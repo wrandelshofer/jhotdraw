@@ -70,6 +70,8 @@ public  class GroupCommand extends AbstractCommand {
 
 			// orphan group figure(s)
 			getDrawingView().drawing().orphanAll(getAffectedFigures());
+			//this tool is now responsible for the release or readd of the figures it removed
+			//!!!dnoyeb!!!
 
 			// create a new collection with the grouped figures as elements
 			List affectedFigures = CollectionsFactory.current().createList();
@@ -104,18 +106,20 @@ public  class GroupCommand extends AbstractCommand {
 
 		public void groupFigures() {
 			getDrawingView().drawing().orphanAll(getAffectedFigures());
+			//this tool is now responsible for the release or readd of the figures it removed
+			//!!!dnoyeb!!!
 			getDrawingView().clearSelection();
 
 			// add new group figure instead
 			GroupFigure group = new GroupFigure();
 			group.addAll(getAffectedFigures());
 
-			Figure figure = getDrawingView().drawing().add(group);
-			getDrawingView().addToSelection(figure);
+			getDrawingView().drawing().add(group);
+			getDrawingView().addToSelection(group);
 
 			// create a new collection with the new group figure as element
 			List affectedFigures = CollectionsFactory.current().createList();
-			affectedFigures.add(figure);
+			affectedFigures.add(group);
 			setAffectedFigures(new FigureEnumerator(affectedFigures));
 		}
 	}

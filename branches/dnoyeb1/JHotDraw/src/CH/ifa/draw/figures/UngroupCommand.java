@@ -87,9 +87,10 @@ public  class UngroupCommand extends AbstractCommand {
 				Figure groupFigure = groupFigures.nextFigure();
 				// orphan individual figures from the group
 				getDrawingView().drawing().orphanAll(groupFigure.figures());
-
-				Figure figure = getDrawingView().drawing().add(groupFigure);
-				getDrawingView().addToSelection(figure);
+				//This tool is now responsible for the release or readd of the figures it just removed
+				//!!!dnoyeb!!!
+				getDrawingView().drawing().add(groupFigure);
+				getDrawingView().addToSelection(groupFigure);
 			}
 
 			return true;
@@ -99,6 +100,8 @@ public  class UngroupCommand extends AbstractCommand {
 			// do not call execute directly as the selection might has changed
 			if (isRedoable()) {
 				getDrawingView().drawing().orphanAll(getAffectedFigures());
+				//this tool is now responsible for the release or readd of the figures it removed
+				//!!!dnoyeb!!!
 				getDrawingView().clearSelection();
 				ungroupFigures();
 				return true;
@@ -110,10 +113,11 @@ public  class UngroupCommand extends AbstractCommand {
 			FigureEnumeration fe = getAffectedFigures();
 			while (fe.hasNextFigure()) {
 				Figure selected = fe.nextFigure();
-				Figure group = getDrawingView().drawing().orphan(selected);
-
-				getDrawingView().drawing().addAll(group.figures());
-				getDrawingView().addToSelectionAll(group.figures());
+				getDrawingView().drawing().orphan(selected);
+				//this tool is now responsible for the release or readd of the figure it removed
+				//!!!dnoyeb!!!
+				getDrawingView().drawing().addAll(selected.figures());
+				getDrawingView().addToSelectionAll(selected.figures());
 			}
 		}
 	}

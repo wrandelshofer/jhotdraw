@@ -86,6 +86,7 @@ public class TextAreaTool extends CreationTool {
 
 			if (getCreatedFigure() != null && getCreatedFigure().isEmpty()) {
 				drawing().remove(getAddedFigure());
+				//or getAddedFigure().remove(); getAddedFigure().release();
 				// nothing to undo
 				setUndoActivity(null);
 			}
@@ -220,6 +221,8 @@ public class TextAreaTool extends CreationTool {
 			}
 			else {
 				drawing().orphan(getAddedFigure());
+				//this tool is now responsible for the release or readd of the figure
+				//!!!dnoyeb!!!
 				// nothing to undo
 //	            setUndoActivity(null);
 			}
@@ -332,9 +335,11 @@ public class TextAreaTool extends CreationTool {
 
 			if (!isValidText(getOriginalText())) {
 				FigureEnumeration fe = getAffectedFigures();
-				while (fe.hasNextFigure()) {
-					getDrawingView().drawing().orphan(fe.nextFigure());
+				while(fe.hasNextFigure()){
+					fe.nextFigure().remove();
 				}
+				//this tool is now responsible for the release or readd of the figures
+				//!!!dnoyeb!!!
 			}
 			// add text figure if it has been removed (no backup text)
 			else if (!isValidText(getBackupText())) {
@@ -370,9 +375,10 @@ public class TextAreaTool extends CreationTool {
 			// the text figure did exist but was remove
 			if (!isValidText(getBackupText())) {
 				FigureEnumeration fe = getAffectedFigures();
-				while (fe.hasNextFigure()) {
-					getDrawingView().drawing().orphan(fe.nextFigure());
+				while(fe.hasNextFigure()){
+					fe.nextFigure().remove();
 				}
+				//this tool is now this tools responsibility to release these figures
 			}
 			// the text figure didn't exist before
 			else if (!isValidText(getOriginalText())) {

@@ -129,6 +129,8 @@ public class TextTool extends CreationTool {
 			}
 			else {
 				drawing().orphan(getAddedFigure());
+				//this tool is now responsible for readding or releasing the figure it just removed.
+				//if it does not support undo then it should release it now !!!dnoyeb!!!
 			}
 
 			TextTool.UndoActivity undoActivity = ((TextTool.UndoActivity)getUndoActivity());
@@ -205,9 +207,12 @@ public class TextTool extends CreationTool {
 
 			if (!isValidText(getOriginalText())) {
 				FigureEnumeration fe  = getAffectedFigures();
-				while (fe.hasNextFigure()) {
-					getDrawingView().drawing().orphan(fe.nextFigure());
+				while(fe.hasNextFigure()){
+					fe.nextFigure().remove();
 				}
+				//this tool is now responsible for the release or readd of the figures is just removed
+				//!!!dnoyeb!!!
+			
 			}
 			// add text figure if it has been removed (no backup text)
 			else if (!isValidText(getBackupText())) {
@@ -238,9 +243,12 @@ public class TextTool extends CreationTool {
 			// the text figure did exist but was remove
 			if (!isValidText(getBackupText())) {
 				FigureEnumeration fe  = getAffectedFigures();
-				while (fe.hasNextFigure()) {
-					getDrawingView().drawing().orphan(fe.nextFigure());
+				while(fe.hasNextFigure()){
+					fe.nextFigure().remove();
 				}
+				//this tool is now responsible for the release or readd of the figures it just removed
+				//!!!dnoyeb!!!
+			
 			}
 			// the text figure didn't exist before
 			else if (!isValidText(getOriginalText())) {

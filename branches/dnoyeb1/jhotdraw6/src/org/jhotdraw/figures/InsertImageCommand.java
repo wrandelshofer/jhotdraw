@@ -93,7 +93,8 @@ public class InsertImageCommand extends AbstractCommand {
 				getDrawingView().clearSelection();
 	
 				getDrawingView().drawing().orphan(getImageFigure());
-	
+				//this tool is now responsible for the release or readd of the figure it removed
+				//!!!dnoyeb!!!
 				return true;
 			}
 			

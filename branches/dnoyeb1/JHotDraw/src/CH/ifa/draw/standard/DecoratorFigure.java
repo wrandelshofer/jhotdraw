@@ -93,16 +93,16 @@ public abstract class DecoratorFigure
 	 */
 	public void decorate(Figure figure) {
 		fComponent = figure;
-		fComponent.addToContainer(this);
-		addDependendFigure(fComponent);
+		getDecoratedFigure().addFigureChangeListener( this );
+		//addDependendFigure( getDecoratedFigure() );
 	}
 
 	/**
 	 * Removes the decoration from the contained figure.
 	 */
 	public Figure peelDecoration() {
-		getDecoratedFigure().removeFromContainer(this); //??? set the container to the listener()?
-		removeDependendFigure(getDecoratedFigure());
+		getDecoratedFigure().removeFigureChangeListener( this );
+		//removeDependendFigure(getDecoratedFigure());
 		return getDecoratedFigure();
 	}
 
@@ -167,21 +167,27 @@ public abstract class DecoratorFigure
 	}
 
 	/**
-	 * Releases itself and the contained figure.
+	 * Releases itself. removes then releases its containees.
+	 * 
 	 */
 	public void release() {
-		super.release();
-		getDecoratedFigure().removeFromContainer(this);
+		getDecoratedFigure().remove();
 		getDecoratedFigure().release();
+		super.release();
 	}
-
+	/**
+	 * Do not remove containees in response to this event.
+	 */
+	public void remove(){
+		super.remove();
+	}
 	/**
 	 * Propagates invalidate up the container chain.
 	 * @see FigureChangeListener
 	 */
 	public void figureInvalidated(FigureChangeEvent e) {
 		if (listener() != null) {
-			listener().figureInvalidated(e);
+			listener().figureInvalidated( new FigureChangeEvent(this,e.getInvalidatedRectangle()));
 		}
 	}
 
@@ -192,20 +198,30 @@ public abstract class DecoratorFigure
 	}
 
 	/**
-	 * Propagates figureRequestUpdate up the container chain.
+     * Informs our container that we need to be updated.  We request this on 
+	 * behalf of the decorated figure.
+	 *
 	 * @see FigureChangeListener
 	 */
 	public  void figureRequestUpdate(FigureChangeEvent e) {
 		if (listener() != null) {
-			listener().figureRequestUpdate(e);
+			listener().figureRequestUpdate(new FigureChangeEvent(this));
 		}
 	}
 
 	/**
 	 * Propagates the removeFromDrawing request up to the container.
+	 * This is the only justified propagation of a request remove event.  This is
+	 * also implemented correctly by repackaging the event so it appears to come
+	 * from this figure.
+	 * The decorator figure requests removal on behalf of the figure it is
+	 * decorating.  the decorator figure is not allowed to exist without its
+	 * decorated figure.
 	 * @see FigureChangeListener
 	 */
 	public void figureRequestRemove(FigureChangeEvent e) {
+		e.getFigure().removeFigureChangeListener(this);
+		removeDependendFigure( e.getFigure() );
 		if (listener() != null) {
 			listener().figureRequestRemove(new FigureChangeEvent(this));
 		}
@@ -299,12 +315,12 @@ public abstract class DecoratorFigure
 
 		s.defaultReadObject();
 
-		getDecoratedFigure().addToContainer(this);
+		getDecoratedFigure().addFigureChangeListener(this);
 	}
 
 	public void visit(FigureVisitor visitor) {
 		super.visit(visitor);
-//		getDecoratedFigure().visit(visitor);
+//		getDecoratedFigure().visit(visitor); !!!dnoyeb!!! this is a must right?
 	}
 
 	public TextHolder getTextHolder() {
