@@ -51,8 +51,24 @@ public  class PertApplication extends DrawApplication {
 	//-- main -----------------------------------------------------------
 
 	public static void main(String[] args) {
-		PertApplication pert = new PertApplication();
+		final PertApplication pert = new PertApplication();
 		pert.open();
-                pert.newWindow( );
+		Runnable r = new Runnable() {
+			public void run() {
+				pert.newWindow( );
+			}
+		};
+		try {
+			java.awt.EventQueue.invokeAndWait( r );
+		}
+		catch(java.lang.InterruptedException ie){
+			System.err.println(ie.getMessage());
+			pert.exit();
+		}
+		catch(java.lang.reflect.InvocationTargetException ite){
+			System.err.println(ite.getMessage());
+			pert.exit();
+		}	
+                
 	}
 }

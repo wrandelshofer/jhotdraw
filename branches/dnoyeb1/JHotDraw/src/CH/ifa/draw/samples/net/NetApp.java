@@ -42,8 +42,23 @@ public  class NetApp extends DrawApplication {
 	//-- main -----------------------------------------------------------
 
 	public static void main(String[] args) {
-		DrawApplication window = new NetApp();
+		final DrawApplication window = new NetApp();
 		window.open();
-                window.newWindow();
+		Runnable r = new Runnable() {
+			public void run() {
+				window.newWindow();
+			}
+		};
+		try {
+			java.awt.EventQueue.invokeAndWait( r );
+		}
+		catch(java.lang.InterruptedException ie){
+			System.err.println(ie.getMessage());
+			window.exit();
+		}
+		catch(java.lang.reflect.InvocationTargetException ite){
+			System.err.println(ite.getMessage());
+			window.exit();
+		}
 	}
 }
