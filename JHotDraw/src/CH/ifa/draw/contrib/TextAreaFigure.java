@@ -750,7 +750,7 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
-	 * Connects the figure to another figure
+	 * Connects the figure to another figure.
 	 *
 	 * @param figure  the connecting figure
 	 */
@@ -814,19 +814,16 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
-	 * The figure is about to be removed from another composite figure
-	 *
+	 * The figures resources have been released
+	 * @todo should this figure do anything?
 	 * @param e  Description of the Parameter
 	 */
 	public void figureRemoved(FigureChangeEvent e) {
-		if (listener() != null) {
-			listener().figureRemoved(new FigureChangeEvent(this));
-		}
 	}
 
 	/**
 	 * A request to remove the figure from another composite figure
-	 *
+	 * @todo find out What figure is this figure listening too?
 	 * @param e  Description of the Parameter
 	 */
 	public void figureRequestRemove(FigureChangeEvent e) {
@@ -836,6 +833,9 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
+	 * This is not used here. Their is no need to update this figure just
+	 * because the figure its decorating requires update.
+	 * See <code>FigureChangeListener</code> interface for why.
 	 * @param e  Description of the Parameter
 	 */
 	public void figureRequestUpdate(FigureChangeEvent e) {

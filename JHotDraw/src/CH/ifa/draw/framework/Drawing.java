@@ -38,7 +38,7 @@ import java.io.Serializable;
  */
 
 public interface Drawing
-		extends Storable, FigureChangeListener, Serializable {
+		extends Storable/*, FigureChangeListener*/, Serializable {
 
 	/**
 	 * Releases the drawing and its contained figures.
@@ -146,8 +146,15 @@ public interface Drawing
 	 *
 	 * @return new iterator of all registered change listener
 	 */
-	public Iterator drawingChangeListeners();
-
+	//public Iterator drawingChangeListeners();
+	
+	/**
+	 * Causes the drawing to nofity its listeners that it wishes to be redrawn.
+	 * This is accomplished by way of <code>requestUpdate</code>
+	 * @see DrawingChangeListener#drawingRequestUpdate
+	 */
+	public void update();
+	
 	/**
 	 * Adds a figure and sets its container to refer to this drawing.
 	 *
@@ -169,11 +176,19 @@ public interface Drawing
 	 * @param fe (unused) enumeration containing all figures to be added
 	 * @see #add
 	 */
-	public void addAll(FigureEnumeration fe);
+	public FigureEnumeration addAll(FigureEnumeration fe);
 
 	/**
-	 * Removes the figure from the drawing and releases it.
+	 * Removes and releases the figure from the drawing.  It can no longer be
+	 * used.
+	 * Preferred way is to call 
+	 * <PRE>
+	 * figure.remove();
+	 * figure.release();
+	 * </PRE>
 	 *
+	 * @see Figure#remove
+	 * @see Figure#release
 	 * @param figure that is part of the drawing and should be removed
 	 * @return the figure that has been removed (might be different from the figure specified)
 	 */
@@ -184,23 +199,18 @@ public interface Drawing
 	 * doesn't release it. Use this method to temporarily
 	 * manipulate a figure outside of the drawing.
 	 *
-	 * @param figure that is part of the drawing and should be added
+	 * Preferred way is to call {@link Figure#remove() Figure.remove()}.
 	 */
-	public Figure orphan(Figure figure);
+	public void orphan(Figure figure);
 
 	/**
-	 * Removes a list of figures from the figure's list
-	 * without releasing the figures.
-	 *
-	 * @see #orphan
-	 * @deprecated use orphanAll(FigureEnumeration) instead
+	 * @deprecated use {@link #orphanAll(FigureEnumeration fe) 
+	 *             orphanAll(FigureEnumeration fe)} instead
 	 */
 	public void orphanAll(List orphanFigures);
 
 	/**
-	 * Removes a FigureEnumeration of figures from the figure's list
-	 * without releasing the figures.
-	 * @see #orphan
+	 * Preferred way is to call {@link Figure#remove() Figure.remove()}.
 	 */
 	public void orphanAll(FigureEnumeration fe);
 
@@ -208,7 +218,8 @@ public interface Drawing
 	 * Removes a list of figures .
 	 *
 	 * @see #remove
-	 * @deprecated use removeAll(FigureEnumeration) instead
+	 * @deprecated use {@link #removeAll(FigureEnumeration) removeAll(FigureEnumeration fe)}
+	 *             instead.
 	 */
 	public void removeAll(List figures);
 
@@ -216,7 +227,7 @@ public interface Drawing
 	 * Removes a FigureEnumeration of figures.
 	 * @see #remove
 	 */
-	public void removeAll(FigureEnumeration fe);
+	public FigureEnumeration removeAll(FigureEnumeration fe);
 
 	/**
 	 * Replaces a figure in the drawing without removing it from the drawing.

@@ -12,7 +12,7 @@
 package CH.ifa.draw.samples.javadraw;
 
 import javax.swing.JApplet;
-import java.awt.event.*;
+
 import java.net.*;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.AbstractTool;
@@ -31,9 +31,9 @@ class FollowURLTool extends AbstractTool {
 	/**
 	 * Handles mouse move events in the drawing view.
 	 */
-	public void mouseMove(MouseEvent e, int x, int y) {
+	public void mouseMove(DrawingViewMouseEvent dvme) {
 		String urlstring = null;
-		Figure figure = drawing().findFigureInside(x,y);
+		Figure figure = drawing().findFigureInside(dvme.getX(),dvme.getY());
 		if (figure != null) {
 			urlstring = (String) figure.getAttribute(FigureAttributeConstant.URL);
 		}
@@ -49,8 +49,8 @@ class FollowURLTool extends AbstractTool {
 	 * Handles mouse up in the drawing view
 	 * assuming mouseUp came from active drawing.
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
-		Figure figure = getActiveDrawing().findFigureInside(x, y);
+	public void mouseUp(DrawingViewMouseEvent dvme) {
+		Figure figure = getActiveDrawing().findFigureInside(dvme.getX(), dvme.getY());
 		if (figure == null) {
 			return;
 		}

@@ -24,7 +24,15 @@ public interface DrawingChangeListener extends EventListener {
 	 *  Sent when an area is invalid
 	 */
 	public void drawingInvalidated(DrawingChangeEvent e);
-
+    /**
+     *  Sent when the drawing Title has changed
+	 *  investigate seperating this event out because the other 2 occur often
+	 *  and you end up listening to events frequently, that you are not 
+	 *  interested in.
+	 *  Likely titles should be simple properties and stored in the attributes.
+	 *  Then we add an attribute listener, and voila.
+     */
+    public void drawingTitleChanged(DrawingChangeEvent e);
 	/**
 	 *  Sent when the drawing wants to be refreshed
 	 */

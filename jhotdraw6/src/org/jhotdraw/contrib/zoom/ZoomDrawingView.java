@@ -45,12 +45,23 @@ public class ZoomDrawingView extends StandardDrawingView {
 	 */
 	private double zoomSpeed = 2.0;
 
+    public ZoomDrawingView(Drawing drawing,DrawingEditor editor, int width, int height){
+        super(drawing,editor, width, height);
+    }
+	public ZoomDrawingView(Drawing drawing,DrawingEditor editor) {
+		this(drawing,editor, MINIMUM_WIDTH, MINIMUM_HEIGHT);
+	}
+    /**
+     *  uses StandardDrawing() as its default Drawing if none is supplied.
+     */    
 	public ZoomDrawingView(DrawingEditor editor) {
 		this(editor, MINIMUM_WIDTH, MINIMUM_HEIGHT);
 	}
-
+    /**
+     *  uses StandardDrawing() as its default Drawing if none is supplied.
+     */
 	public ZoomDrawingView(DrawingEditor editor, int width, int height) {
-		super(editor, width, height);
+		this(new StandardDrawing(), editor, width, height);
 	}
 
 	/**
@@ -378,22 +389,23 @@ public class ZoomDrawingView extends StandardDrawingView {
 			setDamage(null);
 		}
 	}
-
-	/**
-	 * Overridden to accumulate damage in an instance variable of this class.
-	 */
-	public void drawingInvalidated(DrawingChangeEvent e) {
-		Rectangle r = e.getInvalidatedRectangle();
-		if (getDamage() == null) {
-			setDamage(r);
-		}
-		else {
-			Rectangle damagedArea = getDamage();
-			damagedArea.add(r);
-			// the returned rectange may be a clone so we better set it again
-			setDamage(damagedArea);
-		}
-	}
+//
+//	/**
+//	 * Overridden to accumulate damage in an instance variable of this class.
+//	 * Took this method out since it is not doing what it claims above.
+//	 */
+//	public void drawingInvalidated(DrawingChangeEvent e) {
+//		Rectangle r = e.getInvalidatedRectangle();
+//		if (getDamage() == null) {
+//			setDamage(r);
+//		}
+//		else {
+//			Rectangle damagedArea = getDamage();
+//			damagedArea.add(r);
+//			// the returned rectange may be a clone so we better set it again
+//			setDamage(damagedArea);
+//		}
+//	}
 
 	/**
 	 * @return a new MouseEvent, the coordinates of which are transformed
@@ -412,7 +424,7 @@ public class ZoomDrawingView extends StandardDrawingView {
 
 
 	protected MouseListener createMouseListener() {
-		return new StandardDrawingView.DrawingViewMouseListener() {
+		return new StandardDrawingView.innerDrawingViewMouseListener() {
 			public void mousePressed(MouseEvent e) {
 				super.mousePressed(createScaledEvent(e));
 			}
@@ -423,7 +435,7 @@ public class ZoomDrawingView extends StandardDrawingView {
 	}
 
 	protected MouseMotionListener createMouseMotionListener() {
-		return new StandardDrawingView.DrawingViewMouseMotionListener() {
+		return new StandardDrawingView.innerDrawingViewMouseMotionListener() {
 			public void mouseDragged(MouseEvent e) {
 				super.mouseDragged(createScaledEvent(e));
 			}
@@ -434,7 +446,7 @@ public class ZoomDrawingView extends StandardDrawingView {
 	}
 
 	protected KeyListener createKeyListener() {
-		return new StandardDrawingView.DrawingViewKeyListener() {
+		return new StandardDrawingView.innerDrawingViewKeyListener() {
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
 				if (e.getKeyChar() == ' ') {

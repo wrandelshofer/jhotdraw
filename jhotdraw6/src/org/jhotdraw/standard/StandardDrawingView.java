@@ -101,6 +101,8 @@ public class StandardDrawingView
 	/**
 	 * The grid used to constrain points for snap to
 	 * grid functionality.
+	 * Should generalize this to a Constrainer interface.  may have more reasons
+	 * for constraint than just grid.
 	 */
 	private PointConstrainer fConstrainer;
 
@@ -131,8 +133,7 @@ public class StandardDrawingView
 	public StandardDrawingView(DrawingEditor editor) {
 		this(editor, MINIMUM_WIDTH, MINIMUM_HEIGHT);
 	}
-
-	public StandardDrawingView(DrawingEditor editor, int width, int height) {
+	public StandardDrawingView(Drawing drawing, DrawingEditor editor, int width, int height) {
 		setAutoscrolls(true);
 		counter++;
 		fEditor = editor;
@@ -152,18 +153,22 @@ public class StandardDrawingView
 		addMouseListener(createMouseListener());
 		addMouseMotionListener(createMouseMotionListener());
 		addKeyListener(createKeyListener());
+        setDrawing(drawing);
+    }
+	public StandardDrawingView(DrawingEditor editor, int width, int height) {
+        this(new StandardDrawing(),editor,width,height);
 	}
 
 	protected MouseListener createMouseListener() {
-		return new DrawingViewMouseListener();
+		return new innerDrawingViewMouseListener();
 	}
 
 	protected MouseMotionListener createMouseMotionListener() {
-		return  new DrawingViewMouseMotionListener();
+		return  new innerDrawingViewMouseMotionListener();
 	}
 
 	protected KeyListener createKeyListener() {
-		return new DrawingViewKeyListener();
+		return new innerDrawingViewKeyListener();
 	}
 
 	/**
@@ -221,7 +226,6 @@ public class StandardDrawingView
 
 	/**
 	 * Adds a figure to the drawing.
-	 * @return the added figure.
 	 */
 	public Figure add(Figure figure) {
 		return drawing().add(figure);
@@ -229,7 +233,6 @@ public class StandardDrawingView
 
 	/**
 	 * Removes a figure from the drawing.
-	 * @return the removed figure
 	 */
 	public Figure remove(Figure figure) {
 		return drawing().remove(figure);
@@ -238,11 +241,13 @@ public class StandardDrawingView
 	/**
 	 * Adds a Collection of figures to the drawing.
 	 */
-	public void addAll(Collection figures) {
+	public FigureEnumeration addAll(Collection figures) {
 		FigureEnumeration fe = new FigureEnumerator(figures);
+		List l = CollectionsFactory.current().createList();
 		while (fe.hasNextFigure()) {
-			add(fe.nextFigure());
+			l.add(add(fe.nextFigure()));
 		}
+		return new FigureEnumerator(l);
 	}
 
 	/**
@@ -407,7 +412,7 @@ public class StandardDrawingView
 				result.add(f);
 			}
 		}
-		return new ReverseFigureEnumerator(result);
+		return new FigureEnumerator(result);
 	}
 
 	/**
@@ -429,14 +434,26 @@ public class StandardDrawingView
 	 * it is also contained in the Drawing associated with this DrawingView.
 	 */
 	public void addToSelection(Figure figure) {
-		if (!isFigureSelected(figure) && drawing().includes(figure)) {
+		if (!isFigureSelected(figure) && drawing().containsFigure(figure)) {
 			fSelection.add(figure);
 			fSelectionHandles = null;
 			figure.invalidate();
 			fireSelectionChanged();
 		}
 	}
-
+	protected final List getSelection(){
+		return fSelection;
+	}
+	protected final void setSelection(List list){
+		fSelection = list;
+	}
+	protected final List getSelectionHandles(){
+		return fSelectionHandles;
+	}
+	protected final void setSelectionHandles(List list){
+		fSelectionHandles = list;
+	}
+ 	
 	/**
 	 * Adds a Collection of figures to the current selection.
 	 */
@@ -610,20 +627,20 @@ public class StandardDrawingView
 		while (figures.hasNextFigure()) {
 			figures.nextFigure().moveBy(dx, dy);
 		}
-		checkDamage();
+		checkDamage();//likely unneeded, the Tool should request the update !!!dnoyeb!!!
 	}
 
 	/**
 	 * Refreshes the drawing if there is some accumulated damage
+	 * This is typically called when a Tool/Command has finished its editing
+	 * manoever and wants those observing the underlying drawing to update
+	 * themselves.  Sort of a finished editing-action notification.
+	 * But this is based on damage to the view and not damage to the drawing.
+	 * Overagressive in updating other views when not necessary. drawing.update updates all views.
+	 * @see Drawing#update()
 	 */
 	public synchronized void checkDamage() {
-		Iterator each = drawing().drawingChangeListeners();
-		while (each.hasNext()) {
-			Object l = each.next();
-			if (l instanceof DrawingView) {
-				((DrawingView)l).repairDamage();
-			}
-		}
+		drawing().update();
 	}
 
 	public void repairDamage() {
@@ -650,7 +667,8 @@ public class StandardDrawingView
 	public void drawingRequestUpdate(DrawingChangeEvent e) {
 		repairDamage();
 	}
-
+    public void drawingTitleChanged(DrawingChangeEvent e){
+    }
 	/**
 	 * Paints the drawing view. The actual drawing is delegated to
 	 * the current update strategy.
@@ -909,7 +927,7 @@ public class StandardDrawingView
 		t.printStackTrace();
     }
 
-	public class DrawingViewMouseListener extends MouseAdapter {
+	protected class innerDrawingViewMouseListener extends MouseAdapter {
 		 /**
 		 * Handles mouse down events. The event is delegated to the
 		 * currently active tool.
@@ -918,8 +936,8 @@ public class StandardDrawingView
 			try {
 				requestFocus(); // JDK1.1
 				Point p = constrainPoint(new Point(e.getX(), e.getY()));
-				setLastClick(new Point(e.getX(), e.getY()));
-				tool().mouseDown(e, p.x, p.y);
+				setLastClick(new Point(e.getX(), e.getY())); //technically a click is a down and up event, not just down
+				tool().mouseDown(new DrawingViewMouseEvent(StandardDrawingView.this,e,p.x, p.y));
 				checkDamage();
 			}
 			catch (Throwable t) {
@@ -934,7 +952,7 @@ public class StandardDrawingView
 		public void mouseReleased(MouseEvent e) {
 			try {
 				Point p = constrainPoint(new Point(e.getX(), e.getY()));
-				tool().mouseUp(e, p.x, p.y);
+				tool().mouseUp(new DrawingViewMouseEvent(StandardDrawingView.this,e,p.x, p.y) );
 				checkDamage();
 			}
 			catch (Throwable t) {
@@ -943,7 +961,7 @@ public class StandardDrawingView
 		}
 	}
 
-	public class DrawingViewMouseMotionListener implements MouseMotionListener {
+	protected class innerDrawingViewMouseMotionListener implements MouseMotionListener {
 		/**
 		 * Handles mouse drag events. The event is delegated to the
 		 * currently active tool.
@@ -951,7 +969,7 @@ public class StandardDrawingView
 		public void mouseDragged(MouseEvent e) {
 			try {
 				Point p = constrainPoint(new Point(e.getX(), e.getY()));
-				tool().mouseDrag(e, p.x, p.y);
+				tool().mouseDrag(new DrawingViewMouseEvent(StandardDrawingView.this,e,p.x, p.y) );
 				checkDamage();
 			}
 			catch (Throwable t) {
@@ -965,7 +983,8 @@ public class StandardDrawingView
 		 */
 		public void mouseMoved(MouseEvent e) {
 			try {
-				tool().mouseMove(e, e.getX(), e.getY());
+				Point p = constrainPoint(new Point(e.getX(), e.getY()));
+				tool().mouseMove(new DrawingViewMouseEvent(StandardDrawingView.this,e,p.x, p.y) );
 			}
 			catch (Throwable t) {
 				handleMouseEventException(t);
@@ -973,10 +992,10 @@ public class StandardDrawingView
 		}
 	}
 
-	public class DrawingViewKeyListener implements KeyListener {
+	protected class innerDrawingViewKeyListener implements KeyListener {
 		private Command deleteCmd;
 
-		public DrawingViewKeyListener() {
+		public innerDrawingViewKeyListener() {
 			deleteCmd = createDeleteCommand();
 		}
 
@@ -1050,6 +1069,9 @@ public class StandardDrawingView
 		return new DNDHelper () {
 				protected DrawingView view() {
 					return StandardDrawingView.this;
+				}
+				protected DrawingEditor editor() {
+					return StandardDrawingView.this.editor();
 				}
 			};
 	}

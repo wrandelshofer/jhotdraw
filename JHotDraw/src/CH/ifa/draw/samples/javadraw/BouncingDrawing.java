@@ -14,9 +14,24 @@ package CH.ifa.draw.samples.javadraw;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.Animatable;
-
 /**
+ * @todo Needs validation and testing.  The DecoratorFigure AnimationDecorator
+ *       causes some problems with knowing what is and is not in the drawing.
+ *
+ * <b>NOTE: I attempted to hide the internal DecoratorFigures that bouncing
+ * Drawing uses, but unfortunately the current lack of document-view seperation
+ * causes problems with selection and other things.  Normally when you select a figure
+ * with a tool, it will be a AnimationDecorator, but we are supposed to hide that.
+ * so selections will be the the mapped figure.  Its a problem because  internally
+ * the drawing needs to use the animation decorator to draw it.  Its difficuly
+ * to decide which methods should expose the real figure, and which should expose the
+ * decorator.  In the end I think the decision will lead to a form of 
+ * document-view seperation anyway.  So I am not fixing these problems, and
+ * will tend to them when the document view seperation occurs.
+ * If you are having issues, try using <code>StandardDrawing</code> instead.
+ *
  * @version <$CURRENT_VERSION$>
+ * 
  */
 public class BouncingDrawing extends StandardDrawing implements Animatable {
 	/*
@@ -64,4 +79,4 @@ public class BouncingDrawing extends StandardDrawing implements Animatable {
 			}
 		}
 	}
-}
+		}

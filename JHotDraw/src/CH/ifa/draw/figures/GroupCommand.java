@@ -40,7 +40,7 @@ public  class GroupCommand extends AbstractCommand {
 		setUndoActivity(createUndoActivity());
 		getUndoActivity().setAffectedFigures(view().selection());
 		((GroupCommand.UndoActivity)getUndoActivity()).groupFigures();
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {
@@ -70,6 +70,8 @@ public  class GroupCommand extends AbstractCommand {
 
 			// orphan group figure(s)
 			getDrawingView().drawing().orphanAll(getAffectedFigures());
+			//this tool is now responsible for the release or readd of the figures it removed
+			//!!!dnoyeb!!!
 
 			// create a new collection with the grouped figures as elements
 			List affectedFigures = CollectionsFactory.current().createList();
@@ -77,18 +79,27 @@ public  class GroupCommand extends AbstractCommand {
 			FigureEnumeration fe = getAffectedFigures();
 			while (fe.hasNextFigure()) {
 				Figure currentFigure = fe.nextFigure();
-				// add contained figures
-				getDrawingView().drawing().addAll(currentFigure.figures());
-				getDrawingView().addToSelectionAll(currentFigure.figures());
-
-				FigureEnumeration groupedFigures = currentFigure.figures();
-				while (groupedFigures.hasNextFigure()) {
-					affectedFigures.add(groupedFigures.nextFigure());
+				//figures can not be in 2 containers at same time.
+				//copy figures for later use
+				if(currentFigure instanceof CompositeFigure){
+					FigureEnumeration feToRemove = currentFigure.figures();
+					FigureEnumeration feToAdd = currentFigure.figures();
+					FigureEnumeration feToSelect = currentFigure.figures();
+					FigureEnumeration groupedFigures = currentFigure.figures();
+					
+					//remove figures from currentFigure
+					((CompositeFigure)currentFigure).orphanAll( feToRemove );
+					// add contained figures to drawing
+					getDrawingView().drawing().addAll(feToAdd);
+					//select figures
+					getDrawingView().addToSelectionAll(feToSelect);
+					//set new affected figures
+					while (groupedFigures.hasNextFigure()) {
+						affectedFigures.add(groupedFigures.nextFigure());
+					}
 				}
+				setAffectedFigures(new FigureEnumerator(affectedFigures));
 			}
-
-			setAffectedFigures(new FigureEnumerator(affectedFigures));
-
 			return true;
 		}
 
@@ -104,6 +115,8 @@ public  class GroupCommand extends AbstractCommand {
 
 		public void groupFigures() {
 			getDrawingView().drawing().orphanAll(getAffectedFigures());
+			//this tool is now responsible for the release or readd of the figures it removed
+			//!!!dnoyeb!!!
 			getDrawingView().clearSelection();
 
 			// add new group figure instead

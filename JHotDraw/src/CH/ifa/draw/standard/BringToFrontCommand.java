@@ -40,7 +40,7 @@ public class BringToFrontCommand extends AbstractCommand {
 		while (fe.hasNextFigure()) {
 			view().drawing().bringToFront(fe.nextFigure());
 		}
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {

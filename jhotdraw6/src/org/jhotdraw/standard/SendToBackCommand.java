@@ -40,7 +40,7 @@ public class SendToBackCommand extends AbstractCommand {
 		while (fe.hasNextFigure()) {
 			view().drawing().sendToBack(fe.nextFigure());
 		}
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	protected boolean isExecutableWithView() {

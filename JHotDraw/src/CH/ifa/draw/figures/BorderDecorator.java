@@ -46,6 +46,7 @@ public  class BorderDecorator extends DecoratorFigure {
 	 * Subclasses may override this method.
 	 */
 	protected void initialize() {
+		super.initialize();
 		setBorderOffset(new Point(3,3));
 	}
 

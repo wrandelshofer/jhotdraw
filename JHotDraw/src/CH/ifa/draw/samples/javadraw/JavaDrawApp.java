@@ -30,7 +30,7 @@ import java.net.URL;
 /**
  * @version <$CURRENT_VERSION$>
  */
-public  class JavaDrawApp extends MDI_DrawApplication {
+public class JavaDrawApp extends MDI_DrawApplication {
 	private Animator            fAnimator;
 	private static String       fgSampleImagesPath = "/CH/ifa/draw/samples/javadraw/sampleimages";
 	private static String       fgSampleImagesResourcePath = fgSampleImagesPath + "/";
@@ -54,10 +54,11 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 		return new JavaDrawApp("JHotDraw");
 	}
 
-	protected DrawingView createDrawingView() {
-		return new ZoomDrawingView(this);
+	protected DrawingView createDrawingView(Drawing newDrawing) {
+		Dimension d = getDrawingViewSize();
+		DrawingView newDrawingView = new ZoomDrawingView( newDrawing ,this,d.width, d.height);
+		return newDrawingView;
 	}
-
 	//-- application life cycle --------------------------------------------
 
 	public void destroy() {
@@ -111,6 +112,9 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 
 		tool = new UndoableTool(new ScribbleTool(this));
 		palette.add(createToolButton(IMAGES + "SCRIBBL", "Scribble Tool", tool));
+
+		tool = new UndoableTool(new DecoratorTool(this, new BorderFigureDecorator()));
+		palette.add(createToolButton(IMAGES + "BORDDEC", "Border Tool", tool));
 
 		tool = new UndoableTool(new BorderTool(this));
 		palette.add(createToolButton(IMAGES + "BORDDEC", "Border Tool", tool));
@@ -210,7 +214,10 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 	}
 
 	protected Drawing createDrawing() {
-		return new BouncingDrawing();
+		Drawing dwg = new BouncingDrawing();
+		//Drawing dwg = new StandardDrawing();
+        dwg.setTitle( getDefaultDrawingTitle() );
+		return dwg;
 		//return new StandardDrawing();
 	}
 
@@ -219,6 +226,7 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 	public void startAnimation() {
 		if (view().drawing() instanceof Animatable && fAnimator == null) {
 			fAnimator = new Animator((Animatable)view().drawing(), view());
+			//store start and end positions of animatable figures for undo?
 			fAnimator.start();
 		}
 	}
@@ -234,6 +242,7 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 
 	public static void main(String[] args) {
 		JavaDrawApp window = new JavaDrawApp("JHotDraw");
-		window.open();
+        window.open();
+        window.newWindow( );
 	}
 }

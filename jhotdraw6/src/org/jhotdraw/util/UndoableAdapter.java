@@ -90,20 +90,19 @@ public class UndoableAdapter implements Undoable {
 	
 	/**
 	 * Releases all resources related to an undoable activity
+	 * Only resources that are no longer used in the application should be
+	 * released.
 	 */
 	public void release() {
-		FigureEnumeration fe = getAffectedFigures();
-		while (fe.hasNextFigure()) {
-			fe.nextFigure().release();
-		}
 		setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
+		setDrawingView(null);
 	}
 
 	/**
 	 * Create new set of affected figures for redo operation because
 	 * deleting figures in an undo operation makes them unusable
 	 * Especially contained figures have been removed from their
-	 * observing container like CompositeFigure or DecoratorFigure.
+	 * observing container like CompositeFigure.
 	 * Duplicating these figures re-establishes the dependencies.
 	 */
 	protected void duplicateAffectedFigures() {

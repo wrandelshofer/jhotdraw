@@ -29,7 +29,9 @@ public class RedoCommand extends AbstractCommand {
 	public RedoCommand(String name, DrawingEditor newDrawingEditor) {
 		super(name, newDrawingEditor);
 	}
-
+	/**
+	 * Need redo sets that automatically get done together.
+	 */
 	public void execute() {
 		super.execute();
 		UndoManager um = getDrawingEditor().getUndoManager();
@@ -45,7 +47,7 @@ public class RedoCommand extends AbstractCommand {
 			um.pushUndo(lastRedoable);
 		}
 			
-		lastRedoable.getDrawingView().checkDamage();
+		lastRedoable.getDrawingView().drawing().update();
 
 		getDrawingEditor().figureSelectionChanged(lastRedoable.getDrawingView());
 	}

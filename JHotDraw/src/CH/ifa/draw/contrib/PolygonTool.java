@@ -16,7 +16,7 @@ import CH.ifa.draw.util.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.Undoable;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 
 /**
  * Based on ScribbleTool
@@ -72,13 +72,14 @@ public class PolygonTool extends AbstractTool {
 		fLastY = y;
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e,x,y);
-		// replace pts by actual event pts
-		x = e.getX();
-		y = e.getY();
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
+		// use event coordinates to supress any kind of
+		// transformations like constraining points to a grid
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
 
-		if (e.getClickCount() >= 2) {
+		if (dvme.getMouseEvent().getClickCount() >= 2) {
 			if (fPolygon != null) {
 				fPolygon.smoothPoints();
 
@@ -97,29 +98,27 @@ public class PolygonTool extends AbstractTool {
 			// use original event coordinates to avoid
 			// supress that the scribble is constrained to
 			// the grid
-			addPoint(e.getX(), e.getY());
+			addPoint( getAnchorX(), getAnchorY() );
 		}
 	}
 
-	public void mouseMove(MouseEvent e, int x, int y) {
-		if (e.getSource() == getActiveView()) {
+	public void mouseMove(DrawingViewMouseEvent dvme) {
+		if (dvme.getDrawingView() == getActiveView()) {
 			if (fPolygon != null) {
 				if (fPolygon.pointCount() > 1) {
-					fPolygon.setPointAt(new Point(x, y), fPolygon.pointCount()-1);
-					getActiveView().checkDamage();
+					fPolygon.setPointAt(new Point(dvme.getX(), dvme.getY()), fPolygon.pointCount()-1);
+					view().drawing().update();
 				}
 			}
 		}
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		// replace pts by actual event pts
-		x = e.getX();
-		y = e.getY();
-		addPoint(x, y);
+		addPoint(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY());
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 	}
 
 	/**

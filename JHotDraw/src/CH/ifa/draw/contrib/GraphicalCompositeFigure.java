@@ -29,6 +29,16 @@ import java.util.List;
  * its graphical presentation to another (graphical) figure which
  * purpose it is to draw the container for all contained figures.
  *
+ * The GraphicalCompositeFigure adds to the {@link CompositeFigure CompositeFigure}
+ * by containing a presentation figure by default which can not be removed.  Normally,
+ * the {@link CompositeFigure CompositeFigure} can not be seen without containing a figure
+ * because it has no mechanism to draw itself.  It instead relies on its contained
+ * figures to draw themselves thereby giving the {@link CompositeFigure CompositeFigure} its
+ * appearance.  However, the <b>GraphicalCompositeFigure</b>'s presentation figure
+ * can draw itself even when the <b>GraphicalCompositeFigure</b> contains no other figures.
+ * The <b>GraphicalCompositeFigure</b> also uses a {@link Layouter Layouter} or layout
+ * its contained figures.  dnoyeb
+ *
  * @author	Wolfram Kaiser
  * @version <$CURRENT_VERSION$>
  */
@@ -45,6 +55,7 @@ public class GraphicalCompositeFigure extends CompositeFigure implements Layouta
 	/**
 	 * A Layouter determines how the CompositeFigure should
 	 * be laid out graphically.
+	 * needs to be stored !!!dnoyeb!!!
 	 */
 	private Layouter myLayouter;
 
@@ -134,7 +145,7 @@ public class GraphicalCompositeFigure extends CompositeFigure implements Layouta
 	public void update() {
 		willChange();
 		layout();
-		change();
+		change();//this is causing redraw.  their can be improvement here ???dnoyeb???
 		changed();
 	}
 
@@ -295,8 +306,11 @@ public class GraphicalCompositeFigure extends CompositeFigure implements Layouta
 	}
 
 	/**
-	 * Notify the registered change listener if an exlicit change
+	 * Notify the registered change listener if an explicit change
 	 * to the component (or one of its child components has occurred).
+	 *
+	 * this seems out of place ???dnoyeb???
+	 * the whole figureRequestUpdate event seems out of place here.
 	 */
 	protected void change() {
 		if (listener() != null) {
@@ -305,25 +319,28 @@ public class GraphicalCompositeFigure extends CompositeFigure implements Layouta
 	}
 
 	/**
-	 * Propagates the removeFromDrawing request up to the container.
+	 *
 	 */
-	public void figureRequestRemove(FigureChangeEvent e) {
-		if (listener() != null) {
-			if (includes(e.getFigure())) {
-				Rectangle r = invalidateRectangle(displayBox());
-				listener().figureRequestRemove(new FigureChangeEvent(this, r, e));
-			}
-			else {
-				super.figureRequestRemove(e);
-			}
-		}
-	}
+//	protected void figureRequestRemove(FigureChangeEvent e) {
+//		throw new JHotDrawRuntimeException("This method is no longer used.");
+//		if (listener() != null) {
+//			if (includes(e.getFigure())) {
+//				Rectangle r = invalidateRectangle(displayBox());
+//				listener().figureRequestRemove(new FigureChangeEvent(this, r, e));
+//			}
+//			else {
+//				super.figureRequestRemove(e);
+//			}
+//		}
+//	}
 
 	/**
 	 * Reads the contained figures from StorableInput. The
 	 * figure responsible for graphical presentation is read
 	 * together with all child components. The Layouter
-	 * is not stored and therefore not read.
+	 * is not stored and therefore not read.  see setLayouter for contradicting statements.
+	 * Why is not the layouter stored? 
+	 * layout will change then upon load no? ???dnoyeb???
 	 */
 	public void read(StorableInput dr) throws IOException {
 		super.read(dr);

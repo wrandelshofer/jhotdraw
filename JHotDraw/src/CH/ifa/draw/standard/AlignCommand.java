@@ -128,7 +128,7 @@ public class AlignCommand extends AbstractCommand {
 		// get selected figures in the order the figures have been selected
 		getUndoActivity().setAffectedFigures(view().selection());
 		((AlignCommand.UndoActivity)getUndoActivity()).alignAffectedFigures(getAlignment());
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	protected void setAlignment(Alignment newAlignment) {

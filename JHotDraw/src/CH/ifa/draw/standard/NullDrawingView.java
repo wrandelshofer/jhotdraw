@@ -77,7 +77,7 @@ public class NullDrawingView extends JPanel implements DrawingView {
 
 	/**
 	 * Adds a figure to the drawing.
-	 * @return the added figure.
+	 * @return the added figure. misleading.
 	 */
 	public Figure add(Figure figure) {
 		return figure;
@@ -94,8 +94,8 @@ public class NullDrawingView extends JPanel implements DrawingView {
 	/**
 	 * Adds a collection of figures to the drawing.
 	 */
-	public void addAll(Collection figures) {
-		// ignore: do nothing
+	public FigureEnumeration addAll(Collection figures) {
+		return FigureEnumerator.getEmptyEnumeration();
 	}
 
 	/**
@@ -405,7 +405,9 @@ public class NullDrawingView extends JPanel implements DrawingView {
 	public void drawingRequestUpdate(DrawingChangeEvent e) {
 		// ignore: do nothing
 	}
-
+    public void drawingTitleChanged(DrawingChangeEvent e) {
+		// ignore: do nothing        
+    }
 	public boolean isInteractive() {
 		return false;
 	}

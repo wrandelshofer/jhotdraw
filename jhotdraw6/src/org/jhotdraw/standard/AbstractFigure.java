@@ -16,6 +16,7 @@ import CH.ifa.draw.framework.*;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Iterator;
 import java.io.*;
 
 /**
@@ -40,28 +41,55 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * The listeners for a figure's changes.
 	 * It is only one listener but this one can be a (chained) MultiCastFigureChangeListener
+	 *
+	 * Need to figure out who restores this connection when the figure is reloaded !!!dnoyeb!!!
+	 *
 	 * @see #invalidate
 	 * @see #changed
 	 * @see #willChange
 	 */
 	private transient FigureChangeListener fListener;
-
+	
 	/**
-	 * The dependend figures which have been added to this container.
+	 * The container of this figure.  Used to prevent a figure from being added
+	 * to more than one container at a time.
 	 */
-	private List myDependendFigures;
+	private transient FigureChangeListener container;
+	
+	/**
+	 * The dependent figures which have been added to this container.
+	 * This is an ordered collection.  The figures should be stored in the order
+	 * in which they were added.  The figures should be loaded in the order in
+	 * which they were stored.
+	 * do dependent figures depend on us, or do we depend on them? ???dnoyeb???
+	 * @see #read
+	 * @see #write
+	 */
+	private List myDependentFigures;
 
+	private List fFigureManipulators;
+
+	private List fFigureDecorators;
 	/*
 	 * Serialization support.
 	 */
 	private static final long serialVersionUID = -10857585979273442L;
 	private int abstractFigureSerializedDataVersion = 1;
+	/**
+	 * needs cloning unless the z order is preserved in the context/order of
+	 * the saved figures somehow.
+	 */
 	private int _nZ;
 
 	protected AbstractFigure() {
-		 myDependendFigures = CollectionsFactory.current().createList();
+		 init();
 	}
 
+	protected void init(){
+		myDependentFigures = CollectionsFactory.current().createList();
+		fFigureManipulators = CollectionsFactory.current().createList();
+		fFigureDecorators = CollectionsFactory.current().createList();
+	}
 	/**
 	 * Moves the figure by the given offset.
 	 */
@@ -190,21 +218,48 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * Sets the Figure's container and registers the container
 	 * as a figure change listener. A figure's container can be
-	 * any kind of FigureChangeListener. A figure is not restricted
-	 * to have a single container.
+	 * any kind of FigureChangeListener. A figure may have only a single container.
+	 *
+	 * @see Figure
 	 */
 	public void addToContainer(FigureChangeListener c) {
-		addFigureChangeListener(c);
-		invalidate();
+//this blocks duplicate containment.  currently border tool requires duplicate containment...
+//		if(getContainer() != null){
+//			//This will become ASSERT in JDK 1.4
+//			//This represents an avoidable error on the programmers part.
+//			throw new JHotDrawRuntimeException("This figure is already contained.");
+//		}
+		if(c == null){
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.
+			throw new JHotDrawRuntimeException("Container parameter can not be null.");
+		}
+		setContainer( c );
+		addFigureChangeListener(getContainer());
+		invalidate();		
 	}
 
 	/**
-	 * Removes a figure from the given container and unregisters
-	 * it as a change listener.
+	 * A callback from the container in response to the event fired by {@link
+	 * #remove remove}.  This method does the actual removal from the container.
+	 * Do not fire <code>figureRequestRemove</code> from this method.
+	 *
+	 * @see Figure#removeFromContainer
 	 */
 	public void removeFromContainer(FigureChangeListener c) {
+		if( getContainer() == null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("This figure is not contained.");
+		}
+		if(c == null){
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.
+			throw new JHotDrawRuntimeException("Container parameter can not be null.");
+		}
 		invalidate();
-		removeFigureChangeListener(c);
+		removeFigureChangeListener( getContainer() );
+		setContainer( null );
 	}
 
 	/**
@@ -224,19 +279,37 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * Gets the figure's listners.
 	 */
-	public synchronized FigureChangeListener listener() {
+	protected synchronized FigureChangeListener listener() {
 		return fListener;
 	}
 
 	/**
-	 * A figure is released from the drawing. You never call this
-	 * method directly. Release notifies its listeners.
+	 * releases figure from all containers pending release.
 	 * @see Figure#release
 	 */
 	public void release() {
-		if (listener() != null) {
-			listener().figureRemoved(new FigureChangeEvent(this));
+		if( getContainer() != null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
 		}
+	}
+	
+	/**
+	 * Called to remove a figure from its container.
+	 * @see Figure#remove
+	 */
+	public FigureChangeListener remove(){
+		if( getContainer() == null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("Figure can not be removed, it is not contained.");
+		}			
+		FigureChangeListener fcl =  getContainer();
+		if(listener() != null) {
+			listener().figureRequestRemove( new FigureChangeEvent(this));
+		}
+		return fcl;
 	}
 
 	/**
@@ -251,6 +324,12 @@ public abstract class AbstractFigure implements Figure {
 		}
 	}
 
+	public void update() {
+		invalidate();
+		if (listener() != null) {
+			listener().figureRequestUpdate(new FigureChangeEvent(this));
+		}		
+	}
 	/**
 	 * Hook method to change the rectangle that will be invalidated
 	 */
@@ -262,19 +341,25 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * Informes that a figure is about to change something that
 	 * affects the contents of its display box.
+	 * Causes the current display box to be marked as dirty and in need of
+	 * redraw.  The redraw does not occur as a result of this method call.
 	 *
 	 * @see Figure#willChange
+	 * @see Figure#invalidate
 	 */
 	public void willChange() {
-		// call invalidate before the change occurs to invalidate the old display area
 		invalidate();
 	}
 
 	/**
 	 * Informs that a figure changed the area of its display box.
+	 * Causes the current display box to be marked as dirty and in need of
+	 * redraw.  The redraw does not occur as a result of this method call.
 	 *
 	 * @see FigureChangeEvent
+	 * @see FigureChangeListener
 	 * @see Figure#changed
+	 * @see Figure#invalidate
 	 */
 	public void changed() {
 		invalidate();
@@ -322,6 +407,11 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * Sets whether the connectors should be visible.
 	 * By default they are not visible
+	 * It was an error to add this.  If you need visible connectors, what you 
+	 * really need is another Figure that contains a connector.  perhaps
+	 * ConnectionFigures should not be real figures, but something else.  having
+	 * them as figures misleads one into this path.
+	 * Am I correct in this assesment? ???dnoyeb???
 	 */
 	public void connectorVisibility(boolean isVisible, ConnectionFigure connector) {
 	}
@@ -408,14 +498,68 @@ public abstract class AbstractFigure implements Figure {
 	 * Stores the Figure to a StorableOutput.
 	 */
 	public void write(StorableOutput dw) {
+		dw.writeInt( getZValue() );
+		//store dependentFigures
+		int size = myDependentFigures.size();
+		FigureEnumeration fe = getDependendFigures();
+		dw.writeInt( size );
+		while (fe.hasNextFigure()) {
+			dw.writeStorable(fe.nextFigure());
+		}
+		//store figuremanipulators
+		dw.writeInt( fFigureManipulators.size() );
+		for(Iterator it= fFigureManipulators.iterator();it.hasNext();) {
+			dw.writeStorable( (FigureManipulator)it.next() );
+		}
+		//store figuredecorators
+		dw.writeInt( fFigureDecorators.size() );
+		for(Iterator it= fFigureDecorators.iterator();it.hasNext();) {
+			dw.writeStorable( (Figure)it.next() );
+		}		
 	}
 
 	/**
 	 * Reads the Figure from a StorableInput.
 	 */
 	public void read(StorableInput dr) throws IOException {
+		setZValue( dr.readInt() );
+		//load dependentFigures
+		int size = dr.readInt();
+		myDependentFigures = CollectionsFactory.current().createList(size);
+		for (int i=0; i<size; i++) {
+			myDependentFigures.add( (Figure)dr.readStorable()) ;
+		}
+
+		//load figureManipulators
+		int manipSize = dr.readInt();
+		fFigureManipulators = CollectionsFactory.current().createList(manipSize);
+		for (int i=0; i<manipSize; i++) {
+			fFigureManipulators.add( (FigureManipulator)dr.readStorable()) ;
+		}
+		//load figureDecorators
+		int decSize = dr.readInt();
+		fFigureDecorators = CollectionsFactory.current().createList(decSize);
+		for (int i=0; i<decSize; i++) {
+			fFigureDecorators.add( (Figure)dr.readStorable()) ;
+		}
+	}
+	/**
+	 * @todo Verify implementation.
+	 */
+	private void writeObject(ObjectOutputStream s) throws IOException {
+		s.defaultWriteObject();
 	}
 
+	/**
+	 * Used for the cloning mechanism. !?!
+	 * @todo Veify implementation, and specify what it should be.
+	 */
+	private void readObject(ObjectInputStream s) 
+		throws ClassNotFoundException, IOException {
+		//since dependent figures are not transient, they get deserialized here
+		//since FigureManipulators are not transient, they get deserialized here
+		s.defaultReadObject();//Read the non-static and non-transient fields of the current class from this stream.
+	}
 	/**
 	 * Gets the z value (back-to-front ordering) of this figure.
 	 */
@@ -431,9 +575,13 @@ public abstract class AbstractFigure implements Figure {
 	}
 
 	public void visit(FigureVisitor visitor) {
+		//FigHolder = new AbstractFigure(this);
+		
+		
+		
 		// remember original listener as listeners might be changed by a visitor
 		// (e.g. by calling addToContainer() or removeFromContainer())
-		FigureChangeListener originalListener = listener();
+		//FigureChangeListener originalListener = listener();
 		FigureEnumeration fe = getDependendFigures();
 
 		visitor.visitFigure(this);
@@ -456,23 +604,98 @@ public abstract class AbstractFigure implements Figure {
 
 		while (fe.hasNextFigure()) {
 			fe.nextFigure().visit(visitor);
-			// or visitor.visitDependendFigure(fe.nextFigure());
 		}
 	}
 
-	public synchronized FigureEnumeration getDependendFigures() {
-		return new FigureEnumerator(myDependendFigures);
+	public FigureEnumeration getDependendFigures() {
+		synchronized(myDependentFigures){
+			return new FigureEnumerator(myDependentFigures);
+		}
 	}
 
-	public synchronized void addDependendFigure(Figure newDependendFigure) {
-		myDependendFigures.add(newDependendFigure);
+	public void addDependendFigure(Figure newDependendFigure) {
+		synchronized(myDependentFigures){
+			myDependentFigures.add(newDependendFigure);
+		}
 	}
 
-	public synchronized void removeDependendFigure(Figure oldDependendFigure) {
-		myDependendFigures.remove(oldDependendFigure);
+	public synchronized void removeDependendFigure(Figure oldDependentFigure) {
+		synchronized(myDependentFigures){
+			myDependentFigures.remove(oldDependentFigure);
+		}
 	}
 
 	public TextHolder getTextHolder() {
 		return null;
 	}
+	protected FigureChangeListener getContainer() {
+		return container;
+	}
+	protected void setContainer(FigureChangeListener container){
+		this.container = container;
+	}
+	
+	public void addFigureManipulator(FigureManipulator fm) {
+		synchronized(fFigureManipulators) {		
+			fm.AttachFigure(this);
+			fFigureManipulators.add( fm );
+		}
+	}
+	
+	public void removeFigureManipulator(FigureManipulator fm) {
+		synchronized(fFigureManipulators) {
+			fFigureManipulators.remove( fm );
+			fm.DetachFigure(this);
+		}
+	}
+	
+	public void addFigureDecorator(FigureDecorator fd){
+		synchronized(fFigureDecorators){
+			fFigureDecorators.add( fd );
+			fd.decorateFigure( this );
+		}
+		invalidate();
+	}
+	public void removeFigureDecorator(FigureDecorator fd){
+		synchronized(fFigureDecorators){
+			fd.undecorateFigure( this );
+			fFigureDecorators.remove( fd );
+		}
+		invalidate();		
+	}
+	/**
+	 * The returned iterator needs to be fail fast or something !?!dnoyeb!?!
+	 */
+	public java.util.Iterator figureDecorators(){
+		return fFigureDecorators.iterator();
+	}
+	public void drawAll(Graphics g){
+		draw(g);
+		drawDecorators(g);
+	}
+	public void drawDecorators(Graphics g){
+		for(Iterator it= fFigureDecorators.iterator();it.hasNext();) {
+			((FigureDecorator)it.next()).draw(g);
+		}		
+	}
+
+	/**
+	 * Experimental.  Copies everything.
+	 */
+	protected AbstractFigure(AbstractFigure af){
+		_nZ = af._nZ;
+		
+		myDependentFigures = CollectionsFactory.current().createList( af.myDependentFigures.size() );
+		myDependentFigures.addAll( af.myDependentFigures );
+
+		fFigureManipulators = CollectionsFactory.current().createList( af.fFigureManipulators.size() );
+		fFigureManipulators.addAll( af.fFigureManipulators );
+		
+		fFigureDecorators = CollectionsFactory.current().createList( af.fFigureDecorators.size() );
+		fFigureDecorators.addAll( af.fFigureDecorators );
+		
+		fListener = af.fListener;
+		container = af.container;
+	}
+
 }

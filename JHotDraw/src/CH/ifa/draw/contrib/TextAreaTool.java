@@ -15,7 +15,7 @@ import CH.ifa.draw.framework.DrawingView;
 import CH.ifa.draw.framework.Figure;
 import CH.ifa.draw.framework.FigureEnumeration;
 import CH.ifa.draw.standard.CreationTool;
-import CH.ifa.draw.standard.DecoratorFigure;
+
 import CH.ifa.draw.standard.SingleFigureEnumerator;
 import CH.ifa.draw.standard.TextHolder;
 import CH.ifa.draw.util.Undoable;
@@ -24,7 +24,7 @@ import CH.ifa.draw.util.UndoableAdapter;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
+import CH.ifa.draw.framework.DrawingViewMouseEvent;
 
 /**
  * A TextAreaTool creates TextAreaFigures.<br>
@@ -67,9 +67,11 @@ public class TextAreaTool extends CreationTool {
 	 * @param x  Description of the Parameter
 	 * @param y  Description of the Parameter
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		setView((DrawingView)e.getSource());
-		Figure pressedFigure = drawing().findFigureInside(x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+		setAnchorX( dvme.getX() );
+		setAnchorY( dvme.getY() );
+		Figure pressedFigure = drawing().findFigureInside( getAnchorX(), getAnchorY() );
 		TextHolder textHolder = null;
 		if (pressedFigure != null) {
 			textHolder = pressedFigure.getTextHolder();
@@ -101,7 +103,7 @@ public class TextAreaTool extends CreationTool {
 			editor().toolDone();
 		}
 		else {
-			super.mouseDown(e, x, y);
+			super.mouseDown(dvme);
 		}
 	}
 
@@ -112,12 +114,12 @@ public class TextAreaTool extends CreationTool {
 	 * @param x  Description of the Parameter
 	 * @param y  Description of the Parameter
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		// if not creating just ignore
 		if (getCreatedFigure() == null) {
 			return;
 		}
-		super.mouseDrag(e, x, y);
+		super.mouseDrag(dvme);
 	}
 
 	/**
@@ -127,7 +129,7 @@ public class TextAreaTool extends CreationTool {
 	 * @param x  Description of the Parameter
 	 * @param y  Description of the Parameter
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		// if not creating just ignore
 		if (getCreatedFigure() == null) {
 			return;
@@ -136,7 +138,7 @@ public class TextAreaTool extends CreationTool {
 		// update view so the created figure is drawn before the floating text
 		// figure is overlaid. (Note, fDamage should be null in StandardDrawingView
 		// when the overlay figure is drawn because a JTextField cannot be scrolled)
-		view().checkDamage();
+		view().drawing().update();
 		TextHolder textHolder = (TextHolder)getCreatedFigure();
 		if (textHolder.acceptsTyping()) {
 			beginEdit(textHolder, getCreatedFigure());
@@ -218,13 +220,15 @@ public class TextAreaTool extends CreationTool {
 			}
 			else {
 				drawing().orphan(getAddedFigure());
+				//this tool is now responsible for the release or readd of the figure
+				//!!!dnoyeb!!!
 				// nothing to undo
 //	            setUndoActivity(null);
 			}
 
 			fTextField.endOverlay();
 			fTextField = null;
-//			view().checkDamage();
+//			view().drawing().update();
 		}
 	}
 
@@ -330,9 +334,11 @@ public class TextAreaTool extends CreationTool {
 
 			if (!isValidText(getOriginalText())) {
 				FigureEnumeration fe = getAffectedFigures();
-				while (fe.hasNextFigure()) {
+				while(fe.hasNextFigure()){
 					getDrawingView().drawing().orphan(fe.nextFigure());
 				}
+				//this tool is now responsible for the release or readd of the figures
+				//!!!dnoyeb!!!
 			}
 			// add text figure if it has been removed (no backup text)
 			else if (!isValidText(getBackupText())) {
@@ -368,9 +374,8 @@ public class TextAreaTool extends CreationTool {
 			// the text figure did exist but was remove
 			if (!isValidText(getBackupText())) {
 				FigureEnumeration fe = getAffectedFigures();
-				while (fe.hasNextFigure()) {
-					getDrawingView().drawing().orphan(fe.nextFigure());
-				}
+				getDrawingView().drawing().orphanAll( fe );
+				//this tool is now this tools responsibility to release these figures
 			}
 			// the text figure didn't exist before
 			else if (!isValidText(getOriginalText())) {

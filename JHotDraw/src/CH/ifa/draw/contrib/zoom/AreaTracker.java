@@ -15,7 +15,8 @@ import CH.ifa.draw.framework.DrawingEditor;
 import CH.ifa.draw.standard.AbstractTool;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
+import CH.ifa.draw.framework.DrawingViewMouseEvent;
 
 /**
  * A rubberband area tracker.  It can be extended to do anything with
@@ -38,22 +39,24 @@ public abstract class AreaTracker extends AbstractTool {
 		return new Rectangle(area.x, area.y, area.width, area.height);
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
 		// use event coordinates to supress any kind of
 		// transformations like constraining points to a grid
-		super.mouseDown(e, e.getX(), e.getY());
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
 		rubberBand(getAnchorX(), getAnchorY(), getAnchorX(), getAnchorY());
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		super.mouseDrag(e, x, y);
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		super.mouseDrag(dvme);
 		eraseRubberBand();
-		rubberBand(getAnchorX(), getAnchorY(), x, y);
+		rubberBand(getAnchorX(), getAnchorY(), dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY());
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
-		super.mouseUp(e, x, y);
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		eraseRubberBand();
+		super.mouseUp(dvme);		
 	}
 
 	private void rubberBand(int x1, int y1, int x2, int y2) {

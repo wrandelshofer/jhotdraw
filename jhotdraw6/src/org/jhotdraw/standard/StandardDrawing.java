@@ -21,6 +21,7 @@ import java.io.*;
 
 /**
  * The standard implementation of the Drawing interface.
+ * Fix this to aggregrate CompositeFigure instead of extending it.
  *
  * @see Drawing
  *
@@ -79,7 +80,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	/**
 	 * Gets an enumeration with all listener for this drawing.
 	 */
-	public Iterator drawingChangeListeners() {
+	protected Iterator drawingChangeListeners() {
 		return fListeners.iterator();
 	}
 
@@ -90,36 +91,58 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	 *
 	 * @param figure that is part of the drawing and should be added
 	 */
-	public synchronized Figure orphan(Figure figure) {
-		Figure orphanedFigure = super.orphan(figure);
-		// ensure that we remove the top level figure in a drawing
-		if (orphanedFigure.listener() != null) {
-			Rectangle rect = invalidateRectangle(displayBox());
-			orphanedFigure.listener().figureRequestRemove(new FigureChangeEvent(orphanedFigure, rect));
-		}
-		return orphanedFigure;
-	}
+/*	public synchronized Figure orphan(Figure figure) {
+		return super.orphan(figure);
+	}*/
 
-	public synchronized Figure add(Figure figure) {
+/*	public synchronized Figure add(Figure figure) {
 		Figure addedFigure = super.add(figure);
-		if (addedFigure.listener() != null) {
-			Rectangle rect = invalidateRectangle(displayBox());
-			addedFigure.listener().figureRequestUpdate(new FigureChangeEvent(figure, rect));
-			return addedFigure;
-		}
+		addedFigure.update();
 		return addedFigure;
+	}*/
+	
+	/**
+	 * Causes the drawing to requestUpdate
+	 */
+	public void update() {
+		//super.update(); //nobody is expecting us to behave like a CompositeFigure so this is ok to mask.
+		fireDrawingRequestUpdate();
 	}
 
 	/**
-	 * Invalidates a rectangle and merges it with the
-	 * existing damaged area.
+	 * One of the contained figures is announcing that part of it has been
+	 * invalidated.  We announce to our listeners that this same part of us has
+	 * been invalidated.
+	 *
 	 * @see FigureChangeListener
+	 * @see DrawingChangeListener
 	 */
-	public void figureInvalidated(FigureChangeEvent e) {
+	protected void figureInvalidated(FigureChangeEvent e) {
+		//super.figureInvalidated(e);
+		fireDrawingInvalidated(e.getInvalidatedRectangle());
+	}
+	
+	/**
+	 * Forces an update of the drawing change listeners.
+	 * this is error? its overriding the compositeFigure basic behavior.
+	 * should leave composite figure basic behavior alone, and fire drawingrequestupdate
+	 * as well as.
+	 *
+	 * this is fired when the figures we are listening to change.
+	 * 
+	 */
+	protected void figureRequestUpdate(FigureChangeEvent e) {
+		//super.figureRequestUpdate(e);
+		fireDrawingRequestUpdate(); //this will cause the drawing to be redrawn 
+	}	
+	/**
+	 * 
+	 */
+	protected void fireDrawingInvalidated(Rectangle invalidRectangle) {
 		if (fListeners != null) {
 			for (int i = 0; i < fListeners.size(); i++) {
 				DrawingChangeListener l = (DrawingChangeListener)fListeners.get(i);
-				l.drawingInvalidated(new DrawingChangeEvent(this, e.getInvalidatedRectangle()));
+				l.drawingInvalidated(new DrawingChangeEvent(this, invalidRectangle));
 			}
 		}
 	}
@@ -127,7 +150,19 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	/**
 	 * Forces an update of the drawing change listeners.
 	 */
-	public void figureRequestUpdate(FigureChangeEvent e) {
+	protected void fireDrawingTitleChanged() {
+		if (fListeners != null) {
+			for (int i = 0; i < fListeners.size(); i++) {
+				DrawingChangeListener l = (DrawingChangeListener)fListeners.get(i);
+				l.drawingTitleChanged(new DrawingChangeEvent(this, null));
+			}
+		}
+	}
+
+	/**
+	 *  Sent when the drawing wants to be refreshed
+	 */
+	protected void fireDrawingRequestUpdate() {
 		if (fListeners != null) {
 			for (int i = 0; i < fListeners.size(); i++) {
 				DrawingChangeListener l = (DrawingChangeListener)fListeners.get(i);
@@ -153,7 +188,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	 * Gets the display box. This is the union of all figures.
 	 */
 	public Rectangle displayBox() {
-		if (fFigures.size() > 0) {
+		if (figureCount() > 0) {
 			FigureEnumeration fe = figures();
 
 			Rectangle r = fe.nextFigure().displayBox();
@@ -193,7 +228,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	public synchronized void unlock() {
 		if (fDrawingLockHolder != null) {
 			fDrawingLockHolder = null;
-			notifyAll();
+			notify();
 		}
 	}
 
@@ -211,5 +246,6 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 
 	public void setTitle(String newTitle) {
 		myTitle = newTitle;
+        fireDrawingTitleChanged();
 	}
 }

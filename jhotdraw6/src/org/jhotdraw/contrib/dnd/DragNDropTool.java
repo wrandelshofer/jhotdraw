@@ -13,7 +13,7 @@ package CH.ifa.draw.contrib.dnd;
 
 import CH.ifa.draw.standard.AbstractTool;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -65,9 +65,9 @@ public class DragNDropTool extends AbstractTool {
 	/**
 	 * Sent when a new view is created
 	 */
-	public void viewCreated(DrawingView view) {
+	protected void viewCreated(DrawingView view) {
 		super.viewCreated(view);
-		if (DNDInterface.class.isInstance(view)) {
+		if (view instanceof DNDInterface) {
 			DNDInterface dndi = (DNDInterface)view;
 			dndi.setDropTargetActive(true);
 			dndi.setDragSourceActive(false);
@@ -78,8 +78,8 @@ public class DragNDropTool extends AbstractTool {
 	/**
 	 * Send when an existing view is about to be destroyed.
 	 */
-	public void viewDestroying(DrawingView view) {
-		if (DNDInterface.class.isInstance(view)) {
+	protected void viewDestroying(DrawingView view) {
+		if (view instanceof DNDInterface) {
 			DNDInterface dndi = (DNDInterface)view;
 			dndi.setDropTargetActive(false);
 			dndi.setDragSourceActive(false);
@@ -94,13 +94,12 @@ public class DragNDropTool extends AbstractTool {
 	 */
 	public void activate() {
 		super.activate();
-		System.out.println("DNDTool Activation");
-
 		setDragSourceActive(true);
+		//System.out.println("DNDTool Activation");
 	}
 
 	public void deactivate() {
-		System.out.println("DNDTool deactivation.");
+		//System.out.println("DNDTool deactivation.");
 		setDragSourceActive(false);
 		super.deactivate();
 	}
@@ -171,9 +170,9 @@ public class DragNDropTool extends AbstractTool {
      * Don't use x, y use getX and getY so get the real unlimited position
 	 * Part of the Tool interface.
 	 */
-	public void mouseMove(MouseEvent evt, int x, int y) {
-		if (evt.getSource() == getActiveView()) {
-			setCursor(evt.getX(), evt.getY(), getActiveView());
+	public void mouseMove(DrawingViewMouseEvent dvme) {
+		if (dvme.getDrawingView() == getActiveView()) {
+			setCursor(dvme.getX(), dvme.getY(), getActiveView());
 		}
 	}
 
@@ -182,20 +181,25 @@ public class DragNDropTool extends AbstractTool {
 	 * current tracker.
 	 * Part of the Tool interface.
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		if (fChild != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
-			fChild.mouseUp(e, x, y);
+			fChild.mouseUp(dvme);
+			fChild = null;
+			if (dvme.getDrawingView() instanceof DNDInterface) {
+				DNDInterface dndi = (DNDInterface)dvme.getDrawingView();
+				dndi.setDragSourceActive(true);
+			}
 		}
-		fChild = null;
 		view().unfreezeView();
+		//get undo actions and push into undo stack?
 	}
 
 	/**
 	 * Handles mouse down events and starts the corresponding tracker.
 	 * Part of the Tool interface.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e, x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
 		// on MS-Windows NT: AWT generates additional mouse down events
 		// when the left button is down && right button is clicked.
 		// To avoid dead locks we ignore such events
@@ -205,17 +209,22 @@ public class DragNDropTool extends AbstractTool {
 
 		view().freezeView();
 
-		Handle handle = view().findHandle(e.getX(), e.getY());
+		Handle handle = view().findHandle(getAnchorX(), getAnchorY());
 		if (handle != null) {
 			fChild = createHandleTracker(handle);
+			//Turn off DND
+			if (dvme.getDrawingView() instanceof DNDInterface) {
+				DNDInterface dndi = (DNDInterface)dvme.getDrawingView();
+				dndi.setDragSourceActive(false);
+			}
 		}
 		else {
-			Figure figure = drawing().findFigure(e.getX(), e.getY());
+			Figure figure = drawing().findFigure(getAnchorX(), getAnchorY());
 			if (figure != null) {
 				//fChild = createDragTracker(editor(), figure);
 				//fChild.activate();
 				fChild = null;
-				if (e.isShiftDown()) {
+				if (dvme.getMouseEvent().isShiftDown()) {
 				   view().toggleSelection(figure);
 				}
 				else if (!view().isFigureSelected(figure)) {
@@ -224,14 +233,14 @@ public class DragNDropTool extends AbstractTool {
 				}
 			}
 			else {
-				if (!e.isShiftDown()) {
+				if (!dvme.getMouseEvent().isShiftDown()) {
 					view().clearSelection();
 				}
 				fChild = createAreaTracker();
 			}
 		}
 		if (fChild != null) {
-			fChild.mouseDown(e, x, y);
+			fChild.mouseDown(dvme);
 		}
 	}
 
@@ -240,9 +249,9 @@ public class DragNDropTool extends AbstractTool {
 	 * current tracker.
 	 * Part of the Tool interface.
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		if (fChild != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
-			fChild.mouseDrag(e, x, y);
+			fChild.mouseDrag(dvme);
 		}
 	}
 

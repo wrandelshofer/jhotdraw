@@ -59,7 +59,10 @@ public class UndoManager {
 			undoStack = CollectionsFactory.current().createList(maxStackCapacity);
 		}
 	}
-
+	/**
+	 * Need a falling activity that if its the next one, it automatically gets
+	 * redone. !!!dnoyeb!!!
+	 */
 	public void pushRedo(Undoable redoActivity) {
 		if (redoActivity.isRedoable()) {
 

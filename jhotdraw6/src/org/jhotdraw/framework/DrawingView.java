@@ -81,7 +81,7 @@ public interface DrawingView extends ImageObserver, DrawingChangeListener {
 	/**
 	 * Adds a collections of figures to the drawing.
 	 */
-	public void addAll(Collection figures);
+	public FigureEnumeration addAll(Collection figures);
 
 	/**
 	 * Gets the size of the drawing.

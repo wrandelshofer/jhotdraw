@@ -14,7 +14,6 @@ package CH.ifa.draw.figures;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.Undoable;
-import java.awt.event.MouseEvent;
 
 /**
  * Tool to scribble a PolyLineFigure
@@ -67,9 +66,9 @@ public class ScribbleTool extends AbstractTool {
 		fLastY = y;
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e,x,y);
-		if (e.getClickCount() >= 2) {
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
+		if (dvme.getMouseEvent().getClickCount() >= 2) {
 			// use undo activity from paste command...
 			setUndoActivity(createUndoActivity());
 
@@ -79,23 +78,23 @@ public class ScribbleTool extends AbstractTool {
 		else {
 			// use original event coordinates to avoid
 			// supress that the scribble is constrained to
-			// the grid
-			point(e.getX(), e.getY());
+			// the grid - why shouldnt the scribble be constraind to grid as all other Tools?
+			point(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY());
 		}
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		if (fScribble != null) {
-			point(e.getX(), e.getY());
+			point(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY());
 		}
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
-		super.mouseUp(e, x, y);
-		// deactivate tool only when mouseUp was also fired
-		if (e.getClickCount() >= 2) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
+		// deactivate tool only when mouseUp was also fired, needs testing. is deactive the right word here?
+		if (dvme.getMouseEvent().getClickCount() >= 2) {
 			editor().toolDone();
 		}
+		super.mouseUp(dvme);		
 	}
 
 	/**

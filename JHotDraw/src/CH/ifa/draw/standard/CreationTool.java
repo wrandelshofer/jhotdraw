@@ -14,7 +14,7 @@ package CH.ifa.draw.standard;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.util.Undoable;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 
 /**
  * A tool to create new figures. The figure to be
@@ -27,6 +27,9 @@ import java.awt.event.MouseEvent;
  * CreationTool creates new figures by cloning a prototype.
  * <hr>
  *
+ * Note: CreatedFigure and AddedFigure are now the same.  No longer does a
+ * CompositeFigure change the added figure and return a different figure.
+ *
  * @see Figure
  * @see Object#clone
  *
@@ -38,6 +41,9 @@ public class CreationTool extends AbstractTool {
 
 	/**
 	 * the anchor point of the interaction
+	 * This is redundant. AbstractTool already has AnchorX and AnchorY which all
+	 * other tools are using.
+	 * @deprecated
 	 */
 	private Point   fAnchorPoint;
 
@@ -87,9 +93,9 @@ public class CreationTool extends AbstractTool {
 	/**
 	 * Creates a new figure by cloning the prototype.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		setView((DrawingView)e.getSource());
-		setAnchorPoint(new Point(x, y));
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+		setAnchorPoint(new Point(dvme.getX(), dvme.getY()));
 		setCreatedFigure(createFigure());
 		setAddedFigure(view().add(getCreatedFigure()));
 		getAddedFigure().displayBox(getAnchorPoint(), getAnchorPoint());
@@ -100,7 +106,9 @@ public class CreationTool extends AbstractTool {
 	 */
 	protected Figure createFigure() {
 		if (fPrototype == null) {
-			throw new JHotDrawRuntimeException("No protoype defined");
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("No protoype defined.");
 		}
 		return (Figure) fPrototype.clone();
 	}
@@ -108,9 +116,9 @@ public class CreationTool extends AbstractTool {
 	/**
 	 * Adjusts the extent of the created figure
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		if (getAddedFigure() != null) {
-			getAddedFigure().displayBox(getAnchorPoint(), new Point(x,y));
+			getAddedFigure().displayBox(getAnchorPoint(), new Point(dvme.getX(),dvme.getY()));
 		}
 	}
 
@@ -119,7 +127,7 @@ public class CreationTool extends AbstractTool {
 	 * is removed from the drawing.
 	 * @see Figure#isEmpty
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		if (getAddedFigure() != null) {
 			if (getCreatedFigure().isEmpty()) {
 				drawing().remove(getAddedFigure());
@@ -134,6 +142,7 @@ public class CreationTool extends AbstractTool {
 				getUndoActivity().setAffectedFigures(new SingleFigureEnumerator(getAddedFigure()));
 			}
 			setAddedFigure(null);
+			view().drawing().update();//we made a change to the drawing, so update it.
 		}
 		setCreatedFigure(null);
 		editor().toolDone();
@@ -180,6 +189,10 @@ public class CreationTool extends AbstractTool {
 	 *
 	 * @return the anchor point for the interaction
 	 * @see #mouseDown
+	 * @deprecated use {@link AbstractTool#getAnchorX 
+	 *			   AbstractTool.getAnchorX()} and {@link AbstractTool#getAnchorY
+	 *             AbstractTool.getAnchorY()} instead.
+	 *
 	 */
 	protected Point getAnchorPoint() {
 		// SF bug-report id: #490752
@@ -189,7 +202,9 @@ public class CreationTool extends AbstractTool {
 
 	/**
 	 * Sets the anchorPoint attribute of the CreationTool object
-	 *
+	 * @deprecated use {@link AbstractTool#setAnchorX
+	 *			   AbstractTool.setAnchorX()} and {@link AbstractTool#setAnchorY
+	 *             AbstractTool.setAnchorY()} instead.
 	 * @param newAnchorPoint  The new anchorPoint value
 	 */
 	protected void setAnchorPoint(Point newAnchorPoint) {

@@ -11,7 +11,7 @@
 
 package CH.ifa.draw.samples.javadraw;
 
-import java.awt.event.MouseEvent;
+
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 
@@ -29,16 +29,21 @@ public  class MySelectionTool extends SelectionTool {
 	/**
 	 * Handles mouse down events and starts the corresponding tracker.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		setView((DrawingView)e.getSource());
-		if (e.getClickCount() == 2) {
-			Figure figure = drawing().findFigure(e.getX(), e.getY());
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+		// use event coordinates to supress any kind of
+		// transformations like constraining points to a grid
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
+		
+		if (dvme.getMouseEvent().getClickCount() == 2) {
+			Figure figure = drawing().findFigure(getAnchorX(), getAnchorY());
 			if (figure != null) {
 				inspectFigure(figure);
 				return;
 			}
 		}
-		super.mouseDown(e, x, y);
+		super.mouseDown(dvme);
 	}
 
 	protected void inspectFigure(Figure f) {
