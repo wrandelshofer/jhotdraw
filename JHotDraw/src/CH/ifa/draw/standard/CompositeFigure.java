@@ -29,6 +29,10 @@ import java.io.*;
  * CompositeFigure enables to treat a composition of figures like
  * a single figure.<br>
  *
+ * Orphan removes a figure but does not release it.  We need a description of what that means
+ * and what the implications of that are.
+ *
+ *
  * @see Figure
  *
  * @version <$CURRENT_VERSION$>
@@ -344,9 +348,13 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Draws only the given figures
-	 * @see Figure#draw
-	 */
+	* Draws only the given figures
+	* @todo mrfloppy to ensure that only figures contained within this
+	*  <b>CompositeFigure</b> get drawn.  dnoyeb's opinion is that this 
+	*  method is unnecessary and if used is a symptom of some other issue.
+	*  Likely {@link #draw(Graphics) draw} is enough.
+	* @see Figure#draw
+	*/
 	public void draw(Graphics g, FigureEnumeration fe) {
 		while (fe.hasNextFigure()) {
 			fe.nextFigure().draw(g);
@@ -361,19 +369,20 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Returns an Enumeration for accessing the contained figures.
-     * The enumeration is a snapshot of the current contained figures
-     * and is not a "live" enumeration and does not take subsequent
-     * changes of the CompositeFigure into account.
-	 * The figures are returned in the drawing order.
-	 */
+	* Returns an enumeration for accessing the contained figures.
+	* The enumeration is a snapshot of the current contained <b>Figure</b>s
+	* and is not a "live" enumeration and does not take subsequent
+	* changes of the <b>CompositeFigure</b> into account.
+	* The figures are returned in the drawing order.
+	*
+	*/
 	public final FigureEnumeration figures() {
 		return new FigureEnumerator(CollectionsFactory.current().createList(fFigures));
 	}
 
 	/**
 	 * Returns an enumeration to iterate in
-	 * Z-order back to front over the figures
+	 * Z-order back to front over the {@link Figure Figure}s
 	 * that lie within the given bounds.
 	 */
 	public FigureEnumeration figures(Rectangle viewRectangle) {
@@ -406,22 +415,22 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Gets number of child figures.
+	 * Gets number of contained {@link Figure Figure}s.
 	 */
 	public int figureCount() {
 		return fFigures.size();
 	}
 
 	/**
-	 * Check whether a given figure is a child figure of this CompositeFigure.
+	 * Check whether a given <b>figure</b> is contained within this <b>CompositeFigure.</b>
 	 */
 	public boolean containsFigure(Figure checkFigure) {
 		return fFigures.contains(checkFigure);
 	}
 
     /**
-	 * Returns an Enumeration for accessing the contained figures
-	 * in the reverse drawing order.
+	 * Returns an enumeration for accessing the contained {@link Figure Figure}s
+	 * in the reverse {@link Drawing Drawing} order.
 	 */
 	public final FigureEnumeration figuresReverse() {
 		return new ReverseFigureEnumerator(CollectionsFactory.current().createList(fFigures));
@@ -429,7 +438,7 @@ public abstract class CompositeFigure
 
 	/**
 	 * Finds a top level Figure. Use this call for hit detection that
-	 * should not descend into the figure's children.
+	 * should not descend into the contained <b>Figure</b>s.
 	 */
 	public Figure findFigure(int x, int y) {
 		FigureEnumeration fe = figuresReverse();
@@ -443,7 +452,8 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Finds a top level Figure that intersects the given rectangle.
+	 * Finds a top level <b>Figure</b> that intersects the given rectangle.
+	 * @return	Returns the found <b>Figure</b>, or <b>null</b> if not found.
 	 */
 	public Figure findFigure(Rectangle r) {
 		FigureEnumeration fe = figuresReverse();
@@ -458,12 +468,12 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Finds a top level Figure, but supresses the passed
-	 * in figure. Use this method to ignore a figure
+	 * Finds a top level <b>Figure</b>, but supresses the passed
+	 * in <b>Figure</b>. Use this method to ignore a figure
 	 * that is temporarily inserted into the drawing.
 	 * @param x the x coordinate
 	 * @param y the y coordinate
-	 * @param without the figure to be ignored during
+	 * @param without the <b>Figure</b> to be ignored during
 	 * the find.
 	 */
 	public Figure findFigureWithout(int x, int y, Figure without) {
@@ -504,6 +514,17 @@ public abstract class CompositeFigure
 	 * children. Use this method to implement <i>click-through</i>
 	 * hit detection, that is, you want to detect the inner most
 	 * figure containing the given point.
+	 *
+	 * This seems broken!!!  A figure does not seem to be able to find "itself."
+	 * It will pass its call recursively onto the figures it contains, until a
+	 * figure that contains no figures is found.  At which point that figure will
+	 * return null.  This null will trickly all the way back up the heirarchy.
+	 *
+	 * My opinion is that you should first check {@link #findFigure(int, int) findFigure(int x, int y)}.
+	 * If that hits, call {@link #findFigureInside(int, int) findFigureInside(int x, int y)}.
+	 * on the found Figure.  If that returns null <i>then</i> return the found figure.
+	 * dnoyeb@users.sourceforge.net
+	 *
 	 */
 	public Figure findFigureInside(int x, int y) {
 		FigureEnumeration fe = figuresReverse();
@@ -521,6 +542,7 @@ public abstract class CompositeFigure
 	 * children. It supresses the passed
 	 * in figure. Use this method to ignore a figure
 	 * that is temporarily inserted into the drawing.
+	 * @see #fingFigureInside for my error comments.
 	 */
 	public Figure findFigureInsideWithout(int x, int y, Figure without) {
 		FigureEnumeration fe = figuresReverse();
@@ -537,8 +559,8 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Checks if the composite figure has the argument as one of
-	 * its children.
+	 * Checks if the composite figure has the argument as one of its contained
+	 * figures.
 	 * @return true if the figure is part of this CompositeFigure, else otherwise
 	 */
 	public boolean includes(Figure figure) {
@@ -570,7 +592,10 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Releases the figure and all its children.
+	 * Releases the figure and all its contained figures.
+	 * Should we release the figures in the order they were added?
+	 * i.e. should we first release the contained figures, THEN call super.release()??
+	 * !!!dnoyeb@users.sourceforge.net
 	 */
 	public void release() {
 		super.release();
@@ -593,6 +618,9 @@ public abstract class CompositeFigure
 
 	/**
 	 * Propagates the removeFromDrawing request up to the container.
+	 * Why does a contained figures remove request end up being the compositeFigures
+	 * remove request? can we not remove just the contained figure?
+	 * This seems bizarre!!! dnoyeb
 	 * @see FigureChangeListener
 	 */
 	public void figureRequestRemove(FigureChangeEvent e) {

@@ -99,7 +99,7 @@ public class CreationTool extends AbstractTool {
 	 * Creates a new figure by cloning the prototype.
 	 */
 	protected Figure createFigure() {
-		if (fPrototype == null) {
+		if (fPrototype == null) {	//should be ASSERT and not runtime exception because this is a condition that should never happen!!! dnoyeb
 			throw new JHotDrawRuntimeException("No protoype defined");
 		}
 		return (Figure) fPrototype.clone();
