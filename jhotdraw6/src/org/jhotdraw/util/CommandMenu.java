@@ -93,9 +93,14 @@ public  class CommandMenu extends JMenu implements ActionListener, CommandListen
 		// ignore separators (a separator has a hyphen as its label)
 		for (int i = 0; i < getMenuComponentCount(); i++) {
 			Component c = getMenuComponent(i);
-			Command cmd = (Command) hm.get(c);
-			if (cmd != null) {
-				c.setEnabled(cmd.isExecutable());
+			if(c instanceof CommandMenu){
+				((CommandMenu)c).checkEnabled();
+			}
+			else {
+				Command cmd = (Command) hm.get(c);
+				if (cmd != null) {
+					c.setEnabled(cmd.isExecutable());
+				}
 			}
 		}
 	}

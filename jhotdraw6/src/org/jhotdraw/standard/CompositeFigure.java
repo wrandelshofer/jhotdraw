@@ -47,7 +47,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see #remove
 	 */
 	private List fFigures;
-	private Map orphanMap;
+	private transient Map orphanMap;
 	/*
 	 * Serialization support.
 	 */
@@ -59,7 +59,6 @@ public abstract class CompositeFigure extends AbstractFigure {
 	
 	/**
 	 * Encapsulate the FigureChangeListener implementation
-	 * is this created when cloned???dnoyeb???
 	 */
 	private transient FigureChangeListener figureChangeListener;
 	
@@ -95,14 +94,19 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * the figure's container.
 	 *
 	 * @param figure to be added to the drawing
-	 * @return the figure that was inserted (might be different from the figure specified).
 	 */
 	public void add(Figure figure) {
-		DEBUG_validateContainment(figure,false);
-		figure.setZValue(++_nHighestZ);
-		getFigures().add(figure);
-		figure.addToContainer(figureChangeListener);  //add a figure to this CompositeFigure
-		_addToQuadTree(figure);
+		if(orphanMap.containsKey(figure)){
+			System.out.println("Figure restored to " + this);
+			restore(figure);
+		}
+		else {
+			DEBUG_validateContainment(figure,false);
+			figure.setZValue(++_nHighestZ);
+			getFigures().add(figure);
+			figure.addToContainer(figureChangeListener);  //add a figure to this CompositeFigure
+			_addToQuadTree(figure);
+		}
 	}
 
 	/**
@@ -148,13 +152,14 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Puts a figure back into the CompositeFigure in its old place.
 	 * Figure must have already been orphaned.
 	 */
-	public void restore(Figure figure){
+	protected void restore(Figure figure){
 		if(orphanMap.containsKey(figure)){
 			Rectangle r = figure.displayBox();
 			Figure nf = (Figure) orphanMap.remove(figure);
 			int index = getFigures().indexOf(nf);
 			getFigures().set(index,figure);
 			figure.addToContainer( this.figureChangeListener );
+			_addToQuadTree(figure);
 			//need to do something here to repaint the removed area.
 			if (listener() != null) {
 				listener().figureInvalidated(new FigureChangeEvent( this, r ));
@@ -181,7 +186,6 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Removes all figures from this container and releases it from the undo/redo
 	 * architecture.  calls orphan on the figures first if necessary
 	 *
-	 * @deprecated see {@link #remove remove}
 	 * @see #remove
 	 */
 	public void removeAll(FigureEnumeration fe) {
@@ -219,9 +223,6 @@ public abstract class CompositeFigure extends AbstractFigure {
 		//remove figure from quad tree
 		_removeFromQuadTree(figure);
 
-		
-//		figure.remove();//fire the figure orphaned event?
-		
 		//need to do something here to repaint the removed area.
 		if (listener() != null) {
 			listener().figureInvalidated(new FigureChangeEvent( this, r ));
@@ -804,7 +805,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 		//the figures are not transient so they get deserialized here
 		s.defaultReadObject();
-
+		orphanMap = CollectionsFactory.current().createMap(); 
 		//the listener is transient and not deserialized
 		figureChangeListener = new innerFigureChangeListener();
 		//so we need to establish listening to our new figures

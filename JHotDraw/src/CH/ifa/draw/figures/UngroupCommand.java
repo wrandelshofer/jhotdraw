@@ -95,10 +95,10 @@ public  class UngroupCommand extends AbstractCommand {
 					//orphan the figure from the drawing
 					getDrawingView().drawing().orphan(f2);
 					//restore the figure to the group figure
-					groupFigure.restore( f2 );
+					groupFigure.add( f2 );
 				}
 				//restore the groupFigure to the drawing
-				getDrawingView().drawing().restore(groupFigure);
+				getDrawingView().drawing().add(groupFigure);
 				//add the group figure to the selection
 				getDrawingView().addToSelection(groupFigure);
 				//add the figure to the affected figures.

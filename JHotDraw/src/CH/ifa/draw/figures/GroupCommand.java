@@ -86,7 +86,7 @@ public  class GroupCommand extends AbstractCommand {
 				//because we recreate the GroupFigure for the groupFigures action
 				getGroupFigure().remove(addFig);	
 				//restore figure to the drawing
-				getDrawingView().drawing().restore(addFig);
+				getDrawingView().drawing().add(addFig);
 				//add figure to selection
 				getDrawingView().addToSelection(addFig);
 				//add figure to affected figures

@@ -204,12 +204,6 @@ import java.io.Serializable;
 	public void orphan(Figure figure);
 
 	/**
-	 * adds this figure back to the drawing after it has been orphaned.  This
-	 * figure must have been orphaned from this drawing or an exception will be
-	 * thrown. JHDIllegalStateException extends JHDRuntimeException
-	 */
-	public void restore(Figure figure);
-	/**
 	 * @deprecated use {@link #orphanAll(FigureEnumeration fe) 
 	 *             orphanAll(FigureEnumeration fe)} instead
 	 */
