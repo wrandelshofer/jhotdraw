@@ -12,8 +12,6 @@
 package CH.ifa.draw.framework;
 
 import java.io.Serializable;
-import java.util.Vector;
-import java.util.Enumeration;
 
 /**
  * A FigureAttribute is a constant for accessing a special figure attribute. It
@@ -73,7 +71,7 @@ public class FigureAttributeConstant extends JHDType implements Serializable, Cl
 	public FigureAttributeConstant(java.lang.String newName) {
 		super(newName);
 		System.err.println("WARNING: FigureAttributeConstant(String) has been deprecated.");
-		Thread.dumpStack();
+		//Thread.dumpStack();
 	}
 
 	/**
