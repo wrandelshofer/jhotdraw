@@ -60,7 +60,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Encapsulate the FigureChangeListener implementation
 	 * is this created when cloned???dnoyeb???
 	 */
-	private transient FigureChangeListener figureChangeListener = new innerFigureChangeListener();
+	private transient FigureChangeListener figureChangeListener;
 	
 	private class innerFigureChangeListener implements FigureChangeListener, java.io.Serializable,Cloneable {
 		public void figureInvalidated(FigureChangeEvent e){
@@ -82,6 +82,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	protected CompositeFigure() {
 		setFigures( CollectionsFactory.current().createList() );
+		figureChangeListener = new innerFigureChangeListener();
 		_nLowestZ = 0;
 		_nHighestZ = 0;
 	}
@@ -102,7 +103,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 */
 	public void add(Figure figure) {
 		DEBUG_validateContainment(figure,false);
-		figure.setZValue(++_nHighestZ);
+		figure.setZValue(++_nHighestZ); //no need to increment.  draw order insures subsequent on top.
 		getFigures().add(figure);
 		figure.addToContainer(figureChangeListener);  //add a figure to this CompositeFigure
 		_addToQuadTree(figure);
@@ -697,6 +698,9 @@ public abstract class CompositeFigure extends AbstractFigure {
 	protected void figureChanged(FigureChangeEvent e) {
 		_removeFromQuadTree(e.getFigure());
 		_addToQuadTree(e.getFigure());
+		if (listener() != null) {
+			listener().figureChanged(new FigureChangeEvent(this));
+		}
 	}
 
 	/**
@@ -727,6 +731,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	public void read(StorableInput dr) throws IOException {
 		super.read(dr);
 		//
+		figureChangeListener = new innerFigureChangeListener();
 		int size = dr.readInt();
 		setFigures( CollectionsFactory.current().createList(size) );
 		//what about z value reset?
@@ -749,6 +754,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 		s.defaultReadObject();
 
 		//the listener is transient and not deserialized
+		figureChangeListener = new innerFigureChangeListener();
 		//so we need to establish listening to our new figures
 		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
