@@ -14,8 +14,7 @@ package CH.ifa.draw.contrib.zoom;
 import CH.ifa.draw.framework.DrawingEditor;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-
+import CH.ifa.draw.framework.DrawingViewMouseEvent;
 /**
  * @author Andre Spiegel <spiegel@gnu.org>
  * @version <$CURRENT_VERSION$>
@@ -26,12 +25,12 @@ public class ZoomAreaTracker extends AreaTracker {
 		super(editor);
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		Rectangle zoomArea = getArea();
-		super.mouseUp(e, x, y);
 		if (zoomArea.width > 4 && zoomArea.height > 4)
 			((ZoomDrawingView) view()).zoom(zoomArea.x, zoomArea.y,
 					zoomArea.width, zoomArea.height);
+		super.mouseUp(dvme);
 	}
 
 }

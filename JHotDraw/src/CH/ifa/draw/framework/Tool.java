@@ -12,7 +12,7 @@
 package CH.ifa.draw.framework;
 
 import CH.ifa.draw.util.Undoable;
-import java.awt.event.MouseEvent;
+
 import java.awt.event.KeyEvent;
 
 /**
@@ -74,22 +74,22 @@ public interface Tool {
 	/**
 	 * Handles mouse down events in the drawing view.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y);
+	public void mouseDown(DrawingViewMouseEvent dvme);
 
 	/**
 	 * Handles mouse drag events in the drawing view.
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y);
+	public void mouseDrag(DrawingViewMouseEvent dvme);
 
 	/**
 	 * Handles mouse up in the drawing view.
 	 */
-	public void mouseUp(MouseEvent e, int x, int y);
+	public void mouseUp(DrawingViewMouseEvent dvme);
 
 	/**
-	 * Handles mouse moves (if the mouse button is up).
+	 * Handles mouse moves (when the mouse button is up).
 	 */
-	public void mouseMove(MouseEvent evt, int x, int y);
+	public void mouseMove(DrawingViewMouseEvent dvme);
 
 	/**
 	 * Handles key down events in the drawing view.

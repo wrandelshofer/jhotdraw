@@ -16,7 +16,8 @@ import CH.ifa.draw.framework.Tool;
 import CH.ifa.draw.standard.AbstractTool;
 
 import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
+import CH.ifa.draw.framework.DrawingViewMouseEvent;
+
 
 /**
  * @author Andre Spiegel <spiegel@gnu.org>
@@ -30,27 +31,29 @@ public class ZoomTool extends AbstractTool {
 		super(editor);
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e,x,y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
+		int x = getAnchorX();
+		int y = getAnchorY();
 		//  Added handling for SHIFTed and CTRLed BUTTON3_MASK so that normal
 		//  BUTTON3_MASK does zoomOut, SHIFTed BUTTON3_MASK does zoomIn
 		//  and CTRLed BUTTON3_MASK does deZoom
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0) {
+		if ((dvme.getMouseEvent().getModifiers() & InputEvent.BUTTON1_MASK) != 0) {
 			if (child != null) {
 				return;
 			}
 			view().freezeView();
 			child = new ZoomAreaTracker(editor());
-			child.mouseDown(e, x, y);
+			child.mouseDown(dvme);
 		}
-		else if ((e.getModifiers() & InputEvent.BUTTON2_MASK) != 0) {
+		else if ((dvme.getMouseEvent().getModifiers() & InputEvent.BUTTON2_MASK) != 0) {
 			((ZoomDrawingView) view()).deZoom(x, y);
 		}
-		else if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0) {
-			if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
+		else if ((dvme.getMouseEvent().getModifiers() & InputEvent.BUTTON3_MASK) != 0) {
+			if ((dvme.getMouseEvent().getModifiers() & InputEvent.SHIFT_MASK) != 0) {
 				((ZoomDrawingView)view()).zoomIn(x, y);
 			}
-			else if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
+			else if ((dvme.getMouseEvent().getModifiers() & InputEvent.CTRL_MASK) != 0) {
 
 				((ZoomDrawingView) view()).deZoom(x, y);
 			}
@@ -60,16 +63,16 @@ public class ZoomTool extends AbstractTool {
 		}
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		if (child != null) {
-			child.mouseDrag(e, x, y);
+			child.mouseDrag(dvme);
 		}
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		if (child != null) {
 			view().unfreezeView();
-			child.mouseUp(e, x, y);
+			child.mouseUp(dvme);
 		}
 		child = null;
 	}

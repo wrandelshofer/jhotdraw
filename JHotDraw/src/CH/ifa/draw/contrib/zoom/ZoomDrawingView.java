@@ -423,7 +423,7 @@ public class ZoomDrawingView extends StandardDrawingView {
 
 
 	protected MouseListener createMouseListener() {
-		return new StandardDrawingView.DrawingViewMouseListener() {
+		return new StandardDrawingView.innerDrawingViewMouseListener() {
 			public void mousePressed(MouseEvent e) {
 				super.mousePressed(createScaledEvent(e));
 			}
@@ -434,7 +434,7 @@ public class ZoomDrawingView extends StandardDrawingView {
 	}
 
 	protected MouseMotionListener createMouseMotionListener() {
-		return new StandardDrawingView.DrawingViewMouseMotionListener() {
+		return new StandardDrawingView.innerDrawingViewMouseMotionListener() {
 			public void mouseDragged(MouseEvent e) {
 				super.mouseDragged(createScaledEvent(e));
 			}
@@ -445,7 +445,7 @@ public class ZoomDrawingView extends StandardDrawingView {
 	}
 
 	protected KeyListener createKeyListener() {
-		return new StandardDrawingView.DrawingViewKeyListener() {
+		return new StandardDrawingView.innerDrawingViewKeyListener() {
 			public void keyPressed(KeyEvent e) {
 				super.keyPressed(e);
 				if (e.getKeyChar() == ' ') {

@@ -24,7 +24,7 @@ import CH.ifa.draw.util.UndoableAdapter;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
+import CH.ifa.draw.framework.DrawingViewMouseEvent;
 
 /**
  * A TextAreaTool creates TextAreaFigures.<br>
@@ -67,9 +67,11 @@ public class TextAreaTool extends CreationTool {
 	 * @param x  Description of the Parameter
 	 * @param y  Description of the Parameter
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		setView((DrawingView)e.getSource());
-		Figure pressedFigure = drawing().findFigureInside(x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+		setAnchorX( dvme.getX() );
+		setAnchorY( dvme.getY() );
+		Figure pressedFigure = drawing().findFigureInside( getAnchorX(), getAnchorY() );
 		TextHolder textHolder = null;
 		if (pressedFigure != null) {
 			textHolder = pressedFigure.getTextHolder();
@@ -101,7 +103,7 @@ public class TextAreaTool extends CreationTool {
 			editor().toolDone();
 		}
 		else {
-			super.mouseDown(e, x, y);
+			super.mouseDown(dvme);
 		}
 	}
 
@@ -112,12 +114,12 @@ public class TextAreaTool extends CreationTool {
 	 * @param x  Description of the Parameter
 	 * @param y  Description of the Parameter
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		// if not creating just ignore
 		if (getCreatedFigure() == null) {
 			return;
 		}
-		super.mouseDrag(e, x, y);
+		super.mouseDrag(dvme);
 	}
 
 	/**
@@ -127,7 +129,7 @@ public class TextAreaTool extends CreationTool {
 	 * @param x  Description of the Parameter
 	 * @param y  Description of the Parameter
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		// if not creating just ignore
 		if (getCreatedFigure() == null) {
 			return;

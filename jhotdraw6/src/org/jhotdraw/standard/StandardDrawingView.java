@@ -158,15 +158,15 @@ public class StandardDrawingView
 	}
 
 	protected MouseListener createMouseListener() {
-		return new DrawingViewMouseListener();
+		return new innerDrawingViewMouseListener();
 	}
 
 	protected MouseMotionListener createMouseMotionListener() {
-		return  new DrawingViewMouseMotionListener();
+		return  new innerDrawingViewMouseMotionListener();
 	}
 
 	protected KeyListener createKeyListener() {
-		return new DrawingViewKeyListener();
+		return new innerDrawingViewKeyListener();
 	}
 
 	/**
@@ -913,7 +913,7 @@ public class StandardDrawingView
 		t.printStackTrace();
     }
 
-	public class DrawingViewMouseListener extends MouseAdapter {
+	protected class innerDrawingViewMouseListener extends MouseAdapter {
 		 /**
 		 * Handles mouse down events. The event is delegated to the
 		 * currently active tool.
@@ -922,8 +922,8 @@ public class StandardDrawingView
 			try {
 				requestFocus(); // JDK1.1
 				Point p = constrainPoint(new Point(e.getX(), e.getY()));
-				setLastClick(new Point(e.getX(), e.getY()));
-				tool().mouseDown(e, p.x, p.y);
+				setLastClick(new Point(e.getX(), e.getY())); //technically a click is a down and up event, not just down
+				tool().mouseDown(new DrawingViewMouseEvent(StandardDrawingView.this,e,p.x, p.y));
 				checkDamage();
 			}
 			catch (Throwable t) {
@@ -938,7 +938,7 @@ public class StandardDrawingView
 		public void mouseReleased(MouseEvent e) {
 			try {
 				Point p = constrainPoint(new Point(e.getX(), e.getY()));
-				tool().mouseUp(e, p.x, p.y);
+				tool().mouseUp(new DrawingViewMouseEvent(StandardDrawingView.this,e,p.x, p.y) );
 				checkDamage();
 			}
 			catch (Throwable t) {
@@ -947,7 +947,7 @@ public class StandardDrawingView
 		}
 	}
 
-	public class DrawingViewMouseMotionListener implements MouseMotionListener {
+	protected class innerDrawingViewMouseMotionListener implements MouseMotionListener {
 		/**
 		 * Handles mouse drag events. The event is delegated to the
 		 * currently active tool.
@@ -955,7 +955,7 @@ public class StandardDrawingView
 		public void mouseDragged(MouseEvent e) {
 			try {
 				Point p = constrainPoint(new Point(e.getX(), e.getY()));
-				tool().mouseDrag(e, p.x, p.y);
+				tool().mouseDrag(new DrawingViewMouseEvent(StandardDrawingView.this,e,p.x, p.y) );
 				checkDamage();
 			}
 			catch (Throwable t) {
@@ -969,7 +969,8 @@ public class StandardDrawingView
 		 */
 		public void mouseMoved(MouseEvent e) {
 			try {
-				tool().mouseMove(e, e.getX(), e.getY());
+				Point p = constrainPoint(new Point(e.getX(), e.getY()));
+				tool().mouseMove(new DrawingViewMouseEvent(StandardDrawingView.this,e,p.x, p.y) );
 			}
 			catch (Throwable t) {
 				handleMouseEventException(t);
@@ -977,10 +978,10 @@ public class StandardDrawingView
 		}
 	}
 
-	public class DrawingViewKeyListener implements KeyListener {
+	protected class innerDrawingViewKeyListener implements KeyListener {
 		private Command deleteCmd;
 
-		public DrawingViewKeyListener() {
+		public innerDrawingViewKeyListener() {
 			deleteCmd = createDeleteCommand();
 		}
 

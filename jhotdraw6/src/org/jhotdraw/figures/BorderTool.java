@@ -15,7 +15,7 @@ import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.*;
 
-import java.awt.event.MouseEvent;
+
 import java.awt.event.InputEvent;
 import java.util.List;
 
@@ -39,14 +39,18 @@ public  class BorderTool extends ActionTool {
 	 * This is done by CTRLing the click
 	 * @see #action
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		setView((DrawingView)e.getSource());
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		// use event coordinates to supress any kind of
+		// transformations like constraining points to a grid
+		setAnchorX( dvme.getX() );
+		setAnchorY( dvme.getY() );		
+		setView( dvme.getDrawingView() );
 		// if not CTRLed then proceed normally
-		if ((e.getModifiers() & InputEvent.CTRL_MASK) == 0) {
-			super.mouseDown(e, x, y);
+		if ((dvme.getMouseEvent().getModifiers() & InputEvent.CTRL_MASK) == 0) {
+			super.mouseDown(dvme);
 		}
 		else {
-			Figure target = drawing().findFigure(x, y);
+			Figure target = drawing().findFigure( getAnchorX(), getAnchorY());
 			if (target != null && target instanceof DecoratorFigure) {
 				view().addToSelection(target);
 				reverseAction(target);

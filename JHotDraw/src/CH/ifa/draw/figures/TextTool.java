@@ -17,7 +17,7 @@ import CH.ifa.draw.util.FloatingTextField;
 import CH.ifa.draw.util.UndoableAdapter;
 import CH.ifa.draw.util.Undoable;
 import java.awt.*;
-import java.awt.event.*;
+
 
 /**
  * Tool to create new or edit existing text figures.
@@ -44,10 +44,10 @@ public class TextTool extends CreationTool {
 	 * If the pressed figure is a TextHolder it can be edited otherwise
 	 * a new text figure is created.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y)
+	public void mouseDown(DrawingViewMouseEvent dvme)
 	{
-		setView((DrawingView)e.getSource());
-		Figure pressedFigure = drawing().findFigureInside(x, y);
+		setView( dvme.getDrawingView() );
+		Figure pressedFigure = drawing().findFigureInside(dvme.getX(), dvme.getY());
 		TextHolder textHolder = null;
 		if (pressedFigure != null) {
 			textHolder = pressedFigure.getTextHolder();
@@ -60,7 +60,7 @@ public class TextTool extends CreationTool {
 			editor().toolDone();
 		}
 		else {
-			super.mouseDown(e, x, y);
+			super.mouseDown(dvme);
 			// update view so the created figure is drawn before the floating text
 			// figure is overlaid. (Note, fDamage should be null in StandardDrawingView
 			// when the overlay figure is drawn because a JTextField cannot be scrolled)
@@ -69,10 +69,10 @@ public class TextTool extends CreationTool {
 		}
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		if (!isActive()) {
 			editor().toolDone();
 		}
