@@ -36,6 +36,9 @@ public class UndoCommand extends AbstractCommand {
 		super(name, newDrawingEditor);
 	}
 
+	/**
+	 * Need undo sets that automatically all get undone together !!!dnoyeb!!!
+	 */
 	public void execute() {
 		super.execute();
 		UndoManager um = getDrawingEditor().getUndoManager();

@@ -13,7 +13,7 @@ package CH.ifa.draw.contrib;
 
 import CH.ifa.draw.standard.CreationTool;
 import CH.ifa.draw.standard.CompositeFigure;
-import CH.ifa.draw.standard.DecoratorFigure;
+
 import CH.ifa.draw.framework.Figure;
 import CH.ifa.draw.framework.DrawingEditor;
 import CH.ifa.draw.framework.DrawingViewMouseEvent;
@@ -34,22 +34,13 @@ public class NestedCreationTool extends CreationTool {
 		setAnchorX( dvme.getX() );
 		setAnchorY( dvme.getY() );
 		
-		Figure figure = getFigureWithoutDecoration(drawing().findFigure( getAnchorX(), getAnchorY()));
+		Figure figure = drawing().findFigure( getAnchorX(), getAnchorY());
 		if ((figure != null) && (figure instanceof CompositeFigure)) {
 			setContainerFigure((CompositeFigure)figure);
 			super.mouseDown(dvme);
 		}
 		else {
 			toolDone();
-		}
-	}
-
-	private Figure getFigureWithoutDecoration(Figure peelFigure) {
-		if (peelFigure instanceof DecoratorFigure) {
-			return getFigureWithoutDecoration(((DecoratorFigure)peelFigure).getDecoratedFigure());
-		}
-		else {
-			return peelFigure;
 		}
 	}
 

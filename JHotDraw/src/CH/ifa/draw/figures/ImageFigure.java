@@ -106,9 +106,7 @@ public  class ImageFigure
 	}
 
 	/**
-	 * Releases a figure's resources. Release is called when
-	 * a figure is removed from a drawing. Informs the listeners that
-	 * the figure is removed by calling figureRemoved.
+	 *
 	 */
 	public void release() {
 		fImage.flush();

@@ -27,42 +27,34 @@ public class BouncingDrawing extends StandardDrawing implements Animatable {
 	 */
 	private static final long serialVersionUID = -8566272817418441758L;
 	private int bouncingDrawingSerializedDataVersion = 1;
-	private HashMap decFigs = new HashMap();
+	private HashMap animManips = new HashMap();
+	private HashMap orphanedAnimManips = new HashMap();
 	
-	public void draw(Graphics g) {
-		draw(g, getAnimatableFigures() );
-	}
-	public FigureEnumeration getAnimatableFigures() {
-		return new FigureEnumerator(CollectionsFactory.current().createList(decFigs.values()));
-	}
-	
+	/**
+	 * NOTE: Everything added to a figure within the drawing must never be exposed
+	 * outside of the drawing.  During remove this adornments must be stripped
+	 * away!  Their states are not preservable.  For preservation you must add
+	 * your modifications before the Figure is added to the drawing.
+	 */
 	public synchronized void add(Figure figure) {
-		Figure decorFigure;
-		if (!(figure instanceof AnimationDecorator) &&
+		super.add(figure);
+
+		if (/*!(figure instanceof AnimationDecorator) && */  //if figurestrategy does not include AnimationStrategy?
 			!(figure instanceof ConnectionFigure)) {
-			decorFigure = new AnimationDecorator(figure);
-			decFigs.put(figure, decorFigure);
+			FigureManipulator fm = new AnimationManipulator();
+			figure.addFigureManipulator( fm );
+			animManips.put(figure, fm );
 		}
-		else {
-			decFigs.put(figure, figure);
-		}
-		super.add(figure);			
 	}
 
-//	public synchronized void remove(Figure figure) {
-//		Figure f = super.remove(figure);
-//		if (f instanceof AnimationDecorator) {
-//			return ((AnimationDecorator) f).peelDecoration();
-//		}
-//		return f;
-//	}
 	protected void figureRequestRemove(FigureChangeEvent e) {
 		Figure f = e.getFigure();
-		if(decFigs.containsKey( f )) {
-			decFigs.remove(f);
+		if(animManips.containsKey( f )) {
+			AnimationManipulator am = (AnimationManipulator)animManips.remove( f );
 		}
 		super.figureRequestRemove(e);
 	}
+
 	/**
 	 * @param figure figure to be replaced
 	 * @param replacement figure that should replace the specified figure
@@ -77,14 +69,9 @@ public class BouncingDrawing extends StandardDrawing implements Animatable {
 	}
 
 	public void animationStep() {
-		//FigureEnumeration fe = figures();
-		FigureEnumeration fe = getAnimatableFigures();
-		while (fe.hasNextFigure()) {
-			Figure f = fe.nextFigure();
-			
-			if(!(f instanceof ConnectionFigure)) {
-				((AnimationDecorator) f).animationStep(); // seems like a rather assuming cast !!!dnoyeb!!!
-			}
+		for(Iterator it= animManips.values().iterator();it.hasNext();){
+			Animatable am = (Animatable)it.next();
+			am.animationStep();
 		}
 	}
 }

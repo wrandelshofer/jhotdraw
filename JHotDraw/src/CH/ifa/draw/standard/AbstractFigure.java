@@ -16,6 +16,7 @@ import CH.ifa.draw.framework.*;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Iterator;
 import java.io.*;
 
 /**
@@ -60,10 +61,13 @@ public abstract class AbstractFigure implements Figure {
 	 * This is an ordered collection.  The figures should be stored in the order
 	 * in which they were added.  The figures should be loaded in the order in
 	 * which they were stored.
+	 * do dependent figures depend on us, or do we depend on them? ???dnoyeb???
 	 * @see #read
 	 * @see #write
 	 */
-	private transient List myDependentFigures;
+	private List myDependentFigures;
+
+	private List fFigureManipulators;
 
 	/*
 	 * Serialization support.
@@ -77,9 +81,13 @@ public abstract class AbstractFigure implements Figure {
 	private int _nZ;
 
 	protected AbstractFigure() {
-		 myDependentFigures = CollectionsFactory.current().createList();
+		 init();
 	}
 
+	protected void init(){
+		myDependentFigures = CollectionsFactory.current().createList();
+		fFigureManipulators = CollectionsFactory.current().createList();
+	}
 	/**
 	 * Moves the figure by the given offset.
 	 */
@@ -259,14 +267,12 @@ public abstract class AbstractFigure implements Figure {
 	}
 
 	/**
+	 * releases figure from all containers pending release.
 	 * @see Figure#release
 	 */
 	public void release() {
-//		if(still contained) {
-//			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
-//		}
-		if(listener() != null) {
-			listener().figureRemoved( new FigureChangeEvent(this));
+		if( getContainer() != null ) {
+			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
 		}
 	}
 	
@@ -468,15 +474,14 @@ public abstract class AbstractFigure implements Figure {
 	public void write(StorableOutput dw) {
 		//store dependentFigures
 		FigureEnumeration fe;
-		//only way to make sure size matches is to synchronize on this object
-		//a thread safe collection would not work. dnoyeb
-		synchronized(myDependentFigures){
-			dw.writeInt( myDependentFigures.size() );
-			fe = getDependendFigures();
-			//this while loop does not need to by synchronized if the enumeration is thread safe
-			while (fe.hasNextFigure()) {
-				dw.writeStorable(fe.nextFigure());
-			}
+		dw.writeInt( myDependentFigures.size() );
+		fe = getDependendFigures();
+		while (fe.hasNextFigure()) {
+			dw.writeStorable(fe.nextFigure());
+		}
+		dw.writeInt( fFigureManipulators.size() );
+		for(Iterator it= fFigureManipulators.iterator();it.hasNext();) {
+			dw.writeStorable( (FigureManipulator)it.next() );
 		}
 	}
 
@@ -490,22 +495,30 @@ public abstract class AbstractFigure implements Figure {
 		for (int i=0; i<size; i++) {
 			myDependentFigures.add( (Figure)dr.readStorable()) ;
 		}
+
+		//load figureManipulators
+		int stratSize = dr.readInt();
+		fFigureManipulators = CollectionsFactory.current().createList(stratSize);
+		for (int i=0; i<size; i++) {
+			fFigureManipulators.add( (FigureManipulator)dr.readStorable()) ;
+		}
 	}
 	/**
-	 * @todo implement this.
+	 * @todo Verify implementation.
 	 */
 	private void writeObject(ObjectOutputStream s) throws IOException {
-		//s.defaultWriteObject();
-		throw new IOException("writeObject not implemented for AbstractFigure.");
+		s.defaultWriteObject();
 	}
+
 	/**
 	 * Used for the cloning mechanism. !?!
-	 * @todo implement this.
+	 * @todo Veify implementation, and specify what it should be.
 	 */
 	private void readObject(ObjectInputStream s) 
 		throws ClassNotFoundException, IOException {
-		//s.defaultReadObject();//Read the non-static and non-transient fields of the current class from this stream.
-		throw new IOException("readObject not implemented for AbstractFigure.");	
+		//since dependent figures are not transient, they get deserialized here
+		//since FigureManipulators are not transient, they get deserialized here
+		s.defaultReadObject();//Read the non-static and non-transient fields of the current class from this stream.
 	}
 	/**
 	 * Gets the z value (back-to-front ordering) of this figure.
@@ -577,5 +590,19 @@ public abstract class AbstractFigure implements Figure {
 	}
 	protected void setContainer(FigureChangeListener container){
 		this.container = container;
+	}
+	
+	public void addFigureManipulator(FigureManipulator fm) {
+		synchronized(fFigureManipulators) {		
+			fm.AttachFigure(this);
+			fFigureManipulators.add( fm );
+		}
+	}
+	
+	public void removeFigureManipulator(FigureManipulator fm) {
+		synchronized(fFigureManipulators) {
+			fFigureManipulators.remove( fm );
+			fm.DetachFigure(this);
+		}
 	}
 }

@@ -28,15 +28,25 @@ public interface FigureChangeListener extends EventListener {
 
 	/**
 	 * Sent when a figure changed
-	 * give an example of a use please???
-	 * seems like invalidate is enough !!!dnoyeb!!!
+	 * Should be fired when shape / layout has changed
+	 * This is different from JFC/Swing terminology in which this would be called invalidate.
+	 * Here invalidate means a portion is in need of repaint.
+	 * A composite figure would fire this after it has removed one of its containees
 	 */
 	public void figureChanged(FigureChangeEvent e);
 
 	/**
-	 * Sent when a figure has been released from the undo/redo stack, or when
-	 * the figure is being destryoed without ever entering the undo/redo stack.
-	 * Figure will not be valid after receipt of this event.
+	 * Sent when a figure has been removed from the drawing.  this event is 
+	 * meaningless and nobody should be using it.  This is NOT sent when the
+	 * figure is removed from the drawing.  it is sent when the figures resources
+	 * have been released.  It needs to be renamed.
+	 * No object should care about the figure release message.  No objects but
+	 * containers should care about figureRequestRemove.  any actions taken on
+	 * behalf of figureRequestRemove that are not by the container are subject 
+	 * to create difficulties for the undo/redo architecture since they will not
+	 * be recorded.
+	 * If you do not contain this figure, you have no business responding to this event. 
+	 * Going to break this out into a seperate listener soon.
 	 * 
 	 * @see Figure#release
 	 */
@@ -45,6 +55,8 @@ public interface FigureChangeListener extends EventListener {
 	/**
 	 * This is sent by a figure when it is requesting to be removed from the
 	 * container.  The container should remove the figure in response to this event.
+	 * If you do not contain this figure, you have no business responding to this event. 
+	 * Going to break this out into a seperate listener soon.
 	 *
 	 * @see Figure#remove
 	 */

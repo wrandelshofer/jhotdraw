@@ -341,4 +341,12 @@ public interface Figure
 	public void visit(FigureVisitor visitor);
 
 	public TextHolder getTextHolder();
+	/**
+	 * Add a <code>FigureManipulator</code> to the <code>Figure</code>.
+	 */
+	public void addFigureManipulator(FigureManipulator fm);
+	/**
+	 * Remove a <code>FigureManipulator</code> to the <code>Figure</code>.
+	 */
+	public void removeFigureManipulator(FigureManipulator fm);
 }
