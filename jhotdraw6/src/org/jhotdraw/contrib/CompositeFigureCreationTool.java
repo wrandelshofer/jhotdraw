@@ -57,11 +57,11 @@ public class CompositeFigureCreationTool extends CreationTool {
 		}
 	}
 	
-	public void viewCreated(DrawingView view){
+	public void viewActivated(DrawingView view){
 		view.addFigureSelectionListener(figureSelectionListener);
 	}
 	
-	public void viewDestroying(DrawingView view){
+	public void viewDeactivated(DrawingView view){
 		view.removeFigureSelectionListener(figureSelectionListener);
 	}
 	
