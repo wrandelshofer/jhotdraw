@@ -71,6 +71,7 @@ public  class UngroupCommand extends AbstractCommand {
 
 	public static class UndoActivity extends UndoableAdapter {
 		private Map groupFigureMap = CollectionsFactory.current().createMap();
+		boolean undone = false;
 		public UndoActivity(DrawingView newDrawingView) {
 			super(newDrawingView);
 			setUndoable(true);
@@ -106,6 +107,7 @@ public  class UngroupCommand extends AbstractCommand {
 			}
 			setAffectedFigures(new FigureEnumerator( affectedFigures ));
 			//groupFigureMap should be empty, no need to manipulate it.
+			undone = true;
 			return true;
 		}
 
@@ -114,6 +116,7 @@ public  class UngroupCommand extends AbstractCommand {
 			if (isRedoable()) {
 				getDrawingView().clearSelection();
 				ungroupFigures();
+				undone = false;
 				return true;
 			}
 			return false;
@@ -151,21 +154,25 @@ public  class UngroupCommand extends AbstractCommand {
 		 * If undo was last their should be nothing to release, the keySet should be empty
 		 */
 		public void release() {
-			//if we have group figures stored prepared for an undo/regroup type action, remove them
-			Set keySet = groupFigureMap.keySet();
-			for(Iterator it = keySet.iterator();it.hasNext();){
-				//get the group figure
-				GroupFigure gf = (GroupFigure) (GroupFigure) it.next();
-				//get its former figures
-				FigureEnumeration fe = (FigureEnumeration)groupFigureMap.remove( gf );
-				//remove the figures it used to contain permanently from it
-				gf.removeAll( fe );
-				//Permanently remove the groupFigure from the drawing
-				getDrawingView().drawing().remove( gf );
+			if(undone == false){
+				//if we have group figures stored prepared for an undo/regroup type action, remove them
+				Set keySet = groupFigureMap.keySet();
+				for(Iterator it = keySet.iterator();it.hasNext();){
+					//get the group figure
+					GroupFigure gf = (GroupFigure) (GroupFigure) it.next();
+					//get its former figures
+					FigureEnumeration fe = (FigureEnumeration)groupFigureMap.remove( gf );
+					//remove the figures it used to contain permanently from it
+					gf.removeAll( fe );
+					//Permanently remove the groupFigure from the drawing
+					getDrawingView().drawing().remove( gf );
+					//release the groupFigure
+					gf.release();
+					//we do not release the groupFigures old figures because they are in the drawing now.
+				}
 			}
 			groupFigureMap = null; //so we throw NPE if this command is reexecuted after release (better would be JHDillegalstateException)
-			setDrawingView(null);
-			setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
+			super.release();
 		}
 	}
 }

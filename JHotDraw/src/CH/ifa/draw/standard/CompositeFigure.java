@@ -133,9 +133,9 @@ public abstract class CompositeFigure extends AbstractFigure {
 	}
 	
 	/**
-	 * This will orphan and release a figure
-	 * if orphan has not been called on the figure, it will be called as a result
-	 * of this method.  The figure can not be used any further.
+	 * This will remove a figure.  orphan will be called first if necessary.
+	 * It is the removers responsibility to call {@link Figure#release release()}
+	 * if disposing the figure.
 	 *
 	 * @param figure that is part of the drawing and should be removed
 	 */
@@ -146,7 +146,6 @@ public abstract class CompositeFigure extends AbstractFigure {
 		}
 		Figure nf = (Figure)orphanMap.remove(figure);
 		getFigures().remove(nf);
-		//figure.release();//who is qualified to call this? who can know if figure is contained elsewhere...
 	}
 	/**
 	 * Puts a figure back into the CompositeFigure in its old place.
@@ -199,7 +198,13 @@ public abstract class CompositeFigure extends AbstractFigure {
 	/**
 	 * Removes all figures from this container.  calls orphan on the figures first
 	 * if necessary.  Ignores any currently orphaned figures.
+	 * 
+	 *
 	 * @see #remove
+	 * @deprecated This method does not release the figures as required for
+	 *             removed figures.  It also does not return them so the caller
+	 *             has no way of knowing the list of figures that now require
+	 *             release.
 	 */
 	public void removeAll() {
 		removeAll( new FigureEnumerator(getFigures()));
@@ -209,6 +214,10 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Orphans a figure from the container, but doesn't release it. Use this 
 	 * method to temporarily manipulate a figure outside of the drawing.  This
 	 * method is to be used to support the undo/redo architecture.  
+	 *
+	 * An orphaned figure may only be added back to the container it was orphaned
+	 * from.  If you need to add the figure to a different container, first 
+	 * remove it from the container it has been orphaned from.
 	 *
 	 * @param figure that is part of the drawing and should be removed
 	 */
@@ -243,9 +252,11 @@ public abstract class CompositeFigure extends AbstractFigure {
 	}
 
 	/**
-	 * Orphans a FigureEnumeration of figures.
+	 * Orphans a FigureEnumeration of figures.  These figures must be removed
+	 * before they are eligible for release.
+	 *
+	 * @see #removeAll
 	 * @see #orphan
-	 * @see Figure#remove
 	 */	
 	public void orphanAll(FigureEnumeration fe) {
 		while (fe.hasNextFigure()) {
@@ -713,12 +724,28 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Removes all contained figures from this container.
-	 * Releases all contained figures from this container.
+	 * Releases all contained figures.
 	 * Releases itself.
+	 * This figure can not be released until its orphans are removed.
+	 *
 	 * @see #remove
+	 * @see Figure#release
 	 */
 	public void release() {
-		removeAll();
+		if( getContainer() != null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("Figure can not be released, it has not been removed yet.");
+		}
+		if(orphanMap.size() > 0){
+			throw new JHotDrawRuntimeException("Figure can not be released until its orphans are removed.");
+		}
+		FigureEnumeration feRemove = figures();
+		FigureEnumeration feRelease = figures();
+		removeAll(feRemove);
+		while(feRelease.hasNextFigure()){
+			feRelease.nextFigure().release();
+		}
 		super.release();
 	}
 
@@ -767,7 +794,11 @@ public abstract class CompositeFigure extends AbstractFigure {
 		dw.writeInt(figureCount());
 		FigureEnumeration fe = new FigureEnumerator(getFigures());
 		while (fe.hasNextFigure()) {
-			dw.writeStorable(fe.nextFigure());
+			Figure f = fe.nextFigure();
+			if(f instanceof NullFigure){
+				System.err.println("Warning, writing NullFigure " + f);
+			}
+			dw.writeStorable(f);
 		}
 	}
 	
@@ -791,9 +822,13 @@ public abstract class CompositeFigure extends AbstractFigure {
 		orphanMap = CollectionsFactory.current().createMap(); 
 		//what about z value reset?
 		for (int i=0; i<size; i++) {
-			add((Figure)dr.readStorable());
+			Figure f = (Figure)dr.readStorable();
+			if(f instanceof NullFigure){
+				System.err.println("Warning, reading NullFigure." + f);
+			}
+			add(f);
 		}
-		init(displayBox());
+		init(displayBox()); //this is a bad call.  calling unitialized subclasses possible here.
 	}
 
 	/**

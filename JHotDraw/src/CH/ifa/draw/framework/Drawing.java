@@ -179,16 +179,10 @@ import java.io.Serializable;
 	public void addAll(FigureEnumeration fe);
 
 	/**
-	 * Removes and releases the figure from the drawing.  It can no longer be
-	 * used.
-	 * Preferred way is to call 
-	 * <PRE>
-	 * figure.remove();
-	 * figure.release();
-	 * </PRE>
+	 * Removes a figure permanently from the drawing.  It is the remover's 
+	 * responsibility to call {@link #release release()} on the figure when
+	 * finished with it.
 	 *
-	 * @see Figure#remove
-	 * @see Figure#release
 	 * @param figure that is part of the drawing and should be removed
 	 * @return the figure that has been removed (might be different from the figure specified)
 	 */
@@ -199,7 +193,6 @@ import java.io.Serializable;
 	 * doesn't release it. Use this method to temporarily
 	 * manipulate a figure outside of the drawing.
 	 *
-	 * {@link Figure#remove() Figure.remove()}.
 	 */
 	public void orphan(Figure figure);
 
@@ -210,7 +203,7 @@ import java.io.Serializable;
 	public void orphanAll(List orphanFigures);
 
 	/**
-	 * {@link Figure#remove() Figure.remove()}.
+	 *
 	 */
 	public void orphanAll(FigureEnumeration fe);
 

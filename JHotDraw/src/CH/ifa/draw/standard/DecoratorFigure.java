@@ -228,11 +228,10 @@ public abstract class DecoratorFigure
 	 * to fix that.
 	 */
 	public void release() {
-		//getDecoratedFigure().release(); //decorator is dependent, it will be released by the architecture
 		if( getContainer() != null ) {
 			//This will become ASSERT in JDK 1.4
 			//This represents an avoidable error on the programmers part.			
-			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
+			throw new JHotDrawRuntimeException("Figure can not be released, it has not been removed yet.");
 		}
 		if(getDecoratedFigure() != null){
 			removeDependendFigure( getDecoratedFigure() );
@@ -365,7 +364,7 @@ public abstract class DecoratorFigure
 	 * Reads itself and the contained figure from the StorableInput.
 	 */
 	public void read(StorableInput dr) throws IOException {
-		setZValue( dr.readInt() );
+		_nZ = dr.readInt();
 		//load dependentFigures
 		int size = dr.readInt();
 		myDependentFigures = CollectionsFactory.current().createList(size);

@@ -281,12 +281,6 @@ public abstract class AbstractFigure implements Figure {
 	}
 
 	/**
-	 * This method is called by the container when it is releasing the figure
-	 * it just fires an event on the figures listeners. to instruct everyone that i
-	 * the figure has been removed from the certain container.
-	 * THIS IS ONLY CALLED BY THE CONTAINER, see CompositeFigure.remove(Figure f)
-	 *
-	 * so far this event seems needless.
 	 * @see Figure#release
 	 */
 	public void release() {

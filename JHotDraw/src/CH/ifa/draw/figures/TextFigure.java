@@ -348,9 +348,9 @@ public  class TextFigure
 	}
 
 	public void release() {
-		super.release();
 		disconnect(fObservedFigure);
 		fObservedFigure = null;
+		super.release();
 	}
 
 	/**

@@ -78,7 +78,7 @@ public class PasteCommand extends FigureTransferCommand {
 	}
 
 	public static class UndoActivity extends UndoableAdapter {
-
+		private boolean undone = false;
 		public UndoActivity(DrawingView newDrawingView) {
 			super(newDrawingView);
 			setUndoable(true);
@@ -90,6 +90,8 @@ public class PasteCommand extends FigureTransferCommand {
 				return false;
 			}
 			//why does undo visit the drawing when we already know the figures we need? ???dnoyeb???
+			//well it deletes them but we are not using the returned figures so we are still
+			//assuming we know the figures that will be deleted.
 			DeleteFromDrawingVisitor deleteVisitor = new DeleteFromDrawingVisitor(getDrawingView().drawing());
 			FigureEnumeration fe = getAffectedFigures();
 			while (fe.hasNextFigure()) {
@@ -97,7 +99,7 @@ public class PasteCommand extends FigureTransferCommand {
 			}
 
 			getDrawingView().clearSelection();
-
+			undone = true;
 			return true;
 		}
 
@@ -110,8 +112,26 @@ public class PasteCommand extends FigureTransferCommand {
 			getDrawingView().clearSelection();
 			setAffectedFigures(getDrawingView().insertFigures(
 				getAffectedFigures(), 0, 0, false));
-
+			undone = false;
 			return true;
 		}
+		/**
+		 * Releases all resources related to an undoable activity
+		 * Since cut duplicates the figures, it is ok to release the originals
+		 * because the pasted figures are completely new objects.
+		 * But we can only release if the action has not been undone.
+		 */
+		public void release() {
+			if(undone == true){ //creation type commands destroy in their undo, so nothing to release
+				//destroy the removed figures
+				FigureEnumeration fe2 = getAffectedFigures();
+				while (fe2.hasNextFigure()) {
+					Figure f= fe2.nextFigure();
+					getDrawingView().drawing().remove(f);
+					f.release();
+				}
+			}
+			super.release();
+		}	
 	}
 }
