@@ -429,7 +429,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	*/
 	public void draw(Graphics g, FigureEnumeration fe) {
 		while (fe.hasNextFigure()) {
-			fe.nextFigure().draw(g);
+			fe.nextFigure().drawAll(g);
 		}
 	}
 
