@@ -289,6 +289,11 @@ public abstract class AbstractFigure implements Figure {
 	 * @see Figure#remove
 	 */
 	public FigureChangeListener remove(){
+		if( getContainer() == null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("Figure can note be removed, it is not contained.");
+		}			
 		FigureChangeListener fcl =  getContainer();
 		if(listener() != null) {
 			listener().figureRequestRemove( new FigureChangeEvent(this));
@@ -579,8 +584,8 @@ public abstract class AbstractFigure implements Figure {
 */
 
 		while (fe.hasNextFigure()) {
-			fe.nextFigure().visit(visitor);
-			// or visitor.visitDependendFigure(fe.nextFigure());
+			//fe.nextFigure().visit(visitor);
+			visitor.visitDependendFigure(fe.nextFigure());
 		}
 	}
 

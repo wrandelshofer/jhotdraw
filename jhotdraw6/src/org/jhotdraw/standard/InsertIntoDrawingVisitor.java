@@ -56,4 +56,9 @@ public class InsertIntoDrawingVisitor implements FigureVisitor {
 	public FigureEnumeration getInsertedFigures() {
 		return new FigureEnumerator(myInsertedFigures);
 	}
+	/**
+	 * do nothing special with dependent figures.
+	 */
+	public void visitDependendFigure(Figure dependentFigure){
+	}
 }

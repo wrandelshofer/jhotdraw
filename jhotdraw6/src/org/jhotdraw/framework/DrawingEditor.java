@@ -36,18 +36,22 @@ import java.awt.*;
 public interface DrawingEditor extends FigureSelectionListener {
 
 	/**
-	 * Gets the application <b>Desktop</b>.
+	 * Gets the applications <b>Desktop</b>.
+	 * Use this if you have nested Desktops and need access to a specific one.
+	 * This is part of the first version of the Desktop system.  If you have any
+	 * ideas about improvement please post on the JHotDraw forums and/or send to
+	 * CL Gilbert<dnoyeb@users.sourceforge.net>
 	 */
 	public Desktop getDesktop();
+	
 	/**
-	 * Gets the editor's drawing view.
-	 * @deprecated use {@link #getDesktop() getDesktop().getActiveDrawingView()}
-	 *  instead.
+	 * Gets the editor's active <code>DrawingView</code>.
+	 * Convience method.
 	 */
 	public DrawingView view();
 
 	/**
-	 * @deprecated use {@link #getDesktop() getDesktop()} instead.
+	 * Gets all <code>DrawingView<code>s from the <code>Desktop</code>.
 	 */
 	public DrawingView[] views();
 

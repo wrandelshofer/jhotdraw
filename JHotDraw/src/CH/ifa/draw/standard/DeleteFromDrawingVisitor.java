@@ -61,4 +61,7 @@ public class DeleteFromDrawingVisitor implements FigureVisitor {
 	public FigureEnumeration getDeletedFigures() {
 		return new FigureEnumerator(myDeletedFigures);
 	}
+	public void visitDependendFigure(Figure dependentFigure){
+		visitFigure(dependentFigure);
+	}
 }
