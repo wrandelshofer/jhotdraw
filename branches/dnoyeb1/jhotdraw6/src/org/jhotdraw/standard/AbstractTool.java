@@ -61,11 +61,11 @@ public abstract class AbstractTool implements Tool {
 		public void viewSelectionChanged(DrawingView oldView, DrawingView newView){
 			AbstractTool.this.viewSelectionChanged(oldView, newView);
 		}
-		public void viewActivated(DrawingView view){
-			AbstractTool.this.viewActivated(view);
+		public void viewCreated(DrawingView view){
+			AbstractTool.this.viewCreated(view);
 		}
-		public void viewDeactivated(DrawingView view){
-			AbstractTool.this.viewDeactivated(view);
+		public void viewDestroying(DrawingView view){
+			AbstractTool.this.viewDestroying(view);
 		}
 	};
 		
@@ -131,7 +131,7 @@ public abstract class AbstractTool implements Tool {
 	/**
 	 * Sent when a new view is added
 	 */
-	protected void viewActivated(DrawingView view) {
+	protected void viewCreated(DrawingView view) {
 	}
 
 	/**
@@ -144,7 +144,7 @@ public abstract class AbstractTool implements Tool {
 	 * point of fact, this is called <i>after</i> the view is deactivated but it
 	 * is ok unless we make all instances of this situation funnily named.
 	 */
-	protected void viewDeactivated(DrawingView view) {
+	protected void viewDestroying(DrawingView view) {
 	}
 
 	/**
@@ -167,11 +167,8 @@ public abstract class AbstractTool implements Tool {
 	 */
 	public void mouseUp(MouseEvent e, int x, int y) {
 //		setView(null);//This must be fixed!!! the view should not be held onto after mouse up??
-//unlike super.mousedown which is usually called immediately after a sub classes mouse down
-//method starts, super.mouseup should probably be called last before the method ends?
-//it must if its going to set the view to null.  getting messy.
-		//well this means we want the default action of mouseUP to be to release the 
-		//tool so to speak.  all tools may not want this.  dnoyeb. 1/4/02
+		//this should be called.  but if all else is coded properly
+		//it will not matter.
 	}
 
 	/**

@@ -62,6 +62,7 @@ public class SelectionTool extends AbstractTool {
 		}
 		else {
 			Figure figure = drawing().findFigure(e.getX(), e.getY());
+			
 			if (figure != null) {
 				fChild = createDragTracker(figure);
 			}

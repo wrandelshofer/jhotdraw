@@ -410,7 +410,7 @@ public class StandardDrawingView
 				result.add(f);
 			}
 		}
-		return new ReverseFigureEnumerator(result);
+		return new FigureEnumerator(result);
 	}
 
 	/**

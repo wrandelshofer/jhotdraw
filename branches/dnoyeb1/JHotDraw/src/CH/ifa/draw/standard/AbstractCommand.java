@@ -49,17 +49,18 @@ public abstract class AbstractCommand implements Command, FigureSelectionListene
 		setName(newName);
 		setDrawingEditor(newDrawingEditor);
 		getDrawingEditor().addViewChangeListener(this);
+		getDrawingEditor().addFigureSelectionListener(this);
 		myIsViewRequired = newIsViewRequired;
 		setEventDispatcher(createEventDispatcher());
 	}
 
 	public void viewSelectionChanged(DrawingView oldView, DrawingView newView) {
-		if (oldView != null) {
+		/*if (oldView != null) {
 			oldView.removeFigureSelectionListener(this);
 		}
 		if (newView != null) {
 			newView.addFigureSelectionListener(this);
-		}
+		}*/
 		if (isViewRequired()) {
 			boolean isOldViewInteractive = (oldView != null) && oldView.isInteractive();
 			boolean isNewViewInteractive = (newView != null) && newView.isInteractive();
@@ -77,13 +78,13 @@ public abstract class AbstractCommand implements Command, FigureSelectionListene
 	/**
 	 * Sent when a new view is created
 	 */
-	public void viewActivated(DrawingView view) {
+	public void viewCreated(DrawingView view) {
 	}
 
 	/**
 	 * Send when an existing view is about to be destroyed.
 	 */
-	public void viewDeactivated(DrawingView view) {
+	public void viewDestroying(DrawingView view) {
 	}
 
 	/**

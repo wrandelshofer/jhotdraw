@@ -14,6 +14,7 @@ package CH.ifa.draw.samples.javadraw;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.*;
+import CH.ifa.draw.contrib.Desktop;
 
 import javax.swing.JApplet;
 import java.awt.*;
@@ -21,6 +22,7 @@ import java.io.*;
 import java.net.*;
 
 /**
+ * @todo implement {@link Desktop Desktop} functionality to bring upto date.
  * @version <$CURRENT_VERSION$>
  */
 public  class JavaDrawViewer extends JApplet implements DrawingEditor {
@@ -46,11 +48,22 @@ public  class JavaDrawViewer extends JApplet implements DrawingEditor {
 			showStatus("Unable to load drawing");
 		}
 	}
-
+	/**
+	 * @todo Implement <b>Desktop</b> functionality.
+	 */
+	public Desktop getDesktop() {
+		return null;
+	}
 	public void addViewChangeListener(ViewChangeListener vsl)  {
 	}
 
 	public void removeViewChangeListener(ViewChangeListener vsl) {
+	}
+
+	public void addFigureSelectionListener(FigureSelectionListener fsl){
+	}
+
+	public void removeFigureSelectionListener(FigureSelectionListener fsl){
 	}
 
 	private void loadDrawing(String filename) {
