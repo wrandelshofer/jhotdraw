@@ -11,10 +11,9 @@
 
 package CH.ifa.draw.figures;
 
-import CH.ifa.draw.util.*;
 import CH.ifa.draw.framework.*;
-import CH.ifa.draw.standard.*;
-
+import CH.ifa.draw.standard.AbstractFigure;
+import CH.ifa.draw.util.*;
 import java.awt.*;
 import java.io.*;
 
@@ -204,9 +203,6 @@ public abstract class AttributeFigure extends AbstractFigure {
 	}
 
 	public void setAttribute(FigureAttributeConstant attributeConstant, Object value) {
-		if(attributeConstant.getName() == null){
-			int x=0;
-		}
 		if (fAttributes == null) {
 			fAttributes = new FigureAttributes();
 		}
