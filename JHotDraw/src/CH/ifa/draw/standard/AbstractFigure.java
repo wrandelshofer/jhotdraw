@@ -266,7 +266,8 @@ public abstract class AbstractFigure implements Figure {
 	 * @see Figure#willChange
 	 */
 	public void willChange() {
-		// call invalidate before the change occurs to invalidate the old display area
+		// call invalidate before the change occurs to invalidate the old display area.
+		//why? the old display area is not invalid until the move takes place.
 		invalidate();
 	}
 

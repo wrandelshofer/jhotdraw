@@ -38,7 +38,7 @@ import java.io.Serializable;
  */
 
 public interface Drawing
-		extends Storable, FigureChangeListener, Serializable {
+		extends Storable/*, FigureChangeListener*/, Serializable {
 
 	/**
 	 * Releases the drawing and its contained figures.

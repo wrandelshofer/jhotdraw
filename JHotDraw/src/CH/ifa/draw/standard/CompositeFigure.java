@@ -38,9 +38,7 @@ import java.io.*;
  * @version <$CURRENT_VERSION$>
  */
 
-public abstract class CompositeFigure
-				extends AbstractFigure
-				implements FigureChangeListener {
+public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * The figures that this figure is composed of
@@ -57,13 +55,37 @@ public abstract class CompositeFigure
 	private transient QuadTree  _theQuadTree;
 	protected int _nLowestZ;
 	protected int _nHighestZ;
+	
+	/**
+	 * Encapsulate the FigureChangeListener implementation
+	 */
+	
+	private FigureChangeListener figureChangeListener = new innerFigureChangeListener();
+
+	private class innerFigureChangeListener implements FigureChangeListener, java.io.Serializable, Cloneable {
+		public void figureInvalidated(FigureChangeEvent e){
+			CompositeFigure.this.figureInvalidated(e);
+		}
+		public void figureChanged(FigureChangeEvent e){
+			CompositeFigure.this.figureChanged(e);
+		}
+		public void figureRemoved(FigureChangeEvent e){
+			CompositeFigure.this.figureRemoved(e);
+		}
+		public void figureRequestRemove(FigureChangeEvent e){
+			CompositeFigure.this.figureRequestRemove(e);
+		}
+		public void figureRequestUpdate(FigureChangeEvent e){
+			CompositeFigure.this.figureRequestUpdate(e);
+		}
+	};
 
 	protected CompositeFigure() {
 		fFigures = CollectionsFactory.current().createList();
 		_nLowestZ = 0;
 		_nHighestZ = 0;
 	}
-
+	
 	/**
 	 * Adds a figure to the list of figures. Initializes the
 	 * the figure's container.
@@ -75,7 +97,7 @@ public abstract class CompositeFigure
 		if (!containsFigure(figure)) {
 			figure.setZValue(++_nHighestZ);
 			fFigures.add(figure);
-			figure.addToContainer(this);
+			figure.addToContainer(figureChangeListener);
 			_addToQuadTree(figure);
 		}
 		return figure;
@@ -85,7 +107,8 @@ public abstract class CompositeFigure
 	 * Adds a list of figures.
 	 *
 	 * @see #add
-	 * @deprecated use addAll(FigureEnumeration) instead
+	 * @deprecated use {@link #addAll(FigureEnumeration) 
+	 * addAll(FigureEnumeration fe)} instead.
 	 */
 	public void addAll(List newFigures) {
 		addAll(new FigureEnumerator(newFigures));
@@ -95,7 +118,7 @@ public abstract class CompositeFigure
 	 * Adds a FigureEnumeration of figures.
 	 *
 	 * @see #add
-	 * @param fe (unused) enumeration containing all figures to be added
+	 * @param fe An enumeration containing all figures to be added.
 	 */
 	public void addAll(FigureEnumeration fe) {
 		while (fe.hasNextFigure()) {
@@ -122,14 +145,15 @@ public abstract class CompositeFigure
 	 * Removes a list of figures.
 	 *
 	 * @see #remove
-	 * @deprecated use removeAll(FigureEnumeration) instead
+	 * @deprecated use {@link #removeAll(FigureEnumeration) 
+	 *             removeAll(FigureEnumeration fe)} instead.
 	 */
 	public void removeAll(List figures) {
 		removeAll(new FigureEnumerator(figures));
 	}
 
 	/**
-	 * Removes a FigureEnumeration of figures.
+	 * Removes a <b>FigureEnumeration</b> of figures.
 	 * @see #remove
 	 */
 	public void removeAll(FigureEnumeration fe) {
@@ -139,14 +163,14 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Removes all children.
+	 * Removes all contained figures.
 	 * @see #remove
 	 */
 	public void removeAll() {
 		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
-			figure.removeFromContainer(this);
+			figure.removeFromContainer(figureChangeListener);
 		}
 		fFigures.clear();
 
@@ -160,10 +184,13 @@ public abstract class CompositeFigure
 	 * doesn't release it. Use this method to temporarily
 	 * manipulate a figure outside of the drawing.
 	 *
+	 * I think this is a good place to throw a runtime exception if the Figure
+	 * is not part of the drawing, dnoyeb!!! BadParameterException
+	 *
 	 * @param figure that is part of the drawing and should be added
 	 */
 	public synchronized Figure orphan(Figure figure) {
-		figure.removeFromContainer(this);
+		figure.removeFromContainer(figureChangeListener);
 		fFigures.remove(figure);
 		_removeFromQuadTree(figure);
 		return figure;
@@ -174,7 +201,8 @@ public abstract class CompositeFigure
 	 * without releasing the figures.
 	 *
 	 * @see #orphan
-	 * @deprecated use orphanAll(FigureEnumeration) instead
+	 * @deprecated use {@link #orphanAll(FigureEnumeration)
+	 *             orphanAll(FigureEnumeration fe)} instead
 	 */
 	public void orphanAll(List newFigures) {
 		orphanAll(new FigureEnumerator(newFigures));
@@ -198,8 +226,8 @@ public abstract class CompositeFigure
 		int index = fFigures.indexOf(figure);
 		if (index != -1) {
 			replacement.setZValue(figure.getZValue());
-			replacement.addToContainer(this);   // will invalidate figure
-			figure.removeFromContainer(this);
+			replacement.addToContainer(figureChangeListener);   // will invalidate figure
+			figure.removeFromContainer(figureChangeListener);
 			fFigures.set(index, replacement);
 			figure.changed();
 			replacement.changed();
@@ -208,7 +236,9 @@ public abstract class CompositeFigure
 	}
 
 	/**
-	 * Sends a figure to the back of the drawing.
+	 * Sends a figure to the back of the drawing.  
+	 * I think this is a good place to throw a runtime exception if the Figure
+	 * is not part of the drawing, dnoyeb!!! BadParameterException
 	 *
 	 * @param figure that is part of the drawing
 	 */
@@ -224,6 +254,10 @@ public abstract class CompositeFigure
 
 	/**
 	 * Brings a figure to the front.
+	 * I think this is a good place to throw a runtime exception if the Figure
+	 * is not part of the drawing, dnoyeb!!! BadParameterException
+	 * I have spoken on BadParameterException several times, I won't mention it
+	 * all the way through the file...
 	 *
 	 * @param figure that is part of the drawing
 	 */
@@ -252,7 +286,7 @@ public abstract class CompositeFigure
 	 * it will be added as the last figure to the drawing and its layer number
 	 * will be set to the be the one beyond the latest layer so far.
 	 *
-	 * @param figure figure to be sent to a certain layer
+	 * @param figure Figure to be sent to a certain layer
 	 * @param layerNr target layer of the figure
 	 */
 	public void sendToLayer(Figure figure, int layerNr) {
@@ -350,9 +384,12 @@ public abstract class CompositeFigure
 	/**
 	* Draws only the given figures
 	* @todo mrfloppy to ensure that only figures contained within this
-	*  <b>CompositeFigure</b> get drawn.  dnoyeb's opinion is that this 
-	*  method is unnecessary and if used is a symptom of some other issue.
-	*  Likely {@link #draw(Graphics) draw} is enough.
+	*        <b>CompositeFigure</b> get drawn.  dnoyeb's opinion is that this 
+	*         method is unnecessary and if used is a symptom of some other issue.
+	* Likely {@link #draw(Graphics) draw} is enough and we don't need this.
+	*
+	* if we are asked to draw figures that we do not contain, Exception?
+	*
 	* @see Figure#draw
 	*/
 	public void draw(Graphics g, FigureEnumeration fe) {
@@ -376,7 +413,7 @@ public abstract class CompositeFigure
 	* The figures are returned in the drawing order.
 	*
 	*/
-	public final FigureEnumeration figures() {
+	public FigureEnumeration figures() {
 		return new FigureEnumerator(CollectionsFactory.current().createList(fFigures));
 	}
 
@@ -515,34 +552,47 @@ public abstract class CompositeFigure
 	 * hit detection, that is, you want to detect the inner most
 	 * figure containing the given point.
 	 *
-	 * This seems broken!!!  A figure does not seem to be able to find "itself."
-	 * It will pass its call recursively onto the figures it contains, until a
-	 * figure that contains no figures is found.  At which point that figure will
-	 * return null.  This null will trickly all the way back up the heirarchy.
-	 *
-	 * My opinion is that you should first check {@link #findFigure(int, int) findFigure(int x, int y)}.
-	 * If that hits, call {@link #findFigureInside(int, int) findFigureInside(int x, int y)}.
-	 * on the found Figure.  If that returns null <i>then</i> return the found figure.
+	 * This is improved but still <b>broken.</b>  Its achiles heel is the evil
+	 * {@link CH.ifa.draw.standard.DecoratorFigure DecoratorFigure} that is
+	 * "decorating" (read masking) the <b>CompositeFigures</b> it decorates.
+	 * mrfloppy is working on a "Strategy pattern" fix for this.  Still I
+	 * believe it would be better all around if {@link 
+	 * CH.ifa.draw.standard.DecoratorFigure DecoratorFigure} actually used the
+	 * "Decorator pattern." 
+	 * Currently this method can not dig inside decorator figures.
 	 * dnoyeb@users.sourceforge.net
-	 *
 	 */
 	public Figure findFigureInside(int x, int y) {
-		FigureEnumeration fe = figuresReverse();
-		while (fe.hasNextFigure()) {
-			Figure figure = fe.nextFigure().findFigureInside(x, y);
-			if (figure != null) {
+		Figure figure = findFigure(x,y);
+		if(figure instanceof CompositeFigure){
+			Figure figure2 = figure.findFigureInside(x,y);
+			if(figure2 != null)
+				return figure2;
+			else
 				return figure;
-			}
 		}
-		return null;
+		else if(figure instanceof DecoratorFigure){
+			return getFigureWithoutDecoration(figure).findFigureInside(x,y);
+		}
+		else
+			return figure;
 	}
-
+	
+	protected Figure getFigureWithoutDecoration(Figure peelFigure) {
+		if (peelFigure instanceof DecoratorFigure) {
+			return getFigureWithoutDecoration(((DecoratorFigure)peelFigure).getDecoratedFigure());
+		}
+		else {
+			return peelFigure;
+		}
+	}
+	
 	/**
 	 * Finds a figure but descends into a figure's
 	 * children. It supresses the passed
 	 * in figure. Use this method to ignore a figure
 	 * that is temporarily inserted into the drawing.
-	 * @see #fingFigureInside for my error comments.
+	 * @see #findFigureInside for my error comments.
 	 */
 	public Figure findFigureInsideWithout(int x, int y, Figure without) {
 		FigureEnumeration fe = figuresReverse();
@@ -610,7 +660,7 @@ public abstract class CompositeFigure
 	 * Propagates the figureInvalidated event to my listener.
 	 * @see FigureChangeListener
 	 */
-	public void figureInvalidated(FigureChangeEvent e) {
+	protected void figureInvalidated(FigureChangeEvent e) {
 		if (listener() != null) {
 			listener().figureInvalidated(e);
 		}
@@ -621,11 +671,13 @@ public abstract class CompositeFigure
 	 * Why does a contained figures remove request end up being the compositeFigures
 	 * remove request? can we not remove just the contained figure?
 	 * This seems bizarre!!! dnoyeb
+	 * It seems liek if a contained figure wants out, the whole compositefigure
+	 * ends up requesting removal from its container too.
 	 * @see FigureChangeListener
 	 */
-	public void figureRequestRemove(FigureChangeEvent e) {
+	protected void figureRequestRemove(FigureChangeEvent e) {
 		if (listener() != null) {
-			listener().figureRequestRemove(new FigureChangeEvent(this));
+			listener().figureRequestRemove(new FigureChangeEvent(CompositeFigure.this));
 		}
 	}
 
@@ -633,18 +685,18 @@ public abstract class CompositeFigure
 	 * Propagates the requestUpdate request up to the container.
 	 * @see FigureChangeListener
 	 */
-	public void figureRequestUpdate(FigureChangeEvent e) {
+	protected void figureRequestUpdate(FigureChangeEvent e) {
 		if (listener() != null) {
 			listener().figureRequestUpdate(e);
 		}
 	}
 
-	public void figureChanged(FigureChangeEvent e) {
+	protected void figureChanged(FigureChangeEvent e) {
 		_removeFromQuadTree(e.getFigure());
 		_addToQuadTree(e.getFigure());
 	}
 
-	public void figureRemoved(FigureChangeEvent e) {
+	protected void figureRemoved(FigureChangeEvent e) {
 		if (listener() != null) {
 			listener().figureRemoved(e);
 		}
@@ -683,7 +735,7 @@ public abstract class CompositeFigure
 		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
-			figure.addToContainer(this);
+			figure.addToContainer(figureChangeListener);
 		}
 
 		init(new Rectangle(0, 0));

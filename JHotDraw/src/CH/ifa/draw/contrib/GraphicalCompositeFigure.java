@@ -317,7 +317,7 @@ public class GraphicalCompositeFigure extends CompositeFigure implements Layouta
 	/**
 	 * Propagates the removeFromDrawing request up to the container.
 	 */
-	public void figureRequestRemove(FigureChangeEvent e) {
+	protected void figureRequestRemove(FigureChangeEvent e) {
 		if (listener() != null) {
 			if (includes(e.getFigure())) {
 				Rectangle r = invalidateRectangle(displayBox());
