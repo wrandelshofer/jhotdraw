@@ -165,7 +165,7 @@ public  class UngroupCommand extends AbstractCommand {
 			}
 			groupFigureMap = null; //so we throw NPE if this command is reexecuted after release (better would be JHDillegalstateException)
 			setDrawingView(null);
-			setAffectedFigures(null);
+			setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
 		}
 	}
 }
