@@ -123,9 +123,10 @@ public class SimpleLayouter implements Layouter {
 	 */
 	public void write(StorableOutput dw) {
 		dw.writeStorable(getLayoutable());
-		dw.writeInt( myInsets.top );
-		dw.writeInt( myInsets.left );
-		dw.writeInt( myInsets.bottom );
-		dw.writeInt( myInsets.right );
+		Insets i = getInsets();
+		dw.writeInt( i.top );
+		dw.writeInt( i.left );
+		dw.writeInt( i.bottom );
+		dw.writeInt( i.right );
 	}
 }
