@@ -14,11 +14,12 @@ package CH.ifa.draw.contrib.dnd;
 import CH.ifa.draw.standard.AbstractTool;
 import java.awt.*;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-
+import javax.swing.JComponent;
+import java.awt.dnd.*;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
+//import CH.ifa.draw.util.CollectionsFactory;
 
 /**
  * This is a tool which handles drag and drop between Components in
@@ -45,7 +46,8 @@ import CH.ifa.draw.standard.*;
  * a Component to a Container, that Container must be the child of some
  * Container which is added in its heirachy to a topmost Component.  I will
  * refine this description with more appropriate terms as I think of new ways to
- * express this.
+ * express this.  It won't work until setVisible(true) is called.  then you can 
+ * initialize DND.
  *
  * note: if drop target is same as dragsource then we should draw the object.
  *
@@ -55,11 +57,16 @@ import CH.ifa.draw.standard.*;
  */
 public class DragNDropTool extends AbstractTool {
 	private Tool            fChild;
-	private ArrayList       comps;
+//	private java.util.List       comps;
+	private DragGestureListener dragGestureListener;
+	private boolean dragOn;
+	
 
 	public DragNDropTool(DrawingEditor editor) {
 		super(editor);
-		comps = new ArrayList();
+//		comps = CollectionsFactory.current().createList();
+		setDragGestureListener(createDragGestureListener());
+		dragOn = false;
 	}
 
 	/**
@@ -69,9 +76,8 @@ public class DragNDropTool extends AbstractTool {
 		super.viewCreated(view);
 		if (view instanceof DNDInterface) {
 			DNDInterface dndi = (DNDInterface)view;
-			dndi.setDropTargetActive(true);
-			dndi.setDragSourceActive(false);
-			comps.add(dndi);
+			dndi.DNDInitialize( getDragGestureListener() );
+//			comps.add(dndi);
 		}
 	}
 
@@ -81,9 +87,8 @@ public class DragNDropTool extends AbstractTool {
 	protected void viewDestroying(DrawingView view) {
 		if (view instanceof DNDInterface) {
 			DNDInterface dndi = (DNDInterface)view;
-			dndi.setDropTargetActive(false);
-			dndi.setDragSourceActive(false);
-			comps.remove(dndi);
+			dndi.DNDDeinitialize();
+//			comps.remove(dndi);
 		}
 		super.viewDestroying(view);
 	}
@@ -94,23 +99,25 @@ public class DragNDropTool extends AbstractTool {
 	 */
 	public void activate() {
 		super.activate();
-		setDragSourceActive(true);
+//		setDragSourceActive(true);
 		//System.out.println("DNDTool Activation");
+		setDragOn(true);
 	}
 
 	public void deactivate() {
 		//System.out.println("DNDTool deactivation.");
-		setDragSourceActive(false);
+		setDragOn(false);
+//		setDragSourceActive(false);//if its not turned off other tools will have problems since drag will start
 		super.deactivate();
 	}
 
-	private void setDragSourceActive(boolean newState) {
-		Iterator it = comps.iterator();
-		while (it.hasNext()) {
-			DNDInterface dndi = (DNDInterface)it.next();
-			dndi.setDragSourceActive(newState);
-		}
-	}
+//	private void setDragSourceActive(boolean newState) {
+//		Iterator it = comps.iterator();
+//		while (it.hasNext()) {
+//			DNDInterface dndi = (DNDInterface)it.next();
+//			dndi.setDragSourceState(newState);
+//		}
+//	}
 
 	/**
 	 * Sets the type of cursor based on what is under the coordinates in the
@@ -185,11 +192,8 @@ public class DragNDropTool extends AbstractTool {
 		if (fChild != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
 			fChild.mouseUp(dvme);
 			fChild = null;
-			if (dvme.getDrawingView() instanceof DNDInterface) {
-				DNDInterface dndi = (DNDInterface)dvme.getDrawingView();
-				dndi.setDragSourceActive(true);
-			}
 		}
+		setDragOn(true);
 		view().unfreezeView();
 		//get undo actions and push into undo stack?
 	}
@@ -211,12 +215,9 @@ public class DragNDropTool extends AbstractTool {
 
 		Handle handle = view().findHandle(getAnchorX(), getAnchorY());
 		if (handle != null) {
-			fChild = createHandleTracker(handle);
 			//Turn off DND
-			if (dvme.getDrawingView() instanceof DNDInterface) {
-				DNDInterface dndi = (DNDInterface)dvme.getDrawingView();
-				dndi.setDragSourceActive(false);
-			}
+			setDragOn(false);
+			fChild = createHandleTracker(handle);
 		}
 		else {
 			Figure figure = drawing().findFigure(getAnchorX(), getAnchorY());
@@ -233,6 +234,8 @@ public class DragNDropTool extends AbstractTool {
 				}
 			}
 			else {
+				//Turn off DND
+				setDragOn(false);
 				if (!dvme.getMouseEvent().isShiftDown()) {
 					view().clearSelection();
 				}
@@ -276,4 +279,124 @@ public class DragNDropTool extends AbstractTool {
 	protected Tool createHandleTracker(Handle handle) {
 		return new HandleTracker(editor(), handle);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+	private DragGestureListener getDragGestureListener(){
+		return dragGestureListener;
+	}
+	private void setDragGestureListener(DragGestureListener dragGestureListener){
+		this.dragGestureListener = dragGestureListener;
+	}
+	protected boolean isDragOn(){
+		return dragOn;
+	}
+	protected void setDragOn(boolean dragOn){
+		this.dragOn = dragOn;
+	}
+	private DragGestureListener createDragGestureListener() {
+		
+		return new DragGestureListener() {
+			
+			public void dragGestureRecognized(final DragGestureEvent dge) {
+				Component c = dge.getComponent();
+				System.out.println("recognized for " + c);				
+				if(isDragOn() == false)
+					return;
+
+				if (c instanceof DrawingView) {
+					boolean found = false;
+					DrawingView dv = (DrawingView)c;
+					/* Send the drawing view which inspired the action a mouseUp to clean
+					up its current tool.  This is because mouse up will otherwise never
+					be sent and the tool will be stuck with only mouse down which means
+					it will likely stay activated.  solve later for now just make
+					but report. */
+					/* this is a list of cloned figures */
+					FigureEnumeration selectedElements = dv.selection();
+
+					if (selectedElements.hasNextFigure() == false) {
+						return;
+					}
+
+					Point p = dge.getDragOrigin();
+		//				System.out.println("origin at " + p);
+					while (selectedElements.hasNextFigure()) {
+						Figure f = selectedElements.nextFigure();
+						if (f.containsPoint(p.x, p.y)) {
+		/*              Rectangle r = figgy.displayBox();
+							sx = r.width;
+							sy = r.height;*/
+							//System.out.println("figure is " + figgy);
+							found = true;
+							break;
+						}
+					}
+					if (found == true) {
+						DNDFigures dndff = new DNDFigures(dv.selection(), p);
+						DNDFiguresTransferable trans = new DNDFiguresTransferable(dndff);
+
+						/* SAVE FOR FUTURE DRAG IMAGE SUPPORT */
+						/* drag image support that I need to test on some supporting platform.
+						windows is not supporting this on NT so far. Ill test 98 and 2K next
+
+						boolean support = dragSource.isDragImageSupported();
+						java.awt.image.BufferedImage  bi = new BufferedImage(sx,sy,BufferedImage.TYPE_INT_RGB);
+						Graphics2D g = bi.createGraphics();
+						Iterator itr2 = selectedElements.iterator();
+						while ( itr2.hasNext() ) {
+							Figure fig = (Figure) itr2.next();
+							fig = (Figure)fig.clone();
+							Rectangle rold = fig.displayBox();
+							fig.moveBy(-rold.x,-rold.y);
+							fig.draw(g);
+						}
+						g.setBackground(Color.red);
+						dge.getDragSource().startDrag(
+										dge,
+										DragSource.DefaultMoveDrop,
+										bi,
+										new Point(0,0),
+										trans,
+										this);
+						*/
+						if (c instanceof JComponent) {
+							((JComponent)c).setAutoscrolls(false);
+						}
+						dge.getDragSource().startDrag(
+										dge,
+										null,
+										trans,
+										((DNDInterface)dv).getDragSourceListener());
+					}
+				}
+			}
+		};
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
