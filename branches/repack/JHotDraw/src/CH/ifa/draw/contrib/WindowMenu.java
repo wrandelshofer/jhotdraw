@@ -30,8 +30,9 @@ import java.beans.*;
 public class WindowMenu extends CommandMenu {
 	private MDIDesktopPane desktop;
 	private Command cascadeCommand;
-	private Command tileCommand;
-
+	private Command tileHorizontallyCommand;
+	private Command tileVerticallyCommand;
+	
 	public WindowMenu(String newText, MDIDesktopPane newDesktop, DrawingEditor newEditor) {
 		super(newText);
 		this.desktop = newDesktop;
@@ -43,9 +44,17 @@ public class WindowMenu extends CommandMenu {
 				return super.isExecutable() && (WindowMenu.this.desktop.getAllFrames().length > 0);
 			}
 		};
-		tileCommand = new AbstractCommand("Tile", newEditor) {
+		tileHorizontallyCommand = new AbstractCommand("Tile Horizontally", newEditor) {
 			public void execute() {
-				WindowMenu.this.desktop.tileFrames();
+				WindowMenu.this.desktop.tileFramesHorizontally();
+			}
+			public boolean isExecutable() {
+				return super.isExecutable() && (WindowMenu.this.desktop.getAllFrames().length > 0);
+			}
+		};
+		tileVerticallyCommand = new AbstractCommand("Tile Vertically", newEditor) {
+			public void execute() {
+				WindowMenu.this.desktop.tileFramesHorizontally();
 			}
 			public boolean isExecutable() {
 				return super.isExecutable() && (WindowMenu.this.desktop.getAllFrames().length > 0);
@@ -70,7 +79,8 @@ public class WindowMenu extends CommandMenu {
 		JInternalFrame[] array = desktop.getAllFrames();
 
 		add(new CommandMenuItem(cascadeCommand));
-		add(new CommandMenuItem(tileCommand));
+		add(new CommandMenuItem(tileHorizontallyCommand));
+		add(new CommandMenuItem(tileVerticallyCommand));
 		if (array.length > 0) {
 			addSeparator();
 		}
