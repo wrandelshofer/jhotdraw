@@ -177,13 +177,19 @@ public class UndoManager {
 	}
 
 	public void clearUndos() {
+		while(isUndoable()){
+			Undoable u = popUndo();
+			u.release();
+		}
 		clearStack(undoStack);
 	}
-
 	public void clearRedos() {
+		while(isRedoable()){
+			Undoable r = popRedo();
+			r.release();
+		}
 		clearStack(redoStack);
 	}
-
 	protected void clearStack(List clearStack) {
 		clearStack.clear();
 	}

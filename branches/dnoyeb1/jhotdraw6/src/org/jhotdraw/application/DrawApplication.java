@@ -928,6 +928,8 @@ public	class DrawApplication
 			getStorageFormatManager().registerFileFilters(saveDialog);
 
 			if (saveDialog.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+				getUndoManager().clearRedos();//should actually be per drawing
+				getUndoManager().clearUndos();//should actually have 1 manager per dwg.
 				StorageFormat foundFormat = getStorageFormatManager().findStorageFormat(saveDialog.getFileFilter());
 				if (foundFormat != null) {
 					saveDrawing(foundFormat, saveDialog.getSelectedFile().getAbsolutePath());
@@ -1033,7 +1035,7 @@ public	class DrawApplication
 	 */
 	protected void updateApplicationTitle() {
         DrawingView dv = getDesktop().getActiveDrawingView();
-        if(dv != null && dv.isInteractive()){ //mrfloppy, we can do away with null check and ASSERT once their is always at least a NullDrawingView
+        if(dv != null && dv.isInteractive()){
             String drawingTitle = dv.drawing().getTitle();
             if (!getDefaultDrawingTitle().equals(drawingTitle)) {
                 setTitle(getApplicationName() + " - " + drawingTitle);
