@@ -226,18 +226,16 @@ public class StandardDrawingView
 
 	/**
 	 * Adds a figure to the drawing.
-	 * @return the added figure.
 	 */
-	public Figure add(Figure figure) {
-		return drawing().add(figure);
+	public void add(Figure figure) {
+		drawing().add(figure);
 	}
 
 	/**
 	 * Removes a figure from the drawing.
-	 * @return the removed figure
 	 */
-	public Figure remove(Figure figure) {
-		return drawing().remove(figure);
+	public void remove(Figure figure) {
+		drawing().remove(figure);
 	}
 
 	/**

@@ -46,6 +46,7 @@ public class ScribbleTool extends AbstractTool {
 		if (fScribble != null) {
 			if (fScribble.size().width < 4 || fScribble.size().height < 4) {
 				getActiveDrawing().remove(fScribble);
+				//or fScribble.remove();fScribble.release();
 				// nothing to undo
 				setUndoActivity(null);
 			}
@@ -56,7 +57,8 @@ public class ScribbleTool extends AbstractTool {
 	private void point(int x, int y) {
 		if (fScribble == null) {
 			fScribble = new PolyLineFigure(x, y);
-			setAddedFigure(view().add(fScribble));
+			view().add(fScribble);
+			setAddedFigure(fScribble);
 		}
 		else if (fLastX != x || fLastY != y) {
 			fScribble.addPoint(x, y);

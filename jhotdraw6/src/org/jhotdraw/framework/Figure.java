@@ -108,6 +108,10 @@ public interface Figure
 
 	/**
 	 * Checks if the Figure should be considered as empty.
+	 * For instance, when the figure is being added to the drawing, the <code>
+	 * CreationTool</code> will check this to see wether to add the figure or
+	 * not.  If the figure is too small to be seen, it will return true for isEmpty
+	 * under the above condition.
 	 */
 	public boolean isEmpty();
 
@@ -153,17 +157,21 @@ public interface Figure
 	/**
 	 * Sets the Figure's container and registers the container
 	 * as a figure change listener. A figure's container can be
-	 * any kind of FigureChangeListener. A figure is not restricted
-	 * to have a single container.
+	 * any kind of FigureChangeListener.  A figure may only have a single 
+	 * container attempts to add to 2nd container will throw exception.
+	 * This is a runtime exception now while its debated wether it should be
+	 * a checked exception or ont.
 	 */
 	public void addToContainer(FigureChangeListener c);
 
 	/**
-	 * Removes a figure from the given container and unregisters
-	 * it as a change listener.
+	 * Removes a figure from its container.
+	 * This is caled by the container in response to receiving a {@link
+	 * FigureChangeListener#figureRequestRemove figureRequestRemove} event.
 	 */
 	public void removeFromContainer(FigureChangeListener c);
 
+	
 	public void addDependendFigure(Figure newDependendFigure);
 	public void removeDependendFigure(Figure oldDependendFigure);
 	public FigureEnumeration getDependendFigures();
@@ -171,7 +179,7 @@ public interface Figure
 	/**
 	 * Gets the Figure's listeners.
 	 */
-	public FigureChangeListener listener();
+	//public FigureChangeListener listener();
 
 	/**
 	 * Adds a listener for this figure.
@@ -185,15 +193,35 @@ public interface Figure
 
 	/**
 	 * Releases a figure's resources. Release is called when
-	 * a figure is removed from a drawing. Informs the listeners that
-	 * the figure is removed by calling figureRemoved.
+	 * a figure is being permanently deleted from the undo/redo stack.
+	 * or if it should be deleted without ever being added to the stack.
+	 *
+	 * @see FigureChangeListener#figureRemoved
 	 */
 	public void release();
-
+	
+	/**
+	 * Notifies all listeners that this figure wishes to be removed from its
+	 * container.  sends a figureRequestRemove event.
+	 *
+	 * @see FigureChangeListener#figureRequestRemove
+	 */
+	public void remove();
+	
+	
+	/**
+	 * This informs all listeners that the figure is requesting to be redrawn.
+	 *
+	 * @see FigureChangeListener#figureRequestUpdate
+	 */
+	public void update();
 	/**
 	 * Invalidates the figure. This method informs its listeners
 	 * that its current display box is invalid and should be
 	 * refreshed.
+	 * This will fire a figureInvalidated event to all its listeners.
+	 *
+	 * @see FigureChangeListener#figureInvalidated
 	 */
 	public void invalidate();
 
@@ -208,18 +236,30 @@ public interface Figure
 	 *      changed();
 	 *  }
 	 * </pre>
+	 *
+	 * Causes the figures current display box to be marked as dirty and in need
+	 * of redraw.  The redraw does not occur as a result of this method call.
+	 *
 	 * @see #invalidate
 	 * @see #changed
+	 * @see FigureChangeListener#figureInvalidated
 	 */
 	public void willChange();
 
 	/**
-	 * Informes that a figure has changed its display box.
-	 * This method also triggers an update call for its
-	 * registered observers.
+	 * Call this after the figures display box has changed.  It will nottify all
+	 * listeners that the figures bounding box has changed and is in need of
+	 * redraw.
+	 *
+	 * Causes the figures current display box to be marked as dirty and in need
+	 * of redraw.  The redraw does not occur as a direct result of this method 
+	 * call.
+	 *
 	 * @see #invalidate
 	 * @see #willChange
-	 *
+	 * @see FigureChangeListener#figureInvalidated
+	 * @see FigureChangeListener#figureChanged
+	 * @see FigureChangeEvent
 	 */
 	public void changed();
 

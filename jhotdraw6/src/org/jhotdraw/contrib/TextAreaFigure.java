@@ -750,7 +750,7 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
-	 * Connects the figure to another figure
+	 * Connects the figure to another figure.
 	 *
 	 * @param figure  the connecting figure
 	 */
@@ -825,7 +825,7 @@ public class TextAreaFigure extends AttributeFigure
 
 	/**
 	 * A request to remove the figure from another composite figure
-	 *
+	 * 
 	 * @param e  Description of the Parameter
 	 */
 	public void figureRequestRemove(FigureChangeEvent e) {
@@ -835,8 +835,9 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
-	 * This should not be needed in this figure. see the description in the
-	 * <code>FigureChangeListener</code> interface for why.
+	 * This is not used here. Their is no need to update this figure just
+	 * because the figure its decorating requires update.
+	 * See <code>FigureChangeListener</code> interface for why.
 	 * @param e  Description of the Parameter
 	 */
 	public void figureRequestUpdate(FigureChangeEvent e) {

@@ -161,7 +161,7 @@ public interface Drawing
 	 * @param figure to be added to the drawing
 	 * @return the figure that was inserted (might be different from the figure specified).
 	 */
-	public Figure add(Figure figure);
+	public void add(Figure figure);
 
 	/**
 	 * Adds a list of figures.
@@ -179,35 +179,38 @@ public interface Drawing
 	public void addAll(FigureEnumeration fe);
 
 	/**
-	 * Removes the figure from the drawing and releases it.
+	 * Removes and releases the figure from the drawing.  It can no longer be
+	 * used.
+	 * Preferred way is to call 
+	 * <PRE>
+	 * figure.remove();
+	 * figure.release();
+	 * </PRE>
 	 *
+	 * @see Figure#remove
+	 * @see Figure#release
 	 * @param figure that is part of the drawing and should be removed
 	 * @return the figure that has been removed (might be different from the figure specified)
 	 */
-	public Figure remove(Figure figure);
+	public void remove(Figure figure);
 
 	/**
 	 * Removes a figure from the figure list, but
 	 * doesn't release it. Use this method to temporarily
 	 * manipulate a figure outside of the drawing.
 	 *
-	 * @param figure that is part of the drawing and should be added
+	 * Preferred way is to call {@link Figure#remove() Figure.remove()}.
 	 */
-	public Figure orphan(Figure figure);
+	public void orphan(Figure figure);
 
 	/**
-	 * Removes a list of figures from the figure's list
-	 * without releasing the figures.
-	 *
-	 * @see #orphan
-	 * @deprecated use orphanAll(FigureEnumeration) instead
+	 * @deprecated use {@link #orphanAll(FigureEnumeration fe) 
+	 *             orphanAll(FigureEnumeration fe)} instead
 	 */
 	public void orphanAll(List orphanFigures);
 
 	/**
-	 * Removes a FigureEnumeration of figures from the figure's list
-	 * without releasing the figures.
-	 * @see #orphan
+	 * Preferred way is to call {@link Figure#remove() Figure.remove()}.
 	 */
 	public void orphanAll(FigureEnumeration fe);
 
@@ -215,7 +218,8 @@ public interface Drawing
 	 * Removes a list of figures .
 	 *
 	 * @see #remove
-	 * @deprecated use removeAll(FigureEnumeration) instead
+	 * @deprecated use {@link #removeAll(FigureEnumeration) removeAll(FigureEnumeration fe)}
+	 *             instead.
 	 */
 	public void removeAll(List figures);
 

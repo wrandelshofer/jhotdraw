@@ -79,16 +79,16 @@ public class NullDrawingView extends JPanel implements DrawingView {
 	 * Adds a figure to the drawing.
 	 * @return the added figure.
 	 */
-	public Figure add(Figure figure) {
-		return figure;
+	public void add(Figure figure) {
+
 	}
 
 	/**
 	 * Removes a figure from the drawing.
 	 * @return the removed figure
 	 */
-	public Figure remove(Figure figure) {
-		return figure;
+	public void remove(Figure figure) {
+
 	}
 
 	/**

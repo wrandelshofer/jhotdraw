@@ -45,9 +45,13 @@ public abstract class AbstractFigure implements Figure {
 	 * @see #willChange
 	 */
 	private transient FigureChangeListener fListener;
-
+	/**
+	 * needs cloneing !!!dnoyeb!!!
+	 */
+	private FigureChangeListener container;
 	/**
 	 * The dependend figures which have been added to this container.
+	 * needs to be cloned too right ???dnoyeb???
 	 */
 	private List myDependendFigures;
 
@@ -56,6 +60,10 @@ public abstract class AbstractFigure implements Figure {
 	 */
 	private static final long serialVersionUID = -10857585979273442L;
 	private int abstractFigureSerializedDataVersion = 1;
+	/**
+	 * needs cloning unless the z order is preserved in the context/order of
+	 * the saved figures somehow.
+	 */
 	private int _nZ;
 
 	protected AbstractFigure() {
@@ -190,21 +198,33 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * Sets the Figure's container and registers the container
 	 * as a figure change listener. A figure's container can be
-	 * any kind of FigureChangeListener. A figure is not restricted
-	 * to have a single container.
+	 * any kind of FigureChangeListener. A figure may have only a single container.
+	 *
+	 * @see Figure
 	 */
 	public void addToContainer(FigureChangeListener c) {
-		addFigureChangeListener(c);
-		invalidate();
+		if(getContainer() != null){
+			throw new JHotDrawRuntimeException("This figure is already contained.");
+		}
+		setContainer( c );
+		addFigureChangeListener(getContainer());
+		invalidate();		
 	}
 
 	/**
-	 * Removes a figure from the given container and unregisters
-	 * it as a change listener.
+	 * A callback from the container in response to the event fired by {@link
+	 * #remove remove}.  This method does the actual removal from the container.
+	 * Do not fire <code>figureRequestRemove</code> from this method.
+	 *
+	 * @see Figure#removeFromContainer
 	 */
 	public void removeFromContainer(FigureChangeListener c) {
+		if( getContainer() == null ) {
+			throw new JHotDrawRuntimeException("This figure is not contained.");
+		}
 		invalidate();
-		removeFigureChangeListener(c);
+		removeFigureChangeListener( getContainer() );
+		setContainer( null );
 	}
 
 	/**
@@ -224,18 +244,29 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * Gets the figure's listners.
 	 */
-	public synchronized FigureChangeListener listener() {
+	protected synchronized FigureChangeListener listener() {
 		return fListener;
 	}
 
 	/**
-	 * A figure is released from the drawing. You never call this
-	 * method directly. Release notifies its listeners.
 	 * @see Figure#release
 	 */
 	public void release() {
-		if (listener() != null) {
-			listener().figureRemoved(new FigureChangeEvent(this));
+//		if(still contained) {
+//			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
+//		}
+		if(listener() != null) {
+			listener().figureRemoved( new FigureChangeEvent(this));
+		}
+	}
+	
+	/**
+	 * Called to remove a figure from its container.
+	 * @see Figure#remove
+	 */
+	public void remove(){
+		if(listener() != null) {
+			listener().figureRequestRemove( new FigureChangeEvent(this));
 		}
 	}
 
@@ -251,6 +282,12 @@ public abstract class AbstractFigure implements Figure {
 		}
 	}
 
+	public void update() {
+		invalidate();
+		if (listener() != null) {
+			listener().figureRequestUpdate(new FigureChangeEvent(this));
+		}		
+	}
 	/**
 	 * Hook method to change the rectangle that will be invalidated
 	 */
@@ -444,7 +481,7 @@ public abstract class AbstractFigure implements Figure {
 	public void visit(FigureVisitor visitor) {
 		// remember original listener as listeners might be changed by a visitor
 		// (e.g. by calling addToContainer() or removeFromContainer())
-		FigureChangeListener originalListener = listener();
+		//FigureChangeListener originalListener = listener();
 		FigureEnumeration fe = getDependendFigures();
 
 		visitor.visitFigure(this);
@@ -485,5 +522,11 @@ public abstract class AbstractFigure implements Figure {
 
 	public TextHolder getTextHolder() {
 		return null;
+	}
+	protected FigureChangeListener getContainer() {
+		return container;
+	}
+	protected void setContainer(FigureChangeListener container){
+		this.container = container;
 	}
 }

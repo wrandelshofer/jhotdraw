@@ -58,8 +58,11 @@ public  class GroupFigure extends CompositeFigure {
 		// we could transform all components proportionally
 	}
 
+	/**
+	 * this cant be right !!!dnoyeb!!! perhaps then use figures()?
+	 */
 	public FigureEnumeration decompose() {
-		return new FigureEnumerator(fFigures);
+		return new FigureEnumerator(getFigures());
 	}
 
    /**

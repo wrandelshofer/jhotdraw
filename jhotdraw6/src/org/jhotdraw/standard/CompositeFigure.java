@@ -45,7 +45,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see #add
 	 * @see #remove
 	 */
-	protected List fFigures;
+	private List fFigures;
 
 	/*
 	 * Serialization support.
@@ -58,11 +58,13 @@ public abstract class CompositeFigure extends AbstractFigure {
 	
 	/**
 	 * Encapsulate the FigureChangeListener implementation
+	 * Warning, this is the reference the figures will refer to for their
+	 * container.  This is what they will store with then when they are stored.
+	 * we must store this as well.
 	 */
-	
 	private FigureChangeListener figureChangeListener = new innerFigureChangeListener();
 
-	private class innerFigureChangeListener implements FigureChangeListener, java.io.Serializable, Cloneable {
+	private class innerFigureChangeListener implements FigureChangeListener, java.io.Serializable,Cloneable {
 		public void figureInvalidated(FigureChangeEvent e){
 			CompositeFigure.this.figureInvalidated(e);
 		}
@@ -81,11 +83,18 @@ public abstract class CompositeFigure extends AbstractFigure {
 	};
 
 	protected CompositeFigure() {
-		fFigures = CollectionsFactory.current().createList();
+		setFigures( CollectionsFactory.current().createList() );
 		_nLowestZ = 0;
 		_nHighestZ = 0;
 	}
-	
+
+	protected List getFigures(){
+		return fFigures;
+	}
+
+	protected void setFigures(List figures){
+		fFigures = figures;
+	}
 	/**
 	 * Adds a figure to the list of figures. Initializes the
 	 * the figure's container.
@@ -93,22 +102,21 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @param figure to be added to the drawing
 	 * @return the figure that was inserted (might be different from the figure specified).
 	 */
-	public Figure add(Figure figure) {
+	public void add(Figure figure) {
 		if (!containsFigure(figure)) {
 			figure.setZValue(++_nHighestZ);
-			fFigures.add(figure);
-			figure.addToContainer(figureChangeListener);
+			getFigures().add(figure);
+			figure.addToContainer(figureChangeListener);  //add a figure to this CompositeFigure
 			_addToQuadTree(figure);
 		}
-		return figure;
 	}
 
 	/**
 	 * Adds a list of figures.
 	 *
 	 * @see #add
-	 * @deprecated use {@link #addAll(FigureEnumeration) 
-	 * addAll(FigureEnumeration fe)} instead.
+	 * @deprecated use {@link #addAll(FigureEnumeration)
+	 *             addAll(FigureEnumeration fe)} instead.
 	 */
 	public void addAll(List newFigures) {
 		addAll(new FigureEnumerator(newFigures));
@@ -125,27 +133,37 @@ public abstract class CompositeFigure extends AbstractFigure {
 			add(fe.nextFigure());
 		}
 	}
-
+	
 	/**
-	 * Removes a figure from the composite.
+	 * Removes a figure from the figure list and releases it.  Use this method
+	 * if you do not wish to support undo/redo.  An alternate way to achieve the
+	 * same effect is to handle removal through the Figure with
+	 * <code>
+	 * figure.remove();
+	 * figure.release();
+	 * </code>
 	 *
+	 * If you wish to support undo/redo use {@link #orphan orphan} instead.
+	 * @see Figure#remove
+	 * @see Figure#release
+	 * @see FigureChangeListener#figureRequestRemove
+	 * @see FigureChangeListener#figureRemoved
 	 * @param figure that is part of the drawing and should be removed
-	 * @return the figure that has been removed (might be different from the figure specified)
-	 * @see #removeAll
 	 */
-	public Figure remove(Figure figure) {
-		Figure orphanedFigure = orphan(figure);
-		if (orphanedFigure != null) {
-			orphanedFigure.release();
+	public void remove(Figure figure) {
+		if(!containsFigure(figure)){
+			throw new JHotDrawRuntimeException("Figure is not part of this CompositeFigure.");
 		}
-		return orphanedFigure;
+		figure.remove();
+		figure.release();
 	}
 
 	/**
-	 * Removes a list of figures.
+	 * Removes a list of figures from the CompositeFigure.
+	 * <b>You</b> are responsible for their release.
 	 *
 	 * @see #remove
-	 * @deprecated use {@link #removeAll(FigureEnumeration) 
+	 * @deprecated use {@link #removeAll(FigureEnumeration fe) 
 	 *             removeAll(FigureEnumeration fe)} instead.
 	 */
 	public void removeAll(List figures) {
@@ -153,61 +171,65 @@ public abstract class CompositeFigure extends AbstractFigure {
 	}
 
 	/**
-	 * Removes a <b>FigureEnumeration</b> of figures.
+	 * Removes all figures from this container and releases it from the undo/redo
+	 * architecture.
+	 *
 	 * @see #remove
 	 */
 	public void removeAll(FigureEnumeration fe) {
 		while (fe.hasNextFigure()) {
-			remove(fe.nextFigure());
+			remove( fe.nextFigure());
 		}
-		_clearQuadTree();
-		_nLowestZ = 0;
-		_nHighestZ = 0;
 	}
 
 	/**
-	 * Removes all contained figures.
+	 * Removes all figures from this container and releases it from the undo/redo
+	 * architecture.
+	 *
 	 * @see #remove
 	 */
 	public void removeAll() {
-		FigureEnumeration fe = figures();
-		removeAll(fe);
-//		fFigures.clear();
+		removeAll(  figures() );
 	}
 
 	/**
-	 * Removes a figure from the figure list, but
-	 * doesn't release it. Use this method to temporarily
-	 * manipulate a figure outside of the drawing.
+	 * Orphans a figure from the container, but doesn't release it. Use this 
+	 * method to temporarily manipulate a figure outside of the drawing.  This
+	 * method is to be used to support the undo/redo architecture.  This method
+	 * will be executed in response to a figureRequestRemove event.  Alternately
+	 * one can orphan the Figure with
+	 * <code>
+	 * figure.remove();
+	 * </code>
 	 *
-	 * I think this is a good place to throw a runtime exception if the Figure
-	 * is not part of the drawing, dnoyeb!!! BadParameterException
-	 *
-	 * @param figure that is part of the drawing and should be added
+	 * @see Figure#remove
+	 * @see FigureChangeListener#figureRequestRemove
+	 * @param figure that is part of the drawing and should be removed
 	 */
-	public synchronized Figure orphan(Figure figure) {
-		figure.removeFromContainer(figureChangeListener);
-		fFigures.remove(figure);
-		_removeFromQuadTree(figure);
-		return figure;
+	public synchronized void orphan(Figure figure) {
+		figure.remove();
 	}
 
 	/**
-	 * Removes a list of figures from the figure's list
-	 * without releasing the figures.
-	 *
+	 * @deprecated use {@link #orphanAll(FigureEnumeration fe) 
+	 *             orphanAll(FigureEnumeration fe)} instead.
+	 */	
+	public void orphanAll(List figures) {
+		orphanAll( new FigureEnumerator(figures) );
+	}
+
+	/**
+	 * Orphans a FigureEnumeration of figures.
 	 * @see #orphan
-	 * @deprecated use {@link #orphanAll(FigureEnumeration)
-	 *             orphanAll(FigureEnumeration fe)} instead
-	 */
-	public void orphanAll(List newFigures) {
-		orphanAll(new FigureEnumerator(newFigures));
-	}
-
+	 * @see Figure#remove
+	 */	
 	public void orphanAll(FigureEnumeration fe) {
 		while (fe.hasNextFigure()) {
 			orphan(fe.nextFigure());
 		}
+		_clearQuadTree();
+		_nLowestZ = 0;
+		_nHighestZ = 0;
 	}
 
 	/**
@@ -217,14 +239,15 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @param figure figure to be replaced
 	 * @param replacement figure that should replace the specified figure
 	 * @return the figure that has been inserted (might be different from the figure specified)
+	 * @todo determine what we are doign here.  is this an orphan with an add or what?
 	 */
 	public synchronized Figure replace(Figure figure, Figure replacement) {
-		int index = fFigures.indexOf(figure);
+		int index = getFigures().indexOf(figure);
 		if (index != -1) {
 			replacement.setZValue(figure.getZValue());
 			replacement.addToContainer(figureChangeListener);   // will invalidate figure
 			figure.removeFromContainer(figureChangeListener);
-			fFigures.set(index, replacement);
+			getFigures().set(index, replacement);
 			figure.changed();
 			replacement.changed();
 		}
@@ -240,8 +263,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 */
 	public synchronized void sendToBack(Figure figure) {
 		if (containsFigure(figure)) {
-			fFigures.remove(figure);
-			fFigures.add(0, figure);
+			getFigures().remove(figure);
+			getFigures().add(0, figure);
 			_nLowestZ--;
 			figure.setZValue(_nLowestZ);
 			figure.changed();
@@ -259,8 +282,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 */
 	public synchronized void bringToFront(Figure figure) {
 		if (containsFigure(figure)) {
-			fFigures.remove(figure);
-			fFigures.add(figure);
+			getFigures().remove(figure);
+			getFigures().add(figure);
 			_nHighestZ++;
 			figure.setZValue(_nHighestZ);
 			figure.changed();
@@ -287,8 +310,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 */
 	public void sendToLayer(Figure figure, int layerNr) {
 		if (containsFigure(figure)) {
-			if (layerNr >= fFigures.size()) {
-				layerNr = fFigures.size() - 1;
+			if (layerNr >= getFigures().size()) {
+				layerNr = getFigures().size() - 1;
 			}
 			Figure layerFigure = getFigureFromLayer(layerNr);
 			int layerFigureZValue = layerFigure.getZValue();
@@ -301,8 +324,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 				assignFiguresToSuccessorZValue(layerNr, figureLayer - 1);
 			}
 
-			fFigures.remove(figure);
-			fFigures.add(layerNr, figure);
+			getFigures().remove(figure);
+			getFigures().add(layerNr, figure);
 			figure.setZValue(layerFigureZValue);
 			figure.changed();
 		}
@@ -311,25 +334,25 @@ public abstract class CompositeFigure extends AbstractFigure {
 	private void assignFiguresToPredecessorZValue(int lowerBound, int upperBound) {
 		// cannot shift figures to a lower layer if the lower bound is
 		// already the first layer.
-		if (upperBound >= fFigures.size()) {
-			upperBound = fFigures.size() - 1;
+		if (upperBound >= getFigures().size()) {
+			upperBound = getFigures().size() - 1;
 		}
 
 		for (int i = upperBound; i >= lowerBound; i--) {
-			Figure currentFigure = (Figure)fFigures.get(i);
-			Figure predecessorFigure = (Figure)fFigures.get(i - 1);
+			Figure currentFigure = (Figure)getFigures().get(i);
+			Figure predecessorFigure = (Figure)getFigures().get(i - 1);
 			currentFigure.setZValue(predecessorFigure.getZValue());
 		}
 	}
 
 	private void assignFiguresToSuccessorZValue(int lowerBound, int upperBound) {
-		if (upperBound >= fFigures.size()) {
-			upperBound = fFigures.size() - 1;
+		if (upperBound >= getFigures().size()) {
+			upperBound = getFigures().size() - 1;
 		}
 
 		for (int i = upperBound; i >= lowerBound; i--) {
-			Figure currentFigure = (Figure)fFigures.get(i);
-			Figure successorFigure = (Figure)fFigures.get(i + 1);
+			Figure currentFigure = (Figure)getFigures().get(i);
+			Figure successorFigure = (Figure)getFigures().get(i + 1);
 			currentFigure.setZValue(successorFigure.getZValue());
 		}
 	}
@@ -348,7 +371,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 			return -1;
 		}
 		else {
-			return fFigures.indexOf(figure);
+			return getFigures().indexOf(figure);
 		}
 	}
 
@@ -361,8 +384,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see #sendToLayer
 	 */
 	public Figure getFigureFromLayer(int layerNr) {
-		if ((layerNr >= 0) && (layerNr < fFigures.size())) {
-			return (Figure)fFigures.get(layerNr);
+		if ((layerNr >= 0) && (layerNr < getFigures().size())) {
+			return (Figure)getFigures().get(layerNr);
 		}
 		else {
 			return null;
@@ -398,7 +421,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Gets a figure at the given index.
 	 */
 	public Figure figureAt(int i) {
-		return (Figure)fFigures.get(i);
+		return (Figure)getFigures().get(i);
 	}
 
 	/**
@@ -410,7 +433,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	*
 	*/
 	public FigureEnumeration figures() {
-		return new FigureEnumerator(CollectionsFactory.current().createList(fFigures));
+		return new FigureEnumerator(CollectionsFactory.current().createList(getFigures()));
 	}
 
 	/**
@@ -428,7 +451,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 			while (fe.hasNextFigure()) {
 				Figure f = fe.nextFigure();
-				//int z = fFigures.indexOf(f);
+				//int z = getFigures().indexOf(f);
 				l2.add(new OrderedFigureElement(f, f.getZValue()));
 			}
 
@@ -451,14 +474,14 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Gets number of contained {@link Figure Figure}s.
 	 */
 	public int figureCount() {
-		return fFigures.size();
+		return getFigures().size();
 	}
 
 	/**
 	 * Check whether a given <b>figure</b> is contained within this <b>CompositeFigure.</b>
 	 */
 	public boolean containsFigure(Figure checkFigure) {
-		return fFigures.contains(checkFigure);
+		return getFigures().contains(checkFigure);
 	}
 
     /**
@@ -466,7 +489,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * in the reverse {@link Drawing Drawing} order.
 	 */
 	public final FigureEnumeration figuresReverse() {
-		return new ReverseFigureEnumerator(CollectionsFactory.current().createList(fFigures));
+		return new ReverseFigureEnumerator(CollectionsFactory.current().createList(getFigures()));
 	}
 
 	/**
@@ -638,83 +661,77 @@ public abstract class CompositeFigure extends AbstractFigure {
 	}
 
 	/**
-	 * Releases the figure and all its contained figures.
-	 * Should we release the figures in the order they were added?
-	 * i.e. should we first release the contained figures, THEN call super.release()??
-	 * !!!dnoyeb!!!
+	 * Removes all contained figures from this container.
+	 * Releases all contained figures from this container.
+	 * Releases itself.
+	 * @see #remove
 	 */
 	public void release() {
+		removeAll();
 		super.release();
-		//removeAll
-		FigureEnumeration fe = figures();
-		while (fe.hasNextFigure()) {
-			Figure figure = fe.nextFigure();
-			figure.release();
-		}
 	}
 
 	/**
-	 * Propagates the figureInvalidated event to my listener.
+	 * Called when one of the contained figures has been invalidated.  As a 
+	 * result, we will invalidate this rectangle on our container.
 	 * @see FigureChangeListener
 	 */
 	protected void figureInvalidated(FigureChangeEvent e) {
 		if (listener() != null) {
-			listener().figureInvalidated(e);
+			listener().figureInvalidated( new FigureChangeEvent(this,e.getInvalidatedRectangle()));
 		}
 	}
 
 	/**
-	 * Propagates the removeFromDrawing request up to the container.
-	 * Why does a contained figures remove request end up being the compositeFigures
-	 * remove request? can we not remove just the contained figure?
-	 * This seems bizarre !!!dnoyeb!!!
-	 * It seems liek if a contained figure wants out, the whole compositefigure
-	 * ends up requesting removal from its container too.
-	 * I think those listening to this event should know who wants to be removed
-	 * by querying the <code>FigureChangeEvent</code>.
-	 * Still sees wrong here.
-	 *
-	 * Certainly this is wrong, we must handle our containees.
-	 *
-	 * 
-	 * @see FigureChangeListener
+	 * Responds to a contained figure requesting to be removed from the component.
 	 */
 	protected void figureRequestRemove(FigureChangeEvent e) {
+		Figure f = e.getFigure();
+		Rectangle r = f.displayBox();
+		f.removeFromContainer( figureChangeListener ); //removes the figure from being contained in this CompositeFigure
+		getFigures().remove(f);
+		_removeFromQuadTree(f);
+		//need to do something here to repaint the removed area.
 		if (listener() != null) {
-			listener().figureRequestRemove(new FigureChangeEvent(CompositeFigure.this));
+			listener().figureInvalidated(new FigureChangeEvent( this, r ));
+			listener().figureRequestUpdate(new FigureChangeEvent(this));
+			//preferably whoever ordered the remove should order the update so 
+			//we dont redraw too frequently and unnecessarily
 		}
 	}
 
 	/**
-	 * Propagates the requestUpdate request up to the container.
-	 * This is a refiring of the event fired on the figures we are listening to.
-	 * This passes this event onto those who are listening to us.
-	 * we shouldnt pass it on.  those we are passing too never registered to hear
-	 * events on the figure we are passing them.
-	 * We should be repackaging this, since as far as our listeners are concerned
-	 * we are firing it.
+	 * Called when one of the contained figures is requesting to be redrawn.
+	 * As a result, we will request to be redrawn from our container in order
+	 * to satisfy the request of our containee.
 	 *
 	 * @see FigureChangeListener
 	 */
 	protected void figureRequestUpdate(FigureChangeEvent e) {
 		if (listener() != null) {
-			listener().figureRequestUpdate(e);
-		}
-	}
-
-	protected void figureChanged(FigureChangeEvent e) {
-		_removeFromQuadTree(e.getFigure());
-		_addToQuadTree(e.getFigure());
-	}
-
-	protected void figureRemoved(FigureChangeEvent e) {
-		if (listener() != null) {
-			listener().figureRemoved(e);
+			listener().figureRequestUpdate(new FigureChangeEvent(this));
 		}
 	}
 
 	/**
+	 * This event is handled internally by the container !?!dnoyeb!?!
+	 */
+	protected void figureChanged(FigureChangeEvent e) {
+		_removeFromQuadTree(e.getFigure());
+		_addToQuadTree(e.getFigure());
+	}
+	/**
+	 *
+	 */
+	protected void figureRemoved(FigureChangeEvent e) {
+
+	}
+
+	/**
 	 * Writes the contained figures to the StorableOutput.
+	 *
+	 * gotta write the new innerlistener since this is who figures think we are.
+	 * !!!dnoyeb!!!
 	 */
 	public void write(StorableOutput dw) {
 		super.write(dw);
@@ -727,18 +744,25 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Reads the contained figures from StorableInput.
+	 * @todo evaluate readding to container.  Shouldnt we just save them already IN
+	 *       the container. the z values are being redone unless they were stored
+	 *       in z order.  ???dnoyeb???
 	 */
 	public void read(StorableInput dr) throws IOException {
 		super.read(dr);
 		int size = dr.readInt();
-		fFigures = CollectionsFactory.current().createList(size);
+		setFigures( CollectionsFactory.current().createList(size) );
 		//what about z value reset?
+		//this add is redundant ???dnoyeb??? figurea already set, just need to get the stored listener
 		for (int i=0; i<size; i++) {
 			add((Figure)dr.readStorable());
 		}
 		init(displayBox());
 	}
 
+	/**
+	 * used for what? clone?
+	 */
 	private void readObject(ObjectInputStream s)
 		throws ClassNotFoundException, IOException {
 
@@ -747,7 +771,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
-			figure.addToContainer(figureChangeListener);
+			figure.addToContainer(figureChangeListener);//this should be stored in the file right? ???dnoyeb???
 		}
 
 		init(new Rectangle(0, 0));
