@@ -13,7 +13,8 @@ package CH.ifa.draw.standard;
 
 import CH.ifa.draw.util.*;
 import CH.ifa.draw.framework.*;
-
+import java.util.List;
+import java.util.Iterator;
 import java.awt.*;
 import java.io.*;
 
@@ -40,17 +41,49 @@ import java.io.*;
  * of the <code>Tool</code>s and <code>Command</code>s.  Therefore, this pattern
  * does not integrate well with its intended role.  dnoyeb 1/15/03
  * 
- * @deprecated For example of new implementation strategies see {@link
- *             CH.ifa.draw.figures.BorderDecorator BorderDecorator}
+ * Trying to ressurect with better methodology.
+ *
+ *
+ *
  * @see Figure
  *
  * @version <$CURRENT_VERSION$>
  */
 
 public abstract class DecoratorFigure
-				extends AbstractFigure
-				implements FigureChangeListener {
+				implements Figure, FigureChangeListener {
+	/**
+	 * The listeners for a figure's changes.
+	 * It is only one listener but this one can be a (chained) MultiCastFigureChangeListener
+	 *
+	 * Need to figure out who restores this connection when the figure is reloaded !!!dnoyeb!!!
+	 *
+	 * @see #invalidate
+	 * @see #changed
+	 * @see #willChange
+	 */
+	private transient FigureChangeListener fListener;
+	
+	/**
+	 * The container of this figure.  Used to prevent a figure from being added
+	 * to more than one container at a time.
+	 */
+	private transient FigureChangeListener container;
+	
+	/**
+	 * The dependent figures which have been added to this container.
+	 * This is an ordered collection.  The figures should be stored in the order
+	 * in which they were added.  The figures should be loaded in the order in
+	 * which they were stored.
+	 * do dependent figures depend on us, or do we depend on them? ???dnoyeb???
+	 * @see #read
+	 * @see #write
+	 */
+	private List myDependentFigures;
 
+	private List fFigureManipulators;
+
+	private List fFigureDecorators;
 	/**
 	 * The decorated figure.
 	 */
@@ -70,7 +103,7 @@ public abstract class DecoratorFigure
 	 * Constructs a DecoratorFigure and decorates the passed in figure.
 	 */
 	public DecoratorFigure(Figure figure) {
-		initialize();
+		this();
 		decorate(figure);
 	}
 
@@ -79,6 +112,9 @@ public abstract class DecoratorFigure
 	 * Subclasses may override this method.
 	 */
 	protected void initialize() {
+		myDependentFigures = CollectionsFactory.current().createList();
+		fFigureManipulators = CollectionsFactory.current().createList();
+		fFigureDecorators = CollectionsFactory.current().createList();		
 	}
 
 	/**
@@ -108,15 +144,15 @@ public abstract class DecoratorFigure
 	public void decorate(Figure figure) {
 		fComponent = figure;
 		getDecoratedFigure().addFigureChangeListener( this );
-		//addDependendFigure( getDecoratedFigure() );
+		addDependendFigure( getDecoratedFigure() );
 	}
 
 	/**
 	 * Removes the decoration from the contained figure.
+	 * The actual remove takes place from the removeRequestEvent.
 	 */
 	public Figure peelDecoration() {
-		getDecoratedFigure().removeFigureChangeListener( this );
-		//removeDependendFigure(getDecoratedFigure());
+		getDecoratedFigure().remove();
 		return getDecoratedFigure();
 	}
 
@@ -163,7 +199,7 @@ public abstract class DecoratorFigure
 	 * Forwards includes to its contained figure.
 	 */
 	public boolean includes(Figure figure) {
-		return (super.includes(figure) || getDecoratedFigure().includes(figure));
+		return ((figure == this) || getDecoratedFigure().includes(figure));
 	}
 
 	/**
@@ -185,15 +221,30 @@ public abstract class DecoratorFigure
 	 * 
 	 */
 	public void release() {
-		getDecoratedFigure().remove();
-		getDecoratedFigure().release();
-		super.release();
+		//getDecoratedFigure().release(); //decorator is dependent, it will be released by the architecture
+		if( getContainer() != null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
+		}
 	}
 	/**
-	 * Do not remove containees in response to this event.
+	 * We must remove containees, in case someone is dependent upon one of them
+	 * and needs removal as well.
+	 * Architecture automatically removes dependent figures for us. no need to remove them
+	 * here.
 	 */
 	public FigureChangeListener remove(){
-		return super.remove();
+		if( getContainer() == null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("Figure can note be removed, it is not contained.");
+		}			
+		FigureChangeListener fcl =  getContainer();
+		if(listener() != null) {
+			listener().figureRequestRemove( new FigureChangeEvent(this));
+		}
+		return fcl;
 	}
 	/**
 	 * Propagates invalidate up the container chain.
@@ -206,6 +257,9 @@ public abstract class DecoratorFigure
 	}
 
 	public void figureChanged(FigureChangeEvent e) {
+		if(listener() != null) {
+			listener().figureChanged( new FigureChangeEvent(this));
+		}
 	}
 
 	public void figureRemoved(FigureChangeEvent e) {
@@ -236,9 +290,7 @@ public abstract class DecoratorFigure
 	public void figureRequestRemove(FigureChangeEvent e) {
 		e.getFigure().removeFigureChangeListener(this);
 		removeDependendFigure( e.getFigure() );
-		if (listener() != null) {
-			listener().figureRequestRemove(new FigureChangeEvent(this));
-		}
+		remove();
 	}
 
 	/**
@@ -312,7 +364,24 @@ public abstract class DecoratorFigure
 	 * Writes itself and the contained figure to the StorableOutput.
 	 */
 	public void write(StorableOutput dw) {
-		super.write(dw);
+		dw.writeInt( getZValue() );
+		//store dependentFigures
+		int size = myDependentFigures.size();
+		FigureEnumeration fe = getDependendFigures();
+		dw.writeInt( size );
+		while (fe.hasNextFigure()) {
+			dw.writeStorable(fe.nextFigure());
+		}
+		//store figuremanipulators
+		dw.writeInt( fFigureManipulators.size() );
+		for(Iterator it= fFigureManipulators.iterator();it.hasNext();) {
+			dw.writeStorable( (FigureManipulator)it.next() );
+		}
+		//store figuredecorators
+		dw.writeInt( fFigureDecorators.size() );
+		for(Iterator it= fFigureDecorators.iterator();it.hasNext();) {
+			dw.writeStorable( (Figure)it.next() );
+		}	
 		dw.writeStorable(getDecoratedFigure());
 	}
 
@@ -320,24 +389,415 @@ public abstract class DecoratorFigure
 	 * Reads itself and the contained figure from the StorableInput.
 	 */
 	public void read(StorableInput dr) throws IOException {
-		super.read(dr);
+		setZValue( dr.readInt() );
+		//load dependentFigures
+		int size = dr.readInt();
+		myDependentFigures = CollectionsFactory.current().createList(size);
+		for (int i=0; i<size; i++) {
+			myDependentFigures.add( (Figure)dr.readStorable()) ;
+		}
+
+		//load figureManipulators
+		int manipSize = dr.readInt();
+		fFigureManipulators = CollectionsFactory.current().createList(manipSize);
+		for (int i=0; i<manipSize; i++) {
+			fFigureManipulators.add( (FigureManipulator)dr.readStorable()) ;
+		}
+		//load figureDecorators
+		int decSize = dr.readInt();
+		fFigureDecorators = CollectionsFactory.current().createList(decSize);
+		for (int i=0; i<decSize; i++) {
+			fFigureDecorators.add( (Figure)dr.readStorable()) ;
+		}
 		decorate((Figure)dr.readStorable());
 	}
 
 	private void readObject(ObjectInputStream s)
 		throws ClassNotFoundException, IOException {
 
-		s.defaultReadObject();
-
+		//since dependent figures are not transient, they get deserialized here
+		//since FigureManipulators are not transient, they get deserialized here
+		s.defaultReadObject();//Read the non-static and non-transient fields of the current class from this stream.
 		getDecoratedFigure().addFigureChangeListener(this);
 	}
-
+	/**
+	 * @todo Verify implementation.
+	 */
+	private void writeObject(ObjectOutputStream s) throws IOException {
+		s.defaultWriteObject();
+	}
+	
 	public void visit(FigureVisitor visitor) {
-		super.visit(visitor);
-//		getDecoratedFigure().visit(visitor); !!!dnoyeb!!! this is a must right?
+		
+		
+		
+		// remember original listener as listeners might be changed by a visitor
+		// (e.g. by calling addToContainer() or removeFromContainer())
+		//FigureChangeListener originalListener = listener();
+		FigureEnumeration fe = getDependendFigures();
+
+		visitor.visitFigure(this);
+
+		FigureEnumeration visitFigures = figures();
+		while (visitFigures.hasNextFigure()) {
+			visitFigures.nextFigure().visit(visitor);
+		}
+
+		HandleEnumeration visitHandles = handles();
+		while (visitHandles.hasNextHandle()) {
+			visitor.visitHandle(visitHandles.nextHandle());
+		}
+/*
+		originalListener = listener();
+		if (originalListener != null) {
+			visitor.visitFigureChangeListener(originalListener);
+		}
+*/
+
+		while (fe.hasNextFigure()) {
+			//fe.nextFigure().visit(visitor);
+			visitor.visitDependendFigure(fe.nextFigure());
+		}
+		//getDecoratedFigure().visit(visitor); !!!dnoyeb!!! this is a must right?
 	}
 
 	public TextHolder getTextHolder() {
 		return getDecoratedFigure().getTextHolder();
 	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * needs cloning unless the z order is preserved in the context/order of
+	 * the saved figures somehow.
+	 */
+	private int _nZ;
+
+	/**
+	 * Changes the display box of a figure. Clients usually
+	 * call this method. It changes the display box
+	 * and announces the corresponding change.
+	 * @param origin the new origin
+	 * @param corner the new corner
+	 * @see #displayBox
+	 */
+	public void displayBox(Point origin, Point corner) {
+		willChange();
+		basicDisplayBox(origin, corner);
+		changed();
+	}
+
+	/**
+	 * Gets the size of the figure. A convenience method.
+	 */
+	public Dimension size() {
+		return new Dimension(displayBox().width, displayBox().height);
+	}
+
+	/**
+	 * Checks if the figure is empty. The default implementation returns
+	 * true if the width or height of its display box is < 3
+	 * @see Figure#isEmpty
+	 */
+	public boolean isEmpty() {
+		return (size().width < 3) || (size().height < 3);
+	}
+
+
+	/**
+	 * Changes the display box of a figure. This is a
+	 * convenience method. Implementors should only
+	 * have to override basicDisplayBox
+	 * @see #displayBox
+	 */
+	public void displayBox(Rectangle r) {
+		displayBox(new Point(r.x, r.y), new Point(r.x+r.width, r.y+r.height));
+	}
+
+	/**
+	 * Sets the Figure's container and registers the container
+	 * as a figure change listener. A figure's container can be
+	 * any kind of FigureChangeListener. A figure may have only a single container.
+	 *
+	 * @see Figure
+	 */
+	public void addToContainer(FigureChangeListener c) {
+		if(getContainer() != null){
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.
+			throw new JHotDrawRuntimeException("This figure is already contained.");
+		}
+		if(c == null){
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.
+			throw new JHotDrawRuntimeException("Container parameter can not be null.");
+		}
+		setContainer( c );
+		addFigureChangeListener(getContainer());
+		invalidate();		
+	}
+
+	/**
+	 * A callback from the container in response to the event fired by {@link
+	 * #remove remove}.  This method does the actual removal from the container.
+	 * Do not fire <code>figureRequestRemove</code> from this method.
+	 *
+	 * @see Figure#removeFromContainer
+	 */
+	public void removeFromContainer(FigureChangeListener c) {
+		if( getContainer() == null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("This figure is not contained.");
+		}
+		if(c == null){
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.
+			throw new JHotDrawRuntimeException("Container parameter can not be null.");
+		}
+		invalidate();
+		removeFigureChangeListener( getContainer() );
+		setContainer( null );
+	}
+
+	/**
+	 * Adds a listener for this figure.
+	 */
+	public synchronized void addFigureChangeListener(FigureChangeListener l) {
+		fListener = FigureChangeEventMulticaster.add(listener(), l);
+	}
+
+	/**
+	 * Removes a listener for this figure.
+	 */
+	public synchronized void removeFigureChangeListener(FigureChangeListener l) {
+		fListener = FigureChangeEventMulticaster.remove(listener(), l);
+	}
+
+	/**
+	 * Gets the figure's listners.
+	 */
+	protected synchronized FigureChangeListener listener() {
+		return fListener;
+	}
+
+	/**
+	 * Invalidates the figure. This method informs the listeners
+	 * that the figure's current display box is invalid and should be
+	 * refreshed.
+	 */
+	public void invalidate() {
+		if (listener() != null) {
+			Rectangle r = invalidateRectangle(displayBox());
+			listener().figureInvalidated(new FigureChangeEvent(this, r));
+		}
+	}
+
+	public void update() {
+		invalidate();
+		if (listener() != null) {
+			listener().figureRequestUpdate(new FigureChangeEvent(this));
+		}		
+	}
+	/**
+	 * Hook method to change the rectangle that will be invalidated
+	 */
+	protected Rectangle invalidateRectangle(Rectangle r) {
+		r.grow(Handle.HANDLESIZE, Handle.HANDLESIZE);
+		return r;
+	}
+
+	/**
+	 * Informes that a figure is about to change something that
+	 * affects the contents of its display box.
+	 * Causes the current display box to be marked as dirty and in need of
+	 * redraw.  The redraw does not occur as a result of this method call.
+	 *
+	 * @see Figure#willChange
+	 * @see Figure#invalidate
+	 */
+	public void willChange() {
+		invalidate();
+	}
+
+	/**
+	 * Informs that a figure changed the area of its display box.
+	 * Causes the current display box to be marked as dirty and in need of
+	 * redraw.  The redraw does not occur as a result of this method call.
+	 *
+	 * @see FigureChangeEvent
+	 * @see FigureChangeListener
+	 * @see Figure#changed
+	 * @see Figure#invalidate
+	 */
+	public void changed() {
+		invalidate();
+		if (listener() != null) {
+			listener().figureChanged(new FigureChangeEvent(this));
+		}
+	}
+
+	/**
+	 * Gets the center of a figure. A convenice
+	 * method that is rarely overridden.
+	 */
+	public Point center() {
+		return Geom.center(displayBox());
+	}
+
+	/**
+	 * Clones a figure. Creates a clone by using the storable
+	 * mechanism to flatten the Figure to stream followed by
+	 * resurrecting it from the same stream.
+	 *
+	 * @see Figure#clone
+	 */
+	public Object clone() {
+		Object clone = null;
+		ByteArrayOutputStream output = new ByteArrayOutputStream(200);
+		try {
+			ObjectOutput writer = new ObjectOutputStream(output);
+			writer.writeObject(this);
+			writer.close();
+		}
+		catch (IOException e) {
+			System.err.println("Class not found: " + e);
+		}
+
+		InputStream input = new ByteArrayInputStream(output.toByteArray());
+		try {
+			ObjectInput reader = new ObjectInputStream(input);
+			clone = reader.readObject();
+		}
+		catch (IOException e) {
+			System.err.println(e.toString());
+		}
+		catch (ClassNotFoundException e) {
+			System.err.println("Class not found: " + e);
+		}
+		return clone;
+	}
+
+
+
+
+	/**
+	 * Gets the z value (back-to-front ordering) of this figure.
+	 */
+	public int getZValue() {
+	  return _nZ;
+	}
+
+	/**
+	 * Sets the z value (back-to-front ordering) of this figure.
+	 */
+	public void setZValue(int z) {
+	  _nZ = z;
+	}
+
+	public FigureEnumeration getDependendFigures() {
+		synchronized(myDependentFigures){
+			return new FigureEnumerator(myDependentFigures);
+		}
+	}
+
+	public void addDependendFigure(Figure newDependendFigure) {
+		synchronized(myDependentFigures){
+			myDependentFigures.add(newDependendFigure);
+		}
+	}
+
+	public synchronized void removeDependendFigure(Figure oldDependentFigure) {
+		synchronized(myDependentFigures){
+			myDependentFigures.remove(oldDependentFigure);
+		}
+	}
+
+	protected FigureChangeListener getContainer() {
+		return container;
+	}
+	protected void setContainer(FigureChangeListener container){
+		this.container = container;
+	}
+	
+	public void addFigureManipulator(FigureManipulator fm) {
+		synchronized(fFigureManipulators) {		
+			fm.AttachFigure(this);
+			fFigureManipulators.add( fm );
+		}
+	}
+	
+	public void removeFigureManipulator(FigureManipulator fm) {
+		synchronized(fFigureManipulators) {
+			fFigureManipulators.remove( fm );
+			fm.DetachFigure(this);
+		}
+	}
+	
+	public void addFigureDecorator(FigureDecorator fd){
+		synchronized(fFigureDecorators){
+			fFigureDecorators.add( fd );
+			fd.decorateFigure( this );
+		}
+		invalidate();
+	}
+	public void removeFigureDecorator(FigureDecorator fd){
+		synchronized(fFigureDecorators){
+			fd.undecorateFigure( this );
+			fFigureDecorators.remove( fd );
+		}
+		invalidate();		
+	}
+	/**
+	 * The returned iterator needs to be fail fast or something !?!dnoyeb!?!
+	 */
+	public java.util.Iterator figureDecorators(){
+		return fFigureDecorators.iterator();
+	}
+	public void drawAll(Graphics g){
+		draw(g);
+		drawDecorators(g);
+	}
+	public void drawDecorators(Graphics g){
+		for(Iterator it= fFigureDecorators.iterator();it.hasNext();) {
+			((FigureDecorator)it.next()).draw(g);
+		}		
+	}	
 }

@@ -223,11 +223,12 @@ public abstract class AbstractFigure implements Figure {
 	 * @see Figure
 	 */
 	public void addToContainer(FigureChangeListener c) {
-		if(getContainer() != null){
-			//This will become ASSERT in JDK 1.4
-			//This represents an avoidable error on the programmers part.
-			throw new JHotDrawRuntimeException("This figure is already contained.");
-		}
+//this blocks duplicate containment.  currently border tool requires duplicate containment...
+//		if(getContainer() != null){
+//			//This will become ASSERT in JDK 1.4
+//			//This represents an avoidable error on the programmers part.
+//			throw new JHotDrawRuntimeException("This figure is already contained.");
+//		}
 		if(c == null){
 			//This will become ASSERT in JDK 1.4
 			//This represents an avoidable error on the programmers part.
@@ -302,7 +303,7 @@ public abstract class AbstractFigure implements Figure {
 		if( getContainer() == null ) {
 			//This will become ASSERT in JDK 1.4
 			//This represents an avoidable error on the programmers part.			
-			throw new JHotDrawRuntimeException("Figure can note be removed, it is not contained.");
+			throw new JHotDrawRuntimeException("Figure can not be removed, it is not contained.");
 		}			
 		FigureChangeListener fcl =  getContainer();
 		if(listener() != null) {
