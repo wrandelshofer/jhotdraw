@@ -40,20 +40,30 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * The listeners for a figure's changes.
 	 * It is only one listener but this one can be a (chained) MultiCastFigureChangeListener
+	 *
+	 * Need to figure out who restores this connection when the figure is reloaded !!!dnoyeb!!!
+	 *
 	 * @see #invalidate
 	 * @see #changed
 	 * @see #willChange
 	 */
 	private transient FigureChangeListener fListener;
+	
 	/**
-	 * needs cloneing !!!dnoyeb!!!
+	 * The container of this figure.  Used to prevent a figure from being added
+	 * to more than one container at a time.
 	 */
-	private FigureChangeListener container;
+	private transient FigureChangeListener container;
+	
 	/**
-	 * The dependend figures which have been added to this container.
-	 * needs to be cloned too right ???dnoyeb???
+	 * The dependent figures which have been added to this container.
+	 * This is an ordered collection.  The figures should be stored in the order
+	 * in which they were added.  The figures should be loaded in the order in
+	 * which they were stored.
+	 * @see #read
+	 * @see #write
 	 */
-	private List myDependendFigures;
+	private transient List myDependentFigures;
 
 	/*
 	 * Serialization support.
@@ -67,7 +77,7 @@ public abstract class AbstractFigure implements Figure {
 	private int _nZ;
 
 	protected AbstractFigure() {
-		 myDependendFigures = CollectionsFactory.current().createList();
+		 myDependentFigures = CollectionsFactory.current().createList();
 	}
 
 	/**
@@ -456,14 +466,47 @@ public abstract class AbstractFigure implements Figure {
 	 * Stores the Figure to a StorableOutput.
 	 */
 	public void write(StorableOutput dw) {
+		//store dependentFigures
+		FigureEnumeration fe;
+		//only way to make sure size matches is to synchronize on this object
+		//a thread safe collection would not work. dnoyeb
+		synchronized(myDependentFigures){
+			dw.writeInt( myDependentFigures.size() );
+			fe = getDependendFigures();
+			//this while loop does not need to by synchronized if the enumeration is thread safe
+			while (fe.hasNextFigure()) {
+				dw.writeStorable(fe.nextFigure());
+			}
+		}
 	}
 
 	/**
 	 * Reads the Figure from a StorableInput.
 	 */
 	public void read(StorableInput dr) throws IOException {
+		//load dependentFigures
+		int size = dr.readInt();
+		myDependentFigures = CollectionsFactory.current().createList(size);
+		for (int i=0; i<size; i++) {
+			myDependentFigures.add( (Figure)dr.readStorable()) ;
+		}
 	}
-
+	/**
+	 * @todo implement this.
+	 */
+	private void writeObject(ObjectOutputStream s) throws IOException {
+		//s.defaultWriteObject();
+		throw new IOException("writeObject not implemented for AbstractFigure.");
+	}
+	/**
+	 * Used for the cloning mechanism. !?!
+	 * @todo implement this.
+	 */
+	private void readObject(ObjectInputStream s) 
+		throws ClassNotFoundException, IOException {
+		//s.defaultReadObject();//Read the non-static and non-transient fields of the current class from this stream.
+		throw new IOException("readObject not implemented for AbstractFigure.");	
+	}
 	/**
 	 * Gets the z value (back-to-front ordering) of this figure.
 	 */
@@ -508,16 +551,22 @@ public abstract class AbstractFigure implements Figure {
 		}
 	}
 
-	public synchronized FigureEnumeration getDependendFigures() {
-		return new FigureEnumerator(myDependendFigures);
+	public FigureEnumeration getDependendFigures() {
+		synchronized(myDependentFigures){
+			return new FigureEnumerator(myDependentFigures);
+		}
 	}
 
-	public synchronized void addDependendFigure(Figure newDependendFigure) {
-		myDependendFigures.add(newDependendFigure);
+	public void addDependendFigure(Figure newDependendFigure) {
+		synchronized(myDependentFigures){
+			myDependentFigures.add(newDependendFigure);
+		}
 	}
 
-	public synchronized void removeDependendFigure(Figure oldDependendFigure) {
-		myDependendFigures.remove(oldDependendFigure);
+	public synchronized void removeDependendFigure(Figure oldDependentFigure) {
+		synchronized(myDependentFigures){
+			myDependentFigures.remove(oldDependentFigure);
+		}
 	}
 
 	public TextHolder getTextHolder() {

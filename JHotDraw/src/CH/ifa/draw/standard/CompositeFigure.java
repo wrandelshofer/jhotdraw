@@ -735,25 +735,31 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 */
 	public void write(StorableOutput dw) {
 		super.write(dw);
+		//store figures
 		dw.writeInt(figureCount());
 		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
 			dw.writeStorable(fe.nextFigure());
 		}
 	}
+	
+	/**
+	 * @todo implement this.
+	 */
+	private void writeObject(ObjectOutputStream s) throws IOException {
+		//s.defaultWriteObject();
+		throw new IOException("writeObject not implemented for CompositeFigure.");
+	}
 
 	/**
 	 * Reads the contained figures from StorableInput.
-	 * @todo evaluate readding to container.  Shouldnt we just save them already IN
-	 *       the container. the z values are being redone unless they were stored
-	 *       in z order.  ???dnoyeb???
 	 */
 	public void read(StorableInput dr) throws IOException {
 		super.read(dr);
+		//
 		int size = dr.readInt();
 		setFigures( CollectionsFactory.current().createList(size) );
 		//what about z value reset?
-		//this add is redundant ???dnoyeb??? figurea already set, just need to get the stored listener
 		for (int i=0; i<size; i++) {
 			add((Figure)dr.readStorable());
 		}
@@ -761,20 +767,20 @@ public abstract class CompositeFigure extends AbstractFigure {
 	}
 
 	/**
-	 * used for what? clone?
+	 * Used for the cloning mechanism.
+	 * @todo Implement this.
 	 */
 	private void readObject(ObjectInputStream s)
 		throws ClassNotFoundException, IOException {
+		throw new IOException("readObject not implemented for CompositeFigure.");
 
-		s.defaultReadObject();
-
-		FigureEnumeration fe = figures();
-		while (fe.hasNextFigure()) {
-			Figure figure = fe.nextFigure();
-			figure.addToContainer(figureChangeListener);//this should be stored in the file right? ???dnoyeb???
-		}
-
-		init(new Rectangle(0, 0));
+//		FigureEnumeration fe = figures();
+//		while (fe.hasNextFigure()) {
+//			Figure figure = fe.nextFigure();
+//			figure.addToContainer(figureChangeListener);
+//		}
+//
+//		init(new Rectangle(0, 0));
 	}
 
 	/**
