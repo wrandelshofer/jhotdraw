@@ -262,20 +262,25 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * Informes that a figure is about to change something that
 	 * affects the contents of its display box.
+	 * Causes the current display box to be marked as dirty and in need of
+	 * redraw.  The redraw does not occur as a result of this method call.
 	 *
 	 * @see Figure#willChange
+	 * @see Figure#invalidate
 	 */
 	public void willChange() {
-		// call invalidate before the change occurs to invalidate the old display area.
-		//why? the old display area is not invalid until the move takes place.
 		invalidate();
 	}
 
 	/**
 	 * Informs that a figure changed the area of its display box.
+	 * Causes the current display box to be marked as dirty and in need of
+	 * redraw.  The redraw does not occur as a result of this method call.
 	 *
 	 * @see FigureChangeEvent
+	 * @see FigureChangeListener
 	 * @see Figure#changed
+	 * @see Figure#invalidate
 	 */
 	public void changed() {
 		invalidate();
@@ -323,6 +328,11 @@ public abstract class AbstractFigure implements Figure {
 	/**
 	 * Sets whether the connectors should be visible.
 	 * By default they are not visible
+	 * It was an error to add this.  If you need visible connectors, what you 
+	 * really need is another Figure that contains a connector.  perhaps
+	 * ConnectionFigures should not be real figures, but something else.  having
+	 * them as figures misleads one into this path.
+	 * Am I correct in this assesment? ???dnoyeb???
 	 */
 	public void connectorVisibility(boolean isVisible, ConnectionFigure connector) {
 	}

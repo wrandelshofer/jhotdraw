@@ -15,7 +15,7 @@ import java.util.EventListener;
  /**
   * This event is fired by the {@link DrawingEditor DrawingEditor}.
   * @see javax.swing.event.EventListenerList
-  * @see CH.ifa.draw.Framework.DrawingEditor
+  * @see CH.ifa.draw.framework.DrawingEditor
   */
 public interface ViewChangeListener extends EventListener {
 

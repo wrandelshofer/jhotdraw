@@ -79,7 +79,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	/**
 	 * Gets an enumeration with all listener for this drawing.
 	 */
-	public Iterator drawingChangeListeners() {
+	protected Iterator drawingChangeListeners() {
 		return fListeners.iterator();
 	}
 
@@ -104,10 +104,16 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 		Figure addedFigure = super.add(figure);
 		if (addedFigure.listener() != null) {
 			Rectangle rect = invalidateRectangle(displayBox());//why not just the rect of the added figure?
-			addedFigure.listener().figureRequestUpdate(new FigureChangeEvent(figure, rect));
+			addedFigure.listener().figureRequestUpdate(new FigureChangeEvent(figure, rect));  //shouldnt composite figure be handling this?
 			return addedFigure;
 		}
 		return addedFigure;
+	}
+	/**
+	 * Causes the drawing to requestUpdate
+	 */
+	public void update() {
+		fireDrawingRequestUpdate();
 	}
 
 	/**
@@ -116,17 +122,40 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	 * @see FigureChangeListener
 	 */
 	protected void figureInvalidated(FigureChangeEvent e) {
+		//super.figureInvalidated(e);
+		fireDrawingInvalidated(e.getInvalidatedRectangle());
+	}
+	
+	/**
+	 * Forces an update of the drawing change listeners.
+	 * this is error? its overriding the compositeFigure basic behavior.
+	 * should leave composite figure basic behavior alone, and fire drawingrequestupdate
+	 * as well as.
+	 *
+	 * this is fired when the figures we are listening to change.
+	 * so if we move a selection of figures
+	 * 
+	 */
+	protected void figureRequestUpdate(FigureChangeEvent e) {
+		//super.figureRequestUpdate(e);
+		fireDrawingRequestUpdate(); //this will cause the drawing to be redrawn 
+	}	
+	/**
+	 * 
+	 */
+	protected void fireDrawingInvalidated(Rectangle invalidRectangle) {
 		if (fListeners != null) {
 			for (int i = 0; i < fListeners.size(); i++) {
 				DrawingChangeListener l = (DrawingChangeListener)fListeners.get(i);
-				l.drawingInvalidated(new DrawingChangeEvent(this, e.getInvalidatedRectangle()));
+				l.drawingInvalidated(new DrawingChangeEvent(this, invalidRectangle));
 			}
 		}
 	}
+
 	/**
 	 * Forces an update of the drawing change listeners.
 	 */
-	public void fireDrawingTitleChanged() {
+	protected void fireDrawingTitleChanged() {
 		if (fListeners != null) {
 			for (int i = 0; i < fListeners.size(); i++) {
 				DrawingChangeListener l = (DrawingChangeListener)fListeners.get(i);
@@ -134,10 +163,11 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 			}
 		}
 	}
+
 	/**
-	 * Forces an update of the drawing change listeners.
+	 *  Sent when the drawing wants to be refreshed
 	 */
-	protected void figureRequestUpdate(FigureChangeEvent e) {
+	protected void fireDrawingRequestUpdate() {
 		if (fListeners != null) {
 			for (int i = 0; i < fListeners.size(); i++) {
 				DrawingChangeListener l = (DrawingChangeListener)fListeners.get(i);
@@ -203,7 +233,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	public synchronized void unlock() {
 		if (fDrawingLockHolder != null) {
 			fDrawingLockHolder = null;
-			notifyAll();
+			notify();
 		}
 	}
 

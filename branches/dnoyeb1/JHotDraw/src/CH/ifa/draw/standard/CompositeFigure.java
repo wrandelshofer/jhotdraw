@@ -160,6 +160,9 @@ public abstract class CompositeFigure extends AbstractFigure {
 		while (fe.hasNextFigure()) {
 			remove(fe.nextFigure());
 		}
+		_clearQuadTree();
+		_nLowestZ = 0;
+		_nHighestZ = 0;
 	}
 
 	/**
@@ -168,15 +171,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 */
 	public void removeAll() {
 		FigureEnumeration fe = figures();
-		while (fe.hasNextFigure()) {
-			Figure figure = fe.nextFigure();
-			figure.removeFromContainer(figureChangeListener);
-		}
-		fFigures.clear();
-
-		_clearQuadTree();
-		_nLowestZ = 0;
-		_nHighestZ = 0;
+		removeAll(fe);
+//		fFigures.clear();
 	}
 
 	/**
@@ -645,10 +641,11 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Releases the figure and all its contained figures.
 	 * Should we release the figures in the order they were added?
 	 * i.e. should we first release the contained figures, THEN call super.release()??
-	 * !!!dnoyeb@users.sourceforge.net
+	 * !!!dnoyeb!!!
 	 */
 	public void release() {
 		super.release();
+		//removeAll
 		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
@@ -670,9 +667,16 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Propagates the removeFromDrawing request up to the container.
 	 * Why does a contained figures remove request end up being the compositeFigures
 	 * remove request? can we not remove just the contained figure?
-	 * This seems bizarre!!! dnoyeb
+	 * This seems bizarre !!!dnoyeb!!!
 	 * It seems liek if a contained figure wants out, the whole compositefigure
 	 * ends up requesting removal from its container too.
+	 * I think those listening to this event should know who wants to be removed
+	 * by querying the <code>FigureChangeEvent</code>.
+	 * Still sees wrong here.
+	 *
+	 * Certainly this is wrong, we must handle our containees.
+	 *
+	 * 
 	 * @see FigureChangeListener
 	 */
 	protected void figureRequestRemove(FigureChangeEvent e) {
@@ -683,6 +687,13 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Propagates the requestUpdate request up to the container.
+	 * This is a refiring of the event fired on the figures we are listening to.
+	 * This passes this event onto those who are listening to us.
+	 * we shouldnt pass it on.  those we are passing too never registered to hear
+	 * events on the figure we are passing them.
+	 * We should be repackaging this, since as far as our listeners are concerned
+	 * we are firing it.
+	 *
 	 * @see FigureChangeListener
 	 */
 	protected void figureRequestUpdate(FigureChangeEvent e) {
@@ -721,6 +732,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 		super.read(dr);
 		int size = dr.readInt();
 		fFigures = CollectionsFactory.current().createList(size);
+		//what about z value reset?
 		for (int i=0; i<size; i++) {
 			add((Figure)dr.readStorable());
 		}

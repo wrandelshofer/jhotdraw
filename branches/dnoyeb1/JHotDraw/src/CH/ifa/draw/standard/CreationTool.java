@@ -183,8 +183,8 @@ public class CreationTool extends AbstractTool {
 	 *
 	 * @return the anchor point for the interaction
 	 * @see #mouseDown
-	 * @deprecated use {@link AbstractTool#getAnchorX() 
-	 *			   AbstractTool.getAnchorX()} and {@link AbstractTool#getAnchorY()
+	 * @deprecated use {@link AbstractTool#getAnchorX 
+	 *			   AbstractTool.getAnchorX()} and {@link AbstractTool#getAnchorY
 	 *             AbstractTool.getAnchorY()} instead.
 	 *
 	 */
@@ -196,8 +196,8 @@ public class CreationTool extends AbstractTool {
 
 	/**
 	 * Sets the anchorPoint attribute of the CreationTool object
-	 * @deprecated use {@link AbstractTool#setAnchorX() 
-	 *			   AbstractTool.setAnchorX()} and {@link AbstractTool#setAnchorY()
+	 * @deprecated use {@link AbstractTool#setAnchorX
+	 *			   AbstractTool.setAnchorX()} and {@link AbstractTool#setAnchorY
 	 *             AbstractTool.setAnchorY()} instead.
 	 * @param newAnchorPoint  The new anchorPoint value
 	 */

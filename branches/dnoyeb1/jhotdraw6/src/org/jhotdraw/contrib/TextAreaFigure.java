@@ -815,7 +815,6 @@ public class TextAreaFigure extends AttributeFigure
 
 	/**
 	 * The figure is about to be removed from another composite figure
-	 *
 	 * @param e  Description of the Parameter
 	 */
 	public void figureRemoved(FigureChangeEvent e) {
@@ -836,6 +835,8 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
+	 * This should not be needed in this figure. see the description in the
+	 * <code>FigureChangeListener</code> interface for why.
 	 * @param e  Description of the Parameter
 	 */
 	public void figureRequestUpdate(FigureChangeEvent e) {
