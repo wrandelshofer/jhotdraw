@@ -151,7 +151,7 @@ public	class DrawApplication
 	/**
 	 * Opens a new window with a drawing view.
 	 */
-	protected synchronized void open(DrawingView newDrawingView) {
+	protected synchronized void open(final DrawingView newDrawingView) {
 		getVersionControlStrategy().assertCompatibleVersion();
 		setUndoManager(new UndoManager());
 		setIconkit(createIconkit());
@@ -192,10 +192,28 @@ public	class DrawApplication
 		addListeners();
 		setVisible(true);
 		setStorageFormatManager(createStorageFormatManager());
-		if (newDrawingView.isInteractive()) {
-	    	getDesktop().addToDesktop(newDrawingView , Desktop.PRIMARY);
+		//no work allowed to be done on GUI outside of AWT thread once
+		//setVisible(true) called.
+		Runnable r = new Runnable() {
+			public void run() {			
+			if (newDrawingView.isInteractive()) {
+		    	getDesktop().addToDesktop(newDrawingView , Desktop.PRIMARY);
+			}
+			toolDone();
+			}
+		};
+		
+		try {
+			SwingUtilities.invokeAndWait( r );
 		}
-		toolDone();
+		catch(java.lang.InterruptedException ie){
+			System.err.println(ie.getMessage());
+			exit();
+		}
+		catch(java.lang.reflect.InvocationTargetException ite){
+			System.err.println(ite.getMessage());
+			exit();
+		}			
 	}
 
 	/**
