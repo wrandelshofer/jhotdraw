@@ -33,7 +33,7 @@ public class NullDrawingView extends JPanel implements DrawingView {
 	private Painter myUpdateStrategy;
 	private Color myBackgroundColor;
 
-	private static Hashtable drawingViewManager = new Hashtable();
+	private static java.util.Map drawingViewManager = new Hashtable();
 
 	public NullDrawingView(DrawingEditor editor) {
 		setEditor(editor);

@@ -14,7 +14,6 @@ package CH.ifa.draw.contrib;
 import CH.ifa.draw.framework.DrawingView;
 
 import javax.swing.event.EventListenerList;
-import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerListener;
@@ -132,7 +131,7 @@ public class DesktopEventService {
 	}
 
 	public DrawingView[] getDrawingViews(Component[] comps) {
-		ArrayList al = new ArrayList();
+		java.util.List al = CH.ifa.draw.util.CollectionsFactory.current().createList(comps.length);
 		for (int x = 0; x < comps.length; x++) {
 			DrawingView dv = Helper.getDrawingView(comps[x]);
 			if (dv != null) {

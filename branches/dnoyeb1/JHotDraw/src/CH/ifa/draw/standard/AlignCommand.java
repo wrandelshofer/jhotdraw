@@ -147,7 +147,7 @@ public class AlignCommand extends AbstractCommand {
 	}
 
 	public static class UndoActivity extends UndoableAdapter {
-		private Hashtable myOriginalPoints;
+		private java.util.Map myOriginalPoints;
 		private Alignment myAppliedAlignment;
 
 		public UndoActivity(DrawingView newView, Alignment newAlignment) {

@@ -64,7 +64,7 @@ public  class ChangeAttributeCommand extends AbstractCommand {
 
 	public static class UndoActivity extends UndoableAdapter {
 		private FigureAttributeConstant myUndoAttribute;
-		private Hashtable	            myOriginalValues;
+		private java.util.Map	            myOriginalValues;
 		private Object                  myUndoValue;
 
 		public UndoActivity(DrawingView newDrawingView, FigureAttributeConstant newUndoAttribute, Object newUndoValue) {

@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference;
 import java.util.Iterator;
 
 import java.util.WeakHashMap;
-
+import java.util.Map;
 /**
  * StandardDisposableResourceManager implements disposable resource management
  * using a client supplied strategy.<br>
@@ -26,7 +26,7 @@ import java.util.WeakHashMap;
 
 public class StandardDisposableResourceManager implements DisposableResourceManager {
 	/** The registered resources */
-	protected WeakHashMap resources;
+	protected Map resources;
 
 	/** The disposing strategy */
 	protected ResourceDisposabilityStrategy strategy;

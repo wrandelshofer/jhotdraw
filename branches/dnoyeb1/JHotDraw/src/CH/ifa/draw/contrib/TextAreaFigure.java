@@ -82,7 +82,7 @@ public class TextAreaFigure extends AttributeFigure
 	 * Map of attributes for the AttributedString used for the figure's text.
 	 * Currently it just uses one single attribute with the figure's current font.
 	 */
-	protected Hashtable attributesMap = new Hashtable();
+	protected java.util.Map attributesMap = new Hashtable();
 
 	/** True if the figure is read only */
 	protected boolean fIsReadOnly;
