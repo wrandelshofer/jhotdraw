@@ -574,6 +574,10 @@ public abstract class AbstractFigure implements Figure {
 	}
 
 	public void visit(FigureVisitor visitor) {
+		//FigHolder = new AbstractFigure(this);
+		
+		
+		
 		// remember original listener as listeners might be changed by a visitor
 		// (e.g. by calling addToContainer() or removeFromContainer())
 		//FigureChangeListener originalListener = listener();
@@ -674,4 +678,24 @@ public abstract class AbstractFigure implements Figure {
 			((FigureDecorator)it.next()).draw(g);
 		}		
 	}
+
+	/**
+	 * Experimental.  Copies everything.
+	 */
+	protected AbstractFigure(AbstractFigure af){
+		_nZ = af._nZ;
+		
+		myDependentFigures = CollectionsFactory.current().createList( af.myDependentFigures.size() );
+		myDependentFigures.addAll( af.myDependentFigures );
+
+		fFigureManipulators = CollectionsFactory.current().createList( af.fFigureManipulators.size() );
+		fFigureManipulators.addAll( af.fFigureManipulators );
+		
+		fFigureDecorators = CollectionsFactory.current().createList( af.fFigureDecorators.size() );
+		fFigureDecorators.addAll( af.fFigureDecorators );
+		
+		fListener = af.fListener;
+		container = af.container;
+	}
+
 }

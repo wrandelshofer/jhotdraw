@@ -389,22 +389,23 @@ public class ZoomDrawingView extends StandardDrawingView {
 			setDamage(null);
 		}
 	}
-
-	/**
-	 * Overridden to accumulate damage in an instance variable of this class.
-	 */
-	public void drawingInvalidated(DrawingChangeEvent e) {
-		Rectangle r = e.getInvalidatedRectangle();
-		if (getDamage() == null) {
-			setDamage(r);
-		}
-		else {
-			Rectangle damagedArea = getDamage();
-			damagedArea.add(r);
-			// the returned rectange may be a clone so we better set it again
-			setDamage(damagedArea);
-		}
-	}
+//
+//	/**
+//	 * Overridden to accumulate damage in an instance variable of this class.
+//	 * Took this method out since it is not doing what it claims above.
+//	 */
+//	public void drawingInvalidated(DrawingChangeEvent e) {
+//		Rectangle r = e.getInvalidatedRectangle();
+//		if (getDamage() == null) {
+//			setDamage(r);
+//		}
+//		else {
+//			Rectangle damagedArea = getDamage();
+//			damagedArea.add(r);
+//			// the returned rectange may be a clone so we better set it again
+//			setDamage(damagedArea);
+//		}
+//	}
 
 	/**
 	 * @return a new MouseEvent, the coordinates of which are transformed

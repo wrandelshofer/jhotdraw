@@ -27,6 +27,9 @@ import java.awt.*;
  * CreationTool creates new figures by cloning a prototype.
  * <hr>
  *
+ * Note: CreatedFigure and AddedFigure are now the same.  No longer does a
+ * CompositeFigure change the added figure and return a different figure.
+ *
  * @see Figure
  * @see Object#clone
  *

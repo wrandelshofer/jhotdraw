@@ -57,7 +57,8 @@ public class InsertIntoDrawingVisitor implements FigureVisitor {
 		return new FigureEnumerator(myInsertedFigures);
 	}
 	/**
-	 * do nothing special with dependent figures.
+	 * do nothing special with dependent figures.  The dependent figures should
+	 * already be mixed in with the main figures.  no need to visit them.
 	 */
 	public void visitDependendFigure(Figure dependentFigure){
 	}

@@ -103,7 +103,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 */
 	public void add(Figure figure) {
 		DEBUG_validateContainment(figure,false);
-		figure.setZValue(++_nHighestZ); //no need to increment.  draw order insures subsequent on top.
+		figure.setZValue(++_nHighestZ);
 		getFigures().add(figure);
 		figure.addToContainer(figureChangeListener);  //add a figure to this CompositeFigure
 		_addToQuadTree(figure);
@@ -440,7 +440,25 @@ public abstract class CompositeFigure extends AbstractFigure {
 	public FigureEnumeration figures() {
 		return new FigureEnumerator(CollectionsFactory.current().createList(getFigures()));
 	}
-
+	protected List basicIncludedFigures(){
+		List figures = CollectionsFactory.current().createList();
+		FigureEnumeration fe = figures();
+		while(fe.hasNextFigure()){
+			Figure f = fe.nextFigure();
+			figures.add( f );
+			if(f instanceof CompositeFigure) {
+				List innerFigures = ((CompositeFigure)f).basicIncludedFigures();
+				if(innerFigures.size() > 0){
+					figures.addAll( innerFigures );
+					continue;
+				}
+			}
+		}
+		return figures;
+	}
+	public FigureEnumeration includedFigures() {
+		return new FigureEnumerator(basicIncludedFigures());
+	}
 	/**
 	 * Returns an enumeration to iterate in
 	 * Z-order back to front over the {@link Figure Figure}s
@@ -583,13 +601,11 @@ public abstract class CompositeFigure extends AbstractFigure {
 		Figure figure = findFigure(x,y);
 		if(figure instanceof CompositeFigure){
 			Figure figure2 = figure.findFigureInside(x,y);
-			if(figure2 != null)
+			if(figure2 != null) {
 				return figure2;
-			else
-				return figure;
+			}
 		}
-		else
-			return figure;
+		return figure;
 	}
 	
 	/**
@@ -831,5 +847,16 @@ public abstract class CompositeFigure extends AbstractFigure {
 				throw new JHotDrawRuntimeException("Figure is already part of this CompositeFigure.");
 			}			
 		}
+	}
+	/**
+	 * Experimental copy constructor.
+	 */
+	protected CompositeFigure(CompositeFigure cf){
+		super(cf);
+		cf.fFigures = fFigures;
+		cf._nLowestZ = _nLowestZ;
+		cf._nHighestZ = _nHighestZ;
+		cf.figureChangeListener = figureChangeListener;
+		cf.init(new Rectangle(0, 0));	
 	}
 }
