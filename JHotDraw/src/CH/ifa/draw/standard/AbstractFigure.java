@@ -224,6 +224,8 @@ public abstract class AbstractFigure implements Figure {
 	 */
 	public void addToContainer(FigureChangeListener c) {
 		if(getContainer() != null){
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.
 			throw new JHotDrawRuntimeException("This figure is already contained.");
 		}
 		setContainer( c );
@@ -240,6 +242,8 @@ public abstract class AbstractFigure implements Figure {
 	 */
 	public void removeFromContainer(FigureChangeListener c) {
 		if( getContainer() == null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
 			throw new JHotDrawRuntimeException("This figure is not contained.");
 		}
 		invalidate();
@@ -274,6 +278,8 @@ public abstract class AbstractFigure implements Figure {
 	 */
 	public void release() {
 		if( getContainer() != null ) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
 			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
 		}
 	}

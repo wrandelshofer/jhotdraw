@@ -101,12 +101,11 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @return the figure that was inserted (might be different from the figure specified).
 	 */
 	public void add(Figure figure) {
-		if (!containsFigure(figure)) {
-			figure.setZValue(++_nHighestZ);
-			getFigures().add(figure);
-			figure.addToContainer(figureChangeListener);  //add a figure to this CompositeFigure
-			_addToQuadTree(figure);
-		}
+		DEBUG_validateContainment(figure,false);
+		figure.setZValue(++_nHighestZ);
+		getFigures().add(figure);
+		figure.addToContainer(figureChangeListener);  //add a figure to this CompositeFigure
+		_addToQuadTree(figure);
 	}
 
 	/**
@@ -150,15 +149,12 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @deprecated use figure.remove();figure.release();
 	 */
 	public void remove(Figure figure) {
+		DEBUG_validateContainment(figure,true);		
 		figure.remove();
 		figure.release();
 	}
 	
-	protected void removeImpl(Figure figure){
-		if(!containsFigure(figure)){
-			throw new JHotDrawRuntimeException("Figure is not part of this CompositeFigure.");
-		}
-
+	protected void basicOrphan(Figure figure){
 		Rectangle r = figure.displayBox();
 		figure.removeFromContainer( figureChangeListener ); //removes the figure from being contained in this CompositeFigure
 		getFigures().remove(figure);
@@ -222,6 +218,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @param figure that is part of the drawing and should be removed
 	 */
 	public synchronized void orphan(Figure figure) {
+		DEBUG_validateContainment(figure,true);		
 		figure.remove();
 	}
 
@@ -258,6 +255,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @todo determine what we are doign here.  is this an orphan with an add or what?
 	 */
 	public synchronized Figure replace(Figure figure, Figure replacement) {
+		DEBUG_validateContainment(figure,true);		
 		int index = getFigures().indexOf(figure);
 		if (index != -1) {
 			replacement.setZValue(figure.getZValue());
@@ -272,38 +270,29 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Sends a figure to the back of the drawing.  
-	 * I think this is a good place to throw a runtime exception if the Figure
-	 * is not part of the drawing, dnoyeb!!! BadParameterException
-	 * This needs work.  perhaps a will change?
 	 * @param figure that is part of the drawing
 	 */
 	public synchronized void sendToBack(Figure figure) {
-		if (containsFigure(figure)) {
-			getFigures().remove(figure);
-			getFigures().add(0, figure);
-			_nLowestZ--;
-			figure.setZValue(_nLowestZ);
-			figure.changed();
-		}
+		DEBUG_validateContainment(figure,true);		
+		getFigures().remove(figure);
+		getFigures().add(0, figure);
+		_nLowestZ--;
+		figure.setZValue(_nLowestZ);
+		figure.changed();
 	}
 
 	/**
 	 * Brings a figure to the front.
-	 * I think this is a good place to throw a runtime exception if the Figure
-	 * is not part of the drawing, dnoyeb!!! BadParameterException
-	 * I have spoken on BadParameterException several times, I won't mention it
-	 * all the way through the file...
 	 *
 	 * @param figure that is part of the drawing
 	 */
 	public synchronized void bringToFront(Figure figure) {
-		if (containsFigure(figure)) {
-			getFigures().remove(figure);
-			getFigures().add(figure);
-			_nHighestZ++;
-			figure.setZValue(_nHighestZ);
-			figure.changed();
-		}
+		DEBUG_validateContainment(figure,true);		
+		getFigures().remove(figure);
+		getFigures().add(figure);
+		_nHighestZ++;
+		figure.setZValue(_nHighestZ);
+		figure.changed();
 	}
 
 	/**
@@ -325,26 +314,25 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @param layerNr target layer of the figure
 	 */
 	public void sendToLayer(Figure figure, int layerNr) {
-		if (containsFigure(figure)) {
-			if (layerNr >= getFigures().size()) {
-				layerNr = getFigures().size() - 1;
-			}
-			Figure layerFigure = getFigureFromLayer(layerNr);
-			int layerFigureZValue = layerFigure.getZValue();
-			int figureLayer = getLayer(figure);
-			// move figure forward
-			if (figureLayer < layerNr) {
-				assignFiguresToPredecessorZValue(figureLayer + 1, layerNr);
-			}
-			else if (figureLayer > layerNr) {
-				assignFiguresToSuccessorZValue(layerNr, figureLayer - 1);
-			}
-
-			getFigures().remove(figure);
-			getFigures().add(layerNr, figure);
-			figure.setZValue(layerFigureZValue);
-			figure.changed();
+		DEBUG_validateContainment(figure,true);
+		if (layerNr >= getFigures().size()) {
+			layerNr = getFigures().size() - 1;
 		}
+		Figure layerFigure = getFigureFromLayer(layerNr);
+		int layerFigureZValue = layerFigure.getZValue();
+		int figureLayer = getLayer(figure);
+		// move figure forward
+		if (figureLayer < layerNr) {
+			assignFiguresToPredecessorZValue(figureLayer + 1, layerNr);
+		}
+		else if (figureLayer > layerNr) {
+			assignFiguresToSuccessorZValue(layerNr, figureLayer - 1);
+		}
+
+		getFigures().remove(figure);
+		getFigures().add(layerNr, figure);
+		figure.setZValue(layerFigureZValue);
+		figure.changed();
 	}
 
 	private void assignFiguresToPredecessorZValue(int lowerBound, int upperBound) {
@@ -549,6 +537,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * the find.
 	 */
 	public Figure findFigureWithout(int x, int y, Figure without) {
+		DEBUG_validateContainment(without,true);		
 		if (without == null)
 			return findFigure(x, y);
 		FigureEnumeration fe = figuresReverse();
@@ -568,6 +557,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * that is temporarily inserted into the drawing.
 	 */
 	public Figure findFigure(Rectangle r, Figure without) {
+		DEBUG_validateContainment(without,true);		
 		if (without == null)
 			return findFigure(r);
 		FigureEnumeration fe = figuresReverse();
@@ -609,6 +599,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see #findFigureInside for my error comments.
 	 */
 	public Figure findFigureInsideWithout(int x, int y, Figure without) {
+		DEBUG_validateContainment(without,true);		
 		FigureEnumeration fe = figuresReverse();
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
@@ -681,10 +672,10 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Responds to a contained figure requesting to be removed from the component.
 	 */
 	protected void figureRequestRemove(FigureChangeEvent e) {
-		removeImpl(e.getFigure());
+		basicOrphan(e.getFigure());
 	}
-	public void figureRemoved(FigureChangeEvent e){
-		//useless
+	protected void figureRemoved(FigureChangeEvent e){
+		//useless to us
 	}
 
 	/**
@@ -814,6 +805,25 @@ public abstract class CompositeFigure extends AbstractFigure {
 	private void _clearQuadTree() {
 		if (_theQuadTree != null) {
 			_theQuadTree.clear();
+		}
+	}
+	/**
+	 * This is development level code that should not be released in a non
+	 * development edition.  Don't know how to accomplish this.  ASSERT seems
+	 * like a good way in JDK1.4
+	 */
+	protected void DEBUG_validateContainment(Figure figure, boolean want){
+		//This will become ASSERT in JDK 1.4
+		//This represents an avoidable error on the programmers part.
+		if(want == true){
+			if(!containsFigure(figure)){
+				throw new JHotDrawRuntimeException("Figure is not part of this CompositeFigure.");
+			}
+		}
+		else{
+			if(containsFigure(figure)){
+				throw new JHotDrawRuntimeException("Figure is already part of this CompositeFigure.");
+			}			
 		}
 	}
 }

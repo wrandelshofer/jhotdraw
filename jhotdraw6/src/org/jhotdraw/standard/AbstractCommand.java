@@ -138,7 +138,9 @@ public abstract class AbstractCommand implements Command, FigureSelectionListene
 	 */
 	public void execute() {
 		if (view() == null) {
-			throw new JHotDrawRuntimeException("execute should NOT be getting called when view() == null");
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("View is null, exexute should have been called.");
 		};
 	}
 
