@@ -65,7 +65,7 @@ public class DragNDropTool extends AbstractTool {
 	/**
 	 * Sent when a new view is created
 	 */
-	public void viewActivated(DrawingView view) {
+	protected void viewActivated(DrawingView view) {
 		super.viewActivated(view);
 		if (DNDInterface.class.isInstance(view)) {
 			DNDInterface dndi = (DNDInterface)view;
@@ -78,7 +78,7 @@ public class DragNDropTool extends AbstractTool {
 	/**
 	 * Send when an existing view is about to be destroyed.
 	 */
-	public void viewDeactivated(DrawingView view) {
+	protected void viewDeactivated(DrawingView view) {
 		if (DNDInterface.class.isInstance(view)) {
 			DNDInterface dndi = (DNDInterface)view;
 			dndi.setDropTargetActive(false);

@@ -30,7 +30,7 @@ import java.awt.event.KeyEvent;
  * @version <$CURRENT_VERSION$>
  */
 
-public abstract class AbstractTool implements Tool, ViewChangeListener {
+public abstract class AbstractTool implements Tool {
 
 	private DrawingEditor     myDrawingEditor;
 
@@ -57,6 +57,19 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 	 */
 	private boolean myIsEnabled;
 
+	private final ViewChangeListener myViewChangeListener = new ViewChangeListener() {
+		public void viewSelectionChanged(DrawingView oldView, DrawingView newView){
+			AbstractTool.this.viewSelectionChanged(oldView, newView);
+		}
+		public void viewActivated(DrawingView view){
+			AbstractTool.this.viewActivated(view);
+		}
+		public void viewDeactivated(DrawingView view){
+			AbstractTool.this.viewDeactivated(view);
+		}
+	};
+		
+		
 	/**
 	 * Constructs a tool for the given view.
 	 */
@@ -65,7 +78,7 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 		setEventDispatcher(createEventDispatcher());
 		setEnabled(true);
 		checkUsable();
-		editor().addViewChangeListener(this);
+		editor().addViewChangeListener(myViewChangeListener);
 	}
 
 	/**
@@ -106,7 +119,7 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 	 * Subclasses should always call super.  ViewSelectionChanged() this allows
 	 * the tools state to be updated and referenced to the new view.
 	 */
-	public void viewSelectionChanged(DrawingView oldView, DrawingView newView) {
+	protected void viewSelectionChanged(DrawingView oldView, DrawingView newView) {
 		if (isActive()) {
 			deactivate();
 			activate();
@@ -116,15 +129,22 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 	}
 
 	/**
-	 * Sent when a new view is created
+	 * Sent when a new view is added
 	 */
-	public void viewActivated(DrawingView view) {
+	protected void viewActivated(DrawingView view) {
 	}
 
 	/**
-	 * Send when an existing view is about to be destroyed.
+	 * Send when an existing view is about to be removed.
+	 * there is no getting away from the strange order here.
+	 * if you add something after the view is activated, you tend to want to 
+	 * remove it <i>before</i> the view is deactivated.  it will cause funny
+	 * naming of the methods. such as viewActvated and viewDeactivating.
+	 * C'est la vie...dnoyeb
+	 * point of fact, this is called <i>after</i> the view is deactivated but it
+	 * is ok unless we make all instances of this situation funnily named.
 	 */
-	public void viewDeactivated(DrawingView view) {
+	protected void viewDeactivated(DrawingView view) {
 	}
 
 	/**
@@ -150,6 +170,8 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 //unlike super.mousedown which is usually called immediately after a sub classes mouse down
 //method starts, super.mouseup should probably be called last before the method ends?
 //it must if its going to set the view to null.  getting messy.
+		//well this means we want the default action of mouseUP to be to release the 
+		//tool so to speak.  all tools may not want this.  dnoyeb. 1/4/02
 	}
 
 	/**
