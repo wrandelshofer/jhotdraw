@@ -1097,7 +1097,7 @@ public class StandardDrawingView
 		getDNDHelper().deinitialize();
 	}
 
-	public void setDragSourceState(boolean state) {
-		getDNDHelper().setDragSourceState(state);
-	}
+//	public void setDragSourceState(boolean state) {
+//		getDNDHelper().setDragSourceState(state);
+//	}
 }
