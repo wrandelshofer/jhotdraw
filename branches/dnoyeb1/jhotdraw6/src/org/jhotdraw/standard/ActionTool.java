@@ -13,7 +13,6 @@ package CH.ifa.draw.standard;
 
 import CH.ifa.draw.framework.*;
 
-import java.awt.event.MouseEvent;
 
 /**
  * A tool that performs an action when it is active and
@@ -31,16 +30,19 @@ public abstract class ActionTool extends AbstractTool {
 	 * Add the touched figure to the selection an invoke action
 	 * @see #action
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e,x,y);
-		Figure target = drawing().findFigure(x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
+		
+		Figure target = drawing().findFigure( getAnchorX() ,getAnchorY() );
 		if (target != null) {
 			view().addToSelection(target);
 			action(target);
 		}
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		editor().toolDone();
 	}
 

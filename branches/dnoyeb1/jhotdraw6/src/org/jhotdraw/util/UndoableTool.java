@@ -13,7 +13,7 @@ package CH.ifa.draw.util;
 
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.AbstractTool;
-import java.awt.event.MouseEvent;
+
 import java.awt.event.KeyEvent;
 import java.util.EventObject;
 
@@ -61,15 +61,15 @@ public class UndoableTool implements Tool, ToolListener {
 	/**
 	 * Handles mouse down events in the drawing view.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		getWrappedTool().mouseDown(e, x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		getWrappedTool().mouseDown(dvme);
 	}
 
 	/**
 	 * Handles mouse drag events in the drawing view.
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		getWrappedTool().mouseDrag(e, x, y);
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		getWrappedTool().mouseDrag(dvme);
 	}
 
 	/**
@@ -79,15 +79,15 @@ public class UndoableTool implements Tool, ToolListener {
 	 *
 	 * @see CH.ifa.draw.util.Undoable
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
-		getWrappedTool().mouseUp(e, x, y);
+	public void mouseUp(DrawingViewMouseEvent dvme) {
+		getWrappedTool().mouseUp(dvme);
 	}
 
 	/**
 	 * Handles mouse moves (if the mouse button is up).
 	 */
-	public void mouseMove(MouseEvent evt, int x, int y) {
-		getWrappedTool().mouseMove(evt, x, y);
+	public void mouseMove(DrawingViewMouseEvent dvme) {
+		getWrappedTool().mouseMove(dvme);
 	}
 
 	/**

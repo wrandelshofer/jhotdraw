@@ -20,7 +20,7 @@ import java.io.*;
 import javax.swing.JComponent;
 
 /**
- * @author  C.L.Gilbert <dnoyeb@sourceforge.net>
+ * @author  C.L.Gilbert <dnoyeb@users.sourceforge.net>
  * @version <$CURRENT_VERSION$>
  */
 public abstract class DNDHelper implements DropTargetListener,DragSourceListener,DragGestureListener {

@@ -15,7 +15,7 @@ import CH.ifa.draw.framework.*;
 import CH.ifa.draw.util.UndoableAdapter;
 import CH.ifa.draw.util.Undoable;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 
 /**
  * DragTracker implements the dragging of the clicked
@@ -36,12 +36,15 @@ public class DragTracker extends AbstractTool {
 		fAnchorFigure = anchor;
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e, x, y);
-		fLastX = x;
-		fLastY = y;
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
 
-		if (e.isShiftDown()) {
+		fLastX = getAnchorX();
+		fLastY = getAnchorY();
+
+		if (dvme.getMouseEvent().isShiftDown()) {
 		   getActiveView().toggleSelection(fAnchorFigure);
 		   fAnchorFigure = null;
 		}
@@ -54,18 +57,18 @@ public class DragTracker extends AbstractTool {
 //		getUndoActivity().setAffectedFigures(view().selectionElements());
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		super.mouseDrag(e, x, y);
-		fMoved = (Math.abs(x - getAnchorX()) > 4) || (Math.abs(y - getAnchorY()) > 4);
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		super.mouseDrag(dvme);
+		fMoved = (Math.abs(dvme.getX() - getAnchorX()) > 4) || (Math.abs(dvme.getY() - getAnchorY()) > 4);
 
 		if (fMoved) {
 			FigureEnumeration figures = getUndoActivity().getAffectedFigures();
 			while (figures.hasNextFigure()) {
-				figures.nextFigure().moveBy(x - fLastX, y - fLastY);
+				figures.nextFigure().moveBy(dvme.getX() - fLastX, dvme.getY() - fLastY);
 			}
 		}
-		fLastX = x;
-		fLastY = y;
+		fLastX = dvme.getX();
+		fLastY = dvme.getY();
 	}
 
 	public void activate() {

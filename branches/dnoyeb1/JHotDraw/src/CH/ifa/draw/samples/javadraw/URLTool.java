@@ -16,7 +16,6 @@ import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.FloatingTextField;
 import java.awt.*;
 import java.awt.event.*;
-
 /**
  * A tool to attach URLs to figures.
  * The URLs are stored in the figure's "URL" attribute.
@@ -35,10 +34,10 @@ public  class URLTool extends AbstractTool {
 		super(newDrawingEditor);
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y)
+	public void mouseDown(DrawingViewMouseEvent dvme)
 	{
-		super.mouseDown(e,x,y);
-		Figure pressedFigure = drawing().findFigureInside(x, y);
+		super.mouseDown(dvme);
+		Figure pressedFigure = drawing().findFigureInside(getAnchorX(), getAnchorY() );
 		if (pressedFigure != null) {
 			beginEdit(pressedFigure);
 			return;
@@ -47,7 +46,7 @@ public  class URLTool extends AbstractTool {
 		editor().toolDone();
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 	}
 
 	public void deactivate(DrawingView view) {

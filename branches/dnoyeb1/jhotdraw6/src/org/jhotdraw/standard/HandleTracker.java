@@ -11,7 +11,7 @@
 
 package CH.ifa.draw.standard;
 
-import java.awt.event.MouseEvent;
+
 import CH.ifa.draw.framework.*;
 
 /**
@@ -30,19 +30,23 @@ public class HandleTracker extends AbstractTool {
 		fAnchorHandle = anchorHandle;
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e, x, y);
-		fAnchorHandle.invokeStart(x, y, view());
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
+		// use event coordinates to supress any kind of
+		// transformations like constraining points to a grid, why?
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
+		fAnchorHandle.invokeStart(getAnchorX(), getAnchorY(), view());
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		super.mouseDrag(e, x, y);
-		fAnchorHandle.invokeStep(x, y, getAnchorX(), getAnchorY(), view());
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		super.mouseDrag( dvme );
+		fAnchorHandle.invokeStep(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY(), getAnchorX(), getAnchorY(), view());
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
-		super.mouseUp(e, x, y);
-		fAnchorHandle.invokeEnd(x, y, getAnchorX(), getAnchorY(), view());
+	public void mouseUp(DrawingViewMouseEvent dvme) {
+		fAnchorHandle.invokeEnd(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY(), getAnchorX(), getAnchorY(), view());
+		super.mouseUp(dvme);		
 	}
 
 	public void activate() {

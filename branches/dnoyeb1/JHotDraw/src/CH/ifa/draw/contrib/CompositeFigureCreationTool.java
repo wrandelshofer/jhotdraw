@@ -18,7 +18,7 @@ import CH.ifa.draw.framework.DrawingEditor;
 import CH.ifa.draw.framework.DrawingView;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
-import java.awt.event.MouseEvent;
+
 import java.awt.*;
 
 /**
@@ -66,16 +66,15 @@ public class CompositeFigureCreationTool extends CreationTool {
 		view.removeFigureSelectionListener(figureSelectionListener);
 		super.viewDestroying(view);
 	}
-	
-	public void mouseDown(MouseEvent e, int x, int y) {
-		setView((DrawingView)e.getSource());
-		Figure figure = getFigureWithoutDecoration(drawing().findFigure(e.getX(), e.getY()));
+
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+		Figure figure = getFigureWithoutDecoration(drawing().findFigure(dvme.getX(), dvme.getY()));
 		if ((figure != null) && (figure instanceof CompositeFigure)) {
 			setContainerFigure((CompositeFigure)figure);
 			setCreatedFigure(createFigure());
 			setAddedFigure((getContainerFigure().add(getCreatedFigure())));
-
-			setAnchorPoint(new Point(x, y));
+			setAnchorPoint(new Point(dvme.getX(), dvme.getY()));
 			getAddedFigure().displayBox(getAnchorPoint(), getAnchorPoint());
 		}
 		else {
@@ -100,9 +99,9 @@ public class CompositeFigureCreationTool extends CreationTool {
 	 *	figure type???
 	 *
 	 */
-	public void mouseMove(MouseEvent e, int x, int y) {
-		DrawingView v = (DrawingView)e.getSource();
-		Figure f = getFigureWithoutDecoration( v.drawing().findFigure(e.getX(), e.getY()) );
+	public void mouseMove(DrawingViewMouseEvent dvme) {
+		DrawingView v = dvme.getDrawingView();
+		Figure f = getFigureWithoutDecoration( v.drawing().findFigure(dvme.getX(), dvme.getY()) );
 		if(f instanceof CompositeFigure) {
 			getActiveView().setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		}
@@ -119,15 +118,15 @@ public class CompositeFigureCreationTool extends CreationTool {
 	 *	limited independently, and both dont stop operating the second one violates its
 	 *	parameters.
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		if ((getContainerFigure() != null) && getContainerFigure().containsPoint(e.getX(), e.getY())) {
-			super.mouseDrag(e,x, y);
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		if ((getContainerFigure() != null) && getContainerFigure().containsPoint(dvme.getX(), dvme.getY())) {
+			super.mouseDrag(dvme);
 		}
 	}
 	
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		if ((getContainerFigure() != null) && (getCreatedFigure() != null)
-				&& getContainerFigure().containsPoint(e.getX(), e.getY())) {
+				&& getContainerFigure().containsPoint(dvme.getX(), dvme.getY())) {
 			getContainerFigure().add(getCreatedFigure());
 		}
 		toolDone();

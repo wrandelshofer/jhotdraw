@@ -16,7 +16,7 @@ import CH.ifa.draw.util.Geom;
 import CH.ifa.draw.util.UndoableAdapter;
 import CH.ifa.draw.util.Undoable;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 import java.util.*;
 
 /**
@@ -84,8 +84,8 @@ public  class ConnectionTool extends AbstractTool {
 	/**
 	 * Handles mouse move events in the drawing view.
 	 */
-	public void mouseMove(MouseEvent e, int x, int y) {
-		trackConnectors(e, x, y);
+	public void mouseMove(DrawingViewMouseEvent dvme) {
+		trackConnectors(dvme);
 	}
 
 	/**
@@ -93,27 +93,29 @@ public  class ConnectionTool extends AbstractTool {
 	 * mouse down hits a figure start a new connection. If the mousedown
 	 * hits a connection split a segment or join two segments.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e,x,y);
-		int ex = e.getX();
-		int ey = e.getY();
-		setTargetFigure(findConnectionStart(ex, ey, drawing()));
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
+		// use event coordinates to supress any kind of
+		// transformations like constraining points to a grid
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
+		setTargetFigure(findConnectionStart(getAnchorX(), getAnchorY(), drawing()));
 		if (getTargetFigure() != null) {
-			setStartConnector(findConnector(ex, ey, getTargetFigure()));
+			setStartConnector(findConnector(getAnchorX(), getAnchorY(), getTargetFigure()));
 			if (getStartConnector() != null) {
 				setConnection(createConnection());
-				getConnection().startPoint(ex, ey);
-				getConnection().endPoint(ex, ey);
+				getConnection().startPoint(getAnchorX(), getAnchorY());
+				getConnection().endPoint(getAnchorX(), getAnchorY());
 				setAddedFigure(view().add(getConnection()));
 			}
 		}
 		else {
 			// Since we can't connect to the figure, see if its a Connection
 			// object we can modify the appearance of.
-			ConnectionFigure connection = findConnection(ex, ey, drawing());
+			ConnectionFigure connection = findConnection(getAnchorX(), getAnchorY(), drawing());
 			if (connection != null) {
-				if (!connection.joinSegments(ex, ey)) {
-					fSplitPoint = connection.splitSegment(ex, ey);
+				if (!connection.joinSegments(getAnchorX(), getAnchorY())) {
+					fSplitPoint = connection.splitSegment(getAnchorX(), getAnchorY());
 					fEditedConnection = connection;
 				}
 				else {
@@ -126,17 +128,17 @@ public  class ConnectionTool extends AbstractTool {
 	/**
 	 * Adjust the created connection or split segment.
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		Point p = new Point(e.getX(), e.getY());
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		Point p = new Point(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY());
 		if (getConnection() != null) {
-			trackConnectors(e, x, y);
+			trackConnectors(dvme);
 			if (getTargetConnector() != null) {
 				p = Geom.center(getTargetConnector().displayBox());
 			}
 			getConnection().endPoint(p.x, p.y);
 		}
 		else if (fEditedConnection != null) {
-			Point pp = new Point(x, y);
+			Point pp = new Point(dvme.getX(), dvme.getY());
 			fEditedConnection.setPointAt(pp, fSplitPoint);
 		}
 	}
@@ -145,14 +147,14 @@ public  class ConnectionTool extends AbstractTool {
 	 * Connects the figures if the mouse is released over another
 	 * figure.
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		Figure c = null;
 		if (getStartConnector() != null) {
-			c = findTarget(e.getX(), e.getY(), drawing());
+			c = findTarget(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY(), drawing());
 		}
 
 		if (c != null) {
-			setEndConnector(findConnector(e.getX(), e.getY(), c));
+			setEndConnector(findConnector(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY(), c));
 			if (getEndConnector() != null) {
 				getConnection().connectStart(getStartConnector());
 				getConnection().connectEnd(getEndConnector());
@@ -247,17 +249,17 @@ public  class ConnectionTool extends AbstractTool {
 	 * Attempts to set the Connector to be connected to based on the current
 	 * location of the mouse.
 	 */
-	protected void trackConnectors(MouseEvent e, int x, int y) {
+	protected void trackConnectors(DrawingViewMouseEvent dvme) {
 		Figure c = null;
 
 		// If tool is not actively looking for a target for our current
 		// Connection, see if there are any connectable figures at at the
 		// current location(findSource).
 		if (getStartConnector() == null) {
-			c = findSource(x, y, getActiveDrawing());
+			c = findSource(dvme.getX(), dvme.getY(), getActiveDrawing());
 		}
 		else {
-			c = findTarget(x, y, getActiveDrawing());
+			c = findTarget(dvme.getX(), dvme.getY(), getActiveDrawing());
 		}
 
 		// track the figure containing the mouse
@@ -282,7 +284,7 @@ public  class ConnectionTool extends AbstractTool {
 		// the new target connector.
 		Connector cc = null;
 		if (c != null) {
-			cc = findConnector(e.getX(), e.getY(), c);
+			cc = findConnector(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY(), c);
 		}
 		if (cc != getTargetConnector()) {
 			setTargetConnector(cc);

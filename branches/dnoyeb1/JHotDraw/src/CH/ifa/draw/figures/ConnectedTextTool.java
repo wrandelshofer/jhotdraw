@@ -14,7 +14,7 @@ package CH.ifa.draw.figures;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.Undoable;
-import java.awt.event.MouseEvent;
+
 
 /**
  * Tool to create new or edit existing text figures.
@@ -37,10 +37,10 @@ public  class ConnectedTextTool extends TextTool {
 	 * If the pressed figure is a TextHolder it can be edited otherwise
 	 * a new text figure is created.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e, x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
 
-		setConnectedFigure(drawing().findFigureInside(x, y));
+		setConnectedFigure(drawing().findFigureInside(getAnchorX(), getAnchorY()));
 		TextHolder textHolder = getTypingTarget();
 		if (!fConnected && (getConnectedFigure() != null) && (textHolder != null) && (getConnectedFigure() != textHolder)) {
 			textHolder.connect(getConnectedFigure());

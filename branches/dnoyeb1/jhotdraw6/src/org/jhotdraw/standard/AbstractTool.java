@@ -18,7 +18,7 @@ import CH.ifa.draw.util.CollectionsFactory;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 import java.awt.event.KeyEvent;
 
 /**
@@ -150,31 +150,32 @@ public abstract class AbstractTool implements Tool {
 	/**
 	 * Handles mouse down events in the drawing view.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-        setAnchorX(x);
-        setAnchorY(y);
-		setView((DrawingView)e.getSource());
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+        setAnchorX(dvme.getX()); //constrained value
+        setAnchorY(dvme.getY()); //constrained value
+		setView( dvme.getDrawingView() );
 	}
 
 	/**
 	 * Handles mouse drag events in the drawing view.
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 	}
 
 	/**
 	 * Handles mouse up in the drawing view.
+	 * Standard behavior is for the tool to deactivate and the view to be 
+	 * released.  Override this method if you need to use the {@link DrawingView
+	 * DrawingView} after mouseUp.
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
-//		setView(null);//This must be fixed!!! the view should not be held onto after mouse up??
-		//this should be called.  but if all else is coded properly
-		//it will not matter.
+	public void mouseUp(DrawingViewMouseEvent dvme) {
+		setView(null);
 	}
 
 	/**
-	 * Handles mouse moves (if the mouse button is up).
+	 * Handles mouse moves (when the mouse button is up).
 	 */
-	public void mouseMove(MouseEvent evt, int x, int y) {
+	public void mouseMove(DrawingViewMouseEvent dvme) {
 	}
 
 	/**
