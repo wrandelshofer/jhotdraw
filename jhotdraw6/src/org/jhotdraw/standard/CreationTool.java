@@ -138,6 +138,7 @@ public class CreationTool extends AbstractTool {
 				getUndoActivity().setAffectedFigures(new SingleFigureEnumerator(getAddedFigure()));
 			}
 			setAddedFigure(null);
+			view().drawing().update();//we made a change to the drawing, so update it.
 		}
 		setCreatedFigure(null);
 		editor().toolDone();

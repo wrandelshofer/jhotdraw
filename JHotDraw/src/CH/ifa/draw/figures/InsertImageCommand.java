@@ -41,7 +41,7 @@ public class InsertImageCommand extends AbstractCommand {
 		super.execute();
 		setUndoActivity(createUndoActivity());
 		((InsertImageCommand.UndoActivity)getUndoActivity()).insertImage();
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	/**

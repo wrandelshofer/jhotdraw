@@ -42,7 +42,7 @@ public class DuplicateCommand extends FigureTransferCommand {
 		view().clearSelection();
 		getUndoActivity().setAffectedFigures(
 			insertFigures(getUndoActivity().getAffectedFigures(), 10, 10));
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	protected boolean isExecutableWithView() {

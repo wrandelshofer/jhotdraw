@@ -55,7 +55,7 @@ public class UndoCommand extends AbstractCommand {
 		if (hasBeenUndone && lastUndoable.isRedoable()) {
 			um.pushRedo(lastUndoable);
 		}
-		lastUndoable.getDrawingView().checkDamage();
+		lastUndoable.getDrawingView().drawing().update();
 		
 		getDrawingEditor().figureSelectionChanged(lastUndoable.getDrawingView());
 	}

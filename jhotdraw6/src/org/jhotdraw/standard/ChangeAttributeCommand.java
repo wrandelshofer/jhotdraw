@@ -48,7 +48,7 @@ public  class ChangeAttributeCommand extends AbstractCommand {
 		while (fe.hasNextFigure()) {
 			fe.nextFigure().setAttribute(fAttribute, fValue);
 		}
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {

@@ -64,7 +64,7 @@ public class TextTool extends CreationTool {
 			// update view so the created figure is drawn before the floating text
 			// figure is overlaid. (Note, fDamage should be null in StandardDrawingView
 			// when the overlay figure is drawn because a JTextField cannot be scrolled)
-			view().checkDamage();
+			view().checkDamage();//not truly necessary to update dwg yet, but it doesent hurt
 			beginEdit(getCreatedFigure().getTextHolder());
 		}
 	}

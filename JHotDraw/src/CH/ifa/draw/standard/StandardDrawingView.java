@@ -613,7 +613,7 @@ public class StandardDrawingView
 		while (figures.hasNextFigure()) {
 			figures.nextFigure().moveBy(dx, dy);
 		}
-		checkDamage();
+		checkDamage();//likely unneeded, the Tool should request the update !!!dnoyeb!!!
 	}
 
 	/**
@@ -621,6 +621,8 @@ public class StandardDrawingView
 	 * This is typically called when a Tool/Command has finished its editing
 	 * manoever and wants those observing the underlying drawing to update
 	 * themselves.  Sort of a finished editing-action notification.
+	 * But this is based on damage to the view and not damage to the drawing.
+	 * Overagressive in updating other views when not necessary. drawing.update updates all views.
 	 * @see Drawing#update()
 	 */
 	public synchronized void checkDamage() {

@@ -36,7 +36,7 @@ public class DeleteCommand extends FigureTransferCommand {
 		setUndoActivity(createUndoActivity());
 		getUndoActivity().setAffectedFigures(view().selection());
 		deleteFigures(getUndoActivity().getAffectedFigures());
-		view().checkDamage();//tools should call drawing().update so all views get updated !!!dnoyeb!!!
+		view().drawing().update();
 	}
 
 	protected boolean isExecutableWithView() {

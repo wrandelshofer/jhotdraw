@@ -108,7 +108,7 @@ public class PolygonTool extends AbstractTool {
 			if (fPolygon != null) {
 				if (fPolygon.pointCount() > 1) {
 					fPolygon.setPointAt(new Point(dvme.getX(), dvme.getY()), fPolygon.pointCount()-1);
-					getActiveView().checkDamage();
+					view().drawing().update();
 				}
 			}
 		}

@@ -45,7 +45,9 @@ public  class Animator extends Thread {
 			long tm = System.currentTimeMillis();
 			fView.freezeView();
 			fAnimatable.animationStep();
-			fView.checkDamage();
+			fView.drawing().update();//we made a change to the drawing, so update it.
+			//note that this too is in need of drawing - view seperation.  Why freeze the view
+			//when you are making drawing level changes? need to freeze the drawing. !!!dnoyeb!!!
 			fView.unfreezeView();
 
 			// Delay for a while

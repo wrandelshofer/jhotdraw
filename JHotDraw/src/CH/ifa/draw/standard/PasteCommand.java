@@ -54,7 +54,7 @@ public class PasteCommand extends FigureTransferCommand {
 			FigureEnumeration fe = insertFigures(getUndoActivity().getAffectedFigures(), lastClick.x-r.x, lastClick.y-r.y);
 			getUndoActivity().setAffectedFigures(fe);
 
-			view().checkDamage();
+			view().drawing().update();
 		}
 	}
 

@@ -47,7 +47,7 @@ public class RedoCommand extends AbstractCommand {
 			um.pushUndo(lastRedoable);
 		}
 			
-		lastRedoable.getDrawingView().checkDamage();
+		lastRedoable.getDrawingView().drawing().update();
 
 		getDrawingEditor().figureSelectionChanged(lastRedoable.getDrawingView());
 	}
