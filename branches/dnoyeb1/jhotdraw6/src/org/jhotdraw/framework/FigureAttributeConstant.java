@@ -11,6 +11,7 @@
 
 package CH.ifa.draw.framework;
 
+
 import java.io.Serializable;
 
 /**
@@ -19,18 +20,11 @@ import java.io.Serializable;
  * they provide a type-safe way of defining attribute constants.
  * (SourceForge feature request ID: <>)
  *
- * @author Wolfram Kaiser, CL Gilbert(dnoyeb@users.sourceforge.net)
+ * @author Wolfram Kaiser
  * @version <$CURRENT_VERSION$>
  */
-public class FigureAttributeConstant extends JHDType implements Serializable, Cloneable {
+public class FigureAttributeConstant implements Cloneable, Serializable {
 
-	//should these all be strings?
-	//yes should all be strings or simple type
-	//different types are really just different ID scopes.  this is only needed
-	//when end users want their own attributes for whatever reason and can not
-	//know for certain if JHD will ever add new attributes that encroach on their
-	//IDs.  so the color and string and integer types are flawed.
-	//attributes are generic types only determined at load or store time.
 	public static final String FRAME_COLOR_STR = "FrameColor";
 	public static final FigureAttributeConstant FRAME_COLOR = new FigureAttributeConstant(FRAME_COLOR_STR, 1);
 
@@ -55,36 +49,109 @@ public class FigureAttributeConstant extends JHDType implements Serializable, Cl
 	public static final String URL_STR = "URL";
 	public static final FigureAttributeConstant URL = new FigureAttributeConstant(URL_STR, 8);
 
-	public FigureAttributeConstant(java.lang.String newName, int newID) {
-		super(newName,newID);
+	private static FigureAttributeConstant[] attributeConstants;
+	/**
+	 * ID is not stored.  It may not be consistent between sessions.
+	 */
+	private int myID;
+	private String myName;
+
+	private FigureAttributeConstant(String newName, int newID) {
+		setName(newName);
+		setID(newID);
+		addConstant(this);
+	}
+
+	private FigureAttributeConstant(String newName) {
+		this(newName, attributeConstants.length+1);
+	}
+
+	private void setName(String newName) {
+		myName = newName;
+	}
+
+	public String getName() {
+		return myName;
+	}
+
+	private void setID(int newID) {
+		myID = newID;
+	}
+
+	public int getID() {
+		return myID;
+	}
+
+	public boolean equals(Object compareObject) {
+		if (compareObject == null) {
+			return false;
+		}
+		if (!(compareObject instanceof FigureAttributeConstant)) {
+			return false;
+		}
+		FigureAttributeConstant compareAttribute = (FigureAttributeConstant)compareObject;
+
+		if (compareAttribute.getID() != getID()) {
+			return false;
+		}
+
+		if ((compareAttribute.getName() == null) && (getName() == null)) {
+			return true;
+		}
+		if ((compareAttribute.getName() != null) && (getName() != null)) {
+			return getName().equals(compareAttribute.getName());
+		}
+
+		return false;
+	}
+
+	public int hashCode() {
+		return getID();
 	}
 
 	/**
-	 * This is overall flawed because it conflicts with getConstant which assumes
-	 * that constants have unique Names.  While this method itself will create
-	 * many constants all with the same name.
-	 * 
-	 * Warning, deserialization issues can occur when using this constructor.
-	 * @deprecated Does not work well with deserialization of end users own 
-	 *             FigureAttributeConstants.
+	 * Constants are put into the place according to their ID, thus, it is
+	 * recommended to have subsequent attribute IDs.
 	 */
-	public FigureAttributeConstant(java.lang.String newName) {
-		super(newName);
-		System.err.println("WARNING: FigureAttributeConstant(String) has been deprecated.");
-		//Thread.dumpStack();
+	private static void addConstant(FigureAttributeConstant newConstant) {
+		int idPos = newConstant.getID() - 1;
+		// attribute IDs must be unique, thus no two attributes
+		// with the same ID can be added
+		if ((idPos < attributeConstants.length) && (attributeConstants[idPos] != null)) {
+			throw new JHotDrawRuntimeException("No unique FigureAttribute ID: " + newConstant.getID());
+		}
+		// increase capacity if necessary
+		if (idPos >= attributeConstants.length) {
+			FigureAttributeConstant[] tempStrs = new FigureAttributeConstant[idPos + 1];
+			System.arraycopy(attributeConstants, 0, tempStrs, 0, attributeConstants.length);
+			attributeConstants = tempStrs;
+		}
+		attributeConstants[idPos] = newConstant;
 	}
 
 	/**
 	 * @return an existing constant for a given name or create a new one
 	 */
-	public static FigureAttributeConstant getConstant(java.lang.String constantName) {
-		FigureAttributeConstant fac =(FigureAttributeConstant) JHDType.getConstant(FigureAttributeConstant.class, constantName);
-		if( fac == null){
-			fac = new FigureAttributeConstant(constantName, JHDType.getMaxValue(FigureAttributeConstant.class) +1);
+	public static FigureAttributeConstant getConstant(String constantName) {
+		for (int i = 0; i < attributeConstants.length; i++) {
+			FigureAttributeConstant currentAttr = getConstant(i);
+			if ((currentAttr != null) && (currentAttr.getName().equals(constantName))) {
+				return currentAttr;
+			}
 		}
-	    return fac;
+		return new FigureAttributeConstant(constantName);
 	}
+
 	public static FigureAttributeConstant getConstant(int constantId) {
-		return (FigureAttributeConstant) JHDType.getConstant(FigureAttributeConstant.class, constantId);
+		return attributeConstants[constantId];
+	}
+
+	{
+		// use static initializer to create List before any constant is created
+		// initialize List only for the first constant (during debugging it
+		// appeared that the static initializer is invoked for any constant)
+		if (attributeConstants == null) {
+			attributeConstants = new FigureAttributeConstant[64];
+		}
 	}
 }
