@@ -228,6 +228,11 @@ public abstract class AbstractFigure implements Figure {
 			//This represents an avoidable error on the programmers part.
 			throw new JHotDrawRuntimeException("This figure is already contained.");
 		}
+		if(c == null){
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.
+			throw new JHotDrawRuntimeException("Container parameter can not be null.");
+		}
 		setContainer( c );
 		addFigureChangeListener(getContainer());
 		invalidate();		
@@ -245,6 +250,11 @@ public abstract class AbstractFigure implements Figure {
 			//This will become ASSERT in JDK 1.4
 			//This represents an avoidable error on the programmers part.			
 			throw new JHotDrawRuntimeException("This figure is not contained.");
+		}
+		if(c == null){
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.
+			throw new JHotDrawRuntimeException("Container parameter can not be null.");
 		}
 		invalidate();
 		removeFigureChangeListener( getContainer() );
@@ -487,6 +497,7 @@ public abstract class AbstractFigure implements Figure {
 	 * Stores the Figure to a StorableOutput.
 	 */
 	public void write(StorableOutput dw) {
+		dw.writeInt( getZValue() );
 		//store dependentFigures
 		int size = myDependentFigures.size();
 		FigureEnumeration fe = getDependendFigures();
@@ -510,6 +521,7 @@ public abstract class AbstractFigure implements Figure {
 	 * Reads the Figure from a StorableInput.
 	 */
 	public void read(StorableInput dr) throws IOException {
+		setZValue( dr.readInt() );
 		//load dependentFigures
 		int size = dr.readInt();
 		myDependentFigures = CollectionsFactory.current().createList(size);
