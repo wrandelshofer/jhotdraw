@@ -54,7 +54,7 @@ public class DrawApplet
 	private transient JComboBox          fArrowChoice;
 	private transient JComboBox          fFontChoice;
 
-	private transient Thread          fSleeper;
+	private transient SleeperThread      fSleeper;
 	private transient 			UndoManager myUndoManager;
 
 	static String                     fgUntitled = "untitled";
@@ -611,7 +611,7 @@ public class DrawApplet
 
 	private void stopSleeper() {
 		if (fSleeper != null) {
-			fSleeper.stop();
+			fSleeper.endThread();
 		}
 	}
 }
@@ -620,14 +620,15 @@ public class DrawApplet
 class SleeperThread extends Thread {
 
 	JApplet  fApplet;
-
+	boolean endthread;
 	SleeperThread(JApplet applet) {
 		fApplet = applet;
+		endthread = false;
 	}
 
 	public void run() {
 		try {
-			for (;;) {
+			for (;endthread == false;) {
 				fApplet.showStatus("loading icons...");
 				sleep(50);
 			}
@@ -635,6 +636,9 @@ class SleeperThread extends Thread {
 		catch (InterruptedException e) {
 			return;
 		}
+	}
+	public void endThread(){
+		endthread = true;
 	}
 
 }
