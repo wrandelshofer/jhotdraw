@@ -49,6 +49,9 @@ public  class UngroupCommand extends AbstractCommand {
 		FigureEnumeration fe = view().selection();
 		while (fe.hasNextFigure()) {
 			Figure currentFigure = fe.nextFigure();
+			if (currentFigure instanceof DecoratorFigure) {
+				currentFigure = ((DecoratorFigure)currentFigure).getDecoratedFigure();
+			}
 			if (!(currentFigure instanceof GroupFigure)) {
 				return false;
 			}
@@ -83,10 +86,10 @@ public  class UngroupCommand extends AbstractCommand {
 				Figure groupFigure = groupFigures.nextFigure();
 				// orphan individual figures from the group
 				getDrawingView().drawing().orphanAll(groupFigure.figures());
-				//This tool is now responsible for the release or readd of the figures it just removed
+				//This tool is now responsible for the release or readd of the figures it just orphaned
 				//!!!dnoyeb!!!
-				getDrawingView().drawing().add(groupFigure);
-				getDrawingView().addToSelection(groupFigure);
+				Figure figure = getDrawingView().drawing().add(groupFigure);
+				getDrawingView().addToSelection(figure);
 			}
 
 			return true;
@@ -96,7 +99,7 @@ public  class UngroupCommand extends AbstractCommand {
 			// do not call execute directly as the selection might has changed
 			if (isRedoable()) {
 				getDrawingView().drawing().orphanAll(getAffectedFigures());
-				//this tool is now responsible for the release or readd of the figures it removed
+				//this tool is now responsible for the release or readd of the figures it orphaned
 				//!!!dnoyeb!!!
 				getDrawingView().clearSelection();
 				ungroupFigures();
@@ -105,15 +108,24 @@ public  class UngroupCommand extends AbstractCommand {
 			return false;
 		}
 
+		/**
+		 * @todo fix this because components can not belong to more than 1 figure.
+		 */
 		protected void ungroupFigures() {
 			FigureEnumeration fe = getAffectedFigures();
 			while (fe.hasNextFigure()) {
 				Figure selected = fe.nextFigure();
 				getDrawingView().drawing().orphan(selected);
-				//this tool is now responsible for the release or readd of the figure it removed
+				//this tool is now responsible for the release or readd of the figure it orphaned
 				//!!!dnoyeb!!!
-				getDrawingView().drawing().addAll(selected.figures());
-				getDrawingView().addToSelectionAll(selected.figures());
+				FigureEnumeration feToRemove = selected.figures();
+				FigureEnumeration feToAdd = selected.figures();
+				FigureEnumeration feToSelect = selected.figures();
+				if(selected instanceof CompositeFigure){
+					((CompositeFigure)selected).orphanAll( feToRemove );
+				}
+				getDrawingView().drawing().addAll(feToAdd);
+				getDrawingView().addToSelectionAll(feToSelect);
 			}
 		}
 	}

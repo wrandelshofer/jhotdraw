@@ -41,8 +41,7 @@ public class SplitConnectionTool extends ConnectionTool {
 				setStartConnector(findConnector(getAnchorX(), getAnchorY(), getTargetFigure()));
 				getConnection().connectStart(getStartConnector());
 				getConnection().startPoint(getAnchorX(), getAnchorY());
-				view().add(getConnection());
-				setAddedFigure(getConnection());
+				setAddedFigure(view().add(getConnection()));
 			}
 			Figure c = findTarget(getAnchorX(), getAnchorY(), drawing());
 			if (c != null) {

@@ -13,7 +13,7 @@ package CH.ifa.draw.contrib;
 
 import CH.ifa.draw.standard.CreationTool;
 import CH.ifa.draw.standard.CompositeFigure;
-
+import CH.ifa.draw.standard.DecoratorFigure;
 import CH.ifa.draw.framework.Figure;
 import CH.ifa.draw.framework.DrawingEditor;
 import CH.ifa.draw.framework.DrawingViewMouseEvent;
@@ -44,6 +44,14 @@ public class NestedCreationTool extends CreationTool {
 		}
 	}
 
+	private Figure getFigureWithoutDecoration(Figure peelFigure) {
+		if (peelFigure instanceof DecoratorFigure) {
+			return getFigureWithoutDecoration(((DecoratorFigure)peelFigure).getDecoratedFigure());
+		}
+		else {
+			return peelFigure;
+		}
+	}
 	public void mouseMove(DrawingViewMouseEvent dvme) {
 		if ((getContainerFigure() != null) && !getContainerFigure().containsPoint(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY())) {
 			// here you might want to constrain the mouse movements to the size of the

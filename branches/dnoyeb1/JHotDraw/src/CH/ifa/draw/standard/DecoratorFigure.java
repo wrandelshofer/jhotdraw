@@ -143,6 +143,9 @@ public abstract class DecoratorFigure
 
 	/**
 	 * Decorates the given figure.
+	 * Note the decorated figure is not a dependent figure.  it is a contained
+	 * figure.  dependent figures are figures <i>outside</i> of the figure that
+	 * they depend upon.
 	 */
 	public void decorate(Figure figure) {
 		fComponent = figure;
@@ -433,7 +436,10 @@ public abstract class DecoratorFigure
 	private void writeObject(ObjectOutputStream s) throws IOException {
 		s.defaultWriteObject();
 	}
-	
+	/**
+	 * Make sure all dependent figures get visited.  Make sure all contained
+	 * figures get visited.
+	 */
 	public void visit(FigureVisitor visitor) {
 		
 		
@@ -443,16 +449,17 @@ public abstract class DecoratorFigure
 		//FigureChangeListener originalListener = listener();
 		FigureEnumeration fe = getDependendFigures();
 
+		//visit this figure.
 		visitor.visitFigure(this);
 
 		FigureEnumeration visitFigures = figures();
 		while (visitFigures.hasNextFigure()) {
-			visitFigures.nextFigure().visit(visitor);
+			visitFigures.nextFigure().visit(visitor);//visitor now visits the contained figures
 		}
 
 		HandleEnumeration visitHandles = handles();
 		while (visitHandles.hasNextHandle()) {
-			visitor.visitHandle(visitHandles.nextHandle());
+			visitor.visitHandle(visitHandles.nextHandle()); //visiting handles
 		}
 /*
 		originalListener = listener();
@@ -462,10 +469,9 @@ public abstract class DecoratorFigure
 */
 
 		while (fe.hasNextFigure()) {
-			//fe.nextFigure().visit(visitor);
-			visitor.visitDependendFigure(fe.nextFigure());
+			fe.nextFigure().visit(visitor);
 		}
-		//getDecoratedFigure().visit(visitor); !!!dnoyeb!!! this is a must right?
+		//getDecoratedFigure().visit(visitor);
 	}
 
 	public TextHolder getTextHolder() {

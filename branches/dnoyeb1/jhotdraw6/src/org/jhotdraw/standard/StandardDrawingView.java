@@ -227,25 +227,27 @@ public class StandardDrawingView
 	/**
 	 * Adds a figure to the drawing.
 	 */
-	public void add(Figure figure) {
-		drawing().add(figure);
+	public Figure add(Figure figure) {
+		return drawing().add(figure);
 	}
 
 	/**
 	 * Removes a figure from the drawing.
 	 */
-	public void remove(Figure figure) {
-		drawing().remove(figure);
+	public Figure remove(Figure figure) {
+		return drawing().remove(figure);
 	}
 
 	/**
 	 * Adds a Collection of figures to the drawing.
 	 */
-	public void addAll(Collection figures) {
+	public FigureEnumeration addAll(Collection figures) {
 		FigureEnumeration fe = new FigureEnumerator(figures);
+		List l = CollectionsFactory.current().createList();
 		while (fe.hasNextFigure()) {
-			add(fe.nextFigure());
+			l.add(add(fe.nextFigure()));
 		}
+		return new FigureEnumerator(l);
 	}
 
 	/**

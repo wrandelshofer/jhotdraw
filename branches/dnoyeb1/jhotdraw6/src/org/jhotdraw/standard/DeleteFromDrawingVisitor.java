@@ -17,9 +17,11 @@ import CH.ifa.draw.util.CollectionsFactory;
 import java.util.Set;
 
 /**
- * This class is only calling orphan on the figures but is not used for anything else.
- * It is not providing a usefull service yet.  especially considering that the figures it
- * has amassed are never retrieved.
+ * 1.  Visit all figures reachable from the hostFigure.
+ * 2.  Delete all figures directly contained in the drawing. <code>containsFigure()</code>
+ * 3.  Return a list of all deleted figures.
+ * Note: do not delete figures contained in other figures, only those directly
+ * contained in the drawing.
  *
  * @author  Wolfram Kaiser <mrfloppy@sourceforge.net>
  * @version <$CURRENT_VERSION$>
@@ -43,10 +45,8 @@ public class DeleteFromDrawingVisitor implements FigureVisitor {
 
 	public void visitFigure(Figure hostFigure) {
 		if (!myDeletedFigures.contains(hostFigure) && getDrawing().containsFigure(hostFigure)) {
-			hostFigure.remove();
+			getDrawing().orphan(hostFigure);
 			myDeletedFigures.add(hostFigure);
-			//Figure orphanedFigure = getDrawing().orphan(hostFigure);
-			//myDeletedFigures.add(orphanedFigure);
 		}
 	}
 
@@ -60,8 +60,5 @@ public class DeleteFromDrawingVisitor implements FigureVisitor {
 
 	public FigureEnumeration getDeletedFigures() {
 		return new FigureEnumerator(myDeletedFigures);
-	}
-	public void visitDependendFigure(Figure dependentFigure){
-		visitFigure(dependentFigure);
 	}
 }

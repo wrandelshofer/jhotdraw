@@ -335,7 +335,7 @@ public class TextAreaTool extends CreationTool {
 			if (!isValidText(getOriginalText())) {
 				FigureEnumeration fe = getAffectedFigures();
 				while(fe.hasNextFigure()){
-					fe.nextFigure().remove();
+					getDrawingView().drawing().orphan(fe.nextFigure());
 				}
 				//this tool is now responsible for the release or readd of the figures
 				//!!!dnoyeb!!!

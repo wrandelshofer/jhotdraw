@@ -39,10 +39,8 @@ public class InsertIntoDrawingVisitor implements FigureVisitor {
 
 	public void visitFigure(Figure hostFigure) {
 		if (!myInsertedFigures.contains(hostFigure) && !getDrawing().includes(hostFigure)) {
-			getDrawing().add(hostFigure);
-			myInsertedFigures.add(hostFigure);
-			//Figure addedFigure = getDrawing().add(hostFigure);
-			//myInsertedFigures.add(addedFigure);
+			Figure addedFigure = getDrawing().add(hostFigure);
+			myInsertedFigures.add(addedFigure);
 		}
 	}
 
@@ -55,11 +53,5 @@ public class InsertIntoDrawingVisitor implements FigureVisitor {
 
 	public FigureEnumeration getInsertedFigures() {
 		return new FigureEnumerator(myInsertedFigures);
-	}
-	/**
-	 * do nothing special with dependent figures.  The dependent figures should
-	 * already be mixed in with the main figures.  no need to visit them.
-	 */
-	public void visitDependendFigure(Figure dependentFigure){
 	}
 }
