@@ -239,10 +239,35 @@ public class JavaDrawApp extends MDI_DrawApplication {
 	}
 
 	//-- main -----------------------------------------------------------
-
+    /** 
+	 * The method newWindow is manipulating the GUI outside of the GUI thread
+	 * after the GUI has been setVisible(true), it has the  potential to cause
+	 * deadlock.  It should do its updating in the AWT event
+	 * thread.
+	 *
+	 * @see java.awt.EventQueue#invokeAndWait
+	 * @see javax.swing.SwingUtilities#invokeAndWait
+	 * @todo devise a performance efficient way of animating this without creating
+	 *       lots of threads.
+	 */
 	public static void main(String[] args) {
-		JavaDrawApp window = new JavaDrawApp("JHotDraw");
+		final JavaDrawApp window = new JavaDrawApp("JHotDraw");
         window.open();
-        window.newWindow( );
+		Runnable r = new Runnable() {
+			public void run() {
+				window.newWindow();
+			}
+		};
+		try {
+			java.awt.EventQueue.invokeAndWait( r );
+		}
+		catch(java.lang.InterruptedException ie){
+			System.err.println(ie.getMessage());
+			window.exit();
+		}
+		catch(java.lang.reflect.InvocationTargetException ite){
+			System.err.println(ite.getMessage());
+			window.exit();
+		}	
 	}
 }

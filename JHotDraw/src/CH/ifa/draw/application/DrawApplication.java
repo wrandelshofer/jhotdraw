@@ -187,9 +187,8 @@ public	class DrawApplication
 			setSize(mb.getPreferredSize().width, d.height);
 		}
 		addListeners();
-		setVisible(true);
-      
 		setStorageFormatManager(createStorageFormatManager());
+		setVisible(true);
 	}
 
 	/**
