@@ -40,7 +40,7 @@ public  class ConnectedTextTool extends TextTool {
 	public void mouseDown(DrawingViewMouseEvent dvme) {
 		super.mouseDown(dvme);
 
-		setConnectedFigure(drawing().findFigureInside(getAnchorX(), getAnchorY()));
+		setConnectedFigure(drawing().findFigureInside(dvme.getX(), dvme.getY()));
 		TextHolder textHolder = getTypingTarget();
 		if (!fConnected && (getConnectedFigure() != null) && (textHolder != null) && (getConnectedFigure() != textHolder)) {
 			textHolder.connect(getConnectedFigure());
