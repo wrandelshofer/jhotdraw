@@ -11,16 +11,12 @@
 
 package CH.ifa.draw.contrib.dnd;
 
+import java.awt.Component;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.*;
-import java.awt.*;
-import java.util.*;
-import CH.ifa.draw.framework.*;
-import java.awt.datatransfer.*;
 import java.io.*;
-import javax.swing.JComponent;
-import CH.ifa.draw.standard.DeleteFromDrawingVisitor;
+import java.util.List;
 
-import CH.ifa.draw.util.*;
 /**
  * Changes made in hopes of eventually cleaning up the functionality and 
  * distributing it sensibly. 1/10/02
@@ -74,12 +70,12 @@ public abstract class DNDHelper {
 			getDragGestureRecognizer().setSourceActions(getDragSourceActions());
 		}
 	}
-	abstract protected DrawingView view();
-	abstract protected DrawingEditor editor();
+	protected abstract CH.ifa.draw.framework.DrawingView view();
+	protected abstract CH.ifa.draw.framework.DrawingEditor editor();
 	
 	
 	
-	protected static Object ProcessReceivedData(DataFlavor flavor, Transferable transferable) {
+	protected static Object ProcessReceivedData(DataFlavor flavor, java.awt.datatransfer.Transferable transferable) {
 		if (transferable == null) {
 			return null;
 		}
@@ -89,7 +85,7 @@ public abstract class DNDHelper {
 				return str;
 			}
 			else if (flavor.equals(DataFlavor.javaFileListFlavor)) {
-				java.util.List aList = (java.util.List)transferable.getTransferData(DataFlavor.javaFileListFlavor);
+				List aList = (List)transferable.getTransferData(DataFlavor.javaFileListFlavor);
 				File fList [] = new File[aList.size()];
 				aList.toArray(fList);
 				return fList;
@@ -128,7 +124,7 @@ public abstract class DNDHelper {
 			System.err.println(ioe);
 			return null;
 		}
-		catch (UnsupportedFlavorException ufe) {
+		catch (java.awt.datatransfer.UnsupportedFlavorException ufe) {
 			System.err.println(ufe);
 			return null;
 		}
@@ -164,7 +160,7 @@ public abstract class DNDHelper {
 		if (view() instanceof Component) {
 			try {
 				dt = new DropTarget((Component)view(), DnDConstants.ACTION_COPY_OR_MOVE, getDropTargetListener());
-				System.out.println(view().toString() + " Initialized to DND.");
+				//System.out.println(view().toString() + " Initialized to DND.");
 			}
 			catch (java.lang.NullPointerException npe) {
 				System.err.println("View Failed to initialize to DND.");
@@ -183,11 +179,11 @@ public abstract class DNDHelper {
 		DragGestureRecognizer aDgr = null;
 		if (view() instanceof Component) {
 			Component c = (Component)view();
-			aDgr =	DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
+			aDgr =	java.awt.dnd.DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
 					c,
 					getDragSourceActions(),
 					dgl);
-			System.out.println("DragGestureRecognizer created: " + view());
+			//System.out.println("DragGestureRecognizer created: " + view());
 		}
 		return aDgr;
 	}
@@ -196,7 +192,7 @@ public abstract class DNDHelper {
 	 * Used to destroy the gesture listener which in effect turns off dragability.
 	 */
 	protected void destroyDragGestreRecognizer() {
-		System.out.println("Destroying DGR " + view());
+		//System.out.println("Destroying DGR " + view());
 		if (getDragGestureRecognizer() != null) {
 			getDragGestureRecognizer().removeDragGestureListener(getDragGestureListener());
 	    	getDragGestureRecognizer().setComponent(null);
