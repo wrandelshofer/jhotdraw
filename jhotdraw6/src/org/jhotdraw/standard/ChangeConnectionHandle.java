@@ -142,7 +142,7 @@ public abstract class ChangeConnectionHandle extends AbstractHandle {
 		}
 	}
 
-	private Connector findConnectionTarget(int x, int y, Drawing drawing) {
+	protected Connector findConnectionTarget(int x, int y, Drawing drawing) {
 		Figure target = findConnectableFigure(x, y, drawing);
 
 		if ((target != null) && target.canConnect()
@@ -171,7 +171,7 @@ public abstract class ChangeConnectionHandle extends AbstractHandle {
 		g.drawRect(r.x, r.y, r.width, r.height);
 	}
 
-	private Figure findConnectableFigure(int x, int y, Drawing drawing) {
+	protected Figure findConnectableFigure(int x, int y, Drawing drawing) {
 		FigureEnumeration fe = drawing.figuresReverse();
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
