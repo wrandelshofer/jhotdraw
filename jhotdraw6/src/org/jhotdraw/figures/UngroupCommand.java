@@ -15,7 +15,8 @@ import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.UndoableAdapter;
 import CH.ifa.draw.util.Undoable;
-
+import java.util.*;
+import CH.ifa.draw.util.CollectionsFactory;
 /**
  * Command to ungroup the selected figures.
  *
@@ -69,6 +70,7 @@ public  class UngroupCommand extends AbstractCommand {
 	}
 
 	public static class UndoActivity extends UndoableAdapter {
+		private Map groupFigureMap = CollectionsFactory.current().createMap();
 		public UndoActivity(DrawingView newDrawingView) {
 			super(newDrawingView);
 			setUndoable(true);
@@ -79,28 +81,37 @@ public  class UngroupCommand extends AbstractCommand {
 			if (!super.undo()) {
 				return false;
 			}
+			List affectedFigures = CollectionsFactory.current().createList();
 			getDrawingView().clearSelection();
-
-			FigureEnumeration groupFigures = getAffectedFigures();
-			while (groupFigures.hasNextFigure()) {
-				Figure groupFigure = groupFigures.nextFigure();
-				// orphan individual figures from the group
-				getDrawingView().drawing().orphanAll(groupFigure.figures());
-				//This tool is now responsible for the release or readd of the figures it just orphaned
-				//!!!dnoyeb!!!
-				Figure figure = getDrawingView().drawing().add(groupFigure);
-				getDrawingView().addToSelection(figure);
+			//get the figures to regroup from the Map
+			Set keySet = groupFigureMap.keySet();
+			for(Iterator it = keySet.iterator();it.hasNext();){
+				//get the former group figure
+				GroupFigure groupFigure = (GroupFigure)it.next();
+				//get the figures it used to contain, and empty the map too
+				FigureEnumeration fe = (FigureEnumeration)groupFigureMap.remove(groupFigure);
+				while(fe.hasNextFigure()){
+					Figure f2 = fe.nextFigure();
+					//orphan the figure from the drawing
+					getDrawingView().drawing().orphan(f2);
+					//restore the figure to the group figure
+					groupFigure.restore( f2 );
+				}
+				//restore the groupFigure to the drawing
+				getDrawingView().drawing().restore(groupFigure);
+				//add the group figure to the selection
+				getDrawingView().addToSelection(groupFigure);
+				//add the figure to the affected figures.
+				affectedFigures.add( groupFigure );
 			}
-
+			setAffectedFigures(new FigureEnumerator( affectedFigures ));
+			//groupFigureMap should be empty, no need to manipulate it.
 			return true;
 		}
 
 		public boolean redo() {
 			// do not call execute directly as the selection might has changed
 			if (isRedoable()) {
-				getDrawingView().drawing().orphanAll(getAffectedFigures());
-				//this tool is now responsible for the release or readd of the figures it orphaned
-				//!!!dnoyeb!!!
 				getDrawingView().clearSelection();
 				ungroupFigures();
 				return true;
@@ -109,24 +120,52 @@ public  class UngroupCommand extends AbstractCommand {
 		}
 
 		/**
-		 * @todo fix this because components can not belong to more than 1 figure.
+		 *
 		 */
 		protected void ungroupFigures() {
+			//get the GroupFigures
 			FigureEnumeration fe = getAffectedFigures();
 			while (fe.hasNextFigure()) {
-				Figure selected = fe.nextFigure();
-				getDrawingView().drawing().orphan(selected);
-				//this tool is now responsible for the release or readd of the figure it orphaned
-				//!!!dnoyeb!!!
-				FigureEnumeration feToRemove = selected.figures();
-				FigureEnumeration feToAdd = selected.figures();
-				FigureEnumeration feToSelect = selected.figures();
-				if(selected instanceof CompositeFigure){
-					((CompositeFigure)selected).orphanAll( feToRemove );
+				List affectedFigures = CollectionsFactory.current().createList();
+				//remove the GroupFigure from the drawing
+				GroupFigure groupFigure = (GroupFigure) fe.nextFigure(); //Note:  isExecutableWithView() guarantees this cast
+				getDrawingView().drawing().orphan(groupFigure);
+				//get a copy of the contained figures to add to the drawing
+				FigureEnumeration feToAdd = groupFigure.figures();
+				//add the freshly removed figures to the Drawing and select them, and add them to affected figures
+				while(feToAdd.hasNextFigure()){
+					Figure f2 = feToAdd.nextFigure();
+					//remove f2 from current container.
+					groupFigure.orphan( f2 );
+					//add f2 to drawing
+					getDrawingView().drawing().add(f2);
+					getDrawingView().addToSelection(f2);
+					affectedFigures.add(f2);
 				}
-				getDrawingView().drawing().addAll(feToAdd);
-				getDrawingView().addToSelectionAll(feToSelect);
+				//add the groupFigure, along with the figures it used to own to the map.
+				groupFigureMap.put(groupFigure,new FigureEnumerator(affectedFigures));
 			}
+		}
+		
+		/**
+		 * If undo was last their should be nothing to release, the keySet should be empty
+		 */
+		public void release() {
+			//if we have group figures stored prepared for an undo/regroup type action, remove them
+			Set keySet = groupFigureMap.keySet();
+			for(Iterator it = keySet.iterator();it.hasNext();){
+				//get the group figure
+				GroupFigure gf = (GroupFigure) (GroupFigure) it.next();
+				//get its former figures
+				FigureEnumeration fe = (FigureEnumeration)groupFigureMap.remove( gf );
+				//remove the figures it used to contain permanently from it
+				gf.removeAll( fe );
+				//Permanently remove the groupFigure from the drawing
+				getDrawingView().drawing().remove( gf );
+			}
+			groupFigureMap = null; //so we throw NPE if this command is reexecuted after release (better would be JHDillegalstateException)
+			setDrawingView(null);
+			setAffectedFigures(null);
 		}
 	}
 }

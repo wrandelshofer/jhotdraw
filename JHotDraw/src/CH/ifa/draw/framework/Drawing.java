@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @version <$CURRENT_VERSION$>
  */
 
-public interface Drawing
+ public interface Drawing
 		extends Storable/*, FigureChangeListener*/, Serializable {
 
 	/**
@@ -161,7 +161,7 @@ public interface Drawing
 	 * @param figure to be added to the drawing
 	 * @return the figure that was inserted (might be different from the figure specified).
 	 */
-	public Figure add(Figure figure);
+	public void add(Figure figure);
 
 	/**
 	 * Adds a list of figures.
@@ -176,7 +176,7 @@ public interface Drawing
 	 * @param fe (unused) enumeration containing all figures to be added
 	 * @see #add
 	 */
-	public FigureEnumeration addAll(FigureEnumeration fe);
+	public void addAll(FigureEnumeration fe);
 
 	/**
 	 * Removes and releases the figure from the drawing.  It can no longer be
@@ -192,17 +192,23 @@ public interface Drawing
 	 * @param figure that is part of the drawing and should be removed
 	 * @return the figure that has been removed (might be different from the figure specified)
 	 */
-	public Figure remove(Figure figure);
+	public void remove(Figure figure);
 
 	/**
 	 * Removes a figure from the figure list, but
 	 * doesn't release it. Use this method to temporarily
 	 * manipulate a figure outside of the drawing.
 	 *
-	 * Preferred way is to call {@link Figure#remove() Figure.remove()}.
+	 * {@link Figure#remove() Figure.remove()}.
 	 */
 	public void orphan(Figure figure);
 
+	/**
+	 * adds this figure back to the drawing after it has been orphaned.  This
+	 * figure must have been orphaned from this drawing or an exception will be
+	 * thrown. JHDIllegalStateException extends JHDRuntimeException
+	 */
+	public void restore(Figure figure);
 	/**
 	 * @deprecated use {@link #orphanAll(FigureEnumeration fe) 
 	 *             orphanAll(FigureEnumeration fe)} instead
@@ -210,7 +216,7 @@ public interface Drawing
 	public void orphanAll(List orphanFigures);
 
 	/**
-	 * Preferred way is to call {@link Figure#remove() Figure.remove()}.
+	 * {@link Figure#remove() Figure.remove()}.
 	 */
 	public void orphanAll(FigureEnumeration fe);
 
@@ -227,7 +233,7 @@ public interface Drawing
 	 * Removes a FigureEnumeration of figures.
 	 * @see #remove
 	 */
-	public FigureEnumeration removeAll(FigureEnumeration fe);
+	public void removeAll(FigureEnumeration fe);
 
 	/**
 	 * Replaces a figure in the drawing without removing it from the drawing.

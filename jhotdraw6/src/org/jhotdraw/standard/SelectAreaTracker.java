@@ -90,7 +90,7 @@ public class SelectAreaTracker extends AbstractTool {
 	}
 
 	private void selectGroup(boolean toggle) {
-		FigureEnumeration fe = drawing().figuresReverse();
+		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
 			Rectangle r2 = figure.displayBox();
@@ -103,5 +103,8 @@ public class SelectAreaTracker extends AbstractTool {
 				}
 			}
 		}
+	}
+	protected FigureEnumeration figures(){
+		return drawing().figuresReverse();
 	}
 }

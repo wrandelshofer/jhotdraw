@@ -814,25 +814,6 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
-	 * The figures resources have been released
-	 * @todo should this figure do anything?
-	 * @param e  Description of the Parameter
-	 */
-	public void figureRemoved(FigureChangeEvent e) {
-	}
-
-	/**
-	 * A request to remove the figure from another composite figure
-	 * @todo find out What figure is this figure listening too?
-	 * @param e  Description of the Parameter
-	 */
-	public void figureRequestRemove(FigureChangeEvent e) {
-		if (listener() != null) {
-			listener().figureRequestRemove(new FigureChangeEvent(this));
-		}
-	}
-
-	/**
 	 * This is not used here. Their is no need to update this figure just
 	 * because the figure its decorating requires update.
 	 * See <code>FigureChangeListener</code> interface for why.

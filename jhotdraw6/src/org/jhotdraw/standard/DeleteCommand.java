@@ -83,6 +83,7 @@ public class DeleteCommand extends FigureTransferCommand {
 		}
 		/**
 		 * Releases all resources related to an undoable activity
+		 * what if undo was last action?
 		 */
 		public void release() {
 			FigureEnumeration fe = getAffectedFigures();

@@ -33,11 +33,6 @@ public class FigureChangeEventMulticaster extends
 		((FigureChangeListener)b).figureInvalidated(e);
 	}
 
-	public void figureRequestRemove(FigureChangeEvent e) {
-		((FigureChangeListener)a).figureRequestRemove(e);
-		((FigureChangeListener)b).figureRequestRemove(e);
-	}
-
 	public void figureRequestUpdate(FigureChangeEvent e) {
 		((FigureChangeListener)a).figureRequestUpdate(e);
 		((FigureChangeListener)b).figureRequestUpdate(e);
@@ -46,11 +41,6 @@ public class FigureChangeEventMulticaster extends
 	public void figureChanged(FigureChangeEvent e) {
 		((FigureChangeListener)a).figureChanged(e);
 		((FigureChangeListener)b).figureChanged(e);
-	}
-
-	public void figureRemoved(FigureChangeEvent e) {
-		((FigureChangeListener)a).figureRemoved(e);
-		((FigureChangeListener)b).figureRemoved(e);
 	}
 
 	public static FigureChangeListener add(FigureChangeListener a, FigureChangeListener b) {

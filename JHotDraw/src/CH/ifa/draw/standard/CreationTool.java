@@ -97,7 +97,8 @@ public class CreationTool extends AbstractTool {
 		setView( dvme.getDrawingView() );
 		setAnchorPoint(new Point(dvme.getX(), dvme.getY()));
 		setCreatedFigure(createFigure());
-		setAddedFigure(view().add(getCreatedFigure()));
+		view().add(getCreatedFigure());
+		setAddedFigure(getCreatedFigure());
 		getAddedFigure().displayBox(getAnchorPoint(), getAnchorPoint());
 	}
 

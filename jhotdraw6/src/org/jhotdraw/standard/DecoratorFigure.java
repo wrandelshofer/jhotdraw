@@ -240,24 +240,7 @@ public abstract class DecoratorFigure
 			getDecoratedFigure().release();
 		}
 	}
-	/**
-	 * We must remove containees, in case someone is dependent upon one of them
-	 * and needs removal as well.
-	 * Architecture automatically removes dependent figures for us. no need to remove them
-	 * here.
-	 */
-	public FigureChangeListener remove(){
-		if( getContainer() == null ) {
-			//This will become ASSERT in JDK 1.4
-			//This represents an avoidable error on the programmers part.			
-			throw new JHotDrawRuntimeException("Figure can note be removed, it is not contained.");
-		}			
-		FigureChangeListener fcl =  getContainer();
-		if(listener() != null) {
-			listener().figureRequestRemove( new FigureChangeEvent(this));
-		}
-		return fcl;
-	}
+	
 	/**
 	 * Propagates invalidate up the container chain.
 	 * @see FigureChangeListener
@@ -274,9 +257,6 @@ public abstract class DecoratorFigure
 		}
 	}
 
-	public void figureRemoved(FigureChangeEvent e) {
-	}
-
 	/**
      * Informs our container that we need to be updated.  We request this on 
 	 * behalf of the decorated figure.
@@ -287,20 +267,6 @@ public abstract class DecoratorFigure
 		if (listener() != null) {
 			listener().figureRequestUpdate(new FigureChangeEvent(this));
 		}
-	}
-
-	/**
-	 * Propagates the removeFromDrawing request up to the container.
-	 * This is the only justified propagation of a request remove event.  This is
-	 * also implemented correctly by repackaging the event so it appears to come
-	 * from this figure.
-	 * The decorated figure gets removed because it is a dependent figure. Do not
-	 * remove it here or the undo architecture will not know about it.
-	 *
-	 * @see FigureChangeListener
-	 */
-	public void figureRequestRemove(FigureChangeEvent e) {
-		remove();
 	}
 
 	/**
@@ -441,7 +407,12 @@ public abstract class DecoratorFigure
 	 * figures get visited.
 	 */
 	public void visit(FigureVisitor visitor) {
-		
+		//if we are already deleted, do not allow visit.
+		if(visitor instanceof DeleteFromDrawingVisitor){
+			if(getContainer() == null){
+				return;
+			}
+		}
 		
 		
 		// remember original listener as listeners might be changed by a visitor
@@ -451,7 +422,12 @@ public abstract class DecoratorFigure
 
 		//visit this figure.
 		visitor.visitFigure(this);
-
+		//do not visit dependencies on insert
+		if(visitor instanceof InsertIntoDrawingVisitor){
+			return;
+		}
+		
+		
 		FigureEnumeration visitFigures = figures();
 		while (visitFigures.hasNextFigure()) {
 			visitFigures.nextFigure().visit(visitor);//visitor now visits the contained figures
@@ -590,7 +566,7 @@ public abstract class DecoratorFigure
 	/**
 	 * A callback from the container in response to the event fired by {@link
 	 * #remove remove}.  This method does the actual removal from the container.
-	 * Do not fire <code>figureRequestRemove</code> from this method.
+	 * 
 	 *
 	 * @see Figure#removeFromContainer
 	 */

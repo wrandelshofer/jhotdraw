@@ -43,7 +43,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	 * lock holder.
 	 */
 	private transient Thread    fDrawingLockHolder = null;
-	private String				myTitle;
+	private String				myTitle;//probably should be transient.
 
 	/*
 	 * Serialization support
@@ -237,7 +237,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 
 		s.defaultReadObject();
 
-		fListeners = CollectionsFactory.current().createList(2);
+		fListeners = CollectionsFactory.current().createList(2); //why is this needed??? ???dnoyeb???
 	}
 
 	public String getTitle() {

@@ -326,14 +326,6 @@ public  class TextFigure
 		updateLocation();
 	}
 
-	public void figureRemoved(FigureChangeEvent e) {
-		if (listener() != null) {
-			Rectangle rect = invalidateRectangle(displayBox());
-			listener().figureRemoved(new FigureChangeEvent(this, rect, e));
-		}
-	}
-
-	public void figureRequestRemove(FigureChangeEvent e) {}
 	public void figureInvalidated(FigureChangeEvent e) {}
 	public void figureRequestUpdate(FigureChangeEvent e) {}
 

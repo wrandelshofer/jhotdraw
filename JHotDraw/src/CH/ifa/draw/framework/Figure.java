@@ -177,8 +177,6 @@ public interface Figure
 
 	/**
 	 * Removes a figure from its container.
-	 * This is caled by the container in response to receiving a {@link
-	 * FigureChangeListener#figureRequestRemove figureRequestRemove} event.
 	 */
 	public void removeFromContainer(FigureChangeListener c);
 
@@ -203,23 +201,14 @@ public interface Figure
 	public void removeFigureChangeListener(FigureChangeListener l);
 
 	/**
-	 * Releases a figure's resources. Release is called when
-	 * a figure is being permanently deleted from the undo/redo stack.
-	 * or if it should be deleted without ever being added to the stack.
+	 * Notifies all listeners that this figure has been released.
+	 * Figures should first release all their resources such as other figures.
+	 * THIS METHOD IS CALLED BY THE CONTAINER THAT IS RELEASING THE FIGURE
+	 * need to change event names to released
 	 *
-	 * @see FigureChangeListener#figureRemoved
+	 * @see CompositeFigure#remove(Figure f)
 	 */
 	public void release();
-	
-	/**
-	 * Notifies all listeners that this figure wishes to be removed from its
-	 * container.  sends a figureRequestRemove event.
-	 *
-	 * @see FigureChangeListener#figureRequestRemove
-	 * @return FigureChangeListener The container this figure was removed from
-	 */
-	public FigureChangeListener remove();
-	
 	
 	/**
 	 * This informs all listeners that the figure is requesting to be redrawn.
