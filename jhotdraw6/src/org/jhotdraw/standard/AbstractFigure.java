@@ -58,12 +58,8 @@ public abstract class AbstractFigure implements Figure {
 	
 	/**
 	 * The dependent figures which have been added to this container.
-	 * This is an ordered collection.  The figures should be stored in the order
-	 * in which they were added.  The figures should be loaded in the order in
-	 * which they were stored.
-	 * do dependent figures depend on us, or do we depend on them? ???dnoyeb???
-	 * @see #read
-	 * @see #write
+	 * These figures depend on us.  these figures are not stored by AbstractFigure
+	 * but the link to abstractFigure is stored within the dependent figures.
 	 */
 	private List myDependentFigures;
 
@@ -473,13 +469,6 @@ public abstract class AbstractFigure implements Figure {
 	 */
 	public void write(StorableOutput dw) {
 		dw.writeInt( getZValue() );
-		//store dependentFigures
-		int size = myDependentFigures.size();
-		FigureEnumeration fe = getDependendFigures();
-		dw.writeInt( size );
-		while (fe.hasNextFigure()) {
-			dw.writeStorable(fe.nextFigure());
-		}
 		//store figuremanipulators
 		dw.writeInt( fFigureManipulators.size() );
 		for(Iterator it= fFigureManipulators.iterator();it.hasNext();) {
@@ -497,13 +486,6 @@ public abstract class AbstractFigure implements Figure {
 	 */
 	public void read(StorableInput dr) throws IOException {
 		setZValue( dr.readInt() );
-		//load dependentFigures
-		int size = dr.readInt();
-		myDependentFigures = CollectionsFactory.current().createList(size);
-		for (int i=0; i<size; i++) {
-			myDependentFigures.add( (Figure)dr.readStorable()) ;
-		}
-
 		//load figureManipulators
 		int manipSize = dr.readInt();
 		fFigureManipulators = CollectionsFactory.current().createList(manipSize);
