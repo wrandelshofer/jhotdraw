@@ -141,7 +141,7 @@ public  class GroupCommand extends AbstractCommand {
 			}
 			setDrawingView(null);
 			setGroupFigure(null);
-			setAffectedFigures(null);
+			setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
 		}
 	}
 }
