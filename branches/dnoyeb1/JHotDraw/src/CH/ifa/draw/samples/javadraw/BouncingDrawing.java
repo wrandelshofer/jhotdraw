@@ -23,6 +23,18 @@ import java.io.IOException;
  * @todo Needs validation and testing.  The DecoratorFigure AnimationDecorator
  *       causes some problems with knowing what is and is not in the drawing.
  *
+ * <b>NOTE: I attempted to hide the internal DecoratorFigures that bouncing
+ * Drawing uses, but unfortunately the current lack of document-view seperation
+ * causes problems with selection and other things.  Normally when you select a figure
+ * with a tool, it will be a AnimationDecorator, but we are supposed to hide that.
+ * so selections will be the the mapped figure.  Its a problem because  internally
+ * the drawing needs to use the animation decorator to draw it.  Its difficuly
+ * to decide which methods should expose the real figure, and which should expose the
+ * decorator.  In the end I think the decision will lead to a form of 
+ * document-view seperation anyway.  So I am not fixing these problems, and
+ * will tend to them when the document view seperation occurs.
+ * If you are having issues, try using <code>StandardDrawing</code> instead.
+ *
  * @version <$CURRENT_VERSION$>
  * 
  */
@@ -37,21 +49,18 @@ public class BouncingDrawing extends StandardDrawing implements Animatable {
 	private HashMap decorations;
 	
 	BouncingDrawing(){
-		decorations = new HashMap();
+//		decorations = new HashMap();
 //		animManips = new HashMap();
 //		orphanedAnimManips = new HashMap();
 	}
 	/**
-	 * NOTE: Everything added to a figure within the drawing must never be exposed
-	 * outside of the drawing.  During remove this adornments must be stripped
-	 * away!  Their states are not preservable.  For preservation you must add
-	 * your modifications before the Figure is added to the drawing.
+	 *
 	 */
 	public synchronized void add(Figure figure) {
 		if (!(figure instanceof AnimationDecorator) &&
 			!(figure instanceof ConnectionFigure)) {
 			Figure ad = new AnimationDecorator(figure);
-			decorations.put( figure,  ad);
+//			decorations.put( figure,  ad);
 			super.add(ad);
 		}
 		else {
@@ -69,13 +78,17 @@ public class BouncingDrawing extends StandardDrawing implements Animatable {
 //		}
 	}
 
+	/**
+	 * Peeling will make undo difficult.  The whole undo system cant handle the
+	 * DecoratorFigures anyway so expect problems.
+	 */
 	protected void basicOrphan(Figure figure){
-		if(figure instanceof AnimationDecorator){
-			((AnimationDecorator)figure).peelDecoration();
-		}
-		if(decorations.containsKey( figure )){
-			decorations.remove( figure );
-		}
+//		if(figure instanceof AnimationDecorator){
+//			((AnimationDecorator)figure).peelDecoration();
+//		}
+//		if(decorations.containsKey( figure )){
+//			decorations.remove( figure );
+//		}
 		super.basicOrphan(figure);
 	}
 //	protected void figureRequestRemove(FigureChangeEvent e) {
@@ -133,28 +146,28 @@ public class BouncingDrawing extends StandardDrawing implements Animatable {
 	public void read(StorableInput dr) throws IOException {
 		super.read(dr);
 		//load mappings
-		int size = dr.readInt();
-		decorations = new HashMap( size );
-		for (int i=0; i<size; i++) {
-			Figure key = (Figure) dr.readStorable();
-			Figure value = (Figure) dr.readStorable();
-			decorations.put( key, value);
-		}
+//		int size = dr.readInt();
+//		decorations = new HashMap( size );
+//		for (int i=0; i<size; i++) {
+//			Figure key = (Figure) dr.readStorable();
+//			Figure value = (Figure) dr.readStorable();
+//			decorations.put( key, value);
+//		}
 	}
-	/**
-	 * Returns all the figures minus the decorations added in the add method
-	 */
-	public FigureEnumeration figures() {
-		List figs = CollectionsFactory.current().createList(decorations.size());
-		figs.addAll( decorations.keySet() );
-		
-		FigureEnumeration fe = new FigureEnumerator(CollectionsFactory.current().createList(getFigures()));
-		while(fe.hasNextFigure()){
-			Figure f = fe.nextFigure();
-			if(!decorations.containsValue( f )){
-				figs.add( f );
-			}
-		}
-		return new FigureEnumerator(CollectionsFactory.current().createList(figs));
-	}
+//	/**
+//	 * Returns all the figures minus the decorations added in the add method
+//	 */
+//	public FigureEnumeration figures() {
+//		List figs = CollectionsFactory.current().createList(decorations.size());
+//		figs.addAll( decorations.keySet() );
+//		
+//		FigureEnumeration fe = new FigureEnumerator(CollectionsFactory.current().createList(getFigures()));
+//		while(fe.hasNextFigure()){
+//			Figure f = fe.nextFigure();
+//			if(!decorations.containsValue( f )){
+//				figs.add( f );
+//			}
+//		}
+//		return new FigureEnumerator(CollectionsFactory.current().createList(figs));
+//	}
 }

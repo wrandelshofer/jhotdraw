@@ -46,7 +46,6 @@ public class ScribbleTool extends AbstractTool {
 		if (fScribble != null) {
 			if (fScribble.size().width < 4 || fScribble.size().height < 4) {
 				getActiveDrawing().remove(fScribble);
-				//or fScribble.remove();fScribble.release();
 				// nothing to undo
 				setUndoActivity(null);
 			}
