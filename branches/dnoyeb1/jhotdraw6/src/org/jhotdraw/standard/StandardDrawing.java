@@ -94,7 +94,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 		Figure orphanedFigure = super.orphan(figure);
 		// ensure that we remove the top level figure in a drawing
 		if (orphanedFigure.listener() != null) {
-			Rectangle rect = invalidateRectangle(displayBox());
+			Rectangle rect = invalidateRectangle(displayBox());//shouldnt we be invalidating the size of the removed figure?
 			orphanedFigure.listener().figureRequestRemove(new FigureChangeEvent(orphanedFigure, rect));
 		}
 		return orphanedFigure;
@@ -103,7 +103,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	public synchronized Figure add(Figure figure) {
 		Figure addedFigure = super.add(figure);
 		if (addedFigure.listener() != null) {
-			Rectangle rect = invalidateRectangle(displayBox());
+			Rectangle rect = invalidateRectangle(displayBox());//why not just the rect of the added figure?
 			addedFigure.listener().figureRequestUpdate(new FigureChangeEvent(figure, rect));
 			return addedFigure;
 		}
@@ -115,7 +115,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	 * existing damaged area.
 	 * @see FigureChangeListener
 	 */
-	public void figureInvalidated(FigureChangeEvent e) {
+	protected void figureInvalidated(FigureChangeEvent e) {
 		if (fListeners != null) {
 			for (int i = 0; i < fListeners.size(); i++) {
 				DrawingChangeListener l = (DrawingChangeListener)fListeners.get(i);
@@ -137,7 +137,7 @@ public class StandardDrawing extends CompositeFigure implements Drawing {
 	/**
 	 * Forces an update of the drawing change listeners.
 	 */
-	public void figureRequestUpdate(FigureChangeEvent e) {
+	protected void figureRequestUpdate(FigureChangeEvent e) {
 		if (fListeners != null) {
 			for (int i = 0; i < fListeners.size(); i++) {
 				DrawingChangeListener l = (DrawingChangeListener)fListeners.get(i);
