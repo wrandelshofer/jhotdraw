@@ -36,8 +36,10 @@ public class SimpleLayouter implements Layouter {
 	private Insets myInsets;
 
 	static final long serialVersionUID = 2928651014089117493L;
-
-	private SimpleLayouter() {
+	/**
+	 * For serilization support.
+	 */
+	public SimpleLayouter() {
 		// do nothing: for JDO-compliance only
 	}
 
@@ -113,6 +115,7 @@ public class SimpleLayouter implements Layouter {
 	 */
 	public void read(StorableInput dr) throws IOException {
 		setLayoutable((Layoutable)dr.readStorable());
+		setInsets( new Insets(dr.readInt(),dr.readInt(),dr.readInt(),dr.readInt()));
 	}
 
 	/**
@@ -120,5 +123,9 @@ public class SimpleLayouter implements Layouter {
 	 */
 	public void write(StorableOutput dw) {
 		dw.writeStorable(getLayoutable());
+		dw.writeInt( myInsets.top );
+		dw.writeInt( myInsets.left );
+		dw.writeInt( myInsets.bottom );
+		dw.writeInt( myInsets.right );
 	}
 }
