@@ -1064,18 +1064,12 @@ public class StandardDrawingView
     }
 
 	protected DNDHelper createDNDHelper() {
-		DNDHelper dndh = new DNDHelper () {
+		DNDHelper dndh = new DNDHelper (true,true) {
 				protected DrawingView view() {
 					return StandardDrawingView.this;
 				}
 				protected DrawingEditor editor() {
 					return StandardDrawingView.this.editor();
-				}
-				protected boolean isDropTarget(){
-					return true;
-				}
-				protected boolean isDragSource(){
-					return true;
 				}
 			};
 		return dndh;

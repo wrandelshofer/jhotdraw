@@ -34,19 +34,24 @@ public abstract class DNDHelper {
 	private DropTarget dropTarget;
 	private DragSourceListener dragSourceListener;
 	private DropTargetListener dropTargetListener;
+	private boolean isDragSource = false;
+	private boolean isDropTarget = false;
 	
-	public DNDHelper(){
+	
+	public DNDHelper(boolean isDragSource, boolean isDropTarget){
+		this.isDragSource = isDragSource;
+		this.isDropTarget = isDropTarget;
 	}
 	/**
 	 * Do not call this from the constructor.  its methods are overridable.
 	 */
 	public void initialize(DragGestureListener dgl) {
-		if(isDragSource()) {
+		if(isDragSource) {
 			setDragGestureListener( dgl );
 			setDragSourceListener( createDragSourceListener() );
 			setDragGestureRecognizer(createDragGestureRecognizer(getDragGestureListener()));
 		}
-		if(isDropTarget()) {
+		if(isDropTarget) {
 			setDropTargetListener( createDropTargetListener() );
 			setDropTarget(createDropTarget());
 		}
@@ -71,9 +76,6 @@ public abstract class DNDHelper {
 	}
 	abstract protected DrawingView view();
 	abstract protected DrawingEditor editor();
-	abstract protected boolean isDragSource();
-	abstract protected boolean isDropTarget();
-
 	
 	
 	
