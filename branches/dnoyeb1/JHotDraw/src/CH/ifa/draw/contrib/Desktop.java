@@ -57,7 +57,6 @@ public interface Desktop {
      *  desktops must listen to drawings for name changes if they have 
      *  titles that need updating.
      *
-     * @deprecated
      */
 	public void updateTitle(String newDrawingTitle);
 
