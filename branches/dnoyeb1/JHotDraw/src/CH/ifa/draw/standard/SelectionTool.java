@@ -54,33 +54,40 @@ public class SelectionTool extends AbstractTool {
 		// on MS-Windows NT: AWT generates additional mouse down events
 		// when the left button is down && right button is clicked.
 		// To avoid dead locks we ignore such events
-		if (fChild != null) {
+		if (getChildTool() != null) {
 			return;
 		}
 
 		view().freezeView();
 
-		Handle handle = view().findHandle(getAnchorX(), getAnchorY());
+		Handle handle = findHandle(getAnchorX(), getAnchorY());
 		if (handle != null) {
-			fChild = createHandleTracker(view(), handle);
+			setChildTool(createHandleTracker(view(), handle));
 		}
 		else {
-			Figure figure = drawing().findFigure(getAnchorX(), getAnchorY());
+			Figure figure = findFigure(getAnchorX(), getAnchorY());
 			
 			if (figure != null) {
-				fChild = createDragTracker(figure);
+				setChildTool(createDragTracker(figure));
 			}
 			else {
 				if (!dvme.getMouseEvent().isShiftDown()) {
 					view().clearSelection();
 				}
-				fChild = createAreaTracker();
+				setChildTool(createAreaTracker());
 			}
 		}
-		fChild.activate();
-		fChild.mouseDown(dvme);
+		getChildTool().activate();
+		getChildTool().mouseDown(dvme);
 	}
 
+	protected Figure findFigure(int x, int y){
+		 return drawing().findFigure(x, y);
+	}
+	
+	protected Handle findHandle(int x, int y){
+		return view().findHandle(x,y);
+	}
 	/**
 	 * Handles mouse moves (if the mouse button is up).
 	 * Switches the cursors depending on whats under them.
@@ -96,8 +103,8 @@ public class SelectionTool extends AbstractTool {
 	 * current tracker.
 	 */
 	public void mouseDrag(DrawingViewMouseEvent dvme) {
-		if (fChild != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
-			fChild.mouseDrag(dvme);
+		if (getChildTool() != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
+			getChildTool().mouseDrag(dvme);
 		}
 	}
 
@@ -106,10 +113,10 @@ public class SelectionTool extends AbstractTool {
 	 * current tracker.
 	 */
 	public void mouseUp(DrawingViewMouseEvent dvme) {
-		if (fChild != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
-			fChild.mouseUp(dvme);
-			fChild.deactivate();
-			fChild = null;
+		if (getChildTool() != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
+			getChildTool().mouseUp(dvme);
+			getChildTool().deactivate();
+			setChildTool(null);
 		}
 		if (view() != null) {
 			view().unfreezeView();
@@ -136,5 +143,11 @@ public class SelectionTool extends AbstractTool {
 	 */
 	protected Tool createAreaTracker() {
 		return new SelectAreaTracker(editor());
+	}
+	protected Tool getChildTool(){
+		return fChild;
+	}
+	protected void setChildTool(Tool tool){
+		fChild = tool;
 	}
 }

@@ -55,7 +55,7 @@ public abstract class FigureTransferCommand extends AbstractCommand {
 	* Inserts an enumeration of figures and translates them by the
 	* given offset.
 	*/
-	FigureEnumeration insertFigures(FigureEnumeration fe, int dx, int dy) {
+	protected FigureEnumeration insertFigures(FigureEnumeration fe, int dx, int dy) {
 		return view().insertFigures(fe, dx, dy, false);
 	}
 }
