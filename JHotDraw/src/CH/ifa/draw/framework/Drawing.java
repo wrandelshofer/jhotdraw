@@ -146,8 +146,15 @@ public interface Drawing
 	 *
 	 * @return new iterator of all registered change listener
 	 */
-	public Iterator drawingChangeListeners();
-
+	//public Iterator drawingChangeListeners();
+	
+	/**
+	 * Causes the drawing to nofity its listeners that it wishes to be redrawn.
+	 * This is accomplished by way of <code>requestUpdate</code>
+	 * @see DrawingChangeListener#drawingRequestUpdate
+	 */
+	public void update();
+	
 	/**
 	 * Adds a figure and sets its container to refer to this drawing.
 	 *

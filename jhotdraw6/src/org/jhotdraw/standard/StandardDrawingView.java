@@ -620,15 +620,13 @@ public class StandardDrawingView
 
 	/**
 	 * Refreshes the drawing if there is some accumulated damage
+	 * This is typically called when a Tool/Command has finished its editing
+	 * manoever and wants those observing the underlying drawing to update
+	 * themselves.  Sort of a finished editing-action notification.
+	 * @see Drawing#update()
 	 */
 	public synchronized void checkDamage() {
-		Iterator each = drawing().drawingChangeListeners();
-		while (each.hasNext()) {
-			Object l = each.next();
-			if (l instanceof DrawingView) {
-				((DrawingView)l).repairDamage();
-			}
-		}
+		drawing().update();
 	}
 
 	public void repairDamage() {

@@ -305,8 +305,11 @@ public class GraphicalCompositeFigure extends CompositeFigure implements Layouta
 	}
 
 	/**
-	 * Notify the registered change listener if an exlicit change
+	 * Notify the registered change listener if an explicit change
 	 * to the component (or one of its child components has occurred).
+	 *
+	 * this seems out of place !!!dnoyeb!!!
+	 * the whole figureRequestUpdate event seems out of place.
 	 */
 	protected void change() {
 		if (listener() != null) {

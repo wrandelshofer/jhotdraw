@@ -21,12 +21,13 @@ import java.util.EventListener;
 public interface FigureChangeListener extends EventListener {
 
 	/**
-	 * Sent when an area is invalid
+	 * Sent when the whole figure is invalid (dirty and in need of redraw).
 	 */
 	public void figureInvalidated(FigureChangeEvent e);
 
 	/**
 	 * Sent when a figure changed
+	 * give an example of a use please???
 	 */
 	public void figureChanged(FigureChangeEvent e);
 
@@ -41,8 +42,22 @@ public interface FigureChangeListener extends EventListener {
 	public void figureRequestRemove(FigureChangeEvent e);
 
 	/**
-	 * Sent when an update should happen.
+	 * Sent when the figure requests to be redrawn immediately.
+	 * This is of primary use to figures that change themselves without outside
+	 * intervention.  An example of that would be an animated figure where the
+	 * engine for change is within the figure.  In this case when the figure's 
+	 * displayed image changes those that contain it need to know so they can
+	 * redraw it immediately.  Typically the drawing will listen for this event
+	 * and upon receiving it, notify all of its DrawingViews of the area in need
+	 * of redraw.  The area to be redrawn is within a <code>figureIntalidated
+	 * <code> event.
+	 * This is not the case for {@link CH.ifa.draw.samples.javadraw.AnimationDecorator
+	 * AnimationDecorator} since it is manipulated by an external {@link 
+	 * CH.ifa.draw.samples.javadraw.Animator Animator} that calls {@link
+	 * CH.ifa.draw.framework.DrawingView#checkDamage checkDamage()} for it.
 	 *
+	 * @see #figureInvalidated
+	 * @see DrawingChangeListener#drawingRequestUpdate
 	 */
 	public void figureRequestUpdate(FigureChangeEvent e);
 }
