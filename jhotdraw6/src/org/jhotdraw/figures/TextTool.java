@@ -207,9 +207,7 @@ public class TextTool extends CreationTool {
 
 			if (!isValidText(getOriginalText())) {
 				FigureEnumeration fe  = getAffectedFigures();
-				while(fe.hasNextFigure()){
-					fe.nextFigure().remove();
-				}
+				getDrawingView().drawing().orphanAll( fe );
 				//this tool is now responsible for the release or readd of the figures is just removed
 				//!!!dnoyeb!!!
 			
@@ -243,9 +241,7 @@ public class TextTool extends CreationTool {
 			// the text figure did exist but was remove
 			if (!isValidText(getBackupText())) {
 				FigureEnumeration fe  = getAffectedFigures();
-				while(fe.hasNextFigure()){
-					fe.nextFigure().remove();
-				}
+				getDrawingView().drawing().orphanAll( fe );
 				//this tool is now responsible for the release or readd of the figures it just removed
 				//!!!dnoyeb!!!
 			

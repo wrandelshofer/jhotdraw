@@ -86,7 +86,6 @@ public class TextAreaTool extends CreationTool {
 
 			if (getCreatedFigure() != null && getCreatedFigure().isEmpty()) {
 				drawing().remove(getAddedFigure());
-				//or getAddedFigure().remove(); getAddedFigure().release();
 				// nothing to undo
 				setUndoActivity(null);
 			}
@@ -375,9 +374,7 @@ public class TextAreaTool extends CreationTool {
 			// the text figure did exist but was remove
 			if (!isValidText(getBackupText())) {
 				FigureEnumeration fe = getAffectedFigures();
-				while(fe.hasNextFigure()){
-					fe.nextFigure().remove();
-				}
+				getDrawingView().drawing().orphanAll( fe );
 				//this tool is now this tools responsibility to release these figures
 			}
 			// the text figure didn't exist before

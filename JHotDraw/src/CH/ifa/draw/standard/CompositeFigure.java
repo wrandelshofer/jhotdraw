@@ -503,7 +503,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Check whether a given <b>figure</b> is contained within this <b>CompositeFigure.</b>
-	 * Should use figures()
+	 * Should use figures()?
 	 */
 	public boolean containsFigure(Figure checkFigure) {
 		return getFigures().contains(checkFigure);

@@ -439,7 +439,19 @@ public class StandardDrawingView
 			fireSelectionChanged();
 		}
 	}
-
+	protected final List getSelection(){
+		return fSelection;
+	}
+	protected final void setSelection(List list){
+		fSelection = list;
+	}
+	protected final List getSelectionHandles(){
+		return fSelectionHandles;
+	}
+	protected final void setSelectionHandles(List list){
+		fSelectionHandles = list;
+	}
+ 	
 	/**
 	 * Adds a Collection of figures to the current selection.
 	 */

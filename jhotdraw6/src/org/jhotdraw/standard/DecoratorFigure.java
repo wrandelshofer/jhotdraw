@@ -40,10 +40,13 @@ import java.io.*;
  * <code>Figure</code> they are able to work on.  This constitutes quite a few
  * of the <code>Tool</code>s and <code>Command</code>s.  Therefore, this pattern
  * does not integrate well with its intended role.  dnoyeb 1/15/03
- * 
- * Trying to ressurect with better methodology.
  *
- *
+ * I have currently made DecoratorFigure implement Figure as opposed to extending
+ * AbstractFigure.  This way AbstractFigure's implementation can not hide new
+ * methods added to the Figure interface from being properly added to 
+ * DecoratorFigure and forwarded to the decorated figure.  This solves part of
+ * the problem.  I think the rest will actually be solved if document-view
+ * seperation is implemented. 1/20/03
  *
  * @see Figure
  *
@@ -143,16 +146,16 @@ public abstract class DecoratorFigure
 	 */
 	public void decorate(Figure figure) {
 		fComponent = figure;
-		getDecoratedFigure().addFigureChangeListener( this );
+		getDecoratedFigure().addToContainer(this);
 		addDependendFigure( getDecoratedFigure() );
 	}
 
 	/**
 	 * Removes the decoration from the contained figure.
-	 * The actual remove takes place from the removeRequestEvent.
 	 */
 	public Figure peelDecoration() {
-		getDecoratedFigure().remove();
+		removeDependendFigure( getDecoratedFigure() );
+		getDecoratedFigure().removeFromContainer( this );
 		return getDecoratedFigure();
 	}
 
@@ -218,7 +221,8 @@ public abstract class DecoratorFigure
 
 	/**
 	 * Releases itself. removes then releases its containees.
-	 * 
+	 * This is broken.  peel does not set contained figure to null.  unsure how
+	 * to fix that.
 	 */
 	public void release() {
 		//getDecoratedFigure().release(); //decorator is dependent, it will be released by the architecture
@@ -226,6 +230,11 @@ public abstract class DecoratorFigure
 			//This will become ASSERT in JDK 1.4
 			//This represents an avoidable error on the programmers part.			
 			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
+		}
+		if(getDecoratedFigure() != null){
+			removeDependendFigure( getDecoratedFigure() );
+			getDecoratedFigure().removeFromContainer( this ); //this is of course not notifying any listeners. improper.
+			getDecoratedFigure().release();
 		}
 	}
 	/**
@@ -282,14 +291,12 @@ public abstract class DecoratorFigure
 	 * This is the only justified propagation of a request remove event.  This is
 	 * also implemented correctly by repackaging the event so it appears to come
 	 * from this figure.
-	 * The decorator figure requests removal on behalf of the figure it is
-	 * decorating.  the decorator figure is not allowed to exist without its
-	 * decorated figure.
+	 * The decorated figure gets removed because it is a dependent figure. Do not
+	 * remove it here or the undo architecture will not know about it.
+	 *
 	 * @see FigureChangeListener
 	 */
 	public void figureRequestRemove(FigureChangeEvent e) {
-		e.getFigure().removeFigureChangeListener(this);
-		removeDependendFigure( e.getFigure() );
 		remove();
 	}
 
