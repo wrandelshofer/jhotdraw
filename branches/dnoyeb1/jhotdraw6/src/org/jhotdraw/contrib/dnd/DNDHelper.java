@@ -289,6 +289,7 @@ public abstract class DNDHelper implements DragGestureListener {
 			if (!super.undo()) {
 				return false;
 			}
+			//undo of add really shouldnt need visitor !?!dnoyeb!?!
 			//System.out.println("AddUndoActivity AddUndoActivity undo");
 			DeleteFromDrawingVisitor deleteVisitor = new DeleteFromDrawingVisitor(getDrawingView().drawing());
 			FigureEnumeration fe = getAffectedFigures();
@@ -296,6 +297,7 @@ public abstract class DNDHelper implements DragGestureListener {
 	    		Figure f = fe.nextFigure();
 				f.visit(deleteVisitor);
 			}
+			setAffectedFigures( deleteVisitor.getDeletedFigures() );
 			getDrawingView().clearSelection();
 			return true;
 		}
@@ -572,10 +574,21 @@ public abstract class DNDHelper implements DragGestureListener {
 					fe.nextFigure().visit(deleteVisitor);
 				}
 				getDrawingView().clearSelection();
+				setAffectedFigures( deleteVisitor.getDeletedFigures() );
 				return true;
 			}
 			return false;
 		}
+		/**
+		 * Releases all resources related to an undoable activity
+		 */
+		public void release() {
+			FigureEnumeration fe = getAffectedFigures();
+			while (fe.hasNextFigure()) {
+				fe.nextFigure().release();
+			}
+			setAffectedFigures(CH.ifa.draw.standard.FigureEnumerator.getEmptyEnumeration());
+		}		
 	}
 	
 	

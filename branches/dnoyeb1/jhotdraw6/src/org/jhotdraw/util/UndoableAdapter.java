@@ -90,13 +90,12 @@ public class UndoableAdapter implements Undoable {
 	
 	/**
 	 * Releases all resources related to an undoable activity
+	 * Only resources that are no longer used in the application should be
+	 * released.
 	 */
 	public void release() {
-		FigureEnumeration fe = getAffectedFigures();
-		while (fe.hasNextFigure()) {
-			fe.nextFigure().release();
-		}
 		setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
+		setDrawingView(null);
 	}
 
 	/**
