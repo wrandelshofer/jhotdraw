@@ -58,12 +58,10 @@ public abstract class CompositeFigure extends AbstractFigure {
 	
 	/**
 	 * Encapsulate the FigureChangeListener implementation
-	 * Warning, this is the reference the figures will refer to for their
-	 * container.  This is what they will store with then when they are stored.
-	 * we must store this as well.
+	 * is this created when cloned???dnoyeb???
 	 */
-	private FigureChangeListener figureChangeListener = new innerFigureChangeListener();
-
+	private transient FigureChangeListener figureChangeListener = new innerFigureChangeListener();
+	
 	private class innerFigureChangeListener implements FigureChangeListener, java.io.Serializable,Cloneable {
 		public void figureInvalidated(FigureChangeEvent e){
 			CompositeFigure.this.figureInvalidated(e);
@@ -71,11 +69,11 @@ public abstract class CompositeFigure extends AbstractFigure {
 		public void figureChanged(FigureChangeEvent e){
 			CompositeFigure.this.figureChanged(e);
 		}
-		public void figureRemoved(FigureChangeEvent e){
-			CompositeFigure.this.figureRemoved(e);
-		}
 		public void figureRequestRemove(FigureChangeEvent e){
 			CompositeFigure.this.figureRequestRemove(e);
+		}
+		public void figureRemoved(FigureChangeEvent e){
+			CompositeFigure.this.figureRemoved(e);
 		}
 		public void figureRequestUpdate(FigureChangeEvent e){
 			CompositeFigure.this.figureRequestUpdate(e);
@@ -149,15 +147,30 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see FigureChangeListener#figureRequestRemove
 	 * @see FigureChangeListener#figureRemoved
 	 * @param figure that is part of the drawing and should be removed
+	 * @deprecated use figure.remove();figure.release();
 	 */
 	public void remove(Figure figure) {
-		if(!containsFigure(figure)){
-			throw new JHotDrawRuntimeException("Figure is not part of this CompositeFigure.");
-		}
 		figure.remove();
 		figure.release();
 	}
+	
+	protected void removeImpl(Figure figure){
+		if(!containsFigure(figure)){
+			throw new JHotDrawRuntimeException("Figure is not part of this CompositeFigure.");
+		}
 
+		Rectangle r = figure.displayBox();
+		figure.removeFromContainer( figureChangeListener ); //removes the figure from being contained in this CompositeFigure
+		getFigures().remove(figure);
+		_removeFromQuadTree(figure);
+		//need to do something here to repaint the removed area.
+		if (listener() != null) {
+			listener().figureInvalidated(new FigureChangeEvent( this, r ));
+			listener().figureRequestUpdate(new FigureChangeEvent(this));
+			//preferably whoever ordered the remove should order the update so 
+			//we dont redraw too frequently and unnecessarily
+		}		
+	}
 	/**
 	 * Removes a list of figures from the CompositeFigure.
 	 * <b>You</b> are responsible for their release.
@@ -174,6 +187,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Removes all figures from this container and releases it from the undo/redo
 	 * architecture.
 	 *
+	 * @deprecated see {@link #remove remove}
 	 * @see #remove
 	 */
 	public void removeAll(FigureEnumeration fe) {
@@ -204,6 +218,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 *
 	 * @see Figure#remove
 	 * @see FigureChangeListener#figureRequestRemove
+	 * @deprecated use figure.remove()
 	 * @param figure that is part of the drawing and should be removed
 	 */
 	public synchronized void orphan(Figure figure) {
@@ -220,6 +235,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Orphans a FigureEnumeration of figures.
+	 * @deprecated use figure.remove();
 	 * @see #orphan
 	 * @see Figure#remove
 	 */	
@@ -258,7 +274,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Sends a figure to the back of the drawing.  
 	 * I think this is a good place to throw a runtime exception if the Figure
 	 * is not part of the drawing, dnoyeb!!! BadParameterException
-	 *
+	 * This needs work.  perhaps a will change?
 	 * @param figure that is part of the drawing
 	 */
 	public synchronized void sendToBack(Figure figure) {
@@ -571,15 +587,6 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * hit detection, that is, you want to detect the inner most
 	 * figure containing the given point.
 	 *
-	 * This is improved but still <b>broken.</b>  Its achiles heel is the evil
-	 * {@link CH.ifa.draw.standard.DecoratorFigure DecoratorFigure} that is
-	 * "decorating" (read masking) the <b>CompositeFigures</b> it decorates.
-	 * mrfloppy is working on a "Strategy pattern" fix for this.  Still I
-	 * believe it would be better all around if {@link 
-	 * CH.ifa.draw.standard.DecoratorFigure DecoratorFigure} actually used the
-	 * "Decorator pattern." 
-	 * Currently this method can not dig inside decorator figures.
-	 * dnoyeb@users.sourceforge.net
 	 */
 	public Figure findFigureInside(int x, int y) {
 		Figure figure = findFigure(x,y);
@@ -590,20 +597,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 			else
 				return figure;
 		}
-		else if(figure instanceof DecoratorFigure){
-			return getFigureWithoutDecoration(figure).findFigureInside(x,y);
-		}
 		else
 			return figure;
-	}
-	
-	protected Figure getFigureWithoutDecoration(Figure peelFigure) {
-		if (peelFigure instanceof DecoratorFigure) {
-			return getFigureWithoutDecoration(((DecoratorFigure)peelFigure).getDecoratedFigure());
-		}
-		else {
-			return peelFigure;
-		}
 	}
 	
 	/**
@@ -686,18 +681,10 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Responds to a contained figure requesting to be removed from the component.
 	 */
 	protected void figureRequestRemove(FigureChangeEvent e) {
-		Figure f = e.getFigure();
-		Rectangle r = f.displayBox();
-		f.removeFromContainer( figureChangeListener ); //removes the figure from being contained in this CompositeFigure
-		getFigures().remove(f);
-		_removeFromQuadTree(f);
-		//need to do something here to repaint the removed area.
-		if (listener() != null) {
-			listener().figureInvalidated(new FigureChangeEvent( this, r ));
-			listener().figureRequestUpdate(new FigureChangeEvent(this));
-			//preferably whoever ordered the remove should order the update so 
-			//we dont redraw too frequently and unnecessarily
-		}
+		removeImpl(e.getFigure());
+	}
+	public void figureRemoved(FigureChangeEvent e){
+		//useless
 	}
 
 	/**
@@ -720,18 +707,10 @@ public abstract class CompositeFigure extends AbstractFigure {
 		_removeFromQuadTree(e.getFigure());
 		_addToQuadTree(e.getFigure());
 	}
-	/**
-	 *
-	 */
-	protected void figureRemoved(FigureChangeEvent e) {
-
-	}
 
 	/**
 	 * Writes the contained figures to the StorableOutput.
-	 *
-	 * gotta write the new innerlistener since this is who figures think we are.
-	 * !!!dnoyeb!!!
+	 * The storing process is assumed to be serial and not in need of synchronization.
 	 */
 	public void write(StorableOutput dw) {
 		super.write(dw);
@@ -744,15 +723,15 @@ public abstract class CompositeFigure extends AbstractFigure {
 	}
 	
 	/**
-	 * @todo implement this.
+	 * Shallow serialization of the object and the figures it contains
 	 */
 	private void writeObject(ObjectOutputStream s) throws IOException {
-		//s.defaultWriteObject();
-		throw new IOException("writeObject not implemented for CompositeFigure.");
+		s.defaultWriteObject();
 	}
 
 	/**
 	 * Reads the contained figures from StorableInput.
+	 * The loading process is assumed to be serial and not in need of synchronization.
 	 */
 	public void read(StorableInput dr) throws IOException {
 		super.read(dr);
@@ -768,19 +747,25 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Used for the cloning mechanism.
-	 * @todo Implement this.
+	 * Seems to be a copy of those within us, but nothing to do with those we
+	 * connect to. 
+	 * @todo Verify and specify the functionality to be here.
 	 */
 	private void readObject(ObjectInputStream s)
 		throws ClassNotFoundException, IOException {
-		throw new IOException("readObject not implemented for CompositeFigure.");
 
-//		FigureEnumeration fe = figures();
-//		while (fe.hasNextFigure()) {
-//			Figure figure = fe.nextFigure();
-//			figure.addToContainer(figureChangeListener);
-//		}
-//
-//		init(new Rectangle(0, 0));
+		//the figures are not transient so they get deserialized here
+		s.defaultReadObject();
+
+		//the listener is transient and not deserialized
+		//so we need to establish listening to our new figures
+		FigureEnumeration fe = figures();
+		while (fe.hasNextFigure()) {
+			Figure figure = fe.nextFigure();
+			figure.addToContainer(figureChangeListener);
+		}
+
+		init(new Rectangle(0, 0));
 	}
 
 	/**

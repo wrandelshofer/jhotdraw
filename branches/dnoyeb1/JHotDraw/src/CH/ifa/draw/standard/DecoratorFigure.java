@@ -28,6 +28,20 @@ import java.io.*;
  * <b><a href=../pattlets/sld014.htm>Decorator</a></b><br>
  * DecoratorFigure is a decorator.
  *
+ * The main problem is DecoratorFigure's inability to decorate a figure without
+ * knowing all the methods that figure implements.  If it does not know all of
+ * the decorated figures methods, it can not forward all the calls.  This hides
+ * the internal figure from those <code>Tool</code>s and <code>Command</code>s
+ * that would like to work on it.  It forces every <code>Tool</code> and <code>
+ * Command</code> to check for its presence, and when found, query <code>
+ * DecoratorFigure</code> for its decorated figure.  This is only a problem for
+ * <code>Tool</code>s and <code>Command</code>s that have a particular class of
+ * <code>Figure</code> they are able to work on.  This constitutes quite a few
+ * of the <code>Tool</code>s and <code>Command</code>s.  Therefore, this pattern
+ * does not integrate well with its intended role.  dnoyeb 1/15/03
+ * 
+ * @deprecated For example of new implementation strategies see {@link
+ *             CH.ifa.draw.figures.BorderDecorator BorderDecorator}
  * @see Figure
  *
  * @version <$CURRENT_VERSION$>

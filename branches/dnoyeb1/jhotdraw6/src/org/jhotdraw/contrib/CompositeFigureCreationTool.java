@@ -12,7 +12,7 @@ package CH.ifa.draw.contrib;
 
 import CH.ifa.draw.standard.CreationTool;
 import CH.ifa.draw.standard.CompositeFigure;
-import CH.ifa.draw.standard.DecoratorFigure;
+
 import CH.ifa.draw.framework.Figure;
 import CH.ifa.draw.framework.DrawingEditor;
 import CH.ifa.draw.framework.DrawingView;
@@ -69,7 +69,7 @@ public class CompositeFigureCreationTool extends CreationTool {
 
 	public void mouseDown(DrawingViewMouseEvent dvme) {
 		setView( dvme.getDrawingView() );
-		Figure figure = getFigureWithoutDecoration(drawing().findFigure(dvme.getX(), dvme.getY()));
+		Figure figure = drawing().findFigure(dvme.getX(), dvme.getY());
 		if ((figure != null) && (figure instanceof CompositeFigure)) {
 			setContainerFigure((CompositeFigure)figure);
 			setCreatedFigure(createFigure());
@@ -83,26 +83,16 @@ public class CompositeFigureCreationTool extends CreationTool {
 		}
 	}
 
-	protected Figure getFigureWithoutDecoration(Figure peelFigure) {
-		if (peelFigure instanceof DecoratorFigure) {
-			return getFigureWithoutDecoration(((DecoratorFigure)peelFigure).getDecoratedFigure());
-		}
-		else {
-			return peelFigure;
-		}
-	}
 	/**
 	 *	
-	 *	No this does not work because their is no container figure until the mouseDown.
-	 *	This container only lasts until mouseUp when toolDone() is called.  Mousemove
-	 *	is never called between mouse down and mouse up.  mouseDrag is...dnoyeb.
 	 *	Perhaps what you want to do here is alter the cursor when over the proper
 	 *	figure type???
 	 *
 	 */
 	public void mouseMove(DrawingViewMouseEvent dvme) {
 		DrawingView v = dvme.getDrawingView();
-		Figure f = getFigureWithoutDecoration( v.drawing().findFigure(dvme.getX(), dvme.getY()) );
+		Figure f = v.drawing().findFigure(dvme.getX(), dvme.getY());
+		
 		if(f instanceof CompositeFigure) {
 			getActiveView().setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		}
@@ -148,7 +138,7 @@ public class CompositeFigureCreationTool extends CreationTool {
 				if(adv.selectionCount() == 1) {
 					FigureSelection fs = adv.getFigureSelection();
 					FigureEnumerator fe = (FigureEnumerator) fs.getData(StandardFigureSelection.TYPE);
-					Figure f = getFigureWithoutDecoration( fe.nextFigure() );
+					Figure f = fe.nextFigure();
 					if(CompositeFigure.class.isInstance( f )){
 						setUsable( true );
 						return;
