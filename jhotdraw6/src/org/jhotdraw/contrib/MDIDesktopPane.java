@@ -301,7 +301,7 @@ public class MDIDesktopPane extends JDesktopPane implements Desktop {
 
 	public DrawingView[] getAllFromDesktop(int location){
 		Component[] comps = getComponents();
-		java.util.ArrayList al = new java.util.ArrayList();
+		java.util.List al = CH.ifa.draw.util.CollectionsFactory.current().createList(comps.length);
 		for (int x=0; x<comps.length; x++) {
 			DrawingView dv = Helper.getDrawingView(comps[x]);
 			if (dv != null) {

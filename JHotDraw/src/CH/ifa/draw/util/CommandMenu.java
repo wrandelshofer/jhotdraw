@@ -28,11 +28,11 @@ import java.util.*;
  */
 public  class CommandMenu extends JMenu implements ActionListener, CommandListener {
 
-	private HashMap  hm;
+	private Map  hm;
 
 	public CommandMenu(String name) {
 		super(name);
-		hm = new HashMap();
+		hm = CH.ifa.draw.util.CollectionsFactory.current().createMap();
 	}
 
 	/**
