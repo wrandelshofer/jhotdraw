@@ -39,8 +39,8 @@ public class InsertIntoDrawingVisitor implements FigureVisitor {
 
 	public void visitFigure(Figure hostFigure) {
 		if (!myInsertedFigures.contains(hostFigure) && !getDrawing().includes(hostFigure)) {
-			Figure addedFigure = getDrawing().add(hostFigure);
-			myInsertedFigures.add(addedFigure);
+			getDrawing().add(hostFigure);
+			myInsertedFigures.add(hostFigure);
 		}
 	}
 

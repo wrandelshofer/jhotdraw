@@ -36,33 +36,6 @@ public interface FigureChangeListener extends EventListener {
 	public void figureChanged(FigureChangeEvent e);
 
 	/**
-	 * Sent when a figure has been removed from the drawing.  this event is 
-	 * meaningless and nobody should be using it.  This is NOT sent when the
-	 * figure is removed from the drawing.  it is sent when the figures resources
-	 * have been released.  It needs to be renamed.
-	 * No object should care about the figure release message.  No objects but
-	 * containers should care about figureRequestRemove.  any actions taken on
-	 * behalf of figureRequestRemove that are not by the container are subject 
-	 * to create difficulties for the undo/redo architecture since they will not
-	 * be recorded.
-	 * If you do not contain this figure, you have no business responding to this event. 
-	 * Going to break this out into a seperate listener soon.
-	 * 
-	 * @see Figure#release
-	 */
-	public void figureRemoved(FigureChangeEvent e);
-
-	/**
-	 * This is sent by a figure when it is requesting to be removed from the
-	 * container.  The container should remove the figure in response to this event.
-	 * If you do not contain this figure, you have no business responding to this event. 
-	 * Going to break this out into a seperate listener soon.
-	 *
-	 * @see Figure#remove
-	 */
-	public void figureRequestRemove(FigureChangeEvent e);
-
-	/**
 	 * Sent when the figure requests to be redrawn immediately.
 	 * This is of primary use to figures that change themselves without outside
 	 * intervention.  An example of that would be an animated figure where the

@@ -1171,25 +1171,6 @@ public class HTMLTextAreaFigure extends TextAreaFigure
 		changed();
 	}
 
-
-	/**
-	 * handles frame figure's invalidatedremoved events.<br>
-	 * Never happens because the frame figure is not part of the drawing
-	 *
-	 * @param e  Description of the Parameter
-	 */
-	public void figureRemoved(FigureChangeEvent e) { }
-
-
-	/**
-	 * handles frame figure's remove requests events.<br>
-	 * Never happens because the frame figure is not part of the drawing
-	 *
-	 * @param e  Description of the Parameter
-	 */
-	public void figureRequestRemove(FigureChangeEvent e) { }
-
-
 	/**
 	 * handles frame figure's update requests events.<br>
 	 * Never happens because the frame figure is not part of the drawing

@@ -319,22 +319,6 @@ public class GraphicalCompositeFigure extends CompositeFigure implements Layouta
 	}
 
 	/**
-	 *
-	 */
-//	protected void figureRequestRemove(FigureChangeEvent e) {
-//		throw new JHotDrawRuntimeException("This method is no longer used.");
-//		if (listener() != null) {
-//			if (includes(e.getFigure())) {
-//				Rectangle r = invalidateRectangle(displayBox());
-//				listener().figureRequestRemove(new FigureChangeEvent(this, r, e));
-//			}
-//			else {
-//				super.figureRequestRemove(e);
-//			}
-//		}
-//	}
-
-	/**
 	 * Reads the contained figures from StorableInput. The
 	 * figure responsible for graphical presentation is read
 	 * together with all child components. The Layouter

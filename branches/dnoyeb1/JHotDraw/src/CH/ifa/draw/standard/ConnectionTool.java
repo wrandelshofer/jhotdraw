@@ -106,7 +106,8 @@ public  class ConnectionTool extends AbstractTool {
 				setConnection(createConnection());
 				getConnection().startPoint(getAnchorX(), getAnchorY());
 				getConnection().endPoint(getAnchorX(), getAnchorY());
-				setAddedFigure(view().add(getConnection()));
+				view().add(getConnection());
+				setAddedFigure(getConnection());
 			}
 		}
 		else {

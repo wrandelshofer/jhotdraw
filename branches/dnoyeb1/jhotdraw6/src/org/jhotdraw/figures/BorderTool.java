@@ -113,7 +113,8 @@ public  class BorderTool extends ActionTool {
 				Figure innerf = ((DecoratorFigure)f).peelDecoration();
 				
 				List l = CollectionsFactory.current().createList(1);
-				l.add( getDrawingView().drawing().add( innerf ) );
+				getDrawingView().drawing().add( innerf );
+				l.add( innerf );
 				setAffectedFigures(new FigureEnumerator( l ));
 				return true;
 			}
@@ -154,9 +155,9 @@ public  class BorderTool extends ActionTool {
 				getDrawingView().clearSelection();
 
 				BorderDecorator bd = new BorderDecorator(f);
-				Figure newf = getDrawingView().add( bd );
+				getDrawingView().add( bd );
 				List l = CollectionsFactory.current().createList(1);
-				l.add(newf);
+				l.add(bd);
 				setAffectedFigures( new FigureEnumerator(l));
 				return true;
 			}

@@ -31,7 +31,8 @@ import CH.ifa.draw.util.Animatable;
  * If you are having issues, try using <code>StandardDrawing</code> instead.
  *
  * @version <$CURRENT_VERSION$>
- * 
+ *  @deprecated Completely does not work in dnoyeb1  no way to hide the decorations
+ *              which is required.  I have quite trying to fix it for now.
  */
 public class BouncingDrawing extends StandardDrawing implements Animatable {
 	/*
@@ -40,21 +41,21 @@ public class BouncingDrawing extends StandardDrawing implements Animatable {
 	private static final long serialVersionUID = -8566272817418441758L;
 	private int bouncingDrawingSerializedDataVersion = 1;
 
-	public synchronized Figure add(Figure figure) {
+	public synchronized void add(Figure figure) {
 		if (!(figure instanceof AnimationDecorator) &&
 			!(figure instanceof ConnectionFigure)) {
 			figure = new AnimationDecorator(figure);
 		}
-		return super.add(figure);
+		super.add(figure);
 	}
 
-	public synchronized Figure remove(Figure figure) {
-		Figure f = super.remove(figure);
-		if (f instanceof AnimationDecorator) {
-			return ((AnimationDecorator) f).peelDecoration();
-		}
-		return f;
-	}
+//	public synchronized void remove(Figure figure) {
+//		Figure f = super.remove(figure);
+//		if (f instanceof AnimationDecorator) {
+//			return ((AnimationDecorator) f).peelDecoration();
+//		}
+//		return f;
+//	}
 
 	/**
 	 * @param figure figure to be replaced

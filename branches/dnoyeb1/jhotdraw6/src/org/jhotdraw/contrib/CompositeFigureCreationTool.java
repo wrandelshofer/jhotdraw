@@ -66,7 +66,8 @@ public class CompositeFigureCreationTool extends CreationTool {
 		if ((figure != null) && (figure instanceof CompositeFigure)) {
 			setContainerFigure((CompositeFigure)figure);
 			setCreatedFigure(createFigure());
-			setAddedFigure(getContainerFigure().add(getCreatedFigure()));
+			getContainerFigure().add(getCreatedFigure());
+			setAddedFigure(getCreatedFigure());
 			setAnchorPoint(new Point(dvme.getX(), dvme.getY()));
 			getAddedFigure().displayBox(getAnchorPoint(), getAnchorPoint());
 		}

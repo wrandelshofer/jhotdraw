@@ -229,11 +229,6 @@ public class PertFigure extends CompositeFigure {
 		update(e);
 	}
 
-
-	public void figureRemoved(FigureChangeEvent e) {
-		update(e);
-	}
-
 	public void notifyPostTasks() {
 		Iterator iter = fPostTasks.iterator();
 		while (iter.hasNext()) {

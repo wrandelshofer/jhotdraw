@@ -240,9 +240,6 @@ public abstract class AbstractFigure implements Figure {
 	}
 
 	/**
-	 * A callback from the container in response to the event fired by {@link
-	 * #remove remove}.  This method does the actual removal from the container.
-	 * Do not fire <code>figureRequestRemove</code> from this method.
 	 *
 	 * @see Figure#removeFromContainer
 	 */
@@ -284,34 +281,17 @@ public abstract class AbstractFigure implements Figure {
 	}
 
 	/**
-	 * releases figure from all containers pending release.
+	 * This method is called by the container when it is releasing the figure
+	 * it just fires an event on the figures listeners. to instruct everyone that i
+	 * the figure has been removed from the certain container.
+	 * THIS IS ONLY CALLED BY THE CONTAINER, see CompositeFigure.remove(Figure f)
+	 *
+	 * so far this event seems needless.
 	 * @see Figure#release
 	 */
 	public void release() {
-		if( getContainer() != null ) {
-			//This will become ASSERT in JDK 1.4
-			//This represents an avoidable error on the programmers part.			
-			throw new JHotDrawRuntimeException("Figure can note be released, it has not been removed yet.");
-		}
 	}
 	
-	/**
-	 * Called to remove a figure from its container.
-	 * @see Figure#remove
-	 */
-	public FigureChangeListener remove(){
-		if( getContainer() == null ) {
-			//This will become ASSERT in JDK 1.4
-			//This represents an avoidable error on the programmers part.			
-			throw new JHotDrawRuntimeException("Figure can not be removed, it is not contained.");
-		}			
-		FigureChangeListener fcl =  getContainer();
-		if(listener() != null) {
-			listener().figureRequestRemove( new FigureChangeEvent(this));
-		}
-		return fcl;
-	}
-
 	/**
 	 * Invalidates the figure. This method informs the listeners
 	 * that the figure's current display box is invalid and should be
@@ -575,9 +555,12 @@ public abstract class AbstractFigure implements Figure {
 	}
 
 	public void visit(FigureVisitor visitor) {
-		//FigHolder = new AbstractFigure(this);
-		
-		
+		//if we are already deleted, do not allow visit.
+		if(visitor instanceof DeleteFromDrawingVisitor){
+			if(getContainer() == null){
+				return;
+			}
+		}
 		
 		// remember original listener as listeners might be changed by a visitor
 		// (e.g. by calling addToContainer() or removeFromContainer())
@@ -585,7 +568,12 @@ public abstract class AbstractFigure implements Figure {
 		FigureEnumeration fe = getDependendFigures();
 
 		visitor.visitFigure(this);
+		//do not visit dependencies on insert
+		if(visitor instanceof InsertIntoDrawingVisitor){
+			return;
+		}
 
+		
 		FigureEnumeration visitFigures = figures();
 		while (visitFigures.hasNextFigure()) {
 			visitFigures.nextFigure().visit(visitor);
