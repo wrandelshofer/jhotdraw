@@ -114,8 +114,12 @@ public class MDI_DrawApplication extends DrawApplication {
 	/**
 	 * Returns all the views in the application
 	 */
-	public DrawingView[] views() {
-		return getDesktop().getAllFromDesktop(Desktop.PRIMARY);
+	public DrawingView [] views() {
+		DrawingView [] dvs = getDesktop().getAllFromDesktop(Desktop.PRIMARY);
+		if(dvs.length == 0){
+			dvs = new DrawingView[] { NullDrawingView.getManagedDrawingView(this) };
+		}
+		return dvs;
 	}
 
 	public String getDefaultDrawingTitle() {

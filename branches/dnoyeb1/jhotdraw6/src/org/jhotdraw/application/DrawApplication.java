@@ -189,6 +189,30 @@ public	class DrawApplication
 		addListeners();
 		setStorageFormatManager(createStorageFormatManager());
 		setVisible(true);
+		
+		Runnable r = new Runnable() {
+			public void run() {
+				toolDone();
+				checkCommandMenu();
+			}
+		};
+
+		if(java.awt.EventQueue.isDispatchThread() == false) {
+			try {
+				java.awt.EventQueue.invokeAndWait( r );
+			}
+			catch(java.lang.InterruptedException ie){
+				System.err.println(ie.getMessage());
+				exit();
+			}
+			catch(java.lang.reflect.InvocationTargetException ite){
+				System.err.println(ite.getMessage());
+				exit();
+			}
+		}
+		else {
+			r.run();
+		}
 	}
 
 	/**
@@ -349,7 +373,7 @@ public	class DrawApplication
 	 * method to add additional menu items.
 	 */
 	protected JMenu createAttributesMenu() {
-		JMenu menu = new JMenu("Attributes");
+		CommandMenu menu = new CommandMenu("Attributes");
 		menu.add(createColorMenu("Fill Color", FigureAttributeConstant.FILL_COLOR));
 		menu.add(createColorMenu("Pen Color", FigureAttributeConstant.FRAME_COLOR));
 		menu.add(createArrowMenu());
@@ -691,7 +715,11 @@ public	class DrawApplication
 	 * @see DrawingEditor
 	 */
 	public DrawingView view() {
-		return getDesktop().getActiveDrawingView();
+		DrawingView dv = getDesktop().getActiveDrawingView();
+		if(dv == null) {
+			dv = NullDrawingView.getManagedDrawingView(this);
+		}
+		return dv;
 	}
 
 /*	protected void setView(DrawingView newView) {
@@ -701,7 +729,7 @@ public	class DrawApplication
 	}*/
 
 	public DrawingView[] views() {
-		return new DrawingView[] { getDesktop().getActiveDrawingView() };
+		return new DrawingView[] { view() };
 	}
 
 	/**
@@ -727,17 +755,8 @@ public	class DrawApplication
 
 		for (int x = 0; x < mb.getMenuCount(); x++) {
 			JMenu jm = mb.getMenu(x);
-			if (CommandMenu.class.isInstance(jm)) {
-				checkCommandMenu((CommandMenu)jm);
-			}
-		}
-	}
-	protected void checkCommandMenu(CommandMenu cm) {
-		cm.checkEnabled();
-		for (int y = 0; y < cm.getItemCount();y++) {
-			JMenuItem jmi = cm.getItem(y);
-			if (CommandMenu.class.isInstance(jmi)) {
-				checkCommandMenu((CommandMenu)jmi);
+			if (jm instanceof CommandMenu) {
+				((CommandMenu)jm).checkEnabled();
 			}
 		}
 	}
@@ -1108,6 +1127,9 @@ public	class DrawApplication
 					oldView.removeFigureSelectionListener( DrawApplication.this );
 				if(dv != null)
 					dv.addFigureSelectionListener( DrawApplication.this );
+				figureSelectionChanged(dv);//new view, new figure selection is active(this will cause extra events sometimes )
+				//because when tools deactivate due to viewchange they will clear selection and fire event too
+				//not hurting now, but need work.
 			}
 	    };
 	}
