@@ -826,6 +826,9 @@ public abstract class CompositeFigure extends AbstractFigure {
 			if(f instanceof NullFigure){
 				System.err.println("Warning, reading NullFigure." + f);
 			}
+			else if(f instanceof ConnectionFigure){
+				((ConnectionFigure)f).updateConnection();
+			}
 			add(f);
 		}
 		init(displayBox()); //this is a bad call.  calling unitialized subclasses possible here.
