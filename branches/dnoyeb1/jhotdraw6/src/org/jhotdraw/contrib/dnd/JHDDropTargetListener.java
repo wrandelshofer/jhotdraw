@@ -202,7 +202,7 @@ public class JHDDropTargetListener implements DropTargetListener {
 	 * if not a dnd interface comp, then dont support! because we dont even
 	 * really know what kind of view it is.
 	 */
-	protected static boolean supportDropTargetDragEvent(DropTargetDragEvent dtde) {
+	protected boolean supportDropTargetDragEvent(DropTargetDragEvent dtde) {
 		if (dtde.isDataFlavorSupported(DNDFiguresTransferable.DNDFiguresFlavor) == true) {
 			if (dtde.getDropAction() == DnDConstants.ACTION_COPY) {
 				dtde.acceptDrag(DnDConstants.ACTION_COPY);

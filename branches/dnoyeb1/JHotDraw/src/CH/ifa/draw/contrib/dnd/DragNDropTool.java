@@ -315,7 +315,7 @@ public class DragNDropTool extends AbstractTool {
 			
 			public void dragGestureRecognized(final DragGestureEvent dge) {
 				Component c = dge.getComponent();
-				System.out.println("recognized for " + c);				
+				//System.out.println("Drag Gesture Recognized for " + c);				
 				if(isDragOn() == false)
 					return;
 
