@@ -179,6 +179,8 @@ public abstract class AttributeFigure extends AbstractFigure {
 	 * @deprecated use getAttribute(FigureAttributeConstant) instead
 	 */
 	public Object getAttribute(String name) {
+		System.err.println("WARNING: getAttribute(String name) has been deprecated.");
+		//Thread.dumpStack();
 		return getAttribute(FigureAttributeConstant.getConstant(name));
 	}
 
@@ -196,10 +198,15 @@ public abstract class AttributeFigure extends AbstractFigure {
 	 * @deprecated use setAttribute(FigureAttributeConstant, Object) instead
 	 */
 	public void setAttribute(String name, Object value) {
+		System.err.println("WARNING: setAttribute(String name, Object value) has been deprecated.");
+		//Thread.dumpStack();
 		setAttribute(FigureAttributeConstant.getConstant(name), value);
 	}
 
 	public void setAttribute(FigureAttributeConstant attributeConstant, Object value) {
+		if(attributeConstant.getName() == null){
+			int x=0;
+		}
 		if (fAttributes == null) {
 			fAttributes = new FigureAttributes();
 		}
