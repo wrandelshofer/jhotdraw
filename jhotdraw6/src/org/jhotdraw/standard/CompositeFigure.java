@@ -87,7 +87,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 		_nHighestZ = 0;
 	}
 
-	protected List getFigures(){
+	protected final List getFigures(){
 		return fFigures;
 	}
 
@@ -200,7 +200,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see #remove
 	 */
 	public void removeAll() {
-		removeAll(  figures() );
+		removeAll(  new FigureEnumerator(getFigures()) );
 	}
 
 	/**
@@ -402,7 +402,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see Figure#draw
 	 */
 	public void draw(Graphics g) {
-		draw(g, figures());
+		draw(g, new FigureEnumerator(getFigures()));
 	}
 
 	/**
@@ -495,6 +495,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Gets number of contained {@link Figure Figure}s.
+	 * should use figures()
 	 */
 	public int figureCount() {
 		return getFigures().size();
@@ -502,6 +503,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Check whether a given <b>figure</b> is contained within this <b>CompositeFigure.</b>
+	 * Should use figures()
 	 */
 	public boolean containsFigure(Figure checkFigure) {
 		return getFigures().contains(checkFigure);
@@ -510,6 +512,7 @@ public abstract class CompositeFigure extends AbstractFigure {
     /**
 	 * Returns an enumeration for accessing the contained {@link Figure Figure}s
 	 * in the reverse {@link Drawing Drawing} order.
+	 * Should use figures()
 	 */
 	public final FigureEnumeration figuresReverse() {
 		return new ReverseFigureEnumerator(CollectionsFactory.current().createList(getFigures()));
@@ -634,6 +637,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * Checks if the composite figure has the argument as one of its contained
 	 * figures.
 	 * @return true if the figure is part of this CompositeFigure, else otherwise
+	 * should
 	 */
 	public boolean includes(Figure figure) {
 		if (super.includes(figure)) {
@@ -657,7 +661,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see #moveBy
 	 */
 	protected void basicMoveBy(int x, int y) {
-		FigureEnumeration fe = figures();
+		FigureEnumeration fe = new FigureEnumerator(getFigures());
 		while (fe.hasNextFigure()) {
 			fe.nextFigure().moveBy(x,y);
 		}
@@ -727,7 +731,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 		super.write(dw);
 		//store figures
 		dw.writeInt(figureCount());
-		FigureEnumeration fe = figures();
+		FigureEnumeration fe = new FigureEnumerator(getFigures());
 		while (fe.hasNextFigure()) {
 			dw.writeStorable(fe.nextFigure());
 		}
@@ -772,7 +776,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 		//the listener is transient and not deserialized
 		figureChangeListener = new innerFigureChangeListener();
 		//so we need to establish listening to our new figures
-		FigureEnumeration fe = figures();
+		FigureEnumeration fe = new FigureEnumerator(getFigures());
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
 			figure.addToContainer(figureChangeListener);
@@ -795,7 +799,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 	public void init(Rectangle viewRectangle) {
 		_theQuadTree = new QuadTree(new Bounds(viewRectangle).asRectangle2D());
 
-		FigureEnumeration fe = figures();
+		FigureEnumeration fe = new FigureEnumerator(getFigures());
 		while (fe.hasNextFigure()) {
 			_addToQuadTree(fe.nextFigure());
 		}

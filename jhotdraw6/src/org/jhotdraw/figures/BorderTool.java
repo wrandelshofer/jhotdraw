@@ -23,8 +23,7 @@ import java.util.List;
  * BorderTool decorates the clicked figure with a BorderDecorator.
  *
  * @see BorderDecorator
- * @deprecated see {@link CH.ifa.draw.contrib.DecoratorTool DecoratorTool}.
- *
+ * @see CH.ifa.draw.contrib.DecoratorTool
  * @version <$CURRENT_VERSION$>
  */
 public  class BorderTool extends ActionTool {
