@@ -340,13 +340,6 @@ public abstract class DecoratorFigure
 	 */
 	public void write(StorableOutput dw) {
 		dw.writeInt( getZValue() );
-		//store dependentFigures
-		int size = myDependentFigures.size();
-		FigureEnumeration fe = getDependendFigures();
-		dw.writeInt( size );
-		while (fe.hasNextFigure()) {
-			dw.writeStorable(fe.nextFigure());
-		}
 		//store figuremanipulators
 		dw.writeInt( fFigureManipulators.size() );
 		for(Iterator it= fFigureManipulators.iterator();it.hasNext();) {
@@ -365,13 +358,6 @@ public abstract class DecoratorFigure
 	 */
 	public void read(StorableInput dr) throws IOException {
 		_nZ = dr.readInt();
-		//load dependentFigures
-		int size = dr.readInt();
-		myDependentFigures = CollectionsFactory.current().createList(size);
-		for (int i=0; i<size; i++) {
-			myDependentFigures.add( (Figure)dr.readStorable()) ;
-		}
-
 		//load figureManipulators
 		int manipSize = dr.readInt();
 		fFigureManipulators = CollectionsFactory.current().createList(manipSize);
