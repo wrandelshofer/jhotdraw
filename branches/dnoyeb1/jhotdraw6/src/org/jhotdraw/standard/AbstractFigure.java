@@ -488,16 +488,18 @@ public abstract class AbstractFigure implements Figure {
 	 */
 	public void write(StorableOutput dw) {
 		//store dependentFigures
-		FigureEnumeration fe;
-		dw.writeInt( myDependentFigures.size() );
-		fe = getDependendFigures();
+		int size = myDependentFigures.size();
+		FigureEnumeration fe = getDependendFigures();
+		dw.writeInt( size );
 		while (fe.hasNextFigure()) {
 			dw.writeStorable(fe.nextFigure());
 		}
+		//store figuremanipulators
 		dw.writeInt( fFigureManipulators.size() );
 		for(Iterator it= fFigureManipulators.iterator();it.hasNext();) {
 			dw.writeStorable( (FigureManipulator)it.next() );
 		}
+		//store figuredecorators
 		dw.writeInt( fFigureDecorators.size() );
 		for(Iterator it= fFigureDecorators.iterator();it.hasNext();) {
 			dw.writeStorable( (Figure)it.next() );
@@ -518,13 +520,13 @@ public abstract class AbstractFigure implements Figure {
 		//load figureManipulators
 		int manipSize = dr.readInt();
 		fFigureManipulators = CollectionsFactory.current().createList(manipSize);
-		for (int i=0; i<size; i++) {
+		for (int i=0; i<manipSize; i++) {
 			fFigureManipulators.add( (FigureManipulator)dr.readStorable()) ;
 		}
 		//load figureDecorators
 		int decSize = dr.readInt();
 		fFigureDecorators = CollectionsFactory.current().createList(decSize);
-		for (int i=0; i<size; i++) {
+		for (int i=0; i<decSize; i++) {
 			fFigureDecorators.add( (Figure)dr.readStorable()) ;
 		}
 	}
