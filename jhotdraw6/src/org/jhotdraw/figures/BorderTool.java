@@ -18,7 +18,7 @@ import CH.ifa.draw.util.*;
 
 import java.awt.event.InputEvent;
 import java.util.List;
-
+import CH.ifa.draw.samples.javadraw.AnimationDecorator;
 /**
  * BorderTool decorates the clicked figure with a BorderDecorator.
  *
@@ -68,9 +68,8 @@ public  class BorderTool extends ActionTool {
 		setUndoActivity(createUndoActivity());
 		List l = CollectionsFactory.current().createList();
 		l.add(figure);
-		l.add(new BorderDecorator(figure));
 		getUndoActivity().setAffectedFigures(new FigureEnumerator(l));
-		((BorderTool.UndoActivity)getUndoActivity()).replaceAffectedFigures();
+		((BorderTool.UndoActivity)getUndoActivity()).borderizeFigures();
 	}
 
 	/**
@@ -80,9 +79,9 @@ public  class BorderTool extends ActionTool {
 		setUndoActivity(createUndoActivity());
 		List l = CollectionsFactory.current().createList();
 		l.add(figure);
-		l.add(((DecoratorFigure)figure).peelDecoration());
+		//l.add(((DecoratorFigure)figure).peelDecoration());
 		getUndoActivity().setAffectedFigures(new FigureEnumerator(l));
-		((BorderTool.UndoActivity)getUndoActivity()).replaceAffectedFigures();
+		((BorderTool.UndoActivity)getUndoActivity()).borderizeFigures();
 	}
 
 	/**
@@ -103,37 +102,65 @@ public  class BorderTool extends ActionTool {
 			if (!super.undo()) {
 				return false;
 			}
-			getDrawingView().clearSelection();
-			return replaceAffectedFigures();
+			if(getAffectedFigures().hasNextFigure()){
+				getDrawingView().clearSelection();
+				Figure f = getAffectedFigures().nextFigure();
+				getDrawingView().drawing().orphan(f);
+				
+				if(f instanceof AnimationDecorator){
+					f = ((AnimationDecorator)f).peelDecoration();
+				}
+				Figure innerf = ((DecoratorFigure)f).peelDecoration();
+				
+				List l = CollectionsFactory.current().createList(1);
+				l.add( getDrawingView().drawing().add( innerf ) );
+				setAffectedFigures(new FigureEnumerator( l ));
+				return true;
+			}
+			return false;
 		}
 
 		public boolean redo() {
 			if (!isRedoable()) {
 				return false;
 			}
-			getDrawingView().clearSelection();
-			return replaceAffectedFigures();
+			return borderizeFigures();
 		}
 		
-		public boolean replaceAffectedFigures() {
-			FigureEnumeration fe = getAffectedFigures();
-			if (!fe.hasNextFigure()) {
-				return false;
-			}
-			Figure oldFigure = fe.nextFigure();
+//		public boolean replaceAffectedFigures() {
+//			FigureEnumeration fe = getAffectedFigures();
+//			if (!fe.hasNextFigure()) {
+//				return false;
+//			}
+//			Figure oldFigure = fe.nextFigure();
+//
+//			if (!fe.hasNextFigure()) {
+//				return false;
+//			}
+//			Figure replaceFigure = fe.nextFigure();
+//			
+//			replaceFigure = getDrawingView().drawing().replace(oldFigure, replaceFigure);
+//			List l = CollectionsFactory.current().createList();
+//			l.add(replaceFigure);
+//			l.add(oldFigure);
+//			setAffectedFigures(new FigureEnumerator(l));
+//			
+//			return true;
+//		}
+		public boolean borderizeFigures() {
+			if(getAffectedFigures().hasNextFigure()){
+				Figure f = getAffectedFigures().nextFigure();
+				getDrawingView().drawing().orphan(f);
+				getDrawingView().clearSelection();
 
-			if (!fe.hasNextFigure()) {
-				return false;
+				BorderDecorator bd = new BorderDecorator(f);
+				Figure newf = getDrawingView().add( bd );
+				List l = CollectionsFactory.current().createList(1);
+				l.add(newf);
+				setAffectedFigures( new FigureEnumerator(l));
+				return true;
 			}
-			Figure replaceFigure = fe.nextFigure();
-			
-			replaceFigure = getDrawingView().drawing().replace(oldFigure, replaceFigure);
-			List l = CollectionsFactory.current().createList();
-			l.add(replaceFigure);
-			l.add(oldFigure);
-			setAffectedFigures(new FigureEnumerator(l));
-			
-			return true;
+			return false;
 		}
 	}
 }

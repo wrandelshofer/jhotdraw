@@ -19,7 +19,6 @@ import CH.ifa.draw.standard.*;
 /**
  * BorderDecorator decorates an arbitrary Figure with
  * a border.
- * @deprecated
  *
  * @version <$CURRENT_VERSION$>
  */
