@@ -143,7 +143,7 @@ public	class DrawApplication
 	/**
 	 * Opens a new window with a drawing view.
 	 */
-	public synchronized void open() {
+	public void open() {
 		getVersionControlStrategy().assertCompatibleVersion();
 		setUndoManager(new UndoManager());
 		setIconkit(createIconkit());
