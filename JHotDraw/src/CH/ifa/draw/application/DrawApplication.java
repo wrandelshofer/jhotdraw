@@ -93,8 +93,8 @@ public	class DrawApplication
 	 */
 	public DrawApplication(String title) {
 		super(title);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);	
 		setApplicationName(title);
-		winCount++;
 	}
 
 	/**
@@ -112,7 +112,7 @@ public	class DrawApplication
 	 * view of the drawing of the currently activated window.
 	 */
 	public void newView() {
-        DrawingView dv = getDesktop().getActiveDrawingView();
+        DrawingView dv = view();
 		if (dv == null || !dv.isInteractive()) {//this should be ASSERT and otherwise handled by context sensitive menus.
 			return;
 		}
@@ -203,11 +203,11 @@ public	class DrawApplication
 			}
 			catch(java.lang.InterruptedException ie){
 				System.err.println(ie.getMessage());
-				exit();
+				endApp();//would prefer a method that allowed cleanup
 			}
 			catch(java.lang.reflect.InvocationTargetException ite){
 				System.err.println(ite.getMessage());
-				exit();
+				endApp();//would prefer a method that allowed cleanup
 			}
 		}
 		else {
@@ -223,6 +223,14 @@ public	class DrawApplication
 			new WindowAdapter() {
 				public void windowClosing(WindowEvent event) {
 					exit();
+				}
+				public void windowOpened(WindowEvent event) {
+					winCount++;
+				}
+				public void windowClosed(WindowEvent event) {
+					if (--winCount == 0) {
+						System.exit(0);
+					}					
 				}
 			}
 		);
@@ -354,14 +362,14 @@ public	class DrawApplication
 
 		Command cmd = new AbstractCommand("Simple Update", this) {
 			public void execute() {
-				getDesktop().getActiveDrawingView().setDisplayUpdate(new SimpleUpdateStrategy());
+				this.view().setDisplayUpdate(new SimpleUpdateStrategy());
 			}
 		};
 		menu.add(cmd);
 
 		cmd = new AbstractCommand("Buffered Update", this) {
 			public void execute() {
-				getDesktop().getActiveDrawingView().setDisplayUpdate(new BufferedUpdateStrategy());
+				this.view().setDisplayUpdate(new BufferedUpdateStrategy());
 			}
 		};
 		menu.add(cmd);
@@ -874,18 +882,25 @@ public	class DrawApplication
 	}
 
 	/**
-	 * Exits the application. You should never override this method
+	 * Exits the application. You should never override this method unless you
+	 * wish to verify the users intentions to exit the application.
 	 */
 	public void exit() {
-		destroy();
-		setVisible(false);      // hide the JFrame
-		dispose();   // tell windowing system to free resources
-		winCount--;
-		if (winCount == 0) {
-			System.exit(0);
-		}
+//		int reply = JOptionPane.showConfirmDialog(this,
+//													  "Do you really want to exit?",
+//													  "JHotDraw - Exit" ,
+//													  JOptionPane.YES_NO_OPTION,
+//													  JOptionPane.QUESTION_MESSAGE);
+		// If the confirmation was affirmative, handle exiting.
+//		if (reply == JOptionPane.YES_OPTION) {
+			endApp();
+//		}
 	}
-
+	protected final void endApp(){
+		destroy();
+	   // tell windowing system to free resources
+		dispose();
+	}
 	/**
 	 * Handles additional clean up operations. Override to destroy
 	 * or release drawing editor resources.
@@ -922,7 +937,7 @@ public	class DrawApplication
 	 * Shows a file dialog and saves drawing.
 	 */
 	public void promptSaveAs() {
-		if (getDesktop().getActiveDrawingView() != null) {
+		if (view() != null) {
 			toolDone();
 			JFileChooser saveDialog = createSaveFileChooser();
 			getStorageFormatManager().registerFileFilters(saveDialog);
@@ -972,7 +987,7 @@ public	class DrawApplication
 			Graphics pg = printJob.getGraphics();
 
 			if (pg != null) {
-				((StandardDrawingView)getDesktop().getActiveDrawingView()).printAll(pg);
+				((StandardDrawingView)view()).printAll(pg);
 				pg.dispose(); // flush page
 			}
 			printJob.end();
@@ -985,7 +1000,7 @@ public	class DrawApplication
 	 */
 	protected void saveDrawing(StorageFormat storeFormat, String file) {
 		// Need a better alert than this.
-        DrawingView dv = getDesktop().getActiveDrawingView();
+        DrawingView dv = view();
 		if (dv != null && dv.isInteractive() ) {
             try {
                 String name = storeFormat.store(file, dv.drawing());
@@ -1034,7 +1049,7 @@ public	class DrawApplication
 	 * Set the title of the currently selected drawing
 	 */
 	protected void updateApplicationTitle() {
-        DrawingView dv = getDesktop().getActiveDrawingView();
+        DrawingView dv = view();
         if(dv != null && dv.isInteractive()){
             String drawingTitle = dv.drawing().getTitle();
             if (!getDefaultDrawingTitle().equals(drawingTitle)) {
