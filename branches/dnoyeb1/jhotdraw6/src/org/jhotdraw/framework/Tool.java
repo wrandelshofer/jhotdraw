@@ -107,9 +107,15 @@ public interface Tool {
 	public void setEnabled(boolean enableUsableCheck);
 
 	/**
-	 * A usable tool is a enabled and either active or inactive.
-	 * Typically, the tool should be able to determine itself whether it is
-	 * usable or not.
+	 * A usable tool is enabled and either active or inactive. Typically, the 
+	 * <B>Tool</b> should be able to determine itself whether it is usable or 
+	 * not.
+	 *
+	 * Refers to the <b>Tool</b>'s general useablity.  For instance, that their 
+	 * is an active {@link DrawingView DrawingView}, and maybe that a required 
+	 * {@link Figure Figure} is selected.  It does not however, check that the
+	 * <b>Tool</b> can be 'executed.'  This level of feedback is left to the
+	 * {@link java.awt.Cursor Cursor}.
 	 *
 	 * @see #isEnabled
 	 * @see #isUsable
