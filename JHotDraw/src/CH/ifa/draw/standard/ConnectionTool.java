@@ -106,8 +106,7 @@ public  class ConnectionTool extends AbstractTool {
 				setConnection(createConnection());
 				getConnection().startPoint(getAnchorX(), getAnchorY());
 				getConnection().endPoint(getAnchorX(), getAnchorY());
-				view().add(getConnection());
-				setAddedFigure(getConnection());
+				setAddedFigure(view().add(getConnection()));
 			}
 		}
 		else {
@@ -406,9 +405,8 @@ public  class ConnectionTool extends AbstractTool {
 
 			FigureEnumeration fe = getAffectedFigures();
 			while (fe.hasNextFigure()) {
-				fe.nextFigure().remove();
 				//This tool must now release these figures when it is ready
-				//getDrawingView().drawing().orphan(fe.nextFigure());
+				getDrawingView().drawing().orphan(fe.nextFigure());
 			}
 
 			getDrawingView().clearSelection();

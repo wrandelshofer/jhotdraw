@@ -215,6 +215,7 @@ public class JavaDrawApp extends MDI_DrawApplication {
 
 	protected Drawing createDrawing() {
 		Drawing dwg = new BouncingDrawing();
+		//Drawing dwg = new StandardDrawing();
         dwg.setTitle( getDefaultDrawingTitle() );
 		return dwg;
 		//return new StandardDrawing();

@@ -56,8 +56,7 @@ public class ScribbleTool extends AbstractTool {
 	private void point(int x, int y) {
 		if (fScribble == null) {
 			fScribble = new PolyLineFigure(x, y);
-			view().add(fScribble);
-			setAddedFigure(fScribble);
+			setAddedFigure(view().add(fScribble));
 		}
 		else if (fLastX != x || fLastY != y) {
 			fScribble.addPoint(x, y);

@@ -61,8 +61,7 @@ public class PolygonTool extends AbstractTool {
 	private void addPoint(int x, int y) {
 		if (fPolygon == null) {
 			fPolygon = new PolygonFigure(x, y);
-			view().add(fPolygon);
-			setAddedFigure(fPolygon);
+			setAddedFigure(view().add(fPolygon));
 			fPolygon.addPoint(x, y);
 		}
 		else if (fLastX != x || fLastY != y) {

@@ -603,8 +603,7 @@ public abstract class AbstractFigure implements Figure {
 */
 
 		while (fe.hasNextFigure()) {
-			//fe.nextFigure().visit(visitor);
-			visitor.visitDependendFigure(fe.nextFigure());
+			fe.nextFigure().visit(visitor);
 		}
 	}
 

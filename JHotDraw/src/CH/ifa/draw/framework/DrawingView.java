@@ -70,18 +70,18 @@ public interface DrawingView extends ImageObserver, DrawingChangeListener {
 	 * Adds a figure to the drawing.
 	 * @return the added figure.
 	 */
-	public void add(Figure figure);
+	public Figure add(Figure figure);
 
 	/**
 	 * Removes a figure from the drawing.
 	 * @return the removed figure
 	 */
-	public void remove(Figure figure);
+	public Figure remove(Figure figure);
 
 	/**
 	 * Adds a collections of figures to the drawing.
 	 */
-	public void addAll(Collection figures);
+	public FigureEnumeration addAll(Collection figures);
 
 	/**
 	 * Gets the size of the drawing.

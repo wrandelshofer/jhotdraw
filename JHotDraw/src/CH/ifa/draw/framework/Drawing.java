@@ -161,7 +161,7 @@ public interface Drawing
 	 * @param figure to be added to the drawing
 	 * @return the figure that was inserted (might be different from the figure specified).
 	 */
-	public void add(Figure figure);
+	public Figure add(Figure figure);
 
 	/**
 	 * Adds a list of figures.
@@ -176,7 +176,7 @@ public interface Drawing
 	 * @param fe (unused) enumeration containing all figures to be added
 	 * @see #add
 	 */
-	public void addAll(FigureEnumeration fe);
+	public FigureEnumeration addAll(FigureEnumeration fe);
 
 	/**
 	 * Removes and releases the figure from the drawing.  It can no longer be
@@ -192,7 +192,7 @@ public interface Drawing
 	 * @param figure that is part of the drawing and should be removed
 	 * @return the figure that has been removed (might be different from the figure specified)
 	 */
-	public void remove(Figure figure);
+	public Figure remove(Figure figure);
 
 	/**
 	 * Removes a figure from the figure list, but
@@ -227,7 +227,7 @@ public interface Drawing
 	 * Removes a FigureEnumeration of figures.
 	 * @see #remove
 	 */
-	public void removeAll(FigureEnumeration fe);
+	public FigureEnumeration removeAll(FigureEnumeration fe);
 
 	/**
 	 * Replaces a figure in the drawing without removing it from the drawing.

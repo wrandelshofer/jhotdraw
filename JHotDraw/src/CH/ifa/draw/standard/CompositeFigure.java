@@ -101,12 +101,13 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @param figure to be added to the drawing
 	 * @return the figure that was inserted (might be different from the figure specified).
 	 */
-	public void add(Figure figure) {
+	public Figure add(Figure figure) {
 		DEBUG_validateContainment(figure,false);
 		figure.setZValue(++_nHighestZ);
 		getFigures().add(figure);
 		figure.addToContainer(figureChangeListener);  //add a figure to this CompositeFigure
 		_addToQuadTree(figure);
+		return figure;
 	}
 
 	/**
@@ -126,10 +127,12 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see #add
 	 * @param fe An enumeration containing all figures to be added.
 	 */
-	public void addAll(FigureEnumeration fe) {
+	public FigureEnumeration addAll(FigureEnumeration fe) {
+		List l = CollectionsFactory.current().createList();
 		while (fe.hasNextFigure()) {
-			add(fe.nextFigure());
+			l.add(add(fe.nextFigure()));
 		}
+		return new FigureEnumerator(l);
 	}
 	
 	/**
@@ -147,12 +150,12 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @see FigureChangeListener#figureRequestRemove
 	 * @see FigureChangeListener#figureRemoved
 	 * @param figure that is part of the drawing and should be removed
-	 * @deprecated use figure.remove();figure.release();
 	 */
-	public void remove(Figure figure) {
+	public Figure remove(Figure figure) {
 		DEBUG_validateContainment(figure,true);		
 		figure.remove();
 		figure.release();
+		return figure;
 	}
 	
 	protected void basicOrphan(Figure figure){
@@ -187,10 +190,12 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 * @deprecated see {@link #remove remove}
 	 * @see #remove
 	 */
-	public void removeAll(FigureEnumeration fe) {
+	public FigureEnumeration removeAll(FigureEnumeration fe) {
+		List l = CollectionsFactory.current().createList();
 		while (fe.hasNextFigure()) {
-			remove( fe.nextFigure());
+			l.add(remove( fe.nextFigure()));
 		}
+		return new FigureEnumerator(l);
 	}
 
 	/**
@@ -215,7 +220,6 @@ public abstract class CompositeFigure extends AbstractFigure {
 	 *
 	 * @see Figure#remove
 	 * @see FigureChangeListener#figureRequestRemove
-	 * @deprecated use figure.remove()
 	 * @param figure that is part of the drawing and should be removed
 	 */
 	public synchronized void orphan(Figure figure) {
@@ -233,7 +237,6 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	 * Orphans a FigureEnumeration of figures.
-	 * @deprecated use figure.remove();
 	 * @see #orphan
 	 * @see Figure#remove
 	 */	
@@ -398,7 +401,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 	}
 
 	/**
-	 * Draws all the contained figures
+	 * Draws all the contained figures.
+	 * @todo Make this respect Z values in some way.
 	 * @see Figure#draw
 	 */
 	public void draw(Graphics g) {
@@ -407,12 +411,8 @@ public abstract class CompositeFigure extends AbstractFigure {
 
 	/**
 	* Draws only the given figures
-	* @todo mrfloppy to ensure that only figures contained within this
-	*        <b>CompositeFigure</b> get drawn.  dnoyeb's opinion is that this 
-	*         method is unnecessary and if used is a symptom of some other issue.
-	* Likely {@link #draw(Graphics) draw} is enough and we don't need this.
-	*
 	* if we are asked to draw figures that we do not contain, Exception?
+	* maybe this should be protected?
 	*
 	* @see Figure#draw
 	*/

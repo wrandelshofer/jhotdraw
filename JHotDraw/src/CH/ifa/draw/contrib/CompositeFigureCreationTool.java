@@ -66,8 +66,7 @@ public class CompositeFigureCreationTool extends CreationTool {
 		if ((figure != null) && (figure instanceof CompositeFigure)) {
 			setContainerFigure((CompositeFigure)figure);
 			setCreatedFigure(createFigure());
-			getContainerFigure().add(getCreatedFigure());
-			setAddedFigure(getCreatedFigure());
+			setAddedFigure(getContainerFigure().add(getCreatedFigure()));
 			setAnchorPoint(new Point(dvme.getX(), dvme.getY()));
 			getAddedFigure().displayBox(getAnchorPoint(), getAnchorPoint());
 		}
@@ -76,6 +75,14 @@ public class CompositeFigureCreationTool extends CreationTool {
 		}
 	}
 
+	private Figure getFigureWithoutDecoration(Figure peelFigure) {
+		if (peelFigure instanceof DecoratorFigure) {
+			return getFigureWithoutDecoration(((DecoratorFigure)peelFigure).getDecoratedFigure());
+		}
+		else {
+			return peelFigure;
+		}
+	}
 	/**
 	 *	
 	 *	Perhaps what you want to do here is alter the cursor when over the proper
