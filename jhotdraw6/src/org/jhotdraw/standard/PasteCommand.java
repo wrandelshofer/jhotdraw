@@ -89,7 +89,7 @@ public class PasteCommand extends FigureTransferCommand {
 			if (!super.undo()) {
 				return false;
 			}
-
+			//why does undo visit the drawing when we already know the figures we need? ???dnoyeb???
 			DeleteFromDrawingVisitor deleteVisitor = new DeleteFromDrawingVisitor(getDrawingView().drawing());
 			FigureEnumeration fe = getAffectedFigures();
 			while (fe.hasNextFigure()) {

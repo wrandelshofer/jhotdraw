@@ -432,7 +432,7 @@ public class StandardDrawingView
 	 * it is also contained in the Drawing associated with this DrawingView.
 	 */
 	public void addToSelection(Figure figure) {
-		if (!isFigureSelected(figure) && drawing().includes(figure)) {
+		if (!isFigureSelected(figure) && drawing().containsFigure(figure)) {
 			fSelection.add(figure);
 			fSelectionHandles = null;
 			figure.invalidate();
