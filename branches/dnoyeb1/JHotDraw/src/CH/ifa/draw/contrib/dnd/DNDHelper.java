@@ -133,7 +133,19 @@ public abstract class DNDHelper {
 			return null;
 		}
 	}
+	/**
+	 * This must reflect the capabilities of the dragSsource, not your desired
+	 * actions.  If you desire limited drag actions, then I suppose you need to
+	 * make a new drag gesture recognizer?  I do know that if you put for instance
+	 * ACTION_COPY but your device supports ACTION_COPY_OR_MOVE, then the receiving
+	 * target may show the rejected icon, but will still be forced improperly to
+	 * accept your MOVE since the system is not properly calling your MOVE a MOVE
+	 * because you claimed incorrectly that you were incapable of MOVE.
+	 */
 	protected int getDragSourceActions() {
+		return DnDConstants.ACTION_COPY_OR_MOVE;
+	}
+	protected int getDropTargetActions(){
 		return DnDConstants.ACTION_COPY_OR_MOVE;
 	}
 	protected void setDragGestureListener(DragGestureListener dragGestureListener){
@@ -159,7 +171,7 @@ public abstract class DNDHelper {
 		DropTarget dt = null;
 		if (view() instanceof Component) {
 			try {
-				dt = new DropTarget((Component)view(), DnDConstants.ACTION_COPY_OR_MOVE, getDropTargetListener());
+				dt = new DropTarget((Component)view(), getDropTargetActions(), getDropTargetListener());
 				//System.out.println(view().toString() + " Initialized to DND.");
 			}
 			catch (java.lang.NullPointerException npe) {

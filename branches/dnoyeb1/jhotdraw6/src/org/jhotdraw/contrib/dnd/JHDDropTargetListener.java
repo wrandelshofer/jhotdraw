@@ -5,22 +5,21 @@
  */
 
 package CH.ifa.draw.contrib.dnd;
-import java.awt.dnd.*;
-import java.awt.*;
-import java.util.*;
-import CH.ifa.draw.framework.*;
-import java.awt.datatransfer.*;
-import java.io.*;
-import javax.swing.JComponent;
-import CH.ifa.draw.standard.DeleteFromDrawingVisitor;
 
-import CH.ifa.draw.util.*;
+import CH.ifa.draw.framework.*;
+import CH.ifa.draw.standard.DeleteFromDrawingVisitor;
+import java.io.File;
+import CH.ifa.draw.util.Undoable;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.*;
+
 
 /**
  *
  * @author  Administrator
  */
-public class JHDDropTargetListener implements DropTargetListener {
+public class JHDDropTargetListener implements java.awt.dnd.DropTargetListener {
 	private int     fLastX=0, fLastY=0;      // previous mouse position
 	private Undoable targetUndoable;
 	private DrawingView dv;
@@ -60,7 +59,7 @@ public class JHDDropTargetListener implements DropTargetListener {
 	/**
 	 * The drag operation has departed the DropTarget without dropping.
 	 */
-	public void dragExit(DropTargetEvent dte) {
+	public void dragExit(java.awt.dnd.DropTargetEvent dte) {
 		log("DropTargetEvent-dragExit");
 	}
 
@@ -68,7 +67,7 @@ public class JHDDropTargetListener implements DropTargetListener {
 	 * Called when a drag operation is ongoing on the DropTarget.
 	 */
 	 public void dragOver(DropTargetDragEvent dtde) {
-		log("DropTargetDragEvent-dragOver");
+		//log("DropTargetDragEvent-dragOver");
 		if (supportDropTargetDragEvent(dtde)==true) {
 			int x=dtde.getLocation().x;
 			int y=dtde.getLocation().y;
@@ -89,7 +88,7 @@ public class JHDDropTargetListener implements DropTargetListener {
 	 * The drag operation has terminated with a drop on this DropTarget.
 	 * Be nice to somehow incorporate FigureTransferCommand here.
 	 */
-	public void drop(DropTargetDropEvent dtde) {
+	 public void drop(java.awt.dnd.DropTargetDropEvent dtde) {
 		System.out.println("DropTargetDropEvent-drop");
 
 		if (dtde.isDataFlavorSupported(DNDFiguresTransferable.DNDFiguresFlavor) == true) {
@@ -119,19 +118,20 @@ public class JHDDropTargetListener implements DropTargetListener {
 					FigureEnumeration fe = view().insertFigures( getTargetUndoActivity().getAffectedFigures() ,  dx, dy, false );
 					getTargetUndoActivity().setAffectedFigures( fe );
 
-					if (dtde.getDropAction() == DnDConstants.ACTION_MOVE)
+					if (dtde.getDropAction() == DnDConstants.ACTION_MOVE) {
 						view().addToSelectionAll( getTargetUndoActivity().getAffectedFigures() );
+					}
 
 					view().drawing().update();
 					editor().getUndoManager().pushUndo( getTargetUndoActivity() );
 					editor().getUndoManager().clearRedos();
 					// update menus
 					editor().figureSelectionChanged( view() );
-					dtde.getDropTargetContext().dropComplete(true);
+					dtde.dropComplete(true);
 				}
 				catch (NullPointerException npe) {
 					npe.printStackTrace();
-					dtde.getDropTargetContext().dropComplete(false);
+					dtde.dropComplete(false);
 				}
 			}
 			else {
@@ -166,7 +166,7 @@ public class JHDDropTargetListener implements DropTargetListener {
 		else if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
 			log("Java File List Flavor dropped.");
 			dtde.acceptDrop(DnDConstants.ACTION_COPY);
-			java.io.File [] fList = (java.io.File[]) DNDHelper.ProcessReceivedData(DataFlavor.javaFileListFlavor, dtde.getTransferable());
+			File [] fList = (File[]) DNDHelper.ProcessReceivedData(DataFlavor.javaFileListFlavor, dtde.getTransferable());
 			if (fList != null) {
 				log("Got list of files.");
 				for (int x=0; x< fList.length; x++ ) {
@@ -204,12 +204,8 @@ public class JHDDropTargetListener implements DropTargetListener {
 	 */
 	protected boolean supportDropTargetDragEvent(DropTargetDragEvent dtde) {
 		if (dtde.isDataFlavorSupported(DNDFiguresTransferable.DNDFiguresFlavor) == true) {
-			if (dtde.getDropAction() == DnDConstants.ACTION_COPY) {
-				dtde.acceptDrag(DnDConstants.ACTION_COPY);
-				return true;
-			}
-			else if (dtde.getDropAction() == DnDConstants.ACTION_MOVE) {
-				dtde.acceptDrag(DnDConstants.ACTION_MOVE);
+			if ((dtde.getDropAction() & DnDConstants.ACTION_COPY_OR_MOVE) != 0) {
+				dtde.acceptDrag(dtde.getDropAction());
 				return true;
 			}
 			else {
@@ -250,7 +246,8 @@ public class JHDDropTargetListener implements DropTargetListener {
 	protected Undoable getTargetUndoActivity(){
 		return targetUndoable;
 	}
-	public static class AddUndoActivity extends UndoableAdapter {
+	public static class AddUndoActivity extends CH.ifa.draw.util.UndoableAdapter {
+		private boolean undone=false;
 		public AddUndoActivity(DrawingView newDrawingView) {
 			super(newDrawingView);
 			log("AddUndoActivity created " + newDrawingView);			
@@ -267,11 +264,12 @@ public class JHDDropTargetListener implements DropTargetListener {
 			DeleteFromDrawingVisitor deleteVisitor = new DeleteFromDrawingVisitor(getDrawingView().drawing());
 			FigureEnumeration fe = getAffectedFigures();
 			while (fe.hasNextFigure()) {
-	    		Figure f = fe.nextFigure();
+	    		CH.ifa.draw.framework.Figure f = fe.nextFigure();
 				f.visit(deleteVisitor);
 			}
 			setAffectedFigures( deleteVisitor.getDeletedFigures() );
 			getDrawingView().clearSelection();
+			undone = true;
 			return true;
 		}
 
@@ -284,8 +282,23 @@ public class JHDDropTargetListener implements DropTargetListener {
 			getDrawingView().clearSelection();
 			setAffectedFigures(getDrawingView().insertFigures(
 				getAffectedFigures(), 0, 0, false));
-
+			undone = false;
 			return true;
+		}
+		/**
+		 *	Since this is an add operation, figures can only be released if it
+		 *  has been undone.
+		 */
+		public void release() {
+			if(undone == true){
+				FigureEnumeration fe = getAffectedFigures();
+				while (fe.hasNextFigure()) {
+					Figure f = fe.nextFigure();
+					getDrawingView().drawing().remove(f);
+					f.release();
+				}
+			}
+			setAffectedFigures(CH.ifa.draw.standard.FigureEnumerator.getEmptyEnumeration());
 		}
 	}
 	private static void log(String message){

@@ -5,24 +5,21 @@
  */
 
 package CH.ifa.draw.contrib.dnd;
-import java.awt.dnd.*;
-import java.awt.*;
-import java.util.*;
-import CH.ifa.draw.framework.*;
-import java.awt.datatransfer.*;
-import java.io.*;
-import javax.swing.JComponent;
-import CH.ifa.draw.standard.DeleteFromDrawingVisitor;
 
-import CH.ifa.draw.util.*;
+import CH.ifa.draw.framework.*;
+import CH.ifa.draw.standard.DeleteFromDrawingVisitor;
+import CH.ifa.draw.util.Undoable;
+import java.awt.Component;
+import java.awt.dnd.*;
+import javax.swing.JComponent;
+
 /**
  *
  * @author  Administrator
  */
-public class JHDDragSourceListener implements DragSourceListener {
+public class JHDDragSourceListener implements java.awt.dnd.DragSourceListener {
 	private Undoable sourceUndoable;
 	private Boolean autoscrollState;
-//	private DrawingView dv;
 	private DrawingEditor editor;
 	
 	/** Creates a new instance of JHDDragSource */
@@ -39,7 +36,7 @@ public class JHDDragSourceListener implements DragSourceListener {
 	 * This method is invoked to signify that the Drag and Drop operation is complete.
 	 * This is the last method called in the process.
 	 */
-	public void dragDropEnd(DragSourceDropEvent dsde) {
+	public void dragDropEnd(java.awt.dnd.DragSourceDropEvent dsde) {
 		DrawingView view = (DrawingView) dsde.getDragSourceContext().getComponent();
 		log("DragSourceDropEvent-dragDropEnd");
 		if (dsde.getDropSuccess() == true) {
@@ -65,7 +62,7 @@ public class JHDDragSourceListener implements DragSourceListener {
 				editor().figureSelectionChanged( view );
 			}
 			else if (dsde.getDropAction() == DnDConstants.ACTION_COPY) {
-				log("DragSourceDropEvent-ACTION_COPY not implemented?");
+				log("DragSourceDropEvent-ACTION_COPY");
 			}
 		}
 
@@ -88,27 +85,26 @@ public class JHDDragSourceListener implements DragSourceListener {
 			if (JComponent.class.isInstance( c )) {
 				JComponent jc = (JComponent)c;
 				autoscrollState= new Boolean(jc.getAutoscrolls());
-				jc.setAutoscrolls(false);
+				jc.setAutoscrolls(false);//why turn it off???
 			}
 		}
-
-//		dsde.getDragSourceContext().
 	}
 	/**
 	 * Called as the hotspot exits a platform dependent drop site.
 	 */
-	public void dragExit(DragSourceEvent dse) {
+	public void dragExit(java.awt.dnd.DragSourceEvent dse) {
 	}
 	/**
 	 * Called as the hotspot moves over a platform dependent drop site.
 	 */
 	public void dragOver(DragSourceDragEvent dsde) {
-		log("DragSourceDragEvent-dragOver");
+		//log("DragSourceDragEvent-dragOver");
 	}
 	/**
 	 * Called when the user has modified the drop gesture.
 	 */
 	public void dropActionChanged(DragSourceDragEvent dsde) {
+		log("DragSourceDragEvent-dropActionChanged");
 	}
 	
 	
@@ -133,7 +129,8 @@ public class JHDDragSourceListener implements DragSourceListener {
 	protected Undoable getSourceUndoActivity(){
 		return sourceUndoable;
 	}
-	public static class RemoveUndoActivity extends UndoableAdapter {
+	public static class RemoveUndoActivity extends CH.ifa.draw.util.UndoableAdapter {
+		private boolean undone = false;
 		public RemoveUndoActivity(DrawingView view) {
 			super( view );
 			log("RemoveUndoActivity created " + view);
@@ -142,11 +139,14 @@ public class JHDDragSourceListener implements DragSourceListener {
 		}
 
 		public boolean undo() {
-			if (super.undo() && getAffectedFigures().hasNextFigure()) {
-				log("RemoveUndoActivity undo");
-				getDrawingView().clearSelection();
-				setAffectedFigures( getDrawingView().insertFigures(getAffectedFigures(), 0, 0,false));
-				return true;
+			if (isUndoable()) {
+				if(getAffectedFigures().hasNextFigure()) {
+					log("RemoveUndoActivity undo");
+					getDrawingView().clearSelection();
+					setAffectedFigures( getDrawingView().insertFigures(getAffectedFigures(), 0, 0,false));
+					undone = true;
+					return true;
+				}
 			}
 			return false;
 		}
@@ -158,22 +158,27 @@ public class JHDDragSourceListener implements DragSourceListener {
 				DeleteFromDrawingVisitor deleteVisitor = new DeleteFromDrawingVisitor( getDrawingView().drawing());
 				FigureEnumeration fe = getAffectedFigures();
 				while (fe.hasNextFigure()) {
-					fe.nextFigure().visit(deleteVisitor);
+					fe.nextFigure().visit(deleteVisitor); //orphans figures
 				}
 				getDrawingView().clearSelection();
 				setAffectedFigures( deleteVisitor.getDeletedFigures() );
+				undone = false;
 				return true;
 			}
 			return false;
 		}
 		/**
-		 * Releases all resources related to an undoable activity
-		 * @todo investigate if this release is proper.
+		 * Since this is a delete activity, figures can only be released if the
+		 * action has not been undone.
 		 */
 		public void release() {
-			FigureEnumeration fe = getAffectedFigures();
-			while (fe.hasNextFigure()) {
-				fe.nextFigure().release();
+			if(undone == false){//we have figures that used to be in the drawing, but were not adding back
+				FigureEnumeration fe = getAffectedFigures();
+				while (fe.hasNextFigure()) {
+					Figure f = fe.nextFigure();
+					getDrawingView().drawing().remove(f);
+					f.release();
+				}
 			}
 			setAffectedFigures(CH.ifa.draw.standard.FigureEnumerator.getEmptyEnumeration());
 		}		
