@@ -146,11 +146,13 @@ public abstract class CompositeFigure extends AbstractFigure {
 		}
 		Figure nf = (Figure)orphanMap.remove(figure);
 		getFigures().remove(nf);
-		figure.release();//gives figure advance alert of its pending GC.
+		//figure.release();//who is qualified to call this? who can know if figure is contained elsewhere...
 	}
 	/**
 	 * Puts a figure back into the CompositeFigure in its old place.
 	 * Figure must have already been orphaned.
+	 * @todo investigate removing the event firing from here, that way we can use add
+	 * to add to container and quadtree
 	 */
 	protected void restore(Figure figure){
 		if(orphanMap.containsKey(figure)){
@@ -160,7 +162,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 			getFigures().set(index,figure);
 			figure.addToContainer( this.figureChangeListener );
 			_addToQuadTree(figure);
-			//need to do something here to repaint the removed area.
+			//need to do something here to repaint the restored area? probably unnecessary, just behave like add does
 			if (listener() != null) {
 				listener().figureInvalidated(new FigureChangeEvent( this, r ));
 				listener().figureRequestUpdate(new FigureChangeEvent(this));
@@ -785,7 +787,7 @@ public abstract class CompositeFigure extends AbstractFigure {
 		//
 		figureChangeListener = new innerFigureChangeListener();
 		int size = dr.readInt();
-		setFigures( CollectionsFactory.current().createList(size) );
+		fFigures = CollectionsFactory.current().createList(size);
 		orphanMap = CollectionsFactory.current().createMap(); 
 		//what about z value reset?
 		for (int i=0; i<size; i++) {
@@ -884,16 +886,5 @@ public abstract class CompositeFigure extends AbstractFigure {
 				throw new JHotDrawRuntimeException("Figure is already part of this CompositeFigure.");
 			}			
 		}
-	}
-	/**
-	 * Experimental copy constructor.
-	 */
-	protected CompositeFigure(CompositeFigure cf){
-		super(cf);
-		cf.fFigures = fFigures;
-		cf._nLowestZ = _nLowestZ;
-		cf._nHighestZ = _nHighestZ;
-		cf.figureChangeListener = figureChangeListener;
-		cf.init(new Rectangle(0, 0));	
 	}
 }
