@@ -30,7 +30,7 @@ import java.net.URL;
 /**
  * @version <$CURRENT_VERSION$>
  */
-public  class JavaDrawApp extends MDI_DrawApplication {
+public class JavaDrawApp extends MDI_DrawApplication {
 	private Animator            fAnimator;
 	private static String       fgSampleImagesPath = "/CH/ifa/draw/samples/javadraw/sampleimages";
 	private static String       fgSampleImagesResourcePath = fgSampleImagesPath + "/";
@@ -113,7 +113,7 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 		tool = new UndoableTool(new ScribbleTool(this));
 		palette.add(createToolButton(IMAGES + "SCRIBBL", "Scribble Tool", tool));
 
-		tool = new UndoableTool(new BorderTool(this));
+		tool = new UndoableTool(new DecoratorTool(this, new BorderFigureDecorator()));
 		palette.add(createToolButton(IMAGES + "BORDDEC", "Border Tool", tool));
 
 		Component button = new JButton("Hello World");
@@ -222,6 +222,7 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 	public void startAnimation() {
 		if (view().drawing() instanceof Animatable && fAnimator == null) {
 			fAnimator = new Animator((Animatable)view().drawing(), view());
+			//store start and end positions of animatable figures for undo?
 			fAnimator.start();
 		}
 	}

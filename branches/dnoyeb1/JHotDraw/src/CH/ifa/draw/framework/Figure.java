@@ -85,6 +85,17 @@ public interface Figure
 	 * @param g the Graphics to draw into
 	 */
 	public void draw(Graphics g);
+	
+	/**
+	 * This method will call draw first then drawDecorators
+	 */
+	public void drawAll(Graphics g);
+
+	/**
+	 * This method draws the FigureDecorators
+	 * @see FigureDecorator#draw
+	 */
+	public void drawDecorators(Graphics g);
 
 	/**
 	 * Returns the handles used to manipulate
@@ -349,4 +360,10 @@ public interface Figure
 	 * Remove a <code>FigureManipulator</code> to the <code>Figure</code>.
 	 */
 	public void removeFigureManipulator(FigureManipulator fm);
+	public void addFigureDecorator(FigureDecorator fd);
+	public void removeFigureDecorator(FigureDecorator fd);
+	/**
+	 * Need to create an enumerator/enumeration for this.
+	 */
+	public java.util.Iterator figureDecorators();
 }

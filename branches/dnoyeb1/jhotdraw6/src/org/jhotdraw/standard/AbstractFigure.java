@@ -69,6 +69,7 @@ public abstract class AbstractFigure implements Figure {
 
 	private List fFigureManipulators;
 
+	private List fFigureDecorators;
 	/*
 	 * Serialization support.
 	 */
@@ -87,6 +88,7 @@ public abstract class AbstractFigure implements Figure {
 	protected void init(){
 		myDependentFigures = CollectionsFactory.current().createList();
 		fFigureManipulators = CollectionsFactory.current().createList();
+		fFigureDecorators = CollectionsFactory.current().createList();
 	}
 	/**
 	 * Moves the figure by the given offset.
@@ -483,6 +485,10 @@ public abstract class AbstractFigure implements Figure {
 		for(Iterator it= fFigureManipulators.iterator();it.hasNext();) {
 			dw.writeStorable( (FigureManipulator)it.next() );
 		}
+		dw.writeInt( fFigureDecorators.size() );
+		for(Iterator it= fFigureDecorators.iterator();it.hasNext();) {
+			dw.writeStorable( (Figure)it.next() );
+		}		
 	}
 
 	/**
@@ -497,10 +503,16 @@ public abstract class AbstractFigure implements Figure {
 		}
 
 		//load figureManipulators
-		int stratSize = dr.readInt();
-		fFigureManipulators = CollectionsFactory.current().createList(stratSize);
+		int manipSize = dr.readInt();
+		fFigureManipulators = CollectionsFactory.current().createList(manipSize);
 		for (int i=0; i<size; i++) {
 			fFigureManipulators.add( (FigureManipulator)dr.readStorable()) ;
+		}
+		//load figureDecorators
+		int decSize = dr.readInt();
+		fFigureDecorators = CollectionsFactory.current().createList(decSize);
+		for (int i=0; i<size; i++) {
+			fFigureDecorators.add( (Figure)dr.readStorable()) ;
 		}
 	}
 	/**
@@ -604,5 +616,35 @@ public abstract class AbstractFigure implements Figure {
 			fFigureManipulators.remove( fm );
 			fm.DetachFigure(this);
 		}
+	}
+	
+	public void addFigureDecorator(FigureDecorator fd){
+		synchronized(fFigureDecorators){
+			fFigureDecorators.add( fd );
+			fd.decorateFigure( this );
+		}
+		invalidate();
+	}
+	public void removeFigureDecorator(FigureDecorator fd){
+		synchronized(fFigureDecorators){
+			fd.undecorateFigure( this );
+			fFigureDecorators.remove( fd );
+		}
+		invalidate();		
+	}
+	/**
+	 * The returned iterator needs to be fail fast or something !?!dnoyeb!?!
+	 */
+	public java.util.Iterator figureDecorators(){
+		return fFigureDecorators.iterator();
+	}
+	public void drawAll(Graphics g){
+		draw(g);
+		drawDecorators(g);
+	}
+	public void drawDecorators(Graphics g){
+		for(Iterator it= fFigureDecorators.iterator();it.hasNext();) {
+			((FigureDecorator)it.next()).draw(g);
+		}		
 	}
 }

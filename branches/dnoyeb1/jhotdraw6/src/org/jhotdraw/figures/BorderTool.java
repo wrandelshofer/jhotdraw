@@ -23,6 +23,7 @@ import java.util.List;
  * BorderTool decorates the clicked figure with a BorderDecorator.
  *
  * @see BorderDecorator
+ * @deprecated see {@link CH.ifa.draw.contrib.DecoratorTool DecoratorTool}.
  *
  * @version <$CURRENT_VERSION$>
  */
@@ -37,6 +38,7 @@ public  class BorderTool extends ActionTool {
 	 * Overrides ActionTool's mouseDown to allow for peeling the border
 	 * if there is one already.
 	 * This is done by CTRLing the click
+	 *
 	 * @see #action
 	 */
 	public void mouseDown(DrawingViewMouseEvent dvme) {

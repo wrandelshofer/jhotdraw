@@ -18,18 +18,12 @@ import CH.ifa.draw.standard.*;
 
 /**
  * BorderDecorator decorates an arbitrary Figure with
- * a border.  Therein lies the problem.  It can not handle an arbitrary Figure.
- * It will not forward calls which do not come on the Figure interface.  Therefore,
- * it can only handle a plain Figure.  Any Tool or Command seeking a specific
- * Figure type will have to try and determine if DecoratorFigure contains such a
- * type.  This is doable, but burdens every occurance of Figure with this question.
- *
- * This figure has been changed to a CompositeFigure since most Tools and Commands
- * are prepared to deal with CompositeFigures.  Should produce the same results.
+ * a border.
+ * @deprecated
  *
  * @version <$CURRENT_VERSION$>
  */
-public  class BorderDecorator extends CompositeFigure {
+public  class BorderDecorator extends DecoratorFigure {
 
 	/*
 	 * Serialization support.
@@ -41,13 +35,11 @@ public  class BorderDecorator extends CompositeFigure {
 	private Color myBorderColor;
 	private Color myShadowColor;
 
-	protected BorderDecorator() {
-		initialize();
+	public BorderDecorator() {
 	}
 
 	public BorderDecorator(Figure figure) {
-		initialize();
-		add(figure);
+		super(figure);
 	}
 
 	/**
@@ -97,7 +89,7 @@ public  class BorderDecorator extends CompositeFigure {
 	/**
 	 * Invalidates the figure extended by its border.
 	 */
-	protected void figureInvalidated(FigureChangeEvent e) {
+	public void figureInvalidated(FigureChangeEvent e) {
 		Rectangle rect = e.getInvalidatedRectangle();
 		rect.grow(getBorderOffset().x, getBorderOffset().y);
 		super.figureInvalidated(new FigureChangeEvent(this, rect, e));
@@ -112,23 +104,4 @@ public  class BorderDecorator extends CompositeFigure {
 
 		return i;
 	}
-	
-	/**
-	 * Forwards basicDisplayBox to its contained figure.
-	 * What about the size of the decoration? ???dnoyeb???
-	 */
-	public void basicDisplayBox(Point origin, Point corner) {
-		getDecoratedFigure().basicDisplayBox(origin, corner);
-	}
-	
-	/**
-	 * Forwards handles to its contained figure.
-	 * What about the size of the border ???dnoyeb???
-	 */
-	public HandleEnumeration handles() {
-		return getDecoratedFigure().handles();
-	}
-	public Figure getDecoratedFigure() {
-		return (Figure)getFigures().get(0);
-	}	
 }
