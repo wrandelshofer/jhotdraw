@@ -11,14 +11,12 @@
 
 package CH.ifa.draw.contrib.dnd;
 
-import CH.ifa.draw.standard.AbstractTool;
-import java.awt.*;
-
-import java.util.Iterator;
-import javax.swing.JComponent;
-import java.awt.dnd.*;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
+import java.awt.Cursor;
+import java.awt.dnd.DragGestureListener;
+import javax.swing.JComponent;
+
 //import CH.ifa.draw.util.CollectionsFactory;
 
 /**
@@ -55,7 +53,7 @@ import CH.ifa.draw.standard.*;
  * @author C.L.Gilbert <dnoyeb@sourceforge.net>
  * @version <$CURRENT_VERSION$>
  */
-public class DragNDropTool extends AbstractTool {
+public class DragNDropTool extends CH.ifa.draw.standard.AbstractTool {
 	private Tool            fChild;
 //	private java.util.List       comps;
 	private DragGestureListener dragGestureListener;
@@ -133,7 +131,7 @@ public class DragNDropTool extends AbstractTool {
 		if (handle != null) {
 			if (LocatorHandle.class.isInstance(handle)) {
 				LocatorHandle lh = (LocatorHandle)handle;
-				Locator loc = lh.getLocator();
+				CH.ifa.draw.framework.Locator loc = lh.getLocator();
 				if (RelativeLocator.class.isInstance(loc)) {
 					RelativeLocator rl = (RelativeLocator) loc;
 					if (rl.equals( RelativeLocator.north())) {
@@ -263,21 +261,21 @@ public class DragNDropTool extends AbstractTool {
 	 * area.
 	 */
 	protected Tool createAreaTracker() {
-		return new SelectAreaTracker(editor());
+		return new CH.ifa.draw.standard.SelectAreaTracker(editor());
 	}
 
 	/**
 	 * Factory method to create a Drag tracker. It is used to drag a figure.
 	 */
 	protected Tool createDragTracker(DrawingEditor editor, Figure f) {
-		return new DragTracker(editor, f);
+		return new CH.ifa.draw.standard.DragTracker(editor, f);
 	}
 
 	/**
 	 * Factory method to create a Handle tracker. It is used to track a handle.
 	 */
 	protected Tool createHandleTracker(Handle handle) {
-		return new HandleTracker(editor(), handle);
+		return new CH.ifa.draw.standard.HandleTracker(editor(), handle);
 	}
 	
 	
@@ -313,11 +311,12 @@ public class DragNDropTool extends AbstractTool {
 		
 		return new DragGestureListener() {
 			
-			public void dragGestureRecognized(final DragGestureEvent dge) {
-				Component c = dge.getComponent();
-				//System.out.println("Drag Gesture Recognized for " + c);				
-				if(isDragOn() == false)
+			public void dragGestureRecognized(final java.awt.dnd.DragGestureEvent dge) {
+				java.awt.Component c = dge.getComponent();
+				//System.out.println("Drag Gesture Recognized for " + c);
+				if(isDragOn() == false) {
 					return;
+				}
 
 				if (c instanceof DrawingView) {
 					boolean found = false;
@@ -328,13 +327,13 @@ public class DragNDropTool extends AbstractTool {
 					it will likely stay activated.  solve later for now just make
 					but report. */
 					/* this is a list of cloned figures */
-					FigureEnumeration selectedElements = dv.selection();
+					CH.ifa.draw.framework.FigureEnumeration selectedElements = dv.selection();
 
 					if (selectedElements.hasNextFigure() == false) {
 						return;
 					}
 
-					Point p = dge.getDragOrigin();
+					java.awt.Point p = dge.getDragOrigin();
 		//				System.out.println("origin at " + p);
 					while (selectedElements.hasNextFigure()) {
 						Figure f = selectedElements.nextFigure();
