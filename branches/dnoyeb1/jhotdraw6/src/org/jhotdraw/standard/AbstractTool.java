@@ -118,13 +118,13 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 	/**
 	 * Sent when a new view is created
 	 */
-	public void viewCreated(DrawingView view) {
+	public void viewActivated(DrawingView view) {
 	}
 
 	/**
 	 * Send when an existing view is about to be destroyed.
 	 */
-	public void viewDestroying(DrawingView view) {
+	public void viewDeactivated(DrawingView view) {
 	}
 
 	/**

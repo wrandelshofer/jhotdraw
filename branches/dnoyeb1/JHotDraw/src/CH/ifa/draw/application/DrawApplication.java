@@ -780,24 +780,24 @@ public	class DrawApplication
 		}
 	}
 
-	protected void fireViewCreatedEvent(DrawingView view) {
+	protected void fireViewActivatedEvent(DrawingView view) {
 		final Object[] listeners = listenerList.getListenerList();
 		ViewChangeListener vsl = null;
 		for (int i = listeners.length-2; i>=0 ; i-=2) {
 			if (listeners[i] == ViewChangeListener.class) {
 				vsl = (ViewChangeListener)listeners[i+1];
-				vsl.viewCreated(view);
+				vsl.viewActivated(view);
 			}
 		}
 	}
 
-	protected void fireViewDestroyingEvent(DrawingView view) {
+	protected void fireViewDeactivatedEvent(DrawingView view) {
 		final Object[] listeners = listenerList.getListenerList();
 		ViewChangeListener vsl = null;
 		for (int i = listeners.length-2; i>=0 ; i-=2) {
 			if (listeners[i] == ViewChangeListener.class) {
 				vsl = (ViewChangeListener)listeners[i+1];
-				vsl.viewDestroying( view );
+				vsl.viewDeactivated( view );
 			}
 		}
 	}
@@ -1076,11 +1076,11 @@ public	class DrawApplication
 	    return new DesktopListener() {
 			public void drawingViewAdded(DesktopEvent dpe) {
 				DrawingView dv = dpe.getDrawingView();
-				fireViewCreatedEvent(dv);
+				fireViewActivatedEvent(dv);
 			}
 			public void drawingViewRemoved(DesktopEvent dpe) {
 				DrawingView dv = dpe.getDrawingView();
-				fireViewDestroyingEvent(dv);
+				fireViewDeactivatedEvent(dv);
 			}
 			public void drawingViewSelected(DrawingView oldView, DesktopEvent dpe) {
 				DrawingView dv = dpe.getDrawingView();

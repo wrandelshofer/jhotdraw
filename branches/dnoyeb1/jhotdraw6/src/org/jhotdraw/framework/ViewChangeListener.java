@@ -30,12 +30,12 @@ public interface ViewChangeListener extends EventListener {
 	 * to a heavyweight container.
 	 * @param view view
 	 */
-	public void viewCreated(DrawingView view);
+	public void viewActivated(DrawingView view);
 
 	/**
 	 * Send when an existing view is about to be destroyed.  After processing this
 	 * event, the view is not guaranteed to contain any appropriate data.  You
 	 * must not use it.
 	 */
-	public void viewDestroying(DrawingView view);
+	public void viewDeactivated(DrawingView view);
 }
