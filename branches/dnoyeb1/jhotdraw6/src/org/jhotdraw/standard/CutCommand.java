@@ -41,7 +41,7 @@ public class CutCommand extends FigureTransferCommand {
 		copyFigures(getUndoActivity().getAffectedFigures(),
 			view().selectionCount());
 		deleteFigures(getUndoActivity().getAffectedFigures());
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {

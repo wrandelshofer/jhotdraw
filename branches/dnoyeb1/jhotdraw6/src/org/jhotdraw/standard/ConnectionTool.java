@@ -291,8 +291,8 @@ public  class ConnectionTool extends AbstractTool {
 			setTargetConnector(cc);
 		}
 
-		// Clean up the view.
-		getActiveView().checkDamage();
+		// Clean up the views.
+		getActiveView().drawing().update();
 	}
 
 	protected Connector findConnector(int x, int y, Figure f) {

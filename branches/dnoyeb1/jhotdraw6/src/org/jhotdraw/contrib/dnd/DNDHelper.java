@@ -366,7 +366,7 @@ public abstract class DNDHelper implements DragGestureListener {
 					//	fe.nextFigure().moveBy(x - fLastX, y - fLastY);
 					//	System.out.println("moving Figures " + view());
 					//}
-					//view().checkDamage();
+					//view().drawing().update();
 					fLastX = x;
 					fLastY = y;
 				}
@@ -409,7 +409,7 @@ public abstract class DNDHelper implements DragGestureListener {
 						if (dtde.getDropAction() == DnDConstants.ACTION_MOVE)
 							view().addToSelectionAll( getTargetUndoActivity().getAffectedFigures() );
 
-						view().checkDamage();
+						view().drawing().update();
 						editor().getUndoManager().pushUndo( getTargetUndoActivity() );
 						editor().getUndoManager().clearRedos();
 						// update menus
@@ -614,7 +614,7 @@ public abstract class DNDHelper implements DragGestureListener {
 						fe.nextFigure().visit(deleteVisitor);
 					}
 					view.clearSelection();
-					view.checkDamage();
+					view.drawing().update();//we made a change to the drawing, so update it.
 
 					editor().getUndoManager().pushUndo( getSourceUndoActivity() );
 					editor().getUndoManager().clearRedos();

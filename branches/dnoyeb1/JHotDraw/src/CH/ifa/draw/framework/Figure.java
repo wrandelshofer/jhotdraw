@@ -216,8 +216,9 @@ public interface Figure
 	 * container.  sends a figureRequestRemove event.
 	 *
 	 * @see FigureChangeListener#figureRequestRemove
+	 * @return FigureChangeListener The container this figure was removed from
 	 */
-	public void remove();
+	public FigureChangeListener remove();
 	
 	
 	/**

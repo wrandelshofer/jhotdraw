@@ -139,7 +139,7 @@ public class TextAreaTool extends CreationTool {
 		// update view so the created figure is drawn before the floating text
 		// figure is overlaid. (Note, fDamage should be null in StandardDrawingView
 		// when the overlay figure is drawn because a JTextField cannot be scrolled)
-		view().checkDamage();
+		view().drawing().update();
 		TextHolder textHolder = (TextHolder)getCreatedFigure();
 		if (textHolder.acceptsTyping()) {
 			beginEdit(textHolder, getCreatedFigure());
@@ -229,7 +229,7 @@ public class TextAreaTool extends CreationTool {
 
 			fTextField.endOverlay();
 			fTextField = null;
-//			view().checkDamage();
+//			view().drawing().update();
 		}
 	}
 

@@ -192,8 +192,8 @@ public abstract class DecoratorFigure
 	/**
 	 * Do not remove containees in response to this event.
 	 */
-	public void remove(){
-		super.remove();
+	public FigureChangeListener remove(){
+		return super.remove();
 	}
 	/**
 	 * Propagates invalidate up the container chain.

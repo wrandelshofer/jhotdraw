@@ -40,7 +40,7 @@ public  class GroupCommand extends AbstractCommand {
 		setUndoActivity(createUndoActivity());
 		getUndoActivity().setAffectedFigures(view().selection());
 		((GroupCommand.UndoActivity)getUndoActivity()).groupFigures();
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {

@@ -42,7 +42,7 @@ public  class UngroupCommand extends AbstractCommand {
 		view().clearSelection();
 
 		((UngroupCommand.UndoActivity)getUndoActivity()).ungroupFigures();
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {

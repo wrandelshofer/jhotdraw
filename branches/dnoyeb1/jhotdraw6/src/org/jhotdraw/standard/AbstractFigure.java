@@ -282,10 +282,12 @@ public abstract class AbstractFigure implements Figure {
 	 * Called to remove a figure from its container.
 	 * @see Figure#remove
 	 */
-	public void remove(){
+	public FigureChangeListener remove(){
+		FigureChangeListener fcl =  getContainer();
 		if(listener() != null) {
 			listener().figureRequestRemove( new FigureChangeEvent(this));
 		}
+		return fcl;
 	}
 
 	/**
