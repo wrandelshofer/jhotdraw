@@ -57,12 +57,14 @@ public class CompositeFigureCreationTool extends CreationTool {
 		}
 	}
 	
-	public void viewActivated(DrawingView view){
+	protected void viewActivated(DrawingView view){
+		super.viewActivated(view);
 		view.addFigureSelectionListener(figureSelectionListener);
 	}
 	
-	public void viewDeactivated(DrawingView view){
+	protected void viewDeactivated(DrawingView view){
 		view.removeFigureSelectionListener(figureSelectionListener);
+		super.viewDeactivated(view);
 	}
 	
 	public void mouseDown(MouseEvent e, int x, int y) {
