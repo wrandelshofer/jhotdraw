@@ -32,7 +32,8 @@ import CH.ifa.draw.util.Animatable;
  *
  * @version <$CURRENT_VERSION$>
  *  @deprecated Completely does not work in dnoyeb1  no way to hide the decorations
- *              which is required.  I have quite trying to fix it for now.
+ *              which is required.  I have quit trying to fix it for now.  I think
+ *              it can probably return with document-view seperation.
  */
 public class BouncingDrawing extends StandardDrawing implements Animatable {
 	/*

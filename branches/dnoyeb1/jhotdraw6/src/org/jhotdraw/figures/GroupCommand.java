@@ -57,6 +57,7 @@ public  class GroupCommand extends AbstractCommand {
 
 	public static class UndoActivity extends UndoableAdapter {
 		private GroupFigure fGroupFigure=null;
+		private boolean undone = false;
 		public UndoActivity(DrawingView newDrawingView) {
 			super(newDrawingView);
 			setUndoable(true);
@@ -94,18 +95,21 @@ public  class GroupCommand extends AbstractCommand {
 			}
 			//destroy the group figure since upon redo we create a new one
 			getDrawingView().drawing().remove( getGroupFigure() );
+			getGroupFigure().release();
 			setGroupFigure(null);
 			//update affected figures for redo if necessary
 			setAffectedFigures(new FigureEnumerator(affectedFigures));
+			undone = true;
 			return true;
 		}
 
 		public boolean redo() {
-			// do not call execute directly as the selection might has changed
+			// do not call execute directly as the selection might have changed
 			if (isRedoable()) {
 				groupFigures();
 				return true;
 			}
+			undone = false;
 			return false;
 		}
 		/**
@@ -135,13 +139,16 @@ public  class GroupCommand extends AbstractCommand {
 				//permanently remove all figures that were grouped from the drawing
 			//2. if undo undo was our last action and their are lots of figures in the drawing waiting to be regrouped by a redo
 				//nothing to do since its permanently removed in the undo action
-			
-			if(getGroupFigure() != null){
-				getDrawingView().drawing().removeAll(getAffectedFigures());
+			if(undone == false){
+				if(getGroupFigure() != null){
+					getDrawingView().drawing().removeAll(getAffectedFigures());
+				}
 			}
-			setDrawingView(null);
+//			else {
+//				//group figure destroyed in undo so nothing to do here
+//			}
 			setGroupFigure(null);
-			setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
+			super.release();
 		}
 	}
 }

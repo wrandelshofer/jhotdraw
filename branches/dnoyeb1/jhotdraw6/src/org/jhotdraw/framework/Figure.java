@@ -203,10 +203,13 @@ public interface Figure
 	/**
 	 * Notifies all listeners that this figure has been released.
 	 * Figures should first release all their resources such as other figures.
-	 * THIS METHOD IS CALLED BY THE CONTAINER THAT IS RELEASING THE FIGURE
-	 * need to change event names to released
+	 * This method is called by the tool that currently owns the removed figure,
+	 * when it is finished with the figure and does not intend to use it any
+	 * further.  A figure can not be released if it is holding orphans.  They
+	 * must first be removed.  Else the tool that orphaned the figures may not 
+	 * realize they can not be restored.
 	 *
-	 * @see CompositeFigure#remove(Figure f)
+	 * @see CH.ifa.draw.standard.CompositeFigure#remove(Figure f)
 	 */
 	public void release();
 	

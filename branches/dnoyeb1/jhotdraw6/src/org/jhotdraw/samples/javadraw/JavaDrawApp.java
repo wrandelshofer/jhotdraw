@@ -266,7 +266,7 @@ public class JavaDrawApp extends MDI_DrawApplication {
 			window.exit();
 		}
 		catch(java.lang.reflect.InvocationTargetException ite){
-			System.err.println(ite.getMessage());
+			System.err.println(ite);
 			window.exit();
 		}	
 	}

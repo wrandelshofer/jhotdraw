@@ -308,7 +308,6 @@ public  class LineConnection extends PolyLineFigure implements ConnectionFigure 
 	}
 
 	public void release() {
-		super.release();
 		handleDisconnect(startFigure(), endFigure());
 		if (getStartConnector() != null) {
 			startFigure().removeFigureChangeListener(this);
@@ -316,6 +315,7 @@ public  class LineConnection extends PolyLineFigure implements ConnectionFigure 
 		if (getEndConnector() != null) {
 			endFigure().removeFigureChangeListener(this);
 		}
+		super.release();
 	}
 
 	public void write(StorableOutput dw) {

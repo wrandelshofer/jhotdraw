@@ -51,7 +51,7 @@ public class DeleteCommand extends FigureTransferCommand {
 
 	public static class UndoActivity extends UndoableAdapter {
 		private FigureTransferCommand myCommand;
-
+		private boolean undone = false;
 		public UndoActivity(FigureTransferCommand newCommand) {
 			super(newCommand.view());
 			myCommand = newCommand;
@@ -63,7 +63,7 @@ public class DeleteCommand extends FigureTransferCommand {
 			if (super.undo() && getAffectedFigures().hasNextFigure()) {
 				getDrawingView().clearSelection();
 				setAffectedFigures(myCommand.insertFigures(getAffectedFigures(), 0, 0));
-
+				undone = true;
 				return true;
 			}
 
@@ -75,7 +75,7 @@ public class DeleteCommand extends FigureTransferCommand {
 			if (isRedoable()) {
 				myCommand.deleteFigures(getAffectedFigures());
 				getDrawingView().clearSelection();
-
+				undone = false;
 				return true;
 			}
 
@@ -83,14 +83,20 @@ public class DeleteCommand extends FigureTransferCommand {
 		}
 		/**
 		 * Releases all resources related to an undoable activity
-		 * what if undo was last action?
+		 * Since cut duplicates the figures, it is ok to release the originals
+		 * because the pasted figures are completely new objects.
+		 * But we can only release if the action has not been undone.
 		 */
 		public void release() {
-			FigureEnumeration fe = getAffectedFigures();
-			while (fe.hasNextFigure()) {
-				fe.nextFigure().release();
+			if(undone == false){
+				FigureEnumeration fe = getAffectedFigures();
+				while (fe.hasNextFigure()) {
+					Figure f = fe.nextFigure();
+					getDrawingView().drawing().remove(f);
+					f.release();
+				}
 			}
-			setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
+			super.release();
 		}		
 	}
 }
