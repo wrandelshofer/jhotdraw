@@ -232,5 +232,4 @@ public class MiniMapView extends JComponent {
          */
         public void drawingTitleChanged(DrawingChangeEvent e) {
         }
-	}
-}
+	}}

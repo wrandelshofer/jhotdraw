@@ -14,7 +14,8 @@ package CH.ifa.draw.figures;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.*;
-
+import java.util.*;
+import CH.ifa.draw.util.CollectionsFactory;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public  class GroupCommand extends AbstractCommand {
 		setUndoActivity(createUndoActivity());
 		getUndoActivity().setAffectedFigures(view().selection());
 		((GroupCommand.UndoActivity)getUndoActivity()).groupFigures();
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {
@@ -55,40 +56,47 @@ public  class GroupCommand extends AbstractCommand {
 	}
 
 	public static class UndoActivity extends UndoableAdapter {
+		private GroupFigure fGroupFigure=null;
 		public UndoActivity(DrawingView newDrawingView) {
 			super(newDrawingView);
 			setUndoable(true);
 			setRedoable(true);
 		}
-
+		protected void setGroupFigure(GroupFigure figure){
+			fGroupFigure = figure;
+		}
+		protected GroupFigure getGroupFigure(){
+			return fGroupFigure;
+		}
 		public boolean undo() {
 			if (!super.undo()) {
 				return false;
 			}
-
 			getDrawingView().clearSelection();
-
-			// orphan group figure(s)
-			getDrawingView().drawing().orphanAll(getAffectedFigures());
-
-			// create a new collection with the grouped figures as elements
 			List affectedFigures = CollectionsFactory.current().createList();
-
-			FigureEnumeration fe = getAffectedFigures();
-			while (fe.hasNextFigure()) {
-				Figure currentFigure = fe.nextFigure();
-				// add contained figures
-				getDrawingView().drawing().addAll(currentFigure.figures());
-				getDrawingView().addToSelectionAll(currentFigure.figures());
-
-				FigureEnumeration groupedFigures = currentFigure.figures();
-				while (groupedFigures.hasNextFigure()) {
-					affectedFigures.add(groupedFigures.nextFigure());
-				}
+			// orphan group figure
+			getDrawingView().drawing().orphan(getGroupFigure());
+			//get the figures from within the group figure.
+			FigureEnumeration feToAdd = getGroupFigure().figures();
+			while(feToAdd.hasNextFigure()){
+				Figure addFig = feToAdd.nextFigure();
+				//orphan figure from group figure
+				getGroupFigure().orphan(addFig);
+				//remove figure permanently from group figure.  This is required
+				//because we recreate the GroupFigure for the groupFigures action
+				getGroupFigure().remove(addFig);	
+				//restore figure to the drawing
+				getDrawingView().drawing().add(addFig);
+				//add figure to selection
+				getDrawingView().addToSelection(addFig);
+				//add figure to affected figures
+				affectedFigures.add(addFig);
 			}
-
+			//destroy the group figure since upon redo we create a new one
+			getDrawingView().drawing().remove( getGroupFigure() );
+			setGroupFigure(null);
+			//update affected figures for redo if necessary
 			setAffectedFigures(new FigureEnumerator(affectedFigures));
-
 			return true;
 		}
 
@@ -98,25 +106,42 @@ public  class GroupCommand extends AbstractCommand {
 				groupFigures();
 				return true;
 			}
-
 			return false;
 		}
-
+		/**
+		 * Take selected figures and add to a GroupFigure
+		 */
 		public void groupFigures() {
-			getDrawingView().drawing().orphanAll(getAffectedFigures());
 			getDrawingView().clearSelection();
-
+			//orphan all selected figures from the drawing
+			getDrawingView().drawing().orphanAll(getAffectedFigures());
+			FigureEnumeration fe = getAffectedFigures();
 			// add new group figure instead
 			GroupFigure group = new GroupFigure();
-			group.addAll(getAffectedFigures());
-
-			Figure figure = getDrawingView().drawing().add(group);
-			getDrawingView().addToSelection(figure);
-
-			// create a new collection with the new group figure as element
-			List affectedFigures = CollectionsFactory.current().createList();
-			affectedFigures.add(figure);
-			setAffectedFigures(new FigureEnumerator(affectedFigures));
+			//add all the orphaned figures to the group figure
+			group.addAll(fe);
+			//add group figure to the drawing
+			getDrawingView().drawing().add(group);
+			//add group figure to the selection
+			getDrawingView().addToSelection(group);
+			//store groupFigure
+			setGroupFigure(group);
+		}
+		/**
+		 * If undo was last their should be nothing to release
+		 */
+		public void release() {
+			//1. if groupFigures/redo was our last action
+				//permanently remove all figures that were grouped from the drawing
+			//2. if undo undo was our last action and their are lots of figures in the drawing waiting to be regrouped by a redo
+				//nothing to do since its permanently removed in the undo action
+			
+			if(getGroupFigure() != null){
+				getDrawingView().drawing().removeAll(getAffectedFigures());
+			}
+			setDrawingView(null);
+			setGroupFigure(null);
+			setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
 		}
 	}
 }

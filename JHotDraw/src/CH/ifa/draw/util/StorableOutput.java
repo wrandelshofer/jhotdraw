@@ -71,7 +71,6 @@ public  class StorableOutput extends Object {
 		fStream.print(i);
 		space();
 	}
-
 	/**
 	 * Writes a long to the output stream.
 	 */

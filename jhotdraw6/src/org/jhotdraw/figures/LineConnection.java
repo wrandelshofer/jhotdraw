@@ -301,12 +301,6 @@ public  class LineConnection extends PolyLineFigure implements ConnectionFigure 
 		updateConnection();
 	}
 
-	public void figureRemoved(FigureChangeEvent e) {
-	}
-
-	public void figureRequestRemove(FigureChangeEvent e) {
-	}
-
 	public void figureInvalidated(FigureChangeEvent e) {
 	}
 

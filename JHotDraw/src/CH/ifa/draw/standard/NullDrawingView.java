@@ -23,7 +23,7 @@ import javax.swing.JPanel;
  * avoid null pointer exception. This concept is known as the Null-value object
  * bug pattern.
  *
- * @author  Wolfram Kaiser <mrfloppy@users.sourceforge.net>
+ * @author  Wolfram Kaiser <mrfloppy@sourceforge.net>
  * @version <$CURRENT_VERSION$>
  */
 public class NullDrawingView extends JPanel implements DrawingView {
@@ -33,9 +33,9 @@ public class NullDrawingView extends JPanel implements DrawingView {
 	private Painter myUpdateStrategy;
 	private Color myBackgroundColor;
 
-	private static Hashtable drawingViewManager = new Hashtable();
+	private static java.util.Map drawingViewManager = new Hashtable();
 
-	protected NullDrawingView(DrawingEditor editor) {
+	public NullDrawingView(DrawingEditor editor) {
 		setEditor(editor);
 		setDrawing(new StandardDrawing());
 	}
@@ -77,25 +77,23 @@ public class NullDrawingView extends JPanel implements DrawingView {
 
 	/**
 	 * Adds a figure to the drawing.
-	 * @return the added figure.
+	 * @return the added figure. misleading.
 	 */
-	public Figure add(Figure figure) {
-		return figure;
+	public void add(Figure figure) {
 	}
 
 	/**
 	 * Removes a figure from the drawing.
 	 * @return the removed figure
 	 */
-	public Figure remove(Figure figure) {
-		return figure;
+	public void remove(Figure figure) {
 	}
 
 	/**
 	 * Adds a collection of figures to the drawing.
 	 */
 	public void addAll(Collection figures) {
-		// ignore: do nothing
+		FigureEnumerator.getEmptyEnumeration();
 	}
 
 	/**
@@ -405,11 +403,9 @@ public class NullDrawingView extends JPanel implements DrawingView {
 	public void drawingRequestUpdate(DrawingChangeEvent e) {
 		// ignore: do nothing
 	}
-
-	public void drawingTitleChanged(DrawingChangeEvent e) {
+    public void drawingTitleChanged(DrawingChangeEvent e) {
 		// ignore: do nothing        
-	}
-
+    }
 	public boolean isInteractive() {
 		return false;
 	}

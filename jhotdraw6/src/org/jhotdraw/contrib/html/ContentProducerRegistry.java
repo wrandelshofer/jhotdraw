@@ -42,7 +42,7 @@ import CH.ifa.draw.util.StorableOutput;
 
 public class ContentProducerRegistry implements Serializable, Storable {
 	/** producers registered with this registry */
-	protected Hashtable fContentProducers = new Hashtable();
+	protected java.util.Map fContentProducers = new Hashtable();
 
 	/** parent registry for hierarchical searches */
 	protected transient ContentProducerRegistry fParent = null;

@@ -18,7 +18,7 @@ import CH.ifa.draw.util.CollectionsFactory;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 import java.awt.event.KeyEvent;
 
 /**
@@ -30,13 +30,12 @@ import java.awt.event.KeyEvent;
  * @version <$CURRENT_VERSION$>
  */
 
-public abstract class AbstractTool implements Tool, ViewChangeListener {
+public abstract class AbstractTool implements Tool {
 
 	private DrawingEditor     myDrawingEditor;
 
 	/**
 	 * The position of the initial mouse down.
-	 * The anchor point is usually the first mouse click performed with this tool.
 	 */
     private int myAnchorX;
     private int myAnchorY;
@@ -58,6 +57,19 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 	 */
 	private boolean myIsEnabled;
 
+	private final ViewChangeListener myViewChangeListener = new ViewChangeListener() {
+		public void viewSelectionChanged(DrawingView oldView, DrawingView newView){
+			AbstractTool.this.viewSelectionChanged(oldView, newView);
+		}
+		public void viewCreated(DrawingView view){
+			AbstractTool.this.viewCreated(view);
+		}
+		public void viewDestroying(DrawingView view){
+			AbstractTool.this.viewDestroying(view);
+		}
+	};
+		
+		
 	/**
 	 * Constructs a tool for the given view.
 	 */
@@ -66,7 +78,7 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 		setEventDispatcher(createEventDispatcher());
 		setEnabled(true);
 		checkUsable();
-		editor().addViewChangeListener(this);
+		editor().addViewChangeListener(myViewChangeListener);
 	}
 
 	/**
@@ -107,7 +119,7 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 	 * Subclasses should always call super.  ViewSelectionChanged() this allows
 	 * the tools state to be updated and referenced to the new view.
 	 */
-	public void viewSelectionChanged(DrawingView oldView, DrawingView newView) {
+	protected void viewSelectionChanged(DrawingView oldView, DrawingView newView) {
 		if (isActive()) {
 			deactivate();
 			activate();
@@ -117,46 +129,53 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 	}
 
 	/**
-	 * Sent when a new view is created
+	 * Sent when a new view is added
 	 */
-	public void viewCreated(DrawingView view) {
+	protected void viewCreated(DrawingView view) {
 	}
 
 	/**
-	 * Send when an existing view is about to be destroyed.
+	 * Send when an existing view is about to be removed.
+	 * there is no getting away from the strange order here.
+	 * if you add something after the view is activated, you tend to want to 
+	 * remove it <i>before</i> the view is deactivated.  it will cause funny
+	 * naming of the methods. such as viewActvated and viewDeactivating.
+	 * C'est la vie...dnoyeb
+	 * point of fact, this is called <i>after</i> the view is deactivated but it
+	 * is ok unless we make all instances of this situation funnily named.
 	 */
-	public void viewDestroying(DrawingView view) {
+	protected void viewDestroying(DrawingView view) {
 	}
 
 	/**
 	 * Handles mouse down events in the drawing view.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-        setAnchorX(x);
-        setAnchorY(y);
-		setView((DrawingView)e.getSource());
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+        setAnchorX(dvme.getX()); //constrained value
+        setAnchorY(dvme.getY()); //constrained value
+		setView( dvme.getDrawingView() );
 	}
 
 	/**
 	 * Handles mouse drag events in the drawing view.
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 	}
 
 	/**
 	 * Handles mouse up in the drawing view.
+	 * Standard behavior is for the tool to deactivate and the view to be 
+	 * released.  Override this method if you need to use the {@link DrawingView
+	 * DrawingView} after mouseUp.
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
-//		setView(null);//This must be fixed!!! the view should not be held onto after mouse up??
-//unlike super.mousedown which is usually called immediately after a sub classes mouse down
-//method starts, super.mouseup should probably be called last before the method ends?
-//it must if its going to set the view to null.  getting messy.
+	public void mouseUp(DrawingViewMouseEvent dvme) {
+		setView(null);
 	}
 
 	/**
-	 * Handles mouse moves (if the mouse button is up).
+	 * Handles mouse moves (when the mouse button is up).
 	 */
-	public void mouseMove(MouseEvent evt, int x, int y) {
+	public void mouseMove(DrawingViewMouseEvent dvme) {
 	}
 
 	/**
@@ -241,38 +260,18 @@ public abstract class AbstractTool implements Tool, ViewChangeListener {
 		return myIsEnabled;
 	}
 
-	/**
-	 * The anchor point is usually the first mouse click performed with this tool.
-	 * @see #mouseDown
-	 */
 	protected void setAnchorX(int newAnchorX) {
 		myAnchorX = newAnchorX;
 	}
 
-	/**
-	 * The anchor point is usually the first mouse click performed with this tool.
-	 *
-	 * @return the anchor X coordinate for the interaction
-	 * @see #mouseDown
-	 */
 	protected int getAnchorX() {
 		return myAnchorX;
 	}
 
-	/**
-	 * The anchor point is usually the first mouse click performed with this tool.
-	 * @see #mouseDown
-	 */
 	protected void setAnchorY(int newAnchorY) {
 		myAnchorY = newAnchorY;
 	}
 
-	/**
-	 * The anchor point is usually the first mouse click performed with this tool.
-	 *
-	 * @return the anchor Y coordinate for the interaction
-	 * @see #mouseDown
-	 */
 	protected int getAnchorY() {
 		return myAnchorY;
 	}

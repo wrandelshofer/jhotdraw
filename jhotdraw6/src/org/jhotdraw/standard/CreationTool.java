@@ -14,7 +14,7 @@ package CH.ifa.draw.standard;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.util.Undoable;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 
 /**
  * A tool to create new figures. The figure to be
@@ -27,6 +27,9 @@ import java.awt.event.MouseEvent;
  * CreationTool creates new figures by cloning a prototype.
  * <hr>
  *
+ * Note: CreatedFigure and AddedFigure are now the same.  No longer does a
+ * CompositeFigure change the added figure and return a different figure.
+ *
  * @see Figure
  * @see Object#clone
  *
@@ -35,6 +38,14 @@ import java.awt.event.MouseEvent;
 
 
 public class CreationTool extends AbstractTool {
+
+	/**
+	 * the anchor point of the interaction
+	 * This is redundant. AbstractTool already has AnchorX and AnchorY which all
+	 * other tools are using.
+	 * @deprecated
+	 */
+	private Point   fAnchorPoint;
 
 	/**
 	 * the currently created figure
@@ -48,9 +59,9 @@ public class CreationTool extends AbstractTool {
 	private Figure myAddedFigure;
 
 	/**
-	 * the prototypical figure that is used to create new figuresthe prototypical figure that is used to create new figures.
+	 * the prototypical figure that is used to create new figures.
 	 */
-	private Figure  myPrototypeFigure;
+	private Figure  fPrototype;
 
 
 	/**
@@ -58,7 +69,7 @@ public class CreationTool extends AbstractTool {
 	 */
 	public CreationTool(DrawingEditor newDrawingEditor, Figure prototype) {
 		super(newDrawingEditor);
-		setPrototypeFigure(prototype);
+		fPrototype = prototype;
 	}
 
 	/**
@@ -82,29 +93,33 @@ public class CreationTool extends AbstractTool {
 	/**
 	 * Creates a new figure by cloning the prototype.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e, x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+		setAnchorPoint(new Point(dvme.getX(), dvme.getY()));
 		setCreatedFigure(createFigure());
-		setAddedFigure(view().add(getCreatedFigure()));
-		getAddedFigure().displayBox(new Point(getAnchorX(), getAnchorY()), new Point(getAnchorX(), getAnchorY()));
+		view().add(getCreatedFigure());
+		setAddedFigure(getCreatedFigure());
+		getAddedFigure().displayBox(getAnchorPoint(), getAnchorPoint());
 	}
 
 	/**
 	 * Creates a new figure by cloning the prototype.
 	 */
 	protected Figure createFigure() {
-		if (getPrototypeFigure() == null) {
-			throw new JHotDrawRuntimeException("No protoype defined");
+		if (fPrototype == null) {
+			//This will become ASSERT in JDK 1.4
+			//This represents an avoidable error on the programmers part.			
+			throw new JHotDrawRuntimeException("No protoype defined.");
 		}
-		return (Figure)getPrototypeFigure().clone();
+		return (Figure) fPrototype.clone();
 	}
 
 	/**
 	 * Adjusts the extent of the created figure
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		if (getAddedFigure() != null) {
-			getAddedFigure().displayBox(new Point(getAnchorX(), getAnchorY()), new Point(x, y));
+			getAddedFigure().displayBox(getAnchorPoint(), new Point(dvme.getX(),dvme.getY()));
 		}
 	}
 
@@ -113,7 +128,7 @@ public class CreationTool extends AbstractTool {
 	 * is removed from the drawing.
 	 * @see Figure#isEmpty
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		if (getAddedFigure() != null) {
 			if (getCreatedFigure().isEmpty()) {
 				drawing().remove(getAddedFigure());
@@ -128,29 +143,10 @@ public class CreationTool extends AbstractTool {
 				getUndoActivity().setAffectedFigures(new SingleFigureEnumerator(getAddedFigure()));
 			}
 			setAddedFigure(null);
+			view().drawing().update();//we made a change to the drawing, so update it.
 		}
 		setCreatedFigure(null);
 		editor().toolDone();
-	}
-
-	/**
-	 * As the name suggests this CreationTool uses the Prototype design pattern.
-	 * Thus, the prototype figure which is used to create new figures of the same
-	 * type by cloning the original prototype figure.
-	 * @param newPrototypeFigure figure to be cloned to create new figures
-	 */
-	protected void setPrototypeFigure(Figure newPrototypeFigure) {
-		myPrototypeFigure = newPrototypeFigure;
-	}
-
-	/**
-	 * As the name suggests this CreationTool uses the Prototype design pattern.
-	 * Thus, the prototype figure which is used to create new figures of the same
-	 * type by cloning the original prototype figure.
-	 * @return figure to be cloned to create new figures
-	 */
-	protected Figure getPrototypeFigure() {
-		return myPrototypeFigure;
 	}
 
 	/**
@@ -187,5 +183,32 @@ public class CreationTool extends AbstractTool {
 	 */
 	protected Undoable createUndoActivity() {
 		return new PasteCommand.UndoActivity(view());
+	}
+
+	/**
+	 * The anchor point is usually the first mouse click performed with this tool.
+	 *
+	 * @return the anchor point for the interaction
+	 * @see #mouseDown
+	 * @todo use {@link AbstractTool#getAnchorX 
+	 *			   AbstractTool.getAnchorX()} and {@link AbstractTool#getAnchorY
+	 *             AbstractTool.getAnchorY()} instead.
+	 *
+	 */
+	protected Point getAnchorPoint() {
+		// SF bug-report id: #490752
+		return fAnchorPoint;
+	}
+
+
+	/**
+	 * Sets the anchorPoint attribute of the CreationTool object
+	 * @todo use {@link AbstractTool#setAnchorX
+	 *			   AbstractTool.setAnchorX()} and {@link AbstractTool#setAnchorY
+	 *             AbstractTool.setAnchorY()} instead.
+	 * @param newAnchorPoint  The new anchorPoint value
+	 */
+	protected void setAnchorPoint(Point newAnchorPoint) {
+		fAnchorPoint = newAnchorPoint;
 	}
 }

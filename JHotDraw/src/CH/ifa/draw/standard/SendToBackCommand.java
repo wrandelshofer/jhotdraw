@@ -40,7 +40,7 @@ public class SendToBackCommand extends AbstractCommand {
 		while (fe.hasNextFigure()) {
 			view().drawing().sendToBack(fe.nextFigure());
 		}
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	protected boolean isExecutableWithView() {
@@ -52,7 +52,7 @@ public class SendToBackCommand extends AbstractCommand {
 	}
 
 	public static class UndoActivity extends UndoableAdapter {
-		private Hashtable myOriginalLayers;
+		private java.util.Map myOriginalLayers;
 		
 		public UndoActivity(DrawingView newDrawingView) {
 			super(newDrawingView);

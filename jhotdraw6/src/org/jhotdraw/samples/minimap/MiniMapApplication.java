@@ -14,7 +14,22 @@ public class MiniMapApplication extends SplitPaneDrawApplication {
 	}
 
 	public static void main(String[] args) {
-		MiniMapApplication window = new MiniMapApplication();
-		window.open();
+		final MiniMapApplication window = new MiniMapApplication();
+		Runnable r = new Runnable() {
+			public void run() {
+				window.newWindow();
+			}
+		};
+		try {
+			java.awt.EventQueue.invokeAndWait( r );
+		}
+		catch(java.lang.InterruptedException ie){
+			System.err.println(ie.getMessage());
+			window.exit();
+		}
+		catch(java.lang.reflect.InvocationTargetException ite){
+			System.err.println(ite.getMessage());
+			window.exit();
+		}
 	}
 }

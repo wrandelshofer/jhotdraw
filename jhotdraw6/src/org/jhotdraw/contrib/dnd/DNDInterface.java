@@ -13,7 +13,7 @@ package CH.ifa.draw.contrib.dnd;
 
 import java.awt.dnd.DnDConstants;
 import java.awt.datatransfer.*;
-
+import java.awt.dnd.*;
 /**
  * Interface for Components which wish to participate in drag and drop.
  *
@@ -23,13 +23,20 @@ import java.awt.datatransfer.*;
  * drops from extra-JVM sources according to the conditions the Component
  * specifies.
  *
- * @author  C.L.Gilbert <dnoyeb@sourceforge.net>
+ * @author  C.L.Gilbert <dnoyeb@users.sourceforge.net>
  * @version <$CURRENT_VERSION$>
  */
 public interface DNDInterface {
-
-	public boolean setDragSourceActive(boolean state);
-	public boolean setDropTargetActive(boolean state);
+//	public void setDragSourceState(boolean state);
+	public void DNDInitialize(DragGestureListener dgl);
+	public void DNDDeinitialize();
+	/**
+	 * When the DNDTool starts a drag action, it queries the interface for the
+	 * dragSourceListener of the source view.  It uses this listener to create
+	 * the dragGestureEvent.
+	 */
+	public DragSourceListener getDragSourceListener();
+	
 
 	/**
 	 * This method returns the set of DND actions which are accepted by this

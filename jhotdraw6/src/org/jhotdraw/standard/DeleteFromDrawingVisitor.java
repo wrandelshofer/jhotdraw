@@ -17,6 +17,12 @@ import CH.ifa.draw.util.CollectionsFactory;
 import java.util.Set;
 
 /**
+ * 1.  Visit all figures reachable from the hostFigure.
+ * 2.  Delete all figures directly contained in the drawing. <code>containsFigure()</code>
+ * 3.  Return a list of all deleted figures.
+ * Note: do not delete figures contained in other figures, only those directly
+ * contained in the drawing.
+ *
  * @author  Wolfram Kaiser <mrfloppy@sourceforge.net>
  * @version <$CURRENT_VERSION$>
  */
@@ -39,8 +45,8 @@ public class DeleteFromDrawingVisitor implements FigureVisitor {
 
 	public void visitFigure(Figure hostFigure) {
 		if (!myDeletedFigures.contains(hostFigure) && getDrawing().containsFigure(hostFigure)) {
-			Figure orphanedFigure = getDrawing().orphan(hostFigure);
-			myDeletedFigures.add(orphanedFigure);
+			getDrawing().orphan(hostFigure);
+			myDeletedFigures.add(hostFigure);
 		}
 	}
 

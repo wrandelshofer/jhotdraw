@@ -34,8 +34,7 @@ public class NullTool extends AbstractTool {
 	public void deactivate() {
 		// suppress clearSelection() and tool-activation notification in superclass
 	}
-
     protected void checkUsable() {
-    	//suppress setUsable(false);
+    	//setUsable(false);
 	}    
 }

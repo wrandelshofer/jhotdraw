@@ -149,7 +149,7 @@ import CH.ifa.draw.util.StorableOutput;
  * cell's contents come from a different HTMLTextAreaFigure.
  *
  * @author    Eduardo Francos - InContext
- * @created   7 May 2002
+ * @created   7 mai 2002
  * @version   <$CURRENT_VERSION$>
  */
 
@@ -1171,25 +1171,6 @@ public class HTMLTextAreaFigure extends TextAreaFigure
 		changed();
 	}
 
-
-	/**
-	 * handles frame figure's invalidatedremoved events.<br>
-	 * Never happens because the frame figure is not part of the drawing
-	 *
-	 * @param e  Description of the Parameter
-	 */
-	public void figureRemoved(FigureChangeEvent e) { }
-
-
-	/**
-	 * handles frame figure's remove requests events.<br>
-	 * Never happens because the frame figure is not part of the drawing
-	 *
-	 * @param e  Description of the Parameter
-	 */
-	public void figureRequestRemove(FigureChangeEvent e) { }
-
-
 	/**
 	 * handles frame figure's update requests events.<br>
 	 * Never happens because the frame figure is not part of the drawing
@@ -1208,15 +1189,4 @@ public class HTMLTextAreaFigure extends TextAreaFigure
 	private class InvalidAttributeMarker extends Exception {
 	}
 
-	/**
-	 * Usually, a TextHolders is implemented by a Figure subclass. To avoid casting
-	 * a TextHolder to a Figure this method can be used for polymorphism (in this
-	 * case, let the (same) object appear to be of another type).
-	 * Note, that the figure returned is not the figure to which the TextHolder is
-	 * (and its representing figure) connected.
-	 * @return figure responsible for representing the content of this TextHolder
-	 */
-	public Figure getRepresentingFigure() {
-		return this;
-	}
 }

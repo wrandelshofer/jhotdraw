@@ -14,7 +14,7 @@ package CH.ifa.draw.figures;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.Undoable;
-import java.awt.event.MouseEvent;
+
 
 /**
  * Tool to create new or edit existing text figures.
@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
  */
 public  class ConnectedTextTool extends TextTool {
 
+	private boolean fConnected = false;
 	private Figure myConnectedFigure;
 
 	public ConnectedTextTool(DrawingEditor editor, Figure prototype) {
@@ -36,25 +37,24 @@ public  class ConnectedTextTool extends TextTool {
 	 * If the pressed figure is a TextHolder it can be edited otherwise
 	 * a new text figure is created.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e, x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
 
-		if (getTypingTarget() != null) {
-			TextHolder textHolder = getTypingTarget();
-			setConnectedFigure(drawing().findFigureInsideWithout(x, y, textHolder.getRepresentingFigure()));
-			if ((getConnectedFigure() != null) && (textHolder != null) && (getConnectedFigure().getTextHolder() != textHolder)) {
-				textHolder.connect(getConnectedFigure().getDecoratedFigure());
-				getConnectedFigure().addDependendFigure(getAddedFigure());
-			}
+		setConnectedFigure(drawing().findFigureInside(dvme.getX(), dvme.getY()));
+		TextHolder textHolder = getTypingTarget();
+		if (!fConnected && (getConnectedFigure() != null) && (textHolder != null) && (getConnectedFigure() != textHolder)) {
+			textHolder.connect(getConnectedFigure());
+			getConnectedFigure().addDependendFigure(getAddedFigure());
+			fConnected = true;
 		}
 	}
 
 	protected void endEdit() {
 		super.endEdit();
-		if ((getUndoActivity() != null) && (getUndoActivity() instanceof ConnectedTextTool.UndoActivity)) {
+		if (getUndoActivity() != null) {
 			((ConnectedTextTool.UndoActivity)getUndoActivity()).setConnectedFigure(getConnectedFigure());
 		}
-		else if ((getConnectedFigure() != null) && isDeleteTextFigure()) {
+		else {
 			getConnectedFigure().removeDependendFigure(getAddedFigure());
 		}
 	}
@@ -73,12 +73,7 @@ public  class ConnectedTextTool extends TextTool {
 	 */
 	public void activate() {
 		super.activate();
-		setConnectedFigure(null);
-	}
-
-	protected Undoable createDeleteUndoActivity() {
-		FigureTransferCommand cmd = new DeleteCommand("Delete", editor());
-		return new DeleteUndoActivity(cmd, getConnectedFigure());
+		fConnected = false;
 	}
 
 	/**
@@ -144,58 +139,6 @@ public  class ConnectedTextTool extends TextTool {
 					else if (!isValidText(getOriginalText())) {
 						currentFigure.getTextHolder().connect(getConnectedFigure());
 					}
-				}
-			}
-
-			return true;
-		}
-
-		public void setConnectedFigure(Figure newConnectedFigure) {
-			myConnectedFigure = newConnectedFigure;
-		}
-
-		public Figure getConnectedFigure() {
-			return myConnectedFigure;
-		}
-	}
-
-	/**
-	 * This class
-	 */
-	public static class DeleteUndoActivity extends DeleteCommand.UndoActivity {
-		private Figure myConnectedFigure;
-
-		public DeleteUndoActivity(FigureTransferCommand cmd, Figure newConnectedFigure) {
-			super(cmd);
-			setConnectedFigure(newConnectedFigure);
-		}
-
-		public boolean undo() {
-			if (!super.undo()) {
-				return false;
-			}
-
-			FigureEnumeration fe = getAffectedFigures();
-			while (fe.hasNextFigure()) {
-				Figure currentFigure = fe.nextFigure();
-				if (currentFigure.getTextHolder() != null) {
-					currentFigure.getTextHolder().connect(getConnectedFigure().getDecoratedFigure());
-				}
-			}
-
-			return true;
-		}
-
-		public boolean redo() {
-			if (!super.redo()) {
-				return false;
-			}
-
-			FigureEnumeration fe = getAffectedFigures();
-			while (fe.hasNextFigure()) {
-				Figure currentFigure = fe.nextFigure();
-				if (currentFigure.getTextHolder() != null) {
-					currentFigure.getTextHolder().disconnect(getConnectedFigure().getDecoratedFigure());
 				}
 			}
 

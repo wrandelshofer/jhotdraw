@@ -28,11 +28,11 @@ import java.util.*;
  */
 public  class CommandMenu extends JMenu implements ActionListener, CommandListener {
 
-	private HashMap  hm;
+	private Map  hm;
 
 	public CommandMenu(String name) {
 		super(name);
-		hm = new HashMap();
+		hm = CH.ifa.draw.util.CollectionsFactory.current().createMap();
 	}
 
 	/**
@@ -82,7 +82,7 @@ public  class CommandMenu extends JMenu implements ActionListener, CommandListen
 	public synchronized void enable(String name, boolean state) {
 		for (int i = 0; i < getItemCount(); i++) {
 			JMenuItem item = getItem(i);
-			if (name.equals(item.getLabel())) {
+			if (name.equals(item.getText())) {
 				item.setEnabled(state);
 				return;
 			}
@@ -93,9 +93,14 @@ public  class CommandMenu extends JMenu implements ActionListener, CommandListen
 		// ignore separators (a separator has a hyphen as its label)
 		for (int i = 0; i < getMenuComponentCount(); i++) {
 			Component c = getMenuComponent(i);
-			Command cmd = (Command) hm.get(c);
-			if (cmd != null) {
-				c.setEnabled(cmd.isExecutable());
+			if(c instanceof CommandMenu){
+				((CommandMenu)c).checkEnabled();
+			}
+			else {
+				Command cmd = (Command) hm.get(c);
+				if (cmd != null) {
+					c.setEnabled(cmd.isExecutable());
+				}
 			}
 		}
 	}

@@ -13,11 +13,16 @@ package CH.ifa.draw.util;
 
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.StandardDrawing;
+import CH.ifa.draw.standard.CompositeFigure;
+import CH.ifa.draw.figures.TextFigure;
 
 import java.io.*;
 import java.util.*;
-import java.util.List;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+
+import com.poet.jdo.PersistenceManagerFactories;
 
 import javax.jdo.*;
 import javax.swing.*;
@@ -26,7 +31,7 @@ import javax.swing.event.ListSelectionEvent;
 
 
 /**
- * @author Wolfram Kaiser <mrfloppy@users.sourceforge.net>
+ * @author Wolfram Kaiser
  * @version <$CURRENT_VERSION$>
  */
 public class JDOStorageFormat extends StandardStorageFormat {
@@ -38,7 +43,7 @@ public class JDOStorageFormat extends StandardStorageFormat {
 	 */
 	public JDOStorageFormat() {
 		super();
-		pms = CollectionsFactory.current().createMap();
+		pms = new Hashtable();
 		// close database connection when application exits
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
@@ -162,17 +167,15 @@ public class JDOStorageFormat extends StandardStorageFormat {
 	}
 
 	private PersistenceManagerFactory createPersistenceManagerFactory(String dbFileName) {
-		Properties pmfProps = new Properties();
-
-        pmfProps.put(
-            "javax.jdo.PersistenceManagerFactoryClass",
-            "com.poet.jdo.PersistenceManagerFactories" );
-        pmfProps.put(
-            "javax.jdo.option.ConnectionURL",
-            "fastobjects://LOCAL/MyBase.j1" );
-        final PersistenceManagerFactory pmf =
-            JDOHelper.getPersistenceManagerFactory( pmfProps );
-
+		Properties props = new Properties();
+//		props.put("javax.jdo.option.RetainValues", "true");
+//		props.put("javax.jdo.option.NonTransactionalRead", "true");
+//		props.put("javax.jdo.option.NonTransactionalWrite", "true");
+		final PersistenceManagerFactory pmf = PersistenceManagerFactories.getPersistenceManagerFactory(props);
+		pmf.setConnectionURL("fastobjects://LOCAL/" + dbFileName);
+//		pmf.setRetainValues(true);
+//		pmf.setNontransactionalWrite(true);
+//		pmf.setNontransactionalRead(true);
 		return pmf;
 	}
 
@@ -259,10 +262,10 @@ public class JDOStorageFormat extends StandardStorageFormat {
 	}
 
 	static class DrawingListModel extends AbstractListModel {
-		private List myList;
+		private ArrayList myList;
 
 		DrawingListModel(Iterator iter) {
-			myList = CollectionsFactory.current().createList();
+			myList = new ArrayList();
 			while (iter.hasNext()) {
 				Object o = iter.next();
 				System.out.println("extent: " + o + " .. " + ((Drawing)o).getTitle());

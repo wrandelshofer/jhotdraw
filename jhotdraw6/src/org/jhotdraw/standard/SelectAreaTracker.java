@@ -12,7 +12,7 @@
 package CH.ifa.draw.standard;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
+
 import CH.ifa.draw.framework.*;
 
 /**
@@ -34,23 +34,27 @@ public class SelectAreaTracker extends AbstractTool {
         fRubberBandColor = rubberBandColor;
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
 		// use event coordinates to supress any kind of
 		// transformations like constraining points to a grid
-		super.mouseDown(e, e.getX(), e.getY());
+		//I disagree, selection may be unconstrained, but drag should be. I did not change however.
+		//also notice the the drag function is using constrained values
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
 		rubberBand(getAnchorX(), getAnchorY(), getAnchorX(), getAnchorY());
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		super.mouseDrag(e, x, y);
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		super.mouseDrag(dvme);
 		eraseRubberBand();
-		rubberBand(getAnchorX(), getAnchorY(), x, y);
+		rubberBand(getAnchorX(), getAnchorY(), dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY());
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		eraseRubberBand();
-		selectGroup(e.isShiftDown());
-		super.mouseUp(e, x, y);
+		selectGroup(dvme.getMouseEvent().isShiftDown());
+		super.mouseUp(dvme);
 	}
 
 	private void rubberBand(int x1, int y1, int x2, int y2) {
@@ -86,7 +90,7 @@ public class SelectAreaTracker extends AbstractTool {
 	}
 
 	private void selectGroup(boolean toggle) {
-		FigureEnumeration fe = drawing().figuresReverse();
+		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
 			Figure figure = fe.nextFigure();
 			Rectangle r2 = figure.displayBox();
@@ -99,5 +103,8 @@ public class SelectAreaTracker extends AbstractTool {
 				}
 			}
 		}
+	}
+	protected FigureEnumeration figures(){
+		return drawing().figuresReverse();
 	}
 }

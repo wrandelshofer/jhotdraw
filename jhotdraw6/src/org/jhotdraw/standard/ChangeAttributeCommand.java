@@ -48,7 +48,7 @@ public  class ChangeAttributeCommand extends AbstractCommand {
 		while (fe.hasNextFigure()) {
 			fe.nextFigure().setAttribute(fAttribute, fValue);
 		}
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {
@@ -64,7 +64,7 @@ public  class ChangeAttributeCommand extends AbstractCommand {
 
 	public static class UndoActivity extends UndoableAdapter {
 		private FigureAttributeConstant myUndoAttribute;
-		private Hashtable	            myOriginalValues;
+		private java.util.Map	            myOriginalValues;
 		private Object                  myUndoValue;
 
 		public UndoActivity(DrawingView newDrawingView, FigureAttributeConstant newUndoAttribute, Object newUndoValue) {

@@ -58,8 +58,11 @@ public  class GroupFigure extends CompositeFigure {
 		// we could transform all components proportionally
 	}
 
+	/**
+	 * this cant be right !!!dnoyeb!!! perhaps then use figures()?
+	 */
 	public FigureEnumeration decompose() {
-		return new FigureEnumerator(fFigures);
+		return new FigureEnumerator(getFigures());
 	}
 
    /**
@@ -76,12 +79,24 @@ public  class GroupFigure extends CompositeFigure {
 
    /**
 	* Sets the attribute of all the contained figures.
+	* @deprecated use {@link #setAttribute(FigureAttributeConstant ac, Object value) 
+	*             setAttribute(FigureAttributeConstant attributeConstant, Object value)}
 	*/
 	public void setAttribute(String name, Object value) {
 		super.setAttribute(name, value);
 		FigureEnumeration fe = figures();
 		while (fe.hasNextFigure()) {
 			fe.nextFigure().setAttribute(name, value);
+		}
+	}
+	/**
+	 * Sets the named attribute of all contained figures to the new value. 
+	 */
+	public void setAttribute(FigureAttributeConstant attributeConstant, Object value) {
+		super.setAttribute(attributeConstant, value);
+		FigureEnumeration fe = figures();
+		while (fe.hasNextFigure()) {
+			fe.nextFigure().setAttribute(attributeConstant, value);
 		}
 	}
 }

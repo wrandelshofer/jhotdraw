@@ -128,7 +128,7 @@ public class AlignCommand extends AbstractCommand {
 		// get selected figures in the order the figures have been selected
 		getUndoActivity().setAffectedFigures(view().selection());
 		((AlignCommand.UndoActivity)getUndoActivity()).alignAffectedFigures(getAlignment());
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	protected void setAlignment(Alignment newAlignment) {
@@ -147,7 +147,7 @@ public class AlignCommand extends AbstractCommand {
 	}
 
 	public static class UndoActivity extends UndoableAdapter {
-		private Hashtable myOriginalPoints;
+		private java.util.Map myOriginalPoints;
 		private Alignment myAppliedAlignment;
 
 		public UndoActivity(DrawingView newView, Alignment newAlignment) {

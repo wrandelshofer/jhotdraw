@@ -41,7 +41,7 @@ public class CutCommand extends FigureTransferCommand {
 		copyFigures(getUndoActivity().getAffectedFigures(),
 			view().selectionCount());
 		deleteFigures(getUndoActivity().getAffectedFigures());
-		view().checkDamage();
+		view().drawing().update();
 	}
 
 	public boolean isExecutableWithView() {
@@ -88,5 +88,15 @@ public class CutCommand extends FigureTransferCommand {
 
 			return false;
 		}
+		/**
+		 * Releases all resources related to an undoable activity
+		 */
+		public void release() {
+			FigureEnumeration fe = getAffectedFigures();
+			while (fe.hasNextFigure()) {
+				fe.nextFigure().release();
+			}
+			setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
+		}			
 	}
 }

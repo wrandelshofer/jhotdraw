@@ -34,13 +34,14 @@ public abstract class FigureTransferCommand extends AbstractCommand {
    /**
 	* Deletes the selection from the drawing.
 	*/
-	protected void deleteFigures(FigureEnumeration fe) {
+	protected FigureEnumeration deleteFigures(FigureEnumeration fe) {
 	   DeleteFromDrawingVisitor deleteVisitor = new DeleteFromDrawingVisitor(view().drawing());
 		while (fe.hasNextFigure()) {
 			fe.nextFigure().visit(deleteVisitor);
 		}
 
 		view().clearSelection();
+		return deleteVisitor.getDeletedFigures();
 	}
 
    /**
@@ -53,13 +54,8 @@ public abstract class FigureTransferCommand extends AbstractCommand {
    /**
 	* Inserts an enumeration of figures and translates them by the
 	* given offset.
-	* @todo mrfloppy to investigate making this protected.  Looks like it would
-	*       be no problem to me.  It was package scope.  I thought it safer to
-	*       make it less restrictive just incase their was a reason for the
-	*       package scope I didn't know about. dnoyeb.
-	*       Bug - [ 673096 ] FigureTransferCommand has a wrong method
 	*/
-	public FigureEnumeration insertFigures(FigureEnumeration fe, int dx, int dy) {
+	protected FigureEnumeration insertFigures(FigureEnumeration fe, int dx, int dy) {
 		return view().insertFigures(fe, dx, dy, false);
 	}
 }

@@ -26,8 +26,9 @@ import java.util.EventObject;
  */
 public class ToolButton extends PaletteButton implements ToolListener {
 
-	private Tool            myTool;
-	private PaletteIcon     myIcon;
+	private String          fName;
+	private Tool            fTool;
+	private PaletteIcon     fIcon;
 
 	public ToolButton(PaletteListener listener, String iconName, String name, Tool tool) {
 		super(listener);
@@ -56,9 +57,9 @@ public class ToolButton extends PaletteButton implements ToolListener {
 			// ignore exception
 		}
 
-		setPaletteIcon(new PaletteIcon(new Dimension(24,24), im[0], im[1], im[2]));
-		setTool(tool);
-		setName(name);
+		fIcon = new PaletteIcon(new Dimension(24,24), im[0], im[1], im[2]);
+		fTool = tool;
+		fName = name;
 
 		// avoid null pointer exception if image could not be loaded
 		if (im[0] != null) {
@@ -74,11 +75,11 @@ public class ToolButton extends PaletteButton implements ToolListener {
 	}
 
 	public Tool tool() {
-		return myTool;
+		return fTool;
 	}
 
 	public String name() {
-		return getName();
+		return fName;
 	}
 
 	public Object attributeValue() {
@@ -86,15 +87,15 @@ public class ToolButton extends PaletteButton implements ToolListener {
 	}
 
 	public Dimension getMinimumSize() {
-		return new Dimension(getPaletteIcon().getWidth(), getPaletteIcon().getHeight());
+		return new Dimension(fIcon.getWidth(), fIcon.getHeight());
 	}
 
 	public Dimension getPreferredSize() {
-		return new Dimension(getPaletteIcon().getWidth(), getPaletteIcon().getHeight());
+		return new Dimension(fIcon.getWidth(), fIcon.getHeight());
 	}
 
 	public Dimension getMaximumSize() {
-		return new Dimension(getPaletteIcon().getWidth(), getPaletteIcon().getHeight());
+		return new Dimension(fIcon.getWidth(), fIcon.getHeight());
 	}
 
 //  Not necessary anymore in JFC due to the support of Icons in JButton
@@ -112,8 +113,8 @@ public class ToolButton extends PaletteButton implements ToolListener {
 	}
 */
 	public void paintSelected(Graphics g) {
-		if (getPaletteIcon().selected() != null) {
-			g.drawImage(getPaletteIcon().selected(), 0, 0, this);
+		if (fIcon.selected() != null) {
+			g.drawImage(fIcon.selected(), 0, 0, this);
 		}
 	}
 
@@ -149,17 +150,5 @@ public class ToolButton extends PaletteButton implements ToolListener {
 
 	public void toolDisabled(EventObject toolEvent) {
 		setEnabled(false);
-	}
-
-	protected PaletteIcon getPaletteIcon() {
-		return myIcon;
-	}
-
-	private void setPaletteIcon(PaletteIcon myIcon) {
-		this.myIcon = myIcon;
-	}
-
-	private void setTool(Tool myTool) {
-		this.myTool = myTool;
 	}
 }

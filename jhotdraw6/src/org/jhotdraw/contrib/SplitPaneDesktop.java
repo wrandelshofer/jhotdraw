@@ -21,7 +21,7 @@ import java.beans.PropertyChangeEvent;
  * @todo Gotta fix this !!! the selected view changes based on which split pane is selected!
  *
  * @author C.L.Gilbert <dnoyeb@users.sourceforge.net>
- * @author Wolfram Kaiser <mrfloppy@users.sourceforge.net>
+ * @author Wolfram Kaiser <mrfloppy@sourceforge.net>
  * @version <$CURRENT_VERSION$>
  */
 public class SplitPaneDesktop extends JSplitPane implements Desktop {
@@ -143,7 +143,9 @@ public class SplitPaneDesktop extends JSplitPane implements Desktop {
 	protected DesktopEventService createDesktopEventService() {
 		return new DesktopEventService(this, getContainer());
 	}
-
+    /**
+     *  @deprecated desktop will use listener
+     */
 	public void updateTitle(String newDrawingTitle) {
 		// should be setTitle but a JPanelDesktop has no own title bar
 		setName(newDrawingTitle);

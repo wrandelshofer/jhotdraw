@@ -34,9 +34,8 @@ public class DeleteCommand extends FigureTransferCommand {
 	public void execute() {
 		super.execute();
 		setUndoActivity(createUndoActivity());
-		getUndoActivity().setAffectedFigures(view().selection());
-		deleteFigures(getUndoActivity().getAffectedFigures());
-		view().checkDamage();
+		getUndoActivity().setAffectedFigures( deleteFigures( view().selection() ));
+		view().drawing().update();
 	}
 
 	protected boolean isExecutableWithView() {
@@ -82,5 +81,16 @@ public class DeleteCommand extends FigureTransferCommand {
 
 			return false;
 		}
+		/**
+		 * Releases all resources related to an undoable activity
+		 * what if undo was last action?
+		 */
+		public void release() {
+			FigureEnumeration fe = getAffectedFigures();
+			while (fe.hasNextFigure()) {
+				fe.nextFigure().release();
+			}
+			setAffectedFigures(FigureEnumerator.getEmptyEnumeration());
+		}		
 	}
 }

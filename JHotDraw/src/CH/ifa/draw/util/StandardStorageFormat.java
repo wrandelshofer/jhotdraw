@@ -24,7 +24,7 @@ import CH.ifa.draw.framework.Drawing;
  * as plain text in a text file. The StandardStorageFormat has the file extension
  * "draw" (e.g. my_picasso.draw).
  *
- * @author Wolfram Kaiser <mrfloppy@users.sourceforge.net>
+ * @author Wolfram Kaiser
  * @version <$CURRENT_VERSION$>
  */
 public class StandardStorageFormat implements StorageFormat {

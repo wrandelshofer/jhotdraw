@@ -82,7 +82,7 @@ public class TextAreaFigure extends AttributeFigure
 	 * Map of attributes for the AttributedString used for the figure's text.
 	 * Currently it just uses one single attribute with the figure's current font.
 	 */
-	protected Hashtable attributesMap = new Hashtable();
+	protected java.util.Map attributesMap = new Hashtable();
 
 	/** True if the figure is read only */
 	protected boolean fIsReadOnly;
@@ -397,7 +397,7 @@ public class TextAreaFigure extends AttributeFigure
 			savedFontColor = g2.getColor();
 			savedClipArea = g2.getClip();
 			if(savedClipArea != null) {
-			clipRect = displayBox.createIntersection((Rectangle2D)savedClipArea);
+				clipRect = displayBox.createIntersection((Rectangle2D)savedClipArea);
 			} else {
 				clipRect = displayBox;
 			}
@@ -564,7 +564,7 @@ public class TextAreaFigure extends AttributeFigure
 		// restore saved graphic attributes
 		if (g2 != null) {
 			if(savedClipArea != null) {
-			g2.setClip(savedClipArea);
+				g2.setClip(savedClipArea);
 			}
 			g2.setColor(savedFontColor);
 			g2.setRenderingHints(savedRenderingHints);
@@ -750,7 +750,7 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
-	 * Connects the figure to another figure
+	 * Connects the figure to another figure.
 	 *
 	 * @param figure  the connecting figure
 	 */
@@ -814,28 +814,9 @@ public class TextAreaFigure extends AttributeFigure
 	}
 
 	/**
-	 * The figure is about to be removed from another composite figure
-	 *
-	 * @param e  Description of the Parameter
-	 */
-	public void figureRemoved(FigureChangeEvent e) {
-		if (listener() != null) {
-			listener().figureRemoved(new FigureChangeEvent(this));
-		}
-	}
-
-	/**
-	 * A request to remove the figure from another composite figure
-	 *
-	 * @param e  Description of the Parameter
-	 */
-	public void figureRequestRemove(FigureChangeEvent e) {
-		if (listener() != null) {
-			listener().figureRequestRemove(new FigureChangeEvent(this));
-		}
-	}
-
-	/**
+	 * This is not used here. Their is no need to update this figure just
+	 * because the figure its decorating requires update.
+	 * See <code>FigureChangeListener</code> interface for why.
 	 * @param e  Description of the Parameter
 	 */
 	public void figureRequestUpdate(FigureChangeEvent e) {
@@ -907,17 +888,5 @@ public class TextAreaFigure extends AttributeFigure
 	 */
 	public void setFontDirty(boolean newFontIsDirty) {
 		fFontIsDirty = newFontIsDirty;
-	}
-
-	/**
-	 * Usually, a TextHolders is implemented by a Figure subclass. To avoid casting
-	 * a TextHolder to a Figure this method can be used for polymorphism (in this
-	 * case, let the (same) object appear to be of another type).
-	 * Note, that the figure returned is not the figure to which the TextHolder is
-	 * (and its representing figure) connected.
-	 * @return figure responsible for representing the content of this TextHolder
-	 */
-	public Figure getRepresentingFigure() {
-		return this;
 	}
 }

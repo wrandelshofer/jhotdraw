@@ -22,7 +22,7 @@ public  class Animator extends Thread {
 	private DrawingView     fView;
 	private Animatable      fAnimatable;
 
-	private volatile boolean             fIsRunning;
+	private volatile boolean	fIsRunning;
 	private static final int    DELAY = 1000 / 16;
 
 	public Animator(Animatable animatable, DrawingView view) {
@@ -39,13 +39,18 @@ public  class Animator extends Thread {
 	public void end() {
 		fIsRunning = false;
 	}
-
+	
+	/**
+	 *
+	 */
 	public void run() {
 		while (fIsRunning) {
 			long tm = System.currentTimeMillis();
 			fView.freezeView();
 			fAnimatable.animationStep();
-			fView.checkDamage();
+			fView.drawing().update();//we made a change to the drawing, so update it.
+			//note that this too is in need of drawing - view seperation.  Why freeze the view
+			//when you are making drawing level changes? need to freeze the drawing. !!!dnoyeb!!!
 			fView.unfreezeView();
 
 			// Delay for a while

@@ -28,16 +28,7 @@ import java.io.Serializable;
  * Figures can have an open ended set of attributes.
  * An attribute is identified by a string.<p>
  * Default implementations for the Figure interface are provided
- * by AbstractFigure.<p>
- *
- * Figures can have <a name="dependent_figure">dependent figure</a>s. The existence od dependent
- * figures depend on another figure. This is the case for figures
- * such as ConnectedTextFigures and LineDecoration. Thus, they are
- * "externally" dependent on a figure in contrast to (internally)
- * contained figures. This means, "normal" figures (figures that
- * are not containers) can still have dependent figures. Dependent
- * figures are especially important if the figure which the depend
- * on is deleted because they should be removed as well (cascading delete).
+ * by AbstractFigure.
  *
  * @see Handle
  * @see Connector
@@ -94,6 +85,17 @@ public interface Figure
 	 * @param g the Graphics to draw into
 	 */
 	public void draw(Graphics g);
+	
+	/**
+	 * This method will call draw first then drawDecorators
+	 */
+	public void drawAll(Graphics g);
+
+	/**
+	 * This method draws the FigureDecorators
+	 * @see FigureDecorator#draw
+	 */
+	public void drawDecorators(Graphics g);
 
 	/**
 	 * Returns the handles used to manipulate
@@ -117,6 +119,10 @@ public interface Figure
 
 	/**
 	 * Checks if the Figure should be considered as empty.
+	 * For instance, when the figure is being added to the drawing, the <code>
+	 * CreationTool</code> will check this to see wether to add the figure or
+	 * not.  If the figure is too small to be seen, it will return true for isEmpty
+	 * under the above condition.
 	 */
 	public boolean isEmpty();
 
@@ -162,36 +168,27 @@ public interface Figure
 	/**
 	 * Sets the Figure's container and registers the container
 	 * as a figure change listener. A figure's container can be
-	 * any kind of FigureChangeListener. A figure is not restricted
-	 * to have a single container.
+	 * any kind of FigureChangeListener.  A figure may only have a single 
+	 * container attempts to add to 2nd container will throw exception.
+	 * This is a runtime exception now while its debated wether it should be
+	 * a checked exception or ont.
 	 */
 	public void addToContainer(FigureChangeListener c);
 
 	/**
-	 * Removes a figure from the given container and unregisters
-	 * it as a change listener.
+	 * Removes a figure from its container.
 	 */
 	public void removeFromContainer(FigureChangeListener c);
 
-	/**
-	 * Add a <a href="#dependent_figure">dependent figure</a>.
-	 */
+	
 	public void addDependendFigure(Figure newDependendFigure);
-
-	/**
-	 * Remove a <a href="#dependent_figure">dependent figure</a>.
-	 */
 	public void removeDependendFigure(Figure oldDependendFigure);
-
-	/**
-	 * Get an enumeration of all <a href="#dependent_figure">dependent figures</a>.
-	 */
 	public FigureEnumeration getDependendFigures();
 
 	/**
 	 * Gets the Figure's listeners.
 	 */
-	public FigureChangeListener listener();
+	//public FigureChangeListener listener();
 
 	/**
 	 * Adds a listener for this figure.
@@ -204,16 +201,28 @@ public interface Figure
 	public void removeFigureChangeListener(FigureChangeListener l);
 
 	/**
-	 * Releases a figure's resources. Release is called when
-	 * a figure is removed from a drawing. Informs the listeners that
-	 * the figure is removed by calling figureRemoved.
+	 * Notifies all listeners that this figure has been released.
+	 * Figures should first release all their resources such as other figures.
+	 * THIS METHOD IS CALLED BY THE CONTAINER THAT IS RELEASING THE FIGURE
+	 * need to change event names to released
+	 *
+	 * @see CompositeFigure#remove(Figure f)
 	 */
 	public void release();
-
+	
+	/**
+	 * This informs all listeners that the figure is requesting to be redrawn.
+	 *
+	 * @see FigureChangeListener#figureRequestUpdate
+	 */
+	public void update();
 	/**
 	 * Invalidates the figure. This method informs its listeners
 	 * that its current display box is invalid and should be
 	 * refreshed.
+	 * This will fire a figureInvalidated event to all its listeners.
+	 *
+	 * @see FigureChangeListener#figureInvalidated
 	 */
 	public void invalidate();
 
@@ -228,18 +237,30 @@ public interface Figure
 	 *      changed();
 	 *  }
 	 * </pre>
+	 *
+	 * Causes the figures current display box to be marked as dirty and in need
+	 * of redraw.  The redraw does not occur as a result of this method call.
+	 *
 	 * @see #invalidate
 	 * @see #changed
+	 * @see FigureChangeListener#figureInvalidated
 	 */
 	public void willChange();
 
 	/**
-	 * Informes that a figure has changed its display box.
-	 * This method also triggers an update call for its
-	 * registered observers.
+	 * Call this after the figures display box has changed.  It will nottify all
+	 * listeners that the figures bounding box has changed and is in need of
+	 * redraw.
+	 *
+	 * Causes the figures current display box to be marked as dirty and in need
+	 * of redraw.  The redraw does not occur as a direct result of this method 
+	 * call.
+	 *
 	 * @see #invalidate
 	 * @see #willChange
-	 *
+	 * @see FigureChangeListener#figureInvalidated
+	 * @see FigureChangeListener#figureChanged
+	 * @see FigureChangeEvent
 	 */
 	public void changed();
 
@@ -320,21 +341,19 @@ public interface Figure
 
 	public void visit(FigureVisitor visitor);
 
-	/**
-	 * Some figures have the ability to hold text. This method returns
-	 * the adjunctant TextHolder.
-	 * @return
-	 */
 	public TextHolder getTextHolder();
-
 	/**
-	 * Get the underlying figure in case the figure has been decorated.
-	 * If the figure has not been decorated the figure itself is returned.
-	 * The DecoratorFigure does not release the the decorated figure but
-	 * just returns it (in contrast to {@link CH.ifa.draw.standard.DecoratorFigure.peelDecoration}).
-	 *
-	 * @return underlying, "real" without DecoratorFigure
-	 * @see CH.ifa.draw.standard.DecoratorFigure
+	 * Add a <code>FigureManipulator</code> to the <code>Figure</code>.
 	 */
-	public Figure getDecoratedFigure();
+	public void addFigureManipulator(FigureManipulator fm);
+	/**
+	 * Remove a <code>FigureManipulator</code> to the <code>Figure</code>.
+	 */
+	public void removeFigureManipulator(FigureManipulator fm);
+	public void addFigureDecorator(FigureDecorator fd);
+	public void removeFigureDecorator(FigureDecorator fd);
+	/**
+	 * Need to create an enumerator/enumeration for this.
+	 */
+	public java.util.Iterator figureDecorators();
 }

@@ -25,7 +25,7 @@ public class MiniMapDesktop extends SplitPaneDesktop {
 		Image image = Iconkit.instance().registerAndLoadImage(
 			(Component)view, imageName);
 		view.add(new ImageFigure(image, imageName, new Point(0,0)));
-		view.checkDamage();
+		view.drawing().update();//we made a change to the drawing, so update it.
 //		((CH.ifa.draw.standard.StandardDrawingView)view).checkMinimumSize();
 		return super.createRightComponent(view);
 	}

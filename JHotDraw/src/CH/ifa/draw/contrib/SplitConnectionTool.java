@@ -16,7 +16,7 @@ import CH.ifa.draw.standard.SingleFigureEnumerator;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.figures.*;
 
-import java.awt.event.MouseEvent;
+
 import java.awt.*;
 
 /**
@@ -28,27 +28,28 @@ public class SplitConnectionTool extends ConnectionTool {
 		super(newDrawingEditor, newPrototype);
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
-		setView((DrawingView)e.getSource());
-		int ex = e.getX();
-		int ey = e.getY();
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
 		if (getTargetFigure() == null) {
-			setTargetFigure(findConnectableFigure(ex, ey, drawing()));
+			setTargetFigure(findConnectableFigure(getAnchorX(), getAnchorY(), drawing()));
 		}
 		else {
 			if (getAddedFigure() == null) {
 				setConnection(createConnection());
-				setStartConnector(findConnector(ex, ey, getTargetFigure()));
+				setStartConnector(findConnector(getAnchorX(), getAnchorY(), getTargetFigure()));
 				getConnection().connectStart(getStartConnector());
-				getConnection().startPoint(ex, ey);
-				setAddedFigure(view().add(getConnection()));
+				getConnection().startPoint(getAnchorX(), getAnchorY());
+				view().add(getConnection());
+				setAddedFigure(getConnection());
 			}
-			Figure c = findTarget(ex, ey, drawing());
+			Figure c = findTarget(getAnchorX(), getAnchorY(), drawing());
 			if (c != null) {
 				// end connection figure found
-				setEndConnector(findConnector(ex, ex, c));
+				setEndConnector(findConnector(getAnchorX(), getAnchorY(), c));
 				getConnection().connectEnd(getEndConnector());
-				getConnection().endPoint(ex, ey);
+				getConnection().endPoint(getAnchorX(), getAnchorY());
 				setUndoActivity(createUndoActivity());
 				getUndoActivity().setAffectedFigures(
 					new SingleFigureEnumerator(getAddedFigure()));
@@ -60,32 +61,32 @@ public class SplitConnectionTool extends ConnectionTool {
 				// split connection where the mouse click took place
 				if (getEndConnector() == null) {
 					Figure tempEndFigure = new NullFigure();
-					tempEndFigure.basicDisplayBox(new Point(ex, ey), new Point(ex, ey));
+					tempEndFigure.basicDisplayBox(new Point(getAnchorX(), getAnchorY()), new Point(getAnchorX(), getAnchorY()));
 					setEndConnector(new NullConnector(tempEndFigure));
 					getConnection().connectEnd(getEndConnector());
-					getConnection().endPoint(ex, ey);
+					getConnection().endPoint(getAnchorX(), getAnchorY());
 					getConnection().updateConnection();
 				}
 				else {
-					((PolyLineFigure)getConnection()).addPoint(ex, ey);
+					((PolyLineFigure)getConnection()).addPoint(getAnchorX(), getAnchorY());
 				}
 			}
 		}
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		// usually do nothing: tool is still active
-		if (e.getClickCount() == 2) {
+		if (dvme.getMouseEvent().getClickCount() == 2) {
 			init();
 			editor().toolDone();
 		}
 	}
 
-	public void mouseMove(MouseEvent e, int x, int y) {
+	public void mouseMove(DrawingViewMouseEvent dvme) {
 		// avoid tracking connectors
 	}
 
-	public void mouseDrag(MouseEvent e, int x, int y) {
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
 		// avoid tracking connectors
 	}
 

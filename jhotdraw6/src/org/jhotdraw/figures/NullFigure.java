@@ -26,7 +26,11 @@ import java.awt.*;
 public class NullFigure extends AbstractFigure {
 
 	private Rectangle myDisplayBox;
-
+	public NullFigure() {
+		 super();
+		 java.awt.Point p = new Point(0,0);
+		 displayBox(p,p);
+	}
 	/**
 	 * Moves the figure. This is the
 	 * method that subclassers override. Clients usually
@@ -58,7 +62,7 @@ public class NullFigure extends AbstractFigure {
 	 * @see #basicDisplayBox
 	 */
 	public Rectangle displayBox() {
-		return myDisplayBox;
+		return new Rectangle(myDisplayBox);
 	}
 
 	/**

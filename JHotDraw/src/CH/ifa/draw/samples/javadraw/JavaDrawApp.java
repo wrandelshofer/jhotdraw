@@ -30,24 +30,19 @@ import java.net.URL;
 /**
  * @version <$CURRENT_VERSION$>
  */
-public  class JavaDrawApp extends MDI_DrawApplication {
-
+public class JavaDrawApp extends MDI_DrawApplication {
 	private Animator            fAnimator;
 	private static String       fgSampleImagesPath = "/CH/ifa/draw/samples/javadraw/sampleimages";
 	private static String       fgSampleImagesResourcePath = fgSampleImagesPath + "/";
 
-	JavaDrawApp() {
-		super("JHotDraw");
-	}
-
-	/**
-	 * Expose constructor for benefit of subclasses.
-	 * 
-	 * @param title The window title for this application's frame.
-	 */
-	public JavaDrawApp(String title) {
-		super(title);
-	}
+  /**
+   * Expose constructor for benefit of subclasses.
+   * 
+   * @param title The window title for this application's frame.
+   */
+  protected JavaDrawApp(String title) {
+  	super(title);
+  }
 
 	/**
 	 * Factory method which create a new instance of this
@@ -56,13 +51,14 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 	 * @return	newly created application
 	 */
 	protected DrawApplication createApplication() {
-		return new JavaDrawApp();
+		return new JavaDrawApp("JHotDraw");
 	}
 
-	protected DrawingView createDrawingView() {
-		return new ZoomDrawingView(this);
+	protected DrawingView createDrawingView(Drawing newDrawing) {
+		Dimension d = getDrawingViewSize();
+		DrawingView newDrawingView = new ZoomDrawingView( newDrawing ,this,d.width, d.height);
+		return newDrawingView;
 	}
-
 	//-- application life cycle --------------------------------------------
 
 	public void destroy() {
@@ -116,6 +112,9 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 
 		tool = new UndoableTool(new ScribbleTool(this));
 		palette.add(createToolButton(IMAGES + "SCRIBBL", "Scribble Tool", tool));
+
+		tool = new UndoableTool(new DecoratorTool(this, new BorderFigureDecorator()));
+		palette.add(createToolButton(IMAGES + "BORDDEC", "Border Tool", tool));
 
 		tool = new UndoableTool(new BorderTool(this));
 		palette.add(createToolButton(IMAGES + "BORDDEC", "Border Tool", tool));
@@ -215,8 +214,9 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 	}
 
 	protected Drawing createDrawing() {
-		Drawing dwg = new BouncingDrawing();
-        dwg.setTitle(getDefaultDrawingTitle());
+		///Drawing dwg = new BouncingDrawing();
+		Drawing dwg = new StandardDrawing();
+        dwg.setTitle( getDefaultDrawingTitle() );
 		return dwg;
 		//return new StandardDrawing();
 	}
@@ -226,6 +226,7 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 	public void startAnimation() {
 		if (view().drawing() instanceof Animatable && fAnimator == null) {
 			fAnimator = new Animator((Animatable)view().drawing(), view());
+			//store start and end positions of animatable figures for undo?
 			fAnimator.start();
 		}
 	}
@@ -237,23 +238,36 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 		}
 	}
 
-	protected JMenu createDebugMenu() {
-		CommandMenu menu = (CommandMenu)super.createDebugMenu();
-
-		Command cmd = new AbstractCommand("Clipping Update", this) {
-			public void execute() {
-				this.view().setDisplayUpdate(new ClippingUpdateStrategy());
+	//-- main -----------------------------------------------------------
+    /** 
+	 * The method newWindow is manipulating the GUI outside of the GUI thread
+	 * after the GUI has been setVisible(true), it has the  potential to cause
+	 * deadlock.  It should do its updating in the AWT event
+	 * thread.
+	 *
+	 * @see java.awt.EventQueue#invokeAndWait
+	 * @see javax.swing.SwingUtilities#invokeAndWait
+	 * @todo devise a performance efficient way of animating this without creating
+	 *       lots of threads.
+	 */
+	public static void main(String[] args) {
+		final JavaDrawApp window = new JavaDrawApp("JHotDraw");
+        window.open();
+		Runnable r = new Runnable() {
+			public void run() {
+				window.newWindow();
 			}
 		};
-		menu.add(cmd);
-
-		return menu;
-	}
-
-	//-- main -----------------------------------------------------------
-
-	public static void main(String[] args) {
-		JavaDrawApp window = new JavaDrawApp();
-		window.open();
+		try {
+			java.awt.EventQueue.invokeAndWait( r );
+		}
+		catch(java.lang.InterruptedException ie){
+			System.err.println(ie.getMessage());
+			window.exit();
+		}
+		catch(java.lang.reflect.InvocationTargetException ite){
+			System.err.println(ite.getMessage());
+			window.exit();
+		}	
 	}
 }

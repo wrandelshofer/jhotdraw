@@ -18,6 +18,7 @@ import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.*;
 
 /**
+ * @see AnimationManipulator
  * @version <$CURRENT_VERSION$>
  */
 public class AnimationDecorator extends DecoratorFigure {

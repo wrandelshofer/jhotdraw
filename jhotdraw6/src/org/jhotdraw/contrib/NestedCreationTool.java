@@ -13,10 +13,10 @@ package CH.ifa.draw.contrib;
 
 import CH.ifa.draw.standard.CreationTool;
 import CH.ifa.draw.standard.CompositeFigure;
+import CH.ifa.draw.standard.DecoratorFigure;
 import CH.ifa.draw.framework.Figure;
 import CH.ifa.draw.framework.DrawingEditor;
-
-import java.awt.event.MouseEvent;
+import CH.ifa.draw.framework.DrawingViewMouseEvent;
 
 /**
  * @author	Wolfram Kaiser
@@ -29,37 +29,44 @@ public class NestedCreationTool extends CreationTool {
 		super(newDrawingEditor, prototype);
 	}
 
-	public void mouseDown(MouseEvent e, int x, int y) {
-		Figure figure = drawing().findFigure(e.getX(), e.getY());
-		if (figure != null) {
-			figure = figure.getDecoratedFigure();
-			if (figure instanceof CompositeFigure) {
-				setContainerFigure((CompositeFigure)figure);
-				super.mouseDown(e, x, y);
-			}
-			else {
-				toolDone();
-			}
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+		setAnchorX( dvme.getX() );
+		setAnchorY( dvme.getY() );
+		
+		Figure figure = drawing().findFigure( getAnchorX(), getAnchorY());
+		if ((figure != null) && (figure instanceof CompositeFigure)) {
+			setContainerFigure((CompositeFigure)figure);
+			super.mouseDown(dvme);
 		}
 		else {
 			toolDone();
 		}
 	}
 
-	public void mouseMove(MouseEvent e, int x, int y) {
-		if ((getContainerFigure() != null) && !getContainerFigure().containsPoint(e.getX(), e.getY())) {
+	private Figure getFigureWithoutDecoration(Figure peelFigure) {
+		if (peelFigure instanceof DecoratorFigure) {
+			return getFigureWithoutDecoration(((DecoratorFigure)peelFigure).getDecoratedFigure());
+		}
+		else {
+			return peelFigure;
+		}
+	}
+	public void mouseMove(DrawingViewMouseEvent dvme) {
+		if ((getContainerFigure() != null) && !getContainerFigure().containsPoint(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY())) {
 			// here you might want to constrain the mouse movements to the size of the
 			// container figure: not sure whether this works...
+			//why would you cancel the tool just because it ventured outside of container?
 			toolDone();
 		}
 		else {
-			super.mouseMove(e, x, y);
+			super.mouseMove(dvme);
 		}
 	}
 
-	public void mouseUp(MouseEvent e, int x, int y) {
+	public void mouseUp(DrawingViewMouseEvent dvme) {
 		if ((getContainerFigure() != null) && (getCreatedFigure() != null)
-				&& getContainerFigure().containsPoint(e.getX(), e.getY())) {
+				&& getContainerFigure().containsPoint(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY())) {
 			getContainerFigure().add(getCreatedFigure());
 		}
 		toolDone();

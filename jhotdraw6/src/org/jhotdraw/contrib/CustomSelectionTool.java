@@ -15,7 +15,7 @@ import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import javax.swing.JPopupMenu;
 import java.awt.*;
-import java.awt.event.*;
+
 
 /**
  * A SelectionTool, which recognizes double clicks and popup menu triggers.
@@ -25,7 +25,7 @@ import java.awt.event.*;
  * Popup menus must be registered with a Figure using the setAttribute() method.
  * The key which associates a popup menu as an attribute is Figure.POPUP_MENU.
  *
- * @author  Wolfram Kaiser <mrfloppy@users.sourceforge.net>
+ * @author  Wolfram Kaiser <mrfloppy@sourceforge.net>
  * @version <$CURRENT_VERSION$>
  */
 public class CustomSelectionTool extends SelectionTool {
@@ -47,15 +47,16 @@ public class CustomSelectionTool extends SelectionTool {
 	 * @param   x   x coordinate of the MouseEvent
 	 * @param   y   y coordinate of the MouseEvent
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		setView((DrawingView)e.getSource());
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		setView( dvme.getDrawingView() );
+
 		// isPopupTrigger() at mouseDown() is only notified at UNIX systems
-		if (e.isPopupTrigger()) {
-			handlePopupMenu(e, x, y);
+		if (dvme.getMouseEvent().isPopupTrigger()) {
+			handlePopupMenu( dvme );
 		}
 		else {
-			super.mouseDown(e, x, y);
-			handleMouseDown(e, x, y);
+			super.mouseDown(dvme);
+			handleMouseDown(dvme);
 		}
 	}
 	
@@ -67,9 +68,9 @@ public class CustomSelectionTool extends SelectionTool {
 	 * @param   x   x coordinate of the MouseEvent
 	 * @param   y   y coordinate of the MouseEvent
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		if (!e.isPopupTrigger()) {
-			super.mouseDrag(e, x, y);
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		if (!dvme.getMouseEvent().isPopupTrigger()) {
+			super.mouseDrag(dvme);
 		}
 	}
 
@@ -83,19 +84,17 @@ public class CustomSelectionTool extends SelectionTool {
 	 * @param   x   x coordinate of the MouseEvent
 	 * @param   y   y coordinate of the MouseEvent
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
-		if (e.isPopupTrigger()) {
-			handlePopupMenu(e, x, y);
-			super.mouseUp(e, x, y);
+	public void mouseUp(DrawingViewMouseEvent dvme) {
+		if (dvme.getMouseEvent().isPopupTrigger()) {
+			handlePopupMenu(dvme);
 		}
-		else if (e.getClickCount() == 2) {
-			super.mouseUp(e, x, y);
-			handleMouseDoubleClick(e, x, y);
+		else if (dvme.getMouseEvent().getClickCount() == 2) {
+			handleMouseDoubleClick(dvme);
 		}
 		else {
-			super.mouseUp(e, x, y);
-			handleMouseUp(e, x, y);
-			handleMouseClick(e, x, y);
+			handleMouseUp(dvme);
+			handleMouseClick(dvme);
+			super.mouseUp(dvme);			
 		}
 	}
 	
@@ -103,43 +102,43 @@ public class CustomSelectionTool extends SelectionTool {
 	 * Hook method which can be overriden by subclasses to provide
 	 * specialised behaviour in the event of a mouse down.
 	 */
-	protected void handleMouseDown(MouseEvent e, int x, int y) {
+	protected void handleMouseDown(DrawingViewMouseEvent dvme) {
 	}
 
 		/**
 	 * Hook method which can be overriden by subclasses to provide
 	 * specialised behaviour in the event of a mouse up.
 	 */
-	protected void handleMouseUp(MouseEvent e, int x, int y) {
+	protected void handleMouseUp(DrawingViewMouseEvent dvme) {
 	}
 
 	/**
 	 * Hook method which can be overriden by subclasses to provide
 	 * specialised behaviour in the event of a mouse click.
 	 */
-	protected void handleMouseClick(MouseEvent e, int x, int y) {
+	protected void handleMouseClick(DrawingViewMouseEvent dvme) {
 	}
 
 	/**
 	 * Hook method which can be overriden by subclasses to provide
 	 * specialised behaviour in the event of a mouse double click.
 	 */
-	protected void handleMouseDoubleClick(MouseEvent e, int x, int y) {
+	protected void handleMouseDoubleClick(DrawingViewMouseEvent dvme) {
 	}
 
 	/**
 	 * Hook method which can be overriden by subclasses to provide
 	 * specialised behaviour in the event of a popup trigger.
 	 */
-	protected void handlePopupMenu(MouseEvent e, int x, int y) {
-		Figure figure = drawing().findFigure(e.getX(), e.getY());
+	protected void handlePopupMenu(DrawingViewMouseEvent dvme) {
+		Figure figure = drawing().findFigure(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY());
 		if (figure != null) {
 			Object attribute = figure.getAttribute(Figure.POPUP_MENU);
 			if (attribute == null) {
-				figure = drawing().findFigureInside(e.getX(), e.getY());
+				figure = drawing().findFigureInside(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY());
 			}
 			if (figure != null) {
-				showPopupMenu(figure, e.getX(), e.getY(), e.getComponent());
+				showPopupMenu(figure, dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY(), dvme.getMouseEvent().getComponent());
 			}
 		}
 	}

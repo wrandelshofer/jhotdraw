@@ -21,6 +21,7 @@ import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.figures.*;
 import CH.ifa.draw.util.*;
+import CH.ifa.draw.contrib.Desktop;
 
 /**
  * DrawApplication defines a standard presentation for
@@ -30,6 +31,7 @@ import CH.ifa.draw.util.*;
  * <i>DRAWINGS</i>: a blank separated list of drawing names that is
  *           shown in the drawings choice.
  *
+ * @todo add {@link Desktop Desktop} functionality to this class to bring it upto date.
  * @version <$CURRENT_VERSION$>
  */
 public class DrawApplet
@@ -52,7 +54,7 @@ public class DrawApplet
 	private transient JComboBox          fArrowChoice;
 	private transient JComboBox          fFontChoice;
 
-	private transient Thread          fSleeper;
+	private transient SleeperThread      fSleeper;
 	private transient 			UndoManager myUndoManager;
 
 	static String                     fgUntitled = "untitled";
@@ -90,11 +92,22 @@ public class DrawApplet
 		//setBufferedDisplayUpdate();
 		setupAttributes();
 	}
-
+	/**
+	 * @todo implement <b>Desktop</b> functionality here
+	 */
+	public Desktop getDesktop() {
+		return null;
+	}
 	public void addViewChangeListener(ViewChangeListener vsl) {
 	}
 
 	public void removeViewChangeListener(ViewChangeListener vsl) {
+	}
+
+	public void addFigureSelectionListener(FigureSelectionListener fsl){
+	}
+
+	public void removeFigureSelectionListener(FigureSelectionListener fsl){
 	}
 
 	protected Iconkit createIconkit() {
@@ -598,7 +611,7 @@ public class DrawApplet
 
 	private void stopSleeper() {
 		if (fSleeper != null) {
-			fSleeper.stop();
+			fSleeper.endThread();
 		}
 	}
 }
@@ -607,14 +620,15 @@ public class DrawApplet
 class SleeperThread extends Thread {
 
 	JApplet  fApplet;
-
+	boolean endthread;
 	SleeperThread(JApplet applet) {
 		fApplet = applet;
+		endthread = false;
 	}
 
 	public void run() {
 		try {
-			for (;;) {
+			for (;endthread == false;) {
 				fApplet.showStatus("loading icons...");
 				sleep(50);
 			}
@@ -622,6 +636,9 @@ class SleeperThread extends Thread {
 		catch (InterruptedException e) {
 			return;
 		}
+	}
+	public void endThread(){
+		endthread = true;
 	}
 
 }

@@ -15,7 +15,7 @@ import CH.ifa.draw.framework.*;
 import CH.ifa.draw.util.UndoableTool;
 import CH.ifa.draw.util.UndoableHandle;
 import CH.ifa.draw.contrib.dnd.DragNDropTool;
-import java.awt.event.MouseEvent;
+
 
 /**
  * Tool to select and manipulate figures.
@@ -45,44 +45,56 @@ public class SelectionTool extends AbstractTool {
 	/**
 	 * Handles mouse down events and starts the corresponding tracker.
 	 */
-	public void mouseDown(MouseEvent e, int x, int y) {
-		super.mouseDown(e, x, y);
+	public void mouseDown(DrawingViewMouseEvent dvme) {
+		super.mouseDown(dvme);
+		// use event coordinates to supress any kind of
+		// transformations like constraining points to a grid
+		setAnchorX( dvme.getMouseEvent().getX() );
+		setAnchorY( dvme.getMouseEvent().getY() );
 		// on MS-Windows NT: AWT generates additional mouse down events
 		// when the left button is down && right button is clicked.
 		// To avoid dead locks we ignore such events
-		if (getDelegateTool() != null) {
+		if (getChildTool() != null) {
 			return;
 		}
 
 		view().freezeView();
 
-		Handle handle = view().findHandle(e.getX(), e.getY());
+		Handle handle = findHandle(getAnchorX(), getAnchorY());
 		if (handle != null) {
-			setDelegateTool(createHandleTracker(view(), handle));
+			setChildTool(createHandleTracker(view(), handle));
 		}
 		else {
-			Figure figure = drawing().findFigure(e.getX(), e.getY());
+			Figure figure = findFigure(getAnchorX(), getAnchorY());
+			
 			if (figure != null) {
-				setDelegateTool(createDragTracker(figure));
+				setChildTool(createDragTracker(figure));
 			}
 			else {
-				if (!e.isShiftDown()) {
+				if (!dvme.getMouseEvent().isShiftDown()) {
 					view().clearSelection();
 				}
-				setDelegateTool(createAreaTracker());
+				setChildTool(createAreaTracker());
 			}
 		}
-		getDelegateTool().activate();
-		getDelegateTool().mouseDown(e, x, y);
+		getChildTool().activate();
+		getChildTool().mouseDown(dvme);
 	}
 
+	protected Figure findFigure(int x, int y){
+		 return drawing().findFigure(x, y);
+	}
+	
+	protected Handle findHandle(int x, int y){
+		return view().findHandle(x,y);
+	}
 	/**
 	 * Handles mouse moves (if the mouse button is up).
 	 * Switches the cursors depending on whats under them.
 	 */
-	public void mouseMove(MouseEvent evt, int x, int y) {
-		if (evt.getSource() == getActiveView() ) {
-			DragNDropTool.setCursor(evt.getX(), evt.getY(), getActiveView());
+	public void mouseMove(DrawingViewMouseEvent dvme) {
+		if (dvme.getDrawingView() == getActiveView() ) {
+			DragNDropTool.setCursor(dvme.getMouseEvent().getX(), dvme.getMouseEvent().getY(), getActiveView());
 		}
 	}
 
@@ -90,9 +102,9 @@ public class SelectionTool extends AbstractTool {
 	 * Handles mouse drag events. The events are forwarded to the
 	 * current tracker.
 	 */
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		if (getDelegateTool() != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
-			getDelegateTool().mouseDrag(e, x, y);
+	public void mouseDrag(DrawingViewMouseEvent dvme) {
+		if (getChildTool() != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
+			getChildTool().mouseDrag(dvme);
 		}
 	}
 
@@ -100,11 +112,11 @@ public class SelectionTool extends AbstractTool {
 	 * Handles mouse up events. The events are forwarded to the
 	 * current tracker.
 	 */
-	public void mouseUp(MouseEvent e, int x, int y) {
-		if (getDelegateTool() != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
-			getDelegateTool().mouseUp(e, x, y);
-			getDelegateTool().deactivate();
-			setDelegateTool(null);
+	public void mouseUp(DrawingViewMouseEvent dvme) {
+		if (getChildTool() != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
+			getChildTool().mouseUp(dvme);
+			getChildTool().deactivate();
+			setChildTool(null);
 		}
 		if (view() != null) {
 			view().unfreezeView();
@@ -132,12 +144,10 @@ public class SelectionTool extends AbstractTool {
 	protected Tool createAreaTracker() {
 		return new SelectAreaTracker(editor());
 	}
-
-	protected Tool getDelegateTool() {
+	protected Tool getChildTool(){
 		return fChild;
 	}
-
-	private void setDelegateTool(Tool newDelegateTool) {
-		fChild = newDelegateTool;
+	protected void setChildTool(Tool tool){
+		fChild = tool;
 	}
 }
