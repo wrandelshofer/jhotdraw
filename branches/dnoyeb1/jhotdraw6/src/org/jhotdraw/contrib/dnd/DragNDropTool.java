@@ -67,7 +67,7 @@ public class DragNDropTool extends AbstractTool {
 	 */
 	protected void viewCreated(DrawingView view) {
 		super.viewCreated(view);
-		if (DNDInterface.class.isInstance(view)) {
+		if (view instanceof DNDInterface) {
 			DNDInterface dndi = (DNDInterface)view;
 			dndi.setDropTargetActive(true);
 			dndi.setDragSourceActive(false);
@@ -79,7 +79,7 @@ public class DragNDropTool extends AbstractTool {
 	 * Send when an existing view is about to be destroyed.
 	 */
 	protected void viewDestroying(DrawingView view) {
-		if (DNDInterface.class.isInstance(view)) {
+		if (view instanceof DNDInterface) {
 			DNDInterface dndi = (DNDInterface)view;
 			dndi.setDropTargetActive(false);
 			dndi.setDragSourceActive(false);
@@ -94,13 +94,12 @@ public class DragNDropTool extends AbstractTool {
 	 */
 	public void activate() {
 		super.activate();
-		System.out.println("DNDTool Activation");
-
 		setDragSourceActive(true);
+		//System.out.println("DNDTool Activation");
 	}
 
 	public void deactivate() {
-		System.out.println("DNDTool deactivation.");
+		//System.out.println("DNDTool deactivation.");
 		setDragSourceActive(false);
 		super.deactivate();
 	}
@@ -185,9 +184,14 @@ public class DragNDropTool extends AbstractTool {
 	public void mouseUp(DrawingViewMouseEvent dvme) {
 		if (fChild != null) { // JDK1.1 doesn't guarantee mouseDown, mouseDrag, mouseUp
 			fChild.mouseUp(dvme);
+			fChild = null;
+			if (dvme.getDrawingView() instanceof DNDInterface) {
+				DNDInterface dndi = (DNDInterface)dvme.getDrawingView();
+				dndi.setDragSourceActive(true);
+			}
 		}
-		fChild = null;
 		view().unfreezeView();
+		//get undo actions and push into undo stack?
 	}
 
 	/**
@@ -208,6 +212,11 @@ public class DragNDropTool extends AbstractTool {
 		Handle handle = view().findHandle(getAnchorX(), getAnchorY());
 		if (handle != null) {
 			fChild = createHandleTracker(handle);
+			//Turn off DND
+			if (dvme.getDrawingView() instanceof DNDInterface) {
+				DNDInterface dndi = (DNDInterface)dvme.getDrawingView();
+				dndi.setDragSourceActive(false);
+			}
 		}
 		else {
 			Figure figure = drawing().findFigure(getAnchorX(), getAnchorY());

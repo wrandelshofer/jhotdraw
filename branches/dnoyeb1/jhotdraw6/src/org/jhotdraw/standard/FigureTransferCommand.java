@@ -33,6 +33,10 @@ public abstract class FigureTransferCommand extends AbstractCommand {
 
    /**
 	* Deletes the selection from the drawing.
+	* all these implementation details need to move to the DrawingView as with 
+	* insertFigures. !!!
+	* in the long run I think we need full document-view seperation.  nobody shoul
+	* know about the document, nor touch it except the view, file in, file out.
 	*/
 	protected void deleteFigures(FigureEnumeration fe) {
 	   DeleteFromDrawingVisitor deleteVisitor = new DeleteFromDrawingVisitor(view().drawing());

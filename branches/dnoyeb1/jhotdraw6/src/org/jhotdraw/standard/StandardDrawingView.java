@@ -101,6 +101,8 @@ public class StandardDrawingView
 	/**
 	 * The grid used to constrain points for snap to
 	 * grid functionality.
+	 * Should generalize this to a Constrainer interface.  may have more reasons
+	 * for constraint than just grid.
 	 */
 	private PointConstrainer fConstrainer;
 
@@ -1055,6 +1057,9 @@ public class StandardDrawingView
 		return new DNDHelper () {
 				protected DrawingView view() {
 					return StandardDrawingView.this;
+				}
+				protected DrawingEditor editor() {
+					return StandardDrawingView.this.editor();
 				}
 			};
 	}
