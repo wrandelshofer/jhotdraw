@@ -57,14 +57,14 @@ public class CompositeFigureCreationTool extends CreationTool {
 		}
 	}
 	
-	protected void viewActivated(DrawingView view){
-		super.viewActivated(view);
+	protected void viewCreated(DrawingView view){
+		super.viewCreated(view);
 		view.addFigureSelectionListener(figureSelectionListener);
 	}
 	
-	protected void viewDeactivated(DrawingView view){
+	protected void viewDestroying(DrawingView view){
 		view.removeFigureSelectionListener(figureSelectionListener);
-		super.viewDeactivated(view);
+		super.viewDestroying(view);
 	}
 	
 	public void mouseDown(MouseEvent e, int x, int y) {
@@ -83,7 +83,7 @@ public class CompositeFigureCreationTool extends CreationTool {
 		}
 	}
 
-	private Figure getFigureWithoutDecoration(Figure peelFigure) {
+	protected Figure getFigureWithoutDecoration(Figure peelFigure) {
 		if (peelFigure instanceof DecoratorFigure) {
 			return getFigureWithoutDecoration(((DecoratorFigure)peelFigure).getDecoratedFigure());
 		}
@@ -135,9 +135,14 @@ public class CompositeFigureCreationTool extends CreationTool {
 	/**
 	 *	This generates the required context sensitivity for this tool.
 	 *	This tool is only useable when exactly one (1) CompositeFigure is selected.
+	 *  I took this out because it requires an extra mouse push when you want to
+	 * keep working with composite figures.  select figure, hit button, work.
+	 * select figure, hit button work.  without this, you just hit button and work.
+	 * i think its worth it to go back.
 	 */
 	protected void checkUsable() {
-		if (isEnabled()) {
+		super.checkUsable();
+/*		if (isEnabled()) {
 			DrawingView adv = getActiveView();
 			if(adv != null && adv.isInteractive()){
 				if(adv.selectionCount() == 1) {
@@ -151,7 +156,7 @@ public class CompositeFigureCreationTool extends CreationTool {
 				}
 			}
 			setUsable( false );
-		}
+		}*/
 	}
 	protected void setContainerFigure(CompositeFigure newContainerFigure) {
 		myContainerFigure = newContainerFigure;

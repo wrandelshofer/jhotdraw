@@ -30,26 +30,21 @@ import java.beans.*;
  * "x".  so if you say removeAll from container you wont be notified.  No biggie.
  *
  * @author Wolfram Kaiser (adapted from an article in JavaWorld)
- * @author  C.L.Gilbert <dnoyeb@sourceforge.net>
+ * @author C.L.Gilbert <dnoyeb@users.sourceforge.net>
  * @version <$CURRENT_VERSION$>
  */
 public class MDIDesktopPane extends JDesktopPane implements Desktop {
 	private static int FRAME_OFFSET=20;
 	private MDIDesktopManager manager;
 
-    private DrawingChangeListener dcl = new DrawingChangeListener() {
-        /**  Sent when an area is invalid
-         *
-         */
+    private final DrawingChangeListener dcl = new DrawingChangeListener() {
         public void drawingInvalidated(DrawingChangeEvent e) {
         }    
-        /**  Sent when the drawing wants to be refreshed
-         *
-         */
         public void drawingRequestUpdate(DrawingChangeEvent e) {
         }
         /**
-         *  Change all frames that contain this drawing.
+         * Update the title of the JInternalFrame containing the changed
+		 * drawing.
          */
         public void drawingTitleChanged(DrawingChangeEvent e) {
             Drawing dwg = e.getDrawing();

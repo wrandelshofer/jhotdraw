@@ -54,7 +54,6 @@ public	class DrawApplication
 	private String                  fgUntitled = "untitled";
 	private final EventListenerList listenerList = new EventListenerList();
 	private DesktopListener     fDesktopListener;
-
 	/**
 	 * This component acts as a desktop for the content.
 	 */
@@ -718,26 +717,22 @@ public	class DrawApplication
 		}
 	}
 
-	/**
-	 * Fired by a view when the figure selection changes.  Since Commands and
-	 * Tools may depend on the figure selection they are registered to be notified
-	 * about these events.
-	 * Any selection sensitive GUI component should update its
-	 * own state if the selection has changed, e.g. selection sensitive menuitems
-	 * will update their own states.
-	 * @see DrawingEditor
-	 */
 	public void figureSelectionChanged(DrawingView view) {
+		fireFigureSelectionChanged(view);
+		checkCommandMenu();//commands already know about this event, why do we need this?
+		//maybe the menu should listen to the Command it contains.
+	}
+	
+	protected void checkCommandMenu(){
 		JMenuBar mb = getJMenuBar();
 
 		for (int x = 0; x < mb.getMenuCount(); x++) {
-		    JMenu jm = mb.getMenu(x);
+			JMenu jm = mb.getMenu(x);
 			if (CommandMenu.class.isInstance(jm)) {
 				checkCommandMenu((CommandMenu)jm);
 			}
 		}
 	}
-
 	protected void checkCommandMenu(CommandMenu cm) {
 		cm.checkEnabled();
 		for (int y = 0; y < cm.getItemCount();y++) {
@@ -762,12 +757,30 @@ public	class DrawApplication
 	public void removeViewChangeListener(ViewChangeListener vsl) {
 		listenerList.remove(ViewChangeListener.class, vsl);
 	}
-
+	public void addFigureSelectionListener(FigureSelectionListener fsl){
+		listenerList.add(FigureSelectionListener.class, fsl);
+	}
+	public void removeFigureSelectionListener(FigureSelectionListener fsl){
+		listenerList.remove(FigureSelectionListener.class, fsl);
+	}
+	
+	protected void fireFigureSelectionChanged(DrawingView view){
+		final Object[] listeners = listenerList.getListenerList();
+		FigureSelectionListener fsl = null;
+		for (int i = listeners.length-2; i>=0 ; i-=2) {
+			if (listeners[i] == FigureSelectionListener.class) {
+				fsl = (FigureSelectionListener)listeners[i+1];
+				fsl.figureSelectionChanged(view);
+			}
+		}		
+	}
+	
 	/**
 	 * An appropriate event is triggered and all registered observers
 	 * are notified if the drawing view has been changed, e.g. by
 	 * switching between several internal frames.  This method is
-	 * usually not needed in SDI environments.
+	 * usually invoked only when DrawingViews are created in SDI environments.
+	 *
 	 */
 	protected void fireViewSelectionChangedEvent(DrawingView oldView, DrawingView newView) {
 		final Object[] listeners = listenerList.getListenerList();
@@ -780,24 +793,24 @@ public	class DrawApplication
 		}
 	}
 
-	protected void fireViewActivatedEvent(DrawingView view) {
+	protected void fireViewCreatedEvent(DrawingView view) {
 		final Object[] listeners = listenerList.getListenerList();
 		ViewChangeListener vsl = null;
 		for (int i = listeners.length-2; i>=0 ; i-=2) {
 			if (listeners[i] == ViewChangeListener.class) {
 				vsl = (ViewChangeListener)listeners[i+1];
-				vsl.viewActivated(view);
+				vsl.viewCreated(view);
 			}
 		}
 	}
 
-	protected void fireViewDeactivatedEvent(DrawingView view) {
+	protected void fireViewDestroyingEvent(DrawingView view) {
 		final Object[] listeners = listenerList.getListenerList();
 		ViewChangeListener vsl = null;
 		for (int i = listeners.length-2; i>=0 ; i-=2) {
 			if (listeners[i] == ViewChangeListener.class) {
 				vsl = (ViewChangeListener)listeners[i+1];
-				vsl.viewDeactivated( view );
+				vsl.viewDestroying( view );
 			}
 		}
 	}
@@ -1071,26 +1084,31 @@ public	class DrawApplication
 	protected void setDesktopListener(DesktopListener desktopPaneListener) {
 		fDesktopListener = desktopPaneListener;
 	}
-
+	/**
+	 * @todo We need to use DrawingEditor events instead of or in addition to
+	 *       these.
+	 */
 	protected DesktopListener createDesktopListener() {
 	    return new DesktopListener() {
 			public void drawingViewAdded(DesktopEvent dpe) {
-				DrawingView dv = dpe.getDrawingView();
-				fireViewActivatedEvent(dv);
+				fireViewCreatedEvent( dpe.getDrawingView() );
 			}
 			public void drawingViewRemoved(DesktopEvent dpe) {
-				DrawingView dv = dpe.getDrawingView();
-				fireViewDeactivatedEvent(dv);
+				fireViewDestroyingEvent( dpe.getDrawingView() );
 			}
 			public void drawingViewSelected(DrawingView oldView, DesktopEvent dpe) {
 				DrawingView dv = dpe.getDrawingView();
-				//get the current selection and freeze it.
+				//get the current selection and unfreeze it.
 				if (dv != null) {
 					if (dv.drawing() != null)
 						dv.unfreezeView();
 				}
-                fireViewSelectionChangedEvent(oldView, getDesktop().getActiveDrawingView());
+                fireViewSelectionChangedEvent(oldView, dv);
                 updateApplicationTitle();
+				if(oldView != null)
+					oldView.removeFigureSelectionListener( DrawApplication.this );
+				if(dv != null)
+					dv.addFigureSelectionListener( DrawApplication.this );
 			}
 	    };
 	}
