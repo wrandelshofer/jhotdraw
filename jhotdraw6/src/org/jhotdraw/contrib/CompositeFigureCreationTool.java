@@ -23,13 +23,6 @@ import java.awt.*;
 
 /**
  *	Tool must be created before all views it will be used on.
- *  dnoyeb changed this tool to only be useable when a CompositeFigure is selected.
- *  Otherwise, one must try to work on every figure he/she sees without knowing which
- *	is a CompositeFigure until the tool fails to work.  This way at least when you click
- *	on one, the tool will become useable and you can see that because the button will
- *	no longer be greyed out.  I think it helps when you have several tools, to know
- *	which ones you can use when.
- *
  *
  * @author	Wolfram Kaiser
  * @version <$CURRENT_VERSION$>
@@ -114,12 +107,17 @@ public class CompositeFigureCreationTool extends CreationTool {
 			super.mouseDrag(dvme);
 		}
 	}
-	
+	/**
+	 * When creation tool is modified to know of only ContainerFigures and is Drawing
+	 * agnostic, we can call super.mouseUp here.
+	 */
 	public void mouseUp(DrawingViewMouseEvent dvme) {
-		if ((getContainerFigure() != null) && (getCreatedFigure() != null)
-				&& getContainerFigure().containsPoint(dvme.getX(), dvme.getY())) {
-			getContainerFigure().add(getCreatedFigure());
-		}
+		//figure is already added, no need for this.
+//		if ((getContainerFigure() != null) && (getCreatedFigure() != null)
+//				&& getContainerFigure().containsPoint(dvme.getX(), dvme.getY())) {
+//			getContainerFigure().add(getCreatedFigure());
+//		}
+		view().drawing().update();//we made a change to the drawing, so update it.
 		toolDone();
 	}
 	/**
