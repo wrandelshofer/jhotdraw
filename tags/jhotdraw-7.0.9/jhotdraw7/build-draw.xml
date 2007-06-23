@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Builds the "JHotDraw Draw" demo application and demo applet. -->
+<project name="build-draw" default="all" basedir=".">
+    <target name="init">
+        <property name="libdir" value="lib"/>
+        <property name="srcdir" value="src/main/java"/>
+        <property name="builddir" value="build"/>
+        <property name="classdir" value="${builddir}/classes"/>
+        <property name="distdir" value="dist"/>
+        <property name="docdir" value="javadoc"/>
+        <property name="author" value="Werner Randelshofer"/>
+        <property name="version" value="7.0.9"/>
+    </target>
+    <target name="clean" depends="init">
+        <delete dir="${classdir}" />
+    </target>
+    <target name="applet.compile" depends="init,clean">
+        <mkdir dir="${classdir}"/>
+        <javac
+                destdir="${classdir}"
+                srcdir="${srcdir}"
+                debug="false"
+                source="1.5"
+                optimize="true"
+         >
+            <classpath path="${libdir}/java_30.zip"/>
+            <include name="org/jhotdraw/samples/draw/DrawApplet.java"/> 
+            <include name="org/jhotdraw/samples/draw/DrawLiveConnectApplet.java"/> 
+            <include name="net/n3/nanoxml/*.java"/> 
+        </javac>
+        <copy todir="${classdir}/org/jhotdraw/app/action/images">
+            <fileset dir="${srcdir}/org/jhotdraw/app/action/images" >
+                <include name="edit*.png"/>
+            </fileset>
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/draw/action/images">
+            <fileset dir="${srcdir}/org/jhotdraw/draw/action/images" />
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/draw/action/images">
+            <fileset dir="${srcdir}/org/jhotdraw/draw/action/images" />
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/undo">
+            <fileset dir="${srcdir}/org/jhotdraw/undo">
+                <include name="*.properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/undo/images">
+            <fileset dir="${srcdir}/org/jhotdraw/undo/images">
+                <include name="*.png"/>
+            </fileset>
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/draw">
+            <fileset file="${srcdir}/org/jhotdraw/draw/Label*.properties"/>
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/app">
+            <fileset file="${srcdir}/org/jhotdraw/app/Label*.properties"/>
+        </copy>
+        <echo file="${classdir}/org/jhotdraw/samples/draw/version.txt"
+            message="${version}"/>
+    </target>
+    <target name="applet.jar" depends="init,applet.compile">
+        <mkdir dir="${distdir}"/>
+        <jar destfile="${distdir}/jhotdraw_draw.jar" basedir="${classdir}"
+        index="true" compress="false">
+            <manifest>
+                <attribute name="Built-By" value="${author}"/>
+                <attribute name="Main-Class" value="org.jhotdraw.samples.draw.DrawApplet"/>
+            </manifest>
+        </jar>
+        <exec executable="gzip" dir="${distdir}">
+            <arg value="-f"/>
+            <arg value="jhotdraw_draw.jar"/>
+        </exec>
+        <jar destfile="${distdir}/jhotdraw_draw.jar" basedir="${classdir}"
+        index="true">
+            <manifest>
+                <attribute name="Built-By" value="${author}"/>
+                <attribute name="Main-Class" value="org.jhotdraw.samples.draw.DrawApplet"/>
+            </manifest>
+        </jar>
+        <exec executable="pack200">
+            <arg value="${distdir}/jhotdraw_draw.jar.pack.gz"/>
+            <arg value="${distdir}/jhotdraw_draw.jar"/>
+        </exec>
+    </target>
+    <target name="application.compile" depends="init,clean">
+        <mkdir dir="${classdir}"/>
+        <javac
+                destdir="${classdir}"
+                srcdir="${srcdir}"
+                debug="true"
+                source="1.5"
+         >
+            <classpath path="${libdir}/quaqua.jar"/>
+            <classpath path="${libdir}/MRJAdapter.jar"/>
+            <classpath path="${libdir}/java_30.zip"/>
+            <include name="net/n3/nanoxml/*.java"/> 
+            <include name="org/jhotdraw/samples/draw/Main.java"/> 
+            <include name="org/jhotdraw/samples/draw/DrawProject.java"/> 
+        </javac>
+        <copy todir="${classdir}/org/jhotdraw/app/action/images">
+            <fileset dir="${srcdir}/org/jhotdraw/app/action/images" />
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/app">
+            <fileset dir="${srcdir}/org/jhotdraw/app">
+                <include name="*.properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/draw/action/images">
+            <fileset dir="${srcdir}/org/jhotdraw/draw/action/images" />
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/undo">
+            <fileset dir="${srcdir}/org/jhotdraw/undo">
+                <include name="*.properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/undo/images">
+            <fileset dir="${srcdir}/org/jhotdraw/undo/images">
+                <include name="*.png"/>
+            </fileset>
+        </copy>
+        <copy todir="${classdir}/org/jhotdraw/draw">
+            <fileset file="${srcdir}/org/jhotdraw/draw/Label*.properties"/>
+        </copy> 
+        <copy todir="${classdir}/org/jhotdraw/app">
+            <fileset file="${srcdir}/org/jhotdraw/app/Label*.properties"/>
+        </copy>
+    </target>
+    <target name="application.jar" depends="init,application.compile">
+        <jar destfile="${distdir}/JHotDraw Draw.jar" basedir="${classdir}">
+            <manifest>
+                <attribute name="Built-By" value="${author}"/>
+                <attribute name="Main-Class" value="org.jhotdraw.samples.draw.Main"/>
+                <attribute name="Class-Path" value="quaqua.jar lib/quaqua.jar ../lib/quaqua.jar MRJAdapter.jar lib/MRJAdapter.jar ../lib/MRJAdapter.jar"/>
+            </manifest>
+        </jar>
+        <copy todir="${distdir}">
+            <fileset file="${libdir}/*.jnilib"/>
+        </copy>
+    </target>
+    <target name="application.run" depends="init">
+        <java fork="true" jar="${distdir}/JHotDraw Draw.jar">
+            <jvmarg value="-Xdock:name=JHotDraw Draw"/>
+            <jvmarg value="-Dlocale=en"/>
+            <jvmarg value="-Dapple.awt.graphics.UseQuartz=false"/>
+            <jvmarg value="-Djava.library.path=${libdir}"/>
+        </java>
+    </target>
+    <target name="applet.run" depends="init">
+        <java fork="true" jar="${distdir}/jhotdraw_draw.jar">
+        </java>
+    </target>
+    <target name="applet.appletviewer" depends="init">
+        <exec executable="appletviewer">
+        <arg value="${classdir}/DrawLiveConnectApplet.html"/>
+        </exec>
+    </target>
+</project>
