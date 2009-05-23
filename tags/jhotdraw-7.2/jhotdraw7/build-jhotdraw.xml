@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Builds the "JHotDraw" jar file. -->
+<project name="build-jhotdraw" default="all" basedir=".">
+    <target name="init">
+        <!-- properties for copyright and versioning -->
+        <property name="author" value="the authors and contributors of JHotDraw"/>
+        <property name="version" value="7.2"/>
+
+        <!-- build properties -->
+        <property name="libdir" value="lib"/>
+        <property name="srcdir" value="src/main/java"/>
+        <property name="builddir" value="build"/>
+        <property name="classdir" value="${builddir}/classes"/>
+        <property name="distdir" value="dist/JHotDraw ${version}/Samples/JHotDraw"/>
+        <property name="javadocdir" value="dist/JHotDraw ${version}/JavaDoc"/>
+        <property name="docdir" value="dist/JHotDraw ${version}/Documentation"/>
+        <property name="docsrcdir" value="src/documentation"/>
+
+        <!-- compilation properties -->
+        <property name="j2se6.bootclasspath" value="/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Classes/ui.jar" />
+        <property name="j2se6.javac" value="/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home/bin/javac" />
+    </target>
+    <target name="clean" depends="init">
+        <delete dir="${classdir}" />
+    </target>
+    <target depends="init" description="Javadoc for my API." name="javadoc">
+        <mkdir dir="${javadocdir}"/>
+        <javadoc destdir="${javadocdir}" bootclasspath="${j2se6.bootclasspath}"
+        footer="&lt;font size=-2>Copyright 1996-2009 (c) by the authors and contributors of the JHotDraw project.&lt;br>Some rights reserved.&lt;/font>"
+        header="JHotDraw ${version}" 
+        windowtitle="JHotDraw ${version}">
+            <packageset dir="${srcdir}">
+                <include name="org/jhotdraw/**"/>
+            </packageset>
+            <sourcepath>
+                <pathelement location="${srcdir}"/>
+            </sourcepath>
+            <classpath>
+                <pathelement location="${libdir}/quaqua.jar"/>
+                <pathelement location="${libdir}/MRJAdapter.jar"/>
+                <pathelement location="${libdir}/appframework-0.42.jar"/>
+                <pathelement location="${libdir}/swing-layout.jar"/>
+                <pathelement location="${libdir}/swing-worker.jar"/>
+                <pathelement location="${libdir}/java_30.zip"/>
+            </classpath>
+        </javadoc>
+    </target>
+    <target name="compile" depends="init,clean">
+        <mkdir dir="${classdir}"/>
+        <javac  bootclasspath="${j2se6.bootclasspath}"
+                destdir="${classdir}"
+                srcdir="${srcdir}"
+                debug="true"
+                source="1.6"
+                target="1.6"
+                optimize="true"
+                encoding="UTF-8"
+                fork="yes"
+                executable="${j2se6.javac}"
+         >
+            <classpath path="${libdir}/quaqua.jar"/>
+            <classpath path="${libdir}/MRJAdapter.jar"/>
+            <classpath path="${libdir}/java_30.zip"/>
+            <classpath path="${libdir}/appframework-0.42.jar"/>
+            <include name="**/*.java"/> 
+        </javac>
+        <copy todir="${classdir}">
+            <fileset dir="${srcdir}">
+                <include name="**/*.properties"/>
+                <include name="**/*.png"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="jar" depends="init,compile">
+        <mkdir dir="${distdir}"/>
+        <jar destfile="${distdir}/jhotdraw.jar" basedir="${classdir}">
+            <manifest>
+                <attribute name="Built-By" value="${author}"/>
+                <attribute name="Main-Class" value="org.jhotdraw.samples.draw.Main"/>
+                <attribute name="Class-Path" value="quaqua.jar lib/quaqua.jar ../lib/quaqua.jar MRJAdapter.jar lib/MRJAdapter.jar ../lib/MRJAdapter.jar"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="dist" depends="jar">
+    </target>
+    <target name="documentation" depends="init">
+        <delete dir="${docdir}"/>
+        <mkdir dir="${docdir}"/>
+        <copy todir="${docdir}">
+            <fileset dir="${docsrcdir}"/>
+        </copy>
+    </target>
+</project>
