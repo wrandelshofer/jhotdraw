@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.samples.draw;
 
@@ -33,6 +33,7 @@ import org.jhotdraw.draw.liner.ElbowLiner;
 import org.jhotdraw.draw.liner.CurvedLiner;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.*;
@@ -47,9 +48,9 @@ import static org.jhotdraw.draw.AttributeKeys.*;
 
 /**
  * DrawApplicationModel.
- * 
- * 
- * 
+ *
+ *
+ *
  * @author Werner Randelshofer.
  * @version $Id$
  */
@@ -125,7 +126,7 @@ public class DrawApplicationModel extends DefaultApplicationModel {
 
         AbstractAttributedFigure af;
         CreationTool ct;
-        ConnectionTool cnt;
+        ConnectionTool lcnt;
         ConnectionFigure lc;
 
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new RectangleFigure()), "edit.createRectangle", labels);
@@ -137,13 +138,32 @@ public class DrawApplicationModel extends DefaultApplicationModel {
         ButtonFactory.addToolTo(tb, editor, ct = new CreationTool(new LineFigure()), "edit.createArrow", labels);
         af = (AbstractAttributedFigure) ct.getPrototype();
         af.set(END_DECORATION, new ArrowTip(0.35, 12, 11.3));
-        ButtonFactory.addToolTo(tb, editor, new ConnectionTool(new LineConnectionFigure()), "edit.createLineConnection", labels);
-        ButtonFactory.addToolTo(tb, editor, cnt = new ConnectionTool(new LineConnectionFigure()), "edit.createElbowConnection", labels);
-        lc = cnt.getPrototype();
+        ButtonFactory.addToolTo(tb, editor, lcnt = new ConnectionTool(new LineConnectionFigure()), "edit.createLineConnection", labels);
+        if (ConnectorSubTracker.isUsingRelativeConnectors()) {
+            af = (AbstractAttributedFigure) lcnt.getPrototype();
+            af.set(START_CONNECTOR_STRATEGY, "RectilinearConnectorStrategy");
+            af.set(END_CONNECTOR_STRATEGY, "RectilinearConnectorStrategy");
+        }
+
+        ButtonFactory.addToolTo(tb, editor, lcnt = new ConnectionTool(new LineConnectionFigure()), "edit.createElbowConnection", labels);
+        lc = lcnt.getPrototype();
         lc.setLiner(new ElbowLiner());
-        ButtonFactory.addToolTo(tb, editor, cnt = new ConnectionTool(new LineConnectionFigure()), "edit.createCurvedConnection", labels);
-        lc = cnt.getPrototype();
+        if (ConnectorSubTracker.isUsingRelativeConnectors()) {
+            af = (AbstractAttributedFigure) lcnt.getPrototype();
+            af.set(START_CONNECTOR_STRATEGY, "RectilinearConnectorStrategy");
+            af.set(END_CONNECTOR_STRATEGY, "RectilinearConnectorStrategy");
+        }
+
+
+        ButtonFactory.addToolTo(tb, editor, lcnt = new ConnectionTool(new LineConnectionFigure()), "edit.createCurvedConnection", labels);
+        lc = lcnt.getPrototype();
         lc.setLiner(new CurvedLiner());
+        if (ConnectorSubTracker.isUsingRelativeConnectors()) {
+            af = (AbstractAttributedFigure) lcnt.getPrototype();
+            af.set(START_CONNECTOR_STRATEGY, "EdgeConnectorStrategy");
+            af.set(END_CONNECTOR_STRATEGY, "EdgeConnectorStrategy");
+        }
+
         ButtonFactory.addToolTo(tb, editor, new BezierTool(new BezierFigure()), "edit.createScribble", labels);
         ButtonFactory.addToolTo(tb, editor, new BezierTool(new BezierFigure(true)), "edit.createPolygon", labels);
         ButtonFactory.addToolTo(tb, editor, new TextCreationTool(new TextFigure()), "edit.createText", labels);

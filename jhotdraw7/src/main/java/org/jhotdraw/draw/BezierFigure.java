@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 
 package org.jhotdraw.draw;
@@ -43,11 +43,11 @@ import org.jhotdraw.xml.DOMOutput;
  * A straight path segment can be added by clicking on the drawing area.
  * Curved segments can be added by dragging the mouse pointer over the
  * drawing area.
- * <p> 
+ * <p>
  * To creation of the BezierFigure can be finished by adding a segment
  * which closes the path, or by double clicking on the drawing area, or by
  * selecting a different tool in the DrawingEditor.
- * 
+ *
  * <hr>
  * <b>Design Patterns</b>
  *
@@ -73,8 +73,8 @@ public class BezierFigure extends AbstractAttributedFigure {
      * We cache it to increase the drawing speed of the figure.
      */
     private transient BezierPath cappedPath;
-    
-    
+
+
     /**
      * Creates an empty <code>BezierFigure</code>, for example without any
      * <code>BezierPath.Node</code>s.
@@ -99,7 +99,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         set(PATH_CLOSED, isClosed);
         //path.setClosed(isClosed);
     }
-    
+
     // DRAWING
     // SHAPE AND BOUNDS
     // ATTRIBUTES
@@ -113,7 +113,7 @@ public class BezierFigure extends AbstractAttributedFigure {
     public Connector findConnector(Point2D.Double p, ConnectionFigure prototype) {
         return new ChopBezierConnector(this);
     }
-    
+
     @Override
     public Connector findCompatibleConnector(Connector c, boolean isStart) {
         return new ChopBezierConnector(this);
@@ -139,7 +139,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         }
         drawCaps(g);
     }
-    
+
     protected void drawCaps(Graphics2D g) {
         if (getNodeCount() > 1) {
             if (get(START_DECORATION) != null) {
@@ -162,7 +162,7 @@ public class BezierFigure extends AbstractAttributedFigure {
             }
         }
     }
-    
+
     @Override
     protected void drawFill(Graphics2D g) {
         if (isClosed() || get(UNCLOSED_PATH_FILLED)) {
@@ -178,7 +178,7 @@ public class BezierFigure extends AbstractAttributedFigure {
             }
         }
     }
-    
+
     @Override
     public boolean contains(Point2D.Double p) {
         double tolerance = Math.max(2f, AttributeKeys.getStrokeTotalWidth(this) / 2d);
@@ -224,7 +224,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         }
         return false;
     }
-    
+
     @Override
     public Collection<Handle> createHandles(int detailLevel) {
         LinkedList<Handle> handles = new LinkedList<Handle>();
@@ -245,7 +245,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         }
         return handles;
     }
-    
+
     @Override
     public Rectangle2D.Double getBounds() {
         Rectangle2D.Double bounds =path.getBounds2D();
@@ -254,7 +254,7 @@ public class BezierFigure extends AbstractAttributedFigure {
     @Override
     public Rectangle2D.Double getDrawingArea() {
         Rectangle2D.Double r = super.getDrawingArea();
-        
+
         if (getNodeCount() > 1) {
             if (get(START_DECORATION) != null) {
                 Point2D.Double p1 = getPoint(0, 0);
@@ -267,19 +267,19 @@ public class BezierFigure extends AbstractAttributedFigure {
                 r.add(get(END_DECORATION).getDrawingArea(this, p1, p2));
             }
         }
-        
+
         return r;
     }
-    
+
     @Override
     protected void validate() {
         super.validate();
         path.invalidatePath();
         cappedPath = null;
     }
-    
-    
-    
+
+
+
     /**
      * Returns a clone of the bezier path of this figure.
      */
@@ -290,11 +290,20 @@ public class BezierFigure extends AbstractAttributedFigure {
         path = (BezierPath) newValue.clone();
         this.setClosed(newValue.isClosed());
     }
-    
+
+    /**
+     * @param at
+     * @return PathIterator
+     */
+    public PathIterator getPathIterator(AffineTransform at) {
+        return getBezierPath().getPathIterator(at);
+    }
+
+
     public Point2D.Double getPointOnPath(float relative, double flatness) {
         return path.getPointOnPath(relative, flatness);
     }
-    
+
     public boolean isClosed() {
         return (Boolean) get(PATH_CLOSED);
     }
@@ -312,7 +321,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         super.set(key, newValue);
         invalidate();
     }
-    
+
     /**
      * Sets the location of the first and the last <code>BezierPath.Node</code>
      * of the BezierFigure.
@@ -336,7 +345,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         path.invalidatePath();
         cappedPath = null;
     }
-    
+
     /**
      * Returns a path which is cappedPath at the ends, to prevent
      * it from drawing under the end caps.
@@ -366,7 +375,7 @@ public class BezierFigure extends AbstractAttributedFigure {
                     if (get(END_DECORATION) != null) {
                         BezierPath.Node p0 = cappedPath.get(cappedPath.size() - 1);
                         BezierPath.Node p1 = cappedPath.get(cappedPath.size() - 2);
-                        
+
                         Point2D.Double pp;
                         if ((p0.getMask() & BezierPath.C1_MASK) != 0) {
                             pp = p0.getControlPoint(1);
@@ -375,8 +384,8 @@ public class BezierFigure extends AbstractAttributedFigure {
                         } else {
                             pp = p1.getControlPoint(0);
                         }
-                        
-                        
+
+
                         double radius = get(END_DECORATION).getDecorationRadius(this);
                         double lineLength = Geom.length(p0.getControlPoint(0), pp);
                         cappedPath.set(cappedPath.size() - 1, 0, Geom.cap(pp, p0.getControlPoint(0), -Math.min(radius, lineLength)));
@@ -389,7 +398,7 @@ public class BezierFigure extends AbstractAttributedFigure {
     }
     public void layout() {
     }
-    
+
     /**
      * Adds a control point.
      */
@@ -411,7 +420,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         path.set(index, p);
         invalidate();
     }
-    
+
     /**
      * Gets a control point.
      */
@@ -508,10 +517,10 @@ public class BezierFigure extends AbstractAttributedFigure {
     /**
      * Gets the segment of the polyline that is hit by
      * the given Point2D.Double.
-     * 
+     *
      * @param find a Point on the bezier path
      * @param tolerance a tolerance, tolerance should take into account
-     * the line width, plus 2 divided by the zoom factor. 
+     * the line width, plus 2 divided by the zoom factor.
      * @return the index of the segment or -1 if no segment was hit.
      */
     public int findSegment(Point2D.Double find, double tolerance) {
@@ -524,7 +533,7 @@ public class BezierFigure extends AbstractAttributedFigure {
      *
      * @param join a Point at a node on the bezier path
      * @param tolerance a tolerance, tolerance should take into account
-     * the line width, plus 2 divided by the zoom factor. 
+     * the line width, plus 2 divided by the zoom factor.
      */
     public boolean joinSegments(Point2D.Double join, double tolerance) {
         int i = findSegment(join, tolerance);
@@ -540,7 +549,7 @@ public class BezierFigure extends AbstractAttributedFigure {
      *
      * @param split a Point on (or near) a line segment on the bezier path
      * @param tolerance a tolerance, tolerance should take into account
-     * the line width, plus 2 divided by the zoom factor. 
+     * the line width, plus 2 divided by the zoom factor.
      */
     public int splitSegment(Point2D.Double split, double tolerance) {
         int i = findSegment(split, tolerance);
@@ -558,7 +567,7 @@ public class BezierFigure extends AbstractAttributedFigure {
     /**
      * Removes the Point2D.Double at the specified index.
      */
-    protected void removeAllNodes() {
+    public void removeAllNodes() {
         path.clear();
     }
     /**
@@ -567,7 +576,7 @@ public class BezierFigure extends AbstractAttributedFigure {
     public int getNodeCount() {
         return path.size();
     }
-    
+
     @Override
     public BezierFigure clone() {
         BezierFigure that = (BezierFigure) super.clone();
@@ -575,17 +584,17 @@ public class BezierFigure extends AbstractAttributedFigure {
         that.invalidate();
         return that;
     }
-    
+
     @Override
     public void restoreTransformTo(Object geometry) {
         path.setTo((BezierPath) geometry);
     }
-    
+
     @Override
     public Object getTransformRestoreData() {
         return path.clone();
     }
-    
+
     public Point2D.Double chop(Point2D.Double p) {
         if (isClosed()) {
             double grow = AttributeKeys.getPerpendicularHitGrowth(this);
@@ -602,7 +611,7 @@ public class BezierFigure extends AbstractAttributedFigure {
             return path.chop(p);
         }
     }
-    
+
     public Point2D.Double getCenter() {
         return path.getCenter();
     }
@@ -646,7 +655,7 @@ public class BezierFigure extends AbstractAttributedFigure {
                         addNode(index, newNode);
                         changed();
                     }
-                    
+
                     @Override
                     public void undo() throws CannotUndoException {
                         super.undo();
@@ -654,7 +663,7 @@ public class BezierFigure extends AbstractAttributedFigure {
                         removeNode(index);
                         changed();
                     }
-                    
+
                 });
                 changed();
                 evt.consume();
@@ -663,7 +672,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         }
         return false;
     }
-    
+
     @Override
     public void write(DOMOutput out) throws IOException {
         writePoints(out);
@@ -689,7 +698,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         }
         out.closeElement();
     }
-    
+
     @Override
     public void read(DOMInput in) throws IOException {
         readPoints(in);
@@ -699,7 +708,7 @@ public class BezierFigure extends AbstractAttributedFigure {
         path.clear();
         in.openElement("points");
         setClosed(in.getAttribute("closed", false));
-        
+
         for (int i=0, n = in.getElementCount("p"); i < n; i++) {
             in.openElement("p", i);
             BezierPath.Node node = new BezierPath.Node(
@@ -718,4 +727,12 @@ public class BezierFigure extends AbstractAttributedFigure {
         }
         in.closeElement();
     }
+
+    @Override
+    public Shape getConnectibleShape() {
+        return getBezierPath().toGeneralPath();
+    }
+
+
+
 }

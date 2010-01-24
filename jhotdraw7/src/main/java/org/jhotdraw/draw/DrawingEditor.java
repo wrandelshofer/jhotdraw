@@ -5,14 +5,15 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.tool.Tool;
 import java.awt.*;
 import java.beans.*;
@@ -22,7 +23,7 @@ import javax.swing.InputMap;
 
 /**
  * A <em>drawing editor</em> coordinates drawing tools and drawing views.
- * 
+ *
  * <p>Usage of drawing editor in conjunction with the JHotDraw application framework:</p>
  * <ul>
  * <li>For {@link org.jhotdraw.app.Application}s which provide a single document
@@ -51,13 +52,13 @@ import javax.swing.InputMap;
  * <p><em>Mediator</em><br>
  * {@code DrawingEditor} acts as a mediator for coordinating drawing tools
  * and drawing views:<br>
- * Mediator: {@link DrawingEditor}; Colleagues: {@link DrawingView}, 
+ * Mediator: {@link DrawingEditor}; Colleagues: {@link DrawingView},
  * {@link org.jhotdraw.draw.tool.Tool}.
  *
  * <p><em>Mediator</em><br>
  * {@code DrawingEditor} acts as a mediator for coordinating keyboard input from
  * {@code Tool}s and Swing action objects:<br>
- * Mediator: {@link DrawingEditor}; Colleagues: 
+ * Mediator: {@link DrawingEditor}; Colleagues:
  * {@link org.jhotdraw.draw.tool.Tool}, javax.swing.Action.
  *
  * <p><em>Model-View-Controller</em><br>
@@ -70,7 +71,7 @@ import javax.swing.InputMap;
  * State changes of tools can be observed by other objects. Specifically
  * {@code DrawingEditor} observes area invalidations of tools and repaints
  * its active drawing view accordingly.<br>
- * Subject: {@link Tool}; 
+ * Subject: {@link Tool};
  * Observer: {@link org.jhotdraw.draw.event.ToolListener}; Event:
  * {@link org.jhotdraw.draw.event.ToolEvent}; Concrete Observer: {@link DrawingEditor}.
  *
@@ -80,7 +81,7 @@ import javax.swing.InputMap;
  * Subject: {@link DrawingEditor}; Proxy: {@link DrawingEditorProxy};
  * Client: {@link org.jhotdraw.draw.tool.AbstractTool}.
  * <hr>
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -206,9 +207,9 @@ public interface DrawingEditor {
      * Sets a handle attribute of the editor.
      * The default attribute will be used by creation tools, to create a new
      * figure.
-     * 
-     * @param key AttributeKey. 
-     * @param value Attribute value. 
+     *
+     * @param key AttributeKey.
+     * @param value Attribute value.
      */
     public <T> void setHandleAttribute(AttributeKey<T> key, T value);
 
@@ -216,9 +217,9 @@ public interface DrawingEditor {
      * Gets a handle attribute from the editor.
      * The default attribute will be used by creation tools, to create a new
      * figure.
-     * 
-     * @param key AttributeKey. 
-     * 
+     *
+     * @param key AttributeKey.
+     *
      * @return If the handle attribute has been set, returns the previously
      * set value. If the handle attribute has not been set, returns key.getDefaultValue().
      */
@@ -284,4 +285,14 @@ public interface DrawingEditor {
      * @param listener
      */
     public void removePropertyChangeListener(PropertyChangeListener listener);
+
+    /**
+     * @return returns the {@code ConnectorSubTracker}.
+     * A new instance is instantiated if necessary.
+     * <p>
+     * The subTracker's view is always updated to the
+     * editor's active view before this method returns.
+     */
+    public ConnectorSubTracker getConnectorSubTracker();
+
 }

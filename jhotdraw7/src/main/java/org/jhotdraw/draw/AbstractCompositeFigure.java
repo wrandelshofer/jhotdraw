@@ -695,4 +695,31 @@ public abstract class AbstractCompositeFigure
     public void addCompositeFigureListener(CompositeFigureListener listener) {
         listenerList.add(CompositeFigureListener.class, listener);
     }
+
+    /**
+     * Returns all the LineConnection figures attached to this figure
+     * <p>
+     *
+     * @see org.jhotdraw.draw.Figure#getConnections()
+     */
+
+    public Collection<LineConnectionFigure> getConnections() {
+        Collection<LineConnectionFigure> result = new ArrayList<LineConnectionFigure>();
+        Object[] figureListeners = listenerList.getListenerList();
+        for (int i=0; i<figureListeners.length; i++) {
+            if (figureListeners[i] instanceof LineConnectionFigure.ConnectionHandler) {
+                LineConnectionFigure.ConnectionHandler h = (LineConnectionFigure.ConnectionHandler)figureListeners[i];
+                result.add(h.connection);
+            }
+        }
+
+        java.util.List<Figure> children = getChildren();
+        for (Iterator<Figure> iter = children.iterator(); iter.hasNext();) {
+            Figure child = iter.next();
+            result.addAll(child.getConnections());
+        }
+
+      return result;
+    }
+
 }

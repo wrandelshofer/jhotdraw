@@ -192,4 +192,9 @@ public interface ConnectionFigure
     public void lineout();
     // CLONING
     // EVENT HANDLING
+
+    public String findStartConnectorStrategyName();
+
+    public String findEndConnectorStrategyName();
+
 }

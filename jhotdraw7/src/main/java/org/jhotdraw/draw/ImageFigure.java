@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw;
 
@@ -297,8 +297,9 @@ public class ImageFigure extends AbstractAttributedDecoratedFigure
     }
 
     public void loadImage(File file) throws IOException {
-        InputStream in = new FileInputStream(file);
+        InputStream in = null;
         try {
+            in = new FileInputStream(file);
             loadImage(in);
         } catch (Throwable t) {
             ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
@@ -306,8 +307,10 @@ public class ImageFigure extends AbstractAttributedDecoratedFigure
             e.initCause(t);
             throw e;
         } finally {
+            if (in != null) {
             in.close();
         }
+    }
     }
 
     public void loadImage(InputStream in) throws IOException {

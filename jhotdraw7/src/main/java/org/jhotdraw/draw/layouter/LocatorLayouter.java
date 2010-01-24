@@ -96,7 +96,7 @@ public class LocatorLayouter implements Layouter {
         return (bounds == null) ? new Rectangle2D.Double() : bounds;
     }
     
-    private Locator getLocator(Figure f) {
+    protected Locator getLocator(Figure f) {
         return f.get(LAYOUT_LOCATOR);
     }
 }

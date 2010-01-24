@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 
 package org.jhotdraw.draw.handle;
@@ -38,27 +38,27 @@ public class BezierScaleHandle extends AbstractHandle {
     private Point2D.Double center;
     private double startTheta;
     private double startLength;
-    
+
     /** Creates a new instance. */
     public BezierScaleHandle(BezierFigure owner) {
         super(owner);
     }
-    
+
     public boolean isCombinableWith(Handle h) {
         return false;
     }
-    
-    
+
+
     /**
      * Draws this handle.
      */
     public void draw(Graphics2D g) {
-        drawCircle(g, 
+        drawCircle(g,
                 (Color) getEditor().getHandleAttribute(HandleAttributeKeys.SCALE_HANDLE_FILL_COLOR),
                 (Color) getEditor().getHandleAttribute(HandleAttributeKeys.SCALE_HANDLE_STROKE_COLOR)
                 );
     }
-    
+
     protected Rectangle basicGetBounds() {
         Rectangle r = new Rectangle(getLocation());
         int h = getHandlesize();
@@ -67,24 +67,24 @@ public class BezierScaleHandle extends AbstractHandle {
         r.width = r.height = h;
         return r;
     }
-    
+
     public Point getLocation() {
         if (location == null) {
             return  /*location =*/ view.drawingToView(getOrigin());
         }
         return location;
     }
-    
+
     private BezierFigure getBezierFigure() {
         return (BezierFigure) getOwner();
     }
-    
+
     private Point2D.Double getOrigin() {
         // find a nice place to put handle
         // Need to pick a place that will not overlap with point handle
         // and is internal to polygon
         int handlesize = getHandlesize();
-        
+
         // Try for one handlesize step away from outermost toward center
         Point2D.Double outer = getBezierFigure().getOutermostPoint();
         Point2D.Double ctr = getBezierFigure().getCenter();
@@ -92,7 +92,7 @@ public class BezierScaleHandle extends AbstractHandle {
         if (len == 0) { // best we can do?
             return new Point2D.Double(outer.x - handlesize/2, outer.y + handlesize/2);
         }
-        
+
         double u = handlesize / len;
         if (u > 1.0) { // best we can do?
             return new Point2D.Double((outer.x * 3 + ctr.x)/4, (outer.y * 3 + ctr.y)/4);
@@ -110,7 +110,7 @@ public class BezierScaleHandle extends AbstractHandle {
         startTheta = Geom.angle(center.x, center.y, anchorPoint.x, anchorPoint.y);
         startLength = Geom.length(center.x, center.y, anchorPoint.x, anchorPoint.y);
     }
-    
+
     public void trackStep(Point anchor, Point lead, int modifiersEx) {
         location = new Point(lead.x, lead.y);
         Point2D.Double leadPoint = view.viewToDrawing(lead);
@@ -128,25 +128,25 @@ public class BezierScaleHandle extends AbstractHandle {
         getOwner().changed();
     }
     /*
-     *	public  void scaleRotate(Point anchor, Polygon originalPolygon, Point p) {
+     *        public  void scaleRotate(Point anchor, Polygon originalPolygon, Point p) {
                 willChange();
-     
+
                 // use center to determine relative angles and lengths
                 Point ctr = center(originalPolygon);
                 double anchorLen = Geom.length(ctr.x, ctr.y, anchor.x, anchor.y);
-     
+
                 if (anchorLen > 0.0) {
                         double newLen = Geom.length(ctr.x, ctr.y, p.x, p.y);
                         double ratio = newLen / anchorLen;
-     
+
                         double anchorAngle = Math.atan2(anchor.y - ctr.y, anchor.x - ctr.x);
                         double newAngle = Math.atan2(p.y - ctr.y, p.x - ctr.x);
                         double rotation = newAngle - anchorAngle;
-     
+
                         int n = originalPolygon.npoints;
                         int[] xs = new int[n];
                         int[] ys = new int[n];
-     
+
                         for (int i = 0; i < n; ++i) {
                                 int x = originalPolygon.xpoints[i];
                                 int y = originalPolygon.ypoints[i];
@@ -160,11 +160,11 @@ public class BezierScaleHandle extends AbstractHandle {
                 changed();
         }
      */
-    
+
     public void trackEnd(Point anchor, Point lead, int modifiersEx) {
         view.getDrawing().fireUndoableEditHappened(
-                new TransformRestoreEdit(getOwner(), restoreData, getOwner().getTransformRestoreData()));
+                new TransformRestoreEdit(getOwner(), restoreData, getOwner().getTransformRestoreData(), getView()));
         location = null;
     }
-    
+
 }

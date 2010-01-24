@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw.handle;
 
@@ -17,6 +17,8 @@ import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.event.TransformRestoreEdit;
 import java.util.*;
 import java.awt.*;
@@ -28,7 +30,7 @@ import static org.jhotdraw.draw.AttributeKeys.*;
 /**
  * A set of utility methods to create handles which resize a Figure by
  * using its <code>setBounds</code> method, if the Figure is transformable.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -150,6 +152,8 @@ public class ResizeHandleKit {
             Point location = getLocation();
             dx = -anchor.x + location.x;
             dy = -anchor.y + location.y;
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            connectorSubTracker.adjustConnectorsForResizingV(ConnectorSubTracker.trackStart, modifiersEx);
         }
 
         public void trackStep(Point anchor, Point lead, int modifiersEx) {
@@ -168,13 +172,18 @@ public class ResizeHandleKit {
                 }
 
                 trackStepNormalized(p);
+                ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+                connectorSubTracker.adjustConnectorsForResizingV(ConnectorSubTracker.trackStep, modifiersEx);
             }
         }
 
         public void trackEnd(Point anchor, Point lead, int modifiersEx) {
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
             if (getOwner().isTransformable()) {
-                fireUndoableEditHappened(
-                        new TransformRestoreEdit(getOwner(), geometry, getOwner().getTransformRestoreData()));
+                Collection<Connector> prevConnectors = connectorSubTracker.getPriorConnectors();
+                fireUndoableEditHappened(new TransformRestoreEdit(getOwner(), geometry, getOwner()
+                        .getTransformRestoreData(),getView(), prevConnectors));
+                 connectorSubTracker.adjustConnectorsForResizingV(ConnectorSubTracker.trackEnd, modifiersEx);
             }
         }
 

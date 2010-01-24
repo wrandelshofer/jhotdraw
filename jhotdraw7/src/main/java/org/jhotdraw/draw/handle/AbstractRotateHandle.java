@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw.handle;
 
@@ -147,7 +147,7 @@ public abstract class AbstractRotateHandle extends AbstractHandle {
 
     public void trackEnd(Point anchor, Point lead, int modifiersEx) {
         view.getDrawing().fireUndoableEditHappened(
-                new TransformRestoreEdit(getOwner(), restoreData, getOwner().getTransformRestoreData()));
+                new TransformRestoreEdit(getOwner(), restoreData, getOwner().getTransformRestoreData(), getView()));
         fireAreaInvalidated(getDrawingArea());
         location = null;
         invalidate();
@@ -177,7 +177,7 @@ public abstract class AbstractRotateHandle extends AbstractHandle {
             f.transform(tx);
             f.changed();
             fireUndoableEditHappened(
-                    new TransformEdit(f, tx));
+                    new TransformEdit(f, tx, getView()));
         }
     }
 }

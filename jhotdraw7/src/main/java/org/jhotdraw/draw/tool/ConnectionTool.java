@@ -15,6 +15,8 @@ package org.jhotdraw.draw.tool;
 
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
+
 import javax.swing.undo.*;
 import org.jhotdraw.util.*;
 import java.awt.*;
@@ -211,7 +213,11 @@ public class ConnectionTool extends AbstractTool {
 
         Point2D.Double startPoint = viewToDrawing(anchor);
         Figure startFigure = getDrawing().findFigure(startPoint);
-        startConnector = (startFigure == null) ? null : startFigure.findConnector(startPoint, prototype);
+
+        ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+        connectorSubTracker.
+        createNewConnection(startConnector, endConnector, createdFigure, ConnectorSubTracker.trackStart);
+        startConnector = (startFigure == null) ? null : connectorSubTracker.findConnector(startPoint, startFigure, prototype);
 
         if (startConnector != null && canConnect(prototype, startConnector)) {
             Point2D.Double anchor = startConnector.getAnchor();
@@ -241,7 +247,11 @@ public class ConnectionTool extends AbstractTool {
             getView().getConstrainer().constrainPoint(endPoint);
 
             Figure endFigure = getDrawing().findFigureExcept(endPoint, createdFigure);
-            endConnector = (endFigure == null) ? null : endFigure.findConnector(endPoint, prototype);
+
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            connectorSubTracker.
+            createNewConnection(startConnector, endConnector, createdFigure, ConnectorSubTracker.trackStep);
+            endConnector = (endFigure == null) ? null : connectorSubTracker.findConnector(endPoint, endFigure, prototype);
 
             if (endConnector != null && canConnect(createdFigure, startConnector, endConnector)) {
                 endPoint = endConnector.getAnchor();
@@ -261,31 +271,46 @@ public class ConnectionTool extends AbstractTool {
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (createdFigure != null &&
-                startConnector != null && endConnector != null &&
-                createdFigure.canConnect(startConnector, endConnector)) {
-            createdFigure.willChange();
+        final ConnectorSubTracker connectorSubTracker =
+            getView().getEditor().getConnectorSubTracker();
+
+        if (createdFigure != null && startConnector != null && endConnector != null
+                && createdFigure.canConnect(startConnector, endConnector)) {
+            Connector[] startEndConnectors = connectorSubTracker.createNewConnection(startConnector, endConnector,
+                    createdFigure, ConnectorSubTracker.trackEnd);
+            startConnector = startEndConnectors[0];
+            endConnector = startEndConnectors[1];
+        }
+
+        if (createdFigure != null && startConnector != null && endConnector != null
+                && createdFigure.canConnect(startConnector, endConnector)) {
             createdFigure.setStartConnector(startConnector);
             createdFigure.setEndConnector(endConnector);
-            createdFigure.updateConnection();
-            createdFigure.changed();
 
-            final Figure addedFigure = createdFigure;
+            final ConnectionFigure addedFigure = createdFigure;
             final Drawing addedDrawing = getDrawing();
+            final Connector createdStartConnector = startConnector;
+            final Connector createdEndConnector = endConnector;
             getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
-
+                @Override
                 public String getPresentationName() {
                     return presentationName;
                 }
 
+                @Override
                 public void undo() throws CannotUndoException {
                     super.undo();
+                    addedFigure.setStartConnector(null);
+                    addedFigure.setEndConnector(null);
                     addedDrawing.remove(addedFigure);
                 }
 
+                @Override
                 public void redo() throws CannotRedoException {
                     super.redo();
                     addedDrawing.add(addedFigure);
+                    addedFigure.setStartConnector(createdStartConnector);
+                    addedFigure.setEndConnector(createdEndConnector);
                 }
             });
             targetFigure = null;

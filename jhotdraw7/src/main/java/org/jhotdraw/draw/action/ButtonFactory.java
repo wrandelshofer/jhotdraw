@@ -21,6 +21,7 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.tool.DelegationSelectionTool;
 import org.jhotdraw.draw.event.ToolEvent;
 import org.jhotdraw.draw.event.ToolListener;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.decoration.LineDecoration;
 import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.gui.event.SelectionComponentRepainter;
@@ -433,6 +434,10 @@ public class ButtonFactory {
         bar.addSeparator();
         addStrokeButtonsTo(bar, editor);
         bar.addSeparator();
+        if (ConnectorSubTracker.isUsingRelativeConnectors()) {
+            addStrategyButtonsTo(bar, editor);
+            bar.addSeparator();
+        }
         addFontButtonsTo(bar, editor);
     }
 
@@ -1700,5 +1705,237 @@ public class ButtonFactory {
         btn.setText(null);
         btn.setFocusable(false);
         return btn;
+    }
+    public static void addStrategyButtonsTo(JToolBar bar, DrawingEditor editor) {
+        bar.add(createStartStrategyButton(editor));
+        bar.add(createEndStrategyButton(editor));
+    }
+
+    public static JPopupButton createStartStrategyButton(DrawingEditor editor) {
+        return createStartStrategyButton(editor,
+                ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels"));
+    }
+
+    public static JPopupButton createStartStrategyButton(DrawingEditor editor,
+            ResourceBundleUtil labels) {
+        return createStartStrategyButton(editor,
+                labels, new LinkedList<Disposable>());
+    }
+
+
+
+    public static JPopupButton createStartStrategyButton(DrawingEditor editor,
+            ResourceBundleUtil labels, java.util.List<Disposable> dsp) {
+        JPopupButton popupButton = new JPopupButton();
+        labels.configureToolBarButton(popupButton,"startConnectorStrategy");
+        popupButton.setFocusable(false);
+
+        HashMap<AttributeKey,Object> attr;
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(START_CONNECTOR_STRATEGY, "FixedBoundaryConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("startConnectorStrategyFixedBoundary"),
+                null
+                )
+                );
+
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(START_CONNECTOR_STRATEGY, "EdgeConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("startConnectorStrategyEdge"),
+                null
+                )
+                );
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(START_CONNECTOR_STRATEGY, "RotationalConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("startConnectorStrategyRotational"),
+                null
+                )
+                );
+
+   
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(START_CONNECTOR_STRATEGY, "TestConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("startConnectorStrategyTest"),
+                null
+                )
+                );
+
+	  
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(START_CONNECTOR_STRATEGY, "ChopConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("startConnectorStrategyChop"),
+                null
+                )
+                );
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(START_CONNECTOR_STRATEGY, "RectilinearConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("startConnectorStrategyRectilinear"),
+                null
+                )
+                );
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(START_CONNECTOR_STRATEGY, "InteriorConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("startConnectorStrategyInterior"),
+                null
+                )
+                );
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(START_CONNECTOR_STRATEGY, "CenterConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("startConnectorStrategyCenter"),
+                null
+                )
+                );
+        return popupButton;
+    }
+
+    public static JPopupButton createEndStrategyButton(DrawingEditor editor) {
+        return createEndStrategyButton(editor,
+                ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels"));
+    }
+
+    public static JPopupButton createEndStrategyButton(DrawingEditor editor,
+            ResourceBundleUtil labels) {
+        return createEndStrategyButton(editor,
+                labels, new LinkedList<Disposable>());
+    }
+
+
+
+    public static JPopupButton createEndStrategyButton(DrawingEditor editor,
+            ResourceBundleUtil labels, java.util.List<Disposable> dsp) {
+        JPopupButton popupButton = new JPopupButton();
+        labels.configureToolBarButton(popupButton,"endConnectorStrategy");
+        popupButton.setFocusable(false);
+
+        HashMap<AttributeKey,Object> attr;
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(END_CONNECTOR_STRATEGY, "FixedBoundaryConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("endConnectorStrategyFixedBoundary"),
+                null
+                )
+                );
+
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(END_CONNECTOR_STRATEGY, "EdgeConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("endConnectorStrategyEdge"),
+                null
+                )
+                );
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(END_CONNECTOR_STRATEGY, "RotationalConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("endConnectorStrategyRotational"),
+                null
+                )
+                );
+
+    
+		attr = new HashMap<AttributeKey,Object>();
+        attr.put(END_CONNECTOR_STRATEGY, "TestConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("endConnectorStrategyTest"),
+                null
+                )
+                );
+
+
+
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(END_CONNECTOR_STRATEGY, "ChopConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("endConnectorStrategyChop"),
+                null
+                )
+                );
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(END_CONNECTOR_STRATEGY, "RectilinearConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("endConnectorStrategyRectilinear"),
+                null
+                )
+                );
+
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(END_CONNECTOR_STRATEGY, "InteriorConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("endConnectorStrategyInterior"),
+                null
+                )
+                );
+        attr = new HashMap<AttributeKey,Object>();
+        attr.put(END_CONNECTOR_STRATEGY, "CenterConnectorStrategy");
+        popupButton.add(
+                new ConnectorStrategyAction(
+                editor,
+                attr,
+                labels.getString("endConnectorStrategyCenter"),
+                null
+                )
+                );
+        return popupButton;
     }
 }

@@ -5,14 +5,16 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw.tool;
 
+import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.event.TransformEdit;
 import org.jhotdraw.draw.*;
 import java.awt.*;
@@ -31,14 +33,14 @@ import java.util.*;
  * Design pattern:<br>
  * Name: Chain of Responsibility.<br>
  * Role: Handler.<br>
- * Partners: {@link SelectionTool} as Handler, {@link SelectAreaTracker} as 
- * Handler, {@link HandleTracker} as Handler. 
+ * Partners: {@link SelectionTool} as Handler, {@link SelectAreaTracker} as
+ * Handler, {@link HandleTracker} as Handler.
  * <p>
  * Design pattern:<br>
  * Name: State.<br>
  * Role: State.<br>
- * Partners: {@link SelectAreaTracker} as State, {@link SelectionTool} as 
- * Context, {@link HandleTracker} as State. 
+ * Partners: {@link SelectAreaTracker} as State, {@link SelectionTool} as
+ * Context, {@link HandleTracker} as State.
  *
  * @see SelectionTool
  *
@@ -121,6 +123,11 @@ public class DefaultDragTracker extends AbstractTool implements DragTracker {
 
             anchorPoint = previousPoint = view.viewToDrawing(anchor);
             anchorOrigin = previousOrigin = new Point2D.Double(dragRect.x, dragRect.y);
+
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            int modifiersEx = evt.getModifiersEx();
+            connectorSubTracker.
+            adjustConnectorsForMovingV(ConnectorSubTracker.trackStart, modifiersEx, anchorPoint, anchorPoint);
         }
     }
 
@@ -153,11 +160,20 @@ public class DefaultDragTracker extends AbstractTool implements DragTracker {
                 f.changed();
             }
 
+            // always AFTER the transformations of selected figures and Undo edits
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            int modifiersEx = evt.getModifiersEx();
+            connectorSubTracker.
+            adjustConnectorsForMovingV(ConnectorSubTracker.trackStep, modifiersEx,  previousPoint, currentPoint);
+
             previousPoint = currentPoint;
             previousOrigin = new Point2D.Double(constrainedRect.x, constrainedRect.y);
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.tool.AbstractTool#mouseReleased(java.awt.event.MouseEvent)
+     */
     public void mouseReleased(MouseEvent evt) {
         super.mouseReleased(evt);
         DrawingView view = getView();
@@ -191,15 +207,47 @@ public class DefaultDragTracker extends AbstractTool implements DragTracker {
                 }
             }
 
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            int modifiersEx = evt.getModifiersEx();
+            boolean sliding = false;
+            if ((modifiersEx & InputEvent.ALT_DOWN_MASK) != 0 && draggedFigures.size() == 1)
+                sliding = true;
+
+
+
             AffineTransform tx = new AffineTransform();
-            tx.translate(
-                    -anchorOrigin.x + previousOrigin.x,
-                    -anchorOrigin.y + previousOrigin.y);
-            if (!tx.isIdentity()) {
-                getDrawing().fireUndoableEditHappened(new TransformEdit(
-                        draggedFigures, tx));
+            // dragging a 2-point connection results in transform edits that do nothing
+            // but use up memory and demand increased CTRL+Z's
+            if (draggedFigures.size() == 1) {
+                Figure f = draggedFigures.iterator().next();
+                if (f instanceof LineConnectionFigure) {
+                    LineConnectionFigure lf = (LineConnectionFigure)f;
+                    if (lf.getNodeCount() == 2)
+                        tx = null;
+                }
             }
+
+            if (tx != null) {
+                tx.translate(-anchorOrigin.x + previousOrigin.x,
+                             -anchorOrigin.y + previousOrigin.y);
+                if (!tx.isIdentity()) {
+                    if (!sliding)
+                        getDrawing().fireUndoableEditHappened(
+                                new TransformEdit(draggedFigures, tx, getView()));
+                    else {
+                        getDrawing().fireUndoableEditHappened(
+                                new TransformEdit(draggedFigures, tx, getView(),
+                                        connectorSubTracker.getPriorConnectors()));
+                    }
+                }
+            }
+
+            // always AFTER the transformations of selected figures and Undo edits
+            connectorSubTracker.
+                    adjustConnectorsForMovingV(ConnectorSubTracker.trackEnd, modifiersEx, anchorPoint, newPoint);
+
         }
+
         Rectangle r = new Rectangle(anchor.x, anchor.y, 0, 0);
         r.add(evt.getX(), evt.getY());
         maybeFireBoundsInvalidated(r);

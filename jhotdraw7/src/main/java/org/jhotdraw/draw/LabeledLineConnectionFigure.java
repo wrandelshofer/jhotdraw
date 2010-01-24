@@ -15,14 +15,21 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.layouter.Layouter;
+import org.jhotdraw.draw.layouter.LocatorLayouter;
+import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.event.CompositeFigureEvent;
 import org.jhotdraw.draw.event.CompositeFigureListener;
 import org.jhotdraw.util.*;
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
+
 import java.util.*;
 import java.awt.*;
 import java.awt.geom.*;
+import java.io.IOException;
+
 import javax.swing.event.*;
 
 /**
@@ -30,11 +37,10 @@ import javax.swing.event.*;
  * <p>
  * Usage:
  * <pre>
- * LineConnectionFigure lcf = new LineConnectionFigure();
- * lcf.setLayouter(new LocatorLayouter());
+ * LabeledLineConnectionFigure lcf = new LabeledLineConnectionFigure();
  * TextFigure label = new TextFigure();
  * label.setText("Hello");
- * LocatorLayouter.LAYOUT_LOCATOR.set(label, new BezierLabelLocator(0, -Math.PI / 4, 8));
+ * label.setAttribute(AttributeKeys.LABEL_LOCATOR, new BezierLabelLocator(1, Math.PI + Math.PI / 4, 8));
  * lcf.add(label);
  * </pre>
  *
@@ -44,7 +50,13 @@ import javax.swing.event.*;
 public class LabeledLineConnectionFigure extends LineConnectionFigure
         implements CompositeFigure {
     
-    private Layouter layouter;
+	private static class LabelLocatorLayouter extends LocatorLayouter {
+        protected Locator getLocator(Figure f) {
+            return AttributeKeys.LABEL_LOCATOR.get(f);
+        }
+    }
+
+    private Layouter layouter = new LabelLocatorLayouter();
     private ArrayList<Figure> children = new ArrayList<Figure>();
     private transient Rectangle2D.Double cachedDrawingArea;
     
@@ -271,8 +283,12 @@ public class LabeledLineConnectionFigure extends LineConnectionFigure
     public Layouter getLayouter() {
         return layouter;
     }
+    /*
+     * will always use an embedded instance LabelLocatorLayouter
+     * needed only to conform to Composite interface
+     */
     public void setLayouter(Layouter newLayouter) {
-        this.layouter = newLayouter;
+        layouter = new LabelLocatorLayouter();
     }
     
     /**
@@ -388,5 +404,23 @@ public class LabeledLineConnectionFigure extends LineConnectionFigure
 
     public int indexOf(Figure child) {
         return children.indexOf(child);
+    }
+
+    public void read(DOMInput in) throws IOException {
+        super.read(in);
+        in.openElement("children");
+        for (int i = 0; i < in.getElementCount(); i++) {
+            basicAdd((Figure) in.readObject(i));
+        }
+        in.closeElement();
+    }
+
+    public void write(DOMOutput out) throws IOException {
+        super.write(out);
+        out.openElement("children");
+        for (Figure child : getChildren()) {
+            out.writeObject(child);
+        }
+        out.closeElement();
     }
 }

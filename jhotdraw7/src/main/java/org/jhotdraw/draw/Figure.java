@@ -546,16 +546,24 @@ public interface Figure extends Cloneable, Serializable, DOMStorable {
      */
     public void removeFigureListener(FigureListener l);
 
-    /** Adds a {@code PropertyChangeListener} which can optionally be wrapped
-     * into a {@code WeakPropertyChangeListener}.
-     * @param listener
-     */
-    public void addPropertyChangeListener(PropertyChangeListener listener);
-    /** Removes a {@code PropertyChangeListener}. If the listener was added
-     * wrapped into a {@code WeakPropertyChangeListener}, the
-     * {@code WeakPropertyChangeListener} is removed.
+    /**
+     * This is the shape or path that constrains connectors. Boundary connectors
+     * lie on the shape's outline; interior connectors are restricted to the
+     * interior of the shape.
+     * <p>
+     * Typical implementations return the shape of the figure itself or the
+     * rectangular bounds of the figure.
+     * <p>
+     * If sub-class definitions allow points 'outside' the figure the sub-class
+     * must ensure that connection end points lie 'inside' or on the figure.
      *
-     * @param listener
+     * @return a shape to 'contain' connector points
      */
-    public void removePropertyChangeListener(PropertyChangeListener listener);
+    public Shape getConnectibleShape();
+
+
+    /**
+     * @return all connections <i>to</i> or(inclusive) <i>from</i> the figure
+     */
+    public Collection<LineConnectionFigure> getConnections();
 }

@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw.action;
 
@@ -36,7 +36,7 @@ public abstract class MoveConstrainedAction extends AbstractSelectedAction {
 
     public void actionPerformed(java.awt.event.ActionEvent e) {
         if (getView().getSelectionCount() > 0) {
-        
+
         Rectangle2D.Double r = null;
         for (Figure f : getView().getSelectedFigures()) {
             if (r == null) {
@@ -76,7 +76,7 @@ public abstract class MoveConstrainedAction extends AbstractSelectedAction {
             }
         }
         CompositeEdit edit;
-        fireUndoableEditHappened(new TransformEdit(getView().getSelectedFigures(), tx));
+        fireUndoableEditHappened(new TransformEdit(getView().getSelectedFigures(), tx, getView()));
         }
     }
 
