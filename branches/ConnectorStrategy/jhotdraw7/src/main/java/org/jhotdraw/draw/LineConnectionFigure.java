@@ -5,20 +5,29 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw;
 
+import static org.jhotdraw.draw.AttributeKeys.END_CONNECTOR_STRATEGY;
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.START_CONNECTOR_STRATEGY;
+
 import org.jhotdraw.draw.liner.Liner;
+import org.jhotdraw.draw.liner.SelfConnectionLiner;
+import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.handle.BezierOutlineHandle;
 import org.jhotdraw.draw.handle.BezierNodeHandle;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
+import org.jhotdraw.draw.connector.RelativeConnector;
+
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.*;
@@ -37,7 +46,7 @@ import org.jhotdraw.xml.DOMOutput;
  * The bezier path can be laid out manually using bezier handles provided
  * by this figure, or automatically using a {@link Liner} which can be
  * set using the JavaBeans property {@code liner}.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -55,35 +64,50 @@ public class LineConnectionFigure extends LineFigure
      */
     private ConnectionHandler connectionHandler = new ConnectionHandler(this);
 
-    private static class ConnectionHandler extends FigureAdapter implements Serializable {
+    protected static class ConnectionHandler extends FigureAdapter implements Serializable {
+        private static final long serialVersionUID = 1L;
+        protected LineConnectionFigure connection;
+        private Drawing drawing;
 
-        private LineConnectionFigure owner;
-
-        private ConnectionHandler(LineConnectionFigure owner) {
-            this.owner = owner;
+        private ConnectionHandler(LineConnectionFigure connection) {
+            this.connection = connection;
         }
 
         @Override
         public void figureRemoved(FigureEvent evt) {
-            // The commented lines below must stay commented out.
-            // This is because, we must not set our connectors to null,
-            // in order to support reconnection using redo.
-            /*
-            if (evt.getFigure() == owner.getStartFigure()
-            || evt.getFigure() == owner.getEndFigure()) {
-            owner.setStartConnector(null);
-            owner.setEndConnector(null);
-            }*/
-            owner.fireFigureRequestRemove();
+            // We need the drawing in figureAdded below.
+            if (connection.getDrawing() != null)
+                drawing = connection.getDrawing();
+
+            connection.fireFigureRequestRemove();
+            // ConnectionHandler is removed as a listener on start and end figures
+            // by fireFigureRequestRemove calling removeNotify on connection.
+            // If the start or end figure is reinstated (and both figures exist)
+            // then the connection should be reinstated simultaneously.
+            // Without the handler nothing is going to inform the connection to re-connect.
+            // So we add ConnectionHandler back as a listener on the REMOVED figure
+            // and the 'other' figure.
+            connection.registerConnectionHandler(connection.getStartFigure());
+            connection.registerConnectionHandler(connection.getEndFigure());
         }
+
+
+        // this will only be called when the start or end figure is re-instated
+        // after a delete
+        @Override
+        public void figureAdded(FigureEvent e) {
+            if (drawing != null)
+                drawing.add(connection);
+        }
+
 
         @Override
         public void figureChanged(FigureEvent e) {
-            if (e.getSource() == owner.getStartFigure() ||
-                    e.getSource() == owner.getEndFigure()) {
-                owner.willChange();
-                owner.updateConnection();
-                owner.changed();
+            if (e.getSource() == connection.getStartFigure() ||
+                    e.getSource() == connection.getEndFigure()) {
+                connection.willChange();
+                connection.updateConnection();
+                connection.changed();
             }
         }
     };
@@ -93,6 +117,35 @@ public class LineConnectionFigure extends LineFigure
     }
     // DRAWING
     // SHAPE AND BOUNDS
+
+    /**
+     * Add the embedded {@link #connectionHandler} as a listener to {@code
+     * figure} if it is not already a listener.
+     *
+     * @param figure
+     */
+    public void registerConnectionHandler(Figure figure) {
+        Collection<LineConnectionFigure> connections = figure.getConnections();
+        if (!(connections.contains(this)))
+            figure.addFigureListener(connectionHandler);
+    }
+
+
+    /**
+     * Removes the embedded {@link #connectionHandler} as a listener to {@code
+     * figure} if it is already a listener.
+     * <p>
+     * This permits fully cloned connection figures (and their cloned
+     * connectors) to exist independently of the drawing.
+     *
+     * @param figure
+     */
+    public void unRegisterConnectionHandler(Figure figure) {
+        Collection<LineConnectionFigure> connections = figure.getConnections();
+        if (connections.contains(this))
+            figure.removeFigureListener(connectionHandler);
+    }
+
 
     /**
      * Ensures that a connection is updated if the connection
@@ -134,7 +187,7 @@ public class LineConnectionFigure extends LineFigure
 
 // CONNECTING
     /**
-     * 
+     *
      * ConnectionFigures cannot be connected and always sets connectable to false.
      */
     @Override
@@ -198,6 +251,8 @@ public class LineConnectionFigure extends LineFigure
             }
             endConnector = newEnd;
             if (endConnector != null) {
+                if (endConnector instanceof RelativeConnector)
+                    ((RelativeConnector)endConnector).setLineConnection(this);
                 getEndFigure().addFigureListener(connectionHandler);
                 if (getStartFigure() != null && getEndFigure() != null) {
                     if (getDrawing() != null) {
@@ -219,6 +274,8 @@ public class LineConnectionFigure extends LineFigure
             }
             startConnector = newStart;
             if (startConnector != null) {
+                if (startConnector instanceof RelativeConnector)
+                    ((RelativeConnector)startConnector).setLineConnection(this);
                 getStartFigure().addFigureListener(connectionHandler);
                 if (getStartFigure() != null && getEndFigure() != null) {
                     handleConnect(getStartConnector(), getEndConnector());
@@ -269,7 +326,7 @@ public class LineConnectionFigure extends LineFigure
     // CLONING
     // EVENT HANDLING
     /**
-     * This method is invoked, when the Figure is being removed from a Drawing.
+     * This method is invoked, when the Figure is being added to a Drawing.
      * This method invokes handleConnect, if the Figure is connected.
      *
      * @see #handleConnect
@@ -282,6 +339,19 @@ public class LineConnectionFigure extends LineFigure
             handleConnect(getStartConnector(), getEndConnector());
             updateConnection();
         }
+        // When a connection is removed ConnectionHandler is removed as a
+        // listener on both the start and end figures. ConnectionHandler
+        // gets added back as a listener to both figures here.
+        // This method is also called when loading diagrams and
+        // reinstating the start or end figures. In those cases the
+        // ConnectionHandler has not been removed. The register
+        // method will not add ConnectionHandler as a listener if
+        // it is already present.
+
+        if (getStartConnector() != null)
+            registerConnectionHandler(getStartFigure());
+        if (getEndConnector() != null)
+            registerConnectionHandler(getEndFigure());
     }
 
     /**
@@ -296,13 +366,14 @@ public class LineConnectionFigure extends LineFigure
             handleDisconnect(getStartConnector(), getEndConnector());
         }
         // Note: we do not set the connectors to null here, because we
-        // need them when we are added back to a drawing again. For example,
-        // when an undo is performed, after the LineConnection has been
-        // deleted.
-        /*
-        setStartConnector(null);
-        setEndConnector(null);
-         */
+        // need them when adding the connection back to a drawing. For example,
+        // when undoing a LineConnectiondeletion.
+
+        if (getStartConnector() != null)
+            getStartFigure().removeFigureListener(this.connectionHandler);
+        if (getEndConnector() != null)
+            getEndFigure().removeFigureListener(this.connectionHandler);
+
         super.removeNotify(drawing);
     }
 
@@ -393,6 +464,17 @@ public class LineConnectionFigure extends LineFigure
 
         updateConnection();
         changed();
+
+        // a quick hack... must be changed
+        if (ConnectorSubTracker.isUsingRelativeConnectors()) {
+            String startStrategyName = get(START_CONNECTOR_STRATEGY);
+            String endStrategyName = get(END_CONNECTOR_STRATEGY);
+            set(START_CONNECTOR_STRATEGY, null);
+            set(END_CONNECTOR_STRATEGY, null);
+            ConnectorSubTracker.migrateToRelativeConnectors(this);
+            set(START_CONNECTOR_STRATEGY, startStrategyName);
+            set(END_CONNECTOR_STRATEGY, endStrategyName);
+        }
     }
 
     public boolean canConnect(Connector start) {
@@ -440,11 +522,18 @@ public class LineConnectionFigure extends LineFigure
     protected void readPoints(DOMInput in) throws IOException {
         super.readPoints(in);
         in.openElement("startConnector");
-        setStartConnector((Connector) in.readObject());
+        Connector startConnector = (Connector) in.readObject();
+        setStartConnector(startConnector);
         in.closeElement();
         in.openElement("endConnector");
-        setEndConnector((Connector) in.readObject());
+        Connector endConnector = (Connector) in.readObject();
+        setEndConnector(endConnector);
         in.closeElement();
+        if (findStartConnectorStrategyName() != null)
+            ((RelativeConnector)startConnector).setLineConnection(this);
+        if (findEndConnectorStrategyName() != null)
+            ((RelativeConnector)endConnector).setLineConnection(this);
+
     }
 
     @Override
@@ -455,6 +544,12 @@ public class LineConnectionFigure extends LineFigure
         // Note: Points must be read after Liner, because Liner influences
         // the location of the points.
         readPoints(in);
+
+        if (ConnectorSubTracker.isUsingRelativeConnectors()) {
+            if (findStartConnectorStrategyName() == null ||
+                    findEndConnectorStrategyName() == null )
+                ConnectorSubTracker.migrateToRelativeConnectors(this);
+        }
     }
 
     protected void readLiner(DOMInput in) throws IOException {
@@ -586,4 +681,57 @@ public class LineConnectionFigure extends LineFigure
             updateConnection();
         }
     }
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.ConnectionFigure#findStartConnectorStrategyName()
+     */
+    public String findStartConnectorStrategyName() {
+        String strategyName = get(AttributeKeys.START_CONNECTOR_STRATEGY);
+        if (strategyName == null || strategyName.length() == 0)
+            strategyName = get(AttributeKeys.END_CONNECTOR_STRATEGY);
+        return strategyName;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.ConnectionFigure#findEndConnectorStrategyName()
+     */
+    public String findEndConnectorStrategyName() {
+        String strategyName = get(AttributeKeys.END_CONNECTOR_STRATEGY);
+        if (strategyName == null || strategyName.length() == 0)
+            strategyName = get(AttributeKeys.START_CONNECTOR_STRATEGY);
+        return strategyName;
+    }
+
+    /**
+     * set liner and attributes for a self-connection
+     */
+    public void setSelfConnection() {
+         setLiner(new SelfConnectionLiner());
+         set(START_CONNECTOR_STRATEGY, "EdgeConnectorStrategy");
+         set(END_CONNECTOR_STRATEGY, "EdgeConnectorStrategy");
+         setAttributeEnabled(AttributeKeys.START_CONNECTOR_STRATEGY, true);
+         setAttributeEnabled(AttributeKeys.END_CONNECTOR_STRATEGY, true);
+         set(END_DECORATION, new ArrowTip());
+    }
+
+
+    /**
+     * Returns a tooltip for the specified location on the figure.
+     *
+     * The tooltip identifes the connector strategy for the
+     * specified line end.
+     *
+     */
+    @Override
+    public String getToolTipText(Point2D.Double p) {
+        String answer = "";
+        if (p.distance(getPoint(0)) < 12)
+            answer = findStartConnectorStrategyName();
+        else
+            if (p.distance(getPoint(getNodeCount()-1)) < 12)
+                answer = findEndConnectorStrategyName();
+        return answer;
+    }
+
+
+
 }

@@ -16,6 +16,7 @@ package org.jhotdraw.draw;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.event.SetBoundsEdit;
 import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.event.FigureEvent;
@@ -636,4 +637,35 @@ public abstract class AbstractFigure
         connectors.add(new ChopRectangleConnector(this));
         return connectors;
     }
+
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.Figure#getConnectibleShape()
+     */
+    @Override
+    public Shape getConnectibleShape() {
+        return (Rectangle2D.Double) (getBounds().clone());
+    }
+
+    /**
+     * Returns all the LineConnection figures attached to this figure
+     * <p>
+     *
+     * @see org.jhotdraw.draw.Figure#getConnections()
+     */
+
+    public Collection<LineConnectionFigure> getConnections() {
+        Collection<LineConnectionFigure> result = new ArrayList<LineConnectionFigure>();
+        Object[] figureListeners = listenerList.getListenerList();
+        for (int i=0; i<figureListeners.length; i++) {
+            if (figureListeners[i] instanceof LineConnectionFigure.ConnectionHandler) {
+                LineConnectionFigure.ConnectionHandler h = (LineConnectionFigure.ConnectionHandler)figureListeners[i];
+                result.add(h.connection);
+            }
+        }
+      return result;
+    }
+
+
+
+
 }

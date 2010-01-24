@@ -14,6 +14,7 @@
 
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.tool.Tool;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -162,5 +163,9 @@ public class DrawingEditorProxy extends AbstractBean implements DrawingEditor {
 
     public ActionMap getActionMap() {
         return target.getActionMap();
+    }
+
+    public ConnectorSubTracker getConnectorSubTracker() {
+        return target.getConnectorSubTracker();
     }
 }

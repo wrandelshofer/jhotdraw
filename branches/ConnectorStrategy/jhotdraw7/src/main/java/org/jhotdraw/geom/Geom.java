@@ -430,7 +430,14 @@ public class Geom {
     }
 
     /**
-     * Gets the angle of a point relative to a rectangle.
+     * Gets the angle of a point relative to a rectangle.<p>
+     * The returned angle is the 'Normalized' angle at the unit square.<p>
+     * This equals the true 'Geometric' angle for squares only.<p>
+     * It results in vertex points of any rectangle having normalized angles of PI/4, 3PI/4, -3PI/4, -PI/4
+     *
+     * @param r
+     * @param p
+     * @return angle
      */
     public static double pointToAngle(Rectangle r, Point p) {
         int px = p.x - (r.x + r.width / 2);
@@ -439,7 +446,14 @@ public class Geom {
     }
 
     /**
-     * Gets the angle of a point relative to a rectangle.
+     * Gets the angle of a point relative to a rectangle.<p>
+     * The returned angle is the 'Normalized' angle at the unit square.<p>
+     * This equals the true 'Geometric' angle for squares only.<p>
+     * It results in vertex points of any rectangle having normalized angles of PI/4, 3PI/4, -3PI/4, -PI/4
+     *
+     * @param r
+     * @param p
+     * @return angle
      */
     public static double pointToAngle(Rectangle2D.Double r, Point2D.Double p) {
         double px = p.x - (r.x + r.width / 2);

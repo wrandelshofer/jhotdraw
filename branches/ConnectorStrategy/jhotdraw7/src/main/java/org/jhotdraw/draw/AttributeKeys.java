@@ -15,6 +15,7 @@ package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.decoration.LineDecoration;
 import org.jhotdraw.draw.liner.Liner;
+import org.jhotdraw.draw.locator.BezierLabelLocator;
 import org.jhotdraw.util.ResourceBundleUtil;
 import java.awt.*;
 import java.awt.geom.*;
@@ -328,6 +329,28 @@ public class AttributeKeys {
      * Specifies the orientation of a Figure.
      */
     public final static AttributeKey<Orientation> ORIENTATION = new AttributeKey<Orientation>("orientation", Orientation.class, Orientation.NORTH, false, labels);
+
+    /**
+     * The value of this attribute is a String object, which is used to
+     * set the startConnectorStrategy.
+     */
+    public final static AttributeKey<String> START_CONNECTOR_STRATEGY = new AttributeKey<String>("startConnectorStrategy", String.class);
+
+  /**
+     * The value of this attribute is a String object, which is used to
+     * set the endConnectorStrategy.
+     */
+    public final static AttributeKey<String> END_CONNECTOR_STRATEGY = new AttributeKey<String>("endConnectorStrategy", String.class);
+
+
+    /**
+     *
+     * The value of this attribute is a BezierLabelLocator object, which is used to
+     * locate/layout the labels on a LabeledLineConnectionFigure
+     */
+    public final static AttributeKey<BezierLabelLocator> LABEL_LOCATOR = new AttributeKey<BezierLabelLocator>("labelLocator", BezierLabelLocator.class, new BezierLabelLocator(), false, labels);
+
+
     /**
      * A put with all attributes defined by this class.
      */
@@ -365,7 +388,12 @@ public class AttributeKeys {
                     START_DECORATION,
                     DECORATOR_INSETS,
                     ORIENTATION,
-                    WINDING_RULE,}));
+                    WINDING_RULE,
+                    START_CONNECTOR_STRATEGY,
+                    END_CONNECTOR_STRATEGY,
+                    LABEL_LOCATOR ,
+                    }));
+
         supportedAttributes = Collections.unmodifiableSet(as);
         HashMap<String, AttributeKey> am = new HashMap<String, AttributeKey>();
         for (AttributeKey a : as) {

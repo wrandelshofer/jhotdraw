@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 
 package org.jhotdraw.draw.action;
@@ -28,14 +28,14 @@ import java.awt.geom.*;
  */
 public abstract class MoveAction extends AbstractSelectedAction {
     private int dx, dy;
-    
+
     /** Creates a new instance. */
     public MoveAction(DrawingEditor editor, int dx, int dy) {
         super(editor);
         this.dx = dx;
         this.dy = dy;
     }
-    
+
     public void actionPerformed(java.awt.event.ActionEvent e) {
         CompositeEdit edit;
         AffineTransform tx = new AffineTransform();
@@ -45,10 +45,10 @@ public abstract class MoveAction extends AbstractSelectedAction {
             f.transform(tx);
             f.changed();
         }
-        fireUndoableEditHappened(new TransformEdit(getView().getSelectedFigures(), tx));
-        
+        fireUndoableEditHappened(new TransformEdit(getView().getSelectedFigures(), tx, getView()));
+
     }
-    
+
     public static class East extends MoveAction {
         public final static String ID = "edit.moveEast";
         public East(DrawingEditor editor) {

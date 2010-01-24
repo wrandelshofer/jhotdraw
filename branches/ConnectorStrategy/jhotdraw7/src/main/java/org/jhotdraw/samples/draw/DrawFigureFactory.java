@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 
 package org.jhotdraw.samples.draw;
@@ -28,12 +28,15 @@ import org.jhotdraw.draw.ImageFigure;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.liner.ElbowLiner;
 import org.jhotdraw.draw.liner.CurvedLiner;
+import org.jhotdraw.draw.liner.SelfConnectionLiner;
+import org.jhotdraw.draw.locator.BezierLabelLocator;
 import org.jhotdraw.draw.connector.ChopTriangleConnector;
 import org.jhotdraw.draw.connector.ChopRoundRectangleConnector;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.ChopDiamondConnector;
 import org.jhotdraw.draw.connector.ChopBezierConnector;
+import org.jhotdraw.draw.connector.RelativeConnector;
 import org.jhotdraw.draw.decoration.ArrowTip;
 import java.util.*;
 import org.jhotdraw.draw.*;
@@ -61,7 +64,7 @@ public class DrawFigureFactory extends DefaultDOMFactory {
         { TextAreaFigure.class, "ta" },
         { ImageFigure.class, "image" },
         { GroupFigure.class, "g" },
-        
+
         { ArrowTip.class, "arrowTip" },
         { ChopRectangleConnector.class, "rConnector" },
         { ChopEllipseConnector.class, "ellipseConnector" },
@@ -69,9 +72,13 @@ public class DrawFigureFactory extends DefaultDOMFactory {
         { ChopTriangleConnector.class, "triangleConnector" },
         { ChopDiamondConnector.class, "diamondConnector" },
         { ChopBezierConnector.class, "bezierConnector" },
-        
+        { RelativeConnector.class, "relativeConnector" },
+        { LabeledLineConnectionFigure.class, "conn" },
+        { BezierLabelLocator.class, "bll"},
+
         { ElbowLiner.class, "elbowLiner" },
         { CurvedLiner.class, "curvedLiner" },
+        { SelfConnectionLiner.class, "selfLiner" },
     };
     private final static Object[][] enumTagArray = {
         { AttributeKeys.StrokePlacement.class, "strokePlacement" },
@@ -79,7 +86,7 @@ public class DrawFigureFactory extends DefaultDOMFactory {
         { AttributeKeys.Underfill.class, "underfill" },
         { AttributeKeys.Orientation.class, "orientation" },
     };
-    
+
     /** Creates a new instance. */
     public DrawFigureFactory() {
         for (Object[] o : classTagArray) {

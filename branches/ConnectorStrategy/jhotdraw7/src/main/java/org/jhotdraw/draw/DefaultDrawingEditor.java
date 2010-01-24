@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw;
 
@@ -19,6 +19,7 @@ import org.jhotdraw.app.action.edit.DeleteAction;
 import org.jhotdraw.app.action.edit.CopyAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
 import org.jhotdraw.draw.tool.Tool;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.event.ToolEvent;
 import org.jhotdraw.draw.event.ToolListener;
 import javax.swing.ActionMap;
@@ -50,6 +51,7 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor 
     private HashMap<AttributeKey, Object> defaultAttributes = new HashMap<AttributeKey, Object>();
     private HashMap<AttributeKey, Object> handleAttributes = new HashMap<AttributeKey, Object>();
     private Tool tool;
+    private ConnectorSubTracker connectorSubTracker;
     private HashSet<DrawingView> views;
     private DrawingView activeView;
     private boolean isEnabled = true;
@@ -151,6 +153,18 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor 
 
         firePropertyChange(ACTIVE_VIEW_PROPERTY, oldValue, newValue);
     }
+
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.DrawingEditor#getConnectorSubTracker()
+     */
+    public ConnectorSubTracker getConnectorSubTracker() {
+        if (connectorSubTracker == null) {
+            connectorSubTracker = new ConnectorSubTracker();
+        }
+        connectorSubTracker.setView(getActiveView());
+        return connectorSubTracker;
+    }
+
 
     public Tool getTool() {
         return tool;

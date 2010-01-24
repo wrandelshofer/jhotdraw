@@ -133,8 +133,10 @@ public class DOMStorableInputOutputFormat implements OutputFormat, InputFormat {
         try {
             write(out, drawing);
         } finally {
+            if (out != null) {
             out.close();
         }
+    }
     }
 
     public void write(OutputStream out, Drawing drawing) throws IOException {
@@ -151,12 +153,20 @@ public class DOMStorableInputOutputFormat implements OutputFormat, InputFormat {
     }
 
     public void read(File file, Drawing drawing, boolean replace) throws IOException {
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+        BufferedInputStream in = null;
         try {
+            in = new BufferedInputStream(new FileInputStream(file));
             read(in, drawing, replace);
-        } finally {
+        }
+        catch (Exception e) {
+            System.out.println("Read Problem " + e.getMessage());
+            e.printStackTrace();
+        }
+        finally {
+            if (in != null) {
             in.close();
         }
+    }
     }
 
     public void read(InputStream in, Drawing drawing, boolean replace) throws IOException {

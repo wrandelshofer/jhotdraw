@@ -427,4 +427,38 @@ public class GraphicalCompositeFigure extends AbstractCompositeFigure {
         }
         return Geom.angleToPoint(r, Geom.pointToAngle(r, from));
     }
+
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.AbstractCompositeFigure#getTransformRestoreData()
+     */
+    @Override
+    public Object getTransformRestoreData() {
+        LinkedList<Object> list = new LinkedList<Object>();
+        list.add(presentationFigure.getTransformRestoreData());
+        for (Figure child : getChildren()) {
+            list.add(child.getTransformRestoreData());
+        }
+        return list;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.AbstractCompositeFigure#restoreTransformTo(java.lang.Object)
+     */
+    @Override
+    public void restoreTransformTo(Object geometry) {
+        LinkedList<Object> list = (LinkedList<Object>) geometry;
+        Iterator<Object> i = list.iterator();
+        Object pGeom = i.next();
+        presentationFigure.restoreTransformTo(pGeom);
+        for (Figure child : getChildren()) {
+            child.restoreTransformTo(i.next());
+        }
+        invalidate();
+    }
+
+    @Override
+    public Shape getConnectibleShape() {
+        return presentationFigure.getConnectibleShape();
+    }
+
 }

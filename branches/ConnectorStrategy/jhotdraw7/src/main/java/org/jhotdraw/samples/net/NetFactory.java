@@ -17,6 +17,7 @@ package org.jhotdraw.samples.net;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.TextAreaFigure;
 import org.jhotdraw.draw.connector.LocatorConnector;
+import org.jhotdraw.draw.connector.RelativeConnector;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
@@ -46,6 +47,7 @@ public class NetFactory extends DefaultDOMFactory {
         { ArrowTip.class, "arrowTip" },
         { Insets2D.Double.class, "insets" },
         { RelativeLocator.class, "relativeLoc" },
+        { RelativeConnector.class, "relativeConnector" },
         };
     private final static Object[][] enumTagArray = {
         { AttributeKeys.StrokeType.class, "strokeType" },

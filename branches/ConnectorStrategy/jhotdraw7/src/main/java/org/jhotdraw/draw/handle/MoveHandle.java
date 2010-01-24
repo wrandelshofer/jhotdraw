@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw.handle;
 
@@ -17,6 +17,7 @@ import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.event.TransformEdit;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -25,7 +26,7 @@ import java.util.*;
 
 /**
  * A handle that changes the location of the owning figure, if the figure is
- * transformable. 
+ * transformable.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -74,10 +75,10 @@ public class MoveHandle extends LocatorHandle {
     }
 
     /**
-     * Returns a cursor for the handle. 
-     * 
+     * Returns a cursor for the handle.
+     *
      * @return Returns a move cursor, if the figure
-     * is transformable. Returns a default cursor otherwise. 
+     * is transformable. Returns a default cursor otherwise.
      */
     @Override
     public Cursor getCursor() {
@@ -92,6 +93,11 @@ public class MoveHandle extends LocatorHandle {
     public void trackStep(Point anchor, Point lead, int modifiersEx) {
         Figure f = getOwner();
         if (f.isTransformable()) {
+            LinkedList<Figure> movedFigures = new LinkedList<Figure>();
+            movedFigures.add(f);
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            connectorSubTracker.adjustConnectorsForMoving(movedFigures, ConnectorSubTracker.trackStart, modifiersEx);
+
             Point2D.Double newPoint = view.getConstrainer().constrainPoint(view.viewToDrawing(lead));
             AffineTransform tx = new AffineTransform();
             tx.translate(newPoint.x - oldPoint.x, newPoint.y - oldPoint.y);
@@ -99,6 +105,7 @@ public class MoveHandle extends LocatorHandle {
             f.transform(tx);
             f.changed();
 
+            connectorSubTracker.adjustConnectorsForMoving(movedFigures, ConnectorSubTracker.trackStep, modifiersEx);
             oldPoint = newPoint;
         }
     }
@@ -108,7 +115,12 @@ public class MoveHandle extends LocatorHandle {
             AffineTransform tx = new AffineTransform();
             tx.translate(lead.x - anchor.x, lead.y - anchor.y);
             fireUndoableEditHappened(
-                    new TransformEdit(getOwner(), tx));
+                    new TransformEdit(getOwner(), tx, getView()));
+            LinkedList<Figure> movedFigures = new LinkedList<Figure>();
+            movedFigures.add(getOwner());
+
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            connectorSubTracker.adjustConnectorsForMoving(movedFigures, ConnectorSubTracker.trackEnd, modifiersEx);
         }
     }
 
@@ -140,7 +152,7 @@ public class MoveHandle extends LocatorHandle {
             f.transform(tx);
             f.changed();
             fireUndoableEditHappened(
-                    new TransformEdit(f, tx));
+                    new TransformEdit(f, tx, getView()));
         }
 
     }

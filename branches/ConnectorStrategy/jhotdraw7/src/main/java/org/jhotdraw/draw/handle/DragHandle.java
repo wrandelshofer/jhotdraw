@@ -5,17 +5,18 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 
 package org.jhotdraw.draw.handle;
 
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.AbstractHandle;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.event.TransformEdit;
 import java.awt.*;
 import java.awt.geom.*;
@@ -39,12 +40,12 @@ public class DragHandle extends AbstractHandle {
      * The previously handled x and y coordinates.
      */
     private Point2D.Double oldPoint;
-    
+
     /** Creates a new instance. */
     public DragHandle(Figure owner) {
         super(owner);
     }
-    
+
     /**
      * Draws nothing.
      * Drag Handles have no visual appearance of their own.
@@ -56,19 +57,26 @@ public class DragHandle extends AbstractHandle {
     }
     public void trackStep(Point anchor, Point lead, int modifiersEx) {
         Figure f = getOwner();
+        LinkedList<Figure> draggedFigures = new LinkedList<Figure>();
+        draggedFigures.add(f);
         Point2D.Double newPoint = view.getConstrainer().constrainPoint(view.viewToDrawing(lead));
+
+        ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+        connectorSubTracker.adjustConnectorsForMoving(draggedFigures, ConnectorSubTracker.trackStart, modifiersEx);
+
         AffineTransform tx = new AffineTransform();
         tx.translate(newPoint.x - oldPoint.x, newPoint.y - oldPoint.y);
         f.willChange();
         f.transform(tx);
         f.changed();
-        
+
+        connectorSubTracker.adjustConnectorsForMoving(draggedFigures, ConnectorSubTracker.trackStep, modifiersEx);
         oldPoint = newPoint;
     }
     public void trackEnd(Point anchor, Point lead, int modifiersEx) {
         AffineTransform tx = new AffineTransform();
         tx.translate(lead.x - anchor.x, lead.y - anchor.y);
-        
+
         LinkedList<Figure> draggedFigures = new LinkedList<Figure>();
         draggedFigures.add(getOwner());
         Point2D.Double dropPoint = getView().viewToDrawing(lead);
@@ -86,20 +94,22 @@ public class DragHandle extends AbstractHandle {
                 }
             } else {
                 fireUndoableEditHappened(
-                        new TransformEdit(getOwner(),tx)
+                        new TransformEdit(getOwner(),tx, getView())
                         );
             }
         } else {
             fireUndoableEditHappened(
-                    new TransformEdit(getOwner(),tx)
+                    new TransformEdit(getOwner(),tx, getView())
                     );
         }
+        ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+        connectorSubTracker.adjustConnectorsForMoving(draggedFigures, ConnectorSubTracker.trackEnd, modifiersEx);
     }
-    
+
     public boolean contains(Point p) {
         return getOwner().contains(getView().viewToDrawing(p));
     }
-    
+
     protected Rectangle basicGetBounds() {
         return getView().drawingToView(getOwner().getDrawingArea());
     }

@@ -15,6 +15,7 @@
 
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.*;
 import java.awt.*;
 import java.awt.geom.*;
 import org.jhotdraw.geom.Geom;
@@ -94,7 +95,11 @@ public class RectangleFigure extends AbstractAttributedFigure {
     }
     
     public void restoreTransformTo(Object geometry) {
-        rectangle.setRect( (Rectangle2D.Double) geometry );
+        Rectangle2D.Double r = (Rectangle2D.Double) geometry;
+        rectangle.x = r.x;
+        rectangle.y = r.y;
+        rectangle.width = r.width;
+        rectangle.height = r.height;
     }
     
     public Object getTransformRestoreData() {
@@ -107,5 +112,13 @@ public class RectangleFigure extends AbstractAttributedFigure {
         that.rectangle = (Rectangle2D.Double) this.rectangle.clone();
         return that;
     }
+
+    @Override
+    public Shape getConnectibleShape() {
+        return (Rectangle2D.Double) (rectangle.clone());
+    }
+
+
+
     // EVENT HANDLING
 }

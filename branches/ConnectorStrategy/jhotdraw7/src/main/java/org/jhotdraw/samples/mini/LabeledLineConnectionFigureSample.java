@@ -51,17 +51,16 @@ public class LabeledLineConnectionFigureSample {
                 // Create a labeled line connection
                 LabeledLineConnectionFigure cf = new LabeledLineConnectionFigure();
                 cf.setLiner(new ElbowLiner());
-                cf.setLayouter(new LocatorLayouter());
 
                 // Create labels and add them to both ends of the labeled line connection
                 TextFigure startLabel = new TextFigure();
-                startLabel.set(LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator(0, -Math.PI / 4, 8));
+                startLabel.set(AttributeKeys.LABEL_LOCATOR, new BezierLabelLocator(0, -Math.PI / 4, 8));
                 startLabel.setEditable(false);
                 startLabel.setText("start");
                 cf.add(startLabel);
 
                 TextFigure endLabel = new TextFigure();
-                endLabel.set(LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator(1, Math.PI + Math.PI / 4, 8));
+                endLabel.set(AttributeKeys.LABEL_LOCATOR, new BezierLabelLocator(1, Math.PI + Math.PI / 4, 8));
                 endLabel.setEditable(false);
                 endLabel.setText("end");
                 cf.add(endLabel);

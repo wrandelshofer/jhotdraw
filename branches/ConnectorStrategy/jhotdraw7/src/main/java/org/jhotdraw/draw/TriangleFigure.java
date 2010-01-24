@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 
 
@@ -40,12 +40,12 @@ import org.jhotdraw.geom.*;
  * @version $Id$
  */
 public class TriangleFigure extends AbstractAttributedFigure {
-    
+
     /**
      * The bounds of the triangle figure.
      */
     private Rectangle2D.Double rectangle;
-    
+
     /** Creates a new instance. */
     public TriangleFigure() {
         this(0, 0, 0, 0);
@@ -53,7 +53,7 @@ public class TriangleFigure extends AbstractAttributedFigure {
     public TriangleFigure(Orientation direction) {
         this(0, 0, 0, 0, direction);
     }
-    
+
     public TriangleFigure(double x, double y, double width, double height) {
         this(x, y, width, height, Orientation.NORTH);
     }
@@ -61,7 +61,7 @@ public class TriangleFigure extends AbstractAttributedFigure {
         rectangle = new Rectangle2D.Double(x, y, width, height);
         set(ORIENTATION, direction);
     }
-    
+
     // DRAWING
     // SHAPE AND BOUNDS
     // ATTRIBUTES
@@ -88,10 +88,10 @@ public class TriangleFigure extends AbstractAttributedFigure {
         Rectangle2D.Double bounds = (Rectangle2D.Double) rectangle.clone();
         return bounds;
     }
-    
+
     protected void drawFill(Graphics2D g) {
         Rectangle2D.Double r = (Rectangle2D.Double) rectangle.clone();
-        
+
         Shape triangle = getBezierPath();
         double grow = AttributeKeys.getPerpendicularFillGrowth(this);
         if (grow != 0d) {
@@ -101,13 +101,13 @@ public class TriangleFigure extends AbstractAttributedFigure {
                     );
             triangle = gs.createStrokedShape(triangle);
         }
-        
+
         g.fill(triangle);
     }
-    
+
     protected void drawStroke(Graphics2D g) {
         Shape triangle = getBezierPath();
-        
+
         double grow = AttributeKeys.getPerpendicularDrawGrowth(this);
         if (grow != 0d) {
             GrowStroke gs = new GrowStroke((float) grow,
@@ -116,7 +116,7 @@ public class TriangleFigure extends AbstractAttributedFigure {
                     );
             triangle = gs.createStrokedShape(triangle);
         }
-        
+
         g.draw(triangle);
     }
     public Collection<Handle> createHandles(int detailLevel) {
@@ -126,10 +126,10 @@ public class TriangleFigure extends AbstractAttributedFigure {
         }
         return handles;
     }
-    
+
     public BezierPath getBezierPath() {
         Rectangle2D.Double r = (Rectangle2D.Double) rectangle.clone();
-        
+
         BezierPath triangle = new BezierPath();
         switch (get(ORIENTATION)) {
             case NORTH :
@@ -177,12 +177,22 @@ public class TriangleFigure extends AbstractAttributedFigure {
         triangle.setClosed(true);
         return triangle;
     }
+
+    /**
+     * @param at
+     * @return PathIterator
+     */
+    public PathIterator getPathIterator(AffineTransform at) {
+        return getBezierPath().getPathIterator(at);
+    }
+
+
     /**
      * Checks if a Point2D.Double is inside the figure.
      */
     public boolean contains(Point2D.Double p) {
         Shape triangle = getBezierPath();
-        
+
         double grow = AttributeKeys.getPerpendicularHitGrowth(this);
         if (grow != 0d) {
             GrowStroke gs = new GrowStroke((float) grow,
@@ -225,13 +235,13 @@ public class TriangleFigure extends AbstractAttributedFigure {
         }
         width++;
         Rectangle2D.Double r = getBounds();
-        
+
         Geom.grow(r, width, width);
         return r;
     }
     public Point2D.Double chop(Point2D.Double p) {
         Shape triangle = getBezierPath();
-        
+
         double grow = AttributeKeys.getPerpendicularHitGrowth(this);
         if (grow != 0d) {
             GrowStroke gs = new GrowStroke((float) grow,
@@ -254,7 +264,7 @@ public class TriangleFigure extends AbstractAttributedFigure {
                 (Point2D.Double) tx.transform(lead, lead)
                 );
     }
-    
+
     public TriangleFigure clone() {
         TriangleFigure that = (TriangleFigure) super.clone();
         that.rectangle = (Rectangle2D.Double) this.rectangle.clone();
@@ -267,8 +277,16 @@ public class TriangleFigure extends AbstractAttributedFigure {
         rectangle.width = r.width;
         rectangle.height = r.height;
     }
-    
+
     public Object getTransformRestoreData() {
         return rectangle.clone();
+    }
+
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.AbstractFigure#getConnectibleShape()
+     */
+    @Override
+    public Shape getConnectibleShape() {
+        return getBezierPath().toGeneralPath();
     }
 }

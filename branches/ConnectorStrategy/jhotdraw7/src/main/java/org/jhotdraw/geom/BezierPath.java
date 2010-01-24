@@ -333,20 +333,20 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                         gp.lineTo(
                                 current.x[0], current.y[0]);
                     } else {
-                        gp.quadTo(
-                                current.x[1], current.y[1],
-                                current.x[0], current.y[0]);
+                            gp.quadTo(
+                                 current.x[1], current.y[1],
+                                 current.x[0], current.y[0]);
                     }
                 } else {
                     if ((current.mask & C1_MASK) == 0) {
                         gp.quadTo(
-                                previous.x[2], previous.y[2],
-                                current.x[0], current.y[0]);
+                                 previous.x[2], previous.y[2],
+                                 current.x[0],  current.y[0]);
                     } else {
                         gp.curveTo(
-                                previous.x[2], previous.y[2],
-                                current.x[1], current.y[1],
-                                current.x[0], current.y[0]);
+                                 previous.x[2], previous.y[2],
+                                 current.x[1],  current.y[1],
+                                 current.x[0],  current.y[0]);
                     }
                 }
             }
@@ -358,22 +358,22 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                     if ((previous.mask & C2_MASK) == 0) {
                         if ((current.mask & C1_MASK) == 0) {
                             gp.lineTo(
-                                    current.x[0], current.y[0]);
+                                     current.x[0], current.y[0]);
                         } else {
                             gp.quadTo(
-                                    current.x[1], current.y[1],
-                                    current.x[0], current.y[0]);
+                                     current.x[1], current.y[1],
+                                     current.x[0], current.y[0]);
                         }
                     } else {
                         if ((current.mask & C1_MASK) == 0) {
                             gp.quadTo(
-                                    previous.x[2], previous.y[2],
-                                    current.x[0], current.y[0]);
+                                     previous.x[2], previous.y[2],
+                                     current.x[0],  current.y[0]);
                         } else {
                             gp.curveTo(
-                                    previous.x[2], previous.y[2],
-                                    current.x[1], current.y[1],
-                                    current.x[0], current.y[0]);
+                                     previous.x[2], previous.y[2],
+                                     current.x[1],  current.y[1],
+                                     current.x[0],  current.y[0]);
                         }
                     }
                 }
@@ -383,11 +383,11 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         return gp;
     }
 
+
     public boolean contains(Point2D p) {
         validatePath();
         return generalPath.contains(p);
     }
-
     ;
 
     /**
@@ -399,30 +399,30 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      */
     public boolean outlineContains(Point2D.Double p, double tolerance) {
         return Shapes.outlineContains(this, p, tolerance);
-        /*
-        validatePath();
-
-        PathIterator i = generalPath.getPathIterator(new AffineTransform(), tolerance);
-
-        double[] coords = new double[6];
-        int type = i.currentSegment(coords);
-        double prevX = coords[0];
-        double prevY = coords[1];
-        i.next();
-        while (! i.isDone()) {
-        i.currentSegment(coords);
-        if (Geom.lineContainsPoint(
-        prevX, prevY, coords[0], coords[1],
-        p.x, p.y, tolerance)
-        ) {
-        return true;
-        }
-        prevX = coords[0];
-        prevY = coords[1];
-        i.next();
-        }
-        return false;
-         */
+    /*
+    validatePath();
+    
+    PathIterator i = generalPath.getPathIterator(new AffineTransform(), tolerance);
+    
+    double[] coords = new double[6];
+    int type = i.currentSegment(coords);
+    double prevX = coords[0];
+    double prevY = coords[1];
+    i.next();
+    while (! i.isDone()) {
+    i.currentSegment(coords);
+    if (Geom.lineContainsPoint(
+    prevX, prevY, coords[0], coords[1],
+    p.x, p.y, tolerance)
+    ) {
+    return true;
+    }
+    prevX = coords[0];
+    prevY = coords[1];
+    i.next();
+    }
+    return false;
+     */
     }
 
     public boolean intersects(Rectangle2D r) {
@@ -709,79 +709,79 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     public Point2D.Double chop(Point2D.Double p) {
         validatePath();
         return Geom.chop(generalPath, p);
-        /*
-        Point2D.Double ctr = getCenter();
-
-        // Chopped point
-        double cx = -1;
-        double cy = -1;
-        double len = Double.MAX_VALUE;
-
-        // Try for points along edge
-        validatePath();
-        PathIterator i = generalPath.getPathIterator(new AffineTransform(), 1);
-        double[] coords = new double[6];
-        int type = i.currentSegment(coords);
-        double prevX = coords[0];
-        double prevY = coords[1];
-        i.next();
-        for (; ! i.isDone(); i.next()) {
-        i.currentSegment(coords);
-        Point2D.Double chop = Geom.intersect(
-        prevX, prevY,
-        coords[0], coords[1],
-        p.x, p.y,
-        ctr.x, ctr.y
-        );
-
-        if (chop != null) {
-        double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
-        if (cl < len) {
-        len = cl;
-        cx = chop.x;
-        cy = chop.y;
-        }
-        }
-
-        prevX = coords[0];
-        prevY = coords[1];
-        }
-
-        //
-        if (isClosed() && size() > 1) {
-        Node first = get(0);
-        Node last = get(size() - 1);
-        Point2D.Double chop = Geom.intersect(
-        first.x[0], first.y[0],
-        last.x[0], last.y[0],
-        p.x, p.y,
-        ctr.x, ctr.y
-        );
-        if (chop != null) {
-        double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
-        if (cl < len) {
-        len = cl;
-        cx = chop.x;
-        cy = chop.y;
-        }
-        }
-        }
-
-
-        // if none found, pick closest vertex
-        if (len == Double.MAX_VALUE) {
-        for (int j = 0, n = size(); j < n; j++) {
-        Node cp = get(j);
-        double l = Geom.length2(cp.x[0], cp.y[0], p.x, p.y);
-        if (l < len) {
-        len = l;
-        cx = cp.x[0];
-        cy = cp.y[0];
-        }
-        }
-        }
-        return new Point2D.Double(cx, cy);
-         */
+    /*
+    Point2D.Double ctr = getCenter();
+    
+    // Chopped point
+    double cx = -1;
+    double cy = -1;
+    double len = Double.MAX_VALUE;
+    
+    // Try for points along edge
+    validatePath();
+    PathIterator i = generalPath.getPathIterator(new AffineTransform(), 1);
+    double[] coords = new double[6];
+    int type = i.currentSegment(coords);
+    double prevX = coords[0];
+    double prevY = coords[1];
+    i.next();
+    for (; ! i.isDone(); i.next()) {
+    i.currentSegment(coords);
+    Point2D.Double chop = Geom.intersect(
+    prevX, prevY,
+    coords[0], coords[1],
+    p.x, p.y,
+    ctr.x, ctr.y
+    );
+    
+    if (chop != null) {
+    double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
+    if (cl < len) {
+    len = cl;
+    cx = chop.x;
+    cy = chop.y;
+    }
+    }
+    
+    prevX = coords[0];
+    prevY = coords[1];
+    }
+    
+    //
+    if (isClosed() && size() > 1) {
+    Node first = get(0);
+    Node last = get(size() - 1);
+    Point2D.Double chop = Geom.intersect(
+    first.x[0], first.y[0],
+    last.x[0], last.y[0],
+    p.x, p.y,
+    ctr.x, ctr.y
+    );
+    if (chop != null) {
+    double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
+    if (cl < len) {
+    len = cl;
+    cx = chop.x;
+    cy = chop.y;
+    }
+    }
+    }
+    
+    
+    // if none found, pick closest vertex
+    if (len == Double.MAX_VALUE) {
+    for (int j = 0, n = size(); j < n; j++) {
+    Node cp = get(j);
+    double l = Geom.length2(cp.x[0], cp.y[0], p.x, p.y);
+    if (l < len) {
+    len = l;
+    cx = cp.x[0];
+    cy = cp.y[0];
+    }
+    }
+    }
+    return new Point2D.Double(cx, cy);
+     */
     }
 
     /**
@@ -1050,7 +1050,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         if (size() == 0) {
             throw new IllegalPathStateException("lineTo only allowed when not empty");
         }
-        get(size() - 1).keepColinear = false;
+        get(size() -1).keepColinear = false;
         add(new Node(x1, y1));
     }
 
@@ -1070,19 +1070,19 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             throw new IllegalPathStateException("curveTo only allowed when not empty");
         }
         Node lastPoint = get(size() - 1);
-
+        
         lastPoint.mask |= C2_MASK;
         lastPoint.x[2] = x1;
         lastPoint.y[2] = y1;
-
+        
         if ((lastPoint.mask & C1C2_MASK) == C1C2_MASK) {
             lastPoint.keepColinear = Math.abs(
-                    Geom.angle(lastPoint.x[0], lastPoint.y[0],
+                    Geom.angle(lastPoint.x[0], lastPoint.y[0], 
                     lastPoint.x[1], lastPoint.y[1])
                     - Geom.angle(lastPoint.x[2], lastPoint.y[2],
-                    lastPoint.x[0], lastPoint.y[0])) < 0.001;
+                    lastPoint.x[0], lastPoint.y[0])) < 0.001 ;
         }
-
+        
         add(new Node(C1_MASK, x3, y3, x2, y2, x3, y3));
     }
 

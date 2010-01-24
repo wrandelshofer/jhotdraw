@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw.handle;
 
@@ -18,6 +18,11 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.AbstractHandle;
 import org.jhotdraw.draw.liner.Liner;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
+import org.jhotdraw.draw.connector.RelativeConnector;
+import org.jhotdraw.draw.event.FigureEvent;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.BezierFigure;
 import org.jhotdraw.draw.handle.BezierControlPointHandle;
@@ -33,8 +38,6 @@ import java.util.*;
  * This abstract class can be extended to implement a {@link Handle}
  * the start or end point of a {@link ConnectionFigure}.
  *
- * XXX - Undo/Redo is not implemented yet.
- *
  * @author Werner Randelshofer
  * @version $Id: AbstractConnectionHandle.java 527 2009-06-07 14:28:19Z rawcoder $
  */
@@ -43,7 +46,6 @@ public abstract class AbstractConnectionHandle extends AbstractHandle {
     private Connector savedTarget;
     private Connector connectableConnector;
     private Figure connectableFigure;
-    private Point start;
     /**
      * We temporarily remove the Liner from the connection figure, while the
      * handle is being moved.
@@ -107,34 +109,65 @@ public abstract class AbstractConnectionHandle extends AbstractHandle {
         return getOwner().getStartConnector();
     }
 
+    /* (non-Javadoc)
+     * @see org.jhotdraw.draw.handle.AbstractHandle#attributeChanged(org.jhotdraw.draw.event.FigureEvent)
+     */
+    @Override
+    public void attributeChanged(FigureEvent e) {
+        AttributeKey<?> key = e.getAttribute();
+        boolean strategyChange = (key.equals(AttributeKeys.START_CONNECTOR_STRATEGY) || key
+                .equals(AttributeKeys.END_CONNECTOR_STRATEGY));
+        if (strategyChange) {
+            LineConnectionFigure connection = (LineConnectionFigure)e.getFigure();
+            boolean isStart = (key.equals(AttributeKeys.START_CONNECTOR_STRATEGY));
+            Connector connector = connection.getStartConnector();
+            if (!isStart) {
+                connector = connection.getEndConnector();
+            }
+            ConnectorSubTracker connectorSubTracker = view.getEditor().getConnectorSubTracker();
+            connectorSubTracker.touchConnector(connector);
+        }
+    }
+
+
     /**
-     * Disconnects the connection.
+     * Initializes tracking
      */
     public void trackStart(Point anchor, int modifiersEx) {
         savedTarget = getTarget();
-        start = anchor;
         savedLiner = getOwner().getLiner();
         getOwner().setLiner(null);
-        //disconnect();
+        ConnectionFigure connection = getOwner();
+        boolean isStartConnector = (savedTarget == connection.getStartConnector()) ? true : false;
+
+        ConnectorSubTracker connectorSubTracker = view.getEditor().getConnectorSubTracker();
+        connectorSubTracker.dragConnector(savedTarget, ConnectorSubTracker.trackStart,
+                isStartConnector,  null, modifiersEx);
         fireHandleRequestSecondaryHandles();
     }
 
     /**
-     * Finds a new connectableConnector of the connection.
+     *  drags an existing connector if over the same figure
+     *  updates the connection point but keeps the same connectors
      */
     public void trackStep(Point anchor, Point lead, int modifiersEx) {
         Point2D.Double p = view.viewToDrawing(lead);
         view.getConstrainer().constrainPoint(p);
-        connectableFigure = findConnectableFigure(p, view.getDrawing());
-        if (connectableFigure != null) {
-            Connector aTarget = findConnectionTarget(p, view.getDrawing());
-            if (aTarget != null) {
-                p = aTarget.getAnchor();
-            }
+
+        Figure targetFigure = findConnectableFigure(p, view.getDrawing());
+        if (targetFigure == savedTarget.getOwner()) {
+            ConnectionFigure connection = getOwner();
+            boolean isStartConnector = (savedTarget == connection.getStartConnector()) ? true : false;
+            ConnectorSubTracker connectorSubTracker = view.getEditor().getConnectorSubTracker();
+            connectorSubTracker.dragConnector(savedTarget, ConnectorSubTracker.trackStep,
+                    isStartConnector, p, modifiersEx);
+            p = (isStartConnector) ? savedTarget.findStart(getOwner()) : savedTarget.findEnd(getOwner());
         }
         getOwner().willChange();
         setLocation(p);
         getOwner().changed();
+
+        if (getOwner().findStartConnectorStrategyName() == null)
         repaintConnectors();
     }
 
@@ -164,11 +197,23 @@ public abstract class AbstractConnectionHandle extends AbstractHandle {
 
         Point2D.Double p = view.viewToDrawing(lead);
         view.getConstrainer().constrainPoint(p);
+        ConnectionFigure connection = getOwner();
+        boolean isStartConnector = (savedTarget == connection.getStartConnector()) ? true : false;
+
         Connector target = findConnectionTarget(p, view.getDrawing());
-        if (target == null) {
+        ConnectorSubTracker connectorSubTracker = view.getEditor().getConnectorSubTracker();
+        if (target != savedTarget) {
+            //dragging to a different figure ... must be a tracking connector
+            p = (isStartConnector) ? target.findStart(getOwner()) : target.findEnd(getOwner());
+
+            target = connectorSubTracker.dragConnector(target, ConnectorSubTracker.trackEnd,
+                    isStartConnector, p, modifiersEx);
+            // connector might have been vetoed
+            if (target == null)
             target = savedTarget;
         }
 
+        p = (isStartConnector) ? target.findStart(getOwner()) : target.findEnd(getOwner());
         setLocation(p);
         if (target != savedTarget) {
             disconnect();
@@ -176,31 +221,43 @@ public abstract class AbstractConnectionHandle extends AbstractHandle {
         }
         getOwner().setLiner(savedLiner);
         getOwner().updateConnection();
-        connectableConnector = null;
+        connectorSubTracker.touchConnector(target);
         connectors = Collections.emptyList();
     }
 
+    /**
+     * @param p
+     * @param drawing
+     * @return connector
+     */
     private Connector findConnectionTarget(Point2D.Double p, Drawing drawing) {
-        Figure targetFigure = findConnectableFigure(p, drawing);
+        //can't change a self-connection to another figure
+        if (savedTarget.getOwner() == getSource().getOwner())
+            return savedTarget;
 
-        if (getSource() == null && targetFigure != null) {
-            return findConnector(p, targetFigure, getOwner());
-        } else if (targetFigure != null) {
+        Figure targetFigure = findConnectableFigure(p, drawing);
+        if (targetFigure != null && targetFigure != getSource().getOwner()) {
             Connector target = findConnector(p, targetFigure, getOwner());
-            if ((targetFigure != null) && targetFigure.isConnectable()//
-                    && targetFigure != savedTarget //
-                    && !targetFigure.includes(getOwner()) //
+            if ((targetFigure != null) && targetFigure.isConnectable()
+                    && !targetFigure.includes(getOwner())
                     && (canConnect(getSource(), target))) {
                 return target;
             }
         }
-        return null;
+        return savedTarget;
     }
 
     protected abstract boolean canConnect(Connector existingEnd, Connector targetEnd);
 
+    /**
+     * @param p
+     * @param f
+     * @param prototype
+     * @return connector
+     */
     protected Connector findConnector(Point2D.Double p, Figure f, ConnectionFigure prototype) {
-        return f.findConnector(p, prototype);
+        ConnectorSubTracker connectorSubTracker = view.getEditor().getConnectorSubTracker();
+        return connectorSubTracker.findConnector(p, f, prototype);
     }
 
     /**
@@ -255,6 +312,11 @@ public abstract class AbstractConnectionHandle extends AbstractHandle {
     @Override
     final public Collection<Handle> createSecondaryHandles() {
         LinkedList<Handle> list = new LinkedList<Handle>();
+
+        if (((ConnectionFigure) getOwner()).findStartConnectorStrategyName() != null)
+            return list;
+
+
         if (((ConnectionFigure) getOwner()).getLiner() == null && savedLiner == null) {
             int index = getBezierNodeIndex();
             BezierFigure f = getBezierFigure();

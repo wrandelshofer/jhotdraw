@@ -5,11 +5,11 @@
  * and all its contributors.
  * All rights reserved.
  *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
+ * the copyright holders. For details see accompanying license terms.
  */
 package org.jhotdraw.draw.handle;
 
@@ -17,6 +17,8 @@ import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.connector.ConnectorSubTracker;
 import org.jhotdraw.draw.event.TransformRestoreEdit;
 import java.util.*;
 import java.awt.*;
@@ -29,8 +31,8 @@ import static org.jhotdraw.draw.handle.HandleAttributeKeys.*;
 /**
  * A set of utility methods to create Handles which transform a Figure by using
  * its <code>transform</code> method.
- * 
- * 
+ *
+ *
  * @author Werntransformr
  * @version $Id$
  */
@@ -159,18 +161,18 @@ public class TransformHandleKit {
         public void draw(Graphics2D g) {
             if (getEditor().getTool().supportsHandleInteraction()) {
                 //drawArc(g);
-                
+
                 drawDiamond(g,
                         (Color) getEditor().getHandleAttribute(HandleAttributeKeys.TRANSFORM_HANDLE_FILL_COLOR),
                         (Color) getEditor().getHandleAttribute(HandleAttributeKeys.TRANSFORM_HANDLE_STROKE_COLOR));
-                
+
                 } else {
                 drawDiamond(g,
                         (Color) getEditor().getHandleAttribute(HandleAttributeKeys.TRANSFORM_HANDLE_FILL_COLOR_DISABLED),
-                        (Color) getEditor().getHandleAttribute(HandleAttributeKeys.TRANSFORM_HANDLE_STROKE_COLOR_DISABLED));                
+                        (Color) getEditor().getHandleAttribute(HandleAttributeKeys.TRANSFORM_HANDLE_STROKE_COLOR_DISABLED));
                 }
         }
-        
+
         protected void drawArc(Graphics2D g) {
             Point p = getLocation();
             g.drawArc(p.x, p.y, 6, 6, 0, 180);
@@ -195,6 +197,8 @@ public class TransformHandleKit {
             Point location = getLocation();
             dx = -anchor.x + location.x;
             dy = -anchor.y + location.y;
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            connectorSubTracker.adjustConnectorsForResizingV(ConnectorSubTracker.trackStart, modifiersEx);
         }
 
         public void trackStep(Point anchor, Point lead, int modifiersEx) {
@@ -202,11 +206,22 @@ public class TransformHandleKit {
             view.getConstrainer().constrainPoint(p);
 
             trackStepNormalized(p);
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            connectorSubTracker.adjustConnectorsForResizingV(ConnectorSubTracker.trackStep, modifiersEx);
         }
 
         public void trackEnd(Point anchor, Point lead, int modifiersEx) {
-            fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geometry, getOwner().getTransformRestoreData()));
+            ConnectorSubTracker connectorSubTracker = getView().getEditor().getConnectorSubTracker();
+            if (getOwner().isTransformable()) {
+                Collection<Connector> prevConnectors = connectorSubTracker.getPriorConnectors();
+                fireUndoableEditHappened(new TransformRestoreEdit(getOwner(), geometry,
+                        getOwner().getTransformRestoreData(), getView(), prevConnectors));
+                 connectorSubTracker.adjustConnectorsForResizingV(ConnectorSubTracker.trackEnd, modifiersEx);
+            }
+
+
+//            fireUndoableEditHappened(
+//                    new TransformRestoreEdit(getOwner(), geometry, getOwner().getTransformRestoreData()));
 
         }
 
@@ -294,7 +309,7 @@ public class TransformHandleKit {
             }
 
             fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData()));
+                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData(), getView()));
         }
 
         @Override
@@ -348,7 +363,7 @@ public class TransformHandleKit {
             }
 
             fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData()));
+                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData(), getView()));
         }
 
         @Override
@@ -401,7 +416,7 @@ public class TransformHandleKit {
             }
 
             fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData()));
+                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData(), getView()));
         }
 
         @Override
@@ -462,7 +477,7 @@ public class TransformHandleKit {
             }
 
             fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData()));
+                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData(), getView()));
         }
 
         @Override
@@ -523,7 +538,7 @@ public class TransformHandleKit {
             }
 
             fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData()));
+                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData(), getView()));
         }
 
         @Override
@@ -576,7 +591,7 @@ public class TransformHandleKit {
             }
 
             fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData()));
+                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData(), getView()));
         }
 
         @Override
@@ -637,7 +652,7 @@ public class TransformHandleKit {
             }
 
             fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData()));
+                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData(), getView()));
         }
 
         @Override
@@ -690,7 +705,7 @@ public class TransformHandleKit {
             }
 
             fireUndoableEditHappened(
-                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData()));
+                    new TransformRestoreEdit(getOwner(), geom, getOwner().getTransformRestoreData(), getView()));
         }
 
         @Override

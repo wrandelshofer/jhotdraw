@@ -185,6 +185,15 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
         return new ChopRoundRectangleConnector(this);
     }
 
+    /**
+     * @param at
+     * @return PathIterator
+     */
+    public PathIterator getPathIterator(AffineTransform at) {
+        return roundrect.getPathIterator(at);
+    }
+
+
     public Connector findCompatibleConnector(Connector c, boolean isStartConnector) {
         return new ChopRoundRectangleConnector(this);
     }
@@ -210,6 +219,12 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
         super.write(out);
         out.addAttribute("arcWidth", roundrect.arcwidth);
         out.addAttribute("arcHeight", roundrect.archeight);
+    }
+
+
+    @Override
+    public Shape getConnectibleShape() {
+        return (RoundRectangle2D.Double) (roundrect.clone());
     }
 
 }
