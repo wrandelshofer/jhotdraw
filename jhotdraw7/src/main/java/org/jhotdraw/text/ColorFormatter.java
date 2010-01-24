@@ -14,9 +14,6 @@
 package org.jhotdraw.text;
 
 import java.awt.Color;
-import java.awt.color.ColorSpace;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
@@ -24,8 +21,6 @@ import java.util.regex.Pattern;
 import javax.swing.JFormattedTextField.AbstractFormatterFactory;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DefaultFormatterFactory;
-import org.jhotdraw.color.ColorSpaceUtil;
-import org.jhotdraw.color.HSBColorSpace;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**
@@ -34,7 +29,7 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  * <p>
  * The following formats are supported:
  * <ul>
- * <li><b>Format.RGB_HEX</b> - {@code "rgb #"rrggbb} or  {@code "rgb #"rgb}.<br>
+ * <li><b>Format.RGB_HEX - {@code #rrggbb} or  {@code #rgb} .</b>
  * If 6 digits are entered, each pair of hexadecimal digits, in the range 0
  * to F, represents one sRGB color component in the order red, green and blue.
  * The digits A to F may be in either uppercase or lowercase.<br>
@@ -45,26 +40,16 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  * (i.e. a golden color), {@code #000} (i.e. black) {@code #fff} (i.e. white),
  * {@code #6CF} (i.e. #66CCFF.
  * </li>
- * <li><b>Format.RGB_INTEGER</b> - {@code "rgb" rrr"," ggg"," bbb}, or 
- * {@code rrr"," ggg"," bbb} or {@code rrr "r," ggg "g," bbb "b"}.<br>
- * Each integer represents one sRGB
+ * <li><b>Format.RGB_INTEGER - {@code rrr, ggg, bbb}.</b> Each integer represents one sRGB
  * color component in the order red, green and blue, separated by a comma and
  * optionally by white space. Each integer is in the range 0 to 255.
  * This syntactical form can represent 16777216 colors.
  * Examples: {@code 233, 150, 122} (i.e. a salmon pink), {@code 255, 165, 0}
  * (i.e. an orange).
  * </li>
- * <li><b>Format.HSB_PERCENTAGE</b> - {@code "hsb" hue, saturation, brightness},
- * {@code hue "°," saturation "%," brightness "%"} or {@code hue "h"," saturation "s," brightness "b"}.<br>
- * Each integer represents one HSV component in the order hue, saturation and
- * value, separated by a comma and
- * optionally by white space. Hue is in the range from 0.0 to 359.0, saturation
- * and brightness in the range from 0.0 to 100.0.
- * </li>
  * </ul>
  * <p>
- * By default, the formatter is adaptive, meaning that the format depends
- * on the {@code ColorSpace} of the current {@code Color} value.
+ * By default, the formatter formats Color objects with Format.RGB_INTEGER.
  *
  * <p>
  *
@@ -79,57 +64,37 @@ public class ColorFormatter extends DefaultFormatter {
     public enum Format {
 
         RGB_HEX,
-        RGB_INTEGER,
-        RGB_PERCENTAGE,
-        HSB_PERCENTAGE,
-        GRAY_PERCENTAGE,
-        CMYK_PERCENTAGE;
+        RGB_INTEGER
     };
     /**
      * Specifies the preferred output format.
      */
-    protected Format outputFormat = Format.RGB_INTEGER;
+    private Format outputFormat = Format.RGB_INTEGER;
     /**
      * Specifies the last used input format.
      */
-    protected Format lastUsedInputFormat = null;
+    private Format lastUsedInputFormat = null;
     /**
      * This regular expression is used for parsing the RGB_HEX format.
      */
-    protected final static Pattern rgbHexPattern = Pattern.compile("^\\s*(?:[rR][gG][bB])?\\s*#\\s*([0-9a-fA-F]{3,6})\\s*$");
+    private final static Pattern rgbHexPattern = Pattern.compile("^\\s*#\\s*([0-9a-fA-F]{3,6})\\s*$");
     /**
-     * This regular expression is used for parsing the RGB_INTEGER format.
+     * This regular expression is used for parsing the RGB_HEX format.
      */
-    protected final static Pattern rgbIntegerPattern = Pattern.compile("^\\s*(?:[rR][gG][bB])?\\s*([0-9]{1,3})\\s*(?:[rR]|red)?\\s*,?\\s*([0-9]{1,3})\\s*(?:[gG]|green)?\\s*,?\\s*([0-9]{1,3})\\s*(?:[bB]|blue)?\\s*$");
-    /**
-     * This regular expression is used for parsing the RGB_PERCENTAGE format.
-     */
-    protected final static Pattern rgbPercentagePattern = Pattern.compile("^\\s*(?:[rR][gG][bB])?\\s*[%]?\\s*([0-9]{1,3}(?:\\.[0-9]+)?)\\s*[%]?\\s*(?:[rR]|red)?\\s*,?\\s*([0-9]{1,3}(?:\\.[0-9]+)?)\\s*[%]?\\s*(?:[gG]|green)?\\s*,?\\s*([0-9]{1,3}(?:\\.[0-9]+)?)\\s*[%]?\\s*(?:[bB]|blue)?\\s*$");
-    /**
-     * This regular expression is used for parsing the HSB_PERCENTAGE format.
-     * This format is recognized when the degree sign is present.
-     */
-    protected final static Pattern hsbPercentagePattern = Pattern.compile("^\\s*(?:[hH][sS][bB])?\\s*([0-9]{1,3}(?:\\.[0-9]+)?)\\s*°?\\s*(?:[Hh]|hue)?\\s*,?\\s*(?:([0-9]{1,3}(?:\\.[0-9]+)?)\\s*%?\\s*?(?:[sS]|saturation)?\\s*,?\\s*(?:([0-9]{1,3}(?:\\.[0-9]+)?)\\s*%?\\s*(?:[bB]|brightness)?\\s*)?)?$");
-    /**
-     * This regular expression is used for parsing the GRAY_PERCENTAGE format.
-     * This format is recognized when the degree sign is present.
-     */
-    protected final static Pattern grayPercentagePattern = Pattern.compile("^\\s*(?:[gG][rR][aA][yY])?\\s*([0-9]{1,3}(?:\\.[0-9]+)?)\\s*[%gG]?\\s*$");
+    private final static Pattern rgbIntegerPattern = Pattern.compile("^\\s*([0-9]{1,3})\\s*,\\s*([0-9]{1,3}),\\s*([0-9]{1,3})\\s*$");
     /**
      * Specifies whether the formatter allows null values.
      */
-    protected boolean allowsNullValue = true;
+    private boolean allowsNullValue = true;
     /**
      * Specifies whether the formatter should adaptively change its output
      * format depending on the last input format used by the user.
      */
-    protected boolean isAdaptive = true;
+    private boolean isAdaptive = true;
     /**
      * Preferences used for storing the last used input format.
      */
-    protected Preferences prefs;
-
-    protected DecimalFormat numberFormat;
+    private Preferences prefs;
 
     public ColorFormatter() {
         this(Format.RGB_INTEGER, true, true);
@@ -139,12 +104,6 @@ public class ColorFormatter extends DefaultFormatter {
         this.outputFormat = outputFormat;
         this.allowsNullValue = allowsNullValue;
         this.isAdaptive = isAdaptive;
-        numberFormat=new DecimalFormat("#.#");
-        numberFormat.setDecimalSeparatorAlwaysShown(false);
-        numberFormat.setMaximumFractionDigits(1);
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setDecimalSeparator('.');
-        numberFormat.setDecimalFormatSymbols(dfs);
 
         // Retrieve last used input format from preferences
         prefs = PreferencesUtil.userNodeForPackage(getClass());
@@ -232,7 +191,7 @@ public class ColorFormatter extends DefaultFormatter {
     public Object stringToValue(String str) throws ParseException {
 
         // Handle null and empty case
-        if (str == null || str.trim().length() == 0) {
+        if (str == null || str.trim().length()==0) {
             if (allowsNullValue) {
                 return null;
             } else {
@@ -284,68 +243,6 @@ public class ColorFormatter extends DefaultFormatter {
             }
         }
 
-        // Format RGB_PERCENTAGE
-        matcher = rgbPercentagePattern.matcher(str);
-        if (matcher.matches()) {
-            setLastUsedInputFormat(Format.RGB_PERCENTAGE);
-            try {
-                return new Color(//
-                        numberFormat.parse(matcher.group(1)).floatValue()/100f, //
-                        numberFormat.parse(matcher.group(2)).floatValue()/100f, //
-                        numberFormat.parse(matcher.group(3)).floatValue()/100f);
-            } catch (NumberFormatException nfe) {
-                ParseException pe = new ParseException(str, 0);
-                pe.initCause(nfe);
-                throw pe;
-            } catch (IllegalArgumentException iae) {
-                ParseException pe = new ParseException(str, 0);
-                pe.initCause(iae);
-                throw pe;
-            }
-        }
-
-        // Format HSB_PERCENTAGE
-        matcher = hsbPercentagePattern.matcher(str);
-        if (matcher.matches()) {
-            setLastUsedInputFormat(Format.HSB_PERCENTAGE);
-            try {
-                return new Color(HSBColorSpace.getInstance(),
-                        new float[]{//
-                           matcher.group(1)==null?0f: numberFormat.parse(matcher.group(1)).floatValue() / 360f, //
-                            matcher.group(2)==null?1f:numberFormat.parse(matcher.group(2)).floatValue() / 100f, //
-                            matcher.group(3)==null?1f:numberFormat.parse(matcher.group(3)).floatValue() / 100f},//
-                        1f);
-            } catch (NumberFormatException nfe) {
-                ParseException pe = new ParseException(str, 0);
-                pe.initCause(nfe);
-                throw pe;
-            } catch (IllegalArgumentException iae) {
-                ParseException pe = new ParseException(str, 0);
-                pe.initCause(iae);
-                throw pe;
-            }
-        }
-
-        // Format GRAY_PERCENTAGE
-        matcher = grayPercentagePattern.matcher(str);
-        if (matcher.matches()) {
-            setLastUsedInputFormat(Format.GRAY_PERCENTAGE);
-            try {
-                return ColorSpaceUtil.toColor(ColorSpace.getInstance(ColorSpace.CS_GRAY),
-                        new float[]{//
-                           matcher.group(1)==null?0f: numberFormat.parse(matcher.group(1)).floatValue() / 100f}//
-                        );
-            } catch (NumberFormatException nfe) {
-                ParseException pe = new ParseException(str, 0);
-                pe.initCause(nfe);
-                throw pe;
-            } catch (IllegalArgumentException iae) {
-                ParseException pe = new ParseException(str, 0);
-                pe.initCause(iae);
-                throw pe;
-            }
-        }
-
         throw new ParseException(str, 0);
     }
 
@@ -366,50 +263,14 @@ public class ColorFormatter extends DefaultFormatter {
 
             Color c = (Color) value;
 
-            Format f = outputFormat;
-
-            if (isAdaptive) {
-                if (c.getColorSpace().equals(HSBColorSpace.getInstance())) {
-                    f=Format.HSB_PERCENTAGE;
-                } else if (c.getColorSpace().equals(ColorSpace.getInstance(ColorSpace.CS_GRAY))) {
-                    f=Format.GRAY_PERCENTAGE;
-                } else {
-                    f=Format.RGB_INTEGER;
-                }
-            }
-            switch (f) {
+            switch (outputFormat) {
                 case RGB_HEX:
                     str = "000000" + Integer.toHexString(c.getRGB() & 0xffffff);
-                    str = "rgb #" + str.substring(str.length() - 6);
+                    str = "#" + str.substring(str.length() - 6);
                     break;
                 case RGB_INTEGER:
-                    str = "rgb "+c.getRed() + " " + c.getGreen() + " " + c.getBlue();
+                    str = c.getRed() + "," + c.getGreen() + "," + c.getBlue();
                     break;
-                case RGB_PERCENTAGE:
-                    str = "rgb "+numberFormat.format(c.getRed()/255f) + "% " + numberFormat.format(c.getGreen()/255f) + "% " + numberFormat.format(c.getBlue()/255f)+"%";
-                    break;
-                case HSB_PERCENTAGE: {
-                    float[] components;
-                    if (c.getColorSpace().equals(HSBColorSpace.getInstance())) {
-                        components = c.getComponents(null);
-                    } else {
-                        components = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), new float[3]);
-                    }
-                    str = "hsb "+numberFormat.format(components[0] * 360) + "° "//
-                            + numberFormat.format(components[1] * 100) + "% " //
-                            + numberFormat.format(components[2] * 100) + "%";
-                    break;
-                    }
-                case GRAY_PERCENTAGE: {
-                    float[] components;
-                    if (c.getColorSpace().equals(ColorSpace.getInstance(ColorSpace.CS_GRAY))) {
-                        components = c.getComponents(null);
-                    } else {
-                        components = c.getColorComponents(ColorSpace.getInstance(ColorSpace.CS_GRAY),null);
-                    }
-                    str = "gray "+numberFormat.format(components[0] * 100) + "%";
-                    break;
-                    }
             }
         }
         return str;

@@ -14,7 +14,6 @@
 
 package org.jhotdraw.gui.plaf.palette;
 
-import java.awt.Color;
 import java.awt.Font;
 import javax.swing.*;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -40,8 +39,6 @@ private ResourceBundleUtil labels;
         collectionsScrollPane.setFont(smallSystemFont);
         familiesScrollPane.setFont(smallSystemFont);
         facesScrollPane.setFont(smallSystemFont);
-        setOpaque(true);
-        setBackground(new Color(0xededed));
     }
     
     public JList getCollectionList() {

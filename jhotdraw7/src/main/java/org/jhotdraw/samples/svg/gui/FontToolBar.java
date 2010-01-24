@@ -17,8 +17,8 @@ import org.jhotdraw.draw.tool.TextCreationTool;
 import org.jhotdraw.draw.tool.TextAreaCreationTool;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.CompositeFigure;
-import org.jhotdraw.draw.event.SelectionComponentRepainter;
-import org.jhotdraw.draw.event.SelectionComponentDisplayer;
+import org.jhotdraw.gui.event.SelectionComponentRepainter;
+import org.jhotdraw.gui.event.SelectionComponentDisplayer;
 import javax.swing.border.*;
 import org.jhotdraw.util.*;
 import java.awt.*;
@@ -27,7 +27,7 @@ import javax.swing.*;
 import javax.swing.plaf.SliderUI;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.*;
-import org.jhotdraw.draw.event.FigureAttributeEditorHandler;
+import org.jhotdraw.gui.event.FigureAttributeEditorHandler;
 import org.jhotdraw.gui.JAttributeSlider;
 import org.jhotdraw.gui.JAttributeTextField;
 import org.jhotdraw.gui.JFontChooser;
@@ -264,7 +264,7 @@ public class FontToolBar extends AbstractToolBar {
 
                 // Font face field and popup button
                 JAttributeTextField<Font> faceField = new JAttributeTextField<Font>();
-                faceField.setColumns(12);
+                faceField.setColumns(10);
                 faceField.setToolTipText(labels.getString("attribute.font.toolTipText"));
                 faceField.setHorizontalAlignment(JAttributeTextField.RIGHT);
                 faceField.putClientProperty("Palette.Component.segmentPosition", "first");

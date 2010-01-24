@@ -23,7 +23,6 @@ import java.awt.geom.*;
 import org.jhotdraw.geom.*;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
-import org.jhotdraw.xml.DOMStorable;
 /**
  * This abstract class can be extended to implement a {@link Connector}.
  *
@@ -32,7 +31,7 @@ import org.jhotdraw.xml.DOMStorable;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class AbstractConnector implements Connector, DOMStorable {
+public class AbstractConnector implements Connector {
     /**
      * The owner of the connector
      */
@@ -78,17 +77,14 @@ public class AbstractConnector implements Connector, DOMStorable {
     /**
      * Tests if a point is contained in the connector.
      */
-    @Override
     public boolean contains(Point2D.Double p) {
         return getOwner().contains(p);
     }
     
-    @Override
     public Point2D.Double findStart(ConnectionFigure connection) {
         return findPoint(connection);
     }
     
-    @Override
     public Point2D.Double findEnd(ConnectionFigure connection) {
         return findPoint(connection);
     }
@@ -105,7 +101,6 @@ public class AbstractConnector implements Connector, DOMStorable {
     /**
      * Gets the connector's owner.
      */
-    @Override
     public Figure getOwner() {
         return owner;
     }
@@ -116,7 +111,6 @@ public class AbstractConnector implements Connector, DOMStorable {
         owner = newValue;
     }
     
-    @Override
     public Object clone() {
         try {
             AbstractConnector that = (AbstractConnector) super.clone();
@@ -144,15 +138,12 @@ public class AbstractConnector implements Connector, DOMStorable {
     public void updateEndLocation(Point2D.Double p) {
     }
     
-    @Override
     public Point2D.Double getAnchor() {
         return Geom.center(getBounds());
     }
     
-    @Override
     public void updateAnchor(Point2D.Double p) {
     }
-    @Override
     public Rectangle2D.Double getBounds() {
         return isConnectToDecorator() ?
             ((DecoratedFigure) getOwner()).getDecorator().getBounds() :
@@ -160,7 +151,6 @@ public class AbstractConnector implements Connector, DOMStorable {
     }
     
     
-    @Override
     public void read(DOMInput in) throws IOException {
         if (isStatePersistent) {
             isConnectToDecorator = in.getAttribute("connectToDecorator", false);
@@ -174,7 +164,6 @@ public class AbstractConnector implements Connector, DOMStorable {
         in.closeElement();
     }
     
-    @Override
     public void write(DOMOutput out) throws IOException {
         if (isStatePersistent) {
             if (isConnectToDecorator) {
@@ -186,13 +175,11 @@ public class AbstractConnector implements Connector, DOMStorable {
         out.closeElement();
     }
     
-    @Override
     public Rectangle2D.Double getDrawingArea() {
         Point2D.Double anchor = getAnchor();
         return new Rectangle2D.Double(anchor.x - 4, anchor.y - 4, 8, 8);
     }
     
-    @Override
     public void draw(Graphics2D g) {
         Point2D.Double anchor = getAnchor();
         Ellipse2D.Double e = new Ellipse2D.Double(anchor.x - 3, anchor.y - 3, 6, 6);

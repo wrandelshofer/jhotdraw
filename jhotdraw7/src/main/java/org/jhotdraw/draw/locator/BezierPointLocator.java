@@ -39,7 +39,6 @@ public class BezierPointLocator extends AbstractLocator {
         this.coord = index;
     }
     
-    @Override
     public Point2D.Double locate(Figure owner) {
         BezierFigure plf = (BezierFigure) owner;
         if (index < plf.getNodeCount()) {
@@ -48,13 +47,11 @@ public class BezierPointLocator extends AbstractLocator {
         return new Point2D.Double(0, 0);
     }
 
-    @Override
     public void write(DOMOutput out) {
         out.addAttribute("index", index, 0);
         out.addAttribute("coord", coord, 0);
     }
 
-    @Override
     public void read(DOMInput in) {
        index = in.getAttribute("index", 0);
        coord = in.getAttribute("coord", 0);

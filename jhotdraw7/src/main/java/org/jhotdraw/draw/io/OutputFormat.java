@@ -17,17 +17,16 @@ package org.jhotdraw.draw.io;
 import org.jhotdraw.draw.*;
 import java.awt.datatransfer.*;
 import java.io.*;
-import java.net.URI;
 import java.util.*;
 import javax.swing.*;
 
 /**
  * An <em>output format</em> implements a strategy for writing a {@link Drawing}
- * using a specific format into an {@code OutputStream}, an {@code URI} or a
+ * using a specific encoding into an {@code OutputStream}, a {@code File} or a
  * {@code Transferable}.
  * <p>
- * Typically a format can be identified by a Mime type or by a file extension.
- * To identify the format used by a file, an appropriate {@code FileFilter}
+ * Typically an encoding can be recognized by a Mime type or by a file extension.
+ * To identify the encoding used by a file, an appropriate {@code FileFilter}
  * for a javax.swing.JFileChooser component can be requested from {@code OutputFormat}.
  * <p>
  * This interface intentionally contains many identical operations like
@@ -72,12 +71,12 @@ public interface OutputFormat {
     public JComponent getOutputFormatAccessory();
     
     /**
-     * Writes a Drawing into an URI.
+     * Writes a Drawing into a file.
      *
-     * @param uri The uri.
+     * @param file The file.
      * @param drawing The drawing.
      */
-    public void write(URI uri, Drawing drawing) throws IOException;
+    public void write(File file, Drawing drawing) throws IOException;
 
     /**
      * Writes a Drawing into an output stream.

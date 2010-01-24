@@ -13,13 +13,11 @@
  */
 package org.jhotdraw.gui;
 
-import javax.swing.event.PopupMenuEvent;
 import org.jhotdraw.gui.plaf.palette.PaletteMenuItemUI;
 import java.awt.*;
 import java.beans.*;
 import javax.swing.*;
 import java.awt.event.*;
-import javax.swing.event.PopupMenuListener;
 
 /**
  * JPopupButton provides a popup menu.
@@ -36,32 +34,15 @@ public class JPopupButton extends javax.swing.JButton {
     private Font itemFont;
     public final static Font ITEM_FONT = new Font("Dialog", Font.PLAIN, 10);
     private int popupAnchor = SwingConstants.SOUTH_WEST;
-    /** The time when the popup became invisible. */
-    private long popupBecameInvisible;
 
-    private class ActionPropertyHandler implements PropertyChangeListener, PopupMenuListener {
+    private class ActionPropertyHandler implements PropertyChangeListener {
 
-        @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals("enabled")) {
                 setEnabled(((Boolean) evt.getNewValue()).booleanValue());
             } else {
                 repaint();
             }
-        }
-
-        @Override
-        public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-            //
-        }
-
-        @Override
-        public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-            popupBecameInvisible = System.currentTimeMillis();
-        }
-
-        @Override
-        public void popupMenuCanceled(PopupMenuEvent e) {
         }
     };
     private ActionPropertyHandler actionPropertyHandler = new ActionPropertyHandler();
@@ -120,11 +101,6 @@ public class JPopupButton extends javax.swing.JButton {
         getPopupMenu().add(submenu);
     }
 
-    @Override
-    public void removeAll() {
-        getPopupMenu().removeAll();
-    }
-
     private void updateFont(MenuElement menu) {
         menu.getComponent().setFont(itemFont);
         for (MenuElement child : menu.getSubElements()) {
@@ -142,20 +118,13 @@ public class JPopupButton extends javax.swing.JButton {
     }
 
     public void setPopupMenu(JPopupMenu popupMenu) {
-        if (this.popupMenu != null) {
-            popupMenu.removePopupMenuListener(actionPropertyHandler);
-        }
         this.popupMenu = popupMenu;
-        if (this.popupMenu != null) {
-            popupMenu.addPopupMenuListener(actionPropertyHandler);
-        }
     }
 
     public JPopupMenu getPopupMenu() {
         if (popupMenu == null) {
             popupMenu = new JPopupMenu();
             popupMenu.setLayout(new VerticalGridLayout(0, getColumnCount()));
-            popupMenu.addPopupMenuListener(actionPropertyHandler);
         }
         return popupMenu;
     }
@@ -194,14 +163,6 @@ public class JPopupButton extends javax.swing.JButton {
      */
     public void setPopupAnchor(int newValue) {
         popupAnchor = newValue;
-    }
-
-    protected void togglePopup(java.awt.event.MouseEvent evt) {
-        if (popupMenu!=null && popupMenu.isShowing() || popupBecameInvisible >= evt.getWhen()) {
-            popupMenu.setVisible(false);
-        } else {
-            showPopup(evt);
-        }
     }
 
     protected void showPopup(java.awt.event.MouseEvent evt) {
@@ -274,7 +235,7 @@ public class JPopupButton extends javax.swing.JButton {
     }//GEN-LAST:event_performAction
 
     private void handleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_handleMousePressed
-        togglePopup(evt);
+        showPopup(evt);
 
 }//GEN-LAST:event_handleMousePressed
     // Variables declaration - do not modify//GEN-BEGIN:variables

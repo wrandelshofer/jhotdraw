@@ -20,8 +20,7 @@ import javax.swing.*;
 import org.jhotdraw.gui.URIChooser;
 /**
  * {@code ApplicationModel} provides meta-data for an {@link Application},
- * actions and factory methods for creating {@link View}s, toolbars and
- * {@link URIChooser}s.
+ * actions and factory methods for creating {@link View}s and toolbars.
  * <hr>
  * <b>Design Patterns</b>
  *

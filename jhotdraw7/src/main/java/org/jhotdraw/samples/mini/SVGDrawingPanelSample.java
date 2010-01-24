@@ -25,7 +25,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
 import org.jhotdraw.gui.Worker;
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import org.jhotdraw.io.ExtensionFileFilter;
 
 /**
  * Example showing how to embed the {@link org.jhotdraw.samples.svg.SVGDrawingPanel} into an application
@@ -127,7 +127,7 @@ public class SVGDrawingPanelSample extends javax.swing.JFrame {
 
                 @Override
                 protected Object construct() throws IOException {
-                    svgPanel.read(selectedFile.toURI(), selectedFormat);
+                    svgPanel.read(selectedFile, selectedFormat);
                     return null;
                 }
 
@@ -173,7 +173,7 @@ public class SVGDrawingPanelSample extends javax.swing.JFrame {
 
                 @Override
                 protected Object construct() throws IOException {
-                    svgPanel.write(selectedFile.toURI(), selectedFormat);
+                    svgPanel.write(selectedFile, selectedFormat);
                     return null;
                 }
 
@@ -217,7 +217,6 @@ public class SVGDrawingPanelSample extends javax.swing.JFrame {
             openChooser.setFileFilter(firstFF);
             openChooser.addPropertyChangeListener(new PropertyChangeListener() {
 
-                @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals("fileFilterChanged")) {
                         InputFormat inputFormat = fileFilterInputFormatMap.get(evt.getNewValue());
@@ -247,7 +246,6 @@ public class SVGDrawingPanelSample extends javax.swing.JFrame {
             saveChooser.setFileFilter(firstFF);
             saveChooser.addPropertyChangeListener(new PropertyChangeListener() {
 
-                @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals("fileFilterChanged")) {
                         OutputFormat outputFormat = fileFilterOutputFormatMap.get(evt.getNewValue());
@@ -265,7 +263,6 @@ public class SVGDrawingPanelSample extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
-            @Override
             public void run() {
                 new SVGDrawingPanelSample().setVisible(true);
             }

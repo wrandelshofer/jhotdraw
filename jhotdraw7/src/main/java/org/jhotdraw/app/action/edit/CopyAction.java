@@ -16,13 +16,14 @@ package org.jhotdraw.app.action.edit;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import org.jhotdraw.app.action.AbstractSelectionAction;
 import org.jhotdraw.gui.datatransfer.ClipboardUtil;
 import org.jhotdraw.util.*;
 
 /**
  * Copies the selected region and place its contents into the system clipboard.
  * <p>
- * This action acts on the last {@link org.jhotdraw.gui.EditableComponent} /
+ * This action acts on the last {@link org.jhotdraw.app.EditableComponent} /
  * {@code JTextComponent} which had the focus when the {@code ActionEvent}
  * was generated.
  * <p>

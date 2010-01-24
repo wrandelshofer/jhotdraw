@@ -52,7 +52,7 @@ import java.io.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Connector extends Cloneable, Serializable {
+public interface Connector extends Cloneable, Serializable, DOMStorable {
     
     /**
      * Finds the start point for the connection.

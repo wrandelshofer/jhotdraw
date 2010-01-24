@@ -13,8 +13,6 @@
  */
 package org.jhotdraw.color;
 
-import java.awt.Color;
-
 /**
  * HarmonicRule.
  *
@@ -33,5 +31,5 @@ public interface HarmonicRule {
     
     public void apply(HarmonicColorModel model);
     
-    public void colorChanged(HarmonicColorModel model, int index, Color oldValue, Color newValue);
+    public void colorChanged(HarmonicColorModel model, int index, CompositeColor oldValue, CompositeColor newValue);
 }

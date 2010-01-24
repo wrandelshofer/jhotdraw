@@ -17,13 +17,14 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import javax.swing.*;
+import org.jhotdraw.app.action.AbstractSelectionAction;
 import org.jhotdraw.gui.datatransfer.ClipboardUtil;
 import org.jhotdraw.util.*;
 
 /**
  * Pastes the contents of the system clipboard at the caret position.
  * <p>
- * This action acts on the last {@link org.jhotdraw.gui.EditableComponent} /
+ * This action acts on the last {@link org.jhotdraw.app.EditableComponent} /
  * {@code JTextComponent} which had the focus when the {@code ActionEvent}
  * was generated.
  * <p>

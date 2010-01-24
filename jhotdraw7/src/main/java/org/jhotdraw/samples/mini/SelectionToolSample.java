@@ -95,7 +95,7 @@ public class SelectionToolSample {
             //view.selectAll();
             //editor.setTool(new HandleTracker(view.findHandle(view.drawingToView(lf.getStartPoint()))));
             
-            f.setVisible(true);
+            f.show(); 
         }
       public static void main(String[] args) { 
             SwingUtilities.invokeLater(new Runnable() { 

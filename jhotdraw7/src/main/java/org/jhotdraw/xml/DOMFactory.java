@@ -14,32 +14,15 @@
 
 package org.jhotdraw.xml;
 
-import java.io.IOException;
-
 /**
  * DOMFactory.
  * <p>
- * <hr>
- * <b>Design Patterns</b>
- *
- * <p><em>Abstract Factory</em><br>
- * {@code DOMFactory} is used by {@code DOMInput} and {@code DOMOutput} for
- * creating Java objects and DOM elements.
- * Abstract Factory: {@link DOMFactory}<br>
- * Client: {@link DOMInput}, {@link DOMOutput}.
+ * Design pattern:<br>
+ * Name: Abstract Factory.<br>
+ * Role: Abstract Factory.<br>
+ * Partners: {@link DOMInput} as Client of the Abstract Factory, 
+ * {@link DOMOutput} as Client of the Abstract Factory.
  * 
- * <p><em>Strategy</em><br>
- * {@code DOMFactory} is used by {@code DOMInput} and {@code DOMOutput} for
- * reading and writing objects.
- * Client: {@link DOMInput}, {@link DOMOutput}.<br>
- * Strategy: {@link DOMFactory}.<br>
- *
- * <p><em>Chain of Responsibility</em><br>
- * {@code DOMFactory} can delegate reading and writing to objects which implement
- * the {@code DOMStorable} interface.
- * Client: {@link DOMFactory}.<br>
- * Handler: {@link DOMStorable}.<br>
- *
  *
  * @author  Werner Randelshofer
  * @version $Id$
@@ -47,29 +30,27 @@ import java.io.IOException;
 public interface DOMFactory {
     /**
      * Returns the element name for the specified object.
+     * Note: The element names "string", "int", "float", "long", "double", 
+     * "boolean", "enum" and "null"  are reserved and must not be returned by
+     * this operation.
      */
-    public String getName(Object o);
+    public String getName(DOMStorable o);
     /**
      * Creates an object from the specified element name.
      */
     public Object create(String name);
     
-    /** Writes the specified object to DOMOutput.
-     * <p>
-     * This method is only ever called from DOMOutput. You should never call
-     * this method directly.
-     *
-     * @param object The object to be written.
+    /**
+     * Returns the element tag name for the specified Enum class.
      */
-    public void write(DOMOutput out, Object object) throws IOException;
-
-    /** Reads the specified object from DOMInput.
-     * <p>
-     * This method is only ever called from DOMInput. You should never call
-     * this method directly.
-     *
-     * @param in The DOMInput object which creates the object from an element
-     * in a DOM.
+    public String getEnumName(Enum o);
+    /**
+     * Returns the enum tag name for the specified Enum instance.
      */
-    public Object read(DOMInput in) throws IOException;
+    public String getEnumValue(Enum o);
+    
+    /**
+     * Creates an enum from the specified element name.
+     */
+    public Enum createEnum(String name, String value);
 }

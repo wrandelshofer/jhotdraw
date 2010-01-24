@@ -14,7 +14,6 @@
 
 package org.jhotdraw.samples.svg.io;
 
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import java.io.*;
 import java.util.zip.GZIPInputStream;
 import org.jhotdraw.draw.*;

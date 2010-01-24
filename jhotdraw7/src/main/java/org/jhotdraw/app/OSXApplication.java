@@ -62,6 +62,7 @@ import org.jhotdraw.app.action.file.LoadDirectoryAction;
 import org.jhotdraw.app.action.file.LoadFileAction;
 import org.jhotdraw.app.action.file.NewWindowAction;
 import org.jhotdraw.app.osx.OSXAdapter;
+import org.jhotdraw.beans.Disposable;
 import org.jhotdraw.net.URIUtil;
 
 /**
@@ -485,7 +486,6 @@ public class OSXApplication extends AbstractApplication {
     protected void initPalettes(final LinkedList<Action> paletteActions) {
         SwingUtilities.invokeLater(new Worker<LinkedList<JFrame>>() {
 
-            @Override
             public LinkedList<JFrame> construct() {
                 LinkedList<JFrame> palettes = new LinkedList<JFrame>();
                 LinkedList<JToolBar> toolBars = new LinkedList<JToolBar>(getModel().createToolBars(OSXApplication.this, null));
@@ -523,13 +523,11 @@ public class OSXApplication extends AbstractApplication {
                     PreferencesUtil.installPalettePrefsHandler(prefs, "toolbar." + i, d, x);
                     x += d.getWidth();
 
-                    TogglePaletteAction tpa=new TogglePaletteAction(OSXApplication.this, d, tb.getName());
+                    paletteActions.add(new TogglePaletteAction(OSXApplication.this, d, tb.getName()));
                     palettes.add(d);
                     if (prefs.getBoolean("toolbar." + i + ".visible", true)) {
                         addPalette(d);
-                        tpa.putValue(ActionUtil.SELECTED_KEY, true);
                     }
-                    paletteActions.add(tpa);
                 }
                 return palettes;
 

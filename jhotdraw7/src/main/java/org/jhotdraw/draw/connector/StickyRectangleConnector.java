@@ -16,6 +16,7 @@
 package org.jhotdraw.draw.connector;
 
 import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import java.io.IOException;
 import org.jhotdraw.geom.Geom;
 import java.awt.*;
@@ -47,7 +48,6 @@ public class StickyRectangleConnector extends ChopRectangleConnector {
         super(owner);
     }
     
-    @Override
     public void draw(Graphics2D g) {
         g.setColor(Color.blue);
         g.setStroke(new BasicStroke());
@@ -66,11 +66,9 @@ public class StickyRectangleConnector extends ChopRectangleConnector {
         this.angle = (float) Geom.pointToAngle(owner.getBounds(), p);
     }
     
-    @Override
     public void updateAnchor(Point2D.Double p) {
         this.angle = (float) Geom.pointToAngle(getOwner().getBounds(), p);
     }    
-    @Override
     public Point2D.Double getAnchor() {
         return Geom.angleToPoint(getOwner().getBounds(), angle);
     }
@@ -81,12 +79,10 @@ public class StickyRectangleConnector extends ChopRectangleConnector {
     public String getParameters() {
         return Float.toString((float) (angle / Math.PI * 180));
     }
-    @Override
     public void read(DOMInput in) throws IOException {
         super.read(in);
         angle = (float) in.getAttribute("angle", 0.0);
     }
-    @Override
     public void write(DOMOutput out) throws IOException {
         super.write(out);
         out.addAttribute("angle", angle);

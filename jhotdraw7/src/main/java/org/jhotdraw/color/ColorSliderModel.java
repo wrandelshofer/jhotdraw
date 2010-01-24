@@ -15,7 +15,6 @@
 package org.jhotdraw.color;
 
 import java.awt.Color;
-import java.awt.color.ColorSpace;
 import javax.swing.BoundedRangeModel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
@@ -32,17 +31,17 @@ import javax.swing.event.ChangeListener;
  */
 public interface ColorSliderModel {
     /**
-     * Returns the ColorSpace used by this ColorSliderModel.
+     * Returns the ColorSystem used by this ColorSliderModel.
      * 
-     * @return ColorSpace.
+     * @return ColorSystem.
      */
-    public ColorSpace getColorSpace();
+    public ColorSystem getColorSystem();
     /**
-     * Changes the ColorSpace used by this ColorSliderModel.
+     * Changes the ColorSystem used by this ColorSliderModel.
      * 
-     * @param newValue ColorSpace.
+     * @param newValue ColorSystem.
      */
-    public void setColorSpace(ColorSpace newValue);
+    public void setColorSystem(ColorSystem newValue);
     /**
      * Returns the number of components used by this ColorSliderModel.
      * 
@@ -60,6 +59,20 @@ public interface ColorSliderModel {
     public BoundedRangeModel getBoundedRangeModel(int componentIndex);
     
     /**
+     * Returns a CompositeColor representing the current value of the ColorSliderModel.
+     * 
+     * @return CompositeColor.
+     */
+    public CompositeColor getCompositeColor();
+
+    /**
+     * Sets the composite color value of the model.
+     * 
+     * @param newValue .
+     */
+    public void setCompositeColor(CompositeColor newValue);
+    
+    /**
      * Returns an RGB value based on the value of the specified component index
      * and value, based on the values of all other components of the model.
      * 
@@ -75,20 +88,14 @@ public interface ColorSliderModel {
      * @param componentIndex
      * @param newValue
      */
-    public void setComponent(int componentIndex, float newValue);
+    public void setComponentValue(int componentIndex, float newValue);
     /**
      * Gets a value of an individual component.
      * 
      * @param componentIndex
      * @return Value
      */
-    public float getComponent(int componentIndex);
-    /**
-     * Gets all component values.
-     *
-     * @return Values.
-     */
-    public float[] getComponents();
+    public float getComponentValue(int componentIndex);
     
     public void addChangeListener(ChangeListener l);
 
@@ -112,7 +119,7 @@ public interface ColorSliderModel {
     public Color getColor();
     /**
      * Sets the color value of the model.
-     * This is a convenience method for calling setCompositeColor(new CompositeColor(getColorSpace(), color.getRGB());
+     * This is a convenience method for calling setCompositeColor(new CompositeColor(getColorSystem(), color.getRGB());
      * 
      * @param newValue .
      */

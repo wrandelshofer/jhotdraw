@@ -189,15 +189,12 @@ public class CurvedLiner
         path.invalidatePath();
     }
 
-    @Override
     public void read(DOMInput in) {
     }
 
-    @Override
     public void write(DOMOutput out) {
     }
 
-    @Override
     public Liner clone() {
         try {
             return (Liner) super.clone();

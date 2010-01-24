@@ -32,7 +32,7 @@ import java.awt.geom.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Layouter {
+public interface Layouter /*extends Serializable, Storable*/ {
     
     /**
      * Calculate the layout for the figure and all its subelements. The

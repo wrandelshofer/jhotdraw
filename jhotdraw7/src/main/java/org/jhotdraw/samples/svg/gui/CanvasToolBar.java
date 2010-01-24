@@ -13,8 +13,8 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import org.jhotdraw.draw.event.DrawingAttributeEditorHandler;
-import org.jhotdraw.draw.event.DrawingComponentRepainter;
+import org.jhotdraw.gui.event.DrawingAttributeEditorHandler;
+import org.jhotdraw.gui.event.DrawingComponentRepainter;
 import org.jhotdraw.text.JavaNumberFormatter;
 import javax.swing.border.*;
 import org.jhotdraw.gui.*;
@@ -68,7 +68,7 @@ public class CanvasToolBar extends AbstractToolBar {
 
                 // Fill color
                 btn = ButtonFactory.createDrawingColorButton(editor,
-                        CANVAS_FILL_COLOR, ButtonFactory.HSB_COLORS, ButtonFactory.HSB_COLORS_COLUMN_COUNT,
+                        CANVAS_FILL_COLOR, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
                         "attribute.canvasFillColor", labels, null, new Rectangle(3, 3, 10, 10), disposables);
                 btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
                 disposables.add(new DrawingComponentRepainter(editor, btn));
@@ -190,7 +190,7 @@ public class CanvasToolBar extends AbstractToolBar {
 
                 // Fill color field with button
                 JAttributeTextField<Color> colorField = new JAttributeTextField<Color>();
-                colorField.setColumns(12);
+                colorField.setColumns(7);
                 colorField.setToolTipText(labels.getString("attribute.canvasFillColor.toolTipText"));
                 colorField.putClientProperty("Palette.Component.segmentPosition", "first");
                 colorField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(colorField));
@@ -203,7 +203,7 @@ public class CanvasToolBar extends AbstractToolBar {
                 gbc.anchor = GridBagConstraints.FIRST_LINE_START;
                 p1.add(colorField, gbc);
                 btn = ButtonFactory.createDrawingColorButton(editor,
-                        CANVAS_FILL_COLOR, ButtonFactory.HSB_COLORS, ButtonFactory.HSB_COLORS_COLUMN_COUNT,
+                        CANVAS_FILL_COLOR, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
                         "attribute.canvasFillColor", labels, null, new Rectangle(3, 3, 10, 10), disposables);
                 btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
                 disposables.add(new DrawingComponentRepainter(editor, btn));
@@ -214,12 +214,12 @@ public class CanvasToolBar extends AbstractToolBar {
 
                 // Opacity field with slider
                 JAttributeTextField<Double> opacityField = new JAttributeTextField<Double>();
-                opacityField.setColumns(4);
+                opacityField.setColumns(3);
                 opacityField.setToolTipText(labels.getString("attribute.figureOpacity.toolTipText"));
                 opacityField.setHorizontalAlignment(JAttributeTextField.RIGHT);
                 opacityField.putClientProperty("Palette.Component.segmentPosition", "first");
                 opacityField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(opacityField));
-                opacityField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0d, 100d, 100d, false, false,"%"));
+                opacityField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0d, 100d, 100d, true, false));
                 opacityField.setHorizontalAlignment(JTextField.LEADING);
                 disposables.add(new DrawingAttributeEditorHandler<Double>(CANVAS_FILL_OPACITY, opacityField, editor));
                 gbc = new GridBagConstraints();

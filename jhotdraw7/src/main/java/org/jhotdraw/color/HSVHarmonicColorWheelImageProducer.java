@@ -22,14 +22,14 @@ import java.awt.Point;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class HSVHarmonicColorWheelImageProducer extends PolarColorWheelImageProducer {
+public class HSVHarmonicColorWheelImageProducer extends ColorWheelImageProducer {
 
     private float wheelScaleFactor;
     private float[] brights;
     private boolean isDiscrete = true;
 
     public HSVHarmonicColorWheelImageProducer(int w, int h) {
-        super(HSVPsychologicColorSpace.getInstance(), w, h);
+        super(new HSVRYBColorSystem(), w, h);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class HSVHarmonicColorWheelImageProducer extends PolarColorWheelImageProd
         float radius = (float) Math.min(w, h);
         for (int index = 0; index < pixels.length; index++) {
             if (alphas[index] != 0) {
-                pixels[index] = alphas[index] | 0xffffff & ColorSpaceUtil.toRGB(colorSpace,angulars[index], radials[index], brights[index]);
+                pixels[index] = alphas[index] | 0xffffff & colorSystem.toRGB(angulars[index], radials[index], brights[index]);
             }
         }
         newPixels();
@@ -139,15 +139,15 @@ public class HSVHarmonicColorWheelImageProducer extends PolarColorWheelImageProd
     }
 
     @Override
-    public Point getColorLocation(Color c) {
-        float[] hsb = ColorSpaceUtil.fromColor(colorSpace, c);
-        return getColorLocation(hsb);
+    protected Point getColorLocation(Color c, int width, int height) {
+        float[] hsb = new float[3];
+        hsb = colorSystem.toComponents(c.getRGB(), hsb);
+        return getColorLocation(hsb[0], hsb[1], hsb[2], width, height);
     }
 
     @Override
-    public Point getColorLocation(float[] hsb) {
-        float hue=hsb[0]; float saturation=hsb[1]; float brightness=hsb[2];
-        float radius = Math.min(w, h) / 2f;
+    protected Point getColorLocation(float hue, float saturation, float brightness, int width, int height) {
+        float radius = Math.min(width, height) / 2f;
         float radiusH = radius / 2f;
 
         saturation = Math.max(0f, Math.min(1f, saturation));
@@ -156,25 +156,25 @@ public class HSVHarmonicColorWheelImageProducer extends PolarColorWheelImageProd
         Point p;
         if (brightness == 1f) {
             p = new Point(
-                    w / 2 + (int) (radiusH * saturation * Math.cos(hue * Math.PI * 2d) / wheelScaleFactor),
-                    h / 2 - (int) (radiusH * saturation * Math.sin(hue * Math.PI * 2d) / wheelScaleFactor));
+                    width / 2 + (int) (radiusH * saturation * Math.cos(hue * Math.PI * 2d) / wheelScaleFactor),
+                    height / 2 - (int) (radiusH * saturation * Math.sin(hue * Math.PI * 2d) / wheelScaleFactor));
 
         } else {
             p = new Point(
-                    w / 2 + (int) ((radius + radiusH - radius * brightness) * Math.cos(hue * Math.PI * 2d) / wheelScaleFactor),
-                    h / 2 - (int) ((radius + radiusH - radius * brightness) * Math.sin(hue * Math.PI * 2d) / wheelScaleFactor));
+                    width / 2 + (int) ((radius + radiusH - radius * brightness) * Math.cos(hue * Math.PI * 2d) / wheelScaleFactor),
+                    height / 2 - (int) ((radius + radiusH - radius * brightness) * Math.sin(hue * Math.PI * 2d) / wheelScaleFactor));
 
         }
         return p;
     }
 
     @Override
-    public float[] getColorAt(int x, int y) {
-        x -= w / 2;
-        y -= h / 2;
+    protected float[] getColorAt(int x, int y, int width, int height) {
+        x -= width / 2;
+        y -= height / 2;
         float r = (float) Math.sqrt(x * x + y * y);
         float theta = (float) Math.atan2(-y, x);
-        float radius = Math.min(w, h) / 2f;
+        float radius = Math.min(width, height) / 2f;
 
         float[] hsb;
         float sat = (float) r / radius * wheelScaleFactor;

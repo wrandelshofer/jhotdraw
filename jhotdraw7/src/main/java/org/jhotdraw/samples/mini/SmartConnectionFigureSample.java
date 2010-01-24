@@ -102,7 +102,7 @@ public class SmartConnectionFigureSample {
                 editor.add(view);
                 editor.setTool(new DelegationSelectionTool());
                 
-                f.setVisible(true);
+                f.show();
             }
         });
     }

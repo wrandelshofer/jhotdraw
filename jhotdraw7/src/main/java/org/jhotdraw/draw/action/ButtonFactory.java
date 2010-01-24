@@ -23,11 +23,10 @@ import org.jhotdraw.draw.event.ToolEvent;
 import org.jhotdraw.draw.event.ToolListener;
 import org.jhotdraw.draw.decoration.LineDecoration;
 import org.jhotdraw.draw.decoration.ArrowTip;
-import org.jhotdraw.draw.event.SelectionComponentRepainter;
+import org.jhotdraw.gui.event.SelectionComponentRepainter;
 import org.jhotdraw.gui.JPopupButton;
 import org.jhotdraw.util.*;
 import java.awt.*;
-import java.awt.color.ColorSpace;
 import java.awt.event.*;
 import java.beans.*;
 import java.text.*;
@@ -35,8 +34,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 import org.jhotdraw.app.action.*;
-import org.jhotdraw.app.Disposable;
-import org.jhotdraw.color.HSBColorSpace;
+import org.jhotdraw.beans.Disposable;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.geom.*;
 import org.jhotdraw.draw.*;
@@ -156,7 +154,7 @@ public class ButtonFactory {
             for (int r = 0x99; r <= 0xff; r += 0x33) {
                 for (int g = 0; g <= 0xff; g += 0x33) {
                     rgb = 0xff000000 | (r << 16) | (g << 8) | b;
-                    m.add(new ColorIcon(rgb,"#"+Integer.toHexString(rgb).substring(2)));
+                    m.add(new ColorIcon(rgb));
                 }
             }
         }
@@ -164,61 +162,37 @@ public class ButtonFactory {
     }
     public final static int WEBSAVE_COLORS_COLUMN_COUNT = 19;
     /**
-     * HSB color palette with a set of colors chosen based on a physical criteria.
+     * HSV color palette.
+     * This is a 'human friendly' color palette which arranges
+     * the color in a way that makes it (hopefully) easy for humans to
+     * select the desired color.
      * <p>
-     * This is a 'human friendly' color palette which arranges the color in a
-     * way that makes it easy for humans to select the desired
-     * color. The colors are ordered in a way which minimizes the color contrast
-     * effect in the human visual system.
-     * <p>
-     * This palette has 12 columns and 10 rows.
-     * <p>
-     * The topmost row contains a null-color and a gray scale from white to
-     * black in 10 percent steps.
-     * <p>
-     * The remaining rows contain colors taken from the outer hull of the HSV
-     * color model:
-     * <p>
-     * The columns are ordered by hue starting with red - the lowest wavelength -
-     * and ending with purple - the highest wavelength. There are 12 different
-     * hues, so that all primary colors with their additive complements can be
-     * selected. 
-     * <p>
-     * The rows are orderd by brightness with the brightest color at the top (sky)
-     * and the darkest color at the bottom (earth).
-     * The first 5 rows contain colors with maximal brightness and a saturation
-     * ranging form 20% up to 100%. The remaining 4 rows contain colors with
-     * maximal saturation and a brightness ranging from 90% to 20% (this also
-     * makes for a range from 100% to 20% if the 5th row is taken into account).
+     * This palette has 12 columns.
+     * The topmost row contains a null-color and gray scales.
      */
-    public final static java.util.List<ColorIcon> HSB_COLORS;
+    public final static java.util.List<ColorIcon> HSV_COLORS;
 
 
     static {
-        ColorSpace grayCS=ColorSpace.getInstance(ColorSpace.CS_GRAY);
-        HSBColorSpace hsbCS=HSBColorSpace.getInstance();
         LinkedList<ColorIcon> m = new LinkedList<ColorIcon>();
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
         m.add(new ColorIcon(null, labels.getToolTipTextProperty("attribute.color.noColor")));
         for (int b = 10; b >= 0; b--) {
-            m.add(new ColorIcon(new Color(grayCS, new float[]{b * 0.1f}, 1f),//
-                    labels.getFormatted("attribute.color.grayComponents.toolTipText", b*10)));
+            m.add(new ColorIcon(Color.HSBtoRGB(0f, 0f, b * 0.1f)));
         }
-        for (int s = 2; s <=8; s += 2) {
+        for (int b = 2; b <= 10; b += 2) {
             for (int h = 0; h < 12; h++) {
-                m.add(new ColorIcon(new Color(hsbCS, new float[]{(h) / 12f, s * 0.1f, 1f},1f),//
-                        labels.getFormatted("attribute.color.hsbComponents.toolTipText", h*360/12,s*10,100)));
+                m.add(new ColorIcon(Color.HSBtoRGB((h + 6) / 12f, 1f, b * 0.1f)));
             }
         }
-        for (int b = 10; b >= 2; b -= 2) {
+        for (int s = 8; s > 0; s -= 2) {
             for (int h = 0; h < 12; h++) {
-                m.add(new ColorIcon(new Color(hsbCS, new float[]{(h) / 12f, 1f, b * 0.1f},1f),//
-                        labels.getFormatted("attribute.color.hsbComponents.toolTipText", h*360/12,100,b*10)));
+                m.add(new ColorIcon(Color.HSBtoRGB((h + 6) / 12f, s * 0.1f, 1f)));
             }
         }
-        HSB_COLORS = Collections.unmodifiableList(m);
+        HSV_COLORS = Collections.unmodifiableList(m);
     }
-    public final static int HSB_COLORS_COLUMN_COUNT = 12;
+    public final static int HSV_COLORS_COLUMN_COUNT = 12;
 
     private static class ToolButtonListener implements ItemListener {
 
@@ -830,7 +804,6 @@ public class ButtonFactory {
         for (ColorIcon swatch : swatches) {
             AttributeAction a;
             HashMap<AttributeKey, Object> attributes = new HashMap<AttributeKey, Object>(defaultAttributes);
-            if (swatch != null) {
             attributes.put(attributeKey, swatch.getColor());
             if (swatch.getColor() == null) {
                 hasNullColor = true;
@@ -844,10 +817,6 @@ public class ButtonFactory {
             a.putValue(Action.SHORT_DESCRIPTION, swatch.getName());
             a.setUpdateEnabledState(false);
             dsp.add(a);
-            } else {
-                popupButton.add(new JPanel());
-            }
-
         }
 
         // No color
@@ -1023,7 +992,6 @@ public class ButtonFactory {
         for (ColorIcon swatch : swatches) {
             DrawingAttributeAction a;
             HashMap<AttributeKey, Object> attributes = new HashMap<AttributeKey, Object>(defaultAttributes);
-            if (swatch !=null) {
             attributes.put(attributeKey, swatch.getColor());
             if (swatch.getColor() == null) {
                 hasNullColor = true;
@@ -1037,9 +1005,6 @@ public class ButtonFactory {
             dsp.add(a);
             a.putValue(Action.SHORT_DESCRIPTION, swatch.getName());
             a.setUpdateEnabledState(false);
-            } else {
-                popupButton.add(new JPanel());
-            }
         }
 
         // No color

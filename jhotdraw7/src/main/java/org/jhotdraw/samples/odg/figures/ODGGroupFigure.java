@@ -128,12 +128,16 @@ public class ODGGroupFigure extends GroupFigure implements ODGFigure {
         return handles;
     }
     
-    @Override
+    @Override final public void write(DOMOutput out) throws IOException {
+        throw new UnsupportedOperationException("Use ODGStorableOutput to write this Figure.");
+    }
+    @Override final public void read(DOMInput in) throws IOException {
+        throw new UnsupportedOperationException("Use ODGStorableInput to read this Figure.");
+    }
     public boolean isEmpty() {
         return getChildCount() == 0;
     }
     
-    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append(getClass().getName().substring(getClass().getName().lastIndexOf('.')+1));

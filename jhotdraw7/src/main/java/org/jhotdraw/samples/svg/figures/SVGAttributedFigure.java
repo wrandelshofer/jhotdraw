@@ -114,7 +114,6 @@ public abstract class SVGAttributedFigure extends AbstractAttributedFigure {
         if (get(TRANSFORM) != null) {
             ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
             actions.add(new AbstractAction(labels.getString("edit.removeTransform.text")) {
-                @Override
                 public void actionPerformed(ActionEvent evt) {
                     ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
                     willChange();
@@ -126,5 +125,11 @@ public abstract class SVGAttributedFigure extends AbstractAttributedFigure {
             });
         }
         return actions;
+    }
+    @Override final public void write(DOMOutput out) throws IOException {
+        throw new UnsupportedOperationException("Use SVGStorableOutput to write this Figure.");
+    }
+    @Override final public void read(DOMInput in) throws IOException {
+        throw new UnsupportedOperationException("Use SVGStorableInput to read this Figure.");
     }
 }

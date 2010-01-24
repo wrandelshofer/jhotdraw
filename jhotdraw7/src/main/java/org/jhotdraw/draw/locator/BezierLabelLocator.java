@@ -222,7 +222,6 @@ public class BezierLabelLocator implements Locator, DOMStorable {
         }*/
     }
     
-    @Override
     public void read(DOMInput in) {
         relativePosition = in.getAttribute("relativePosition", 0d);
         angle = in.getAttribute("angle", 0d);
@@ -230,7 +229,6 @@ public class BezierLabelLocator implements Locator, DOMStorable {
         
     }
     
-    @Override
     public void write(DOMOutput out) {
         out.addAttribute("relativePosition", relativePosition);
         out.addAttribute("angle", angle);

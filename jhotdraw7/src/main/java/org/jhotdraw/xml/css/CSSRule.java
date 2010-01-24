@@ -113,7 +113,7 @@ public class CSSRule {
                 break;
             }
             case CLASS_ATTRIBUTE : {
-                String value = elem.getAttribute("class",null);
+                String value = elem.getAttribute("class");
                 if (value != null) {
                     String[] clazzes = value.split(" ");
                     for (String clazz : clazzes) {
@@ -126,7 +126,7 @@ public class CSSRule {
                 break;
             }
             case ID_ATTRIBUTE : {
-                String name = elem.getAttribute("id",null);
+                String name = elem.getAttribute("id");
                 isMatch = name != null && name.equals(selector);
                 break;
             }

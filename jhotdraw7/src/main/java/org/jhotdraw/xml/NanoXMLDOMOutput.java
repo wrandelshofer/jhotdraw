@@ -18,7 +18,7 @@ import java.awt.*;
 import java.util.*;
 import java.io.*;
 import net.n3.nanoxml.*;
-import org.jhotdraw.app.Disposable;
+import org.jhotdraw.beans.Disposable;
 /**
  * DOMOutput using Nano XML.
  * <p>
@@ -118,7 +118,6 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
      * document. Then it becomes the current element.
      * The element must be closed using closeElement.
      */
-    @Override
     public void openElement(String tagName) {
         XMLElement newElement = new XMLElement();//new HashMap(), false, false);
         newElement.setName(tagName);
@@ -132,14 +131,12 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
      * @exception IllegalArgumentException if the provided tagName does
      * not match the tag name of the element.
      */
-    @Override
     public void closeElement() {
         current = (XMLElement) stack.pop();
     }
     /**
      * Adds a comment to the current element of the DOM Document.
      */
-    @Override
     public void addComment(String comment) {
         // NanoXML does not support comments
     }
@@ -147,7 +144,6 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
      * Adds a text to current element of the DOM Document.
      * Note: Multiple consecutives texts will be merged.
      */
-    @Override
     public void addText(String text) {
         String old = current.getContent();
         if (old == null) {
@@ -159,7 +155,6 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
     /**
      * Adds an attribute to current element of the DOM Document.
      */
-    @Override
     public void addAttribute(String name, String value) {
         if (value != null) {
             current.setAttribute(name, value);
@@ -168,21 +163,18 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
     /**
      * Adds an attribute to current element of the DOM Document.
      */
-    @Override
     public void addAttribute(String name, int value) {
         current.setAttribute(name, Integer.toString(value));
     }
     /**
      * Adds an attribute to current element of the DOM Document.
      */
-    @Override
     public void addAttribute(String name, boolean value) {
         current.setAttribute(name, new Boolean(value).toString());
     }
     /**
      * Adds an attribute to current element of the DOM Document.
      */
-    @Override
     public void addAttribute(String name, float value) {
         // Remove the awkard .0 at the end of each number
         String str = Float.toString(value);
@@ -192,7 +184,6 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
     /**
      * Adds an attribute to current element of the DOM Document.
      */
-    @Override
     public void addAttribute(String name, double value) {
         // Remove the awkard .0 at the end of each number
         String str = Double.toString(value);
@@ -200,8 +191,86 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
         current.setAttribute(name, str);
     }
     
-    @Override
     public void writeObject(Object o) throws IOException {
+        if (o == null) {
+            openElement("null");
+            closeElement();
+        } else if (o instanceof DOMStorable) {
+            writeStorable((DOMStorable) o);
+        } else if (o instanceof String) {
+            openElement("string");
+            addText((String) o);
+            closeElement();
+        } else if (o instanceof Integer) {
+            openElement("int");
+            addText(o.toString());
+            closeElement();
+        } else if (o instanceof Long) {
+            openElement("long");
+            addText(o.toString());
+            closeElement();
+        } else if (o instanceof Double) {
+            openElement("double");
+            // Remove the awkard .0 at the end of each number
+            String str = o.toString();
+            if (str.endsWith(".0")) str = str.substring(0, str.length() - 2);
+            addText(str);
+            closeElement();
+        } else if (o instanceof Float) {
+            openElement("float");
+            // Remove the awkard .0 at the end of each number
+            String str = o.toString();
+            if (str.endsWith(".0")) str = str.substring(0, str.length() - 2);
+            addText(str);
+            closeElement();
+        } else if (o instanceof Boolean) {
+            openElement("boolean");
+            addText(o.toString());
+            closeElement();
+        } else if (o instanceof Color) {
+            Color c = (Color) o;
+            openElement("color");
+            addAttribute("rgba", "#"+Integer.toHexString(c.getRGB()));
+            closeElement();
+        } else if (o instanceof int[]) {
+            openElement("intArray");
+            int[] a = (int[]) o;
+            for (int i=0; i < a.length; i++) {
+                writeObject(new Integer(a[i]));
+            }
+            closeElement();
+        } else if (o instanceof float[]) {
+            openElement("floatArray");
+            float[] a = (float[]) o;
+            for (int i=0; i < a.length; i++) {
+                writeObject(new Float(a[i]));
+            }
+            closeElement();
+        } else if (o instanceof double[]) {
+            openElement("doubleArray");
+            double[] a = (double[]) o;
+            for (int i=0; i < a.length; i++) {
+                writeObject(new Double(a[i]));
+            }
+            closeElement();
+        } else if (o instanceof Font) {
+            Font f = (Font) o;
+            openElement("font");
+            addAttribute("name", f.getName());
+            addAttribute("style", f.getStyle());
+            addAttribute("size", f.getSize());
+            closeElement();
+        } else if (o instanceof Enum) {
+            openElement("enum");
+            Enum e = (Enum) o;
+            addAttribute("type", factory.getEnumName(e));
+            addText(factory.getEnumValue(e));
+            closeElement();
+        } else {
+            throw new IllegalArgumentException("unable to store: "+o+" "+o.getClass());
+        }
+    }
+    private XMLElement writeStorable(DOMStorable o) throws IOException {
         String tagName = factory.getName(o);
         if (tagName == null) throw new IllegalArgumentException("no tag name for:"+o);
         openElement(tagName);
@@ -212,47 +281,42 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
             String id = Integer.toString(objectids.size(), 16);
             objectids.put(o, id);
             addAttribute("id", id);
-            factory.write(this,o);
+            o.write(this);
         }
         closeElement();
+        return element;
     }
     
-    @Override
     public void addAttribute(String name, float value, float defaultValue) {
         if (value != defaultValue) {
             addAttribute(name, value);
         }
     }
     
-    @Override
     public void addAttribute(String name, int value, int defaultValue) {
         if (value != defaultValue) {
             addAttribute(name, value);
         }
     }
     
-    @Override
     public void addAttribute(String name, double value, double defaultValue) {
         if (value != defaultValue) {
             addAttribute(name, value);
         }
     }
     
-    @Override
     public void addAttribute(String name, boolean value, boolean defaultValue) {
         if (value != defaultValue) {
             addAttribute(name, value);
         }
     }
     
-    @Override
     public void addAttribute(String name, String value, String defaultValue) {
         if (value != null && ! value.equals(defaultValue)) {
             addAttribute(name, value);
         }
     }
     
-    @Override
     public Object getPrototype() {
         if (prototypes == null) {
             prototypes = new HashMap<String, Object>();
@@ -263,12 +327,10 @@ public class NanoXMLDOMOutput implements DOMOutput, Disposable {
         return prototypes.get(current.getName());
     }
     
-    @Override
     public void setDoctype(String doctype) {
         this.doctype = doctype;
     }
 
-    @Override
     public void dispose() {
         if (document != null) {
             document.dispose();

@@ -280,18 +280,15 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
         return paragraphBounds;
     }
 
-    @Override
     protected void drawFill(Graphics2D g) {
         g.fill(bounds);
     }
 
-    @Override
     protected void drawStroke(Graphics2D g) {
         g.draw(bounds);
     }
 
     // SHAPE AND BOUNDS
-    @Override
     public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
         bounds.x = Math.min(anchor.x, lead.x);
         bounds.y = Math.min(anchor.y, lead.y);
@@ -299,7 +296,6 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
         bounds.height = Math.max(1, Math.abs(lead.y - anchor.y));
     }
 
-    @Override
     public void transform(AffineTransform tx) {
         Point2D.Double anchor = getStartPoint();
         Point2D.Double lead = getEndPoint();
@@ -308,17 +304,14 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
                 (Point2D.Double) tx.transform(lead, lead));
     }
 
-    @Override
     public boolean figureContains(Point2D.Double p) {
         return bounds.contains(p);
     }
 
-    @Override
     public Rectangle2D.Double getBounds() {
         return (Rectangle2D.Double) bounds.getBounds2D();
     }
 
-    @Override
     public void restoreTransformTo(Object geometry) {
         Rectangle2D.Double r = (Rectangle2D.Double) geometry;
         bounds.x = r.x;
@@ -327,7 +320,6 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
         bounds.height = r.height;
     }
 
-    @Override
     public Object getTransformRestoreData() {
         return bounds.clone();
     }
@@ -336,7 +328,6 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
     /**
      * Gets the text shown by the text figure.
      */
-    @Override
     public String getText() {
         return (String) get(TEXT);
     }
@@ -344,19 +335,16 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
     /**
      * Returns the insets used to draw text.
      */
-    @Override
     public Insets2D.Double getInsets() {
         double sw = Math.ceil(get(STROKE_WIDTH) / 2);
         Insets2D.Double insets = new Insets2D.Double(4, 4, 4, 4);
         return new Insets2D.Double(insets.top + sw, insets.left + sw, insets.bottom + sw, insets.right + sw);
     }
 
-    @Override
     public double getBaseline() {
         return getFont().getLineMetrics(getText(), getFontRenderContext()).getAscent() + getInsets().top;
     }
 
-    @Override
     public int getTabSize() {
         return 8;
     }
@@ -364,43 +352,35 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
     /**
      * Sets the text shown by the text figure.
      */
-    @Override
     public void setText(String newText) {
         set(TEXT, newText);
     }
 
-    @Override
     public int getTextColumns() {
         return (getText() == null) ? 4 : Math.max(getText().length(), 4);
     }
 
-    @Override
     public Font getFont() {
         return AttributeKeys.getFont(this);
     }
 
-    @Override
     public Color getTextColor() {
         return get(TEXT_COLOR);
     }
 
-    @Override
     public Color getFillColor() {
         return get(FILL_COLOR);
     }
 
-    @Override
     public void setFontSize(float size) {
         set(FONT_SIZE, new Double(size));
     }
 
-    @Override
     public float getFontSize() {
         return get(FONT_SIZE).floatValue();
     }
 
     // EDITING
-    @Override
     public boolean isEditable() {
         return editable;
     }
@@ -413,7 +393,6 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
      * Returns a specialized tool for the given coordinate.
      * <p>Returns null, if no specialized tool is available.
      */
-    @Override
     public Tool getTool(Point2D.Double p) {
         if (isEditable() && contains(p)) {
             TextAreaEditingTool tool = new TextAreaEditingTool(this);
@@ -422,7 +401,6 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
         return null;
     }
 
-    @Override
     public TextHolderFigure getLabelFor() {
         return this;
     }
@@ -430,7 +408,6 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
     // CONNECTING
     // COMPOSITE FIGURES
     // CLONING
-    @Override
     public TextAreaFigure clone() {
         TextAreaFigure that = (TextAreaFigure) super.clone();
         that.bounds = (Rectangle2D.Double) this.bounds.clone();
@@ -438,7 +415,6 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
     }
 
     // EVENT HANDLING
-    @Override
     public Collection<Handle> createHandles(int detailLevel) {
         LinkedList<Handle> handles = (LinkedList<Handle>) super.createHandles(detailLevel);
         if (detailLevel == 0) {
@@ -462,25 +438,21 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
         out.addAttribute("h", bounds.height);
     }
 
-    @Override
     public void read(DOMInput in) throws IOException {
         readBounds(in);
         readAttributes(in);
     }
 
-    @Override
     public void write(DOMOutput out) throws IOException {
         writeBounds(out);
         writeAttributes(out);
     }
 
-    @Override
     public void invalidate() {
         super.invalidate();
         isTextOverflow = null;
     }
 
-    @Override
     public boolean isTextOverflow() {
         if (isTextOverflow == null) {
             Insets2D.Double insets = getInsets();

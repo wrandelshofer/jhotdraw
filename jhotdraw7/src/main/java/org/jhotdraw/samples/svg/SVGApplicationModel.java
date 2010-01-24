@@ -44,10 +44,6 @@ import org.jhotdraw.gui.URIChooser;
  * @version $Id$
  */
 public class SVGApplicationModel extends DefaultApplicationModel {
-    /** Client property on the URIFileChooser. */
-public final static String INPUT_FORMAT_MAP_CLIENT_PROPERTY="InputFormatMap";
-    /** Client property on the URIFileChooser. */
-public final static String OUTPUT_FORMAT_MAP_CLIENT_PROPERTY="OutputFormatMap";
 
     private final static double[] scaleFactors = {5, 4, 3, 2, 1.5, 1.25, 1, 0.75, 0.5, 0.25, 0.10};
     private GridConstrainer gridConstrainer;
@@ -186,7 +182,7 @@ public final static String OUTPUT_FORMAT_MAP_CLIENT_PROPERTY="OutputFormatMap";
         final JFileURIChooser c = new JFileURIChooser();
         final HashMap<FileFilter, InputFormat> fileFilterInputFormatMap =
                 new HashMap<FileFilter, InputFormat>();
-        c.putClientProperty(INPUT_FORMAT_MAP_CLIENT_PROPERTY, fileFilterInputFormatMap);
+        c.putClientProperty("ffInputFormatMap", fileFilterInputFormatMap);
         javax.swing.filechooser.FileFilter firstFF = null;
 
         if (v == null) {
@@ -230,7 +226,7 @@ public final static String OUTPUT_FORMAT_MAP_CLIENT_PROPERTY="OutputFormatMap";
                 new HashMap<FileFilter, OutputFormat>();
 
 
-        c.putClientProperty(OUTPUT_FORMAT_MAP_CLIENT_PROPERTY, fileFilterOutputFormatMap);
+        c.putClientProperty("ffOutputFormatMap", fileFilterOutputFormatMap);
 
         if (v == null) {
             v = new SVGView();

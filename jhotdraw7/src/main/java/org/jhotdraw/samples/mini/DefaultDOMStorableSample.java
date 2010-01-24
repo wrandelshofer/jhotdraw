@@ -50,12 +50,10 @@ public class DefaultDOMStorableSample {
             this.name = name;
         }
 
-        @Override
         public void write(DOMOutput out) throws IOException {
             out.addAttribute("name", name);
         }
 
-        @Override
         public void read(DOMInput in) throws IOException {
             name = in.getAttribute("name", null);
         }

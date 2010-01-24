@@ -35,7 +35,6 @@ public class JavaNumberFormatter extends DefaultFormatter {
     private Comparable min;
     private Comparable max;
     private boolean appendsDotZero = true;
-    private String unit;
 
     /**
      * Creates a <code>NumberFormatter</code> with the a default
@@ -50,13 +49,13 @@ public class JavaNumberFormatter extends DefaultFormatter {
      * Creates a NumberFormatter with the specified Format instance.
      */
     public JavaNumberFormatter(double min, double max, double scaleFactor) {
-        this(min, max, scaleFactor, false, true, null);
+        this(min, max, scaleFactor, false, true);
     }
 
     /**
      * Creates a NumberFormatter with the specified Format instance.
      */
-    public JavaNumberFormatter(double min, double max, double scaleFactor, boolean allowsNullValue, boolean appendsDotZero, String unit) {
+    public JavaNumberFormatter(double min, double max, double scaleFactor, boolean allowsNullValue, boolean appendsDotZero) {
         super();
         setMinimum(min);
         setMaximum(max);
@@ -64,7 +63,6 @@ public class JavaNumberFormatter extends DefaultFormatter {
         setAllowsNullValue(allowsNullValue);
         setAppendsDotZero(appendsDotZero);
         setOverwriteMode(false);
-        setUnit(unit);
     }
 
     /**
@@ -180,7 +178,6 @@ public class JavaNumberFormatter extends DefaultFormatter {
             return "";
         }
 
-        StringBuilder buf = new StringBuilder();
         if (value instanceof Double) {
             double v = ((Double) value).doubleValue();
             v *= scaleFactor;
@@ -188,7 +185,7 @@ public class JavaNumberFormatter extends DefaultFormatter {
             if (!appendsDotZero && str.endsWith(".0")) {
                 str = str.substring(0, str.length() - 2);
             }
-            buf.append(str);
+            return str;
         } else if (value instanceof Float) {
             float v = ((Float) value).floatValue();
             v = (float) (v * scaleFactor);
@@ -196,30 +193,25 @@ public class JavaNumberFormatter extends DefaultFormatter {
             if (appendsDotZero && str.endsWith(".0")) {
                 str = str.substring(0, str.length() - 2);
             }
-            buf.append(str);
+            return str;
         } else if (value instanceof Long) {
             long v = ((Long) value).longValue();
             v = (long) (v * scaleFactor);
-            buf.append(Long.toString(v));
+            return Long.toString(v);
         } else if (value instanceof Integer) {
             int v = ((Integer) value).intValue();
             v = (int) (v * scaleFactor);
-            buf.append(Integer.toString(v));
+            return Integer.toString(v);
         } else if (value instanceof Byte) {
             byte v = ((Byte) value).byteValue();
             v = (byte) (v * scaleFactor);
-            buf.append(Byte.toString(v));
+            return Byte.toString(v);
         } else if (value instanceof Short) {
             short v = ((Short) value).shortValue();
             v = (short) (v * scaleFactor);
-            buf.append(Short.toString(v));
+            return Short.toString(v);
         }
-        if (buf.length() != 0) {
-            if (unit != null) {
-                buf.append(unit);
-            }
-            return buf.toString();
-        }
+
         throw new ParseException("Value is of unsupported class " + value, 0);
     }
 
@@ -236,15 +228,6 @@ public class JavaNumberFormatter extends DefaultFormatter {
         if ((text == null || text.length() == 0) && getAllowsNullValue()) {
             return null;
         }
-
-        // Remove unit from text
-        if (unit != null) {
-            int p = text.lastIndexOf(unit);
-            if (p != -1) {
-                text = text.substring(0, p);
-            }
-        }
-
         Class valueClass = getValueClass();
         Object value;
         if (valueClass != null) {
@@ -329,23 +312,13 @@ public class JavaNumberFormatter extends DefaultFormatter {
         return true;
     }
 
-    /** If non-null the unit string is appended to the value. */
-    public void setUnit(String value) {
-        unit = value;
-    }
-
-    /** If non-null the unit string is appended to the value. */
-    public String getUnit() {
-        return unit;
-    }
-
     /**
      * Convenience method for creating a formatter factory with a
      * {@code ScalableNumberFormatter} and a Java-style DecimalFormat.
      * Doesn't allow null values and doesn't append ".0" to double and float values.
      */
     public static AbstractFormatterFactory createFormatterFactory(double min, double max, double scaleFactor) {
-        return createFormatterFactory(min, max, scaleFactor, false, false, null);
+        return createFormatterFactory(min, max, scaleFactor, false, false);
     }
 
     /**
@@ -353,14 +326,6 @@ public class JavaNumberFormatter extends DefaultFormatter {
      * {@code ScalableNumberFormatter} and a Java-style DecimalFormat.
      */
     public static AbstractFormatterFactory createFormatterFactory(double min, double max, double scaleFactor, boolean allowsNullValue, boolean appendsDotZero) {
-        return new DefaultFormatterFactory(new JavaNumberFormatter(min, max, scaleFactor, allowsNullValue, appendsDotZero, null));
-    }
-
-    /**
-     * Convenience method for creating a formatter factory with a
-     * {@code ScalableNumberFormatter} and a Java-style DecimalFormat.
-     */
-    public static AbstractFormatterFactory createFormatterFactory(double min, double max, double scaleFactor, boolean allowsNullValue, boolean appendsDotZero, String unit) {
-        return new DefaultFormatterFactory(new JavaNumberFormatter(min, max, scaleFactor, allowsNullValue, appendsDotZero, unit));
+        return new DefaultFormatterFactory(new JavaNumberFormatter(min, max, scaleFactor, allowsNullValue, appendsDotZero));
     }
 }

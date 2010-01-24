@@ -197,7 +197,6 @@ public class ImageFigure extends AbstractAttributedDecoratedFigure
         return that;
     }
 
-    @Override
     public void read(DOMInput in) throws IOException {
         super.read(in);
         if (in.getElementCount("imageData") > 0) {
@@ -210,7 +209,6 @@ public class ImageFigure extends AbstractAttributedDecoratedFigure
         }
     }
 
-    @Override
     public void write(DOMOutput out) throws IOException {
         super.write(out);
         if (getImageData() != null) {

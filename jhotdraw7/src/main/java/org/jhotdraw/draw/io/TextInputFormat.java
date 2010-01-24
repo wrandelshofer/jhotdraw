@@ -14,15 +14,15 @@
 
 package org.jhotdraw.draw.io;
 
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.*;
 import java.awt.datatransfer.*;
 import java.awt.geom.*;
 import java.io.*;
-import java.net.URI;
 import java.util.*;
 import javax.swing.*;
 import org.jhotdraw.geom.Dimension2DDouble;
+import org.jhotdraw.io.*;
 
 /**
  * An input format for importing text into a drawing.
@@ -97,7 +97,6 @@ public class TextInputFormat implements InputFormat {
         this.isMultiline = isMultiline;
     }
     
-    @Override
     public javax.swing.filechooser.FileFilter getFileFilter() {
         return new ExtensionFileFilter(description, fileExtension);
     }
@@ -106,21 +105,10 @@ public class TextInputFormat implements InputFormat {
         return fileExtension;
     }
     
-    @Override
     public JComponent getInputFormatAccessory() {
         return null;
     }
     
-    @Override
-    public void read(URI uri, Drawing drawing) throws IOException {
-        read(new File(uri), drawing);
-    }
-
-    @Override
-    public void read(URI uri, Drawing drawing, boolean replace) throws IOException {
-        read(new File(uri), drawing, replace);
-    }
-
     public void read(File file, Drawing drawing) throws IOException {
         read(file, drawing, true);
     }
@@ -129,7 +117,6 @@ public class TextInputFormat implements InputFormat {
         read(new FileInputStream(file), drawing, replace);
     }
     
-    @Override
     public void read(InputStream in, Drawing drawing, boolean replace) throws IOException {
         if (replace) {
             drawing.removeAllChildren();
@@ -179,12 +166,10 @@ public class TextInputFormat implements InputFormat {
         return list;
     }
     
-    @Override
     public boolean isDataFlavorSupported(DataFlavor flavor) {
         return flavor.equals(DataFlavor.stringFlavor);
     }
     
-    @Override
     public void read(Transferable t, Drawing drawing, boolean replace) throws UnsupportedFlavorException, IOException {
         String text = (String) t.getTransferData(DataFlavor.stringFlavor);
         

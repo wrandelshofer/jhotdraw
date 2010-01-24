@@ -13,9 +13,9 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import org.jhotdraw.draw.event.SelectionComponentRepainter;
-import org.jhotdraw.draw.event.FigureAttributeEditorHandler;
-import org.jhotdraw.draw.event.SelectionComponentDisplayer;
+import org.jhotdraw.gui.event.SelectionComponentRepainter;
+import org.jhotdraw.gui.event.FigureAttributeEditorHandler;
+import org.jhotdraw.gui.event.SelectionComponentDisplayer;
 import org.jhotdraw.text.JavaNumberFormatter;
 import javax.swing.border.*;
 import org.jhotdraw.gui.*;
@@ -118,12 +118,12 @@ public class FigureToolBar extends AbstractToolBar {
 
                 // Opacity field with slider
                 JAttributeTextField<Double> opacityField = new JAttributeTextField<Double>();
-                opacityField.setColumns(4);
+                opacityField.setColumns(3);
                 opacityField.setToolTipText(labels.getString("attribute.figureOpacity.toolTipText"));
                 opacityField.setHorizontalAlignment(JAttributeTextField.RIGHT);
                 opacityField.putClientProperty("Palette.Component.segmentPosition", "first");
                 opacityField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(opacityField));
-                opacityField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0d, 1d, 100d,false,false,"%"));
+                opacityField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0d, 1d, 100d));
                 opacityField.setHorizontalAlignment(JTextField.LEADING);
                 disposables.add(new FigureAttributeEditorHandler<Double>(OPACITY, opacityField, editor));
                 gbc = new GridBagConstraints();

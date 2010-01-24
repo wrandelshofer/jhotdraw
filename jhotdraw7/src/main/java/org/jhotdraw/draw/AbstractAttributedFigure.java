@@ -22,7 +22,6 @@ import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.geom.*;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
-import org.jhotdraw.xml.DOMStorable;
 
 /**
  * This abstract class can be extended to implement a {@link Figure}
@@ -31,7 +30,7 @@ import org.jhotdraw.xml.DOMStorable;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractAttributedFigure extends AbstractFigure implements DOMStorable {
+public abstract class AbstractAttributedFigure extends AbstractFigure {
     /**
      * Holds the attributes of the figure.
      */
@@ -67,16 +66,13 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
             set(entry.getKey(), entry.getValue());
         }
     }
-    @Override
     public Map<AttributeKey, Object> getAttributes() {
         return new HashMap<AttributeKey,Object>(attributes);
     }
-    @Override
     public Object getAttributesRestoreData() {
         return getAttributes();
     }
     @SuppressWarnings("unchecked")
-    @Override
     public void restoreAttributesTo(Object restoreData) {
         attributes.clear();
         setAttributes((HashMap<AttributeKey,Object>) restoreData);
@@ -86,7 +82,6 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
      * AttributeKey name and semantics are defined by the class implementing
      * the figure interface.
      */
-    @Override
     public <T> void set(AttributeKey<T> key, T newValue) {
         if (forbiddenAttributes == null
                 || ! forbiddenAttributes.contains(key)) {
@@ -97,13 +92,11 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
     /**
      * Gets an attribute from the figure.
      */
-    @Override
     public <T> T get(AttributeKey<T> key) {
         return key.get(attributes);
     }
     
     
-    @Override
     public void draw(Graphics2D g) {
         if (get(FILL_COLOR) != null) {
             g.setColor(get(FILL_COLOR));
@@ -139,7 +132,6 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
     }
     
     
-    @Override
     public Rectangle2D.Double getDrawingArea() {
         double strokeTotalWidth = AttributeKeys.getStrokeTotalWidth(this);
         double width = strokeTotalWidth / 2d;
@@ -177,7 +169,6 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
     protected void drawText(java.awt.Graphics2D g) {
     }
     
-    @Override
     public AbstractAttributedFigure clone() {
         AbstractAttributedFigure that = (AbstractAttributedFigure) super.clone();
         that.attributes = new HashMap<AttributeKey,Object>(this.attributes);
@@ -253,7 +244,6 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
     }
     
     
-    @Override
     public void write(DOMOutput out) throws IOException {
         Rectangle2D.Double r = getBounds();
         out.addAttribute("x", r.x);
@@ -263,7 +253,6 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
         writeAttributes(out);
     }
     
-    @Override
     public void read(DOMInput in) throws IOException {
         double x = in.getAttribute("x", 0d);
         double y = in.getAttribute("y", 0d);

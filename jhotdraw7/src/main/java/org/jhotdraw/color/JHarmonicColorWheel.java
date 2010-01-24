@@ -14,7 +14,6 @@
 package org.jhotdraw.color;
 
 import java.awt.*;
-import java.awt.color.ColorSpace;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.beans.*;
@@ -38,28 +37,22 @@ public class JHarmonicColorWheel extends JColorWheel {
 
     private class MouseHandler implements MouseListener, MouseMotionListener {
 
-        @Override
         public void mouseClicked(MouseEvent e) {
         }
 
-        @Override
         public void mouseDragged(MouseEvent e) {
             update(e);
         }
 
-        @Override
         public void mouseEntered(MouseEvent e) {
         }
 
-        @Override
         public void mouseExited(MouseEvent e) {
         }
 
-        @Override
         public void mouseMoved(MouseEvent e) {
         }
 
-        @Override
         public void mousePressed(MouseEvent e) {
             int x = e.getX();
             int y = e.getY();
@@ -67,7 +60,7 @@ public class JHarmonicColorWheel extends JColorWheel {
             if (harmonicModel != null && harmonicModel.size() > 0) {
                 int closestError = Integer.MAX_VALUE;
                 for (int i = 0, n = harmonicModel.size(); i < n; i++) {
-                    Color c = harmonicModel.get(i);
+                    CompositeColor c = harmonicModel.get(i);
                     if (c != null) {
                         Point p = getColorLocation(harmonicModel.get(i));
                         int error = (p.x - x) * (p.x - x) +
@@ -94,9 +87,9 @@ public class JHarmonicColorWheel extends JColorWheel {
         private void update(MouseEvent e) {
             if (selectedIndex != -1) {
                 float[] hsb = getColorAt(e.getX(), e.getY());
-                hsb[1] = harmonicModel.get(selectedIndex).getColorComponents(null)[1];
+                hsb[1] = harmonicModel.get(selectedIndex).getComponent(1);
                 //if (hsb != null) {
-                harmonicModel.set(selectedIndex, new Color(harmonicModel.getColorSpace(), hsb, 1f));
+                harmonicModel.set(selectedIndex, new CompositeColor(harmonicModel.getColorSystem(), hsb));
                 //}
                 repaint();
             }
@@ -108,9 +101,9 @@ public class JHarmonicColorWheel extends JColorWheel {
 
         public void propertyChange(PropertyChangeEvent evt) {
             String name = evt.getPropertyName();
-            if (name == HarmonicColorModel.COLOR_SPACE_PROPERTY) {
-                model.setColorSpace(harmonicModel.getColorSpace());
-                model.setComponent(1, 1f);
+            if (name == HarmonicColorModel.COLOR_SYSTEM_PROPERTY) {
+                model.setColorSystem(harmonicModel.getColorSystem());
+                model.setComponentValue(1, 1f);
                 colorWheelProducer = createWheelProducer(getWidth(), getHeight());
                 colorWheelImage = null;
             }
@@ -133,12 +126,12 @@ public class JHarmonicColorWheel extends JColorWheel {
 
     /** Creates new form. */
     public JHarmonicColorWheel() {
-        super(HSLPsychologicColorSpace.getInstance());
+        super(new HSLRYBColorSystem());
         initComponents();
 
         setRadialComponentIndex(2);
         setVerticalComponentIndex(1);
-        getModel().setComponent(1, 1f);
+        getModel().setComponentValue(1, 1f);
         setWheelInsets(new Insets(5, 5, 5, 5));
 
         modelHandler = new ModelHandler();
@@ -149,10 +142,10 @@ public class JHarmonicColorWheel extends JColorWheel {
 
     }
 
-    public void setColorSpace(ColorSpace newValue) {
-        harmonicModel.setColorSpace(newValue);
-        getModel().setColorSpace(newValue);
-        getModel().setComponent(1, 1f);
+    public void setColorSystem(ColorSystem newValue) {
+        harmonicModel.setColorSystem(newValue);
+        getModel().setColorSystem(newValue);
+        getModel().setComponentValue(1, 1f);
     }
 
     public HarmonicColorModel getHarmonicColorModel() {
@@ -202,6 +195,11 @@ public class JHarmonicColorWheel extends JColorWheel {
             colorWheelProducer = createWheelProducer(getWidth(), getHeight());
         }
     }
+    /*
+    @Override
+    protected ColorWheelImageProducer createWheelProducer(int w, int h) {
+    return new HSLHarmonicColorWheelImageProducer(harmonicModel == null ? new HSLRYBColorSystem() : harmonicModel.getColorSystem(), w, h);
+    }*/
 
     @Override
     public void paintComponent(Graphics gr) {
@@ -231,8 +229,8 @@ public class JHarmonicColorWheel extends JColorWheel {
             for (int i = harmonicModel.size() - 1; i >= 0; i--) {
                 if (harmonicModel.get(i) != null) {
                     Point p = getColorLocation(harmonicModel.get(i));
-                    Color mixerColor = harmonicModel.get(i);
-                    comp = ColorSpaceUtil.fromColor(harmonicModel.getColorSpace(),mixerColor);
+                    CompositeColor mixerColor = harmonicModel.get(i);
+                    comp = mixerColor.getComponents();
                     if (i == selectedIndex) {
                         g.setColor(Color.white);
                         oval.x = p.x - baseRadius;
@@ -241,7 +239,7 @@ public class JHarmonicColorWheel extends JColorWheel {
                         oval.height = baseRadius * 2f;
                         g.fill(oval);
                     }
-                    g.setColor(mixerColor);
+                    g.setColor(mixerColor.getColor());
                     oval.x = p.x - handleRadius;
                     oval.y = p.y - handleRadius;
                     oval.width = handleRadius * 2f;
@@ -270,10 +268,11 @@ public class JHarmonicColorWheel extends JColorWheel {
             Ellipse2D.Float oval = new Ellipse2D.Float(0, 0, 0, 0);
 
             int baseIndex = harmonicModel.getBase();
-            Color bc = harmonicModel.get(baseIndex);
+            CompositeColor bc = harmonicModel.get(baseIndex);
             g.setColor(Color.DARK_GRAY);
+            
             for (int i = 0; i < 12; i++) {
-                float angle = bc.getColorComponents(null)[0] + i / 12f;
+                float angle = bc.getComponent(0) + i / 12f;
 
                 float radial1 = radius;
                 /*g.draw(new Line2D.Double(
@@ -292,11 +291,11 @@ public class JHarmonicColorWheel extends JColorWheel {
 
             for (int i = 0, n = harmonicModel.size(); i < n; i++) {
                 if (i != baseIndex) {
-                    Color dc = harmonicModel.get(i);
+                    CompositeColor dc = harmonicModel.get(i);
                     if (dc != null) {
-                        float angle = dc.getColorComponents(null)[0];
+                        float angle = dc.getComponent(0);
 
-                        float diff = Math.abs(angle - bc.getColorComponents(null)[0]) * 12;
+                        float diff = Math.abs(angle - bc.getComponent(0)) * 12;
                         if (Math.abs(diff - Math.round(diff)) < 0.02f) {
                         g.draw(new Line2D.Double(
                                 center.x + (radius + 6) * Math.cos(angle * Math.PI * 2d),
@@ -328,8 +327,10 @@ public class JHarmonicColorWheel extends JColorWheel {
         return selectedIndex;
     }
 
-    protected Point getColorLocation(Color c) {
-        Point p = colorWheelProducer.getColorLocation(c);
+    protected Point getColorLocation(CompositeColor c) {
+        Point p = colorWheelProducer.getColorLocation(c,
+                getWidth() - wheelInsets.left - wheelInsets.right,
+                getHeight() - wheelInsets.top - wheelInsets.bottom);
         p.x += wheelInsets.left;
         p.y += wheelInsets.top;
         return p;
