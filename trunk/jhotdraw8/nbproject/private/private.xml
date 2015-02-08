@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/DocumentOrientedApplication.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/edit/CopyAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/edit/SelectAllAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/AbstractApplicationAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/file/OpenFileAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/edit/DeleteAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/edit/PasteAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/gui/URIChooser.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/AbstractFocusOwnerAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/edit/AbstractSelectionAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/AbstractViewAction.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/app/ExitAction.java</file>
+        </group>
+    </open-files>
+</project-private>

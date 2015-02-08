@@ -1,0 +1,144 @@
+/*
+ * @(#)OpenFileAction.java
+ *
+ * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
+ * You may not use, copy or modify this file, except in compliance with the 
+ * accompanying license terms.
+ */
+package org.jhotdraw.app.action.file;
+
+import org.jhotdraw.util.*;
+import org.jhotdraw.gui.*;
+import java.net.URI;
+import java.util.prefs.Preferences;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.View;
+import org.jhotdraw.app.action.AbstractApplicationAction;
+import org.jhotdraw.collection.Key;
+import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.net.URIUtil;
+//import org.jhotdraw.util.prefs.PreferencesUtil;
+
+/**
+ * Presents an {@code URIChooser} and loads the selected URI into an
+ * empty view. If no empty view is available, a new view is created.
+ *
+ * @author  Werner Randelshofer
+ * @version $Id: OpenFileAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ */
+public class OpenFileAction extends AbstractApplicationAction {
+
+    private static final long serialVersionUID = 1L;
+    public final static Key<URIChooser> OPEN_CHOOSER_KEY = new Key<>("openChooser", URIChooser.class);
+    public static final String ID = "file.open";
+
+    /** Creates a new instance.
+     * @param app the application */
+    public OpenFileAction(Application app) {
+        super(app);
+        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        labels.configureAction(this, ID);
+    }
+
+    protected URIChooser getChooser(View view) {
+        URIChooser c = app.getValue(OPEN_CHOOSER_KEY);
+        if (c == null) {
+            c = getApplication().getModel().createOpenChooser();
+            app.putValue(OPEN_CHOOSER_KEY, c);
+        }
+        return c;
+    }
+
+    @Override
+    public void handle(ActionEvent evt) {
+        if (isDisabled()) {
+            return;
+        }
+
+        final Application app = getApplication();
+        {
+            app.addDisabler(this);
+            // Search for an empty view
+            View emptyView = app.getActiveView();
+            if (emptyView == null
+                    || !emptyView.isEmpty()
+                    || emptyView.isDisabled()) {
+                emptyView = null;
+            }
+
+            final View view;
+            boolean disposeView;
+            if (emptyView == null) {
+                view = app.getModel().createView();
+                disposeView = true;
+            } else {
+                view = emptyView;
+                disposeView = false;
+            }
+            URIChooser chooser = getChooser(view);
+            URI uri = chooser.showDialog(app.getNode());
+            if (uri!=null) {
+                app.add(view);
+
+
+                // Prevent same URI from being opened more than once
+                if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
+                    for (View v : getApplication().views()) {
+                        if (v.getURI() != null && v.getURI().equals(uri)) {
+                            if (disposeView) {
+                                app.remove(view);
+                            }
+                            app.removeDisabler(this);
+                            v.getNode().getScene().getWindow().requestFocus();
+                            v.getNode().requestFocus();
+                            return;
+                        }
+                    }
+                }
+
+                openViewFromURI(view, uri, chooser);
+            } else {
+                if (disposeView) {
+                    app.remove(view);
+                }
+                            app.removeDisabler(this);
+            }
+        }
+    }
+
+    protected void openViewFromURI(final View v, final URI uri, final URIChooser chooser) {
+        final Application app = getApplication();
+                            app.removeDisabler(this);
+        v.addDisabler(this);
+
+        // Open the file
+        v.read(uri,false, event -> {
+            switch (event.getState()) {
+                case CANCELLED:
+                    v.removeDisabler(this);
+                    break;
+                case FAILED:
+                    Throwable value = event.getException();
+                    String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
+                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+                    Alert alert = new Alert(Alert.AlertType.ERROR,
+                            
+                             ((message == null) ? "" : message));
+                    alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
+                    alert.showAndWait();
+                    v.removeDisabler(this);
+                    break;
+                case SUCCEEDED:
+                    v.setURI(uri);
+                    v.clearModified();
+                    v.setTitle(URIUtil.getName(uri));
+                     v.removeDisabler(this);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+}
