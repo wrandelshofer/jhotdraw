@@ -1,0 +1,9 @@
+<#if licenseFirst??>
+${licenseFirst} @(#)${name}.java
+</#if>
+${licensePrefix}Copyright (c) ${date?date?string("yyyy")} by the authors and contributors of JHotDraw.
+${licensePrefix}You may not use, copy or modify this file, except in compliance with the
+${licensePrefix}accompanying license terms.
+<#if licenseLast??>
+${licenseLast}
+</#if>

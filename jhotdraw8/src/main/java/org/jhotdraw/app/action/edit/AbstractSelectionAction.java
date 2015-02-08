@@ -1,0 +1,72 @@
+/*
+ * @(#)AbstractSelectionAction.java
+ * 
+ * Copyright (c) 2010 The authors and contributors of JHotDraw.
+ * 
+ * You may not use, copy or modify this file, except in compliance with the 
+ * accompanying license terms.
+ */
+package org.jhotdraw.app.action.edit;
+
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javax.annotation.Nullable;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.View;
+import org.jhotdraw.app.action.AbstractAction;
+import org.jhotdraw.app.action.AbstractApplicationAction;
+
+/**
+ * {@code AbstractSelectionAction} acts on the selection of a target component.
+ *
+ * @author Werner Randelshofer
+ * @version $Id: AbstractSelectionAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ */
+public abstract class AbstractSelectionAction extends AbstractAction {
+
+    private static final long serialVersionUID = 1L;
+    @Nullable
+    protected Application app;
+    @Nullable
+    private Node target;
+    private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
+        disabled.unbind();
+        if (newValue == null) {
+            disabled.set(true);
+        } else {
+            Scene s = newValue.getNode().getScene();
+            if (target==null) {
+            disabled.bind(
+                    s.focusOwnerProperty().isNull().or(app.disabledProperty()).or(newValue.disabledProperty()).or(disablers.emptyProperty().not()));
+            } else {
+            disabled.bind(
+                    s.focusOwnerProperty().isNotEqualTo(target).or(app.disabledProperty()).or(newValue.disabledProperty()).or(disablers.emptyProperty().not()));
+            }
+        }
+    };
+
+    /** Creates a new instance.
+     * @param app the application */
+    public AbstractSelectionAction(Application app) {
+        this(app,null);
+    }
+    /** Creates a new instance.
+     * @param app the application 
+    * @param target the target node
+    */
+    public AbstractSelectionAction(Application app,@Nullable Node target) {
+        this.app = app;
+        this.target=target;
+            
+        
+        app.activeViewProperty().addListener(activeViewListener);
+        activeViewListener.changed(null, null, app.getActiveView());
+        
+    }
+
+    public Application getApplication() {
+        return app;
+    }
+}
