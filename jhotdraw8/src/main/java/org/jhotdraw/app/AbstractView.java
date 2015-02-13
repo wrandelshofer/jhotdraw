@@ -7,24 +7,17 @@ package org.jhotdraw.app;
 
 import org.jhotdraw.collection.HierarchicalMap;
 import java.net.URI;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.scene.Node;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.collection.Key;
 
@@ -71,6 +64,10 @@ protected final StringProperty title = new SimpleStringProperty();
     @Override
     public MapProperty<Key<?>, ObjectProperty<?>> valuesProperty() {
         return values;
+    }
+
+    @Override
+    public void dispose() {
     }
 
 }

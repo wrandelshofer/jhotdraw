@@ -268,6 +268,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         view.setApplication(null);
         stage.focusedProperty().removeListener(view.getValue(FOCUS_LISTENER_KEY));
         stage.close();
+        view.dispose();
         
         // Auto close feature
         if (views.isEmpty() && !isSystemMenuSupported) {
