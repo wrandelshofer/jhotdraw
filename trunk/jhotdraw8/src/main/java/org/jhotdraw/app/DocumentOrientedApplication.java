@@ -287,7 +287,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     protected MenuBar createMenuBar(HierarchicalMap<String, Action> actions) {
         FXMLLoader loader = new FXMLLoader();
         try {
-            MenuBar mb = loader.load(getClass().getResourceAsStream("DocumentOrientedMenu.fxml"));
+            MenuBar mb = loader.load(DocumentOrientedApplication.class.getResourceAsStream("DocumentOrientedMenu.fxml"));
 
             LinkedList<Menu> todo = new LinkedList<>(mb.getMenus());
             while (!todo.isEmpty()) {
