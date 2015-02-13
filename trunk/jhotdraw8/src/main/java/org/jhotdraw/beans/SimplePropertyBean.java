@@ -20,10 +20,13 @@ import org.jhotdraw.collection.Key;
  */
 public class SimplePropertyBean implements PropertyBean {
 
-    protected final MapProperty<Key<?>, ObjectProperty<?>> values = new SimpleMapProperty<>(FXCollections.observableHashMap());
+    private MapProperty<Key<?>, ObjectProperty<?>> values;
 
     @Override
     public MapProperty<Key<?>, ObjectProperty<?>> valuesProperty() {
+        if (values==null) {
+            values = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        }
         return values;
     }
 }
