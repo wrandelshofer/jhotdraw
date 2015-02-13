@@ -118,4 +118,7 @@ public interface View extends Disableable, PropertyBean {
     default public boolean isEmpty() {
         return !isModified() && getURI() == null;
     }
+    
+    /** Disposes of the view. */
+    public void dispose();
 }
