@@ -201,6 +201,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             event.consume();
             view.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
+        stage.focusedProperty().addListener((observer,oldValue,newValue) -> {if (newValue) activeView.set(view);});
         stage.titleProperty().bind(BindingUtil.formatted(getLabels().getString("frame.title"),
                 view.titleProperty(), getModel().getName(), view.disambiguationProperty(), view.modifiedProperty()));
         view.titleProperty().addListener(this::onTitleChanged);

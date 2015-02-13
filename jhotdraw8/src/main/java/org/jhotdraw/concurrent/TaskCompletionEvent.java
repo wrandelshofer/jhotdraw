@@ -53,7 +53,7 @@ public class TaskCompletionEvent<V> extends Event {
     private final V value;
 
     /**
-     * Create a new WorkerStateEvent. Specify the worker and the event type.
+     * Create a new TaskCompletionEvent. Specify the worker and the event type.
      *
      * @param worker The Worker which is firing the event. The Worker really
      *               should be an EventTarget, otherwise the EventTarget
@@ -69,6 +69,13 @@ public class TaskCompletionEvent<V> extends Event {
         }
         this.value = value;
         this.exception = exception;
+    }
+
+    /* Create a new TaskCompletionEvent with event type {@code SUCCEEDED}
+     * and all other values set to null.
+     */
+    public TaskCompletionEvent() {
+        this(null,SUCCEEDED,null,null);
     }
     
    /**

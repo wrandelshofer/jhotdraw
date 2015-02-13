@@ -56,7 +56,11 @@ public abstract class AbstractViewAction extends AbstractAction {
     public AbstractViewAction(Application app, @Nullable View view) {
         this.app = app;
         this.view = view;
+        if (view!=null) {
         activeViewListener.changed(null,null,view);
+        } else {
+        app.activeViewProperty().addListener(activeViewListener);
+        }
     }
 
     public Application getApplication() {
