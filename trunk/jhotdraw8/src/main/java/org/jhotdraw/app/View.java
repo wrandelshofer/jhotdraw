@@ -85,8 +85,11 @@ public interface View extends Disableable, PropertyBean {
     }
 
     /** Asynchronously reads data from the specified URI and appends it to the
-     * content of the view. This method does not change the current document in
+     * content of the view. This method should not change the current document in
      * case of a read failure.
+     * <p>
+     * The application typically installs a disabler on the view during
+     * a read operation. The disabler is removed when the callback is invoked.
      *
      * @param uri the URI
      * @param append whether to append to the current document or to replace it.
@@ -94,6 +97,10 @@ public interface View extends Disableable, PropertyBean {
     public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent> callback);
 
     /** Asynchronously writes the content data of view to the specified URI using a Worker.
+     * <p>
+     * The application typically installs a disabler on the view during
+     * a read operation. The disabler is removed when the callback is invoked.
+     *
      * @param uri the URI
      * @param callback Receives events from the worker */
     public void write(URI uri, EventHandler<TaskCompletionEvent> callback);
