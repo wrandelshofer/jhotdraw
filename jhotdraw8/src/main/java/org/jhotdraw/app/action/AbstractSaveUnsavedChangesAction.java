@@ -7,8 +7,8 @@
  */
 package org.jhotdraw.app.action;
 
-import javax.annotation.Nullable;
 import java.net.URI;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -41,33 +41,36 @@ import org.jhotdraw.util.ResourceBundleUtil;
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewAction {
 
-    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new Key<>("saveChooser", URIChooser.class);
+    /**
+     *
+     */
+    public final static Key<Optional<URIChooser>> SAVE_CHOOSER_KEY = new Key<Optional<URIChooser>>(
+            "saveChooser", Optional.class);
 
     private static final long serialVersionUID = 1L;
 
-    @Nullable
-    private Node oldFocusOwner;
+    private Optional<Node> oldFocusOwner = Optional.empty();
 
     /** Creates a new instance.
      * @param app the application 
      * @param view the view */
-    public AbstractSaveUnsavedChangesAction(Application app, @Nullable View view) {
+    public AbstractSaveUnsavedChangesAction(Application app, Optional<View> view) {
         super(app, view);
     }
 
     @Override
     public void handle(ActionEvent evt) {
         Application app = getApplication();
-        View av = getActiveView();
-        if (av == null) {
+        Optional<View> av = getActiveView();
+        if (!av.isPresent()) {
             if (isMayCreateView()) {
-                av = app.getModel().createView();
-                app.add(av);
+                av = Optional.of(app.getModel().createView());
+                app.add(av.get());
             } else {
                 return;
             }
         }
-        final View v = av;
+        final View v = av.get();
         if (!v.isDisabled()) {
             final ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
             /*Window wAncestor = v.getNode().getScene().getWindow();*/
@@ -110,8 +113,8 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                     }
                     if (mustEnable) {
                         v.removeDisabler(this);
-                        if (oldFocusOwner != null) {
-                            oldFocusOwner.requestFocus();
+                        if (oldFocusOwner.isPresent()) {
+                            oldFocusOwner.get().requestFocus();
                         }
                     }
                 });
@@ -122,28 +125,27 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
 
                 doIt(v);
                 v.removeDisabler(this);
-                if (oldFocusOwner != null) {
-                    oldFocusOwner.requestFocus();
+                if (oldFocusOwner.isPresent()) {
+                    oldFocusOwner.get().requestFocus();
                 }
             }
         }
     }
 
-    protected @Nullable
-    Node getFocusOwner(Node node) {
-        @Nullable
-        Scene scene = node.getScene();
-        return scene == null ? null : scene.getFocusOwner();
+    protected Optional<
+    Node> getFocusOwner(Node node) {
+
+        Optional<Scene> scene = Optional.ofNullable(node.getScene());
+        return Optional.ofNullable(scene.isPresent() ? scene.get().getFocusOwner() : null);
     }
 
     protected URIChooser getChooser(View view) {
-        @Nullable
-        URIChooser chsr = view.getValue(SAVE_CHOOSER_KEY);
-        if (chsr == null) {
-            chsr = getApplication().getModel().createSaveChooser();
+        Optional<URIChooser> chsr = view.getValue(SAVE_CHOOSER_KEY);
+        if (!chsr.isPresent()) {
+            chsr = Optional.of(getApplication().getModel().createSaveChooser());
             view.putValue(SAVE_CHOOSER_KEY, chsr);
         }
-        return chsr;
+        return chsr.get();
     }
 
     protected void saveView(final View v) {
@@ -151,17 +153,18 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
 
-            URI uri = null;
-            Outer:while (true) {
+            Optional<URI> uri = Optional.empty();
+            Outer:
+            while (true) {
                 uri = chooser.showDialog(v.getNode());
 
-            // Prevent save to URI that is open in another view!
+                // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
-                if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
+                if (uri.isPresent() && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (View vi : app.views()) {
-                        if (vi != v && v.getURI().equals(uri)) {
+                        if (vi != v && v.getURI().equals(uri.get())) {
                             // FIXME Localize message
-                            Alert alert=new Alert(Alert.AlertType.INFORMATION,"You can not save to a file which is already open.");
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
                             alert.showAndWait();
                             continue Outer;
                         }
@@ -169,38 +172,38 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                 }
                 break;
             }
-            if (uri != null) {
-                saveViewToURI(v, uri, chooser);
+            if (uri.isPresent()) {
+                saveViewToURI(v, uri.get(), chooser);
             }
             v.removeDisabler(this);
-            if (oldFocusOwner != null) {
-                oldFocusOwner.requestFocus();
+            if (oldFocusOwner.isPresent()) {
+                oldFocusOwner.get().requestFocus();
             }
         } else {
             saveViewToURI(v, v.getURI(), null);
         }
     }
 
-    protected void saveViewToURI(final View v, final URI uri, @Nullable final URIChooser chooser) {
+    protected void saveViewToURI(final View v, final URI uri, final URIChooser chooser) {
         v.write(uri, event -> {
             switch (event.getState()) {
                 case CANCELLED:
                     v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
+                    if (oldFocusOwner.isPresent()) {
+                        oldFocusOwner.get().requestFocus();
                     }
                     break;
                 case FAILED:
                     Throwable value = event.getException();
-                    String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
+                    String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
                     ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
                             ((message == null) ? "" : message));
                     alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
                     alert.showAndWait();
                     v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
+                    if (oldFocusOwner.isPresent()) {
+                        oldFocusOwner.get().requestFocus();
                     }
                     break;
                 case SUCCEEDED:

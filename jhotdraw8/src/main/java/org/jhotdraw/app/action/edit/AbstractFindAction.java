@@ -8,7 +8,7 @@
 
 package org.jhotdraw.app.action.edit;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Optional;
 import org.jhotdraw.app.*;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.*;
@@ -27,7 +27,7 @@ public abstract class AbstractFindAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public AbstractFindAction(Application app, @Nullable View view) {
+    public AbstractFindAction(Application app, Optional<View> view) {
         super(app, view);
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);

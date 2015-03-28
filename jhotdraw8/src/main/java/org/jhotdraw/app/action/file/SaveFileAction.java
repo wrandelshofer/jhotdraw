@@ -8,10 +8,10 @@
 package org.jhotdraw.app.action.file;
 
 import java.net.URI;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javax.annotation.Nullable;
 import org.jhotdraw.app.*;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.collection.Key;
@@ -38,8 +38,15 @@ public class SaveFileAction extends AbstractViewAction {
 
     /** Creates a new instance.
      * @param app the application
+     */
+    public SaveFileAction(Application app) {
+        this(app, Optional.empty(), false);
+    }
+
+    /** Creates a new instance.
+     * @param app the application
      * @param view the view */
-    public SaveFileAction(Application app, @Nullable View view) {
+    public SaveFileAction(Application app, Optional<View> view) {
         this(app, view, false);
     }
 
@@ -47,7 +54,7 @@ public class SaveFileAction extends AbstractViewAction {
      * @param app the application 
      * @param view the view
      * @param saveAs whether to force a file dialog */
-    public SaveFileAction(Application app, @Nullable View view, boolean saveAs) {
+    public SaveFileAction(Application app, Optional<View> view, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
@@ -68,30 +75,30 @@ public class SaveFileAction extends AbstractViewAction {
         if (isDisabled()) {
             return;
         }
-        final View v = getActiveView();
-        if (v == null || v.isDisabled()) {
+        final Optional<View> v = getActiveView();
+        if (!v.isPresent() || v.get().isDisabled()) {
             return;
         }
-        oldFocusOwner = v.getNode().getScene().getFocusOwner();
-        v.addDisabler(this);
-        saveView(v);
+        oldFocusOwner = v.get().getNode().getScene().getFocusOwner();
+        v.get().addDisabler(this);
+        saveView(v.get());
     }
 
     protected void saveView(final View v) {
-        if (v.getURI() == null||saveAs) {
+        if (v.getURI() == null || saveAs) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
 
-            URI uri = null;
+            Optional<URI> uri = Optional.empty();
             Outer:
             while (true) {
                 uri = chooser.showDialog(v.getNode());
 
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
-                if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
+                if (uri.isPresent() && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (View vi : app.views()) {
-                        if (vi != v && uri.equals(v.getURI())) {
+                        if (vi != v && uri.get().equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
                             alert.showAndWait();
@@ -101,8 +108,8 @@ public class SaveFileAction extends AbstractViewAction {
                 }
                 break;
             }
-            if (uri != null) {
-                saveViewToURI(v, uri, chooser);
+            if (uri.isPresent()) {
+                saveViewToURI(v, uri.get(), Optional.of(chooser));
             }
             v.removeDisabler(this);
             if (oldFocusOwner != null) {
@@ -113,7 +120,7 @@ public class SaveFileAction extends AbstractViewAction {
         }
     }
 
-    protected void saveViewToURI(final View v, final URI uri, @Nullable final URIChooser chooser) {
+    protected void saveViewToURI(final View v, final URI uri, final Optional<URIChooser> chooser) {
         v.write(uri, event -> {
             switch (event.getState()) {
                 case CANCELLED:

@@ -6,9 +6,6 @@
 
 package org.jhotdraw.collection;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.util.ResourceBundleUtil;
-
 /**
  * StringKey.
  * @author Werner Randelshofer
@@ -20,11 +17,7 @@ public class StringKey extends Key<String> {
         super(key, String.class);
     }
 
-    public StringKey(String key, @Nullable String defaultValue) {
-        super(key,  String.class, defaultValue);
-    }
-
-    public StringKey(String key,@Nullable String defaultValue, boolean isNullable) {
-        super(key,  String.class, defaultValue, isNullable);
+    public StringKey(String key, String defaultValue) {
+        super(key, String.class, defaultValue);
     }
 }

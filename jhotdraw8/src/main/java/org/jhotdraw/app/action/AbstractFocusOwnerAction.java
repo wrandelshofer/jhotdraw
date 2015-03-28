@@ -5,11 +5,11 @@
  */
 package org.jhotdraw.app.action;
 
-import javafx.beans.binding.Bindings;
+import java.util.Optional;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javax.annotation.Nullable;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 
@@ -18,49 +18,45 @@ import org.jhotdraw.app.View;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFocusOwnerAction extends AbstractAction {
+public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
-    @Nullable
-    protected Application app;
-    @Nullable
-    private Node target;
+    private Optional<Node> target = Optional.empty();
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null) {
             disabled.set(true);
         } else {
             Scene s = newValue.getNode().getScene();
-            if (target==null) {
-            disabled.bind(
-                    s.focusOwnerProperty().isNull().or(app.disabledProperty()).or(newValue.disabledProperty()).or(disablers.emptyProperty().not()));
+            BooleanBinding binding = disablers.emptyProperty().not().or(app.disabledProperty());
+            if (target.isPresent()) {
+                binding = binding.or(s.focusOwnerProperty().isNotEqualTo(target));
             } else {
-            disabled.bind(
-                    s.focusOwnerProperty().isNotEqualTo(target).or(app.disabledProperty()).or(newValue.disabledProperty()).or(disablers.emptyProperty().not()));
+               binding = binding.or( s.focusOwnerProperty().isNull());
             }
+            disabled.bind(binding);
         }
     };
 
     /** Creates a new instance.
      * @param app the application */
     public AbstractFocusOwnerAction(Application app) {
-        this(app,null);
+        this(app,Optional.empty());
     }
     /** Creates a new instance.
      * @param app the application 
     * @param target the target node
     */
-    public AbstractFocusOwnerAction(Application app,@Nullable Node target) {
-        this.app = app;
+    public AbstractFocusOwnerAction(Application app,Optional< Node> target) {
+       super(app);
+       if (target == null) {
+           throw new IllegalArgumentException("target is null");
+       }
         this.target=target;
             
         
         app.activeViewProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null, app.getActiveView());
+        activeViewListener.changed(null, null, app.getActiveView().orElse(null));
         
-    }
-
-    public Application getApplication() {
-        return app;
     }
 }

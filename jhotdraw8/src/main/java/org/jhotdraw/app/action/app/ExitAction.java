@@ -7,17 +7,9 @@
  */
 package org.jhotdraw.app.action.app;
 
-import java.io.IOException;
-import javax.annotation.Nullable;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -61,7 +53,6 @@ public class ExitAction extends AbstractApplicationAction {
         if (isDisabled()) {
             return;
         }
-        final Application app = getApplication();
         app.addDisabler(this);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;
@@ -128,20 +119,19 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected URIChooser getChooser(View view) {
-        @Nullable
-        URIChooser chsr = view.getValue(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
-        if (chsr == null) {
-            chsr = getApplication().getModel().createSaveChooser();
+        Optional<URIChooser> chsr = view.getValue(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
+        if (!chsr.isPresent()) {
+            chsr = Optional.of(getApplication().getModel().createSaveChooser());
             view.putValue(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY, chsr);
         }
-        return chsr;
+        return chsr.get();
     }
 
     protected void saveChanges() {
         View v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
-            URI uri = null;
+            Optional<URI> uri = Optional.empty();
 
             Outer:
             while (true) {
@@ -149,9 +139,9 @@ public class ExitAction extends AbstractApplicationAction {
 
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
-                if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
+                if (uri.isPresent() && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (View vi : app.views()) {
-                        if (vi != v && v.getURI().equals(uri)) {
+                        if (vi != v && v.getURI().equals(uri.get())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
                             alert.showAndWait();
@@ -162,7 +152,7 @@ public class ExitAction extends AbstractApplicationAction {
                 break;
             }
 
-            if (uri == null) {
+            if (!uri.isPresent()) {
                 unsavedView.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
@@ -170,7 +160,7 @@ public class ExitAction extends AbstractApplicationAction {
                 getApplication().removeDisabler(this);
             } else {
 
-                saveToFile(uri, chooser);
+                saveToFile(uri.get(), chooser);
 
             }
         } else {
@@ -226,9 +216,9 @@ public class ExitAction extends AbstractApplicationAction {
         final View v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
-            URI uri = chooser.showDialog(unsavedView.getNode());
-            if (uri != null) {
-                saveToFileAndReviewNext(uri, chooser);
+            Optional<URI> uri = chooser.showDialog(unsavedView.getNode());
+            if (uri.isPresent()) {
+                saveToFileAndReviewNext(uri.get(), chooser);
 
             } else {
                 v.removeDisabler(this);
@@ -264,7 +254,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected void saveToFile(final URI uri, @Nullable final URIChooser chooser) {
+    protected void saveToFile(final URI uri, final URIChooser chooser) {
         final View v = unsavedView;
         v.write(uri, event -> {
             switch (event.getState()) {
@@ -298,7 +288,7 @@ public class ExitAction extends AbstractApplicationAction {
         });
     }
 
-    protected void saveToFileAndReviewNext(final URI uri, @Nullable final URIChooser chooser) {
+    protected void saveToFileAndReviewNext(final URI uri, final URIChooser chooser) {
         final View v = unsavedView;
         v.write(uri, event -> {
             switch (event.getState()) {

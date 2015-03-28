@@ -7,11 +7,9 @@ package org.jhotdraw.gui;
 
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import javax.annotation.Nullable;
 
 /**
  * FileURIChooser.
@@ -50,8 +48,8 @@ public class FileURIChooser implements URIChooser {
     }
 
     @Override
-    public @Nullable
-    URI showDialog(Window parent) {
+    public Optional<
+    URI> showDialog(Window parent) {
         File f = null;
         switch (mode) {
             case OPEN:
@@ -61,6 +59,6 @@ public class FileURIChooser implements URIChooser {
                 f = chooser.showSaveDialog(parent);
                 break;
         }
-        return f==null?null:f.toURI();
+        return f == null ? Optional.empty() : Optional.of(f.toURI());
     }
 }

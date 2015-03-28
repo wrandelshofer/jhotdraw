@@ -6,18 +6,14 @@
 package org.jhotdraw.app;
 
 import java.net.URI;
+import java.util.Optional;
 import org.jhotdraw.collection.HierarchicalMap;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SetProperty;
-import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.ObservableSet;
 import javafx.scene.Node;
-import javafx.stage.Window;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.beans.PropertyBean;
-import org.jhotdraw.gui.URIChooser;
 
 /**
  * Application.
@@ -55,8 +51,8 @@ public interface Application extends Disableable, PropertyBean {
     public ReadOnlyObjectProperty<View> activeViewProperty();
 
     // Convenience method
-    default public View getActiveView() {
-        return activeViewProperty().get();
+    default public Optional<View> getActiveView() {
+        return Optional.ofNullable(activeViewProperty().get());
     }
 
     /** Returns the action map of the application.

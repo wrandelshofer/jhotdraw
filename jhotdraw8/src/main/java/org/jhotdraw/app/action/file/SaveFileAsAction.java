@@ -8,9 +8,10 @@
 
 package org.jhotdraw.app.action.file;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Optional;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.View;
 
 /**
@@ -28,9 +29,13 @@ public class SaveFileAsAction extends SaveFileAction {
     /** Creates a new instance. 
      * @param app the application
      * @param view the view */
-    public SaveFileAsAction(Application app, @Nullable View view) {
+    public SaveFileAsAction(Application app, Optional<View> view) {
         super(app, view, true);
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
+    }
+
+    public SaveFileAsAction(DocumentOrientedApplication app) {
+        this(app, Optional.empty());
     }
 }

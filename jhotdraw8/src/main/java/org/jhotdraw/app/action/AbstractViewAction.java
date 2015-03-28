@@ -7,11 +7,9 @@
  */
 package org.jhotdraw.app.action;
 
+import java.util.Optional;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.beans.value.WeakChangeListener;
-import javax.annotation.Nullable;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 
@@ -29,14 +27,11 @@ import org.jhotdraw.app.View;
  * @author Werner Randelshofer
  * @version $Id: AbstractViewAction.java 788 2014-03-22 07:56:28Z rawcoder $
  */
-public abstract class AbstractViewAction extends AbstractAction {
+public abstract class AbstractViewAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
 
-    /** Is final, but does not compile with final modifier. */
-    protected  Application app;
-    @Nullable
-    private final View view;
+    private final Optional<View> view;
     /** Set this to true if the action may create a new view if none exists.*/
     private boolean mayCreateView;
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
@@ -53,23 +48,21 @@ public abstract class AbstractViewAction extends AbstractAction {
      * @param view The view. If view is null then the action acts on the active view
      *  of the application. Otherwise it will act on the specified view.
      */
-    public AbstractViewAction(Application app, @Nullable View view) {
-        this.app = app;
+    public AbstractViewAction(Application app, Optional< View> view) {
+        super(app);
+        if (view == null) {
+            throw new IllegalArgumentException("view is null");
+        }
         this.view = view;
-        if (view!=null) {
-        activeViewListener.changed(null,null,view);
+        if (view.isPresent()) {
+            activeViewListener.changed(null, null, view.get());
         } else {
-        app.activeViewProperty().addListener(activeViewListener);
+            app.activeViewProperty().addListener(activeViewListener);
         }
     }
 
-    public Application getApplication() {
-        return app;
-    }
-
-    @Nullable
-    public View getActiveView() {
-        return (view == null) ? app.getActiveView() : view;
+    public Optional<View> getActiveView() {
+        return (view.isPresent()) ? view : app.getActiveView();
     }
 
     /** Set this to true if the action may create a new view if none exists.

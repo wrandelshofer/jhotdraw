@@ -8,11 +8,10 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import javafx.beans.binding.Bindings;
+import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javax.annotation.Nullable;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractAction;
@@ -24,13 +23,10 @@ import org.jhotdraw.app.action.AbstractApplicationAction;
  * @author Werner Randelshofer
  * @version $Id: AbstractSelectionAction.java 788 2014-03-22 07:56:28Z rawcoder $
  */
-public abstract class AbstractSelectionAction extends AbstractAction {
+public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
-    @Nullable
-    protected Application app;
-    @Nullable
-    private Node target;
+    private Optional<Node> target;
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null) {
@@ -50,23 +46,19 @@ public abstract class AbstractSelectionAction extends AbstractAction {
     /** Creates a new instance.
      * @param app the application */
     public AbstractSelectionAction(Application app) {
-        this(app,null);
+        this(app, Optional.empty());
     }
     /** Creates a new instance.
      * @param app the application 
     * @param target the target node
     */
-    public AbstractSelectionAction(Application app,@Nullable Node target) {
-        this.app = app;
+    public AbstractSelectionAction(Application app,Optional< Node> target) {
+        super(app);
         this.target=target;
             
         
         app.activeViewProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null, app.getActiveView());
+        activeViewListener.changed(null, null, app.getActiveView().orElse(null));
         
-    }
-
-    public Application getApplication() {
-        return app;
     }
 }

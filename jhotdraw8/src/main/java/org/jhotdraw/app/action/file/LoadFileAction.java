@@ -7,7 +7,7 @@
  */
 package org.jhotdraw.app.action.file;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Optional;
 import java.net.URI;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -32,7 +32,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public LoadFileAction(Application app, @Nullable View view) {
+    public LoadFileAction(Application app, Optional<View> view) {
         super(app, view);
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);

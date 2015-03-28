@@ -7,7 +7,7 @@
  */
 package org.jhotdraw.app.action.file;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Optional;
 import java.net.URI;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -56,7 +56,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view 
      * @param uri the uri of the recent file
     */
-    public LoadRecentFileAction(Application app, @Nullable View view, URI uri) {
+    public LoadRecentFileAction(Application app, Optional<View> view, URI uri) {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);

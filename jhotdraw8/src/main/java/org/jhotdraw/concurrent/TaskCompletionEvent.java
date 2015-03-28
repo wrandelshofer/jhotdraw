@@ -6,50 +6,48 @@
 
 package org.jhotdraw.concurrent;
 
+import java.util.Optional;
 import javafx.concurrent.Worker;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
-import javax.annotation.Nullable;
 
 /**
  * TaskCompletionEvent.
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <V>
  */
 public class TaskCompletionEvent<V> extends Event {
      /**
      * Common supertype for all result event types.
      */
     public static final EventType<TaskCompletionEvent> ANY =
-            new EventType<TaskCompletionEvent>(Event.ANY, "WORK_RESULT");
+            new EventType<>(Event.ANY, "WORK_RESULT");
 
     /**
      * This event occurs when the state of a Worker implementation has
      * transitioned to the SUCCEEDED state.
      */
     public static final EventType<TaskCompletionEvent> SUCCEEDED =
-            new EventType<TaskCompletionEvent>(TaskCompletionEvent.ANY, "WORKER_SUCCEEDED");
+            new EventType<>(TaskCompletionEvent.ANY, "WORKER_SUCCEEDED");
 
     /**
      * This event occurs when the state of a Worker implementation has
      * transitioned to the CANCELLED state.
      */
     public static final EventType<TaskCompletionEvent> CANCELLED =
-            new EventType<TaskCompletionEvent>(TaskCompletionEvent.ANY, "WORKER_CANCELLED");
+            new EventType<>(TaskCompletionEvent.ANY, "WORKER_CANCELLED");
 
     /**
      * This event occurs when the state of a Worker implementation has
      * transitioned to the FAILED state.
      */
     public static final EventType<TaskCompletionEvent> FAILED =
-            new EventType<TaskCompletionEvent>(TaskCompletionEvent.ANY, "WORKER_FAILED");
+            new EventType<>(TaskCompletionEvent.ANY, "WORKER_FAILED");
     /** The exception. */
-    @Nullable
     private final Throwable exception;
     /** The value. */
-    @Nullable
     private final V value;
 
     /**
@@ -62,7 +60,7 @@ public class TaskCompletionEvent<V> extends Event {
      * @param value The result value in case of success.
      * @param exception The exception in case of failure.
      */
-    public TaskCompletionEvent(Worker<V> worker, EventType<? extends Event> eventType, @Nullable V value,@Nullable Throwable exception) {
+    public TaskCompletionEvent(Worker<V> worker, EventType<? extends Event> eventType, V value, Throwable exception) {
         super(worker, worker instanceof EventTarget ? (EventTarget) worker : null, eventType);
         if (eventType==ANY) {
             throw new IllegalArgumentException("eventType==ANY");
@@ -108,8 +106,10 @@ public class TaskCompletionEvent<V> extends Event {
     *
     * @return exception
     */
-    @Nullable
     public Throwable getException() {
+        if (getState()!=Worker.State.FAILED) {
+            throw new IllegalStateException();
+        }
         return exception;
     }
 
@@ -117,8 +117,10 @@ public class TaskCompletionEvent<V> extends Event {
     *
     * @return exception
     */
-    @Nullable
     public V getValue() {
+        if (getState()!=Worker.State.SUCCEEDED) {
+            throw new IllegalStateException();
+        }
         return value;
     }
     

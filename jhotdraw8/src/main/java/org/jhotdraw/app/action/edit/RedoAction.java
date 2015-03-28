@@ -7,10 +7,7 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
-import java.awt.event.*;
-import javax.swing.*;
-import java.beans.*;
+import java.util.Optional;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -47,7 +44,7 @@ public class RedoAction extends AbstractViewAction {
      * @param app the application 
      * @param view the view
     */
-    public RedoAction(Application app, @Nullable View view) {
+    public RedoAction(Application app, Optional<View> view) {
         super(app, view);
         labels.configureAction(this, ID);
     }
@@ -62,7 +59,7 @@ public class RedoAction extends AbstractViewAction {
     }
 
     @Override
-    protected void updateView(@Nullable View oldValue, @Nullable View newValue) {
+    protected void updateView(Optional<View> oldValue, Optional<View> newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //
