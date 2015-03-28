@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.beans;
 
+import java.util.Optional;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
 import org.jhotdraw.collection.Key;
@@ -51,7 +52,7 @@ public interface PropertyBean {
     /** Gets a client property value.
      * @param <V> the value type
      * @param key the key
-     * @return the value
+     * @return the value. Returns the default value if the key is not in valuesProperty.
      */
     default public <V> V getValue(Key<V> key) {
         return key.getValue(valuesProperty());

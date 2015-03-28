@@ -7,9 +7,9 @@
  */
 package org.jhotdraw.app.action;
 
+import java.util.Optional;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javax.annotation.Nullable;
 import org.jhotdraw.app.Application;
 
 /**
@@ -20,18 +20,24 @@ import org.jhotdraw.app.Application;
  * @version $Id: AbstractApplicationAction.java 788 2014-03-22 07:56:28Z rawcoder $
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
+
     private static final long serialVersionUID = 1L;
-    @Nullable protected Application app;
+    protected Application app;
 
     /** Creates a new instance.
      * @param app the application */
     public AbstractApplicationAction(Application app) {
+        if (app == null) {
+            throw new IllegalArgumentException("app is null");
+        }
         this.app = app;
         disabled.unbind();
+
         disabled.bind(app.disabledProperty().or(disablers.emptyProperty().not()));
+
     }
 
-    public Application getApplication() {
+    public final Application getApplication() {
         return app;
     }
 }

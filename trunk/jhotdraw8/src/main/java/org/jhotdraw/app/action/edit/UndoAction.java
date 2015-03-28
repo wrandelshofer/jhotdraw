@@ -7,7 +7,7 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Optional;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -40,7 +40,7 @@ public class UndoAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public UndoAction(Application app, @Nullable View view) {
+    public UndoAction(Application app, Optional<View> view) {
         super(app, view);
         labels.configureAction(this, ID);
     }
@@ -55,7 +55,7 @@ public class UndoAction extends AbstractViewAction {
     }
 
     @Override
-    protected void updateView(@Nullable View oldValue, @Nullable View newValue) {
+    protected void updateView(Optional<View> oldValue, Optional<View> newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //

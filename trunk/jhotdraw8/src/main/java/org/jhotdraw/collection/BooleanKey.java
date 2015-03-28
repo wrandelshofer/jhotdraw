@@ -6,9 +6,6 @@
 
 package org.jhotdraw.collection;
 
-import javax.annotation.Nullable;
-import org.jhotdraw.util.ResourceBundleUtil;
-
 /**
  * BooleanKey.
  * @author Werner Randelshofer
@@ -20,11 +17,7 @@ public class BooleanKey extends Key<Boolean> {
         super(key, Boolean.class);
     }
 
-    public BooleanKey(String key, @Nullable Boolean defaultValue) {
-        super(key,  Boolean.class, defaultValue);
-    }
-
-    public BooleanKey(String key,@Nullable Boolean defaultValue, boolean isNullable) {
-        super(key,  Boolean.class, defaultValue, isNullable);
+    public BooleanKey(String key, Boolean defaultValue) {
+        super(key, Boolean.class, defaultValue);
     }
 }

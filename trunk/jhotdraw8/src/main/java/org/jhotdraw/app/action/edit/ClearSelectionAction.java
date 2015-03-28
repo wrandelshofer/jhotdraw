@@ -1,18 +1,14 @@
 /*
  * @(#)ClearSelectionAction.java
  *
- * Copyright (c) 2008 The authors and contributors of JHotDraw.
+ * Copyright (c) 2015 The authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the 
  * accompanying license terms.
  */
 package org.jhotdraw.app.action.edit;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.awt.event.*;
+import java.util.Optional;
 import javafx.scene.Node;
-import javax.swing.*;
-import javax.swing.text.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.util.*;
 
@@ -31,7 +27,7 @@ public class ClearSelectionAction extends AbstractSelectionAction {
     /** Creates a new instance which acts on the currently focused component.
      * @param app the application */
     public ClearSelectionAction(Application app) {
-        this(app,null);
+        this(app, Optional.empty());
     }
 
     /** Creates a new instance which acts on the specified component.
@@ -40,7 +36,7 @@ public class ClearSelectionAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public ClearSelectionAction(Application app, @Nullable Node target) {
+    public ClearSelectionAction(Application app, Optional<Node> target) {
         super(app,target);
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);

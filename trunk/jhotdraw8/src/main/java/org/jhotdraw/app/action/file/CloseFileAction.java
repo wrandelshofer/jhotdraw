@@ -7,9 +7,10 @@
  */
 package org.jhotdraw.app.action.file;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.Optional;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 
@@ -20,6 +21,7 @@ import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
  * @version $Id: CloseFileAction.java 788 2014-03-22 07:56:28Z rawcoder $
  */
 public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
+
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "file.close";
@@ -27,10 +29,14 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public CloseFileAction(Application app, @Nullable View view) {
+    public CloseFileAction(Application app, Optional<View> view) {
         super(app, view);
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
+    }
+
+    public CloseFileAction(DocumentOrientedApplication app) {
+        this(app, Optional.empty());
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,7 +74,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
  */
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
 
-    private final static Key<ChangeListener> FOCUS_LISTENER_KEY = new Key<>("focusListener", ChangeListener.class);
+    private final static Key<Optional<ChangeListener>> FOCUS_LISTENER_KEY = new Key<>("focusListener", Optional.class, Optional.empty());
     private boolean isSystemMenuSupported;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
@@ -81,7 +82,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     private final ReadOnlyObjectWrapper<View> activeView = new ReadOnlyObjectWrapper<>();
     private final SetProperty<View> views = new SimpleSetProperty<>(FXCollections.observableSet());
     private final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper();
-    private final SetProperty<Object> disablers = new SimpleSetProperty<Object>(FXCollections.observableSet());
+    private final SetProperty<Object> disablers = new SimpleSetProperty<>(FXCollections.observableSet());
 
     public DocumentOrientedApplication() {
         disabled.bind(Bindings.not(disablers.emptyProperty()));
@@ -105,7 +106,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     @Override
     public void start(Stage primaryStage) throws Exception {
         isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
-       // isSystemMenuSupported=false;
+        // isSystemMenuSupported=false;
         actionMap = createApplicationActionMap();
         if (isSystemMenuSupported) {
             Platform.setImplicitExit(false);
@@ -136,7 +137,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         v.init();
         v.setTitle(getLabels().getString("unnamedFile"));
         HierarchicalMap<String, Action> map = v.getActionMap();
-        map.put(CloseFileAction.ID, new CloseFileAction(this, v));
+        map.put(CloseFileAction.ID, new CloseFileAction(this, Optional.of(v)));
         return v;
     }
 
@@ -181,7 +182,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     /** Called immediately after a view has been added to the views set.
      * @param view the view */
     protected void onViewAdded(View view) {
-        view.getActionMap().setParent(getActionMap());
+        view.getActionMap().setParent(Optional.of(getActionMap()));
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
@@ -197,21 +198,20 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             event.consume();
             view.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
-        stage.focusedProperty().addListener((observer,oldValue,newValue) -> {if (newValue) activeView.set(view);});
+        stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
+            if (newValue) {
+                activeView.set(view);
+            }
+        });
         stage.titleProperty().bind(BindingUtil.formatted(getLabels().getString("frame.title"),
                 view.titleProperty(), getModel().getName(), view.disambiguationProperty(), view.modifiedProperty()));
         view.titleProperty().addListener(this::onTitleChanged);
-        ChangeListener<Boolean> focusListener = new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue == true) {
-                    activeView.set(view);
-                }
+        ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (newValue == true) {
+                activeView.set(view);
             }
-
         };
-        view.putValue(FOCUS_LISTENER_KEY, focusListener);
+        view.putValue(FOCUS_LISTENER_KEY, Optional.of(focusListener));
         stage.focusedProperty().addListener(focusListener);
         disambiguateViews();
 
@@ -219,21 +219,21 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         if (screen != null) {
             Rectangle2D bounds = screen.getVisualBounds();
             Random r = new Random();
-            if (activeView.get()!=null) {
-              Window w = activeView.get().getNode().getScene().getWindow();
-            stage.setWidth(w.getWidth());
-            stage.setHeight(w.getHeight() );
-            stage.setX(Math.min(w.getX() + 22, bounds.getMaxX() - stage.getWidth()));
-            stage.setY(Math.min(w.getY() + 22, bounds.getMaxY() - stage.getHeight()));
-            }else{
-            stage.setWidth(bounds.getWidth() / 4);
-            stage.setHeight(bounds.getHeight() / 3);
-            stage.setX(bounds.getMinX());
-            stage.setY(bounds.getMinY());
+            if (activeView.get() != null) {
+                Window w = activeView.get().getNode().getScene().getWindow();
+                stage.setWidth(w.getWidth());
+                stage.setHeight(w.getHeight());
+                stage.setX(Math.min(w.getX() + 22, bounds.getMaxX() - stage.getWidth()));
+                stage.setY(Math.min(w.getY() + 22, bounds.getMaxY() - stage.getHeight()));
+            } else {
+                stage.setWidth(bounds.getWidth() / 4);
+                stage.setHeight(bounds.getHeight() / 3);
+                stage.setX(bounds.getMinX());
+                stage.setY(bounds.getMinY());
             }
-            
+
             Outer:
-            for (int retries = views.getSize();retries>0;retries--) {
+            for (int retries = views.getSize(); retries > 0; retries--) {
                 for (View v : views) {
                     if (v != view) {
                         Window w = v.getNode().getScene().getWindow();
@@ -261,12 +261,15 @@ public class DocumentOrientedApplication extends javafx.application.Application 
      * @param view the view */
     protected void onViewRemoved(View view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
-        view.getActionMap().setParent(null);
+        view.getActionMap().setParent(Optional.empty());
         view.setApplication(null);
-        stage.focusedProperty().removeListener(view.getValue(FOCUS_LISTENER_KEY));
+        Optional<ChangeListener> focusListener = view.getValue(FOCUS_LISTENER_KEY);
+        if (focusListener.isPresent()) {
+            stage.focusedProperty().removeListener(focusListener.get());
+        }
         stage.close();
         view.dispose();
-        
+
         // Auto close feature
         if (views.isEmpty() && !isSystemMenuSupported) {
             exit();
@@ -293,9 +296,9 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                     if (mi instanceof Menu) {
                         todo.add((Menu) mi);
                     } else {
-                        Action a = actions.getOrParent(mi.getId());
-                        if (a != null) {
-                            Actions.bindMenuItem(mi, a);
+                        Optional<Action> a = actions.getOrParent(mi.getId());
+                        if (a.isPresent()) {
+                            Actions.bindMenuItem(mi, a.get());
                         } else if (mi.getId() != null) {
                             System.err.println("No action for menu item with id=" + mi.getId());
                             mi.setVisible(false);
@@ -316,9 +319,9 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         map.put(ExitAction.ID, new ExitAction(this));
         map.put(NewFileAction.ID, new NewFileAction(this));
         map.put(OpenFileAction.ID, new OpenFileAction(this));
-        map.put(SaveFileAction.ID, new SaveFileAction(this,null));
-        map.put(SaveFileAsAction.ID, new SaveFileAsAction(this,null));
-        map.put(CloseFileAction.ID, new CloseFileAction(this, null));
+        map.put(SaveFileAction.ID, new SaveFileAction(this));
+        map.put(SaveFileAsAction.ID, new SaveFileAsAction(this));
+        map.put(CloseFileAction.ID, new CloseFileAction(this));
         map.put(CutAction.ID, new CutAction(this));
         map.put(CopyAction.ID, new CopyAction(this));
         map.put(PasteAction.ID, new PasteAction(this));
@@ -357,7 +360,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         for (View v : views) {
             String t = v.getTitle();
             if (!titles.containsKey(t)) {
-                titles.put(t, new ArrayList<View>());
+                titles.put(t, new ArrayList<>());
             }
             titles.get(t).add(v);
         }
@@ -392,7 +395,6 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     public boolean isAllowMultipleViewsPerURI() {
         return false;
     }
-
 
     @Override
     public void addRecentURI(URI uri) {
