@@ -5,12 +5,16 @@
  */
 package org.jhotdraw.app.action;
 
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.Property;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.input.KeyCombination;
 
 /**
  * Actions.
@@ -30,7 +34,11 @@ public class Actions {
      * @param action The action
      */
     public static void bindButton(Button control, Action action) {
-        control.textProperty().bind(action.getValueProperty(Action.NAME));
+        // create a strong reference to name binding:
+        Binding<String> nameBinding = Action.NAME.valueAt(action.properties());
+        control.getProperties().put("ActionsNameBinding", nameBinding);
+        control.textProperty().bind(action.NAME.valueAt(action.properties()));
+
         control.setOnAction(action);
         control.disableProperty().bind(action.disabledProperty());
     }
@@ -41,15 +49,31 @@ public class Actions {
      * @param action The action
      */
     public static void bindMenuItem(MenuItem control, Action action) {
-        control.textProperty().bind(action.getValueProperty(Action.NAME));
+        // create a strong reference to name binding:
+        Binding<String> nameBinding = Action.NAME.valueAt(action.properties());
+        control.getProperties().put("ActionsNameBinding", nameBinding);
+        control.textProperty().bind(action.NAME.valueAt(action.properties()));
+
         if (control instanceof CheckMenuItem) {
-            ((CheckMenuItem) control).selectedProperty().bindBidirectional(action.getValueProperty(Action.SELECTED_KEY));
-        }else
-        if (control instanceof RadioMenuItem) {
-            ((RadioMenuItem) control).selectedProperty().bindBidirectional(action.getValueProperty(Action.SELECTED_KEY));
+            Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.properties());
+            // create a strong reference to name binding:
+            control.getProperties().put("ActionsSelectedBinding", selectedBinding);
+            // this only creates a weak reference to the name binding:
+            ((CheckMenuItem) control).selectedProperty().bindBidirectional(selectedBinding);
+        } else if (control instanceof RadioMenuItem) {
+            Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.properties());
+            // create a strong reference to name binding:
+            control.getProperties().put("ActionsSelectedBinding", selectedBinding);
+            // this only creates a weak reference to the name binding:
+            ((RadioMenuItem) control).selectedProperty().bindBidirectional(selectedBinding);
         }
         control.setOnAction(action);
         control.disableProperty().bind(action.disabledProperty());
-        control.acceleratorProperty().bind(action.getValueProperty(Action.ACCELERATOR_KEY));
+        
+        Binding<KeyCombination> acceleratorBinding = Action.ACCELERATOR_KEY.valueAt(action.properties());
+        // create a strong reference to name binding:
+        control.getProperties().put("ActionsAcceleratorBinding", acceleratorBinding);
+        // this only creates a weak reference to the name binding:
+        control.acceleratorProperty().bind(acceleratorBinding);
     }
 }

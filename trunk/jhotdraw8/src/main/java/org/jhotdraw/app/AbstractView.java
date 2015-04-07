@@ -31,7 +31,7 @@ protected ObjectProperty<Application> application = new SimpleObjectProperty<>()
     /** Disabled is bound to disable. Subclasses can assign a different binding. */
     protected final BooleanProperty modified = new SimpleBooleanProperty();
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
-    protected final  MapProperty<Key<?>,  ObjectProperty<?>> values = new SimpleMapProperty<>(FXCollections.observableHashMap());
+    protected final  MapProperty<Key<?>,  Object> values = new SimpleMapProperty<>(FXCollections.observableHashMap());
 protected final StringProperty title = new SimpleStringProperty();
     private final IntegerProperty disambiguation = new SimpleIntegerProperty();
     @Override
@@ -62,7 +62,7 @@ protected final StringProperty title = new SimpleStringProperty();
         return application;
     }
     @Override
-    public MapProperty<Key<?>, ObjectProperty<?>> valuesProperty() {
+    public MapProperty<Key<?>, Object> properties() {
         return values;
     }
 

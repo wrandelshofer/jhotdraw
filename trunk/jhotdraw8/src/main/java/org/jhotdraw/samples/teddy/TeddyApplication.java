@@ -22,6 +22,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw.app.ApplicationModel;
 import org.jhotdraw.app.DocumentOrientedApplication;
+import org.jhotdraw.app.TextAreaViewController;
+import org.jhotdraw.app.View;
 
 /**
  *
@@ -32,35 +34,11 @@ public class TeddyApplication extends DocumentOrientedApplication {
     public TeddyApplication() {
         super();
     }
-    
-   
-    public void startOFF(Stage stage) throws Exception {
-        Parent view = FXMLLoader.load(getClass().getResource("TeddyView.fxml"));
-
-MenuBar menuBar = new MenuBar();
-        Menu fileMenu = new Menu("File");
-        MenuItem newNotebookMenuItem = new MenuItem("New Notebook...");
-        newNotebookMenuItem.setAccelerator(KeyCombination.keyCombination("Meta+N"));
-        newNotebookMenuItem.setOnAction(event -> { System.out.println("Action fired"); });
-        fileMenu.getItems().add(newNotebookMenuItem);
-        menuBar.getMenus().add(fileMenu);
-        menuBar.setUseSystemMenuBar(true);        
-        
-        VBox root = new VBox();
-       // root.getChildren().add(menuBar);
-        root.getChildren().add(view);
-        
-        Scene scene = new Scene(root);
-        
-        List<MenuBase> menus = new ArrayList<>();
-menus.add(GlobalMenuAdapter.adapt(fileMenu));
-
-Toolkit.getToolkit().getSystemMenu().setMenus(menus);
-        
-        stage.setScene(scene);
-        stage.show();
+     @Override
+    public View instantiateView() {
+        TextAreaViewController v = new TextAreaViewController();
+        return v;
     }
-
     /**
      * @param args the command line arguments
      */

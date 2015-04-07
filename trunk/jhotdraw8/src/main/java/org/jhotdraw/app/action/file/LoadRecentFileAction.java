@@ -60,7 +60,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);
-        putValue(Action.NAME, URIUtil.getName(uri));
+        set(Action.NAME, URIUtil.getName(uri));
     }
 /*
     @Override

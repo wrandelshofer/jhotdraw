@@ -62,10 +62,10 @@ public class SaveFileAction extends AbstractViewAction {
     }
 
     protected URIChooser getChooser(View view) {
-        URIChooser c = app.getValue(SAVE_CHOOSER_KEY);
+        URIChooser c = app.get(SAVE_CHOOSER_KEY);
         if (c == null) {
             c = getApplication().getModel().createSaveChooser();
-            app.putValue(SAVE_CHOOSER_KEY, c);
+            app.set(SAVE_CHOOSER_KEY, c);
         }
         return c;
     }
