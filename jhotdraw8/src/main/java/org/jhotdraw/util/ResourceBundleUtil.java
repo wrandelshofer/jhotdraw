@@ -466,15 +466,15 @@ public class ResourceBundleUtil implements Serializable {
     }
 
     public void configureAction(Action action, String argument, Class<?> baseClass) {
-        action.putValue(Action.NAME, getTextProperty(argument));
+        action.set(Action.NAME, getTextProperty(argument));
         String shortDescription = getToolTipTextProperty(argument);
         if (shortDescription != null && shortDescription.length() > 0) {
-            action.putValue(Action.SHORT_DESCRIPTION, shortDescription);
+            action.set(Action.SHORT_DESCRIPTION, shortDescription);
         }
-        action.putValue(Action.ACCELERATOR_KEY, getAcceleratorProperty(argument));
-        action.putValue(Action.MNEMONIC_KEY, getMnemonicProperty(argument));
-        action.putValue(Action.SMALL_ICON, getSmallIconProperty(argument, baseClass));
-        action.putValue(Action.LARGE_ICON_KEY, getLargeIconProperty(argument, baseClass));
+        action.set(Action.ACCELERATOR_KEY, getAcceleratorProperty(argument));
+        action.set(Action.MNEMONIC_KEY, getMnemonicProperty(argument));
+        action.set(Action.SMALL_ICON, getSmallIconProperty(argument, baseClass));
+        action.set(Action.LARGE_ICON_KEY, getLargeIconProperty(argument, baseClass));
     }
 
     public void configureButton(ButtonBase button, String argument) {

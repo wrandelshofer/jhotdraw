@@ -119,10 +119,10 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected URIChooser getChooser(View view) {
-        Optional<URIChooser> chsr = view.getValue(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
+        Optional<URIChooser> chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
         if (!chsr.isPresent()) {
             chsr = Optional.of(getApplication().getModel().createSaveChooser());
-            view.putValue(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY, chsr);
+            view.set(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY, chsr);
         }
         return chsr.get();
     }

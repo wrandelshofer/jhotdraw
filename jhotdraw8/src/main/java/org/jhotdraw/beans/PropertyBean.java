@@ -5,27 +5,28 @@
  */
 package org.jhotdraw.beans;
 
-import java.util.Optional;
 import javafx.beans.property.MapProperty;
-import javafx.beans.property.ObjectProperty;
 import org.jhotdraw.collection.Key;
 
 /**
  * Interface for beans which support an open number of properties.
  * <p>
- * A property is accessed using a type safe {@link Key}.
+ * A property is typically accessed using a type safe {@link Key}.
  * <p>
  * To implement this interface, you need to implement the {@code valuesProperty()}
  * method as shown below.
  *
  * <pre>{@code 
  * public class MyBean implements PropertyBean {
- *   private final MapProperty<Key<?>, ObjectProperty<?>> values =
- *           new SimpleMapProperty<>(FXCollections.observableHashMap());
- *   }
- *   public MapProperty<Key<?>, ObjectProperty<?>> valuesProperty() {
- *      return values;
- *   }
+ * private MapProperty<Key<?>, Object> properties;*
+ *
+ *  @Override
+ *  public final MapProperty<Key<?>, Object> properties() {
+ *      if (properties == null) {
+ *          properties = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<Key<?>, Object>()));
+ *      }
+ *      return properties;
+ *  }
  * }
  * }</pre>
  * 
@@ -35,35 +36,17 @@ import org.jhotdraw.collection.Key;
  */
 public interface PropertyBean {
 
-    /** A map for client properties.
+    /** Returns an observable map of properties.
      * @return the map 
      */
-    public MapProperty<Key<?>, ObjectProperty<?>> valuesProperty();
+    MapProperty<Key<?>,Object> properties();
 
-    /** Sets a client property value.
-     * @param <V> the value type
-     * @param key the key
-     * @param value the value
-     */
-    default public <V> void putValue(Key<V> key, V value) {
-        key.putValue(valuesProperty(), value);
+    /** Sets a property value. */
+    default <T> void set(Key<T> key, T value) {
+       key.put(properties(), value);
     }
-
-    /** Gets a client property value.
-     * @param <V> the value type
-     * @param key the key
-     * @return the value. Returns the default value if the key is not in valuesProperty.
-     */
-    default public <V> V getValue(Key<V> key) {
-        return key.getValue(valuesProperty());
-    }
-
-    /** Gets a client property.
-     * @param <V> the value type
-     * @param key the key
-     * @return the value
-     */
-    default public <V> ObjectProperty<V> getValueProperty(Key<V> key) {
-        return key.getValueProperty(valuesProperty());
+    /** Gets a property value. */
+    default <T> T get(Key<T> key) {
+       return key.get(properties());
     }
 }

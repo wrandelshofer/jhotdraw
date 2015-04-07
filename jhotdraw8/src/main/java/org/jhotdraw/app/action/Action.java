@@ -5,11 +5,6 @@
  */
 package org.jhotdraw.app.action;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -86,12 +81,12 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * @return The name 
      */
     default public String getName() {
-        return getValue(NAME);
+        return get(NAME);
     }
     /** The name of the action for use in action maps.
      * @return The id 
      */
     default public String getId() {
-        return getValue(ID);
+        return get(ID);
     }
 }

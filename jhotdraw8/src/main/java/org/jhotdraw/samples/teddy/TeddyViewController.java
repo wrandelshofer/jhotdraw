@@ -5,28 +5,16 @@
  */
 package org.jhotdraw.samples.teddy;
 
-import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import org.jhotdraw.collection.HierarchicalMap;
-import org.jhotdraw.app.View;
-import org.jhotdraw.app.action.Action;
-import org.jhotdraw.collection.Key;
-import org.jhotdraw.gui.URIChooser;
 
 /**
  *

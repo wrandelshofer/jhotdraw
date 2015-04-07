@@ -52,7 +52,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     public OpenRecentFileAction(Application app, URI uri) {
         super(app);
         this.uri = uri;
-        putValue(Action.NAME, URIUtil.getName(uri));
+        set(Action.NAME, URIUtil.getName(uri));
     }
 /*
     @Override

@@ -45,7 +45,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
      *
      */
     public final static Key<Optional<URIChooser>> SAVE_CHOOSER_KEY = new Key<Optional<URIChooser>>(
-            "saveChooser", Optional.class);
+            "saveChooser", Optional.class, "<URIChooser>",Optional.empty());
 
     private static final long serialVersionUID = 1L;
 
@@ -140,10 +140,10 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
     }
 
     protected URIChooser getChooser(View view) {
-        Optional<URIChooser> chsr = view.getValue(SAVE_CHOOSER_KEY);
+        Optional<URIChooser> chsr = view.get(SAVE_CHOOSER_KEY);
         if (!chsr.isPresent()) {
             chsr = Optional.of(getApplication().getModel().createSaveChooser());
-            view.putValue(SAVE_CHOOSER_KEY, chsr);
+            view.set(SAVE_CHOOSER_KEY, chsr);
         }
         return chsr.get();
     }

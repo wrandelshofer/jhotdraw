@@ -8,14 +8,18 @@ package org.jhotdraw.collection;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.MapExpression;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.MapChangeListener;
 
 /**
- * An <em>key</em> which provides typesafe access to a map entry.
+ * An <em>name</em> which provides typesafe access to a map entry.
  * <p>
  * A Key has a name, a type and a default value. 
  <p>
@@ -39,61 +43,100 @@ public class Key<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Holds a String representation of the key.
+     * Holds a String representation of the name.
      */
-    private String key;
+    private final String name;
     /**
      * Holds the default value.
      */
-    private T defaultValue;
+    private final T defaultValue;
     /** This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    private Class<?> clazz;
+    private final Class<?> clazz;
+    /** The type token is not sufficient, if the type is parameterized.
+     * We allow to specify the type parameters as a string.
+     */
+    private final String typeParameters;
 
     /** The hashcode is computed upon creation. */
     private final int hashcode;
 
-    /** Creates a new instance with the specified key, type token class,
-     * default value null, and allowing null values.
-     * @param key The name of the key.
+    /** Creates a new instance with the specified name, type token class,
+     default value null, and allowing null values.
+     * @param key The name of the name.
      * @param clazz The type of the value.
      */
-    public Key(String key, Class<?> clazz) {
-        this(key, clazz, null);
+    public Key(String key, Class<T> clazz) {
+        this(key, clazz, "", null);
     }
-    
-    /** Creates a new instance with the specified key, type token class,
-     * default value, and allowing or disallowing null values. 
-     * @param key The name of the key.
+
+    /** Creates a new instance with the specified name, type token class,
+     default value, and allowing or disallowing null values. 
+     * @param key The name of the name.
      * @param clazz The type of the value.
      * @param defaultValue The default value.
      */
-    public Key(String key, Class<?> clazz, T defaultValue) {
+    public Key(String key, Class<T> clazz, T defaultValue) {
+        this(key, clazz, "", defaultValue);
+    }
+
+    /** Creates a new instance with the specified name, type token class,
+     default value, and allowing or disallowing null values. 
+     * @param key The name of the name.
+     * @param clazz The type of the value.
+     * @param typeParameters The type parameters of the class.
+     *              Specify "" if no type parameters are given.
+     *              Otherwise specify them in arrow brackets.
+     * @param defaultValue The default value.
+     */
+    public Key(String key, Class<?> clazz, String typeParameters, T defaultValue) {
         if (key == null) {
             throw new IllegalArgumentException("key is null");
         }
         if (clazz == null) {
             throw new IllegalArgumentException("clazz is null");
         }
-        this.key = key;
+        if (typeParameters == null) {
+            throw new IllegalArgumentException("type parameters is null");
+        }
+if (typeParameters.length()>0) {
+    if (! typeParameters.startsWith("<")||!typeParameters.endsWith(">")) {
+            throw new IllegalArgumentException("type parameters does not have arrow brackets:"+typeParameters);
+    }
+}        
+        this.name = key;
         this.clazz = clazz;
+        this.typeParameters = typeParameters;
         this.defaultValue = defaultValue;
 
         // compute hashcode
         int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.key);
+        hash = 17 * hash + Objects.hashCode(this.name);
         hash = 17 * hash + Objects.hashCode(this.defaultValue);
         hash = 17 * hash + Objects.hashCode(this.clazz);
+        hash = 17 * hash + Objects.hashCode(this.typeParameters);
         hashcode = hash;
     }
 
     /**
-     * Returns the key string.
-     * @return key string.
+     * Returns the name string.
+     * @return name string.
      */
-    public String getKey() {
-        return key;
+    public String getName() {
+        return name;
+    }
+
+    public Class<?> getValueType() {
+        return clazz;
+    }
+
+    public String getValueTypeParameters() {
+        return typeParameters;
+    }
+
+    public String getFullValueType() {
+        return clazz.getName() + typeParameters;
     }
 
     /**
@@ -112,11 +155,12 @@ public class Key<T> implements Serializable {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    public T get(Map<Key<?>, Object> a) {
+    public T get(Map<? super Key<?>, Object> a) {
         T value = a.containsKey(this) ? (T) a.get(this) : defaultValue;
         assert isAssignable(value);
         return value;
     }
+
     /**
      * Gets the value of the attribute denoted by this Key from
      a Map.
@@ -124,13 +168,14 @@ public class Key<T> implements Serializable {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    public ObjectProperty<T> getValueProperty(Map<Key<?>, ObjectProperty<?>> a) {
+    public ObjectProperty<T> getValueProperty(Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<T>(defaultValue));
         }
         SimpleObjectProperty<T> value = (SimpleObjectProperty<T>) a.get(this);
         return value;
     }
+
     /**
      * Gets the value of the attribute denoted by this Key from
      a Map.
@@ -138,7 +183,7 @@ public class Key<T> implements Serializable {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    public T getValue(Map<Key<?>, ObjectProperty<?>> a) {
+    public T getValue(Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<T>(defaultValue));
         }
@@ -154,7 +199,7 @@ public class Key<T> implements Serializable {
      * @param value The new value.
      * @return The old value.
      */
-    public T put(Map<Key<?>, Object> a, T value) {
+    public T put(Map<? super Key<?>, Object> a, T value) {
         assert isAssignable(value);
         return (T) a.put(this, value);
     }
@@ -167,7 +212,7 @@ public class Key<T> implements Serializable {
      * @param value The new value.
      * @return The old value.
      */
-    public T putValue(Map<Key<?>, ObjectProperty<?>> a, T value) {
+    public T putValue(Map<? super Key<?>, ObjectProperty<?>> a, T value) {
         assert isAssignable(value);
         if (a.containsKey(this)) {
             ObjectProperty<T> p = (ObjectProperty<T>) a.get(this);
@@ -181,7 +226,7 @@ public class Key<T> implements Serializable {
     }
 
     /**
-     * Returns true if the specified value is assignable with this key.
+     * Returns true if the specified value is assignable with this name.
      *
      * @param value The object to be verified for assignability.
      * @return True if assignable.
@@ -190,10 +235,21 @@ public class Key<T> implements Serializable {
         return clazz.isInstance(value);
     }
 
-    /** Returns the key string. */
+    /**
+     * Returns true if the specified value is the default value of this key.
+     *
+     * @param value The object to be verified for assignability.
+     * @return True if assignable.
+     */
+    public boolean isDefault(Object value) {
+        return (defaultValue == null)
+                ? value == null : defaultValue.equals(value);
+    }
+
+    /** Returns the name string. */
     @Override
     public String toString() {
-        return key;
+        return name;
     }
 
     @Override
@@ -210,7 +266,7 @@ public class Key<T> implements Serializable {
             return false;
         }
         final Key<?> other = (Key<?>) obj;
-        if (!Objects.equals(this.key, other.key)) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         if (!Objects.equals(this.defaultValue, other.defaultValue)) {
@@ -222,8 +278,54 @@ public class Key<T> implements Serializable {
         return true;
     }
 
-    public ObjectBinding<T> valueAt(MapExpression<Key<?>, Object> map) {
+    /** Creates a new binding for the map entry specified by this name. */
+    public Binding<T> valueAt(MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
         return (ObjectBinding<T>) value;
     }
+
+    private static class PropertyAt<T> extends ReadOnlyObjectWrapper<T> {
+
+        private final MapExpression<Key<?>, Object> map;
+        private final Key<T> key;
+
+        private PropertyAt(MapExpression<Key<?>, Object> map, Key<T> key) {
+            this.map = map;
+            this.key = key;
+            map.addListener((MapChangeListener.Change<? extends Key<?>, ? extends Object> change) -> {
+                if (change.getKey() == this.key) {
+                    if (get() != change.getValueAdded()) {
+                        set((T) change.getValueAdded());
+                    }
+                }
+            });
+        }
+
+        @Override
+        public T get() {
+            return key.get(map);
+        }
+
+        @Override
+        public void setValue(T value) {
+            super.setValue(value);
+            if (value != key.get(map)) {
+                map.put(key, value);
+            }
+        }
+
+    }
+
+    /** Creates a new property for the map entry specified by this name. */
+    public Property<T> propertyAt(final MapExpression<Key<?>, Object> map) {
+        ObjectBinding<Object> value = map.valueAt(this);
+        return new PropertyAt<>(map, this);
+    }
+
+    /** Creates a new read-only property for the map entry specified by this name. */
+    public ReadOnlyProperty<T> readOnlyPropertyAt(final MapExpression<Key<?>, Object> map) {
+        ObjectBinding<Object> value = map.valueAt(this);
+        return new PropertyAt<>(map, this).getReadOnlyProperty();
+    }
+
 }

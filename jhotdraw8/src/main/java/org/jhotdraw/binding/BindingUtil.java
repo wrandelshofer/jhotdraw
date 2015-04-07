@@ -5,8 +5,15 @@
  */
 package org.jhotdraw.binding;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ObjectPropertyBase;
+import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 /**
  * BindingUtil.
@@ -16,9 +23,9 @@ import javafx.beans.binding.StringExpression;
 public class BindingUtil {
 
     /** Returns a string expression which uses {@code java.test.MessageFormat} to format
-    * the text.
-    * See {@link MessageStringFormatter} for special treatment of boolean values.
-    *
+     * the text.
+     * See {@link MessageStringFormatter} for special treatment of boolean values.
+     *
      * @param format The format string.
      * @param args The arguments.
      * @return  The string expression */

@@ -24,7 +24,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
     private Optional<Node> target = Optional.empty();
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
-        if (newValue == null) {
+        if (newValue == null||newValue.getNode()==null) {
             disabled.set(true);
         } else {
             Scene s = newValue.getNode().getScene();

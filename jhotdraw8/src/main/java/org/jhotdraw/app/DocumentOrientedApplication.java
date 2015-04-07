@@ -35,6 +35,7 @@ import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -74,7 +75,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
  */
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
 
-    private final static Key<Optional<ChangeListener>> FOCUS_LISTENER_KEY = new Key<>("focusListener", Optional.class, Optional.empty());
+    private final static Key<Optional<ChangeListener>> FOCUS_LISTENER_KEY = new Key<>("focusListener", Optional.class,"<ChangeListener>", Optional.empty());
     private boolean isSystemMenuSupported;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
@@ -132,12 +133,16 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     }
 
     @Override
-    public View createView() {
-        TextAreaViewController v = new TextAreaViewController();
+    public final View createView() {
+        View v = instantiateView();
         v.init();
         v.setTitle(getLabels().getString("unnamedFile"));
-        HierarchicalMap<String, Action> map = v.getActionMap();
+            HierarchicalMap<String, Action> map = v.getActionMap();
         map.put(CloseFileAction.ID, new CloseFileAction(this, Optional.of(v)));
+    return v;
+    }
+    protected View instantiateView() {
+        TextAreaViewController v = new TextAreaViewController();
         return v;
     }
 
@@ -211,7 +216,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                 activeView.set(view);
             }
         };
-        view.putValue(FOCUS_LISTENER_KEY, Optional.of(focusListener));
+        view.set(FOCUS_LISTENER_KEY, Optional.of(focusListener));
         stage.focusedProperty().addListener(focusListener);
         disambiguateViews();
 
@@ -263,7 +268,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.getActionMap().setParent(Optional.empty());
         view.setApplication(null);
-        Optional<ChangeListener> focusListener = view.getValue(FOCUS_LISTENER_KEY);
+        Optional<ChangeListener> focusListener = view.get(FOCUS_LISTENER_KEY);
         if (focusListener.isPresent()) {
             stage.focusedProperty().removeListener(focusListener.get());
         }
@@ -384,13 +389,16 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             }
         }
     }
-    protected final MapProperty<Key<?>, ObjectProperty<?>> values = new SimpleMapProperty<>(FXCollections.observableHashMap());
+
+    private MapProperty<Key<?>, Object> properties;
 
     @Override
-    public MapProperty<Key<?>, ObjectProperty<?>> valuesProperty() {
-        return values;
-    }
-
+    public final MapProperty<Key<?>, Object> properties() {
+        if (properties == null) {
+            properties = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<Key<?>, Object>()));
+        }
+        return properties;
+    }   
     @Override
     public boolean isAllowMultipleViewsPerURI() {
         return false;

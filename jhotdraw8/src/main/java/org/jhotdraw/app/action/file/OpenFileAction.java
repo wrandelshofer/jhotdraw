@@ -44,10 +44,10 @@ public class OpenFileAction extends AbstractApplicationAction {
     }
 
     protected URIChooser getChooser(View view) {
-        URIChooser c = app.getValue(OPEN_CHOOSER_KEY);
+        URIChooser c = app.get(OPEN_CHOOSER_KEY);
         if (c == null) {
             c = getApplication().getModel().createOpenChooser();
-            app.putValue(OPEN_CHOOSER_KEY, c);
+            app.set(OPEN_CHOOSER_KEY, c);
         }
         return c;
     }
