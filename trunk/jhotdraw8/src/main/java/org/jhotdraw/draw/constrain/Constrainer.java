@@ -35,11 +35,11 @@ public interface Constrainer {
      * @return Returns the constrained point.
      */
     default Point2D constrainPoint(Point2D p) {
-        return constrainPoint(p, Point2D.ZERO);
+        return translatePoint(p, Point2D.ZERO);
     }
 
     /**
-     * Moves a point to the closest constrained location in the specified
+     * Snaps a point to the next constrained location in the specified
      * direction.
      * <p>
      * This method changes the point which is passed as a parameter.
@@ -49,7 +49,7 @@ public interface Constrainer {
      *            nearest constrained location is used.
      * @return Returns the constrained point.
      */
-    public Point2D constrainPoint(Point2D p, Point2D dir);
+    public Point2D translatePoint(Point2D p, Point2D dir);
 
     /**
      * Constrains the placement of a rectangle towards the closest constraint
@@ -62,10 +62,10 @@ public interface Constrainer {
      * @return Returns the constrained rectangle.
      */
     default Rectangle2D constrainRectangle(Rectangle2D r) {
-        return constrainRectangle(r, Point2D.ZERO);
+        return translateRectangle(r, Point2D.ZERO);
     }
     /**
-     * Constrains the placement of a rectangle towards the closest constraint
+     * Snaps a rectangle into the the closest constraint position
      * in the given direction.
      * <p>
      * This method changes the location of the rectangle which is passed as a
@@ -76,30 +76,30 @@ public interface Constrainer {
      *            nearest constrained location is used.
      * @return Returns the constrained rectangle.
      */
-    public Rectangle2D constrainRectangle(Rectangle2D r, Point2D dir);
+    public Rectangle2D translateRectangle(Rectangle2D r, Point2D dir);
 
 
     /**
-     * Constrains the given angle (in radians).
+     * Constrains the given angle (in degrees).
      * This method changes the angle which is passed as a parameter.
      * 
      * @param angle The angle (in degrees).
      * @return The closest constrained angle (in radians).
      */
     default double constrainAngle(double angle) {
-        return constrainAngle(angle,Point2D.ZERO);
+        return translateAngle(angle,0);
     }
 
     /**
-     * Moves the given angle (in radians) to the closest constrained orientation
+     * Snaps an angle (in degrees) to the closest constrained orientation
      * in the specified direction.
      * 
      * @param angle The angle (in degrees).
-     * @param dir A direction vector. If the vector length is zero, then the
+     * @param dir A direction. If the direction is zero, then the
      *            nearest constrained location is used.
      * @return The closest constrained angle (in radians) in the specified
      * direction.
      */
-    public double constrainAngle(double angle, Point2D dir);
+    public double translateAngle(double angle, double dir);
 
 }

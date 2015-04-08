@@ -34,6 +34,7 @@ public class OpenFileAction extends AbstractApplicationAction {
     private static final long serialVersionUID = 1L;
     public final static Key<URIChooser> OPEN_CHOOSER_KEY = new Key<>("openChooser", URIChooser.class);
     public static final String ID = "file.open";
+    private boolean reuseEmptyViews = false;
 
     /** Creates a new instance.
      * @param app the application */
@@ -62,10 +63,15 @@ public class OpenFileAction extends AbstractApplicationAction {
         {
             app.addDisabler(this);
             // Search for an empty view
-            Optional<View> emptyView = app.getActiveView();
-            if (!emptyView.isPresent()
-                    || !emptyView.get().isEmpty()
-                    || emptyView.get().isDisabled()) {
+            Optional<          View> emptyView;
+            if (reuseEmptyViews) {
+                emptyView = app.getActiveView();
+                if (!emptyView.isPresent()
+                        || !emptyView.get().isEmpty()
+                        || emptyView.get().isDisabled()) {
+                    emptyView = Optional.empty();
+                }
+            } else {
                 emptyView = Optional.empty();
             }
 
@@ -82,7 +88,6 @@ public class OpenFileAction extends AbstractApplicationAction {
             Optional<URI> uri = chooser.showDialog(app.getNode());
             if (uri.isPresent()) {
                 app.add(view);
-
 
                 // Prevent same URI from being opened more than once
                 if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
@@ -104,18 +109,18 @@ public class OpenFileAction extends AbstractApplicationAction {
                 if (disposeView) {
                     app.remove(view);
                 }
-                            app.removeDisabler(this);
+                app.removeDisabler(this);
             }
         }
     }
 
     protected void openViewFromURI(final View v, final URI uri, final URIChooser chooser) {
         final Application app = getApplication();
-                            app.removeDisabler(this);
+        app.removeDisabler(this);
         v.addDisabler(this);
 
         // Open the file
-        v.read(uri,false, event -> {
+        v.read(uri, false, event -> {
             switch (event.getState()) {
                 case CANCELLED:
                     v.removeDisabler(this);
@@ -125,8 +130,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                     String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
                     ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
-                            
-                             ((message == null) ? "" : message));
+                            ((message == null) ? "" : message));
                     alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
                     alert.showAndWait();
                     v.removeDisabler(this);
@@ -135,7 +139,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                     v.setURI(uri);
                     v.clearModified();
                     v.setTitle(URIUtil.getName(uri));
-                     v.removeDisabler(this);
+                    v.removeDisabler(this);
                     break;
                 default:
                     break;

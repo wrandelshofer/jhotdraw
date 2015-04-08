@@ -24,18 +24,12 @@ import org.jhotdraw.beans.SimplePropertyBean;
  * @version $Id$
  */
 public abstract class AbstractFigure extends SimplePropertyBean implements Figure {
-    private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this,CHILDREN_PROPERTY,FXCollections.observableList(new ArrayList<Figure>())).getReadOnlyProperty();
     private final OptionalProperty<Figure> parent = new OptionalProperty<Figure>(this,PARENT_PROPERTY);
 
     
     
     @Override
-    public ReadOnlyListProperty<Figure> children() {
-        return children;
-    }
-
-    @Override
-    public OptionalProperty<Figure> parent() {
+    public OptionalProperty<Figure> parentProperty() {
         return parent;
     }
 

@@ -15,6 +15,7 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.AbstractFigure;
+import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.Figure;
 
 /**
@@ -23,7 +24,7 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class ShapeFigure extends AbstractFigure {
+public abstract class ShapeFigure extends AbstractLeafFigure {
     /**
      * Defines the paint used for filling the interior of the figure.
      * Default value: {@code Color.WHITE}.

@@ -25,8 +25,8 @@ import org.jhotdraw.text.Converter;
  */
 public class SimpleFigureFactory implements FigureFactory {
 
-    private final Map<String, Key<?>> attrToKey = new HashMap<>();
-    private final Map<Key<?>, String> keyToAttr = new HashMap<>();
+    private final  Map<Class<? extends Figure>,HashMap<String, Key<?>>> attrToKey = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToAttr = new HashMap<>();
     private final Map<String, Class<? extends Figure>> elemToFigure = new HashMap<>();
     private final Map<Class<? extends Figure>, String> figureToElem = new HashMap<>();
     private final Map<String, Converter> valueToCData = new HashMap<>();
@@ -50,7 +50,7 @@ public class SimpleFigureFactory implements FigureFactory {
     public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<Key<?>> keys) {
         addFigureKeys(f,keys);
         for (Key<?> key : keys) {
-            addKey(key.getName(),key);
+            addKey(f,key.getName(),key);
         }
     }
 
@@ -62,12 +62,21 @@ public class SimpleFigureFactory implements FigureFactory {
      *  @param name The attribute name
      *  @param key The key
      */
-    public void addKey(String name, Key<?> key) {
-        if (!attrToKey.containsKey(name)) {
-            attrToKey.put(name, key);
+    public void addKey(Class<? extends Figure> figure, String name, Key<?> key) {
+        if (!attrToKey.containsKey(figure)) {
+            attrToKey.put(figure, new HashMap<String,Key<?>>());
         }
-        if (!keyToAttr.containsKey(key)) {
-            keyToAttr.put(key, name);
+        HashMap<String,Key<?>> strToKey = attrToKey.get(figure);
+        if (!strToKey.containsKey(name)) {
+            strToKey.put(name, key);
+        }
+        
+        if (!keyToAttr.containsKey(figure)) {
+            keyToAttr.put(figure, new HashMap<Key<?>,String>());
+        }
+        HashMap<Key<?>,String> keyToStr = keyToAttr.get(figure);
+        if (!keyToStr.containsKey(key)) {
+            keyToStr.put(key, name);
         }
     }
     /** Adds the provided mapping of XML attribute names from/to
@@ -78,9 +87,9 @@ public class SimpleFigureFactory implements FigureFactory {
      *  @param name The attribute name
      *  @param key The key
      */
-    public void addKeys(HashMap<String,Key<?>> keys) {
+    public void addKeys(Class<? extends Figure> f, HashMap<String,Key<?>> keys) {
         for (Map.Entry<String,Key<?>> entry:keys.entrySet()) {
-            addKey(entry.getKey(),entry.getValue());
+            addKey(f, entry.getKey(),entry.getValue());
         }
     }
 
@@ -134,19 +143,27 @@ public class SimpleFigureFactory implements FigureFactory {
     }
 
     @Override
-    public String keyToName(Key<?> key) throws IOException {
-        if (!keyToAttr.containsKey(key)) {
-            throw new IOException("no mapping for key " + key);
+    public String keyToName(Figure f, Key<?> key) throws IOException {
+        if (!keyToAttr.containsKey(f.getClass())) {
+            throw new IOException("no mapping for figure " + f.getClass());
         }
-        return keyToAttr.get(key);
+        HashMap<Key<?>,String> keyToStr = keyToAttr.get(f);
+        if (!keyToStr.containsKey(key)) {
+            throw new IOException("no mapping for key " + key+" in figure "+f.getClass());
+        }
+        return keyToStr.get(key);
     }
 
     @Override
-    public Key<?> nameToKey(String attributeName) throws IOException {
-        if (!attrToKey.containsKey(attributeName)) {
-            throw new IOException("no mapping for attribute " + attributeName);
+    public Key<?> nameToKey(Figure f, String attributeName) throws IOException {
+        if (!attrToKey.containsKey(f.getClass())) {
+            throw new IOException("no mapping for figure " + f.getClass());
         }
-        return attrToKey.get(attributeName);
+        HashMap<String,Key<?>> strToKey = attrToKey.get(f.getClass());
+        if (!strToKey.containsKey(attributeName)) {
+            throw new IOException("no mapping for attribute " + attributeName+" in figure "+f.getClass());
+        }
+        return strToKey.get(attributeName);
     }
 
     /** Adds a converter.

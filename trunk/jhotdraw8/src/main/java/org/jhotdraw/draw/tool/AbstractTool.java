@@ -90,7 +90,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     @Override
-    public OptionalProperty<DrawingView> drawingView() {
+    public OptionalProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
@@ -99,7 +99,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         return node;
     }
 
-    protected abstract void stopEditing();
+    protected void stopEditing() {}
 
     protected void onMouseMoved(MouseEvent event, DrawingView dv) {
     }

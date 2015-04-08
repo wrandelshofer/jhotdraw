@@ -29,10 +29,10 @@ public interface FigureFactory {
      * The name used for persistent storage may be different from the name
      * defined in the key.
      */
-    String keyToName(Key<?> key) throws IOException;
+    String keyToName(Figure f, Key<?> key) throws IOException;
 
     /** Maps a name to a key. */
-    Key<?> nameToKey(String name) throws IOException;
+    Key<?> nameToKey(Figure f, String name) throws IOException;
 
     /** Maps a value to a String. */
     String valueToString(Key<?> key, Object value) throws IOException;

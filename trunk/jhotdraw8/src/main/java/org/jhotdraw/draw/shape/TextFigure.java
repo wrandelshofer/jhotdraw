@@ -5,26 +5,19 @@
  */
 package org.jhotdraw.draw.shape;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import org.jhotdraw.draw.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
-import static org.jhotdraw.draw.shape.CircleFigure.CENTER;
-import static org.jhotdraw.draw.shape.CircleFigure.RADIUS;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.TextHolderFigure;
 
 /**
  * TextFigure.

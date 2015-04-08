@@ -29,13 +29,16 @@ import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.gui.ToolsToolbar;
+import org.jhotdraw.draw.gui.ZoomToolbar;
 import org.jhotdraw.draw.io.DefaultFigureFactory;
 import org.jhotdraw.draw.io.FigureFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
 import org.jhotdraw.draw.shape.CircleFigure;
+import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.tool.CreationTool;
+import org.jhotdraw.draw.tool.SelectionTool;
 
 /**
  *
@@ -51,7 +54,7 @@ public class GrapherViewController extends AbstractView {
     private ScrollPane scrollPane;
 
     private DrawingView drawingView;
-    
+
     private DrawingEditor editor;
 
     @Override
@@ -66,19 +69,25 @@ public class GrapherViewController extends AbstractView {
         }
 
         drawingView = new SimpleDrawingView();
-drawingView.setConstrainer(new GridConstrainer(0,0,10,10,90));
+        drawingView.setConstrainer(new GridConstrainer(0, 0, 1, 1, 1));
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
 
         scrollPane.setContent(drawingView.getNode());
-        
+
         ToolsToolbar ttbar = new ToolsToolbar();
-        ttbar.addTool(new CreationTool("createRectangle",()->new RectangleFigure()), 0, 0);
-        ttbar.addTool(new CreationTool("createCircle",()->new CircleFigure()), 1, 0);
-        ttbar.addTool(new CreationTool("createLine",()->new LineFigure()), 2, 0);
-        ttbar.addTool(new CreationTool("createText",()->new TextFigure(0,0,"Hello")), 3, 0);
+        ttbar.addTool(new SelectionTool("Select"), 0, 0);
+        ttbar.addTool(new CreationTool("Rectangle", () -> new RectangleFigure()), 1, 0);
+        ttbar.addTool(new CreationTool("Circle", () -> new CircleFigure()), 2, 0);
+        ttbar.addTool(new CreationTool("Ellipse", () -> new EllipseFigure()), 0, 1);
+        ttbar.addTool(new CreationTool("Line", () -> new LineFigure()), 1, 1);
+        ttbar.addTool(new CreationTool("Text", () -> new TextFigure(0, 0, "Hello")), 2, 1);
         ttbar.setDrawingEditor(editor);
         toolBar.getItems().add(ttbar);
+
+        ZoomToolbar ztbar = new ZoomToolbar();
+        ztbar.setDrawingView(drawingView);
+        toolBar.getItems().add(ztbar);
     }
 
     @Override
@@ -92,26 +101,26 @@ drawingView.setConstrainer(new GridConstrainer(0,0,10,10,90));
 
     @Override
     public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent> callback) {
- BackgroundTask<SimpleDrawing> t = new BackgroundTask<SimpleDrawing>() {
+        BackgroundTask<SimpleDrawing> t = new BackgroundTask<SimpleDrawing>() {
 
             @Override
             protected SimpleDrawing call() throws Exception {
                 try {
-              FigureFactory factory = new DefaultFigureFactory();
-                SimpleXmlIO io = new SimpleXmlIO(factory);
-                SimpleDrawing drawing = (SimpleDrawing) io.read(uri,null);
-                return drawing;
+                    FigureFactory factory = new DefaultFigureFactory();
+                    SimpleXmlIO io = new SimpleXmlIO(factory);
+                    SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
+                    return drawing;
                 } catch (Exception e) {
                     throw e;
                 }
             }
 
-     @Override
-     protected void succeeded(SimpleDrawing value) {
-          drawingView.setDrawing(value);
-          
-     }
-            
+            @Override
+            protected void succeeded(SimpleDrawing value) {
+                drawingView.setDrawing(value);
+
+            }
+
         };
         t.addCompletionHandler(callback);
         getApplication().execute(t);
@@ -123,9 +132,9 @@ drawingView.setConstrainer(new GridConstrainer(0,0,10,10,90));
 
             @Override
             protected Void call() throws Exception {
-              FigureFactory factory = new DefaultFigureFactory();
+                FigureFactory factory = new DefaultFigureFactory();
                 SimpleXmlIO io = new SimpleXmlIO(factory);
-                io.write(uri,drawingView.getDrawing());
+                io.write(uri, drawingView.getDrawing());
                 return null;
             }
         };
@@ -141,7 +150,7 @@ drawingView.setConstrainer(new GridConstrainer(0,0,10,10,90));
     @FXML
     public void buttonPerformed(ActionEvent event) {
         Instant now = Instant.now();
-        for (Figure f : drawingView.getDrawing().children()) {
+        for (Figure f : drawingView.getDrawing().childrenProperty()) {
             if (f instanceof TextHolderFigure) {
                 TextHolderFigure tf = (TextHolderFigure) f;
                 tf.set(TextHolderFigure.TEXT, now.toString());
