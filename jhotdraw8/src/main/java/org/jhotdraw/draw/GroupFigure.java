@@ -8,13 +8,10 @@ package org.jhotdraw.draw;
 import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 
@@ -23,7 +20,8 @@ import org.jhotdraw.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GroupFigure extends AbstractFigure {
+public class GroupFigure extends AbstractCompositeFigure {
+
 
     @Override
     public Rectangle2D getLayoutBounds() {
@@ -33,7 +31,7 @@ public class GroupFigure extends AbstractFigure {
         double minY = Double.MAX_VALUE;
         double maxY = Double.MIN_VALUE;
 
-        for (Figure child : children()) {
+        for (Figure child : childrenProperty()) {
             Rectangle2D b = child.getLayoutBounds();
             minX = min(minX, b.getMinX());
             maxX = max(maxX, b.getMaxX());
@@ -46,7 +44,7 @@ public class GroupFigure extends AbstractFigure {
 
     @Override
     public void reshape(Transform transform) {
-        for (Figure child : children()) {
+        for (Figure child : childrenProperty()) {
             child.reshape(transform);
         }
     }
@@ -55,7 +53,7 @@ public class GroupFigure extends AbstractFigure {
     public void updateNode(DrawingView v, Node n) {
         ObservableList<Node> group = ((Group) n).getChildren();
         group.clear();
-        for (Figure child : children()) {
+        for (Figure child : childrenProperty()) {
             group.add(v.getNode(child));
         }
     }
@@ -66,7 +64,7 @@ public class GroupFigure extends AbstractFigure {
     }
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
-            HashMap<String, Key<?>> keys = new HashMap<>();
+            HashMap<String, Key<?>> keys = Figure.getFigureKeys();
             for (Field f : GroupFigure.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);

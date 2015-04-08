@@ -23,7 +23,7 @@ import org.jhotdraw.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LabelFigure extends AbstractFigure implements TextHolderFigure {
+public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure {
 
     public final static Key<Point2D> ORIGIN = new Key<>("origin", Point2D.class, new Point2D(0, 0));
 

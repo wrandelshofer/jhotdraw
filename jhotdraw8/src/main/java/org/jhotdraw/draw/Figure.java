@@ -122,15 +122,15 @@ public interface Figure extends PropertyBean, Observable {
      * @return the children property, with {@code getBean()} returning this figure,
      * and {@code getName()} returning {@code CHILDREN_PROPERTY}.
      */
-    ReadOnlyListProperty<Figure> children();
+    ReadOnlyListProperty<Figure> childrenProperty();
 
     /** The parent figure.
      * <p>
      * @return the children property, with {@code getBean()} returning this figure,
      * and {@code getName()} returning {@code PARENT_PROPERTY}.
-     * @see #children
+     * @see #childrenProperty
      */
-    OptionalProperty<Figure> parent();
+    OptionalProperty<Figure> parentProperty();
 
     // ----
     // methods
@@ -206,34 +206,37 @@ public interface Figure extends PropertyBean, Observable {
      * of these figures to its node.
      * <pre>{@code
      * public void updateNode(DrawingView v, Node n) {
-     *    ObservableList<Node> group = ((Group) n).getChildren();
-     *    group.clear();
-     *    for (Figure child : children()) {
-     *       group.add(v.getNode(child));
-     *    }
-     * }
-     * }</pre>
+     ObservableList<Node> group = ((Group) n).getChildren();
+     group.clear();
+     for (Figure child : childrenProperty()) {
+     group.add(v.getNode(child));
+     }
+     }
+     }</pre>
      @param drawingView 
      */
     void updateNode(DrawingView drawingView, Node node);
+
+    /** Whether children may be added to this figure. */
+    boolean allowsChildren();
     // ----
     // convenience methods
     // ----
 
     /** Adds a new child to the figure. */
     default void add(Figure newChild) {
-        children().add(newChild);
+        childrenProperty().add(newChild);
     }
 
     /** Removes a child from the figure. */
     default void remove(Figure child) {
-        children().remove(child);
+        childrenProperty().remove(child);
     }
 
     /** Returns the parent figure.
      * @return parent figure or empty, if the figure is the root.  */
     default Optional<Figure> getParent() {
-        return parent().get();
+        return parentProperty().get();
     }
 
     /** Updates a figure node. 
@@ -268,4 +271,5 @@ public interface Figure extends PropertyBean, Observable {
             throw new InternalError("class can not read its own keys");
         }
     }
+
 }

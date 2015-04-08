@@ -68,7 +68,7 @@ public class SimpleDrawing extends GroupFigure implements Drawing {
         page.setFill(get(BACKGROUND));
         children.add(page);
 
-        for (Figure child : children()) {
+        for (Figure child : childrenProperty()) {
             children.add(v.getNode(child));
         }
     }

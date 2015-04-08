@@ -103,7 +103,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     public Drawing read(Document in, Drawing drawing) throws IOException {
         Drawing tmp = ofDocument(in);
         if (drawing != null) {
-            drawing.children().addAll(tmp.children());
+            drawing.childrenProperty().addAll(tmp.childrenProperty());
             drawing.properties().putAll(tmp.properties());
             tmp = drawing;
         }
@@ -132,20 +132,20 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             Object value = figure.get(key);
             if (!factory.isDefaultValue(key, value)) {
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    elem.setAttribute(factory.keyToName(key), cdataConverter.toString(ids.createId(value)));
+                    elem.setAttribute(factory.keyToName(figure,key), cdataConverter.toString(ids.createId(value)));
                 } else {
-                    elem.setAttribute(factory.keyToName(key), cdataConverter.toString(factory.valueToString(key, value)));
+                    elem.setAttribute(factory.keyToName(figure,key), cdataConverter.toString(factory.valueToString(key, value)));
                 }
             }
         }
 
-        for (Figure child : figure.children()) {
+        for (Figure child : figure.childrenProperty()) {
             if (factory.figureToName(child) != null) {
                 elem.appendChild(doc.createTextNode("\n"));
                 elem.appendChild(writeNode(doc, child));
             }
         }
-        if (!figure.children().isEmpty()) {
+        if (!figure.childrenProperty().isEmpty()) {
             elem.appendChild(doc.createTextNode("\n"));
         }
         return elem;
@@ -214,7 +214,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                     if ("id".equals(attr.getName())) {
                         continue;
                     }
-                    Key<Object> key = (Key<Object>) factory.nameToKey(attr.getName());
+                    Key<Object> key = (Key<Object>) factory.nameToKey(figure,attr.getName());
                     if (key != null && factory.figureKeys(figure).contains(key)) {
                         Object value = null;
                         if (Figure.class.isAssignableFrom(key.getValueType())) {

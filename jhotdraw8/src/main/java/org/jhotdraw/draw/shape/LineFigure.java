@@ -15,7 +15,6 @@ import org.jhotdraw.collection.Key;
 import static java.lang.Math.*;
 import javafx.scene.shape.Line;
 import org.jhotdraw.draw.DrawingView;
-import static org.jhotdraw.draw.shape.RectangleFigure.RECTANGLE;
 
 /**
  * Renders a {@code javafx.scene.shape.Line}.

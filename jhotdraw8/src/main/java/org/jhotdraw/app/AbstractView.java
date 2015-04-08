@@ -53,6 +53,11 @@ protected final StringProperty title = new SimpleStringProperty();
     public BooleanProperty modifiedProperty() {
         return modified;
     }
+    
+    protected void setModified(boolean newValue) {
+        modified.set(newValue);
+    }
+    
     @Override
     public ObjectProperty<URI> uriProperty() {
         return uri;
