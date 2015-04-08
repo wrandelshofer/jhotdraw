@@ -6,11 +6,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="400.0" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane fx:id="backgroundPane" prefHeight="200.0" prefWidth="200.0" />
-      <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="200.0" />
-      <Pane fx:id="glassPane" prefHeight="200.0" prefWidth="200.0" />
-      <Pane fx:id="handlePane" prefHeight="200.0" prefWidth="200.0" />
+      <BorderPane fx:id="backgroundPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="100.0" />
+      <BorderPane fx:id="drawingPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+      <BorderPane fx:id="gridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+      <BorderPane fx:id="toolPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
    </children>
 </StackPane>

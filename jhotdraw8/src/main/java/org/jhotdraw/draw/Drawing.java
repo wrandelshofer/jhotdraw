@@ -7,7 +7,11 @@
 package org.jhotdraw.draw;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.TreeItem;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import org.jhotdraw.collection.Key;
 
 /**
  * A {@code Drawing} is a container for {@link Figure}s.
@@ -16,4 +20,7 @@ import javafx.scene.control.TreeItem;
  * @version $Id$
  */
 public interface Drawing extends Figure {
+        public final static Key<Rectangle2D> BOUNDS = new Key<>("bounds", Rectangle2D.class, new Rectangle2D(0, 0, 640, 480));
+    public final static Key<Paint> BACKGROUND = new Key<>("background", Paint.class, Color.WHITE);
+
 }

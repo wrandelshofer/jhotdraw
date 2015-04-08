@@ -5,10 +5,6 @@
  */
 package org.jhotdraw.draw;
 
-import javafx.beans.value.ChangeListener;
-import javafx.event.Event;
-import javafx.event.EventTarget;
-import javafx.event.EventType;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -30,7 +26,7 @@ public class DrawingModelEvent {
     private final Object oldValue;
     private final Object newValue;
 
-    private final Figure child;
+    private final Figure parent;
     private final int index;
     private final EventType eventType;
     private final SimpleDrawingModel source;
@@ -45,7 +41,7 @@ public class DrawingModelEvent {
         this.key = key;
         this.oldValue = oldValue;
         this.newValue = newValue;
-        this.child = null;
+        this.parent = null;
         this.index = -1;
     }
 
@@ -55,11 +51,11 @@ public class DrawingModelEvent {
         }
         eventType = wasAdded ? EventType.FIGURE_ADDED : EventType.FIGURE_REMOVED;
         this.source = source;
-        this.child = child;
+        this.figure = child;
         this.key = null;
         this.oldValue = null;
         this.newValue = null;
-        this.figure = parent;
+        this.parent = parent;
         this.index = index;
     }
     public <T> DrawingModelEvent(SimpleDrawingModel source, Figure invalidatedFigure) {
@@ -72,7 +68,7 @@ public class DrawingModelEvent {
         this.key = null;
         this.oldValue = null;
         this.newValue = null;
-        this.child = null;
+        this.parent = null;
         this.index = -1;
     }
 
@@ -114,11 +110,11 @@ public class DrawingModelEvent {
 
     /** If a child was added or removed, returns the parent. */
     public Figure getParent() {
-        return figure;
+        return parent;
     }
     /** If a child was added or removed, returns the child. */
     public Figure getChild() {
-        return child;
+        return figure;
     }
 
     /** If the figure was added or removed, returns the child index. */
@@ -132,6 +128,11 @@ public class DrawingModelEvent {
 
     public SimpleDrawingModel getSource() {
         return source;
+    }
+
+    @Override
+    public String toString() {
+        return "DrawingModelEvent{" + "figure=" + figure + ", key=" + key + ", oldValue=" + oldValue + ", newValue=" + newValue + ", parent=" + parent + ", index=" + index + ", eventType=" + eventType + ", source=" + source + '}';
     }
     
 }

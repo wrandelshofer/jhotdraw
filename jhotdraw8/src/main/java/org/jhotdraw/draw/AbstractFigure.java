@@ -5,17 +5,17 @@
  */
 package org.jhotdraw.draw;
 
-import static org.jhotdraw.draw.FigureKeys.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.geometry.Point3D;
-import javafx.scene.Node;
-import javafx.scene.effect.BlendMode;
+import org.jhotdraw.beans.NonnullProperty;
+import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.beans.SimplePropertyBean;
 
 /**
@@ -24,18 +24,18 @@ import org.jhotdraw.beans.SimplePropertyBean;
  * @version $Id$
  */
 public abstract class AbstractFigure extends SimplePropertyBean implements Figure {
-    private final ListProperty<Figure> children = new SimpleListProperty<>(this,"children",FXCollections.observableList(new ArrayList<Figure>()));
-    private final ObjectProperty<Optional<Figure>> parent = new SimpleObjectProperty<Optional<Figure>>(this,"parent",Optional.empty());
+    private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this,CHILDREN_PROPERTY,FXCollections.observableList(new ArrayList<Figure>())).getReadOnlyProperty();
+    private final OptionalProperty<Figure> parent = new OptionalProperty<Figure>(this,PARENT_PROPERTY);
 
     
     
     @Override
-    public ListProperty<Figure> children() {
+    public ReadOnlyListProperty<Figure> children() {
         return children;
     }
 
     @Override
-    public ObjectProperty<Optional<Figure>> parent() {
+    public OptionalProperty<Figure> parent() {
         return parent;
     }
 

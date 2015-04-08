@@ -7,7 +7,10 @@
 package org.jhotdraw.draw;
 
 /**
- * DrawingModel.
+ * DrawingModel allows to observe all changes for a tree of figures.
+ * <p>
+ * DrawingModel is typically used with a Drawing object as the root of the tree.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */

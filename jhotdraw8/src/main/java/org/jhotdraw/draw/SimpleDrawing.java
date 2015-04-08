@@ -25,12 +25,16 @@ import org.jhotdraw.collection.Key;
  */
 public class SimpleDrawing extends GroupFigure implements Drawing {
 
-    public final static Key<Rectangle2D> BOUNDS = new Key<>("bounds", Rectangle2D.class, new Rectangle2D(0, 0, 640, 480));
-    public final static Key<Paint> BACKGROUND = new Key<>("background", Paint.class, Color.WHITE);
 
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
             HashMap<String, Key<?>> keys = new HashMap<>();
+            for (Field f : Drawing.class.getDeclaredFields()) {
+                if (Key.class.isAssignableFrom(f.getType())) {
+                    Key<?> value = (Key<?>) f.get(null);
+                    keys.put(value.getName(), value);
+                }
+            }
             for (Field f : SimpleDrawing.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);

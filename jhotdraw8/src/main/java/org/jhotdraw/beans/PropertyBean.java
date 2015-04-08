@@ -6,6 +6,7 @@
 package org.jhotdraw.beans;
 
 import javafx.beans.property.MapProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -39,7 +40,7 @@ public interface PropertyBean {
     /** Returns an observable map of properties.
      * @return the map 
      */
-    MapProperty<Key<?>,Object> properties();
+    ReadOnlyMapProperty<Key<?>,Object> properties();
 
     /** Sets a property value. */
     default <T> void set(Key<T> key, T value) {
