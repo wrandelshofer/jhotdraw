@@ -9,6 +9,8 @@ import java.util.HashMap;
 import javafx.beans.Observable;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -26,14 +28,10 @@ import org.jhotdraw.collection.Key;
  */
 public class SimplePropertyBean extends SimpleObservable implements PropertyBean {
 
-    private MapProperty<Key<?>, Object> properties;
+    private ReadOnlyMapWrapper<Key<?>, Object> properties = new ReadOnlyMapWrapper<>(this, "properties", FXCollections.observableHashMap());
 
     @Override
-    public final MapProperty<Key<?>, Object> properties() {
-        if (properties == null) {
-            properties = new SimpleMapProperty<>(this,"properties",FXCollections.observableMap(new HashMap<Key<?>, Object>()));
-            properties.addListener((Observable o) -> fireInvalidated());
-        }
-        return properties;
+    public final ReadOnlyMapProperty<Key<?>, Object> properties() {
+        return properties.getReadOnlyProperty();
     }
 }

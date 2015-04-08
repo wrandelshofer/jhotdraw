@@ -5,13 +5,8 @@
  */
 package org.jhotdraw.samples.grapher;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,20 +14,28 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToolBar;
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.FigureKeys;
-import org.jhotdraw.draw.RectangleFigure;
+import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
-import org.jhotdraw.draw.TextFigure;
+import org.jhotdraw.draw.SimpleDrawingEditor;
+import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.draw.constrain.GridConstrainer;
+import org.jhotdraw.draw.gui.ToolsToolbar;
 import org.jhotdraw.draw.io.DefaultFigureFactory;
 import org.jhotdraw.draw.io.FigureFactory;
-import org.jhotdraw.draw.io.SimpleFigureFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
+import org.jhotdraw.draw.shape.CircleFigure;
+import org.jhotdraw.draw.shape.LineFigure;
+import org.jhotdraw.draw.shape.TextFigure;
+import org.jhotdraw.draw.tool.CreationTool;
 
 /**
  *
@@ -43,9 +46,13 @@ public class GrapherViewController extends AbstractView {
     private Node node;
 
     @FXML
+    private ToolBar toolBar;
+    @FXML
     private ScrollPane scrollPane;
 
-    private SimpleDrawingView drawingView;
+    private DrawingView drawingView;
+    
+    private DrawingEditor editor;
 
     @Override
     public void init() {
@@ -58,15 +65,20 @@ public class GrapherViewController extends AbstractView {
             throw new InternalError(ex);
         }
 
-        Drawing d = new SimpleDrawing();
-        d.add(new RectangleFigure(10, 10, 40, 30));
-        d.add(new TextFigure(15, 30, "Hello"));
-
         drawingView = new SimpleDrawingView();
-        drawingView.init();
-        drawingView.setDrawing(d);
+drawingView.setConstrainer(new GridConstrainer(0,0,10,10,90));
+        editor = new SimpleDrawingEditor();
+        editor.addDrawingView(drawingView);
 
         scrollPane.setContent(drawingView.getNode());
+        
+        ToolsToolbar ttbar = new ToolsToolbar();
+        ttbar.addTool(new CreationTool("createRectangle",()->new RectangleFigure()), 0, 0);
+        ttbar.addTool(new CreationTool("createCircle",()->new CircleFigure()), 1, 0);
+        ttbar.addTool(new CreationTool("createLine",()->new LineFigure()), 2, 0);
+        ttbar.addTool(new CreationTool("createText",()->new TextFigure(0,0,"Hello")), 3, 0);
+        ttbar.setDrawingEditor(editor);
+        toolBar.getItems().add(ttbar);
     }
 
     @Override
@@ -97,6 +109,7 @@ public class GrapherViewController extends AbstractView {
      @Override
      protected void succeeded(SimpleDrawing value) {
           drawingView.setDrawing(value);
+          
      }
             
         };
@@ -122,15 +135,16 @@ public class GrapherViewController extends AbstractView {
 
     @Override
     public void clear() {
+        drawingView.setDrawing(new SimpleDrawing());
     }
 
     @FXML
     public void buttonPerformed(ActionEvent event) {
         Instant now = Instant.now();
         for (Figure f : drawingView.getDrawing().children()) {
-            if (f instanceof TextFigure) {
-                TextFigure tf = (TextFigure) f;
-                tf.set(TextFigure.TEXT, now.toString());
+            if (f instanceof TextHolderFigure) {
+                TextHolderFigure tf = (TextHolderFigure) f;
+                tf.set(TextHolderFigure.TEXT, now.toString());
             }
         }
     }

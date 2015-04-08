@@ -21,14 +21,15 @@ import org.jhotdraw.collection.Key;
  */
 public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disableable {
    /** 
-     * The key used for storing the action in an action map.
+     * The key used for storing the action in an action map, and for accessing
+    * resources in resource bundles.
      */
-    public static final StringKey ID = new StringKey("Id");
+    public static final StringKey NAME = new StringKey("name");
    /** 
      * The key used for storing the {@code String} name
      * for the action, used for a menu or button.
      */
-    public static final StringKey NAME = new StringKey("Name");
+    public static final StringKey LABEL = new StringKey("label");
     /**
      * The key used for storing a short {@code String}
      * description for the action, used for tooltip text.
@@ -71,7 +72,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
     public static final BooleanKey SELECTED_KEY = new BooleanKey( "SwingSelectedKey");
 
     /**
-     * The key used for storing a small icon, such
+     * The key used for large icon, such
      * as {@code ImageView}.  This is typically used by
      * buttons.
      */
@@ -80,13 +81,13 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
     /** The localized name of the action for use in controls.
      * @return The name 
      */
-    default public String getName() {
-        return get(NAME);
+    default public String getLabel() {
+        return get(LABEL);
     }
-    /** The name of the action for use in action maps.
+    /** The name of the action for use in action maps and for resource bundles.
      * @return The id 
      */
-    default public String getId() {
-        return get(ID);
+    default public String getName() {
+        return get(NAME);
     }
 }

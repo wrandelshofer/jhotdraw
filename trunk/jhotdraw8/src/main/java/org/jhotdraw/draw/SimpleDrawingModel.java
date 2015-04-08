@@ -5,13 +5,11 @@
  */
 package org.jhotdraw.draw;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.MapProperty;
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -27,26 +25,26 @@ import org.jhotdraw.collection.Key;
  */
 public class SimpleDrawingModel implements DrawingModel {
 
-    private class FigureHandler implements ListChangeListener<Figure>, MapChangeListener<Key<?>, Object>,InvalidationListener {
+    private class FigureHandler implements ListChangeListener<Figure>, MapChangeListener<Key<?>, Object>, InvalidationListener {
 
         public FigureHandler() {
         }
 
         public void addFigure(Figure figure) {
-            figure.children().addListener((ListChangeListener<Figure>)this);
-            figure.properties().addListener((MapChangeListener<Key<?>, Object>)this);
-            figure.addListener((InvalidationListener)this);
+            figure.children().addListener((ListChangeListener<Figure>) this);
+            figure.properties().addListener((MapChangeListener<Key<?>, Object>) this);
+            figure.addListener((InvalidationListener) this);
         }
 
         public void removeFigure(Figure figure) {
-            figure.children().removeListener((ListChangeListener<Figure>)this);
-            figure.properties().removeListener((MapChangeListener<Key<?>, Object>)this);
-            figure.removeListener((InvalidationListener)this);
+            figure.children().removeListener((ListChangeListener<Figure>) this);
+            figure.properties().removeListener((MapChangeListener<Key<?>, Object>) this);
+            figure.removeListener((InvalidationListener) this);
         }
 
         @Override
         public void onChanged(ListChangeListener.Change<? extends Figure> c) {
-            Figure figure = (Figure) ((ListProperty) c.getList()).getBean();
+            Figure figure = (Figure) ((ReadOnlyProperty) c.getList()).getBean();
             while (c.next()) {
                 final int from = c.getFrom();
                 final int to = c.getTo();
@@ -72,11 +70,13 @@ public class SimpleDrawingModel implements DrawingModel {
                     if (c.wasRemoved()) {
                         final List<? extends Figure> removed = c.getRemoved();
                         for (int i = 0, n = removed.size(); i < n; i++) {
+                            handleFigureRemoved(removed.get(i));
                             fireFigureRemoved(figure, removed.get(i), i + from);
                         }
                     }
                     if (c.wasAdded()) {
                         for (int i = from; i < to; i++) {
+                            handleFigureAdded(list.get(i));
                             fireFigureAdded(figure, list.get(i), i);
                         }
                     }
@@ -87,7 +87,7 @@ public class SimpleDrawingModel implements DrawingModel {
         @Override
         public void onChanged(MapChangeListener.Change<? extends Key<?>, ? extends Object> change
         ) {
-            Figure figure = (Figure) ((MapProperty) change.getMap()).getBean();
+            Figure figure = (Figure) ((ReadOnlyProperty) change.getMap()).getBean();
             firePropertyChange(figure, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
         }
 
@@ -135,18 +135,17 @@ public class SimpleDrawingModel implements DrawingModel {
     }
 
     private void fireFigureRemoved(Figure parent, Figure child, int index) {
-        handleFigureRemoved(child);
         fire(new DrawingModelEvent(SimpleDrawingModel.this, false, parent, child, index));
     }
 
     private void fireFigureAdded(Figure parent, Figure child, int index) {
-        handleFigureAdded(child);
         fire(new DrawingModelEvent(SimpleDrawingModel.this, true, parent, child, index));
     }
 
     private <T> void firePropertyChange(Figure figure, Key<T> key, T oldValue, T newValue) {
         fire(new DrawingModelEvent(SimpleDrawingModel.this, figure, key, oldValue, newValue));
     }
+
     private void fireFigureInvalidated(Figure figure) {
         fire(new DrawingModelEvent(SimpleDrawingModel.this, figure));
     }

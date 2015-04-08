@@ -466,7 +466,7 @@ public class ResourceBundleUtil implements Serializable {
     }
 
     public void configureAction(Action action, String argument, Class<?> baseClass) {
-        action.set(Action.NAME, getTextProperty(argument));
+        action.set(Action.LABEL, getTextProperty(argument));
         String shortDescription = getToolTipTextProperty(argument);
         if (shortDescription != null && shortDescription.length() > 0) {
             action.set(Action.SHORT_DESCRIPTION, shortDescription);

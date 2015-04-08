@@ -100,11 +100,11 @@ public class Key<T> implements Serializable {
         if (typeParameters == null) {
             throw new IllegalArgumentException("type parameters is null");
         }
-if (typeParameters.length()>0) {
-    if (! typeParameters.startsWith("<")||!typeParameters.endsWith(">")) {
-            throw new IllegalArgumentException("type parameters does not have arrow brackets:"+typeParameters);
-    }
-}        
+        if (typeParameters.length() > 0) {
+            if (!typeParameters.startsWith("<") || !typeParameters.endsWith(">")) {
+                throw new IllegalArgumentException("type parameters does not have arrow brackets:" + typeParameters);
+            }
+        }
         this.name = key;
         this.clazz = clazz;
         this.typeParameters = typeParameters;
@@ -284,21 +284,24 @@ if (typeParameters.length()>0) {
         return (ObjectBinding<T>) value;
     }
 
+    /** This property is bound to a value in the map. */
     private static class PropertyAt<T> extends ReadOnlyObjectWrapper<T> {
 
-        private final MapExpression<Key<?>, Object> map;
-        private final Key<T> key;
+        private MapExpression<Key<?>, Object> map;
+        private Key<T> key;
+        private MapChangeListener<Key<?>, Object> mapListener;
 
         private PropertyAt(MapExpression<Key<?>, Object> map, Key<T> key) {
             this.map = map;
             this.key = key;
-            map.addListener((MapChangeListener.Change<? extends Key<?>, ? extends Object> change) -> {
+            this.mapListener = (MapChangeListener.Change<? extends Key<?>, ? extends Object> change) -> {
                 if (change.getKey() == this.key) {
                     if (get() != change.getValueAdded()) {
                         set((T) change.getValueAdded());
                     }
                 }
-            });
+            };
+            map.addListener(mapListener);
         }
 
         @Override
@@ -312,6 +315,21 @@ if (typeParameters.length()>0) {
             if (value != key.get(map)) {
                 map.put(key, value);
             }
+        }
+
+        @Override
+        public void unbind() {
+            if (map != null) {
+                map.removeListener(mapListener);
+                mapListener = null;
+                map = null;
+                key = null;
+            }
+        }
+
+        @Override
+        public boolean isBound() {
+            return (map != null);
         }
 
     }

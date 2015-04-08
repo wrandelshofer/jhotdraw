@@ -5,40 +5,20 @@
  */
 package org.jhotdraw.draw.io;
 
-import org.jhotdraw.text.Point2DConverter;
-import org.jhotdraw.text.Rectangle2DConverter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.FigureKeys;
-import org.jhotdraw.draw.RectangleFigure;
-import org.jhotdraw.draw.SimpleDrawing;
-import org.jhotdraw.draw.TextFigure;
-import org.jhotdraw.text.CDataConverter;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.DefaultConverter;
 
 /**
  * SimpleFigureFactory.
- * <p>
- * This factory provides the following mappings.
- * <ul>
- * <li>Maps {@code Figure}s from/to XML element names.</li>
- * <li>Maps {@code Key}s from/to XML attribute names.</li>
- * </ul>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -65,6 +45,12 @@ public class SimpleFigureFactory implements FigureFactory {
             figureKeys.get(f).addAll(keys);
         } else {
             figureKeys.put(f, new HashSet<>(keys));
+        }
+    }
+    public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<Key<?>> keys) {
+        addFigureKeys(f,keys);
+        for (Key<?> key : keys) {
+            addKey(key.getName(),key);
         }
     }
 

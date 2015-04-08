@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.draw.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -73,6 +74,19 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     @Override
+    public void write(File file, Drawing drawing) throws IOException {
+        Document doc = toDocument(drawing);
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(file);
+            t.transform(source, result);
+        } catch (TransformerException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
     public void write(OutputStream out, Drawing drawing) throws IOException {
         Document doc = toDocument(drawing);
         try {
@@ -114,7 +128,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         Element elem = doc.createElement(factory.figureToName(figure));
         elem.setAttribute("id", ids.createId(figure));
         for (Key<?> k : factory.figureKeys(figure)) {
-System.out.println("figure:"+figure+" "+k);
             Key<Object> key = (Key<Object>) k;
             Object value = figure.get(key);
             if (!factory.isDefaultValue(key, value)) {

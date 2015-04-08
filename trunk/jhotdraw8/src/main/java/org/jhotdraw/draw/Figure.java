@@ -5,34 +5,25 @@
  */
 package org.jhotdraw.draw;
 
-import static org.jhotdraw.draw.FigureKeys.*;
-import java.awt.geom.Point2D;
-import java.util.Arrays;
+import static java.lang.Math.*;
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Optional;
 import javafx.beans.Observable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.collections.ObservableList;
-import javafx.event.EventTarget;
-import javafx.geometry.Bounds;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.Effect;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.beans.PropertyBean;
-import static org.jhotdraw.draw.FigureKeys.FILL;
-import static org.jhotdraw.draw.FigureKeys.SMOOTH;
-import static org.jhotdraw.draw.FigureKeys.STROKE;
-import static org.jhotdraw.draw.FigureKeys.STROKE_DASH_ARRAY;
-import static org.jhotdraw.draw.FigureKeys.STROKE_DASH_OFFSET;
-import static org.jhotdraw.draw.FigureKeys.STROKE_LINE_CAP;
-import static org.jhotdraw.draw.FigureKeys.STROKE_LINE_JOIN;
-import static org.jhotdraw.draw.FigureKeys.STROKE_MITER_LIMIT;
-import static org.jhotdraw.draw.FigureKeys.STROKE_TYPE;
-import static org.jhotdraw.draw.FigureKeys.STROKE_WIDTH;
+import org.jhotdraw.collection.Key;
 
 /**
  * A {@code Figure} is an editable element of a {@link Drawing}.
@@ -43,7 +34,75 @@ import static org.jhotdraw.draw.FigureKeys.STROKE_WIDTH;
  * @version $Id$
  */
 public interface Figure extends PropertyBean, Observable {
+    // ----
+    // keys
+    // ----
 
+    /**
+     * Specifies a blend mode applied to the figure.
+     * The {@code null} value is interpreted as {@code SRC_OVER}.
+     * <p>
+     * Default value: {@code SRC_OVER}.
+     */
+    public static Key<BlendMode> BLEND_MODE = new Key<>("blendMode", BlendMode.class, BlendMode.SRC_OVER);
+    /**
+     * Specifies an effect applied to the figure.
+     * The {@code null} means that no effect is applied.
+     * <p>
+     * Default value: {@code null}.
+     */
+    public static Key<Effect> EFFECT = new Key<>("effect", Effect.class, null);
+    /**
+     * Specifies the opacity of the figure.
+     * A figure with {@code 0} opacity is completely translucent.
+     * A figure with {@code 1} opacity is completely opaque.
+     * <p>
+     * Values smaller than {@code 0} are treated as {@code 0}. 
+     * Values larger than {@code 1} are treated as {@code 1}. 
+     * <p>
+     * Default value: {@code 1}.
+     */
+    public static Key<Double> OPACITY = new Key<>("opacity", Double.class, 1.0);
+    /**
+     * Defines the angle of rotation around the center of the figure in degrees.
+     * Default value: {@code 0}.
+     */
+    public static Key<Double> ROTATE = new Key<>("rotate", Double.class, 0.0);
+    /**
+     * Defines the rotation axis used.
+     * Default value: {@code Rotate.Z_AXIS}.
+     */
+    public static Key<Point3D> ROTATION_AXIS = new Key<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
+    /**
+     * Defines the scale factor by which coordinates are scaled on the x axis
+     * about the center of the figure.
+     * Default value: {@code 1}.
+     */
+    public static Key<Double> SCALE_X = new Key<>("scaleX", Double.class, 1.0);
+    /**
+     * Defines the scale factor by which coordinates are scaled on the y axis
+     * about the center of the figure.
+     * Default value: {@code 1}.
+     */
+    public static Key<Double> SCALE_Y = new Key<>("scaleY", Double.class, 1.0);
+    /**
+     * Defines the scale factor by which coordinates are scaled on the z axis
+     * about the center of the figure.
+     * Default value: {@code 1}.
+     */
+    public static Key<Double> SCALE_Z = new Key<>("scaleZ", Double.class, 1.0);
+
+    // ----
+    // property names
+    // ----
+    /** The name of the children property. */
+    public final static String CHILDREN_PROPERTY = "children";
+    /** The name of the parent property. */
+    public final static String PARENT_PROPERTY = "parent";
+
+    // ----
+    // properties
+    // ----
     /** The child figures. 
      * <p>
      * If a child is added to a figure, figure must set itself set as the parent
@@ -51,33 +110,31 @@ public interface Figure extends PropertyBean, Observable {
      * <p>
      * If a child is removed from a figure, figure must set parent to null
      * immediately before the child is removed.
-     * @return the children of the figure
+     * <p>
+     * Note that this method returns a {@code ReadOnlyListProperty} and not
+     * just an {@code ObservableList}. {@code ListChangeListener}s can get
+     * the associated {@code Figure} using the following code:
+     * <pre>{@code
+     * (ListChangeListener.Change change) -> Figure figure = (Figure) ((ReadOnlyProperty) change.getList()).getBean();
+     * }</pre>
+     * <p>
+     *
+     * @return the children property, with {@code getBean()} returning this figure,
+     * and {@code getName()} returning {@code CHILDREN_PROPERTY}.
      */
-    ListProperty<Figure> children();
-
-    /** Adds a new child to the figure. */
-    default void add(Figure newChild) {
-        children().add(newChild);
-    }
-
-    /** Removes a child from the figure. */
-    default void remove(Figure child) {
-        children().remove(child);
-    }
+    ReadOnlyListProperty<Figure> children();
 
     /** The parent figure.
      * <p>
-     * @return parent figure or empty, if the figure is the root.
+     * @return the children property, with {@code getBean()} returning this figure,
+     * and {@code getName()} returning {@code PARENT_PROPERTY}.
      * @see #children
      */
-    ObjectProperty<Optional<Figure>> parent();
+    OptionalProperty<Figure> parent();
 
-    /** Returns the parent figure.
-     * @return parent figure or empty, if the figure is the root.  */
-    default Optional<Figure> getParent() {
-        return parent().get();
-    }
-
+    // ----
+    // methods
+    // ----
     /** The rectangular bounds that should be used for layout calculations
      * for this figure.
      * @return the layout bounds
@@ -86,17 +143,27 @@ public interface Figure extends PropertyBean, Observable {
 
     /** Attempts to change the layout bounds of the figure.
      * <p>
+     * The figure may choose to only partially perform the transformation.
+     * <p>
+     * If the layout bounds of the figure changes, it fires an invalidation event.
+     *
+     * @param transform the desired transformation
+     */
+    void reshape(Transform transform);
+
+    /** Attempts to change the layout bounds of the figure.
+     * <p>
      * Width and height are ignored, if the figure is not resizable.
      * <p>
      * If the layout bounds of the figure changes, it fires an invalidation event.
      * @param x desired x-position
      * @param y desired y-position
-     * @param width desired width
-     * @param height desired height
+     * @param width desired width, may be negative
+     * @param height desired height, may be negative
      */
     default void reshape(double x, double y, double width, double height) {
         Rectangle2D oldBounds = getLayoutBounds();
-        Rectangle2D newBounds = new Rectangle2D(x, y, width, height);
+        Rectangle2D newBounds = new Rectangle2D(x - min(width, 0), y - min(height, 0), abs(width), abs(height));
 
         double sx = newBounds.getWidth() / oldBounds.getWidth();
         double sy = newBounds.getHeight() / oldBounds.getHeight();
@@ -118,16 +185,6 @@ public interface Figure extends PropertyBean, Observable {
         reshape.append(tx);
         reshape(reshape);
     }
-
-    /** Attempts to change the layout bounds of the figure.
-     * <p>
-     * The figure may choose to only partially perform the transformation.
-     * <p>
-     * If the layout bounds of the figure changes, it fires an invalidation event.
-     *
-     * @param transform the desired transformation
-     */
-    void reshape(Transform transform);
 
     /** This method is invoked by {@code DrawingView}, when it needs a node
      * to create a scene graph for a figure.
@@ -159,9 +216,30 @@ public interface Figure extends PropertyBean, Observable {
      @param drawingView 
      */
     void updateNode(DrawingView drawingView, Node node);
+    // ----
+    // convenience methods
+    // ----
 
-    /** Updates a regular node. */
-    default void updateNodeProperties(Node node) {
+    /** Adds a new child to the figure. */
+    default void add(Figure newChild) {
+        children().add(newChild);
+    }
+
+    /** Removes a child from the figure. */
+    default void remove(Figure child) {
+        children().remove(child);
+    }
+
+    /** Returns the parent figure.
+     * @return parent figure or empty, if the figure is the root.  */
+    default Optional<Figure> getParent() {
+        return parent().get();
+    }
+
+    /** Updates a figure node. 
+     * This method can be used from {@code updateNode}.
+     */
+    default void updateFigureProperties(Node node) {
         node.setBlendMode(get(BLEND_MODE));
         node.setEffect(get(EFFECT));
         node.setOpacity(get(OPACITY));
@@ -171,49 +249,23 @@ public interface Figure extends PropertyBean, Observable {
         node.setScaleY(get(SCALE_Y));
         node.setScaleZ(get(SCALE_Z));
     }
-    /** Updates a shape node. */
-    default void updateShapeProperties(Shape shape) {
-        updateNodeProperties(shape);
-        shape.setFill(get(FILL));
-        shape.setSmooth(get(SMOOTH));
-        shape.setStrokeDashOffset(get(STROKE_DASH_OFFSET));
-        shape.setStrokeLineCap(get(STROKE_LINE_CAP));
-        shape.setStrokeLineJoin(get(STROKE_LINE_JOIN));
-        shape.setStrokeMiterLimit(get(STROKE_MITER_LIMIT));
-        shape.setStroke(get(STROKE));
-        shape.setStrokeType(get(STROKE_TYPE));
-        shape.setStrokeWidth(get(STROKE_WIDTH));
-        shape.getStrokeDashArray().clear();
-        for (double dash : get(STROKE_DASH_ARRAY)) {
-            shape.getStrokeDashArray().add(dash);
+
+    // ---
+    // static methods
+    // ---
+    /** Returns all keys declared in this class. */
+    public static HashMap<String, Key<?>> getFigureKeys() {
+        try {
+            HashMap<String, Key<?>> keys = new HashMap<>();
+            for (Field f : Figure.class.getDeclaredFields()) {
+                if (Key.class.isAssignableFrom(f.getType())) {
+                    Key<?> value = (Key<?>) f.get(null);
+                    keys.put(value.getName(), value);
+                }
+            }
+            return keys;
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
+            throw new InternalError("class can not read its own keys");
         }
     }
-    /** Updates a text node. */
-    default void updateTextProperties(Text text) {
-        updateNodeProperties(text);
-        
-        text.setFont(get(FONT));
-        text.setFontSmoothingType(get(FONT_SMOOTHING_TYPE));
-        text.setLineSpacing(get(LINE_SPACING));
-        text.setStrikethrough(get(STRIKETHROUGH));
-        text.setTextAlignment(get(TEXT_ALIGNMENT));
-        text.setTextOrigin(get(TEXT_ORIGIN));
-        text.setUnderline(get(UNDERLINE));
-        text.setWrappingWidth(get(WRAPPING_WIDTH));
-        
-        text.setFill(get(TEXT_FILL));
-        text.setSmooth(get(TEXT_SMOOTH));
-        text.setStrokeDashOffset(get(TEXT_STROKE_DASH_OFFSET));
-        text.setStrokeLineCap(get(TEXT_STROKE_LINE_CAP));
-        text.setStrokeLineJoin(get(TEXT_STROKE_LINE_JOIN));
-        text.setStrokeMiterLimit(get(TEXT_STROKE_MITER_LIMIT));
-        text.setStroke(get(TEXT_STROKE));
-        text.setStrokeType(get(TEXT_STROKE_TYPE));
-        text.setStrokeWidth(get(TEXT_STROKE_WIDTH));
-        text.getStrokeDashArray().clear();
-        for (double dash : get(TEXT_STROKE_DASH_ARRAY)) {
-            text.getStrokeDashArray().add(dash);
-        }
-    }
-    
 }

@@ -3,32 +3,36 @@
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.shape;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import org.jhotdraw.draw.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import static org.jhotdraw.draw.shape.CircleFigure.CENTER;
+import static org.jhotdraw.draw.shape.CircleFigure.RADIUS;
 
 /**
  * TextFigure.
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractFigure {
-
-    public final static Key<String> TEXT = new Key<>("text", String.class, "");
-
-    public final static Key<Point2D> ORIGIN = new Key<>("origin", Point2D.class, new Point2D(0, 0));
+public class TextFigure extends ShapeFigure implements TextHolderFigure {
+     public final static Key<Point2D> ORIGIN = new Key<>("origin", Point2D.class, new Point2D(0, 0));
 
     private ReadOnlyObjectWrapper<Bounds> layoutBounds = null;
 
@@ -66,6 +70,11 @@ public class TextFigure extends AbstractFigure {
     }
 
     @Override
+    public void reshape(double x, double y, double width, double height) {
+        set(ORIGIN,new Point2D(x,y));
+    }
+
+    @Override
     public void putNode(DrawingView drawingView) {
         drawingView.putNode(this, new Text());
     }
@@ -79,9 +88,16 @@ public class TextFigure extends AbstractFigure {
         textNode.setBoundsType(TextBoundsType.VISUAL);
         updateTextProperties(textNode);
     }
+
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
-            HashMap<String, Key<?>> keys = FigureKeys.getFigureKeys();
+            HashMap<String, Key<?>> keys = ShapeFigure.getFigureKeys();
+            for (Field f : TextHolderFigure.class.getDeclaredFields()) {
+                if (Key.class.isAssignableFrom(f.getType())) {
+                    Key<?> value = (Key<?>) f.get(null);
+                    keys.put(value.getName(), value);
+                }
+            }
             for (Field f : TextFigure.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);
