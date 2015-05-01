@@ -48,6 +48,7 @@ import org.jhotdraw.draw.event.ToolAdapter;
  * @version $Id$
  */
 public class SelectionTool extends AbstractTool {
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -68,38 +69,39 @@ public class SelectionTool extends AbstractTool {
     private DragTracker dragTracker;
 
     private class TrackerHandler extends ToolAdapter {
-        @Override
-    public void toolDone(ToolEvent event) {
-        // Empty
-        Tool newTracker = getSelectAreaTracker();
 
-        if (newTracker != null) {
-            if (tracker != null) {
-                tracker.deactivate(getEditor());
-                tracker.removeToolListener(this);
+        @Override
+        public void toolDone(ToolEvent event) {
+            // Empty
+            Tool newTracker = getSelectAreaTracker();
+
+            if (newTracker != null) {
+                if (tracker != null) {
+                    tracker.deactivate(getEditor());
+                    tracker.removeToolListener(this);
+                }
+                tracker = newTracker;
+                tracker.activate(getEditor());
+                tracker.addToolListener(this);
             }
-            tracker = newTracker;
-            tracker.activate(getEditor());
-            tracker.addToolListener(this);
+            fireToolDone();
         }
-        fireToolDone();
-    }
 
-    /**
-     * Sent when an area of the drawing view needs to be repainted.
-     */
+        /**
+         * Sent when an area of the drawing view needs to be repainted.
+         */
         @Override
-    public void areaInvalidated(ToolEvent e) {
-        fireAreaInvalidated(e.getInvalidatedArea());
-    }
-    /**
-     * Sent when the bounds need to be revalidated.
-     */
-        @Override
-    public void boundsInvalidated(ToolEvent e) {
-        fireBoundsInvalidated(e.getInvalidatedArea());
-    }
+        public void areaInvalidated(ToolEvent e) {
+            fireAreaInvalidated(e.getInvalidatedArea());
+        }
 
+        /**
+         * Sent when the bounds need to be revalidated.
+         */
+        @Override
+        public void boundsInvalidated(ToolEvent e) {
+            fireBoundsInvalidated(e.getInvalidatedArea());
+        }
 
     }
     private TrackerHandler trackerHandler;
@@ -232,9 +234,9 @@ public class SelectionTool extends AbstractTool {
                 Figure figure;
                 Drawing drawing = view.getDrawing();
                 Point2D.Double p = view.viewToDrawing(anchor);
-                if (isSelectBehindEnabled() &&
-                        (evt.getModifiersEx() &
-                        (InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK)) != 0) {
+                if (isSelectBehindEnabled() && (evt.getModifiersEx()
+                        & (InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK))
+                        != 0) {
                     // Select a figure behind the current selection
                     figure = view.findFigure(anchor);
                     while (figure != null && !figure.isSelectable()) {
@@ -361,7 +363,6 @@ public class SelectionTool extends AbstractTool {
         dragTracker = newValue;
     }
 
-
     /**
      * Returns true, if this tool lets the user interact with handles.
      * <p>
@@ -369,6 +370,7 @@ public class SelectionTool extends AbstractTool {
      * 
      * @return True, if this tool supports interaction with the handles.
      */
+    @Override
     public boolean supportsHandleInteraction() {
         return true;
     }
