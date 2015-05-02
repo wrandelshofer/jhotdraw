@@ -7,12 +7,15 @@ package org.jhotdraw.draw;
 
 import static java.lang.Math.*;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import javafx.beans.Observable;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
+import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
@@ -24,6 +27,9 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.HandleLevel;
+import org.jhotdraw.draw.handle.SimpleHighlightHandle;
 
 /**
  * A {@code Figure} is an editable element of a {@link Drawing}.
@@ -133,13 +139,13 @@ public interface Figure extends PropertyBean, Observable {
     OptionalProperty<Figure> parentProperty();
 
     // ----
-    // methods
+    // Behaviors
     // ----
     /** The rectangular bounds that should be used for layout calculations
      * for this figure.
      * @return the layout bounds
      */
-    public Rectangle2D getLayoutBounds();
+    public Bounds getLayoutBounds();
 
     /** Attempts to change the layout bounds of the figure.
      * <p>
@@ -162,7 +168,7 @@ public interface Figure extends PropertyBean, Observable {
      * @param height desired height, may be negative
      */
     default void reshape(double x, double y, double width, double height) {
-        Rectangle2D oldBounds = getLayoutBounds();
+        Bounds oldBounds = getLayoutBounds();
         Rectangle2D newBounds = new Rectangle2D(x - min(width, 0), y - min(height, 0), abs(width), abs(height));
 
         double sx = newBounds.getWidth() / oldBounds.getWidth();
@@ -219,8 +225,26 @@ public interface Figure extends PropertyBean, Observable {
 
     /** Whether children may be added to this figure. */
     boolean allowsChildren();
+    /** Whether the figure is selectable by the user. */
+    boolean isSelectable();
+    
+    /** Creates handles of the specified level and for the specified drawing view. 
+     * @param level The desired handle level
+     * @param dv The drawing view which will display the handles
+     * @return The handles. Returns {@code Optional.empty()} if the figure does
+     * not have handles of this level.
+     */
+    default List<Handle> createHandles(HandleLevel level, DrawingView dv) {
+        if (level == HandleLevel.HIGHLIGHT||
+                level == HandleLevel.SHAPE) {
+            List<Handle> list = new LinkedList<>();
+            list.add(new SimpleHighlightHandle(this,dv));
+            return list;
+        }
+        return Collections.emptyList();
+    }
     // ----
-    // convenience methods
+    // Convenience Methods
     // ----
 
     /** Adds a new child to the figure. */
@@ -231,6 +255,10 @@ public interface Figure extends PropertyBean, Observable {
     /** Removes a child from the figure. */
     default void remove(Figure child) {
         childrenProperty().remove(child);
+    }
+    
+    default ObservableList<Figure> children() {
+        return childrenProperty().get();
     }
 
     /** Returns the parent figure.

@@ -24,13 +24,18 @@ import org.jhotdraw.beans.SimplePropertyBean;
  * @version $Id$
  */
 public abstract class AbstractFigure extends SimplePropertyBean implements Figure {
-    private final OptionalProperty<Figure> parent = new OptionalProperty<Figure>(this,PARENT_PROPERTY);
 
-    
-    
+    private final OptionalProperty<Figure> parent = new OptionalProperty<Figure>(this, PARENT_PROPERTY);
+
     @Override
     public OptionalProperty<Figure> parentProperty() {
         return parent;
+    }
+
+    /** This implementation always returns true. */
+    @Override
+    public boolean isSelectable() {
+        return true;
     }
 
 }

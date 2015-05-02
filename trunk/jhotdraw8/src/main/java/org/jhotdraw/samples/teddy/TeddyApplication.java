@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw.app.ApplicationModel;
 import org.jhotdraw.app.DocumentOrientedApplication;
-import org.jhotdraw.app.TextAreaViewController;
+import org.jhotdraw.app.TextAreaView;
 import org.jhotdraw.app.View;
 
 /**
@@ -36,7 +36,7 @@ public class TeddyApplication extends DocumentOrientedApplication {
     }
      @Override
     public View instantiateView() {
-        TextAreaViewController v = new TextAreaViewController();
+        TextAreaView v = new TextAreaView();
         return v;
     }
     /**

@@ -14,6 +14,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.event.Listener;
 
 /**
  * The {@code SimpleDrawingModel} listens to mutations on a figure and
@@ -103,7 +104,12 @@ public class SimpleDrawingModel implements DrawingModel {
     private final FigureHandler handler = new FigureHandler();
 
     public SimpleDrawingModel() {
+        this(null);
     }
+    public SimpleDrawingModel(Figure root) {
+        setRoot(root);
+    }
+
 
     @Override
     public void setRoot(Figure newValue) {
@@ -116,38 +122,51 @@ public class SimpleDrawingModel implements DrawingModel {
         }
     }
 
-    private final LinkedList<DrawingModelListener> listeners = new LinkedList<>();
+    private final LinkedList<Listener<DrawingModelEvent>> drawingModelListeners = new LinkedList<>();
+    private final LinkedList<InvalidationListener> invalidationListeners = new LinkedList<>();
 
     @Override
-    public void addListener(DrawingModelListener listener) {
-        listeners.add(listener);
+    public void addListener(Listener<DrawingModelEvent> listener) {
+        drawingModelListeners.add(listener);
     }
 
     @Override
-    public void removeListener(DrawingModelListener listener) {
-        listeners.remove(listener);
+    public void removeListener(Listener<DrawingModelEvent> listener) {
+        drawingModelListeners.remove(listener);
+    }
+    @Override
+    public void addListener(InvalidationListener listener) {
+        invalidationListeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+        invalidationListeners.remove(listener);
     }
 
     private void fire(DrawingModelEvent event) {
-        for (DrawingModelListener l : listeners) {
+        for (Listener<DrawingModelEvent> l : drawingModelListeners) {
             l.handle(event);
+        }
+        for (InvalidationListener l : invalidationListeners) {
+            l.invalidated(this);
         }
     }
 
     private void fireFigureRemoved(Figure parent, Figure child, int index) {
-        fire(new DrawingModelEvent(SimpleDrawingModel.this, false, parent, child, index));
+        fire(new DrawingModelEvent(this, false, parent, child, index));
     }
 
     private void fireFigureAdded(Figure parent, Figure child, int index) {
-        fire(new DrawingModelEvent(SimpleDrawingModel.this, true, parent, child, index));
+        fire(new DrawingModelEvent(this, true, parent, child, index));
     }
 
     private <T> void firePropertyChange(Figure figure, Key<T> key, T oldValue, T newValue) {
-        fire(new DrawingModelEvent(SimpleDrawingModel.this, figure, key, oldValue, newValue));
+        fire(new DrawingModelEvent(this, figure, key, oldValue, newValue));
     }
 
     private void fireFigureInvalidated(Figure figure) {
-        fire(new DrawingModelEvent(SimpleDrawingModel.this, figure));
+        fire(new DrawingModelEvent(this, figure));
     }
 
     private void handleFigureAdded(Figure figure) {

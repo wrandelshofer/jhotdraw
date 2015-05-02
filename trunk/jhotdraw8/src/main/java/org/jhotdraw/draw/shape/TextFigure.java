@@ -8,6 +8,7 @@ package org.jhotdraw.draw.shape;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -45,14 +46,14 @@ public class TextFigure extends ShapeFigure implements TextHolderFigure {
     }
 
     @Override
-    public Rectangle2D getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         if (textNode == null) {
             textNode = new Text();
         }
         updateNode(null, textNode);
 
         Bounds b = textNode.getLayoutBounds();
-        return new Rectangle2D(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+        return new BoundingBox(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override

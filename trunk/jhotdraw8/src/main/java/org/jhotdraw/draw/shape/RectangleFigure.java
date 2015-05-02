@@ -43,8 +43,9 @@ public class RectangleFigure extends ShapeFigure {
     }
 
     @Override
-    public Rectangle2D getLayoutBounds() {
-        return get(RECTANGLE);
+    public Bounds getLayoutBounds() {
+        Rectangle2D r= get(RECTANGLE);
+        return new BoundingBox(r.getMinX(),r.getMinY(),r.getWidth(),r.getHeight());
     }
 
     @Override

@@ -41,7 +41,7 @@ public class CopyAction extends AbstractSelectionAction {
      */
     public CopyAction(Application app,Optional< Node> target) {
         super(app,target);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
     @Override

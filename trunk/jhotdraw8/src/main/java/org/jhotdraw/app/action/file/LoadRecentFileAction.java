@@ -14,7 +14,7 @@ import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.net.URIUtil;
-import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.Resources;
 
 /**
  * Lets the user write unsaved changes of the active view, and then loads
@@ -124,7 +124,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
                 if (exists) {
                     view.read(uri, null);
                 } else {
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+                    Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
                     throw new IOException(labels.getFormatted("file.read.fileDoesNotExist.message", URIUtil.getName(uri)));
                 }
             }
@@ -146,7 +146,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
             @Override
             protected void failed(Throwable error) {
                 error.printStackTrace();
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+                Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
 
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")

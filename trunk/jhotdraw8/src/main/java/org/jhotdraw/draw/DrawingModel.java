@@ -6,6 +6,10 @@
 
 package org.jhotdraw.draw;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import org.jhotdraw.event.Listener;
+
 /**
  * DrawingModel allows to observe all changes for a tree of figures.
  * <p>
@@ -14,12 +18,15 @@ package org.jhotdraw.draw;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DrawingModel {
+public interface DrawingModel extends Observable {
 
-    void addListener(DrawingModelListener listener);
+    void addListener(Listener<DrawingModelEvent> listener);
 
-    void removeListener(DrawingModelListener listener);
-
+    void removeListener(Listener<DrawingModelEvent> listener);
+    
+    /** Sets the root of the drawing model. 
+     * @param newValue the root. Specify null to unlink the drawing model.
+     */
     void setRoot(Figure newValue);
 
 }

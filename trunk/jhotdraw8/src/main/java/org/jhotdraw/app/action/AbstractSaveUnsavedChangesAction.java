@@ -21,7 +21,7 @@ import org.jhotdraw.app.View;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
-import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.Resources;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
@@ -45,7 +45,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
      *
      */
     public final static Key<Optional<URIChooser>> SAVE_CHOOSER_KEY = new Key<Optional<URIChooser>>(
-            "saveChooser", Optional.class, "<URIChooser>",Optional.empty());
+            "saveChooser", Optional.class, "<URIChooser>", Optional.empty());
 
     private static final long serialVersionUID = 1L;
 
@@ -62,17 +62,21 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
     public void handle(ActionEvent evt) {
         Application app = getApplication();
         Optional<View> av = getActiveView();
-        if (!av.isPresent()) {
+        if (av.isPresent()) {
+            handle(av.get());
+        } else {
             if (isMayCreateView()) {
-                av = Optional.of(app.getModel().createView());
-                app.add(av.get());
-            } else {
-                return;
+                app.getModel().createView(v -> {
+                    app.add(v);
+                    handle(v);
+                });
             }
         }
-        final View v = av.get();
+    }
+
+    public void handle(View v) {
         if (!v.isDisabled()) {
-            final ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+            final Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
             /*Window wAncestor = v.getNode().getScene().getWindow();*/
             oldFocusOwner = getFocusOwner(v.getNode());
             v.addDisabler(this);
@@ -160,7 +164,8 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
 
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
-                if (uri.isPresent() && !app.getModel().isAllowMultipleViewsPerURI()) {
+                if (uri.isPresent()
+                        && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (View vi : app.views()) {
                         if (vi != v && v.getURI().equals(uri.get())) {
                             // FIXME Localize message
@@ -196,7 +201,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                 case FAILED:
                     Throwable value = event.getException();
                     String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+                    Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
                             ((message == null) ? "" : message));
                     alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));

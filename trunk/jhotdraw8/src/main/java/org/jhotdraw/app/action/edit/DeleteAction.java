@@ -13,7 +13,7 @@ import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractFocusOwnerAction;
-import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.Resources;
 
 /**
  * Deletes the region at (or after) the caret position.
@@ -32,7 +32,7 @@ public class DeleteAction extends AbstractFocusOwnerAction {
     */
     public DeleteAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
     @Override

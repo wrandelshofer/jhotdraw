@@ -9,6 +9,8 @@ import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -24,7 +26,7 @@ public class GroupFigure extends AbstractCompositeFigure {
 
 
     @Override
-    public Rectangle2D getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         // FIXME we should cache the layout bounds
         double minX = Double.MAX_VALUE;
         double maxX = Double.MIN_VALUE;
@@ -32,14 +34,14 @@ public class GroupFigure extends AbstractCompositeFigure {
         double maxY = Double.MIN_VALUE;
 
         for (Figure child : childrenProperty()) {
-            Rectangle2D b = child.getLayoutBounds();
+            Bounds b = child.getLayoutBounds();
             minX = min(minX, b.getMinX());
             maxX = max(maxX, b.getMaxX());
             minY = min(minY, b.getMinY());
             maxX = max(maxY, b.getMaxY());
         }
 
-        return new Rectangle2D(minX, minY, maxX - minX, maxY - minY);
+        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
     @Override

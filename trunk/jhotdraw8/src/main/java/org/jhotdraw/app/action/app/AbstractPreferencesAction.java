@@ -10,7 +10,7 @@ package org.jhotdraw.app.action.app;
 
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.action.AbstractApplicationAction;
-import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.Resources;
 
 /**
  * Displays a preferences dialog for the application.
@@ -28,7 +28,7 @@ public abstract class AbstractPreferencesAction extends AbstractApplicationActio
      * @param app the application */
     public AbstractPreferencesAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 }

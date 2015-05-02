@@ -37,7 +37,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
      * @param app the application */
     public ClearRecentFilesMenuAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
    //     updateEnabled();
     }

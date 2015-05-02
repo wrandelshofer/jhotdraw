@@ -15,7 +15,7 @@ import javafx.geometry.Rectangle2D;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingModelEvent;
-import org.jhotdraw.draw.DrawingModelListener;
+import org.jhotdraw.draw.HandleListener;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingModel;
 import org.jhotdraw.draw.shape.RectangleFigure;
@@ -48,7 +48,7 @@ public class Scratchpad {
 
         SimpleDrawingModel m=new SimpleDrawingModel();
         m.setRoot(d);
-        m.addListener(new DrawingModelListener() {
+        m.addDrawingModelListener(new HandleListener() {
 
             @Override
             public void handle(DrawingModelEvent mutation) {

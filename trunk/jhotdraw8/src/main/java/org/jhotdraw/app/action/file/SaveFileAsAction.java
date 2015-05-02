@@ -31,7 +31,7 @@ public class SaveFileAsAction extends SaveFileAction {
      * @param view the view */
     public SaveFileAsAction(Application app, Optional<View> view) {
         super(app, view, true);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 
