@@ -321,7 +321,7 @@ public abstract class AbstractHandle implements Handle, FigureListener {
 
     /**
      * Returns true, if the given handle is an instance of the same
-     * class or of a subclass of this handle,.
+     * class or of a subclass of this handle.
      */
     @Override
     public boolean isCombinableWith(Handle handle) {

@@ -16,12 +16,12 @@ import java.awt.geom.Point2D;
 import java.util.*;
 
 /**
- * <code>DefaultSelectAreaTracker</code> implements interactions with the background
- * area of a <code>Drawing</code>.
+ * {@code DefaultSelectAreaTracker} implements interactions with the background
+ * area of a {@code Drawing}.
  * <p>
- * The <code>DefaultSelectAreaTracker</code> handles one of the three states of the
- * <code>SelectionTool</code>. It comes into action, when the user presses
- * the mouse button over the background of a <code>Drawing</code>.
+ * The {@code DefaultSelectAreaTracker} handles one of the three states of the
+ * {@code SelectionTool}. It comes into action, when the user presses
+ * the mouse button over the background of a {@code Drawing}.
  * <p>
  * Design pattern:<br>
  * Name: Chain of Responsibility.<br>

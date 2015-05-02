@@ -4,13 +4,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/util/ResourceBundleUtil.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/samples/svg/Labels.properties</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/samples/svg/gui/CanvasToolBar.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/samples/svg/gui/StrokeToolBar.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/SelectionTool.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/DefaultHandleTracker.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/DefaultSelectAreaTracker.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/DefaultDragTracker.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/DelegationSelectionTool.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/AbstractTool.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/HandleTracker.java</file>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/Tool.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/samples/svg/gui/FigureToolBar.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/samples/svg/gui/FillToolBar.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/event/ToolListener.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/event/HandleListener.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/handle/AbstractHandle.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/handle/Handle.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/DefaultDrawingView.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/tool/SelectAreaTracker.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/DrawingView.java</file>
         </group>
     </open-files>
 </project-private>

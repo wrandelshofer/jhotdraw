@@ -16,12 +16,12 @@ import java.awt.event.*;
 import java.util.*;
 
 /**
- * <code>DefaultDragTracker</code> implements interactions with the content area of a
- * <code>Figure</code>.
+ * {@code DefaultDragTracker} implements interactions with the content area of a
+ * {@code Figure}.
  * <p>
- * The <code>DefaultDragTracker</code> handles one of the three states of the
- * <code>SelectionTool</code>. It comes into action, when the user presses
- * the mouse button over the content area of a <code>Figure</code>.
+ * The {@code DefaultDragTracker} handles one of the three states of the
+ * {@code SelectionTool}. It comes into action, when the user presses
+ * the mouse button over the content area of a {@code Figure}.
  * <p>
  * Design pattern:<br>
  * Name: Chain of Responsibility.<br>

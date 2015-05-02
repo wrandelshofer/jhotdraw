@@ -19,17 +19,17 @@ import org.jhotdraw.draw.event.HandleEvent;
 import org.jhotdraw.draw.event.HandleListener;
 
 /**
- * DefaultHandleTracker implements interactions with the handles of a Figure.
+ * {@code DefaultHandleTracker} implements interactions with the handles of a Figure.
  * <p>
- * The <code>DefaultHandleTracker</code> handles one of the three states of the
- * <code>SelectionTool</code>. Iz comes into action, when the user presses
- * the mouse button over a <code>Figure</code>.
+ * The {@code DefaultHandleTracker} handles one of the three states of the
+ * {@code SelectionTool}. Iz comes into action, when the user presses
+ * the mouse button over a {@code Figure}.
  * <p>
  * Design pattern:<br>
  * Name: Chain of Responsibility.<br>
  * Role: Handler.<br>
  * Partners: {@link SelectionTool} as Handler, {@link SelectAreaTracker} as 
- * Handler, {@link DragTracker} as Handler, {@link DefaultHandleTracker} as Handler.
+ * Handler, {@link DragTracker} as Handler, {@link HandleTracker} as Handler.
  * <p>
  * Design pattern:<br>
  * Name: State.<br>
