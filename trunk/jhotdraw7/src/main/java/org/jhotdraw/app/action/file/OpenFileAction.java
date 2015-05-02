@@ -57,8 +57,9 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  * @version $Id$
  */
 public class OpenFileAction extends AbstractApplicationAction {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
+    private boolean reuseEmptyViews = false;
     public static final String ID = "file.open";
 
     /** Creates a new instance. */
@@ -78,11 +79,17 @@ public class OpenFileAction extends AbstractApplicationAction {
         final Application app = getApplication();
         if (app.isEnabled()) {
             app.setEnabled(false);
+
             // Search for an empty view
-            View emptyView = app.getActiveView();
-            if (emptyView == null
-                    || !emptyView.isEmpty()
-                    || !emptyView.isEnabled()) {
+            View emptyView;
+            if (reuseEmptyViews) {
+                emptyView = app.getActiveView();
+                if (emptyView == null
+                        || !emptyView.isEmpty()
+                        || !emptyView.isEnabled()) {
+                    emptyView = null;
+                }
+            } else {
                 emptyView = null;
             }
 
@@ -250,8 +257,8 @@ public class OpenFileAction extends AbstractApplicationAction {
         contentPane.add(chooser.getComponent(), BorderLayout.CENTER);
 
         if (JDialog.isDefaultLookAndFeelDecorated()) {
-            boolean supportsWindowDecorations =
-                    UIManager.getLookAndFeel().getSupportsWindowDecorations();
+            boolean supportsWindowDecorations
+                    = UIManager.getLookAndFeel().getSupportsWindowDecorations();
             if (supportsWindowDecorations) {
                 dialog.getRootPane().setWindowDecorationStyle(JRootPane.FILE_CHOOSER_DIALOG);
             }
@@ -261,13 +268,13 @@ public class OpenFileAction extends AbstractApplicationAction {
 
         PreferencesUtil.installFramePrefsHandler(prefs, "openChooser", dialog);
         /*
-        if (window.getBounds().isEmpty()) {
-        Rectangle screenBounds = window.getGraphicsConfiguration().getBounds();
-        dialog.setLocation(screenBounds.x + (screenBounds.width - dialog.getWidth()) / 2, //
-        screenBounds.y + (screenBounds.height - dialog.getHeight()) / 3);
-        } else {
-        dialog.setLocationRelativeTo(parent);
-        }*/
+         if (window.getBounds().isEmpty()) {
+         Rectangle screenBounds = window.getGraphicsConfiguration().getBounds();
+         dialog.setLocation(screenBounds.x + (screenBounds.width - dialog.getWidth()) / 2, //
+         screenBounds.y + (screenBounds.height - dialog.getHeight()) / 3);
+         } else {
+         dialog.setLocationRelativeTo(parent);
+         }*/
 
         return dialog;
     }
