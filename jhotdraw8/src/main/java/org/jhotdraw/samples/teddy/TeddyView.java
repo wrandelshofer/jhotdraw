@@ -20,7 +20,7 @@ import javafx.scene.control.Label;
  *
  * @author werni
  */
-public class TeddyViewController implements Initializable {
+public class TeddyView implements Initializable {
     
     @FXML
     private Label label;

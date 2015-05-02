@@ -40,7 +40,7 @@ public class OpenFileAction extends AbstractApplicationAction {
      * @param app the application */
     public OpenFileAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 
@@ -75,42 +75,41 @@ public class OpenFileAction extends AbstractApplicationAction {
                 emptyView = Optional.empty();
             }
 
-            final View view;
-            boolean disposeView;
             if (!emptyView.isPresent()) {
-                view = app.getModel().createView();
-                disposeView = true;
+                app.getModel().createView(v -> handle(v, true));
             } else {
-                view = emptyView.get();
-                disposeView = false;
+                handle(emptyView.get(), false);
             }
-            URIChooser chooser = getChooser(view);
-            Optional<URI> uri = chooser.showDialog(app.getNode());
-            if (uri.isPresent()) {
-                app.add(view);
+        }
+    }
 
-                // Prevent same URI from being opened more than once
-                if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                    for (View v : getApplication().views()) {
-                        if (v.getURI() != null && v.getURI().equals(uri.get())) {
-                            if (disposeView) {
-                                app.remove(view);
-                            }
-                            app.removeDisabler(this);
-                            v.getNode().getScene().getWindow().requestFocus();
-                            v.getNode().requestFocus();
-                            return;
+    public void handle(View view, boolean disposeView) {
+        URIChooser chooser = getChooser(view);
+        Optional<URI> uri = chooser.showDialog(app.getNode());
+        if (uri.isPresent()) {
+            app.add(view);
+
+            // Prevent same URI from being opened more than once
+            if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
+                for (View v : getApplication().views()) {
+                    if (v.getURI() != null && v.getURI().equals(uri.get())) {
+                        if (disposeView) {
+                            app.remove(view);
                         }
+                        app.removeDisabler(this);
+                        v.getNode().getScene().getWindow().requestFocus();
+                        v.getNode().requestFocus();
+                        return;
                     }
                 }
-
-                openViewFromURI(view, uri.get(), chooser);
-            } else {
-                if (disposeView) {
-                    app.remove(view);
-                }
-                app.removeDisabler(this);
             }
+
+            openViewFromURI(view, uri.get(), chooser);
+        } else {
+            if (disposeView) {
+                app.remove(view);
+            }
+            app.removeDisabler(this);
         }
     }
 
@@ -127,8 +126,9 @@ public class OpenFileAction extends AbstractApplicationAction {
                     break;
                 case FAILED:
                     Throwable value = event.getException();
-                    String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+                    String message = (value != null && value.getMessage()
+                            != null) ? value.getMessage() : value.toString();
+                    Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
                             ((message == null) ? "" : message));
                     alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));

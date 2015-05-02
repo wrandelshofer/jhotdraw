@@ -6,13 +6,14 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.event.Event;
 
 /**
  * DrawingModelEvent.
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DrawingModelEvent {
+public class DrawingModelEvent extends Event<DrawingModel> {
 
     enum EventType {
 
@@ -29,14 +30,13 @@ public class DrawingModelEvent {
     private final Figure parent;
     private final int index;
     private final EventType eventType;
-    private final SimpleDrawingModel source;
 
-    public <T> DrawingModelEvent(SimpleDrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
+    public <T> DrawingModelEvent(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
+        super(source);
         if (figure==null) {
             throw new NullPointerException("figure is null");
         }
         eventType = EventType.PROPERTY_CHANGED;
-        this.source = source;
         this.figure = figure;
         this.key = key;
         this.oldValue = oldValue;
@@ -45,12 +45,12 @@ public class DrawingModelEvent {
         this.index = -1;
     }
 
-    public <T> DrawingModelEvent(SimpleDrawingModel source, boolean wasAdded, Figure parent, Figure child, int index) {
+    public <T> DrawingModelEvent(DrawingModel source, boolean wasAdded, Figure parent, Figure child, int index) {
+        super(source);
         if (parent==null) {
             throw new NullPointerException("parent is null");
         }
         eventType = wasAdded ? EventType.FIGURE_ADDED : EventType.FIGURE_REMOVED;
-        this.source = source;
         this.figure = child;
         this.key = null;
         this.oldValue = null;
@@ -58,12 +58,12 @@ public class DrawingModelEvent {
         this.parent = parent;
         this.index = index;
     }
-    public <T> DrawingModelEvent(SimpleDrawingModel source, Figure invalidatedFigure) {
+    public <T> DrawingModelEvent(DrawingModel source, Figure invalidatedFigure) {
+        super(source);
         if (invalidatedFigure==null) {
             throw new NullPointerException("figure is null");
         }
         eventType = EventType.FIGURE_INVALIDATED;
-        this.source = source;
         this.figure = invalidatedFigure;
         this.key = null;
         this.oldValue = null;
@@ -124,10 +124,6 @@ public class DrawingModelEvent {
 
     public EventType getEventType() {
         return eventType;
-    }
-
-    public SimpleDrawingModel getSource() {
-        return source;
     }
 
     @Override

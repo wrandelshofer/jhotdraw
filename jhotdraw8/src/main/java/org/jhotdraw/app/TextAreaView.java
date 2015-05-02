@@ -31,8 +31,9 @@ import org.jhotdraw.concurrent.TaskCompletionEvent;
  *
  * @author werni
  */
-public class TextAreaViewController extends AbstractView implements Initializable {
+public class TextAreaView extends AbstractView implements Initializable {
 
+    @Override
     public void init() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);

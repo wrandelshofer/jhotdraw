@@ -27,11 +27,16 @@ import org.jhotdraw.gui.URIChooser;
 
 /**
  * View.
+ * <p>
+ * Note that a View may be instantiated on a background thread. 
+ * However, all methods of a View  may only be invoked from the FX event dispatcher thread.
+ *
  * @author Werner Randelshofer
  */
 public interface View extends Disableable, PropertyBean {
 
-    /** Initializes the view. This method must be called before the view can be used. */
+    /** Initializes the view. This method must be called before the view can be used. 
+     */
     public void init();
 
     /** Returns the scene node which renders the view.
@@ -125,7 +130,7 @@ public interface View extends Disableable, PropertyBean {
     default public boolean isEmpty() {
         return !isModified() && getURI() == null;
     }
-    
+
     /** Disposes of the view. */
     public void dispose();
 }

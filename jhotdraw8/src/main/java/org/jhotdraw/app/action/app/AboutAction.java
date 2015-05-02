@@ -13,7 +13,7 @@ import javafx.stage.Modality;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.ApplicationModel;
 import org.jhotdraw.app.action.AbstractApplicationAction;
-import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.Resources;
 
 /**
  * Displays a dialog showing information about the application.
@@ -32,7 +32,7 @@ public class AboutAction extends AbstractApplicationAction {
      * @param app the application */
     public AboutAction(Application app) {
         super(app);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 

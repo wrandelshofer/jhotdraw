@@ -44,15 +44,15 @@ public class CircleFigure extends ShapeFigure {
     }
 
     @Override
-    public Rectangle2D getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         Point2D c = get(CENTER);
         double r = get(RADIUS);
-        return new Rectangle2D(c.getX() - r, c.getY() - r, r * 2, r * 2);
+        return new BoundingBox(c.getX() - r, c.getY() - r, r * 2, r * 2);
     }
 
     @Override
     public void reshape(Transform transform) {
-        Rectangle2D r = getLayoutBounds();
+        Bounds r = getLayoutBounds();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY());
         b = transform.transform(b);
         set(CENTER, new Point2D(b.getMinX() + b.getWidth() / 2, b.getMinY() + b.getHeight() / 2));

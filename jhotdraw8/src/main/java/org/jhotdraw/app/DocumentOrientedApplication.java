@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -65,9 +66,14 @@ import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.app.action.file.SaveFileAsAction;
 import org.jhotdraw.binding.BindingUtil;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.concurrent.BackgroundTask;
+import org.jhotdraw.draw.SimpleDrawing;
+import org.jhotdraw.draw.io.DefaultFigureFactory;
+import org.jhotdraw.draw.io.FigureFactory;
+import org.jhotdraw.draw.io.SimpleXmlIO;
 import org.jhotdraw.gui.FileURIChooser;
 import org.jhotdraw.gui.URIChooser;
-import org.jhotdraw.util.ResourceBundleUtil;
+import org.jhotdraw.util.Resources;
 
 /**
  * DocumentOrientedApplication.
@@ -75,7 +81,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
  */
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
 
-    private final static Key<Optional<ChangeListener>> FOCUS_LISTENER_KEY = new Key<>("focusListener", Optional.class,"<ChangeListener>", Optional.empty());
+    private final static Key<Optional<ChangeListener>> FOCUS_LISTENER_KEY = new Key<>("focusListener", Optional.class, "<ChangeListener>", Optional.empty());
     private boolean isSystemMenuSupported;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
@@ -118,8 +124,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             }
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
         }
-        View v = createView();
-        add(v);
+        createView(v -> add(v));
     }
 
     @Override
@@ -133,16 +138,29 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     }
 
     @Override
-    public final View createView() {
-        View v = instantiateView();
-        v.init();
-        v.setTitle(getLabels().getString("unnamedFile"));
-            HierarchicalMap<String, Action> map = v.getActionMap();
-        map.put(CloseFileAction.ID, new CloseFileAction(this, Optional.of(v)));
-    return v;
+    public final void createView(Consumer<View> callback) {
+        BackgroundTask<View> t = new BackgroundTask<View>() {
+
+            @Override
+            protected View call() throws Exception {
+                return instantiateView();
+            }
+
+            @Override
+            protected void succeeded(View v) {
+                v.init();
+                v.setTitle(getLabels().getString("unnamedFile"));
+                HierarchicalMap<String, Action> map = v.getActionMap();
+                map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, Optional.of(v)));
+                callback.accept(v);
+            }
+        };
+        execute(t);
+
     }
+
     protected View instantiateView() {
-        TextAreaViewController v = new TextAreaViewController();
+        TextAreaView v = new TextAreaView();
         return v;
     }
 
@@ -228,8 +246,10 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                 Window w = activeView.get().getNode().getScene().getWindow();
                 stage.setWidth(w.getWidth());
                 stage.setHeight(w.getHeight());
-                stage.setX(Math.min(w.getX() + 22, bounds.getMaxX() - stage.getWidth()));
-                stage.setY(Math.min(w.getY() + 22, bounds.getMaxY() - stage.getHeight()));
+                stage.setX(Math.min(w.getX() + 22, bounds.getMaxX()
+                        - stage.getWidth()));
+                stage.setY(Math.min(w.getY() + 22, bounds.getMaxY()
+                        - stage.getHeight()));
             } else {
                 stage.setWidth(bounds.getWidth() / 4);
                 stage.setHeight(bounds.getHeight() / 3);
@@ -244,8 +264,10 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
                                 || Math.abs(w.getY() - stage.getY()) < 10) {
-                            stage.setX(Math.min(w.getX() + 20, bounds.getMaxX() - stage.getWidth()));
-                            stage.setY(Math.min(w.getY() + 20, bounds.getMaxY() - stage.getHeight()));
+                            stage.setX(Math.min(w.getX() + 20, bounds.getMaxX()
+                                    - stage.getWidth()));
+                            stage.setY(Math.min(w.getY() + 20, bounds.getMaxY()
+                                    - stage.getHeight()));
                             continue Outer;
                         }
                     }
@@ -283,8 +305,8 @@ public class DocumentOrientedApplication extends javafx.application.Application 
 
     /** Gets the resource bundle.
      * @return the resource bundle */
-    protected ResourceBundleUtil getLabels() {
-        return ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+    protected Resources getLabels() {
+        return Resources.getBundle("org.jhotdraw.app.Labels");
     }
 
     /** Creates a menu bar.
@@ -305,7 +327,8 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                         if (a.isPresent()) {
                             Actions.bindMenuItem(mi, a.get());
                         } else if (mi.getId() != null) {
-                            System.err.println("No action for menu item with id=" + mi.getId());
+                            System.err.println("No action for menu item with id="
+                                    + mi.getId());
                             mi.setVisible(false);
                         }
                     }
@@ -377,7 +400,8 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                 for (View v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
-                Collections.sort(list, (a, b) -> a.getDisambiguation() - b.getDisambiguation());
+                Collections.sort(list, (a, b) -> a.getDisambiguation()
+                        - b.getDisambiguation());
                 int prev = 0;
                 for (View v : list) {
                     int current = v.getDisambiguation();
@@ -398,7 +422,8 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             properties = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<Key<?>, Object>()));
         }
         return properties;
-    }   
+    }
+
     @Override
     public boolean isAllowMultipleViewsPerURI() {
         return false;

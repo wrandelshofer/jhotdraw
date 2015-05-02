@@ -1,4 +1,4 @@
-/* @(#)ResourceBundleUtil.java
+/* @(#)Resources.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -59,7 +59,7 @@ import org.jhotdraw.app.action.Action;
  * @author  Werner Randelshofer
  * @version $Id$
  */
-public class ResourceBundleUtil implements Serializable {
+public class Resources implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -107,7 +107,7 @@ public class ResourceBundleUtil implements Serializable {
      * @param baseName the base name
      * @param locale the locale
      */
-    public ResourceBundleUtil(String baseName, Locale locale) {
+    public Resources(String baseName, Locale locale) {
         this.locale = locale;
         this.baseName = baseName;
         this.resource = ResourceBundle.getBundle(baseName, locale);
@@ -132,10 +132,10 @@ public class ResourceBundleUtil implements Serializable {
     public String getString(String key) {
         try {
             String value = getStringRecursive(key);
-            // System.out.println("ResourceBundleUtil "+baseName+" get("+key+"):"+value);
+            // System.out.println("Resources "+baseName+" get("+key+"):"+value);
             return value;
         } catch (MissingResourceException e) {
-            // System.out.println("ResourceBundleUtil "+baseName+" get("+key+"):***MISSING***");
+            // System.out.println("Resources "+baseName+" get("+key+"):***MISSING***");
             if (isVerbose) {
                 System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + "\" not found.");
                 //e.printStackTrace();
@@ -448,7 +448,7 @@ public class ResourceBundleUtil implements Serializable {
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    public static ResourceBundleUtil getBundle(String baseName)
+    public static Resources getBundle(String baseName)
             throws MissingResourceException {
         return getBundle(baseName, LocaleUtil.getDefault());
     }
@@ -525,10 +525,10 @@ public class ResourceBundleUtil implements Serializable {
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    public static ResourceBundleUtil getBundle(String baseName, Locale locale)
+    public static Resources getBundle(String baseName, Locale locale)
             throws MissingResourceException {
-        ResourceBundleUtil r;
-        r = new ResourceBundleUtil(baseName, locale);
+        Resources r;
+        r = new Resources(baseName, locale);
         return r;
     }
 

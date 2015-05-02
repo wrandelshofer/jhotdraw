@@ -13,34 +13,31 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/SimpleDrawingModel.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/constrain/NullConstrainer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/LabelFigure.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/io/DefaultFigureFactory.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/samples/grapher/GrapherViewController.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/CreationTool.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/shape/EllipseFigure.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/AbstractFigure.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/handle/Handle.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SimpleDragTracker.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/DragTracker.java</file>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/SimpleDrawingView.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/shape/TextFigure.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/event/Listener.java</file>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/DrawingView.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/AbstractView.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SelectAreaTracker.java</file>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SelectionTool.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/constrain/Constrainer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/text/RealNumberConverter.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/handle/SimpleHighlightHandle.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/handle/AbstractHandle.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/samples/grapher/GrapherView.java</file>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/AbstractTool.java</file>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/DrawingModelEvent.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/io/SimpleFigureFactory.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/io/SimpleXmlIO.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/shape/CircleFigure.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/collection/Key.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/gui/ToolsToolbar.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/gui/ZoomToolbar.fxml</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/Action.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/constrain/GridConstrainer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/shape/ShapeFigure.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/action/file/OpenFileAction.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/gui/ZoomToolbar.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/handle/HandleEvent.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SimpleHandleTracker.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/DrawingModel.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/AbstractCompositeFigure.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/Figure.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/HandleTracker.java</file>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/Tool.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/io/FigureFactory.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/ToolEvent.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SimpleSelectAreaTracker.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/AbstractLeafFigure.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/event/Event.java</file>
         </group>
     </open-files>
 </project-private>

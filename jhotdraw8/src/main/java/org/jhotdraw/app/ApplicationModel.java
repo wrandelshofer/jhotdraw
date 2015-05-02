@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.app;
 
+import java.util.function.Consumer;
 import org.jhotdraw.gui.URIChooser;
 
 /**
@@ -16,12 +17,18 @@ import org.jhotdraw.gui.URIChooser;
  * @version $Id: ApplicationModel.java 789 2014-03-22 13:14:07Z rawcoder $
  */
 public interface ApplicationModel {
+
     // Views
     /** Creates a view and initializes it.
-     * @return the view */
-    public View createView();
+     *
+     * Since this operation may involve class loading, it is performed in
+     * the background.
+     *
+     * @param callback the created view is passed to the callback. 
+     */
+    public void createView(Consumer<View> callback);
     // URI choosers
-    
+
     /** Creates an open chooser.
      * @return chooser */
     public URIChooser createOpenChooser();
@@ -31,7 +38,6 @@ public interface ApplicationModel {
     public URIChooser createSaveChooser();
 
     // Copyright information
-    
     /** Returns the name of the application.
      * @return  name */
     public String getName();

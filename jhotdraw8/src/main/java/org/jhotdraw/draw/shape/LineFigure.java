@@ -13,6 +13,8 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import static java.lang.Math.*;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.shape.Line;
 import org.jhotdraw.draw.DrawingView;
 
@@ -42,10 +44,10 @@ public class LineFigure extends ShapeFigure {
     }
 
     @Override
-    public Rectangle2D getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         Point2D start = get(START);
         Point2D end = get(END);
-        return new Rectangle2D(//
+        return new BoundingBox(//
                 min(start.getX(), end.getX()),//
                 min(end.getX(), end.getY()),//
                 abs(start.getX() - end.getX()), //

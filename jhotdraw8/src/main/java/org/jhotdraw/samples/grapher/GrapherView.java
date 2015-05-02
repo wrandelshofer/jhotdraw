@@ -8,6 +8,8 @@ package org.jhotdraw.samples.grapher;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,12 +41,13 @@ import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.SelectionTool;
+import org.jhotdraw.util.Resources;
 
 /**
  *
  * @author werni
  */
-public class GrapherViewController extends AbstractView {
+public class GrapherView extends AbstractView {
 
     private Node node;
 
@@ -70,18 +73,24 @@ public class GrapherViewController extends AbstractView {
 
         drawingView = new SimpleDrawingView();
         drawingView.setConstrainer(new GridConstrainer(0, 0, 1, 1, 1));
+        
+        // 
+        drawingView.getDrawingModel().addListener((InvalidationListener)drawingModel -> {
+            modified.set(true);
+        });
+        
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
 
         scrollPane.setContent(drawingView.getNode());
 
         ToolsToolbar ttbar = new ToolsToolbar();
-        ttbar.addTool(new SelectionTool("Select"), 0, 0);
-        ttbar.addTool(new CreationTool("Rectangle", () -> new RectangleFigure()), 1, 0);
-        ttbar.addTool(new CreationTool("Circle", () -> new CircleFigure()), 2, 0);
-        ttbar.addTool(new CreationTool("Ellipse", () -> new EllipseFigure()), 0, 1);
-        ttbar.addTool(new CreationTool("Line", () -> new LineFigure()), 1, 1);
-        ttbar.addTool(new CreationTool("Text", () -> new TextFigure(0, 0, "Hello")), 2, 1);
+        Resources rsrc = Resources.getBundle("org.jhotdraw.draw.Labels");
+        ttbar.addTool(new SelectionTool("selectionTool", rsrc), 0, 0);
+        ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, () -> new RectangleFigure()), 1, 0);
+        ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, () -> new EllipseFigure()), 2, 0);
+        ttbar.addTool(new CreationTool("edit.createLine", rsrc, () -> new LineFigure()), 1, 1);
+        ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new TextFigure(0, 0, "Hello")), 2, 1);
         ttbar.setDrawingEditor(editor);
         toolBar.getItems().add(ttbar);
 
@@ -95,9 +104,7 @@ public class GrapherViewController extends AbstractView {
         return node;
     }
 
-    @Override
-    public void clearModified() {
-    }
+   
 
     @Override
     public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent> callback) {

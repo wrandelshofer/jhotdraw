@@ -147,7 +147,7 @@ public class SimpleFigureFactory implements FigureFactory {
         if (!keyToAttr.containsKey(f.getClass())) {
             throw new IOException("no mapping for figure " + f.getClass());
         }
-        HashMap<Key<?>,String> keyToStr = keyToAttr.get(f);
+        HashMap<Key<?>,String> keyToStr = keyToAttr.get(f.getClass());
         if (!keyToStr.containsKey(key)) {
             throw new IOException("no mapping for key " + key+" in figure "+f.getClass());
         }

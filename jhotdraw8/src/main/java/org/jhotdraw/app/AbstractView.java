@@ -53,9 +53,14 @@ protected final StringProperty title = new SimpleStringProperty();
     public BooleanProperty modifiedProperty() {
         return modified;
     }
+
+    @Override
+    public void clearModified() {
+        modified.set(false);
+    }
     
-    protected void setModified(boolean newValue) {
-        modified.set(newValue);
+    protected void markAsModified() {
+        modified.set(true);
     }
     
     @Override

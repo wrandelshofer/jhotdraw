@@ -8,8 +8,11 @@ package org.jhotdraw.draw;
 import static java.lang.Math.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +23,12 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
-import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,12 +45,17 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 import org.jhotdraw.beans.NonnullProperty;
 import org.jhotdraw.beans.OptionalProperty;
-import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.constrain.NullConstrainer;
 import org.jhotdraw.draw.tool.Tool;
+import org.jhotdraw.event.Listener;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.HandleEvent;
+import org.jhotdraw.draw.handle.HandleLevel;
 
 /**
  * FXML Controller class
@@ -70,7 +80,9 @@ public class SimpleDrawingView implements DrawingView {
 
     private final NonnullProperty<Drawing> drawing = new NonnullProperty<>(this, DRAWING_PROPERTY, new SimpleDrawing());
     private final NonnullProperty<Constrainer> constrainer = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
-    private final ReadOnlySetProperty<Figure> selection = new ReadOnlySetWrapper<>(this,CHILDREN_PROPERTY,FXCollections.observableSet(new HashSet<Figure>())).getReadOnlyProperty();
+    private final ReadOnlySetProperty<Figure> selection = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
+    private boolean handlesAreValid;
+    private HandleLevel detailLevel = HandleLevel.SHAPE;
 
     {
         drawing.addListener((observable, oldValue, newValue) -> updateDrawing(oldValue, newValue));
@@ -80,8 +92,10 @@ public class SimpleDrawingView implements DrawingView {
     {
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
+    private final OptionalProperty<Handle> activeHandle = new OptionalProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
     private final ReadOnlyBooleanWrapper focusedProperty = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
+    private final ReadOnlyObjectWrapper<Transform> drawingToViewProperty = new ReadOnlyObjectWrapper<Transform>(this, DRAWING_TO_VIEW_PROPERTY, new Scale());
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, SCALE_FACTOR_PROPERTY, 1.0) {
 
         @Override
@@ -91,6 +105,7 @@ public class SimpleDrawingView implements DrawingView {
                 drawingPane.setScaleX(newValue);
                 drawingPane.setScaleY(newValue);
             }
+            drawingToViewProperty.set(new Scale(newValue, newValue));
         }
     };
 
@@ -100,10 +115,28 @@ public class SimpleDrawingView implements DrawingView {
     private HashMap<Figure, Node> figureToNodeMap = new HashMap<>();
     private HashSet<Figure> dirtyFigures = new HashSet<>();
 
+    private LinkedList<Handle> selectionHandles = new LinkedList<Handle>();
+    private LinkedList<Handle> secondaryHandles = new LinkedList<Handle>();
+
     private Runnable repainter = null;
+    private Listener<HandleEvent> eventHandler;
+
+    private class HandleEventHandler implements Listener<HandleEvent> {
+
+        @Override
+        public void handle(HandleEvent event) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
 
     public SimpleDrawingView() {
         init();
+        eventHandler = createEventHandler();
+    }
+
+    protected Listener<HandleEvent> createEventHandler() {
+        return new HandleEventHandler();
     }
 
     private void init() {
@@ -116,7 +149,7 @@ public class SimpleDrawingView implements DrawingView {
             throw new InternalError(ex);
         }
 
-        model.addListener(event -> {
+        model.addListener((Listener<DrawingModelEvent>) event -> {
             dirtyFigures.add(event.getFigure());
             if (event.getParent() != null) {
                 dirtyFigures.add(event.getParent());
@@ -168,7 +201,8 @@ public class SimpleDrawingView implements DrawingView {
             f.putNode(this);
             n = figureToNodeMap.get(f);
             if (n == null) {
-                throw new IllegalStateException("Figure.putNode() must put a node. Figure=" + f);
+                throw new IllegalStateException("Figure.putNode() must put a node. Figure="
+                        + f);
             }
         }
         return n;
@@ -260,7 +294,8 @@ public class SimpleDrawingView implements DrawingView {
 
     private void updatePreferredSize() {
         Rectangle2D r = drawing.get().get(Drawing.BOUNDS);
-        Rectangle2D visible = new Rectangle2D(max(r.getMinX(), 0), max(r.getMinY(), 0), (r.getWidth() + max(r.getMinX(), 0)),
+        Rectangle2D visible = new Rectangle2D(max(r.getMinX(), 0), max(r.getMinY(), 0), (r.getWidth()
+                + max(r.getMinX(), 0)),
                 r.getHeight() + max(r.getMinY(), 0));
         node.setPrefHeight(visible.getHeight());
         node.setPrefHeight(visible.getWidth());
@@ -274,6 +309,11 @@ public class SimpleDrawingView implements DrawingView {
     @Override
     public OptionalProperty<Tool> toolProperty() {
         return tool;
+    }
+
+    @Override
+    public OptionalProperty<Handle> activeHandleProperty() {
+        return activeHandle;
     }
 
     private void updateTool(Optional<Tool> oldValue, Optional<Tool> newValue) {
@@ -319,10 +359,49 @@ public class SimpleDrawingView implements DrawingView {
         return null;
     }
 
+    public Optional<Figure> findFigureBehind(double vx, double vy, Figure figureInWay) {
+        Drawing dr = drawing.get();
+        Figure f = findFigureBehind((Parent) getNode(dr), viewToDrawing(vx, vy), figureInWay);
+
+        return Optional.ofNullable(f);
+    }
+
+    private Figure findFigureBehind(Parent p, Point2D pp, Figure figureInWay) {
+        ObservableList<Node> list = p.getChildrenUnmodifiable();
+        for (int i = list.size() - 1; i >= 0; i--) {// front to back
+            Node n = list.get(i);
+            Point2D pl = n.parentToLocal(pp);
+            if (n.contains(pl)) {
+                Figure f = nodeToFigureMap.get(n);
+                if (f == null) {
+                    if (n instanceof Parent) {
+                        f = findFigureBehind((Parent) n, pl, figureInWay);
+                    }
+                }
+                if (f == figureInWay) {
+                    if (n instanceof Parent) {
+                        f = findFigure((Parent) n, pl);
+                    } else {
+                        f = null;
+                    }
+                } else {
+                    if (n instanceof Parent) {
+                        f = findFigureBehind((Parent) n, pl, figureInWay);
+                    } else {
+                        f = null;
+                    }
+                }
+                return f;
+            }
+        }
+        return null;
+    }
+
     @Override
     public List<Figure> findFigures(double vx, double vy, double vwidth, double vheight) {
         double sf = 1 / zoomFactor.get();
-        BoundingBox r = new BoundingBox(vx * sf, vy * sf, 0, vwidth * sf, vheight * sf, 0);
+        BoundingBox r = new BoundingBox(vx * sf, vy * sf, 0, vwidth * sf, vheight
+                * sf, 0);
         List<Figure> list = new LinkedList<Figure>();
         return list;
     }
@@ -344,15 +423,119 @@ public class SimpleDrawingView implements DrawingView {
                     if (n instanceof Parent) {
                         findFigures((Parent) n, pl, found);
                     }
-                }else{
+                } else {
                     found.add(f);
                 }
             }
         }
-    }    
+    }
 
     @Override
     public ReadOnlySetProperty<Figure> selectionProperty() {
-       return selection;
+        return selection;
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<Transform> drawingToViewProperty() {
+        return drawingToViewProperty.getReadOnlyProperty();
+    }
+
+    @Override
+    public DrawingModel getDrawingModel() {
+        return model;
+    }
+
+    // Handles
+    /**
+     * Gets compatible handles.
+     * @return A collection containing the handle and all compatible handles.
+     */
+    @Override
+    public Collection<Handle> getCompatibleHandles(Handle master) {
+        validateHandles();
+
+        HashSet<Figure> owners = new HashSet<Figure>();
+        LinkedList<Handle> compatibleHandles = new LinkedList<Handle>();
+        owners.add(master.getFigure());
+        compatibleHandles.add(master);
+
+        for (Handle handle : getSelectionHandles()) {
+            if (!owners.contains(handle.getFigure())
+                    && handle.isCombinableWith(master)) {
+                owners.add(handle.getFigure());
+                compatibleHandles.add(handle);
+            }
+
+        }
+        return compatibleHandles;
+
+    }
+
+    /**
+     * Gets the currently active selection handles.
+     */
+    private java.util.List<Handle> getSelectionHandles() {
+        validateHandles();
+        return Collections.unmodifiableList(selectionHandles);
+    }
+
+    /**
+     * Gets the currently active secondary handles.
+     */
+    private java.util.List<Handle> getSecondaryHandles() {
+        validateHandles();
+        return Collections.unmodifiableList(secondaryHandles);
+    }
+
+    /**
+     * Invalidates the handles.
+     */
+    private void invalidateHandles() {
+        if (handlesAreValid) {
+            handlesAreValid = false;
+
+            for (Handle handle : selectionHandles) {
+                handle.removeHandleListener(eventHandler);
+                handle.dispose();
+            }
+
+            for (Handle handle : secondaryHandles) {
+                handle.removeHandleListener(eventHandler);
+                handle.dispose();
+            }
+
+            selectionHandles.clear();
+            secondaryHandles.clear();
+            setActiveHandle(null);
+        }
+    }
+
+    /**
+     * Validates the handles.
+     */
+    private void validateHandles() {
+        // Validate handles only, if they are invalid/*, and if
+        // the DrawingView has a DrawingEditor.*/
+        if (!handlesAreValid /*&& getEditor() != null*/) {
+            handlesAreValid = true;
+            selectionHandles.clear();
+            while (true) {
+                for (Figure figure : getSelectedFigures()) {
+                    for (Handle handle : figure.createHandles(detailLevel, this)) {
+                        selectionHandles.add(handle);
+                        handle.addHandleListener(eventHandler);
+                    }
+                }
+
+                if (selectionHandles.size() == 0 && detailLevel
+                        != HandleLevel.SHAPE) {
+                    // No handles are available at the desired detail level.
+                    // Retry with detail level 0.
+                    detailLevel = HandleLevel.SHAPE;
+                    continue;
+                }
+                break;
+            }
+        }
     }
 }
