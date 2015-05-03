@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="build-svg" default="all" basedir=".">
     <target name="init">
+        <!-- gobal build properties -->
+        <property file="build.properties"/>
+
         <!-- properties for copyright and versioning -->
-        <property name="author" value="the authors and contributors of JHotDraw"/>
-        <property name="version" value="7.6"/>
+        <property name="name" value="JHotDraw: SVG Sample"/>
 
         <!-- build properties -->
         <property name="libdir" value="lib"/>
@@ -12,11 +14,10 @@
         <property name="classdir" value="${builddir}/classes"/>
         <property name="distdir" value="dist/JHotDraw ${version}/Samples/SVG"/>
 
+        
         <!-- properties for jar signing -->
-        <property name="keystore.file" value="../../../../_Keystore/JavaKeystore"/>
-        <property name="keystore.alias" value="werner"/>
-        <property name="keystore.storepass" value="werner"/>
-        <property name="debug" value="true"/>
+        <property name="keystore.file" value="../../../../_Keystore/JavaKeystore.jks"/>
+        <property file="${keystore.file}.properties"/>
     </target>
     <target name="clean" depends="init">
         <delete dir="${classdir}" />
@@ -26,9 +27,16 @@
         <javac
                 destdir="${classdir}"
                 srcdir="${srcdir}"
-                debug="${debug}"
-                optimize="true"
-                encoding="UTF-8"
+                
+                debug="${javac.debug}"
+                optimize="${javac.optimize}"
+                encoding="${javac.encoding}"
+                includeantruntime="${javac.includeantruntime}"
+                source="${javac.source}"
+                target="${javac.target}"
+                bootclasspath="${javac.bootclasspath}"
+                classpath="${javac.classpath}"
+                extdirs="${javac.extdirs}"
          >
             <classpath path="${libdir}/java_30.zip"/>
             <classpath path="${libdir}/annotations.jar"/>
@@ -50,6 +58,7 @@
                 <include name="org/jhotdraw/gui/plaf/palette/images/*" />
 
                 <include name="org/jhotdraw/color/*.icc" />
+                <include name="org/jhotdraw/color/images/*" />
 
                 <include name="org/jhotdraw/draw/Label*.properties"/>
                 <include name="org/jhotdraw/draw/action/images/*.png"/>
@@ -67,9 +76,27 @@
         <jar destfile="${distdir}/unsigned/jhotdraw_svg.jar" basedir="${classdir}"
         index="true" compress="true">
             <manifest>
-                <attribute name="Built-By" value="${author}"/>
                 <attribute name="Main-Class" value="org.jhotdraw.samples.svg.SVGApplet"/>
+                
+                <!-- versioning -->
+                <attribute name="Created-By" value="${author}"/>
+                <attribute name="Built-By" value="${author}"/>
+                <attribute name="Specification-Title" value="${name}"/>
+                <attribute name="Specification-Version" value="${version}"/>
+                <attribute name="Specification-Vendor" value="${author}"/>
+                <attribute name="Implementation-Title" value="${name}"/>
                 <attribute name="Implementation-Version" value="${version}"/>
+                <attribute name="Implementation-Vendor" value="${author}"/>
+                
+                <!-- applet security -->
+                <attribute name="Application-Name" value="${name}"/>
+                <attribute name="Application-Library-Allowable-Codebase" value="*"/>
+                <attribute name="Caller-Allowable-Codebase" value="*"/>
+                <attribute name="Codebase" value="*"/>
+                <!-- attribute name="Entry-Point" value=""/-->
+                <attribute name="Permissions" value="sandbox"/>
+                <attribute name="Trusted-Library" value="false"/>
+                <attribute name="Trusted-Only" value="false"/>
             </manifest>
         </jar>
         <exec executable="pack200">
@@ -89,6 +116,7 @@
                 storepass="${keystore.storepass}"
                 keystore="${keystore.file}" 
                 jar="${distdir}/signed/jhotdraw_svg.jar"
+                tsaurl="${keystore.tsaurl}"
                 >
         </signjar>        
         <exec executable="pack200">
@@ -101,9 +129,16 @@
         <javac
                 destdir="${classdir}"
                 srcdir="${srcdir}"
-                debug="true"
-                optimize="true"
-                encoding="UTF-8"
+                
+                debug="${javac.debug}"
+                optimize="${javac.optimize}"
+                encoding="${javac.encoding}"
+                includeantruntime="${javac.includeantruntime}"
+                source="${javac.source}"
+                target="${javac.target}"
+                bootclasspath="${javac.bootclasspath}"
+                classpath="${javac.classpath}"
+                extdirs="${javac.extdirs}"
          >
             <classpath path="${libdir}/quaqua.jar"/>
             <classpath path="${libdir}/java_30.zip"/>
@@ -176,7 +211,7 @@
                 storepass="${keystore.storepass}"
                 keystore="${keystore.file}" 
                 jar="${distdir}/signed/JHotDraw SVG.jar"
-                
+                tsaurl="${keystore.tsaurl}"
                 >
         </signjar>        
         <jar basedir="${libdir}" compress="true"
@@ -188,6 +223,7 @@
             storepass="${keystore.storepass}"
             keystore="${keystore.file}" 
             jar="${distdir}/signed/libquaqua.jnilib.jar"
+            tsaurl="${keystore.tsaurl}"
             >
         </signjar>        
         <jar basedir="${libdir}" compress="true"
@@ -199,6 +235,7 @@
             storepass="${keystore.storepass}"
             keystore="${keystore.file}" 
             jar="${distdir}/signed/libquaqua64.jnilib.jar"
+            tsaurl="${keystore.tsaurl}"
             >
         </signjar>        
     </target>

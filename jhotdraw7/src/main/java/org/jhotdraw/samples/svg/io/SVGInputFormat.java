@@ -8,33 +8,67 @@
 package org.jhotdraw.samples.svg.io;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.*;
-import java.net.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.net.URI;
+import java.net.URL;
 import java.text.ParseException;
-import java.util.*;
-import javax.imageio.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import net.n3.nanoxml.*;
-import org.jhotdraw.draw.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Stack;
+import java.util.StringTokenizer;
+import javax.imageio.IIOException;
+import javax.imageio.ImageIO;
+import javax.swing.JComponent;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import net.n3.nanoxml.IXMLElement;
+import net.n3.nanoxml.IXMLParser;
+import net.n3.nanoxml.IXMLReader;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLException;
+import net.n3.nanoxml.XMLParserFactory;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.io.InputFormat;
-import org.jhotdraw.xml.css.StyleManager;
-import org.jhotdraw.geom.*;
-import org.jhotdraw.io.*;
-import org.jhotdraw.samples.svg.*;
-import org.jhotdraw.samples.svg.figures.*;
+import org.jhotdraw.geom.BezierPath;
+import org.jhotdraw.io.Base64;
+import org.jhotdraw.io.StreamPosTokenizer;
+import org.jhotdraw.samples.svg.Gradient;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import static org.jhotdraw.samples.svg.SVGConstants.*;
+import org.jhotdraw.samples.svg.figures.SVGFigure;
 import org.jhotdraw.text.FontFormatter;
 import org.jhotdraw.util.LocaleUtil;
-import static org.jhotdraw.samples.svg.SVGConstants.*;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
 import org.jhotdraw.xml.css.CSSParser;
+import org.jhotdraw.xml.css.StyleManager;
 
 /**
  * SVGInputFormat.
@@ -1950,7 +1984,7 @@ public class SVGInputFormat implements InputFormat {
         //Computed value:  	 Specified value, except inherit
         value = readInheritAttribute(elem, "display-align", "auto");
         // XXX - Implement me properly
-        if (!value.equals("auto")) {
+        if (!"auto".equals(value)) {
             if ("center".equals(value)) {
                 TEXT_ANCHOR.put(a, TextAnchor.MIDDLE);
             } else if ("before".equals(value)) {
@@ -1968,7 +2002,7 @@ public class SVGInputFormat implements InputFormat {
         //Animatable:	 yes
         value = readInheritAttribute(elem, "text-align", "start");
         // XXX - Implement me properly
-        if (!value.equals("start")) {
+        if (!"start".equals(value)) {
             TEXT_ALIGN.put(a, SVG_TEXT_ALIGNS.get(value));
         }
     }
@@ -2003,7 +2037,7 @@ public class SVGInputFormat implements InputFormat {
             throws IOException {
         String value;
         value = readAttribute(elem, "transform", "none");
-        if (!value.equals("none")) {
+        if (!"none".equals(value)) {
             TRANSFORM.put(a, toTransform(elem, value));
         }
     }
@@ -2160,7 +2194,7 @@ public class SVGInputFormat implements InputFormat {
         //Animatable:  	 yes (non-additive)
         //Computed value:  	 Specified value, except inherit
         value = readInheritAttribute(elem, "stroke-dasharray", "none");
-        if (!value.equals("none")) {
+        if (!"none".equals(value)) {
             String[] values = toWSOrCommaSeparatedArray(value);
             double[] dashes = new double[values.length];
             for (int i = 0; i < values.length; i++) {
@@ -2362,7 +2396,7 @@ public class SVGInputFormat implements InputFormat {
         //Animatable:  	 yes (non-additive)
         //Computed value:  	 Specified value, except inherit
         value = readInheritAttribute(elem, "stroke-dasharray", null);
-        if (value != null && !value.equals("none")) {
+        if (value != null && !"none".equals(value)) {
             String[] values = toCommaSeparatedArray(value);
             double[] dashes = new double[values.length];
             for (int i = 0; i < values.length; i++) {
@@ -2575,7 +2609,7 @@ public class SVGInputFormat implements InputFormat {
         //Animatable:  	 yes (non-additive)
         //Computed value:  	 Specified value, except inherit
         value = readInheritAttribute(elem, "stroke-dasharray", "none");
-        if (!value.equals("none")) {
+        if (!"none".equals(value)) {
             String[] values = toWSOrCommaSeparatedArray(value);
             double[] dashes = new double[values.length];
             for (int i = 0; i < values.length; i++) {
@@ -3059,7 +3093,7 @@ public class SVGInputFormat implements InputFormat {
         // Animatable:  	yes
         // Computed value:  	 Specified value, except inherit
         value = readInheritAttribute(elem, "font-style", "normal");
-        FONT_ITALIC.put(a, value.equals("italic"));
+        FONT_ITALIC.put(a, "italic".equals(value));
 
 
         //'font-variant'
@@ -3087,9 +3121,9 @@ public class SVGInputFormat implements InputFormat {
         // values shall be converted to numeric values according to the rules
         // defined below.
         value = readInheritAttribute(elem, "font-weight", "normal");
-        FONT_BOLD.put(a, value.equals("bold") || value.equals("bolder")
-                || value.equals("400") || value.equals("500") || value.equals("600")
-                || value.equals("700") || value.equals("800") || value.equals("900"));
+        FONT_BOLD.put(a, "bold".equals(value) || "bolder".equals(value)
+                || "400".equals(value) || "500".equals(value) || "600".equals(value)
+                || "700".equals(value) || "800".equals(value) || "900".equals(value));
 
         // Note: text-decoration is an SVG 1.1 feature
         //'text-decoration'
@@ -3101,7 +3135,7 @@ public class SVGInputFormat implements InputFormat {
         //Media:  	visual
         //Animatable:  	yes
         value = readAttribute(elem, "text-decoration", "none");
-        FONT_UNDERLINE.put(a, value.equals("underline"));
+        FONT_UNDERLINE.put(a, "underline".equals(value));
     }
 
     /**

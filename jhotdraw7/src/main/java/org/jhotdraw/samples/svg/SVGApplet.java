@@ -18,6 +18,7 @@ import org.jhotdraw.util.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
@@ -46,9 +47,10 @@ import org.jhotdraw.samples.svg.gui.*;
  * @version $Id$
  */
 public class SVGApplet extends JApplet {
+
     private static final long serialVersionUID = 1L;
 
-    private SVGDrawingPanel drawingComponent;
+    private volatile SVGDrawingPanel drawingComponent;
     /**
      * Lazily initialized in method getVersion();
      */
@@ -58,7 +60,8 @@ public class SVGApplet extends JApplet {
     public SVGApplet() {
         setBackground(Color.WHITE);
         start = System.currentTimeMillis();
-        setName("JHotDraw SVG Applet " + getClass().getPackage().getImplementationVersion());
+        setName("JHotDraw SVG Applet "
+                + getClass().getPackage().getImplementationVersion());
         ((JComponent) getContentPane()).setBorder(new MatteBorder(new Insets(1, 1, 1, 1), new Color(0xa5a5a5)));
         //ResourceBundleUtil.setVerbose(true);
     }
@@ -103,7 +106,6 @@ public class SVGApplet extends JApplet {
             Locale.setDefault(new Locale(getParameter("Locale")));
         }
 
-
         final ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
 
         // Set look and feel
@@ -143,59 +145,76 @@ public class SVGApplet extends JApplet {
 
                     @Override
                     public void run() {
-                        drawingComponent = createDrawingComponent();
+                        try {
+                            drawingComponent = createDrawingComponent();
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                        }
                     }
                 };
                 t.start();
-                progress.setNote(labels.getString("progressLoading"));
-                Drawing drawing = loadDrawing(progress);
-                progress.setNote(labels.getString("progressOpeningEditor"));
-                progress.setIndeterminate(true);
-                t.join();
-                return drawing;
+                try {
+                    progress.setNote(labels.getString("progressLoading"));
+                    Drawing drawing = loadDrawing(progress);
+                    progress.setNote(labels.getString("progressOpeningEditor"));
+                    progress.setIndeterminate(true);
+                    return drawing;
+                } finally {
+                    t.join();
+                }
             }
 
             @Override
             protected void done(Drawing result) {
                 Container c = getContentPane();
-                c.setLayout(new BorderLayout());
                 c.removeAll();
+                c.setLayout(new BorderLayout());
                 c.add(drawingComponent.getComponent());
                 initComponents();
                 if (result != null) {
-                        setDrawing(result);
+                    setDrawing(result);
                 }
                 drawingComponent.revalidate();
+                ((JComponent) c).revalidate();
             }
 
             @Override
-            protected void failed(Throwable result) {
-                Container c = getContentPane();
-                c.setLayout(new BorderLayout());
-                c.removeAll();
-                Throwable error = result;
-                error.printStackTrace();
+            protected void failed(Throwable error) {
+                Drawing d = createDrawing();
                 String message = (error.getMessage() == null) ? error.toString() : error.getMessage();
-                MessagePanel mp = new MessagePanel(
-                        UIManager.getIcon("OptionPane.errorIcon"),
-                        labels.getFormatted("messageLoadFailed", htmlencode(getParameter("DrawingURL")), htmlencode(message)));
-                c.add(mp);
-                mp.addActionListener(new ActionListener() {
+                SVGTextAreaFigure txt = new SVGTextAreaFigure(labels.getFormatted("messageLoadFailed", getParameter("DrawingURL"), message));
+                txt.setBounds(new Point2D.Double(0, 0), new Point2D.Double(getWidth(), getHeight()));
+                d.add(txt);
+                done(d);
+                /*
+                 Container c = getContentPane();
+                 c.setLayout(new BorderLayout());
+                 c.removeAll();
+                 Throwable error = result;
+                 error.printStackTrace();
+                 String message = (error.getMessage() == null) ? error.toString() : error.getMessage();
+                 MessagePanel mp = new MessagePanel(
+                 UIManager.getIcon("OptionPane.errorIcon"),
+                 labels.getFormatted("messageLoadFailed", htmlencode(getParameter("DrawingURL")), htmlencode(message)));
+                 c.add(mp);
+                 mp.addActionListener(new ActionListener() {
 
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        if ("close".equals(evt.getActionCommand())) {
-                            close();
-                        }
-                    }
-                });
-                mp.revalidate();
+                 @Override
+                 public void actionPerformed(ActionEvent evt) {
+                 if ("close".equals(evt.getActionCommand())) {
+                 close();
+                 }
+                 }
+                 });
+                 mp.revalidate();
+                 */
             }
 
             @Override
             protected void finished() {
                 long end = System.currentTimeMillis();
-                System.out.println("AbstractDrawingApplet startup latency:" + (end - start));
+                System.out.println("AbstractDrawingApplet startup latency:"
+                        + (end - start));
             }
         }.start();
     }
@@ -288,8 +307,8 @@ public class SVGApplet extends JApplet {
     @Override
     public String[][] getParameterInfo() {
         return new String[][]{
-                    {"data", "String", "the data to be displayed by this applet."},
-                    {"datafile", "URL", "an URL to a file containing the data to be displayed by this applet."}};
+            {"data", "String", "the data to be displayed by this applet."},
+            {"datafile", "URL", "an URL to a file containing the data to be displayed by this applet."}};
     }
 
     /**
@@ -337,7 +356,8 @@ public class SVGApplet extends JApplet {
                         uc = url.openConnection();
                         in = uc.getInputStream();
                         in = new BoundedRangeInputStream(in);
-                        ((BoundedRangeInputStream) in).setMaximum(contentLength + 1);
+                        ((BoundedRangeInputStream) in).setMaximum(contentLength
+                                + 1);
                         progress.setProgressModel((BoundedRangeModel) in);
                         bin = new BufferedInputStream(in);
                         bin.mark(512);
@@ -376,6 +396,8 @@ public class SVGApplet extends JApplet {
         if (appletContext == null) {
             System.exit(0);
         } else {
+            getContentPane().removeAll();
+            ((JComponent) getContentPane()).revalidate();
             try {
                 appletContext.showDocument(new URL(getDocumentBase(), getParameter("PageURL")));
             } catch (MalformedURLException ex) {

@@ -2,10 +2,11 @@
 <!-- Builds the "JHotDraw" jar file. -->
 <project name="JHotDraw" default="all" basedir=".">
     <target name="init">
+        <!-- gobal build properties -->
+        <property file="build.properties"/>
+        
         <!-- properties for copyright and versioning -->
         <property name="name" value="${ant.project.name}"/>
-        <property name="author" value="the authors and contributors of JHotDraw"/>
-        <property name="version" value="7rev758"/>
 
         <!-- build properties -->
         <property name="lib" value="lib"/>
@@ -16,16 +17,6 @@
         <property name="javadoc" value="dist/JHotDraw ${version}/JavaDoc"/>
         <property name="doc" value="dist/JHotDraw ${version}/Documentation"/>
         <property name="docsrc" value="src/documentation"/>
-        
-        <!-- compilation -->
-        <property name="j2se6" value="/System/Library/Frameworks/JavaVM.framework/Versions/1.6" />
-        <property name="j2se6.jvm" value="${j2se6}/Home/bin/java"/>
-        <property name="javac.source" value="1.6"/>
-        <property name="javac.target" value="1.6"/>
-        <property name="javac.bootclasspath" value="${j2se6}/Classes/classes.jar:${j2se6}/Classes/ui.jar" />
-        <property name="javac.classpath" value="lib/java_30.zip:${j2se6}/Classes/classes.jar:${j2se6}/Classes/ui.jar" />
-        <property name="javac.extdirs" value="lib/ext" />
-        <property name="javac.endorseddirs" value="lib/endorsed" />
     </target>
     <target name="clean" depends="init">
         <delete dir="${classes}" />
@@ -58,10 +49,11 @@
         <mkdir dir="${classes}"/>
         <javac  destdir="${classes}"
                 srcdir="${src}"
-                debug="true"
-                optimize="true"
-                encoding="UTF-8"
-                includeantruntime="false"
+                
+                debug="${javac.debug}"
+                optimize="${javac.optimize}"
+                encoding="${javac.encoding}"
+                includeantruntime="${javac.includeantruntime}"
                 source="${javac.source}"
                 target="${javac.target}"
                 bootclasspath="${javac.bootclasspath}"

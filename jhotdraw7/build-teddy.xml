@@ -2,9 +2,11 @@
 <!-- Builds the "JHotDraw Teddy" demo application and demo applet. -->
 <project name="build-teddy" default="all" basedir=".">
     <target name="init">
+        <!-- gobal build properties -->
+        <property file="build.properties"/>
+        
         <!-- properties for copyright and versioning -->
-        <property name="author" value="the authors and contributors of JHotDraw"/>
-        <property name="version" value="7.6"/>
+        <property name="name" value="JHotDraw: Teddy Sample"/>
 
         <!-- build properties -->
         <property name="libdir" value="lib"/>
@@ -14,9 +16,8 @@
         <property name="distdir" value="dist/JHotDraw ${version}/Samples/Teddy"/>
 
         <!-- properties for jar signing -->
-        <property name="keystore.file" value="../../../../_Keystore/JavaKeystore"/>
-        <property name="keystore.alias" value="werner"/>
-        <property name="keystore.storepass" value="werner"/>
+        <property name="keystore.file" value="../../../../_Keystore/JavaKeystore.jks"/>
+        <property file="${keystore.file}.properties"/>
     </target>
     <target name="clean" depends="init">
         <delete dir="${classdir}" />
@@ -26,9 +27,16 @@
         <javac
                 destdir="${classdir}"
                 srcdir="${srcdir}"
-                debug="true"
-                optimize="true"
-                encoding="UTF-8"
+                
+                debug="${javac.debug}"
+                optimize="${javac.optimize}"
+                encoding="${javac.encoding}"
+                includeantruntime="${javac.includeantruntime}"
+                source="${javac.source}"
+                target="${javac.target}"
+                bootclasspath="${javac.bootclasspath}"
+                classpath="${javac.classpath}"
+                extdirs="${javac.extdirs}"
          >
             <classpath path="${libdir}/quaqua.jar"/>
             <classpath path="${libdir}/annotations.jar"/>
@@ -90,7 +98,7 @@
                 storepass="${keystore.storepass}"
                 keystore="${keystore.file}" 
                 jar="${distdir}/signed/JHotDraw Teddy.jar"
-                
+                tsaurl="${keystore.tsaurl}"
                 >
         </signjar>        
         <jar basedir="${libdir}" compress="true"
@@ -102,6 +110,7 @@
             storepass="${keystore.storepass}"
             keystore="${keystore.file}" 
             jar="${distdir}/signed/libquaqua.jnilib.jar"
+            tsaurl="${keystore.tsaurl}"
             >
         </signjar>        
         <jar basedir="${libdir}" compress="true"
@@ -113,6 +122,7 @@
             storepass="${keystore.storepass}"
             keystore="${keystore.file}" 
             jar="${distdir}/signed/libquaqua64.jnilib.jar"
+            tsaurl="${keystore.tsaurl}"
             >
         </signjar>        
     </target>

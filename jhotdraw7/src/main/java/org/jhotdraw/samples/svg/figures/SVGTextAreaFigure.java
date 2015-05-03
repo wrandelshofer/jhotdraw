@@ -51,7 +51,7 @@ public class SVGTextAreaFigure extends SVGAttributedFigure
 
     /** Creates a new instance. */
     public SVGTextAreaFigure() {
-        this("Text");
+        this("");
     }
 
     public SVGTextAreaFigure(String text) {
