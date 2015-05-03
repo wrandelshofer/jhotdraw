@@ -328,7 +328,7 @@ public class ColorSliderUI extends BasicSliderUI {
             }
         }
 
-        g.drawImage(colorTrackImage, x, y, slider);
+        g.drawImage(colorTrackImage, x, y, null);
     }
 
     @Override
