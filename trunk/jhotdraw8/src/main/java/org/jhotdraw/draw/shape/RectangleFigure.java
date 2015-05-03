@@ -51,7 +51,7 @@ public class RectangleFigure extends ShapeFigure {
     @Override
     public void reshape(Transform transform) {
         Rectangle2D r = get(RECTANGLE);
-        Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY());
+        Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
