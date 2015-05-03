@@ -53,7 +53,7 @@ public class CircleFigure extends ShapeFigure {
     @Override
     public void reshape(Transform transform) {
         Bounds r = getLayoutBounds();
-        Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY());
+        Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         set(CENTER, new Point2D(b.getMinX() + b.getWidth() / 2, b.getMinY() + b.getHeight() / 2));
         set(RADIUS, min(abs(b.getWidth()), abs(b.getHeight())) / 2);

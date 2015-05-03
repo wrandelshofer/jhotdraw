@@ -126,12 +126,12 @@ public class SimpleDrawingModel implements DrawingModel {
     private final LinkedList<InvalidationListener> invalidationListeners = new LinkedList<>();
 
     @Override
-    public void addListener(Listener<DrawingModelEvent> listener) {
+    public void addDrawingModelListener(Listener<DrawingModelEvent> listener) {
         drawingModelListeners.add(listener);
     }
 
     @Override
-    public void removeListener(Listener<DrawingModelEvent> listener) {
+    public void removeDrawingModelListener(Listener<DrawingModelEvent> listener) {
         drawingModelListeners.remove(listener);
     }
     @Override

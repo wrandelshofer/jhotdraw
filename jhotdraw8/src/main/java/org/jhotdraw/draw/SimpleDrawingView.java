@@ -149,7 +149,7 @@ public class SimpleDrawingView implements DrawingView {
             throw new InternalError(ex);
         }
 
-        model.addListener((Listener<DrawingModelEvent>) event -> {
+        model.addDrawingModelListener((Listener<DrawingModelEvent>) event -> {
             dirtyFigures.add(event.getFigure());
             if (event.getParent() != null) {
                 dirtyFigures.add(event.getParent());

@@ -1,25 +1,14 @@
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.Formatter;
-import java.util.Locale;
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.beans.property.SimpleMapProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableMap;
-import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingModelEvent;
-import org.jhotdraw.draw.HandleListener;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingModel;
 import org.jhotdraw.draw.shape.RectangleFigure;
-import org.jhotdraw.text.Point2DConverter;
+import org.jhotdraw.event.Listener;
 /* @(#)Scratchpad.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
@@ -48,7 +37,7 @@ public class Scratchpad {
 
         SimpleDrawingModel m=new SimpleDrawingModel();
         m.setRoot(d);
-        m.addDrawingModelListener(new HandleListener() {
+        m.addDrawingModelListener(new Listener<DrawingModelEvent>() {
 
             @Override
             public void handle(DrawingModelEvent mutation) {

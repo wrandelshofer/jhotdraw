@@ -49,14 +49,15 @@ public class EllipseFigure extends ShapeFigure {
     @Override
     public Bounds getLayoutBounds() {
         Point2D c = get(CENTER);
-        double r = get(RADIUS_X);
-        return new BoundingBox(c.getX() - r, c.getY() - r, r * 2, r * 2);
+        double rx = get(RADIUS_X);
+        double ry = get(RADIUS_Y);
+        return new BoundingBox(c.getX() - rx, c.getY() - ry, rx * 2, ry * 2);
     }
 
     @Override
     public void reshape(Transform transform) {
         Bounds r = getLayoutBounds();
-        Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY());
+        Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         set(CENTER, new Point2D(b.getMinX()+b.getWidth()/2 , b.getMinY()+b.getHeight()/2));
         set(RADIUS_X, abs(b.getWidth())/2 );

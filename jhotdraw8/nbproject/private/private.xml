@@ -11,33 +11,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/SimpleDrawingModel.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/AbstractFigure.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/handle/Handle.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SimpleDragTracker.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/DragTracker.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/SimpleDrawingView.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/event/Listener.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/DrawingView.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SelectAreaTracker.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SelectionTool.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/handle/SimpleHighlightHandle.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/handle/AbstractHandle.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/samples/grapher/GrapherView.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/AbstractTool.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/DrawingModelEvent.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/handle/HandleEvent.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SimpleHandleTracker.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/DrawingModel.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/AbstractCompositeFigure.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/Figure.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/HandleTracker.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/Tool.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/ToolEvent.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/tool/SimpleSelectAreaTracker.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/AbstractLeafFigure.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/event/Event.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -20,9 +20,9 @@ import org.jhotdraw.event.Listener;
  */
 public interface DrawingModel extends Observable {
 
-    void addListener(Listener<DrawingModelEvent> listener);
+    void addDrawingModelListener(Listener<DrawingModelEvent> listener);
 
-    void removeListener(Listener<DrawingModelEvent> listener);
+    void removeDrawingModelListener(Listener<DrawingModelEvent> listener);
     
     /** Sets the root of the drawing model. 
      * @param newValue the root. Specify null to unlink the drawing model.
