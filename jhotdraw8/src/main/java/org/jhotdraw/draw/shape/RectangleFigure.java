@@ -6,7 +6,7 @@
 package org.jhotdraw.draw.shape;
 
 import static java.lang.Math.*;
-import org.jhotdraw.draw.shape.ShapeFigure;
+import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.geometry.BoundingBox;
@@ -24,7 +24,7 @@ import org.jhotdraw.draw.DrawingView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends ShapeFigure {
+public class RectangleFigure extends AbstractShapeFigure {
 
     public final static Key<Rectangle2D> RECTANGLE = new Key<>("rectangle", Rectangle2D.class, new Rectangle2D(0, 0, 1, 1));
     public final static Key<Double> ARC_HEIGHT = new Key<>("arcHeight", Double.class, 0.0);
@@ -82,7 +82,7 @@ public class RectangleFigure extends ShapeFigure {
 
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
-            HashMap<String, Key<?>> keys = ShapeFigure.getFigureKeys();
+            HashMap<String, Key<?>> keys = AbstractShapeFigure.getFigureKeys();
             for (Field f : RectangleFigure.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);

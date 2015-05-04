@@ -24,7 +24,7 @@ import org.jhotdraw.draw.DrawingView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CircleFigure extends ShapeFigure {
+public class CircleFigure extends AbstractShapeFigure {
 
     public final static Key<Point2D> CENTER = new Key<>("center", Point2D.class, new Point2D(0, 0));
     public final static Key<Double> RADIUS = new Key<>("radius", Double.class, 1.0);
@@ -83,7 +83,7 @@ public class CircleFigure extends ShapeFigure {
 
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
-            HashMap<String, Key<?>> keys = ShapeFigure.getFigureKeys();
+            HashMap<String, Key<?>> keys = AbstractShapeFigure.getFigureKeys();
             for (Field f : CircleFigure.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);

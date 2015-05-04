@@ -24,7 +24,7 @@ import org.jhotdraw.draw.DrawingView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends ShapeFigure {
+public class EllipseFigure extends AbstractShapeFigure {
 
     public final static Key<Point2D> CENTER = new Key<>("center", Point2D.class, new Point2D(0, 0));
     public final static Key<Double> RADIUS_X = new Key<>("radiusX", Double.class, 1.0);
@@ -90,7 +90,7 @@ public class EllipseFigure extends ShapeFigure {
 
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
-            HashMap<String, Key<?>> keys = ShapeFigure.getFigureKeys();
+            HashMap<String, Key<?>> keys = AbstractShapeFigure.getFigureKeys();
             for (Field f : EllipseFigure.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);

@@ -80,7 +80,7 @@ public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure 
 
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
-            HashMap<String, Key<?>> keys = ShapeFigure.getFigureKeys();
+            HashMap<String, Key<?>> keys = AbstractShapeFigure.getFigureKeys();
             for (Field f : LabelFigure.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);
