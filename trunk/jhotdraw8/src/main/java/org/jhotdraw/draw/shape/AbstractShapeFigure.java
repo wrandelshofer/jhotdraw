@@ -1,4 +1,4 @@
-/* @(#)ShapeFigure.java
+/* @(#)AbstractShapeFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -24,7 +24,7 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class ShapeFigure extends AbstractLeafFigure {
+public abstract class AbstractShapeFigure extends AbstractLeafFigure {
     /**
      * Defines the paint used for filling the interior of the figure.
      * Default value: {@code Color.WHITE}.
@@ -95,7 +95,7 @@ public abstract class ShapeFigure extends AbstractLeafFigure {
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
             HashMap<String, Key<?>> keys = Figure.getFigureKeys();
-            for (Field f : ShapeFigure.class.getDeclaredFields()) {
+            for (Field f : AbstractShapeFigure.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);
                     keys.put(value.getName(), value);

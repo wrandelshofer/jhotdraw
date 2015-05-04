@@ -1,46 +1,65 @@
-/* @(#)LineFigure.java
+/* @(#)LineConnectionFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
-package org.jhotdraw.draw.shape;
+package org.jhotdraw.draw;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
-import static java.lang.Math.*;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.shape.Line;
-import org.jhotdraw.draw.DrawingView;
+import javafx.scene.transform.Transform;
+import org.jhotdraw.beans.PropertyBean;
+import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.shape.LineFigure;
+import org.jhotdraw.draw.shape.AbstractShapeFigure;
 
 /**
- * Renders a {@code javafx.scene.shape.Line}.
- *
+ * LineConnectionFigure.
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineFigure extends AbstractShapeFigure {
+public class LineConnectionFigure extends AbstractShapeFigure implements ConnectionFigure {
 
-    public final static Key<Point2D> START = new Key<>("start", Point2D.class, new Point2D(0, 0));
-    public final static Key<Point2D> END = new Key<>("end", Point2D.class, new Point2D(0, 0));
-
-    public LineFigure() {
+    public LineConnectionFigure() {
         this(0, 0, 1, 1);
     }
 
-    public LineFigure(double startX, double startY, double endX, double endY) {
+    public LineConnectionFigure(double startX, double startY, double endX, double endY) {
         set(START, new Point2D(startX, startY));
         set(END, new Point2D(endX, endY));
     }
 
-    public LineFigure(Point2D start, Point2D end) {
+    public LineConnectionFigure(Point2D start, Point2D end) {
         set(START, start);
         set(END, end);
+
+        // We must update the start and end point when ever one of
+        // the connected figures or one of the connectors changes
+        InvalidationListener il = observable -> invalidate();
+        ChangeListener<Observable> cl = (observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeListener(il);
+            }
+            if (newValue != null) {
+                newValue.addListener(il);
+            }
+        };
+
+        START_FIGURE.propertyAt(properties()).addListener(il);
+        END_FIGURE.propertyAt(properties()).addListener(cl);
+        START_CONNECTOR.propertyAt(properties()).addListener(il);
+        END_CONNECTOR.propertyAt(properties()).addListener(cl);
     }
 
     @Override
@@ -98,4 +117,8 @@ public class LineFigure extends AbstractShapeFigure {
             throw new InternalError("class can not read its own keys");
         }
     }
+
+    private void invalidate() {
+    }
+
 }

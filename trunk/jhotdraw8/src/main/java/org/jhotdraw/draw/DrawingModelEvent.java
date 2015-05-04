@@ -19,6 +19,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
         FIGURE_ADDED,
         FIGURE_REMOVED,
+        FIGURE_REQUEST_REMOVE,
         PROPERTY_CHANGED,
         FIGURE_INVALIDATED
     }

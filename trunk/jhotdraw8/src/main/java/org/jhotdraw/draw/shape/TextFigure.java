@@ -25,7 +25,7 @@ import org.jhotdraw.draw.TextHolderFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends ShapeFigure implements TextHolderFigure {
+public class TextFigure extends AbstractShapeFigure implements TextHolderFigure {
      public final static Key<Point2D> ORIGIN = new Key<>("origin", Point2D.class, new Point2D(0, 0));
 
     private ReadOnlyObjectWrapper<Bounds> layoutBounds = null;
@@ -85,7 +85,7 @@ public class TextFigure extends ShapeFigure implements TextHolderFigure {
 
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
-            HashMap<String, Key<?>> keys = ShapeFigure.getFigureKeys();
+            HashMap<String, Key<?>> keys = AbstractShapeFigure.getFigureKeys();
             for (Field f : TextHolderFigure.class.getDeclaredFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
                     Key<?> value = (Key<?>) f.get(null);
