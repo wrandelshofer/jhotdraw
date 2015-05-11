@@ -294,9 +294,10 @@ public class Key<T> implements Serializable {
         private PropertyAt(MapExpression<Key<?>, Object> map, Key<T> key) {
             this.map = map;
             this.key = key;
+            
             this.mapListener = (MapChangeListener.Change<? extends Key<?>, ? extends Object> change) -> {
-                if (change.getKey() == this.key) {
-                    if (get() != change.getValueAdded()) {
+                if (this.key.equals(change.getKey())) {
+                    if (super.get() != change.getValueAdded()) {
                         set((T) change.getValueAdded());
                     }
                 }
@@ -326,12 +327,6 @@ public class Key<T> implements Serializable {
                 key = null;
             }
         }
-
-        @Override
-        public boolean isBound() {
-            return (map != null);
-        }
-
     }
 
     /** Creates a new property for the map entry specified by this name. */

@@ -11,6 +11,11 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/samples/grapher/GrapherApplication.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/app/AbstractView.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/draw/DrawingView.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw/samples/grapher/GrapherView.java</file>
+        </group>
     </open-files>
 </project-private>

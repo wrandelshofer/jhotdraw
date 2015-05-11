@@ -7,6 +7,7 @@ package org.jhotdraw.draw;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import javafx.beans.Observable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -24,9 +25,13 @@ import org.jhotdraw.beans.SimplePropertyBean;
  * @version $Id$
  */
 public abstract class AbstractFigure extends SimplePropertyBean implements Figure {
-
+    
     private final OptionalProperty<Figure> parent = new OptionalProperty<Figure>(this, PARENT_PROPERTY);
-
+    
+    { // A figure fires an invalidation event when one of its properties changes
+        properties.addListener((Observable observable) -> fireInvalidated());
+    }
+    
     @Override
     public OptionalProperty<Figure> parentProperty() {
         return parent;
@@ -37,5 +42,5 @@ public abstract class AbstractFigure extends SimplePropertyBean implements Figur
     public boolean isSelectable() {
         return true;
     }
-
+    
 }

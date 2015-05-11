@@ -35,6 +35,17 @@ import org.jhotdraw.draw.handle.SimpleHighlightHandle;
  * A {@code Figure} is an editable element of a {@link Drawing}.
  * <p>
  * A figure typically has a visual representation, such as a rectangle or a line.
+ * <p>
+ * A figure fires the following events:
+ * <ul>
+ * <li>An invalidation event to {@code InvalidationListener}s registered on the 
+ * figure, when its JavaFX {@code Node} needs to be updated.</li>
+ * <li>A change event to {@code MapChangeListenerss registered on the figures
+ * {@code properties} when a property value has been changed.</li>
+ * <li>A change event to {@code ListChangeListener}s registered on the figures
+ * {@code childrenProperty} when a child figure has been added or removed or
+ * reordered.</li>
+ * </ul>
  * 
  * @author Werner Randelshofer
  * @version $Id$
@@ -169,7 +180,8 @@ public interface Figure extends PropertyBean, Observable {
      */
     default void reshape(double x, double y, double width, double height) {
         Bounds oldBounds = getLayoutBounds();
-        Rectangle2D newBounds = new Rectangle2D(x - min(width, 0), y - min(height, 0), abs(width), abs(height));
+        Rectangle2D newBounds = new Rectangle2D(x - min(width, 0), y
+                - min(height, 0), abs(width), abs(height));
 
         double sx = newBounds.getWidth() / oldBounds.getWidth();
         double sy = newBounds.getHeight() / oldBounds.getHeight();
@@ -225,9 +237,10 @@ public interface Figure extends PropertyBean, Observable {
 
     /** Whether children may be added to this figure. */
     boolean allowsChildren();
+
     /** Whether the figure is selectable by the user. */
     boolean isSelectable();
-    
+
     /** Creates handles of the specified level and for the specified drawing view. 
      * @param level The desired handle level
      * @param dv The drawing view which will display the handles
@@ -235,10 +248,9 @@ public interface Figure extends PropertyBean, Observable {
      * not have handles of this level.
      */
     default List<Handle> createHandles(HandleLevel level, DrawingView dv) {
-        if (level == HandleLevel.HIGHLIGHT||
-                level == HandleLevel.SHAPE) {
+        if (level == HandleLevel.HIGHLIGHT || level == HandleLevel.SHAPE) {
             List<Handle> list = new LinkedList<>();
-            list.add(new SimpleHighlightHandle(this,dv));
+            list.add(new SimpleHighlightHandle(this, dv));
             return list;
         }
         return Collections.emptyList();
@@ -256,7 +268,7 @@ public interface Figure extends PropertyBean, Observable {
     default void remove(Figure child) {
         childrenProperty().remove(child);
     }
-    
+
     default ObservableList<Figure> children() {
         return childrenProperty().get();
     }

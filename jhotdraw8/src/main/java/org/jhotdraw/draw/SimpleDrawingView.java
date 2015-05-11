@@ -96,7 +96,7 @@ public class SimpleDrawingView implements DrawingView {
 
     private final ReadOnlyBooleanWrapper focusedProperty = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
     private final ReadOnlyObjectWrapper<Transform> drawingToViewProperty = new ReadOnlyObjectWrapper<Transform>(this, DRAWING_TO_VIEW_PROPERTY, new Scale());
-    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, SCALE_FACTOR_PROPERTY, 1.0) {
+    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, ZOOM_FACTOR_PROPERTY, 1.0) {
 
         @Override
         public void set(double newValue) {
@@ -173,6 +173,9 @@ public class SimpleDrawingView implements DrawingView {
         node.setFocusTraversable(true);
         focusedProperty.bind(node.focusedProperty());
 
+        drawingPane.setScaleX(zoomFactor.get());
+        drawingPane.setScaleY(zoomFactor.get());
+        
         updateDrawing(null, drawingProperty().get());
     }
 

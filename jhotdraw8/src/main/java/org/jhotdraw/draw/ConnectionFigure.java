@@ -9,6 +9,8 @@ package org.jhotdraw.draw;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.connector.CenterConnector;
+import org.jhotdraw.draw.connector.Connector;
 
 /**
  * A <em>connection figure</em> connects two figures with a 
@@ -22,13 +24,19 @@ import org.jhotdraw.collection.Key;
  * {@code figureRemoved} events sent by the two figures that it connects, and
  * then fires a {@code requestRemove} event to get removed as well.
  * <p>
- * The geometric path of the connection figure can be laid out using a {@link Liner}.
+ * The geometric path of the connection figure can be laid out using a
+ * {@link Liner}.
+ * <p>
+ * A connection figure listens to changes in the properties of the two figures
+ * that it connects. If a property is changed, the connection figure updates
+ * it start, middle and end points, which may result in firing an invalidation
+ * event when its {@code Node} needs to be updated.
  *
  * ConnectionFigure.
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface ConnectionFigure {
+public interface ConnectionFigure extends Figure {
     // ----
     // keys
     // ----
@@ -54,10 +62,10 @@ public interface ConnectionFigure {
     /**
      * The start connector.
      */
-    public static Key<Figure> START_CONNECTOR = new Key<>("startConnector", Figure.class, null);
+    public static Key<Connector> START_CONNECTOR = new Key<>("startConnector", Connector.class, new CenterConnector());
     /**
      * The end connector.
      */
-    public static Key<Figure> END_CONNECTOR = new Key<>("endConnector", Figure.class, null);
+    public static Key<Connector> END_CONNECTOR = new Key<>("endConnector", Connector.class, new CenterConnector());
 
 }

@@ -28,7 +28,7 @@ import org.jhotdraw.collection.Key;
  */
 public class SimplePropertyBean extends SimpleObservable implements PropertyBean {
 
-    private ReadOnlyMapWrapper<Key<?>, Object> properties = new ReadOnlyMapWrapper<>(this, "properties", FXCollections.observableHashMap());
+    protected ReadOnlyMapWrapper<Key<?>, Object> properties = new ReadOnlyMapWrapper<>(this, "properties", FXCollections.observableHashMap());
 
     @Override
     public final ReadOnlyMapProperty<Key<?>, Object> properties() {
