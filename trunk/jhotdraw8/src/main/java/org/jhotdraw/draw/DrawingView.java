@@ -52,7 +52,7 @@ public interface DrawingView {
     /** The name of the focused property. */
     public final static String FOCUSED_PROPERTY = "focused";
     /** The name of the scale factor property. */
-    public final static String SCALE_FACTOR_PROPERTY = "scaleFactor";
+    public final static String ZOOM_FACTOR_PROPERTY = "scaleFactor";
     /** The name of the drawing to view property. */
     public final static String DRAWING_TO_VIEW_PROPERTY = "drawingToView";
     /** The name of the constrainer property. */

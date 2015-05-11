@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.BoundingBox;
@@ -21,6 +22,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
 
@@ -31,35 +33,62 @@ import org.jhotdraw.draw.shape.AbstractShapeFigure;
  */
 public class LineConnectionFigure extends AbstractShapeFigure implements ConnectionFigure {
 
+    /** Holds a strong reference to the property. */
+    private Property<Figure> startFigureProperty;
+    /** Holds a strong reference to the property. */
+    private Property<Figure> endFigureProperty;
+    /** Holds a strong reference to the property. */
+    private Property<Connector> startConnectorProperty;
+    /** Holds a strong reference to the property. */
+    private Property<Connector> endConnectorProperty;
+
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
+    }
+
+    public LineConnectionFigure(Point2D start, Point2D end) {
+        this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
     public LineConnectionFigure(double startX, double startY, double endX, double endY) {
         set(START, new Point2D(startX, startY));
         set(END, new Point2D(endX, endY));
-    }
-
-    public LineConnectionFigure(Point2D start, Point2D end) {
-        set(START, start);
-        set(END, end);
 
         // We must update the start and end point when ever one of
         // the connected figures or one of the connectors changes
-        InvalidationListener il = observable -> invalidate();
-        ChangeListener<Observable> cl = (observable, oldValue, newValue) -> {
+        InvalidationListener ilStart = observable -> {
+            updateStart();
+        };
+        ChangeListener<Observable> clStart = (observable, oldValue, newValue) -> {
             if (oldValue != null) {
-                oldValue.removeListener(il);
+                oldValue.removeListener(ilStart);
             }
             if (newValue != null) {
-                newValue.addListener(il);
+                newValue.addListener(ilStart);
+                updateStart();
+            }
+        };
+        InvalidationListener ilEnd = observable -> {
+            updateEnd();
+        };
+        ChangeListener<Observable> clEnd = (observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeListener(ilEnd);
+            }
+            if (newValue != null) {
+                newValue.addListener(ilEnd);
+                updateEnd();
             }
         };
 
-        START_FIGURE.propertyAt(properties()).addListener(il);
-        END_FIGURE.propertyAt(properties()).addListener(cl);
-        START_CONNECTOR.propertyAt(properties()).addListener(il);
-        END_CONNECTOR.propertyAt(properties()).addListener(cl);
+        startFigureProperty = START_FIGURE.propertyAt(properties());
+        startFigureProperty.addListener(clStart);
+        endFigureProperty = END_FIGURE.propertyAt(properties());
+        endFigureProperty.addListener(clEnd);
+        startConnectorProperty = START_CONNECTOR.propertyAt(properties());
+        startConnectorProperty.addListener(clStart);
+        endConnectorProperty = END_CONNECTOR.propertyAt(properties());
+        endConnectorProperty.addListener(clEnd);
     }
 
     @Override
@@ -75,14 +104,22 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
 
     @Override
     public void reshape(Transform transform) {
-        set(START, transform.transform(get(START)));
-        set(END, transform.transform(get(END)));
+        if (get(START_FIGURE) == null) {
+            set(START, transform.transform(get(START)));
+        }
+        if (get(END_FIGURE) == null) {
+            set(END, transform.transform(get(END)));
+        }
     }
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(START, new Point2D(x, y));
-        set(END, new Point2D(x + width, y + height));
+        if (get(START_FIGURE) == null) {
+            set(START, new Point2D(x, y));
+        }
+        if (get(END_FIGURE) == null) {
+            set(END, new Point2D(x + width, y + height));
+        }
     }
 
     @Override
@@ -118,7 +155,12 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         }
     }
 
-    private void invalidate() {
+    private void updateStart() {
+        get(START_CONNECTOR).updateStartPosition(this);
+    }
+
+    private void updateEnd() {
+        get(END_CONNECTOR).updateEndPosition(this);
     }
 
 }
