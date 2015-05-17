@@ -102,7 +102,8 @@ public class Key<T> implements Serializable {
         }
         if (typeParameters.length() > 0) {
             if (!typeParameters.startsWith("<") || !typeParameters.endsWith(">")) {
-                throw new IllegalArgumentException("type parameters does not have arrow brackets:" + typeParameters);
+                throw new IllegalArgumentException("type parameters does not have arrow brackets:"
+                        + typeParameters);
             }
         }
         this.name = key;
@@ -200,7 +201,10 @@ public class Key<T> implements Serializable {
      * @return The old value.
      */
     public T put(Map<? super Key<?>, Object> a, T value) {
-        assert isAssignable(value);
+        if (!isAssignable(value)) {
+            throw new IllegalArgumentException("Value is not assignable to key. key="
+                    + this + ", value=" + value);
+        }
         return (T) a.put(this, value);
     }
 
@@ -213,7 +217,10 @@ public class Key<T> implements Serializable {
      * @return The old value.
      */
     public T putValue(Map<? super Key<?>, ObjectProperty<?>> a, T value) {
-        assert isAssignable(value);
+        if (!isAssignable(value)) {
+            throw new IllegalArgumentException("Value is not assignable to key. key="
+                    + this + ", value=" + value);
+        }
         if (a.containsKey(this)) {
             ObjectProperty<T> p = (ObjectProperty<T>) a.get(this);
             T oldValue = p.get();
@@ -232,7 +239,7 @@ public class Key<T> implements Serializable {
      * @return True if assignable.
      */
     public boolean isAssignable(Object value) {
-        return clazz.isInstance(value);
+        return value == null || clazz.isInstance(value);
     }
 
     /**
@@ -294,7 +301,7 @@ public class Key<T> implements Serializable {
         private PropertyAt(MapExpression<Key<?>, Object> map, Key<T> key) {
             this.map = map;
             this.key = key;
-            
+
             this.mapListener = (MapChangeListener.Change<? extends Key<?>, ? extends Object> change) -> {
                 if (this.key.equals(change.getKey())) {
                     if (super.get() != change.getValueAdded()) {
