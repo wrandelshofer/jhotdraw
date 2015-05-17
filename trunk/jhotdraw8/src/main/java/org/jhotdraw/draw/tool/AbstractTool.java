@@ -15,6 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventType;
 import javafx.scene.Node;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -30,13 +31,16 @@ import org.jhotdraw.util.Resources;
  * @author Werner Randelshofer
  */
 public abstract class AbstractTool extends AbstractDisableable implements Tool {
+
     // ---
     // Fields
     // ---
+
     /** The properties. */
     private MapProperty<Key<?>, Object> properties;
     /** The active view. */
     private final OptionalProperty<DrawingView> drawingView = new OptionalProperty<>(this, DRAWING_VIEW_PROPERTY);
+
     {
         drawingView.addListener((ObservableValue<? extends Optional<DrawingView>> observable, Optional<DrawingView> oldValue, Optional<DrawingView> newValue) -> {
             stopEditing();
@@ -45,6 +49,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     protected final BorderPane node = new BorderPane();
     /** Listeners. */
     private final LinkedList<Listener<org.jhotdraw.draw.handle.HandleEvent>> handleListeners = new LinkedList<>();
+
     {
         node.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
             if (drawingView.get().isPresent()) {
@@ -68,8 +73,21 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                 event.consume();
             }
         });
+        node.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {
+            if (drawingView.get().isPresent()) {
+                DrawingView dv = drawingView.get().get();
+                EventType<? extends KeyEvent> type = event.getEventType();
+                if (type == KeyEvent.KEY_PRESSED) {
+                    onKeyPressed(event, dv);
+                } else if (type == KeyEvent.KEY_RELEASED) {
+                    onKeyReleased(event, dv);
+                } else if (type == KeyEvent.KEY_TYPED) {
+                    onKeyTyped(event, dv);
+                }
+            }
+        });
     }
-   /** Listeners. */
+    /** Listeners. */
     private final LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
 
     // ---
@@ -109,9 +127,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     public OptionalProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
+
     // ---
     // Behaviors
     // ---
+
     protected void applyResources(Resources rsrc) {
         String name = get(NAME);
         set(LABEL, rsrc.getTextProperty(name));
@@ -199,9 +219,20 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     protected void onMouseClicked(MouseEvent event, DrawingView dv) {
     }
+
+    protected void onKeyPressed(KeyEvent event, DrawingView dv) {
+    }
+
+    protected void onKeyReleased(KeyEvent event, DrawingView dv) {
+    }
+
+    protected void onKeyTyped(KeyEvent event, DrawingView dv) {
+    }
+
     // ---
     // Listeners
     // ---
+
     @Override
     public void addToolListener(Listener<ToolEvent> listener) {
         toolListeners.add(listener);
@@ -211,30 +242,33 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     public void removeToolListener(Listener<ToolEvent> listener) {
         toolListeners.remove(listener);
     }
+
     protected void fire(ToolEvent event) {
         for (Listener<ToolEvent> l : toolListeners) {
             l.handle(event);
         }
     }
+
     protected void fireToolStarted() {
-        fire(new ToolEvent(this,ToolEvent.EventType.TOOL_STARTED));
+        fire(new ToolEvent(this, ToolEvent.EventType.TOOL_STARTED));
     }
+
     protected void fireToolDone() {
-        fire(new ToolEvent(this,ToolEvent.EventType.TOOL_DONE));
+        fire(new ToolEvent(this, ToolEvent.EventType.TOOL_DONE));
     }
-    
+
     /** Gets the active drawing view. 
-    */
+     */
     public Optional<DrawingView> getDrawingView() {
         return drawingViewProperty().get();
     }
 
     /** Sets the active drawing view. 
-    * <p>
-    * This method is invoked by {@link DrawingView} when
-    * the tool is set or unset on the drawing view.
-    */
+     * <p>
+     * This method is invoked by {@link DrawingView} when
+     * the tool is set or unset on the drawing view.
+     */
     public void setDrawingView(DrawingView drawingView) {
         drawingViewProperty().set(Optional.ofNullable(drawingView));
-    }    
+    }
 }
