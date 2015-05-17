@@ -20,6 +20,8 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -313,32 +315,26 @@ public class DocumentOrientedApplication extends javafx.application.Application 
      * @param actions the action map
      * @return the menu bar */
     protected MenuBar createMenuBar(HierarchicalMap<String, Action> actions) {
-        FXMLLoader loader = new FXMLLoader();
-        try {
-            MenuBar mb = loader.load(DocumentOrientedApplication.class.getResourceAsStream("DocumentOrientedMenu.fxml"));
+        MenuBar mb = createMenuBar();
 
-            LinkedList<Menu> todo = new LinkedList<>(mb.getMenus());
-            while (!todo.isEmpty()) {
-                for (MenuItem mi : todo.remove().getItems()) {
-                    if (mi instanceof Menu) {
-                        todo.add((Menu) mi);
-                    } else {
-                        Optional<Action> a = actions.getOrParent(mi.getId());
-                        if (a.isPresent()) {
-                            Actions.bindMenuItem(mi, a.get());
-                        } else if (mi.getId() != null) {
-                            System.err.println("No action for menu item with id="
-                                    + mi.getId());
-                            mi.setVisible(false);
-                        }
+        LinkedList<Menu> todo = new LinkedList<>(mb.getMenus());
+        while (!todo.isEmpty()) {
+            for (MenuItem mi : todo.remove().getItems()) {
+                if (mi instanceof Menu) {
+                    todo.add((Menu) mi);
+                } else {
+                    Optional<Action> a = actions.getOrParent(mi.getId());
+                    if (a.isPresent()) {
+                        Actions.bindMenuItem(mi, a.get());
+                    } else if (mi.getId() != null) {
+                        System.err.println("No action for menu item with id="
+                                + mi.getId());
+                        mi.setVisible(false);
                     }
                 }
             }
-            return mb;
-        } catch (IOException e) {
-            throw new InternalError(e);
         }
-
+        return mb;
     }
 
     public HierarchicalMap<String, Action> createApplicationActionMap() {
@@ -432,6 +428,16 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     @Override
     public void addRecentURI(URI uri) {
         // FIXME implement me
+    }
+
+    @Override
+    public MenuBar createMenuBar() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            return loader.load(DocumentOrientedApplication.class.getResourceAsStream("DocumentOrientedMenu.fxml"));
+        } catch (IOException ex) {
+            throw new InternalError(ex);
+        }
     }
 
 }

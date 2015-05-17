@@ -127,7 +127,7 @@ public class SelectionTool extends AbstractTool {
         }
 
         if (figure.isPresent()) {
-            DragTracker t = getDragTracker(figure.get());
+            DragTracker t = getDragTracker(figure.get(), view);
             setTracker(t);
         } else {
             SelectAreaTracker t = getSelectAreaTracker();
@@ -145,6 +145,7 @@ public class SelectionTool extends AbstractTool {
             tracker.trackMouseDragged(event, dv);
         }
     }
+
     @Override
     protected void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (tracker != null) {
@@ -170,11 +171,11 @@ public class SelectionTool extends AbstractTool {
      * Method to get a {@code DragTracker} which handles user interaction
      * for dragging the specified figure.
      */
-    protected DragTracker getDragTracker(Figure f) {
+    protected DragTracker getDragTracker(Figure f, DrawingView dv) {
         if (dragTracker == null) {
             dragTracker = new SimpleDragTracker();
         }
-        dragTracker.setDraggedFigure(f);
+        dragTracker.setDraggedFigure(f, dv);
         return dragTracker;
     }
 
@@ -214,7 +215,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     private void setTracker(Tracker t) {
-        
+
         if (tracker != null) {
             node.setCenter(null);
         }

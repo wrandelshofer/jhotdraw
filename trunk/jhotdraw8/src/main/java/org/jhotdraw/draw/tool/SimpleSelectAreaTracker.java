@@ -3,7 +3,6 @@
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
-
 package org.jhotdraw.draw.tool;
 
 import javafx.geometry.Bounds;
@@ -17,6 +16,7 @@ import org.jhotdraw.util.Resources;
 import static java.lang.Math.*;
 import java.util.List;
 import org.jhotdraw.draw.Figure;
+
 /**
  * {@code SimpleSelectAreaTracker} implements interactions with the background
  * area of a {@code Drawing}.
@@ -43,6 +43,7 @@ import org.jhotdraw.draw.Figure;
  * @version $Id$
  */
 public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaTracker {
+
     private static final long serialVersionUID = 1L;
     /**
      * The rubberband. 
@@ -51,31 +52,31 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
 
     double x;
     double y;
-    
+
     public SimpleSelectAreaTracker() {
-        this("selectAreaTool",Resources.getBundle("org.jhotdraw.draw.Labels"));
+        this("selectAreaTool", Resources.getBundle("org.jhotdraw.draw.Labels"));
     }
 
     public SimpleSelectAreaTracker(String name, Resources rsrc) {
         super(name, rsrc);
-        
+
         // Add the rubberband to the node with absolute positioning
-        node.getChildren().add(rubberband); 
+        node.getChildren().add(rubberband);
         rubberband.setVisible(false);
         configureRubberband(rubberband);
     }
+
     private void configureRubberband(Rectangle r) {
         r.setFill(null);
         r.setStroke(Color.WHITE);
         r.setBlendMode(BlendMode.DIFFERENCE);
     }
-    
 
     @Override
     public void trackMousePressed(MouseEvent event, DrawingView dv) {
         Bounds b = getNode().getBoundsInParent();
-        x=event.getX();
-        y=event.getY();
+        x = event.getX();
+        y = event.getY();
         rubberband.setVisible(true);
         rubberband.setX(x);
         rubberband.setY(y);
@@ -86,12 +87,12 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
         rubberband.setVisible(false);
-        
-        double w = x-event.getX();
-        double h = y-event.getY();
-        List<Figure> f =dv.findFigures(min(x,event.getX()), min(y,event.getY()), abs(w), abs(h));
+
+        double w = x - event.getX();
+        double h = y - event.getY();
+        List<Figure> f = dv.findFigures(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h));
         if (!event.isShiftDown()) {
-        dv.selectionProperty().clear();
+            dv.selectionProperty().clear();
         }
         dv.selectionProperty().addAll(f);
         fireToolDone();
@@ -99,13 +100,12 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView dv) {
-        double w = x-event.getX();
-        double h = y-event.getY();
-        rubberband.setX(min(x-0.5,event.getX()));
-        rubberband.setY(min(y-0.5,event.getY()));
+        double w = x - event.getX();
+        double h = y - event.getY();
+        rubberband.setX(min(x - 0.5, event.getX()));
+        rubberband.setY(min(y - 0.5, event.getY()));
         rubberband.setWidth(abs(w));
         rubberband.setHeight(abs(h));
     }
 
-    
 }
