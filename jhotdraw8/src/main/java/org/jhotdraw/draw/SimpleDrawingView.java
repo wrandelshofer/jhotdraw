@@ -406,6 +406,7 @@ public class SimpleDrawingView implements DrawingView {
         BoundingBox r = new BoundingBox(vx * sf, vy * sf, 0, vwidth * sf, vheight
                 * sf, 0);
         List<Figure> list = new LinkedList<Figure>();
+        findFigures((Parent)figureToNodeMap.get(getDrawing()),r,list);
         return list;
     }
 
@@ -415,12 +416,12 @@ public class SimpleDrawingView implements DrawingView {
      * @param p A point given in parentProperty coordinate system
      * @return Returns the node
      */
-    private void findFigures(Parent p, Bounds pp, LinkedList<Figure> found) {
+    private void findFigures(Parent p, Bounds pp, List<Figure> found) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
             Bounds pl = n.parentToLocal(pp);
-            if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parentProperty contains the point
+            if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent contains the point
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null) {
                     if (n instanceof Parent) {

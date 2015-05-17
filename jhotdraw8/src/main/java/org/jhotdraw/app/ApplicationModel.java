@@ -6,6 +6,7 @@
 package org.jhotdraw.app;
 
 import java.util.function.Consumer;
+import javafx.scene.control.MenuBar;
 import org.jhotdraw.gui.URIChooser;
 
 /**
@@ -54,4 +55,10 @@ public interface ApplicationModel {
      * @return whether multiple views per URI are allowed */
     public boolean isAllowMultipleViewsPerURI();
 
+    /** Creates a menu bar.
+     * This method is invoked by {@code Application} when it needs to create
+     * a menu bar. {@code Application} uses the {@code id} of the menu items
+     * in the menu bar to link the menu item with {@code Action} objects.
+     */
+    MenuBar createMenuBar();
 }

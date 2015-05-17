@@ -47,8 +47,12 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     // Behaviors
     // ---
     @Override
-    public void setDraggedFigure(Figure f) {
+    public void setDraggedFigure(Figure f, DrawingView view) {
         anchorFigure = f;
+        if (!view.getSelectedFigures().contains(f)) {
+            view.getSelectedFigures().clear();
+            view.getSelectedFigures().add(f);
+        }
     }
 
     @Override
@@ -69,7 +73,10 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
 
         // Convert point into drawing coordinates
         Point2D dp = dv.viewToDrawing(evt.getX() - x, evt.getY() - y);
-        anchorFigure.reshape(Transform.translate(dp.getX(), dp.getY()));
+        Transform t = Transform.translate(dp.getX(), dp.getY());
+        for (Figure f : dv.getSelectedFigures()) {
+            f.reshape(t);
+        }
 
         x = evt.getX();
         y = evt.getY();
