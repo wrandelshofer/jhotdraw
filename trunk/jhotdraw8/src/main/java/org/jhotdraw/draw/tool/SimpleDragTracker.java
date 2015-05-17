@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.draw.tool;
 
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
@@ -45,7 +46,6 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     // --- 
     // Behaviors
     // ---
-
     @Override
     public void setDraggedFigure(Figure f) {
         anchorFigure = f;
@@ -66,8 +66,11 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     @Override
     public void trackMouseDragged(MouseEvent evt, DrawingView dv) {
         // FIXME implement me properly
-        anchorFigure.reshape(Transform.translate(evt.getX()-x,evt.getY()- y));
-        
+
+        // Convert point into drawing coordinates
+        Point2D dp = dv.viewToDrawing(evt.getX() - x, evt.getY() - y);
+        anchorFigure.reshape(Transform.translate(dp.getX(), dp.getY()));
+
         x = evt.getX();
         y = evt.getY();
     }
