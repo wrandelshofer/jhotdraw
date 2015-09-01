@@ -6,7 +6,6 @@
 package org.jhotdraw.draw.shape;
 
 import static java.lang.Math.*;
-import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.geometry.BoundingBox;

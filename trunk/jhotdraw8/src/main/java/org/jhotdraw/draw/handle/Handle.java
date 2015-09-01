@@ -27,6 +27,10 @@ public interface Handle {
      * The node is rendered by {@code DrawingView} in a pane which uses view coordinates.
      * The node should use {@code DrawingView.viewToDrawingProperty()} to transform
      * its coordinates.
+     * <p>
+     * A {@code Handle} can only reside in one {@code DrawingView} at any
+     * given time. The JavaFX node returned by this method is use to render
+     * the handle in the {@code DrawingView}.
      *
      * @return  the node */
     public Node getNode();

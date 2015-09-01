@@ -9,9 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
@@ -87,7 +85,11 @@ public interface DrawingView {
      */
     OptionalProperty<Tool> toolProperty();
 
-    /** The scale factor of the drawing view. */
+    /** The scale factor of the drawing view.
+     * @return The zoom factor. The value is always greater than 0. 
+    * Values larger than 1 cause a  magnification. 
+    * Values between 0 and 1 causes a minification. 
+    */
     DoubleProperty zoomFactorProperty();
 
     /** The constrainer. 

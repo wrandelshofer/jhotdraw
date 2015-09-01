@@ -74,6 +74,8 @@ public class CreationTool extends AbstractTool {
                 }
                 figure.reshape(c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY() - c1.getY());
             }
+            dv.selectionProperty().clear();
+            dv.selectionProperty().add(figure);
             figure = null;
         }
     }

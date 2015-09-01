@@ -44,7 +44,8 @@ public class GrapherApplication extends DocumentOrientedApplication {
         c.setMode(FileURIChooser.Mode.SAVE);
         c.getFileChooser().getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
         return c;
-    }    /**
+    }
+    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
