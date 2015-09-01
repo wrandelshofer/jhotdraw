@@ -21,6 +21,8 @@
         <MenuItem id="edit.cut" mnemonicParsing="false" text="Cut" />
             <MenuItem id="edit.copy" mnemonicParsing="false" text="Copy" />
             <MenuItem id="edit.paste" mnemonicParsing="false" text="Paste" />
+            <MenuItem id="edit.delete" mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem id="edit.selectAll" mnemonicParsing="false" text="Select All" />
       </items>
     </Menu>

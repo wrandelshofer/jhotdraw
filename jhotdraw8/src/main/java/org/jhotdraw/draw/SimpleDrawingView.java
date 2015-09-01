@@ -7,7 +7,6 @@ package org.jhotdraw.draw;
 
 import static java.lang.Math.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,8 +22,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
@@ -55,7 +52,6 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.event.Listener;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleEvent;
-import org.jhotdraw.draw.handle.HandleLevel;
 
 /**
  * FXML Controller class
@@ -76,26 +72,37 @@ public class SimpleDrawingView implements DrawingView {
     @FXML
     private BorderPane toolPane;
 
+    /** This is the JavaFX Node which is used to represent this drawing view. 
+     * in a JavaFX scene graph.
+     */
     private StackPane node;
 
-    private final NonnullProperty<Drawing> drawing = new NonnullProperty<>(this, DRAWING_PROPERTY, new SimpleDrawing());
-    private final NonnullProperty<Constrainer> constrainer = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
-    private final ReadOnlySetProperty<Figure> selection = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
+    private final NonnullProperty<Drawing> drawingProperty = new NonnullProperty<>(this, DRAWING_PROPERTY, new SimpleDrawing());
+
+    {
+        drawingProperty.addListener((observable, oldValue, newValue) -> updateDrawing(oldValue, newValue));
+    }
+    private final NonnullProperty<Constrainer> constrainerProperty = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final ReadOnlySetProperty<Figure> selectionProperty = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
     private boolean handlesAreValid;
-    private HandleLevel detailLevel = HandleLevel.SHAPE;
+    private int detailLevel = 0;
+
+    private final OptionalProperty<Tool> toolProperty = new OptionalProperty<>(this, TOOL_PROPERTY);
 
     {
-        drawing.addListener((observable, oldValue, newValue) -> updateDrawing(oldValue, newValue));
+        toolProperty.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
-    private final OptionalProperty<Tool> tool = new OptionalProperty<>(this, TOOL_PROPERTY);
+    private final OptionalProperty<Handle> activeHandleProperty = new OptionalProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
-    {
-        tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
-    }
-    private final OptionalProperty<Handle> activeHandle = new OptionalProperty<>(this, ACTIVE_HANDLE_PROPERTY);
-
+    /** This is just a wrapper around the focusedProperty of the JavaFX Node which
+     * is used to render this view. 
+     */
     private final ReadOnlyBooleanWrapper focusedProperty = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
-    private final ReadOnlyObjectWrapper<Transform> drawingToViewProperty = new ReadOnlyObjectWrapper<Transform>(this, DRAWING_TO_VIEW_PROPERTY, new Scale());
+    /**
+     * Holds the transformation from drawing coordinates to view coordinates. 
+     */
+    private final ReadOnlyObjectWrapper<Transform> drawingToViewProperty = new ReadOnlyObjectWrapper<>(this, DRAWING_TO_VIEW_PROPERTY, new Scale());
+    /** The zoom factor. */
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, ZOOM_FACTOR_PROPERTY, 1.0) {
 
         @Override
@@ -109,17 +116,28 @@ public class SimpleDrawingView implements DrawingView {
         }
     };
 
-    private DrawingModel model = new SimpleDrawingModel();
+    private final DrawingModel model = new SimpleDrawingModel();
 
-    private HashMap<Node, Figure> nodeToFigureMap = new HashMap<>();
-    private HashMap<Figure, Node> figureToNodeMap = new HashMap<>();
-    private HashSet<Figure> dirtyFigures = new HashSet<>();
+    /** Maps each figure in the drawing to a JavaFX node. */
+    private final HashMap<Node, Figure> nodeToFigureMap = new HashMap<>();
+    /** Maps JavaFX nodes to a figure.
+     * Note that the DrawingView may contain JavaFX nodes which have no mapping.
+     * this is usually the case, when a Figure is represented by multiple nodes.
+     * Then only the parent of these nodes is associated with the figure.
+     */
+    private final HashMap<Figure, Node> figureToNodeMap = new HashMap<>();
+    /** This is the set of figures which are out of sync with their JavaFX node. */
+    private final HashSet<Figure> dirtyFigures = new HashSet<>();
 
-    private LinkedList<Handle> selectionHandles = new LinkedList<Handle>();
-    private LinkedList<Handle> secondaryHandles = new LinkedList<Handle>();
+    /** The set of all handles which were produced by selected figures. */
+    private final LinkedList<Handle> selectionHandles = new LinkedList<>();
+    /** The set of all secondary handles. 
+     * One handle at a time may create secondary handles.
+     */
+    private final LinkedList<Handle> secondaryHandles = new LinkedList<>();
 
     private Runnable repainter = null;
-    private Listener<HandleEvent> eventHandler;
+    private final Listener<HandleEvent> eventHandler;
 
     private class HandleEventHandler implements Listener<HandleEvent> {
 
@@ -159,23 +177,23 @@ public class SimpleDrawingView implements DrawingView {
 
         node.addEventFilter(MouseEvent.MOUSE_PRESSED,
                 new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent evt) {
-                        if (!node.isFocused()) {
-                            node.requestFocus();
-                            if (!node.getScene().getWindow().isFocused()) {
-                                evt.consume();
-                            }
-                        }
+            @Override
+            public void handle(MouseEvent evt) {
+                if (!node.isFocused()) {
+                    node.requestFocus();
+                    if (!node.getScene().getWindow().isFocused()) {
+                        evt.consume();
                     }
-                ;
+                }
+            }
+        ;
         });
         node.setFocusTraversable(true);
         focusedProperty.bind(node.focusedProperty());
 
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
-        
+
         updateDrawing(null, drawingProperty().get());
     }
 
@@ -213,12 +231,12 @@ public class SimpleDrawingView implements DrawingView {
 
     @Override
     public NonnullProperty<Drawing> drawingProperty() {
-        return drawing;
+        return drawingProperty;
     }
 
     @Override
     public NonnullProperty<Constrainer> constrainerProperty() {
-        return constrainer;
+        return constrainerProperty;
     }
 
     private InvalidationListener invalidationListener = new InvalidationListener() {
@@ -274,14 +292,12 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     private void updateView() {
-        try {
+        {
             LinkedList<Figure> update = new LinkedList<>(dirtyFigures);
             dirtyFigures.clear();
             for (Figure f : update) {
                 f.updateNode(this, getNode(f));
             }
-        } catch (Throwable t) {
-            t.printStackTrace();
         }
     }
 
@@ -296,7 +312,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     private void updatePreferredSize() {
-        Rectangle2D r = drawing.get().get(Drawing.BOUNDS);
+        Rectangle2D r = drawingProperty.get().get(Drawing.BOUNDS);
         Rectangle2D visible = new Rectangle2D(max(r.getMinX(), 0), max(r.getMinY(), 0), (r.getWidth()
                 + max(r.getMinX(), 0)),
                 r.getHeight() + max(r.getMinY(), 0));
@@ -311,12 +327,12 @@ public class SimpleDrawingView implements DrawingView {
 
     @Override
     public OptionalProperty<Tool> toolProperty() {
-        return tool;
+        return toolProperty;
     }
 
     @Override
     public OptionalProperty<Handle> activeHandleProperty() {
-        return activeHandle;
+        return activeHandleProperty;
     }
 
     private void updateTool(Optional<Tool> oldValue, Optional<Tool> newValue) {
@@ -338,7 +354,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     public Optional<Figure> findFigure(double vx, double vy) {
-        Drawing dr = drawing.get();
+        Drawing dr = drawingProperty.get();
         Figure f = findFigure((Parent) getNode(dr), viewToDrawing(vx, vy));
 
         return Optional.ofNullable(f);
@@ -363,7 +379,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     public Optional<Figure> findFigureBehind(double vx, double vy, Figure figureInWay) {
-        Drawing dr = drawing.get();
+        Drawing dr = drawingProperty.get();
         Figure f = findFigureBehind((Parent) getNode(dr), viewToDrawing(vx, vy), figureInWay);
 
         return Optional.ofNullable(f);
@@ -387,12 +403,10 @@ public class SimpleDrawingView implements DrawingView {
                     } else {
                         f = null;
                     }
+                } else if (n instanceof Parent) {
+                    f = findFigureBehind((Parent) n, pl, figureInWay);
                 } else {
-                    if (n instanceof Parent) {
-                        f = findFigureBehind((Parent) n, pl, figureInWay);
-                    } else {
-                        f = null;
-                    }
+                    f = null;
                 }
                 return f;
             }
@@ -406,7 +420,7 @@ public class SimpleDrawingView implements DrawingView {
         BoundingBox r = new BoundingBox(vx * sf, vy * sf, 0, vwidth * sf, vheight
                 * sf, 0);
         List<Figure> list = new LinkedList<Figure>();
-        findFigures((Parent)figureToNodeMap.get(getDrawing()),r,list);
+        findFigures((Parent) figureToNodeMap.get(getDrawing()), r, list);
         return list;
     }
 
@@ -436,7 +450,7 @@ public class SimpleDrawingView implements DrawingView {
 
     @Override
     public ReadOnlySetProperty<Figure> selectionProperty() {
-        return selection;
+        return selectionProperty;
     }
 
     @Override
@@ -531,11 +545,10 @@ public class SimpleDrawingView implements DrawingView {
                     }
                 }
 
-                if (selectionHandles.size() == 0 && detailLevel
-                        != HandleLevel.SHAPE) {
+                if (selectionHandles.isEmpty() && detailLevel != 0) {
                     // No handles are available at the desired detail level.
                     // Retry with detail level 0.
-                    detailLevel = HandleLevel.SHAPE;
+                    detailLevel = 0;
                     continue;
                 }
                 break;

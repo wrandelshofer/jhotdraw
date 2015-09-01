@@ -28,7 +28,6 @@ import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.HandleLevel;
 import org.jhotdraw.draw.handle.SimpleHighlightHandle;
 
 /**
@@ -213,7 +212,12 @@ public interface Figure extends PropertyBean, Observable {
      *    v.putNode(this, new ...desired subclass of Node...());
      * }
      * }</pre>
-     @param drawingView 
+     * <p>
+     * A figure may be shown in multiple {@code DrawingView}s. 
+     * Each {@code DrawingView} view uses this method to instantiate a JavaFX
+     * node for the figure.
+     *
+     * @param drawingView 
      */
     void putNode(DrawingView drawingView);
 
@@ -224,14 +228,20 @@ public interface Figure extends PropertyBean, Observable {
      * of these figures to its node.
      * <pre>{@code
      * public void updateNode(DrawingView v, Node n) {
-     ObservableList<Node> group = ((Group) n).getChildren();
-     group.clear();
-     for (Figure child : childrenProperty()) {
-     group.add(v.getNode(child));
-     }
-     }
-     }</pre>
-     @param drawingView 
+     * ObservableList<Node> group = ((Group) n).getChildren();
+     * group.clear();
+     * for (Figure child : childrenProperty()) {
+     * group.add(v.getNode(child));
+     * }
+     * }
+     * }</pre>
+     * <p>
+     * A figure may be shown in multiple {@code DrawingView}s. 
+     * Each {@code DrawingView} view uses this method to update the a JavaFX
+     * node for the figure.
+     *
+     *
+     * @param drawingView 
      */
     void updateNode(DrawingView drawingView, Node node);
 
@@ -242,18 +252,19 @@ public interface Figure extends PropertyBean, Observable {
     boolean isSelectable();
 
     /** Creates handles of the specified level and for the specified drawing view. 
-     * @param level The desired handle level
+     * @param detailLevel The desired detail level
      * @param dv The drawing view which will display the handles
-     * @return The handles. Returns {@code Optional.empty()} if the figure does
-     * not have handles of this level.
+     * @return The handles. Returns an empty list if the figure does not provide
+     * handles at the desired detail level.
      */
-    default List<Handle> createHandles(HandleLevel level, DrawingView dv) {
-        if (level == HandleLevel.HIGHLIGHT || level == HandleLevel.SHAPE) {
+    default List<Handle> createHandles(int detailLevel, DrawingView dv) {
+        if (detailLevel > 0) {
+            return Collections.emptyList();
+        } else {
             List<Handle> list = new LinkedList<>();
             list.add(new SimpleHighlightHandle(this, dv));
             return list;
         }
-        return Collections.emptyList();
     }
     // ----
     // Convenience Methods

@@ -31,8 +31,6 @@ public class SimpleHighlightHandle extends AbstractHandle {
         node = new Rectangle();
         node.setFill(null);
         node.setStroke(Color.LIGHTBLUE);
-
-        updateNode();
     }
 
     @Override
