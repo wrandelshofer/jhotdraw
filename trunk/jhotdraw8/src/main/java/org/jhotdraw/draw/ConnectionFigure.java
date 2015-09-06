@@ -25,7 +25,7 @@ import org.jhotdraw.draw.connector.Connector;
  * then fires a {@code requestRemove} event to get removed as well.
  * <p>
  * The geometric path of the connection figure can be laid out using a
- * {@link Liner}.
+ * {@code Liner}.
  * <p>
  * A connection figure listens to changes in the properties of the two figures
  * that it connects. If a property is changed, the connection figure updates

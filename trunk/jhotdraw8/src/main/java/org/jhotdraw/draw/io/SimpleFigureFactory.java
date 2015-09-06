@@ -25,20 +25,21 @@ import org.jhotdraw.text.Converter;
  */
 public class SimpleFigureFactory implements FigureFactory {
 
-    private final  Map<Class<? extends Figure>,HashMap<String, Key<?>>> attrToKey = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> attrToKey = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToAttr = new HashMap<>();
     private final Map<String, Class<? extends Figure>> elemToFigure = new HashMap<>();
     private final Map<Class<? extends Figure>, String> figureToElem = new HashMap<>();
-    private final Map<String, Converter> valueToCData = new HashMap<>();
-    private final Map<String, Converter> valueOfCData = new HashMap<>();
+    private final Map<String, Converter> valueToXML = new HashMap<>();
+    private final Map<String, Converter> valueFromXML = new HashMap<>();
     private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureKeys = new HashMap<>();
 
     public SimpleFigureFactory() {
     }
 
-    /** Adds the provided keys to the figure. 
+    /** Adds the provided keys to the figure.
      *
-     *  @param map the mapping 
+     * @param f the figure
+     * @param keys the keys
      */
     public void addFigureKeys(Class<? extends Figure> f, Collection<Key<?>> keys) {
         if (figureKeys.containsKey(f)) {
@@ -47,49 +48,52 @@ public class SimpleFigureFactory implements FigureFactory {
             figureKeys.put(f, new HashSet<>(keys));
         }
     }
+
     public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<Key<?>> keys) {
-        addFigureKeys(f,keys);
+        addFigureKeys(f, keys);
         for (Key<?> key : keys) {
-            addKey(f,key.getName(),key);
+            addKey(f, key.getName(), key);
         }
     }
 
     /** Adds the provided mapping of XML attribute names from/to
      * {@code Key}s.
-     *  <p>
+     * <p>
      * The same key can be added more than once.
      *
-     *  @param name The attribute name
-     *  @param key The key
+     * @param figure the figure
+     * @param name The attribute name
+     * @param key The key
      */
     public void addKey(Class<? extends Figure> figure, String name, Key<?> key) {
         if (!attrToKey.containsKey(figure)) {
-            attrToKey.put(figure, new HashMap<String,Key<?>>());
+            attrToKey.put(figure, new HashMap<>());
         }
-        HashMap<String,Key<?>> strToKey = attrToKey.get(figure);
+        HashMap<String, Key<?>> strToKey = attrToKey.get(figure);
         if (!strToKey.containsKey(name)) {
             strToKey.put(name, key);
         }
-        
+
         if (!keyToAttr.containsKey(figure)) {
-            keyToAttr.put(figure, new HashMap<Key<?>,String>());
+            keyToAttr.put(figure, new HashMap<>());
         }
-        HashMap<Key<?>,String> keyToStr = keyToAttr.get(figure);
+        HashMap<Key<?>, String> keyToStr = keyToAttr.get(figure);
         if (!keyToStr.containsKey(key)) {
             keyToStr.put(key, name);
         }
     }
+
     /** Adds the provided mapping of XML attribute names from/to
      * {@code Key}s.
-     *  <p>
+     * <p>
      * The same key can be added more than once.
      *
-     *  @param name The attribute name
-     *  @param key The key
+     * @param f The figure
+     * @param keys The mapping from attribute names to keys
      */
-    public void addKeys(Class<? extends Figure> f, HashMap<String,Key<?>> keys) {
-        for (Map.Entry<String,Key<?>> entry:keys.entrySet()) {
-            addKey(f, entry.getKey(),entry.getValue());
+    public void addKeys(Class<? extends Figure> f, HashMap<String, Key<?>> keys) {
+        for (Map.Entry<String, Key<?>> entry : keys.entrySet()) {
+            addKey(f, entry.getKey(), entry.getValue());
         }
     }
 
@@ -102,8 +106,9 @@ public class SimpleFigureFactory implements FigureFactory {
 
     /** Adds the provided mappings of XML attribute names from/to
      * {@code Figure}s.
-     *  @param name The element name
-     *  @param figure The figure class
+     *
+     * @param name The element name
+     * @param figure The figure class
      */
     public void addFigure(String name, Class<? extends Figure> figure) {
         if (!elemToFigure.containsKey(name)) {
@@ -147,9 +152,10 @@ public class SimpleFigureFactory implements FigureFactory {
         if (!keyToAttr.containsKey(f.getClass())) {
             throw new IOException("no mapping for figure " + f.getClass());
         }
-        HashMap<Key<?>,String> keyToStr = keyToAttr.get(f.getClass());
+        HashMap<Key<?>, String> keyToStr = keyToAttr.get(f.getClass());
         if (!keyToStr.containsKey(key)) {
-            throw new IOException("no mapping for key " + key+" in figure "+f.getClass());
+            throw new IOException("no mapping for key " + key + " in figure "
+                    + f.getClass());
         }
         return keyToStr.get(key);
     }
@@ -159,35 +165,41 @@ public class SimpleFigureFactory implements FigureFactory {
         if (!attrToKey.containsKey(f.getClass())) {
             throw new IOException("no mapping for figure " + f.getClass());
         }
-        HashMap<String,Key<?>> strToKey = attrToKey.get(f.getClass());
+        HashMap<String, Key<?>> strToKey = attrToKey.get(f.getClass());
         if (!strToKey.containsKey(attributeName)) {
-            throw new IOException("no mapping for attribute " + attributeName+" in figure "+f.getClass());
+            throw new IOException("no mapping for attribute " + attributeName
+                    + " in figure " + f.getClass());
         }
         return strToKey.get(attributeName);
     }
 
     /** Adds a converter.
+     *
      * @param valueType A value type returned by {@code Key.getValueType();}.
-     * @param converter */
+     * @param converter the converter
+     */
     public void addConverter(Class<?> valueType, Converter<?> converter) {
         addConverter(valueType.getName(), converter);
 
     }
 
     /** Adds a converter.
-     * @param valueType A value type returned by {@code Key.getFullValueType();}.
-     * @param converter
+     *
+     * @param fullValueType A value type returned by
+     * {@code Key.getFullValueType();}.
+     * @param converter the converter
      */
     public void addConverter(String fullValueType, Converter<?> converter) {
-        valueToCData.put(fullValueType, converter);
-        valueOfCData.put(fullValueType, converter);
+        valueToXML.put(fullValueType, converter);
+        valueFromXML.put(fullValueType, converter);
     }
 
     @Override
     public String valueToString(Key<?> key, Object value) throws IOException {
-        Converter converter = valueToCData.get(key.getFullValueType());
+        Converter converter = valueToXML.get(key.getFullValueType());
         if (converter == null) {
-            throw new IOException("no converter for attribute type " + key.getFullValueType());
+            throw new IOException("no converter for attribute type "
+                    + key.getFullValueType());
         }
         return converter.toString(value);
     }
@@ -195,11 +207,12 @@ public class SimpleFigureFactory implements FigureFactory {
     @Override
     public Object stringToValue(Key<?> key, String string) throws IOException {
         try {
-            Converter converter = valueOfCData.get(key.getFullValueType());
+            Converter converter = valueFromXML.get(key.getFullValueType());
             if (converter == null) {
-                throw new IOException("no converter for attribute type " + key.getClass());
+                throw new IOException("no converter for attribute type "
+                        + key.getClass());
             }
-            return converter.toValue(string);
+            return converter.fromString(string);
         } catch (ParseException ex) {
             throw new IOException(ex);
         }

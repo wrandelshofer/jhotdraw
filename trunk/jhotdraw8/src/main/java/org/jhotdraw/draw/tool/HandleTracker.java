@@ -27,7 +27,7 @@ import org.jhotdraw.draw.handle.Handle;
  * @author Werner Randelshofer
  * @version $Id$
  */
-interface HandleTracker extends Tracker {
+public interface HandleTracker extends Tracker {
 
     public void setHandles(Handle handle, Collection<Handle> compatibleHandles);
 

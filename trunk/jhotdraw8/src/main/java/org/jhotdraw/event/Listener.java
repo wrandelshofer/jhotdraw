@@ -16,6 +16,7 @@ import java.util.EventObject;
  */
 @FunctionalInterface
 public interface Listener<E extends EventObject> {
-    /** Handles an event. */
+    /** Handles an event.
+     * @param event the event */
     void handle(E event);
 }

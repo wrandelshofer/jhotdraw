@@ -5,35 +5,47 @@
  */
 package org.jhotdraw.draw;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import org.jhotdraw.beans.NonnullProperty;
+import org.jhotdraw.beans.ListenerSupport;
 import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.beans.SimplePropertyBean;
 
 /**
  * AbstractFigure.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public abstract class AbstractFigure extends SimplePropertyBean implements Figure {
-    
-    private final OptionalProperty<Figure> parent = new OptionalProperty<Figure>(this, PARENT_PROPERTY);
-    
-    { // A figure fires an invalidation event when one of its properties changes
-        properties.addListener((Observable observable) -> fireInvalidated());
+
+    private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY);
+
+    protected final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport();
+
+    {
+        properties.addListener((InvalidationListener) (Observable l) -> {
+            invalidate();
+        });
     }
-    
+
     @Override
-    public OptionalProperty<Figure> parentProperty() {
+    public void addListener(InvalidationListener listener) {
+        invalidationListeners.addListener(listener);
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+        invalidationListeners.removeListener(listener);
+    }
+
+    /** Whether the state of the figure is valid. */
+    private boolean valid = true;
+
+    @Override
+    public ObjectProperty<Figure> parentProperty() {
         return parent;
     }
 
@@ -42,5 +54,40 @@ public abstract class AbstractFigure extends SimplePropertyBean implements Figur
     public boolean isSelectable() {
         return true;
     }
-    
+
+    /** Notifies all registered invalidation listeners. */
+    public void fireInvalidated() {
+        invalidationListeners.fire(l -> l.invalidated(this));
+    }
+
+    /** Marks the state of the figure as invalid. */
+    protected final void invalidate() {
+        if (valid) {
+            valid = false;
+            fireInvalidated();
+        }
+    }
+
+    @Override
+    public final boolean isValid() {
+        return valid;
+    }
+
+    @Override
+    public final void validate() {
+        if (!valid) {
+            updateState();
+            valid = true;
+        }
+    }
+
+    /** This method is invoked by validate when the state of the figure is
+     * invalid. 
+     * <p>
+     * This implementation is empty. Subclasses which override this method
+     * do not need to call super.
+     */
+    protected void updateState() {
+        
+    }
 }

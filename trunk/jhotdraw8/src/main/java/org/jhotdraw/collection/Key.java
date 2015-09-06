@@ -1,4 +1,5 @@
-/* @(#)Key.java
+/*
+ * @(#)Key.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -21,8 +22,8 @@ import javafx.collections.MapChangeListener;
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
  * <p>
- * A Key has a name, a type and a default value. 
- <p>
+ * A Key has a name, a type and a default value.
+ * <p>
  * The following code example shows how to set and get a value from a map.
  * <pre>
  * {@code
@@ -33,7 +34,10 @@ import javafx.collections.MapChangeListener;
  * }
  * </pre>
  * <p>
- * 
+ * Note that {@code Key} is not a value type. Thus using two distinct instances
+ * of a Key will result in two distinct entries in the hash map, even if both
+ * keys have the same name.
+ *
  * @author Werner Randelshofer
  * @version $Id: Key.java 788 2014-03-22 07:56:28Z rawcoder $
  * @param <T> The value type.
@@ -50,20 +54,21 @@ public class Key<T> implements Serializable {
      * Holds the default value.
      */
     private final T defaultValue;
-    /** This variable is used as a "type token" so that we can check for
+    /**
+     * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
     private final Class<?> clazz;
-    /** The type token is not sufficient, if the type is parameterized.
-     * We allow to specify the type parameters as a string.
+    /**
+     * The type token is not sufficient, if the type is parameterized. We allow
+     * to specify the type parameters as a string.
      */
     private final String typeParameters;
 
-    /** The hashcode is computed upon creation. */
-    private final int hashcode;
-
-    /** Creates a new instance with the specified name, type token class,
-     default value null, and allowing null values.
+    /**
+     * Creates a new instance with the specified name, type token class, default
+     * value null, and allowing null values.
+     *
      * @param key The name of the name.
      * @param clazz The type of the value.
      */
@@ -71,8 +76,10 @@ public class Key<T> implements Serializable {
         this(key, clazz, "", null);
     }
 
-    /** Creates a new instance with the specified name, type token class,
-     default value, and allowing or disallowing null values. 
+    /**
+     * Creates a new instance with the specified name, type token class, default
+     * value, and allowing or disallowing null values.
+     *
      * @param key The name of the name.
      * @param clazz The type of the value.
      * @param defaultValue The default value.
@@ -81,13 +88,14 @@ public class Key<T> implements Serializable {
         this(key, clazz, "", defaultValue);
     }
 
-    /** Creates a new instance with the specified name, type token class,
-     default value, and allowing or disallowing null values. 
+    /**
+     * Creates a new instance with the specified name, type token class, default
+     * value, and allowing or disallowing null values.
+     *
      * @param key The name of the name.
      * @param clazz The type of the value.
-     * @param typeParameters The type parameters of the class.
-     *              Specify "" if no type parameters are given.
-     *              Otherwise specify them in arrow brackets.
+     * @param typeParameters The type parameters of the class. Specify "" if no
+     * type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue The default value.
      */
     public Key(String key, Class<?> clazz, String typeParameters, T defaultValue) {
@@ -110,18 +118,11 @@ public class Key<T> implements Serializable {
         this.clazz = clazz;
         this.typeParameters = typeParameters;
         this.defaultValue = defaultValue;
-
-        // compute hashcode
-        int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.name);
-        hash = 17 * hash + Objects.hashCode(this.defaultValue);
-        hash = 17 * hash + Objects.hashCode(this.clazz);
-        hash = 17 * hash + Objects.hashCode(this.typeParameters);
-        hashcode = hash;
     }
 
     /**
      * Returns the name string.
+     *
      * @return name string.
      */
     public String getName() {
@@ -150,9 +151,8 @@ public class Key<T> implements Serializable {
     }
 
     /**
-     * Gets the value of the attribute denoted by this Key from
-     a Map.
-     * 
+     * Gets the value of the attribute denoted by this Key from a Map.
+     *
      * @param a A Map.
      * @return The value of the attribute.
      */
@@ -163,9 +163,8 @@ public class Key<T> implements Serializable {
     }
 
     /**
-     * Gets the value of the attribute denoted by this Key from
-     a Map.
-     * 
+     * Gets the value of the attribute denoted by this Key from a Map.
+     *
      * @param a A Map.
      * @return The value of the attribute.
      */
@@ -178,9 +177,8 @@ public class Key<T> implements Serializable {
     }
 
     /**
-     * Gets the value of the attribute denoted by this Key from
-     a Map.
-     * 
+     * Gets the value of the attribute denoted by this Key from a Map.
+     *
      * @param a A Map.
      * @return The value of the attribute.
      */
@@ -193,8 +191,8 @@ public class Key<T> implements Serializable {
     }
 
     /**
-     * Use this method to perform a type-safe put operation of an attribute
-     * into a Map.
+     * Use this method to perform a type-safe put operation of an attribute into
+     * a Map.
      *
      * @param a An attribute map.
      * @param value The new value.
@@ -209,8 +207,8 @@ public class Key<T> implements Serializable {
     }
 
     /**
-     * Use this method to perform a type-safe put operation of an attribute
-     * into a Map.
+     * Use this method to perform a type-safe put operation of an attribute into
+     * a Map.
      *
      * @param a An attribute map.
      * @param value The new value.
@@ -233,7 +231,7 @@ public class Key<T> implements Serializable {
     }
 
     /**
-     * Returns true if the specified value is assignable with this name.
+     * Returns true if the specified value is assignable with this key.
      *
      * @param value The object to be verified for assignability.
      * @return True if assignable.
@@ -253,45 +251,28 @@ public class Key<T> implements Serializable {
                 ? value == null : defaultValue.equals(value);
     }
 
-    /** Returns the name string. */
+    /**
+     * Returns the name string.
+     */
     @Override
     public String toString() {
         return name;
     }
 
-    @Override
-    public int hashCode() {
-        return hashcode;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Key<?> other = (Key<?>) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.defaultValue, other.defaultValue)) {
-            return false;
-        }
-        if (!Objects.equals(this.clazz, other.clazz)) {
-            return false;
-        }
-        return true;
-    }
-
-    /** Creates a new binding for the map entry specified by this name. */
+    /**
+     * Creates a new binding for the map entry specified by this key.
+     *
+     * @param map a map
+     * @return a binding for the map entry
+     */
     public Binding<T> valueAt(MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
         return (ObjectBinding<T>) value;
     }
 
-    /** This property is bound to a value in the map. */
+    /**
+     * This property is bound to a value in the map.
+     */
     private static class PropertyAt<T> extends ReadOnlyObjectWrapper<T> {
 
         private MapExpression<Key<?>, Object> map;
@@ -336,13 +317,23 @@ public class Key<T> implements Serializable {
         }
     }
 
-    /** Creates a new property for the map entry specified by this name. */
+    /**
+     * Creates a new property for the map entry specified by this key.
+     *
+     * @param map a map
+     * @return a property for the map entry
+     */
     public Property<T> propertyAt(final MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
         return new PropertyAt<>(map, this);
     }
 
-    /** Creates a new read-only property for the map entry specified by this name. */
+    /**
+     * Creates a new read-only property for the map entry specified by this key.
+     *
+     * @param map a map
+     * @return a property for the map entry
+     */
     public ReadOnlyProperty<T> readOnlyPropertyAt(final MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
         return new PropertyAt<>(map, this).getReadOnlyProperty();

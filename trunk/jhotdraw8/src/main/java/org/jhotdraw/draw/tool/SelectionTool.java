@@ -85,7 +85,8 @@ public class SelectionTool extends AbstractTool {
     private DragTracker dragTracker;
 
     private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
-
+private boolean mouseDragged;
+private Optional<Figure> pressedFigure;
     // ---
     // Constructors
     // ---
@@ -114,20 +115,21 @@ public class SelectionTool extends AbstractTool {
 
     @Override
     protected void onMousePressed(MouseEvent evt, DrawingView view) {
+        mouseDragged=false;
         Bounds b = getNode().getBoundsInParent();
         Drawing drawing = view.getDrawing();
         double vx = evt.getX();
         double vy = evt.getY();
-        Optional<Figure> figure = view.findFigure(vx, vy);
+         pressedFigure = view.findFigure(vx, vy);
         if (isSelectBehindEnabled() && (evt.isAltDown() || evt.isControlDown())) {
             // Select a figure behind the current selection
             // FIXME implement me - this is just a stub and selects just the figure
             //         behind the front most figure
-            figure = view.findFigureBehind(vx, vy, figure.get());
+            pressedFigure = view.findFigureBehind(vx, vy, pressedFigure.get());
         }
 
-        if (figure.isPresent()) {
-            DragTracker t = getDragTracker(figure.get(), view);
+        if (pressedFigure.isPresent() && view.getSelectedFigures().contains(pressedFigure.get())) {
+            DragTracker t = getDragTracker(pressedFigure.get(), view);
             setTracker(t);
         } else {
             SelectAreaTracker t = getSelectAreaTracker();
@@ -141,6 +143,7 @@ public class SelectionTool extends AbstractTool {
 
     @Override
     protected void onMouseDragged(MouseEvent event, DrawingView dv) {
+        mouseDragged=true;
         if (tracker != null) {
             tracker.trackMouseDragged(event, dv);
         }
@@ -152,12 +155,19 @@ public class SelectionTool extends AbstractTool {
             tracker.trackMouseReleased(event, dv);
         }
         setTracker(null);
+        
+        if (! mouseDragged && pressedFigure.isPresent()) {
+            dv.selectionProperty().add(pressedFigure.get());
+        }
+        
         fireToolDone();
     }
 
     /**
      * Method to get a {@code HandleTracker} which handles user interaction
      * for the specified handle.
+     * @param handle a handle
+     * @return a handle tracker
      */
     protected HandleTracker getHandleTracker(Handle handle) {
         if (handleTracker == null) {
@@ -170,6 +180,9 @@ public class SelectionTool extends AbstractTool {
     /**
      * Method to get a {@code DragTracker} which handles user interaction
      * for dragging the specified figure.
+     * @param f a figure
+     * @param dv a drawing view
+     * @return a tracker
      */
     protected DragTracker getDragTracker(Figure f, DrawingView dv) {
         if (dragTracker == null) {
@@ -182,6 +195,7 @@ public class SelectionTool extends AbstractTool {
     /**
      * Method to get a {@code SelectAreaTracker} which handles user interaction
      * for selecting an area on the drawing.
+     * @return a tracker
      */
     protected SelectAreaTracker getSelectAreaTracker() {
         if (selectAreaTracker == null) {
@@ -193,6 +207,7 @@ public class SelectionTool extends AbstractTool {
     /**
      * Method to set a {@code HandleTracker}. If you specify null, the
      * {@code SelectionTool} uses the {@code DefaultHandleTracker}.
+     * @param newValue a tracker
      */
     public void setHandleTracker(HandleTracker newValue) {
         handleTracker = newValue;
@@ -201,6 +216,7 @@ public class SelectionTool extends AbstractTool {
     /**
      * Method to set a {@code SelectAreaTracker}. If you specify null, the
      * {@code SelectionTool} uses the {@code DefaultSelectAreaTracker}.
+     * @param newValue a tracker
      */
     public void setSelectAreaTracker(SelectAreaTracker newValue) {
         selectAreaTracker = newValue;
@@ -209,6 +225,7 @@ public class SelectionTool extends AbstractTool {
     /**
      * Method to set a {@code DragTracker}. If you specify null, the
      * {@code SelectionTool} uses the {@code DefaultDragTracker}.
+     * @param newValue a tracker
      */
     public void setDragTracker(DragTracker newValue) {
         dragTracker = newValue;

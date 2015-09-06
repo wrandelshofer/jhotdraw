@@ -48,10 +48,10 @@ public class SimpleDrawing extends GroupFigure implements Drawing {
     }
 
     @Override
-    public void putNode(DrawingView drawingView) {
+    public Node createNode(DrawingView drawingView) {
         Group g = new Group();
         g.getProperties().put("page", new Rectangle());
-        drawingView.putNode(this, g);
+        return g;
     }
 
     @Override

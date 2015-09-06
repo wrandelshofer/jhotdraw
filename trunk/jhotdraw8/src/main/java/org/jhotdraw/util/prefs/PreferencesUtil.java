@@ -208,6 +208,7 @@ public class PreferencesUtil
     /** Gets the system node for the package of the class if
      * permitted, gets a proxy otherwise.
      *
+     * @param c The class
      * @return system node or a proxy.
      */
     public static Preferences systemNodeForPackage(Class<?> c) {
@@ -223,7 +224,7 @@ public class PreferencesUtil
             return Preferences.systemNodeForPackage(c);
         } catch (Throwable t) {
             if (systemNodes == null) {
-                systemNodes = new HashMap<Package, Preferences>();
+                systemNodes = new HashMap<>();
             }
             return systemNodeForPackage(c);
         }
@@ -232,6 +233,7 @@ public class PreferencesUtil
     /** Gets the user node for the package of the class if
      * permitted, gets a proxy otherwise.
      *
+     * @param c The class
      * @return user node or a proxy.
      */
     public static Preferences userNodeForPackage(Class<?> c) {
@@ -246,7 +248,7 @@ public class PreferencesUtil
             return Preferences.userNodeForPackage(c);
         } catch (Throwable t) {
             if (userNodes == null) {
-                userNodes = new HashMap<Package, Preferences>();
+                userNodes = new HashMap<>();
             }
             return userNodeForPackage(c);
         }

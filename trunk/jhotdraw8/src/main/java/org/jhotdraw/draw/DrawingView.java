@@ -1,4 +1,5 @@
-/* @(#)DrawingView.java
+/*
+ * @(#)DrawingView.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -33,7 +34,7 @@ import org.jhotdraw.draw.handle.Handle;
  * <li>Grid. Displays a grid.</li>
  * <li>Tools. Displays the handles used for editing figures.</li>
  * </ul>
- * 
+ *
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -43,121 +44,163 @@ public interface DrawingView {
     // ---
     // property names
     // ----
-    /** The name of the drawing property. */
+    /**
+     * The name of the drawing property.
+     */
     public final static String DRAWING_PROPERTY = "drawing";
-    /** The name of the tool property. */
+    /**
+     * The name of the tool property.
+     */
     public final static String TOOL_PROPERTY = "tool";
-    /** The name of the focused property. */
+    /**
+     * The name of the focused property.
+     */
     public final static String FOCUSED_PROPERTY = "focused";
-    /** The name of the scale factor property. */
+    /**
+     * The name of the scale factor property.
+     */
     public final static String ZOOM_FACTOR_PROPERTY = "scaleFactor";
-    /** The name of the drawing to view property. */
+    /**
+     * The name of the drawing to view property.
+     */
     public final static String DRAWING_TO_VIEW_PROPERTY = "drawingToView";
-    /** The name of the constrainer property. */
+    /**
+     * The name of the constrainer property.
+     */
     public final static String CONSTRAINER_PROPERTY = "constrainer";
-    /** The name of the selection property. */
+    /**
+     * The name of the selection property.
+     */
     public final static String SELECTION_PROPERTY = "selection";
-    /** The name of the active handle property. */
+    /**
+     * The name of the active handle property.
+     */
     public final static String ACTIVE_HANDLE_PROPERTY = "activeHandle";
-
 
     // ---
     // properties
     // ---
-    /** The drawing. 
-     * @return the drawing property, with {@code getBean()} returning this drawing view,
-     and {@code getName()} returning {@code DRAWING_PROPERTY}.
+    /**
+     * The drawing.
+     *
+     * @return the drawing property, with {@code getBean()} returning this
+     * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
     NonnullProperty<Drawing> drawingProperty();
 
-    /** The tool which currently edits this {@code DrawingView}.
+    /**
+     * The tool which currently edits this {@code DrawingView}.
      * <p>
      * When a tool is set on the drawing view, then drawing view adds the
-     * {@code Node} of the tool to its tool panel which is stacked on top of the 
+     * {@code Node} of the tool to its tool panel which is stacked on top of the
      * drawing panel. It then invokes {@code toolsetDrawingView(this)}.
      * <p>
      * Setting a tool will remove the previous tool. The drawing view invokes
-     * {@code tool.setDrawingView(null)} and then removes its {@code Node}
-     * from its tool panel.
+     * {@code tool.setDrawingView(null)} and then removes its {@code Node} from
+     * its tool panel.
      *
-     * @return the tool property, with {@code getBean()} returning this drawing view,
-     * and {@code getName()} returning {@code TOOL_PROPERTY}.
+     * @return the tool property, with {@code getBean()} returning this drawing
+     * view, and {@code getName()} returning {@code TOOL_PROPERTY}.
      */
     OptionalProperty<Tool> toolProperty();
 
-    /** The scale factor of the drawing view.
-     * @return The zoom factor. The value is always greater than 0. 
-    * Values larger than 1 cause a  magnification. 
-    * Values between 0 and 1 causes a minification. 
-    */
+    /**
+     * The scale factor of the drawing view.
+     *
+     * @return The zoom factor. The value is always greater than 0. Values
+     * larger than 1 cause a magnification. Values between 0 and 1 causes a
+     * minification.
+     */
     DoubleProperty zoomFactorProperty();
 
-    /** The constrainer. 
-     * @return the constrainer property, with {@code getBean()} returning this drawing view,
-     and {@code getName()} returning {@code CONSTRAINER_PROPERTY}.
+    /**
+     * The constrainer.
+     *
+     * @return the constrainer property, with {@code getBean()} returning this
+     * drawing view, and {@code getName()} returning
+     * {@code CONSTRAINER_PROPERTY}.
      */
     NonnullProperty<Constrainer> constrainerProperty();
 
     /**
-     * The focused property is set to true, when the DrawingView has input focus.
-     * @return the focused property, with {@code getBean()} returning this drawing view,
-     and {@code getName()} returning {@code FOCUSED_PROPERTY}.
+     * The focused property is set to true, when the DrawingView has input
+     * focus.
+     *
+     * @return the focused property, with {@code getBean()} returning this
+     * drawing view, and {@code getName()} returning {@code FOCUSED_PROPERTY}.
      */
     public ReadOnlyBooleanProperty focusedProperty();
 
-    /** The selected figures.
+    /**
+     * The selected figures.
      * <p>
-     * Note: Selection is a set. However, the sequence of the selection is important.
+     * Note: Selection is a set. However, the sequence of the selection is
+     * important.
+     *
+     * @return a list of the selected figures
      */
     public ReadOnlySetProperty<Figure> selectionProperty();
 
-    /** This property holds the transformation that is applied a drawing 
-     * when it is displayed by the drawing view. This is typically a {@code Scale}
-     * which uses the {@code zoomFactoryProperty} as the scale factor.
-     @return 
+    /**
+     * This property holds the transformation that is applied a drawing when it
+     * is displayed by the drawing view. This is typically a {@code Scale} which
+     * uses the {@code zoomFactoryProperty} as the scale factor.
+     *
+     * @return a transform
      */
     public ReadOnlyObjectProperty<Transform> drawingToViewProperty();
-    /** The active handle. 
+
+    /**
+     * The active handle.
+     *
+     * @return the active handle if present
      */
     OptionalProperty<Handle> activeHandleProperty();
 
     // ---
     // methods
     // ---
-    /** Returns the {@code javafx.scene.Node} of the DrawingView. */
+    /**
+     * Returns the {@code javafx.scene.Node} of the DrawingView.
+     *
+     * @return a node
+     */
     public Node getNode();
 
-    /** Puts a node for the specified figure into the drawing view.
-     * The drawing view uses this node to build a scene graph.
-     The node can not be part of multiple drawing views.
-     <p>
-     * By convention this method is only invoked by {@code Figure}.
-     */
-    public void putNode(Figure f, Node newNode);
-
-    /** Gets the node which is used to render the specified figure by the drawing view.
+    /**
+     * Gets the node which is used to render the specified figure by the drawing
+     * view.
+     *
+     * @param f The figure
+     * @return The node associated to the figure
      */
     public Node getNode(Figure f);
 
-    /** Finds the figure at the given view coordinates.
-     * Figures are searched in Z-order from front to back.
+    /**
+     * Finds the figure at the given view coordinates. Figures are searched in
+     * Z-order from front to back.
+     *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
      * @return A figure or empty
      */
     public Optional<Figure> findFigure(double vx, double vy);
 
-    /** Finds the figure at the given view coordinates behind the given figure.
+    /**
+     * Finds the figure at the given view coordinates behind the given figure.
      * Figures are searched in Z-order from front to back.
+     *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
      * @param figureInWay A figure which is in front of the desired figure
      * @return A figure or empty
      */
     public Optional<Figure> findFigureBehind(double vx, double vy, Figure figureInWay);
+
     /**
-     * Returns all figures that lie within the specified
-     * bounds given in view coordinates. The figures are returned in Z-order from back to front.
+     * Returns all figures that lie within the specified bounds given in view
+     * coordinates. The figures are returned in Z-order from back to front.
+     *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
      * @param vwidth width in view coordinates
@@ -192,6 +235,7 @@ public interface DrawingView {
     default Optional<Tool> getTool() {
         return toolProperty().get();
     }
+
     default void setActiveHandle(Handle newValue) {
         activeHandleProperty().set(Optional.ofNullable(newValue));
     }
@@ -207,6 +251,7 @@ public interface DrawingView {
     default double getZoomFactor() {
         return zoomFactorProperty().get();
     }
+
     default ObservableSet<Figure> getSelectedFigures() {
         return selectionProperty().get();
     }
@@ -215,7 +260,12 @@ public interface DrawingView {
         return drawingToViewProperty().get();
     }
 
-    /** Converts view coordinates into drawing coordinates. */
+    /**
+     * Converts view coordinates into drawing coordinates.
+     *
+     * @param view a point in view coordinates
+     * @return the corresponding point in drawing coordinates
+     */
     default Point2D viewToDrawing(Point2D view) {
         try {
             return getDrawingToView().inverseTransform(view);
@@ -224,12 +274,23 @@ public interface DrawingView {
         }
     }
 
-    /** Converts drawing coordinates into view coordinates. */
+    /**
+     * Converts drawing coordinates into view coordinates.
+     *
+     * @param drawing a point in drawing coordinates
+     * @return the corresponding point in view coordinates
+     */
     default Point2D drawingToView(Point2D drawing) {
         return getDrawingToView().transform(drawing);
     }
 
-    /** Converts view coordinates into drawing coordinates. */
+    /**
+     * Converts view coordinates into drawing coordinates.
+     *
+     * @param vx the x coordinate of a point in view coordinates
+     * @param vy the y coordinate of a point in view coordinates
+     * @return the corresponding point in drawing coordinates
+     */
     default Point2D viewToDrawing(double vx, double vy) {
         try {
             return getDrawingToView().inverseTransform(vx, vy);
@@ -238,17 +299,28 @@ public interface DrawingView {
         }
     }
 
-    /** Converts drawing coordinates into view coordinates. */
+    /**
+     * Converts drawing coordinates into view coordinates.
+     *
+     * @param dx the x coordinate of a point in drawing coordinates
+     * @param dy the y coordinate of a point in drawing coordinates
+     * @return the corresponding point in view coordinates
+     */
     default Point2D drawingToView(double dx, double dy) {
         return getDrawingToView().transform(dx, dy);
     }
-    
-    /** Returns the underlying drawing model. */
+
+    /**
+     * Returns the underlying drawing model.
+     * @return a drawing model
+     */
     DrawingModel getDrawingModel();
-    
+
     // Handles
     /**
      * Gets compatible handles.
+     *
+     * @param handle a handle
      * @return A collection containing the handle and all compatible handles.
      */
     public Collection<Handle> getCompatibleHandles(Handle handle);

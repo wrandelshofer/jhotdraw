@@ -9,6 +9,7 @@ package org.jhotdraw.samples.mini;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -18,6 +19,8 @@ import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
@@ -40,21 +43,39 @@ public class ConnectingFiguresSample extends Application {
         RectangleFigure vertex1 = new RectangleFigure(10,10,30,20);
         RectangleFigure vertex2 = new RectangleFigure(50,40,30,20);
         RectangleFigure vertex3 = new RectangleFigure(90,10,30,20);
+
+        vertex3.set(Figure.ROTATE, 20.0);
         
         LineConnectionFigure edge12 = new LineConnectionFigure();
         LineConnectionFigure edge23 = new LineConnectionFigure();
+        LineConnectionFigure edge3Null = new LineConnectionFigure();
+        LineConnectionFigure edgeNullNull = new LineConnectionFigure();
         
         edge12.set(ConnectionFigure.START_FIGURE,vertex1);
         edge12.set(ConnectionFigure.END_FIGURE,vertex2);
         edge23.set(ConnectionFigure.START_FIGURE,vertex2);
         edge23.set(ConnectionFigure.END_FIGURE,vertex3);
+        edge3Null.set(ConnectionFigure.START_FIGURE,vertex3);
+        edge3Null.set(ConnectionFigure.END, new Point2D(145,15));
+        edgeNullNull.set(ConnectionFigure.START, new Point2D(65,90));
+        edgeNullNull.set(ConnectionFigure.END, new Point2D(145,95));
 
+        RectangleFigure vertex2b = new RectangleFigure(80,40,30,20);
+        GroupFigure vertex2Group = new GroupFigure();
+        vertex2Group.add(vertex2);
+        vertex2Group.add(vertex2b);
+        vertex2Group.set(Figure.ROTATE, -50.0);
+        
+        
         drawing.add(vertex1);
-        drawing.add(vertex2);
+        //drawing.add(vertex2);
+        drawing.add(vertex2Group);
         drawing.add(vertex3);
         
         drawing.add(edge12);
         drawing.add(edge23);
+        drawing.add(edge3Null);
+        drawing.add(edgeNullNull);
 
 
         DrawingView drawingView = new SimpleDrawingView();

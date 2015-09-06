@@ -61,14 +61,14 @@ public class RectangleFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public void putNode(DrawingView drawingView) {
-        drawingView.putNode(this, new Rectangle());
+    public Node createNode(DrawingView drawingView) {
+        return new Rectangle();
     }
 
     @Override
     public void updateNode(DrawingView drawingView, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
-        updateFigureProperties(rectangleNode);
+        applyFigureProperties(rectangleNode);
         updateShapeProperties(rectangleNode);
         Rectangle2D r = get(RECTANGLE);
         rectangleNode.setX(r.getMinX());

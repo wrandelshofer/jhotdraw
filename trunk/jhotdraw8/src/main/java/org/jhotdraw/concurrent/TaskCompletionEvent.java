@@ -16,7 +16,7 @@ import javafx.event.EventType;
  * TaskCompletionEvent.
  * @author Werner Randelshofer
  * @version $Id$
- * @param <V>
+ * @param <V> the value type
  */
 public class TaskCompletionEvent<V> extends Event {
      /**

@@ -35,7 +35,7 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-interface DragTracker extends Tracker {
+public interface DragTracker extends Tracker {
 
     void setDraggedFigure(Figure f, DrawingView dv);
 

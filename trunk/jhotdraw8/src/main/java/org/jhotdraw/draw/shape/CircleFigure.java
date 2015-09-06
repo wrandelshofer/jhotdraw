@@ -66,14 +66,14 @@ public class CircleFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public void putNode(DrawingView drawingView) {
-        drawingView.putNode(this, new Circle());
+    public Node createNode(DrawingView drawingView) {
+        return new Circle();
     }
 
     @Override
     public void updateNode(DrawingView drawingView, Node node) {
         Circle circleNode = (Circle) node;
-        updateFigureProperties(circleNode);
+        applyFigureProperties(circleNode);
         updateShapeProperties(circleNode);
         Point2D c = get(CENTER);
         circleNode.setCenterX(c.getX());

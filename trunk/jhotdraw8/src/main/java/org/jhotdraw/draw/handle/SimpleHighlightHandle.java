@@ -18,6 +18,7 @@ import org.jhotdraw.draw.SimpleDrawingModel;
 
 /**
  * SimpleHiglightHandle.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -26,11 +27,11 @@ public class SimpleHighlightHandle extends AbstractHandle {
     private Rectangle node;
 
     public SimpleHighlightHandle(Figure figure, DrawingView dv) {
-        super(figure,dv);
+        super(figure, dv);
 
         node = new Rectangle();
         node.setFill(null);
-        node.setStroke(Color.LIGHTBLUE);
+        node.setStroke(Color.BLUE);
     }
 
     @Override
@@ -39,18 +40,16 @@ public class SimpleHighlightHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseDragged(double dx, double dy) {
-        // empty. This handle is not interactive
-    }
+    public void updateNode() {
+        Bounds r
+                = dv.getDrawingToView().transform(getFigure().getLayoutBounds());
+        node.setX(Math.round(r.getMinX())-0.5);
+        node.setY(Math.round(r.getMinY())-0.5);
+        node.setWidth(Math.round(r.getWidth()));
+        node.setHeight(Math.round(r.getHeight()));
+        
 
-    @Override
-    protected void updateNode() {
-        Bounds r = 
-        dv.getDrawingToView().transform(getFigure().getLayoutBounds());
-        node.setX(r.getMinX());
-        node.setY(r.getMinY());
-        node.setWidth(r.getWidth());
-        node.setHeight(r.getHeight());
+        applyFigureTransform(node);
     }
 
 }

@@ -1,4 +1,5 @@
-/* @(#)AbstractAction.java
+/*
+ * @(#)AbstractAction.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -28,6 +29,7 @@ import org.jhotdraw.util.Resources;
 
 /**
  * AbstractAction.
+ *
  * @author Werner Randelshofer
  */
 public abstract class AbstractTool extends AbstractDisableable implements Tool {
@@ -35,10 +37,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Fields
     // ---
-
-    /** The properties. */
+    /**
+     * The properties.
+     */
     private MapProperty<Key<?>, Object> properties;
-    /** The active view. */
+    /**
+     * The active view.
+     */
     private final OptionalProperty<DrawingView> drawingView = new OptionalProperty<>(this, DRAWING_VIEW_PROPERTY);
 
     {
@@ -47,7 +52,9 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         });
     }
     protected final BorderPane node = new BorderPane();
-    /** Listeners. */
+    /**
+     * Listeners.
+     */
     private final LinkedList<Listener<org.jhotdraw.draw.handle.HandleEvent>> handleListeners = new LinkedList<>();
 
     {
@@ -87,22 +94,27 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             }
         });
     }
-    /** Listeners. */
+    /**
+     * Listeners.
+     */
     private final LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
 
     // ---
     // Constructors
     // ---
-    /** Creates a new instance.
+    /**
+     * Creates a new instance.
      */
     public AbstractTool() {
         this(null, null);
 
     }
 
-    /** Creates a new instance.
-     * Binds {@code disabled} to {@code disable}.
+    /**
+     * Creates a new instance. 
+     *
      * @param name the id of the tool
+     * @param rsrc iff nonnull, the resource is applied to the tool
      */
     public AbstractTool(String name, Resources rsrc) {
         set(NAME, name);
@@ -131,7 +143,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Behaviors
     // ---
-
     protected void applyResources(Resources rsrc) {
         String name = get(NAME);
         set(LABEL, rsrc.getTextProperty(name));
@@ -148,9 +159,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     /**
-     * Deletes the selection.
-     * Depending on the tool, this could be selected figures, selected points
-     * or selected text.
+     * Deletes the selection. Depending on the tool, this could be selected
+     * figures, selected points or selected text.
      */
     @Override
     public void editDelete() {
@@ -161,36 +171,32 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     /**
-     * Cuts the selection into the clipboard.
-     * Depending on the tool, this could be selected figures, selected points
-     * or selected text.
+     * Cuts the selection into the clipboard. Depending on the tool, this could
+     * be selected figures, selected points or selected text.
      */
     @Override
     public void editCut() {
     }
 
     /**
-     * Copies the selection into the clipboard.
-     * Depending on the tool, this could be selected figures, selected points
-     * or selected text.
+     * Copies the selection into the clipboard. Depending on the tool, this
+     * could be selected figures, selected points or selected text.
      */
     @Override
     public void editCopy() {
     }
 
     /**
-     * Duplicates the selection.
-     * Depending on the tool, this could be selected figures, selected points
-     * or selected text.
+     * Duplicates the selection. Depending on the tool, this could be selected
+     * figures, selected points or selected text.
      */
     @Override
     public void editDuplicate() {
     }
 
     /**
-     * Pastes the contents of the clipboard.
-     * Depending on the tool, this could be selected figures, selected points
-     * or selected text.
+     * Pastes the contents of the clipboard. Depending on the tool, this could
+     * be selected figures, selected points or selected text.
      */
     @Override
     public void editPaste() {
@@ -232,7 +238,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Listeners
     // ---
-
     @Override
     public void addToolListener(Listener<ToolEvent> listener) {
         toolListeners.add(listener);
@@ -257,16 +262,18 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         fire(new ToolEvent(this, ToolEvent.EventType.TOOL_DONE));
     }
 
-    /** Gets the active drawing view. 
+    /**
+     * Gets the active drawing view.
      */
     public Optional<DrawingView> getDrawingView() {
         return drawingViewProperty().get();
     }
 
-    /** Sets the active drawing view. 
+    /**
+     * Sets the active drawing view.
      * <p>
-     * This method is invoked by {@link DrawingView} when
-     * the tool is set or unset on the drawing view.
+     * This method is invoked by {@link DrawingView} when the tool is set or
+     * unset on the drawing view.
      */
     public void setDrawingView(DrawingView drawingView) {
         drawingViewProperty().set(Optional.ofNullable(drawingView));
