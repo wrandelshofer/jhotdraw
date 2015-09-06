@@ -5,46 +5,35 @@
  */
 package org.jhotdraw.beans;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.WeakListener;
+import javafx.beans.value.ObservableValueBase;
 
 /**
  * SimpleObservable.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class SimpleObservable implements Observable {
 
-    /** Nullable. */
-    private LinkedList<InvalidationListener> invalidationListeners;
+    protected final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport();
 
     @Override
     public void addListener(InvalidationListener listener) {
-        if (invalidationListeners == null) {
-            invalidationListeners = new LinkedList<>();
-        }
-        invalidationListeners.add(listener);
+         invalidationListeners.addListener(listener);
     }
 
     @Override
     public void removeListener(InvalidationListener listener) {
-        invalidationListeners.remove(listener);
-        if (invalidationListeners != null) {
-            if (invalidationListeners.isEmpty()) {
-                invalidationListeners = null;
-            }
-        }
+         invalidationListeners.removeListener(listener);
     }
 
+    /** Notifies all registered invalidation listeners. */
     public void fireInvalidated() {
-        if (invalidationListeners != null) {
-            // We clone the list here. This way, listeners can remove themselves
-            // from the list during event handling.
-            for (InvalidationListener l : new LinkedList<>(invalidationListeners)) {
-                l.invalidated(this);
-            }
-        }
-
+        invalidationListeners.fire(l->l.invalidated(this));
     }
 }

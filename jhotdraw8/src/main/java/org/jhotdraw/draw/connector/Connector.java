@@ -19,11 +19,13 @@ import org.jhotdraw.draw.ConnectionFigure;
 public interface Connector extends Observable {
     /**
      * Updates the start position of the specified connection figure.
+     * @param connection a connection figure
      */
     public void updateStartPosition(ConnectionFigure connection);
     
     /**
      * Updates the end position of the specified connection figure.
+     * @param connection a connection figure
      */
     public void updateEndPosition(ConnectionFigure connection);
 

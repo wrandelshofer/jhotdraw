@@ -67,14 +67,14 @@ public class LineFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public void putNode(DrawingView drawingView) {
-        drawingView.putNode(this, new Line());
+    public Node createNode(DrawingView drawingView) {
+        return new Line();
     }
 
     @Override
     public void updateNode(DrawingView drawingView, Node node) {
         Line lineNode = (Line) node;
-        updateFigureProperties(lineNode);
+        applyFigureProperties(lineNode);
         updateShapeProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());

@@ -3,7 +3,6 @@
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
-
 package org.jhotdraw.draw.io;
 
 import java.io.BufferedInputStream;
@@ -18,6 +17,7 @@ import org.jhotdraw.draw.Drawing;
 
 /**
  * InputFormat.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -28,34 +28,43 @@ public interface InputFormat {
      *
      * @param uri The uri.
      * @param drawing If you provide a non-null value, the contents of the file
-     * is added to the drawing. Otherwise a new drawing is created.
+     * is added to this drawing. Otherwise a new drawing is created.
+     * @return the drawing
+     *
+     * @throws java.io.IOException if an IO error occurs
      */
     default Drawing read(URI uri, Drawing drawing) throws IOException {
-       return read(new File(uri), drawing);
+        return read(new File(uri), drawing);
     }
 
     /**
      * Writes the drawing to the specified file.
      * This method ensures that all figures of the drawing are visible on
      * the image.
-     * @param file
+     *
+     * @param file the file
      * @param drawing If you provide a non-null value, the contents of the file
      * is added to the drawing. Otherwise a new drawing is created.
      * @return the drawing
+     *
+     * @throws java.io.IOException if an IO error occurs
      */
     default Drawing read(File file, Drawing drawing) throws IOException {
         try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(file))) {
-           return read(out, drawing);
+            return read(out, drawing);
         }
     }
 
     /**
-     * Reads figures from an input stream and adds them to the specified drawing.
+     * Reads figures from an input stream and adds them to the specified
+     * drawing.
      *
      * @param in The input stream.
      * @param drawing If you provide a non-null value, the contents of the file
      * is added to the drawing. Otherwise a new drawing is created.
      * @return the drawing
+     *
+     * @throws java.io.IOException if an IO error occurs
      */
     public Drawing read(InputStream in, Drawing drawing) throws IOException;
 

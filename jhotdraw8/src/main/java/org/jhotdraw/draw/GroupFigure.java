@@ -14,6 +14,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 
@@ -38,7 +39,7 @@ public class GroupFigure extends AbstractCompositeFigure {
             minX = min(minX, b.getMinX());
             maxX = max(maxX, b.getMaxX());
             minY = min(minY, b.getMinY());
-            maxX = max(maxY, b.getMaxY());
+            maxY = max(maxY, b.getMaxY());
         }
 
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
@@ -53,6 +54,7 @@ public class GroupFigure extends AbstractCompositeFigure {
 
     @Override
     public void updateNode(DrawingView v, Node n) {
+        applyFigureProperties(n);
         ObservableList<Node> group = ((Group) n).getChildren();
         group.clear();
         for (Figure child : childrenProperty()) {
@@ -61,8 +63,8 @@ public class GroupFigure extends AbstractCompositeFigure {
     }
 
     @Override
-    public void putNode(DrawingView drawingView) {
-        drawingView.putNode(this, new Group());
+    public Node createNode(DrawingView drawingView) {
+        return new Group();
     }
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {

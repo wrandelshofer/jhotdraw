@@ -40,6 +40,6 @@ The key interfaces for editing a drawing are:
     <li>{@link org.jhotdraw.draw.tool.Tool} (in sub-package "tool")</li>
     <li>{@link org.jhotdraw.draw.handle.Handle} (in sub-package "handle")</li>
 </ul>
-<p>*/
+*/
 package org.jhotdraw.draw;
 

@@ -1,4 +1,5 @@
-/* @(#)SimpleXmlIO.java
+/*
+ * @(#)SimpleXmlIO.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -9,24 +10,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jhotdraw.draw.Drawing;
-import org.w3c.dom.DOMImplementation;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.text.CDataConverter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -38,14 +32,14 @@ import org.xml.sax.SAXException;
 /**
  * SimpleXmlIO.
  * <p>
- * Represents each Figure by an element, and each figure property by
- * an attribute.
+ * Represents each Figure by an element, and each figure property by an
+ * attribute.
  * <p>
- * All attribute values are treated as value types, except if an attribute
- * type is an instance of Figure.
+ * All attribute values are treated as value types, except if an attribute type
+ * is an instance of Figure.
  * <p>
- * This i/o-format only works, if a drawing can be described entirely based
- * on the properties of its figures.
+ * This i/o-format only works, if a drawing can be described entirely based on
+ * the properties of its figures.
  * <p>
  *
  *
@@ -56,7 +50,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     private FigureFactory factory;
     private IdFactory ids = new SimpleIdFactory();
-    private final CDataConverter cdataConverter = new CDataConverter();
 
     public SimpleXmlIO(FigureFactory factory) {
         this.factory = factory;
@@ -101,7 +94,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     public Drawing read(Document in, Drawing drawing) throws IOException {
-        Drawing tmp = ofDocument(in);
+        Drawing tmp = fromDocument(in);
         if (drawing != null) {
             drawing.childrenProperty().addAll(tmp.childrenProperty());
             drawing.properties().putAll(tmp.properties());
@@ -132,9 +125,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             Object value = figure.get(key);
             if (!factory.isDefaultValue(key, value)) {
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    elem.setAttribute(factory.keyToName(figure,key), cdataConverter.toString(ids.createId(value)));
+                    elem.setAttribute(factory.keyToName(figure, key), ids.createId(value));
                 } else {
-                    elem.setAttribute(factory.keyToName(figure,key), cdataConverter.toString(factory.valueToString(key, value)));
+                    elem.setAttribute(factory.keyToName(figure, key), factory.valueToString(key, value));
                 }
             }
         }
@@ -151,7 +144,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         return elem;
     }
 
-    public Drawing ofDocument(Document doc) throws IOException {
+    public Drawing fromDocument(Document doc) throws IOException {
         ids.reset();
         Drawing drawing = null;
         NodeList list = doc.getChildNodes();
@@ -172,7 +165,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
     }
 
-    /** Creates a figure but does not process the properties. */
+    /**
+     * Creates a figure but does not process the properties.
+     */
     private Figure readNode(Node node) throws IOException {
         if (node instanceof Element) {
             Element elem = (Element) node;
@@ -197,7 +192,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         return null;
     }
 
-    /** Creates a figure but does not process the properties. */
+    /**
+     * Creates a figure but does not process the properties.
+     */
     private void readElementAttributes(Node node) throws IOException {
         if (node instanceof Element) {
             Element elem = (Element) node;
@@ -214,13 +211,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                     if ("id".equals(attr.getName())) {
                         continue;
                     }
-                    Key<Object> key = (Key<Object>) factory.nameToKey(figure,attr.getName());
+                    Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getName());
                     if (key != null && factory.figureKeys(figure).contains(key)) {
                         Object value = null;
                         if (Figure.class.isAssignableFrom(key.getValueType())) {
-                            value = getFigure(cdataConverter.toValue(attr.getValue()));
+                            value = getFigure(attr.getValue());
                         } else {
-                            value = factory.stringToValue(key, cdataConverter.toValue(attr.getValue()));
+                            value = factory.stringToValue(key, attr.getValue());
                         }
                         figure.set(key, value);
                     }

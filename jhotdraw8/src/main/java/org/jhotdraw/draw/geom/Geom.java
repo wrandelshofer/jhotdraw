@@ -2,7 +2,7 @@
  * @(#)Geom.java
  *
  * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
 package org.jhotdraw.draw.geom;
@@ -24,7 +24,16 @@ public class Geom {
 
     /**
      * Tests if a point is on a line.
-     * <p>changed Werner Randelshofer 2003-11-26
+     *
+     * @param x1 the x coordinate of point 1 on the line
+     * @param y1 the y coordinate of point 1 on the line
+     * @param x2 the x coordinate of point 2 on the line
+     * @param y2 the y coordinate of point 2 on the line
+     * @param px the x coordinate of the point
+     * @param py the y coordinate of the point
+     * @param tolerance the maximal distance that the point may stray from the
+     * line
+     * @return true if the line contains the point within the given tolerance
      */
     public static boolean lineContainsPoint(double x1, double y1,
             double x2, double y2,
@@ -60,14 +69,22 @@ public class Geom {
     public static final int OUT_TOP = 2;
     /** The bitmask that indicates that a point lies below the rectangle. */
     public static final int OUT_BOTTOM = 8;
-    /** The bitmask that indicates that a point lies to the left of the rectangle. */
+    /** The bitmask that indicates that a point lies to the left of the
+     * rectangle. */
     public static final int OUT_LEFT = 1;
-    /** The bitmask that indicates that a point lies to the right of the rectangle. */
+    /** The bitmask that indicates that a point lies to the right of the
+     * rectangle. */
     public static final int OUT_RIGHT = 4;
 
     /**
      * Returns the direction OUT_TOP, OUT_BOTTOM, OUT_LEFT, OUT_RIGHT from
      * one point to another one.
+     *
+     * @param x1 the x coordinate of point 1
+     * @param y1 the y coordinate of point 1
+     * @param x2 the x coordinate of point 2
+     * @param y2 the y coordinate of point 2
+     * @return the direction
      */
     public static int direction(double x1, double y1, double x2, double y2) {
         int direction = 0;
@@ -92,7 +109,10 @@ public class Geom {
      * Rectangle2D r2 is on the same side of the edge as the rest
      * of this Rectangle2D.
      *
-     * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT, OUT_BOTTOM,
+     * @param r1 rectangle 1
+     * @param r2 rectangle 2
+     * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT,
+     * OUT_BOTTOM,
      * OUT_TOP.
      */
     public static int outcode(Rectangle2D r1, Rectangle2D r2) {
@@ -114,11 +134,13 @@ public class Geom {
     }
 
     public static Point2D south(Rectangle2D r) {
-        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY() + r.getHeight());
+        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY()
+                + r.getHeight());
     }
 
     public static Point2D center(Rectangle2D r) {
-        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY() + r.getHeight() / 2);
+        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY()
+                + r.getHeight() / 2);
     }
 
     /**
@@ -126,91 +148,95 @@ public class Geom {
      * from the center of the shape to the specified point.
      * If no edge crosses of the shape crosses the line, the nearest control
      * point of the shape is returned.
+     *
+     * @param shape the shape
+     * @param p the point
+     * @return a point on the shape
      */
     public static Point2D chop(Shape shape, Point2D p) {
         return p;
         /*
-        Rectangle2D bounds = shape.getBounds2D();
-        Point2D ctr = new Point2D(bounds.getCenterX(), bounds.getCenterY());
-
-        // Chopped point
-        double cx = -1;
-        double cy = -1;
-        double len = Double.MAX_VALUE;
-
-        // Try for points along edge
-        PathIterator i = shape.getPathIterator(new AffineTransform(), 1);
-        double[] coords = new double[6];
-        double prevX = coords[0];
-        double prevY = coords[1];
-        double moveToX = prevX;
-        double moveToY = prevY;
-        i.next();
-        for (; !i.isDone(); i.next()) {
-            switch (i.currentSegment(coords)) {
-                case PathIterator.SEG_MOVETO:
-                    moveToX = coords[0];
-                    moveToY = coords[1];
-                    break;
-                case PathIterator.SEG_CLOSE:
-                    coords[0] = moveToX;
-                    coords[1] = moveToY;
-                    break;
-            }
-            Point2D chop = Geom.intersect(
-                    prevX, prevY,
-                    coords[0], coords[1],
-                    p.x, p.y,
-                    ctr.x, ctr.y);
-
-            if (chop != null) {
-                double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
-                if (cl < len) {
-                    len = cl;
-                    cx = chop.x;
-                    cy = chop.y;
-                }
-            }
-
-            prevX = coords[0];
-            prevY = coords[1];
-        }
-
-        /*
-         if (isClosed() && size() > 1) {
-         Node first = get(0);
-         Node last = get(size() - 1);
-         Point2D chop = Geom.intersect(
-         first.x[0], first.y[0],
-         last.x[0], last.y[0],
-         p.x, p.y,
-         ctr.x, ctr.y
-         );
-         if (chop != null) {
-         double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
-         if (cl < len) {
-         len = cl;
-         cx = chop.x;
-         cy = chop.y;
-         }
-         }
-         }* /
-        // if none found, pick closest vertex
-        if (len == Double.MAX_VALUE) {
-            i = shape.getPathIterator(new AffineTransform(), 1);
-            for (; !i.isDone(); i.next()) {
-                i.currentSegment(coords);
-
-                double l = Geom.length2(ctr.x, ctr.y, coords[0], coords[1]);
-                if (l < len) {
-                    len = l;
-                    cx = coords[0];
-                    cy = coords[1];
-                }
-            }
-        }
-        return new Point2D(cx, cy);
-        */
+         * Rectangle2D bounds = shape.getBounds2D();
+         * Point2D ctr = new Point2D(bounds.getCenterX(), bounds.getCenterY());
+         *
+         * // Chopped point
+         * double cx = -1;
+         * double cy = -1;
+         * double len = Double.MAX_VALUE;
+         *
+         * // Try for points along edge
+         * PathIterator i = shape.getPathIterator(new AffineTransform(), 1);
+         * double[] coords = new double[6];
+         * double prevX = coords[0];
+         * double prevY = coords[1];
+         * double moveToX = prevX;
+         * double moveToY = prevY;
+         * i.next();
+         * for (; !i.isDone(); i.next()) {
+         * switch (i.currentSegment(coords)) {
+         * case PathIterator.SEG_MOVETO:
+         * moveToX = coords[0];
+         * moveToY = coords[1];
+         * break;
+         * case PathIterator.SEG_CLOSE:
+         * coords[0] = moveToX;
+         * coords[1] = moveToY;
+         * break;
+         * }
+         * Point2D chop = Geom.intersect(
+         * prevX, prevY,
+         * coords[0], coords[1],
+         * p.x, p.y,
+         * ctr.x, ctr.y);
+         *
+         * if (chop != null) {
+         * double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
+         * if (cl < len) {
+         * len = cl;
+         * cx = chop.x;
+         * cy = chop.y;
+         * }
+         * }
+         *
+         * prevX = coords[0];
+         * prevY = coords[1];
+         * }
+         *
+         * /*
+         * if (isClosed() && size() > 1) {
+         * Node first = get(0);
+         * Node last = get(size() - 1);
+         * Point2D chop = Geom.intersect(
+         * first.x[0], first.y[0],
+         * last.x[0], last.y[0],
+         * p.x, p.y,
+         * ctr.x, ctr.y
+         * );
+         * if (chop != null) {
+         * double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
+         * if (cl < len) {
+         * len = cl;
+         * cx = chop.x;
+         * cy = chop.y;
+         * }
+         * }
+         * }* /
+         * // if none found, pick closest vertex
+         * if (len == Double.MAX_VALUE) {
+         * i = shape.getPathIterator(new AffineTransform(), 1);
+         * for (; !i.isDone(); i.next()) {
+         * i.currentSegment(coords);
+         *
+         * double l = Geom.length2(ctr.x, ctr.y, coords[0], coords[1]);
+         * if (l < len) {
+         * len = l;
+         * cx = coords[0];
+         * cy = coords[1];
+         * }
+         * }
+         * }
+         * return new Point2D(cx, cy);
+         */
     }
 
     public static Point2D west(Rectangle2D r) {
@@ -218,7 +244,8 @@ public class Geom {
     }
 
     public static Point2D east(Rectangle2D r) {
-        return new Point2D(r.getMinX() + r.getWidth(), r.getMinY() + r.getHeight() / 2);
+        return new Point2D(r.getMinX() + r.getWidth(), r.getMinY()
+                + r.getHeight() / 2);
     }
 
     public static Point2D north(Rectangle2D r) {
@@ -226,21 +253,31 @@ public class Geom {
     }
 
     /**
-     * Constains a value to the given range.
+     * Clamps a value to the given range.
+     *
+     * @param value the value
+     * @param min the lower bound of the range
+     * @param max the upper bound of the range
      * @return the constrained value
      */
-    public static double range(double min, double max, double value) {
+    public static double clamp(double value, double min, double max) {
         if (value < min) {
-            value = min;
+            return min;
         }
         if (value > max) {
-            value = max;
+            return max;
         }
         return value;
     }
 
     /**
      * Gets the square distance between two points.
+     *
+     * @param x1 the x coordinate of point 1
+     * @param y1 the y coordinate of point 1
+     * @param x2 the x coordinate of point 2
+     * @param y2 the y coordinate of point 2
+     * @return the square distance between the two points
      */
     public static double length2(double x1, double y1, double x2, double y2) {
         return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
@@ -248,6 +285,12 @@ public class Geom {
 
     /**
      * Gets the distance between to points
+     *
+     * @param x1 the x coordinate of point 1
+     * @param y1 the y coordinate of point 1
+     * @param x2 the x coordinate of point 2
+     * @param y2 the y coordinate of point 2
+     * @return the distance between the two points
      */
     public static double length(double x1, double y1, double x2, double y2) {
         return sqrt(length2(x1, y1, x2, y2));
@@ -255,6 +298,10 @@ public class Geom {
 
     /**
      * Gets the distance between to points
+     *
+     * @param p1 point 1
+     * @param p2 point 2
+     * @return the distance between the two points
      */
     public static double length(Point2D p1, Point2D p2) {
         return sqrt(length2(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
@@ -263,10 +310,15 @@ public class Geom {
     /**
      * Caps the line defined by p1 and p2 by the number of units
      * specified by radius.
+     *
+     * @param p1 point 1, the start point
+     * @param p2 point 2, the end point
+     * @param radius the radius
      * @return A new end point for the line.
      */
     public static Point2D cap(Point2D p1, Point2D p2, double radius) {
-        double angle = PI / 2 - atan2(p2.getX() - p1.getX(), p2.getY() - p1.getY());
+        double angle = PI / 2 - atan2(p2.getX() - p1.getX(), p2.getY()
+                - p1.getY());
         Point2D p3 = new Point2D(
                 p2.getX() + radius * cos(angle),
                 p2.getY() + radius * sin(angle));
@@ -275,6 +327,10 @@ public class Geom {
 
     /**
      * Gets the angle of a point relative to a rectangle.
+     *
+     * @param r the rectangle
+     * @param p the point
+     * @return the angle
      */
     public static double pointToAngle(Rectangle2D r, Point2D p) {
         double px = p.getX() - (r.getMinX() + r.getWidth() / 2);
@@ -284,14 +340,23 @@ public class Geom {
 
     /**
      * Gets the angle of the specified line.
+     *
+     * @param x1 the x-coordinate of point 1 on the line
+     * @param y1 the y-coordinate of point 1 on the line
+     * @param x2 the x-coordinate of point 2 on the line
+     * @param y2 the y-coordinate of point 2 on the line
+     * @return the angle
      */
     public static double angle(double x1, double y1, double x2, double y2) {
         return atan2(y2 - y1, x2 - x1);
     }
 
-
     /**
      * Gets the point on a rectangle that corresponds to the given angle.
+     *
+     * @param r the rectangle
+     * @param angle the angle of the ray starting at the center of the rectangle
+     * @return a point on the rectangle
      */
     public static Point2D angleToPoint(Rectangle2D r, double angle) {
         double si = sin(angle);
@@ -301,13 +366,13 @@ public class Geom {
         double x = 0, y = 0;
         if (abs(si) > e) {
             x = (1.0 + co / abs(si)) / 2.0 * r.getWidth();
-            x = range(0, r.getWidth(), x);
+            x = clamp(x, 0, r.getWidth());
         } else if (co >= 0.0) {
             x = r.getWidth();
         }
         if (abs(co) > e) {
             y = (1.0 + si / abs(co)) / 2.0 * r.getHeight();
-            y = range(0, r.getHeight(), y);
+            y = clamp(y, 0, r.getHeight());
         } else if (si >= 0.0) {
             y = r.getHeight();
         }
@@ -316,6 +381,11 @@ public class Geom {
 
     /**
      * Converts a polar to a point
+     *
+     * @param angle the angle of the point in polar coordinates
+     * @param fx the x coordinate of the point in polar coordinates
+     * @param fy the y coordinate of the point in polar coordinates
+     * @return the point in Cartesian coordinates
      */
     public static Point2D polarToPoint(double angle, double fx, double fy) {
         double si = sin(angle);
@@ -324,16 +394,11 @@ public class Geom {
     }
 
     /**
-     * Converts a polar to a point
-     */
-    public static Point2D polarToPoint2D(double angle, double fx, double fy) {
-        double si = sin(angle);
-        double co = cos(angle);
-        return new Point2D(fx * co + 0.5, fy * si + 0.5);
-    }
-
-    /**
      * Gets the point on an oval that corresponds to the given angle.
+     *
+     * @param r the bounds of the oval
+     * @param angle the angle
+     * @return a point on the oval
      */
     public static Point2D ovalAngleToPoint(Rectangle2D r, double angle) {
         Point2D center = Geom.center(r);
@@ -344,8 +409,20 @@ public class Geom {
     /**
      * Standard line intersection algorithm
      * Return the point of intersection if it exists, else null
-     **/
-    // from Doug Lea's PolygonFigure
+     *
+     * from Doug Lea's PolygonFigure
+     *
+     *
+     * @param xa the x-coordinate of point a on line 1
+     * @param ya the y-coordinate of point a on line 1
+     * @param xb the x-coordinate of point b on line 1
+     * @param yb the y-coordinate of point b on line 1
+     * @param xc the x-coordinate of point c on line 2
+     * @param yc the y-coordinate of point c on line 2
+     * @param xd the x-coordinate of point d on line 2
+     * @param yd the y-coordinate of point d on line 2
+     * @return the intersection point or null
+     */
     public static Point2D intersect(double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
             double xb, // line 1 point 2 x
@@ -396,6 +473,23 @@ public class Geom {
         }
     }
 
+    /**
+     * Line intersection algorithm
+     * Return the point of intersection if it exists, else null.
+     *
+     *
+     * @param xa the x-coordinate of point a on line 1
+     * @param ya the y-coordinate of point a on line 1
+     * @param xb the x-coordinate of point b on line 1
+     * @param yb the y-coordinate of point b on line 1
+     * @param xc the x-coordinate of point c on line 2
+     * @param yc the y-coordinate of point c on line 2
+     * @param xd the x-coordinate of point d on line 2
+     * @param yd the y-coordinate of point d on line 2
+     * @param limit the lines are extend by up to limit units in order to meet
+     * at the intersection point
+     * @return the intersection point or null
+     */
     public static Point2D intersect(
             double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
@@ -462,8 +556,15 @@ public class Geom {
      * compute distance of point from line segment, or
      * Double.MAX_VALUE if perpendicular projection is outside segment; or
      * If pts on line are same, return distance from point
-     **/
-    // from Doug Lea's PolygonFigure
+     *
+     * @param xa the x-coordinate of point a on the line 
+     * @param ya the y-coordinate of point a on the line 
+     * @param xb the x-coordinate of point b on the line 
+     * @param yb the y-coordinate of point b on the line 
+     * @param xc the x-coordinate of the point c
+     * @param yc the y-coordinate of the point c
+     * @return the distance from the line
+     */
     public static double distanceFromLine(int xa, int ya,
             int xb, int yb,
             int xc, int yc) {
@@ -523,12 +624,12 @@ public class Geom {
         return sqrt(xd * xd + yd * yd);
 
         /*
-         for directional version, instead use
-         double snum =  (ya-yc) * (xb-xa) - (xa-xc) * (yb-ya);
-         double s = snum / l2;
-
-         double l = sqrt((double)l2);
-         return = s * l;
+         * for directional version, instead use
+         * double snum = (ya-yc) * (xb-xa) - (xa-xc) * (yb-ya);
+         * double s = snum / l2;
+         *
+         * double l = sqrt((double)l2);
+         * return = s * l;
          */
     }
 
@@ -552,15 +653,18 @@ public class Geom {
      * The <code>grow</code> method does not check whether the resulting
      * values of <code>width</code> and <code>height</code> are
      * non-negative.
+     *
+     * @param r the rectangle
      * @param h the horizontal expansion
      * @param v the vertical expansion
+     * @return the new rectangle
      */
     public static Rectangle2D grow(Rectangle2D r, double h, double v) {
         return new Rectangle2D(
-        r.getMinX() - h,
-        r.getMinY() - v,
-        r.getWidth() + h * 2d,
-        r.getHeight() + v * 2d);
+                r.getMinX() - h,
+                r.getMinY() - v,
+                r.getWidth() + h * 2d,
+                r.getHeight() + v * 2d);
     }
 
     /**
@@ -577,8 +681,10 @@ public class Geom {
     public static boolean contains(Rectangle2D r1, Rectangle2D r2) {
         return (r2.getMinX() >= r1.getMinX()
                 && r2.getMinY() >= r1.getMinY()
-                && (r2.getMinX() + max(0, r2.getWidth())) <= r1.getMinX() + max(0, r1.getWidth())
-                && (r2.getMinY() + max(0, r2.getHeight())) <= r1.getMinY() + max(0, r1.getHeight()));
+                && (r2.getMinX() + max(0, r2.getWidth())) <= r1.getMinX()
+                + max(0, r1.getWidth())
+                && (r2.getMinY() + max(0, r2.getHeight())) <= r1.getMinY()
+                + max(0, r1.getHeight()));
     }
 
     private static Rectangle2D add(Rectangle2D r, double newx, double newy) {

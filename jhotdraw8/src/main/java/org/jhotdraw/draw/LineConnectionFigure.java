@@ -25,6 +25,8 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 /**
  * LineConnectionFigure.
@@ -57,7 +59,8 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         // We must update the start and end point when ever one of
         // the connected figures or one of the connectors changes
         InvalidationListener ilStart = observable -> {
-            updateStart();
+            invalidate();
+            //updateStart();
         };
         ChangeListener<Observable> clStart = (observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -65,11 +68,13 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
             }
             if (newValue != null) {
                 newValue.addListener(ilStart);
-                updateStart();
+                invalidate();
+                //updateStart();
             }
         };
         InvalidationListener ilEnd = observable -> {
-            updateEnd();
+            invalidate();
+            //updateEnd();
         };
         ChangeListener<Observable> clEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -77,7 +82,8 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
             }
             if (newValue != null) {
                 newValue.addListener(ilEnd);
-                updateEnd();
+                invalidate();
+                //updateEnd();
             }
         };
 
@@ -97,7 +103,7 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         Point2D end = get(END);
         return new BoundingBox(//
                 min(start.getX(), end.getX()),//
-                min(end.getX(), end.getY()),//
+                min(start.getY(), end.getY()),//
                 abs(start.getX() - end.getX()), //
                 abs(start.getY() - end.getY()));
     }
@@ -123,14 +129,14 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
     }
 
     @Override
-    public void putNode(DrawingView drawingView) {
-        drawingView.putNode(this, new Line());
+    public Node createNode(DrawingView drawingView) {
+        return new Line();
     }
 
     @Override
     public void updateNode(DrawingView drawingView, Node node) {
         Line lineNode = (Line) node;
-        updateFigureProperties(lineNode);
+        applyFigureProperties(lineNode);
         updateShapeProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
@@ -153,6 +159,12 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys");
         }
+    }
+
+    @Override
+    protected void updateState() {
+        updateStart();
+        updateEnd();
     }
 
     private void updateStart() {

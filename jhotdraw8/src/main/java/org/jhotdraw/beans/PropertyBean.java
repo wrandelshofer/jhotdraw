@@ -7,47 +7,62 @@ package org.jhotdraw.beans;
 
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.css.CssMetaData;
 import org.jhotdraw.collection.Key;
 
 /**
  * Interface for beans which support an open number of properties.
  * <p>
- * A property is typically accessed using a type safe {@link Key}.
+ * A property is accessed using a type safe {@link Key}.
+ * </p>
  * <p>
- * To implement this interface, you need to implement the {@code valuesProperty()}
- * method as shown below.
+ * To implement this interface, you need to implement the
+ * {@code valuesProperty()} method as shown below.
+ * </p>
  *
- * <pre>{@code 
+ * <pre><code>
  * public class MyBean implements PropertyBean {
- * private MapProperty<Key<?>, Object> properties;*
+ *     private final ReadOnlyMapWrappery{@literal <Key<?>, Object>} properties
+ *         = new ReadOnlyMapWrapper{@literal <>}(this, "properties", FXCollections.observableHashMap());
  *
- *  @Override
- *  public final MapProperty<Key<?>, Object> properties() {
- *      if (properties == null) {
- *          properties = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<Key<?>, Object>()));
- *      }
- *      return properties;
- *  }
+ *     {@literal @}Override
+ *     public final MapProperty{@literal <Key<?>, Object>} properties() {
+ *          return properties;
+ *     }
  * }
- * }</pre>
- * 
+ * }</code></pre>
+ *
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface PropertyBean {
-
-    /** Returns an observable map of properties.
-     * @return the map 
+    /**
+     * Returns an observable map of properties.
+     *
+     * @return the map
      */
-    ReadOnlyMapProperty<Key<?>,Object> properties();
+    ReadOnlyMapProperty<Key<?>, Object> properties();
 
-    /** Sets a property value. */
+    /**
+     * Sets a property value.
+     *
+     * @param <T> the value type
+     * @param key the key
+     * @param value the value
+     */
     default <T> void set(Key<T> key, T value) {
-       key.put(properties(), value);
+        key.put(properties(), value);
     }
-    /** Gets a property value. */
+
+    /**
+     * Gets a property value.
+     *
+     * @param <T> the value type
+     * @param key the key
+     * @return the value
+     */
     default <T> T get(Key<T> key) {
-       return key.get(properties());
+        return key.get(properties());
     }
 }

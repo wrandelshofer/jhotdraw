@@ -59,6 +59,7 @@ public interface ApplicationModel {
      * This method is invoked by {@code Application} when it needs to create
      * a menu bar. {@code Application} uses the {@code id} of the menu items
      * in the menu bar to link the menu item with {@code Action} objects.
+     * @return a menu bar
      */
     MenuBar createMenuBar();
 }

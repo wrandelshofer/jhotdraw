@@ -15,6 +15,7 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.event.Listener;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  * The {@code SimpleDrawingModel} listens to mutations on a figure and
@@ -123,6 +124,7 @@ public class SimpleDrawingModel implements DrawingModel {
     }
 
     private final LinkedList<Listener<DrawingModelEvent>> drawingModelListeners = new LinkedList<>();
+    private final LinkedList<Listener<DrawingModelEvent>> propertyListeners = new LinkedList<>();
     private final LinkedList<InvalidationListener> invalidationListeners = new LinkedList<>();
 
     @Override
@@ -152,6 +154,11 @@ public class SimpleDrawingModel implements DrawingModel {
             l.invalidated(this);
         }
     }
+    private void fireToPropertyListeners(DrawingModelEvent event) {
+        for (Listener<DrawingModelEvent> l : propertyListeners) {
+            l.handle(event);
+        }
+    }
 
     private void fireFigureRemoved(Figure parent, Figure child, int index) {
         fire(new DrawingModelEvent(this, false, parent, child, index));
@@ -162,7 +169,7 @@ public class SimpleDrawingModel implements DrawingModel {
     }
 
     private <T> void firePropertyChange(Figure figure, Key<T> key, T oldValue, T newValue) {
-        fire(new DrawingModelEvent(this, figure, key, oldValue, newValue));
+       fireToPropertyListeners(new DrawingModelEvent(this, figure, key, oldValue, newValue));
     }
 
     private void fireFigureInvalidated(Figure figure) {

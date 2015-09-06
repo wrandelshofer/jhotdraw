@@ -1,4 +1,5 @@
-/* @(#)Handle.java
+/*
+ * @(#)Handle.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -10,57 +11,65 @@ import javafx.scene.Node;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.event.Listener;
-
+import static org.jhotdraw.draw.Figure.*;
 /**
  * Handle.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface Handle {
+
     // ---
     // Behavior
     // ---
-    /** Returns the figure to which the handle is associated. */
-    public Figure getFigure();
-    
-    /** Returns the node which is used to visualize the handle.
-     * The node is rendered by {@code DrawingView} in a pane which uses view coordinates.
-     * The node should use {@code DrawingView.viewToDrawingProperty()} to transform
-     * its coordinates.
-     * <p>
-     * A {@code Handle} can only reside in one {@code DrawingView} at any
-     * given time. The JavaFX node returned by this method is use to render
-     * the handle in the {@code DrawingView}.
+    /**
+     * Returns the figure to which the handle is associated.
      *
-     * @return  the node */
-    public Node getNode();
+     * @return a figure
+     */
+    Figure getFigure();
 
+    /**
+     * Returns the node which is used to visualize the handle. The node is
+     * rendered by {@code DrawingView} in a pane which uses view coordinates.
+     * The node should use {@code DrawingView.viewToDrawingProperty()} to
+     * transform its coordinates.
+     * <p>
+     * A {@code Handle} can only reside in one {@code DrawingView} at any given
+     * time. The JavaFX node returned by this method is use to render the handle
+     * in the {@code DrawingView}. This is why, unlike {@code Figure}, we only
+     * need this method instead of a {@code createNode} and an
+     * {@code updateNode} method.
+     *
+     * @return the node
+     */
+    Node getNode();
+
+    void updateNode();
+
+    /**
+     * Updates a handle node with all {@code Key}s which define the transformation
+     * of the node.
+     * <p>
+     * This method is intended to be used by {@link #updateNode}.
+     *
+     * @param node a JavaFX scene node.
+     */
+    default void applyFigureTransform(Node node) {
+        Figure f = getFigure();
+        node.setRotate(f.get(ROTATE));
+        node.setRotationAxis(f.get(ROTATION_AXIS));
+        node.setScaleX(f.get(SCALE_X));
+        node.setScaleY(f.get(SCALE_Y));
+        node.setScaleZ(f.get(SCALE_Z));
+        node.setTranslateX(f.get(TRANSLATE_X));
+        node.setTranslateY(f.get(TRANSLATE_Y));
+        node.setTranslateZ(f.get(TRANSLATE_Z));
+    }
+    
     /**
      * Disposes of all resources acquired by the handler.
      */
-    public void dispose();
-
-    
-    /**
-     * This method is invoked by {@code Tool} (typically the {@code HandleTool}),
-     * when the user drags the handle. 
-    *
-    * @param dx Drag distance in x direction (in drawing coordinates).
-    * @param dy Drag distance in y direction (in drawing coordinates).
-    */
-    public void onMouseDragged(double dx, double dy);
-
-        /**
-     * Returns true, if this handle is combinable with the specified handle.
-     * This method is used to determine, if multiple handles need to be tracked,
-     * when more than one figure is selected.
-     */
-    public boolean isCombinableWith(Handle handle);
-    // ---
-    // listeners
-    // ---
-    void addHandleListener(Listener<org.jhotdraw.draw.handle.HandleEvent> listener);
-
-    void removeHandleListener(Listener<org.jhotdraw.draw.handle.HandleEvent> listener);
-
+    void dispose();
 }

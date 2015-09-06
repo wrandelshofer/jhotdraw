@@ -25,6 +25,8 @@ public interface OutputFormat {
      *
      * @param uri The uri.
      * @param drawing The drawing.
+     *
+     * @throws java.io.IOException if an IO error occurs
      */
     default void write(URI uri, Drawing drawing) throws IOException {
         write(new File(uri), drawing);
@@ -34,9 +36,10 @@ public interface OutputFormat {
      * Writes the drawing to the specified file.
      * This method ensures that all figures of the drawing are visible on
      * the image.
-     * @param file
-     * @param drawing
-     * @throws java.io.IOException
+     * @param file the file
+     * @param drawing the drawing
+     *
+     * @throws java.io.IOException if an IO error occurs
      */
     default void write(File file, Drawing drawing) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
@@ -49,6 +52,8 @@ public interface OutputFormat {
      *
      * @param out The output stream.
      * @param drawing The drawing.
+     *
+     * @throws java.io.IOException if an IO error occurs
      */
     void write(OutputStream out, Drawing drawing) throws IOException;
 }
