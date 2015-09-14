@@ -1,5 +1,4 @@
-/*
- * @(#)SimpleDrawingView.java
+/* @(#)SimpleDrawingView.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -82,23 +81,33 @@ public class SimpleDrawingView implements DrawingView {
      */
     private StackPane node;
 
-    /** The drawingProperty holds the drawing that is presented by this drawing
-     * view. */
+    /**
+     * The drawingProperty holds the drawing that is presented by this drawing
+     * view.
+     */
     private final NonnullProperty<Drawing> drawingProperty = new NonnullProperty<>(this, DRAWING_PROPERTY, new SimpleDrawing());
 
-    /** Installs a handler for changes in the drawingProperty. */
+    /**
+     * Installs a handler for changes in the drawingProperty.
+     */
     {
         drawingProperty.addListener((observable, oldValue, newValue) -> updateDrawing(oldValue, newValue));
     }
 
-    /** The constrainerProperty holds the constrainer for this drawing view */
+    /**
+     * The constrainerProperty holds the constrainer for this drawing view
+     */
     private final NonnullProperty<Constrainer> constrainerProperty = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
     private boolean handlesAreValid;
 
-    /** The selectionProperty holds the list of selected figures. */
+    /**
+     * The selectionProperty holds the list of selected figures.
+     */
     private final ReadOnlySetProperty<Figure> selectionProperty = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
 
-    /** Installs a handler for changes in the seletionProperty. */
+    /**
+     * Installs a handler for changes in the seletionProperty.
+     */
     {
         selectionProperty.addListener((Observable o) -> {
             invalidateHandles();
@@ -210,39 +219,39 @@ public class SimpleDrawingView implements DrawingView {
 
         model.addDrawingModelListener((Listener<DrawingModelEvent>) event -> {
             switch (event.getEventType()) {
-                case FIGURE_ADDED:
-                    handleFigureAdded(event.getFigure());
-                    break;
-                case FIGURE_REMOVED:
-                    handleFigureRemoved(event.getFigure());
-                    break;
-                case FIGURE_INVALIDATED:
-                    handleFigureInvalidated(event.getFigure());
-                    break;
-                case FIGURE_REQUEST_REMOVE:
-                    // it is not our job to remove the figure
-                    break;
-                case PROPERTY_CHANGED:
-                    // the figure looks still the same
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + "not supported");
+            case FIGURE_ADDED:
+                handleFigureAdded(event.getFigure());
+                break;
+            case FIGURE_REMOVED:
+                handleFigureRemoved(event.getFigure());
+                break;
+            case FIGURE_INVALIDATED:
+                handleFigureInvalidated(event.getFigure());
+                break;
+            case FIGURE_REQUEST_REMOVE:
+                // it is not our job to remove the figure
+                break;
+            case PROPERTY_CHANGED:
+                // the figure looks still the same
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + "not supported");
             }
         });
 
         node.addEventFilter(MouseEvent.MOUSE_PRESSED,
                 new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent evt) {
-                if (!node.isFocused()) {
-                    node.requestFocus();
-                    if (!node.getScene().getWindow().isFocused()) {
-                        evt.consume();
+                    @Override
+                    public void handle(MouseEvent evt) {
+                        if (!node.isFocused()) {
+                            node.requestFocus();
+                            if (!node.getScene().getWindow().isFocused()) {
+                                evt.consume();
+                            }
+                        }
                     }
-                }
-            }
-        ;
+                ;
         });
         node.setFocusTraversable(true);
         focusedProperty.bind(node.focusedProperty());
@@ -430,6 +439,9 @@ public class SimpleDrawingView implements DrawingView {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
+            if (!n.isVisible()) {
+                continue;
+            }
             Point2D pl = n.parentToLocal(pp);
             if (n.contains(pl)) {
                 Figure f = nodeToFigureMap.get(n);
@@ -455,6 +467,9 @@ public class SimpleDrawingView implements DrawingView {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
+            if (!n.isVisible()) {
+                continue;
+            }
             Point2D pl = n.parentToLocal(pp);
             if (n.contains(pl)) {
                 Figure f = nodeToFigureMap.get(n);
