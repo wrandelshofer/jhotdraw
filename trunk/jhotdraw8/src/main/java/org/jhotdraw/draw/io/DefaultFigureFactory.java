@@ -8,6 +8,7 @@ package org.jhotdraw.draw.io;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
@@ -36,13 +37,13 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigure("Circle", CircleFigure.class);
         addFigure("Line", LineFigure.class);
         addFigure("Ellipse", EllipseFigure.class);
-        addFigureKeysAndNames(RectangleFigure.class, RectangleFigure.getFigureKeys().values());
-        addFigureKeysAndNames(GroupFigure.class, GroupFigure.getFigureKeys().values());
-        addFigureKeysAndNames(SimpleDrawing.class, SimpleDrawing.getFigureKeys().values());
-        addFigureKeysAndNames(TextFigure.class, TextFigure.getFigureKeys().values());
-        addFigureKeysAndNames(CircleFigure.class, CircleFigure.getFigureKeys().values());
-        addFigureKeysAndNames(LineFigure.class, LineFigure.getFigureKeys().values());
-        addFigureKeysAndNames(EllipseFigure.class, EllipseFigure.getFigureKeys().values());
+        addFigureKeysAndNames(RectangleFigure.class, Figure.getDeclaredAndInheritedKeys(RectangleFigure.class));
+        addFigureKeysAndNames(GroupFigure.class, Figure.getDeclaredAndInheritedKeys(GroupFigure.class));
+        addFigureKeysAndNames(SimpleDrawing.class, Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class));
+        addFigureKeysAndNames(TextFigure.class, Figure.getDeclaredAndInheritedKeys(TextFigure.class));
+        addFigureKeysAndNames(CircleFigure.class, Figure.getDeclaredAndInheritedKeys(CircleFigure.class));
+        addFigureKeysAndNames(LineFigure.class, Figure.getDeclaredAndInheritedKeys(LineFigure.class));
+        addFigureKeysAndNames(EllipseFigure.class, Figure.getDeclaredAndInheritedKeys(EllipseFigure.class));
         addConverter(Rectangle2D.class, new Rectangle2DConverter());
         addConverter(String.class, new DefaultConverter());
         addConverter(Point2D.class, new Point2DConverter());

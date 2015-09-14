@@ -10,9 +10,11 @@ import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -409,17 +411,28 @@ public interface Figure extends PropertyBean, Observable {
     // static methods
     // ---
     /**
-     * Returns all keys declared in this class.
+     * Returns all keys declared in the figure class and inherited from parent
+     * classes.
      *
-     * @return all declared keys
+     * @param f A figure.
      */
-    public static HashMap<String, Key<?>> getFigureKeys() {
+    public static Set<Key<?>> getFigureKeys(Figure f) {
+        return getDeclaredAndInheritedKeys(f.getClass());
+    }
+
+    /**
+     * Returns all keys declared in this class and inherited from parent
+     * classes.
+     *
+     * @param c A figure class.
+     */
+    public static Set<Key<?>> getDeclaredAndInheritedKeys(Class<?> c) {
         try {
-            HashMap<String, Key<?>> keys = new HashMap<>();
-            for (Field f : Figure.class.getDeclaredFields()) {
+            HashSet<Key<?>> keys = new HashSet<>();
+            for (Field f : c.getFields()) {
                 if (Key.class.isAssignableFrom(f.getType())) {
-                    Key<?> value = (Key<?>) f.get(null);
-                    keys.put(value.getName(), value);
+                    Key<?> k = (Key<?>) f.get(null);
+                    keys.add(k);
                 }
             }
             return keys;

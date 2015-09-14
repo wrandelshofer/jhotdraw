@@ -87,19 +87,4 @@ public class EllipseFigure extends AbstractShapeFigure {
         n.setRadiusX(get(RADIUS_X));
         n.setRadiusY(get(RADIUS_Y));
     }
-
-    public static HashMap<String, Key<?>> getFigureKeys() {
-        try {
-            HashMap<String, Key<?>> keys = AbstractShapeFigure.getFigureKeys();
-            for (Field f : EllipseFigure.class.getDeclaredFields()) {
-                if (Key.class.isAssignableFrom(f.getType())) {
-                    Key<?> value = (Key<?>) f.get(null);
-                    keys.put(value.getName(), value);
-                }
-            }
-            return keys;
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys");
-        }
-    }
 }

@@ -151,19 +151,4 @@ public interface TextHolderFigure extends Figure {
             text.getStrokeDashArray().add(dash);
         }
     }
-
-    public static HashMap<String, Key<?>> getFigureKeys() {
-        try {
-            HashMap<String, Key<?>> keys = Figure.getFigureKeys();
-            for (Field f : TextHolderFigure.class.getDeclaredFields()) {
-                if (Key.class.isAssignableFrom(f.getType())) {
-                    Key<?> value = (Key<?>) f.get(null);
-                    keys.put(value.getName(), value);
-                }
-            }
-            return keys;
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys");
-        }
-    }
 }
