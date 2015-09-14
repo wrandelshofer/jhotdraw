@@ -11,7 +11,7 @@ import org.jhotdraw.draw.ConnectionFigure;
 
 /**
  * A <em>connector</em> encapsulates the strategy for locating the
- * start or end point of a {@code ConnectionFigure}.
+ * start or end point of a {@code ConnectionFigure} on a {@code ConnectableFigure}.
  *
  * @author Werner Randelshofer
  * @version $Id$
