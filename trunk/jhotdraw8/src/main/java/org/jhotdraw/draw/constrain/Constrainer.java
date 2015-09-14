@@ -26,6 +26,11 @@ import javafx.geometry.Rectangle2D;
 public interface Constrainer {
 
     /**
+     * A direction vector with distance of zero.
+     */
+    public final static Point2D DIRECTION_NEAREST = Point2D.ZERO;
+
+    /**
      * Constrains the placement of a point towards the closest constraint in any
      * direction.
      * <p>
@@ -35,7 +40,7 @@ public interface Constrainer {
      * @return Returns the constrained point.
      */
     default Point2D constrainPoint(Point2D p) {
-        return translatePoint(p, Point2D.ZERO);
+        return translatePoint(p, DIRECTION_NEAREST);
     }
 
     /**
@@ -62,12 +67,12 @@ public interface Constrainer {
      * @return Returns the constrained rectangle.
      */
     default Rectangle2D constrainRectangle(Rectangle2D r) {
-        return translateRectangle(r, Point2D.ZERO);
+        return translateRectangle(r, DIRECTION_NEAREST);
     }
 
     /**
-     * Snaps a rectangle into the the closest constraint position in the given
-     * direction.
+     * Snaps a rectangle into the the closest constraint position in the
+     * specified direction.
      * <p>
      * This method changes the location of the rectangle which is passed as a
      * parameter. This method does not change the size of the rectangle.

@@ -6,17 +6,12 @@
 package org.jhotdraw.draw.tool;
 
 import java.util.function.Supplier;
-import javafx.collections.MapChangeListener;
-import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import static java.lang.Math.*;
+import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -67,8 +62,8 @@ public class CreationTool extends AbstractTool {
     protected void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (figure != null) {
             if (abs(x2 - x1)<minSize && abs(y2 - y1)<minSize) {
-                Point2D c1 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(new Point2D(x1, y1)));
-                Point2D c2 = dv.getConstrainer().translatePoint(dv.viewToDrawing(new Point2D(x1+minSize, y1+minSize)),new Point2D(1,1));
+                Point2D c1 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(x1, y1));
+                Point2D c2 = dv.getConstrainer().translatePoint(dv.viewToDrawing(x1+minSize, y1+minSize),Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
                     c2 = new Point2D(c1.getX() + 10, c1.getY() + 10);
                 }
@@ -85,8 +80,8 @@ public class CreationTool extends AbstractTool {
         if (figure != null) {
             x2 = event.getX();
             y2 = event.getY();
-            Point2D c1 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(new Point2D(x1, y1)));
-            Point2D c2 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(new Point2D(x2, y2)));
+            Point2D c1 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(x1, y1));
+            Point2D c2 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(x2, y2));
             figure.reshape(c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY() - c1.getY());
         }
     }
