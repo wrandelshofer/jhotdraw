@@ -66,18 +66,4 @@ public class GroupFigure extends AbstractCompositeFigure {
     public Node createNode(DrawingView drawingView) {
         return new Group();
     }
-    public static HashMap<String, Key<?>> getFigureKeys() {
-        try {
-            HashMap<String, Key<?>> keys = Figure.getFigureKeys();
-            for (Field f : GroupFigure.class.getDeclaredFields()) {
-                if (Key.class.isAssignableFrom(f.getType())) {
-                    Key<?> value = (Key<?>) f.get(null);
-                    keys.put(value.getName(), value);
-                }
-            }
-            return keys;
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys");
-        }
-    }
 }

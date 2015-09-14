@@ -95,19 +95,4 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
             shape.getStrokeDashArray().add(dash);
         }
     }
-
-    public static HashMap<String, Key<?>> getFigureKeys() {
-        try {
-            HashMap<String, Key<?>> keys = Figure.getFigureKeys();
-            for (Field f : AbstractShapeFigure.class.getDeclaredFields()) {
-                if (Key.class.isAssignableFrom(f.getType())) {
-                    Key<?> value = (Key<?>) f.get(null);
-                    keys.put(value.getName(), value);
-                }
-            }
-            return keys;
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys");
-        }
-    }
 }
