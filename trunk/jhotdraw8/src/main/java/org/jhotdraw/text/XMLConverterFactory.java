@@ -1,19 +1,29 @@
 /*
- * @(#)XMLConverterFactory.java
- * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
- * Alle Rechte vorbehalten. 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
 package org.jhotdraw.text;
 
 /**
  * XMLConverterFactory.
- *
- * @version $$Id$$
+ * @author Werner Randelshofer
+ * @version $Id$
  */
-class XMLConverterFactory {
+public class XMLConverterFactory implements ConverterFactory {
 
-    public XMLConverterFactory() {
+    @Override
+    public Converter<?> apply(String type, String style) {
+        if (type==null) {
+            return new DefaultConverter();
+        }
+        switch (type) {
+            case "number":
+                return new XMLDoubleConverter();
+            default:
+                throw new IllegalArgumentException("illegal type:"+type);
+        }
     }
 
 }

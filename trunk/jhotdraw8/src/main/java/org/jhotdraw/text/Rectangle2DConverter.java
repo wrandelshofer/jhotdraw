@@ -19,7 +19,7 @@ import javafx.geometry.Rectangle2D;
  */
 public class Rectangle2DConverter implements Converter<Rectangle2D> {
 
-    private final ArrayConverter formatter = new ArrayConverter("{0,number} {1,number} {2,number} {3,number}", new XMLConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number} {2,number} {3,number}", new XMLConverterFactory());
 
     @Override
     public String toString(Rectangle2D value) {

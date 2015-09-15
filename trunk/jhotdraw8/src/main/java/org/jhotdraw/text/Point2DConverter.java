@@ -21,7 +21,7 @@ import javafx.geometry.Point2D;
  */
 public class Point2DConverter implements Converter<Point2D> {
 
-    private final ArrayConverter formatter = new ArrayConverter("{0,number} {1,number}", new XMLConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new XMLConverterFactory());
 
     @Override
     public String toString(Point2D value) {
