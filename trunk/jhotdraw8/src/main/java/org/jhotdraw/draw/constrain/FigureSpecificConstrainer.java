@@ -1,0 +1,120 @@
+/*
+ * @(#)FigureSpecificConstrainer.java
+ * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
+ * Alle Rechte vorbehalten. 
+ */
+package org.jhotdraw.draw.constrain;
+
+import javafx.beans.property.ReadOnlyMapWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
+import org.jhotdraw.beans.NonnullProperty;
+import org.jhotdraw.draw.Figure;
+import java.util.Map;
+
+/**
+ * Allows to use different constrainers for different figure types.
+ * <p>
+ * XXX This could be an abstract class with abstract method getConstrainer. The
+ * constrainerMap and the defaultConstrainer could be moved into a concrete
+ * subclass.
+ * </p>
+ *
+ * @author Werner Randelshofer
+ * @version $$Id$$
+ */
+public class FigureSpecificConstrainer implements Constrainer {
+    // ----
+    // property names
+    // ----
+
+    /**
+     * The name of the "constrainerMap" property.
+     */
+    public final String CONSTRAINER_MAP_PROPERTY = "constrainerMap";
+    /**
+     * The name of the "defaultConstrainer" property.
+     */
+    public final String DEFAULT_CONSTRAINER_PROPERTY = "defaultConstrainer";
+
+    // ----
+    // property fields
+    // ----
+    /**
+     * Maps figure classes to constrainers.
+     */
+    private final ReadOnlyMapWrapper<Class<?>, Constrainer> constrainerMap
+            = new ReadOnlyMapWrapper<>(this, "CONSTRAINER_MAP_PROPERTY", FXCollections.observableHashMap());
+
+    /**
+     * All figures which are not in the map use the default constrainer.
+     */
+    private final NonnullProperty<Constrainer> defaultConstrainer = new NonnullProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
+
+    // ----
+    // property methods
+    // ----
+    public ObservableMap<Class<?>, Constrainer> constrainerMapProperty() {
+        return constrainerMap;
+    }
+
+    public NonnullProperty<Constrainer> defaultConstrainerProperty() {
+        return defaultConstrainer;
+    }
+
+    public Map<Class<?>, Constrainer> getConstrainerMap() {
+        return constrainerMap.get();
+    }
+
+    public Constrainer getDefaultConstrainer() {
+        return defaultConstrainer.get();
+    }
+
+    public void setDefaultConstrainer(Constrainer newValue) {
+        defaultConstrainer.set(newValue);
+    }
+    // ----
+    // behavior methods
+    // ----
+
+    /**
+     * Retrieves the constrainer for the specified figure.
+     */
+    private Constrainer getConstrainer(Figure f) {
+        Constrainer c = constrainerMap.get(f);
+        return c != null ? c : defaultConstrainer.get();
+    }
+
+    @Override
+    public Point2D translatePoint(Figure f, Point2D p, Point2D dir) {
+        return getConstrainer(f).translatePoint(f, p, dir);
+    }
+
+    @Override
+    public Rectangle2D translateRectangle(Figure f, Rectangle2D r, Point2D dir) {
+        return getConstrainer(f).translateRectangle(f, r, dir);
+    }
+
+    @Override
+    public double translateAngle(Figure f, double angle, double dir) {
+        return getConstrainer(f).translateAngle(f, angle, dir);
+    }
+
+    @Override
+    public Point2D constrainPoint(Figure f, Point2D p) {
+        return getConstrainer(f).constrainPoint(f, p);
+    }
+
+    @Override
+    public Rectangle2D constrainRectangle(Figure f, Rectangle2D r) {
+        return getConstrainer(f).constrainRectangle(f, r);
+    }
+
+    @Override
+    public double constrainAngle(Figure f, double angle) {
+        return getConstrainer(f).constrainAngle(f, angle);
+    }
+
+}
