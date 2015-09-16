@@ -6,15 +6,13 @@
 package org.jhotdraw.text;
 
 import java.io.IOException;
-import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jhotdraw.io.StreamPosTokenizer;
 
 /**
@@ -128,9 +126,6 @@ public class PatternConverter implements Converter<Object[]> {
 
     @Override
     public void toString(Object[] value, Appendable out) throws IOException {
-        System.out.println("MaxArgumentIndex:"
-                + ast.getMaxArgumentIndex(value, new ArgumentOffset()));
-
         ast.toString(value, out, factory, new ArgumentOffset());
     }
 
@@ -139,7 +134,7 @@ public class PatternConverter implements Converter<Object[]> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public static class ArgumentOffset {
+    static class ArgumentOffset {
 
         int offset;
 
@@ -154,9 +149,9 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     /** Pattern AST.
-     * This class is only public for testing purposes.
+     * This class is package visible for testing purposes.
      */
-    public static class AST {
+    static class AST {
 
         protected List<AST> children = new ArrayList<>();
 
@@ -181,12 +176,12 @@ public class PatternConverter implements Converter<Object[]> {
         }
     }
 
-    public static class Argument extends AST {
+    static class Argument extends AST {
 
         protected int index;
     }
 
-    public static class SimpleArgument extends Argument {
+    static class SimpleArgument extends Argument {
 
         protected String type;
         protected String style;
@@ -194,8 +189,12 @@ public class PatternConverter implements Converter<Object[]> {
 
         @Override
         public String toString() {
-            return "SimpleArgument{index='" + index + "' type=" + type
-                    + " style=" + style + '}';
+            if (type.isEmpty() && style.isEmpty()) {
+                return "Arg{" + index + '}';
+            } else {
+                return "Arg{" + index + " type=" + type
+                        + " style=" + style + '}';
+            }
         }
 
         @Override
@@ -213,24 +212,26 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     /** Each child represents a choice. */
-    public static class ChoiceArgument extends Argument {
+    static class ChoiceArgument extends Argument {
 
-        protected ArrayList<Double> limits;
+        protected double[] limits;
 
         @Override
         public String toString() {
-            return "ChoiceArgument{index='" + index + "' limits=" + limits
+            return "ArgChoice{" + index + " limits=" + limits
                     + "' children=" + children
                     + '}';
         }
 
         @Override
         public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
-            int choiceIndex = Collections.binarySearch(limits, ((Number) value[index]).doubleValue());
+            //int choiceIndex = Collections.binarySearch(limits, ((Number) value[index]).doubleValue());
+            int choiceIndex = Arrays.binarySearch(limits, ((Number) value[index]).doubleValue());
             if (choiceIndex < 0) {
-                choiceIndex = 0;
-            } else if (choiceIndex >= limits.size()) {
-                choiceIndex = limits.size() - 1;
+                choiceIndex = -choiceIndex - 1;
+            }
+            if (choiceIndex >= limits.length) {
+                choiceIndex = limits.length - 1;
             }
 
             children.get(choiceIndex).toString(value, out, factory, argumentOffset);
@@ -247,11 +248,11 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     /** First child represents item, second child represents separator. */
-    public static class ListArgument extends Argument {
+    static class ListArgument extends Argument {
 
         @Override
         public String toString() {
-            return "ListArgument{index='" + index + "' children=" + children
+            return "ArgList{" + index + " children=" + children
                     + '}';
         }
 
@@ -265,9 +266,6 @@ public class PatternConverter implements Converter<Object[]> {
 
             int repeat = ((Number) value[i]).intValue();
             int step = (childi - i);
-            System.out.println("ListArgument #=" + value.length + " argOffs="
-                    + argumentOffset.offset + " i=" + i + " repeat=" + repeat
-                    + " step=" + step + " childi=" + childi);
 
             argumentOffset.offset = i + repeat * step;
 
@@ -278,7 +276,7 @@ public class PatternConverter implements Converter<Object[]> {
         public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
             int i = index + argumentOffset.offset;
 
-            AST separator = children.get(1);
+            AST separator = children.size() < 2 ? null : children.get(1);
 
             int childi = -1;
             AST child = children.get(0);
@@ -291,7 +289,7 @@ public class PatternConverter implements Converter<Object[]> {
                     + " step=" + step);
 
             for (int j = 0; j < repeat; j++) {
-                if (j != 0) {
+                if (j != 0 && separator != null) {
                     separator.toString(value, out, factory, new ArgumentOffset(0));
                 }
                 child.toString(value, out, factory, new ArgumentOffset(i + j
@@ -302,20 +300,23 @@ public class PatternConverter implements Converter<Object[]> {
         }
     }
 
-    public static class Regex extends AST {
+    static class Regex extends AST {
 
         protected int maxRepeat;
         protected int minRepeat;
     }
 
-    public static class RegexChars extends Regex {
+    static class RegexChars extends Regex {
 
         protected String chars;
 
         @Override
         public String toString() {
-            return "RegexChars{chars='" + chars + "' repeat=" + minRepeat + ".."
-                    + maxRepeat + '}';
+            if (minRepeat == 1 && maxRepeat == 1) {
+                return "\"" + chars + "\"";
+            } else {
+                return "\"" + chars + "\"{" + minRepeat + "," + maxRepeat + "}";
+            }
         }
 
         @Override
@@ -326,13 +327,13 @@ public class PatternConverter implements Converter<Object[]> {
         }
     }
 
-    public static class RegexCharclass extends Regex {
+    static class RegexCharclass extends Regex {
 
         protected String chars;
 
         @Override
         public String toString() {
-            return "RegexCharclass{chars='" + chars + "' repeat=" + minRepeat
+            return "RegCharclass[" + chars + "] repeat=" + minRepeat
                     + ".." + maxRepeat + '}';
         }
 
@@ -344,11 +345,11 @@ public class PatternConverter implements Converter<Object[]> {
         }
     }
 
-    public static class RegexChoice extends Regex {
+    static class RegexChoice extends Regex {
 
         @Override
         public String toString() {
-            return "RegexChoice{children='" + children + "' repeat=" + minRepeat
+            return "RegChoice{children='" + children + " repeat=" + minRepeat
                     + ".." + maxRepeat + '}';
         }
 
@@ -400,13 +401,7 @@ public class PatternConverter implements Converter<Object[]> {
             case StreamPosTokenizer.TT_EOF:
                 throw new IOException("RegexExpression expected @"
                         + (tt.getStartPosition() + offset));
-            case '\'': {
-                RegexChars regex = new RegexChars();
-                regex.chars = (tt.sval.isEmpty()) ? "\'" : tt.sval;
-                parseRegexRepeat(tt, regex, offset);
-                parent.children.add(regex);
-            }
-            break;
+
             case '(':
                 tt.pushBack();
                 parseRegexChoice(tt, parent, offset);
@@ -422,14 +417,11 @@ public class PatternConverter implements Converter<Object[]> {
                 throw new IOException("RegexExpression may not start with '"
                         + (char) tt.ttype + "' @"
                         + (tt.getStartPosition() + offset));
-
-            default: {
-                RegexChars regex = new RegexChars();
-                regex.chars = String.valueOf((char) tt.ttype);
-                parseRegexRepeat(tt, regex, offset);
-                parent.children.add(regex);
-            }
-            break;
+            case '\'':
+            default:
+                tt.pushBack();
+                parseRegexChars(tt, parent, offset);
+                break;
         }
     }
 
@@ -449,6 +441,35 @@ public class PatternConverter implements Converter<Object[]> {
                 tt.pushBack();
                 break;
         }
+    }
+
+    private static void parseRegexChars(StreamPosTokenizer tt, AST parent, int offset) throws IOException {
+        RegexChars regex = new RegexChars();
+        regex.chars = "";
+        switch (tt.nextToken()) {
+            case StreamPosTokenizer.TT_EOF:
+                throw new IOException("RegexChars expected @"
+                        + (tt.getStartPosition() + offset));
+            case '\'':
+                regex.chars += tt.sval.isEmpty() ? "'" : tt.sval;
+
+                break;
+            case '(':
+            case '[':
+            case '+':
+            case '*':
+            case ')':
+            case ']':
+                throw new IOException("RegexChars may not start with '"
+                        + (char) tt.ttype + "' @"
+                        + (tt.getStartPosition() + offset));
+
+            default:
+                regex.chars += (char) tt.ttype;
+                break;
+        }
+        parseRegexRepeat(tt, regex, offset);
+        parent.children.add(regex);
     }
 
     private static void parseRegexChoice(StreamPosTokenizer tt, AST parent, int offset) throws IOException {
@@ -552,10 +573,10 @@ public class PatternConverter implements Converter<Object[]> {
 
         switch (typeStr) {
             case "choice":
-                parseChoiceArgumentStyle(tt, parent, index, typeStr, offset);
+                parseChoiceArgumentStyle(tt, parent, index, offset);
                 break;
             case "list":
-                parseListArgumentStyle(tt, parent, index, typeStr, offset);
+                parseListArgumentStyle(tt, parent, index, offset);
                 break;
             default:
                 parseSimpleArgumentStyle(tt, parent, index, typeStr, offset);
@@ -597,10 +618,10 @@ public class PatternConverter implements Converter<Object[]> {
         parent.children.add(argument);
     }
 
-    private static void parseChoiceArgumentStyle(StreamPosTokenizer tt, AST parent, int index, String type, int offset) throws IOException {
+    private static void parseChoiceArgumentStyle(StreamPosTokenizer tt, AST parent, int index, int offset) throws IOException {
         ChoiceArgument argument = new ChoiceArgument();
         argument.index = index;
-        argument.limits = new ArrayList<>();
+        ArrayList<Double> limits = new ArrayList<>();
         // parse argument style
         StringBuilder style = new StringBuilder();
 
@@ -625,9 +646,9 @@ public class PatternConverter implements Converter<Object[]> {
             }
             try {
                 double limit = Double.parseDouble(style.toString());
-                argument.limits.add(limit);
+                limits.add(limit);
             } catch (NumberFormatException e) {
-                throw new IOException("Choice Arugment: Illegal number format for limit: '"
+                throw new IOException("Choice Argument: Illegal number format for limit: '"
                         + style + "' @" + (startPosition + offset));
             }
             style.delete(0, style.length());
@@ -636,6 +657,7 @@ public class PatternConverter implements Converter<Object[]> {
             }
 
             // parse item
+            int itemPosition = tt.getEndPosition();
             while (((tt.nextToken() != '|' && tt.ttype != '}') || depth > 0)
                     && tt.ttype != StreamPosTokenizer.TT_EOF) {
                 switch (tt.ttype) {
@@ -656,20 +678,23 @@ public class PatternConverter implements Converter<Object[]> {
                 }
             }
             AST child = new AST();
+            argument.limits = new double[limits.size()];
+            for (int i = 0, n = limits.size(); i < n; i++) {
+                argument.limits[i] = limits.get(i);
+            }
             argument.children.add(child);
             parseTextFormatPattern(style.toString(), child, offset
-                    + tt.getEndPosition());
+                    + itemPosition);
             style.delete(0, style.length());
             if (tt.ttype != '|') {
                 tt.pushBack();
             }
         }
 
-        parseTextFormatPattern(tt, argument, offset + tt.getEndPosition());
         parent.children.add(argument);
     }
 
-    private static void parseListArgumentStyle(StreamPosTokenizer tt, AST parent, int index, String type, int offset) throws IOException {
+    private static void parseListArgumentStyle(StreamPosTokenizer tt, AST parent, int index, int offset) throws IOException {
         ListArgument argument = new ListArgument();
         argument.index = index;
         // parse argument style

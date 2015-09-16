@@ -59,6 +59,16 @@ import org.jhotdraw.draw.handle.SimpleHighlightHandle;
  * {@code childrenProperty} when a child figure has been added or removed or
  * reordered.</li>
  * </ul>
+ * FIXME Figure should fire more differentiated invalidation events:
+ * <ul>
+ * <li>Should fire Node invalidated when its Node needs to be updated.</li>
+ * <li>Should fire LayoutBounds invalidated when its parent Figures
+ * need to recursively update their LayoutBounds too. Connecting ConnectionFigures
+ * must update their layout in this case too. (Does  not need to
+ * differentiate between LayoutBoundsInLocal and LayoutBoundsInParent).</li>
+ * <li>Should fire VisualBounds invalidated when connecting ConnectionFigures 
+ * need to compute their start and end points.</li>
+ * </ul>
  *
  * @author Werner Randelshofer @version $Id$
  */

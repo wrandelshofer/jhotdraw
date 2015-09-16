@@ -29,9 +29,9 @@ import org.testng.annotations.Test;
  *
  * @author werni
  */
-public class ArrayConverterNGTest {
+public class PatternConverterNGTest {
 
-    public ArrayConverterNGTest() {
+    public PatternConverterNGTest() {
     }
 
     /**
@@ -40,20 +40,24 @@ public class ArrayConverterNGTest {
     @Test(dataProvider = "patternData")
     public void testParsePattern(String pattern, Object[] value, String expectedOutput) throws IOException {
         PatternConverter.AST ast = PatternConverter.parseTextFormatPattern(pattern);
-        System.out.println(ast);
+        System.out.println("pattern:"+pattern);
+      System.out.println(ast);
         
         PatternConverter c = new PatternConverter(pattern, new MessageFormatConverterFactory());
         String actualOutput=c.toString(value);
         
         System.out.println(actualOutput);
         
-        
+        assertEquals(actualOutput, expectedOutput);
     }
 
     @DataProvider
     public Object[][] patternData() {
         return new Object[][]{
+            {"{0,choice,0#a|1#b}c", new Object[]{0}, "ac"},
+            
             {"hello world", new Object[]{}, "hello world"},
+            {"'hello world'", new Object[]{}, "hello world"},
             {"he+llo", new Object[]{}, "hello"},
             {"he*llo", new Object[]{}, "hllo"},
             {"h(e|a)llo", new Object[]{}, "hello"},
@@ -67,10 +71,14 @@ public class ArrayConverterNGTest {
             
             {"{0,choice,0#hello}", new Object[]{0}, "hello"},
             {"{0,choice,0#hello world|1#good morning}", new Object[]{0}, "hello world"},
-            {"{0,choice,0#hello world|1#good morning}bla", new Object[]{1}, "good morningbla"},
-            {"{0,list,{1}|separator}", new Object[]{2,1,2}, "1separator2"},
-            {"{0,list,{1}|separator}bla", new Object[]{2,1,2}, "1separator2bla"},
-            {"{0,list,{1}{2}|}'+'{3,list,{4}|-}={7}", new Object[]{2,'h','e','l','o',5,'w','o','r','l','d','!'}, "1.1x1.2,2.1x2.2,11.1a11.2b11.3;12.1a12.2b12.3;13.1a13.2b13.3=4"},
+            {"{0,choice,0#hello world|1#good morning}minusone", new Object[]{-1}, "hello worldminusone"},
+            {"{0,choice,0#hello world|1#good morning}zero", new Object[]{0}, "hello worldzero"},
+            {"{0,choice,0#hello world|1#good morning}one", new Object[]{1}, "good morningone"},
+            {"{0,choice,0#hello world|1#good morning}two", new Object[]{2}, "good morningtwo"},
+            {"{0,list,{1}}", new Object[]{2,1,2}, "12"},
+            {"{0,list,{1}|,}", new Object[]{2,1,2}, "1,2"},
+            {"{0,list,{1}|,}bla", new Object[]{2,1,2}, "1,2bla"},
+            {"{0,list,{1}{2}}'+'{3,list,{4}|-}={5}", new Object[]{2,'h','e','l','o',5,'w','o','r','l','d','!'}, "hello+w-o-r-l-d=!"},
             
         };
 
