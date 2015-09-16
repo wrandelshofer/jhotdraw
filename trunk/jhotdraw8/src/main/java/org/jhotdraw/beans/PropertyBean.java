@@ -37,6 +37,17 @@ import org.jhotdraw.collection.Key;
  * @version $Id$
  */
 public interface PropertyBean {
+    // ---
+    // constant declarations
+    // ---
+    /**
+     * The name of the "properties" property.
+     */
+    public final String PROPERTIES_PROPERTY = "properties";
+
+    // ---
+    // property methods
+    // ---
     /**
      * Returns an observable map of properties.
      *
