@@ -85,31 +85,31 @@ public class SimpleDrawingView implements DrawingView {
      * The drawingProperty holds the drawing that is presented by this drawing
      * view.
      */
-    private final NonnullProperty<Drawing> drawingProperty = new NonnullProperty<>(this, DRAWING_PROPERTY, new SimpleDrawing());
+    private final NonnullProperty<Drawing> drawing = new NonnullProperty<>(this, DRAWING_PROPERTY, new SimpleDrawing());
 
     /**
      * Installs a handler for changes in the drawingProperty.
      */
     {
-        drawingProperty.addListener((observable, oldValue, newValue) -> updateDrawing(oldValue, newValue));
+        drawing.addListener((observable, oldValue, newValue) -> updateDrawing(oldValue, newValue));
     }
 
     /**
      * The constrainerProperty holds the constrainer for this drawing view
      */
-    private final NonnullProperty<Constrainer> constrainerProperty = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final NonnullProperty<Constrainer> constrainer = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
     private boolean handlesAreValid;
 
     /**
      * The selectionProperty holds the list of selected figures.
      */
-    private final ReadOnlySetProperty<Figure> selectionProperty = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
+    private final ReadOnlySetProperty<Figure> selection = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
 
     /**
      * Installs a handler for changes in the seletionProperty.
      */
     {
-        selectionProperty.addListener((Observable o) -> {
+        selection.addListener((Observable o) -> {
             invalidateHandles();
             repaint();
         });
@@ -117,22 +117,22 @@ public class SimpleDrawingView implements DrawingView {
 
     private int detailLevel = 0;
 
-    private final OptionalProperty<Tool> toolProperty = new OptionalProperty<>(this, TOOL_PROPERTY);
+    private final OptionalProperty<Tool> tool = new OptionalProperty<>(this, TOOL_PROPERTY);
 
     {
-        toolProperty.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
+        tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
-    private final OptionalProperty<Handle> activeHandleProperty = new OptionalProperty<>(this, ACTIVE_HANDLE_PROPERTY);
+    private final OptionalProperty<Handle> activeHandle = new OptionalProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
     /**
      * This is just a wrapper around the focusedProperty of the JavaFX Node
      * which is used to render this view.
      */
-    private final ReadOnlyBooleanWrapper focusedProperty = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
+    private final ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
     /**
      * Holds the transformation from drawing coordinates to view coordinates.
      */
-    private final ReadOnlyObjectWrapper<Transform> drawingToViewProperty = new ReadOnlyObjectWrapper<>(this, DRAWING_TO_VIEW_PROPERTY, new Scale());
+    private final ReadOnlyObjectWrapper<Transform> drawingToView = new ReadOnlyObjectWrapper<>(this, DRAWING_TO_VIEW_PROPERTY, new Scale());
     /**
      * The zoom factor.
      */
@@ -149,7 +149,7 @@ public class SimpleDrawingView implements DrawingView {
                     drawingPane.getTransforms().set(0, st);
                 }
             }
-            drawingToViewProperty.set(st);
+            drawingToView.set(st);
             updateHandles();
         }
     };
@@ -254,7 +254,7 @@ public class SimpleDrawingView implements DrawingView {
                 ;
         });
         node.setFocusTraversable(true);
-        focusedProperty.bind(node.focusedProperty());
+        focused.bind(node.focusedProperty());
 
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
@@ -291,12 +291,12 @@ public class SimpleDrawingView implements DrawingView {
 
     @Override
     public NonnullProperty<Drawing> drawingProperty() {
-        return drawingProperty;
+        return drawing;
     }
 
     @Override
     public NonnullProperty<Constrainer> constrainerProperty() {
-        return constrainerProperty;
+        return constrainer;
     }
 
     private InvalidationListener invalidationListener = new InvalidationListener() {
@@ -387,7 +387,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     private void updatePreferredSize() {
-        Rectangle2D r = drawingProperty.get().get(Drawing.BOUNDS);
+        Rectangle2D r = drawing.get().get(Drawing.BOUNDS);
         Rectangle2D visible = new Rectangle2D(max(r.getMinX(), 0), max(r.getMinY(), 0), (r.getWidth()
                 + max(r.getMinX(), 0)),
                 r.getHeight() + max(r.getMinY(), 0));
@@ -397,17 +397,17 @@ public class SimpleDrawingView implements DrawingView {
 
     @Override
     public ReadOnlyBooleanProperty focusedProperty() {
-        return focusedProperty.getReadOnlyProperty();
+        return focused.getReadOnlyProperty();
     }
 
     @Override
     public OptionalProperty<Tool> toolProperty() {
-        return toolProperty;
+        return tool;
     }
 
     @Override
     public OptionalProperty<Handle> activeHandleProperty() {
-        return activeHandleProperty;
+        return activeHandle;
     }
 
     private void updateTool(Optional<Tool> oldValue, Optional<Tool> newValue) {
@@ -429,7 +429,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     public Optional<Figure> findFigure(double vx, double vy) {
-        Drawing dr = drawingProperty.get();
+        Drawing dr = drawing.get();
         Figure f = findFigure((Parent) getNode(dr), viewToDrawing(vx, vy));
 
         return Optional.ofNullable(f);
@@ -457,7 +457,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     public Optional<Figure> findFigureBehind(double vx, double vy, Figure figureInWay) {
-        Drawing dr = drawingProperty.get();
+        Drawing dr = drawing.get();
         Figure f = findFigureBehind((Parent) getNode(dr), viewToDrawing(vx, vy), figureInWay);
 
         return Optional.ofNullable(f);
@@ -496,24 +496,27 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     @Override
-    public List<Figure> findFigures(double vx, double vy, double vwidth, double vheight) {
+    public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight) {
         double sf = 1 / zoomFactor.get();
         BoundingBox r = new BoundingBox(vx * sf, vy * sf, 0, vwidth * sf, vheight
                 * sf, 0);
         List<Figure> list = new LinkedList<Figure>();
-        findFigures((Parent) figureToNodeMap.get(getDrawing()), r, list);
+        findFiguresInside((Parent) figureToNodeMap.get(getDrawing()), r, list);
         return list;
+    }
+    @Override
+    public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight) {
+        return findFiguresInside(vx,vy,vwidth,vheight);
     }
 
     /**
-     * Finds a node at the given drawingProperty coordinates.
+     * Finds a node at the given drawing coordinates.
      *
      * @param p The parentProperty of the node, which already must contain the
      * point!
-     * @param p A point given in parentProperty coordinate system
-     * @return Returns the node
+     * @param p A point given in the drawing coordinate system
      */
-    private void findFigures(Parent p, Bounds pp, List<Figure> found) {
+    private void findFiguresInside(Parent p, Bounds pp, List<Figure> found) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -522,7 +525,7 @@ public class SimpleDrawingView implements DrawingView {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null) {
                     if (n instanceof Parent) {
-                        findFigures((Parent) n, pl, found);
+                        findFiguresInside((Parent) n, pl, found);
                     }
                 } else {
                     found.add(f);
@@ -533,12 +536,12 @@ public class SimpleDrawingView implements DrawingView {
 
     @Override
     public ReadOnlySetProperty<Figure> selectionProperty() {
-        return selectionProperty;
+        return selection;
     }
 
     @Override
     public ReadOnlyObjectProperty<Transform> drawingToViewProperty() {
-        return drawingToViewProperty.getReadOnlyProperty();
+        return drawingToView.getReadOnlyProperty();
     }
 
     @Override
