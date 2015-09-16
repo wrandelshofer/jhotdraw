@@ -74,7 +74,7 @@ import org.jhotdraw.draw.handle.SimpleHighlightHandle;
  */
 public interface Figure extends PropertyBean, Observable {
     // ----
-    // keys
+    // key declarations
     // ----
 
     /**
@@ -155,7 +155,7 @@ public interface Figure extends PropertyBean, Observable {
     public final static String PARENT_PROPERTY = "parent";
 
     // ----
-    // properties
+    // property fields
     // ----
     /**
      * The child figures.
@@ -198,7 +198,7 @@ public interface Figure extends PropertyBean, Observable {
     ObjectProperty<Figure> parentProperty();
 
     // ----
-    // Behaviors
+    // behavior methods
     // ----
     /**
      * The bounds that should be used for layout calculations for this figure.
@@ -345,7 +345,7 @@ public interface Figure extends PropertyBean, Observable {
         }
     }
     // ----
-    // Convenience Methods
+    // convenience methods
     // ----
 
     /**

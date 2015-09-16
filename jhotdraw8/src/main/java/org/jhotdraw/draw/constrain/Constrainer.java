@@ -24,30 +24,20 @@ import javafx.geometry.Rectangle2D;
  * @version $Id$
  */
 public interface Constrainer {
-
+    // ---
+    // constant declarations
+    // ---
     /**
      * A direction vector with distance of zero.
      */
     public final static Point2D DIRECTION_NEAREST = Point2D.ZERO;
 
-    /**
-     * Constrains the placement of a point towards the closest constraint in any
-     * direction.
-     * <p>
-     * This method changes the point which is passed as a parameter.
-     *
-     * @param p A point on the drawing.
-     * @return Returns the constrained point.
-     */
-    default Point2D constrainPoint(Point2D p) {
-        return translatePoint(p, DIRECTION_NEAREST);
-    }
-
+    // ---
+    // behavior methods
+    // ---
     /**
      * Snaps a point to the next constrained location in the specified
      * direction.
-     * <p>
-     * This method changes the point which is passed as a parameter.
      *
      * @param p A point on the drawing.
      * @param dir A direction vector. If the vector length is zero, then the
@@ -57,18 +47,16 @@ public interface Constrainer {
     public Point2D translatePoint(Point2D p, Point2D dir);
 
     /**
-     * Constrains the placement of a rectangle towards the closest constraint in
-     * any direction.
-     * <p>
-     * This method changes the location of the rectangle which is passed as a
-     * parameter. This method does not change the size of the rectangle.
+     * Snaps an angle (in degrees) to the closest constrained orientation in the
+     * specified direction.
      *
-     * @param r A rectangle on the drawing.
-     * @return Returns the constrained rectangle.
+     * @param angle The angle (in degrees).
+     * @param dir A direction. If the direction is zero, then the nearest
+     * constrained location is used.
+     * @return The closest constrained angle (in radians) in the specified
+     * direction.
      */
-    default Rectangle2D constrainRectangle(Rectangle2D r) {
-        return translateRectangle(r, DIRECTION_NEAREST);
-    }
+    public double translateAngle(double angle, double dir);
 
     /**
      * Snaps a rectangle into the the closest constraint position in the
@@ -84,6 +72,31 @@ public interface Constrainer {
      */
     public Rectangle2D translateRectangle(Rectangle2D r, Point2D dir);
 
+    // ---
+    // convenience methods
+    // ---
+    /**
+     * Constrains the placement of a point towards the closest constraint in any
+     * direction.
+     *
+     * @param p A point on the drawing.
+     * @return Returns the constrained point.
+     */
+    default Point2D constrainPoint(Point2D p) {
+        return translatePoint(p, DIRECTION_NEAREST);
+    }
+
+    /**
+     * Constrains the placement of a rectangle towards the closest constraint in
+     * any direction.
+     *
+     * @param r A rectangle on the drawing.
+     * @return Returns the constrained rectangle.
+     */
+    default Rectangle2D constrainRectangle(Rectangle2D r) {
+        return translateRectangle(r, DIRECTION_NEAREST);
+    }
+
     /**
      * Constrains the given angle (in degrees). This method changes the angle
      * which is passed as a parameter.
@@ -94,17 +107,4 @@ public interface Constrainer {
     default double constrainAngle(double angle) {
         return translateAngle(angle, 0);
     }
-
-    /**
-     * Snaps an angle (in degrees) to the closest constrained orientation in the
-     * specified direction.
-     *
-     * @param angle The angle (in degrees).
-     * @param dir A direction. If the direction is zero, then the nearest
-     * constrained location is used.
-     * @return The closest constrained angle (in radians) in the specified
-     * direction.
-     */
-    public double translateAngle(double angle, double dir);
-
 }
