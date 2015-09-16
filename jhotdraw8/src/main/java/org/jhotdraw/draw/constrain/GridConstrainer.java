@@ -8,6 +8,7 @@ package org.jhotdraw.draw.constrain;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import static java.lang.Math.*;
+import org.jhotdraw.draw.Figure;
 
 /**
  * GridConstrainer.
@@ -60,7 +61,7 @@ public class GridConstrainer implements Constrainer {
     }
 
     @Override
-    public Point2D translatePoint(Point2D p, Point2D dir) {
+    public Point2D translatePoint(Figure f, Point2D p, Point2D dir) {
         double tx = (width == 0) ? p.getX() : (p.getX() - x) / width;
         double ty = (height == 0) ? p.getY() : (p.getY() - y) / height;
 
@@ -83,7 +84,7 @@ public class GridConstrainer implements Constrainer {
     }
 
     @Override
-    public Rectangle2D translateRectangle(Rectangle2D r, Point2D dir) {
+    public Rectangle2D translateRectangle(Figure f, Rectangle2D r, Point2D dir) {
         double tx = (width == 0) ? r.getMinX() : (r.getMinX() - x) / width;
         double ty = (height == 0) ? r.getMinY() : (r.getMinY() - y) / height;
         double tmaxx = (width == 0) ? r.getMaxX() : (r.getMaxX() - x) / width;
@@ -108,7 +109,7 @@ public class GridConstrainer implements Constrainer {
     }
 
     @Override
-    public double translateAngle(double angle, double dir) {
+    public double translateAngle(Figure f, double angle, double dir) {
         double ta = angle / theta;
 
         if (Double.isNaN(dir) || dir == 0) {

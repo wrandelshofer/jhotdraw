@@ -53,7 +53,7 @@ public class CreationTool extends AbstractTool {
         x2 = x1;
         y2 = y1;
         figure = factory.get();
-        Point2D c = dv.getConstrainer().constrainPoint(dv.viewToDrawing(new Point2D(x1, y1)));
+        Point2D c = dv.getConstrainer().constrainPoint(figure,dv.viewToDrawing(new Point2D(x1, y1)));
         figure.reshape(c.getX(), c.getY(), 1, 1);
         dv.getDrawing().add(figure);
     }
@@ -62,8 +62,8 @@ public class CreationTool extends AbstractTool {
     protected void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (figure != null) {
             if (abs(x2 - x1)<minSize && abs(y2 - y1)<minSize) {
-                Point2D c1 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(x1, y1));
-                Point2D c2 = dv.getConstrainer().translatePoint(dv.viewToDrawing(x1+minSize, y1+minSize),Constrainer.DIRECTION_NEAREST);
+                Point2D c1 = dv.getConstrainer().constrainPoint(figure,dv.viewToDrawing(x1, y1));
+                Point2D c2 = dv.getConstrainer().translatePoint(figure,dv.viewToDrawing(x1+minSize, y1+minSize),Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
                     c2 = new Point2D(c1.getX() + 10, c1.getY() + 10);
                 }
@@ -80,8 +80,8 @@ public class CreationTool extends AbstractTool {
         if (figure != null) {
             x2 = event.getX();
             y2 = event.getY();
-            Point2D c1 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(x1, y1));
-            Point2D c2 = dv.getConstrainer().constrainPoint(dv.viewToDrawing(x2, y2));
+            Point2D c1 = dv.getConstrainer().constrainPoint(figure,dv.viewToDrawing(x1, y1));
+            Point2D c2 = dv.getConstrainer().constrainPoint(figure,dv.viewToDrawing(x2, y2));
             figure.reshape(c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY() - c1.getY());
         }
     }
