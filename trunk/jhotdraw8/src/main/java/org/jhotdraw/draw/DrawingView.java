@@ -207,7 +207,18 @@ public interface DrawingView {
      * @param vheight height in view coordinates
      * @return A figure or empty
      */
-    public List<Figure> findFigures(double vx, double vy, double vwidth, double vheight);
+    public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight);
+    /**
+     * Returns all figures that intersect the specified bounds given in view
+     * coordinates. The figures are returned in Z-order from back to front.
+     *
+     * @param vx x in view coordinates
+     * @param vy y in view coordinates
+     * @param vwidth width in view coordinates
+     * @param vheight height in view coordinates
+     * @return A figure or empty
+     */
+    public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight);
     // ---
     // convenience methods
     // ---
