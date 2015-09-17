@@ -23,17 +23,22 @@ import org.jhotdraw.collection.Key;
 
 /**
  * AbstractView.
+ *
  * @author Werner Randelshofer
  */
 public abstract class AbstractView extends AbstractDisableable implements View {
-protected ObjectProperty<Application> application = new SimpleObjectProperty<>();
+
+    protected ObjectProperty<Application> application = new SimpleObjectProperty<>();
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
-    /** Disabled is bound to disable. Subclasses can assign a different binding. */
+    /**
+     * Disabled is bound to disable. Subclasses can assign a different binding.
+     */
     protected final BooleanProperty modified = new SimpleBooleanProperty();
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
-    protected final  MapProperty<Key<?>,  Object> values = new SimpleMapProperty<>(FXCollections.observableHashMap());
-protected final StringProperty title = new SimpleStringProperty();
+    protected final MapProperty<Key<?>, Object> values = new SimpleMapProperty<>(FXCollections.observableHashMap());
+    protected final StringProperty title = new SimpleStringProperty();
     private final IntegerProperty disambiguation = new SimpleIntegerProperty();
+
     @Override
     public HierarchicalMap<String, Action> getActionMap() {
         return actionMap;
@@ -58,19 +63,21 @@ protected final StringProperty title = new SimpleStringProperty();
     public void clearModified() {
         modified.set(false);
     }
-    
+
     protected void markAsModified() {
         modified.set(true);
     }
-    
+
     @Override
     public ObjectProperty<URI> uriProperty() {
         return uri;
     }
+
     @Override
     public ObjectProperty<Application> applicationProperty() {
         return application;
     }
+
     @Override
     public MapProperty<Key<?>, Object> properties() {
         return values;
@@ -78,6 +85,22 @@ protected final StringProperty title = new SimpleStringProperty();
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public void stop() {
+    }
+
+    @Override
+    public void deactivate() {
+    }
+
+    @Override
+    public void activate() {
+    }
+
+    @Override
+    public void start() {
     }
 
 }

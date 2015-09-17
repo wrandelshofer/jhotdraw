@@ -9,9 +9,11 @@
 package org.jhotdraw.app.action.file;
 
 import java.util.Optional;
+import javafx.event.EventHandler;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
+import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -34,7 +36,7 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
         labels.configureAction(this, "file.clear");
     }
     
-    @Override public void doIt(final View view) {
-        view.clear();
+    @Override public void doIt(final View view, EventHandler<TaskCompletionEvent> callback) {
+        view.clear(callback);
     }
 }

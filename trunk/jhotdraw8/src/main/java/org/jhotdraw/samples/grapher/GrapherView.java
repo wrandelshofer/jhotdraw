@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,7 +20,6 @@ import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.draw.SimpleDrawingView;
-import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -35,7 +33,6 @@ import org.jhotdraw.draw.gui.ZoomToolbar;
 import org.jhotdraw.draw.io.DefaultFigureFactory;
 import org.jhotdraw.draw.io.FigureFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
-import org.jhotdraw.draw.shape.CircleFigure;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.TextFigure;
@@ -61,7 +58,7 @@ public class GrapherView extends AbstractView {
     private DrawingEditor editor;
 
     @Override
-    public void init() {
+    public void init(EventHandler<TaskCompletionEvent> callback) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -150,7 +147,7 @@ public class GrapherView extends AbstractView {
     }
 
     @Override
-    public void clear() {
+    public void clear(EventHandler<TaskCompletionEvent> callback) {
         drawingView.setDrawing(new SimpleDrawing());
     }
 

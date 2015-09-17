@@ -8,11 +8,13 @@
 package org.jhotdraw.app.action.file;
 
 import java.util.Optional;
+import javafx.event.EventHandler;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
+import org.jhotdraw.concurrent.TaskCompletionEvent;
 
 /**
  * Closes the active view after letting the user save unsaved changes.
@@ -40,9 +42,10 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
     }
 
     @Override
-    protected void doIt(View view) {
+    protected void doIt(View view, EventHandler<TaskCompletionEvent> callback) {
         if (view != null) {
             app.remove(view);
         }
+        callback.handle(new TaskCompletionEvent());
     }
 }
