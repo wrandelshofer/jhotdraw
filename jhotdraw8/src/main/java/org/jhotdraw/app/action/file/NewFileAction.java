@@ -25,7 +25,9 @@ public class NewFileAction extends AbstractApplicationAction {
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.new";
 
-    /** Creates a new instance. 
+    /**
+     * Creates a new instance.
+     *
      * @param app the application
      */
     public NewFileAction(Application app) {
@@ -52,8 +54,9 @@ public class NewFileAction extends AbstractApplicationAction {
              newView.setMultipleOpenId(multiOpenId);
              */
             app.add(newView);
-            newView.clear();
-            newView.clearModified();
+            newView.clear(e -> {
+                newView.clearModified();
+            });
         });
     }
 }

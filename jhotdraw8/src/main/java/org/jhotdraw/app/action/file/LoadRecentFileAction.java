@@ -9,10 +9,12 @@ package org.jhotdraw.app.action.file;
 
 import java.util.Optional;
 import java.net.URI;
+import javafx.event.EventHandler;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.app.action.Action;
+import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
 
@@ -169,7 +171,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
     }*/
 
     @Override
-    protected void doIt(View p) {
+    protected void doIt(View p, EventHandler<TaskCompletionEvent> callback) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

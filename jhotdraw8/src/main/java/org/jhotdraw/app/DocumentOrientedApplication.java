@@ -79,6 +79,7 @@ import org.jhotdraw.util.Resources;
 
 /**
  * DocumentOrientedApplication.
+ *
  * @author Werner Randelshofer
  */
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
@@ -150,11 +151,16 @@ public class DocumentOrientedApplication extends javafx.application.Application 
 
             @Override
             protected void succeeded(View v) {
-                v.init();
-                v.setTitle(getLabels().getString("unnamedFile"));
-                HierarchicalMap<String, Action> map = v.getActionMap();
-                map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, Optional.of(v)));
-                callback.accept(v);
+                v.getActionMap().setParent(Optional.of(getActionMap()));
+                v.setApplication(DocumentOrientedApplication.this);
+                v.init(e -> {
+                   // FIXME - check if initialisation succeeded!
+
+                    v.setTitle(getLabels().getString("unnamedFile"));
+                    HierarchicalMap<String, Action> map = v.getActionMap();
+                    map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, Optional.of(v)));
+                    callback.accept(v);
+                });
             }
         };
         execute(t);
@@ -204,10 +210,12 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         launch(args);
     }
 
-    /** Called immediately after a view has been added to the views set.
-     * @param view the view */
+    /**
+     * Called immediately after a view has been added to the views set.
+     *
+     * @param view the view
+     */
     protected void onViewAdded(View view) {
-        view.getActionMap().setParent(Optional.of(getActionMap()));
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
@@ -217,7 +225,6 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             borderPane.setTop(mb);
         }
         Scene scene = new Scene(borderPane);
-        view.setApplication(this);
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> {
             event.consume();
@@ -278,26 +285,34 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             }
         }
         stage.show();
+        view.start();
     }
 
-    /** Called immediately after a view has been removed from the views set.
-     * @param obs the observable */
+    /**
+     * Called immediately after a view has been removed from the views set.
+     *
+     * @param obs the observable
+     */
     protected void onTitleChanged(Observable obs) {
         disambiguateViews();
     }
 
-    /** Called immediately after a view has been removed from the views set.
-     * @param view the view */
+    /**
+     * Called immediately after a view has been removed from the views set.
+     *
+     * @param view the view
+     */
     protected void onViewRemoved(View view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
-        view.getActionMap().setParent(Optional.empty());
-        view.setApplication(null);
+        view.stop();
         Optional<ChangeListener> focusListener = view.get(FOCUS_LISTENER_KEY);
         if (focusListener.isPresent()) {
             stage.focusedProperty().removeListener(focusListener.get());
         }
         stage.close();
         view.dispose();
+        view.setApplication(null);
+        view.getActionMap().setParent(Optional.empty());
 
         // Auto close feature
         if (views.isEmpty() && !isSystemMenuSupported) {
@@ -305,15 +320,21 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         }
     }
 
-    /** Gets the resource bundle.
-     * @return the resource bundle */
+    /**
+     * Gets the resource bundle.
+     *
+     * @return the resource bundle
+     */
     protected Resources getLabels() {
         return Resources.getBundle("org.jhotdraw.app.Labels");
     }
 
-    /** Creates a menu bar.
+    /**
+     * Creates a menu bar.
+     *
      * @param actions the action map
-     * @return the menu bar */
+     * @return the menu bar
+     */
     protected MenuBar createMenuBar(HierarchicalMap<String, Action> actions) {
         MenuBar mb = createMenuBar();
 
