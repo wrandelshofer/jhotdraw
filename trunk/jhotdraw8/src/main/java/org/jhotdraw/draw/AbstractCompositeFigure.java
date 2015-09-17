@@ -37,9 +37,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
                     final int to = c.getTo();
                     final ObservableList<? extends Figure> list = c.getList();
                     if (c.wasPermutated()) {
-                        fireInvalidated();
                     } else if (c.wasUpdated()) {
-                        fireInvalidated();
                     } else {
                         if (c.wasRemoved()) {
                             final List<? extends Figure> removed = c.getRemoved();
@@ -50,14 +48,13 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
                         if (c.wasAdded()) {
                             for (int i = from; i < to; i++) {
                                 Figure f = list.get(i);
-                                Figure oldParent = f.parentProperty().get();
+                                Figure oldParent = f.getParent();
                                 if (oldParent != null) {
                                     oldParent.remove(f);
                                 }
                                 f.parentProperty().set(AbstractCompositeFigure.this);
                             }
                         }
-                        fireInvalidated();
                     }
                 }
             }
@@ -65,15 +62,12 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public ReadOnlyListProperty<Figure> childrenProperty() {
+    public final ReadOnlyListProperty<Figure> childrenProperty() {
         return children;
     }
 
-    /**
-     * Whether children may be added to this figure.
-     */
     @Override
-    public boolean allowsChildren() {
+    public final boolean allowsChildren() {
         return true;
     }
 

@@ -35,13 +35,13 @@ public class SimpleDrawingModel implements DrawingModel {
         public void addFigure(Figure figure) {
             figure.childrenProperty().addListener((ListChangeListener<Figure>) this);
             figure.properties().addListener((MapChangeListener<Key<?>, Object>) this);
-            figure.addListener((InvalidationListener) this);
+            //figure.addListener((InvalidationListener) this);
         }
 
         public void removeFigure(Figure figure) {
             figure.childrenProperty().removeListener((ListChangeListener<Figure>) this);
             figure.properties().removeListener((MapChangeListener<Key<?>, Object>) this);
-            figure.removeListener((InvalidationListener) this);
+            //figure.removeListener((InvalidationListener) this);
         }
 
         @Override

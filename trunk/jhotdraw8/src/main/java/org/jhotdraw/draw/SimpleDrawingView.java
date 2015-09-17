@@ -364,7 +364,6 @@ public class SimpleDrawingView implements DrawingView {
         LinkedList<Figure> update = new LinkedList<>(dirtyFigures);
         dirtyFigures.clear();
         for (Figure f : update) {
-            f.validate();
             f.updateNode(this, getNode(f));
         }
         for (Handle h : selectionHandles) {
