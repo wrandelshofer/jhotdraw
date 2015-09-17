@@ -59,7 +59,6 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         // We must update the start and end point when ever one of
         // the connected figures or one of the connectors changes
         InvalidationListener ilStart = observable -> {
-            invalidate();
             //updateStart();
         };
         ChangeListener<Observable> clStart = (observable, oldValue, newValue) -> {
@@ -68,12 +67,10 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
             }
             if (newValue != null) {
                 newValue.addListener(ilStart);
-                invalidate();
                 //updateStart();
             }
         };
         InvalidationListener ilEnd = observable -> {
-            invalidate();
             //updateEnd();
         };
         ChangeListener<Observable> clEnd = (observable, oldValue, newValue) -> {
@@ -82,15 +79,14 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
             }
             if (newValue != null) {
                 newValue.addListener(ilEnd);
-                invalidate();
                 //updateEnd();
             }
         };
 
         startFigureProperty = START_FIGURE.propertyAt(properties());
-        startFigureProperty.addListener(clStart);
+        //startFigureProperty.addListener(clStart);
         endFigureProperty = END_FIGURE.propertyAt(properties());
-        endFigureProperty.addListener(clEnd);
+        //endFigureProperty.addListener(clEnd);
         startConnectorProperty = START_CONNECTOR.propertyAt(properties());
         startConnectorProperty.addListener(clStart);
         endConnectorProperty = END_CONNECTOR.propertyAt(properties());
@@ -146,7 +142,7 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         lineNode.setEndY(end.getY());
     }
 
-    @Override
+    
     protected void updateState() {
         updateStart();
         updateEnd();

@@ -9,16 +9,12 @@ package org.jhotdraw.draw;
 import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point3D;
@@ -29,7 +25,6 @@ import javafx.scene.effect.Effect;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.handle.Handle;
@@ -42,7 +37,7 @@ import org.jhotdraw.draw.handle.SimpleHighlightHandle;
  * line.
  * <p>
  * The state of a figure is represented by its properties. A figure supports an
- * open ended number of properties which can be accessed using {@code Key}s.
+ * open ended number of properties which can be accessed using {@code FigureKey}s.
  * <p>
  * A property value may depend on other property values in the same figure or
  * in other figures. Since recomputing property values may be time consuming,
@@ -72,7 +67,7 @@ import org.jhotdraw.draw.handle.SimpleHighlightHandle;
  *
  * @author Werner Randelshofer @version $Id$
  */
-public interface Figure extends PropertyBean, Observable {
+public interface Figure extends PropertyBean {
     // ----
     // key declarations
     // ----
@@ -83,14 +78,14 @@ public interface Figure extends PropertyBean, Observable {
      * <p>
      * Default value: {@code SRC_OVER}.
      */
-    public static Key<BlendMode> BLEND_MODE = new Key<>("blendMode", BlendMode.class, BlendMode.SRC_OVER);
+    public static FigureKey<BlendMode> BLEND_MODE = new FigureKey<BlendMode>("blendMode", BlendMode.class, BlendMode.SRC_OVER, DirtyBits.NODE);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
      * <p>
      * Default value: {@code null}.
      */
-    public static Key<Effect> EFFECT = new Key<>("effect", Effect.class, null);
+    public static FigureKey<Effect> EFFECT = new FigureKey<>("effect", Effect.class, null, DirtyBits.NODE);
     /**
      * Specifies the opacity of the figure. A figure with {@code 0} opacity is
      * completely translucent. A figure with {@code 1} opacity is completely
@@ -101,46 +96,46 @@ public interface Figure extends PropertyBean, Observable {
      * <p>
      * Default value: {@code 1}.
      */
-    public static Key<Double> OPACITY = new Key<>("opacity", Double.class, 1.0);
+    public static FigureKey<Double> OPACITY = new FigureKey<>("opacity", Double.class, 1.0, DirtyBits.NODE);
     /**
      * Defines the angle of rotation around the center of the figure in degrees.
      * Default value: {@code 0}.
      */
-    public static Key<Double> ROTATE = new Key<>("rotate", Double.class, 0.0);
+    public static FigureKey<Double> ROTATE = new FigureKey<>("rotate", Double.class, 0.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
     /**
      * Defines the rotation axis used. Default value: {@code Rotate.Z_AXIS}.
      */
-    public static Key<Point3D> ROTATION_AXIS = new Key<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
+    public static FigureKey<Point3D> ROTATION_AXIS = new FigureKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static Key<Double> SCALE_X = new Key<>("scaleX", Double.class, 1.0);
+    public static FigureKey<Double> SCALE_X = new FigureKey<>("scaleX", Double.class, 1.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static Key<Double> SCALE_Y = new Key<>("scaleY", Double.class, 1.0);
+    public static FigureKey<Double> SCALE_Y = new FigureKey<>("scaleY", Double.class, 1.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
     /**
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static Key<Double> SCALE_Z = new Key<>("scaleZ", Double.class, 1.0);
+    public static FigureKey<Double> SCALE_Z = new FigureKey<>("scaleZ", Double.class, 1.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
     /**
      * Defines the translation on the x axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static Key<Double> TRANSLATE_X = new Key<>("translateX", Double.class, 0.0);
+    public static FigureKey<Double> TRANSLATE_X = new FigureKey<>("translateX", Double.class, 0.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
     /**
      * Defines the translation on the y axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static Key<Double> TRANSLATE_Y = new Key<>("translateY", Double.class, 0.0);
+    public static FigureKey<Double> TRANSLATE_Y = new FigureKey<>("translateY", Double.class, 0.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
     /**
      * Defines the translation on the z axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static Key<Double> TRANSLATE_Z = new Key<>("translateZ", Double.class, 0.0);
+    public static FigureKey<Double> TRANSLATE_Z = new FigureKey<>("translateZ", Double.class, 0.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
 
     // ----
     // property names
@@ -191,6 +186,12 @@ public interface Figure extends PropertyBean, Observable {
      * If this figure has not been added as a child to another figure, then this
      * variable will be null.
      * </p>
+     * By convention the parent is set exclusively by a composite figure on
+     * its child figures.
+     * The composite figure sets parent to itself on a child immediately
+     * after the child figure has been added to the composite figure.
+     * The composite figure sets parent to {@code null} on a child immediately
+     * after the child figure has been removed from the composite figure.
      *
      * @return the parent property, with {@code getBean()} returning this
      * figure, and {@code getName()} returning {@code PARENT_PROPERTY}.
@@ -377,6 +378,8 @@ public interface Figure extends PropertyBean, Observable {
 
     /**
      * Returns the parent figure.
+     * <p>
+     * Note that there is no convenience method named {@code setParent}.
      *
      * @return parent figure or null, if the figure has no parent.
      */
@@ -385,7 +388,7 @@ public interface Figure extends PropertyBean, Observable {
     }
 
     /**
-     * Updates a figure node with all applicable {@code Key}s defined in this
+     * Updates a figure node with all applicable {@code FigureKey}s defined in this
      * interface.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
@@ -405,17 +408,6 @@ public interface Figure extends PropertyBean, Observable {
         node.setTranslateY(get(TRANSLATE_Y));
         node.setTranslateZ(get(TRANSLATE_Z));
     }
-
-    /** Whether the state of the figure is valid.
-     *
-     * @return true if the state is valid */
-    boolean isValid();
-
-    /** Makes the state of the figure valid.
-     * <p>
-     * {@code isValid} must return true when this method has been completed.
-     */
-    void validate();
 
     // ---
     // static methods
@@ -440,8 +432,8 @@ public interface Figure extends PropertyBean, Observable {
         try {
             HashSet<Key<?>> keys = new HashSet<>();
             for (Field f : c.getFields()) {
-                if (Key.class.isAssignableFrom(f.getType())) {
-                    Key<?> k = (Key<?>) f.get(null);
+                if (FigureKey.class.isAssignableFrom(f.getType())) {
+                    FigureKey<?> k = (FigureKey<?>) f.get(null);
                     keys.add(k);
                 }
             }

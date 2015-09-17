@@ -19,17 +19,15 @@ import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
  */
 public abstract class AbstractLeafFigure extends AbstractFigure {
 
-    private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this, CHILDREN_PROPERTY);
+    private static final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(null, CHILDREN_PROPERTY);
 
     @Override
-    public ReadOnlyListProperty<Figure> childrenProperty() {
+    public final ReadOnlyListProperty<Figure> childrenProperty() {
         return children;
     }
 
-    /**
-     * Whether childrenProperty may be added to this figure.
-     */
-    public boolean allowsChildren() {
+    @Override
+    public final boolean allowsChildren() {
         return false;
     }
 

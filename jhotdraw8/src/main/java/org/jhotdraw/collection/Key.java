@@ -98,7 +98,7 @@ public class Key<T> implements Serializable {
      * type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public Key(String key, Class<?> clazz, String typeParameters, T defaultValue) {
+    public Key(String key, Class<T> clazz, String typeParameters, T defaultValue) {
         if (key == null) {
             throw new IllegalArgumentException("key is null");
         }

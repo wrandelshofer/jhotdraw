@@ -23,27 +23,6 @@ public abstract class AbstractFigure extends SimplePropertyBean implements Figur
 
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY);
 
-    protected final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport();
-
-    {
-        properties.addListener((InvalidationListener) (Observable l) -> {
-            invalidate();
-        });
-    }
-
-    @Override
-    public void addListener(InvalidationListener listener) {
-        invalidationListeners.addListener(listener);
-    }
-
-    @Override
-    public void removeListener(InvalidationListener listener) {
-        invalidationListeners.removeListener(listener);
-    }
-
-    /** Whether the state of the figure is valid. */
-    private boolean valid = true;
-
     @Override
     public ObjectProperty<Figure> parentProperty() {
         return parent;
@@ -53,41 +32,5 @@ public abstract class AbstractFigure extends SimplePropertyBean implements Figur
     @Override
     public boolean isSelectable() {
         return true;
-    }
-
-    /** Notifies all registered invalidation listeners. */
-    public void fireInvalidated() {
-        invalidationListeners.fire(l -> l.invalidated(this));
-    }
-
-    /** Marks the state of the figure as invalid. */
-    protected final void invalidate() {
-        if (valid) {
-            valid = false;
-            fireInvalidated();
-        }
-    }
-
-    @Override
-    public final boolean isValid() {
-        return valid;
-    }
-
-    @Override
-    public final void validate() {
-        if (!valid) {
-            updateState();
-            valid = true;
-        }
-    }
-
-    /** This method is invoked by validate when the state of the figure is
-     * invalid. 
-     * <p>
-     * This implementation is empty. Subclasses which override this method
-     * do not need to call super.
-     */
-    protected void updateState() {
-        
     }
 }
