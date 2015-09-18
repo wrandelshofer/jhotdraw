@@ -2,13 +2,12 @@
  * @(#)AbstractSaveUnsavedChangesAction.java
  *
  * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
 package org.jhotdraw.app.action;
 
 import java.net.URI;
-import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -47,12 +46,12 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
     /**
      *
      */
-    public final static Key<Optional<URIChooser>> SAVE_CHOOSER_KEY = new Key<Optional<URIChooser>>(
-            "saveChooser", Optional.class, "<URIChooser>", Optional.empty());
+    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new Key<URIChooser>(
+            "saveChooser", URIChooser.class, null);
 
     private static final long serialVersionUID = 1L;
 
-    private Optional<Node> oldFocusOwner = Optional.empty();
+    private Node oldFocusOwner = null;
 
     /**
      * Creates a new instance.
@@ -60,30 +59,28 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
      * @param app the application
      * @param view the view
      */
-    public AbstractSaveUnsavedChangesAction(Application app, Optional<View> view) {
+    public AbstractSaveUnsavedChangesAction(Application app, View view) {
         super(app, view);
     }
 
     @Override
     public void handle(ActionEvent evt) {
         Application app = getApplication();
-        Optional<View> av = getActiveView();
-        if (av.isPresent()) {
-            handle(av.get());
-        } else {
-            if (isMayCreateView()) {
-                app.getModel().createView(v -> {
-                    app.add(v);
-                    handle(v);
-                });
-            }
+        View av = getActiveView();
+        if (av != null) {
+            handle(av);
+        } else if (isMayCreateView()) {
+            app.getModel().createView(v -> {
+                app.add(v);
+                handle(v);
+            });
         }
     }
 
     public void handle(View v) {
         if (!v.isDisabled()) {
             final Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
-            /*Window wAncestor = v.getNode().getScene().getWindow();*/
+            /* Window wAncestor = v.getNode().getScene().getWindow(); */
             oldFocusOwner = getFocusOwner(v.getNode());
             v.addDisabler(this);
             if (v.isModified()) {
@@ -103,29 +100,29 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                     ButtonType result = alert.getResult();
                     if (result != null) {
                         switch (result.getButtonData()) {
-                        default:
-                        case CANCEL_CLOSE:
-                            v.removeDisabler(this);
-                            if (oldFocusOwner.isPresent()) {
-                                oldFocusOwner.get().requestFocus();
-                            }
-                            break;
-                        case NO:
-                            doIt(v, e -> {
-                                // FIXME check success
+                            default:
+                            case CANCEL_CLOSE:
                                 v.removeDisabler(this);
-                                if (oldFocusOwner.isPresent()) {
-                                    oldFocusOwner.get().requestFocus();
+                                if (oldFocusOwner != null) {
+                                    oldFocusOwner.requestFocus();
                                 }
-                            });
-                            break;
-                        case YES:
-                            // this is a little bit quirky.
-                            // saveView may start a worker thread
-                            // and thus will enable the view at
-                            // a later point in time.
-                            saveView(v);
-                            break;
+                                break;
+                            case NO:
+                                doIt(v, e -> {
+                                    // FIXME check success
+                                    v.removeDisabler(this);
+                                    if (oldFocusOwner != null) {
+                                        oldFocusOwner.requestFocus();
+                                    }
+                                });
+                                break;
+                            case YES:
+                                // this is a little bit quirky.
+                                // saveView may start a worker thread
+                                // and thus will enable the view at
+                                // a later point in time.
+                                saveView(v);
+                                break;
                         }
                     }
                 });
@@ -137,28 +134,27 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                 doIt(v, e -> {
                     // FIXME check success
                     v.removeDisabler(this);
-                    if (oldFocusOwner.isPresent()) {
-                        oldFocusOwner.get().requestFocus();
+                    if (oldFocusOwner != null) {
+                        oldFocusOwner.requestFocus();
                     }
                 });
             }
         }
     }
 
-    protected Optional<
-    Node> getFocusOwner(Node node) {
+    protected Node getFocusOwner(Node node) {
 
-        Optional<Scene> scene = Optional.ofNullable(node.getScene());
-        return Optional.ofNullable(scene.isPresent() ? scene.get().getFocusOwner() : null);
+        Scene scene = node.getScene();
+        return scene == null ? null : scene.getFocusOwner();
     }
 
     protected URIChooser getChooser(View view) {
-        Optional<URIChooser> chsr = view.get(SAVE_CHOOSER_KEY);
-        if (!chsr.isPresent()) {
-            chsr = Optional.of(getApplication().getModel().createSaveChooser());
+        URIChooser chsr = view.get(SAVE_CHOOSER_KEY);
+        if (chsr == null) {
+            chsr = getApplication().getModel().createSaveChooser();
             view.set(SAVE_CHOOSER_KEY, chsr);
         }
-        return chsr.get();
+        return chsr;
     }
 
     protected void saveView(final View v) {
@@ -166,17 +162,17 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
 
-            Optional<URI> uri = Optional.empty();
+            URI uri = null;
             Outer:
             while (true) {
                 uri = chooser.showDialog(v.getNode());
 
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
-                if (uri.isPresent()
+                if (uri != null
                         && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (View vi : app.views()) {
-                        if (vi != v && v.getURI().equals(uri.get())) {
+                        if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
                             alert.showAndWait();
@@ -186,12 +182,12 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                 }
                 break;
             }
-            if (uri.isPresent()) {
-                saveViewToURI(v, uri.get(), chooser);
+            if (uri != null) {
+                saveViewToURI(v, uri, chooser);
             }
             v.removeDisabler(this);
-            if (oldFocusOwner.isPresent()) {
-                oldFocusOwner.get().requestFocus();
+            if (oldFocusOwner != null) {
+                oldFocusOwner.requestFocus();
             }
         } else {
             saveViewToURI(v, v.getURI(), null);
@@ -201,35 +197,35 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
     protected void saveViewToURI(final View v, final URI uri, final URIChooser chooser) {
         v.write(uri, event -> {
             switch (event.getState()) {
-            case CANCELLED:
-                v.removeDisabler(this);
-                if (oldFocusOwner.isPresent()) {
-                    oldFocusOwner.get().requestFocus();
-                }
-                break;
-            case FAILED:
-                Throwable value = event.getException();
-                String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
-                Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
-                Alert alert = new Alert(Alert.AlertType.ERROR,
-                        ((message == null) ? "" : message));
-                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
-                alert.showAndWait();
-                v.removeDisabler(this);
-                if (oldFocusOwner.isPresent()) {
-                    oldFocusOwner.get().requestFocus();
-                }
-                break;
-            case SUCCEEDED:
-                v.setURI(uri);
-                v.clearModified();
-                v.setTitle(URIUtil.getName(uri));
-                app.addRecentURI(uri);
-                doIt(v, e -> {
-                });
-                break;
-            default:
-                break;
+                case CANCELLED:
+                    v.removeDisabler(this);
+                    if (oldFocusOwner != null) {
+                        oldFocusOwner.requestFocus();
+                    }
+                    break;
+                case FAILED:
+                    Throwable value = event.getException();
+                    String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
+                    Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+                    Alert alert = new Alert(Alert.AlertType.ERROR,
+                            ((message == null) ? "" : message));
+                    alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
+                    alert.showAndWait();
+                    v.removeDisabler(this);
+                    if (oldFocusOwner != null) {
+                        oldFocusOwner.requestFocus();
+                    }
+                    break;
+                case SUCCEEDED:
+                    v.setURI(uri);
+                    v.clearModified();
+                    v.setTitle(URIUtil.getName(uri));
+                    app.addRecentURI(uri);
+                    doIt(v, e -> {
+                    });
+                    break;
+                default:
+                    break;
             }
         });
     }

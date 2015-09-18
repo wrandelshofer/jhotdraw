@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action;
 
-import java.util.Optional;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import org.jhotdraw.app.Application;

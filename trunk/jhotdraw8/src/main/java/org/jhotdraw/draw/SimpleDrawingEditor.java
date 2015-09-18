@@ -6,7 +6,6 @@
 package org.jhotdraw.draw;
 
 import java.util.HashSet;
-import java.util.Optional;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
@@ -17,7 +16,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.draw.tool.Tool;
 
 /**
@@ -39,8 +37,8 @@ public class SimpleDrawingEditor implements DrawingEditor {
         drawingViews.addListener((SetChangeListener.Change<? extends DrawingView> change) -> {
             if (change.wasRemoved()) {
                 change.getElementRemoved().focusedProperty().removeListener(focusListener);
-                if (getActiveDrawingView().isPresent()) {
-                    if (getActiveDrawingView().get() == change.getElementRemoved()) {
+                if (getActiveDrawingView()!=null) {
+                    if (getActiveDrawingView() == change.getElementRemoved()) {
                         setActiveDrawingView(drawingViews.isEmpty() ? null : drawingViews.get().iterator().next());
                     }
                 }
@@ -54,14 +52,14 @@ public class SimpleDrawingEditor implements DrawingEditor {
         });
     }
 
-    private final OptionalProperty<DrawingView> activeDrawingView = new OptionalProperty<>(this,"activeDrawingView");
-    private final OptionalProperty<Tool> activeTool = new OptionalProperty<Tool>(this,"activeTool") {
+    private final ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this,"activeDrawingView");
+    private final ObjectProperty<Tool> activeTool = new SimpleObjectProperty<Tool>(this,"activeTool") {
 
         @Override
-        public void set(Optional<Tool> newValue) {
+        public void set(Tool newValue) {
             super.set(newValue);
-            if (getActiveDrawingView().isPresent()) {
-                getActiveDrawingView().get().setTool(newValue.orElse(null));
+            if (getActiveDrawingView()!=null) {
+                getActiveDrawingView().setTool(newValue);
             }
         }
     };
@@ -72,12 +70,12 @@ public class SimpleDrawingEditor implements DrawingEditor {
     }
 
     @Override
-    public OptionalProperty<DrawingView> activeDrawingViewProperty() {
+    public ObjectProperty<DrawingView> activeDrawingViewProperty() {
         return activeDrawingView;
     }
 
     @Override
-    public OptionalProperty<Tool> activeToolProperty() {
+    public ObjectProperty<Tool> activeToolProperty() {
         return activeTool;
     }
 }

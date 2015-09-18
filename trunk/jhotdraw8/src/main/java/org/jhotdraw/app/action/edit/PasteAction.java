@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import java.util.Optional;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
@@ -31,7 +30,7 @@ public class PasteAction extends AbstractFocusOwnerAction {
      * @param app the application 
     */
     public PasteAction(Application app) {
-        this(app, Optional.empty());
+        this(app, null);
     }
 
     /** Creates a new instance which acts on the specified component.
@@ -40,16 +39,16 @@ public class PasteAction extends AbstractFocusOwnerAction {
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public PasteAction(Application app, Optional<Node> target) {
+    public PasteAction(Application app, Node target) {
         super(app, target);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
     @Override
     public void handle(javafx.event.ActionEvent event) {
-        Optional<View> v = app.getActiveView();
-        if (v.isPresent() && !v.get().isDisabled()) {
-            Node n = v.get().getNode().getScene().getFocusOwner();
+        View v = app.getActiveView();
+        if (v!=null && !v.isDisabled()) {
+            Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
                 TextInputControl tic=(TextInputControl)n;
                 tic.paste();

@@ -13,7 +13,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
-import java.util.Optional;
 
 /**
  * Formats real numbers.

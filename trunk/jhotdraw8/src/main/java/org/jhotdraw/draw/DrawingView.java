@@ -8,8 +8,8 @@ package org.jhotdraw.draw;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
@@ -19,7 +19,6 @@ import javafx.scene.Node;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.beans.NonnullProperty;
-import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.handle.Handle;
@@ -102,7 +101,7 @@ public interface DrawingView {
      * @return the tool property, with {@code getBean()} returning this drawing
      * view, and {@code getName()} returning {@code TOOL_PROPERTY}.
      */
-    OptionalProperty<Tool> toolProperty();
+    ObjectProperty<Tool> toolProperty();
 
     /**
      * The scale factor of the drawing view.
@@ -155,7 +154,7 @@ public interface DrawingView {
      *
      * @return the active handle if present
      */
-    OptionalProperty<Handle> activeHandleProperty();
+    ObjectProperty<Handle> activeHandleProperty();
 
     // ---
     // methods
@@ -184,7 +183,7 @@ public interface DrawingView {
      * @param vy y in view coordinates
      * @return A figure or empty
      */
-    public Optional<Figure> findFigure(double vx, double vy);
+    public Figure findFigure(double vx, double vy);
 
     /**
      * Finds the figure at the given view coordinates behind the given figure.
@@ -195,7 +194,7 @@ public interface DrawingView {
      * @param figureInWay A figure which is in front of the desired figure
      * @return A figure or empty
      */
-    public Optional<Figure> findFigureBehind(double vx, double vy, Figure figureInWay);
+    public Figure findFigureBehind(double vx, double vy, Figure figureInWay);
 
     /**
      * Returns all figures that lie within the specified bounds given in view
@@ -240,18 +239,18 @@ public interface DrawingView {
     }
 
     default void setTool(Tool newValue) {
-        toolProperty().set(Optional.ofNullable(newValue));
+        toolProperty().set(newValue);
     }
 
-    default Optional<Tool> getTool() {
+    default Tool getTool() {
         return toolProperty().get();
     }
 
     default void setActiveHandle(Handle newValue) {
-        activeHandleProperty().set(Optional.ofNullable(newValue));
+        activeHandleProperty().set(newValue);
     }
 
-    default Optional<Handle> getActiveHandle() {
+    default Handle getActiveHandle() {
         return activeHandleProperty().get();
     }
 

@@ -9,7 +9,6 @@ package org.jhotdraw.text;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.util.Optional;
 import javafx.geometry.Point2D;
 
 /**

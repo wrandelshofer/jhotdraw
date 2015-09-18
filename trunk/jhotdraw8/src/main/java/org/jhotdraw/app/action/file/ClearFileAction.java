@@ -8,7 +8,6 @@
 
 package org.jhotdraw.app.action.file;
 
-import java.util.Optional;
 import javafx.event.EventHandler;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -30,7 +29,7 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public ClearFileAction(Application app, Optional<View> view) {
+    public ClearFileAction(Application app, View view) {
         super(app, view);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, "file.clear");

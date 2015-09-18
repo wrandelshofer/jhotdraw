@@ -9,7 +9,6 @@ package org.jhotdraw.text;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
-import java.util.Optional;
 
 /**
  * Allows to use a {@code Converter} with the {@code java.text.Format} API.

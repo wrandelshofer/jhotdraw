@@ -8,10 +8,8 @@ package org.jhotdraw.draw;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import java.util.Optional;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
@@ -30,7 +29,7 @@ public class SelectAllAction extends AbstractFocusOwnerAction {
     /** Creates a new instance which acts on the currently focused component.
      * @param app the application */
     public SelectAllAction(Application app) {
-        this(app, Optional.empty());
+        this(app, null);
     }
 
     /** Creates a new instance which acts on the specified component.
@@ -39,7 +38,7 @@ public class SelectAllAction extends AbstractFocusOwnerAction {
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public SelectAllAction(Application app, Optional<Node> target) {
+    public SelectAllAction(Application app, Node target) {
         super(app,target);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
@@ -48,9 +47,9 @@ public class SelectAllAction extends AbstractFocusOwnerAction {
 
     @Override
     public void handle(javafx.event.ActionEvent event) {
-        Optional<View> v = app.getActiveView();
-        if (v.isPresent() && !v.get().isDisabled()) {
-            Node n = v.get().getNode().getScene().getFocusOwner();
+        View v = app.getActiveView();
+        if (v!=null && !v.isDisabled()) {
+            Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
                 TextInputControl tic=(TextInputControl)n;
                 tic.selectAll();

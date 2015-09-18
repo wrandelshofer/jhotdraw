@@ -6,12 +6,12 @@
  */
 package org.jhotdraw.draw.tool;
 
-import org.jhotdraw.app.action.*;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Optional;
 import javafx.beans.property.MapProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleMapProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventType;
@@ -19,9 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import org.jhotdraw.app.AbstractDisableable;
-import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.event.Listener;
@@ -44,10 +42,10 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     /**
      * The active view.
      */
-    private final OptionalProperty<DrawingView> drawingView = new OptionalProperty<>(this, DRAWING_VIEW_PROPERTY);
+    private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
 
     {
-        drawingView.addListener((ObservableValue<? extends Optional<DrawingView>> observable, Optional<DrawingView> oldValue, Optional<DrawingView> newValue) -> {
+        drawingView.addListener((ObservableValue<? extends DrawingView> observable, DrawingView oldValue, DrawingView newValue) -> {
             stopEditing();
         });
     }
@@ -59,8 +57,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     {
         node.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
-            if (drawingView.get().isPresent()) {
-                DrawingView dv = drawingView.get().get();
+            if (drawingView.get()!=null) {
+                DrawingView dv = drawingView.get();
                 EventType<? extends MouseEvent> type = event.getEventType();
                 if (type == MouseEvent.MOUSE_MOVED) {
                     onMouseMoved(event, dv);
@@ -81,8 +79,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             }
         });
         node.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {
-            if (drawingView.get().isPresent()) {
-                DrawingView dv = drawingView.get().get();
+            if (drawingView.get()!=null) {
+                DrawingView dv = drawingView.get();
                 EventType<? extends KeyEvent> type = event.getEventType();
                 if (type == KeyEvent.KEY_PRESSED) {
                     onKeyPressed(event, dv);
@@ -136,7 +134,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     @Override
-    public OptionalProperty<DrawingView> drawingViewProperty() {
+    public ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
@@ -164,8 +162,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      */
     @Override
     public void editDelete() {
-        if (getDrawingView().isPresent()) {
-            DrawingView v = getDrawingView().get();
+        if (getDrawingView()!=null) {
+            DrawingView v = getDrawingView();
             v.getDrawing().children().removeAll(v.getSelectedFigures());
         }
     }
@@ -265,7 +263,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     /**
      * Gets the active drawing view.
      */
-    public Optional<DrawingView> getDrawingView() {
+    public DrawingView getDrawingView() {
         return drawingViewProperty().get();
     }
 
@@ -276,6 +274,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * unset on the drawing view.
      */
     public void setDrawingView(DrawingView drawingView) {
-        drawingViewProperty().set(Optional.ofNullable(drawingView));
+        drawingViewProperty().set(drawingView);
     }
 }

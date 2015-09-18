@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -84,7 +83,7 @@ import org.jhotdraw.util.Resources;
  */
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
 
-    private final static Key<Optional<ChangeListener>> FOCUS_LISTENER_KEY = new Key<>("focusListener", Optional.class, "<ChangeListener>", Optional.empty());
+    private final static Key<ChangeListener> FOCUS_LISTENER_KEY = new Key<>("focusListener", ChangeListener.class, null);
     private boolean isSystemMenuSupported;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
@@ -151,14 +150,14 @@ public class DocumentOrientedApplication extends javafx.application.Application 
 
             @Override
             protected void succeeded(View v) {
-                v.getActionMap().setParent(Optional.of(getActionMap()));
+                v.getActionMap().setParent(getActionMap());
                 v.setApplication(DocumentOrientedApplication.this);
                 v.init(e -> {
                    // FIXME - check if initialisation succeeded!
 
                     v.setTitle(getLabels().getString("unnamedFile"));
                     HierarchicalMap<String, Action> map = v.getActionMap();
-                    map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, Optional.of(v)));
+                    map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this,v));
                     callback.accept(v);
                 });
             }
@@ -243,7 +242,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                 activeView.set(view);
             }
         };
-        view.set(FOCUS_LISTENER_KEY, Optional.of(focusListener));
+        view.set(FOCUS_LISTENER_KEY, focusListener);
         stage.focusedProperty().addListener(focusListener);
         disambiguateViews();
 
@@ -305,14 +304,14 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     protected void onViewRemoved(View view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
-        Optional<ChangeListener> focusListener = view.get(FOCUS_LISTENER_KEY);
-        if (focusListener.isPresent()) {
-            stage.focusedProperty().removeListener(focusListener.get());
+        ChangeListener focusListener = view.get(FOCUS_LISTENER_KEY);
+        if (focusListener!=null) {
+            stage.focusedProperty().removeListener(focusListener);
         }
         stage.close();
         view.dispose();
         view.setApplication(null);
-        view.getActionMap().setParent(Optional.empty());
+        view.getActionMap().setParent(null);
 
         // Auto close feature
         if (views.isEmpty() && !isSystemMenuSupported) {
@@ -344,9 +343,9 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                 if (mi instanceof Menu) {
                     todo.add((Menu) mi);
                 } else {
-                    Optional<Action> a = actions.getOrParent(mi.getId());
-                    if (a.isPresent()) {
-                        Actions.bindMenuItem(mi, a.get());
+                    Action a = actions.get(mi.getId());
+                    if (a!=null) {
+                        Actions.bindMenuItem(mi, a);
                     } else if (mi.getId() != null) {
                         System.err.println("No action for menu item with id="
                                 + mi.getId());

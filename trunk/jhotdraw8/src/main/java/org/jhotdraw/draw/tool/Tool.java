@@ -6,12 +6,10 @@
  */
 package org.jhotdraw.draw.tool;
 
-import java.util.Optional;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
 import org.jhotdraw.app.Disableable;
-import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.Key;
@@ -103,7 +101,7 @@ public interface Tool extends PropertyBean, Disableable {
      * @return the drawingView property, with {@code getBean()} returning this
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
-    OptionalProperty<DrawingView> drawingViewProperty();
+    ObjectProperty<DrawingView> drawingViewProperty();
 
     // ---
     // Behaviors
@@ -190,7 +188,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return a drawing view
      */
-    default Optional<DrawingView> getDrawingView() {
+    default DrawingView getDrawingView() {
         return drawingViewProperty().get();
     }
 
@@ -203,7 +201,7 @@ public interface Tool extends PropertyBean, Disableable {
      * @param drawingView a drawing view
      */
     default void setDrawingView(DrawingView drawingView) {
-        drawingViewProperty().set(Optional.ofNullable(drawingView));
+        drawingViewProperty().set(drawingView);
     }
 
 }

@@ -5,34 +5,28 @@
  */
 package org.jhotdraw.draw.tool;
 
-import java.awt.event.InputEvent;
-import java.awt.geom.Point2D;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.event.Listener;
 import org.jhotdraw.util.Resources;
 
 /**
  * A tool to select and manipulate figures.
  * <p>
- * A selection tool is in one of three states: 
+ * A selection tool is in one of three states:
  * <ol>
  * <li>area selection</li>
  * <li>figure dragging</li>
  * <li>handle manipulation</li>
  * </ol>
  * The different states are handled by different tracker objects: the
- * <code>SimpleSelectAreaTracker</code>, the <code>SimpleDragTracker</code> and the
+ * <code>SimpleSelectAreaTracker</code>, the <code>SimpleDragTracker</code> and
+ * the
  * <code>SimpleHandleTracker</code>.
  * <p>
  * A Figure can be selected by clicking at it. Holding the alt key or the
@@ -40,13 +34,15 @@ import org.jhotdraw.util.Resources;
  * <hr>
  * <b>Design Patterns</b>
  *
- * <p><em>Strategy</em><br>
+ * <p>
+ * <em>Strategy</em><br>
  * The different behavior states of the selection tool are implemented by
  * trackers.<br>
  * Context: {@link SelectionTool}; State: {@link DragTracker},
  * {@link HandleTracker}, {@link SelectAreaTracker}.
  *
- * <p><em>Chain of responsibility</em><br>
+ * <p>
+ * <em>Chain of responsibility</em><br>
  * Mouse and keyboard events of the user occur on the drawing view, and are
  * preprocessed by the {@code DragTracker} of a {@code SelectionTool}. In
  * turn {@code DragTracker} invokes "track" methods on a {@code Handle} which in
@@ -85,11 +81,13 @@ public class SelectionTool extends AbstractTool {
     private DragTracker dragTracker;
 
     private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
-private boolean mouseDragged;
-private Optional<Figure> pressedFigure;
+    private boolean mouseDragged;
+    private Figure pressedFigure;
+
     // ---
     // Constructors
     // ---
+
     public SelectionTool() {
         this("selectionTool", Resources.getBundle("org.jhotdraw.draw.Labels"));
     }
@@ -115,21 +113,22 @@ private Optional<Figure> pressedFigure;
 
     @Override
     protected void onMousePressed(MouseEvent evt, DrawingView view) {
-        mouseDragged=false;
+        mouseDragged = false;
         Bounds b = getNode().getBoundsInParent();
         Drawing drawing = view.getDrawing();
         double vx = evt.getX();
         double vy = evt.getY();
-         pressedFigure = view.findFigure(vx, vy);
+        pressedFigure = view.findFigure(vx, vy);
         if (isSelectBehindEnabled() && (evt.isAltDown() || evt.isControlDown())) {
             // Select a figure behind the current selection
             // FIXME implement me - this is just a stub and selects just the figure
             //         behind the front most figure
-            pressedFigure = view.findFigureBehind(vx, vy, pressedFigure.get());
+            pressedFigure = view.findFigureBehind(vx, vy, pressedFigure);
         }
 
-        if (pressedFigure.isPresent() && view.getSelectedFigures().contains(pressedFigure.get())) {
-            DragTracker t = getDragTracker(pressedFigure.get(), view);
+        if (pressedFigure!=null
+                && view.getSelectedFigures().contains(pressedFigure)) {
+            DragTracker t = getDragTracker(pressedFigure, view);
             setTracker(t);
         } else {
             SelectAreaTracker t = getSelectAreaTracker();
@@ -143,7 +142,7 @@ private Optional<Figure> pressedFigure;
 
     @Override
     protected void onMouseDragged(MouseEvent event, DrawingView dv) {
-        mouseDragged=true;
+        mouseDragged = true;
         if (tracker != null) {
             tracker.trackMouseDragged(event, dv);
         }
@@ -155,17 +154,18 @@ private Optional<Figure> pressedFigure;
             tracker.trackMouseReleased(event, dv);
         }
         setTracker(null);
-        
-        if (! mouseDragged && pressedFigure.isPresent()) {
-            dv.selectionProperty().add(pressedFigure.get());
+
+        if (!mouseDragged && pressedFigure!=null) {
+            dv.selectionProperty().add(pressedFigure);
         }
-        
+
         fireToolDone();
     }
 
     /**
      * Method to get a {@code HandleTracker} which handles user interaction
      * for the specified handle.
+     *
      * @param handle a handle
      * @return a handle tracker
      */
@@ -173,13 +173,14 @@ private Optional<Figure> pressedFigure;
         if (handleTracker == null) {
             handleTracker = new SimpleHandleTracker();
         }
-        handleTracker.setHandles(handle, getDrawingView().get().getCompatibleHandles(handle));
+        handleTracker.setHandles(handle, getDrawingView().getCompatibleHandles(handle));
         return handleTracker;
     }
 
     /**
      * Method to get a {@code DragTracker} which handles user interaction
      * for dragging the specified figure.
+     *
      * @param f a figure
      * @param dv a drawing view
      * @return a tracker
@@ -195,6 +196,7 @@ private Optional<Figure> pressedFigure;
     /**
      * Method to get a {@code SelectAreaTracker} which handles user interaction
      * for selecting an area on the drawing.
+     *
      * @return a tracker
      */
     protected SelectAreaTracker getSelectAreaTracker() {
@@ -207,6 +209,7 @@ private Optional<Figure> pressedFigure;
     /**
      * Method to set a {@code HandleTracker}. If you specify null, the
      * {@code SelectionTool} uses the {@code DefaultHandleTracker}.
+     *
      * @param newValue a tracker
      */
     public void setHandleTracker(HandleTracker newValue) {
@@ -216,6 +219,7 @@ private Optional<Figure> pressedFigure;
     /**
      * Method to set a {@code SelectAreaTracker}. If you specify null, the
      * {@code SelectionTool} uses the {@code DefaultSelectAreaTracker}.
+     *
      * @param newValue a tracker
      */
     public void setSelectAreaTracker(SelectAreaTracker newValue) {
@@ -225,6 +229,7 @@ private Optional<Figure> pressedFigure;
     /**
      * Method to set a {@code DragTracker}. If you specify null, the
      * {@code SelectionTool} uses the {@code DefaultDragTracker}.
+     *
      * @param newValue a tracker
      */
     public void setDragTracker(DragTracker newValue) {

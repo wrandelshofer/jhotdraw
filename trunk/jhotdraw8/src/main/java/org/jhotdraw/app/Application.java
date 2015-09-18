@@ -6,7 +6,6 @@
 package org.jhotdraw.app;
 
 import java.net.URI;
-import java.util.Optional;
 import org.jhotdraw.collection.HierarchicalMap;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SetProperty;
@@ -51,8 +50,8 @@ public interface Application extends Disableable, PropertyBean {
     public ReadOnlyObjectProperty<View> activeViewProperty();
 
     // Convenience method
-    default public Optional<View> getActiveView() {
-        return Optional.ofNullable(activeViewProperty().get());
+    default public View getActiveView() {
+        return activeViewProperty().get();
     }
 
     /** Returns the action map of the application.

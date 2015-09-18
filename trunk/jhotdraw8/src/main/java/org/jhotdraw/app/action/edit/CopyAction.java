@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import java.util.Optional;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
@@ -30,7 +29,7 @@ public class CopyAction extends AbstractSelectionAction {
     /** Creates a new instance which acts on the currently focused component.
      * @param app the application */
     public CopyAction(Application app) {
-        this(app, Optional.empty());
+        this(app, null);
     }
 
     /** Creates a new instance which acts on the specified component.
@@ -39,16 +38,16 @@ public class CopyAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify empty for the currently
      * focused component.
      */
-    public CopyAction(Application app,Optional< Node> target) {
+    public CopyAction(Application app, Node target) {
         super(app,target);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
     @Override
     public void handle(javafx.event.ActionEvent event) {
-        Optional<View> v = app.getActiveView();
-        if (v.isPresent() && !v.get().isDisabled()) {
-            Node n = v.get().getNode().getScene().getFocusOwner();
+        View v = app.getActiveView();
+        if (v!=null && !v.isDisabled()) {
+            Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
                 TextInputControl tic=(TextInputControl)n;
                 tic.copy();

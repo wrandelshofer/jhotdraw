@@ -8,7 +8,6 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -26,7 +25,7 @@ import org.jhotdraw.app.action.AbstractApplicationAction;
 public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
-    private Optional<Node> target;
+    private Node target;
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode()== null) {
@@ -46,19 +45,19 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
     /** Creates a new instance.
      * @param app the application */
     public AbstractSelectionAction(Application app) {
-        this(app, Optional.empty());
+        this(app, null);
     }
     /** Creates a new instance.
      * @param app the application 
     * @param target the target node
     */
-    public AbstractSelectionAction(Application app,Optional< Node> target) {
+    public AbstractSelectionAction(Application app, Node target) {
         super(app);
         this.target=target;
             
         
         app.activeViewProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null, app.getActiveView().orElse(null));
+        activeViewListener.changed(null, null, app.getActiveView());
         
     }
 }

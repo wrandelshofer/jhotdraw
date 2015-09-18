@@ -49,7 +49,7 @@ public interface PropertyBean {
     // property methods
     // ---
     /**
-     * Returns an observable map of properties.
+     * Returns an observable map of property keys and their values.
      *
      * @return the map
      */

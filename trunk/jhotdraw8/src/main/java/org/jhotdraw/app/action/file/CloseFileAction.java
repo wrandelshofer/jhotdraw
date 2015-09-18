@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.file;
 
-import java.util.Optional;
 import javafx.event.EventHandler;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
@@ -31,14 +30,14 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public CloseFileAction(Application app, Optional<View> view) {
+    public CloseFileAction(Application app, View view) {
         super(app, view);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 
     public CloseFileAction(DocumentOrientedApplication app) {
-        this(app, Optional.empty());
+        this(app, null);
     }
 
     @Override
