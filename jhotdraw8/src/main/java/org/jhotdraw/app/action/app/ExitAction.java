@@ -119,19 +119,19 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected URIChooser getChooser(View view) {
-        Optional<URIChooser> chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
-        if (!chsr.isPresent()) {
-            chsr = Optional.of(getApplication().getModel().createSaveChooser());
+        URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
+        if (chsr==null) {
+            chsr = getApplication().getModel().createSaveChooser();
             view.set(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY, chsr);
         }
-        return chsr.get();
+        return chsr;
     }
 
     protected void saveChanges() {
         View v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
-            Optional<URI> uri = Optional.empty();
+            URI uri = null;
 
             Outer:
             while (true) {
@@ -139,9 +139,9 @@ public class ExitAction extends AbstractApplicationAction {
 
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
-                if (uri.isPresent() && !app.getModel().isAllowMultipleViewsPerURI()) {
+                if (uri!=null && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (View vi : app.views()) {
-                        if (vi != v && v.getURI().equals(uri.get())) {
+                        if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
                             alert.showAndWait();
@@ -152,7 +152,7 @@ public class ExitAction extends AbstractApplicationAction {
                 break;
             }
 
-            if (!uri.isPresent()) {
+            if (uri==null) {
                 unsavedView.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
@@ -160,7 +160,7 @@ public class ExitAction extends AbstractApplicationAction {
                 getApplication().removeDisabler(this);
             } else {
 
-                saveToFile(uri.get(), chooser);
+                saveToFile(uri, chooser);
 
             }
         } else {
@@ -216,9 +216,9 @@ public class ExitAction extends AbstractApplicationAction {
         final View v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
-            Optional<URI> uri = chooser.showDialog(unsavedView.getNode());
-            if (uri.isPresent()) {
-                saveToFileAndReviewNext(uri.get(), chooser);
+            URI uri = chooser.showDialog(unsavedView.getNode());
+            if (uri!=null) {
+                saveToFileAndReviewNext(uri, chooser);
 
             } else {
                 v.removeDisabler(this);

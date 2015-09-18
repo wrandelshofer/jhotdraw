@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import java.util.Optional;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
@@ -37,9 +36,9 @@ public class DeleteAction extends AbstractFocusOwnerAction {
     }
     @Override
     public void handle(javafx.event.ActionEvent event) {
-        Optional<View> v = app.getActiveView();
-        if (v.isPresent() && !v.get().isDisabled()) {
-            Node n = v.get().getNode().getScene().getFocusOwner();
+        View v = app.getActiveView();
+        if (v!=null && !v.isDisabled()) {
+            Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
                 TextInputControl tic=(TextInputControl)n;
                 tic.deleteNextChar();

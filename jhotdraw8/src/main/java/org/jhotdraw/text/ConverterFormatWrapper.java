@@ -11,7 +11,6 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.util.Optional;
 
 /**
  * Allows to use a {@code java.text.Format} with the {@code Converter} API.
@@ -33,9 +32,9 @@ public class ConverterFormatWrapper implements Converter<Object> {
     }
 
   
-    public Optional<Object> fromString(String string, ParsePosition pp) {
+    public Object fromString(String string, ParsePosition pp) {
         Object value = format.parseObject(string, pp);
-        return Optional.ofNullable(value);
+        return value;
     }
 
     @Override

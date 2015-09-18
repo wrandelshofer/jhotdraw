@@ -8,7 +8,6 @@
 
 package org.jhotdraw.app.action.file;
 
-import java.util.Optional;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.DocumentOrientedApplication;
@@ -29,13 +28,13 @@ public class SaveFileAsAction extends SaveFileAction {
     /** Creates a new instance. 
      * @param app the application
      * @param view the view */
-    public SaveFileAsAction(Application app, Optional<View> view) {
+    public SaveFileAsAction(Application app, View view) {
         super(app, view, true);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 
     public SaveFileAsAction(DocumentOrientedApplication app) {
-        this(app, Optional.empty());
+        this(app, null);
     }
 }

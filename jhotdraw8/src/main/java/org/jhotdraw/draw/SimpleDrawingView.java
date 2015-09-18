@@ -14,11 +14,11 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -27,6 +27,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -45,7 +46,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.beans.NonnullProperty;
-import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.constrain.NullConstrainer;
 import org.jhotdraw.draw.tool.Tool;
@@ -117,12 +117,12 @@ public class SimpleDrawingView implements DrawingView {
 
     private int detailLevel = 0;
 
-    private final OptionalProperty<Tool> tool = new OptionalProperty<>(this, TOOL_PROPERTY);
+    private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
 
     {
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
-    private final OptionalProperty<Handle> activeHandle = new OptionalProperty<>(this, ACTIVE_HANDLE_PROPERTY);
+    private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
     /**
      * This is just a wrapper around the focusedProperty of the JavaFX Node
@@ -400,23 +400,23 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     @Override
-    public OptionalProperty<Tool> toolProperty() {
+    public ObjectProperty<Tool> toolProperty() {
         return tool;
     }
 
     @Override
-    public OptionalProperty<Handle> activeHandleProperty() {
+    public ObjectProperty<Handle> activeHandleProperty() {
         return activeHandle;
     }
 
-    private void updateTool(Optional<Tool> oldValue, Optional<Tool> newValue) {
-        if (oldValue.isPresent()) {
-            Tool t = oldValue.get();
+    private void updateTool(Tool oldValue, Tool newValue) {
+        if (oldValue!=null) {
+            Tool t = oldValue;
             toolPane.setCenter(null);
             t.setDrawingView(null);
         }
-        if (newValue.isPresent()) {
-            Tool t = newValue.get();
+        if (newValue!=null) {
+            Tool t = newValue;
             toolPane.setCenter(t.getNode());
             t.setDrawingView(this);
         }
@@ -427,11 +427,11 @@ public class SimpleDrawingView implements DrawingView {
         return zoomFactor;
     }
 
-    public Optional<Figure> findFigure(double vx, double vy) {
+    public Figure findFigure(double vx, double vy) {
         Drawing dr = drawing.get();
         Figure f = findFigure((Parent) getNode(dr), viewToDrawing(vx, vy));
 
-        return Optional.ofNullable(f);
+        return f;
     }
 
     private Figure findFigure(Parent p, Point2D pp) {
@@ -455,11 +455,11 @@ public class SimpleDrawingView implements DrawingView {
         return null;
     }
 
-    public Optional<Figure> findFigureBehind(double vx, double vy, Figure figureInWay) {
+    public Figure findFigureBehind(double vx, double vy, Figure figureInWay) {
         Drawing dr = drawing.get();
         Figure f = findFigureBehind((Parent) getNode(dr), viewToDrawing(vx, vy), figureInWay);
 
-        return Optional.ofNullable(f);
+        return f;
     }
 
     private Figure findFigureBehind(Parent p, Point2D pp, Figure figureInWay) {

@@ -6,7 +6,6 @@
 
 package org.jhotdraw.concurrent;
 
-import java.util.Optional;
 import javafx.concurrent.Worker;
 import javafx.event.Event;
 import javafx.event.EventTarget;

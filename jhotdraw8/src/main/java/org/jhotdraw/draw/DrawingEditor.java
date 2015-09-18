@@ -5,11 +5,9 @@
  */
 package org.jhotdraw.draw;
 
-import java.util.Optional;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
-import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.draw.tool.Tool;
 
 /**
@@ -31,12 +29,12 @@ public interface DrawingEditor {
     /** The currently active drawing view.
      * @return the property
     */
-    OptionalProperty<DrawingView> activeDrawingViewProperty();
+    ObjectProperty<DrawingView> activeDrawingViewProperty();
 
     /** The currently active tool.
      * @return the property
     */
-    OptionalProperty<Tool> activeToolProperty();
+    ObjectProperty<Tool> activeToolProperty();
 
     // ---
     // convenience methods
@@ -57,7 +55,7 @@ public interface DrawingEditor {
     /** Gets the active drawing view.
      * @return the active drawing view or empty
     */
-    default Optional<DrawingView> getActiveDrawingView() {
+    default DrawingView getActiveDrawingView() {
         return activeDrawingViewProperty().get();
     }
 
@@ -65,13 +63,13 @@ public interface DrawingEditor {
      * @param drawingView the drawing view or null if none is active
     */
     default void setActiveDrawingView(DrawingView drawingView) {
-        activeDrawingViewProperty().set(Optional.ofNullable(drawingView));
+        activeDrawingViewProperty().set(drawingView);
     }
 
     /** Gets the active tool.
      * @return the active tool or empty
     */
-    default Optional<Tool> getActiveTool() {
+    default Tool getActiveTool() {
         return activeToolProperty().get();
     }
 
@@ -79,7 +77,7 @@ public interface DrawingEditor {
      * @param tool the active tool or null if none is active
     */
     default void setActiveTool(Tool tool) {
-        activeToolProperty().set(Optional.ofNullable(tool));
+        activeToolProperty().set(tool);
     }
 
     

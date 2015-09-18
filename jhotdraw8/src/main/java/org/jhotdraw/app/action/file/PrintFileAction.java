@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.file;
 
-import java.util.Optional;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -38,7 +37,7 @@ public class PrintFileAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public PrintFileAction(Application app, Optional<View> view) {
+    public PrintFileAction(Application app, View view) {
         super(app, view);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);

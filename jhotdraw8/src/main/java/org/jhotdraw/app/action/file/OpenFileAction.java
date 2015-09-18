@@ -10,7 +10,6 @@ package org.jhotdraw.app.action.file;
 import org.jhotdraw.util.*;
 import org.jhotdraw.gui.*;
 import java.net.URI;
-import java.util.Optional;
 import java.util.prefs.Preferences;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -63,36 +62,36 @@ public class OpenFileAction extends AbstractApplicationAction {
         {
             app.addDisabler(this);
             // Search for an empty view
-            Optional<          View> emptyView;
+                      View emptyView;
             if (reuseEmptyViews) {
                 emptyView = app.getActiveView();
-                if (!emptyView.isPresent()
-                        || !emptyView.get().isEmpty()
-                        || emptyView.get().isDisabled()) {
-                    emptyView = Optional.empty();
+                if (emptyView==null
+                        || !emptyView.isEmpty()
+                        || emptyView.isDisabled()) {
+                    emptyView = null;
                 }
             } else {
-                emptyView = Optional.empty();
+                emptyView = null;
             }
 
-            if (!emptyView.isPresent()) {
+            if (emptyView==null) {
                 app.getModel().createView(v -> handle(v, true));
             } else {
-                handle(emptyView.get(), false);
+                handle(emptyView, false);
             }
         }
     }
 
     public void handle(View view, boolean disposeView) {
         URIChooser chooser = getChooser(view);
-        Optional<URI> uri = chooser.showDialog(app.getNode());
-        if (uri.isPresent()) {
+        URI uri = chooser.showDialog(app.getNode());
+        if (uri!=null) {
             app.add(view);
 
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
                 for (View v : getApplication().views()) {
-                    if (v.getURI() != null && v.getURI().equals(uri.get())) {
+                    if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
                         }
@@ -104,7 +103,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                 }
             }
 
-            openViewFromURI(view, uri.get(), chooser);
+            openViewFromURI(view, uri, chooser);
         } else {
             if (disposeView) {
                 app.remove(view);

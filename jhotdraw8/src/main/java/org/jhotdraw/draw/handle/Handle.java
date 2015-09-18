@@ -6,11 +6,8 @@
  */
 package org.jhotdraw.draw.handle;
 
-import java.util.Optional;
 import javafx.scene.Node;
-import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.event.Listener;
 import static org.jhotdraw.draw.Figure.*;
 /**
  * Handle.

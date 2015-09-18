@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.file;
 
-import java.util.Optional;
 import java.net.URISyntaxException;
 import java.net.URI;
 import java.util.prefs.Preferences;
@@ -37,11 +36,11 @@ public class ExportFileAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public ExportFileAction(Application app, Optional<View> view) {
+    public ExportFileAction(Application app, View view) {
         this(app, view, false);
     }
 
-    public ExportFileAction(Application app, Optional<View> view, boolean proposeFileName) {
+    public ExportFileAction(Application app, View view, boolean proposeFileName) {
         super(app, view);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);

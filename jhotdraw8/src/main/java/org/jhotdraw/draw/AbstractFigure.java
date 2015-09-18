@@ -5,12 +5,8 @@
  */
 package org.jhotdraw.draw;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.jhotdraw.beans.ListenerSupport;
-import org.jhotdraw.beans.OptionalProperty;
 import org.jhotdraw.beans.SimplePropertyBean;
 
 /**

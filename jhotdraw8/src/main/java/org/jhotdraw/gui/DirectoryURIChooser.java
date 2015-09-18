@@ -7,7 +7,6 @@ package org.jhotdraw.gui;
 
 import java.io.File;
 import java.net.URI;
-import java.util.Optional;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 
@@ -25,9 +24,9 @@ public class DirectoryURIChooser implements URIChooser {
     }
 
     @Override
-    public Optional<URI> showDialog(Window parent) {
+    public URI showDialog(Window parent) {
         File f = chooser.showDialog(parent);
         
-        return f==null?Optional.empty():Optional.of(f.toURI());
+        return f==null?null:f.toURI();
     }
 }

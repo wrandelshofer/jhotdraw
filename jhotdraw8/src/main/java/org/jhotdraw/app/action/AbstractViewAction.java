@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action;
 
-import java.util.Optional;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import org.jhotdraw.app.Application;
@@ -31,7 +30,7 @@ public abstract class AbstractViewAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
 
-    private final Optional<View> view;
+    private final View view;
     /** Set this to true if the action may create a new view if none exists.*/
     private boolean mayCreateView;
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
@@ -48,21 +47,21 @@ public abstract class AbstractViewAction extends AbstractApplicationAction {
      * @param view The view. If view is null then the action acts on the active view
      *  of the application. Otherwise it will act on the specified view.
      */
-    public AbstractViewAction(Application app, Optional< View> view) {
+    public AbstractViewAction(Application app,  View view) {
         super(app);
         if (view == null) {
             throw new IllegalArgumentException("view is null");
         }
         this.view = view;
-        if (view.isPresent()) {
-            activeViewListener.changed(null, null, view.get());
+        if (view!=null) {
+            activeViewListener.changed(null, null, view);
         } else {
             app.activeViewProperty().addListener(activeViewListener);
         }
     }
 
-    public Optional<View> getActiveView() {
-        return (view.isPresent()) ? view : app.getActiveView();
+    public View getActiveView() {
+        return (view!=null) ? view : app.getActiveView();
     }
 
     /** Set this to true if the action may create a new view if none exists.

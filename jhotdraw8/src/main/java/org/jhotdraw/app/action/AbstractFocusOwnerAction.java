@@ -5,7 +5,6 @@
  */
 package org.jhotdraw.app.action;
 
-import java.util.Optional;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
@@ -21,7 +20,7 @@ import org.jhotdraw.app.View;
 public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
-    private Optional<Node> target = Optional.empty();
+    private Node target = null;
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null||newValue.getNode()==null) {
@@ -29,7 +28,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
         } else {
             Scene s = newValue.getNode().getScene();
             BooleanBinding binding = disablers.emptyProperty().not().or(app.disabledProperty());
-            if (target.isPresent()) {
+            if (target!=null) {
                 binding = binding.or(s.focusOwnerProperty().isNotEqualTo(target));
             } else {
                binding = binding.or( s.focusOwnerProperty().isNull());
@@ -41,13 +40,13 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
     /** Creates a new instance.
      * @param app the application */
     public AbstractFocusOwnerAction(Application app) {
-        this(app,Optional.empty());
+        this(app,null);
     }
     /** Creates a new instance.
      * @param app the application 
     * @param target the target node
     */
-    public AbstractFocusOwnerAction(Application app,Optional< Node> target) {
+    public AbstractFocusOwnerAction(Application app, Node target) {
        super(app);
        if (target == null) {
            throw new IllegalArgumentException("target is null");
@@ -56,7 +55,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
             
         
         app.activeViewProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null, app.getActiveView().orElse(null));
+        activeViewListener.changed(null, null,app==null?null: app.getActiveView());
         
     }
 }

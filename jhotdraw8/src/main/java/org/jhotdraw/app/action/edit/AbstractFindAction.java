@@ -8,7 +8,6 @@
 
 package org.jhotdraw.app.action.edit;
 
-import java.util.Optional;
 import org.jhotdraw.app.*;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.*;
@@ -27,7 +26,7 @@ public abstract class AbstractFindAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public AbstractFindAction(Application app, Optional<View> view) {
+    public AbstractFindAction(Application app, View view) {
         super(app, view);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);

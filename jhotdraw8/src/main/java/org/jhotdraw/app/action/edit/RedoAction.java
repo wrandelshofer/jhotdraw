@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import java.util.Optional;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -44,7 +43,7 @@ public class RedoAction extends AbstractViewAction {
      * @param app the application 
      * @param view the view
     */
-    public RedoAction(Application app, Optional<View> view) {
+    public RedoAction(Application app, View view) {
         super(app, view);
         labels.configureAction(this, ID);
     }
@@ -59,7 +58,7 @@ public class RedoAction extends AbstractViewAction {
     }
 
     @Override
-    protected void updateView(Optional<View> oldValue, Optional<View> newValue) {
+    protected void updateView(View oldValue, View newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //

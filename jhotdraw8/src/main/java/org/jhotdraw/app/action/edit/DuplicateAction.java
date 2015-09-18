@@ -8,7 +8,6 @@
 
 package org.jhotdraw.app.action.edit;
 
-import java.util.Optional;
 import javafx.scene.Node;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.util.*;
@@ -28,7 +27,7 @@ public class DuplicateAction extends AbstractSelectionAction {
     /** Creates a new instance which acts on the currently focused component. 
      * @param app the application */
     public DuplicateAction(Application app) {
-        this(app, Optional.empty());
+        this(app, null);
     }
 
     /** Creates a new instance which acts on the specified component.
@@ -37,7 +36,7 @@ public class DuplicateAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public DuplicateAction(Application app, Optional<Node> target) {
+    public DuplicateAction(Application app, Node target) {
         super(app,target);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);

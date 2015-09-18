@@ -6,7 +6,6 @@
 package org.jhotdraw.gui;
 
 import java.net.URI;
-import java.util.Optional;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Window;
@@ -31,7 +30,7 @@ public interface URIChooser {
      *                  see {@code showDialog}  for details
      * @return   the selected URIs if a selection has been made.
      */
-    public Optional< URI> showDialog(Window parent);
+    public URI showDialog(Window parent);
 
     /**
      * Pops up an URI chooser dialog. 
@@ -41,7 +40,7 @@ public interface URIChooser {
      *                  see {@code showDialog}  for details
      * @return   the selected URIs or an empty list if no selection has been made.
      */
-    default public Optional< URI> showDialog(Node node) {
+    default public URI showDialog(Node node) {
         Scene scene = node == null ? null : node.getScene();
         return showDialog(scene == null ? null : scene.getWindow());
     }

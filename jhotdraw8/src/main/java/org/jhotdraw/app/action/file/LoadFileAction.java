@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.app.action.file;
 
-import java.util.Optional;
 import java.net.URI;
 import javafx.event.EventHandler;
 import org.jhotdraw.app.Application;
@@ -34,7 +33,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public LoadFileAction(Application app, Optional<View> view) {
+    public LoadFileAction(Application app, View view) {
         super(app, view);
         Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);

@@ -7,7 +7,6 @@
 package org.jhotdraw.collection;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 /**
  * HierarchicalMap.
@@ -18,16 +17,16 @@ import java.util.Optional;
  */
 public class HierarchicalMap<K, V> extends HashMap<K, V> {
 
-    private Optional<HierarchicalMap<K, V>> parent = Optional.empty();
+    private HierarchicalMap<K, V> parent = null;
 
-    public void setParent(Optional<HierarchicalMap<K, V>> newValue) {
+    public void setParent(HierarchicalMap<K, V> newValue) {
         if (newValue == null) {
             throw new IllegalArgumentException("newValue is null");
         }
         parent = newValue;
     }
 
-    public Optional<HierarchicalMap<K, V>> getParent() {
+    public HierarchicalMap<K, V> getParent() {
         return parent;
     }
 
@@ -37,11 +36,12 @@ public class HierarchicalMap<K, V> extends HashMap<K, V> {
      * @param key the key
      * @return the value or null
      */
-    public Optional<V> getOrParent(K key) {
+    @Override
+    public V get(Object key) {
         if (containsKey(key)) {
-            return Optional.of(get(key));
+            return get(key);
         } else {
-            return (parent.isPresent()) ? parent.get().getOrParent(key) : Optional.empty();
+            return (parent!=null) ? parent.get(key) : null;
         }
     }
 }
