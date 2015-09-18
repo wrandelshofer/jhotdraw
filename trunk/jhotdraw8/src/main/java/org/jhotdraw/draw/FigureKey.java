@@ -15,7 +15,7 @@ import org.jhotdraw.collection.Key;
  */
 public class FigureKey<T> extends Key<T> {
 
-    private final long dirtyMask;
+    private final DirtyMask dirtyMask;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -25,7 +25,7 @@ public class FigureKey<T> extends Key<T> {
      * @param clazz The type of the value.
      */
     public FigureKey(String key, Class<T> clazz) {
-        this(key, clazz, "", null, null);
+        this(key, clazz, "", DirtyMask.ALL,null);
     }
 
     /**
@@ -37,7 +37,7 @@ public class FigureKey<T> extends Key<T> {
      * @param defaultValue The default value.
      */
     public FigureKey(String key, Class<T> clazz, T defaultValue) {
-        this(key, clazz, "", defaultValue, null);
+        this(key, clazz, "", DirtyMask.ALL, defaultValue);
     }
 
     /**
@@ -47,10 +47,10 @@ public class FigureKey<T> extends Key<T> {
      * @param key The name of the name.
      * @param clazz The type of the value.
      * @param defaultValue The default value.
-     * @param dirtyBits the dirty bits
+     * @param dirtyMask the dirty bits
      */
-    public FigureKey(String key, Class<T> clazz, T defaultValue, DirtyBits... dirtyBits) {
-        this(key, clazz, "", defaultValue, dirtyBits);
+    public FigureKey(String key,Class<T> clazz, DirtyMask dirtyMask, T defaultValue) {
+        this(key, clazz, "",  dirtyMask,defaultValue);
     }
 
     /**
@@ -62,14 +62,10 @@ public class FigureKey<T> extends Key<T> {
      * @param typeParameters The type parameters of the class. Specify "" if no
      * type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue The default value.
-     * @param dirtyBits the dirty bits
+     * @param dirtyMask the dirty bits
      */
-    public FigureKey(String key, Class<T> clazz, String typeParameters, T defaultValue, DirtyBits... dirtyBits) {
+    public FigureKey(String key, Class<?> clazz, String typeParameters, DirtyMask dirtyMask, T defaultValue) {
         super(key, clazz, typeParameters, defaultValue);
-        long mask = 0;
-        for (DirtyBits db : dirtyBits) {
-            mask |= db.getMask();
-        }
-        dirtyMask = mask;
+        this.dirtyMask = dirtyMask;
     }
 }

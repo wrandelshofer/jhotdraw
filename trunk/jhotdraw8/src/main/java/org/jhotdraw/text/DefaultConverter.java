@@ -7,13 +7,8 @@
 package org.jhotdraw.text;
 
 import java.io.IOException;
-import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Converts an {@code Object} to a {@code String} but can not a {@code String}

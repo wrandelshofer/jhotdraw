@@ -173,7 +173,7 @@ public class StreamPosTokenizer
     
     /**
      * Create a tokenizer that parses the given character stream.
-     * @since   JDK1.1
+     * @param r the reader
      */
     public StreamPosTokenizer(Reader r) {
         this();
@@ -186,7 +186,7 @@ public class StreamPosTokenizer
     /**
      * Sets the reader for the tokenizer.
      * 
-     * @param r
+     * @param r The reader
      */
     public void setReader(Reader r) {
         this.reader = r;
@@ -942,6 +942,8 @@ public class StreamPosTokenizer
     /**
      * Reads the next character from the input stream, without
      * passing it to the tokenizer.
+     * @return the next char
+     * @throws java.io.IOException in case of an IO error
      */
     public int nextChar() throws IOException {
         if (pushedBack) {
@@ -957,6 +959,8 @@ public class StreamPosTokenizer
     }
     /**
      * Unreads a character back into the input stream of the tokenizer.
+     * @param ch The character
+     * @throws java.io.IOException in case of an IO error
      */
     public void pushCharBack(int ch) throws IOException {
         if (pushedBack) {
@@ -975,6 +979,8 @@ public class StreamPosTokenizer
      * Due to limitations by this implementation, both tokens must have the
      * same number of characters and the character length must be either 1
      * or 2.
+     * @param slashStar token
+     * @param starSlash token
      */
     public void setSlashStarTokens(String slashStar, String starSlash) {
         if (slashStar.length() != starSlash.length()) {
@@ -991,6 +997,7 @@ public class StreamPosTokenizer
      * Sets the slash slash token.
      * Due to limitations by this implementation, the character length must be
      * either 1 or 2.
+     * @param slashSlash token
      */
     public void setSlashSlashToken(String slashSlash) {
         if (slashSlash.length() < 1 || slashSlash.length() > 2) {
@@ -1037,6 +1044,7 @@ public class StreamPosTokenizer
     }
     /**
      * Set the start position of the current token.
+     * @param p the position
      */
     public void setStartPosition(int p) {
         startpos = p;
@@ -1054,6 +1062,7 @@ public class StreamPosTokenizer
     
     /**
      * Consumes a substring from the current sval of the StreamPosTokenizer.
+     * @param greedyToken the token to be consumed
      */
     public void consumeGreedy(String greedyToken) {
         if (greedyToken.length() < sval.length()) {
