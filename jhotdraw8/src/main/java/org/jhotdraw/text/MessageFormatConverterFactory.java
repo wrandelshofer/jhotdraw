@@ -5,20 +5,18 @@
  */
 package org.jhotdraw.text;
 
-import java.text.ChoiceFormat;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
- * With this factory, {@link PatternConverter} can be used to produce the same
- * output as {@code java.text.MessageFormat}.
+ * Together with this factory {@link PatternConverter} can be used to produce
+ * the same output as {@code java.text.MessageFormat}.
  *
- * <pre>{@code
+ * <pre>
  *   <i>FormatType: one of</i>
  *           number date time choice
  *
@@ -31,7 +29,12 @@ import java.util.Locale;
  *           currency
  *           percent
  *           <i>SubformatPattern</i>
- * }</pre>
+ * </pre>
+ * <p>
+ * If the type is an empty String or null, then the {@code DefaultConverter}
+ * is used. If the {@code DefaultConverter} is used, this factory can
+ * only be used for one way conversion to a String but not from a String!
+ * </p>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -53,12 +56,12 @@ public class MessageFormatConverterFactory implements ConverterFactory {
 
     @Override
     public Converter<?> apply(String type, String style) {
-        if (type == null||type.isEmpty()) {
+        if (type == null || type.isEmpty()) {
             return new DefaultConverter();
         }
         switch (type) {
             case "number":
-                if (style == null||style.isEmpty()) {
+                if (style == null || style.isEmpty()) {
                     return new ConverterFormatWrapper(NumberFormat.getInstance(locale));
                 }
                 switch (style) {
@@ -72,7 +75,7 @@ public class MessageFormatConverterFactory implements ConverterFactory {
                         return new ConverterFormatWrapper(new DecimalFormat(style, DecimalFormatSymbols.getInstance(locale)));
                 }
             case "date":
-                if (style == null||style.isEmpty()) {
+                if (style == null || style.isEmpty()) {
                     return new ConverterFormatWrapper(DateFormat.getDateInstance(DateFormat.DEFAULT, locale));
                 }
                 switch (style) {
@@ -88,7 +91,7 @@ public class MessageFormatConverterFactory implements ConverterFactory {
                         return new ConverterFormatWrapper(new SimpleDateFormat(style, locale));
                 }
             case "time":
-                if (style == null||style.isEmpty()) {
+                if (style == null || style.isEmpty()) {
                     return new ConverterFormatWrapper(DateFormat.getTimeInstance(DateFormat.DEFAULT, locale));
                 }
                 switch (style) {
@@ -103,7 +106,7 @@ public class MessageFormatConverterFactory implements ConverterFactory {
                     default:
                         return new ConverterFormatWrapper(new SimpleDateFormat(style, locale));
                 }
-            
+
             default:
                 throw new IllegalArgumentException("type=" + type);
         }

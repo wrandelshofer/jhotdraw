@@ -33,12 +33,21 @@ import org.jhotdraw.draw.handle.SimpleHighlightHandle;
 /**
  * A {@code Figure} is an editable element of a {@link Drawing}.
  * <p>
- * A figure typically has a visual representation, such as a rectangle or a
- * line.
+ * The elements of a {@link Drawing} are organized in a tree structure. All 
+ * nodes of the tree are represented by {@code Figure} objects. 
+ * The root of the tree is typically a {@code Drawing} object. The immediate 
+ * children of the {@code Drawing} are typically {@code Layer} objects.
+ * Note that this implies that {@link Drawing} and {@code Layer} are subtypes
+ * of {@code Figure}. 
  * <p>
- * The state of a figure is represented by its properties. A figure supports an
- * open ended number of properties which can be accessed using {@code FigureKey}s.
+ * A figure has a visual representation, such as a circle, a bezier path or
+ * text.
  * <p>
+ * The visual representation of a {@code Figure} depends on property sets. A
+ * property set is an open ended set of key and value pairs. The values
+ * are accessed using {@code FigureKey}s.
+ * <p>
+ * 
  * A property value may depend on other property values in the same figure or
  * in other figures. Since recomputing property values may be time consuming,
  * instead changes its state to invalid. Once a figure has become invalid, the
@@ -78,14 +87,14 @@ public interface Figure extends PropertyBean {
      * <p>
      * Default value: {@code SRC_OVER}.
      */
-    public static FigureKey<BlendMode> BLEND_MODE = new FigureKey<BlendMode>("blendMode", BlendMode.class, BlendMode.SRC_OVER, DirtyBits.NODE);
+    public static FigureKey<BlendMode> BLEND_MODE = new FigureKey<BlendMode>("blendMode", BlendMode.class,DirtyMask.of(DirtyBits.NODE),  BlendMode.SRC_OVER);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
      * <p>
      * Default value: {@code null}.
      */
-    public static FigureKey<Effect> EFFECT = new FigureKey<>("effect", Effect.class, null, DirtyBits.NODE);
+    public static FigureKey<Effect> EFFECT = new FigureKey<>("effect", Effect.class,DirtyMask.of(DirtyBits.NODE),  null);
     /**
      * Specifies the opacity of the figure. A figure with {@code 0} opacity is
      * completely translucent. A figure with {@code 1} opacity is completely
@@ -96,46 +105,46 @@ public interface Figure extends PropertyBean {
      * <p>
      * Default value: {@code 1}.
      */
-    public static FigureKey<Double> OPACITY = new FigureKey<>("opacity", Double.class, 1.0, DirtyBits.NODE);
+    public static FigureKey<Double> OPACITY = new FigureKey<>("opacity", Double.class,DirtyMask.of(DirtyBits.NODE),  1.0);
     /**
      * Defines the angle of rotation around the center of the figure in degrees.
      * Default value: {@code 0}.
      */
-    public static FigureKey<Double> ROTATE = new FigureKey<>("rotate", Double.class, 0.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
+    public static FigureKey<Double> ROTATE = new FigureKey<>("rotate", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  0.0);
     /**
      * Defines the rotation axis used. Default value: {@code Rotate.Z_AXIS}.
      */
-    public static FigureKey<Point3D> ROTATION_AXIS = new FigureKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
+    public static FigureKey<Point3D> ROTATION_AXIS = new FigureKey<>("rotationAxis", Point3D.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_X = new FigureKey<>("scaleX", Double.class, 1.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
+    public static FigureKey<Double> SCALE_X = new FigureKey<>("scaleX", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_Y = new FigureKey<>("scaleY", Double.class, 1.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
+    public static FigureKey<Double> SCALE_Y = new FigureKey<>("scaleY", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_Z = new FigureKey<>("scaleZ", Double.class, 1.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
+    public static FigureKey<Double> SCALE_Z = new FigureKey<>("scaleZ", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  1.0);
     /**
      * Defines the translation on the x axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_X = new FigureKey<>("translateX", Double.class, 0.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
+    public static FigureKey<Double> TRANSLATE_X = new FigureKey<>("translateX", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  0.0);
     /**
      * Defines the translation on the y axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_Y = new FigureKey<>("translateY", Double.class, 0.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
+    public static FigureKey<Double> TRANSLATE_Y = new FigureKey<>("translateY", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  0.0);
     /**
      * Defines the translation on the z axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_Z = new FigureKey<>("translateZ", Double.class, 0.0, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS);
+    public static FigureKey<Double> TRANSLATE_Z = new FigureKey<>("translateZ", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  0.0);
 
     // ----
     // property names
@@ -417,6 +426,7 @@ public interface Figure extends PropertyBean {
      * classes.
      *
      * @param f A figure.
+     * @return the keys
      */
     public static Set<Key<?>> getFigureKeys(Figure f) {
         return getDeclaredAndInheritedKeys(f.getClass());
@@ -427,6 +437,7 @@ public interface Figure extends PropertyBean {
      * classes.
      *
      * @param c A figure class.
+     * @return the keys
      */
     public static Set<Key<?>> getDeclaredAndInheritedKeys(Class<?> c) {
         try {

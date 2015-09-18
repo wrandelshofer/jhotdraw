@@ -311,6 +311,7 @@ public class RealNumberConverter implements Converter<Number> {
      * <code>String</code> <code>text</code>.
      *
      * @param str <code>String</code> to convert
+     * @param pp the parse position
      * @return <code>Object</code> representation of str
      */
 

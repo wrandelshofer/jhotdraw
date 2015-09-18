@@ -1,7 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* @(#)PatternConverter.java
+ * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.text;
 
@@ -105,6 +104,10 @@ import org.jhotdraw.io.StreamPosTokenizer;
  * in ascending order, the results of formatting will be incorrect. ChoiceFormat
  * also accepts {@code \u221E} as equivalent to infinity(INF).
  * </p>
+ * <p>
+ * If the separator of a list contains arguments, then their argument
+ * indices should be smaller than the argument index.
+ * </p>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -113,10 +116,13 @@ public class PatternConverter implements Converter<Object[]> {
 
     private AST ast;
     private ConverterFactory factory;
+    /** Number of argument indices needed. */
+    private int numIndices;
 
     public PatternConverter(String pattern, ConverterFactory factory) {
         try {
             ast = parseTextFormatPattern(pattern);
+            numIndices = 1 + ast.getMaxArgumentIndex();
         } catch (IOException ex) {
             throw new IllegalArgumentException("Illegal pattern", ex);
         }
@@ -126,12 +132,18 @@ public class PatternConverter implements Converter<Object[]> {
 
     @Override
     public void toString(Object[] value, Appendable out) throws IOException {
-        ast.toString(value, out, factory, new ArgumentOffset());
+        int[] indices = new int[numIndices];
+        for (int i = 0; i < indices.length; i++) {
+            indices[i] = i;
+        }
+        ast.toString(value, out, factory, indices);
     }
 
     @Override
-    public Object[] fromString(CharBuffer buf) throws ParseException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object[] fromString(CharBuffer buf) throws ParseException, IOException {
+        ArrayList<Object> value = new ArrayList<>();
+        ast.fromString(buf,factory, value);
+        return value.toArray();
     }
 
     static class ArgumentOffset {
@@ -160,25 +172,51 @@ public class PatternConverter implements Converter<Object[]> {
             return "AST{" + children + '}';
         }
 
-        public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
+        public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             for (AST child : children) {
-                child.toString(value, out, factory, argumentOffset);
+                child.toString(value, out, factory, indices);
             }
         }
 
-        public int getMaxArgumentIndex(Object[] value, ArgumentOffset argumentOffset) {
+        public int getMaxArgumentIndex() {
             int index = -1;
             for (AST child : children) {
-                index = Math.max(index, argumentOffset.offset
-                        + child.getMaxArgumentIndex(value, argumentOffset));
+                index = Math.max(index, +child.getMaxArgumentIndex());
             }
             return index;
+        }
+
+        public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
+            for (AST child : children) {
+                child.fromString(buf,factory, value);
+            }
+        }
+
+        static String escape(char charAt) {
+            if (Character.isISOControl(charAt)) {
+                String hex = "000" + Integer.toHexString(charAt);
+                return "\\u" + hex.substring(hex.length() - 4);
+            } else {
+                return String.valueOf(charAt);
+            }
+        }
+
+        static String escape(String charAt) {
+            StringBuilder buf = new StringBuilder();
+            for (int i = 0, n = charAt.length(); i < n; i++) {
+            }
+            return buf.toString();
         }
     }
 
     static class Argument extends AST {
 
         protected int index;
+
+        @Override
+        public int getMaxArgumentIndex() {
+            return Math.max(index, super.getMaxArgumentIndex());
+        }
     }
 
     static class SimpleArgument extends Argument {
@@ -198,17 +236,27 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
+        public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             if (converter == null) {
                 converter = factory.apply(type, style);
             }
-            converter.toString(value[index + argumentOffset.offset], out);
+            converter.toString(value[indices[index]], out);
         }
-
+        
         @Override
-        public int getMaxArgumentIndex(Object[] value, ArgumentOffset argumentOffset) {
-            return index + argumentOffset.offset;
+        public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
+            if (converter == null) {
+                converter = factory.apply(type, style);
+            }
+            Object v = converter.fromString(buf);
+            while (value.size()<=index) {
+                value.add(null);
+            }
+            value.set(index,v);
+//            converter.toString(value[indices[index]], out);
         }
+        
+
     }
 
     /** Each child represents a choice. */
@@ -224,7 +272,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
+        public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             //int choiceIndex = Collections.binarySearch(limits, ((Number) value[index]).doubleValue());
             int choiceIndex = Arrays.binarySearch(limits, ((Number) value[index]).doubleValue());
             if (choiceIndex < 0) {
@@ -234,21 +282,41 @@ public class PatternConverter implements Converter<Object[]> {
                 choiceIndex = limits.length - 1;
             }
 
-            children.get(choiceIndex).toString(value, out, factory, argumentOffset);
+            children.get(choiceIndex).toString(value, out, factory, indices);
         }
 
         @Override
-        public int getMaxArgumentIndex(Object[] value, ArgumentOffset argumentOffset) {
-            int i = index + argumentOffset.offset;
-            for (AST child : children) {
-                i = Math.max(i, child.getMaxArgumentIndex(value, argumentOffset));
+        public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
+            int pos = buf.position();
+            int choice = -1;
+            for (int i = 0, n = children.size(); i < n; i++) {
+                AST child = children.get(i);
+
+                // try to parse each choice, break on success
+                try {
+                    child.fromString(buf, factory, value);
+                    choice = i;
+                    break;
+                } catch (ParseException e) {
+                    if (i < n - 1) {// reset position since more choices are left
+                        buf.position(pos);
+                    } else {// fail since we ran out of choices
+                        throw new ParseException("Could not parse choice.", pos);
+                    }
+                }
             }
-            return i;
+            while (value.size() < index) {
+                value.add(null);
+            }
+            value.set(index, limits[choice]);
         }
+
     }
 
     /** First child represents item, second child represents separator. */
     static class ListArgument extends Argument {
+
+        protected int maxIndex;
 
         @Override
         public String toString() {
@@ -257,46 +325,34 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public int getMaxArgumentIndex(Object[] value, ArgumentOffset argumentOffset) {
-            int i = index + argumentOffset.offset;
-
-            int childi = -1;
-            AST child = children.get(0);
-            childi = Math.max(childi, child.getMaxArgumentIndex(value, argumentOffset));
-
-            int repeat = ((Number) value[i]).intValue();
-            int step = (childi - i);
-
-            argumentOffset.offset = i + repeat * step;
-
-            return i + repeat * step;
-        }
-
-        @Override
-        public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
-            int i = index + argumentOffset.offset;
+        public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
+            int i = indices[index];
 
             AST separator = children.size() < 2 ? null : children.get(1);
-
-            int childi = -1;
             AST child = children.get(0);
-            childi = Math.max(childi, child.getMaxArgumentIndex(value, argumentOffset));
 
+            int step = maxIndex - index;
             int repeat = ((Number) value[i]).intValue();
-            int step = (childi - i);
-            System.out.println("ListArgument #=" + value.length + " argOffs="
-                    + argumentOffset.offset + " i=" + i + " repeat=" + repeat
-                    + " step=" + step);
-
-            for (int j = 0; j < repeat; j++) {
-                if (j != 0 && separator != null) {
-                    separator.toString(value, out, factory, new ArgumentOffset(0));
-                }
-                child.toString(value, out, factory, new ArgumentOffset(i + j
-                        * step));
+            // update indices after list
+            int shift = step * (repeat - 1);
+            for (int j = maxIndex + 1; j < indices.length; j++) {
+                indices[j] += shift;
             }
 
-            argumentOffset.offset = i + repeat * step;
+            // process list items
+            for (int j = 0; j < repeat; j++) {
+                if (j != 0 && separator != null) {
+                    separator.toString(value, out, factory, indices);
+                }
+
+                child.toString(value, out, factory, indices);
+
+                // update list item indices 
+                for (int k = index + 1; k <= maxIndex; k++) {
+                    indices[k] += step;
+                }
+            }
+
         }
     }
 
@@ -320,11 +376,32 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
+        public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             for (int i = 0; i < minRepeat; i++) {
                 out.append(chars);
             }
         }
+
+        @Override
+        public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
+            for (int i = 0; i < maxRepeat; i++) {
+                int reset = buf.position();
+                for (int j = 0; j < chars.length(); j++) {
+                    int ch = buf.remaining() > 0 ? buf.get() : -1;
+                    if (ch != chars.charAt(j)) {
+                        if (i < minRepeat) {
+                            throw new ParseException("Expected character '"
+                                    + escape(chars.charAt(j)) + "' but found '"
+                                    + escape((char) ch) + "'.", buf.position());
+                        } else {
+                            buf.position(reset);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     static class RegexCharclass extends Regex {
@@ -338,9 +415,34 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
+        public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             for (int i = 0; i < minRepeat; i++) {
                 out.append(chars.charAt(0));
+            }
+        }
+
+        @Override
+        public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
+            for (int i = 0; i < maxRepeat; i++) {
+                int reset = buf.position();
+                int ch = buf.remaining() > 0 ? buf.get() : -1;
+                boolean found = false;
+                for (int j = 0; j < chars.length(); j++) {
+                    if (ch == chars.charAt(j)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    if (i < minRepeat) {
+                        throw new ParseException("Expected character in ["
+                                + escape(chars) + "] but found '"
+                                + (char) ch + "'.", buf.position());
+                    } else {
+                        buf.position(reset);
+                        return;
+                    }
+                }
             }
         }
     }
@@ -354,11 +456,38 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         @Override
-        public void toString(Object[] value, Appendable out, ConverterFactory factory, ArgumentOffset argumentOffset) throws IOException {
+        public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             for (int i = 0; i < minRepeat; i++) {
-                children.get(0).toString(value, out, factory, argumentOffset);
+                children.get(0).toString(value, out, factory, indices);
             }
         }
+
+        @Override
+        public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
+            for (int i = 0; i < maxRepeat; i++) {
+                int reset = buf.position();
+                for (int j = 0, n = children.size(); j < n; j++) {
+                    AST child = children.get(j);
+
+                    // try to parse each choice, break on success
+                    try {
+                        child.fromString(buf, factory,value);
+                        break;
+                    } catch (ParseException e) {
+                        if (j < n - 1) {// reset position since more choices are left
+                            buf.position(reset);
+                        } else// fail since we ran out of choices
+                        if (i < minRepeat) {
+                            throw new ParseException("Could not parse choice.", reset);
+                        } else {
+                            buf.position(reset);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     public static AST parseTextFormatPattern(String pattern) throws IOException {
@@ -734,6 +863,7 @@ public class PatternConverter implements Converter<Object[]> {
             if (tt.ttype != '|') {
                 tt.pushBack();
             }
+            argument.maxIndex = Math.max(argument.maxIndex, child.getMaxArgumentIndex());
         }
 
         parent.children.add(argument);

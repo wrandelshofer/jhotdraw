@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ChoiceFormat;
 import java.text.MessageFormat;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.Locale;
@@ -35,26 +36,34 @@ public class PatternConverterNGTest {
     }
 
     /**
-     * Test of parseTextFormatPattern method, of class PatternConverter.
+     * Test of toString method, of class PatternConverter.
      */
-    @Test(dataProvider = "patternData")
-    public void testParsePattern(String pattern, Object[] value, String expectedOutput) throws IOException {
-        PatternConverter.AST ast = PatternConverter.parseTextFormatPattern(pattern);
-        System.out.println("pattern:"+pattern);
-      System.out.println(ast);
-        
+    @Test(dataProvider = "toStringData")
+    public void testToString(String pattern, Object[] value, String expectedOutput) throws IOException {
         PatternConverter c = new PatternConverter(pattern, new MessageFormatConverterFactory());
         String actualOutput=c.toString(value);
-        
-        System.out.println(actualOutput);
-        
         assertEquals(actualOutput, expectedOutput);
+    }
+    /**
+     * Test of fromString method, of class PatternConverter.
+     */
+    @Test(dataProvider = "fromStringData")
+    public void testFromString(String pattern, Object[] expectedValue, String input) throws IOException, ParseException {
+        PatternConverter c = new PatternConverter(pattern, new MessageFormatConverterFactory());
+        PatternConverter.AST ast = PatternConverter.parseTextFormatPattern(pattern);
+        System.out.println("ast:"+ast);
+        Object[] actualValue=c.fromString(input);
+        assertEquals(actualValue, expectedValue);
     }
 
     @DataProvider
-    public Object[][] patternData() {
+    public Object[][] toStringData() {
         return new Object[][]{
-            {"{0,choice,0#a|1#b}c", new Object[]{0}, "ac"},
+            {"{0,list,{1}}", new Object[]{0}, ""},
+            {"{0,list,{1}}", new Object[]{1,"i0"}, "i0"},
+            {"{0,list,{1}}", new Object[]{2,"i0","i1"}, "i0i1"},
+            {"{0,list,{1}|,}", new Object[]{2,"i0","i1"}, "i0,i1"},
+            {"{0,list,{1}|,}{2}", new Object[]{2,"i0","i1","x"}, "i0,i1x"},
             
             {"hello world", new Object[]{}, "hello world"},
             {"'hello world'", new Object[]{}, "hello world"},
@@ -75,11 +84,25 @@ public class PatternConverterNGTest {
             {"{0,choice,0#hello world|1#good morning}zero", new Object[]{0}, "hello worldzero"},
             {"{0,choice,0#hello world|1#good morning}one", new Object[]{1}, "good morningone"},
             {"{0,choice,0#hello world|1#good morning}two", new Object[]{2}, "good morningtwo"},
-            {"{0,list,{1}}", new Object[]{2,1,2}, "12"},
-            {"{0,list,{1}|,}", new Object[]{2,1,2}, "1,2"},
-            {"{0,list,{1}|,}bla", new Object[]{2,1,2}, "1,2bla"},
-            {"{0,list,{1}{2}}'+'{3,list,{4}|-}={5}", new Object[]{2,'h','e','l','o',5,'w','o','r','l','d','!'}, "hello+w-o-r-l-d=!"},
             
+        };
+    }
+    @DataProvider
+    public Object[][] fromStringData() {
+        return new Object[][]{
+            {"hello world", new Object[]{}, "hello world"},
+            {"'hello world'", new Object[]{}, "hello world"},
+            {"he+llo", new Object[]{}, "hello"},
+            {"he*llo", new Object[]{}, "hllo"},
+            {"h(e|a)llo", new Object[]{}, "hello"},
+            {"h[ea]llo", new Object[]{}, "hello"},
+            {"hello {0}", new Object[]{"world"}, "hello world"},
+            {"left brace '{'", new Object[]{}, "left brace {"},
+            {"right brace '}'", new Object[]{}, "right brace }"},
+            {"quote ''", new Object[]{}, "quote '"},
+            /*{"{0} world", new Object[]{"hello"}, "hello world"},
+            {"{0} {1}", new Object[]{"hello","world"}, "hello world"},
+            {"{1} {0}", new Object[]{"world","hello"}, "hello world"},*/
         };
 
     }
