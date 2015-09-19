@@ -17,7 +17,14 @@ import org.jhotdraw.beans.SimplePropertyBean;
  */
 public abstract class AbstractFigure extends SimplePropertyBean implements Figure {
 
-    private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY);
+    private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
+
+        @Override
+        public void set(Figure newValue) {
+            checkNewParent(newValue);
+            super.set(newValue);
+        }
+    };
 
     @Override
     public ObjectProperty<Figure> parentProperty() {
@@ -28,5 +35,14 @@ public abstract class AbstractFigure extends SimplePropertyBean implements Figur
     @Override
     public boolean isSelectable() {
         return true;
+    }
+
+    /** Subclasses can override this method to check whether they are added to a
+     * legal parent. This method throws an illegal argument exception if the new
+     * parent is an instance of Drawing. */
+    protected void checkNewParent(Figure newValue) {
+        if (newValue instanceof Drawing) {
+            throw new IllegalArgumentException("This figure can not be directly added to a Drawing. Illegal parent: "+newValue);
+        }
     }
 }

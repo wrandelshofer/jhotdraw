@@ -31,4 +31,18 @@ public class DirtyMask {
         }
         return new DirtyMask(mask);
     }
+
+    /** API for DirtyBits. */
+    final int getMask() {
+        return bitmask;
+    }
+
+    public boolean containsOneOf(DirtyBits... bits) {
+        for (DirtyBits bit : bits) {
+            if ((bitmask & bit.getMask()) == bit.getMask()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

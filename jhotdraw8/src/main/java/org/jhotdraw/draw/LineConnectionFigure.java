@@ -5,44 +5,51 @@
  */
 package org.jhotdraw.draw;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.beans.PropertyBean;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import javafx.geometry.VPos;
+import javafx.scene.Group;
+import javafx.scene.text.Text;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
 /**
  * LineConnectionFigure.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class LineConnectionFigure extends AbstractShapeFigure implements ConnectionFigure {
 
     /** Holds a strong reference to the property. */
-    private Property<Figure> startFigureProperty;
+    private Property<ConnectableFigure> startFigureProperty;
     /** Holds a strong reference to the property. */
-    private Property<Figure> endFigureProperty;
+    private Property<ConnectableFigure> endFigureProperty;
     /** Holds a strong reference to the property. */
     private Property<Connector> startConnectorProperty;
     /** Holds a strong reference to the property. */
     private Property<Connector> endConnectorProperty;
+
+    /** Whether the value of the start property is valid.
+     * XXX should use a bitmask instead of a field for each invalidable value.
+     */
+    private boolean isStartValid = false;
+    /** Whether the value of the end property is valid.
+     * XXX should use a bitmask instead of a field for each invalidable value.
+     */
+    private boolean isEndValid = false;
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
@@ -59,42 +66,65 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         // We must update the start and end point when ever one of
         // the connected figures or one of the connectors changes
         InvalidationListener ilStart = observable -> {
-            //updateStart();
+            invalidateStart();
         };
-        ChangeListener<Observable> clStart = (observable, oldValue, newValue) -> {
+        ChangeListener<ConnectableFigure> clStart = (observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.connections().remove(LineConnectionFigure.this);
+                oldValue.properties().removeListener(ilStart);
+            }
+            if (newValue != null) {
+                newValue.connections().add(LineConnectionFigure.this);
+                newValue.properties().addListener(ilStart);
+                invalidateStart();
+            }
+        };
+        ChangeListener<Observable> oclStart = (observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 oldValue.removeListener(ilStart);
             }
             if (newValue != null) {
                 newValue.addListener(ilStart);
-                //updateStart();
+                invalidateStart();
             }
         };
         InvalidationListener ilEnd = observable -> {
-            //updateEnd();
+            invalidateEnd();
         };
-        ChangeListener<Observable> clEnd = (observable, oldValue, newValue) -> {
+        ChangeListener<ConnectableFigure> clEnd = (observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.connections().remove(LineConnectionFigure.this);
+                oldValue.properties().removeListener(ilEnd);
+            }
+            if (newValue != null) {
+                newValue.connections().add(LineConnectionFigure.this);
+                newValue.properties().addListener(ilEnd);
+                invalidateEnd();
+            }
+        };
+        ChangeListener<Observable> oclEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 oldValue.removeListener(ilEnd);
             }
             if (newValue != null) {
                 newValue.addListener(ilEnd);
-                //updateEnd();
+                invalidateEnd();
             }
         };
 
         startFigureProperty = START_FIGURE.propertyAt(properties());
-        //startFigureProperty.addListener(clStart);
+        startFigureProperty.addListener(clStart);
         endFigureProperty = END_FIGURE.propertyAt(properties());
-        //endFigureProperty.addListener(clEnd);
+        endFigureProperty.addListener(clEnd);
         startConnectorProperty = START_CONNECTOR.propertyAt(properties());
-        startConnectorProperty.addListener(clStart);
+        startConnectorProperty.addListener(oclStart);
         endConnectorProperty = END_CONNECTOR.propertyAt(properties());
-        endConnectorProperty.addListener(clEnd);
+        endConnectorProperty.addListener(oclEnd);
     }
 
     @Override
-    public Bounds getLayoutBounds() {
+    public Bounds getBoundsInLocal() {
+        validate();
         Point2D start = get(START);
         Point2D end = get(END);
         return new BoundingBox(//
@@ -125,12 +155,13 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
     }
 
     @Override
-    public Node createNode(DrawingView drawingView) {
+    public Node createNode(DrawingRenderer drawingView) {
         return new Line();
     }
 
     @Override
-    public void updateNode(DrawingView drawingView, Node node) {
+    public void updateNode(DrawingRenderer drawingView, Node node) {
+        validate();
         Line lineNode = (Line) node;
         applyFigureProperties(lineNode);
         updateShapeProperties(lineNode);
@@ -142,10 +173,27 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         lineNode.setEndY(end.getY());
     }
 
-    
-    protected void updateState() {
-        updateStart();
-        updateEnd();
+    /** Some property values of this figure depend on property values of
+     * other figures. Invoke this method to ensure that you get the correct
+     * property values.
+     */
+    public void validate() {
+        validateStart();
+        validateEnd();
+    }
+
+    private void validateStart() {
+        if (!isStartValid) {
+            updateStart();
+            isStartValid = true;
+        }
+    }
+
+    private void validateEnd() {
+        if (!isEndValid) {
+            updateEnd();
+            isEndValid = true;
+        }
     }
 
     private void updateStart() {
@@ -156,4 +204,17 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         get(END_CONNECTOR).updateEndPosition(this);
     }
 
+    private void invalidateStart() {
+        isStartValid = false;
+        // we also have to invalidate the end because 
+        // some connectors require this
+        isEndValid = false;
+    }
+
+    private void invalidateEnd() {
+        isEndValid = false;
+        // we also have to invalidate the start because 
+        // some connectors require this
+        isStartValid = false;
+    }
 }

@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.draw.tool;
 
+import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
@@ -31,6 +32,9 @@ import org.jhotdraw.util.Resources;
  * <p>
  * A Figure can be selected by clicking at it. Holding the alt key or the
  * ctrl key down, selects the Figure behind it.
+ * <p>
+ * Holding down the shift key on mouse pressed, enforces the area selection
+ * function.
  * <hr>
  * <b>Design Patterns</b>
  *
@@ -63,6 +67,9 @@ public class SelectionTool extends AbstractTool {
     // Fields
     // ---
     private static final long serialVersionUID = 1L;
+    /** Look inside a radius of 2 pixels if the mouse click did not hit
+     * something. */
+    private final double tolerance = 2;
     /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
@@ -87,7 +94,6 @@ public class SelectionTool extends AbstractTool {
     // ---
     // Constructors
     // ---
-
     public SelectionTool() {
         this("selectionTool", Resources.getBundle("org.jhotdraw.draw.Labels"));
     }
@@ -119,15 +125,22 @@ public class SelectionTool extends AbstractTool {
         double vx = evt.getX();
         double vy = evt.getY();
         pressedFigure = view.findFigure(vx, vy);
-        if (isSelectBehindEnabled() && (evt.isAltDown() || evt.isControlDown())) {
+        if (pressedFigure == null) {
+            List<Figure> fs = view.findFiguresIntersecting(vx - tolerance, vy
+                    - tolerance, tolerance * 2, tolerance * 2);
+            if (!fs.isEmpty()) {
+                pressedFigure = fs.get(0);
+            }
+        }
+        if (isSelectBehindEnabled() && (evt.isShiftDown())) {
             // Select a figure behind the current selection
             // FIXME implement me - this is just a stub and selects just the figure
             //         behind the front most figure
             pressedFigure = view.findFigureBehind(vx, vy, pressedFigure);
         }
-
-        if (pressedFigure!=null
-                && view.getSelectedFigures().contains(pressedFigure)) {
+        if (pressedFigure != null
+                && (!(evt.isAltDown() || evt.isControlDown())
+                || view.getSelectedFigures().contains(pressedFigure))) {
             DragTracker t = getDragTracker(pressedFigure, view);
             setTracker(t);
         } else {
@@ -155,7 +168,7 @@ public class SelectionTool extends AbstractTool {
         }
         setTracker(null);
 
-        if (!mouseDragged && pressedFigure!=null) {
+        if (!mouseDragged && pressedFigure != null) {
             dv.selectionProperty().add(pressedFigure);
         }
 

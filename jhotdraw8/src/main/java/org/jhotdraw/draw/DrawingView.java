@@ -24,7 +24,7 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.handle.Handle;
 
 /**
- * A {@code DrawingView} can display a {@code Drawing}.
+ * A {@code DrawingView} can display a {@code Drawing} in a JavaFX scene graph.
  * <p>
  * A {@code DrawingView} consists of the following layers:
  * <ul>
@@ -38,15 +38,15 @@ import org.jhotdraw.draw.handle.Handle;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DrawingView {
+public interface DrawingView extends DrawingRenderer {
 
     // ---
     // property names
     // ----
     /**
-     * The name of the drawing property.
+     * The name of the drawingModel property.
      */
-    public final static String DRAWING_PROPERTY = "drawing";
+    public final static String DRAWING_MODEL_PROPERTY = "drawingModel";
     /**
      * The name of the tool property.
      */
@@ -75,17 +75,28 @@ public interface DrawingView {
      * The name of the active handle property.
      */
     public final static String ACTIVE_HANDLE_PROPERTY = "activeHandle";
+    /**
+     * The name of the active layer property.
+     */
+    public final static String ACTIVE_LAYER_PROPERTY = "activeLayer";
 
     // ---
     // properties
     // ---
     /**
-     * The drawing.
+     * The drawing model.
      *
-     * @return the drawing property, with {@code getBean()} returning this
+     * @return the drawing model property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
-    NonnullProperty<Drawing> drawingProperty();
+    NonnullProperty<DrawingModel> drawingModelProperty();
+    /**
+     * The active layer of the drawing.
+     *
+     * @return the active layer of the drawing. Returns null if the drawing
+     * has no layers or no layer has been activated.
+     */
+    ObjectProperty<Layer> activeLayerProperty();
 
     /**
      * The tool which currently edits this {@code DrawingView}.
@@ -177,7 +188,7 @@ public interface DrawingView {
 
     /**
      * Finds the figure at the given view coordinates. Figures are searched in
-     * Z-order from front to back.
+     * Z-order from front to back. Only considers figures in editable {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
@@ -187,7 +198,7 @@ public interface DrawingView {
 
     /**
      * Finds the figure at the given view coordinates behind the given figure.
-     * Figures are searched in Z-order from front to back.
+     * Figures are searched in Z-order from front to back. Only considers figures in editable {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
@@ -199,6 +210,7 @@ public interface DrawingView {
     /**
      * Returns all figures that lie within the specified bounds given in view
      * coordinates. The figures are returned in Z-order from back to front.
+     * Only considers figures in editable {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
@@ -210,6 +222,7 @@ public interface DrawingView {
     /**
      * Returns all figures that intersect the specified bounds given in view
      * coordinates. The figures are returned in Z-order from back to front.
+     * Only considers figures in editable {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
@@ -223,11 +236,11 @@ public interface DrawingView {
     // ---
 
     default void setDrawing(Drawing newValue) {
-        drawingProperty().set(newValue);
+        drawingModelProperty().get().setRoot(newValue);
     }
 
     default Drawing getDrawing() {
-        return drawingProperty().get();
+        return drawingModelProperty().get().getRoot();
     }
 
     default void setConstrainer(Constrainer newValue) {
@@ -252,6 +265,13 @@ public interface DrawingView {
 
     default Handle getActiveHandle() {
         return activeHandleProperty().get();
+    }
+    default void setActiveLayer(Layer newValue) {
+        activeLayerProperty().set(newValue);
+    }
+
+    default Layer getActiveLayer() {
+        return activeLayerProperty().get();
     }
 
     default void setZoomFactor(double newValue) {
@@ -334,5 +354,7 @@ public interface DrawingView {
      * @return A collection containing the handle and all compatible handles.
      */
     public Collection<Handle> getCompatibleHandles(Handle handle);
+    
+    
 
 }

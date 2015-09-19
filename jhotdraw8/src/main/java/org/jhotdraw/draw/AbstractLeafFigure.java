@@ -8,6 +8,7 @@ package org.jhotdraw.draw;
 
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.collections.FXCollections;
 import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
 
 /**
@@ -19,7 +20,7 @@ import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
  */
 public abstract class AbstractLeafFigure extends AbstractFigure {
 
-    private static final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(null, CHILDREN_PROPERTY);
+    private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this,CHILDREN_PROPERTY,FXCollections.emptyObservableList());
 
     @Override
     public final ReadOnlyListProperty<Figure> childrenProperty() {

@@ -20,9 +20,6 @@ public class HierarchicalMap<K, V> extends HashMap<K, V> {
     private HierarchicalMap<K, V> parent = null;
 
     public void setParent(HierarchicalMap<K, V> newValue) {
-        if (newValue == null) {
-            throw new IllegalArgumentException("newValue is null");
-        }
         parent = newValue;
     }
 
@@ -39,7 +36,7 @@ public class HierarchicalMap<K, V> extends HashMap<K, V> {
     @Override
     public V get(Object key) {
         if (containsKey(key)) {
-            return get(key);
+            return super.get(key);
         } else {
             return (parent!=null) ? parent.get(key) : null;
         }

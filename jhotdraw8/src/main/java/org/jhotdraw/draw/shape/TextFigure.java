@@ -5,30 +5,30 @@
  */
 package org.jhotdraw.draw.shape;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DirtyBits;
+import org.jhotdraw.draw.DirtyMask;
+import org.jhotdraw.draw.DrawingRenderer;
+import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.connector.Connector;
 
 /**
  * TextFigure.
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractShapeFigure implements TextHolderFigure {
-     public final static Key<Point2D> ORIGIN = new Key<>("origin", Point2D.class, new Point2D(0, 0));
-
-    private ReadOnlyObjectWrapper<Bounds> layoutBounds = null;
+public class TextFigure extends AbstractConnectableShapeFigure implements TextHolderFigure {
+     public final static FigureKey<Point2D> ORIGIN = new FigureKey<>("origin", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), new Point2D(0, 0));
 
     private Text textNode;
 
@@ -46,7 +46,7 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
     }
 
     @Override
-    public Bounds getLayoutBounds() {
+    public Bounds getBoundsInLocal() {
         if (textNode == null) {
             textNode = new Text();
         }
@@ -69,17 +69,21 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
     }
 
     @Override
-    public Node createNode(DrawingView drawingView) {
+    public Node createNode(DrawingRenderer drawingView) {
         return new Text();
     }
 
     @Override
-    public void updateNode(DrawingView drawingView, Node node) {
-        Text textNode = (Text) node;
-        textNode.setText(get(TEXT));
-        textNode.setX(get(ORIGIN).getX());
-        textNode.setY(get(ORIGIN).getY());
-        textNode.setBoundsType(TextBoundsType.VISUAL);
-        updateTextProperties(textNode);
+    public void updateNode(DrawingRenderer drawingView, Node node) {
+        Text tn = (Text) node;
+        tn.setText(get(TEXT));
+        tn.setX(get(ORIGIN).getX());
+        tn.setY(get(ORIGIN).getY());
+        tn.setBoundsType(TextBoundsType.VISUAL);
+        updateTextProperties(tn);
+    }
+    @Override
+    public Connector findConnector(Point2D p, ConnectionFigure prototype) {
+        return new ChopRectangleConnector();
     }
 }

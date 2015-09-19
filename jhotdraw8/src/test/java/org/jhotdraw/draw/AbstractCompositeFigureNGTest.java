@@ -69,7 +69,7 @@ public class AbstractCompositeFigureNGTest {
     public class AbstractCompositeFigureImpl extends AbstractCompositeFigure {
 
         @Override
-        public Bounds getLayoutBounds() {
+        public Bounds getBoundsInLocal() {
             throw new UnsupportedOperationException("Not supported yet."); 
         }
 

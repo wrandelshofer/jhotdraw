@@ -10,7 +10,7 @@ import java.text.ParseException;
 import javafx.util.StringConverter;
 
 /**
- * Allows to use a {@code Converter} with the {@code javafx.util.StringFormatter}
+ * Allows to use a {@code Converter} with the {@code javafx.util.StringConverter}
  * API.
  *
  * @author Werner Randelshofer

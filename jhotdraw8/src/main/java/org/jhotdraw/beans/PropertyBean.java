@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.beans;
 
+import javafx.beans.Observable;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.css.CssMetaData;
@@ -36,7 +37,7 @@ import org.jhotdraw.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface PropertyBean {
+public interface PropertyBean  {
     // ---
     // constant declarations
     // ---
@@ -60,10 +61,11 @@ public interface PropertyBean {
      *
      * @param <T> the value type
      * @param key the key
-     * @param value the value
+     * @param newValue the value
+     * @return the old value
      */
-    default <T> void set(Key<T> key, T value) {
-        key.put(properties(), value);
+    default <T> T set(Key<T> key, T newValue) {
+        return key.put(properties(), newValue);
     }
 
     /**

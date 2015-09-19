@@ -94,6 +94,8 @@ public class GrapherView extends AbstractView {
         ZoomToolbar ztbar = new ZoomToolbar();
         ztbar.setDrawingView(drawingView);
         toolBar.getItems().add(ztbar);
+        
+        callback.handle(new TaskCompletionEvent());
     }
 
     @Override
