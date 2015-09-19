@@ -1,24 +1,20 @@
-/*
- * @(#)AbstractShapeFigure.java
+/* @(#)AbstractShapeFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
 package org.jhotdraw.draw.shape;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw.draw.AbstractFigure;
+import org.jhotdraw.draw.AbstractConnectableLeafFigure;
 import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
 
 /**
@@ -33,7 +29,7 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * Defines the paint used for filling the interior of the figure. Default
      * value: {@code Color.WHITE}.
      */
-    public static FigureKey<Paint> FILL = new FigureKey<>("fill", Paint.class,DirtyMask.of(DirtyBits.NODE),  Color.WHITE);
+    public static FigureKey<Paint> FILL_PAINT = new FigureKey<>("fillPaint", Paint.class,DirtyMask.of(DirtyBits.NODE),  Color.WHITE);
     /**
      * Defines whether anti aliasing hints are used. Default value: {@code true}.
      */
@@ -61,7 +57,7 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
      */
-    public static FigureKey<Paint> STROKE = new FigureKey<>("stroke", Paint.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  Color.BLACK);
+    public static FigureKey<Paint> STROKE_PAINT = new FigureKey<>("strokePaint", Paint.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  Color.BLACK);
     /**
      * Defines the stroke type used for drawing outline of the figure. Default
      * value: {@code StrokeType.CENTERED}.
@@ -83,13 +79,13 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * @param shape a shape node
      */
     protected void updateShapeProperties(Shape shape) {
-        shape.setFill(get(FILL));
+        shape.setFill(get(FILL_PAINT));
         shape.setSmooth(get(SMOOTH));
         shape.setStrokeDashOffset(get(STROKE_DASH_OFFSET));
         shape.setStrokeLineCap(get(STROKE_LINE_CAP));
         shape.setStrokeLineJoin(get(STROKE_LINE_JOIN));
         shape.setStrokeMiterLimit(get(STROKE_MITER_LIMIT));
-        shape.setStroke(get(STROKE));
+        shape.setStroke(get(STROKE_PAINT));
         shape.setStrokeType(get(STROKE_TYPE));
         shape.setStrokeWidth(get(STROKE_WIDTH));
         shape.getStrokeDashArray().clear();

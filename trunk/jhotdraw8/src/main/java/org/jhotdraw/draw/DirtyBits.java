@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* @(#)DirtyBits.java
+ * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+ * You may not use, copy or modify this file, except in compliance with the
+ * accompanying license terms.
  */
 package org.jhotdraw.draw;
 
@@ -12,7 +12,12 @@ package org.jhotdraw.draw;
  * @version $Id$
  */
 public enum DirtyBits {
-    /** The appearance of the node which is used to render the figure has changed.
+    /** The state of the figure has changed.
+     * Such as when a comment or another non-visual property has changed.
+     */
+    STATE,
+    /** The appearance of the node which is used to render the figure has
+     * changed.
      * Such as when the fill color changed.
      */
     NODE,
@@ -35,7 +40,10 @@ public enum DirtyBits {
         mask = 1 << ordinal();
     }
 
-    public final long getMask() {
+    /** API for DirtyMask. */
+    final int getMask() {
         return mask;
     }
+
+
 }

@@ -1,8 +1,7 @@
 /*
- * @(#)DrawingModelEvent.java
- * Copyright (c) 2015 by the authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the
- * accompanying license terms.
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package org.jhotdraw.draw;
 
@@ -17,13 +16,19 @@ import org.jhotdraw.event.Event;
  */
 public class DrawingModelEvent extends Event<DrawingModel> {
 
-    enum EventType {
+    /**
+     *
+     */
+    public final static Key<Drawing> ROOT_KEY = new Key<>("root", Drawing.class, null);
 
+    public enum EventType {
+        ROOT_CHANGED,
+        SUBTREE_STRUCTURE_CHANGED,
+        SUBTREE_NODES_CHANGED,
         FIGURE_ADDED,
         FIGURE_REMOVED,
-        FIGURE_REQUEST_REMOVE,
         PROPERTY_CHANGED,
-        FIGURE_INVALIDATED
+        NODE_CHANGED
     }
     private final Figure figure;
     private final Key<?> key;
@@ -32,64 +37,43 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
     private final Figure parent;
     private final int index;
-    private final EventType eventType;
+    private final DrawingModelEvent.EventType eventType;
 
-    public <T> DrawingModelEvent(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
+    private DrawingModelEvent(DrawingModel source, EventType eventType, Figure figure, Figure parent, int index, Key<?> key, Object oldValue, Object newValue) {
         super(source);
-        if (figure == null) {
-            throw new NullPointerException("figure is null");
-        }
-        eventType = EventType.PROPERTY_CHANGED;
         this.figure = figure;
         this.key = key;
         this.oldValue = oldValue;
         this.newValue = newValue;
-        this.parent = null;
-        this.index = -1;
-    }
-
-    public <T> DrawingModelEvent(DrawingModel source, boolean wasAdded, Figure parent, Figure child, int index) {
-        super(source);
-        if (parent == null) {
-            throw new NullPointerException("parent is null");
-        }
-        eventType = wasAdded ? EventType.FIGURE_ADDED : EventType.FIGURE_REMOVED;
-        this.figure = child;
-        this.key = null;
-        this.oldValue = null;
-        this.newValue = null;
         this.parent = parent;
         this.index = index;
+        this.eventType = eventType;
     }
 
-    public <T> DrawingModelEvent(DrawingModel source, Figure invalidatedFigure) {
-        super(source);
-        if (invalidatedFigure == null) {
-            throw new NullPointerException("figure is null");
-        }
-        eventType = EventType.FIGURE_INVALIDATED;
-        this.figure = invalidatedFigure;
-        this.key = null;
-        this.oldValue = null;
-        this.newValue = null;
-        this.parent = null;
-        this.index = -1;
+    public static DrawingModelEvent subtreeStructureChanged(DrawingModel source, Figure root) {
+        return new DrawingModelEvent(source, EventType.SUBTREE_STRUCTURE_CHANGED, root, null, -1, null, null, null);
+    }
+    public static DrawingModelEvent subtreeNodesChanged(DrawingModel source, Figure root) {
+        return new DrawingModelEvent(source, EventType.SUBTREE_NODES_CHANGED, root, null, -1, null, null, null);
     }
 
-    public boolean wasInvalidated() {
-        return getEventType() == EventType.FIGURE_INVALIDATED;
+    public static DrawingModelEvent figureAdded(DrawingModel source, Figure parent, Figure child, int index) {
+        return new DrawingModelEvent(source, EventType.FIGURE_ADDED, child, parent, index, null, null, null);
     }
 
-    public boolean wasAdded() {
-        return getEventType() == EventType.FIGURE_ADDED;
+    public static DrawingModelEvent figureRemoved(DrawingModel source, Figure parent, Figure child, int index) {
+        return new DrawingModelEvent(source, EventType.FIGURE_REMOVED, child, parent, index, null, null, null);
     }
 
-    public boolean wasRemoved() {
-        return getEventType() == EventType.FIGURE_REMOVED;
+    public static <T> DrawingModelEvent propertyChanged(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
+        return new DrawingModelEvent(source, EventType.PROPERTY_CHANGED, figure, null, -1, key, oldValue, newValue);
     }
 
-    public boolean wasChanged() {
-        return getEventType() == EventType.PROPERTY_CHANGED;
+    public static <T> DrawingModelEvent nodeChanged(DrawingModel source, Figure figure) {
+        return new DrawingModelEvent(source, EventType.NODE_CHANGED, figure, null, -1, null, null, null);
+    }
+    public static <T> DrawingModelEvent rootChanged(DrawingModel source, Drawing figure) {
+        return new DrawingModelEvent(source, EventType.ROOT_CHANGED, figure, null, -1, null, null, null);
     }
 
     /**
@@ -158,7 +142,8 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return index;
     }
 
-    public EventType getEventType() {
+    /** Returns the event type. */
+    public DrawingModelEvent.EventType getEventType() {
         return eventType;
     }
 

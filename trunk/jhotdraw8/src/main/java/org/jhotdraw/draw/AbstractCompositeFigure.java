@@ -6,6 +6,8 @@
  */
 package org.jhotdraw.draw;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -13,7 +15,11 @@ import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * This base class can be used to implement figures which support child figures.
@@ -69,4 +75,20 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return true;
     }
 
-}
+    @Override
+    public Bounds getBoundsInLocal() {
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+
+        for (Figure child : childrenProperty()) {
+            Bounds b = child.getBoundsInParent();
+            minX = min(minX, b.getMinX());
+            maxX = max(maxX, b.getMaxX());
+            minY = min(minY, b.getMinY());
+            maxY = max(maxY, b.getMaxY());
+        }
+
+        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    }}

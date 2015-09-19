@@ -49,9 +49,6 @@ public abstract class AbstractViewAction extends AbstractApplicationAction {
      */
     public AbstractViewAction(Application app,  View view) {
         super(app);
-        if (view == null) {
-            throw new IllegalArgumentException("view is null");
-        }
         this.view = view;
         if (view!=null) {
             activeViewListener.changed(null, null, view);

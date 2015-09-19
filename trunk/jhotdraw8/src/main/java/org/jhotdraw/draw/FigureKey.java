@@ -24,20 +24,8 @@ public class FigureKey<T> extends Key<T> {
      * @param key The name of the name.
      * @param clazz The type of the value.
      */
-    public FigureKey(String key, Class<T> clazz) {
-        this(key, clazz, "", DirtyMask.ALL,null);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key The name of the name.
-     * @param clazz The type of the value.
-     * @param defaultValue The default value.
-     */
-    public FigureKey(String key, Class<T> clazz, T defaultValue) {
-        this(key, clazz, "", DirtyMask.ALL, defaultValue);
+    public FigureKey(String key, Class<T> clazz, DirtyMask dirtyMask) {
+        this(key, clazz, "", dirtyMask,null);
     }
 
     /**
@@ -68,4 +56,10 @@ public class FigureKey<T> extends Key<T> {
         super(key, clazz, typeParameters, defaultValue);
         this.dirtyMask = dirtyMask;
     }
+
+    public DirtyMask getDirtyMask() {
+        return dirtyMask;
+    }
+    
+    
 }

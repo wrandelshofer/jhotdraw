@@ -19,11 +19,6 @@ import org.jhotdraw.draw.connector.Connector;
  * The location of the start and end points of the geometric path is defined by
  * {@link Connector} objects, which are supplied by the connected figures.
  * <p>
- * If a connected figure is removed, the connection figure needs to be
- * removed as well. To achieve this, {@code ConnectionFigure} listens to
- * {@code figureRemoved} events sent by the two figures that it connects, and
- * then fires a {@code requestRemove} event to get removed as well.
- * <p>
  * The geometric path of the connection figure can be laid out using a
  * {@code Liner}.
  * <p>
@@ -44,28 +39,34 @@ public interface ConnectionFigure extends Figure {
     /**
      * The start position of the geometric path.
      */
-    public static Key<Point2D> START= new Key<>("start", Point2D.class, new Point2D(0,0));
+    public static FigureKey<Point2D> START= new FigureKey<>("start", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS),new Point2D(0,0));
     /**
      * The end position of the geometric path.
      */
-    public static Key<Point2D> END = new Key<>("end", Point2D.class, new Point2D(0,0));
+    public static FigureKey<Point2D> END = new FigureKey<>("end", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS),new Point2D(0,0));
     /**
      * The start figure.
      * Is null if the figure is not connected at the start.
+     * <p>
+     * If the value is changed. This figure must add or remove itself from
+     * the list of connections on the {@code ConnectableFigure}.</p>
      */
-    public static Key<Figure> START_FIGURE = new Key<>("startFigure", Figure.class, null);
+    public static FigureKey<ConnectableFigure> START_FIGURE = new FigureKey<>("startFigure",ConnectableFigure.class, DirtyMask.of(DirtyBits.STATE), null);
     /**
      * The end figure.
      * Is null if the figure is not connected at the end.
+     * <p>
+     * If the value is changed. This figure must add or remove itself from
+     * the list of connections on the {@code ConnectableFigure}.</p>
      */
-    public static Key<Figure> END_FIGURE = new Key<>("endFigure", Figure.class, null);
+    public static FigureKey<ConnectableFigure> END_FIGURE = new FigureKey<>("endFigure", ConnectableFigure.class,DirtyMask.of(DirtyBits.STATE),  null);
     /**
      * The start connector.
      */
-    public static Key<Connector> START_CONNECTOR = new Key<>("startConnector", Connector.class, new CenterConnector());
+    public static FigureKey<Connector> START_CONNECTOR = new FigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE), new CenterConnector());
     /**
      * The end connector.
      */
-    public static Key<Connector> END_CONNECTOR = new Key<>("endConnector", Connector.class, new CenterConnector());
+    public static FigureKey<Connector> END_CONNECTOR = new FigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE), new CenterConnector());
 
 }

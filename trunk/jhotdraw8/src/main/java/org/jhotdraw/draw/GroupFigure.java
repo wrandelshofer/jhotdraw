@@ -27,25 +27,6 @@ public class GroupFigure extends AbstractCompositeFigure {
 
 
     @Override
-    public Bounds getLayoutBounds() {
-        // FIXME we should cache the layout bounds
-        double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
-
-        for (Figure child : childrenProperty()) {
-            Bounds b = child.getLayoutBounds();
-            minX = min(minX, b.getMinX());
-            maxX = max(maxX, b.getMaxX());
-            minY = min(minY, b.getMinY());
-            maxY = max(maxY, b.getMaxY());
-        }
-
-        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
-    }
-
-    @Override
     public void reshape(Transform transform) {
         for (Figure child : childrenProperty()) {
             child.reshape(transform);
@@ -53,7 +34,7 @@ public class GroupFigure extends AbstractCompositeFigure {
     }
 
     @Override
-    public void updateNode(DrawingView v, Node n) {
+    public void updateNode(DrawingRenderer v, Node n) {
         applyFigureProperties(n);
         ObservableList<Node> group = ((Group) n).getChildren();
         group.clear();
@@ -63,7 +44,7 @@ public class GroupFigure extends AbstractCompositeFigure {
     }
 
     @Override
-    public Node createNode(DrawingView drawingView) {
+    public Node createNode(DrawingRenderer drawingView) {
         return new Group();
     }
 }

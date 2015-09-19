@@ -6,6 +6,7 @@
  */
 package org.jhotdraw.text;
 
+import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -22,27 +23,17 @@ public class Rectangle2DConverter implements Converter<Rectangle2D> {
     private final PatternConverter formatter = new PatternConverter("{0,number} {1,number} {2,number} {3,number}", new XMLConverterFactory());
 
     @Override
-    public String toString(Rectangle2D value) {
-        return null;// formatter.toString(value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
+    public void toString(Rectangle2D value, Appendable out) throws IOException {
+        formatter.toString(new Object[]{value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight()},out);
     }
 
-   
-    public Rectangle2D fromString(String value, ParsePosition pp) {
-        Object[] v = null;//formatter.fromString(value, pp);
-        if (v == null || pp.getErrorIndex() != -1) {
+    @Override
+    public Rectangle2D fromString(CharBuffer buf) throws ParseException, IOException {
+       Object[] v = formatter.fromString(buf);
+        if (v == null) {
             return null;
         }
         return new Rectangle2D((double) v[0], (double) v[1], (double) v[2], (double) v[3]);
-    }
-
-    @Override
-    public void toString(Rectangle2D value, Appendable out) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rectangle2D fromString(CharBuffer buf) throws ParseException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

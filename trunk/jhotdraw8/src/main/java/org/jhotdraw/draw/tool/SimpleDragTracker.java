@@ -8,6 +8,7 @@ package org.jhotdraw.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.draw.DrawingModel;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
@@ -74,8 +75,9 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
         // Convert point into drawing coordinates
         Point2D dp = dv.viewToDrawing(evt.getX() - x, evt.getY() - y);
         Transform t = Transform.translate(dp.getX(), dp.getY());
+        DrawingModel dm = dv.getDrawingModel();
         for (Figure f : dv.getSelectedFigures()) {
-            f.reshape(t);
+            dm.reshape(f, t);
         }
 
         x = evt.getX();

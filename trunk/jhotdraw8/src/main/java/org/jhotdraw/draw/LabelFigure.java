@@ -46,7 +46,7 @@ public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure 
     }
 
     @Override
-    public Bounds getLayoutBounds() {
+    public Bounds getBoundsInLocal() {
         if (textNode == null) {
             textNode = new Text();
         }
@@ -64,12 +64,12 @@ public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure 
     }
 
     @Override
-    public Node createNode(DrawingView drawingView) {
+    public Node createNode(DrawingRenderer drawingView) {
         return new Text();
     }
 
     @Override
-    public void updateNode(DrawingView drawingView, Node node) {
+    public void updateNode(DrawingRenderer drawingView, Node node) {
         Text textNode = (Text) node;
         textNode.setText(get(TEXT));
         textNode.setX(get(ORIGIN).getX());

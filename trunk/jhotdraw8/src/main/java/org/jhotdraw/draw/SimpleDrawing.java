@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -20,11 +21,11 @@ import org.jhotdraw.collection.Key;
 
 /**
  * SimpleDrawing.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class SimpleDrawing extends GroupFigure implements Drawing {
-
 
     public static HashMap<String, Key<?>> getFigureKeys() {
         try {
@@ -48,14 +49,14 @@ public class SimpleDrawing extends GroupFigure implements Drawing {
     }
 
     @Override
-    public Node createNode(DrawingView drawingView) {
+    public Node createNode(DrawingRenderer drawingView) {
         Group g = new Group();
         g.getProperties().put("page", new Rectangle());
         return g;
     }
 
     @Override
-    public void updateNode(DrawingView v, Node n) {
+    public void updateNode(DrawingRenderer v, Node n) {
         Group g = (Group) n;
         ObservableList<Node> children = ((Group) n).getChildren();
         children.clear();
@@ -65,11 +66,24 @@ public class SimpleDrawing extends GroupFigure implements Drawing {
         page.setY(bounds.getMinY());
         page.setWidth(bounds.getWidth());
         page.setHeight(bounds.getHeight());
-        page.setFill(get(BACKGROUND));
+        page.setFill(get(BACKGROUND_PAINT));
         children.add(page);
 
         for (Figure child : childrenProperty()) {
             children.add(v.getNode(child));
+        }
+    }
+
+    @Override
+    public Bounds getBoundsInLocal() {
+        Rectangle2D bounds = get(BOUNDS);
+        return new BoundingBox(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
+    }
+
+    @Override
+    protected void checkNewParent(Figure newValue) {
+        if (newValue != null) {
+            throw new IllegalArgumentException("A drawing can not have a parent.");
         }
     }
 

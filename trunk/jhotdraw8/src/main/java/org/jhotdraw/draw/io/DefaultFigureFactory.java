@@ -12,6 +12,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
+import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.shape.CircleFigure;
 import org.jhotdraw.draw.shape.EllipseFigure;
@@ -19,7 +20,7 @@ import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.text.DefaultConverter;
 import org.jhotdraw.text.Point2DConverter;
-import org.jhotdraw.text.RealNumberConverter;
+import org.jhotdraw.text.NumberConverter;
 import org.jhotdraw.text.Rectangle2DConverter;
 
 /**
@@ -30,6 +31,7 @@ import org.jhotdraw.text.Rectangle2DConverter;
 public class DefaultFigureFactory extends SimpleFigureFactory {
 
     public DefaultFigureFactory() {
+        addFigure("Layer", SimpleLayer.class);
         addFigure("Group", GroupFigure.class);
         addFigure("Drawing", SimpleDrawing.class);
         addFigure("Rectangle", RectangleFigure.class);
@@ -47,6 +49,6 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(Rectangle2D.class, new Rectangle2DConverter());
         addConverter(String.class, new DefaultConverter());
         addConverter(Point2D.class, new Point2DConverter());
-        addConverter(Double.class, new RealNumberConverter());
+        addConverter(Double.class, new NumberConverter());
     }
 }

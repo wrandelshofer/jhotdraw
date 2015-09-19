@@ -1,11 +1,12 @@
 /*
- * @(#)RealNumberConverter.java
+ * @(#)NumberConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
 package org.jhotdraw.text;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.CharBuffer;
 import java.text.DecimalFormat;
@@ -31,7 +32,7 @@ import java.util.Locale;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RealNumberConverter implements Converter<Number> {
+public class NumberConverter implements Converter<Number> {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,48 +62,51 @@ public class RealNumberConverter implements Converter<Number> {
      * <code>NumberFormat</code> instance obtained from
      * <code>NumberFormat.getNumberInstance()</code>.
      */
-    public RealNumberConverter() {
+    public NumberConverter() {
         super();
         initFormats();
     }
 
     /**
      * Creates a NumberFormatter with the specified Format instance.
+     *
      * @param min the min
      * @param max the max
      * @param multiplier the multiplier
      */
-    public RealNumberConverter(double min, double max, double multiplier) {
+    public NumberConverter(double min, double max, double multiplier) {
         this(min, max, multiplier, false, null);
     }
 
     /**
      * Creates a NumberFormatter with the specified Format instance.
+     *
      * @param min the min
      * @param max the max
      * @param multiplier the multiplier
      * @param allowsNullValue whether null values are allowed
      */
-    public RealNumberConverter(double min, double max, double multiplier, boolean allowsNullValue) {
+    public NumberConverter(double min, double max, double multiplier, boolean allowsNullValue) {
         this(min, max, multiplier, allowsNullValue, null);
     }
 
     /**
      * Creates a NumberFormatter with the specified Format instance.
+     *
      * @param min the min
      * @param max the max
      * @param multiplier the multiplier
      * @param allowsNullValue whether null values are allowed
      * @param unit the unit string
      */
-    public RealNumberConverter(double min, double max, double multiplier, boolean allowsNullValue, String unit) {
+    public NumberConverter(double min, double max, double multiplier, boolean allowsNullValue, String unit) {
         super();
         initFormats();
-        this.min=min;
-        this.max=max;
-        this.factor=multiplier;
-        this.allowsNullValue=allowsNullValue;
-        this.unit=unit;
+        this.min = min;
+        this.max = max;
+        this.factor = multiplier;
+        this.allowsNullValue = allowsNullValue;
+        this.unit = unit;
     }
 
     private void initFormats() {
@@ -161,6 +165,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Sets the factor for use in percent, per mille, and similar formats.
+     *
      * @param newValue the factor
      */
     public void setFactor(double newValue) {
@@ -169,6 +174,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Gets the factor for use in percent, per mille, and similar formats.
+     *
      * @return the factor
      */
     public double getFactor() {
@@ -186,6 +192,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Returns true if null values are allowed.
+     *
      * @return true if null values are allowed
      */
     public boolean getAllowsNullValue() {
@@ -205,6 +212,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Returns the minimum fraction digits.
+     *
      * @return the minimum fraction digits
      */
     public int getMinimumFractionDigits() {
@@ -219,12 +227,11 @@ public class RealNumberConverter implements Converter<Number> {
      * @return String representation of value
      */
     @Override
-    public String toString(Number value) {
+    public void toString(Number value, Appendable buf) throws IOException {
         if (value == null && allowsNullValue) {
-            return "";
+            return;
         }
 
-        StringBuilder buf = new StringBuilder();
         if (value instanceof Double) {
             double v = ((Double) value).doubleValue();
             if (factor != 1.0) {
@@ -233,7 +240,8 @@ public class RealNumberConverter implements Converter<Number> {
             String str;
             BigDecimal big = new BigDecimal(v);
             int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
-            if (!usesScientificNotation || exponent > minNegativeExponent && exponent < minPositiveExponent) {
+            if (!usesScientificNotation || exponent > minNegativeExponent
+                    && exponent < minPositiveExponent) {
                 str = decimalFormat.format(v);
             } else {
                 str = scientificFormat.format(v);
@@ -247,7 +255,8 @@ public class RealNumberConverter implements Converter<Number> {
             String str;// = Float.toString(v);
             BigDecimal big = new BigDecimal(v);
             int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
-            if (!usesScientificNotation || exponent > minNegativeExponent && exponent < minPositiveExponent) {
+            if (!usesScientificNotation || exponent > minNegativeExponent
+                    && exponent < minPositiveExponent) {
                 str = decimalFormat.format(v);
             } else {
                 str = scientificFormat.format(v);
@@ -278,31 +287,12 @@ public class RealNumberConverter implements Converter<Number> {
             }
             buf.append(Short.toString(v));
         }
-        if (buf.length() != 0) {
+        if (value != null) {
             if (unit != null) {
                 buf.append(unit);
             }
-            return buf.toString();
         }
-        throw new IllegalArgumentException("Value is of unsupported class " + value);
-    }
-
-    /**
-     * Returns the <code>Object</code> representation of the
-     * <code>String</code> <code>text</code>.
-     *
-     * @param text <code>String</code> to convert
-     * @return <code>Object</code> representation of text
-     * @throws ParseException if there is an error in the conversion
-     */
-    
-    public Number fromString(String text) throws ParseException {
-        ParsePosition pp = new ParsePosition(0);
-        Number value = fromString(text, pp);
-        if (pp.getErrorIndex()!=-1) {
-            throw new ParseException("Unable to parse \""+text+"\"",pp.getErrorIndex());
-        }
-        return value;
+        return;
     }
 
     /**
@@ -312,22 +302,24 @@ public class RealNumberConverter implements Converter<Number> {
      * @param str <code>String</code> to convert
      * @param pp the parse position
      * @return <code>Object</code> representation of str
+     * @throws java.text.ParseException if the string does not start with a number
      */
-
-    public Number fromString(String str, ParsePosition pp) {
+    @Override
+    public Number fromString(CharBuffer str) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
         }
 
-        // Parse
-        int end = pp.getIndex();
+        // Parse the remaining characters from the CharBuffer
+        final int remaining = str.remaining();
+        int end = 0; // end is a relative to CharBuffer.position();
         {
             boolean noMoreSigns = false;
             boolean noMorePoints = false;
             boolean noMoreEs = false;
             Outer:
-            for (; end < str.length(); end++) {
-                char c = str.charAt(end);
+            for (; end < remaining; end++) {
+                char c = str.charAt(end);// does not consume chars from CharBuffer!
                 switch (c) {
                     case '+':
                     case '-':
@@ -370,11 +362,11 @@ public class RealNumberConverter implements Converter<Number> {
             }
         }
 
-        String text = str.substring(pp.getIndex(), end);
+        String text = str.subSequence(0, end).toString();
 
         // Remove unit from text
-        if (unit != null && end < str.length()) {
-            if (str.substring(end).startsWith(unit)) {
+        if (unit != null && end+unit.length() <= str.length()) {
+            if (str.subSequence(end, end + unit.length()).toString().startsWith(unit)) {
                 end += unit.length();
             }
         }
@@ -420,28 +412,28 @@ public class RealNumberConverter implements Converter<Number> {
                     }
                     value = v;
                 } else {
-                    pp.setErrorIndex(pp.getIndex());
-                    return null;
+                    throw new ParseException("parse error (1)",str.position());
                 }
             } catch (NumberFormatException e) {
-                pp.setErrorIndex(pp.getIndex());
-                return null;
+                    ParseException pe= new ParseException("illegal number format",str.position());
+                    pe.initCause(e);
+                    throw pe;
             }
         } else {
-            pp.setErrorIndex(pp.getIndex());
-            return null;
+                    throw new ParseException("illegal value class:"+valueClass,str.position());
         }
 
         try {
             if (!isValidValue(value, true)) {
-                pp.setErrorIndex(pp.getIndex());
-                return null;
+                    throw new ParseException("invalid value",str.position());
             }
         } catch (ClassCastException cce) {
-            pp.setErrorIndex(pp.getIndex());
-            return null;
+                    ParseException pe=new ParseException("invalid value",str.position());
+                    pe.initCause(cce);
+                    throw pe;
         }
-        pp.setIndex(end);
+        // consume the text that we just parsed
+        str.position(str.position() + end);
         return (Number) value;
     }
 
@@ -449,8 +441,8 @@ public class RealNumberConverter implements Converter<Number> {
      * Returns true if <code>value</code> is between the min/max.
      *
      * @param wantsCCE If false, and a ClassCastException is thrown in
-     *                 comparing the values, the exception is consumed and
-     *                 false is returned.
+     * comparing the values, the exception is consumed and
+     * false is returned.
      */
     @SuppressWarnings("unchecked")
     boolean isValidValue(Object value, boolean wantsCCE) {
@@ -479,12 +471,14 @@ public class RealNumberConverter implements Converter<Number> {
     }
 
     /** If non-null the unit string is appended to the value.
+     *
      * @param value the unit string */
     public void setUnit(String value) {
         unit = value;
     }
 
     /** If non-null the unit string is appended to the value.
+     *
      * @return the unit string */
     public String getUnit() {
         return unit;
@@ -493,6 +487,7 @@ public class RealNumberConverter implements Converter<Number> {
     /**
      * Gets the minimum number of digits allowed in the integer portion of a
      * number.
+     *
      * @return the minimum integer digits
      */
     public int getMinimumIntegerDigits() {
@@ -502,6 +497,7 @@ public class RealNumberConverter implements Converter<Number> {
     /**
      * Sets the minimum number of digits allowed in the integer portion of a
      * number.
+     *
      * @param newValue the new value
      */
     public void setMinimumIntegerDigits(int newValue) {
@@ -513,6 +509,7 @@ public class RealNumberConverter implements Converter<Number> {
     /**
      * Gets the maximum number of digits allowed in the integer portion of a
      * number.
+     *
      * @return the maximum integer digits
      */
     public int getMaximumIntegerDigits() {
@@ -522,6 +519,7 @@ public class RealNumberConverter implements Converter<Number> {
     /**
      * Sets the maximum number of digits allowed in the integer portion of a
      * number.
+     *
      * @param newValue the new value
      */
     public void setMaximumIntegerDigits(int newValue) {
@@ -533,6 +531,7 @@ public class RealNumberConverter implements Converter<Number> {
     /**
      * Gets the maximum number of digits allowed in the fraction portion of a
      * number.
+     *
      * @return the maximum fraction digits
      */
     public int getMaximumFractionDigits() {
@@ -542,6 +541,7 @@ public class RealNumberConverter implements Converter<Number> {
     /**
      * Sets the maximum number of digits allowed in the fraction portion of a
      * number.
+     *
      * @param newValue the maximum fraction digits
      */
     public void setMaximumFractionDigits(int newValue) {
@@ -552,6 +552,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Gets the minimum negative exponent value for scientific notation.
+     *
      * @return the minimum negative exponent
      */
     public int getMinimumNegativeExponent() {
@@ -560,6 +561,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Sets the minimum negative exponent value for scientific notation.
+     *
      * @param newValue the minimum negative exponent
      */
     public void setMinimumNegativeExponent(int newValue) {
@@ -568,6 +570,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Gets the minimum positive exponent value for scientific notation.
+     *
      * @return the minimum positive exponent
      */
     public int getMinimumPositiveExponent() {
@@ -576,6 +579,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Sets the minimum positive exponent value for scientific notation.
+     *
      * @param newValue the maximum positive exponent
      */
     public void setMinimumPositiveExponent(int newValue) {
@@ -584,6 +588,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Returns true if scientific notation is used.
+     *
      * @return true if scientific notation is used
      */
     public boolean isUsesScientificNotation() {
@@ -592,6 +597,7 @@ public class RealNumberConverter implements Converter<Number> {
 
     /**
      * Sets whether scientific notation is used.
+     *
      * @param newValue true if scientific notation is used
      */
     public void setUsesScientificNotation(boolean newValue) {
@@ -599,7 +605,7 @@ public class RealNumberConverter implements Converter<Number> {
     }
 
     /** Gets the value class.
-     * 
+     *
      * @return the value class
      */
     public Class<? extends Number> getValueClass() {
@@ -607,21 +613,11 @@ public class RealNumberConverter implements Converter<Number> {
     }
 
     /** Sets the value class.
-     * 
+     *
      * @param valueClass the value class
      */
     public void setValueClass(Class<? extends Number> valueClass) {
         this.valueClass = valueClass;
-    }
-
-    @Override
-    public void toString(Number value, Appendable out) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Number fromString(CharBuffer buf) throws ParseException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

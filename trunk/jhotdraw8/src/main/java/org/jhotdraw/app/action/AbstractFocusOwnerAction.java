@@ -48,9 +48,6 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
     */
     public AbstractFocusOwnerAction(Application app, Node target) {
        super(app);
-       if (target == null) {
-           throw new IllegalArgumentException("target is null");
-       }
         this.target=target;
             
         

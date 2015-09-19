@@ -5,10 +5,7 @@
  */
 package org.jhotdraw.draw.shape;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
@@ -16,7 +13,13 @@ import static java.lang.Math.*;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Line;
-import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DirtyBits;
+import org.jhotdraw.draw.DirtyMask;
+import org.jhotdraw.draw.DrawingRenderer;
+import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.connector.CenterConnector;
+import org.jhotdraw.draw.connector.Connector;
 
 /**
  * Renders a {@code javafx.scene.shape.Line}.
@@ -26,8 +29,8 @@ import org.jhotdraw.draw.DrawingView;
  */
 public class LineFigure extends AbstractShapeFigure {
 
-    public final static Key<Point2D> START = new Key<>("start", Point2D.class, new Point2D(0, 0));
-    public final static Key<Point2D> END = new Key<>("end", Point2D.class, new Point2D(0, 0));
+    public final static FigureKey<Point2D> START = new FigureKey<>("start", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), new Point2D(0, 0));
+    public final static FigureKey<Point2D> END = new FigureKey<>("end", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), new Point2D(0, 0));
 
     public LineFigure() {
         this(0, 0, 1, 1);
@@ -44,12 +47,12 @@ public class LineFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Bounds getLayoutBounds() {
+    public Bounds getBoundsInLocal() {
         Point2D start = get(START);
         Point2D end = get(END);
         return new BoundingBox(//
                 min(start.getX(), end.getX()),//
-                min(end.getX(), end.getY()),//
+                min(start.getY(), end.getY()),//
                 abs(start.getX() - end.getX()), //
                 abs(start.getY() - end.getY()));
     }
@@ -67,12 +70,12 @@ public class LineFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Node createNode(DrawingView drawingView) {
+    public Node createNode(DrawingRenderer drawingView) {
         return new Line();
     }
 
     @Override
-    public void updateNode(DrawingView drawingView, Node node) {
+    public void updateNode(DrawingRenderer drawingView, Node node) {
         Line lineNode = (Line) node;
         applyFigureProperties(lineNode);
         updateShapeProperties(lineNode);

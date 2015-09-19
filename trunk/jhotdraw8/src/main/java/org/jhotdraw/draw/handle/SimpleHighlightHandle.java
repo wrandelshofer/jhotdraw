@@ -5,16 +5,12 @@
  */
 package org.jhotdraw.draw.handle;
 
-import javafx.beans.InvalidationListener;
 import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.jhotdraw.draw.DrawingModel;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.SimpleDrawingModel;
 
 /**
  * SimpleHiglightHandle.
@@ -42,7 +38,7 @@ public class SimpleHighlightHandle extends AbstractHandle {
     @Override
     public void updateNode() {
         Bounds r
-                = dv.getDrawingToView().transform(getFigure().getLayoutBounds());
+                = dv.getDrawingToView().transform(getFigure().getBoundsInLocal());
         node.setX(Math.round(r.getMinX())-0.5);
         node.setY(Math.round(r.getMinY())-0.5);
         node.setWidth(Math.round(r.getWidth()));

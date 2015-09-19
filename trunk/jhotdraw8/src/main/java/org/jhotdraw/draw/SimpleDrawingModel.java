@@ -1,192 +1,264 @@
-/* @(#)SimpleDrawingModel.java
- * Copyright (c) 2015 by the authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the
- * accompanying license terms.
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package org.jhotdraw.draw;
 
-import java.util.LinkedList;
 import java.util.List;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.property.ReadOnlyProperty;
-import javafx.collections.ListChangeListener;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
+import javafx.scene.transform.Transform;
+import org.jhotdraw.beans.ListenerSupport;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.event.Listener;
-import javax.swing.tree.DefaultTreeModel;
 
 /**
- * The {@code SimpleDrawingModel} listens to mutations on a figure and
- * all its descendants, and generates {@code DrawingMutationEvent}s.
- * 
+ * SimpleDrawingModel.
+ * <p>
+ * For performance reasons this model does not register listeners on the
+ * figures. Thus listeners are only informed about changes on operations
+ * performed through this interface.
+ * <p>
+ * The events that this model fires are based on assumptions of the
+ * figure classes defined in the {@code org.jhotdraw.draw} packages.
+ * Specifically
+ * for composite figures based on {@code AbstractCompositeFigure}
+ * and connectable figures based on {@code ConnectableFigure} and
+ * {@code ConnectionFigure}. If, for example, you define a new kind
+ * of connectable figures which are not based on the @code ConnectableFigure}
+ * you may have to implement a new DrawingModel class which generates
+ * the proper events for {@code DrawingModelEvent} listeners.
+ *
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class SimpleDrawingModel implements DrawingModel {
 
-    private class FigureHandler implements ListChangeListener<Figure>, MapChangeListener<Key<?>, Object>, InvalidationListener {
+    private final ListenerSupport<Listener<DrawingModelEvent>> dmeListeners = new ListenerSupport<>();
+    private final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport<>();
 
-        public FigureHandler() {
-        }
-
-        public void addFigure(Figure figure) {
-            figure.childrenProperty().addListener((ListChangeListener<Figure>) this);
-            figure.properties().addListener((MapChangeListener<Key<?>, Object>) this);
-            //figure.addListener((InvalidationListener) this);
-        }
-
-        public void removeFigure(Figure figure) {
-            figure.childrenProperty().removeListener((ListChangeListener<Figure>) this);
-            figure.properties().removeListener((MapChangeListener<Key<?>, Object>) this);
-            //figure.removeListener((InvalidationListener) this);
-        }
+    private final MapChangeListener<Key<?>, Object> propertyHandler = new MapChangeListener<Key<?>, Object>() {
 
         @Override
-        public void onChanged(ListChangeListener.Change<? extends Figure> c) {
-            Figure figure = (Figure) ((ReadOnlyProperty) c.getList()).getBean();
-            while (c.next()) {
-                final int from = c.getFrom();
-                final int to = c.getTo();
-                final ObservableList<? extends Figure> list = c.getList();
-                if (c.wasPermutated()) {
-                    // Fixme this is extremely slow, we should forward permutations
-                    Figure[] tmp = new Figure[to - from];
-                    for (int oldi = from; oldi < to; ++oldi) {
-                        tmp[oldi] = list.get(oldi);
-                        fireFigureRemoved(figure, tmp[oldi], oldi);
-                    }
-                    for (int i = from; i < to; ++i) {
-                        for (int j = from; j < to; ++j) {
-                            if (c.getPermutation(j) == i) {
-                                fireFigureAdded(figure, tmp[j], i);
-                            }
-                        }
-                    }
+        public void onChanged(MapChangeListener.Change<? extends Key<?>, ? extends Object> change) {
+            fire(DrawingModelEvent.propertyChanged(//
+                    SimpleDrawingModel.this,
+                    (Figure) ((ReadOnlyMapProperty) change.getMap()).getBean(),//
+                    (Key<Object>) change.getKey(), //
+                    (Object) change.getValueRemoved(), //
+                    (Object) change.getValueAdded()
+            ));
 
-                } else if (c.wasUpdated()) {
-                    //update item
-                } else {
-                    if (c.wasRemoved()) {
-                        final List<? extends Figure> removed = c.getRemoved();
-                        for (int i = 0, n = removed.size(); i < n; i++) {
-                            handleFigureRemoved(removed.get(i));
-                            fireFigureRemoved(figure, removed.get(i), i + from);
-                        }
-                    }
-                    if (c.wasAdded()) {
-                        for (int i = from; i < to; i++) {
-                            handleFigureAdded(list.get(i));
-                            fireFigureAdded(figure, list.get(i), i);
-                        }
+        }
+    };
+
+    /** The root. */
+    private Drawing root = new SimpleDrawing();
+
+    @Override
+    public void addDrawingModelListener(Listener<DrawingModelEvent> l) {
+        dmeListeners.addListener(l);
+    }
+
+    @Override
+    public void removeDrawingModelListener(Listener<DrawingModelEvent> l) {
+        dmeListeners.removeListener(l);
+    }
+
+    @Override
+    public void addListener(InvalidationListener l) {
+        invalidationListeners.addListener(l);
+    }
+
+    @Override
+    public void removeListener(InvalidationListener l) {
+        invalidationListeners.removeListener(l);
+    }
+
+    @Override
+    public Drawing getRoot() {
+        return root;
+    }
+
+    @Override
+    public List<Figure> getChildren(Figure parent) {
+        return parent.children();
+    }
+
+    @Override
+    public void removeFromParent(Figure child) {
+        Figure parent = child.getParent();
+        int index = parent.children().indexOf(child);
+        parent.children().remove(index);
+        { // fire child added
+            fire(DrawingModelEvent.figureRemoved(this, parent, child, index));
+
+        }
+        { // we assume that the node of the parent figure needs to be updated
+            fire(DrawingModelEvent.nodeChanged(this, parent));
+
+        }
+        fireInvalidated();
+    }
+
+    @Override
+    public void insertChildAt(Figure child, Figure parent, int index) {
+        parent.children().add(index, child);
+        { // fire child removed
+            fire(DrawingModelEvent.figureAdded(this, parent, child, index));
+
+        }
+        { // we assume that the node of the parent figure needs to be updated
+            fire(DrawingModelEvent.nodeChanged(this, parent));
+
+        }
+        fireInvalidated();
+    }
+
+    @Override
+    public <T> void set(Figure figure, Key<T> key, T newValue) {
+        T oldValue = figure.set(key, newValue);
+        { // fire property change
+            fire(DrawingModelEvent.propertyChanged(this, figure, key, oldValue, newValue));
+
+        }
+        if (key instanceof FigureKey) {
+            DirtyMask dm = ((FigureKey<T>) key).getDirtyMask();
+            if (dm.containsOneOf(DirtyBits.NODE)) {
+                // we assume that the node needs to be updated when the
+                // corresponding bit in the dirty mask is set
+                fire(DrawingModelEvent.nodeChanged(this, figure));
+
+            }
+
+            if (figure instanceof ConnectableFigure) {
+                ConnectableFigure connectable = (ConnectableFigure) figure;
+                if (dm.containsOneOf(DirtyBits.GEOMETRY, DirtyBits.LAYOUT_BOUNDS)) {
+                    for (ConnectionFigure connection : connectable.connections()) {
+                        // we assume that the nodes of all connections need
+                        // to be updated when the geometry or the layout bounds
+                        // of a connectable figure changes.
+                        fire(DrawingModelEvent.nodeChanged(this, connection));
+
                     }
                 }
             }
         }
-
-        @Override
-        public void onChanged(MapChangeListener.Change<? extends Key<?>, ? extends Object> change
-        ) {
-            Figure figure = (Figure) ((ReadOnlyProperty) change.getMap()).getBean();
-            firePropertyChange(figure, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
-        }
-
-        @Override
-        public void invalidated(Observable observable) {
-            Figure figure = (Figure) observable;
-            fireFigureInvalidated(figure);
-        }
-
+        fireInvalidated();
     }
-
-    private Figure root;
-    private final FigureHandler handler = new FigureHandler();
-
-    public SimpleDrawingModel() {
-        this(null);
-    }
-    public SimpleDrawingModel(Figure root) {
-        setRoot(root);
-    }
-
 
     @Override
-    public void setRoot(Figure newValue) {
-        if (root != null) {
-            handleFigureRemoved(root);
-        }
+    public <T> T get(Figure figure, Key<T> key) {
+        return figure.get(key);
+    }
+
+    @Override
+    public void reshape(Figure figure, Transform transform) {
+        // we assume that reshaping a figure results in property changes
+        // so we register a listener here and unregister it immediately afterwards.
+        figure.properties().addListener(propertyHandler);
+        figure.reshape(transform);
+        figure.properties().removeListener(propertyHandler);
+
+        fireSubtreeNodesChanged(figure, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS);
+        fireInvalidated();
+    }
+
+    @Override
+    public void reshape(Figure figure, double x, double y, double width, double height) {
+        // we assume that reshaping a figure results in various property changes
+        // so we register a listener here and unregister it immediately afterwards.
+        figure.properties().addListener(propertyHandler);
+
+        figure.reshape(x, y, width, height);
+
+        // we assume that reshaping a figure results in property changes
+        // so we register a listener here and unregister it immediately afterwards.
+        figure.properties().removeListener(propertyHandler);
+
+        fireSubtreeNodesChanged(figure, DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS);
+        fireInvalidated();
+    }
+
+    @Override
+    public void setRoot(Drawing newValue) {
+        Drawing oldValue = root;
         root = newValue;
-        if (root != null) {
-            handleFigureAdded(root);
+        fire(DrawingModelEvent.rootChanged(this, newValue));
+    }
+
+    @Override
+    public void fireFigureChanged(Figure figure, DirtyBits... bits) {
+        DirtyMask mask = DirtyMask.of(bits);
+        if (mask.containsOneOf(DirtyBits.NODE)) {
+            fire(DrawingModelEvent.nodeChanged(this, figure));
+
         }
-    }
+        if (mask.containsOneOf(DirtyBits.LAYOUT_BOUNDS, DirtyBits.GEOMETRY)) {
+            if (figure instanceof ConnectableFigure) {
+                ConnectableFigure connectable = (ConnectableFigure) figure;
+                for (ConnectionFigure connection : connectable.connections()) {
+                    // we assume that the nodes of all connections need
+                    // to be updated when the geometry or the layout bounds
+                    // of a connectable figure changes.
+                    fire(DrawingModelEvent.nodeChanged(this, connection));
 
-    private final LinkedList<Listener<DrawingModelEvent>> drawingModelListeners = new LinkedList<>();
-    private final LinkedList<Listener<DrawingModelEvent>> propertyListeners = new LinkedList<>();
-    private final LinkedList<InvalidationListener> invalidationListeners = new LinkedList<>();
-
-    @Override
-    public void addDrawingModelListener(Listener<DrawingModelEvent> listener) {
-        drawingModelListeners.add(listener);
-    }
-
-    @Override
-    public void removeDrawingModelListener(Listener<DrawingModelEvent> listener) {
-        drawingModelListeners.remove(listener);
-    }
-    @Override
-    public void addListener(InvalidationListener listener) {
-        invalidationListeners.add(listener);
+                }
+            }
+        }
+        fireInvalidated();
     }
 
     @Override
-    public void removeListener(InvalidationListener listener) {
-        invalidationListeners.remove(listener);
+    public void fireSubtreeNodesChanged(Figure figure, DirtyBits... bits) {
+        DirtyMask mask = DirtyMask.of(bits);
+        fire(DrawingModelEvent.subtreeNodesChanged(this, figure));
+        if (mask.containsOneOf(DirtyBits.LAYOUT_BOUNDS, DirtyBits.GEOMETRY)) {
+            for (Figure f : figure.preorderIterable()) {
+                if (f instanceof ConnectableFigure) {
+                    ConnectableFigure connectable = (ConnectableFigure) f;
+                    for (ConnectionFigure connection : connectable.connections()) {
+                        // we assume that the nodes of all connections need
+                        // to be updated when the geometry or the layout bounds
+                        // of a connectable figure changes.
+                        fire(DrawingModelEvent.nodeChanged(this, connection));
+
+                    }
+                }
+            }
+        }
+        fireInvalidated();
+    }
+
+    @Override
+    public void fireSubtreeStructureChanged(Figure figure) {
+        fire(DrawingModelEvent.subtreeStructureChanged(this, figure));
+        for (Figure f : figure.preorderIterable()) {
+            if (f instanceof ConnectableFigure) {
+                ConnectableFigure connectable = (ConnectableFigure) f;
+                for (ConnectionFigure connection : connectable.connections()) {
+                        // we assume that the nodes of all connections need
+                    // to be updated when the geometry or the layout bounds
+                    // of a connectable figure changes.
+                    fire(DrawingModelEvent.nodeChanged(this, connection));
+
+                }
+            }
+        }
+        fireInvalidated();
+    }
+
+    private void fireInvalidated() {
+        invalidationListeners.fire(l -> l.invalidated(this));
+
     }
 
     private void fire(DrawingModelEvent event) {
-        for (Listener<DrawingModelEvent> l : drawingModelListeners) {
-            l.handle(event);
-        }
-        for (InvalidationListener l : invalidationListeners) {
-            l.invalidated(this);
-        }
-    }
-    private void fireToPropertyListeners(DrawingModelEvent event) {
-        for (Listener<DrawingModelEvent> l : propertyListeners) {
-            l.handle(event);
-        }
+        dmeListeners.fire(l -> l.handle(event));
     }
 
-    private void fireFigureRemoved(Figure parent, Figure child, int index) {
-        fire(new DrawingModelEvent(this, false, parent, child, index));
-    }
-
-    private void fireFigureAdded(Figure parent, Figure child, int index) {
-        fire(new DrawingModelEvent(this, true, parent, child, index));
-    }
-
-    private <T> void firePropertyChange(Figure figure, Key<T> key, T oldValue, T newValue) {
-       fireToPropertyListeners(new DrawingModelEvent(this, figure, key, oldValue, newValue));
-    }
-
-    private void fireFigureInvalidated(Figure figure) {
-        fire(new DrawingModelEvent(this, figure));
-    }
-
-    private void handleFigureAdded(Figure figure) {
-        handler.addFigure(figure);
-        for (Figure child : figure.childrenProperty()) {
-            handleFigureAdded(child);
-        }
-    }
-
-    private void handleFigureRemoved(Figure figure) {
-        handler.removeFigure(figure);
-        for (Figure child : figure.childrenProperty()) {
-            handleFigureRemoved(child);
-        }
-    }
 }

@@ -10,12 +10,21 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DirtyBits;
+import org.jhotdraw.draw.DirtyMask;
+import org.jhotdraw.draw.DrawingRenderer;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.connector.ChopEllipseConnector;
+import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.connector.Connector;
 
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.
@@ -23,11 +32,11 @@ import org.jhotdraw.draw.DrawingView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends AbstractShapeFigure {
+public class RectangleFigure extends AbstractConnectableShapeFigure {
 
-    public final static Key<Rectangle2D> RECTANGLE = new Key<>("rectangle", Rectangle2D.class, new Rectangle2D(0, 0, 1, 1));
-    public final static Key<Double> ARC_HEIGHT = new Key<>("arcHeight", Double.class, 0.0);
-    public final static Key<Double> ARC_WIDTH = new Key<>("arcWidth", Double.class, 0.0);
+    public final static FigureKey<Rectangle2D> RECTANGLE = new FigureKey<>("rectangle", Rectangle2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS),new Rectangle2D(0, 0, 1, 1));
+    public final static FigureKey<Double> ARC_HEIGHT = new FigureKey<>("arcHeight",Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY), 0.0);
+    public final static FigureKey<Double> ARC_WIDTH = new FigureKey<>("arcWidth", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY), 0.0);
 
     public RectangleFigure() {
         this(0, 0, 1, 1);
@@ -42,7 +51,7 @@ public class RectangleFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Bounds getLayoutBounds() {
+    public Bounds getBoundsInLocal() {
         Rectangle2D r= get(RECTANGLE);
         return new BoundingBox(r.getMinX(),r.getMinY(),r.getWidth(),r.getHeight());
     }
@@ -61,12 +70,12 @@ public class RectangleFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Node createNode(DrawingView drawingView) {
+    public Node createNode(DrawingRenderer drawingView) {
         return new Rectangle();
     }
 
     @Override
-    public void updateNode(DrawingView drawingView, Node node) {
+    public void updateNode(DrawingRenderer drawingView, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyFigureProperties(rectangleNode);
         updateShapeProperties(rectangleNode);
@@ -77,5 +86,9 @@ public class RectangleFigure extends AbstractShapeFigure {
         rectangleNode.setHeight(r.getHeight());
         rectangleNode.setArcWidth(get(ARC_WIDTH));
         rectangleNode.setArcHeight(get(ARC_HEIGHT));
+    }
+    @Override
+    public Connector findConnector(Point2D p, ConnectionFigure prototype) {
+        return new ChopRectangleConnector();
     }
 }

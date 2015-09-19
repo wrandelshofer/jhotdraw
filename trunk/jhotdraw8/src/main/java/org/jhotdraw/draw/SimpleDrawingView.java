@@ -7,6 +7,7 @@ package org.jhotdraw.draw;
 
 import static java.lang.Math.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,18 +82,61 @@ public class SimpleDrawingView implements DrawingView {
      */
     private StackPane node;
 
+    private final Listener<DrawingModelEvent> modelHandler = new Listener<DrawingModelEvent>() {
+
+        @Override
+        public void handle(DrawingModelEvent event) {
+            switch (event.getEventType()) {
+                case FIGURE_ADDED:
+                    handleFigureAdded(event.getFigure());
+                    break;
+                case FIGURE_REMOVED:
+                    handleFigureRemoved(event.getFigure());
+                    break;
+                case NODE_CHANGED:
+                    handleNodeChanged(event.getFigure());
+                    break;
+                case PROPERTY_CHANGED:
+                    // nothing to do
+                    break;
+                case ROOT_CHANGED:
+                    updateDrawing();
+                    repaint();
+                    break;
+                case SUBTREE_NODES_CHANGED:
+                    updateTreeNodes(event.getFigure());
+                    repaint();
+                    break;
+                case SUBTREE_STRUCTURE_CHANGED:
+                    updateTreeStructure(event.getFigure());
+                    break;
+                default:
+                    throw new UnsupportedOperationException(event.getEventType()
+                            + "not supported");
+            }
+        }
+
+    };
     /**
      * The drawingProperty holds the drawing that is presented by this drawing
      * view.
      */
-    private final NonnullProperty<Drawing> drawing = new NonnullProperty<>(this, DRAWING_PROPERTY, new SimpleDrawing());
+    private final NonnullProperty<DrawingModel> drawingModel = new NonnullProperty<DrawingModel>(this, DRAWING_MODEL_PROPERTY, new SimpleDrawingModel()) {
 
-    /**
-     * Installs a handler for changes in the drawingProperty.
-     */
-    {
-        drawing.addListener((observable, oldValue, newValue) -> updateDrawing(oldValue, newValue));
-    }
+        @Override
+        public void set(DrawingModel newValue) {
+            DrawingModel oldValue = get();
+            if (oldValue != null) {
+                oldValue.removeDrawingModelListener(modelHandler);
+            }
+            super.set(newValue); //To change body of generated methods, choose Tools | Templates.
+            if (newValue != null) {
+                newValue.addDrawingModelListener(modelHandler);
+                updateDrawing();
+                repaint();
+            }
+        }
+    };
 
     /**
      * The constrainerProperty holds the constrainer for this drawing view
@@ -123,6 +167,7 @@ public class SimpleDrawingView implements DrawingView {
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
+    private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
 
     /**
      * This is just a wrapper around the focusedProperty of the JavaFX Node
@@ -153,8 +198,6 @@ public class SimpleDrawingView implements DrawingView {
             updateHandles();
         }
     };
-
-    private final DrawingModel model = new SimpleDrawingModel();
 
     /**
      * Maps each figure in the drawing to a JavaFX node.
@@ -217,49 +260,26 @@ public class SimpleDrawingView implements DrawingView {
             throw new InternalError(ex);
         }
 
-        model.addDrawingModelListener((Listener<DrawingModelEvent>) event -> {
-            switch (event.getEventType()) {
-            case FIGURE_ADDED:
-                handleFigureAdded(event.getFigure());
-                break;
-            case FIGURE_REMOVED:
-                handleFigureRemoved(event.getFigure());
-                break;
-            case FIGURE_INVALIDATED:
-                handleFigureInvalidated(event.getFigure());
-                break;
-            case FIGURE_REQUEST_REMOVE:
-                // it is not our job to remove the figure
-                break;
-            case PROPERTY_CHANGED:
-                // the figure looks still the same
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + "not supported");
-            }
-        });
+        setDrawingModel(new SimpleDrawingModel());
 
         node.addEventFilter(MouseEvent.MOUSE_PRESSED,
                 new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent evt) {
-                        if (!node.isFocused()) {
-                            node.requestFocus();
-                            if (!node.getScene().getWindow().isFocused()) {
-                                evt.consume();
-                            }
-                        }
+            @Override
+            public void handle(MouseEvent evt) {
+                if (!node.isFocused()) {
+                    node.requestFocus();
+                    if (!node.getScene().getWindow().isFocused()) {
+                        evt.consume();
                     }
-                ;
+                }
+            }
+        ;
         });
         node.setFocusTraversable(true);
         focused.bind(node.focusedProperty());
 
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
-
-        updateDrawing(null, drawingProperty().get());
     }
 
     public Node getNode() {
@@ -271,11 +291,13 @@ public class SimpleDrawingView implements DrawingView {
         if (oldNode != null) {
             nodeToFigureMap.remove(oldNode);
         }
+        dirtyFigures.remove(f);
     }
 
     private void clearNodes() {
         figureToNodeMap.clear();
         nodeToFigureMap.clear();
+        dirtyFigures.clear();
     }
 
     @Override
@@ -290,8 +312,8 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     @Override
-    public NonnullProperty<Drawing> drawingProperty() {
-        return drawing;
+    public NonnullProperty<DrawingModel> drawingModelProperty() {
+        return drawingModel;
     }
 
     @Override
@@ -299,7 +321,7 @@ public class SimpleDrawingView implements DrawingView {
         return constrainer;
     }
 
-    private InvalidationListener invalidationListener = new InvalidationListener() {
+    private InvalidationListener preferredSizeHandler = new InvalidationListener() {
 
         @Override
         public void invalidated(Observable observable) {
@@ -310,25 +332,43 @@ public class SimpleDrawingView implements DrawingView {
 
     private Property<Rectangle2D> boundsProperty;
 
-    private void updateDrawing(Drawing oldValue, Drawing newValue) {
-        if (oldValue != null) {
-            clearNodes();
-            drawingPane.getChildren().clear();
-            dirtyFigures.clear();
-            model.setRoot(null);
-            if (boundsProperty != null) {
-                boundsProperty.removeListener(invalidationListener);
-                boundsProperty.unbind();
-                boundsProperty = null;
+    private void updateDrawing() {
+        clearNodes();
+        drawingPane.getChildren().clear();
+        if (boundsProperty != null) {
+            boundsProperty.removeListener(preferredSizeHandler);
+            boundsProperty.unbind();
+            boundsProperty = null;
+            activeLayer.set(null);
+        }
+        Drawing d = getDrawingModel().getRoot();
+        if (d != null) {
+            boundsProperty = Drawing.BOUNDS.propertyAt(d.properties());
+            boundsProperty.addListener(preferredSizeHandler);
+            drawingPane.getChildren().add(getNode(d));
+            updateTreeNodes(d);
+        }
+    }
+
+    private void updateTreeNodes(Figure parent) {
+        dirtyFigures.add(parent);
+        for (Figure child : parent.children()) {
+            updateTreeNodes(child);
+        }
+    }
+
+    private void updateTreeStructure(Figure parent) {
+        // Since we don't know which figures have been removed from
+        // the drawing, we have to get rid of them on ourselves.
+        // XXX This is a really slow operation. If each figure would store a
+        // reference to its drawing it would perform better.
+        Drawing drawing = getDrawing();
+        for (Figure f : new ArrayList<Figure>(figureToNodeMap.keySet())) {
+            if (f.getDrawing() != drawing) {
+                removeNode(f);
             }
         }
-        if (newValue != null) {
-            drawingPane.getChildren().add(getNode(newValue));
-            model.setRoot(newValue);
-            boundsProperty = Drawing.BOUNDS.propertyAt(newValue.properties());
-            boundsProperty.addListener(invalidationListener);
-            handleFigureAdded(newValue);
-        }
+        updateTreeNodes(parent);
     }
 
     private void handleFigureAdded(Figure f) {
@@ -355,7 +395,7 @@ public class SimpleDrawingView implements DrawingView {
         removeNode(f);
     }
 
-    private void handleFigureInvalidated(Figure f) {
+    private void handleNodeChanged(Figure f) {
         invalidateFigure(f);
         repaint();
     }
@@ -386,7 +426,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     private void updatePreferredSize() {
-        Rectangle2D r = drawing.get().get(Drawing.BOUNDS);
+        Rectangle2D r = getDrawing().get(Drawing.BOUNDS);
         Rectangle2D visible = new Rectangle2D(max(r.getMinX(), 0), max(r.getMinY(), 0), (r.getWidth()
                 + max(r.getMinX(), 0)),
                 r.getHeight() + max(r.getMinY(), 0));
@@ -410,12 +450,12 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     private void updateTool(Tool oldValue, Tool newValue) {
-        if (oldValue!=null) {
+        if (oldValue != null) {
             Tool t = oldValue;
             toolPane.setCenter(null);
             t.setDrawingView(null);
         }
-        if (newValue!=null) {
+        if (newValue != null) {
             Tool t = newValue;
             toolPane.setCenter(t.getNode());
             t.setDrawingView(this);
@@ -428,7 +468,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     public Figure findFigure(double vx, double vy) {
-        Drawing dr = drawing.get();
+        Drawing dr = getDrawing();
         Figure f = findFigure((Parent) getNode(dr), viewToDrawing(vx, vy));
 
         return f;
@@ -444,7 +484,7 @@ public class SimpleDrawingView implements DrawingView {
             Point2D pl = n.parentToLocal(pp);
             if (n.contains(pl)) {
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null) {
+                if (f == null || !f.isSelectable()) {
                     if (n instanceof Parent) {
                         f = findFigure((Parent) n, pl);
                     }
@@ -456,7 +496,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     public Figure findFigureBehind(double vx, double vy, Figure figureInWay) {
-        Drawing dr = drawing.get();
+        Drawing dr = getDrawing();
         Figure f = findFigureBehind((Parent) getNode(dr), viewToDrawing(vx, vy), figureInWay);
 
         return f;
@@ -472,7 +512,7 @@ public class SimpleDrawingView implements DrawingView {
             Point2D pl = n.parentToLocal(pp);
             if (n.contains(pl)) {
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null) {
+                if (f == null || !f.isSelectable()) {
                     if (n instanceof Parent) {
                         f = findFigureBehind((Parent) n, pl, figureInWay);
                     }
@@ -503,9 +543,15 @@ public class SimpleDrawingView implements DrawingView {
         findFiguresInside((Parent) figureToNodeMap.get(getDrawing()), r, list);
         return list;
     }
+
     @Override
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight) {
-        return findFiguresInside(vx,vy,vwidth,vheight);
+        double sf = 1 / zoomFactor.get();
+        BoundingBox r = new BoundingBox(vx * sf, vy * sf, 0, vwidth * sf, vheight
+                * sf, 0);
+        List<Figure> list = new LinkedList<Figure>();
+        findFiguresIntersecting((Parent) figureToNodeMap.get(getDrawing()), r, list);
+        return list;
     }
 
     /**
@@ -519,12 +565,47 @@ public class SimpleDrawingView implements DrawingView {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
-            Bounds pl = n.parentToLocal(pp);
-            if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent contains the point
-                Figure f = nodeToFigureMap.get(n);
-                if (f == null) {
+            Figure f1 = nodeToFigureMap.get(n);
+            if (f1 != null && f1.isSelectable()) {
+                Bounds pl = n.parentToLocal(pp);
+                if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent contains the point
+                    Figure f = nodeToFigureMap.get(n);
+                    if (f == null || !f.isSelectable()) {
+                        if (n instanceof Parent) {
+                            findFiguresInside((Parent) n, pl, found);
+                        }
+                    } else {
+                        found.add(f);
+                    }
+                }
+            } else {
+                Bounds pl = n.parentToLocal(pp);
+                if (pl.intersects(n.getBoundsInLocal())) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
                         findFiguresInside((Parent) n, pl, found);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Finds a node at the given drawing coordinates.
+     *
+     * @param p The parentProperty of the node, which already must contain the
+     * point!
+     * @param p A point given in the drawing coordinate system
+     */
+    private void findFiguresIntersecting(Parent p, Bounds pp, List<Figure> found) {
+        ObservableList<Node> list = p.getChildrenUnmodifiable();
+        for (int i = list.size() - 1; i >= 0; i--) {// front to back
+            Node n = list.get(i);
+            Bounds pl = n.parentToLocal(pp);
+            if (pl.intersects(n.getBoundsInLocal())) { // only drill down if the parent contains the point
+                Figure f = nodeToFigureMap.get(n);
+                if (f == null || !f.isSelectable()) {
+                    if (n instanceof Parent) {
+                        findFiguresIntersecting((Parent) n, pl, found);
                     }
                 } else {
                     found.add(f);
@@ -539,13 +620,22 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     @Override
+    public ObjectProperty<Layer> activeLayerProperty() {
+        return activeLayer;
+    }
+
+    @Override
     public ReadOnlyObjectProperty<Transform> drawingToViewProperty() {
         return drawingToView.getReadOnlyProperty();
     }
 
     @Override
     public DrawingModel getDrawingModel() {
-        return model;
+        return drawingModel.get();
+    }
+
+    public void setDrawingModel(DrawingModel newValue) {
+        drawingModel.set(newValue);
     }
 
     // Handles

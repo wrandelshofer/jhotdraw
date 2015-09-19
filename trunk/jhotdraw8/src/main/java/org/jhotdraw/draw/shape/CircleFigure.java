@@ -16,7 +16,14 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import static java.lang.Math.*;
 import javafx.scene.shape.Circle;
+import org.jhotdraw.draw.ConnectionFigure;
+import org.jhotdraw.draw.DirtyBits;
+import org.jhotdraw.draw.DirtyMask;
+import org.jhotdraw.draw.DrawingRenderer;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.connector.ChopEllipseConnector;
+import org.jhotdraw.draw.connector.Connector;
 
 /**
  * Renders a {@code javafx.scene.shape.Circle}.
@@ -24,10 +31,10 @@ import org.jhotdraw.draw.DrawingView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CircleFigure extends AbstractShapeFigure {
+public class CircleFigure extends AbstractConnectableShapeFigure {
 
-    public final static Key<Point2D> CENTER = new Key<>("center", Point2D.class, new Point2D(0, 0));
-    public final static Key<Double> RADIUS = new Key<>("radius", Double.class, 1.0);
+    public final static FigureKey<Point2D> CENTER = new FigureKey<>("center", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS),new Point2D(0, 0));
+    public final static FigureKey<Double> RADIUS = new FigureKey<>("radius", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS),1.0);
 
     public CircleFigure() {
         this(0, 0, 1);
@@ -44,7 +51,7 @@ public class CircleFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Bounds getLayoutBounds() {
+    public Bounds getBoundsInLocal() {
         Point2D c = get(CENTER);
         double r = get(RADIUS);
         return new BoundingBox(c.getX() - r, c.getY() - r, r * 2, r * 2);
@@ -52,7 +59,7 @@ public class CircleFigure extends AbstractShapeFigure {
 
     @Override
     public void reshape(Transform transform) {
-        Bounds r = getLayoutBounds();
+        Bounds r = getBoundsInLocal();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         set(CENTER, new Point2D(b.getMinX() + b.getWidth() / 2, b.getMinY() + b.getHeight() / 2));
@@ -66,12 +73,12 @@ public class CircleFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Node createNode(DrawingView drawingView) {
+    public Node createNode(DrawingRenderer drawingView) {
         return new Circle();
     }
 
     @Override
-    public void updateNode(DrawingView drawingView, Node node) {
+    public void updateNode(DrawingRenderer drawingView, Node node) {
         Circle circleNode = (Circle) node;
         applyFigureProperties(circleNode);
         updateShapeProperties(circleNode);
@@ -79,5 +86,10 @@ public class CircleFigure extends AbstractShapeFigure {
         circleNode.setCenterX(c.getX());
         circleNode.setCenterY(c.getY());
         circleNode.setRadius(get(RADIUS));
+    }
+
+    @Override
+    public Connector findConnector(Point2D p, ConnectionFigure prototype) {
+        return new ChopEllipseConnector();
     }
 }

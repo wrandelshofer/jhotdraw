@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.text;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.CharBuffer;
 import java.text.DecimalFormat;
@@ -23,116 +24,258 @@ import javafx.scene.shape.SVGPath;
  * <a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#double">W3C: XML
  * Schema Part 2: Datatypes Second Edition: 3.2.5 double</a>
  * </p>
- * <p>
- * The converter applies the linear function {@code f(x) = a*x + b} to the value
- * {@code x} before converting it to a string, and its inverse when converting
- * back from a string. {@code a} is referred to as the {@code factor} and
- * {@code b} as the {@code offset}.
- * </p>
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class XMLDoubleConverter implements Converter<Double> {
-SVGPath s;
-    private final HashSet<Double> enumeration;
-    private final Double minInclusive;
-    private final Double maxInclusive;
-    private final Double minExclusive;
-    private final Double maxExclusive;
 
-    private final int minNegativeExponent = -3;
-    private final int minPositiveExponent = 7;
-    private final boolean alwaysUseScientificNotation = false;
-    private final DecimalFormat decimalFormat;
-    private final DecimalFormat scientificFormat;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * Creates a new instance without constraints.
+     * Specifies whether the formatter allows null values.
+     */
+    private boolean allowsNullValue = false;
+    @SuppressWarnings("rawtypes")
+    private Comparable min;
+    @SuppressWarnings("rawtypes")
+    private Comparable max;
+    private String unit;
+    private DecimalFormat decimalFormat;
+    private DecimalFormat scientificFormat;
+    private double factor = 1;
+    private int minIntDigits;
+    private int maxIntDigits;
+    private int minFractionDigits;
+    private int maxFractionDigits;
+    private int minNegativeExponent = -3;
+    private int minPositiveExponent = 8;
+    private boolean usesScientificNotation = true;
+
+    /**
+     * Creates a <code>NumberFormatter</code> with the a default
+     * <code>NumberFormat</code> instance obtained from
+     * <code>NumberFormat.getNumberInstance()</code>.
      */
     public XMLDoubleConverter() {
-        this(null, null, null, null, null);
+        super();
+        initFormats();
     }
 
     /**
-     * Creates a new instance.
+     * Creates a NumberFormatter with the specified Format instance.
      *
-     * @param enumeration The enumeration constraint.
-     * @param minInclusive The minInclusive constraint.
-     * @param maxInclusive The maxInclusive constraint.
-     * @param minExclusive The minExclusive constraint.
-     * @param maxExclusive The maxExclusive constraint.
+     * @param min the min
+     * @param max the max
+     * @param multiplier the multiplier
      */
-    public XMLDoubleConverter(Set<Double> enumeration, Double minInclusive, Double maxInclusive, Double minExclusive, Double maxExclusive) {
-        this.enumeration = enumeration == null || enumeration.isEmpty() ? null : new HashSet<>(enumeration);
-        this.minInclusive = minInclusive;
-        this.maxInclusive = maxInclusive;
-        this.minExclusive = minExclusive;
-        this.maxExclusive = maxExclusive;
-
-        DecimalFormatSymbols s = new DecimalFormatSymbols(Locale.ENGLISH);
-        decimalFormat = new DecimalFormat("######0.#################", s);
-        scientificFormat = new DecimalFormat("0.#################E0", s);
+    public XMLDoubleConverter(double min, double max, double multiplier) {
+        this(min, max, multiplier, false, null);
     }
 
+    /**
+     * Creates a NumberFormatter with the specified Format instance.
+     *
+     * @param min the min
+     * @param max the max
+     * @param multiplier the multiplier
+     * @param allowsNullValue whether null values are allowed
+     */
+    public XMLDoubleConverter(double min, double max, double multiplier, boolean allowsNullValue) {
+        this(min, max, multiplier, allowsNullValue, null);
+    }
+
+    /**
+     * Creates a NumberFormatter with the specified Format instance.
+     *
+     * @param min the min
+     * @param max the max
+     * @param multiplier the multiplier
+     * @param allowsNullValue whether null values are allowed
+     * @param unit the unit string
+     */
+    public XMLDoubleConverter(double min, double max, double multiplier, boolean allowsNullValue, String unit) {
+        super();
+        initFormats();
+        this.min = min;
+        this.max = max;
+        this.factor = multiplier;
+        this.allowsNullValue = allowsNullValue;
+        this.unit = unit;
+    }
+
+    private void initFormats() {
+        DecimalFormatSymbols s = new DecimalFormatSymbols(Locale.ENGLISH);
+        decimalFormat = new DecimalFormat("#################0.#################", s);
+        scientificFormat = new DecimalFormat("0.0################E0", s);
+    }
+
+    /**
+     * Sets the minimum permissible value. If the <code>valueClass</code> has
+     * not been specified, and <code>minimum</code> is non null, the
+     * <code>valueClass</code> will be set to that of the class of
+     * <code>minimum</code>.
+     *
+     * @param minimum Minimum legal value that can be input
+     * @see #setValueClass
+     */
+    @SuppressWarnings("rawtypes")
+    public void setMinimum(Comparable minimum) {
+        min = minimum;
+    }
+
+    /**
+     * Returns the minimum permissible value.
+     *
+     * @return Minimum legal value that can be input
+     */
+    @SuppressWarnings("rawtypes")
+    public Comparable getMinimum() {
+        return min;
+    }
+
+    /**
+     * Sets the maximum permissible value. If the <code>valueClass</code> has
+     * not been specified, and <code>max</code> is non null, the
+     * <code>valueClass</code> will be set to that of the class of
+     * <code>max</code>.
+     *
+     * @param max Maximum legal value that can be input
+     * @see #setValueClass
+     */
+    @SuppressWarnings("rawtypes")
+    public void setMaximum(Comparable max) {
+        this.max = max;
+    }
+
+    /**
+     * Returns the maximum permissible value.
+     *
+     * @return Maximum legal value that can be input
+     */
+    @SuppressWarnings("rawtypes")
+    public Comparable getMaximum() {
+        return max;
+    }
+
+    /**
+     * Sets the factor for use in percent, per mille, and similar formats.
+     *
+     * @param newValue the factor
+     */
+    public void setFactor(double newValue) {
+        factor = newValue;
+    }
+
+    /**
+     * Gets the factor for use in percent, per mille, and similar formats.
+     *
+     * @return the factor
+     */
+    public double getFactor() {
+        return factor;
+    }
+
+    /**
+     * Allows/Disallows null values.
+     *
+     * @param newValue true if null values are allowed
+     */
+    public void setAllowsNullValue(boolean newValue) {
+        allowsNullValue = newValue;
+    }
+
+    /**
+     * Returns true if null values are allowed.
+     *
+     * @return true if null values are allowed
+     */
+    public boolean getAllowsNullValue() {
+        return allowsNullValue;
+    }
+
+    /**
+     * Specifies how many "0" are appended to double and float
+     * values. By default this is 0.
+     *
+     * @param newValue the value
+     */
+    public void setMinimumFractionDigits(int newValue) {
+        minFractionDigits = newValue;
+        decimalFormat.setMinimumFractionDigits(newValue);
+    }
+
+    /**
+     * Returns the minimum fraction digits.
+     *
+     * @return the minimum fraction digits
+     */
+    public int getMinimumFractionDigits() {
+        return minFractionDigits;
+    }
+
+    /**
+     * Returns a String representation of the Object <code>value</code>.
+     * This invokes <code>format</code> on the current <code>Format</code>.
+     *
+     * @param value Value to convert
+     * @return String representation of value
+     */
     @Override
-    public String toString(Double v) {
-        if (v == null) {
-            return "";
-        }
-        if (Double.isNaN(v)) {
-            return "NaN";
-        }
-        if (v == Double.POSITIVE_INFINITY) {
-            return "INF";
-        }
-        if (v == Double.NEGATIVE_INFINITY) {
-            return "-INF";
+    public void toString(Double value, Appendable buf) throws IOException {
+        if (value == null && allowsNullValue) {
+            return;
         }
 
-        StringBuilder buf = new StringBuilder();
+        double v = ((Double) value).doubleValue();
+        if (factor != 1.0) {
+            v = v * factor;
+        }
         String str;
         BigDecimal big = new BigDecimal(v);
         int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
-        if (alwaysUseScientificNotation || !(minNegativeExponent < exponent
-                && exponent <= minPositiveExponent)) {
-            str = scientificFormat.format(v);
-        } else {
+        if (!usesScientificNotation || exponent > minNegativeExponent
+                && exponent < minPositiveExponent) {
             str = decimalFormat.format(v);
+        } else {
+            str = scientificFormat.format(v);
         }
         buf.append(str);
 
-        return str;
+        if (value != null) {
+            if (unit != null) {
+                buf.append(unit);
+            }
+        }
+        return;
     }
 
-    
-    public Double fromString(String str, ParsePosition pp) {
-        if ((str == null || str.length() - pp.getIndex() <= 0)) {
+    /**
+     * Returns the <code>Object</code> representation of the
+     * <code>String</code> <code>text</code>.
+     *
+     * @param str <code>String</code> to convert
+     * @param pp the parse position
+     * @return <code>Object</code> representation of str
+     *
+     * @throws java.text.ParseException
+     */
+    @Override
+    public Double fromString(CharBuffer str) throws ParseException {
+        if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
         }
 
-        if (str.startsWith("NaN", pp.getIndex())) {
-            pp.setIndex(pp.getIndex() + 3);
-            return Double.NaN;
-        }
-        if (str.startsWith("INF", pp.getIndex())) {
-            pp.setIndex(pp.getIndex() + 3);
-            return Double.POSITIVE_INFINITY;
-        }
-        if (str.startsWith("-INF", pp.getIndex())) {
-            pp.setIndex(pp.getIndex() + 4);
-            return Double.NEGATIVE_INFINITY;
-        }
-
-        // Parse. Find the end of the number.
-        int end = pp.getIndex();
+        // Parse the remaining characters from the CharBuffer
+        final int remaining = str.remaining();
+        int end = 0; // end is a relative to CharBuffer.position();
         {
             boolean noMoreSigns = false;
             boolean noMorePoints = false;
             boolean noMoreEs = false;
             Outer:
-            for (; end < str.length(); end++) {
-                char c = str.charAt(end);
+            for (; end < remaining; end++) {
+                char c = str.charAt(end); // does not consume chars from CharBuffer!
                 switch (c) {
                     case '+':
                     case '-':
@@ -175,45 +318,200 @@ SVGPath s;
             }
         }
 
-        String text = str.substring(pp.getIndex(), end);
+        String text = str.subSequence(0, end).toString();
+        // Remove unit from text
+        if (unit != null && end + unit.length() <= remaining) {
+            if (str.subSequence(end, end + unit.length()).toString().startsWith(unit)) {
+                end += unit.length();
+            }
+        }
 
-        Double value = 0.0;
+        Object value;
+
+        double v = Double.parseDouble(text);
+        if (factor != 1.0) {
+            v = (v / factor);
+        }
+        value = new Double(v);
+
         try {
-            value = Double.parseDouble(text);
-        } catch (NumberFormatException e) {
-            pp.setErrorIndex(pp.getIndex());
-            return null;
+            if (!isValidValue(value, true)) {
+                throw new ParseException("invalid value", str.position());
+            }
+        } catch (ClassCastException cce) {
+            ParseException pe = new ParseException("invalid value", str.position());
+            pe.initCause(cce);
+            throw pe;
+        }
+        // consume the text that we just parsed
+        str.position(str.position() + end);
+        return (Double) value;
+    }
+
+    /**
+     * Returns true if <code>value</code> is between the min/max.
+     *
+     * @param wantsCCE If false, and a ClassCastException is thrown in
+     * comparing the values, the exception is consumed and
+     * false is returned.
+     */
+    @SuppressWarnings("unchecked")
+    boolean isValidValue(Object value, boolean wantsCCE) {
+        try {
+            if (min != null && min.compareTo((Number) value) > 0) {
+                return false;
+            }
+        } catch (ClassCastException cce) {
+            if (wantsCCE) {
+                throw cce;
+            }
+            return false;
         }
 
-        if (!isValid(value)) {
-            pp.setErrorIndex(pp.getIndex());
-            return null;
+        try {
+            if (max != null && max.compareTo((Number) value) < 0) {
+                return false;
+            }
+        } catch (ClassCastException cce) {
+            if (wantsCCE) {
+                throw cce;
+            }
+            return false;
         }
-
-        pp.setIndex(end);
-        return value;
-
+        return true;
     }
 
-    private boolean isValid(Double value) {
-        boolean valid = true;
-
-        valid &= (enumeration == null) || enumeration.contains(value);
-        valid &= (minInclusive == null) || minInclusive <= value;
-        valid &= (minExclusive == null) || minExclusive < value;
-        valid &= (maxInclusive == null) || value <= maxInclusive;
-        valid &= (maxExclusive == null) || value < maxExclusive;
-
-        return valid;
+    /** If non-null the unit string is appended to the value.
+     *
+     * @param value the unit string */
+    public void setUnit(String value) {
+        unit = value;
     }
 
-    @Override
-    public void toString(Double value, Appendable out) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /** If non-null the unit string is appended to the value.
+     *
+     * @return the unit string */
+    public String getUnit() {
+        return unit;
     }
 
-    @Override
-    public Double fromString(CharBuffer buf) throws ParseException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Gets the minimum number of digits allowed in the integer portion of a
+     * number.
+     *
+     * @return the minimum integer digits
+     */
+    public int getMinimumIntegerDigits() {
+        return minIntDigits;
+    }
+
+    /**
+     * Sets the minimum number of digits allowed in the integer portion of a
+     * number.
+     *
+     * @param newValue the new value
+     */
+    public void setMinimumIntegerDigits(int newValue) {
+        decimalFormat.setMinimumIntegerDigits(newValue);
+        scientificFormat.setMinimumIntegerDigits(newValue);
+        this.minIntDigits = newValue;
+    }
+
+    /**
+     * Gets the maximum number of digits allowed in the integer portion of a
+     * number.
+     *
+     * @return the maximum integer digits
+     */
+    public int getMaximumIntegerDigits() {
+        return maxIntDigits;
+    }
+
+    /**
+     * Sets the maximum number of digits allowed in the integer portion of a
+     * number.
+     *
+     * @param newValue the new value
+     */
+    public void setMaximumIntegerDigits(int newValue) {
+        decimalFormat.setMaximumIntegerDigits(newValue);
+        scientificFormat.setMaximumIntegerDigits(newValue);
+        this.maxIntDigits = newValue;
+    }
+
+    /**
+     * Gets the maximum number of digits allowed in the fraction portion of a
+     * number.
+     *
+     * @return the maximum fraction digits
+     */
+    public int getMaximumFractionDigits() {
+        return maxFractionDigits;
+    }
+
+    /**
+     * Sets the maximum number of digits allowed in the fraction portion of a
+     * number.
+     *
+     * @param newValue the maximum fraction digits
+     */
+    public void setMaximumFractionDigits(int newValue) {
+        decimalFormat.setMaximumFractionDigits(newValue);
+        scientificFormat.setMaximumFractionDigits(newValue);
+        this.maxFractionDigits = newValue;
+    }
+
+    /**
+     * Gets the minimum negative exponent value for scientific notation.
+     *
+     * @return the minimum negative exponent
+     */
+    public int getMinimumNegativeExponent() {
+        return minNegativeExponent;
+    }
+
+    /**
+     * Sets the minimum negative exponent value for scientific notation.
+     *
+     * @param newValue the minimum negative exponent
+     */
+    public void setMinimumNegativeExponent(int newValue) {
+        this.minNegativeExponent = newValue;
+    }
+
+    /**
+     * Gets the minimum positive exponent value for scientific notation.
+     *
+     * @return the minimum positive exponent
+     */
+    public int getMinimumPositiveExponent() {
+        return minPositiveExponent;
+    }
+
+    /**
+     * Sets the minimum positive exponent value for scientific notation.
+     *
+     * @param newValue the maximum positive exponent
+     */
+    public void setMinimumPositiveExponent(int newValue) {
+        this.minPositiveExponent = newValue;
+    }
+
+    /**
+     * Returns true if scientific notation is used.
+     *
+     * @return true if scientific notation is used
+     */
+    public boolean isUsesScientificNotation() {
+        return usesScientificNotation;
+    }
+
+    /**
+     * Sets whether scientific notation is used.
+     *
+     * @param newValue true if scientific notation is used
+     */
+    public void setUsesScientificNotation(boolean newValue) {
+        this.usesScientificNotation = newValue;
     }
 }

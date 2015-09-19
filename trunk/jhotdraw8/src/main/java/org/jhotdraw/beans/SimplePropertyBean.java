@@ -22,7 +22,7 @@ public class SimplePropertyBean implements PropertyBean {
     /**
      * Holds the properties.
      */
-    protected final ReadOnlyMapWrapper<Key<?>, Object> properties = new ReadOnlyMapWrapper<>(this, PROPERTIES_PROPERTY, FXCollections.observableHashMap());
+    protected final ReadOnlyMapWrapper<Key<?>, Object> properties = new ReadOnlyMapWrapper<Key<?>, Object>(this, PROPERTIES_PROPERTY, FXCollections.observableHashMap());
 
     @Override
     public final ReadOnlyMapProperty<Key<?>, Object> properties() {
