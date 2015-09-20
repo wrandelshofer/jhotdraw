@@ -29,7 +29,7 @@ public class ConvexHull {
     /**
      * Computes the convex hull from a set of points.
      *
-     * @param points
+     * @param points the points
      * @return convex hull of the points as a polygon object.
      */
     public static Polygon getConvexHullPolygon(List<Point> points) {
@@ -43,7 +43,7 @@ public class ConvexHull {
     /**
      * Computes the convex hull from a set of points.
      *
-     * @param points
+     * @param points the points
      * @return convex hull of the points as a Polygon2D object.
      */
     public static Path2D.Double getConvexHullPath2D(List<Point2D.Double> points) {
@@ -64,7 +64,7 @@ public class ConvexHull {
     /**
      * Computes the convex hull from a shape.
      *
-     * @param shape an arbitray shape
+     * @param shape an arbitrary shape
      * @return convex hull of the points as a Polygon2D object.
      */
     public static Path2D.Double getConvexHullPath2D(Shape shape) {
@@ -107,7 +107,7 @@ public class ConvexHull {
     /**
      * Computes the convex hull from a set of points.
      *
-     * @param points
+     * @param points the points
      * @return convex hull of the points
      */
     public static List<Point> getConvexHull(List<Point> points) {
@@ -117,7 +117,7 @@ public class ConvexHull {
     /**
      * Computes the convex hull from a set of points.
      *
-     * @param points
+     * @param points the points
      * @return convex hull of the points
      */
     public static List<Point2D.Double> getConvexHull2D(List<Point2D.Double> points) {
@@ -127,7 +127,7 @@ public class ConvexHull {
     /**
      * Computes the convex hull from a set of points.
      *
-     * @param points
+     * @param points the points
      * @return convex hull of the points
      */
     public static Point[] getConvexHull(Point[] points) {
@@ -199,7 +199,7 @@ public class ConvexHull {
     /**
      * Computes the convex hull from a set of points.
      *
-     * @param points
+     * @param points the points
      * @return convex hull of the points
      */
     public static Point2D.Double[] getConvexHull2D(Point2D.Double[] points) {

@@ -254,6 +254,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * This is a convenience method for adding a node with a single control
      * point C0 to the path.
+     * @param c0 the point
      */
     public void add(Point2D.Double c0) {
         add(new Node(0, c0, c0, c0));
@@ -264,6 +265,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * This is a convenience method for adding a node with a single control
      * point C0 to the path.
+     * @param x x-coordinate of the point
+     * @param y y-coordinate of the point
      */
     public void add(double x, double y) {
         add(new Node(0, x, y, x, y, x, y));
@@ -289,6 +292,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * Convenience method for adding multiple nodes with a single control point
      * C0.
+     * @param points the points
      */
     public void addPolyline(Collection<Point2D.Double> points) {
         for (Point2D.Double c0 : points) {
@@ -341,7 +345,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         }
     }
 
-    /** Converts the BezierPath into a Path2D.Double. */
+    /** Converts the BezierPath into a Path2D.Double.
+     * @return the path */
     public Path2D.Double toGeneralPath() {
         Path2D.Double gp = new Path2D.Double();
         gp.setWindingRule(windingRule);
@@ -431,6 +436,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @param p The point to be tested.
      * @param tolerance The tolerance for the test.
+     * @return whether this path contains the point
      */
     public boolean outlineContains(Point2D.Double p, double tolerance) {
         return Shapes.outlineContains(this, p, tolerance);
@@ -674,6 +680,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Sets all values of this bezier path to that bezier path, so that this
      * path becomes identical to that path.
+     * @param that that path
      */
     public void setTo(BezierPath that) {
         while (that.size() < size()) {
@@ -689,6 +696,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Returns the point at the center of the bezier path.
+     * @return the center
      */
     public Point2D.Double getCenter() {
         double sx = 0;
@@ -706,13 +714,17 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * Returns a point on the edge of the bezier path which crosses the line
      * from the center of the bezier path to the specified point.
      * If no edge crosses the line, the nearest C0 control point is returned.
+     * @param p the point
+     * @return the chopped point
      */
     public Point2D.Double chop(Point2D.Double p) {
-        return Geom.chop(this, p);
+       javafx.geometry.Point2D chopped=  Geom.chop(this, new javafx.geometry.Point2D(p.x,p.y));
+       return new Point2D.Double(chopped.getX(),chopped.getY());
     }
 
     /**
      * Return the index of the node that is the furthest away from the center
+     * @return the index
      **/
     public int indexOfOutermostNode() {
         if (outer == -1) {
@@ -740,6 +752,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * path.
      *
      * @param relative a value between 0 and 1.
+     * @param flatness the flatness
+     * @return the point
      */
     public Point2D.Double getPointOnPath(double relative, double flatness) {
         // This method works only for straight lines
@@ -792,6 +806,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * Returns the length of the path.
      *
      * @param flatness the flatness used to approximate the length.
+     * @return the length
      */
     public double getLengthOfPath(double flatness) {
         double len = 0;
@@ -812,6 +827,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Returns the relative position of the specified point on the path.
      *
+     * @param find the point
      * @param flatness the flatness used to approximate the length.
      *
      * @return relative position on path, this is a number between 0 and 1.
@@ -873,6 +889,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Gets the segment of the polyline that is hit by
      * the given Point2D.Double.
+     * @param find the point
+     * @param tolerance the tolerance
      * @return the index of the segment or -1 if no segment was hit.
      */
     public int findSegment(Point2D.Double find, double tolerance) {
@@ -921,6 +939,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Joins two segments into one if the given Point2D.Double hits a node
      * of the bezier path.
+     * @param join the point
+     * @param tolerance the tolerance
      * @return the index of the joined segment or -1 if no segment was joined.
      */
     public int joinSegments(Point2D.Double join, double tolerance) {
@@ -936,6 +956,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Splits the segment at the given Point2D.Double if a segment was hit.
+     * @param split the point
+     * @param tolerance the tolerance
      * @return the index of the segment or -1 if no segment was hit.
      */
     public int splitSegment(Point2D.Double split, double tolerance) {
@@ -967,6 +989,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * This is a convenience method for adding the first node with a single
      * control point C0 to the bezier path.
+     * @param x1 the x-coordinate of the point
+     * @param y1 the y-coordinate of the point
      */
     public void moveTo(double x1, double y1) {
         if (size() != 0) {
@@ -987,6 +1011,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * point C0.
      * <p>
      * The bezier path must already have at least one node.
+     * @param x1 the x-coordinate of the point
+     * @param y1 the y-coordinate of the point
      */
     public void lineTo(double x1, double y1) {
         if (size() == 0) {
@@ -1006,6 +1032,10 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * C1 (incoming curve) to the bezier path.
      * <p>
      * The bezier path must already have at least one node.
+     * @param x1 the x-coordinate of the first point
+     * @param y1 the y-coordinate of the first point
+     * @param x2 the x-coordinate of the second point
+     * @param y2 the y-coordinate of the second point
      */
     public void quadTo(double x1, double y1,
             double x2, double y2) {
@@ -1024,6 +1054,12 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * point C2 (outgoing curve) of the previous node.
      * <p>
      * The bezier path must already have at least one node.
+     * @param x1 the x-coordinate of the first point
+     * @param y1 the y-coordinate of the first point
+     * @param x2 the x-coordinate of the second point
+     * @param y2 the y-coordinate of the second point
+     * @param x3 the x-coordinate of the third point
+     * @param y3 the y-coordinate of the third point
      */
     public void curveTo(double x1, double y1,
             double x2, double y2,

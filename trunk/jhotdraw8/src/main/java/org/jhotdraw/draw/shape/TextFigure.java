@@ -13,10 +13,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.DrawingRenderer;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
@@ -27,8 +27,8 @@ import org.jhotdraw.draw.connector.Connector;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractConnectableShapeFigure implements TextHolderFigure {
-     public final static FigureKey<Point2D> ORIGIN = new FigureKey<>("origin", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), new Point2D(0, 0));
+public class TextFigure extends AbstractShapeFigure implements TextHolderFigure {
+     public final static FigureKey<Point2D> ORIGIN = new FigureKey<>("origin", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
 
     private Text textNode;
 
@@ -83,7 +83,7 @@ public class TextFigure extends AbstractConnectableShapeFigure implements TextHo
         updateTextProperties(tn);
     }
     @Override
-    public Connector findConnector(Point2D p, ConnectionFigure prototype) {
+    public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopRectangleConnector();
     }
 }

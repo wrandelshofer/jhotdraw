@@ -22,13 +22,26 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     public final static Key<Drawing> ROOT_KEY = new Key<>("root", Drawing.class, null);
 
     public enum EventType {
+        /** The root of the model changed. */
         ROOT_CHANGED,
+        /** The structure
+         * in a subtree of the figures changed. */
         SUBTREE_STRUCTURE_CHANGED,
-        SUBTREE_NODES_CHANGED,
+        /** All
+         * JavaFX Nodes in a subtree of the figures have been invalidated. */
+        SUBTREE_NODES_INVALIDATED,
+        /** A single figure has been
+         * added. */
         FIGURE_ADDED,
+        /** A single figure has been
+         * removed. */
         FIGURE_REMOVED,
-        PROPERTY_CHANGED,
-        NODE_CHANGED
+        /** The
+         * JavaFX Node of a single figure has been invalidated. */
+        NODE_INVALIDATED,
+        /** The
+         * layout of a single figure has been invalidated. */
+        LAYOUT_INVALIDATED
     }
     private final Figure figure;
     private final Key<?> key;
@@ -53,8 +66,9 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     public static DrawingModelEvent subtreeStructureChanged(DrawingModel source, Figure root) {
         return new DrawingModelEvent(source, EventType.SUBTREE_STRUCTURE_CHANGED, root, null, -1, null, null, null);
     }
-    public static DrawingModelEvent subtreeNodesChanged(DrawingModel source, Figure root) {
-        return new DrawingModelEvent(source, EventType.SUBTREE_NODES_CHANGED, root, null, -1, null, null, null);
+
+    public static DrawingModelEvent subtreeNodesInvalidated(DrawingModel source, Figure root) {
+        return new DrawingModelEvent(source, EventType.SUBTREE_NODES_INVALIDATED, root, null, -1, null, null, null);
     }
 
     public static DrawingModelEvent figureAdded(DrawingModel source, Figure parent, Figure child, int index) {
@@ -65,13 +79,14 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return new DrawingModelEvent(source, EventType.FIGURE_REMOVED, child, parent, index, null, null, null);
     }
 
-    public static <T> DrawingModelEvent propertyChanged(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
-        return new DrawingModelEvent(source, EventType.PROPERTY_CHANGED, figure, null, -1, key, oldValue, newValue);
+    public static <T> DrawingModelEvent nodeInvalidated(DrawingModel source, Figure figure) {
+        return new DrawingModelEvent(source, EventType.NODE_INVALIDATED, figure, null, -1, null, null, null);
     }
 
-    public static <T> DrawingModelEvent nodeChanged(DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.NODE_CHANGED, figure, null, -1, null, null, null);
+    public static <T> DrawingModelEvent layoutInvalidated(DrawingModel source, Figure figure) {
+        return new DrawingModelEvent(source, EventType.LAYOUT_INVALIDATED, figure, null, -1, null, null, null);
     }
+
     public static <T> DrawingModelEvent rootChanged(DrawingModel source, Drawing figure) {
         return new DrawingModelEvent(source, EventType.ROOT_CHANGED, figure, null, -1, null, null, null);
     }
@@ -142,7 +157,9 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return index;
     }
 
-    /** Returns the event type. */
+    /** Returns the event type.
+     *
+     * @return the event type */
     public DrawingModelEvent.EventType getEventType() {
         return eventType;
     }

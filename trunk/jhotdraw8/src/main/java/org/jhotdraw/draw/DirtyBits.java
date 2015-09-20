@@ -6,33 +6,32 @@
 package org.jhotdraw.draw;
 
 /**
- * DirtyBits.
+ * {@code DirtyBits} describes how changing a property value of a {@code Figure}
+ * affects dependent objects.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public enum DirtyBits {
-    /** The state of the figure has changed.
-     * Such as when a comment or another non-visual property has changed.
+    /** Affects the state of the figure.
+     *//** Affects the state of the figure.
      */
     STATE,
-    /** The appearance of the node which is used to render the figure has
-     * changed.
-     * Such as when the fill color changed.
+    /** Affects the JavaFX {@code Node} created by the figure.
+     * <p>
+     * All cached JavaFX {@code Node}s created by the figure, should be updated.</p>
      */
     NODE,
-    /** The geometry of the figure has changed.
-     * Such as when a point has been added to or removed from a path.
+    /** Affects the layout of connection figures.
+     * <p>
+     * All connection figures which perform layouts should by laid out.</p>
      */
-    GEOMETRY,
-    /** The layout bounds of the figure have changed.
-     * Such as when a shape has been resized or scaled.
+    CONNECTION_LAYOUT,
+    /** Affects the layout of parent figures.
+     * <p>
+     * All parent figures which perform layouts should by laid out.</p>
      */
-    LAYOUT_BOUNDS,
-    /** The visual bounds of the figure has changed.
-     * Such as when the stroke width has been changed.
-     */
-    VISUAL_BOUNDS;
+    LAYOUT;
 
     private int mask;
 
@@ -44,6 +43,5 @@ public enum DirtyBits {
     final int getMask() {
         return mask;
     }
-
 
 }

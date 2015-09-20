@@ -6,8 +6,6 @@
 package org.jhotdraw.draw.shape;
 
 import static java.lang.Math.*;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -15,14 +13,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.DrawingRenderer;
-import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
-import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 
@@ -32,11 +27,11 @@ import org.jhotdraw.draw.connector.Connector;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends AbstractConnectableShapeFigure {
+public class RectangleFigure extends AbstractShapeFigure {
 
-    public final static FigureKey<Rectangle2D> RECTANGLE = new FigureKey<>("rectangle", Rectangle2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS),new Rectangle2D(0, 0, 1, 1));
-    public final static FigureKey<Double> ARC_HEIGHT = new FigureKey<>("arcHeight",Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY), 0.0);
-    public final static FigureKey<Double> ARC_WIDTH = new FigureKey<>("arcWidth", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY), 0.0);
+    public final static FigureKey<Rectangle2D> RECTANGLE = new FigureKey<>("rectangle", Rectangle2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT),new Rectangle2D(0, 0, 1, 1));
+    public final static FigureKey<Double> ARC_HEIGHT = new FigureKey<>("arcHeight",Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static FigureKey<Double> ARC_WIDTH = new FigureKey<>("arcWidth", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT), 0.0);
 
     public RectangleFigure() {
         this(0, 0, 1, 1);
@@ -88,7 +83,7 @@ public class RectangleFigure extends AbstractConnectableShapeFigure {
         rectangleNode.setArcHeight(get(ARC_HEIGHT));
     }
     @Override
-    public Connector findConnector(Point2D p, ConnectionFigure prototype) {
+    public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopRectangleConnector();
     }
 }

@@ -6,8 +6,6 @@
  */
 package org.jhotdraw.draw;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -20,12 +18,18 @@ import javafx.geometry.Bounds;
 import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import javafx.geometry.Point2D;
+import org.jhotdraw.draw.connector.Connector;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * This base class can be used to implement figures which support child figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <C> the child type
+ * @param <P> the parent type
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
 
@@ -91,4 +95,34 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
 
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
-    }}
+    }
+
+    @Override
+    public Connector findConnector(Point2D p, Figure prototype) {
+        ObservableList<Figure> cs = children();
+        for (int i = cs.size() - 1; i >= 0; i--) {
+            Figure c = cs.get(i);
+            Connector cr = c.findConnector(p, prototype);
+            if (cr != null) {
+                return cr;
+            }
+        }
+        return null;
+    }
+
+    /** First layout all children and then layout self. */
+    @Override
+    public final void layout() {
+        for (Figure child:children()) {
+            child.layout();
+        }
+        doLayout();
+    }
+    
+    /** Layout self. */
+    protected void doLayout() {
+        
+    }
+    
+
+}

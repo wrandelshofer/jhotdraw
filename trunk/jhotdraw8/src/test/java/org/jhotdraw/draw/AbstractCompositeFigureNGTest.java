@@ -79,13 +79,18 @@ public class AbstractCompositeFigureNGTest {
         }
 
         @Override
-        public Node createNode(DrawingView drawingView) {
-            throw new UnsupportedOperationException("Not supported yet."); 
+        public Node createNode(DrawingRenderer renderer) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void updateNode(DrawingView drawingView, Node node) {
-            throw new UnsupportedOperationException("Not supported yet."); 
+        public void updateNode(DrawingRenderer renderer, Node node) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public boolean isLayoutable() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }    
 }

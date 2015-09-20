@@ -41,6 +41,7 @@ public class BezierPathIterator implements PathIterator {
     
     /**
      * Constructs an iterator given a BezierPath.
+     * @param path the path
      * @see BezierPath#getPathIterator
      */
     public BezierPathIterator(BezierPath path) {
@@ -50,6 +51,8 @@ public class BezierPathIterator implements PathIterator {
     /**
      * Constructs an iterator given a BezierPath and an optional
      * AffineTransform.
+     * @param path the path
+     * @param at the transform
      * @see BezierPath#getPathIterator
      */
     public BezierPathIterator(BezierPath path, AffineTransform at) {

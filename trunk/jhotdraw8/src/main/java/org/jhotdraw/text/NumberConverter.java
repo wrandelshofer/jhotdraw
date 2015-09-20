@@ -219,13 +219,6 @@ public class NumberConverter implements Converter<Number> {
         return minFractionDigits;
     }
 
-    /**
-     * Returns a String representation of the Object <code>value</code>.
-     * This invokes <code>format</code> on the current <code>Format</code>.
-     *
-     * @param value Value to convert
-     * @return String representation of value
-     */
     @Override
     public void toString(Number value, Appendable buf) throws IOException {
         if (value == null && allowsNullValue) {
@@ -295,15 +288,6 @@ public class NumberConverter implements Converter<Number> {
         return;
     }
 
-    /**
-     * Returns the <code>Object</code> representation of the
-     * <code>String</code> <code>text</code>.
-     *
-     * @param str <code>String</code> to convert
-     * @param pp the parse position
-     * @return <code>Object</code> representation of str
-     * @throws java.text.ParseException if the string does not start with a number
-     */
     @Override
     public Number fromString(CharBuffer str) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {

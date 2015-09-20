@@ -132,7 +132,7 @@ public class DoubleStroke implements Stroke {
                     bp.get(1).x[0], bp.get(1).y[0],
                     innerWidth, currentCorners);
 
-            intersect = Geom.intersect(
+            intersect = Geom.intersectAWT(
                     prevCorners[0], prevCorners[1],
                     prevCorners[4], prevCorners[5],
                     currentCorners[0], currentCorners[1],
@@ -145,7 +145,7 @@ public class DoubleStroke implements Stroke {
                 right.lineTo(currentCorners[0], currentCorners[1]);
             }
 
-            intersect = Geom.intersect(
+            intersect = Geom.intersectAWT(
                     prevCorners[2], prevCorners[3],
                     prevCorners[6], prevCorners[7],
                     currentCorners[2], currentCorners[3],
@@ -175,7 +175,7 @@ public class DoubleStroke implements Stroke {
                     bp.get(i).x[0], bp.get(i).y[0],
                     bp.get(i + 1).x[0], bp.get(i + 1).y[0],
                     innerWidth, tmp);
-            intersect = Geom.intersect(
+            intersect = Geom.intersectAWT(
                     prevCorners[0], prevCorners[1],
                     prevCorners[4], prevCorners[5],
                     currentCorners[0], currentCorners[1],
@@ -187,7 +187,7 @@ public class DoubleStroke implements Stroke {
                 right.lineTo(currentCorners[0], currentCorners[1]);
             }
 
-            intersect = Geom.intersect(
+            intersect = Geom.intersectAWT(
                     prevCorners[2], prevCorners[3],
                     prevCorners[6], prevCorners[7],
                     currentCorners[2], currentCorners[3],
@@ -209,7 +209,7 @@ public class DoubleStroke implements Stroke {
                     bp.get(0).x[0], bp.get(0).y[0],
                     //bp.get(1).x[0], bp.get(1).y[0],
                     innerWidth, tmp);
-            intersect = Geom.intersect(
+            intersect = Geom.intersectAWT(
                     prevCorners[0], prevCorners[1],
                     prevCorners[4], prevCorners[5],
                     currentCorners[0], currentCorners[1],
@@ -221,7 +221,7 @@ public class DoubleStroke implements Stroke {
                 right.lineTo(currentCorners[0], currentCorners[1]);
             }
 
-            intersect = Geom.intersect(
+            intersect = Geom.intersectAWT(
                     prevCorners[2], prevCorners[3],
                     prevCorners[6], prevCorners[7],
                     currentCorners[2], currentCorners[3],

@@ -117,7 +117,6 @@ public class XMLDoubleConverter implements Converter<Double> {
      * <code>minimum</code>.
      *
      * @param minimum Minimum legal value that can be input
-     * @see #setValueClass
      */
     @SuppressWarnings("rawtypes")
     public void setMinimum(Comparable minimum) {
@@ -141,7 +140,6 @@ public class XMLDoubleConverter implements Converter<Double> {
      * <code>max</code>.
      *
      * @param max Maximum legal value that can be input
-     * @see #setValueClass
      */
     @SuppressWarnings("rawtypes")
     public void setMaximum(Comparable max) {
@@ -214,13 +212,6 @@ public class XMLDoubleConverter implements Converter<Double> {
         return minFractionDigits;
     }
 
-    /**
-     * Returns a String representation of the Object <code>value</code>.
-     * This invokes <code>format</code> on the current <code>Format</code>.
-     *
-     * @param value Value to convert
-     * @return String representation of value
-     */
     @Override
     public void toString(Double value, Appendable buf) throws IOException {
         if (value == null && allowsNullValue) {
@@ -250,16 +241,6 @@ public class XMLDoubleConverter implements Converter<Double> {
         return;
     }
 
-    /**
-     * Returns the <code>Object</code> representation of the
-     * <code>String</code> <code>text</code>.
-     *
-     * @param str <code>String</code> to convert
-     * @param pp the parse position
-     * @return <code>Object</code> representation of str
-     *
-     * @throws java.text.ParseException
-     */
     @Override
     public Double fromString(CharBuffer str) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {

@@ -2,14 +2,18 @@
  * @(#)Geom.java
  *
  * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
 package org.jhotdraw.geom;
 
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import static java.lang.Math.*;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
+
 
 /**
  * Some geometric utilities.
@@ -23,60 +27,27 @@ public class Geom {
 
     /**
      * Tests if a point is on a line.
-     */
-    public static boolean lineContainsPoint(int x1, int y1,
-            int x2, int y2,
-            int px, int py) {
-        return lineContainsPoint(x1, y1, x2, y2, px, py, 3d);
-    }
-
-    /**
-     * Tests if a point is on a line.
-     * <p>changed Werner Randelshofer 2003-11-26
-     */
-    public static boolean lineContainsPoint(int x1, int y1,
-            int x2, int y2,
-            int px, int py, double tolerance) {
-
-        Rectangle r = new Rectangle(new Point(x1, y1));
-        r.add(x2, y2);
-        r.grow(max(2, (int) ceil(tolerance)), max(2, (int) ceil(tolerance)));
-        if (!r.contains(px, py)) {
-            return false;
-        }
-
-        double a, b, x, y;
-
-        if (x1 == x2) {
-            return (abs(px - x1) <= tolerance);
-        }
-        if (y1 == y2) {
-            return (abs(py - y1) <= tolerance);
-        }
-
-        a = (double) (y1 - y2) / (double) (x1 - x2);
-        b = (double) y1 - a * (double) x1;
-        x = (py - b) / a;
-        y = a * px + b;
-
-        return (min(abs(x - px), abs(y - py)) <= tolerance);
-    }
-
-    /**
-     * Tests if a point is on a line.
-     * <p>changed Werner Randelshofer 2003-11-26
+     *
+     * @param x1 the x coordinate of point 1 on the line
+     * @param y1 the y coordinate of point 1 on the line
+     * @param x2 the x coordinate of point 2 on the line
+     * @param y2 the y coordinate of point 2 on the line
+     * @param px the x coordinate of the point
+     * @param py the y coordinate of the point
+     * @param tolerance the maximal distance that the point may stray from the
+     * line
+     * @return true if the line contains the point within the given tolerance
      */
     public static boolean lineContainsPoint(double x1, double y1,
             double x2, double y2,
             double px, double py, double tolerance) {
-
-        Rectangle2D.Double r = new Rectangle2D.Double(x1, y1, 0, 0);
-        r.add(x2, y2);
+        Rectangle2D r = new Rectangle2D(x1, y1, 0, 0);
+        r = Geom.add(r, x2, y2);
         double grow = max(2, (int) ceil(tolerance));
-        r.x -= grow;
-        r.y -= grow;
-        r.width += grow * 2;
-        r.height += grow * 2;
+        r = new Rectangle2D(r.getMinX() - grow,
+                r.getMinY() - grow,
+                r.getWidth() + grow * 2,
+                r.getHeight() + grow * 2);
         if (!r.contains(px, py)) {
             return false;
         }
@@ -98,38 +69,25 @@ public class Geom {
         return (min(abs(x - px), abs(y - py)) <= tolerance);
     }
     /** The bitmask that indicates that a point lies above the rectangle. */
-    public static final int OUT_TOP = Rectangle2D.OUT_TOP;
+    public static final int OUT_TOP = 2;
     /** The bitmask that indicates that a point lies below the rectangle. */
-    public static final int OUT_BOTTOM = Rectangle2D.OUT_BOTTOM;
-    /** The bitmask that indicates that a point lies to the left of the rectangle. */
-    public static final int OUT_LEFT = Rectangle2D.OUT_LEFT;
-    /** The bitmask that indicates that a point lies to the right of the rectangle. */
-    public static final int OUT_RIGHT = Rectangle2D.OUT_RIGHT;
+    public static final int OUT_BOTTOM = 8;
+    /** The bitmask that indicates that a point lies to the left of the
+     * rectangle. */
+    public static final int OUT_LEFT = 1;
+    /** The bitmask that indicates that a point lies to the right of the
+     * rectangle. */
+    public static final int OUT_RIGHT = 4;
 
     /**
      * Returns the direction OUT_TOP, OUT_BOTTOM, OUT_LEFT, OUT_RIGHT from
      * one point to another one.
-     */
-    public static int direction(int x1, int y1, int x2, int y2) {
-        int direction = 0;
-        int vx = x2 - x1;
-        int vy = y2 - y1;
-
-        if (vy < vx && vx > -vy) {
-            direction = OUT_RIGHT;
-        } else if (vy > vx && vy > -vx) {
-            direction = OUT_TOP;
-        } else if (vx < vy && vx < -vy) {
-            direction = OUT_LEFT;
-        } else {
-            direction = OUT_BOTTOM;
-        }
-        return direction;
-    }
-
-    /**
-     * Returns the direction OUT_TOP, OUT_BOTTOM, OUT_LEFT, OUT_RIGHT from
-     * one point to another one.
+     *
+     * @param x1 the x coordinate of point 1
+     * @param y1 the y coordinate of point 1
+     * @param x2 the x coordinate of point 2
+     * @param y2 the y coordinate of point 2
+     * @return the direction
      */
     public static int direction(double x1, double y1, double x2, double y2) {
         int direction = 0;
@@ -150,86 +108,42 @@ public class Geom {
 
     /**
      * This method computes a binary OR of the appropriate mask values
-     * indicating, for each side of Rectangle r1, whether or not the
-     * Rectangle r2 is on the same side of the edge as the rest
-     * of this Rectangle.
+     * indicating, for each side of Rectangle2D r1, whether or not the
+     * Rectangle2D r2 is on the same side of the edge as the rest
+     * of this Rectangle2D.
      *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT, OUT_BOTTOM,
+     * @param r1 rectangle 1
+     * @param r2 rectangle 2
+     * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT,
+     * OUT_BOTTOM,
      * OUT_TOP.
      */
-    public static int outcode(Rectangle r1, Rectangle r2) {
+    public static int outcode(Rectangle2D r1, Rectangle2D r2) {
         int outcode = 0;
 
-        if (r2.x > r1.x + r1.width) {
+        if (r2.getMinX() > r1.getMinX() + r1.getWidth()) {
             outcode = OUT_RIGHT;
-        } else if (r2.x + r2.width < r1.x) {
+        } else if (r2.getMinX() + r2.getWidth() < r1.getMinX()) {
             outcode = OUT_LEFT;
         }
 
-        if (r2.y > r1.y + r1.height) {
+        if (r2.getMinY() > r1.getMinY() + r1.getHeight()) {
             outcode |= OUT_BOTTOM;
-        } else if (r2.y + r2.height < r1.y) {
+        } else if (r2.getMinY() + r2.getHeight() < r1.getMinY()) {
             outcode |= OUT_TOP;
         }
 
         return outcode;
     }
 
-    /**
-     * This method computes a binary OR of the appropriate mask values
-     * indicating, for each side of Rectangle r1, whether or not the
-     * Rectangle r2 is on the same side of the edge as the rest
-     * of this Rectangle.
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT, OUT_BOTTOM,
-     * OUT_TOP.
-     */
-    public static int outcode(Rectangle2D.Double r1, Rectangle2D.Double r2) {
-        int outcode = 0;
-
-        if (r2.x > r1.x + r1.width) {
-            outcode = OUT_RIGHT;
-        } else if (r2.x + r2.width < r1.x) {
-            outcode = OUT_LEFT;
-        }
-
-        if (r2.y > r1.y + r1.height) {
-            outcode |= OUT_BOTTOM;
-        } else if (r2.y + r2.height < r1.y) {
-            outcode |= OUT_TOP;
-        }
-
-        return outcode;
+    public static Point2D south(Rectangle2D r) {
+        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY()
+                + r.getHeight());
     }
 
-    public static Point south(Rectangle r) {
-        return new Point(r.x + r.width / 2, r.y + r.height);
-    }
-
-    public static Point2D.Double south(Rectangle2D.Double r) {
-        return new Point2D.Double(r.x + r.width / 2, r.y + r.height);
-    }
-
-    public static Point center(Rectangle r) {
-        return new Point(r.x + r.width / 2, r.y + r.height / 2);
-    }
-
-    public static Point2D.Double center(Rectangle2D.Double r) {
-        return new Point2D.Double(r.x + r.width / 2, r.y + r.height / 2);
+    public static Point2D center(Rectangle2D r) {
+        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY()
+                + r.getHeight() / 2);
     }
 
     /**
@@ -237,10 +151,14 @@ public class Geom {
      * from the center of the shape to the specified point.
      * If no edge crosses of the shape crosses the line, the nearest control
      * point of the shape is returned.
+     *
+     * @param shape the shape
+     * @param p the point
+     * @return a point on the shape
      */
-    public static Point2D.Double chop(Shape shape, Point2D.Double p) {
-        Rectangle2D bounds = shape.getBounds2D();
-        Point2D.Double ctr = new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
+    public static Point2D chop(Shape shape, Point2D p) {
+        java.awt.geom.Rectangle2D bounds = shape.getBounds2D();
+        java.awt.geom.Point2D.Double ctr = new java.awt.geom.Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
 
         // Chopped point
         double cx = -1;
@@ -266,18 +184,18 @@ public class Geom {
                     coords[1] = moveToY;
                     break;
             }
-            Point2D.Double chop = Geom.intersect(
+            Point2D chop = Geom.intersect(
                     prevX, prevY,
                     coords[0], coords[1],
-                    p.x, p.y,
-                    ctr.x, ctr.y);
+                    p.getX(), p.getY(),
+                    ctr.getX(), ctr.getY());
 
             if (chop != null) {
-                double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
+                double cl = Geom.length2(chop.getX(), chop.getY(), p.getX(), p.getY());
                 if (cl < len) {
                     len = cl;
-                    cx = chop.x;
-                    cy = chop.y;
+                    cx = chop.getX();
+                    cy = chop.getY();
                 }
             }
 
@@ -320,77 +238,48 @@ public class Geom {
                 }
             }
         }
-        return new Point2D.Double(cx, cy);
+        return new Point2D(cx, cy);
     }
 
-    public static Point west(Rectangle r) {
-        return new Point(r.x, r.y + r.height / 2);
+    public static Point2D west(Rectangle2D r) {
+        return new Point2D(r.getMinX(), r.getMinY() + r.getHeight() / 2);
     }
 
-    public static Point2D.Double west(Rectangle2D.Double r) {
-        return new Point2D.Double(r.x, r.y + r.height / 2);
+    public static Point2D east(Rectangle2D r) {
+        return new Point2D(r.getMinX() + r.getWidth(), r.getMinY()
+                + r.getHeight() / 2);
     }
 
-    public static Point east(Rectangle r) {
-        return new Point(r.x + r.width, r.y + r.height / 2);
-    }
-
-    public static Point2D.Double east(Rectangle2D.Double r) {
-        return new Point2D.Double(r.x + r.width, r.y + r.height / 2);
-    }
-
-    public static Point north(Rectangle r) {
-        return new Point(r.x + r.width / 2, r.y);
-    }
-
-    public static Point2D.Double north(Rectangle2D.Double r) {
-        return new Point2D.Double(r.x + r.width / 2, r.y);
+    public static Point2D north(Rectangle2D r) {
+        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY());
     }
 
     /**
-     * Constains a value to the given range.
+     * Clamps a value to the given range.
+     *
+     * @param value the value
+     * @param min the lower bound of the range
+     * @param max the upper bound of the range
      * @return the constrained value
      */
-    public static int range(int min, int max, int value) {
+    public static double clamp(double value, double min, double max) {
         if (value < min) {
-            value = min;
+            return min;
         }
         if (value > max) {
-            value = max;
-        }
-        return value;
-    }
-
-    /**
-     * Constains a value to the given range.
-     * @return the constrained value
-     */
-    public static double range(double min, double max, double value) {
-        if (value < min) {
-            value = min;
-        }
-        if (value > max) {
-            value = max;
+            return max;
         }
         return value;
     }
 
     /**
      * Gets the square distance between two points.
-     */
-    public static long length2(int x1, int y1, int x2, int y2) {
-        return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
-    }
-
-    /**
-     * Gets the distance between to points
-     */
-    public static long length(int x1, int y1, int x2, int y2) {
-        return (long) sqrt(length2(x1, y1, x2, y2));
-    }
-
-    /**
-     * Gets the square distance between two points.
+     *
+     * @param x1 the x coordinate of point 1
+     * @param y1 the y coordinate of point 1
+     * @param x2 the x coordinate of point 2
+     * @param y2 the y coordinate of point 2
+     * @return the square distance between the two points
      */
     public static double length2(double x1, double y1, double x2, double y2) {
         return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
@@ -398,6 +287,12 @@ public class Geom {
 
     /**
      * Gets the distance between to points
+     *
+     * @param x1 the x coordinate of point 1
+     * @param y1 the y coordinate of point 1
+     * @param x2 the x coordinate of point 2
+     * @param y2 the y coordinate of point 2
+     * @return the distance between the two points
      */
     public static double length(double x1, double y1, double x2, double y2) {
         return sqrt(length2(x1, y1, x2, y2));
@@ -405,44 +300,54 @@ public class Geom {
 
     /**
      * Gets the distance between to points
+     *
+     * @param p1 point 1
+     * @param p2 point 2
+     * @return the distance between the two points
      */
-    public static double length(Point2D.Double p1, Point2D.Double p2) {
-        return sqrt(length2(p1.x, p1.y, p2.x, p2.y));
+    public static double length(Point2D p1, Point2D p2) {
+        return sqrt(length2(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
     }
 
     /**
      * Caps the line defined by p1 and p2 by the number of units
      * specified by radius.
+     *
+     * @param p1 point 1, the start point
+     * @param p2 point 2, the end point
+     * @param radius the radius
      * @return A new end point for the line.
      */
-    public static Point2D.Double cap(Point2D.Double p1, Point2D.Double p2, double radius) {
-        double angle = PI / 2 - atan2(p2.x - p1.x, p2.y - p1.y);
-        Point2D.Double p3 = new Point2D.Double(
-                p2.x + radius * cos(angle),
-                p2.y + radius * sin(angle));
+    public static Point2D cap(Point2D p1, Point2D p2, double radius) {
+        double angle = PI / 2 - atan2(p2.getX() - p1.getX(), p2.getY()
+                - p1.getY());
+        Point2D p3 = new Point2D(
+                p2.getX() + radius * cos(angle),
+                p2.getY() + radius * sin(angle));
         return p3;
     }
 
     /**
      * Gets the angle of a point relative to a rectangle.
+     *
+     * @param r the rectangle
+     * @param p the point
+     * @return the angle
      */
-    public static double pointToAngle(Rectangle r, Point p) {
-        int px = p.x - (r.x + r.width / 2);
-        int py = p.y - (r.y + r.height / 2);
-        return atan2(py * r.width, px * r.height);
-    }
-
-    /**
-     * Gets the angle of a point relative to a rectangle.
-     */
-    public static double pointToAngle(Rectangle2D.Double r, Point2D.Double p) {
-        double px = p.x - (r.x + r.width / 2);
-        double py = p.y - (r.y + r.height / 2);
-        return atan2(py * r.width, px * r.height);
+    public static double pointToAngle(Rectangle2D r, Point2D p) {
+        double px = p.getX() - (r.getMinX() + r.getWidth() / 2);
+        double py = p.getY() - (r.getMinY() + r.getHeight() / 2);
+        return atan2(py * r.getWidth(), px * r.getHeight());
     }
 
     /**
      * Gets the angle of the specified line.
+     *
+     * @param x1 the x-coordinate of point 1 on the line
+     * @param y1 the y-coordinate of point 1 on the line
+     * @param x2 the x-coordinate of point 2 on the line
+     * @param y2 the y-coordinate of point 2 on the line
+     * @return the angle
      */
     public static double angle(double x1, double y1, double x2, double y2) {
         return atan2(y2 - y1, x2 - x1);
@@ -450,150 +355,77 @@ public class Geom {
 
     /**
      * Gets the point on a rectangle that corresponds to the given angle.
+     *
+     * @param r the rectangle
+     * @param angle the angle of the ray starting at the center of the rectangle
+     * @return a point on the rectangle
      */
-    public static Point angleToPoint(Rectangle r, double angle) {
-        double si = sin(angle);
-        double co = cos(angle);
-        double e = 0.0001;
-
-        int x = 0, y = 0;
-        if (abs(si) > e) {
-            x = (int) ((1.0 + co / abs(si)) / 2.0 * r.width);
-            x = range(0, r.width, x);
-        } else if (co >= 0.0) {
-            x = r.width;
-        }
-        if (abs(co) > e) {
-            y = (int) ((1.0 + si / abs(co)) / 2.0 * r.height);
-            y = range(0, r.height, y);
-        } else if (si >= 0.0) {
-            y = r.height;
-        }
-        return new Point(r.x + x, r.y + y);
-    }
-
-    /**
-     * Gets the point on a rectangle that corresponds to the given angle.
-     */
-    public static Point2D.Double angleToPoint(Rectangle2D.Double r, double angle) {
+    public static Point2D angleToPoint(Rectangle2D r, double angle) {
         double si = sin(angle);
         double co = cos(angle);
         double e = 0.0001;
 
         double x = 0, y = 0;
         if (abs(si) > e) {
-            x = (1.0 + co / abs(si)) / 2.0 * r.width;
-            x = range(0, r.width, x);
+            x = (1.0 + co / abs(si)) / 2.0 * r.getWidth();
+            x = clamp(x, 0, r.getWidth());
         } else if (co >= 0.0) {
-            x = r.width;
+            x = r.getWidth();
         }
         if (abs(co) > e) {
-            y = (1.0 + si / abs(co)) / 2.0 * r.height;
-            y = range(0, r.height, y);
+            y = (1.0 + si / abs(co)) / 2.0 * r.getHeight();
+            y = clamp(y, 0, r.getHeight());
         } else if (si >= 0.0) {
-            y = r.height;
+            y = r.getHeight();
         }
-        return new Point2D.Double(r.x + x, r.y + y);
+        return new Point2D(r.getMinX() + x, r.getMinY() + y);
     }
 
     /**
      * Converts a polar to a point
+     *
+     * @param angle the angle of the point in polar coordinates
+     * @param fx the x coordinate of the point in polar coordinates
+     * @param fy the y coordinate of the point in polar coordinates
+     * @return the point in Cartesian coordinates
      */
-    public static Point polarToPoint(double angle, double fx, double fy) {
+    public static Point2D polarToPoint(double angle, double fx, double fy) {
         double si = sin(angle);
         double co = cos(angle);
-        return new Point((int) (fx * co + 0.5), (int) (fy * si + 0.5));
-    }
-
-    /**
-     * Converts a polar to a point
-     */
-    public static Point2D.Double polarToPoint2D(double angle, double fx, double fy) {
-        double si = sin(angle);
-        double co = cos(angle);
-        return new Point2D.Double(fx * co + 0.5, fy * si + 0.5);
+        return new Point2D((int) (fx * co + 0.5), (int) (fy * si + 0.5));
     }
 
     /**
      * Gets the point on an oval that corresponds to the given angle.
+     *
+     * @param r the bounds of the oval
+     * @param angle the angle
+     * @return a point on the oval
      */
-    public static Point ovalAngleToPoint(Rectangle r, double angle) {
-        Point center = Geom.center(r);
-        Point p = Geom.polarToPoint(angle, r.width / 2, r.height / 2);
-        return new Point(center.x + p.x, center.y + p.y);
-    }
-
-    /**
-     * Gets the point on an oval that corresponds to the given angle.
-     */
-    public static Point2D.Double ovalAngleToPoint(Rectangle2D.Double r, double angle) {
-        Point2D.Double center = Geom.center(r);
-        Point2D.Double p = Geom.polarToPoint2D(angle, r.width / 2, r.height / 2);
-        return new Point2D.Double(center.x + p.x, center.y + p.y);
-    }
-
-    /**
-     * Standard line intersection algorithm
-     * Return the point of intersection if it exists, else null.
-     **/
-    public static Point intersect(int xa, // line 1 point 1 x
-            // from Doug Lea's PolygonFigure
-            int ya, // line 1 point 1 y
-            int xb, // line 1 point 2 x
-            int yb, // line 1 point 2 y
-            int xc, // line 2 point 1 x
-            int yc, // line 2 point 1 y
-            int xd, // line 2 point 2 x
-            int yd) { // line 2 point 2 y
-
-        // source: http://vision.dai.ed.ac.uk/andrewfg/c-g-a-faq.html
-        // eq: for lines AB and CD
-        //     (YA-YC)(XD-XC)-(XA-XC)(YD-YC)
-        // r = -----------------------------  (eqn 1)
-        //     (XB-XA)(YD-YC)-(YB-YA)(XD-XC)
-        //
-        //     (YA-YC)(XB-XA)-(XA-XC)(YB-YA)
-        // s = -----------------------------  (eqn 2)
-        //     (XB-XA)(YD-YC)-(YB-YA)(XD-XC)
-        //  XI = XA + r(XB-XA)
-        //  YI = YA + r(YB-YA)
-
-        double denom = ((xb - xa) * (yd - yc) - (yb - ya) * (xd - xc));
-
-        double rnum = ((ya - yc) * (xd - xc) - (xa - xc) * (yd - yc));
-
-        if (denom == 0.0) { // parallel
-            if (rnum == 0.0) { // coincident; pick one end of first line
-                if ((xa < xb && (xb < xc || xb < xd))
-                        || (xa > xb && (xb > xc || xb > xd))) {
-                    return new Point(xb, yb);
-                } else {
-                    return new Point(xa, ya);
-                }
-            } else {
-                return null;
-            }
-        }
-
-        double r = rnum / denom;
-        double snum = ((ya - yc) * (xb - xa) - (xa - xc) * (yb - ya));
-        double s = snum / denom;
-
-        if (0.0 <= r && r <= 1.0 && 0.0 <= s && s <= 1.0) {
-            int px = (int) (xa + (xb - xa) * r);
-            int py = (int) (ya + (yb - ya) * r);
-            return new Point(px, py);
-        } else {
-            return null;
-        }
+    public static Point2D ovalAngleToPoint(Rectangle2D r, double angle) {
+        Point2D center = Geom.center(r);
+        Point2D p = Geom.polarToPoint(angle, r.getWidth() / 2, r.getHeight() / 2);
+        return new Point2D(center.getX() + p.getX(), center.getY() + p.getY());
     }
 
     /**
      * Standard line intersection algorithm
      * Return the point of intersection if it exists, else null
-     **/
-    // from Doug Lea's PolygonFigure
-    public static Point2D.Double intersect(double xa, // line 1 point 1 x
+     *
+     * from Doug Lea's PolygonFigure
+     *
+     *
+     * @param xa the x-coordinate of point a on line 1
+     * @param ya the y-coordinate of point a on line 1
+     * @param xb the x-coordinate of point b on line 1
+     * @param yb the y-coordinate of point b on line 1
+     * @param xc the x-coordinate of point c on line 2
+     * @param yc the y-coordinate of point c on line 2
+     * @param xd the x-coordinate of point d on line 2
+     * @param yd the y-coordinate of point d on line 2
+     * @return the intersection point or null
+     */
+    public static Point2D intersect(double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
             double xb, // line 1 point 2 x
             double yb, // line 1 point 2 y
@@ -613,7 +445,6 @@ public class Geom {
         //     (XB-XA)(YD-YC)-(YB-YA)(XD-XC)
         //  XI = XA + r(XB-XA)
         //  YI = YA + r(YB-YA)
-
         double denom = ((xb - xa) * (yd - yc) - (yb - ya) * (xd - xc));
 
         double rnum = ((ya - yc) * (xd - xc) - (xa - xc) * (yd - yc));
@@ -622,9 +453,9 @@ public class Geom {
             if (rnum == 0.0) { // coincident; pick one end of first line
                 if ((xa < xb && (xb < xc || xb < xd))
                         || (xa > xb && (xb > xc || xb > xd))) {
-                    return new Point2D.Double(xb, yb);
+                    return new Point2D(xb, yb);
                 } else {
-                    return new Point2D.Double(xa, ya);
+                    return new Point2D(xa, ya);
                 }
             } else {
                 return null;
@@ -638,13 +469,30 @@ public class Geom {
         if (0.0 <= r && r <= 1.0 && 0.0 <= s && s <= 1.0) {
             double px = xa + (xb - xa) * r;
             double py = ya + (yb - ya) * r;
-            return new Point2D.Double(px, py);
+            return new Point2D(px, py);
         } else {
             return null;
         }
     }
 
-    public static Point2D.Double intersect(
+    /**
+     * Line intersection algorithm
+     * Return the point of intersection if it exists, else null.
+     *
+     *
+     * @param xa the x-coordinate of point a on line 1
+     * @param ya the y-coordinate of point a on line 1
+     * @param xb the x-coordinate of point b on line 1
+     * @param yb the y-coordinate of point b on line 1
+     * @param xc the x-coordinate of point c on line 2
+     * @param yc the y-coordinate of point c on line 2
+     * @param xd the x-coordinate of point d on line 2
+     * @param yd the y-coordinate of point d on line 2
+     * @param limit the lines are extend by up to limit units in order to meet
+     * at the intersection point
+     * @return the intersection point or null
+     */
+    public static Point2D intersect(
             double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
             double xb, // line 1 point 2 x
@@ -666,7 +514,6 @@ public class Geom {
         //     (XB-XA)(YD-YC)-(YB-YA)(XD-XC)
         //  XI = XA + r(XB-XA)
         //  YI = YA + r(YB-YA)
-
         double denom = ((xb - xa) * (yd - yc) - (yb - ya) * (xd - xc));
 
         double rnum = ((ya - yc) * (xd - xc) - (xa - xc) * (yd - yc));
@@ -675,9 +522,9 @@ public class Geom {
             if (rnum == 0.0) { // coincident; pick one end of first line
                 if ((xa < xb && (xb < xc || xb < xd))
                         || (xa > xb && (xb > xc || xb > xd))) {
-                    return new Point2D.Double(xb, yb);
+                    return new Point2D(xb, yb);
                 } else {
-                    return new Point2D.Double(xa, ya);
+                    return new Point2D(xa, ya);
                 }
             } else {
                 return null;
@@ -691,7 +538,7 @@ public class Geom {
         if (0.0 <= r && r <= 1.0 && 0.0 <= s && s <= 1.0) {
             double px = xa + (xb - xa) * r;
             double py = ya + (yb - ya) * r;
-            return new Point2D.Double(px, py);
+            return new Point2D(px, py);
         } else {
             double px = xa + (xb - xa) * r;
             double py = ya + (yb - ya) * r;
@@ -700,24 +547,61 @@ public class Geom {
                     || length(xb, yb, px, py) <= limit
                     || length(xc, yc, px, py) <= limit
                     || length(xd, yd, px, py) <= limit) {
-                return new Point2D.Double(px, py);
+                return new Point2D(px, py);
             }
 
             return null;
         }
+    }
+    /**
+     * Line intersection algorithm
+     * Return the point of intersection if it exists, else null.
+     *
+     *
+     * @param xa the x-coordinate of point a on line 1
+     * @param ya the y-coordinate of point a on line 1
+     * @param xb the x-coordinate of point b on line 1
+     * @param yb the y-coordinate of point b on line 1
+     * @param xc the x-coordinate of point c on line 2
+     * @param yc the y-coordinate of point c on line 2
+     * @param xd the x-coordinate of point d on line 2
+     * @param yd the y-coordinate of point d on line 2
+     * @param limit the lines are extend by up to limit units in order to meet
+     * at the intersection point
+     * @return the intersection point or null
+     */
+    public static java.awt.geom.Point2D.Double intersectAWT(
+            double xa, // line 1 point 1 x
+            double ya, // line 1 point 1 y
+            double xb, // line 1 point 2 x
+            double yb, // line 1 point 2 y
+            double xc, // line 2 point 1 x
+            double yc, // line 2 point 1 y
+            double xd, // line 2 point 2 x
+            double yd,
+            double limit) { // line 2 point 2 y
+        Point2D p = intersect(xa,ya,xb,yb,xc,yc,xd,yd,limit);
+        return new java.awt.geom.Point2D.Double(p.getX(),p.getY());
     }
 
     /**
      * compute distance of point from line segment, or
      * Double.MAX_VALUE if perpendicular projection is outside segment; or
      * If pts on line are same, return distance from point
-     **/
+     *
+     * @param xa the x-coordinate of point a on the line 
+     * @param ya the y-coordinate of point a on the line 
+     * @param xb the x-coordinate of point b on the line 
+     * @param yb the y-coordinate of point b on the line 
+     * @param xc the x-coordinate of the point c
+     * @param yc the y-coordinate of the point c
+     * @return the distance from the line
+     */
+   public static double distanceFromLine(double xa, double ya,
+            double xb, double yb,
+            double xc, double yc) {
+
     // from Doug Lea's PolygonFigure
-    public static double distanceFromLine(int xa, int ya,
-            int xb, int yb,
-            int xc, int yc) {
-
-
         // source:http://vision.dai.ed.ac.uk/andrewfg/c-g-a-faq.html#q7
         //Let the point be C (XC,YC) and the line be AB (XA,YA) to (XB,YB).
         //The length of the
@@ -751,10 +635,9 @@ public class Geom {
         //      If s < 0 C is left of AB (you can just check the numerator)
         //      If s>0 C is right of AB
         //      If s=0 C is on AB
-
-        int xdiff = xb - xa;
-        int ydiff = yb - ya;
-        long l2 = xdiff * xdiff + ydiff * ydiff;
+        double xdiff = xb - xa;
+        double ydiff = yb - ya;
+        double l2 = xdiff * xdiff + ydiff * ydiff;
 
         if (l2 == 0) {
             return Geom.length(xa, ya, xc, yc);
@@ -774,23 +657,23 @@ public class Geom {
         return sqrt(xd * xd + yd * yd);
 
         /*
-        for directional version, instead use
-        double snum =  (ya-yc) * (xb-xa) - (xa-xc) * (yb-ya);
-        double s = snum / l2;
-
-        double l = sqrt((double)l2);
-        return = s * l;
+         * for directional version, instead use
+         * double snum = (ya-yc) * (xb-xa) - (xa-xc) * (yb-ya);
+         * double s = snum / l2;
+         *
+         * double l = sqrt((double)l2);
+         * return = s * l;
          */
     }
 
     /**
-     * Resizes the <code>Rectangle2D.Double</code> both horizontally and vertically.
+     * Resizes the <code>Rectangle2D</code> both horizontally and vertically.
      * <p>
-     * This method modifies the <code>Rectangle2D.Double</code> so that it is
+     * This method modifies the <code>Rectangle2D</code> so that it is
      * <code>h</code> units larger on both the left and right side,
      * and <code>v</code> units larger at both the top and bottom.
      * <p>
-     * The new <code>Rectangle2D.Double</code> has (<code>x&nbsp;-&nbsp;h</code>,
+     * The new <code>Rectangle2D</code> has (<code>x&nbsp;-&nbsp;h</code>,
      * <code>y&nbsp;-&nbsp;v</code>) as its top-left corner, a
      * width of
      * <code>width</code>&nbsp;<code>+</code>&nbsp;<code>2h</code>,
@@ -798,19 +681,23 @@ public class Geom {
      * <code>height</code>&nbsp;<code>+</code>&nbsp;<code>2v</code>.
      * <p>
      * If negative values are supplied for <code>h</code> and
-     * <code>v</code>, the size of the <code>Rectangle2D.Double</code>
+     * <code>v</code>, the size of the <code>Rectangle2D</code>
      * decreases accordingly.
      * The <code>grow</code> method does not check whether the resulting
      * values of <code>width</code> and <code>height</code> are
      * non-negative.
+     *
+     * @param r the rectangle
      * @param h the horizontal expansion
      * @param v the vertical expansion
+     * @return the new rectangle
      */
-    public static void grow(Rectangle2D.Double r, double h, double v) {
-        r.x -= h;
-        r.y -= v;
-        r.width += h * 2d;
-        r.height += v * 2d;
+    public static Rectangle2D grow(Rectangle2D r, double h, double v) {
+        return new Rectangle2D(
+                r.getMinX() - h,
+                r.getMinY() - v,
+                r.getWidth() + h * 2d,
+                r.getHeight() + v * 2d);
     }
 
     /**
@@ -820,33 +707,41 @@ public class Geom {
      * when rectangle1 contains rectangle2 and either or both of them
      * are empty.
      *
-     * @param r1 Rectangle 1.
-     * @param r2 Rectangle 2.
-     * @return true if r1 contains r2.
-     */
-    public static boolean contains(Rectangle2D.Double r1, Rectangle2D.Double r2) {
-        return (r2.x >= r1.x
-                && r2.y >= r1.y
-                && (r2.x + max(0, r2.width)) <= r1.x + max(0, r1.width)
-                && (r2.y + max(0, r2.height)) <= r1.y + max(0, r1.height));
-    }
-
-    /**
-     * Returns true, if rectangle 1 contains rectangle 2.
-     * <p>
-     * This method is similar to Rectangle2D.contains, but also returns true,
-     * when rectangle1 contains rectangle2 and either or both of them
-     * are empty.
-     *
-     * @param r1 Rectangle 1.
-     * @param r2 Rectangle 2.
+     * @param r1 Rectangle2D 1.
+     * @param r2 Rectangle2D 2.
      * @return true if r1 contains r2.
      */
     public static boolean contains(Rectangle2D r1, Rectangle2D r2) {
+        return (r2.getMinX() >= r1.getMinX()
+                && r2.getMinY() >= r1.getMinY()
+                && (r2.getMinX() + max(0, r2.getWidth())) <= r1.getMinX()
+                + max(0, r1.getWidth())
+                && (r2.getMinY() + max(0, r2.getHeight())) <= r1.getMinY()
+                + max(0, r1.getHeight()));
+    }
+    /**
+     * Returns true, if rectangle 1 contains rectangle 2.
+     * <p>
+     * This method is similar to Rectangle2D.contains, but also returns true,
+     * when rectangle1 contains rectangle2 and either or both of them
+     * are empty.
+     *
+     * @param r1 Rectangle 1.
+     * @param r2 Rectangle 2.
+     * @return true if r1 contains r2.
+     */
+    public static boolean containsAWT(java.awt.geom.Rectangle2D r1, java.awt.geom.Rectangle2D r2) {
         return (r2.getX()) >= r1.getX()
                 && r2.getY() >= r1.getY()
                 && (r2.getX() + max(0, r2.getWidth())) <= r1.getX() + max(0, r1.getWidth())
                 && (r2.getY() + max(0, r2.getHeight())) <= r1.getY() + max(0, r1.getHeight());
     }
-}
 
+    private static Rectangle2D add(Rectangle2D r, double newx, double newy) {
+        double x1 = Math.min(r.getMinX(), newx);
+        double x2 = Math.max(r.getMaxX(), newx);
+        double y1 = Math.min(r.getMinY(), newy);
+        double y2 = Math.max(r.getMaxY(), newy);
+        return new Rectangle2D(x1, y1, x2 - x1, y2 - y1);
+    }
+}

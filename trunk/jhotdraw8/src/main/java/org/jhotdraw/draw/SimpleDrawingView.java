@@ -44,8 +44,10 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw.beans.NonnullProperty;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.constrain.NullConstrainer;
@@ -93,17 +95,17 @@ public class SimpleDrawingView implements DrawingView {
                 case FIGURE_REMOVED:
                     handleFigureRemoved(event.getFigure());
                     break;
-                case NODE_CHANGED:
-                    handleNodeChanged(event.getFigure());
+                case NODE_INVALIDATED:
+                    handleNodeInvalidated(event.getFigure());
                     break;
-                case PROPERTY_CHANGED:
-                    // nothing to do
+                case LAYOUT_INVALIDATED:
+                    handleLayoutInvalidated(event.getFigure());
                     break;
                 case ROOT_CHANGED:
                     updateDrawing();
                     repaint();
                     break;
-                case SUBTREE_NODES_CHANGED:
+                case SUBTREE_NODES_INVALIDATED:
                     updateTreeNodes(event.getFigure());
                     repaint();
                     break;
@@ -121,21 +123,16 @@ public class SimpleDrawingView implements DrawingView {
      * The drawingProperty holds the drawing that is presented by this drawing
      * view.
      */
-    private final NonnullProperty<DrawingModel> drawingModel = new NonnullProperty<DrawingModel>(this, DRAWING_MODEL_PROPERTY, new SimpleDrawingModel()) {
+    private final NonnullProperty<DrawingModel> drawingModel //
+            = new NonnullProperty<DrawingModel>(this, DRAWING_MODEL_PROPERTY, new ConnectionsNoLayoutDrawingModel()) {
 
         @Override
         public void set(DrawingModel newValue) {
             DrawingModel oldValue = get();
-            if (oldValue != null) {
-                oldValue.removeDrawingModelListener(modelHandler);
-            }
             super.set(newValue); //To change body of generated methods, choose Tools | Templates.
-            if (newValue != null) {
-                newValue.addDrawingModelListener(modelHandler);
-                updateDrawing();
-                repaint();
-            }
+            handleNewDrawingModel(oldValue, newValue);
         }
+
     };
 
     /**
@@ -194,7 +191,7 @@ public class SimpleDrawingView implements DrawingView {
                     drawingPane.getTransforms().set(0, st);
                 }
             }
-            drawingToView.set(st);
+            updateDrawingToView();
             updateHandles();
         }
     };
@@ -213,7 +210,11 @@ public class SimpleDrawingView implements DrawingView {
     /**
      * This is the set of figures which are out of sync with their JavaFX node.
      */
-    private final HashSet<Figure> dirtyFigures = new HashSet<>();
+    private final HashSet<Figure> dirtyFigureNodes = new HashSet<>();
+    /**
+     * This is the set of figures which are out of sync with their layout.
+     */
+    private final HashSet<Figure> dirtyFigureLayouts = new HashSet<>();
 
     /**
      * The set of all handles which were produced by selected figures.
@@ -228,8 +229,12 @@ public class SimpleDrawingView implements DrawingView {
     private Runnable repainter = null;
     private final Listener<HandleEvent> eventHandler;
 
-    private void invalidateFigure(Figure f) {
-        dirtyFigures.add(f);
+    private void invalidateFigureNode(Figure f) {
+        dirtyFigureNodes.add(f);
+    }
+
+    private void invalidateFigureLayout(Figure f) {
+        dirtyFigureLayouts.add(f);
     }
 
     private class HandleEventHandler implements Listener<HandleEvent> {
@@ -260,8 +265,6 @@ public class SimpleDrawingView implements DrawingView {
             throw new InternalError(ex);
         }
 
-        setDrawingModel(new SimpleDrawingModel());
-
         node.addEventFilter(MouseEvent.MOUSE_PRESSED,
                 new EventHandler<MouseEvent>() {
             @Override
@@ -280,6 +283,13 @@ public class SimpleDrawingView implements DrawingView {
 
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
+
+        drawingModel.get().setRoot(new SimpleDrawing());
+        handleNewDrawingModel(null, drawingModel.get());
+
+        //FIXME - we need to update on boundsInLocalProperty but this listener
+        // fires too busily
+        //drawingPane.boundsInLocalProperty().addListener(l -> updateDrawingToView());
     }
 
     public Node getNode() {
@@ -291,13 +301,15 @@ public class SimpleDrawingView implements DrawingView {
         if (oldNode != null) {
             nodeToFigureMap.remove(oldNode);
         }
-        dirtyFigures.remove(f);
+        dirtyFigureNodes.remove(f);
+        dirtyFigureLayouts.remove(f);
     }
 
     private void clearNodes() {
         figureToNodeMap.clear();
         nodeToFigureMap.clear();
-        dirtyFigures.clear();
+        dirtyFigureNodes.clear();
+        dirtyFigureLayouts.clear();
     }
 
     @Override
@@ -307,6 +319,7 @@ public class SimpleDrawingView implements DrawingView {
             n = f.createNode(this);
             figureToNodeMap.put(f, n);
             nodeToFigureMap.put(n, f);
+            dirtyFigureNodes.add(f);
         }
         return n;
     }
@@ -346,12 +359,14 @@ public class SimpleDrawingView implements DrawingView {
             boundsProperty = Drawing.BOUNDS.propertyAt(d.properties());
             boundsProperty.addListener(preferredSizeHandler);
             drawingPane.getChildren().add(getNode(d));
-            updateTreeNodes(d);
+            dirtyFigureNodes.add(d);
+//            updateTreeNodes(d);
+            repaint();
         }
     }
 
     private void updateTreeNodes(Figure parent) {
-        dirtyFigures.add(parent);
+        dirtyFigureNodes.add(parent);
         for (Figure child : parent.children()) {
             updateTreeNodes(child);
         }
@@ -364,11 +379,21 @@ public class SimpleDrawingView implements DrawingView {
         // reference to its drawing it would perform better.
         Drawing drawing = getDrawing();
         for (Figure f : new ArrayList<Figure>(figureToNodeMap.keySet())) {
-            if (f.getDrawing() != drawing) {
+            if (f.getRoot() != drawing) {
                 removeNode(f);
             }
         }
         updateTreeNodes(parent);
+    }
+
+    private void handleNewDrawingModel(DrawingModel oldValue, DrawingModel newValue) {
+        if (oldValue != null) {
+            oldValue.removeDrawingModelListener(modelHandler);
+        }
+        if (newValue != null) {
+            newValue.addDrawingModelListener(modelHandler);
+            updateDrawing();
+        }
     }
 
     private void handleFigureAdded(Figure f) {
@@ -377,7 +402,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     private void handleFigureAdded0(Figure f) {
-        invalidateFigure(f);
+        invalidateFigureNode(f);
         for (Figure child : f.childrenProperty()) {
             handleFigureAdded0(child);
         }
@@ -395,15 +420,26 @@ public class SimpleDrawingView implements DrawingView {
         removeNode(f);
     }
 
-    private void handleNodeChanged(Figure f) {
-        invalidateFigure(f);
+    private void handleNodeInvalidated(Figure f) {
+        invalidateFigureNode(f);
+        repaint();
+    }
+
+    private void handleLayoutInvalidated(Figure f) {
+        invalidateFigureLayout(f);
         repaint();
     }
 
     private void updateView() {
-        LinkedList<Figure> update = new LinkedList<>(dirtyFigures);
-        dirtyFigures.clear();
-        for (Figure f : update) {
+        LinkedList<Figure> updateLayouts = new LinkedList<>(dirtyFigureLayouts);
+        dirtyFigureLayouts.clear();
+        DrawingModel dm = drawingModel.get();
+        for (Figure f : updateLayouts) {
+            dm.layout(f);
+        }
+        LinkedList<Figure> updateNodes = new LinkedList<>(dirtyFigureNodes);
+        dirtyFigureNodes.clear();
+        for (Figure f : updateNodes) {
             f.updateNode(this, getNode(f));
         }
         for (Handle h : selectionHandles) {
@@ -411,6 +447,9 @@ public class SimpleDrawingView implements DrawingView {
         }
         for (Handle h : secondaryHandles) {
             h.updateNode();
+        }
+        if (!dirtyFigureNodes.isEmpty()) {
+            repaint();
         }
     }
 
@@ -728,5 +767,14 @@ public class SimpleDrawingView implements DrawingView {
             }
             break;
         }
+    }
+
+    private void updateDrawingToView() {
+        Scale st = new Scale(zoomFactor.get(), zoomFactor.get());
+        Bounds b = drawingPane.getBoundsInLocal();
+        System.out.println("drawingPane:" + b);
+        Translate tr = new Translate(-b.getMinX(), -b.getMinY());
+        Transform t = tr.createConcatenation(st);
+        drawingToView.set(t);
     }
 }
