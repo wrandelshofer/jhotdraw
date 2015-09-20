@@ -41,7 +41,7 @@ public interface TextHolderFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("System",12)}
      */
-    public static FigureKey<Font> FONT = new FigureKey<>("font", Font.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.GEOMETRY, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),new Font("System",  12.0));
+    public static FigureKey<Font> FONT = new FigureKey<>("font", Font.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),new Font("System",  12.0));
     /**
      * The smoothing type. Default value: {@code GRAY}.
      */
@@ -49,7 +49,7 @@ public interface TextHolderFigure extends Figure {
     /**
      * The line spacing. Default value: {@code 12.0}
      */
-    public static FigureKey<Double> LINE_SPACING = new FigureKey<>("lineSpacing", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.GEOMETRY, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  12.0);
+    public static FigureKey<Double> LINE_SPACING = new FigureKey<>("lineSpacing", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),  12.0);
     /**
      * Whether to strike through the text. Default value: {@code false}
      */
@@ -57,11 +57,11 @@ public interface TextHolderFigure extends Figure {
     /**
      * The text alignment. Default value: {@code left}
      */
-    public static FigureKey<TextAlignment> TEXT_ALIGNMENT = new FigureKey<>("textAlignment", TextAlignment.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.GEOMETRY, DirtyBits.VISUAL_BOUNDS),  TextAlignment.LEFT);
+    public static FigureKey<TextAlignment> TEXT_ALIGNMENT = new FigureKey<>("textAlignment", TextAlignment.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT),  TextAlignment.LEFT);
     /**
      * The text origin. Default value: {@code baseline}
      */
-    public static FigureKey<VPos> TEXT_ORIGIN = new FigureKey<>("textOrigin", VPos.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.GEOMETRY, DirtyBits.VISUAL_BOUNDS),  VPos.BASELINE);
+    public static FigureKey<VPos> TEXT_ORIGIN = new FigureKey<>("textOrigin", VPos.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT),  VPos.BASELINE);
     /**
      * Whether to underline the text. Default value: {@code false}
      */
@@ -69,7 +69,7 @@ public interface TextHolderFigure extends Figure {
     /**
      * Text wrapping width. Default value: {@code 0.0} (no wrapping).
      */
-    public static FigureKey<Double> WRAPPING_WIDTH = new FigureKey<>("wrappingWidth", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.GEOMETRY, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  0.0);
+    public static FigureKey<Double> WRAPPING_WIDTH = new FigureKey<>("wrappingWidth", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),  0.0);
     // shape properties
     /**
      * Defines the paint used for filling the interior of the text. Default
@@ -89,38 +89,38 @@ public interface TextHolderFigure extends Figure {
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      */
-    public static FigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new FigureKey<>("textStrokeLineCap", StrokeLineCap.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  StrokeLineCap.SQUARE);
+    public static FigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new FigureKey<>("textStrokeLineCap", StrokeLineCap.class,DirtyMask.of(DirtyBits.NODE),  StrokeLineCap.SQUARE);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
      */
-    public static FigureKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new FigureKey<>("textStrokeLineJoin", StrokeLineJoin.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  StrokeLineJoin.MITER);
+    public static FigureKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new FigureKey<>("textStrokeLineJoin", StrokeLineJoin.class,DirtyMask.of(DirtyBits.NODE),  StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
      * value: {@code 10.0}.
      */
-    public static FigureKey<Double> TEXT_STROKE_MITER_LIMIT = new FigureKey<>("textStrokeMiterLimit", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  10.0);
+    public static FigureKey<Double> TEXT_STROKE_MITER_LIMIT = new FigureKey<>("textStrokeMiterLimit", Double.class,DirtyMask.of(DirtyBits.NODE),  10.0);
     /**
      * Defines the paint used for filling the outline of the text. Default
      * value: {@code null}.
      */
-    public static FigureKey<Paint> TEXT_STROKE = new FigureKey<>("textStroke", Paint.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  null);
+    public static FigureKey<Paint> TEXT_STROKE = new FigureKey<>("textStroke", Paint.class,DirtyMask.of(DirtyBits.NODE),  null);
     /**
      * Defines the stroke type used for drawing the outline of the text. Default
      * value: {@code StrokeType.CENTERED}.
      */
-    public static FigureKey<StrokeType> TEXT_STROKE_TYPE = new FigureKey<>("textStrokeType", StrokeType.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  StrokeType.CENTERED);
+    public static FigureKey<StrokeType> TEXT_STROKE_TYPE = new FigureKey<>("textStrokeType", StrokeType.class,DirtyMask.of(DirtyBits.NODE),  StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the text. Default value: {@code 1.0}.
      */
-    public static FigureKey<Double> TEXT_STROKE_WIDTH = new FigureKey<>("textStrokeWidth", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  1.0);
+    public static FigureKey<Double> TEXT_STROKE_WIDTH = new FigureKey<>("textStrokeWidth", Double.class,DirtyMask.of(DirtyBits.NODE),  1.0);
     /**
      * Defines the dash array used for the text. Default value:
      * {@code empty array}.
      */
     public static FigureKey<double[]> TEXT_STROKE_DASH_ARRAY = new FigureKey<>("textStrokeDashArray", double[].class,DirtyMask.of(DirtyBits.NODE),  new double[0]);
 
-    public final static FigureKey<String> TEXT = new FigureKey<>("text", String.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.GEOMETRY, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS),  "");
+    public final static FigureKey<String> TEXT = new FigureKey<>("text", String.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),  "");
 
     /**
      * Updates a text node.

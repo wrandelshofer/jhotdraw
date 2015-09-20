@@ -17,13 +17,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import javafx.geometry.VPos;
-import javafx.scene.Group;
-import javafx.scene.text.Text;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
+import org.jhotdraw.draw.connector.CenterConnector;
 
 /**
  * LineConnectionFigure.
@@ -31,25 +26,44 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineConnectionFigure extends AbstractShapeFigure implements ConnectionFigure {
+public class LineConnectionFigure extends AbstractShapeFigure {
 
     /** Holds a strong reference to the property. */
-    private Property<ConnectableFigure> startFigureProperty;
+    private Property<Figure> startFigureProperty;
     /** Holds a strong reference to the property. */
-    private Property<ConnectableFigure> endFigureProperty;
-    /** Holds a strong reference to the property. */
-    private Property<Connector> startConnectorProperty;
-    /** Holds a strong reference to the property. */
-    private Property<Connector> endConnectorProperty;
-
-    /** Whether the value of the start property is valid.
-     * XXX should use a bitmask instead of a field for each invalidable value.
+    private Property<Figure> endFigureProperty;
+    /**
+     * The start position of the line.
      */
-    private boolean isStartValid = false;
-    /** Whether the value of the end property is valid.
-     * XXX should use a bitmask instead of a field for each invalidable value.
+    public static FigureKey<Point2D> START = new FigureKey<>("start", Point2D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    /**
+     * The end position of the line.
      */
-    private boolean isEndValid = false;
+    public static FigureKey<Point2D> END = new FigureKey<>("end", Point2D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    /**
+     * The start figure.
+     * Is null if the figure is not connected at the start.
+     * <p>
+     * If the value is changed. This figure must add or remove itself from
+     * the list of connections on the {@code ConnectableFigure}.</p>
+     */
+    public static FigureKey<Figure> START_FIGURE = new FigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
+    /**
+     * The end figure.
+     * Is null if the figure is not connected at the end.
+     * <p>
+     * If the value is changed. This figure must add or remove itself from
+     * the list of connections on the {@code ConnectableFigure}.</p>
+     */
+    public static FigureKey<Figure> END_FIGURE = new FigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
+    /**
+     * The start connector.
+     */
+    public static FigureKey<Connector> START_CONNECTOR = new FigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new CenterConnector());
+    /**
+     * The end connector.
+     */
+    public static FigureKey<Connector> END_CONNECTOR = new FigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new CenterConnector());
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
@@ -65,50 +79,20 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
 
         // We must update the start and end point when ever one of
         // the connected figures or one of the connectors changes
-        InvalidationListener ilStart = observable -> {
-            invalidateStart();
-        };
-        ChangeListener<ConnectableFigure> clStart = (observable, oldValue, newValue) -> {
+        ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 oldValue.connections().remove(LineConnectionFigure.this);
-                oldValue.properties().removeListener(ilStart);
             }
             if (newValue != null) {
                 newValue.connections().add(LineConnectionFigure.this);
-                newValue.properties().addListener(ilStart);
-                invalidateStart();
             }
         };
-        ChangeListener<Observable> oclStart = (observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeListener(ilStart);
-            }
-            if (newValue != null) {
-                newValue.addListener(ilStart);
-                invalidateStart();
-            }
-        };
-        InvalidationListener ilEnd = observable -> {
-            invalidateEnd();
-        };
-        ChangeListener<ConnectableFigure> clEnd = (observable, oldValue, newValue) -> {
+        ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 oldValue.connections().remove(LineConnectionFigure.this);
-                oldValue.properties().removeListener(ilEnd);
             }
             if (newValue != null) {
                 newValue.connections().add(LineConnectionFigure.this);
-                newValue.properties().addListener(ilEnd);
-                invalidateEnd();
-            }
-        };
-        ChangeListener<Observable> oclEnd = (observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeListener(ilEnd);
-            }
-            if (newValue != null) {
-                newValue.addListener(ilEnd);
-                invalidateEnd();
             }
         };
 
@@ -116,15 +100,10 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         startFigureProperty.addListener(clStart);
         endFigureProperty = END_FIGURE.propertyAt(properties());
         endFigureProperty.addListener(clEnd);
-        startConnectorProperty = START_CONNECTOR.propertyAt(properties());
-        startConnectorProperty.addListener(oclStart);
-        endConnectorProperty = END_CONNECTOR.propertyAt(properties());
-        endConnectorProperty.addListener(oclEnd);
     }
 
     @Override
     public Bounds getBoundsInLocal() {
-        validate();
         Point2D start = get(START);
         Point2D end = get(END);
         return new BoundingBox(//
@@ -161,7 +140,6 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
 
     @Override
     public void updateNode(DrawingRenderer drawingView, Node node) {
-        validate();
         Line lineNode = (Line) node;
         applyFigureProperties(lineNode);
         updateShapeProperties(lineNode);
@@ -173,48 +151,34 @@ public class LineConnectionFigure extends AbstractShapeFigure implements Connect
         lineNode.setEndY(end.getY());
     }
 
-    /** Some property values of this figure depend on property values of
-     * other figures. Invoke this method to ensure that you get the correct
-     * property values.
-     */
-    public void validate() {
-        validateStart();
-        validateEnd();
-    }
-
-    private void validateStart() {
-        if (!isStartValid) {
-            updateStart();
-            isStartValid = true;
+    public void layout() {
+        Point2D start = get(START);
+        Point2D end = get(END);
+        Figure startFigure = get(START_FIGURE);
+        Figure endFigure = get(END_FIGURE);
+        Connector startConnector = get(START_CONNECTOR);
+        Connector endConnector = get(END_CONNECTOR);
+        if (startFigure != null && startConnector != null) {
+            start = startConnector.getPosition(startFigure, this);
+        }
+        if (endFigure != null && endConnector != null) {
+            end = endConnector.getPosition(endFigure, this);
+        }
+        if (startFigure != null && startConnector != null) {
+            set(START, drawingToLocal(startConnector.chopStart(startFigure, this, start, end)));
+        }
+        if (endFigure != null && endConnector != null) {
+            set(END, drawingToLocal(startConnector.chopEnd(endFigure, this, start, end)));
         }
     }
 
-    private void validateEnd() {
-        if (!isEndValid) {
-            updateEnd();
-            isEndValid = true;
-        }
+    @Override
+    public boolean isLayoutable() {
+        return true;
     }
 
-    private void updateStart() {
-        get(START_CONNECTOR).updateStartPosition(this);
-    }
-
-    private void updateEnd() {
-        get(END_CONNECTOR).updateEndPosition(this);
-    }
-
-    private void invalidateStart() {
-        isStartValid = false;
-        // we also have to invalidate the end because 
-        // some connectors require this
-        isEndValid = false;
-    }
-
-    private void invalidateEnd() {
-        isEndValid = false;
-        // we also have to invalidate the start because 
-        // some connectors require this
-        isStartValid = false;
+    @Override
+    public Connector findConnector(Point2D p, Figure prototype) {
+        return null;
     }
 }

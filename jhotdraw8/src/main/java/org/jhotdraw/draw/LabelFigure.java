@@ -8,6 +8,7 @@ package org.jhotdraw.draw;
 import org.jhotdraw.draw.shape.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -18,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.connector.Connector;
 
 /**
  * TextFigure.
@@ -76,5 +78,20 @@ public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure 
         textNode.setY(get(ORIGIN).getY());
         textNode.setBoundsType(TextBoundsType.VISUAL);
         updateTextProperties(textNode);
+    }
+
+    @Override
+    public boolean isLayoutable() {
+        return false;
+    }
+
+    @Override
+    public Connector findConnector(Point2D p, Figure prototype) {
+        return null;
+    }
+
+    @Override
+    public void layout() {
+        // empty!
     }
 }

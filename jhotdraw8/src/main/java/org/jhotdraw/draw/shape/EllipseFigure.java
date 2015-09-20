@@ -5,22 +5,17 @@
  */
 package org.jhotdraw.draw.shape;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
 import static java.lang.Math.*;
 import javafx.scene.shape.Ellipse;
-import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.DrawingRenderer;
-import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
@@ -31,11 +26,11 @@ import org.jhotdraw.draw.connector.Connector;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends AbstractConnectableShapeFigure {
+public class EllipseFigure extends AbstractShapeFigure {
 
-    public final static FigureKey<Point2D> CENTER = new FigureKey<>("center", Point2D.class,DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), new Point2D(0, 0));
-    public final static FigureKey<Double> RADIUS_X = new FigureKey<>("radiusX", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), 1.0);
-    public final static FigureKey<Double> RADIUS_Y = new FigureKey<>("radiusY", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), 1.0);
+    public final static FigureKey<Point2D> CENTER = new FigureKey<>("center", Point2D.class,DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static FigureKey<Double> RADIUS_X = new FigureKey<>("radiusX", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), 1.0);
+    public final static FigureKey<Double> RADIUS_Y = new FigureKey<>("radiusY", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), 1.0);
 
     public EllipseFigure() {
         this(0, 0, 1,1);
@@ -95,7 +90,7 @@ public class EllipseFigure extends AbstractConnectableShapeFigure {
         n.setRadiusY(get(RADIUS_Y));
     }
     @Override
-    public Connector findConnector(Point2D p, ConnectionFigure prototype) {
+    public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopEllipseConnector();
     }
 }

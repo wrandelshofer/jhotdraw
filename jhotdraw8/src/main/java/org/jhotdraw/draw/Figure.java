@@ -1,5 +1,4 @@
-/*
- * @(#)Figure.java
+/* @(#)Figure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -14,12 +13,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.Stack;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
@@ -28,28 +28,44 @@ import javafx.scene.effect.Effect;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import javax.swing.tree.DefaultMutableTreeNode;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.SimpleHighlightHandle;
 
 /**
- * A {@code Figure} is an editable element of a {@link Drawing}.
+ * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
  * <p>
- * The elements of a {@link Drawing} are organized in a tree structure. All
- * nodes of the tree are represented by {@code Figure} objects.
- * The root of the tree is typically a {@code Drawing} object. The immediate
- * children of the {@code Drawing} are typically {@code Layer} objects.
- * Note that this implies that {@link Drawing} and {@code Layer} are subtypes
- * of {@code Figure}.</p>
+ * A figure can render its graphical representation into a JavaFX {@code Node}.
+ * </p>
  * <p>
- * A figure has a visual representation, such as a circle, a bezier path or
- * text.</p>
+ * A figure can be composed of other figures in a tree structure.
+ * The composition is implemented with the {@code children} and the
+ * {@code parent} properties. The composition can be restricted to specific
+ * child and parent types using the type parameters {@code <Figure>} and
+ * {@code <F>}.</p>
  * <p>
- * The visual representation of a {@code Figure} depends on property sets. A
- * property set is an open ended set of key and value pairs. The values
- * are accessed using {@code FigureKey}s.</p>
+ * Some figures can be connected to other figures.
+ * All figures which are connected with this figure must maintain an entry in
+ * the {@code connections} property of this figure.
+ * </p>
+ * <p>
+ * The state of a figure is described by its property map. The property map
+ * consists of key and value pairs. The keys are of type {@link Key}. If a
+ * property affects the graphical representation of the figure, a key of type
+ * {@code FigureKey} must be used. {@code FigureKey} provides a mean to describe
+ * how the value affects the graphical representation of the figure.</p>
+ * <p>
+ * The state of a figure may depend on the state of other figures. The
+ * dependencies may be cyclic due to connections.
+ * A figure provides a method {@code layout} which updates the state of the
+ * figure and of its descendants in the tree structure, but not of connected
+ * figures.
+ * </p>
+ * <p>
+ * A figure can produce {@code Handle}s which allow to graphically change
+ * the state of the figure.
  *
  * @author Werner Randelshofer @version $Id$
  */
@@ -87,41 +103,41 @@ public interface Figure extends PropertyBean {
      * Defines the angle of rotation around the center of the figure in degrees.
      * Default value: {@code 0}.
      */
-    public static FigureKey<Double> ROTATE = new FigureKey<>("rotate", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS), 0.0);
+    public static FigureKey<Double> ROTATE = new FigureKey<>("rotate", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Defines the rotation axis used. Default value: {@code Rotate.Z_AXIS}.
      */
-    public static FigureKey<Point3D> ROTATION_AXIS = new FigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS), Rotate.Z_AXIS);
+    public static FigureKey<Point3D> ROTATION_AXIS = new FigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_X = new FigureKey<>("scaleX", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS), 1.0);
+    public static FigureKey<Double> SCALE_X = new FigureKey<>("scaleX", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_Y = new FigureKey<>("scaleY", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS), 1.0);
+    public static FigureKey<Double> SCALE_Y = new FigureKey<>("scaleY", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_Z = new FigureKey<>("scaleZ", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS), 1.0);
+    public static FigureKey<Double> SCALE_Z = new FigureKey<>("scaleZ", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
      * Defines the translation on the x axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_X = new FigureKey<>("translateX", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS), 0.0);
+    public static FigureKey<Double> TRANSLATE_X = new FigureKey<>("translateX", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Defines the translation on the y axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_Y = new FigureKey<>("translateY", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS), 0.0);
+    public static FigureKey<Double> TRANSLATE_Y = new FigureKey<>("translateY", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Defines the translation on the z axis
      * about the center of the figure. Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_Z = new FigureKey<>("translateZ", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_BOUNDS, DirtyBits.VISUAL_BOUNDS), 0.0);
+    public static FigureKey<Double> TRANSLATE_Z = new FigureKey<>("translateZ", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
 
     // ----
     // property names
@@ -134,6 +150,10 @@ public interface Figure extends PropertyBean {
      * The name of the parent property.
      */
     public final static String PARENT_PROPERTY = "parent";
+    /**
+     * The name of the connections property.
+     */
+    public final static String CONNECTIONS_PROPERTY = "connections";
 
     // ----
     // property fields
@@ -165,6 +185,20 @@ public interface Figure extends PropertyBean {
      * figure, and {@code getName()} returning {@code CHILDREN_PROPERTY}.
      */
     ReadOnlyListProperty<Figure> childrenProperty();
+
+    /**
+     * The connection figures.
+     * <p>
+     * By convention this set is maintained by the connected figures.
+     * <p>
+     * For example, to remove a {@code ConnectionFigure} from this set set its
+     * corresponding
+     * {@code START_FIGURE} or {@code END_FIGURE} property to null.
+     *
+     * @return the connections property, with {@code getBean()} returning this
+     * figure, and {@code getName()} returning {@code CONNECTIONS_PROPERTY}.
+     */
+    ReadOnlySetProperty<Figure> connectionsProperty();
 
     /**
      * The parent figure.
@@ -321,7 +355,14 @@ public interface Figure extends PropertyBean {
     boolean allowsChildren();
 
     /**
-     * Whether the figure is selectable by the user.
+     * Whether the {@code layout} method of this figure does anything.
+     *
+     * @return true if the {@code layout} method is not empty.
+     */
+    boolean isLayoutable();
+
+    /**
+     * Whether the figure is selectable.
      *
      * @return true if the user may select the figure
      */
@@ -345,6 +386,23 @@ public interface Figure extends PropertyBean {
             return list;
         }
     }
+
+    /**
+     * Gets a connector for this figure at the given location.
+     *
+     * @param p the location of the connector.
+     * @param prototype The prototype used to create a connection or null if
+     * unknown. This allows for specific connectors for different
+     * connection figures.
+     * @return Returns the connector. Returns null if there is no connector
+     * at the given location.
+     */
+    Connector findConnector(Point2D p, Figure prototype);
+
+    /** Updates the state of this figure and of its descendant figures.
+     * Does not update connection figures.
+     */
+    void layout();
     // ----
     // convenience methods
     // ----
@@ -371,6 +429,7 @@ public interface Figure extends PropertyBean {
      * Gets the child with the specified index from the figure.
      *
      * @param index the index
+     * @return the child
      */
     default Figure getChild(int index) {
         return childrenProperty().get(index);
@@ -390,7 +449,7 @@ public interface Figure extends PropertyBean {
      *
      * @return The first child. Returns null if the figure has no children.
      */
-    default Figure getFirstChild(int index) {
+    default Figure getFirstChild() {
         return childrenProperty().isEmpty() //
                 ? null//
                 : childrenProperty().get(childrenProperty().getSize() - 1);
@@ -416,24 +475,43 @@ public interface Figure extends PropertyBean {
         return parentProperty().get();
     }
 
-    /**
-     * Returns the drawing to which this figure belongs.
-     *
-     * @return the drawing or null if the figure is not part of a drawing.
-     */
-    default Drawing getDrawing() {
-        Figure parent = this;
-        // Linear time! 
-        while (parent.getParent() != null) {
-            parent = getParent();
+    /** Returns the root.
+     * @return the root  */
+    default Figure getRoot() {
+        Figure root = this;
+        while (root.getParent() != null) {
+            root = root.getParent();
         }
-        return (parent instanceof Drawing) ? (Drawing) parent : null;
+        return root;
+    }
+
+    /** Returns an iterable which can iterate through this figure and all
+     * its descendants in preorder sequence.
+     * @return the iterable
+     */
+    default public Iterable<Figure> preorderIterable() {
+
+        return new Iterable<Figure>() {
+
+            @Override
+            public Iterator<Figure> iterator() {
+                return new PreorderIterator(Figure.this);
+            }
+        };
+    }
+
+    /**
+     * Returns all connections of the figure.
+     *
+     * @return a list of the children
+     */
+    default ObservableSet<Figure> connections() {
+        return connectionsProperty().get();
     }
 
     /**
      * Updates a figure node with all applicable {@code FigureKey}s defined in
-     * this
-     * interface.
+     * this interface.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
@@ -463,7 +541,7 @@ public interface Figure extends PropertyBean {
      * @param f A figure.
      * @return the keys
      */
-    public static Set<Key<?>> getFigureKeys(Figure f) {
+    public static Set<Key<?>> getKeys(Figure f) {
         return getDeclaredAndInheritedKeys(f.getClass());
     }
 
@@ -487,17 +565,6 @@ public interface Figure extends PropertyBean {
         } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys");
         }
-    }
-
-    default public Iterable<Figure> preorderIterable() {
-
-        return new Iterable<Figure>() {
-
-            @Override
-            public Iterator<Figure> iterator() {
-                return new PreorderIterator(Figure.this);
-            }
-        };
     }
 
     static class PreorderIterator implements Iterator<Figure> {
@@ -529,5 +596,27 @@ public interface Figure extends PropertyBean {
             }
             return node;
         }
+    }
+
+    /** Transforms the specified point from drawing coordinates into local
+     * coordinates.
+     *
+     * @param p point in drawing coordinates
+     * @return point in local coordinates
+     */
+    default Point2D drawingToLocal(Point2D p) {
+        // FIXME implement me
+        return p;
+    }
+
+    /** Transforms the specified point from local coordinates into drawing
+     * coordinates.
+     *
+     * @param p point in drawing coordinates
+     * @return point in local coordinates
+     */
+    default Point2D localToDrawing(Point2D p) {
+        // FIXME implement me
+        return p;
     }
 }

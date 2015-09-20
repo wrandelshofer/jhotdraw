@@ -23,6 +23,7 @@ public class FigureKey<T> extends Key<T> {
      *
      * @param key The name of the name.
      * @param clazz The type of the value.
+     * @param dirtyMask the dirty mask
      */
     public FigureKey(String key, Class<T> clazz, DirtyMask dirtyMask) {
         this(key, clazz, "", dirtyMask,null);

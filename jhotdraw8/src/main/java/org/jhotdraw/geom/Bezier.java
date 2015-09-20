@@ -55,6 +55,7 @@ public class Bezier {
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
      * digitized points. 
+     * @return  the bezier path
      */
     public static BezierPath fitBezierPath(Point2D.Double[] digitizedPoints, double error) {
         return fitBezierPath(Arrays.asList(digitizedPoints), error);
@@ -66,6 +67,7 @@ public class Bezier {
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
      * digitized points. 
+     * @return  the bezier path
      */
     public static BezierPath fitBezierPath(java.util.List<Point2D.Double> digitizedPoints, double error) {
         // Split into segments at corners
@@ -136,6 +138,7 @@ public class Bezier {
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
      * digitized points. 
+     * @return  the bezier path
      */
     public static BezierPath fitBezierPath(BezierPath digitizedPoints, double error) {
         ArrayList<Point2D.Double> d = new ArrayList<Point2D.Double>(digitizedPoints.size());
@@ -226,6 +229,7 @@ public class Bezier {
      * @param maxAngle maximal angle in radians between the current point and its
      * predecessor and successor up to which the point does not break the
      * digitized list into segments. Recommended value 44° = 44 * 180d / Math.PI
+     * @param minDistance the minimal distance
      * @return Segments of digitized points, each segment having less than maximal
      * angle between points.
      */

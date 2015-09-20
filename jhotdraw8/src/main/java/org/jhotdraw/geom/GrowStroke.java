@@ -79,7 +79,7 @@ public class GrowStroke extends DoubleStroke {
         }
 
 
-        if (Geom.contains(left.getBounds2D(), right.getBounds2D())) {
+        if (Geom.containsAWT(left.getBounds2D(), right.getBounds2D())) {
             return (grow > 0) ? left : right;
         } else {
             return (grow > 0) ? right : left;

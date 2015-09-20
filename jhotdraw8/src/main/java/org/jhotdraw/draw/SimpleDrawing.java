@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -25,28 +26,7 @@ import org.jhotdraw.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleDrawing extends GroupFigure implements Drawing {
-
-    public static HashMap<String, Key<?>> getFigureKeys() {
-        try {
-            HashMap<String, Key<?>> keys = new HashMap<>();
-            for (Field f : Drawing.class.getDeclaredFields()) {
-                if (Key.class.isAssignableFrom(f.getType())) {
-                    Key<?> value = (Key<?>) f.get(null);
-                    keys.put(value.getName(), value);
-                }
-            }
-            for (Field f : SimpleDrawing.class.getDeclaredFields()) {
-                if (Key.class.isAssignableFrom(f.getType())) {
-                    Key<?> value = (Key<?>) f.get(null);
-                    keys.put(value.getName(), value);
-                }
-            }
-            return keys;
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys");
-        }
-    }
+public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
 
     @Override
     public Node createNode(DrawingRenderer drawingView) {
@@ -78,13 +58,16 @@ public class SimpleDrawing extends GroupFigure implements Drawing {
     public Bounds getBoundsInLocal() {
         Rectangle2D bounds = get(BOUNDS);
         return new BoundingBox(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
-    }
-
-    @Override
-    protected void checkNewParent(Figure newValue) {
-        if (newValue != null) {
-            throw new IllegalArgumentException("A drawing can not have a parent.");
+        
+    }    @Override
+    public void reshape(Transform transform) {
+        for (Figure child : childrenProperty()) {
+            child.reshape(transform);
         }
     }
 
+    @Override
+    public boolean isLayoutable() {
+        return false;
+    }
 }

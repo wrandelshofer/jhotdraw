@@ -11,7 +11,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw.draw.AbstractConnectableLeafFigure;
 import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
@@ -29,49 +28,50 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * Defines the paint used for filling the interior of the figure. Default
      * value: {@code Color.WHITE}.
      */
-    public static FigureKey<Paint> FILL_PAINT = new FigureKey<>("fillPaint", Paint.class,DirtyMask.of(DirtyBits.NODE),  Color.WHITE);
+    public static FigureKey<Paint> FILL_PAINT = new FigureKey<>("fillPaint", Paint.class, DirtyMask.of(DirtyBits.NODE), Color.WHITE);
     /**
-     * Defines whether anti aliasing hints are used. Default value: {@code true}.
+     * Defines whether anti aliasing hints are used. Default value:
+     * {@code true}.
      */
-    public static FigureKey<Boolean> SMOOTH = new FigureKey<>("smooth", Boolean.class,DirtyMask.of(DirtyBits.NODE),  true);
+    public static FigureKey<Boolean> SMOOTH = new FigureKey<>("smooth", Boolean.class, DirtyMask.of(DirtyBits.NODE), true);
     /**
      * Defines the distance in user coordinates for the dashing pattern. Default
      * value: {@code 0}.
      */
-    public static FigureKey<Double> STROKE_DASH_OFFSET = new FigureKey<>("strokeDashOffset", Double.class,DirtyMask.of(DirtyBits.NODE),  0.0);
+    public static FigureKey<Double> STROKE_DASH_OFFSET = new FigureKey<>("strokeDashOffset", Double.class, DirtyMask.of(DirtyBits.NODE), 0.0);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      */
-    public static FigureKey<StrokeLineCap> STROKE_LINE_CAP = new FigureKey<>("strokeLineCap", StrokeLineCap.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  StrokeLineCap.SQUARE);
+    public static FigureKey<StrokeLineCap> STROKE_LINE_CAP = new FigureKey<>("strokeLineCap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.SQUARE);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
      */
-    public static FigureKey<StrokeLineJoin> STROKE_LINE_JOIN = new FigureKey<>("strokeLineJoin", StrokeLineJoin.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  StrokeLineJoin.MITER);
+    public static FigureKey<StrokeLineJoin> STROKE_LINE_JOIN = new FigureKey<>("strokeLineJoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
      * value: {@code 10.0}.
      */
-    public static FigureKey<Double> STROKE_MITER_LIMIT = new FigureKey<>("strokeMiterLimit", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  10.0);
+    public static FigureKey<Double> STROKE_MITER_LIMIT = new FigureKey<>("strokeMiterLimit", Double.class, DirtyMask.of(DirtyBits.NODE), 10.0);
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
      */
-    public static FigureKey<Paint> STROKE_PAINT = new FigureKey<>("strokePaint", Paint.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  Color.BLACK);
+    public static FigureKey<Paint> STROKE_PAINT = new FigureKey<>("strokePaint", Paint.class, DirtyMask.of(DirtyBits.NODE), Color.BLACK);
     /**
      * Defines the stroke type used for drawing outline of the figure. Default
      * value: {@code StrokeType.CENTERED}.
      */
-    public static FigureKey<StrokeType> STROKE_TYPE = new FigureKey<>("strokeType", StrokeType.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  StrokeType.CENTERED);
+    public static FigureKey<StrokeType> STROKE_TYPE = new FigureKey<>("strokeType", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure. Default value:
      * {@code 1.0}.
      */
-    public static FigureKey<Double> STROKE_WIDTH = new FigureKey<>("strokeWidth", Double.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.VISUAL_BOUNDS),  1.0);
+    public static FigureKey<Double> STROKE_WIDTH = new FigureKey<>("strokeWidth", Double.class, DirtyMask.of(DirtyBits.NODE), 1.0);
     /**
      * Defines the dash array used. Default value: {@code empty array}.
      */
-    public static FigureKey<double[]> STROKE_DASH_ARRAY = new FigureKey<>("strokeDashArray", double[].class,DirtyMask.of(DirtyBits.NODE),  new double[0]);
+    public static FigureKey<double[]> STROKE_DASH_ARRAY = new FigureKey<>("strokeDashArray", double[].class, DirtyMask.of(DirtyBits.NODE), new double[0]);
 
     /**
      * Updates a shape node.
@@ -93,4 +93,15 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
             shape.getStrokeDashArray().add(dash);
         }
     }
+
+    @Override
+    public void layout() {//empty
+
+    }
+
+    @Override
+    public boolean isLayoutable() {
+        return false;
+    }
+
 }

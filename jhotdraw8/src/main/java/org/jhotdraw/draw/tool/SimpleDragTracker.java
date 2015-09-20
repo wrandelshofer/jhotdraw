@@ -7,6 +7,7 @@ package org.jhotdraw.draw.tool;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingModel;
 import org.jhotdraw.draw.DrawingView;
@@ -43,6 +44,7 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     protected Figure anchorFigure;
     private double x;
     private double y;
+    private Transform viewToDrawing;
 
     // --- 
     // Behaviors
@@ -61,6 +63,11 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
         // FIXME implement me properly
         x = evt.getX();
         y = evt.getY();
+        try {
+            viewToDrawing=view.getDrawingToView().createInverse();
+        } catch (NonInvertibleTransformException ex) {
+            throw new InternalError(ex);
+        }
     }
 
     @Override
@@ -73,7 +80,7 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
         // FIXME implement me properly
 
         // Convert point into drawing coordinates
-        Point2D dp = dv.viewToDrawing(evt.getX() - x, evt.getY() - y);
+        Point2D dp = viewToDrawing.deltaTransform(evt.getX() - x, evt.getY() - y);
         Transform t = Transform.translate(dp.getX(), dp.getY());
         DrawingModel dm = dv.getDrawingModel();
         for (Figure f : dv.getSelectedFigures()) {

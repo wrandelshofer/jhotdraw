@@ -8,17 +8,15 @@ package org.jhotdraw.draw.shape;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
 import static java.lang.Math.*;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Line;
-import org.jhotdraw.draw.ConnectionFigure;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.DrawingRenderer;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
-import org.jhotdraw.draw.connector.CenterConnector;
 import org.jhotdraw.draw.connector.Connector;
 
 /**
@@ -29,8 +27,8 @@ import org.jhotdraw.draw.connector.Connector;
  */
 public class LineFigure extends AbstractShapeFigure {
 
-    public final static FigureKey<Point2D> START = new FigureKey<>("start", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), new Point2D(0, 0));
-    public final static FigureKey<Point2D> END = new FigureKey<>("end", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.GEOMETRY,DirtyBits.LAYOUT_BOUNDS,DirtyBits.VISUAL_BOUNDS), new Point2D(0, 0));
+    public final static FigureKey<Point2D> START = new FigureKey<>("start", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static FigureKey<Point2D> END = new FigureKey<>("end", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
 
     public LineFigure() {
         this(0, 0, 1, 1);
@@ -85,5 +83,10 @@ public class LineFigure extends AbstractShapeFigure {
         Point2D end = get(END);
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
+    }
+
+    @Override
+    public Connector findConnector(Point2D p, Figure prototype) {
+        return null;
     }
 }

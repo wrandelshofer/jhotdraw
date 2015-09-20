@@ -5,104 +5,40 @@
  */
 package org.jhotdraw.draw;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
 import java.util.List;
 import javafx.beans.Observable;
-import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.event.Listener;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
 
 /**
  * {@code DrawingModel} provides {@code DrawingModelEvent}s about a
  * {@code Drawing}.
  * <p>
- * {@code DrawingModel} is used by {@code DrawingView}, {@code Tool},
- * {@code Handle} and all other kinds of inspectors to get change events
- * from the drawing without having to register listeners on all figures.
+ * {@code DrawingModel} is used by {@code DrawingView} to get change events
+ * from a drawing without having to register listeners on all figures.</p>
  * <p>
- * A {@code DrawingModel} might register listeners on all figures.
- * But since this might not scale well with large drawings, a 
- * {@code DrawingModel} typically infers the events from operations performed
- * on the figures through the {@code DrawingModel} API.
- * 
+ * The {@code DrawingModelEvent}s that a {@code DrawingModel} fires are
+ * based on assumptions that it makes about the figures contained in the
+ * drawing. If the assumptions are wrong, then the drawing view will not
+ * properly update its view!</p>
+ * <p>
+ * A {@code DrawingView} will only be updated properly, if all {@code Tool}s,
+ * {@code Handle}s and inspectors update the drawing using the
+ * {@code DrawingModel}.
+ * </p>
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface DrawingModel extends Observable {
 
-    /** Adds a listener form {@code DrawingModelEvent}s.
+    /** Adds a listener for {@code DrawingModelEvent}s.
      *
      * @param l the listener */
     void addDrawingModelListener(Listener<DrawingModelEvent> l);
 
-    /** Removes a listener form {@code DrawingModelEvent}s.
+    /** Removes a listener for {@code DrawingModelEvent}s.
      *
      * @param l the listener */
     void removeDrawingModelListener(Listener<DrawingModelEvent> l);
@@ -113,30 +49,32 @@ public interface DrawingModel extends Observable {
      */
     Drawing getRoot();
 
-    /** Sets the root of the tree.
+    /** Sets the root of the tree and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param root the new root
      */
     void setRoot(Drawing root);
 
-    /** Gets the children of parent.
+    /** Gets the children of the specified figure.
      *
-     * @param parent the parent.
-     * @return list a read only list of the children.
-     * For performance reason, this list is not always wrapped into
-     * Collections.unmodifiableList, but should be treated as such.
+     * @param figure the figure.
+     * @return the children.
      */
-    List<Figure> getChildren(Figure parent);
-
-    /** Gets the child count of parent.
-     *
-     * @param parent the parent.
-     */
-    default int getChildCount(Figure parent) {
-        return getChildren(parent).size();
+    default List<Figure> getChildren(Figure figure) {
+        return figure.children();
     }
 
-    /** Gets the specified child of parent.
+    /** Gets the child count of the specified figure.
+     *
+     * @param figure the parent.
+     * @return the number of children
+     */
+    default int getChildCount(Figure figure) {
+        return getChildren(figure).size();
+    }
+
+    /** Gets the child at the given index from the parent.
      *
      * @param parent the parent.
      * @param index the index.
@@ -146,31 +84,34 @@ public interface DrawingModel extends Observable {
         return getChildren(parent).get(index);
     }
 
-    /** Removes the specified child from its parent.
+    /** Removes the specified child from its parent and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
-     * @param child the child
+     * @param child the figure
      */
     void removeFromParent(Figure child);
 
-    /** Adds the specified child to a parent.
+    /** Adds the specified child to a parent and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param child the new child
      * @param parent the parent.
      * @param index the index
      */
     void insertChildAt(Figure child, Figure parent, int index);
-    /** Adds the specified child to a parent.
+
+    /** Adds the specified child to a parent and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param child the new child
      * @param parent the parent.
      */
     default void addChildTo(Figure child, Figure parent) {
-        insertChildAt(child,parent,getChildCount(parent));
+        insertChildAt(child, parent, getChildCount(parent));
     }
-    
-    
 
-    /** Sets the specified property on the figure.
+    /** Sets the specified property on the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param <T> the value type
      * @param figure the figure
@@ -184,16 +125,15 @@ public interface DrawingModel extends Observable {
      * @param <T> the value type
      * @param figure the figure
      * @param key the key
+     * @return the value
      */
-    <T> T get(Figure figure, Key<T> key);
+    default <T> T get(Figure figure, Key<T> key) {
+        return figure.get(key);
+    }
 
     /**
-     * Attempts to change the layout bounds of the figure.
-     * <p>
-     * The figure may choose to only partially change its layout bounds.
-     * <p>
-     * Reshape typically changes property values in this figure. The way how
-     * this is performed is implementation specific.
+     * Attempts to change the layout bounds of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param f the figure
      * @param transform the desired transformation
@@ -201,12 +141,8 @@ public interface DrawingModel extends Observable {
     void reshape(Figure f, Transform transform);
 
     /**
-     * Attempts to change the layout bounds of the figure.
-     * <p>
-     * Width and height are ignored, if the figure is not resizable.
-     * <p>
-     * If the layout bounds of the figure changes, it fires an invalidation
-     * event.
+     * Attempts to change the layout bounds of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param f the figure
      * @param x desired x-position
@@ -215,30 +151,18 @@ public interface DrawingModel extends Observable {
      * @param height desired height, may be negative
      */
     void reshape(Figure f, double x, double y, double width, double height);
-    
+
     /**
-     * Retrieves the layout bounds of the figure.
-     * <p>
-     * FIXME If a figure performs layout operations, then this may cause the
-     * figure to change property values of its children, which might cascade
-     * into the entire subtree and connected connection figures. :-P
+     * Invokes the layout method of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
+     *
+     * @param f the figure
      */
-    
-    /** Invoke this method if you have made non-structural changes on a single
-     * figure.
-     * @param figure the figure
-     * @param bits dirty bits describing the change
+    void layout(Figure f);
+
+    /**
+     * Fires the specified event.
+     * @param event the event
      */
-    void fireFigureChanged(Figure figure, DirtyBits... bits);
-    /** Invoke this method if you have made non-structural changes on a subtree
-     * of figures.
-     * @param figure the figure at the root of the subtree
-     * @param bits dirty bits describing the change
-     */
-    void fireSubtreeNodesChanged(Figure figure, DirtyBits... bits);
-    /** Invoke this method if you have made structural changes on a subtree
-     * of figures.
-     * @param figure the figure at the root of the subtree
-     */
-    void fireSubtreeStructureChanged(Figure figure);
+    void fire(DrawingModelEvent event);
 }

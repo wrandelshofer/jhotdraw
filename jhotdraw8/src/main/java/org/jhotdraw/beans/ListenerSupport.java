@@ -27,7 +27,7 @@ public class ListenerSupport<L> {
     /** Adds a listener to the list.
      *
      * @param listener the listener */
-    public void addListener(L listener) {
+    public void add(L listener) {
         if (listeners == null) {
             listeners = new ArrayList<>();
         }
@@ -37,7 +37,7 @@ public class ListenerSupport<L> {
     /** Removes a listener from the list.
      *
      * @param listener the listener */
-    public void removeListener(L listener) {
+    public void remove(L listener) {
         if (listeners != null) {
             int index = listeners.lastIndexOf(listener);
             if (index != -1) {
@@ -66,7 +66,7 @@ public class ListenerSupport<L> {
             for (L l : new ArrayList<>(listeners)) {
                 if ((l instanceof WeakListener)
                         && ((WeakListener) l).wasGarbageCollected()) {
-                    removeListener(l);
+                    remove(l);
                 }
                 consumer.accept(l);
             }

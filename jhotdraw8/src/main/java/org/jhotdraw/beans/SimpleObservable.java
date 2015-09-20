@@ -24,12 +24,12 @@ public class SimpleObservable implements Observable {
 
     @Override
     public void addListener(InvalidationListener listener) {
-         invalidationListeners.addListener(listener);
+         invalidationListeners.add(listener);
     }
 
     @Override
     public void removeListener(InvalidationListener listener) {
-         invalidationListeners.removeListener(listener);
+         invalidationListeners.remove(listener);
     }
 
     /** Notifies all registered invalidation listeners. */

@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.shape.Rectangle;
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
@@ -23,9 +24,11 @@ import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
+import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.gui.ToolsToolbar;
@@ -80,7 +83,7 @@ public class GrapherView extends AbstractView {
         editor.addDrawingView(drawingView);
 
         scrollPane.setContent(drawingView.getNode());
-
+        
         ToolsToolbar ttbar = new ToolsToolbar();
         Resources rsrc = Resources.getBundle("org.jhotdraw.draw.Labels");
         ttbar.addTool(new SelectionTool("selectionTool", rsrc), 0, 0);
@@ -151,6 +154,7 @@ public class GrapherView extends AbstractView {
     @Override
     public void clear(EventHandler<TaskCompletionEvent> callback) {
         drawingView.setDrawing(new SimpleDrawing());
+        callback.handle(new TaskCompletionEvent());
     }
 
     @FXML

@@ -26,8 +26,10 @@ public class Shapes {
      * Returns true, if the outline of this bezier path contains the specified
      * point.
      *
+     * @param shape The shape.
      * @param p The point to be tested.
      * @param tolerance The tolerance for the test.
+     * @return true if contained within tolerance
      */
     public static boolean outlineContains(Shape shape, Point2D.Double p, double tolerance) {
         double[] coords = new double[6];
