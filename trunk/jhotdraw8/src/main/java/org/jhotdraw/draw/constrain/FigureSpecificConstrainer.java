@@ -83,7 +83,7 @@ public class FigureSpecificConstrainer implements Constrainer {
      * Retrieves the constrainer for the specified figure.
      */
     private Constrainer getConstrainer(Figure f) {
-        Constrainer c = constrainerMap.get(f);
+        Constrainer c = constrainerMap.get(f.getClass());
         return c != null ? c : defaultConstrainer.get();
     }
 

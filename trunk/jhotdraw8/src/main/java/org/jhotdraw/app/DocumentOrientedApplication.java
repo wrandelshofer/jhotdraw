@@ -304,6 +304,10 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         view.dispose();
         view.setApplication(null);
         view.getActionMap().setParent(null);
+        
+        if (activeView.get()==view) {
+            activeView.set(null);
+        }
 
         // Auto close feature
         if (views.isEmpty() && !isSystemMenuSupported) {
