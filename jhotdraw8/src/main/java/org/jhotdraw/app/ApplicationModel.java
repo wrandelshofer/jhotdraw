@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.app;
 
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import javafx.scene.control.MenuBar;
 import org.jhotdraw.gui.URIChooser;
@@ -62,4 +63,7 @@ public interface ApplicationModel {
      * @return a menu bar
      */
     MenuBar createMenuBar();
+    
+    /** Gets the resource bundle for use by the application. */
+    ResourceBundle getResources();
 }

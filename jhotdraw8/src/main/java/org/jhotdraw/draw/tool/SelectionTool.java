@@ -95,7 +95,7 @@ public class SelectionTool extends AbstractTool {
     // Constructors
     // ---
     public SelectionTool() {
-        this("selectionTool", Resources.getBundle("org.jhotdraw.draw.Labels"));
+        this("selectionTool", Resources.getResources("org.jhotdraw.draw.Labels"));
     }
 
     public SelectionTool(String name, Resources rsrc) {

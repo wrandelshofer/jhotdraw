@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -321,7 +322,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
      * @return the resource bundle
      */
     protected Resources getLabels() {
-        return Resources.getBundle("org.jhotdraw.app.Labels");
+        return Resources.getResources("org.jhotdraw.app.Labels");
     }
 
     /**
@@ -449,11 +450,17 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     @Override
     public MenuBar createMenuBar() {
         FXMLLoader loader = new FXMLLoader();
+        loader.setResources(getModel().getResources());
         try {
             return loader.load(DocumentOrientedApplication.class.getResourceAsStream("DocumentOrientedMenu.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
+    }
+
+    @Override
+    public ResourceBundle getResources() {
+        return Resources.getResources("org.jhotdraw.app.Labels");
     }
 
 }

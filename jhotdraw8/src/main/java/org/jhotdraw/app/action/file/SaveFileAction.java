@@ -56,7 +56,7 @@ public class SaveFileAction extends AbstractViewAction {
     public SaveFileAction(Application app, View view, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
-        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 
@@ -131,7 +131,7 @@ public class SaveFileAction extends AbstractViewAction {
                 case FAILED:
                     Throwable value = event.getException();
                     String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+                    Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
                             ((message == null) ? "" : message));
                     alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));

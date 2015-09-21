@@ -59,7 +59,7 @@ import org.jhotdraw.app.action.Action;
  * @author  Werner Randelshofer
  * @version $Id$
  */
-public class Resources implements Serializable {
+public class Resources extends ResourceBundle implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -128,7 +128,7 @@ public class Resources implements Serializable {
      * @param key The key of the property.
      * @return The value of the property. Returns the key
      *          if the property is missing.
-     */
+     * /
     public String getString(String key) {
         try {
             String value = getStringRecursive(key);
@@ -142,7 +142,7 @@ public class Resources implements Serializable {
             }
             return key;
         }
-    }
+    }*/
 
     /**
      * Recursive part of the getString method.
@@ -181,7 +181,7 @@ public class Resources implements Serializable {
                 }
             }
             if (placeholderValue == null) {
-                throw new MissingResourceException("\"" + key + "\" not found in " + baseName, baseName, key);
+                throw new MissingResourceException("Placeholder value for fallback keys \"" + fallbackKeys + "\" in key \"" + key + "\" not found in " + baseName, baseName, key);
             }
 
             // Do post-processing depending on placeholder format 
@@ -448,9 +448,9 @@ public class Resources implements Serializable {
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    public static Resources getBundle(String baseName)
+    public static Resources getResources(String baseName)
             throws MissingResourceException {
-        return getBundle(baseName, LocaleUtil.getDefault());
+        return getResources(baseName, LocaleUtil.getDefault());
     }
 
     public void setBaseClass(Class<?> baseClass) {
@@ -525,7 +525,7 @@ public class Resources implements Serializable {
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    public static Resources getBundle(String baseName, Locale locale)
+    public static Resources getResources(String baseName, Locale locale)
             throws MissingResourceException {
         Resources r;
         r = new Resources(baseName, locale);
@@ -573,5 +573,19 @@ public class Resources implements Serializable {
         in.defaultReadObject();
         // re-establish the "resource" variable
         this.resource = ResourceBundle.getBundle(baseName, locale);
+    }
+
+    @Override
+    protected Object handleGetObject(String key) {
+        Object obj=resource.getObject(key);
+        if (obj instanceof String) {
+            obj = getStringRecursive(key);
+        }
+        return obj;
+    }
+
+    @Override
+    public Enumeration<String> getKeys() {
+        return resource.getKeys();
     }
 }

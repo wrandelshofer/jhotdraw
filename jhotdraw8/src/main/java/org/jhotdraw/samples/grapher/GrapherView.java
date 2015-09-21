@@ -85,7 +85,7 @@ public class GrapherView extends AbstractView {
         scrollPane.setContent(drawingView.getNode());
         
         ToolsToolbar ttbar = new ToolsToolbar();
-        Resources rsrc = Resources.getBundle("org.jhotdraw.draw.Labels");
+        Resources rsrc = Resources.getResources("org.jhotdraw.draw.Labels");
         ttbar.addTool(new SelectionTool("selectionTool", rsrc), 0, 0);
         ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, () -> new RectangleFigure()), 1, 0);
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, () -> new EllipseFigure()), 2, 0);

@@ -54,7 +54,7 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
     double y;
 
     public SimpleSelectAreaTracker() {
-        this("selectAreaTool", Resources.getBundle("org.jhotdraw.draw.Labels"));
+        this("selectAreaTool", Resources.getResources("org.jhotdraw.draw.Labels"));
     }
 
     public SimpleSelectAreaTracker(String name, Resources rsrc) {

@@ -40,7 +40,7 @@ public class SelectAllAction extends AbstractFocusOwnerAction {
      */
     public SelectAllAction(Application app, Node target) {
         super(app,target);
-        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 
