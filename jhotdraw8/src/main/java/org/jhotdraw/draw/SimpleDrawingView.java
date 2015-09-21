@@ -89,32 +89,32 @@ public class SimpleDrawingView implements DrawingView {
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {
-                case FIGURE_ADDED:
-                    handleFigureAdded(event.getFigure());
-                    break;
-                case FIGURE_REMOVED:
-                    handleFigureRemoved(event.getFigure());
-                    break;
-                case NODE_INVALIDATED:
-                    handleNodeInvalidated(event.getFigure());
-                    break;
-                case LAYOUT_INVALIDATED:
-                    handleLayoutInvalidated(event.getFigure());
-                    break;
-                case ROOT_CHANGED:
-                    updateDrawing();
-                    repaint();
-                    break;
-                case SUBTREE_NODES_INVALIDATED:
-                    updateTreeNodes(event.getFigure());
-                    repaint();
-                    break;
-                case SUBTREE_STRUCTURE_CHANGED:
-                    updateTreeStructure(event.getFigure());
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + "not supported");
+            case FIGURE_ADDED:
+                handleFigureAdded(event.getFigure());
+                break;
+            case FIGURE_REMOVED:
+                handleFigureRemoved(event.getFigure());
+                break;
+            case NODE_INVALIDATED:
+                handleNodeInvalidated(event.getFigure());
+                break;
+            case LAYOUT_INVALIDATED:
+                handleLayoutInvalidated(event.getFigure());
+                break;
+            case ROOT_CHANGED:
+                updateDrawing();
+                repaint();
+                break;
+            case SUBTREE_NODES_INVALIDATED:
+                updateTreeNodes(event.getFigure());
+                repaint();
+                break;
+            case SUBTREE_STRUCTURE_CHANGED:
+                updateTreeStructure(event.getFigure());
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + "not supported");
             }
         }
 
@@ -126,14 +126,14 @@ public class SimpleDrawingView implements DrawingView {
     private final NonnullProperty<DrawingModel> drawingModel //
             = new NonnullProperty<DrawingModel>(this, DRAWING_MODEL_PROPERTY, new ConnectionsNoLayoutDrawingModel()) {
 
-        @Override
-        public void set(DrawingModel newValue) {
-            DrawingModel oldValue = get();
-            super.set(newValue); //To change body of generated methods, choose Tools | Templates.
-            handleNewDrawingModel(oldValue, newValue);
-        }
+                @Override
+                public void set(DrawingModel newValue) {
+                    DrawingModel oldValue = get();
+                    super.set(newValue); //To change body of generated methods, choose Tools | Templates.
+                    handleNewDrawingModel(oldValue, newValue);
+                }
 
-    };
+            };
 
     /**
      * The constrainerProperty holds the constrainer for this drawing view
@@ -267,16 +267,16 @@ public class SimpleDrawingView implements DrawingView {
 
         node.addEventFilter(MouseEvent.MOUSE_PRESSED,
                 new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent evt) {
-                if (!node.isFocused()) {
-                    node.requestFocus();
-                    if (!node.getScene().getWindow().isFocused()) {
-                        evt.consume();
+                    @Override
+                    public void handle(MouseEvent evt) {
+                        if (!node.isFocused()) {
+                            node.requestFocus();
+                            if (!node.getScene().getWindow().isFocused()) {
+                                evt.consume();
+                            }
+                        }
                     }
-                }
-            }
-        ;
+                ;
         });
         node.setFocusTraversable(true);
         focused.bind(node.focusedProperty());
@@ -751,11 +751,14 @@ public class SimpleDrawingView implements DrawingView {
         handlePane.getChildren().clear();
         while (true) {
             for (Figure figure : getSelectedFigures()) {
-                for (Handle handle : figure.createHandles(detailLevel, this)) {
-                    selectionHandles.add(handle);
-                    handlePane.getChildren().add(handle.getNode());
-                    handle.updateNode();
+                List<Handle> handles = figure.createHandles(detailLevel, this);
+                if (handles != null) {
+                    for (Handle handle : handles) {
+                        selectionHandles.add(handle);
+                        handlePane.getChildren().add(handle.getNode());
+                        handle.updateNode();
 //                        handle.addHandleListener(eventHandler);
+                    }
                 }
             }
 
