@@ -27,11 +27,10 @@ import org.jhotdraw.util.Resources;
  * </ol>
  * The different states are handled by different tracker objects: the
  * <code>SimpleSelectAreaTracker</code>, the <code>SimpleDragTracker</code> and
- * the
- * <code>SimpleHandleTracker</code>.
+ * the <code>SimpleHandleTracker</code>.
  * <p>
- * A Figure can be selected by clicking at it. Holding the alt key or the
- * ctrl key down, selects the Figure behind it.
+ * A Figure can be selected by clicking at it. Holding the alt key or the ctrl
+ * key down, selects the Figure behind it.
  * <p>
  * Holding down the shift key on mouse pressed, enforces the area selection
  * function.
@@ -48,9 +47,9 @@ import org.jhotdraw.util.Resources;
  * <p>
  * <em>Chain of responsibility</em><br>
  * Mouse and keyboard events of the user occur on the drawing view, and are
- * preprocessed by the {@code DragTracker} of a {@code SelectionTool}. In
- * turn {@code DragTracker} invokes "track" methods on a {@code Handle} which in
- * turn changes an aspect of a figure.<br>
+ * preprocessed by the {@code DragTracker} of a {@code SelectionTool}. In turn
+ * {@code DragTracker} invokes "track" methods on a {@code Handle} which in turn
+ * changes an aspect of a figure.<br>
  * Client: {@link SelectionTool}; Handler: {@link DragTracker}, {@link Handle}.
  * <hr>
  *
@@ -67,8 +66,10 @@ public class SelectionTool extends AbstractTool {
     // Fields
     // ---
     private static final long serialVersionUID = 1L;
-    /** Look inside a radius of 2 pixels if the mouse click did not hit
-     * something. */
+    /**
+     * Look inside a radius of 2 pixels if the mouse click did not hit
+     * something.
+     */
     private final double tolerance = 2;
     /**
      * The tracker encapsulates the current state of the SelectionTool.
@@ -132,15 +133,42 @@ public class SelectionTool extends AbstractTool {
                 pressedFigure = fs.get(0);
             }
         }
-        if (isSelectBehindEnabled() && (evt.isShiftDown())) {
+        // "alt" modifier selects figure behind.
+        if (isSelectBehindEnabled() && (evt.isAltDown())) {
             // Select a figure behind the current selection
             // FIXME implement me - this is just a stub and selects just the figure
             //         behind the front most figure
             pressedFigure = view.findFigureBehind(vx, vy, pressedFigure);
         }
+
+        // "shift" without "meta" adds the pressed figure to the selection
+        if (evt.isShiftDown() && !evt.isMetaDown()) {
+            if (pressedFigure != null) {
+                view.getSelectedFigures().add(pressedFigure);
+            }
+        } 
+        // "meta" without "shift"  toggles the selection for the pressed figure
+        if (!evt.isShiftDown() && evt.isMetaDown()) {
+            if (pressedFigure != null) {
+                if (view.selectionProperty().contains(pressedFigure)) {
+                    view.selectionProperty().remove(pressedFigure);
+                } else {
+                    view.selectionProperty().add(pressedFigure);
+                }
+            }
+        } 
+        // neither "meta" nor "shift" sets the selection to the pressed figure
+        if (!evt.isShiftDown() && !evt.isMetaDown()) {
+            if (pressedFigure != null) {
+                view.selectionProperty().clear();
+                    view.selectionProperty().add(pressedFigure);
+            }
+        }
+
+        // "control" modifier enforces the select area tracker
         if (pressedFigure != null
-                && (!(evt.isAltDown() || evt.isControlDown())
-                || view.getSelectedFigures().contains(pressedFigure))) {
+                && (!(evt.isControlDown())
+                || view.selectionProperty().contains(pressedFigure))) {
             DragTracker t = getDragTracker(pressedFigure, view);
             setTracker(t);
         } else {
@@ -168,16 +196,12 @@ public class SelectionTool extends AbstractTool {
         }
         setTracker(null);
 
-        if (!mouseDragged && pressedFigure != null) {
-            dv.selectionProperty().add(pressedFigure);
-        }
-
         fireToolDone();
     }
 
     /**
-     * Method to get a {@code HandleTracker} which handles user interaction
-     * for the specified handle.
+     * Method to get a {@code HandleTracker} which handles user interaction for
+     * the specified handle.
      *
      * @param handle a handle
      * @return a handle tracker
@@ -191,8 +215,8 @@ public class SelectionTool extends AbstractTool {
     }
 
     /**
-     * Method to get a {@code DragTracker} which handles user interaction
-     * for dragging the specified figure.
+     * Method to get a {@code DragTracker} which handles user interaction for
+     * dragging the specified figure.
      *
      * @param f a figure
      * @param dv a drawing view

@@ -283,7 +283,7 @@ public interface DrawingView extends DrawingRenderer {
     }
 
     default ObservableSet<Figure> getSelectedFigures() {
-        return selectionProperty().get();
+        return selectionProperty();
     }
 
     default Transform getDrawingToView() {

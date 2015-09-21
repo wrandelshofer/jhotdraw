@@ -18,20 +18,20 @@ import org.jhotdraw.draw.Figure;
  * {@code Figure}.
  * <p>
  * The {@code DefaultDragTracker} handles one of the three states of the
- * {@code SelectionTool}. It comes into action, when the user presses
- * the mouse button over the content area of a {@code Figure}.
+ * {@code SelectionTool}. It comes into action, when the user presses the mouse
+ * button over the content area of a {@code Figure}.
  * <p>
  * Design pattern:<br>
  * Name: Chain of Responsibility.<br>
  * Role: Handler.<br>
- * Partners: {@link SelectionTool} as Handler, {@link SelectAreaTracker} as 
- * Handler, {@link HandleTracker} as Handler. 
+ * Partners: {@link SelectionTool} as Handler, {@link SelectAreaTracker} as
+ * Handler, {@link HandleTracker} as Handler.
  * <p>
  * Design pattern:<br>
  * Name: State.<br>
  * Role: State.<br>
- * Partners: {@link SelectAreaTracker} as State, {@link SelectionTool} as 
- * Context, {@link HandleTracker} as State. 
+ * Partners: {@link SelectAreaTracker} as State, {@link SelectionTool} as
+ * Context, {@link HandleTracker} as State.
  *
  * @see SelectionTool
  *
@@ -42,9 +42,8 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
 
     private static final long serialVersionUID = 1L;
     protected Figure anchorFigure;
-    private double x;
-    private double y;
-    private Transform viewToDrawing;
+    private Point2D previous;
+    private Point2D start;
 
     // --- 
     // Behaviors
@@ -52,22 +51,12 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     @Override
     public void setDraggedFigure(Figure f, DrawingView view) {
         anchorFigure = f;
-        if (!view.getSelectedFigures().contains(f)) {
-            view.getSelectedFigures().clear();
-            view.getSelectedFigures().add(f);
-        }
     }
 
     @Override
     public void trackMousePressed(MouseEvent evt, DrawingView view) {
         // FIXME implement me properly
-        x = evt.getX();
-        y = evt.getY();
-        try {
-            viewToDrawing=view.getDrawingToView().createInverse();
-        } catch (NonInvertibleTransformException ex) {
-            throw new InternalError(ex);
-        }
+        previous = start = view.viewToDrawing(evt.getX(), evt.getY());
     }
 
     @Override
@@ -78,17 +67,23 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     @Override
     public void trackMouseDragged(MouseEvent evt, DrawingView dv) {
         // FIXME implement me properly
-
+        Point2D current = dv.viewToDrawing(evt.getX(), evt.getY());
+        if (evt.isControlDown()) {
+            if (Math.abs(current.getX() - start.getX()) < Math.abs(current.getY() - start.getY())) {
+                current = new Point2D(start.getX(), current.getY());
+            } else {
+                current = new Point2D(current.getX(), start.getY());
+            }
+        }
         // Convert point into drawing coordinates
-        Point2D dp = viewToDrawing.deltaTransform(evt.getX() - x, evt.getY() - y);
+        Point2D dp = current.subtract(previous);
         Transform t = Transform.translate(dp.getX(), dp.getY());
         DrawingModel dm = dv.getDrawingModel();
         for (Figure f : dv.getSelectedFigures()) {
             dm.reshape(f, t);
         }
 
-        x = evt.getX();
-        y = evt.getY();
+        previous = current;
     }
 
 }
