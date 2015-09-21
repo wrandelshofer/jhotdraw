@@ -5,7 +5,7 @@
 
 <MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <menus>
-    <Menu id="file" mnemonicParsing="false" text="File">
+    <Menu id="file" mnemonicParsing="false" text="%file.text">
       <items>
             <MenuItem id="file.new" mnemonicParsing="false" text="New" />
             <MenuItem id="file.open" mnemonicParsing="false" text="Open" />
@@ -16,7 +16,7 @@
             <MenuItem id="application.exit" mnemonicParsing="false" text="Exit" />
       </items>
     </Menu>
-    <Menu id="edit" mnemonicParsing="false" text="Edit">
+    <Menu id="edit" mnemonicParsing="false" text="%edit.text">
       <items>
         <MenuItem id="edit.cut" mnemonicParsing="false" text="Cut" />
             <MenuItem id="edit.copy" mnemonicParsing="false" text="Copy" />
@@ -26,7 +26,7 @@
             <MenuItem id="edit.selectAll" mnemonicParsing="false" text="Select All" />
       </items>
     </Menu>
-    <Menu id="help" mnemonicParsing="false" text="Help">
+    <Menu id="help" mnemonicParsing="false" text="%help.text.mac">
       <items>
         <MenuItem id="application.about" mnemonicParsing="false" text="About" />
       </items>

@@ -35,7 +35,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view */
     public LoadFileAction(Application app, View view) {
         super(app, view);
-        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 /*
@@ -110,7 +110,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
             protected void failed(Throwable value) {
                 value.printStackTrace();
                 
-                Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+                Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
                         + "<b>" + labels.getFormatted("file.read.couldntLoad.message", URIUtil.getName(uri)) + "</b><p>"

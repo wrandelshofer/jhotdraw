@@ -32,7 +32,7 @@ public class AboutAction extends AbstractApplicationAction {
      * @param app the application */
     public AboutAction(Application app) {
         super(app);
-        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 

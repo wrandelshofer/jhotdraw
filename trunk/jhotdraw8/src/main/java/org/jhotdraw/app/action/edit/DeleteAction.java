@@ -31,7 +31,7 @@ public class DeleteAction extends AbstractFocusOwnerAction {
     */
     public DeleteAction(Application app) {
         super(app);
-        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
     @Override

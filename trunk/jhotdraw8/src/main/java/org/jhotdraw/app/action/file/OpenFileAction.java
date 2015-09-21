@@ -39,7 +39,7 @@ public class OpenFileAction extends AbstractApplicationAction {
      * @param app the application */
     public OpenFileAction(Application app) {
         super(app);
-        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
 
@@ -127,7 +127,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                     Throwable value = event.getException();
                     String message = (value != null && value.getMessage()
                             != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+                    Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
                             ((message == null) ? "" : message));
                     alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));

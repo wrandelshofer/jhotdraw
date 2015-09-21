@@ -42,7 +42,7 @@ public class ExportFileAction extends AbstractViewAction {
 
     public ExportFileAction(Application app, View view, boolean proposeFileName) {
         super(app, view);
-        Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
         this.proposeFileName = proposeFileName;
     }
@@ -68,7 +68,7 @@ public class ExportFileAction extends AbstractViewAction {
     public void actionPerformed(ActionEvent evt) {
         final View view = getActiveView();
         if (view.isEnabled()) {
-            Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+            Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
 
             oldFocusOwner = SwingUtilities.getWindowAncestor(view.getComponent()).getFocusOwner();
             view.setEnabled(false);
