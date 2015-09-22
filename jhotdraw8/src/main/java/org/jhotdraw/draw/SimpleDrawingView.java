@@ -23,6 +23,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
@@ -49,6 +51,8 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw.beans.NonnullProperty;
+import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
+import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.constrain.NullConstrainer;
 import org.jhotdraw.draw.tool.Tool;
@@ -99,7 +103,7 @@ public class SimpleDrawingView implements DrawingView {
                 handleNodeInvalidated(event.getFigure());
                 break;
             case LAYOUT_INVALIDATED:
-                handleLayoutInvalidated(event.getFigure());
+                // none of my business
                 break;
             case ROOT_CHANGED:
                 updateDrawing();
@@ -140,6 +144,11 @@ public class SimpleDrawingView implements DrawingView {
      */
     private final NonnullProperty<Constrainer> constrainer = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
     private boolean handlesAreValid;
+
+    /**
+     * Holds the rendering hints.
+     */
+    protected final ReadOnlyMapProperty<Key<?>, Object> renderingHints = new ReadOnlyMapWrapper<Key<?>, Object>(this, RENDERING_HINTS_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
 
     /**
      * The selectionProperty holds the list of selected figures.
@@ -212,11 +221,6 @@ public class SimpleDrawingView implements DrawingView {
      */
     private final HashSet<Figure> dirtyFigureNodes = new HashSet<>();
     /**
-     * This is the set of figures which are out of sync with their layout.
-     */
-    private final HashSet<Figure> dirtyFigureLayouts = new HashSet<>();
-
-    /**
      * The set of all handles which were produced by selected figures.
      */
     private final LinkedList<Handle> selectionHandles = new LinkedList<>();
@@ -231,10 +235,6 @@ public class SimpleDrawingView implements DrawingView {
 
     private void invalidateFigureNode(Figure f) {
         dirtyFigureNodes.add(f);
-    }
-
-    private void invalidateFigureLayout(Figure f) {
-        dirtyFigureLayouts.add(f);
     }
 
     private class HandleEventHandler implements Listener<HandleEvent> {
@@ -302,14 +302,12 @@ public class SimpleDrawingView implements DrawingView {
             nodeToFigureMap.remove(oldNode);
         }
         dirtyFigureNodes.remove(f);
-        dirtyFigureLayouts.remove(f);
     }
 
     private void clearNodes() {
         figureToNodeMap.clear();
         nodeToFigureMap.clear();
         dirtyFigureNodes.clear();
-        dirtyFigureLayouts.clear();
     }
 
     @Override
@@ -360,7 +358,7 @@ public class SimpleDrawingView implements DrawingView {
             boundsProperty.addListener(preferredSizeHandler);
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
-//            updateTreeNodes(d);
+            updateTreeNodes(d);
             repaint();
         }
     }
@@ -425,18 +423,7 @@ public class SimpleDrawingView implements DrawingView {
         repaint();
     }
 
-    private void handleLayoutInvalidated(Figure f) {
-        invalidateFigureLayout(f);
-        repaint();
-    }
-
     private void updateView() {
-        LinkedList<Figure> updateLayouts = new LinkedList<>(dirtyFigureLayouts);
-        dirtyFigureLayouts.clear();
-        DrawingModel dm = drawingModel.get();
-        for (Figure f : updateLayouts) {
-            dm.layout(f);
-        }
         LinkedList<Figure> updateNodes = new LinkedList<>(dirtyFigureNodes);
         dirtyFigureNodes.clear();
         for (Figure f : updateNodes) {
@@ -447,9 +434,6 @@ public class SimpleDrawingView implements DrawingView {
         }
         for (Handle h : secondaryHandles) {
             h.updateNode();
-        }
-        if (!dirtyFigureNodes.isEmpty()) {
-            repaint();
         }
     }
 
@@ -779,5 +763,9 @@ public class SimpleDrawingView implements DrawingView {
         Translate tr = new Translate(-b.getMinX(), -b.getMinY());
         Transform t = tr.createConcatenation(st);
         drawingToView.set(t);
+    }
+    @Override
+    public final ReadOnlyMapProperty<Key<?>, Object> renderingHints() {
+        return renderingHints;
     }
 }

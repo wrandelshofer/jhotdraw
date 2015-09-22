@@ -298,8 +298,7 @@ public interface Figure extends PropertyBean {
 
     /**
      * This method is invoked by {@code DrawingRenderer}, when it needs a node
-     * to
-     * create a scene graph for a figure.
+     * to create a JavaFX scene graph for a figure.
      * <p>
      * A typical implementation should look like this:
      * <pre>{@code
@@ -321,8 +320,7 @@ public interface Figure extends PropertyBean {
 
     /**
      * This method is invoked by {@code DrawingRenderer}, when it needs to
-     * update
-     * the node which represents the scene graph in the figure.
+     * update the node which represents the scene graph in the figure.
      * <p>
      * A figure which is composed from child figures, must add the nodes of its
      * children to its node. This ensures that coordinate space transformations
@@ -478,11 +476,20 @@ public interface Figure extends PropertyBean {
     /** Returns the root.
      * @return the root  */
     default Figure getRoot() {
-        Figure root = this;
-        while (root.getParent() != null) {
-            root = root.getParent();
+        Figure parent = this;
+        while (parent.getParent() != null) {
+            parent = parent.getParent();
         }
-        return root;
+        return parent;
+    }
+    /** Returns the nearest parent Drawing.
+     * @return the drawing or null if no ancestor is a drawing.  */
+    default Drawing getDrawing() {
+        Figure parent = this;
+        while (parent != null && ! (parent instanceof Drawing)) {
+            parent = parent.getParent();
+        }
+        return (Drawing) parent;
     }
 
     /** Returns an iterable which can iterate through this figure and all
@@ -595,6 +602,11 @@ public interface Figure extends PropertyBean {
                 stack.push(children);
             }
             return node;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("Not supported yet."); 
         }
     }
 

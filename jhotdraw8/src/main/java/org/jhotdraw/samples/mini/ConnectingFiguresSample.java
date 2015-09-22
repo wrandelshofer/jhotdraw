@@ -5,20 +5,14 @@
  */
 package org.jhotdraw.samples.mini;
 
-import java.util.List;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.LineConnectionFigure;
@@ -56,8 +50,6 @@ public class ConnectingFiguresSample extends Application {
         edge12.set(LineConnectionFigure.END_FIGURE, vertex2);
         edge12.set(LineConnectionFigure.START_CONNECTOR, new ChopRectangleConnector());
         edge12.set(LineConnectionFigure.END_CONNECTOR, new ChopRectangleConnector());
-
-        System.out.println("vertex1.connections:" + vertex1.connections());
 
         edge23.set(LineConnectionFigure.START_FIGURE, vertex2);
         edge23.set(LineConnectionFigure.END_FIGURE, vertex3);
