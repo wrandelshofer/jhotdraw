@@ -66,12 +66,12 @@ public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure 
     }
 
     @Override
-    public Node createNode(DrawingRenderer drawingView) {
+    public Node createNode(RenderContext drawingView) {
         return new Text();
     }
 
     @Override
-    public void updateNode(DrawingRenderer drawingView, Node node) {
+    public void updateNode(RenderContext drawingView, Node node) {
         Text textNode = (Text) node;
         textNode.setText(get(TEXT));
         textNode.setX(get(ORIGIN).getX());

@@ -5,8 +5,6 @@
  */
 package org.jhotdraw.draw;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.BoundingBox;
@@ -134,12 +132,12 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Node createNode(DrawingRenderer drawingView) {
+    public Node createNode(RenderContext drawingView) {
         return new Line();
     }
 
     @Override
-    public void updateNode(DrawingRenderer drawingView, Node node) {
+    public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
         applyFigureProperties(lineNode);
         updateShapeProperties(lineNode);

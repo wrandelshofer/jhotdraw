@@ -14,11 +14,11 @@ import static java.lang.Math.*;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
-import org.jhotdraw.draw.DrawingRenderer;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.RenderContext;
 
 /**
  * Renders a {@code javafx.scene.shape.Circle}.
@@ -74,12 +74,12 @@ public class EllipseFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Node createNode(DrawingRenderer drawingView) {
+    public Node createNode(RenderContext drawingView) {
         return new Ellipse();
     }
 
     @Override
-    public void updateNode(DrawingRenderer drawingView, Node node) {
+    public void updateNode(RenderContext drawingView, Node node) {
         Ellipse n = (Ellipse) node;
         applyFigureProperties(n);
         updateShapeProperties(n);

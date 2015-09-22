@@ -38,7 +38,7 @@ import org.jhotdraw.draw.handle.Handle;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DrawingView extends DrawingRenderer {
+public interface DrawingView extends RenderContext {
 
     // ---
     // property names

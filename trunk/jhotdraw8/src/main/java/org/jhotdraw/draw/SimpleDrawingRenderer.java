@@ -12,7 +12,7 @@ import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import org.jhotdraw.collection.Key;
-import static org.jhotdraw.draw.DrawingRenderer.RENDERING_HINTS_PROPERTY;
+import static org.jhotdraw.draw.RenderContext.RENDERING_HINTS_PROPERTY;
 
 /**
  * SimpleDrawingRenderer.
@@ -20,7 +20,7 @@ import static org.jhotdraw.draw.DrawingRenderer.RENDERING_HINTS_PROPERTY;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class SimpleDrawingRenderer implements DrawingRenderer {
+public class SimpleDrawingRenderer implements RenderContext {
 
     /**
      * Holds the rendering hints.
