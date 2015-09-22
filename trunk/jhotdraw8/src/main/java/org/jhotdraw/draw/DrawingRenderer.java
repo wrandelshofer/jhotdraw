@@ -5,7 +5,9 @@
  */
 package org.jhotdraw.draw;
 
+import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.scene.Node;
+import org.jhotdraw.collection.Key;
 
 /**
  * DrawingRenderer.
@@ -14,6 +16,46 @@ import javafx.scene.Node;
  * @version $Id$
  */
 public interface DrawingRenderer {
+   // ---
+    // constant declarations
+    // ---
+    /**
+     * The name of the "renderingHints" property.
+     */
+    public final String RENDERING_HINTS_PROPERTY = "renderingHints";
+
+    // ---
+    // property methods
+    // ---
+    /**
+     * Returns an observable map of rendering hint keys and their values.
+     *
+     * @return the map
+     */
+    ReadOnlyMapProperty<Key<?>, Object> renderingHints();
+
+    /**
+     * Sets a rendering hint value.
+     *
+     * @param <T> the value type
+     * @param key the key
+     * @param newValue the value
+     * @return the old value
+     */
+    default <T> T setRenderingHint(Key<T> key, T newValue) {
+        return key.put(renderingHints(), newValue);
+    }
+
+    /**
+     * Gets a rendering hint value.
+     *
+     * @param <T> the value type
+     * @param key the key
+     * @return the value
+     */
+    default <T> T getRenderingHint(Key<T> key) {
+        return key.get(renderingHints());
+    }
 
     /**
      * Gets the node which is used to render the specified figure by this
