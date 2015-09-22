@@ -15,6 +15,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
@@ -59,10 +60,6 @@ public interface DrawingView extends RenderContext {
      * The name of the scale factor property.
      */
     public final static String ZOOM_FACTOR_PROPERTY = "scaleFactor";
-    /**
-     * The name of the drawing to view property.
-     */
-    public final static String DRAWING_TO_VIEW_PROPERTY = "drawingToView";
     /**
      * The name of the constrainer property.
      */
@@ -152,15 +149,6 @@ public interface DrawingView extends RenderContext {
     public ReadOnlySetProperty<Figure> selectionProperty();
 
     /**
-     * This property holds the transformation that is applied a drawing when it
-     * is displayed by the drawing view. This is typically a {@code Scale} which
-     * uses the {@code zoomFactoryProperty} as the scale factor.
-     *
-     * @return a transform
-     */
-    public ReadOnlyObjectProperty<Transform> drawingToViewProperty();
-
-    /**
      * The active handle.
      *
      * @return the active handle if present
@@ -234,6 +222,27 @@ public interface DrawingView extends RenderContext {
     // ---
     // convenience methods
     // ---
+    /**
+     * Finds the figure at the given view coordinates. Figures are searched in
+     * Z-order from front to back. Only considers figures in editable {@code Layer}s.
+     *
+     * @param v point in view coordinates
+     * @return A figure or empty
+     */
+    default Figure findFigure(Point2D v) {
+        return findFigure(v.getX(),v.getY());
+    }
+    /**
+     * Returns all figures that intersect the specified bounds given in view
+     * coordinates. The figures are returned in Z-order from back to front.
+     * Only considers figures in editable {@code Layer}s.
+     *
+     * @param v rectangle in view coordinates
+     * @return A figure or empty
+     */
+    default List<Figure> findFiguresIntersecting(Rectangle2D v) {
+        return findFiguresIntersecting(v.getMinX(),v.getMinY(),v.getWidth(),v.getHeight());
+    }
 
     default void setDrawing(Drawing newValue) {
         drawingModelProperty().get().setRoot(newValue);
@@ -286,9 +295,10 @@ public interface DrawingView extends RenderContext {
         return selectionProperty();
     }
 
-    default Transform getDrawingToView() {
-        return drawingToViewProperty().get();
-    }
+    /** Returns the drawing to view transformation. */
+    Transform getDrawingToView();
+    /** Returns the view to drawing transformation. */
+    Transform getViewToDrawing();
 
     /**
      * Converts view coordinates into drawing coordinates.
@@ -297,11 +307,7 @@ public interface DrawingView extends RenderContext {
      * @return the corresponding point in drawing coordinates
      */
     default Point2D viewToDrawing(Point2D view) {
-        try {
-            return getDrawingToView().inverseTransform(view);
-        } catch (NonInvertibleTransformException ex) {
-            throw new InternalError(ex);
-        }
+        return getViewToDrawing().transform(view);
     }
 
     /**
@@ -322,11 +328,7 @@ public interface DrawingView extends RenderContext {
      * @return the corresponding point in drawing coordinates
      */
     default Point2D viewToDrawing(double vx, double vy) {
-        try {
-            return getDrawingToView().inverseTransform(vx, vy);
-        } catch (NonInvertibleTransformException ex) {
-            throw new InternalError(ex);
-        }
+            return getViewToDrawing().transform(vx, vy);
     }
 
     /**

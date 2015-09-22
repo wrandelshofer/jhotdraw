@@ -311,7 +311,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         }
 
         // Auto close feature
-        if (views.isEmpty() && !isSystemMenuSupported) {
+        if (views.isEmpty()) {
             exit();
         }
     }

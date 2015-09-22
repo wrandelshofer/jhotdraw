@@ -9,6 +9,7 @@ import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
@@ -146,7 +147,7 @@ public class SelectionTool extends AbstractTool {
             if (pressedFigure != null) {
                 view.getSelectedFigures().add(pressedFigure);
             }
-        } 
+        } else
         // "meta" without "shift"  toggles the selection for the pressed figure
         if (!evt.isShiftDown() && evt.isMetaDown()) {
             if (pressedFigure != null) {
@@ -156,10 +157,10 @@ public class SelectionTool extends AbstractTool {
                     view.selectionProperty().add(pressedFigure);
                 }
             }
-        } 
+        } else
         // neither "meta" nor "shift" sets the selection to the pressed figure
         if (!evt.isShiftDown() && !evt.isMetaDown()) {
-            if (pressedFigure != null) {
+            if (pressedFigure != null && !view.selectionProperty().contains(pressedFigure)) {
                 view.selectionProperty().clear();
                     view.selectionProperty().add(pressedFigure);
             }
