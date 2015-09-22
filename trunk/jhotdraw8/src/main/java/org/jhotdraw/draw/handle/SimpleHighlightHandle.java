@@ -37,15 +37,14 @@ public class SimpleHighlightHandle extends AbstractHandle {
 
     @Override
     public void updateNode() {
-        Bounds r
-                = dv.getDrawingToView().transform(getFigure().getBoundsInLocal());
+        Bounds r=getFigure().getBoundsInLocal();
+     r           = dv.getDrawingToView().transform(r);
         node.setX(Math.round(r.getMinX())-0.5);
         node.setY(Math.round(r.getMinY())-0.5);
         node.setWidth(Math.round(r.getWidth()));
         node.setHeight(Math.round(r.getHeight()));
         
 
-        applyFigureTransform(node);
     }
 
 }

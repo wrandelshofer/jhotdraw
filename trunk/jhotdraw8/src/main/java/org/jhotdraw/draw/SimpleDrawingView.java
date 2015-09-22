@@ -93,32 +93,32 @@ public class SimpleDrawingView implements DrawingView {
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {
-            case FIGURE_ADDED:
-                handleFigureAdded(event.getFigure());
-                break;
-            case FIGURE_REMOVED:
-                handleFigureRemoved(event.getFigure());
-                break;
-            case NODE_INVALIDATED:
-                handleNodeInvalidated(event.getFigure());
-                break;
-            case LAYOUT_INVALIDATED:
-                // none of my business
-                break;
-            case ROOT_CHANGED:
-                updateDrawing();
-                repaint();
-                break;
-            case SUBTREE_NODES_INVALIDATED:
-                updateTreeNodes(event.getFigure());
-                repaint();
-                break;
-            case SUBTREE_STRUCTURE_CHANGED:
-                updateTreeStructure(event.getFigure());
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + "not supported");
+                case FIGURE_ADDED:
+                    handleFigureAdded(event.getFigure());
+                    break;
+                case FIGURE_REMOVED:
+                    handleFigureRemoved(event.getFigure());
+                    break;
+                case NODE_INVALIDATED:
+                    handleNodeInvalidated(event.getFigure());
+                    break;
+                case LAYOUT_INVALIDATED:
+                    // none of my business
+                    break;
+                case ROOT_CHANGED:
+                    updateDrawing();
+                    repaint();
+                    break;
+                case SUBTREE_NODES_INVALIDATED:
+                    updateTreeNodes(event.getFigure());
+                    repaint();
+                    break;
+                case SUBTREE_STRUCTURE_CHANGED:
+                    updateTreeStructure(event.getFigure());
+                    break;
+                default:
+                    throw new UnsupportedOperationException(event.getEventType()
+                            + "not supported");
             }
         }
 
@@ -130,14 +130,14 @@ public class SimpleDrawingView implements DrawingView {
     private final NonnullProperty<DrawingModel> drawingModel //
             = new NonnullProperty<DrawingModel>(this, DRAWING_MODEL_PROPERTY, new ConnectionsNoLayoutDrawingModel()) {
 
-                @Override
-                public void set(DrawingModel newValue) {
-                    DrawingModel oldValue = get();
-                    super.set(newValue); //To change body of generated methods, choose Tools | Templates.
-                    handleNewDrawingModel(oldValue, newValue);
-                }
+        @Override
+        public void set(DrawingModel newValue) {
+            DrawingModel oldValue = get();
+            super.set(newValue); //To change body of generated methods, choose Tools | Templates.
+            handleNewDrawingModel(oldValue, newValue);
+        }
 
-            };
+    };
 
     /**
      * The constrainerProperty holds the constrainer for this drawing view
@@ -154,6 +154,8 @@ public class SimpleDrawingView implements DrawingView {
      * The selectionProperty holds the list of selected figures.
      */
     private final ReadOnlySetProperty<Figure> selection = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
+    private Transform viewToDrawingTransform = null;
+    private Transform drawingToViewTransform = null;
 
     /**
      * Installs a handler for changes in the seletionProperty.
@@ -181,10 +183,6 @@ public class SimpleDrawingView implements DrawingView {
      */
     private final ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
     /**
-     * Holds the transformation from drawing coordinates to view coordinates.
-     */
-    private final ReadOnlyObjectWrapper<Transform> drawingToView = new ReadOnlyObjectWrapper<>(this, DRAWING_TO_VIEW_PROPERTY, new Scale());
-    /**
      * The zoom factor.
      */
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, ZOOM_FACTOR_PROPERTY, 1.0) {
@@ -200,9 +198,10 @@ public class SimpleDrawingView implements DrawingView {
                     drawingPane.getTransforms().set(0, st);
                 }
             }
-            updateDrawingToView();
+            invalidateDrawingViewTransforms();
             updateHandles();
         }
+
     };
 
     /**
@@ -237,6 +236,25 @@ public class SimpleDrawingView implements DrawingView {
         dirtyFigureNodes.add(f);
     }
 
+    @Override
+    public Transform getDrawingToView() {
+        Scale st = new Scale(zoomFactor.get(), zoomFactor.get());
+        // Note: we do not need to consider the layout bounds of the JavaFX
+        // node of the drawing object, because the handles will also be
+        // translated accordingly. (weird stuff).
+        drawingToViewTransform = st;
+        return drawingToViewTransform;
+    }
+
+    @Override
+    public Transform getViewToDrawing() {
+        Scale st = new Scale(1.0 / zoomFactor.get(), 1.0 / zoomFactor.get());
+        Bounds viewRootNodeBounds = getNode(getDrawing()).getLayoutBounds();
+        Translate tr = new Translate(viewRootNodeBounds.getMinX(), viewRootNodeBounds.getMinY());
+        viewToDrawingTransform = st.createConcatenation(tr);
+        return viewToDrawingTransform;
+    }
+
     private class HandleEventHandler implements Listener<HandleEvent> {
 
         @Override
@@ -267,16 +285,16 @@ public class SimpleDrawingView implements DrawingView {
 
         node.addEventFilter(MouseEvent.MOUSE_PRESSED,
                 new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent evt) {
-                        if (!node.isFocused()) {
-                            node.requestFocus();
-                            if (!node.getScene().getWindow().isFocused()) {
-                                evt.consume();
-                            }
-                        }
+            @Override
+            public void handle(MouseEvent evt) {
+                if (!node.isFocused()) {
+                    node.requestFocus();
+                    if (!node.getScene().getWindow().isFocused()) {
+                        evt.consume();
                     }
-                ;
+                }
+            }
+        ;
         });
         node.setFocusTraversable(true);
         focused.bind(node.focusedProperty());
@@ -492,12 +510,12 @@ public class SimpleDrawingView implements DrawingView {
 
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
-        Figure f = findFigure((Parent) getNode(dr), viewToDrawing(vx, vy));
+        Figure f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy));
 
         return f;
     }
 
-    private Figure findFigure(Parent p, Point2D pp) {
+    private Figure findFigureRecursive(Parent p, Point2D pp) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -509,7 +527,7 @@ public class SimpleDrawingView implements DrawingView {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null || !f.isSelectable()) {
                     if (n instanceof Parent) {
-                        f = findFigure((Parent) n, pl);
+                        f = findFigureRecursive((Parent) n, pl);
                     }
                 }
                 return f;
@@ -520,12 +538,12 @@ public class SimpleDrawingView implements DrawingView {
 
     public Figure findFigureBehind(double vx, double vy, Figure figureInWay) {
         Drawing dr = getDrawing();
-        Figure f = findFigureBehind((Parent) getNode(dr), viewToDrawing(vx, vy), figureInWay);
+        Figure f = findFigureBehindRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), figureInWay);
 
         return f;
     }
 
-    private Figure findFigureBehind(Parent p, Point2D pp, Figure figureInWay) {
+    private Figure findFigureBehindRecursive(Parent p, Point2D pp, Figure figureInWay) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -537,17 +555,17 @@ public class SimpleDrawingView implements DrawingView {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null || !f.isSelectable()) {
                     if (n instanceof Parent) {
-                        f = findFigureBehind((Parent) n, pl, figureInWay);
+                        f = findFigureBehindRecursive((Parent) n, pl, figureInWay);
                     }
                 }
                 if (f == figureInWay) {
                     if (n instanceof Parent) {
-                        f = findFigure((Parent) n, pl);
+                        f = findFigureRecursive((Parent) n, pl);
                     } else {
                         f = null;
                     }
                 } else if (n instanceof Parent) {
-                    f = findFigureBehind((Parent) n, pl, figureInWay);
+                    f = findFigureBehindRecursive((Parent) n, pl, figureInWay);
                 } else {
                     f = null;
                 }
@@ -559,21 +577,23 @@ public class SimpleDrawingView implements DrawingView {
 
     @Override
     public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight) {
-        double sf = 1 / zoomFactor.get();
-        BoundingBox r = new BoundingBox(vx * sf, vy * sf, 0, vwidth * sf, vheight
-                * sf, 0);
+        Transform vt = getViewToDrawing();
+        Point2D pxy = vt.transform(vx, vy);
+        Point2D pwh = vt.deltaTransform(vwidth, vheight);
+        BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
         List<Figure> list = new LinkedList<Figure>();
-        findFiguresInside((Parent) figureToNodeMap.get(getDrawing()), r, list);
+        findFiguresInsideRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list);
         return list;
     }
 
     @Override
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight) {
-        double sf = 1 / zoomFactor.get();
-        BoundingBox r = new BoundingBox(vx * sf, vy * sf, 0, vwidth * sf, vheight
-                * sf, 0);
+        Transform vt = getViewToDrawing();
+        Point2D pxy = vt.transform(vx, vy);
+        Point2D pwh = vt.deltaTransform(vwidth, vheight);
+        BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
         List<Figure> list = new LinkedList<Figure>();
-        findFiguresIntersecting((Parent) figureToNodeMap.get(getDrawing()), r, list);
+        findFiguresIntersectingRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list);
         return list;
     }
 
@@ -584,7 +604,7 @@ public class SimpleDrawingView implements DrawingView {
      * point!
      * @param p A point given in the drawing coordinate system
      */
-    private void findFiguresInside(Parent p, Bounds pp, List<Figure> found) {
+    private void findFiguresInsideRecursive(Parent p, Bounds pp, List<Figure> found) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -595,7 +615,7 @@ public class SimpleDrawingView implements DrawingView {
                     Figure f = nodeToFigureMap.get(n);
                     if (f == null || !f.isSelectable()) {
                         if (n instanceof Parent) {
-                            findFiguresInside((Parent) n, pl, found);
+                            findFiguresInsideRecursive((Parent) n, pl, found);
                         }
                     } else {
                         found.add(f);
@@ -605,7 +625,7 @@ public class SimpleDrawingView implements DrawingView {
                 Bounds pl = n.parentToLocal(pp);
                 if (pl.intersects(n.getBoundsInLocal())) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
-                        findFiguresInside((Parent) n, pl, found);
+                        findFiguresInsideRecursive((Parent) n, pl, found);
                     }
                 }
             }
@@ -619,7 +639,7 @@ public class SimpleDrawingView implements DrawingView {
      * point!
      * @param p A point given in the drawing coordinate system
      */
-    private void findFiguresIntersecting(Parent p, Bounds pp, List<Figure> found) {
+    private void findFiguresIntersectingRecursive(Parent p, Bounds pp, List<Figure> found) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -628,7 +648,7 @@ public class SimpleDrawingView implements DrawingView {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null || !f.isSelectable()) {
                     if (n instanceof Parent) {
-                        findFiguresIntersecting((Parent) n, pl, found);
+                        findFiguresIntersectingRecursive((Parent) n, pl, found);
                     }
                 } else {
                     found.add(f);
@@ -645,11 +665,6 @@ public class SimpleDrawingView implements DrawingView {
     @Override
     public ObjectProperty<Layer> activeLayerProperty() {
         return activeLayer;
-    }
-
-    @Override
-    public ReadOnlyObjectProperty<Transform> drawingToViewProperty() {
-        return drawingToView.getReadOnlyProperty();
     }
 
     @Override
@@ -756,14 +771,10 @@ public class SimpleDrawingView implements DrawingView {
         }
     }
 
-    private void updateDrawingToView() {
-        Scale st = new Scale(zoomFactor.get(), zoomFactor.get());
-        Bounds b = drawingPane.getBoundsInLocal();
-        System.out.println("drawingPane:" + b);
-        Translate tr = new Translate(-b.getMinX(), -b.getMinY());
-        Transform t = tr.createConcatenation(st);
-        drawingToView.set(t);
+    private void invalidateDrawingViewTransforms() {
+        drawingToViewTransform = viewToDrawingTransform = null;
     }
+
     @Override
     public final ReadOnlyMapProperty<Key<?>, Object> renderingHints() {
         return renderingHints;

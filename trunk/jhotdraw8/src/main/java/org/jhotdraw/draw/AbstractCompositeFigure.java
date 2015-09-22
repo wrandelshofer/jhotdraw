@@ -79,10 +79,10 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
 
     @Override
     public Bounds getBoundsInLocal() {
-        double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
 
         for (Figure child : childrenProperty()) {
             Bounds b = child.getBoundsInParent();
