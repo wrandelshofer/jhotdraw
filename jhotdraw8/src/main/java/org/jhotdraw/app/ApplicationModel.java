@@ -64,6 +64,7 @@ public interface ApplicationModel {
      */
     MenuBar createMenuBar();
     
-    /** Gets the resource bundle for use by the application. */
+    /** Gets the resource bundle for use by the application.
+     * @return the resource bundle */
     ResourceBundle getResources();
 }

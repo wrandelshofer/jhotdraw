@@ -25,8 +25,6 @@ import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <C> the child type
- * @param <P> the parent type
  */
 public abstract class AbstractFigure extends SimplePropertyBean implements Figure {
 
@@ -65,12 +63,12 @@ public abstract class AbstractFigure extends SimplePropertyBean implements Figur
      * This implementation fires an illegal argument exception if the parent
      * is an instanceof {@code Drawing}.
      *
-     * @param newValue
-     * @throws IllegaArgumentException if newVale is an illegal parent
+     * @param newParent The new parent figure.
+     * @throws IllegalArgumentException if newParent is an illegal parent
      */
-    protected void checkParent(Figure newValue) {
-        if (newValue instanceof Drawing) {
-            throw new IllegalArgumentException("illegal parent:" + newValue);
+    protected void checkParent(Figure newParent) {
+        if (newParent instanceof Drawing) {
+            throw new IllegalArgumentException("illegal parent:" + newParent);
         }
     }
 }

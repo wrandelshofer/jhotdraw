@@ -28,8 +28,6 @@ import static java.lang.Math.min;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <C> the child type
- * @param <P> the parent type
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
 
