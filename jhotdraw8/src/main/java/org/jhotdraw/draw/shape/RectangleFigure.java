@@ -15,11 +15,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
-import org.jhotdraw.draw.DrawingRenderer;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.RenderContext;
 
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.
@@ -65,12 +65,12 @@ public class RectangleFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Node createNode(DrawingRenderer drawingView) {
+    public Node createNode(RenderContext drawingView) {
         return new Rectangle();
     }
 
     @Override
-    public void updateNode(DrawingRenderer drawingView, Node node) {
+    public void updateNode(RenderContext drawingView, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyFigureProperties(rectangleNode);
         updateShapeProperties(rectangleNode);

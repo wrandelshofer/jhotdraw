@@ -14,10 +14,10 @@ import javafx.geometry.Bounds;
 import javafx.scene.shape.Line;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
-import org.jhotdraw.draw.DrawingRenderer;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.RenderContext;
 
 /**
  * Renders a {@code javafx.scene.shape.Line}.
@@ -68,12 +68,12 @@ public class LineFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public Node createNode(DrawingRenderer drawingView) {
+    public Node createNode(RenderContext drawingView) {
         return new Line();
     }
 
     @Override
-    public void updateNode(DrawingRenderer drawingView, Node node) {
+    public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
         applyFigureProperties(lineNode);
         updateShapeProperties(lineNode);

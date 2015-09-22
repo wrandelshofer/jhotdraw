@@ -29,14 +29,14 @@ import org.jhotdraw.collection.Key;
 public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
 
     @Override
-    public Node createNode(DrawingRenderer drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.getProperties().put("page", new Rectangle());
         return g;
     }
 
     @Override
-    public void updateNode(DrawingRenderer v, Node n) {
+    public void updateNode(RenderContext v, Node n) {
         Group g = (Group) n;
         ObservableList<Node> children = ((Group) n).getChildren();
         children.clear();

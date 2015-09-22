@@ -1,4 +1,4 @@
-/* @(#)DrawingRenderer.java
+/* @(#)RenderContext.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
@@ -10,12 +10,12 @@ import javafx.scene.Node;
 import org.jhotdraw.collection.Key;
 
 /**
- * DrawingRenderer.
+ * RenderContext.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DrawingRenderer {
+public interface RenderContext {
    // ---
     // constant declarations
     // ---
@@ -58,11 +58,11 @@ public interface DrawingRenderer {
     }
 
     /**
-     * Gets the node which is used to render the specified figure by this
-     * {@code DrawingRenderer}.
+     * Gets the JavaFX node which is used to render the specified figure by this
+     * {@code RenderContext}.
      *
      * @param f The figure
-     * @return The node associated to the figure
+     * @return The JavaFX node associated to the figure
      */
     public Node getNode(Figure f);
 

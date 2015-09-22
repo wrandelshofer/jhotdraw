@@ -297,29 +297,34 @@ public interface Figure extends PropertyBean {
     }
 
     /**
-     * This method is invoked by {@code DrawingRenderer}, when it needs a node
+     * This method is invoked by a {@code RenderContext}, when it needs a node
      * to create a JavaFX scene graph for a figure.
      * <p>
      * A typical implementation should look like this:
      * <pre>{@code
-     * public Node createNode(DrawingRenderer v) {
-     *     return new ...desired subclass of Node...();
+     * public Node createNode(RenderContext v) {
+     * return new ...desired subclass of Node...();
      * }
      * }</pre>
      * <p>
-     * A figure may be shown in multiple {@code DrawingRenderer}s
-     * simultaneously. Each {@code DrawingRenderer} uses this method to
-     * instantiate a JavaFX node for the figure. This method must create a new
-     * instance because returning an already existing instance may cause
-     * undesired side effects on other {@code DrawingRenderer}s.
+     * A figure may be rendered with multiple {@code RenderContext}s
+     * simultaneously. Each {@code RenderContext} uses this method to
+     * instantiate a JavaFX node for the figure and associate it to the figure.
+     * <p>
+     * This method must create a new instance because returning an already
+     * existing instance may cause undesired side effects on other
+     * {@code RenderContext}s.
+     * <p>
+     * Note that by convention this method <b>may only</b> be invoked by
+     * a {@code RenderContext} object.
      *
      * @param renderer the drawing view which will use the node
      * @return the newly created node
      */
-    Node createNode(DrawingRenderer renderer);
+    Node createNode(RenderContext renderer);
 
     /**
-     * This method is invoked by {@code DrawingRenderer}, when it needs to
+     * This method is invoked by a {@code RenderContext}, when it needs to
      * update the node which represents the scene graph in the figure.
      * <p>
      * A figure which is composed from child figures, must add the nodes of its
@@ -327,23 +332,30 @@ public interface Figure extends PropertyBean {
      * of the composed figure are properly propagated to its children.
      * </p>
      * <pre>{@code
-     * public void updateNode(DrawingView v, Node n) {
+     * public void updateNode(RenderContext rc, Node n) {
      *     ObservableList<Node> group = ((Group) n).getChildren();
      *     group.clear();
      *     for (Figure child : childrenProperty()) {
-     *         group.add(v.getNode(child));
-     *     }
+     *         group.add(rc.getNode(child));
      * }
      * }</pre>
      * <p>
-     * A figure may be shown in multiple {@code DrawingView}s. Each
-     * {@code DrawingView} view uses this method to update the a JavaFX node for
+     * A figure may be shown in multiple {@code RenderContext}s. Each
+     * {@code RenderContext} uses this method to update the a JavaFX node for
      * the figure.
+     * <p>
+     * Note that the figure <b>must</b> retrieve the JavaFX node from other figures
+     * from the render context by invoking {@code rc.getNode(child)} rather than
+     * creating new nodes using {@code child.createNode(rc)}. 
+     * This convention allows to implement a cache in the render
+     * context for the Java FX node. Also, render contexts like
+     * {@code DrawingView} need to associate input events on Java FX nodes
+     * to the corresponding figure.  
      *
      * @param renderer the drawing view
      * @param node the node which was created with {@link #createNode}
      */
-    void updateNode(DrawingRenderer renderer, Node node);
+    void updateNode(RenderContext renderer, Node node);
 
     /**
      * Whether children may be added to this figure.
@@ -474,7 +486,8 @@ public interface Figure extends PropertyBean {
     }
 
     /** Returns the root.
-     * @return the root  */
+     *
+     * @return the root */
     default Figure getRoot() {
         Figure parent = this;
         while (parent.getParent() != null) {
@@ -482,11 +495,13 @@ public interface Figure extends PropertyBean {
         }
         return parent;
     }
+
     /** Returns the nearest parent Drawing.
-     * @return the drawing or null if no ancestor is a drawing.  */
+     *
+     * @return the drawing or null if no ancestor is a drawing. */
     default Drawing getDrawing() {
         Figure parent = this;
-        while (parent != null && ! (parent instanceof Drawing)) {
+        while (parent != null && !(parent instanceof Drawing)) {
             parent = parent.getParent();
         }
         return (Drawing) parent;
@@ -494,6 +509,7 @@ public interface Figure extends PropertyBean {
 
     /** Returns an iterable which can iterate through this figure and all
      * its descendants in preorder sequence.
+     *
      * @return the iterable
      */
     default public Iterable<Figure> preorderIterable() {
@@ -606,7 +622,7 @@ public interface Figure extends PropertyBean {
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException("Not supported yet."); 
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 

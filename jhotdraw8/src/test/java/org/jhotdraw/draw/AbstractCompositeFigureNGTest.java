@@ -79,12 +79,12 @@ public class AbstractCompositeFigureNGTest {
         }
 
         @Override
-        public Node createNode(DrawingRenderer renderer) {
+        public Node createNode(RenderContext renderer) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void updateNode(DrawingRenderer renderer, Node node) {
+        public void updateNode(RenderContext renderer, Node node) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
