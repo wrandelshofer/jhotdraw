@@ -1,5 +1,4 @@
-/*
- * @(#)DrawingView.java
+/* @(#)DrawingView.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -86,11 +85,12 @@ public interface DrawingView extends RenderContext {
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
     NonnullProperty<DrawingModel> drawingModelProperty();
+
     /**
      * The active layer of the drawing.
      *
-     * @return the active layer of the drawing. Returns null if the drawing
-     * has no layers or no layer has been activated.
+     * @return the active layer of the drawing. Returns null if the drawing has
+     * no layers or no layer has been activated.
      */
     ObjectProperty<Layer> activeLayerProperty();
 
@@ -175,7 +175,8 @@ public interface DrawingView extends RenderContext {
 
     /**
      * Finds the figure at the given view coordinates. Figures are searched in
-     * Z-order from front to back. Only considers figures in editable {@code Layer}s.
+     * Z-order from front to back. Only considers figures in editable
+     * {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
@@ -185,7 +186,8 @@ public interface DrawingView extends RenderContext {
 
     /**
      * Finds the figure at the given view coordinates behind the given figure.
-     * Figures are searched in Z-order from front to back. Only considers figures in editable {@code Layer}s.
+     * Figures are searched in Z-order from front to back. Only considers
+     * figures in editable {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
@@ -196,8 +198,8 @@ public interface DrawingView extends RenderContext {
 
     /**
      * Returns all figures that lie within the specified bounds given in view
-     * coordinates. The figures are returned in Z-order from back to front.
-     * Only considers figures in editable {@code Layer}s.
+     * coordinates. The figures are returned in Z-order from back to front. Only
+     * considers figures in editable {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
@@ -206,10 +208,11 @@ public interface DrawingView extends RenderContext {
      * @return A figure or empty
      */
     public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight);
+
     /**
      * Returns all figures that intersect the specified bounds given in view
-     * coordinates. The figures are returned in Z-order from back to front.
-     * Only considers figures in editable {@code Layer}s.
+     * coordinates. The figures are returned in Z-order from back to front. Only
+     * considers figures in editable {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
@@ -218,29 +221,33 @@ public interface DrawingView extends RenderContext {
      * @return A figure or empty
      */
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight);
+
     // ---
     // convenience methods
     // ---
+
     /**
      * Finds the figure at the given view coordinates. Figures are searched in
-     * Z-order from front to back. Only considers figures in editable {@code Layer}s.
+     * Z-order from front to back. Only considers figures in editable
+     * {@code Layer}s.
      *
      * @param v point in view coordinates
      * @return A figure or empty
      */
     default Figure findFigure(Point2D v) {
-        return findFigure(v.getX(),v.getY());
+        return findFigure(v.getX(), v.getY());
     }
+
     /**
      * Returns all figures that intersect the specified bounds given in view
-     * coordinates. The figures are returned in Z-order from back to front.
-     * Only considers figures in editable {@code Layer}s.
+     * coordinates. The figures are returned in Z-order from back to front. Only
+     * considers figures in editable {@code Layer}s.
      *
      * @param v rectangle in view coordinates
      * @return A figure or empty
      */
     default List<Figure> findFiguresIntersecting(Rectangle2D v) {
-        return findFiguresIntersecting(v.getMinX(),v.getMinY(),v.getWidth(),v.getHeight());
+        return findFiguresIntersecting(v.getMinX(), v.getMinY(), v.getWidth(), v.getHeight());
     }
 
     default void setDrawing(Drawing newValue) {
@@ -274,6 +281,7 @@ public interface DrawingView extends RenderContext {
     default Handle getActiveHandle() {
         return activeHandleProperty().get();
     }
+
     default void setActiveLayer(Layer newValue) {
         activeLayerProperty().set(newValue);
     }
@@ -294,9 +302,18 @@ public interface DrawingView extends RenderContext {
         return selectionProperty();
     }
 
-    /** Returns the drawing to view transformation. */
+    /**
+     * Returns the drawing to view transformation.
+     *
+     * @return the transformation
+     */
     Transform getDrawingToView();
-    /** Returns the view to drawing transformation. */
+
+    /**
+     * Returns the view to drawing transformation.
+     *
+     * @return the transformation;
+     */
     Transform getViewToDrawing();
 
     /**
@@ -327,7 +344,7 @@ public interface DrawingView extends RenderContext {
      * @return the corresponding point in drawing coordinates
      */
     default Point2D viewToDrawing(double vx, double vy) {
-            return getViewToDrawing().transform(vx, vy);
+        return getViewToDrawing().transform(vx, vy);
     }
 
     /**
@@ -343,6 +360,7 @@ public interface DrawingView extends RenderContext {
 
     /**
      * Returns the underlying drawing model.
+     *
      * @return a drawing model
      */
     DrawingModel getDrawingModel();
@@ -355,7 +373,5 @@ public interface DrawingView extends RenderContext {
      * @return A collection containing the handle and all compatible handles.
      */
     public Collection<Handle> getCompatibleHandles(Handle handle);
-    
-    
 
 }
