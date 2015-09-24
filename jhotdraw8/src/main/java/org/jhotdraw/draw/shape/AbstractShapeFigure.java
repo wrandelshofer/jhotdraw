@@ -56,7 +56,7 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
      */
-    public static FigureKey<Paint> STROKE_PAINT = new FigureKey<>("strokePaint", Paint.class, DirtyMask.of(DirtyBits.NODE), Color.BLACK);
+    public static FigureKey<Paint> STROKE = new FigureKey<>("stroke", Paint.class, DirtyMask.of(DirtyBits.NODE), Color.BLACK);
     /**
      * Defines the stroke type used for drawing outline of the figure. Default
      * value: {@code StrokeType.CENTERED}.
@@ -84,7 +84,7 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
         shape.setStrokeLineCap(get(STROKE_LINE_CAP));
         shape.setStrokeLineJoin(get(STROKE_LINE_JOIN));
         shape.setStrokeMiterLimit(get(STROKE_MITER_LIMIT));
-        shape.setStroke(get(STROKE_PAINT));
+        shape.setStroke(get(STROKE));
         shape.setStrokeType(get(STROKE_TYPE));
         shape.setStrokeWidth(get(STROKE_WIDTH));
         shape.getStrokeDashArray().clear();

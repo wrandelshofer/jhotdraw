@@ -28,7 +28,7 @@ public class ChopRectangleConnector extends CenterConnector {
         
         Rectangle2D r = new Rectangle2D(bounds.getMinX(), bounds.getMinY(),
                 bounds.getWidth(), bounds.getHeight());
-        if (target.get(STROKE_PAINT) != null) {
+        if (target.get(STROKE) != null) {
             double grow;
             switch (target.get(STROKE_TYPE)) {
                 case CENTERED:
