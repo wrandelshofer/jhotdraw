@@ -4,10 +4,14 @@
  */
 package org.jhotdraw.draw.handle;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
@@ -19,12 +23,14 @@ import org.jhotdraw.draw.Figure;
  */
 public class SimpleHighlightHandle extends AbstractHandle {
 
-    private Rectangle node;
+    private Polygon node;
+    private double[] points;
 
     public SimpleHighlightHandle(Figure figure, DrawingView dv) {
         super(figure, dv);
 
-        node = new Rectangle();
+        points = new double[8];
+        node = new Polygon(points);
         node.setFill(null);
         node.setStroke(Color.BLUE);
     }
@@ -36,15 +42,21 @@ public class SimpleHighlightHandle extends AbstractHandle {
 
     @Override
     public void updateNode() {
-        Bounds r=getFigure().getBoundsInLocal();
-     r           = dv.getDrawingToView().transform(r);
-        node.setX(Math.round(r.getMinX())-0.5);
-        node.setY(Math.round(r.getMinY())-0.5);
-        node.setWidth(Math.round(r.getWidth()));
-        node.setHeight(Math.round(r.getHeight()));
-        applyFigureTransform(node);
+        Bounds b=getFigure().getBoundsInLocal();
+        points[0]=b.getMinX();
+        points[1]=b.getMinY();
+        points[2]=b.getMaxX();
+        points[3]=b.getMinY();
+        points[4]=b.getMaxX();
+        points[5]=b.getMaxY();
+        points[6]=b.getMinX();
+        points[7]=b.getMaxY();
         
-
+        Transform t = getFigure().getLocalToDrawing();
+        t.transform2DPoints(points, 0, points, 0, 4);
+        ObservableList<Double> pp = node.getPoints();
+        for (int i=0;i<points.length;i++) {
+        pp.set(i,points[i]);
+        }
     }
-
 }
