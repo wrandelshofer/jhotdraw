@@ -354,14 +354,14 @@ public interface Figure extends PropertyBean {
      * children to its node. This ensures that coordinate space transformations
      * of the composed figure are properly propagated to its children.
      * </p>
-     * <pre>{@code
+     * <pre>
      * public void updateNode(RenderContext rc, Node n) {
-     *     ObservableList<Node> group = ((Group) n).getChildren();
+     *     ObservableList&lt;Node&gt; group = ((Group) n).getChildren();
      *     group.clear();
      *     for (Figure child : childrenProperty()) {
      *         group.add(rc.getNode(child));
      * }
-     * }</pre>
+     * </pre>
      * <p>
      * A figure may be shown in multiple {@code RenderContext}s. Each
      * {@code RenderContext} uses this method to update the a JavaFX node for
@@ -650,7 +650,8 @@ public interface Figure extends PropertyBean {
         }
     }
 
-    /** Returns the center of BoundsInLocal. */
+    /** Returns the center of the figure in the local coordinates of the figure.
+     * @return The center of the figure */
     default Point2D getCenterInLocal() {
         Bounds b = getBoundsInLocal();
         return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
