@@ -27,7 +27,7 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * Defines the paint used for filling the interior of the figure. Default
      * value: {@code Color.WHITE}.
      */
-    public static FigureKey<Paint> FILL_PAINT = new FigureKey<>("fillPaint", Paint.class, DirtyMask.of(DirtyBits.NODE), Color.WHITE);
+    public static FigureKey<Paint> FILL = new FigureKey<>("fill", Paint.class, DirtyMask.of(DirtyBits.NODE), Color.WHITE);
     /**
      * Defines whether anti aliasing hints are used. Default value:
      * {@code true}.
@@ -77,8 +77,8 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      *
      * @param shape a shape node
      */
-    protected void updateShapeProperties(Shape shape) {
-        shape.setFill(get(FILL_PAINT));
+    protected void applyShapeProperties(Shape shape) {
+        shape.setFill(get(FILL));
         shape.setSmooth(get(SMOOTH));
         shape.setStrokeDashOffset(get(STROKE_DASH_OFFSET));
         shape.setStrokeLineCap(get(STROKE_LINE_CAP));

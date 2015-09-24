@@ -4,20 +4,15 @@
  */
 package org.jhotdraw.draw.shape;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
 import static java.lang.Math.*;
 import javafx.scene.shape.Circle;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
-import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
@@ -80,7 +75,7 @@ public class CircleFigure extends AbstractShapeFigure {
     public void updateNode(RenderContext drawingView, Node node) {
         Circle circleNode = (Circle) node;
         applyFigureProperties(circleNode);
-        updateShapeProperties(circleNode);
+        applyShapeProperties(circleNode);
         Point2D c = get(CENTER);
         circleNode.setCenterX(c.getX());
         circleNode.setCenterY(c.getY());
