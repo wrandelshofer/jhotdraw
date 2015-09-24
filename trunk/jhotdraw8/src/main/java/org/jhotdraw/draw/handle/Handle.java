@@ -1,11 +1,11 @@
-/*
- * @(#)Handle.java
+/* @(#)Handle.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.draw.handle;
 
 import javafx.scene.Node;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import static org.jhotdraw.draw.Figure.*;
 /**
@@ -42,7 +42,7 @@ public interface Handle {
      */
     Node getNode();
 
-    void updateNode();
+    void updateNode(DrawingView drawingView);
 
     /**
      * Updates a handle node with all {@code Key}s which define the transformation

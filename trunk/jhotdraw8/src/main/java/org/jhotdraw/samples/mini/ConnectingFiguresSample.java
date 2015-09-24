@@ -75,7 +75,7 @@ public class ConnectingFiguresSample extends Application {
           vertex2.set(Figure.ROTATE, 45.0);
           
           vertex3.set(Figure.ROTATE, 20.0);
-          vertex3.set(Figure.ROTATION_AXIS, new Point3D(0,1.0,0));
+          //vertex3.set(Figure.ROTATION_AXIS, new Point3D(0,1.0,0));
           
          
 

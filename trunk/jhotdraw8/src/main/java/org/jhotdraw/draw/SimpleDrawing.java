@@ -45,7 +45,7 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
         page.setY(bounds.getMinY());
         page.setWidth(bounds.getWidth());
         page.setHeight(bounds.getHeight());
-        page.setFill(get(BACKGROUND_PAINT));
+        page.setFill(get(BACKGROUND));
         children.add(page);
 
         for (Figure child : childrenProperty()) {

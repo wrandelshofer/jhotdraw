@@ -6,16 +6,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <BorderPane fx:id="backgroundPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-      <Group autoSizeChildren="false">
-         <children>
-            <Group fx:id="drawingPane" scaleX="2.0" scaleY="2.0" />
-            <Group fx:id="handlePane" />
-         </children>
-      </Group>
-      <BorderPane fx:id="gridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-      <BorderPane fx:id="toolPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+      <SubScene fx:id="drawingSubScene" fill="TRANSPARENT" height="200.0" width="200.0" StackPane.alignment="TOP_LEFT">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
+      <SubScene fx:id="overlaysSubScene" fill="TRANSPARENT" height="200.0" width="200.0" StackPane.alignment="TOP_LEFT">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
    </children>
 </StackPane>

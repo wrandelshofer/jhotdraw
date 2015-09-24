@@ -42,6 +42,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.SubScene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -58,6 +59,10 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.event.Listener;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleEvent;
+import static java.lang.Math.*;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Pane;
 
 /**
  * FXML Controller class
@@ -67,18 +72,14 @@ import org.jhotdraw.draw.handle.HandleEvent;
 public class SimpleDrawingView implements DrawingView {
 
     @FXML
-    private Group handlePane;
-
+    private SubScene drawingSubScene;
     @FXML
-    private BorderPane backgroundPane;
+    private SubScene overlaysSubScene;
 
-    @FXML
-    private BorderPane gridPane;
-
-    @FXML
     private BorderPane toolPane;
 
-    @FXML
+    private Group handlesPane;
+
     private Group drawingPane;
 
     /**
@@ -129,14 +130,14 @@ public class SimpleDrawingView implements DrawingView {
     private final NonnullProperty<DrawingModel> drawingModel //
             = new NonnullProperty<DrawingModel>(this, DRAWING_MODEL_PROPERTY, new ConnectionsNoLayoutDrawingModel()) {
 
-        @Override
-        public void set(DrawingModel newValue) {
-            DrawingModel oldValue = get();
-            super.set(newValue); //To change body of generated methods, choose Tools | Templates.
-            handleNewDrawingModel(oldValue, newValue);
-        }
+                @Override
+                public void set(DrawingModel newValue) {
+                    DrawingModel oldValue = get();
+                    super.set(newValue); //To change body of generated methods, choose Tools | Templates.
+                    handleNewDrawingModel(oldValue, newValue);
+                }
 
-    };
+            };
 
     /**
      * The constrainerProperty holds the constrainer for this drawing view
@@ -237,21 +238,36 @@ public class SimpleDrawingView implements DrawingView {
 
     @Override
     public Transform getDrawingToView() {
-        Scale st = new Scale(zoomFactor.get(), zoomFactor.get());
-        // Note: we do not need to consider the layout bounds of the JavaFX
-        // node of the drawing object, because the handles will also be
-        // translated accordingly. (weird stuff).
-        drawingToViewTransform = st;
+        if (drawingToViewTransform == null) {
+            Scale st = new Scale(zoomFactor.get(), zoomFactor.get());
+            Translate tr = new Translate(drawingPane.getTranslateX(), drawingPane.getTranslateY());
+            drawingToViewTransform = st.createConcatenation(tr);
+        }
         return drawingToViewTransform;
     }
 
     @Override
     public Transform getViewToDrawing() {
-        Scale st = new Scale(1.0 / zoomFactor.get(), 1.0 / zoomFactor.get());
-        Bounds viewRootNodeBounds = getNode(getDrawing()).getLayoutBounds();
-        Translate tr = new Translate(viewRootNodeBounds.getMinX(), viewRootNodeBounds.getMinY());
-        viewToDrawingTransform = st.createConcatenation(tr);
+        if (viewToDrawingTransform == null) {
+            Scale st = new Scale(1.0 / zoomFactor.get(), 1.0 / zoomFactor.get());
+            Translate tr = new Translate(-drawingPane.getTranslateX(), -drawingPane.getTranslateY());
+            viewToDrawingTransform = tr.createConcatenation(st);
+        }
         return viewToDrawingTransform;
+    }
+
+    private void updateLayout() {
+        Bounds newValue = drawingPane.getLayoutBounds();
+            drawingPane.setTranslateX(max(0, -newValue.getMinX()));
+            drawingPane.setTranslateY(max(0, -newValue.getMinY()));
+            toolPane.resize(newValue.getWidth(), newValue.getHeight());
+            drawingSubScene.setWidth(newValue.getWidth());
+            drawingSubScene.setHeight(newValue.getHeight());
+            Bounds hb= handlesPane.getLayoutBounds();
+            overlaysSubScene.setWidth(max(newValue.getWidth(),hb.getMinX()+hb.getWidth()));
+            overlaysSubScene.setHeight(max(newValue.getHeight(),hb.getMinY()+hb.getHeight()));
+            invalidateDrawingViewTransforms();
+
     }
 
     private class HandleEventHandler implements Listener<HandleEvent> {
@@ -284,22 +300,40 @@ public class SimpleDrawingView implements DrawingView {
 
         node.addEventFilter(MouseEvent.MOUSE_PRESSED,
                 new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent evt) {
-                if (!node.isFocused()) {
-                    node.requestFocus();
-                    if (!node.getScene().getWindow().isFocused()) {
-                        evt.consume();
+                    @Override
+                    public void handle(MouseEvent evt) {
+                        if (!node.isFocused()) {
+                            node.requestFocus();
+                            if (!node.getScene().getWindow().isFocused()) {
+                                evt.consume();
+                            }
+                        }
                     }
-                }
-            }
-        ;
+                ;
         });
         node.setFocusTraversable(true);
         focused.bind(node.focusedProperty());
 
+        drawingPane = new Group();
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
+        drawingSubScene.setRoot(drawingPane);
+
+        
+        toolPane = new BorderPane();
+        toolPane.setBackground(Background.EMPTY);
+        toolPane.setManaged(false);
+        handlesPane = new Group();
+        handlesPane.setManaged(false);
+        Pane overlaysPane = new Pane();
+        overlaysPane.setBackground(Background.EMPTY);
+        overlaysPane.getChildren().addAll(handlesPane,toolPane);
+        overlaysSubScene.setRoot(overlaysPane);
+
+        drawingPane.layoutBoundsProperty().addListener(observer-> {
+            updateLayout();
+            
+        });
 
         drawingModel.get().setRoot(new SimpleDrawing());
         handleNewDrawingModel(null, drawingModel.get());
@@ -447,10 +481,10 @@ public class SimpleDrawingView implements DrawingView {
             f.updateNode(this, getNode(f));
         }
         for (Handle h : selectionHandles) {
-            h.updateNode();
+            h.updateNode(this);
         }
         for (Handle h : secondaryHandles) {
-            h.updateNode();
+            h.updateNode(this);
         }
     }
 
@@ -738,6 +772,7 @@ public class SimpleDrawingView implements DrawingView {
                  */) {
             handlesAreValid = true;
             updateHandles();
+            updateLayout();
         }
     }
 
@@ -746,15 +781,15 @@ public class SimpleDrawingView implements DrawingView {
             h.dispose();
         }
         selectionHandles.clear();
-        handlePane.getChildren().clear();
+        handlesPane.getChildren().clear();
         while (true) {
             for (Figure figure : getSelectedFigures()) {
                 List<Handle> handles = figure.createHandles(detailLevel, this);
                 if (handles != null) {
                     for (Handle handle : handles) {
                         selectionHandles.add(handle);
-                        handlePane.getChildren().add(handle.getNode());
-                        handle.updateNode();
+                        handlesPane.getChildren().add(handle.getNode());
+                        handle.updateNode(this);
 //                        handle.addHandleListener(eventHandler);
                     }
                 }
