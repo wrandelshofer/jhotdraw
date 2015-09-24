@@ -72,7 +72,7 @@ public class RectangleFigure extends AbstractShapeFigure {
     public void updateNode(RenderContext drawingView, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyFigureProperties(rectangleNode);
-        updateShapeProperties(rectangleNode);
+        applyShapeProperties(rectangleNode);
         Rectangle2D r = get(RECTANGLE);
         rectangleNode.setX(r.getMinX());
         rectangleNode.setY(r.getMinY());

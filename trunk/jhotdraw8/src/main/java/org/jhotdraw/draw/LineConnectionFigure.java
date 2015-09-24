@@ -139,7 +139,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
         applyFigureProperties(lineNode);
-        updateShapeProperties(lineNode);
+        applyShapeProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());

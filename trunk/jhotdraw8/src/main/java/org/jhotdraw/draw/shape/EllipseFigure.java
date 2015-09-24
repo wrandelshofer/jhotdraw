@@ -81,7 +81,7 @@ public class EllipseFigure extends AbstractShapeFigure {
     public void updateNode(RenderContext drawingView, Node node) {
         Ellipse n = (Ellipse) node;
         applyFigureProperties(n);
-        updateShapeProperties(n);
+        applyShapeProperties(n);
         Point2D c = get(CENTER);
         n.setCenterX(c.getX());
         n.setCenterY(c.getY());
