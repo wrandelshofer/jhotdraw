@@ -32,6 +32,9 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.SimpleHighlightHandle;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import javafx.geometry.BoundingBox;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -231,10 +234,31 @@ public interface Figure extends PropertyBean {
     public Bounds getBoundsInLocal();
 
     default public Bounds getBoundsInParent() {
-        // FIXME apply transform properties
-        // also implementations have to transform their
-        // geometry so that we get tighter bounds
-        return getBoundsInLocal();
+        Bounds b=getBoundsInLocal();
+        double[] points=new double[8];
+        points[0]=b.getMinX();
+        points[1]=b.getMinY();
+        points[2]=b.getMaxX();
+        points[3]=b.getMinY();
+        points[4]=b.getMaxX();
+        points[5]=b.getMaxY();
+        points[6]=b.getMinX();
+        points[7]=b.getMaxY();
+        
+        Transform t = getLocalToParent();
+        t.transform2DPoints(points, 0, points, 0, 4);
+        
+        double minX=Double.POSITIVE_INFINITY;
+        double maxX=Double.NEGATIVE_INFINITY;
+        double minY=Double.POSITIVE_INFINITY;
+        double maxY=Double.NEGATIVE_INFINITY;
+        for (int i=0;i<points.length;i+=2) {
+            minX=min(minX,points[i]);
+            maxX=max(maxX,points[i]);
+            minY=min(minY,points[i+1]);
+            maxY=max(maxY,points[i+1]);
+        }
+        return new BoundingBox(minX,minY,maxX-minX,maxY-minY);
     }
 
     default public Bounds getBoundsInDrawing() {
@@ -343,13 +367,14 @@ public interface Figure extends PropertyBean {
      * {@code RenderContext} uses this method to update the a JavaFX node for
      * the figure.
      * <p>
-     * Note that the figure <b>must</b> retrieve the JavaFX node from other figures
+     * Note that the figure <b>must</b> retrieve the JavaFX node from other
+     * figures
      * from the render context by invoking {@code rc.getNode(child)} rather than
-     * creating new nodes using {@code child.createNode(rc)}. 
+     * creating new nodes using {@code child.createNode(rc)}.
      * This convention allows to implement a cache in the render
      * context for the Java FX node. Also, render contexts like
      * {@code DrawingView} need to associate input events on Java FX nodes
-     * to the corresponding figure.  
+     * to the corresponding figure.
      *
      * @param renderer the drawing view
      * @param node the node which was created with {@link #createNode}
@@ -625,6 +650,64 @@ public interface Figure extends PropertyBean {
         }
     }
 
+    /** Returns the center of BoundsInLocal. */
+    default Point2D getCenterInLocal() {
+        Bounds b = getBoundsInLocal();
+        return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
+                + b.getMaxY()) * 0.5);
+    }
+
+    /** Returns the transformation from parent coordinates into local
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform getParentToLocal() {
+        Point2D center = getCenterInLocal();
+        
+        Transform translate = Transform.translate(-get(TRANSLATE_X), -get(TRANSLATE_Y));
+        Transform scale = Transform.scale(1.0/get(SCALE_X), 1.0/get(SCALE_Y), center.getX(), center.getY());
+        Transform rotate = Transform.rotate(-get(ROTATE), center.getX(), center.getY());
+        
+        Transform t = scale.createConcatenation(rotate).createConcatenation(translate);
+        return t;
+    }
+
+    /** Returns the transformation from local coordinates into parent
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform getLocalToParent() {
+        Point2D center = getCenterInLocal();
+        Transform translate = Transform.translate(get(TRANSLATE_X), get(TRANSLATE_Y));
+        Transform scale = Transform.scale(get(SCALE_X), get(SCALE_Y), center.getX(), center.getY());
+        Transform rotate = Transform.rotate(get(ROTATE), center.getX(), center.getY());
+        
+        Transform t = translate.createConcatenation(rotate).createConcatenation(scale);
+        return t;
+    }
+
+    /** Returns the transformation from drawing coordinates into local
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform getDrawingToLocal() {
+        Transform t = getParentToLocal();
+        return getParent() == null ? t : t.createConcatenation(getParent().getDrawingToLocal());
+    }
+
+    /** Returns the transformation from local coordinates into drawing
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform getLocalToDrawing() {
+        Transform t = getLocalToParent();
+        return getParent() == null ? t : getParent().getLocalToDrawing().createConcatenation(t);
+    }
+
     /** Transforms the specified point from drawing coordinates into local
      * coordinates.
      *
@@ -632,8 +715,7 @@ public interface Figure extends PropertyBean {
      * @return point in local coordinates
      */
     default Point2D drawingToLocal(Point2D p) {
-        // FIXME implement me
-        return p;
+        return getDrawingToLocal().transform(p);
     }
 
     /** Transforms the specified point from local coordinates into drawing
@@ -643,7 +725,6 @@ public interface Figure extends PropertyBean {
      * @return point in local coordinates
      */
     default Point2D localToDrawing(Point2D p) {
-        // FIXME implement me
-        return p;
+        return getLocalToDrawing().transform(p);
     }
 }

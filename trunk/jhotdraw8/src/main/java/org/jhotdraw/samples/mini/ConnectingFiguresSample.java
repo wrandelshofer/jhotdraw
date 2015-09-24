@@ -6,12 +6,14 @@ package org.jhotdraw.samples.mini;
 
 import javafx.application.Application;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.LineConnectionFigure;
@@ -64,10 +66,18 @@ public class ConnectingFiguresSample extends Application {
         GroupFigure vertex2Group = new GroupFigure();
         vertex2Group.add(vertex2);
         vertex2Group.add(vertex2b);
-        /*
-         * vertex2Group.set(Figure.ROTATE, -50.0);
-         * vertex3.set(Figure.ROTATE, 20.0);
-         */
+
+                  edge23.set(Figure.ROTATE, 10.0);
+
+        
+          vertex2Group.set(Figure.ROTATE, -50.0);
+          vertex2Group.set(Figure.SCALE_Y, 3.0);
+          vertex2.set(Figure.ROTATE, 45.0);
+          
+          vertex3.set(Figure.ROTATE, 20.0);
+          vertex3.set(Figure.ROTATION_AXIS, new Point3D(0,1.0,0));
+          
+         
 
         Layer layer = new SimpleLayer();
         drawing.add(layer);
