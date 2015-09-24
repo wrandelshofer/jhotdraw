@@ -9,7 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.shape.AbstractShapeFigure.STROKE_PAINT;
+import static org.jhotdraw.draw.shape.AbstractShapeFigure.STROKE;
 import static org.jhotdraw.draw.shape.AbstractShapeFigure.STROKE_TYPE;
 import static org.jhotdraw.draw.shape.AbstractShapeFigure.STROKE_WIDTH;
 import org.jhotdraw.geom.Geom;
@@ -28,7 +28,7 @@ public class ChopEllipseConnector extends CenterConnector {
         Bounds bounds = target.getBoundsInLocal();
         Rectangle2D r = new Rectangle2D(bounds.getMinX(), bounds.getMinY(),
                 bounds.getWidth(), bounds.getHeight());
-        if (target.get(STROKE_PAINT) != null) {
+        if (target.get(STROKE) != null) {
             double grow;
             switch (target.get(STROKE_TYPE)) {
                 case CENTERED:
