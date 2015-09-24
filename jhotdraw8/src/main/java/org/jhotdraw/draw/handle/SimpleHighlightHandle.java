@@ -41,7 +41,7 @@ public class SimpleHighlightHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode() {
+    public void updateNode(DrawingView view) {
         Bounds b=getFigure().getBoundsInLocal();
         points[0]=b.getMinX();
         points[1]=b.getMinY();
@@ -52,7 +52,7 @@ public class SimpleHighlightHandle extends AbstractHandle {
         points[6]=b.getMinX();
         points[7]=b.getMaxY();
         
-        Transform t = getFigure().getLocalToDrawing();
+        Transform t = view.getDrawingToView().createConcatenation(getFigure().getLocalToDrawing());
         t.transform2DPoints(points, 0, points, 0, 4);
         ObservableList<Double> pp = node.getPoints();
         for (int i=0;i<points.length;i++) {
