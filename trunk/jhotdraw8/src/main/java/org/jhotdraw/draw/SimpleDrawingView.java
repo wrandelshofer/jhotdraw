@@ -4,7 +4,9 @@
  */
 package org.jhotdraw.draw;
 
-import static java.lang.Math.*;
+import org.jhotdraw.draw.model.ConnectionsNoLayoutDrawingModel;
+import org.jhotdraw.draw.model.DrawingModelEvent;
+import org.jhotdraw.draw.model.DrawingModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,8 +26,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -46,12 +46,10 @@ import javafx.scene.SubScene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw.beans.NonnullProperty;
-import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.constrain.NullConstrainer;
@@ -60,9 +58,11 @@ import org.jhotdraw.event.Listener;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleEvent;
 import static java.lang.Math.*;
-import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 /**
  * FXML Controller class
@@ -107,6 +107,7 @@ public class SimpleDrawingView implements DrawingView {
                     break;
                 case ROOT_CHANGED:
                     updateDrawing();
+                    updateLayout();
                     repaint();
                     break;
                 case SUBTREE_NODES_INVALIDATED:
@@ -198,14 +199,18 @@ public class SimpleDrawingView implements DrawingView {
                     drawingPane.getTransforms().set(0, st);
                 }
             }
-            invalidateDrawingViewTransforms();
+            updateLayout();
             updateHandles();
         }
 
     };
 
     /**
-     * Maps each figure in the drawing to a JavaFX node.
+     * Maps each JavaFX node to a handle in the drawing view.
+     */
+    private final HashMap<Node, Handle> nodeToHandleMap = new HashMap<>();
+    /**
+     * Maps each JavaFX node to a figure in the drawing.
      */
     private final HashMap<Node, Figure> nodeToFigureMap = new HashMap<>();
     /**
@@ -239,9 +244,9 @@ public class SimpleDrawingView implements DrawingView {
     @Override
     public Transform getDrawingToView() {
         if (drawingToViewTransform == null) {
-            Scale st = new Scale(zoomFactor.get(), zoomFactor.get());
-            Translate tr = new Translate(drawingPane.getTranslateX(), drawingPane.getTranslateY());
-            drawingToViewTransform = st.createConcatenation(tr);
+            Transform st = new Scale(zoomFactor.get(), zoomFactor.get());
+            Transform tr = new Translate(drawingPane.getTranslateX(), drawingPane.getTranslateY());
+            drawingToViewTransform = tr.createConcatenation(st);
         }
         return drawingToViewTransform;
     }
@@ -249,25 +254,35 @@ public class SimpleDrawingView implements DrawingView {
     @Override
     public Transform getViewToDrawing() {
         if (viewToDrawingTransform == null) {
-            Scale st = new Scale(1.0 / zoomFactor.get(), 1.0 / zoomFactor.get());
-            Translate tr = new Translate(-drawingPane.getTranslateX(), -drawingPane.getTranslateY());
-            viewToDrawingTransform = tr.createConcatenation(st);
+            Transform st = new Scale(1.0 / zoomFactor.get(), 1.0 / zoomFactor.get());
+            Transform tr = new Translate(-drawingPane.getTranslateX(), -drawingPane.getTranslateY());
+            viewToDrawingTransform = st.createConcatenation(tr);
         }
         return viewToDrawingTransform;
     }
 
+    /**
+     * Updates the layout of the drawing pane and the panes laid over it.
+     */
     private void updateLayout() {
-        Bounds newValue = drawingPane.getLayoutBounds();
-            drawingPane.setTranslateX(max(0, -newValue.getMinX()));
-            drawingPane.setTranslateY(max(0, -newValue.getMinY()));
-            toolPane.resize(newValue.getWidth(), newValue.getHeight());
-            drawingSubScene.setWidth(newValue.getWidth());
-            drawingSubScene.setHeight(newValue.getHeight());
-            Bounds hb= handlesPane.getLayoutBounds();
-            overlaysSubScene.setWidth(max(newValue.getWidth(),hb.getMinX()+hb.getWidth()));
-            overlaysSubScene.setHeight(max(newValue.getHeight(),hb.getMinY()+hb.getHeight()));
-            invalidateDrawingViewTransforms();
+        Bounds bounds = drawingPane.getLayoutBounds();
 
+        double f = getZoomFactor();
+        double x = bounds.getMinX() * f;
+        double y = bounds.getMinY() * f;
+        double w = bounds.getWidth() * f;
+        double h = bounds.getHeight() * f;
+
+        drawingPane.setTranslateX(max(0, -x));
+        drawingPane.setTranslateY(max(0, -y));
+        drawingSubScene.setWidth(w);
+        drawingSubScene.setHeight(h);
+        overlaysSubScene.setWidth(w);
+        overlaysSubScene.setHeight(h);
+
+        toolPane.resize(w, h);
+        toolPane.layout();
+        invalidateDrawingViewTransforms();
     }
 
     private class HandleEventHandler implements Listener<HandleEvent> {
@@ -318,29 +333,31 @@ public class SimpleDrawingView implements DrawingView {
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
         drawingSubScene.setRoot(drawingPane);
+        drawingSubScene.setManaged(false);
 
-        
         toolPane = new BorderPane();
         toolPane.setBackground(Background.EMPTY);
+        //toolPane.setBackground(new Background(new BackgroundFill(new Color(0,1,0,0.25),null,null)));
         toolPane.setManaged(false);
         handlesPane = new Group();
         handlesPane.setManaged(false);
         Pane overlaysPane = new Pane();
         overlaysPane.setBackground(Background.EMPTY);
-        overlaysPane.getChildren().addAll(handlesPane,toolPane);
+        overlaysPane.getChildren().addAll(handlesPane, toolPane);
+        overlaysPane.setManaged(false);
         overlaysSubScene.setRoot(overlaysPane);
+        overlaysSubScene.setManaged(false);
 
-        drawingPane.layoutBoundsProperty().addListener(observer-> {
+        drawingPane.layoutBoundsProperty().addListener(observer -> {
             updateLayout();
-            
+
         });
 
         drawingModel.get().setRoot(new SimpleDrawing());
         handleNewDrawingModel(null, drawingModel.get());
 
-        //FIXME - we need to update on boundsInLocalProperty but this listener
-        // fires too busily
-        //drawingPane.boundsInLocalProperty().addListener(l -> updateDrawingToView());
+        // Set stylesheet
+        overlaysPane.getStylesheets().add("org/jhotdraw/draw/SimpleDrawingView.css");
     }
 
     public Node getNode() {
@@ -442,6 +459,7 @@ public class SimpleDrawingView implements DrawingView {
         if (newValue != null) {
             newValue.addDrawingModelListener(modelHandler);
             updateDrawing();
+            updateLayout();
         }
     }
 
@@ -471,6 +489,9 @@ public class SimpleDrawingView implements DrawingView {
 
     private void handleNodeInvalidated(Figure f) {
         invalidateFigureNode(f);
+        if (f == getDrawing()) {
+            updateLayout();
+        }
         repaint();
     }
 
@@ -541,6 +562,17 @@ public class SimpleDrawingView implements DrawingView {
         return zoomFactor;
     }
 
+    public Handle findHandle(double vx, double vy) {
+        for (Node n : handlesPane.getChildren()) {
+            Point2D pl = n.parentToLocal(vx, vy);
+            if (n.contains(pl)) {
+                return nodeToHandleMap.get(n);
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
         Figure f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy));
@@ -569,122 +601,109 @@ public class SimpleDrawingView implements DrawingView {
         return null;
     }
 
-    public Figure findFigureBehind(double vx, double vy, Figure figureInWay) {
-        Drawing dr = getDrawing();
-        Figure f = findFigureBehindRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), figureInWay);
-
-        return f;
+    @Override
+    public List<Figure> findFigures(double vx, double vy, boolean decompose) {
+        Transform vt = getViewToDrawing();
+        Point2D pp = vt.transform(vx, vy);
+        List<Figure> list = new LinkedList<Figure>();
+        findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose);
+        return list;
     }
 
-    private Figure findFigureBehindRecursive(Parent p, Point2D pp, Figure figureInWay) {
+    private void findFiguresRecursive(Parent p, Point2D pp, List<Figure> found, boolean decompose) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
-            if (!n.isVisible()) {
-                continue;
-            }
-            Point2D pl = n.parentToLocal(pp);
-            if (n.contains(pl)) {
-                Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable()) {
-                    if (n instanceof Parent) {
-                        f = findFigureBehindRecursive((Parent) n, pl, figureInWay);
+            Figure f1 = nodeToFigureMap.get(n);
+            if (f1 != null && f1.isSelectable()) {
+                Point2D pl = n.parentToLocal(pp);
+                if (n.contains(pl)) { // only drill down if the parent contains the point
+                    Figure f = nodeToFigureMap.get(n);
+                    if (f != null && f.isSelectable()) {
+                        found.add(f);
+                    }
+                if (f == null||!f.isSelectable() || decompose&&f.isDecomposable()) {
+                        if (n instanceof Parent) {
+                            findFiguresRecursive((Parent) n, pl, found, decompose);
+                        }
                     }
                 }
-                if (f == figureInWay) {
+            } else {
+                Point2D pl = n.parentToLocal(pp);
+                if (n.contains(pl)) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
-                        f = findFigureRecursive((Parent) n, pl);
-                    } else {
-                        f = null;
+                        findFiguresRecursive((Parent) n, pl, found, decompose);
                     }
-                } else if (n instanceof Parent) {
-                    f = findFigureBehindRecursive((Parent) n, pl, figureInWay);
-                } else {
-                    f = null;
                 }
-                return f;
             }
         }
-        return null;
     }
 
     @Override
-    public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight) {
+    public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         Transform vt = getViewToDrawing();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
         List<Figure> list = new LinkedList<Figure>();
-        findFiguresInsideRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list);
+        findFiguresInsideRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose);
         return list;
     }
 
-    @Override
-    public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight) {
-        Transform vt = getViewToDrawing();
-        Point2D pxy = vt.transform(vx, vy);
-        Point2D pwh = vt.deltaTransform(vwidth, vheight);
-        BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
-        List<Figure> list = new LinkedList<Figure>();
-        findFiguresIntersectingRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list);
-        return list;
-    }
-
-    /**
-     * Finds a node at the given drawing coordinates.
-     *
-     * @param p The parentProperty of the node, which already must contain the
-     * point!
-     * @param p A point given in the drawing coordinate system
-     */
-    private void findFiguresInsideRecursive(Parent p, Bounds pp, List<Figure> found) {
+    private void findFiguresInsideRecursive(Parent p, Bounds pp, List<Figure> found, boolean decompose) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
             Figure f1 = nodeToFigureMap.get(n);
             if (f1 != null && f1.isSelectable()) {
                 Bounds pl = n.parentToLocal(pp);
-                if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent contains the point
+                if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent bounds contains the point
                     Figure f = nodeToFigureMap.get(n);
-                    if (f == null || !f.isSelectable()) {
-                        if (n instanceof Parent) {
-                            findFiguresInsideRecursive((Parent) n, pl, found);
-                        }
-                    } else {
+                    if (f != null && f.isSelectable()) {
                         found.add(f);
+                    }
+                if (f == null||!f.isSelectable() || decompose&&f.isDecomposable()) {
+                        if (n instanceof Parent) {
+                            findFiguresInsideRecursive((Parent) n, pl, found, decompose);
+                        }
                     }
                 }
             } else {
                 Bounds pl = n.parentToLocal(pp);
-                if (pl.intersects(n.getBoundsInLocal())) { // only drill down if the parent intersects the point
+                if (n.intersects(pl)) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
-                        findFiguresInsideRecursive((Parent) n, pl, found);
+                        findFiguresInsideRecursive((Parent) n, pl, found, decompose);
                     }
                 }
             }
         }
     }
 
-    /**
-     * Finds a node at the given drawing coordinates.
-     *
-     * @param p The parentProperty of the node, which already must contain the
-     * point!
-     * @param p A point given in the drawing coordinate system
-     */
-    private void findFiguresIntersectingRecursive(Parent p, Bounds pp, List<Figure> found) {
+    @Override
+    public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+        Transform vt = getViewToDrawing();
+        Point2D pxy = vt.transform(vx, vy);
+        Point2D pwh = vt.deltaTransform(vwidth, vheight);
+        BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
+        List<Figure> list = new LinkedList<Figure>();
+        findFiguresIntersectingRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose);
+        return list;
+    }
+
+    private void findFiguresIntersectingRecursive(Parent p, Bounds pp, List<Figure> found, boolean decompose) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
             Bounds pl = n.parentToLocal(pp);
-            if (pl.intersects(n.getBoundsInLocal())) { // only drill down if the parent contains the point
+            if (n.intersects(pl)) { // only drill down if the parent intersects the point
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable()) {
-                    if (n instanceof Parent) {
-                        findFiguresIntersectingRecursive((Parent) n, pl, found);
-                    }
-                } else {
+                if (f != null && f.isSelectable()) {
                     found.add(f);
+                }
+                if (f == null||!f.isSelectable() || decompose&&(f.isDecomposable())) {
+                    if (n instanceof Parent) {
+                        findFiguresIntersectingRecursive((Parent) n, pl, found,decompose);
+                    }
                 }
             }
         }
@@ -777,6 +796,7 @@ public class SimpleDrawingView implements DrawingView {
     }
 
     private void updateHandles() {
+        nodeToHandleMap.clear();
         for (Handle h : selectionHandles) {
             h.dispose();
         }
@@ -788,7 +808,9 @@ public class SimpleDrawingView implements DrawingView {
                 if (handles != null) {
                     for (Handle handle : handles) {
                         selectionHandles.add(handle);
-                        handlesPane.getChildren().add(handle.getNode());
+                        Node n = handle.getNode();
+                        nodeToHandleMap.put(n, handle);
+                        handlesPane.getChildren().add(n);
                         handle.updateNode(this);
 //                        handle.addHandleListener(eventHandler);
                     }

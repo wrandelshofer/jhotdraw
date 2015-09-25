@@ -15,7 +15,13 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.List;
 import org.jhotdraw.draw.connector.CenterConnector;
+import org.jhotdraw.draw.handle.ConnectionPointHandle;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.LineWireframeHandle;
+import org.jhotdraw.draw.shape.LineFigure;
 
 /**
  * LineConnectionFigure.
@@ -32,11 +38,11 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     /**
      * The start position of the line.
      */
-    public static FigureKey<Point2D> START = new FigureKey<>("start", Point2D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public static FigureKey<Point2D> START = LineFigure.START;
     /**
      * The end position of the line.
      */
-    public static FigureKey<Point2D> END = new FigureKey<>("end", Point2D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public static FigureKey<Point2D> END = LineFigure.END;
     /**
      * The start figure.
      * Is null if the figure is not connected at the start.
@@ -165,7 +171,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
             set(START, drawingToLocal(startConnector.chopStart(startFigure, this, start, end)));
         }
         if (endFigure != null && endConnector != null) {
-            set(END, drawingToLocal(startConnector.chopEnd(endFigure, this, start, end)));
+            set(END, drawingToLocal(endConnector.chopEnd(endFigure, this, start, end)));
         }
     }
 
@@ -177,5 +183,14 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return null;
+    }
+
+    @Override
+    public List<Handle> createHandles(int detailLevel, DrawingView dv) {
+        ArrayList<Handle> list=new ArrayList<>();
+        list.add(new LineWireframeHandle(this, dv, Handle.STYLECLASS_HANDLE_OUTLINE));
+        list.add(new ConnectionPointHandle(this, dv, Handle.STYLECLASS_HANDLE_CONNECTION_POINT,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, START,START_FIGURE,START_CONNECTOR));
+        list.add(new ConnectionPointHandle(this, dv, Handle.STYLECLASS_HANDLE_CONNECTION_POINT,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED,  END,END_FIGURE,END_CONNECTOR));
+        return list;
     }
 }

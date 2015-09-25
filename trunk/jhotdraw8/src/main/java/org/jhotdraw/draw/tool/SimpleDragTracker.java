@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.draw.DrawingModel;
+import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 

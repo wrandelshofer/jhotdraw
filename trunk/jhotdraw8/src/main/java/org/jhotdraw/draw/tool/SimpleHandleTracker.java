@@ -35,23 +35,24 @@ import org.jhotdraw.draw.handle.Handle;
  * @version $Id$
  */
 public class SimpleHandleTracker extends AbstractTool implements HandleTracker {
-
+private Handle handle;
     @Override
     public void setHandles(Handle handle, Collection<Handle> compatibleHandles) {
-        //
+        this.handle=handle;
     }
     @Override
     public void trackMousePressed(MouseEvent event, DrawingView dv) {
-System.out.println("HandleTracker.onMousePressed");        
+handle.onMousePressed(event, dv);
     }
 
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
-System.out.println("HandleTracker.onMouseReleased");    
+handle.onMouseReleased(event, dv);
 fireToolDone();
     }
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView dv) {
+handle.onMouseDragged(event, dv);
     }
 }

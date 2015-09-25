@@ -11,7 +11,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import static java.lang.Math.*;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingModel;
+import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.util.Resources;
