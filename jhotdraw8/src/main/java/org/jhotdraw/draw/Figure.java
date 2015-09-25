@@ -31,10 +31,12 @@ import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.SimpleHighlightHandle;
+import org.jhotdraw.draw.handle.BoundsInLocalHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import javafx.geometry.BoundingBox;
+import javafx.scene.transform.Translate;
+import org.jhotdraw.draw.handle.BoundsInParentHandle;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -401,6 +403,14 @@ public interface Figure extends PropertyBean {
      * @return true if the user may select the figure
      */
     boolean isSelectable();
+    /** Whether the figure is decomposable. 
+     * 
+     * @return true if the figure is decomposable
+     */
+    default boolean isDecomposable() {
+        return true;
+    }
+
 
     /**
      * Creates handles of the specified level and for the specified drawing
@@ -416,7 +426,7 @@ public interface Figure extends PropertyBean {
             return Collections.emptyList();
         } else {
             List<Handle> list = new LinkedList<>();
-            list.add(new SimpleHighlightHandle(this, dv));
+            list.add(new BoundsInLocalHandle(this, dv, Handle.STYLECLASS_HANDLE_OUTLINE));
             return list;
         }
     }
@@ -708,6 +718,16 @@ public interface Figure extends PropertyBean {
         Transform t = getLocalToParent();
         return getParent() == null ? t : getParent().getLocalToDrawing().createConcatenation(t);
     }
+    /** Returns the transformation from parent coordinates into drawing
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform getParentToDrawing() {
+        Transform t = new Translate();
+        return getParent() == null ? t : getParent().getLocalToDrawing().createConcatenation(t);
+    }
+
 
     /** Transforms the specified point from drawing coordinates into local
      * coordinates.

@@ -83,6 +83,8 @@ public class GrapherView extends AbstractView {
 
         scrollPane.setContent(drawingView.getNode());
         
+        drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
+        
         ToolsToolbar ttbar = new ToolsToolbar();
         Resources rsrc = Resources.getResources("org.jhotdraw.draw.Labels");
         ttbar.addTool(new SelectionTool("selectionTool", rsrc), 0, 0);

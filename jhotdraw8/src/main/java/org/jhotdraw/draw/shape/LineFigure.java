@@ -8,15 +8,21 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Line;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.LineWireframeHandle;
+import org.jhotdraw.draw.handle.PointHandle;
 
 /**
  * Renders a {@code javafx.scene.shape.Line}.
@@ -87,5 +93,13 @@ public class LineFigure extends AbstractShapeFigure {
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return null;
+    }
+    @Override
+    public List<Handle> createHandles(int detailLevel, DrawingView dv) {
+        ArrayList<Handle> list=new ArrayList<>();
+        list.add(new LineWireframeHandle(this, dv, Handle.STYLECLASS_HANDLE_OUTLINE));
+        list.add(new PointHandle(this, dv, Handle.STYLECLASS_HANDLE_POINT, START));
+        list.add(new PointHandle(this, dv, Handle.STYLECLASS_HANDLE_POINT, END));
+        return list;
     }
 }

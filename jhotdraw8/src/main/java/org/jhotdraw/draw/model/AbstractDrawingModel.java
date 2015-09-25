@@ -2,11 +2,14 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.model;
 
+import org.jhotdraw.draw.model.DrawingModelEvent;
+import org.jhotdraw.draw.model.DrawingModel;
 import javafx.beans.InvalidationListener;
 import org.jhotdraw.beans.ListenerSupport;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.event.Listener;
 
 /**

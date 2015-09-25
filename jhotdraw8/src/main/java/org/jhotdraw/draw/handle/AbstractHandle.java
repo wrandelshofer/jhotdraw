@@ -5,7 +5,10 @@
 
 package org.jhotdraw.draw.handle;
 
+import javafx.event.EventType;
 import javafx.scene.Node;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.event.Listener;
@@ -14,18 +17,19 @@ import org.jhotdraw.event.Listener;
  * AbstractHandle.
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <F> the supported figure type
  */
-public abstract class AbstractHandle implements Handle {
+public abstract class AbstractHandle<F extends Figure> implements Handle<F> {
     // ---
     // Fields
     // ---
-    protected final Figure figure;
+    protected final F figure;
     protected final DrawingView dv;
 
     // ---
     // Constructors
     // ---
-    public AbstractHandle(Figure figure, DrawingView dv) {
+    public AbstractHandle(F figure, DrawingView dv) {
         this.figure = figure;
         this.dv = dv;
     }
@@ -38,7 +42,7 @@ public abstract class AbstractHandle implements Handle {
     }
 
     @Override
-    public Figure getFigure() {
+    public F getFigure() {
        return figure;
     }
 }

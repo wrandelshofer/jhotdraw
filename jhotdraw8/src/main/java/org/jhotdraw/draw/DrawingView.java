@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.model.DrawingModel;
 import java.util.Collection;
 import java.util.List;
 import javafx.beans.property.DoubleProperty;
@@ -174,16 +175,24 @@ public interface DrawingView extends RenderContext {
     public Node getNode(Figure f);
 
     /**
+     * Finds the handle at the given view coordinates. Handles are searched in
+     * Z-order from front to back.
+     *
+     * @param vx x in view coordinates
+     * @param vy y in view coordinates
+     * @return A handle or null
+     */
+    public Handle findHandle(double vx, double vy);
+    /**
      * Finds the figure at the given view coordinates. Figures are searched in
      * Z-order from front to back. Only considers figures in editable
      * {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
-     * @return A figure or empty
+     * @return A figure or null
      */
-    public Figure findFigure(double vx, double vy);
-
+    Figure findFigure(double vx, double vy);
     /**
      * Finds the figure at the given view coordinates behind the given figure.
      * Figures are searched in Z-order from front to back. Only considers
@@ -191,10 +200,10 @@ public interface DrawingView extends RenderContext {
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
-     * @param figureInWay A figure which is in front of the desired figure
-     * @return A figure or empty
+     * @param decompose whether to decompose the figures
+     * @return A list of figures from front to back 
      */
-    public Figure findFigureBehind(double vx, double vy, Figure figureInWay);
+    List<Figure> findFigures(double vx, double vy, boolean decompose);
 
     /**
      * Returns all figures that lie within the specified bounds given in view
@@ -205,22 +214,24 @@ public interface DrawingView extends RenderContext {
      * @param vy y in view coordinates
      * @param vwidth width in view coordinates
      * @param vheight height in view coordinates
-     * @return A figure or empty
+     * @param decompose whether to decompose the figures
+     * @return A list of figures from front to back 
      */
-    public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight);
+    public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
 
     /**
      * Returns all figures that intersect the specified bounds given in view
-     * coordinates. The figures are returned in Z-order from back to front. Only
+     * coordinates. The figures are returned in Z-order from front to back. Only
      * considers figures in editable {@code Layer}s.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
      * @param vwidth width in view coordinates
      * @param vheight height in view coordinates
-     * @return A figure or empty
+     * @param decompose whether to decompose the figures
+     * @return A list of figures from front to back 
      */
-    public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight);
+    public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
 
     // ---
     // convenience methods
@@ -239,15 +250,40 @@ public interface DrawingView extends RenderContext {
     }
 
     /**
+     * Finds the figures at the given view coordinates. Figures are searched in
+     * Z-order from front to back. Only considers figures in editable {@code Layer}s.
+     *
+     * @param v point in view coordinates
+     * @param decompose whether to decompose the figures
+     * @return A list of figures from front to back 
+     */
+    default List<Figure> findFigures(Point2D v, boolean decompose) {
+        return findFigures(v.getX(),v.getY(),decompose);
+    }
+
+    /**
+     * Returns all figures that are inside the specified bounds given in view
+     * coordinates. The figures are returned in Z-order from front to back.
+     * Only considers figures in editable {@code Layer}s.
+     *
+     * @param v rectangle in view coordinates
+     * @param decompose whether to decompose the figures
+     * @return A list of figures from front to back 
+     */
+    default List<Figure> findFiguresInside(Rectangle2D v, boolean decompose) {
+        return findFiguresInside(v.getMinX(),v.getMinY(),v.getWidth(),v.getHeight(), decompose);
+    }
+    /**
      * Returns all figures that intersect the specified bounds given in view
      * coordinates. The figures are returned in Z-order from back to front. Only
      * considers figures in editable {@code Layer}s.
      *
      * @param v rectangle in view coordinates
-     * @return A figure or empty
+     * @param decompose whether to decompose the figures
+     * @return A list of figures from front to back 
      */
-    default List<Figure> findFiguresIntersecting(Rectangle2D v) {
-        return findFiguresIntersecting(v.getMinX(), v.getMinY(), v.getWidth(), v.getHeight());
+    default List<Figure> findFiguresIntersecting(Rectangle2D v, boolean decompose) {
+        return findFiguresIntersecting(v.getMinX(), v.getMinY(), v.getWidth(), v.getHeight(), decompose);
     }
 
     default void setDrawing(Drawing newValue) {

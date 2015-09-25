@@ -2,10 +2,15 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.model;
 
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.DirtyBits;
+import org.jhotdraw.draw.DirtyMask;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.FigureKey;
 
 /**
  * This drawing model assumes that the drawing contains no figures which
@@ -15,7 +20,7 @@ import org.jhotdraw.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
+public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void setRoot(Drawing root) {
@@ -45,46 +50,32 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public <T> void set(Figure figure, Key<T> key, T value) {
-        figure.set(key, value);
+        figure.set(key,value);
         if (key instanceof FigureKey) {
-            FigureKey<T> fk = (FigureKey<T>) key;
+            FigureKey<T> fk = (FigureKey<T>)key;
             DirtyMask dm = fk.getDirtyMask();
             if (dm.containsOneOf(DirtyBits.NODE)) {
                 fire(DrawingModelEvent.nodeInvalidated(this, figure));
             }
-            if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
-                for (Figure c : figure.connections()) {
-                    fire(DrawingModelEvent.layoutInvalidated(this, figure));
-                }
-            }
         }
     }
 
     @Override
-    public void reshape(Figure figure, Transform transform) {
-        figure.reshape(transform);
-        fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
-        for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
-                fire(DrawingModelEvent.layoutInvalidated(this, c));
-            }
-        }
+    public void reshape(Figure f, Transform transform) {
+        f.reshape(transform);
+        fire(DrawingModelEvent.subtreeNodesInvalidated(this, f));
     }
 
     @Override
-    public void reshape(Figure figure, double x, double y, double width, double height) {
-        figure.reshape(x, y, width, height);
-        fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
-        for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
-                fire(DrawingModelEvent.layoutInvalidated(this, c));
-            }
-        }    }
+    public void reshape(Figure f, double x, double y, double width, double height) {
+        f.reshape(x,y,width,height);
+        fire(DrawingModelEvent.subtreeNodesInvalidated(this,f));
+    }
 
     @Override
     public void layout(Figure f) {
         f.layout();
-        fire(DrawingModelEvent.subtreeNodesInvalidated(this, f));
+        // no event fired! fire(DrawingModelEvent.subtreeNodesInvalidated(this,f));
     }
 
 }

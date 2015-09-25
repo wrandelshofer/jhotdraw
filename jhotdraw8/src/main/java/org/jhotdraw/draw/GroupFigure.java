@@ -7,6 +7,7 @@ package org.jhotdraw.draw;
 import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -53,4 +54,11 @@ public class GroupFigure extends AbstractCompositeFigure {
     public boolean isLayoutable() {
         return false;
     }
+
+    @Override
+    public Connector findConnector(Point2D p, Figure prototype) {
+        return null;
+    }
+    
+    
 }

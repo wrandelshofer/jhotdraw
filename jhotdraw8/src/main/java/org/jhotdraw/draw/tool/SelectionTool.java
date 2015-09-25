@@ -125,55 +125,68 @@ public class SelectionTool extends AbstractTool {
         Drawing drawing = view.getDrawing();
         double vx = evt.getX();
         double vy = evt.getY();
-        pressedFigure = view.findFigure(vx, vy);
-        if (pressedFigure == null) {
-            List<Figure> fs = view.findFiguresIntersecting(vx - tolerance, vy
-                    - tolerance, tolerance * 2, tolerance * 2);
-            if (!fs.isEmpty()) {
-                pressedFigure = fs.get(0);
-            }
-        }
-        // "alt" modifier selects figure behind.
-        if (isSelectBehindEnabled() && (evt.isAltDown())) {
-            // Select a figure behind the current selection
-            // FIXME implement me - this is just a stub and selects just the figure
-            //         behind the front most figure
-            pressedFigure = view.findFigureBehind(vx, vy, pressedFigure);
-        }
 
-        // "shift" without "meta" adds the pressed figure to the selection
-        if (evt.isShiftDown() && !evt.isMetaDown()) {
-            if (pressedFigure != null) {
-                view.getSelectedFigures().add(pressedFigure);
+        Handle h = view.findHandle(vx, vy);
+        if (h != null) {
+                setTracker(getHandleTracker(h));
+        } else {
+
+            pressedFigure = view.findFigure(vx, vy);
+            if (pressedFigure == null&&tolerance!=0) {
+                List<Figure> fs = view.findFiguresIntersecting(vx - tolerance, vy
+                        - tolerance, tolerance * 2, tolerance * 2,false);
+                if (!fs.isEmpty()) {
+                    pressedFigure = fs.get(0);
+                }
             }
-        } else
-        // "meta" without "shift"  toggles the selection for the pressed figure
-        if (!evt.isShiftDown() && evt.isMetaDown()) {
-            if (pressedFigure != null) {
-                if (view.selectionProperty().contains(pressedFigure)) {
-                    view.selectionProperty().remove(pressedFigure);
-                } else {
+            // "alt" modifier selects figure behind.
+            if (isSelectBehindEnabled() && (evt.isAltDown())) {
+            // Select a figure behind the current selection
+                pressedFigure = null;
+                boolean selectionFound = false;
+                for (Figure f : view.findFigures(vx, vy, false)) {
+                    if (view.selectionProperty().contains(f)) {
+                        selectionFound=true;
+                    }
+                    if (selectionFound) {
+                        pressedFigure=f;
+                        break;
+                    }
+                }
+            }
+
+            // "shift" without "meta" adds the pressed figure to the selection
+            if (evt.isShiftDown() && !evt.isMetaDown()) {
+                if (pressedFigure != null) {
+                    view.getSelectedFigures().add(pressedFigure);
+                }
+            } else // "meta" without "shift"  toggles the selection for the pressed figure
+            if (!evt.isShiftDown() && evt.isMetaDown()) {
+                if (pressedFigure != null) {
+                    if (view.selectionProperty().contains(pressedFigure)) {
+                        view.selectionProperty().remove(pressedFigure);
+                    } else {
+                        view.selectionProperty().add(pressedFigure);
+                    }
+                }
+            } else // neither "meta" nor "shift" sets the selection to the pressed figure
+            if (!evt.isShiftDown() && !evt.isMetaDown()) {
+                if (pressedFigure != null && !view.selectionProperty().contains(pressedFigure)) {
+                    view.selectionProperty().clear();
                     view.selectionProperty().add(pressedFigure);
                 }
             }
-        } else
-        // neither "meta" nor "shift" sets the selection to the pressed figure
-        if (!evt.isShiftDown() && !evt.isMetaDown()) {
-            if (pressedFigure != null && !view.selectionProperty().contains(pressedFigure)) {
-                view.selectionProperty().clear();
-                    view.selectionProperty().add(pressedFigure);
-            }
-        }
 
-        // "control" modifier enforces the select area tracker
-        if (pressedFigure != null
-                && (!(evt.isControlDown())
-                || view.selectionProperty().contains(pressedFigure))) {
-            DragTracker t = getDragTracker(pressedFigure, view);
-            setTracker(t);
-        } else {
-            SelectAreaTracker t = getSelectAreaTracker();
-            setTracker(t);
+            // "control" modifier enforces the select area tracker
+            if (pressedFigure != null
+                    && (!(evt.isControlDown())
+                    || view.selectionProperty().contains(pressedFigure))) {
+                DragTracker t = getDragTracker(pressedFigure, view);
+                setTracker(t);
+            } else {
+                SelectAreaTracker t = getSelectAreaTracker();
+                setTracker(t);
+            }
         }
         if (tracker != null) {
             tracker.trackMousePressed(evt, view);

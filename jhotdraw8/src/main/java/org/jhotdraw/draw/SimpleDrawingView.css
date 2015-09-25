@@ -4,7 +4,21 @@
  */
 
 /**
- * This CSS is used by SimpleDrawingView to style JavaFX Nodes generated
- * by {@code Tool}s and {@code Handle}s.
+ * This CSS is used by {@code SimpleDrawingView} to style JavaFX Nodes which are 
+ * laid over a drawing, such as {@code Tool}s and {@code Handle}s.
  */
 
+/* Styles the rubberbands drawn by tools. See {@code Tool}. */
+.tool-rubberband {
+    -fx-stroke: black;
+}
+
+/* Styles the outline drawn by handles. See {@code Handle}. */
+.handle-outline {
+    -fx-stroke: blue;
+}
+
+/* Styles the wireframe drawn by handles. See {@code Handle}. */
+.handle-wireframe {
+    -fx-stroke: cyan;
+}

@@ -15,26 +15,29 @@ import org.jhotdraw.util.Resources;
 import static java.lang.Math.*;
 import java.util.List;
 import org.jhotdraw.draw.Figure;
+import static java.lang.Math.*;
 
 /**
  * {@code SimpleSelectAreaTracker} implements interactions with the background
  * area of a {@code Drawing}.
  * <p>
  * The {@code DefaultSelectAreaTracker} handles one of the three states of the
- * {@code SelectionTool}. It comes into action, when the user presses
- * the mouse button over the background of a {@code Drawing}.
+ * {@code SelectionTool}. It comes into action, when the user presses the mouse
+ * button over the background of a {@code Drawing}.
+ * <p>
+ * This tool draws a {@code Rectangle} with style class "tool-rubberband".
  * <p>
  * Design pattern:<br>
  * Name: Chain of Responsibility.<br>
  * Role: Handler.<br>
- * Partners: {@link SelectionTool} as Handler, {@link DragTracker} as Handler, 
- * {@link HandleTracker} as Handler. 
+ * Partners: {@link SelectionTool} as Handler, {@link DragTracker} as Handler,
+ * {@link HandleTracker} as Handler.
  * <p>
  * Design pattern:<br>
  * Name: State.<br>
  * Role: State.<br>
- * Partners: {@link SelectionTool} as Context, {@link DragTracker} as 
- * State, {@link HandleTracker} as State. 
+ * Partners: {@link SelectionTool} as Context, {@link DragTracker} as State,
+ * {@link HandleTracker} as State.
  *
  * @see SelectionTool
  *
@@ -43,9 +46,15 @@ import org.jhotdraw.draw.Figure;
  */
 public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaTracker {
 
+    /**
+     * This tool draws a JavaFX {@code Rectangle} with style class
+     * "tool-rubberband".
+     */
+    public final static String STYLECLASS_TOOL_RUBBERBAND = "tool-rubberband";
+
     private static final long serialVersionUID = 1L;
     /**
-     * The rubberband. 
+     * The rubberband.
      */
     private Rectangle rubberband = new Rectangle();
 
@@ -62,13 +71,13 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
         // Add the rubberband to the node with absolute positioning
         node.getChildren().add(rubberband);
         rubberband.setVisible(false);
-        configureRubberband(rubberband);
+        initNode(rubberband);
     }
 
-    private void configureRubberband(Rectangle r) {
+    protected void initNode(Rectangle r) {
         r.setFill(null);
-        r.setStroke(Color.WHITE);
-        r.setBlendMode(BlendMode.DIFFERENCE);
+        r.setStroke(Color.BLACK);
+        rubberband.getStyleClass().add(STYLECLASS_TOOL_RUBBERBAND);
     }
 
     @Override
@@ -77,8 +86,8 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
         x = event.getX();
         y = event.getY();
         rubberband.setVisible(true);
-        rubberband.setX(x);
-        rubberband.setY(y);
+        rubberband.setX(round(x) - 0.5);
+        rubberband.setY(round(y) - 0.5);
         rubberband.setWidth(0);
         rubberband.setHeight(0);
     }
@@ -89,7 +98,7 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
 
         double w = x - event.getX();
         double h = y - event.getY();
-        List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h));
+        List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h),false);
         if (!event.isShiftDown()) {
             dv.selectionProperty().clear();
         }
@@ -101,10 +110,10 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
     public void trackMouseDragged(MouseEvent event, DrawingView dv) {
         double w = x - event.getX();
         double h = y - event.getY();
-        rubberband.setX(min(x - 0.5, event.getX()));
-        rubberband.setY(min(y - 0.5, event.getY()));
-        rubberband.setWidth(abs(w));
-        rubberband.setHeight(abs(h));
+        rubberband.setX(round(min(x, event.getX())) - 0.5);
+        rubberband.setY(round(min(y, event.getY())) - 0.5);
+        rubberband.setWidth(round(abs(w)));
+        rubberband.setHeight(round(abs(h)));
     }
 
 }
