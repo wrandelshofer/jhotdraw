@@ -29,7 +29,7 @@ public interface Converter<T> {
      * @param out The appendable
      * @throws java.io.IOException thrown by Appendable
      */
-    void toString(T value, Appendable out) throws IOException;
+    void toString(Appendable out, T value) throws IOException;
 
     /**
      * Converts a value to a String.
@@ -45,7 +45,7 @@ public interface Converter<T> {
     default String toString(T value) {
         StringBuilder out = new StringBuilder();
         try {
-            toString(value, out);
+            toString(out,value);
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -60,7 +60,7 @@ public interface Converter<T> {
      * <p>
      * This method does not change the state of the converter. 
      *
-     * @param buf A char buffer which holds the string. The char buffer must
+     * @param in A char buffer which holds the string. The char buffer must
      * be treated as read only! The position of the char buffer denotes
      * the beginning of the string when this method is invoked. After 
      * completion of this method, the position is set after the last consumed
@@ -72,7 +72,7 @@ public interface Converter<T> {
      * is undefined.
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
-    T fromString(CharBuffer buf) throws ParseException, IOException;
+    T fromString(CharBuffer in) throws ParseException, IOException;
     
     /**
      * Constructs a value from a String.
@@ -84,13 +84,13 @@ public interface Converter<T> {
      * Note: this is a convenience method. Implementing classes rarely need
      * to overwrite this method.
      *
-     * @param string The String.
+     * @param in The String.
      * @return The value. Nullable.
      *
      * @throws ParseException if conversion failed.
      */
-    default T fromString(CharSequence string) throws ParseException {
-        CharBuffer buf = CharBuffer.wrap(string);
+    default T fromString(CharSequence in) throws ParseException {
+        CharBuffer buf = CharBuffer.wrap(in);
         T value;
         try {
             value = fromString(buf);

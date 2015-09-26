@@ -13,6 +13,7 @@ import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.StringKey;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.SimpleKey;
 
 /**
  * Action.
@@ -44,14 +45,14 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * as {@code ImageView}.  This is typically used with
      * menus.
      */
-    public static final Key<Node> SMALL_ICON = new Key<>("SmallIcon",Node.class);
+    public static final Key<Node> SMALL_ICON = new SimpleKey<>("SmallIcon",Node.class);
 
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
      * accelerator for the action.
      */
-    public static final Key<KeyCombination> ACCELERATOR_KEY=new Key<>("AcceleratorKey",KeyCombination.class);
+    public static final Key<KeyCombination> ACCELERATOR_KEY=new SimpleKey<>("AcceleratorKey",KeyCombination.class);
     
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
@@ -59,7 +60,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @since 1.3
      */
-    public static final Key<KeyCombination> MNEMONIC_KEY=new Key<>("MnemonicKey",KeyCombination.class);
+    public static final Key<KeyCombination> MNEMONIC_KEY=new SimpleKey<>("MnemonicKey",KeyCombination.class);
 
     /**
      * The key used for storing a {@code Boolean} that corresponds
@@ -75,7 +76,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * as {@code ImageView}.  This is typically used by
      * buttons.
      */
-    public static final Key<Node> LARGE_ICON_KEY = new Key<>("SwingLargeIconKey",Node.class);
+    public static final Key<Node> LARGE_ICON_KEY = new SimpleKey<>("SwingLargeIconKey",Node.class);
 
     /** The localized name of the action for use in controls.
      * @return The name 

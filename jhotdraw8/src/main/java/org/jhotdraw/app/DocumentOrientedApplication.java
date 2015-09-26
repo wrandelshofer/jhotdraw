@@ -63,6 +63,7 @@ import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.app.action.file.SaveFileAsAction;
 import org.jhotdraw.binding.BindingUtil;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.gui.FileURIChooser;
 import org.jhotdraw.gui.URIChooser;
@@ -75,7 +76,7 @@ import org.jhotdraw.util.Resources;
  */
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
 
-    private final static Key<ChangeListener> FOCUS_LISTENER_KEY = new Key<>("focusListener", ChangeListener.class, null);
+    private final static Key<ChangeListener> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, null);
     private boolean isSystemMenuSupported;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();

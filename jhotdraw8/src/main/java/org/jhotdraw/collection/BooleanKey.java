@@ -10,7 +10,7 @@ package org.jhotdraw.collection;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BooleanKey extends Key<Boolean> {
+public class BooleanKey extends SimpleKey<Boolean> {
 
     public BooleanKey(String key) {
         super(key, Boolean.class);

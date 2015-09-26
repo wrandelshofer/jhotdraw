@@ -18,7 +18,7 @@ import java.util.Locale;
  *
  * <pre>
  *   <i>FormatType: one of</i>
- *           number date time choice
+ *           number date time choice word
  *
  *   <i>FormatStyle:</i>
  *           short
@@ -31,9 +31,9 @@ import java.util.Locale;
  *           <i>SubformatPattern</i>
  * </pre>
  * <p>
- * If the type is an empty String or null, then the {@code DefaultConverter}
- * is used. If the {@code DefaultConverter} is used, this factory can
- * only be used for one way conversion to a String but not from a String!
+ * If the type is an empty String or null, then the {@code DefaultConverter} is
+ * used. If the {@code DefaultConverter} is used, this factory can only be used
+ * for one way conversion to a String but not from a String!
  * </p>
  *
  * @author Werner Randelshofer
@@ -60,6 +60,8 @@ public class MessageFormatConverterFactory implements ConverterFactory {
             return new DefaultConverter();
         }
         switch (type) {
+            case "word":
+                return new WordConverter();
             case "number":
                 if (style == null || style.isEmpty()) {
                     return new ConverterFormatWrapper(NumberFormat.getInstance(locale));

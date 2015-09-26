@@ -1,0 +1,14 @@
+/* @(#)DrawingView.java
+ * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
+ */
+
+/**
+ * This CSS is used by {@code GrapherView} to style the drawing.
+ */
+
+* {
+    -jhotdraw-stroke-width: 10px;
+    -jhotdraw-stroke: red;
+    -jhotdraw-fill: yellow;
+}

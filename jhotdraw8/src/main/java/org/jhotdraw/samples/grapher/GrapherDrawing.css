@@ -8,6 +8,6 @@
  */
 
 * {
-    -fx-stroke: red;
-    -fx-fill: yellow;
+    -jhotdraw-stroke: red;
+    -jhotdraw-fill: yellow;
 }

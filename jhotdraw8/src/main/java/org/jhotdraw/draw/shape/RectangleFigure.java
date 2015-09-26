@@ -15,7 +15,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
@@ -27,10 +27,14 @@ import org.jhotdraw.draw.RenderContext;
  * @version $Id$
  */
 public class RectangleFigure extends AbstractShapeFigure {
+    /**
+     * The CSS type selector for this object is {@code "Rectangle"}.
+     */
+    public final static String TYPE_SELECTOR = "Rectangle";
 
-    public final static FigureKey<Rectangle2D> RECTANGLE = new FigureKey<>("rectangle", Rectangle2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT),new Rectangle2D(0, 0, 1, 1));
-    public final static FigureKey<Double> ARC_HEIGHT = new FigureKey<>("arcHeight",Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static FigureKey<Double> ARC_WIDTH = new FigureKey<>("arcWidth", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static SimpleFigureKey<Rectangle2D> RECTANGLE = new SimpleFigureKey<>("rectangle", Rectangle2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT),new Rectangle2D(0, 0, 1, 1));
+    public final static SimpleFigureKey<Double> ARC_HEIGHT = new SimpleFigureKey<>("arcHeight",Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static SimpleFigureKey<Double> ARC_WIDTH = new SimpleFigureKey<>("arcWidth", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT), 0.0);
 
     public RectangleFigure() {
         this(0, 0, 1, 1);
@@ -85,5 +89,10 @@ public class RectangleFigure extends AbstractShapeFigure {
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopRectangleConnector();
+    }
+    
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
     }
 }

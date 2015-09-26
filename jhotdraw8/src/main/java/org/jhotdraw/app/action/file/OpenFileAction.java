@@ -17,6 +17,7 @@ import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
 //import org.jhotdraw.util.prefs.PreferencesUtil;
@@ -31,7 +32,7 @@ import org.jhotdraw.net.URIUtil;
 public class OpenFileAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
-    public final static Key<URIChooser> OPEN_CHOOSER_KEY = new Key<>("openChooser", URIChooser.class);
+    public final static Key<URIChooser> OPEN_CHOOSER_KEY = new SimpleKey<>("openChooser", URIChooser.class);
     public static final String ID = "file.open";
     private boolean reuseEmptyViews = false;
 

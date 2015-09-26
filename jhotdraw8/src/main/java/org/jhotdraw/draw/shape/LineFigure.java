@@ -17,7 +17,7 @@ import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.handle.Handle;
@@ -32,8 +32,13 @@ import org.jhotdraw.draw.handle.PointHandle;
  */
 public class LineFigure extends AbstractShapeFigure {
 
-    public final static FigureKey<Point2D> START = new FigureKey<>("start", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
-    public final static FigureKey<Point2D> END = new FigureKey<>("end", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
+    /**
+     * The CSS type selector for this object is {@code "Line"}.
+     */
+    public final static String TYPE_SELECTOR = "Line";
+
+    public final static SimpleFigureKey<Point2D> START = new SimpleFigureKey<>("start", Point2D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static SimpleFigureKey<Point2D> END = new SimpleFigureKey<>("end", Point2D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
 
     public LineFigure() {
         this(0, 0, 1, 1);
@@ -89,18 +94,25 @@ public class LineFigure extends AbstractShapeFigure {
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
         lineNode.applyCss();
-        }
+    }
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return null;
     }
+
     @Override
     public List<Handle> createHandles(int detailLevel, DrawingView dv) {
-        ArrayList<Handle> list=new ArrayList<>();
+        ArrayList<Handle> list = new ArrayList<>();
         list.add(new LineWireframeHandle(this, dv, Handle.STYLECLASS_HANDLE_OUTLINE));
         list.add(new PointHandle(this, dv, Handle.STYLECLASS_HANDLE_POINT, START));
         list.add(new PointHandle(this, dv, Handle.STYLECLASS_HANDLE_POINT, END));
         return list;
     }
+
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
+    }
+
 }

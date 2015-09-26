@@ -219,7 +219,7 @@ public class NumberConverter implements Converter<Number> {
     }
 
     @Override
-    public void toString(Number value, Appendable buf) throws IOException {
+    public void toString(Appendable buf, Number value) throws IOException {
         if (value == null && allowsNullValue) {
             return;
         }

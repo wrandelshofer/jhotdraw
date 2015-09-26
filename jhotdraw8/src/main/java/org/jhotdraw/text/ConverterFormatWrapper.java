@@ -37,12 +37,22 @@ public class ConverterFormatWrapper implements Converter<Object> {
     }
 
     @Override
-    public void toString(Object value, Appendable out) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void toString(Appendable out, Object value) {
+        throw new UnsupportedOperationException("Not supported yet."+format); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object fromString(CharBuffer buf) throws ParseException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int pos=buf.position();
+        String str=buf.toString();
+        ParsePosition pp=new ParsePosition(0);
+        Object value=format.parseObject(str,pp);
+        if (pp.getErrorIndex()!=-1) {
+            buf.position(pos+pp.getErrorIndex());
+            throw new ParseException("Parse error",buf.position());
+        }else{
+            buf.position(pos+pp.getIndex());
+        }
+        return value;
     }
 }

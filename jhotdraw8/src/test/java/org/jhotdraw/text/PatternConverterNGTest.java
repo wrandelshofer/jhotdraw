@@ -5,24 +5,9 @@
  */
 package org.jhotdraw.text;
 
-import static java.awt.geom.PathIterator.SEG_CLOSE;
-import static java.awt.geom.PathIterator.SEG_CUBICTO;
-import static java.awt.geom.PathIterator.SEG_LINETO;
-import static java.awt.geom.PathIterator.SEG_MOVETO;
-import static java.awt.geom.PathIterator.SEG_QUADTO;
 import java.io.IOException;
-import java.nio.CharBuffer;
-import java.text.ChoiceFormat;
-import java.text.MessageFormat;
 import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Arrays;
-import java.util.Locale;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -100,9 +85,11 @@ public class PatternConverterNGTest {
             {"left brace '{'", new Object[]{}, "left brace {"},
             {"right brace '}'", new Object[]{}, "right brace }"},
             {"quote ''", new Object[]{}, "quote '"},
-            /*{"{0} world", new Object[]{"hello"}, "hello world"},
-            {"{0} {1}", new Object[]{"hello","world"}, "hello world"},
-            {"{1} {0}", new Object[]{"world","hello"}, "hello world"},*/
+            {"{0,word} world", new Object[]{"hello"}, "hello world"},
+            {"{0,word} {1}", new Object[]{"hello","world"}, "hello world"},
+            {"{1,word} {0,word}", new Object[]{"world","hello"}, "hello world"},
+            {"{0,number}{1,choice,0#|1#px}", new Object[]{0.5,0.0}, "0.5"},
+            {"{0,number}{1,choice,0#|1#px}", new Object[]{0.5,1.0}, "0.5px"},
         };
 
     }

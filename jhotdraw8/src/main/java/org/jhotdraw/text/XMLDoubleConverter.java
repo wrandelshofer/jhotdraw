@@ -213,7 +213,7 @@ public class XMLDoubleConverter implements Converter<Double> {
     }
 
     @Override
-    public void toString(Double value, Appendable buf) throws IOException {
+    public void toString(Appendable buf, Double value) throws IOException {
         if (value == null && allowsNullValue) {
             return;
         }
