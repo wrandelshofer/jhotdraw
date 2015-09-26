@@ -88,7 +88,8 @@ public class LineFigure extends AbstractShapeFigure {
         Point2D end = get(END);
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
-    }
+        lineNode.applyCss();
+        }
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {

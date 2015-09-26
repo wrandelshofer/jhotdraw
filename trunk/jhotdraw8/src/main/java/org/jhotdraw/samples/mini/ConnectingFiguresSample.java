@@ -67,6 +67,7 @@ public class ConnectingFiguresSample extends Application {
         vertex2Group.add(vertex2);
         vertex2Group.add(vertex2b);
 
+        /*
                   edge23.set(Figure.ROTATE, 10.0);
 
         
@@ -76,7 +77,7 @@ public class ConnectingFiguresSample extends Application {
           
           vertex3.set(Figure.ROTATE, 20.0);
           //vertex3.set(Figure.ROTATION_AXIS, new Point3D(0,1.0,0));
-          
+          */
          
 
         Layer layer = new SimpleLayer();

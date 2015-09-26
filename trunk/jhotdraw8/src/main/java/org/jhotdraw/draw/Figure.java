@@ -44,15 +44,14 @@ import org.jhotdraw.draw.handle.BoundsInParentHandle;
  * A figure can render its graphical representation into a JavaFX {@code Node}.
  * </p>
  * <p>
- * A figure can be composed of other figures in a tree structure.
- * The composition is implemented with the {@code children} and the
- * {@code parent} properties. The composition can be restricted to specific
- * child and parent types using the type parameters {@code <Figure>} and
- * {@code <F>}.</p>
+ * A figure can be composed of other figures in a tree structure. The
+ * composition is implemented with the {@code children} and the {@code parent}
+ * properties. The composition can be restricted to specific child and parent
+ * types using the type parameters {@code <Figure>} and {@code <F>}.</p>
  * <p>
- * Some figures can be connected to other figures.
- * All figures which are connected with this figure must maintain an entry in
- * the {@code connections} property of this figure.
+ * Some figures can be connected to other figures. All figures which are
+ * connected with this figure must maintain an entry in the {@code connections}
+ * property of this figure.
  * </p>
  * <p>
  * The state of a figure is described by its property map. The property map
@@ -62,14 +61,13 @@ import org.jhotdraw.draw.handle.BoundsInParentHandle;
  * how the value affects the graphical representation of the figure.</p>
  * <p>
  * The state of a figure may depend on the state of other figures. The
- * dependencies may be cyclic due to connections.
- * A figure provides a method {@code layout} which updates the state of the
- * figure and of its descendants in the tree structure, but not of connected
- * figures.
+ * dependencies may be cyclic due to connections. A figure provides a method
+ * {@code layout} which updates the state of the figure and of its descendants
+ * in the tree structure, but not of connected figures.
  * </p>
  * <p>
- * A figure can produce {@code Handle}s which allow to graphically change
- * the state of the figure.
+ * A figure can produce {@code Handle}s which allow to graphically change the
+ * state of the figure.
  *
  * @author Werner Randelshofer @version $Id$
  */
@@ -128,20 +126,48 @@ public interface Figure extends PropertyBean {
      */
     public static FigureKey<Double> SCALE_Z = new FigureKey<>("scaleZ", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
-     * Defines the translation on the x axis
-     * about the center of the figure. Default value: {@code 0}.
+     * Defines the translation on the x axis about the center of the figure.
+     * Default value: {@code 0}.
      */
     public static FigureKey<Double> TRANSLATE_X = new FigureKey<>("translateX", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
-     * Defines the translation on the y axis
-     * about the center of the figure. Default value: {@code 0}.
+     * Defines the translation on the y axis about the center of the figure.
+     * Default value: {@code 0}.
      */
     public static FigureKey<Double> TRANSLATE_Y = new FigureKey<>("translateY", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
-     * Defines the translation on the z axis
-     * about the center of the figure. Default value: {@code 0}.
+     * Defines the translation on the z axis about the center of the figure.
+     * Default value: {@code 0}.
      */
     public static FigureKey<Double> TRANSLATE_Z = new FigureKey<>("translateZ", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    /**
+     * Defines the id of the figure. 
+     * The id is used for styling the figure with CSS. 
+     * 
+     * Default value: {@code null}.
+     */
+    public static FigureKey<String> ID = new FigureKey<>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT), null);
+    /**
+     * Defines the style class of the figure. 
+     * The style class is used for styling the figure with CSS. 
+     * 
+     * Default value: {@code null}.
+     */
+    public static FigureKey<ObservableList<String>> STYLE_CLASS = new FigureKey<>("styleClass", ObservableList.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
+    /**
+     * Defines the type selector of the figure. 
+     * The type selector is used for styling the figure with CSS. 
+     * 
+     * Default value: {@code null}.
+     */
+    public static FigureKey<String> TYPE_SELECTOR = new FigureKey<>("typeSelector", List.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
+    /**
+     * Defines the style of the figure. 
+     * The style is used for styling the figure with CSS. 
+     * 
+     * Default value: {@code null}.
+     */
+    public static FigureKey<String> STYLE = new FigureKey<>("style", List.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
 
     // ----
     // property names
@@ -169,12 +195,11 @@ public interface Figure extends PropertyBean {
      * event.
      * <p>
      * If a child is added to this figure, the child must be removed from its
-     * former parent. This figure must set itself set as the parent of the
-     * child immediately after the figure has been added.</p>
+     * former parent. This figure must set itself set as the parent of the child
+     * immediately after the figure has been added.</p>
      * <p>
      * If a child is removed from this figure, this figure must set parent to
-     * null
-     * immediately before the child is removed.</p>
+     * null immediately before the child is removed.</p>
      * <p>
      * Note that this method returns a {@code ReadOnlyListProperty} and not just
      * an {@code ObservableList}. {@code ListChangeListener}s can get the
@@ -196,8 +221,8 @@ public interface Figure extends PropertyBean {
      * By convention this set is maintained by the connected figures.
      * <p>
      * For example, to remove a {@code ConnectionFigure} from this set set its
-     * corresponding
-     * {@code START_FIGURE} or {@code END_FIGURE} property to null.
+     * corresponding {@code START_FIGURE} or {@code END_FIGURE} property to
+     * null.
      *
      * @return the connections property, with {@code getBean()} returning this
      * figure, and {@code getName()} returning {@code CONNECTIONS_PROPERTY}.
@@ -210,12 +235,12 @@ public interface Figure extends PropertyBean {
      * If this figure has not been added as a child to another figure, then this
      * variable will be null.
      * </p>
-     * By convention the parent is set exclusively by a composite figure on
-     * its child figures.
-     * The composite figure sets parent to itself on a child immediately
-     * after the child figure has been added to the composite figure.
-     * The composite figure sets parent to {@code null} on a child immediately
-     * after the child figure has been removed from the composite figure.
+     * By convention the parent is set exclusively by a composite figure on its
+     * child figures. The composite figure sets parent to itself on a child
+     * immediately after the child figure has been added to the composite
+     * figure. The composite figure sets parent to {@code null} on a child
+     * immediately after the child figure has been removed from the composite
+     * figure.
      *
      * @return the parent property, with {@code getBean()} returning this
      * figure, and {@code getName()} returning {@code PARENT_PROPERTY}.
@@ -228,39 +253,39 @@ public interface Figure extends PropertyBean {
     /**
      * The bounds that should be used for layout calculations for this figure.
      * <p>
-     * The bounds are given in the untransformed local coordinate
-     * space of the figure.
+     * The bounds are given in the untransformed local coordinate space of the
+     * figure.
      *
      * @return the layout bounds
      */
     public Bounds getBoundsInLocal();
 
     default public Bounds getBoundsInParent() {
-        Bounds b=getBoundsInLocal();
-        double[] points=new double[8];
-        points[0]=b.getMinX();
-        points[1]=b.getMinY();
-        points[2]=b.getMaxX();
-        points[3]=b.getMinY();
-        points[4]=b.getMaxX();
-        points[5]=b.getMaxY();
-        points[6]=b.getMinX();
-        points[7]=b.getMaxY();
-        
+        Bounds b = getBoundsInLocal();
+        double[] points = new double[8];
+        points[0] = b.getMinX();
+        points[1] = b.getMinY();
+        points[2] = b.getMaxX();
+        points[3] = b.getMinY();
+        points[4] = b.getMaxX();
+        points[5] = b.getMaxY();
+        points[6] = b.getMinX();
+        points[7] = b.getMaxY();
+
         Transform t = getLocalToParent();
         t.transform2DPoints(points, 0, points, 0, 4);
-        
-        double minX=Double.POSITIVE_INFINITY;
-        double maxX=Double.NEGATIVE_INFINITY;
-        double minY=Double.POSITIVE_INFINITY;
-        double maxY=Double.NEGATIVE_INFINITY;
-        for (int i=0;i<points.length;i+=2) {
-            minX=min(minX,points[i]);
-            maxX=max(maxX,points[i]);
-            minY=min(minY,points[i+1]);
-            maxY=max(maxY,points[i+1]);
+
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        for (int i = 0; i < points.length; i += 2) {
+            minX = min(minX, points[i]);
+            maxX = max(maxX, points[i]);
+            minY = min(minY, points[i + 1]);
+            maxY = max(maxY, points[i + 1]);
         }
-        return new BoundingBox(minX,minY,maxX-minX,maxY-minY);
+        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
     default public Bounds getBoundsInDrawing() {
@@ -340,8 +365,8 @@ public interface Figure extends PropertyBean {
      * existing instance may cause undesired side effects on other
      * {@code RenderContext}s.
      * <p>
-     * Note that by convention this method <b>may only</b> be invoked by
-     * a {@code RenderContext} object.
+     * Note that by convention this method <b>may only</b> be invoked by a
+     * {@code RenderContext} object.
      *
      * @param renderer the drawing view which will use the node
      * @return the newly created node
@@ -370,13 +395,11 @@ public interface Figure extends PropertyBean {
      * the figure.
      * <p>
      * Note that the figure <b>must</b> retrieve the JavaFX node from other
-     * figures
-     * from the render context by invoking {@code rc.getNode(child)} rather than
-     * creating new nodes using {@code child.createNode(rc)}.
-     * This convention allows to implement a cache in the render
-     * context for the Java FX node. Also, render contexts like
-     * {@code DrawingView} need to associate input events on Java FX nodes
-     * to the corresponding figure.
+     * figures from the render context by invoking {@code rc.getNode(child)}
+     * rather than creating new nodes using {@code child.createNode(rc)}. This
+     * convention allows to implement a cache in the render context for the Java
+     * FX node. Also, render contexts like {@code DrawingView} need to associate
+     * input events on Java FX nodes to the corresponding figure.
      *
      * @param renderer the drawing view
      * @param node the node which was created with {@link #createNode}
@@ -403,14 +426,15 @@ public interface Figure extends PropertyBean {
      * @return true if the user may select the figure
      */
     boolean isSelectable();
-    /** Whether the figure is decomposable. 
-     * 
+
+    /**
+     * Whether the figure is decomposable.
+     *
      * @return true if the figure is decomposable
      */
     default boolean isDecomposable() {
         return true;
     }
-
 
     /**
      * Creates handles of the specified level and for the specified drawing
@@ -436,15 +460,16 @@ public interface Figure extends PropertyBean {
      *
      * @param p the location of the connector.
      * @param prototype The prototype used to create a connection or null if
-     * unknown. This allows for specific connectors for different
-     * connection figures.
-     * @return Returns the connector. Returns null if there is no connector
-     * at the given location.
+     * unknown. This allows for specific connectors for different connection
+     * figures.
+     * @return Returns the connector. Returns null if there is no connector at
+     * the given location.
      */
     Connector findConnector(Point2D p, Figure prototype);
 
-    /** Updates the state of this figure and of its descendant figures.
-     * Does not update connection figures.
+    /**
+     * Updates the state of this figure and of its descendant figures. Does not
+     * update connection figures.
      */
     void layout();
     // ----
@@ -519,9 +544,11 @@ public interface Figure extends PropertyBean {
         return parentProperty().get();
     }
 
-    /** Returns the root.
+    /**
+     * Returns the root.
      *
-     * @return the root */
+     * @return the root
+     */
     default Figure getRoot() {
         Figure parent = this;
         while (parent.getParent() != null) {
@@ -530,9 +557,11 @@ public interface Figure extends PropertyBean {
         return parent;
     }
 
-    /** Returns the nearest parent Drawing.
+    /**
+     * Returns the nearest parent Drawing.
      *
-     * @return the drawing or null if no ancestor is a drawing. */
+     * @return the drawing or null if no ancestor is a drawing.
+     */
     default Drawing getDrawing() {
         Figure parent = this;
         while (parent != null && !(parent instanceof Drawing)) {
@@ -541,8 +570,9 @@ public interface Figure extends PropertyBean {
         return (Drawing) parent;
     }
 
-    /** Returns an iterable which can iterate through this figure and all
-     * its descendants in preorder sequence.
+    /**
+     * Returns an iterable which can iterate through this figure and all its
+     * descendants in preorder sequence.
      *
      * @return the iterable
      */
@@ -575,6 +605,10 @@ public interface Figure extends PropertyBean {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyFigureProperties(Node node) {
+        node.setId(get(ID));
+        node.setStyle(get(STYLE));
+        node.setId(get(ID));
+        node.setId(get(ID));
         node.setBlendMode(get(BLEND_MODE));
         node.setEffect(get(EFFECT));
         node.setOpacity(get(OPACITY));
@@ -660,31 +694,36 @@ public interface Figure extends PropertyBean {
         }
     }
 
-    /** Returns the center of the figure in the local coordinates of the figure.
-     * @return The center of the figure */
+    /**
+     * Returns the center of the figure in the local coordinates of the figure.
+     *
+     * @return The center of the figure
+     */
     default Point2D getCenterInLocal() {
         Bounds b = getBoundsInLocal();
         return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
                 + b.getMaxY()) * 0.5);
     }
 
-    /** Returns the transformation from parent coordinates into local
+    /**
+     * Returns the transformation from parent coordinates into local
      * coordinates.
      *
      * @return the transformation
      */
     default Transform getParentToLocal() {
         Point2D center = getCenterInLocal();
-        
+
         Transform translate = Transform.translate(-get(TRANSLATE_X), -get(TRANSLATE_Y));
-        Transform scale = Transform.scale(1.0/get(SCALE_X), 1.0/get(SCALE_Y), center.getX(), center.getY());
+        Transform scale = Transform.scale(1.0 / get(SCALE_X), 1.0 / get(SCALE_Y), center.getX(), center.getY());
         Transform rotate = Transform.rotate(-get(ROTATE), center.getX(), center.getY());
-        
+
         Transform t = scale.createConcatenation(rotate).createConcatenation(translate);
         return t;
     }
 
-    /** Returns the transformation from local coordinates into parent
+    /**
+     * Returns the transformation from local coordinates into parent
      * coordinates.
      *
      * @return the transformation
@@ -694,12 +733,13 @@ public interface Figure extends PropertyBean {
         Transform translate = Transform.translate(get(TRANSLATE_X), get(TRANSLATE_Y));
         Transform scale = Transform.scale(get(SCALE_X), get(SCALE_Y), center.getX(), center.getY());
         Transform rotate = Transform.rotate(get(ROTATE), center.getX(), center.getY());
-        
+
         Transform t = translate.createConcatenation(rotate).createConcatenation(scale);
         return t;
     }
 
-    /** Returns the transformation from drawing coordinates into local
+    /**
+     * Returns the transformation from drawing coordinates into local
      * coordinates.
      *
      * @return the transformation
@@ -709,7 +749,8 @@ public interface Figure extends PropertyBean {
         return getParent() == null ? t : t.createConcatenation(getParent().getDrawingToLocal());
     }
 
-    /** Returns the transformation from local coordinates into drawing
+    /**
+     * Returns the transformation from local coordinates into drawing
      * coordinates.
      *
      * @return the transformation
@@ -718,7 +759,9 @@ public interface Figure extends PropertyBean {
         Transform t = getLocalToParent();
         return getParent() == null ? t : getParent().getLocalToDrawing().createConcatenation(t);
     }
-    /** Returns the transformation from parent coordinates into drawing
+
+    /**
+     * Returns the transformation from parent coordinates into drawing
      * coordinates.
      *
      * @return the transformation
@@ -728,8 +771,8 @@ public interface Figure extends PropertyBean {
         return getParent() == null ? t : getParent().getLocalToDrawing().createConcatenation(t);
     }
 
-
-    /** Transforms the specified point from drawing coordinates into local
+    /**
+     * Transforms the specified point from drawing coordinates into local
      * coordinates.
      *
      * @param p point in drawing coordinates
@@ -739,7 +782,8 @@ public interface Figure extends PropertyBean {
         return getDrawingToLocal().transform(p);
     }
 
-    /** Transforms the specified point from local coordinates into drawing
+    /**
+     * Transforms the specified point from local coordinates into drawing
      * coordinates.
      *
      * @param p point in drawing coordinates

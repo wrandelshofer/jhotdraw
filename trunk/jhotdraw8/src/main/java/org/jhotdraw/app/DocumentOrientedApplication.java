@@ -118,7 +118,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             }
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
         }
-        createView(v -> add(v));
+        createView(v ->{ add(v);v.addDisabler(this);v.clear(e->v.removeDisabler(this));});
     }
 
     @Override

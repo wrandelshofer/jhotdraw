@@ -58,6 +58,8 @@ import org.jhotdraw.event.Listener;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleEvent;
 import static java.lang.Math.*;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -177,6 +179,7 @@ public class SimpleDrawingView implements DrawingView {
     }
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
+    private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
 
     /**
      * This is just a wrapper around the focusedProperty of the JavaFX Node
@@ -283,6 +286,11 @@ public class SimpleDrawingView implements DrawingView {
         toolPane.resize(w, h);
         toolPane.layout();
         invalidateDrawingViewTransforms();
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<Drawing> drawingProperty() {
+       return drawing.getReadOnlyProperty();
     }
 
     private class HandleEventHandler implements Listener<HandleEvent> {
@@ -421,11 +429,13 @@ public class SimpleDrawingView implements DrawingView {
             activeLayer.set(null);
         }
         Drawing d = getDrawingModel().getRoot();
+        drawing.set(d);
         if (d != null) {
             boundsProperty = Drawing.BOUNDS.propertyAt(d.properties());
             boundsProperty.addListener(preferredSizeHandler);
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
+        updatePreferredSize();
             updateTreeNodes(d);
             repaint();
         }
@@ -455,6 +465,7 @@ public class SimpleDrawingView implements DrawingView {
     private void handleNewDrawingModel(DrawingModel oldValue, DrawingModel newValue) {
         if (oldValue != null) {
             oldValue.removeDrawingModelListener(modelHandler);
+            drawing.setValue(null);
         }
         if (newValue != null) {
             newValue.addDrawingModelListener(modelHandler);

@@ -87,6 +87,7 @@ public class EllipseFigure extends AbstractShapeFigure {
         n.setCenterY(c.getY());
         n.setRadiusX(get(RADIUS_X));
         n.setRadiusY(get(RADIUS_Y));
+        n.applyCss();
     }
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {

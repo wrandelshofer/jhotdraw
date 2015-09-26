@@ -5,6 +5,8 @@
 package org.jhotdraw.draw;
 
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
@@ -57,8 +59,10 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
     public Bounds getBoundsInLocal() {
         Rectangle2D bounds = get(BOUNDS);
         return new BoundingBox(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
-        
-    }    @Override
+
+    }
+
+    @Override
     public void reshape(Transform transform) {
         for (Figure child : childrenProperty()) {
             child.reshape(transform);
