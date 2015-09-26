@@ -11,7 +11,7 @@ package org.jhotdraw.text;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class XMLConverterFactory implements ConverterFactory {
+public class CSSConverterFactory implements ConverterFactory {
 
     @Override
     public Converter<?> apply(String type, String style) {
