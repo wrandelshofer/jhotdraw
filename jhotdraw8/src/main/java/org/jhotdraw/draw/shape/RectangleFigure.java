@@ -80,6 +80,7 @@ public class RectangleFigure extends AbstractShapeFigure {
         rectangleNode.setHeight(r.getHeight());
         rectangleNode.setArcWidth(get(ARC_WIDTH));
         rectangleNode.setArcHeight(get(ARC_HEIGHT));
+        rectangleNode.applyCss();
     }
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {

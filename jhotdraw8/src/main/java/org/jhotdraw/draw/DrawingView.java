@@ -75,6 +75,10 @@ public interface DrawingView extends RenderContext {
      * The name of the active layer property.
      */
     public final static String ACTIVE_LAYER_PROPERTY = "activeLayer";
+    /**
+     * The name of the drawing property.
+     */
+    public final static String DRAWING_PROPERTY = "drawing";
 
     // ---
     // properties
@@ -86,6 +90,13 @@ public interface DrawingView extends RenderContext {
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
     NonnullProperty<DrawingModel> drawingModelProperty();
+    /**
+     * The drawing model.
+     *
+     * @return the drawing model property, with {@code getBean()} returning this
+     * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
+     */
+    ReadOnlyObjectProperty<Drawing> drawingProperty();
 
     /**
      * The active layer of the drawing.

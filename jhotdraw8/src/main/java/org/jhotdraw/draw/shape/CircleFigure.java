@@ -80,6 +80,7 @@ public class CircleFigure extends AbstractShapeFigure {
         circleNode.setCenterX(c.getX());
         circleNode.setCenterY(c.getY());
         circleNode.setRadius(get(RADIUS));
+        circleNode.applyCss();
     }
 
     @Override

@@ -19,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
@@ -154,7 +155,9 @@ public class GrapherView extends AbstractView {
 
     @Override
     public void clear(EventHandler<TaskCompletionEvent> callback) {
-        drawingView.setDrawing(new SimpleDrawing());
+        Drawing d = new SimpleDrawing();
+        d.set(Drawing.STYLESHEET, GrapherView.class.getResource("GrapherDrawing.css"));
+        drawingView.setDrawing(d);
         callback.handle(new TaskCompletionEvent());
     }
 

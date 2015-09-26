@@ -23,11 +23,13 @@ import org.jhotdraw.draw.RenderContext;
 
 /**
  * TextFigure.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class TextFigure extends AbstractShapeFigure implements TextHolderFigure {
-     public final static FigureKey<Point2D> ORIGIN = new FigureKey<>("origin", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
+
+    public final static FigureKey<Point2D> ORIGIN = new FigureKey<>("origin", Point2D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
 
     private Text textNode;
 
@@ -39,7 +41,7 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
         this(position.getX(), position.getY(), text);
     }
 
-    public TextFigure(double x, double y,String text) {
+    public TextFigure(double x, double y, String text) {
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
     }
@@ -64,7 +66,7 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(ORIGIN,new Point2D(x,y));
+        set(ORIGIN, new Point2D(x, y));
     }
 
     @Override
@@ -80,7 +82,9 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
         tn.setY(get(ORIGIN).getY());
         tn.setBoundsType(TextBoundsType.VISUAL);
         updateTextProperties(tn);
+        tn.applyCss();
     }
+
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopRectangleConnector();
