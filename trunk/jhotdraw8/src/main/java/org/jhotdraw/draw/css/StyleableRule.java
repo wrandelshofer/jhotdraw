@@ -26,12 +26,12 @@ import org.w3c.dom.Element;
  * <li><code>.name</code> matches the value of the attribute "class".</li>
  * <li><code>#name</code> matches the value of the attribute "id".</li>
  * </ul>
- * This class supports net.n3.nanoxml as well as org.w3c.dom.
+ * XXX should be an inner class of StyleableStyleManager.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StyleableRule {
+class StyleableRule {
 
     private String selector;
 
@@ -135,11 +135,12 @@ public class StyleableRule {
                 StyleableProperty styleableProperty = meta.getStyleableProperty(elem);
                 PropertyValue pv = entry.getValue();
                 if (pv.convertedValue == null) {
-                StyleConverter<String, Object> converter = (StyleConverter<String, Object>)meta.getConverter();
-                ParsedValueImpl<String,Object> parsedValue=new ParsedValueImpl<>(pv.unparsedValue,null);
+                    // only convert once and then foolishly assume no other object will request a different conversion
+                    StyleConverter<String, Object> converter = (StyleConverter<String, Object>) meta.getConverter();
+                    ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(pv.unparsedValue, null);
                     pv.convertedValue = converter.convert(parsedValue, null);
                 }
-                System.out.println("StyleableRule. implement " + entry.getKey() + ":" + pv.unparsedValue + " c:" + pv.convertedValue);
+//                System.out.println("StyleableRule. implement " + entry.getKey() + ":" + pv.unparsedValue + " c:" + pv.convertedValue);
                 styleableProperty.applyStyle(StyleOrigin.AUTHOR, pv.convertedValue);
 
             }

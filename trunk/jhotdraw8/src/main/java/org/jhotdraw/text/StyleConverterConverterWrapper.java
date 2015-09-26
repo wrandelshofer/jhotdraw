@@ -30,6 +30,7 @@ public class StyleConverterConverterWrapper<T> extends StyleConverter<String,T>{
             return converter.fromString(value.getValue());
         } catch (ParseException ex) {
             System.err.println("StyleConverterConverterWrapper. Warning could not convert "+value+" with "+converter);
+            ex.printStackTrace();
             return null;
         }
     }

@@ -22,6 +22,7 @@ import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
@@ -75,8 +76,15 @@ public class CssSample extends Application {
         layer.add(edge3Null);
         layer.add(edgeNullNull);
         
+System.out.println("vertex.stroke="+vertex1.getStyled(AbstractShapeFigure.STROKE));        
+System.out.println("vertex.strokeWidth="+vertex1.getStyled(AbstractShapeFigure.STROKE_WIDTH));        
+System.out.println("vertex.fill="+vertex1.getStyled(AbstractShapeFigure.FILL));        
+        drawing.layout();
         drawing.set(Drawing.STYLESHEET, CssSample.class.getResource("CssSample.css"));
         drawing.applyCss();
+System.out.println("vertex.stroke="+vertex1.getStyled(AbstractShapeFigure.STROKE));        
+System.out.println("vertex.strokeWidth="+vertex1.getStyled(AbstractShapeFigure.STROKE_WIDTH));        
+System.out.println("vertex.fill="+vertex1.getStyled(AbstractShapeFigure.FILL));        
         drawing.layout();
 
         DrawingView drawingView = new SimpleDrawingView();

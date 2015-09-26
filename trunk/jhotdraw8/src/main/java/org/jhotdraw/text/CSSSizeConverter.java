@@ -12,10 +12,17 @@ import javafx.geometry.Point2D;
 
 /**
  * CSSSizeConverter.
+ * <p>
+ * Parses the following EBNF:
+ * </p>
+ * <pre>
+ * Size := Double, ("px"|"mm"|"cm"|in"|"pt"|"pc"]"em"|"ex") ;
+ * </pre>
  * @author Werner Randelshofer
  */
 public class CSSSizeConverter implements Converter<Double> {
-   private final PatternConverter formatter = new PatternConverter("{0,number}{1,choice,#0|}", new XMLConverterFactory());
+   private final PatternConverter formatter = new PatternConverter("{0,number}{1,choice,0#{2,word}|1#}", new CSSConverterFactory());
+
 
     @Override
     public void toString(Appendable out, Double value) throws IOException {

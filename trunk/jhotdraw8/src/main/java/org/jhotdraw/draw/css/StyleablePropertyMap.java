@@ -186,16 +186,17 @@ public class StyleablePropertyMap {
         } else {
             switch (origin) {
                 case INLINE:
-                    output.put(key, inline.getValue());
+                    output.put(key, inline.get(key));
                     break;
                 case AUTHOR:
-                    output.put(key, author.getValue());
+System.out.println(this+" updating output k:"+key+" v:"+author.get(key));                    
+                    output.put(key, author.get(key));
                     break;
                 case USER:
-                    output.put(key, user.getValue());
+                    output.put(key, user.get(key));
                     break;
                 case USER_AGENT:
-                    output.put(key, userAgent.getValue());
+                    output.put(key, userAgent.get(key));
                     break;
                 default:
                     throw new InternalError("unknown enum value " + origin);

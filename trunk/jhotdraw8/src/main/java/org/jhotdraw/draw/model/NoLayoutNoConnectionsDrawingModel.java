@@ -78,5 +78,9 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
         f.layout();
         // no event fired! fire(DrawingModelEvent.subtreeNodesInvalidated(this,f));
     }
-
+    @Override
+    public void applyCss(Figure figure) {
+        figure.applyCss();
+        fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
+    }
 }

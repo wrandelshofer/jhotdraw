@@ -15,8 +15,8 @@ import org.jhotdraw.draw.FigureKey;
 import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
- * This drawing model assumes that the drawing contains no figures which
- * perform layouts and no connections between figures.
+ * This drawing model assumes that the drawing contains no figures which perform
+ * layouts and no connections between figures.
  *
  *
  * @author Werner Randelshofer
@@ -53,19 +53,20 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
     @Override
     public <T> void set(Figure figure, Key<T> key, T newValue) {
         T oldValue = figure.set(key, newValue);
-        if (oldValue!=newValue) {
-        if (key instanceof FigureKey) {
-            FigureKey<T> fk = (FigureKey<T>) key;
-            DirtyMask dm = fk.getDirtyMask();
-            if (dm.containsOneOf(DirtyBits.NODE)) {
-                fire(DrawingModelEvent.nodeInvalidated(this, figure));
-            }
-            if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
-                for (Figure c : figure.connections()) {
-                    fire(DrawingModelEvent.layoutInvalidated(this, figure));
+        if (oldValue != newValue) {
+            if (key instanceof FigureKey) {
+                FigureKey<T> fk = (FigureKey<T>) key;
+                DirtyMask dm = fk.getDirtyMask();
+                if (dm.containsOneOf(DirtyBits.NODE)) {
+                    fire(DrawingModelEvent.nodeInvalidated(this, figure));
+                }
+                if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
+                    for (Figure c : figure.connections()) {
+                        fire(DrawingModelEvent.layoutInvalidated(this, figure));
+                    }
                 }
             }
-        }}
+        }
     }
 
     @Override
@@ -87,12 +88,28 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
             for (Figure c : f.connections()) {
                 fire(DrawingModelEvent.layoutInvalidated(this, c));
             }
-        }    }
-
-    @Override
-    public void layout(Figure f) {
-        f.layout();
-        fire(DrawingModelEvent.subtreeNodesInvalidated(this, f));
+        }
     }
 
+    @Override
+    public void layout(Figure figure) {
+        figure.layout();
+        fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
+        for (Figure f : figure.preorderIterable()) {
+            for (Figure c : f.connections()) {
+                fire(DrawingModelEvent.layoutInvalidated(this, c));
+            }
+        }
+    }
+
+    @Override
+    public void applyCss(Figure figure) {
+        figure.applyCss();
+        fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
+        for (Figure f : figure.preorderIterable()) {
+            for (Figure c : f.connections()) {
+                fire(DrawingModelEvent.layoutInvalidated(this, c));
+            }
+        }
+    }
 }

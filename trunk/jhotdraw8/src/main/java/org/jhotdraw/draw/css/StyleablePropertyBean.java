@@ -10,8 +10,16 @@ import org.jhotdraw.collection.Key;
 
 /**
  * StyleablePropertyBean.
+ *
  * @author Werner Randelshofer
  */
 public interface StyleablePropertyBean extends PropertyBean {
+
     <T> StyleableProperty<T> getStyleableProperty(Key<T> key);
+
+    /**
+     * returns the styled value.
+     */
+    public <T> T getStyled(Key<T> key);
+
 }
