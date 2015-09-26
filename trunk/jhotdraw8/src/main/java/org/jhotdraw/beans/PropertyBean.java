@@ -55,6 +55,9 @@ public interface PropertyBean  {
      */
     ReadOnlyMapProperty<Key<?>, Object> properties();
 
+    // ---
+    // convenience methods
+    // ---
     /**
      * Sets a property value.
      *

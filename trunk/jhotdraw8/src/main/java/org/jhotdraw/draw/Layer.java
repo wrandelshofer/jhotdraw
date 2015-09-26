@@ -16,9 +16,18 @@ package org.jhotdraw.draw;
  * @version $Id$
  */
 public interface Layer extends Figure {
+    /**
+     * The CSS type selector for a layer figure is {@code "layer"}.
+     */
+    public final static String TYPE_SELECTOR = "layer";
+    
     /** Layer figures always return false for isSelectable. */
     @Override
     default public boolean isSelectable() { return false; }
     
+    @Override
+    default String getTypeSelector() {
+        return TYPE_SELECTOR;
+    }
 }
 

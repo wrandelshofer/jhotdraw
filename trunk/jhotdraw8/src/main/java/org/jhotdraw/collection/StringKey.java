@@ -10,7 +10,7 @@ package org.jhotdraw.collection;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StringKey extends Key<String> {
+public class StringKey extends SimpleKey<String> {
 
     public StringKey(String key) {
         super(key, String.class);

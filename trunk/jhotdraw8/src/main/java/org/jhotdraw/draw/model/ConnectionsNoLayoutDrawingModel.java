@@ -12,6 +12,7 @@ import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains no figures which

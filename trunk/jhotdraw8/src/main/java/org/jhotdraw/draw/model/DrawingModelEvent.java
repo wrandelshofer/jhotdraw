@@ -6,6 +6,7 @@
 package org.jhotdraw.draw.model;
 
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.event.Event;
@@ -17,11 +18,6 @@ import org.jhotdraw.event.Event;
  * @version $Id$
  */
 public class DrawingModelEvent extends Event<DrawingModel> {
-
-    /**
-     *
-     */
-    public final static Key<Drawing> ROOT_KEY = new Key<>("root", Drawing.class, null);
 
     public enum EventType {
         /** The root of the model changed. */

@@ -41,113 +41,22 @@ import javafx.collections.MapChangeListener;
  * @version $Id: Key.java 788 2014-03-22 07:56:28Z rawcoder $
  * @param <T> The value type.
  */
-public class Key<T> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Holds a String representation of the name.
-     */
-    private final String name;
-    /**
-     * Holds the default value.
-     */
-    private final T defaultValue;
-    /**
-     * This variable is used as a "type token" so that we can check for
-     * assignability of attribute values at runtime.
-     */
-    private final Class<?> clazz;
-    /**
-     * The type token is not sufficient, if the type is parameterized. We allow
-     * to specify the type parameters as a string.
-     */
-    private final String typeParameters;
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
-     *
-     * @param key The name of the name.
-     * @param clazz The type of the value.
-     */
-    public Key(String key, Class<T> clazz) {
-        this(key, clazz, "", null);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key The name of the name.
-     * @param clazz The type of the value.
-     * @param defaultValue The default value.
-     */
-    public Key(String key, Class<T> clazz, T defaultValue) {
-        this(key, clazz, "", defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key The name of the name.
-     * @param clazz The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     * type parameters are given. Otherwise specify them in arrow brackets.
-     * @param defaultValue The default value.
-     */
-    public Key(String key, Class<?> clazz, String typeParameters, T defaultValue) {
-        if (key == null) {
-            throw new IllegalArgumentException("key is null");
-        }
-        if (clazz == null) {
-            throw new IllegalArgumentException("clazz is null");
-        }
-        if (typeParameters == null) {
-            throw new IllegalArgumentException("type parameters is null");
-        }
-        if (typeParameters.length() > 0) {
-            if (!typeParameters.startsWith("<") || !typeParameters.endsWith(">")) {
-                throw new IllegalArgumentException("type parameters does not have arrow brackets:"
-                        + typeParameters);
-            }
-        }
-        this.name = key;
-        this.clazz = clazz;
-        this.typeParameters = typeParameters;
-        this.defaultValue = defaultValue;
-    }
+public interface Key<T> extends Serializable {
 
     /**
      * Returns the name string.
      *
      * @return name string.
      */
-    public String getName() {
-        return name;
-    }
+    String getName();
 
-    public Class<?> getValueType() {
-        return clazz;
-    }
+    public Class<?> getValueType();
 
-    public String getValueTypeParameters() {
-        return typeParameters;
-    }
+    public String getValueTypeParameters();
 
-    public String getFullValueType() {
-        return clazz.getName() + typeParameters;
-    }
+    public String getFullValueType();
 
-    /**
-     * Returns the default value of the attribute.
-     *
-     * @return the default value.
-     */
-    public T getDefaultValue() {
-        return defaultValue;
-    }
+    public T getDefaultValue();
 
     /**
      * Gets the value of the attribute denoted by this Key from a Map.
@@ -155,9 +64,9 @@ public class Key<T> implements Serializable {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    public T get(Map<? super Key<?>, Object> a) {
-        T value = a.containsKey(this) ? (T) a.get(this) : defaultValue;
-        assert isAssignable(value);
+    default T get(Map<? super Key<?>, Object> a) {
+        T value = a.containsKey(this) ? (T) a.get(this) : getDefaultValue();
+        assert isAssignable(value):value+" is not assignable to "+getValueType();
         return value;
     }
 
@@ -167,9 +76,9 @@ public class Key<T> implements Serializable {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    public ObjectProperty<T> getValueProperty(Map<? super Key<?>, ObjectProperty<?>> a) {
+    default ObjectProperty<T> getValueProperty(Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
-            a.put(this, new SimpleObjectProperty<T>(defaultValue));
+            a.put(this, new SimpleObjectProperty<T>(getDefaultValue()));
         }
         SimpleObjectProperty<T> value = (SimpleObjectProperty<T>) a.get(this);
         return value;
@@ -181,9 +90,9 @@ public class Key<T> implements Serializable {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    public T getValue(Map<? super Key<?>, ObjectProperty<?>> a) {
+    default T getValue(Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
-            a.put(this, new SimpleObjectProperty<T>(defaultValue));
+            a.put(this, new SimpleObjectProperty<T>(getDefaultValue()));
         }
         SimpleObjectProperty<T> value = (SimpleObjectProperty<T>) a.get(this);
         return value.get();
@@ -197,7 +106,7 @@ public class Key<T> implements Serializable {
      * @param value The new value.
      * @return The old value.
      */
-    public T put(Map<? super Key<?>, Object> a, T value) {
+    default T put(Map<? super Key<?>, Object> a, T value) {
         if (!isAssignable(value)) {
             throw new IllegalArgumentException("Value is not assignable to key. key="
                     + this + ", value=" + value);
@@ -213,7 +122,7 @@ public class Key<T> implements Serializable {
      * @param value The new value.
      * @return The old value.
      */
-    public T putValue(Map<? super Key<?>, ObjectProperty<?>> a, T value) {
+    default T putValue(Map<? super Key<?>, ObjectProperty<?>> a, T value) {
         if (!isAssignable(value)) {
             throw new IllegalArgumentException("Value is not assignable to key. key="
                     + this + ", value=" + value);
@@ -235,8 +144,8 @@ public class Key<T> implements Serializable {
      * @param value The object to be verified for assignability.
      * @return True if assignable.
      */
-    public boolean isAssignable(Object value) {
-        return value == null || clazz.isInstance(value);
+    default boolean isAssignable(Object value) {
+        return value == null || getValueType().isInstance(value);
     }
 
     /**
@@ -245,17 +154,9 @@ public class Key<T> implements Serializable {
      * @param value The object to be verified for assignability.
      * @return True if assignable.
      */
-    public boolean isDefault(Object value) {
-        return (defaultValue == null)
-                ? value == null : defaultValue.equals(value);
-    }
-
-    /**
-     * Returns the name string.
-     */
-    @Override
-    public String toString() {
-        return name;
+    default boolean isDefault(Object value) {
+        return (getDefaultValue() == null)
+                ? value == null : getDefaultValue().equals(value);
     }
 
     /**
@@ -264,7 +165,7 @@ public class Key<T> implements Serializable {
      * @param map a map
      * @return a binding for the map entry
      */
-    public Binding<T> valueAt(MapExpression<Key<?>, Object> map) {
+    default Binding<T> valueAt(MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
         return (ObjectBinding<T>) value;
     }
@@ -272,7 +173,7 @@ public class Key<T> implements Serializable {
     /**
      * This property is bound to a value in the map.
      */
-    private static class PropertyAt<T> extends ReadOnlyObjectWrapper<T> {
+    static class PropertyAt<T> extends ReadOnlyObjectWrapper<T> {
 
         private MapExpression<Key<?>, Object> map;
         private Key<T> key;
@@ -322,7 +223,7 @@ public class Key<T> implements Serializable {
      * @param map a map
      * @return a property for the map entry
      */
-    public Property<T> propertyAt(final MapExpression<Key<?>, Object> map) {
+    default Property<T> propertyAt(final MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
         return new PropertyAt<>(map, this);
     }
@@ -333,7 +234,7 @@ public class Key<T> implements Serializable {
      * @param map a map
      * @return a property for the map entry
      */
-    public ReadOnlyProperty<T> readOnlyPropertyAt(final MapExpression<Key<?>, Object> map) {
+    default ReadOnlyProperty<T> readOnlyPropertyAt(final MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
         return new PropertyAt<>(map, this).getReadOnlyProperty();
     }

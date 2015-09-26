@@ -15,7 +15,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.model.DrawingModel;
 
@@ -29,9 +29,9 @@ import org.jhotdraw.draw.model.DrawingModel;
  */
 public class ConnectionPointHandle extends AbstractHandle {
 
-    private final FigureKey<Point2D> pointKey;
-    private final FigureKey<Figure> figureKey;
-    private final FigureKey<Connector> connectorKey;
+    private final SimpleFigureKey<Point2D> pointKey;
+    private final SimpleFigureKey<Figure> figureKey;
+    private final SimpleFigureKey<Connector> connectorKey;
     private double startX, startY;
     private Point2D startPoint;
     private Point2D unconstrainedPoint;
@@ -40,8 +40,8 @@ public class ConnectionPointHandle extends AbstractHandle {
     private final String styleclass;
     private final String styleclassConnected;
 
-    public ConnectionPointHandle(Figure figure, DrawingView dv, String styleclass, String styleclassConnected, FigureKey<Point2D> pointKey,
-            FigureKey<Figure> figureKey, FigureKey<Connector> connectorKey) {
+    public ConnectionPointHandle(Figure figure, DrawingView dv, String styleclass, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
+            SimpleFigureKey<Figure> figureKey, SimpleFigureKey<Connector> connectorKey) {
         super(figure, dv);
         this.pointKey = pointKey;
         this.figureKey = figureKey;

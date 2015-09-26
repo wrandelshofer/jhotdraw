@@ -34,9 +34,14 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.BoundsInLocalHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
+import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.BoundsInParentHandle;
+import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
+import org.jhotdraw.draw.key.EffectStyleableFigureKey;
+import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -57,7 +62,7 @@ import org.jhotdraw.draw.handle.BoundsInParentHandle;
  * The state of a figure is described by its property map. The property map
  * consists of key and value pairs. The keys are of type {@link Key}. If a
  * property affects the graphical representation of the figure, a key of type
- * {@code FigureKey} must be used. {@code FigureKey} provides a mean to describe
+ * {@code SimpleFigureKey} must be used. {@code SimpleFigureKey} provides a mean to describe
  * how the value affects the graphical representation of the figure.</p>
  * <p>
  * The state of a figure may depend on the state of other figures. The
@@ -71,7 +76,14 @@ import org.jhotdraw.draw.handle.BoundsInParentHandle;
  *
  * @author Werner Randelshofer @version $Id$
  */
-public interface Figure extends PropertyBean {
+public interface Figure extends StyleablePropertyBean, Styleable {
+    // ----
+    // various declarations
+    // ----
+    /** To avoid name clashes in the stylesheet, all styleable JHotDraw properties
+     * use the prefix {@code "-jhotdraw-"}.
+     */
+    public final static String JHOTDRAW_CSS_PREFIX = "-jhotdraw-";
     // ----
     // key declarations
     // ----
@@ -82,14 +94,14 @@ public interface Figure extends PropertyBean {
      * <p>
      * Default value: {@code SRC_OVER}.
      */
-    public static FigureKey<BlendMode> BLEND_MODE = new FigureKey<BlendMode>("blendMode", BlendMode.class, DirtyMask.of(DirtyBits.NODE), BlendMode.SRC_OVER);
+    public static BlendModeStyleableFigureKey BLEND_MODE = new BlendModeStyleableFigureKey("blendMode", BlendMode.SRC_OVER);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
      * <p>
      * Default value: {@code null}.
      */
-    public static FigureKey<Effect> EFFECT = new FigureKey<>("effect", Effect.class, DirtyMask.of(DirtyBits.NODE), null);
+    public static EffectStyleableFigureKey EFFECT = new EffectStyleableFigureKey("effect", null);
     /**
      * Specifies the opacity of the figure. A figure with {@code 0} opacity is
      * completely translucent. A figure with {@code 1} opacity is completely
@@ -100,74 +112,67 @@ public interface Figure extends PropertyBean {
      * <p>
      * Default value: {@code 1}.
      */
-    public static FigureKey<Double> OPACITY = new FigureKey<>("opacity", Double.class, DirtyMask.of(DirtyBits.NODE), 1.0);
+    public static DoubleStyleableFigureKey OPACITY = new DoubleStyleableFigureKey("opacity", 1.0);
     /**
      * Defines the angle of rotation around the center of the figure in degrees.
      * Default value: {@code 0}.
      */
-    public static FigureKey<Double> ROTATE = new FigureKey<>("rotate", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey  ROTATE = new DoubleStyleableFigureKey("rotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Defines the rotation axis used. Default value: {@code Rotate.Z_AXIS}.
      */
-    public static FigureKey<Point3D> ROTATION_AXIS = new FigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), Rotate.Z_AXIS);
+    public static SimpleFigureKey<Point3D> ROTATION_AXIS = new SimpleFigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_X = new FigureKey<>("scaleX", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public static DoubleStyleableFigureKey SCALE_X = new DoubleStyleableFigureKey("scaleX",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_Y = new FigureKey<>("scaleY", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public static DoubleStyleableFigureKey SCALE_Y = new DoubleStyleableFigureKey("scaleY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static FigureKey<Double> SCALE_Z = new FigureKey<>("scaleZ", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_X = new FigureKey<>("translateX", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_X = new DoubleStyleableFigureKey("translateX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Defines the translation on the y axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_Y = new FigureKey<>("translateY", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_Y = new DoubleStyleableFigureKey("translateY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Defines the translation on the z axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static FigureKey<Double> TRANSLATE_Z = new FigureKey<>("translateZ", Double.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Defines the id of the figure. 
      * The id is used for styling the figure with CSS. 
      * 
      * Default value: {@code null}.
      */
-    public static FigureKey<String> ID = new FigureKey<>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT), null);
+    public static SimpleFigureKey<String> ID = new SimpleFigureKey<>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT), null);
     /**
      * Defines the style class of the figure. 
      * The style class is used for styling the figure with CSS. 
      * 
      * Default value: {@code null}.
      */
-    public static FigureKey<ObservableList<String>> STYLE_CLASS = new FigureKey<>("styleClass", ObservableList.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
-    /**
-     * Defines the type selector of the figure. 
-     * The type selector is used for styling the figure with CSS. 
-     * 
-     * Default value: {@code null}.
-     */
-    public static FigureKey<String> TYPE_SELECTOR = new FigureKey<>("typeSelector", List.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
+    public static SimpleFigureKey<ObservableList<String>> STYLE_CLASS = new SimpleFigureKey<>("styleClass", ObservableList.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
     /**
      * Defines the style of the figure. 
      * The style is used for styling the figure with CSS. 
      * 
      * Default value: {@code null}.
      */
-    public static FigureKey<String> STYLE = new FigureKey<>("style", List.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
+    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", List.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
 
     // ----
     // property names
@@ -468,10 +473,14 @@ public interface Figure extends PropertyBean {
     Connector findConnector(Point2D p, Figure prototype);
 
     /**
-     * Updates the state of this figure and of its descendant figures. Does not
+     * Updates the layout of this figure and of its descendant figures. Does not
      * update connection figures.
      */
     void layout();
+    /**
+     * Applies the stylesheet on this figure and on its descendant figures. 
+     */
+    void applyCss();
     // ----
     // convenience methods
     // ----
@@ -597,7 +606,7 @@ public interface Figure extends PropertyBean {
     }
 
     /**
-     * Updates a figure node with all applicable {@code FigureKey}s defined in
+     * Updates a figure node with all applicable {@code SimpleFigureKey}s defined in
      * this interface.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
@@ -632,7 +641,7 @@ public interface Figure extends PropertyBean {
      * @param f A figure.
      * @return the keys
      */
-    public static Set<Key<?>> getKeys(Figure f) {
+    public static Set<Key<?>> getSupportedKeys(Figure f) {
         return getDeclaredAndInheritedKeys(f.getClass());
     }
 
@@ -647,8 +656,8 @@ public interface Figure extends PropertyBean {
         try {
             HashSet<Key<?>> keys = new HashSet<>();
             for (Field f : c.getFields()) {
-                if (FigureKey.class.isAssignableFrom(f.getType())) {
-                    FigureKey<?> k = (FigureKey<?>) f.get(null);
+                if (Key.class.isAssignableFrom(f.getType())) {
+                    Key<?> k = (Key<?>) f.get(null);
                     keys.add(k);
                 }
             }
@@ -791,5 +800,25 @@ public interface Figure extends PropertyBean {
      */
     default Point2D localToDrawing(Point2D p) {
         return getLocalToDrawing().transform(p);
+    }
+
+    @Override
+    default Styleable getStyleableParent() {
+        return getParent();
+    }
+
+    @Override
+    default String getStyle() {
+        return get(STYLE);
+    }
+
+    @Override
+    default ObservableList<String> getStyleClass() {
+        return get(STYLE_CLASS);
+    }
+
+    @Override
+    default String getId() {
+        return get(ID);
     }
 }

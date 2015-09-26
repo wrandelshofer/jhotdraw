@@ -4,15 +4,10 @@
  */
 package org.jhotdraw.draw;
 
-import org.jhotdraw.draw.shape.*;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
@@ -22,12 +17,17 @@ import org.jhotdraw.draw.connector.Connector;
 
 /**
  * TextFigure.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure {
 
-    public final static Key<Point2D> ORIGIN = new Key<>("origin", Point2D.class, new Point2D(0, 0));
+    public final static Key<Point2D> ORIGIN = new SimpleFigureKey<>("origin", Point2D.class, DirtyMask.of(DirtyBits.NODE),new Point2D(0, 0));
+    /**
+     * The CSS type selector for a label object is {@code "Label"}.
+     */
+    public final static String TYPE_SELECTOR = "Label";
 
     private ReadOnlyObjectWrapper<Bounds> layoutBounds = null;
 
@@ -41,7 +41,7 @@ public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure 
         this(position.getX(), position.getY(), text);
     }
 
-    public LabelFigure(double x, double y,String text) {
+    public LabelFigure(double x, double y, String text) {
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
     }
@@ -93,4 +93,10 @@ public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure 
     public void layout() {
         // empty!
     }
+
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
+    }
+
 }

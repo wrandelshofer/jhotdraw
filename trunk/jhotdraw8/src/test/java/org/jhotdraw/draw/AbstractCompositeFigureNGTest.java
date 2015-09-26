@@ -92,5 +92,9 @@ public class AbstractCompositeFigureNGTest {
         public boolean isLayoutable() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
+        
+        public String getTypeSelector() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }    
 }

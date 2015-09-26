@@ -23,8 +23,8 @@ public class Point2DConverter implements Converter<Point2D> {
     private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new XMLConverterFactory());
 
     @Override
-    public void toString(Point2D value, Appendable out) throws IOException {
-        formatter.toString(new Object[]{value.getX(), value.getY()}, out);
+    public void toString(Appendable out, Point2D value) throws IOException {
+        formatter.toString(out, value.getX(), value.getY());
     }
 
     @Override

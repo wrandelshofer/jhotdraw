@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import org.jhotdraw.app.*;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.*;
@@ -29,7 +30,7 @@ import org.jhotdraw.util.*;
 public class SaveFileAction extends AbstractViewAction {
 
     private static final long serialVersionUID = 1L;
-    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new Key<>("saveChooser", URIChooser.class);
+    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new SimpleKey<>("saveChooser", URIChooser.class);
 
     public static final String ID = "file.save";
     private boolean saveAs;

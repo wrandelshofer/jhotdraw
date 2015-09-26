@@ -131,7 +131,7 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     @Override
-    public void toString(Object[] value, Appendable out) throws IOException {
+    public void toString(Appendable out, Object... value) throws IOException {
         int[] indices = new int[numIndices];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = i;
@@ -240,7 +240,7 @@ public class PatternConverter implements Converter<Object[]> {
             if (converter == null) {
                 converter = factory.apply(type, style);
             }
-            converter.toString(value[indices[index]], out);
+            converter.toString(out,value[indices[index]]);
         }
         
         @Override
@@ -289,23 +289,27 @@ public class PatternConverter implements Converter<Object[]> {
         public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
             int pos = buf.position();
             int choice = -1;
+            int greediest=-1;
             for (int i = 0, n = children.size(); i < n; i++) {
+                buf.position(pos);
                 AST child = children.get(i);
 
-                // try to parse each choice, break on success
+                // try to parse each choice, take the greediest one
                 try {
                     child.fromString(buf, factory, value);
+                    if (buf.position()>greediest) {
                     choice = i;
-                    break;
-                } catch (ParseException e) {
-                    if (i < n - 1) {// reset position since more choices are left
-                        buf.position(pos);
-                    } else {// fail since we ran out of choices
-                        throw new ParseException("Could not parse choice.", pos);
+                    greediest=buf.position();
                     }
+                } catch (ParseException e) {
+                    // empty because we try again with a different choice
+                    //e.printStackTrace();
                 }
             }
-            while (value.size() < index) {
+            if (greediest>0) {
+                buf.position(greediest);
+            }
+            while (value.size() <= index) {
                 value.add(null);
             }
             value.set(index, limits[choice]);

@@ -30,6 +30,10 @@ import org.jhotdraw.draw.shape.LineFigure;
  * @version $Id$
  */
 public class LineConnectionFigure extends AbstractShapeFigure {
+    /**
+     * The CSS type selector for this object is {@code "LineConnection"}.
+     */
+    public final static String TYPE_SELECTOR = "LineConnection";
 
     /** Holds a strong reference to the property. */
     private Property<Figure> startFigureProperty;
@@ -38,11 +42,11 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     /**
      * The start position of the line.
      */
-    public static FigureKey<Point2D> START = LineFigure.START;
+    public static SimpleFigureKey<Point2D> START = LineFigure.START;
     /**
      * The end position of the line.
      */
-    public static FigureKey<Point2D> END = LineFigure.END;
+    public static SimpleFigureKey<Point2D> END = LineFigure.END;
     /**
      * The start figure.
      * Is null if the figure is not connected at the start.
@@ -50,7 +54,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
      * If the value is changed. This figure must add or remove itself from
      * the list of connections on the {@code ConnectableFigure}.</p>
      */
-    public static FigureKey<Figure> START_FIGURE = new FigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
+    public static SimpleFigureKey<Figure> START_FIGURE = new SimpleFigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
      * The end figure.
      * Is null if the figure is not connected at the end.
@@ -58,15 +62,15 @@ public class LineConnectionFigure extends AbstractShapeFigure {
      * If the value is changed. This figure must add or remove itself from
      * the list of connections on the {@code ConnectableFigure}.</p>
      */
-    public static FigureKey<Figure> END_FIGURE = new FigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
+    public static SimpleFigureKey<Figure> END_FIGURE = new SimpleFigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
      * The start connector.
      */
-    public static FigureKey<Connector> START_CONNECTOR = new FigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new CenterConnector());
+    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new CenterConnector());
     /**
      * The end connector.
      */
-    public static FigureKey<Connector> END_CONNECTOR = new FigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new CenterConnector());
+    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new CenterConnector());
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
@@ -193,4 +197,9 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         list.add(new ConnectionPointHandle(this, dv, Handle.STYLECLASS_HANDLE_CONNECTION_POINT,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED,  END,END_FIGURE,END_CONNECTOR));
         return list;
     }
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
+    }
+
 }

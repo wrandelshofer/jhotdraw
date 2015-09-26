@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 
 /**
@@ -23,14 +23,14 @@ import org.jhotdraw.draw.connector.Connector;
  */
 public class PointHandle extends AbstractHandle {
 
-    private final FigureKey<Point2D> pointKey;
+    private final SimpleFigureKey<Point2D> pointKey;
 private double startX,startY;
 private Point2D startPoint;
 private Point2D unconstrainedPoint;
     private final Rectangle node;
     private final String styleclass;
 
-    public PointHandle(Figure figure, DrawingView dv, String styleclass, FigureKey<Point2D> pointKey) {
+    public PointHandle(Figure figure, DrawingView dv, String styleclass, SimpleFigureKey<Point2D> pointKey) {
         super(figure, dv);
         this.pointKey = pointKey;
         this.styleclass = styleclass;

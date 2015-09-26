@@ -22,8 +22,8 @@ public class Rectangle2DConverter implements Converter<Rectangle2D> {
     private final PatternConverter formatter = new PatternConverter("{0,number} {1,number} {2,number} {3,number}", new XMLConverterFactory());
 
     @Override
-    public void toString(Rectangle2D value, Appendable out) throws IOException {
-        formatter.toString(new Object[]{value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight()},out);
+    public void toString(Appendable out, Rectangle2D value) throws IOException {
+        formatter.toString(out, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
     }
 
     @Override

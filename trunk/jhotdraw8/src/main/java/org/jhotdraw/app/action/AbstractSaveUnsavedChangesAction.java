@@ -18,6 +18,7 @@ import javafx.stage.Modality;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
@@ -45,7 +46,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
     /**
      *
      */
-    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new Key<URIChooser>(
+    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new SimpleKey<URIChooser>(
             "saveChooser", URIChooser.class, null);
 
     private static final long serialVersionUID = 1L;

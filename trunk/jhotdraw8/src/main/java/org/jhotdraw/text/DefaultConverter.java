@@ -40,7 +40,7 @@ public class DefaultConverter implements Converter<Object> {
     }
 
     @Override
-    public void toString(Object value, Appendable out) throws IOException {
+    public void toString(Appendable out, Object value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
 

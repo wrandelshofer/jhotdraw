@@ -14,7 +14,7 @@ import javafx.scene.shape.Ellipse;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.FigureKey;
+import org.jhotdraw.draw.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
@@ -26,10 +26,14 @@ import org.jhotdraw.draw.RenderContext;
  * @version $Id$
  */
 public class EllipseFigure extends AbstractShapeFigure {
+    /**
+     * The CSS type selector for this object is {@code "Ellipse"}.
+     */
+    public final static String TYPE_SELECTOR = "Ellipse";
 
-    public final static FigureKey<Point2D> CENTER = new FigureKey<>("center", Point2D.class,DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
-    public final static FigureKey<Double> RADIUS_X = new FigureKey<>("radiusX", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), 1.0);
-    public final static FigureKey<Double> RADIUS_Y = new FigureKey<>("radiusY", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), 1.0);
+    public final static SimpleFigureKey<Point2D> CENTER = new SimpleFigureKey<>("center", Point2D.class,DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static SimpleFigureKey<Double> RADIUS_X = new SimpleFigureKey<>("radiusX", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), 1.0);
+    public final static SimpleFigureKey<Double> RADIUS_Y = new SimpleFigureKey<>("radiusY", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), 1.0);
 
     public EllipseFigure() {
         this(0, 0, 1,1);
@@ -92,5 +96,9 @@ public class EllipseFigure extends AbstractShapeFigure {
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopEllipseConnector();
+    }
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
     }
 }

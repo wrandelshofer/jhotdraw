@@ -9,6 +9,10 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+import javafx.css.CssMetaData;
+import javafx.css.PseudoClass;
+import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -27,6 +31,10 @@ import org.jhotdraw.draw.connector.Connector;
  * @version $Id$
  */
 public class GroupFigure extends AbstractCompositeFigure {
+    /**
+     * The CSS type selector for group objects is @code("group"}.
+     */
+    public final static String TYPE_SELECTOR = "group";
 
     @Override
     public void reshape(Transform transform) {
@@ -59,6 +67,9 @@ public class GroupFigure extends AbstractCompositeFigure {
     public Connector findConnector(Point2D p, Figure prototype) {
         return null;
     }
-    
-    
+
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
+    }
 }
