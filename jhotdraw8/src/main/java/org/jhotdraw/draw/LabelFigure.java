@@ -76,7 +76,7 @@ public class LabelFigure extends AbstractLeafFigure implements TextHolderFigure 
         textNode.setX(get(ORIGIN).getX());
         textNode.setY(get(ORIGIN).getY());
         textNode.setBoundsType(TextBoundsType.VISUAL);
-        updateTextProperties(textNode);
+        applyTextProperties(textNode);
     }
 
     @Override

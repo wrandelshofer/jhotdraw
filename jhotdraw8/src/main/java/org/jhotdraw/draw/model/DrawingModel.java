@@ -161,6 +161,13 @@ public interface DrawingModel extends Observable {
      * @param f the figure
      */
     void layout(Figure f);
+    /**
+     * Invokes the applyCss method of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
+     *
+     * @param f the figure
+     */
+    void applyCss(Figure f);
 
     /**
      * Fires the specified event.

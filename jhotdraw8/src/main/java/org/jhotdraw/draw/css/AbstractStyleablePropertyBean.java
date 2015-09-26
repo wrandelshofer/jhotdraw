@@ -32,4 +32,10 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
         return styleableProperties.getStyleableProperty(key);
     }
+    
+    /** Returns  the style value. */
+    @Override
+    public <T> T getStyled(Key<T> key) {
+        return key.get(styleableProperties.outputProperties());
+    }
 }

@@ -85,19 +85,16 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * @param shape a shape node
      */
     protected void applyShapeProperties(Shape shape) {
-        shape.setFill(get(FILL));
-        shape.setSmooth(get(SMOOTH));
-        shape.setStrokeDashOffset(get(STROKE_DASH_OFFSET));
-        shape.setStrokeLineCap(get(STROKE_LINE_CAP));
-        shape.setStrokeLineJoin(get(STROKE_LINE_JOIN));
-        shape.setStrokeMiterLimit(get(STROKE_MITER_LIMIT));
-        shape.setStroke(get(STROKE));
-        shape.setStrokeType(get(STROKE_TYPE));
-        shape.setStrokeWidth(get(STROKE_WIDTH));
-        shape.getStrokeDashArray().clear();
-        for (double dash : get(STROKE_DASH_ARRAY)) {
-            shape.getStrokeDashArray().add(dash);
-        }
+        shape.setFill(getStyled(FILL));
+        shape.setSmooth(getStyled(SMOOTH));
+        shape.setStrokeDashOffset(getStyled(STROKE_DASH_OFFSET));
+        shape.setStrokeLineCap(getStyled(STROKE_LINE_CAP));
+        shape.setStrokeLineJoin(getStyled(STROKE_LINE_JOIN));
+        shape.setStrokeMiterLimit(getStyled(STROKE_MITER_LIMIT));
+        shape.setStroke(getStyled(STROKE));
+        shape.setStrokeType(getStyled(STROKE_TYPE));
+        shape.setStrokeWidth(getStyled(STROKE_WIDTH));
+        shape.getStrokeDashArray().setAll(getStyled(STROKE_DASH_ARRAY));
     }
 
     @Override

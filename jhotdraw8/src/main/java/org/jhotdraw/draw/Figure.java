@@ -614,21 +614,21 @@ public interface Figure extends StyleablePropertyBean, Styleable {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyFigureProperties(Node node) {
-        node.setId(get(ID));
-        node.setStyle(get(STYLE));
-        node.setId(get(ID));
-        node.setId(get(ID));
-        node.setBlendMode(get(BLEND_MODE));
-        node.setEffect(get(EFFECT));
-        node.setOpacity(get(OPACITY));
-        node.setRotate(get(ROTATE));
-        node.setRotationAxis(get(ROTATION_AXIS));
-        node.setScaleX(get(SCALE_X));
-        node.setScaleY(get(SCALE_Y));
-        node.setScaleZ(get(SCALE_Z));
-        node.setTranslateX(get(TRANSLATE_X));
-        node.setTranslateY(get(TRANSLATE_Y));
-        node.setTranslateZ(get(TRANSLATE_Z));
+        node.setId(getStyled(ID));
+        node.setStyle(getStyled(STYLE));
+        node.setId(getStyled(ID));
+        node.setId(getStyled(ID));
+        node.setBlendMode(getStyled(BLEND_MODE));
+        node.setEffect(getStyled(EFFECT));
+        node.setOpacity(getStyled(OPACITY));
+        node.setRotate(getStyled(ROTATE));
+        node.setRotationAxis(getStyled(ROTATION_AXIS));
+        node.setScaleX(getStyled(SCALE_X));
+        node.setScaleY(getStyled(SCALE_Y));
+        node.setScaleZ(getStyled(SCALE_Z));
+        node.setTranslateX(getStyled(TRANSLATE_X));
+        node.setTranslateY(getStyled(TRANSLATE_Y));
+        node.setTranslateZ(getStyled(TRANSLATE_Z));
     }
 
     // ---

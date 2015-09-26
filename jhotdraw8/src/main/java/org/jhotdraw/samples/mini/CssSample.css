@@ -8,7 +8,7 @@
  */
 
 * {
-    -jhotdraw-stroke-width: 10px;
+    -jhotdraw-stroke-width: 10;
     -jhotdraw-stroke: red;
     -jhotdraw-fill: yellow;
 }
