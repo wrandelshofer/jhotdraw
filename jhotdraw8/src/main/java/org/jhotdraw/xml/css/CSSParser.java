@@ -54,6 +54,8 @@ import java.util.*;
  * | '(' S* any* ')' | '[' S* any* ']' ] S*;
  * </pre>
  *
+ * <p>FIXME does not handle most of the productions listed above</p>
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

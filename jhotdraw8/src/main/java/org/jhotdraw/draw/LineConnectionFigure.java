@@ -193,8 +193,8 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     public List<Handle> createHandles(int detailLevel, DrawingView dv) {
         ArrayList<Handle> list=new ArrayList<>();
         list.add(new LineWireframeHandle(this, dv, Handle.STYLECLASS_HANDLE_OUTLINE));
-        list.add(new ConnectionPointHandle(this, dv, Handle.STYLECLASS_HANDLE_CONNECTION_POINT,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, START,START_FIGURE,START_CONNECTOR));
-        list.add(new ConnectionPointHandle(this, dv, Handle.STYLECLASS_HANDLE_CONNECTION_POINT,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED,  END,END_FIGURE,END_CONNECTOR));
+        list.add(new ConnectionPointHandle(this, dv, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, START,START_FIGURE,START_CONNECTOR));
+        list.add(new ConnectionPointHandle(this, dv, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED,  END,END_FIGURE,END_CONNECTOR));
         return list;
     }
     @Override

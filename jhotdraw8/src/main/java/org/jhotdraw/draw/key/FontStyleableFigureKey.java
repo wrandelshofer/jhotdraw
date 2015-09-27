@@ -4,7 +4,11 @@
  */
 package org.jhotdraw.draw.key;
 
+import java.util.function.Function;
 import javafx.css.CssMetaData;
+import javafx.css.StyleConverter;
+import javafx.css.Styleable;
+import javafx.css.StyleableProperty;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -16,6 +20,9 @@ import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.SimpleFigureKey;
+import org.jhotdraw.text.CSSFontConverter;
+import org.jhotdraw.text.CSSSizeConverter;
+import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
  * FontStyleableFigureKey.
@@ -46,13 +53,26 @@ public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements Sty
         super(name, Font.class, //
                 DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),//
                 defaultValue);
-
-        StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-        cssMetaData = factory.createFontCssMetaData(
-                Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-                    StyleablePropertyBean spb = (StyleablePropertyBean) s;
-                    return spb.getStyleableProperty(this);
-                });
+        /*
+         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
+         cssMetaData = factory.createFontCssMetaData(
+         Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
+         StyleablePropertyBean spb = (StyleablePropertyBean) s;
+         return spb.getStyleableProperty(this);
+         });
+         */
+        Function<Styleable, StyleableProperty<Font>> function = s -> {
+            StyleablePropertyBean spb = (StyleablePropertyBean) s;
+            return spb.getStyleableProperty(this);
+        };
+        boolean inherits = false;
+        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
+        final StyleConverter<String, Font> converter
+                = new StyleConverterConverterWrapper<Font>(new CSSFontConverter());
+        CssMetaData<Styleable, Font> md
+                = new SimpleCssMetaData<Styleable, Font>(property, function,
+                        converter, defaultValue, inherits);
+        cssMetaData = md;
     }
 
     @Override

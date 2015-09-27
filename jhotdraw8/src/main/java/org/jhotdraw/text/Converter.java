@@ -98,7 +98,7 @@ public interface Converter<T> {
             throw new InternalError(ex);
         }
         if (buf.remaining()!=0) {
-            throw new ParseException("Remaining characters not consumed.",buf.position());
+            throw new ParseException(buf.remaining()+" remaining character(s) not consumed.",buf.position());
         }
         return value;
     }

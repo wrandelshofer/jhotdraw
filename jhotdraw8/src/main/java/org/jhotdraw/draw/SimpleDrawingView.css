@@ -23,19 +23,20 @@
     -fx-stroke: cyan;
 }
 
-/* Styles the wireframe drawn by handles. See {@code Handle}. */
+/* Styles move and point handles. See {@code Handle}. */
+.handle-move,
 .handle-point {
     -fx-stroke: blue;
     -fx-fill: white;
 }
 
-/* Styles the wireframe drawn by handles. See {@code Handle}. */
-.handle-connection-point {
+/* Styles disconnected connection point handles. See {@code Handle}. */
+.handle-connection-point-disconnected {
     -fx-stroke: blue;
     -fx-fill: white;
 }
 
-/* Styles the wireframe drawn by handles. See {@code Handle}. */
+/* Styles connected connection point handles. See {@code Handle}. */
 .handle-connection-point-connected {
     -fx-stroke: blue;
     -fx-fill: blue;

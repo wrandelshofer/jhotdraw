@@ -84,7 +84,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private Group handlesPane;
 
     private Group drawingPane;
-
+    private Pane overlaysPane;
     /**
      * This is the JavaFX Node which is used to represent this drawing view. in
      * a JavaFX scene graph.
@@ -286,7 +286,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     @Override
     public ReadOnlyObjectProperty<Drawing> drawingProperty() {
-       return drawing.getReadOnlyProperty();
+        return drawing.getReadOnlyProperty();
     }
 
     private class HandleEventHandler implements Listener<HandleEvent> {
@@ -345,7 +345,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         toolPane.setManaged(false);
         handlesPane = new Group();
         handlesPane.setManaged(false);
-        Pane overlaysPane = new Pane();
+        overlaysPane = new Pane();
         overlaysPane.setBackground(Background.EMPTY);
         overlaysPane.getChildren().addAll(handlesPane, toolPane);
         overlaysPane.setManaged(false);
@@ -431,7 +431,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             boundsProperty.addListener(preferredSizeHandler);
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
-        updatePreferredSize();
+            updatePreferredSize();
             updateTreeNodes(d);
             repaint();
         }
@@ -629,7 +629,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     if (f != null && f.isSelectable()) {
                         found.add(f);
                     }
-                if (f == null||!f.isSelectable() || decompose&&f.isDecomposable()) {
+                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
                         if (n instanceof Parent) {
                             findFiguresRecursive((Parent) n, pl, found, decompose);
                         }
@@ -669,7 +669,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     if (f != null && f.isSelectable()) {
                         found.add(f);
                     }
-                if (f == null||!f.isSelectable() || decompose&&f.isDecomposable()) {
+                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
                         if (n instanceof Parent) {
                             findFiguresInsideRecursive((Parent) n, pl, found, decompose);
                         }
@@ -707,9 +707,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 if (f != null && f.isSelectable()) {
                     found.add(f);
                 }
-                if (f == null||!f.isSelectable() || decompose&&(f.isDecomposable())) {
+                if (f == null || !f.isSelectable() || decompose && (f.isDecomposable())) {
                     if (n instanceof Parent) {
-                        findFiguresIntersectingRecursive((Parent) n, pl, found,decompose);
+                        findFiguresIntersectingRecursive((Parent) n, pl, found, decompose);
                     }
                 }
             }
@@ -836,5 +836,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void invalidateDrawingViewTransforms() {
         drawingToViewTransform = viewToDrawingTransform = null;
+    }
+
+    /** The stylesheet used for handles and tools. 
+     * @return the stylesheet list
+     */
+    public ObservableList<String> overlayStylesheets() {
+        return overlaysPane.getStylesheets();
     }
 }

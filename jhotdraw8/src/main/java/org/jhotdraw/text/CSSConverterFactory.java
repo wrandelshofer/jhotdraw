@@ -25,6 +25,8 @@ public class CSSConverterFactory implements ConverterFactory {
                 return new WordConverter();
             case "paint":
                 return new CSSPaintConverter();
+            case "font":
+                return new CSSFontConverter();
             default:
                 throw new IllegalArgumentException("illegal type:"+type);
         }

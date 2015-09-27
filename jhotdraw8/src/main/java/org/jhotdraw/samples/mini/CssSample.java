@@ -24,6 +24,7 @@ import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
+import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
 
@@ -41,7 +42,8 @@ public class CssSample extends Application {
 
         RectangleFigure vertex1 = new RectangleFigure(10, 10, 30, 20);
         RectangleFigure vertex2 = new RectangleFigure(50, 40, 30, 20);
-        RectangleFigure vertex3 = new RectangleFigure(90, 10, 30, 20);
+        TextFigure vertex3 = new TextFigure(120, 50, "Lorem Ipsum");
+        RectangleFigure vertex4 = new RectangleFigure(90, 100, 30, 20);
 
         LineConnectionFigure edge12 = new LineConnectionFigure();
         LineConnectionFigure edge23 = new LineConnectionFigure();
@@ -70,21 +72,21 @@ public class CssSample extends Application {
         layer.add(vertex1);
         layer.add(vertex2);
         layer.add(vertex3);
+        layer.add(vertex4);
 
         layer.add(edge12);
         layer.add(edge23);
         layer.add(edge3Null);
         layer.add(edgeNullNull);
         
-System.out.println("vertex.stroke="+vertex1.getStyled(AbstractShapeFigure.STROKE));        
-System.out.println("vertex.strokeWidth="+vertex1.getStyled(AbstractShapeFigure.STROKE_WIDTH));        
-System.out.println("vertex.fill="+vertex1.getStyled(AbstractShapeFigure.FILL));        
+        vertex1.set(Figure.ID,"vertex1");
+        vertex2.set(Figure.ID,"vertex2");
+        vertex3.set(Figure.ID,"vertex3");
+        vertex4.set(Figure.ID,"vertex4");
+        
         drawing.layout();
         drawing.set(Drawing.STYLESHEET, CssSample.class.getResource("CssSample.css"));
         drawing.applyCss();
-System.out.println("vertex.stroke="+vertex1.getStyled(AbstractShapeFigure.STROKE));        
-System.out.println("vertex.strokeWidth="+vertex1.getStyled(AbstractShapeFigure.STROKE_WIDTH));        
-System.out.println("vertex.fill="+vertex1.getStyled(AbstractShapeFigure.FILL));        
         drawing.layout();
 
         DrawingView drawingView = new SimpleDrawingView();
