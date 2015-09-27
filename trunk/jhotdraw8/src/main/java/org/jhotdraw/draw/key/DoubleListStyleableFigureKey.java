@@ -7,18 +7,17 @@ package org.jhotdraw.draw.key;
 import java.util.List;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.SimpleFigureKey;
-import org.jhotdraw.draw.css.DoubleListStyleConverter;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.text.CSSSizeListConverter;
+import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
  * DoubleListStyleableFigureKey.
@@ -58,17 +57,29 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> 
      */
     public DoubleListStyleableFigureKey(String name, DirtyMask mask, List<Double> defaultValue) {
         super(name, List.class, "<Double>", mask, defaultValue);
+        /*
+         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
 
-        StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-
+         Function<Styleable, StyleableProperty<List<Double>>> function = s -> {
+         StyleablePropertyBean spb = (StyleablePropertyBean) s;
+         return spb.getStyleableProperty(this);
+         };
+         boolean inherits = false;
+         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
+         final StyleConverter<ParsedValue[], List<Double>> converter
+         = DoubleListStyleConverter.getInstance();
+         CssMetaData<Styleable, List<Double>> md
+         = new SimpleCssMetaData<Styleable, List<Double>>(property, function,
+         converter, defaultValue, inherits);
+         cssMetaData = md;*/
         Function<Styleable, StyleableProperty<List<Double>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<ParsedValue[], List<Double>> converter
-                = DoubleListStyleConverter.getInstance();
+        final StyleConverter<String, List<Double>> converter
+                = new StyleConverterConverterWrapper<List<Double>>(new CSSSizeListConverter());
         CssMetaData<Styleable, List<Double>> md
                 = new SimpleCssMetaData<Styleable, List<Double>>(property, function,
                         converter, defaultValue, inherits);

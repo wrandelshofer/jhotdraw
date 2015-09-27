@@ -5,28 +5,30 @@
 package org.jhotdraw.draw;
 
 import java.net.URL;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.TreeItem;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.draw.css.StyleableStyleManager;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
  * <p>
- * The graphical elements are represented by {@link Figure} objects. The figure
- * objects are organized in a tree structure of which the drawing object is the
- * typically the root.</p>
+ * <b>Tree Structure.</b> The graphical elements are represented by
+ * {@link Figure} objects. The figure objects are organized in a tree structure
+ * of which the drawing object is typically the root.
  * <p>
- * A drawing can have a style sheet which may affect the state of its descendant
- * figures. Since figures cache style sheet data, method {@code applyCss}
- * must be invoked on the drawing, when its style sheet is changed, and
- * on a figure when its location in the descendant tree structure changes.</p>
- * 
+ * <b>Nested Drawings.</b> Since {@code Drawing} implements the {@code Figure}
+ * interface, a drawing may be contained in another drawing.</p>
+ * <p>
+ * <b>Styling.</b> A drawing can have a style sheet which may affect the
+ * state of its descendant figures. Since figures cache style sheet data, method
+ * {@code applyCss} must be invoked on the drawing, when its style sheet is
+ * changed, and on a figure when its location in the descendant tree structure
+ * changes.</p>
+ * <p>
+ * <b>Layers.</b> By convention all children of a {@code Drawing} must be
+ * {@link Layer}s.</p>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -44,8 +46,8 @@ public interface Drawing extends Figure {
      * Defines the (clip) bounds of the drawing.
      * <p>
      * The bounds are used to determine the area of the drawing when it is
-     * printed or exported to an image. {@code DrawingView} typically ignores this
-     * value so that the user can still edit figures which are outside of
+     * printed or exported to an image. {@code DrawingView} typically ignores
+     * this value so that the user can still edit figures which are outside of
      * the bounds of the drawing.
      * </p>
      * <p>
@@ -55,11 +57,12 @@ public interface Drawing extends Figure {
     /**
      * Defines the background paint of the drawing.
      * <p>
-     * A drawing typically renders a rectangle with the dimensions given
-     * by {@code BOUNDS} and fills it with the {@code BACKGROUND} paint.
+     * A drawing typically renders a rectangle with the dimensions given by
+     * {@code BOUNDS} and fills it with the {@code BACKGROUND} paint.
      * </p>
      * <p>
-     * This property is styleable with the key {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
+     * This property is styleable with the key
+     * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
     public final static PaintStyleableFigureKey BACKGROUND = new PaintStyleableFigureKey("background", Color.WHITE);
 

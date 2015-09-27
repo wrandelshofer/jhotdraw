@@ -23,11 +23,9 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.Effect;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.Handle;
@@ -38,8 +36,9 @@ import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
-import org.jhotdraw.draw.handle.BoundsInParentHandle;
+import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
+import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw.draw.key.EffectStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 
@@ -47,14 +46,14 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
  * <p>
  * <b>State.</b> The state of a figure is described by the values of its
- * property map. The values in the property map are typically accessed using a
- * {@code StyleableFigureKey} which support styling and which provides layout
- * hints (see further below).</p>
+ * property map.</p>
  * <p>
  * <b>Tree Structure.</b> A figure can be composed of other figures in a tree
  * structure. The composition is implemented with the {@code children} and the
  * {@code parent} properties. The composition can be restricted to a specific
- * parent type using the type parameter {@literal <P>}.</p>
+ * parent type. By convention all children of a {@code Drawing} must be
+ * {@link Layer}s, and the parent of a {@code Layer} must be a
+ * {@code Drawing}.</p>
  * <p>
  * <b>Connections.</b> A figure can be connected to other figures. The
  * connections are directed. By convention, when a figure "A" is connected to an
@@ -171,6 +170,11 @@ public interface Figure extends StyleablePropertyBean {
      * Default value: {@code 0}.
      */
     public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    /**
+     * Defines the visibility of the figure.
+     * Default value: {@code true}.
+     */
+    public static BooleanStyleableFigureKey VISIBLE = new BooleanStyleableFigureKey("visible", DirtyMask.of(DirtyBits.NODE), true);
     /**
      * Defines the id of the figure. The id is used for styling the figure with
      * CSS.
@@ -475,6 +479,10 @@ public interface Figure extends StyleablePropertyBean {
         } else {
             List<Handle> list = new LinkedList<>();
             list.add(new BoundsInLocalHandle(this, dv, Handle.STYLECLASS_HANDLE_OUTLINE));
+            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 0,0));
+            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 1,0));
+            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 0,1));
+            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 1,1));
             return list;
         }
     }
@@ -634,10 +642,8 @@ public interface Figure extends StyleablePropertyBean {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyFigureProperties(Node node) {
-        node.setId(getStyled(ID));
-        node.setStyle(getStyled(STYLE));
-        node.setId(getStyled(ID));
-        node.setId(getStyled(ID));
+        node.setId(get(ID));
+        node.setVisible(getStyled(VISIBLE));
         node.setBlendMode(getStyled(BLEND_MODE));
         node.setEffect(getStyled(EFFECT));
         node.setOpacity(getStyled(OPACITY));

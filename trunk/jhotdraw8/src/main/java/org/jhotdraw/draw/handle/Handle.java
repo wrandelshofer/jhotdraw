@@ -35,13 +35,17 @@ public interface Handle<F extends Figure> {
     public final static String STYLECLASS_HANDLE_WIREFRAME = "handle-wireframe";
 
     /**
+     * Style class for handles which move a shape.
+     */
+    public final static String STYLECLASS_HANDLE_MOVE = "handle-move";
+    /**
      * Style class for handles which draw a point of a shape.
      */
     public final static String STYLECLASS_HANDLE_POINT = "handle-point";
     /**
      * Style class for handles which draw a connection point of a shape.
      */
-    public final static String STYLECLASS_HANDLE_CONNECTION_POINT = "handle-connection-point";
+    public final static String STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED = "handle-connection-point-disconnected";
     /**
      * Style class for handles which draw a connection point of a shape.
      */
