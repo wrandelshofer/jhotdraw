@@ -17,7 +17,7 @@ import org.jhotdraw.collection.Key;
  * SimpleStyleablePropertyBean.
  * @author Werner Randelshofer
  */
-public class SimpleStyleablePropertyBean implements StyleablePropertyBean {
+public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBean {
     /**
      * Holds the properties.
      */

@@ -46,42 +46,61 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
  * <p>
- * A figure can render its graphical representation into a JavaFX {@code Node}.
+ * <b>State.</b> The state of a figure is described by the values of its
+ * property map. The values in the property map are typically accessed using a
+ * {@code StyleableFigureKey} which support styling and which provides layout
+ * hints (see further below).</p>
+ * <p>
+ * <b>Tree Structure.</b> A figure can be composed of other figures in a tree
+ * structure. The composition is implemented with the {@code children} and the
+ * {@code parent} properties. The composition can be restricted to a specific
+ * parent type using the type parameter {@literal <P>}.</p>
+ * <p>
+ * <b>Connections.</b> A figure can be connected to other figures. The
+ * connections are directed. By convention, when a figure "A" is connected to an
+ * other figure "B", then "A" adds itself in the {@code connections} property of
+ * "B". When "A" is disconnected from "B", then "A" removes itself from the
+ * {@code connections} property of "B".</p>
+ * <p>
+ * <b>Rendering.</b> A figure can render its graphical representation into a
+ * JavaFX {@code Node} with the help of a {@link RenderContext}.</p>
+ * <p>
+ * <b>Handles.</b> A figure can produce {@code Handle}s which allow to
+ * graphically change the state of the figure in a {@link DrawingView}.</p>
+ * <p>
+ * <b>Layout.</b> The state of a figure may depend on the state of other
+ * figures. The dependencies can be cyclic due to connections. A figure does not
+ * automatically update its dependent state. Method {@code layout()} must be
+ * invoked to incrementally update the state of a figure and its descendants
+ * based on the current state of all other figures in the tree structure.</p>
+ * <p>
+ * <b>Layout hints and node update hints.</b> Essentially each time when the
+ * state of a figure is changed, method {@code layout()} needs to be invoked on
+ * the root of the tree hierarchy to incrementally update the state of all
+ * dependent figures and then all figures need to be rendered again. This is
+ * time consuming. The interface {@link FigureKey} provides hints about which
+ * figures need to be laid out and rendered again. The hints are given by a
+ * {@link DirtyMask}.
  * </p>
  * <p>
- * A figure can be composed of other figures in a tree structure. The
- * composition is implemented with the {@code children} and the {@code parent}
- * properties. The composition can be restricted to specific child and parent
- * types using the type parameters {@code <Figure>} and {@code <F>}.</p>
- * <p>
- * Some figures can be connected to other figures. All figures which are
- * connected with this figure must maintain an entry in the {@code connections}
- * property of this figure.
- * </p>
- * <p>
- * The state of a figure is described by its property map. The property map
- * consists of key and value pairs. The keys are of type {@link Key}. If a
- * property affects the graphical representation of the figure, a key of type
- * {@code SimpleFigureKey} must be used. {@code SimpleFigureKey} provides a mean to describe
- * how the value affects the graphical representation of the figure.</p>
- * <p>
- * The state of a figure may depend on the state of other figures. The
- * dependencies may be cyclic due to connections. A figure provides a method
- * {@code layout} which updates the state of the figure and of its descendants
- * in the tree structure, but not of connected figures.
- * </p>
- * <p>
- * A figure can produce {@code Handle}s which allow to graphically change the
- * state of the figure.
+ * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
+ * corresponding property key must implement the interface
+ * {@link org.jhotdraw.draw.css.StyleableKey}. The style information is cached
+ * in the figure properties. When the position of a figure in the tree structure
+ * is changed, method {@code applyCss()} must be called to update the style
+ * information of the figure and its descendants.</p>
  *
- * @author Werner Randelshofer @version $Id$
+ * @author Werner Randelshofer
+ * @version $Id$
  */
-public interface Figure extends StyleablePropertyBean, Styleable {
+public interface Figure extends StyleablePropertyBean {
+
     // ----
     // various declarations
     // ----
-    /** To avoid name clashes in the stylesheet, all styleable JHotDraw properties
-     * use the prefix {@code "-jhotdraw-"}.
+    /**
+     * To avoid name clashes in the stylesheet, all styleable JHotDraw
+     * properties use the prefix {@code "-jhotdraw-"}.
      */
     public final static String JHOTDRAW_CSS_PREFIX = "-jhotdraw-";
     // ----
@@ -117,7 +136,7 @@ public interface Figure extends StyleablePropertyBean, Styleable {
      * Defines the angle of rotation around the center of the figure in degrees.
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey  ROTATE = new DoubleStyleableFigureKey("rotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey ROTATE = new DoubleStyleableFigureKey("rotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
      * Defines the rotation axis used. Default value: {@code Rotate.Z_AXIS}.
      */
@@ -126,7 +145,7 @@ public interface Figure extends StyleablePropertyBean, Styleable {
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey SCALE_X = new DoubleStyleableFigureKey("scaleX",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public static DoubleStyleableFigureKey SCALE_X = new DoubleStyleableFigureKey("scaleX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
@@ -136,7 +155,7 @@ public interface Figure extends StyleablePropertyBean, Styleable {
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
@@ -153,26 +172,26 @@ public interface Figure extends StyleablePropertyBean, Styleable {
      */
     public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
-     * Defines the id of the figure. 
-     * The id is used for styling the figure with CSS. 
-     * 
+     * Defines the id of the figure. The id is used for styling the figure with
+     * CSS.
+     *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> ID = new SimpleFigureKey<>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT), null);
+    public static SimpleFigureKey<String> ID = new SimpleFigureKey<>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
     /**
-     * Defines the style class of the figure. 
-     * The style class is used for styling the figure with CSS. 
-     * 
+     * Defines the style class of the figure. The style class is used for
+     * styling the figure with CSS.
+     *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<ObservableList<String>> STYLE_CLASS = new SimpleFigureKey<>("styleClass", ObservableList.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
+    public static SimpleFigureKey<ObservableList<String>> STYLE_CLASS = new SimpleFigureKey<>("styleClass", ObservableList.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
     /**
-     * Defines the style of the figure. 
-     * The style is used for styling the figure with CSS. 
-     * 
+     * Defines the style of the figure. The style is used for styling the figure
+     * with CSS.
+     *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", List.class, "<String>",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),null);
+    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", List.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
 
     // ----
     // property names
@@ -477,8 +496,9 @@ public interface Figure extends StyleablePropertyBean, Styleable {
      * update connection figures.
      */
     void layout();
+
     /**
-     * Applies the stylesheet on this figure and on its descendant figures. 
+     * Applies the stylesheet on this figure and on its descendant figures.
      */
     void applyCss();
     // ----
@@ -606,8 +626,8 @@ public interface Figure extends StyleablePropertyBean, Styleable {
     }
 
     /**
-     * Updates a figure node with all applicable {@code SimpleFigureKey}s defined in
-     * this interface.
+     * Updates a figure node with all applicable {@code SimpleFigureKey}s
+     * defined in this interface.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *

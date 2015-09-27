@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.css;
 
 import javafx.css.StyleOrigin;
+import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
@@ -28,7 +29,7 @@ import org.jhotdraw.collection.Key;
  *
  * @author Werner Randelshofer
  */
-public interface StyleablePropertyBean extends PropertyBean {
+public interface StyleablePropertyBean extends PropertyBean, Styleable {
 
     /**
      * Returns the styleable property.

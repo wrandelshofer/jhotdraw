@@ -11,13 +11,14 @@ import javafx.css.CssMetaData;
 import org.jhotdraw.collection.Key;
 
 /**
- * Interface for beans which support an open number of properties.
+ * Interface for beans which support an open number of properties in a property
+ * map.
  * <p>
  * A property is accessed using a type safe {@link Key}.
  * </p>
  * <p>
- * To implement this interface, you need to implement the
- * {@code valuesProperty()} method as shown below.
+ * To implement this interface, you need to implement method
+ * {@code valuesProperty()} as shown below.
  * </p>
  *
  * <pre><code>
@@ -36,10 +37,12 @@ import org.jhotdraw.collection.Key;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface PropertyBean  {
+public interface PropertyBean {
+
     // ---
     // constant declarations
     // ---
+
     /**
      * The name of the "properties" property.
      */
@@ -80,7 +83,7 @@ public interface PropertyBean  {
     default <T> T get(Key<T> key) {
         return key.get(properties());
     }
-    
+
     /**
      * Removes a property value.
      *
