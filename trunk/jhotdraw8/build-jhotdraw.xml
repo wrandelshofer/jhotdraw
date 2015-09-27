@@ -84,14 +84,14 @@
         header="${ant.project.name} ${version}" 
         windowtitle="${ant.project.name} ${version}"
         maxmemory="256M"
-        overview="${src}/org/jhotdraw/overview.html"
+        overview="${src.main.java}/org/jhotdraw/overview.html"
         charset="UTF-8"
         >
             <packageset dir="${src.main.java}">
                 <include name="org/jhotdraw/**"/>
             </packageset>
             <sourcepath>
-                <pathelement location="${src.main}"/>
+                <pathelement location="${src.main.java}"/>
             </sourcepath>
             <classpath>
                 <pathelement path="${lib.runtime}"/>
