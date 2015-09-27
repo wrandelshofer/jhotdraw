@@ -73,6 +73,7 @@
       <fileset dir="${src.main.java}">
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
+        <include name="**/*.png"/>
         <include name="**/*.fxml"/>
       </fileset>
     </copy>
