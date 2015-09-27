@@ -28,7 +28,10 @@
     <property name="dist" value="dist"/>
     <property name="javadoc" value="${dist}/javadoc"/>
     <property name="lib" value="lib"/>
-    <property name="src" value="src/main/java"/>
+    <property name="lib.runtime" value="${lib}/runtime"/>
+    <property name="lib.compile" value="${lib}/compile"/>
+    <property name="lib.test" value="${lib}/test"/>
+    <property name="src" value="src"/>
     <property name="doc" value="doc"/>
     <property name="build.classes" value="${build}/classes"/>
     <property name="build.jars" value="${build}/jars"/>
@@ -52,7 +55,6 @@
     <delete dir="${dist.standalone}"/>
   </target>
   <target name="do-clean" depends="init">
-    <delete dir="${lib}"/>
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
   </target>
@@ -85,14 +87,14 @@
         overview="${src}/org/jhotdraw/overview.html"
         charset="UTF-8"
         >
-            <packageset dir="${src}">
+            <packageset dir="${src.main.java}">
                 <include name="org/jhotdraw/**"/>
             </packageset>
             <sourcepath>
-                <pathelement location="${src}"/>
+                <pathelement location="${src.main}"/>
             </sourcepath>
             <classpath>
-                <pathelement location="${lib}/testng-6.8.1-dist.jar"/>
+                <pathelement path="${lib.runtime}"/>
             </classpath>
         </javadoc>
     </target>
@@ -152,9 +154,9 @@
   </target>
 
   <target name="do-dist" depends="init">
-    <mkdir dir="${dist.standalone}"/>
-    <mkdir dir="${dist.standalone}/lib"/>
-    <copy todir="${dist.standalone}/lib">
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/lib"/>
+    <copy todir="${dist}/lib">
       <fileset dir="${build.jars}">
         <exclude name=".*"/>
         <include name="*.jar"/>
@@ -164,21 +166,6 @@
         <include name="*.jar"/>
       </fileset>
     </copy>
-    <copy todir="${dist.standalone}/config">
-      <fileset dir="${src.main.config}">
-        <exclude name=".*"/>
-      </fileset>
-    </copy>
-    <copy todir="${dist.standalone}">
-      <fileset dir="${src.main.bash}">
-        <exclude name=".*"/>
-      </fileset>
-      <fileset dir="${build.doc}">
-        <exclude name=".*"/>
-        <include name="*.pdf"/>
-      </fileset>
-    </copy>
-    <chmod dir="${dist.standalone}" perm="ug+rx" includes="**/*.command"/>
   </target>
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
