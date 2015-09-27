@@ -5,17 +5,13 @@
 package org.jhotdraw.draw.key;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.function.Function;
-import javafx.beans.property.Property;
 import javafx.css.CssMetaData;
 import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.css.StyleablePropertyFactory;
-import javafx.geometry.Insets;
-import javafx.util.Pair;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
@@ -34,39 +30,34 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> 
     private final CssMetaData cssMetaData;
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
+     * Creates a new instance with the specified name and with null as the
+     * default value.
      *
-     * @param key The name of the name.
-     * @param metaData The CSS meta data.
+     * @param name The name of the key.
      */
-    public DoubleListStyleableFigureKey(String key) {
-        this(key, null);
+    public DoubleListStyleableFigureKey(String name) {
+        this(name, null);
     }
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * Creates a new instance with the specified name and default value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
+     * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleListStyleableFigureKey(String key, List<Double> defaultValue) {
-        this(key, DirtyMask.of(DirtyBits.NODE), defaultValue);
+    public DoubleListStyleableFigureKey(String name, List<Double> defaultValue) {
+        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * Creates a new instance with the specified name, mask and default value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
+     * @param name The name of the key.
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public DoubleListStyleableFigureKey(String key, DirtyMask mask, List<Double> defaultValue) {
-        super(key, List.class, "<Double>", mask, defaultValue);
+    public DoubleListStyleableFigureKey(String name, DirtyMask mask, List<Double> defaultValue) {
+        super(name, List.class, "<Double>", mask, defaultValue);
 
         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
 
@@ -85,7 +76,7 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> 
     }
 
     @Override
-    public CssMetaData createCssMetaData() {
+    public CssMetaData getCssMetaData() {
         return cssMetaData;
 
     }

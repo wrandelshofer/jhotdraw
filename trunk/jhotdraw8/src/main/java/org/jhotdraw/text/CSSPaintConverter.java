@@ -15,7 +15,8 @@ import javafx.scene.paint.Paint;
 /**
  * CSSPaintConverter.
  * <p>
- * Parses the following EBNF:
+ * Parses the following EBNF from the
+ * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX CSS Reference Guide</a>.
  * </p>
  * <pre>
  * Paint := (Color|LinearGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
@@ -26,11 +27,11 @@ import javafx.scene.paint.Paint;
  * NamedColor := Word
  * LookedUpColor := Word
  * RgbColor := ("#",Digit,Digit,Digit
- *             | #<digit><digit><digit><digit><digit><digit>
+ *             | "#",Digit,Digit,Digit,Digit,Digit,Digit
  *             | "rgb(", Integer, ",", Integer, ",", Integer, ")"
  *             | "rgb(" Integer, "%", ",", Integer,"%","," Integer,"%" ")"
- *             | "rgba(", Integer, ",", Integer, "," Integer, ",", Number )
- *             | "rgba(", Integer "%" "," Integer, "%" "," Integer "%" "," Number )
+ *             | "rgba(", Integer, ",", Integer, "," Integer, ",", Double )
+ *             | "rgba(", Integer "%" "," Integer, "%" "," Integer "%" "," Double )
  *  ...TODO...
  * </pre>
  * <p>
@@ -70,11 +71,11 @@ public class CSSPaintConverter implements Converter<Paint> {
     @Override
     public Paint fromString(CharBuffer buf) throws ParseException, IOException {
         try {
-       Color c= Color.web(buf.toString());
-       buf.position(buf.limit());
-       return c;
+            Color c = Color.web(buf.toString());
+            buf.position(buf.limit());
+            return c;
         } catch (IllegalArgumentException e) {
-            ParseException pe= new ParseException("not a color:"+buf,buf.position());
+            ParseException pe = new ParseException("not a color:" + buf, buf.position());
             pe.initCause(e);
             throw pe;
         }

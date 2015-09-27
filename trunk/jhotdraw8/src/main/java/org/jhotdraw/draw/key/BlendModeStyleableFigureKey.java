@@ -7,9 +7,6 @@ package org.jhotdraw.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.paint.Paint;
-import org.jhotdraw.collection.Key;
-import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.DirtyBits;
@@ -19,7 +16,7 @@ import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
  * BlendModeStyleableFigureKey.
- * @author werni
+ * @author Werner Randelshofer
  */
 public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> implements StyleableKey<BlendMode> {
 
@@ -27,26 +24,24 @@ public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> impl
     private final CssMetaData cssMetaData;
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
+     * Creates a new instance with the specified name and with null as the
+     * default value.
      *
-     * @param key The name of the name.
-     * @param metaData The CSS meta data.
+     * @param name The name of the key.
      */
-    public BlendModeStyleableFigureKey(String key) {
-        this(key, null);
+    public BlendModeStyleableFigureKey(String name) {
+        this(name, null);
     }
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * Creates a new instance with the specified name and default
+     * value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
+     * @param name The name of the key. 
      * @param defaultValue The default value.
      */
-    public BlendModeStyleableFigureKey(String key, BlendMode defaultValue) {
-        super(key, BlendMode.class, DirtyMask.of(DirtyBits.NODE), defaultValue);
+    public BlendModeStyleableFigureKey(String name, BlendMode defaultValue) {
+        super(name, BlendMode.class, DirtyMask.of(DirtyBits.NODE), defaultValue);
 
         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
         cssMetaData = factory.createEnumCssMetaData(BlendMode.class,
@@ -57,7 +52,7 @@ public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> impl
     }
 
     @Override
-    public CssMetaData createCssMetaData() {
+    public CssMetaData getCssMetaData() {
         return cssMetaData;
 
     }

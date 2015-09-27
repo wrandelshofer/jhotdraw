@@ -20,18 +20,19 @@ import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 
 /**
- * Holds properties which can be styled from a CSS stylesheet.
+ * {@code StyleablePropertyMap} provides an acceleration structure for
+ * properties which can by styled from CSS.
  * <p>
  * {@code StyleablePropertyMap} consists internally of four input maps and one
- * outputReadonly map.
+ * output map.
  * <ul>
  * <li>An input map is provided for each {@link StyleOrigin}.</li>
- * <li>The outputReadonly map contains the styled value. The style origins have
- * the precedence as defined in {@link StyleableProperty} which is
+ * <li>The output map contains the styled value. The style origins have the
+ * precedence as defined in {@link StyleableProperty} which is
  * {@code INLINE, AUTHOR, USER, USER_AGENT}.</li>
  * </ul>
  *
- * @author werni
+ * @author Werner Randelshofer
  */
 public class StyleablePropertyMap {
 
@@ -68,15 +69,15 @@ public class StyleablePropertyMap {
     /**
      * Holds the inline properties.
      */
-    protected final ReadOnlyMapProperty<Key<?>, Object> inline = new ReadOnlyMapWrapper<Key<?>, Object>(this, INLINE_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+    protected ReadOnlyMapProperty<Key<?>, Object> inline;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, INLINE_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
     /**
      * Holds the author properties.
      */
-    protected final ReadOnlyMapProperty<Key<?>, Object> author = new ReadOnlyMapWrapper<Key<?>, Object>(this, AUTHOR_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+    protected ReadOnlyMapProperty<Key<?>, Object> author;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, AUTHOR_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
     /**
      * Holds the user agent properties.
      */
-    protected final ReadOnlyMapProperty<Key<?>, Object> userAgent = new ReadOnlyMapWrapper<Key<?>, Object>(this, USER_AGENT_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+    protected ReadOnlyMapProperty<Key<?>, Object> userAgent;// 
     /**
      * Holds the outputReadonly properties.
      */
@@ -104,16 +105,12 @@ public class StyleablePropertyMap {
     // ---
     // constructors
     // ---
-    
-    
+
     public StyleablePropertyMap() {
         this(null);
     }
 
     public StyleablePropertyMap(Object bean) {
-        author.addListener(inputHandler);
-        userAgent.addListener(inputHandler);
-        inline.addListener(inputHandler);
         user.addListener(inputHandler);
         this.bean = bean;
     }
@@ -136,6 +133,10 @@ public class StyleablePropertyMap {
      * @return the map
      */
     ReadOnlyMapProperty<Key<?>, Object> userAgentProperties() {
+        if (userAgent == null) {
+            userAgent = new ReadOnlyMapWrapper<Key<?>, Object>(this, USER_AGENT_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+            userAgent.addListener(inputHandler);
+        }
         return userAgent;
     }
 
@@ -145,6 +146,10 @@ public class StyleablePropertyMap {
      * @return the map
      */
     ReadOnlyMapProperty<Key<?>, Object> authorProperties() {
+        if (author == null) {
+            author = new ReadOnlyMapWrapper<Key<?>, Object>(this, AUTHOR_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+            author.addListener(inputHandler);
+        }
         return author;
     }
 
@@ -154,6 +159,10 @@ public class StyleablePropertyMap {
      * @return the map
      */
     ReadOnlyMapProperty<Key<?>, Object> inlineProperties() {
+        if (inline == null) {
+            inline = new ReadOnlyMapWrapper<Key<?>, Object>(this, INLINE_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+            inline.addListener(inputHandler);
+        }
         return inline;
     }
 
@@ -171,14 +180,21 @@ public class StyleablePropertyMap {
     // ---
     // behavior
     // ---
-    
-    /** Clears all properties except the user properties. */
+    /**
+     * Clears all properties except the user properties.
+     */
     public void clearNonUserProperties() {
-        userAgent.clear();
-        inline.clear();
-        author.clear();
+        if (userAgent != null) {
+            userAgent.clear();
+        }
+        if (inline != null) {
+            inline.clear();
+        }
+        if (author != null) {
+            author.clear();
+        }
     }
-    
+
     private void updateOutput(Key<?> key) {
         StyleOrigin origin = getStyleOrigin(key);
         if (origin == null) {
@@ -186,17 +202,16 @@ public class StyleablePropertyMap {
         } else {
             switch (origin) {
                 case INLINE:
-                    output.put(key, inline.get(key));
+                    output.put(key, inlineProperties().get(key));
                     break;
                 case AUTHOR:
-System.out.println(this+" updating output k:"+key+" v:"+author.get(key));                    
-                    output.put(key, author.get(key));
+                    output.put(key, authorProperties().get(key));
                     break;
                 case USER:
-                    output.put(key, user.get(key));
+                    output.put(key, userProperties().get(key));
                     break;
                 case USER_AGENT:
-                    output.put(key, userAgent.get(key));
+                    output.put(key, userAgentProperties().get(key));
                     break;
                 default:
                     throw new InternalError("unknown enum value " + origin);
@@ -205,16 +220,19 @@ System.out.println(this+" updating output k:"+key+" v:"+author.get(key));
     }
 
     /**
-     * Returns the style origin of the specified value.
+     * Returns the style origin for the specified value.
+     *
+     * @param key The key identifying the value.
+     * @return The style origin or null if the key is not contained in the map.
      */
     public StyleOrigin getStyleOrigin(Key<?> key) {
-        if (inline.containsKey(key)) {
+        if (inline != null && inline.containsKey(key)) {
             return StyleOrigin.INLINE;
-        } else if (author.containsKey(key)) {
+        } else if (author != null && author.containsKey(key)) {
             return StyleOrigin.AUTHOR;
-        } else if (user.containsKey(key)) {
+        } else if (user != null && user.containsKey(key)) {
             return StyleOrigin.INLINE;
-        } else if (userAgent.containsKey(key)) {
+        } else if (userAgent != null && userAgent.containsKey(key)) {
             return StyleOrigin.USER_AGENT;
         } else {
             return null;
@@ -229,13 +247,42 @@ System.out.println(this+" updating output k:"+key+" v:"+author.get(key));
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
         if (sp == null) {
             if (key instanceof StyleableKey) {
-                sp = new MapStyleableProperty<>(key, ((StyleableKey) key).createCssMetaData());
+                sp = new MapStyleableProperty<>(key, ((StyleableKey) key).getCssMetaData());
             } else {
                 sp = new MapStyleableProperty<>(key, null);
             }
             styleableProperties.put(key, sp);
         }
         return sp;
+    }
+
+    public <T> T remove(StyleOrigin origin, Key<T> key) {
+        T value = null;
+        switch (origin) {
+            case INLINE:
+                if (inline != null) {
+                    value = (T) inline.remove(key);
+                }
+                break;
+            case AUTHOR:
+                if (author != null) {
+                    value = (T) author.remove(key);
+                }
+                break;
+            case USER:
+                if (user != null) {
+                    value = (T) user.remove(key);
+                }
+                break;
+            case USER_AGENT:
+                if (userAgent != null) {
+                    value = (T) userAgent.remove(key);
+                }
+                break;
+            default:
+                throw new InternalError("unknown enum value " + origin);
+        }
+        return value;
     }
 
     // ---
@@ -269,23 +316,23 @@ System.out.println(this+" updating output k:"+key+" v:"+author.get(key));
         @Override
         public void applyStyle(StyleOrigin origin, T value) {
             if (!key.isAssignable(value)) {
-                throw new ClassCastException("value is not assignable. key:"+key+" value:"+value);
+                throw new ClassCastException("value is not assignable. key:" + key + " value:" + value);
             }
             if (origin == null) {
                 throw new IllegalArgumentException("origin must not be null");
             } else {
                 switch (origin) {
                     case INLINE:
-                        inline.put(key, value);
+                        inlineProperties().put(key, value);
                         break;
                     case AUTHOR:
-                        author.put(key, value);
+                        authorProperties().put(key, value);
                         break;
                     case USER:
-                        user.put(key, value);
+                        userProperties().put(key, value);
                         break;
                     case USER_AGENT:
-                        userAgent.put(key, value);
+                        userAgentProperties().put(key, value);
                         break;
                     default:
                         throw new InternalError("unknown enum value " + origin);

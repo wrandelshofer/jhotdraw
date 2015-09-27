@@ -67,37 +67,37 @@ public class SimpleKey<T> implements Key<T> {
      * Creates a new instance with the specified name, type token class, default
      * value null, and allowing null values.
      *
-     * @param key The name of the name.
+     * @param name The name of the key.
      * @param clazz The type of the value.
      */
-    public SimpleKey(String key, Class<T> clazz) {
-        this(key, clazz, "", null);
+    public SimpleKey(String name, Class<T> clazz) {
+        this(name, clazz, "", null);
     }
 
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
      *
-     * @param key The name of the name.
+     * @param name The name of the key.
      * @param clazz The type of the value.
      * @param defaultValue The default value.
      */
-    public SimpleKey(String key, Class<T> clazz, T defaultValue) {
-        this(key, clazz, "", defaultValue);
+    public SimpleKey(String name, Class<T> clazz, T defaultValue) {
+        this(name, clazz, "", defaultValue);
     }
 
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
      *
-     * @param key The name of the name.
+     * @param name The name of the key.
      * @param clazz The type of the value.
      * @param typeParameters The type parameters of the class. Specify "" if no
      * type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public SimpleKey(String key, Class<?> clazz, String typeParameters, T defaultValue) {
-        if (key == null) {
+    public SimpleKey(String name, Class<?> clazz, String typeParameters, T defaultValue) {
+        if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
         if (clazz == null) {
@@ -112,7 +112,7 @@ public class SimpleKey<T> implements Key<T> {
                         + typeParameters);
             }
         }
-        this.name = key;
+        this.name = name;
         this.clazz = clazz;
         this.typeParameters = typeParameters;
         this.defaultValue = defaultValue;

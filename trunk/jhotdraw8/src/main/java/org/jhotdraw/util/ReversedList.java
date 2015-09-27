@@ -7,14 +7,16 @@ package org.jhotdraw.util;
 
 import java.util.*;
 /**
- * A ReversedList provides in unmodifiable view on a List in reverse order.
+ * A ReversedList provides an unmodifiable view on a List in reverse order.
  *
  * @author wrandels
  */
 public class ReversedList<T> extends AbstractList<T> {
     private List<T> target;
     
-    /** Creates a new instance of ReversedList */
+    /** Creates a new instance of ReversedList.
+     * @param target the target list
+     */
     public ReversedList(List<T> target) {
         this.target = target;
     }

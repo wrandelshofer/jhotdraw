@@ -1,17 +1,12 @@
-/*
- * @(#)SimpleDrawingRenderer.java
+/* @(#)SimpleDrawingRenderer.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.draw;
 
 import java.util.HashMap;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.collections.FXCollections;
 import javafx.scene.Node;
-import org.jhotdraw.collection.Key;
-import static org.jhotdraw.draw.RenderContext.RENDERING_HINTS_PROPERTY;
+import org.jhotdraw.beans.SimplePropertyBean;
 
 /**
  * SimpleDrawingRenderer.
@@ -19,19 +14,15 @@ import static org.jhotdraw.draw.RenderContext.RENDERING_HINTS_PROPERTY;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class SimpleDrawingRenderer implements RenderContext {
-
-    /**
-     * Holds the rendering hints.
-     */
-    protected final ReadOnlyMapProperty<Key<?>, Object> renderingHints = new ReadOnlyMapWrapper<Key<?>, Object>(this, RENDERING_HINTS_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
-
+public class SimpleDrawingRenderer extends SimplePropertyBean implements RenderContext {
+    // ---
+    // Field declarations
+    // ---
     protected final HashMap<Figure,Node> figureToNodeMap = new HashMap<>();
     
-    @Override
-    public ReadOnlyMapProperty<Key<?>, Object> renderingHints() {
-        return renderingHints;
-    }
+    // ---
+    // Behavior
+    // ---
 
     @Override
     public Node getNode(Figure f) {

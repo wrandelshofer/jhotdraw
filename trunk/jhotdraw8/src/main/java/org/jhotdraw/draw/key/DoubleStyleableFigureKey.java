@@ -4,74 +4,66 @@
  */
 package org.jhotdraw.draw.key;
 
-import java.util.List;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
-import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.DirtyBits;
 import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.SimpleFigureKey;
-import org.jhotdraw.draw.css.DoubleListStyleConverter;
 import org.jhotdraw.text.CSSSizeConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
  * DoubleStyleableFigureKey.
- * @author werni
+ *
+ * @author Werner Randelshofer
  */
 public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements StyleableKey<Double> {
 
-    
     private final CssMetaData cssMetaData;
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
+     * Creates a new instance with the specified name and with null as the
+     * default value.
      *
-     * @param key The name of the name.
-     * @param metaData The CSS meta data.
+     * @param name The name of the key.
      */
-    public DoubleStyleableFigureKey(String key) {
-        this(key, null);
+    public DoubleStyleableFigureKey(String name) {
+        this(name, null);
     }
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * Creates a new instance with the specified name and default value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
+     * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleStyleableFigureKey(String key, Double defaultValue) {
-        this(key,DirtyMask.of(DirtyBits.NODE),defaultValue);
+    public DoubleStyleableFigureKey(String name, Double defaultValue) {
+        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
+
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * Creates a new instance with the specified name, mask and default value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
+     * @param name The name of the key.
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public DoubleStyleableFigureKey(String key,DirtyMask mask, Double defaultValue) {
-        super(key, Double.class, mask, defaultValue);
-/*
-        StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-        cssMetaData = factory.createSizeCssMetaData(
-                Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-                    StyleablePropertyBean spb = (StyleablePropertyBean) s;
-                    return spb.getStyleableProperty(this);
-                });*/
-        
+    public DoubleStyleableFigureKey(String name, DirtyMask mask, Double defaultValue) {
+        super(name, Double.class, mask, defaultValue);
+        /*
+         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
+         cssMetaData = factory.createSizeCssMetaData(
+         Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
+         StyleablePropertyBean spb = (StyleablePropertyBean) s;
+         return spb.getStyleableProperty(this);
+         });*/
+
         Function<Styleable, StyleableProperty<Double>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
@@ -83,11 +75,11 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
         CssMetaData<Styleable, Double> md
                 = new SimpleCssMetaData<Styleable, Double>(property, function,
                         converter, defaultValue, inherits);
-        cssMetaData = md;  
+        cssMetaData = md;
     }
 
     @Override
-    public CssMetaData createCssMetaData() {
+    public CssMetaData getCssMetaData() {
         return cssMetaData;
 
     }

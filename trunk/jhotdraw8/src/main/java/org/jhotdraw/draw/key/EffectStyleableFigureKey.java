@@ -19,7 +19,7 @@ import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
  * EffectStyleableFigureKey.
- * @author werni
+ * @author Werner Randelshofer
  */
 public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements StyleableKey<Effect> {
 
@@ -27,26 +27,23 @@ public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements
     private final CssMetaData cssMetaData;
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
+     * Creates a new instance with the specified name and with null as the
+     * default value.
      *
-     * @param key The name of the name.
-     * @param metaData The CSS meta data.
+     * @param name The name of the key.
      */
-    public EffectStyleableFigureKey(String key) {
-        this(key, null);
+    public EffectStyleableFigureKey(String name) {
+        this(name, null);
     }
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+   /**
+     * Creates a new instance with the specified name and default value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
+     * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public EffectStyleableFigureKey(String key, Effect defaultValue) {
-        super(key, Effect.class, DirtyMask.of(DirtyBits.NODE), defaultValue);
+    public EffectStyleableFigureKey(String name, Effect defaultValue) {
+        super(name, Effect.class, DirtyMask.of(DirtyBits.NODE), defaultValue);
 
         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
         cssMetaData = factory.createEffectCssMetaData(
@@ -57,7 +54,7 @@ public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements
     }
 
     @Override
-    public CssMetaData createCssMetaData() {
+    public CssMetaData getCssMetaData() {
         return cssMetaData;
 
     }

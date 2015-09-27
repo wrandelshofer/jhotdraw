@@ -57,7 +57,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
     }
 
     @Override
-    public CssMetaData createCssMetaData() {
+    public CssMetaData getCssMetaData() {
         return null;
     }
 

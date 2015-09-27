@@ -80,4 +80,15 @@ public interface PropertyBean  {
     default <T> T get(Key<T> key) {
         return key.get(properties());
     }
+    
+    /**
+     * Removes a property value.
+     *
+     * @param <T> the value type
+     * @param key the key
+     * @return the removed value
+     */
+    default <T> T remove(Key<T> key) {
+        return (T) properties().remove(key);
+    }
 }
