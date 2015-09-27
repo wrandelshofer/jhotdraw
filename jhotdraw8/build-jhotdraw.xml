@@ -167,6 +167,13 @@
         <include name="*.jar"/>
       </fileset>
     </copy>
+    <jar file="${dist}/${ant.project.name}-source.jar">
+        <fileset dir=".">
+            <exclude name=".*"/>
+            <exclude name="build/**"/>
+            <exclude name="dist/**"/>
+        </fileset>
+    </jar>
   </target>
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
