@@ -41,8 +41,8 @@ public class MoveHandle extends AbstractHandle {
 
     protected void initNode(Rectangle r) {
         // FIXME width and height must come from stylesheet
-        r.setWidth(8);
-        r.setHeight(8);
+        r.setWidth(5);
+        r.setHeight(5);
         r.setFill(Color.WHITE);
         r.setStroke(Color.BLUE);
         r.getStyleClass().add(styleclass);

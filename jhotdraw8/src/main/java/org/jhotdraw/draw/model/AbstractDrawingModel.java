@@ -4,12 +4,12 @@
  */
 package org.jhotdraw.draw.model;
 
-import org.jhotdraw.draw.model.DrawingModelEvent;
-import org.jhotdraw.draw.model.DrawingModel;
+import java.util.HashSet;
+import java.util.LinkedList;
 import javafx.beans.InvalidationListener;
 import org.jhotdraw.beans.ListenerSupport;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.event.Listener;
 
 /**
@@ -22,6 +22,15 @@ public abstract class AbstractDrawingModel implements DrawingModel {
 
     private final ListenerSupport<Listener<DrawingModelEvent>> listeners = new ListenerSupport<>();
     private final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport<>();
+    /**
+     * This is the set of figures which are out of sync with their stylesheet.
+     */
+    private final HashSet<Figure> dirtyStyles = new HashSet<>();
+    /**
+     * This is the set of figures which are out of sync with their layout.
+     */
+    private final HashSet<Figure> dirtyLayouts = new HashSet<>();
+    private boolean isValidating = false;
     protected Drawing root;
 
     @Override
@@ -53,5 +62,62 @@ public abstract class AbstractDrawingModel implements DrawingModel {
     public void fire(DrawingModelEvent event) {
         listeners.fire(l -> l.handle(event));
         invalidationListeners.fire(l -> l.invalidated(this));
+        handle(event);
+    }
+
+    protected void handle(DrawingModelEvent event) {
+        if (isValidating) {
+            return;
+        }
+        switch (event.getEventType()) {
+        case FIGURE_ADDED:
+            invalidateStyle(event.getFigure());
+            break;
+        case FIGURE_REMOVED:
+        case NODE_INVALIDATED:
+        case ROOT_CHANGED:
+        case SUBTREE_NODES_INVALIDATED:
+            // not my business
+            break;
+        case LAYOUT_INVALIDATED:
+            invalidateLayout(event.getFigure());
+            break;
+        case SUBTREE_STRUCTURE_CHANGED:
+            invalidateLayout(event.getFigure());
+            break;
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + "not supported");
+        }
+    }
+
+    protected void invalidateLayout(Figure figure) {
+        dirtyLayouts.add(figure);
+    }
+    protected void invalidateStyle(Figure figure) {
+        dirtyStyles.add(figure);
+    }
+
+
+    @Override
+    public void validate() {
+        if (!dirtyStyles.isEmpty()) {
+            isValidating = true;
+            LinkedList<Figure> fs = new LinkedList<>(dirtyStyles);
+            dirtyStyles.clear();
+            for (Figure f : fs) {
+                applyCss(f);
+            }
+            isValidating = false;
+        }
+        if (!dirtyLayouts.isEmpty()) {
+            isValidating = true;
+            LinkedList<Figure> fs = new LinkedList<>(dirtyLayouts);
+            dirtyLayouts.clear();
+            for (Figure f : fs) {
+                layout(f);
+            }
+            isValidating = false;
+        }
     }
 }

@@ -55,10 +55,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         });
     }
     protected final BorderPane node = new BorderPane();
-    /**
-     * This is the set of figures which are out of sync with their layout.
-     */
-    private final HashSet<Figure> dirtyLayouts = new HashSet<>();
 
     /**
      * Listeners.
@@ -69,7 +65,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         node.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
             if (drawingView.get() != null) {
                 DrawingView dv = drawingView.get();
-                registerLayoutInvalidationListener(dv);
                 EventType<? extends MouseEvent> type = event.getEventType();
                 if (type == MouseEvent.MOUSE_MOVED) {
                     onMouseMoved(event, dv);
@@ -87,14 +82,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                     onMouseClicked(event, dv);
                 }
                 event.consume();
-                unregisterLayoutInvalidationListener(dv);
-                validateLayouts(dv);
             }
         });
         node.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {
             if (drawingView.get() != null) {
                 DrawingView dv = drawingView.get();
-                registerLayoutInvalidationListener(dv);
                 EventType<? extends KeyEvent> type = event.getEventType();
                 if (type == KeyEvent.KEY_PRESSED) {
                     onKeyPressed(event, dv);
@@ -104,8 +96,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                     onKeyTyped(event, dv);
                 }
                 event.consume();
-                unregisterLayoutInvalidationListener(dv);
-                validateLayouts(dv);
             }
         });
     }
@@ -113,34 +103,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * Listeners.
      */
     private final LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
-    /**
-     * Handler for drawing model events.
-     */
-    private final Listener<DrawingModelEvent> layoutInvalidationListener = new Listener<DrawingModelEvent>() {
-
-        @Override
-        public void handle(DrawingModelEvent event) {
-            switch (event.getEventType()) {
-            case FIGURE_ADDED:
-            case FIGURE_REMOVED:
-            case NODE_INVALIDATED:
-            case ROOT_CHANGED:
-            case SUBTREE_NODES_INVALIDATED:
-                // not my business
-                break;
-            case LAYOUT_INVALIDATED:
-                invalidateLayout(event.getFigure());
-                break;
-            case SUBTREE_STRUCTURE_CHANGED:
-                invalidateLayout(event.getFigure());
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + "not supported");
-            }
-        }
-    };
-
     // ---
     // Constructors
     // ---
@@ -320,26 +282,4 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     public void setDrawingView(DrawingView drawingView) {
         drawingViewProperty().set(drawingView);
     }
-
-    protected void registerLayoutInvalidationListener(DrawingView dv) {
-        dv.getDrawingModel().addDrawingModelListener(layoutInvalidationListener);
-    }
-
-    protected void unregisterLayoutInvalidationListener(DrawingView dv) {
-        dv.getDrawingModel().removeDrawingModelListener(layoutInvalidationListener);
-    }
-
-    protected void invalidateLayout(Figure figure) {
-        dirtyLayouts.add(figure);
-    }
-
-    protected void validateLayouts(DrawingView dv) {
-        DrawingModel dm = dv.getDrawingModel();
-        LinkedList<Figure> fs = new LinkedList<>(dirtyLayouts);
-        dirtyLayouts.clear();
-        for (Figure f : fs) {
-            dm.layout(f);
-        }
-    }
-
 }
