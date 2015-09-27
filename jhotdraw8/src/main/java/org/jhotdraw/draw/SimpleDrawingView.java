@@ -65,13 +65,14 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import org.jhotdraw.beans.SimplePropertyBean;
 
 /**
  * FXML Controller class
  *
  * @author werni
  */
-public class SimpleDrawingView implements DrawingView {
+public class SimpleDrawingView extends SimplePropertyBean implements DrawingView {
 
     @FXML
     private SubScene drawingSubScene;
@@ -147,11 +148,6 @@ public class SimpleDrawingView implements DrawingView {
      */
     private final NonnullProperty<Constrainer> constrainer = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
     private boolean handlesAreValid;
-
-    /**
-     * Holds the rendering hints.
-     */
-    protected final ReadOnlyMapProperty<Key<?>, Object> renderingHints = new ReadOnlyMapWrapper<Key<?>, Object>(this, RENDERING_HINTS_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
 
     /**
      * The selectionProperty holds the list of selected figures.
@@ -840,10 +836,5 @@ public class SimpleDrawingView implements DrawingView {
 
     private void invalidateDrawingViewTransforms() {
         drawingToViewTransform = viewToDrawingTransform = null;
-    }
-
-    @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> renderingHints() {
-        return renderingHints;
     }
 }

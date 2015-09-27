@@ -19,34 +19,33 @@ import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
  * FontStyleableFigureKey.
+ *
  * @author werni
  */
 public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements StyleableKey<Font> {
 
-    
     private final CssMetaData cssMetaData;
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
+     * Creates a new instance with the specified name and with null as the
+     * default value.
      *
-     * @param key The name of the name.
-     * @param metaData The CSS meta data.
+     * @param name The name of the key.
      */
-    public FontStyleableFigureKey(String key) {
-        this(key, null);
+    public FontStyleableFigureKey(String name) {
+        this(name, null);
     }
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * Creates a new instance with the specified name and default value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
+     * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public FontStyleableFigureKey(String key, Font defaultValue) {
-        super(key, Font.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), defaultValue);
+    public FontStyleableFigureKey(String name, Font defaultValue) {
+        super(name, Font.class, //
+                DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),//
+                defaultValue);
 
         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
         cssMetaData = factory.createFontCssMetaData(
@@ -57,7 +56,7 @@ public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements Sty
     }
 
     @Override
-    public CssMetaData createCssMetaData() {
+    public CssMetaData getCssMetaData() {
         return cssMetaData;
 
     }

@@ -19,34 +19,36 @@ import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
  * EnumStyleableFigureKey.
+ *
  * @author werni
  */
 public class EnumStyleableFigureKey<T extends Enum> extends SimpleFigureKey<T> implements StyleableKey<T> {
 
-    
     private final CssMetaData cssMetaData;
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value null, and allowing null values.
+     * Creates a new instance with the specified name, enum class, mask and with
+     * null as the default value.
      *
-     * @param key The name of the name.
-     * @param metaData The CSS meta data.
+     * @param name The name of the key.
+     * @param clazz The enum class.
+     * @param mask The mask.
      */
-    public EnumStyleableFigureKey(String key, Class<T> clazz, DirtyMask mask) {
-        this(key, clazz, mask, null);
+    public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask) {
+        this(name, clazz, mask, null);
     }
 
     /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * Creates a new instance with the specified name, enum class, mask and 
+     * default value.
      *
-     * @param key The name of the name. type parameters are given. Otherwise
-     * specify them in arrow brackets.
+     * @param name The name of the key.
+     * @param clazz The enum class.
+     * @param mask The mask.
      * @param defaultValue The default value.
      */
-    public EnumStyleableFigureKey(String key, Class<T> clazz, DirtyMask mask,T defaultValue) {
-        super(key, clazz, mask, defaultValue);
+    public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask, T defaultValue) {
+        super(name, clazz, mask, defaultValue);
 
         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
@@ -57,7 +59,7 @@ public class EnumStyleableFigureKey<T extends Enum> extends SimpleFigureKey<T> i
     }
 
     @Override
-    public CssMetaData createCssMetaData() {
+    public CssMetaData getCssMetaData() {
         return cssMetaData;
 
     }

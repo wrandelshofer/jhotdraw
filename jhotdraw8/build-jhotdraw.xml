@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * @(#)build-jhotdraw8.xml
+ * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
+-->
+<project name="jhotdraw8" basedir="." default="all">
+  <!-- ignore system classpath to get consistent builds on different platforms -->
+  <property name="build.sysclasspath" value="ignore"/>
+
+  <target name="init" description="initializes the build targets">
+    <property name="jdk" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home"/>
+    <property name="jdk.version" value="8"/>
+
+
+    <property name="copyright" value="Copyright (c) 2015 by the authors and contributors of JHotDraw."/>
+    <exec executable="svnversion" outputproperty="svn.version" />
+    <property name="version" value="rev${svn.version}"/>
+    
+    <property name="manifest.application-name" value="${ant.project.name}"/>
+    <property name="manifest.implementation-version" value="${version}"/>
+    <property name="manifest.implementation-vendor" value="org.jhotdraw"/>
+    <property name="manifest.main-class" value="org.jhotdraw.samples.grapher.GrapherApplication"/>
+
+    <property name="build" value="build"/>
+    <property name="bin" value="bin"/>
+    <property name="doc" value="doc"/>
+    <property name="dist" value="dist"/>
+    <property name="javadoc" value="${dist}/javadoc"/>
+    <property name="lib" value="lib"/>
+    <property name="src" value="src/main/java"/>
+    <property name="doc" value="doc"/>
+    <property name="build.classes" value="${build}/classes"/>
+    <property name="build.jars" value="${build}/jars"/>
+    <property name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
+
+
+    <property name="src.main.java" value="${src}/main/java"/>
+    <property name="src.test.java" value="${src}/test/java"/>
+  </target>
+
+  <target name="do-clean.compile" depends="init">
+    <delete dir="${build.classes}"/>
+  </target>
+  <target name="do-clean.jar" depends="init">
+    <delete dir="${build.jars}"/>
+  </target>
+  <target name="do-clean.pdflatex" depends="init">
+    <delete dir="${build.doc}"/>
+  </target>
+  <target name="do-clean.dist" depends="init">
+    <delete dir="${dist.standalone}"/>
+  </target>
+  <target name="do-clean" depends="init">
+    <delete dir="${lib}"/>
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+  <target name="do-compile" depends="init">
+    <mkdir dir="${build.classes}"/>
+    <javac executable="${jdk}/bin/javac" fork="yes"
+           source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.classes}"
+             >
+      <src path="${src.main.java}"/>
+      <classpath>
+        <fileset dir="${lib.compile}" />
+      </classpath>
+      <compilerarg value="-version"/>
+    </javac>
+    <copy todir="${build.classes}">
+      <fileset dir="${src.main.java}">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.fxml"/>
+      </fileset>
+    </copy>
+  </target>
+    <target depends="init" name="do-javadoc">
+        <mkdir dir="${javadoc}"/>
+        <javadoc destdir="${javadoc}" 
+        footer="&lt;font size=-2>${copyright}/font>"
+        header="${ant.project.name} ${version}" 
+        windowtitle="${ant.project.name} ${version}"
+        maxmemory="256M"
+        overview="${src}/org/jhotdraw/overview.html"
+        charset="UTF-8"
+        >
+            <packageset dir="${src}">
+                <include name="org/jhotdraw/**"/>
+            </packageset>
+            <sourcepath>
+                <pathelement location="${src}"/>
+            </sourcepath>
+            <classpath>
+                <pathelement location="${lib}/testng-6.8.1-dist.jar"/>
+            </classpath>
+        </javadoc>
+    </target>
+  <target name="do-jar" depends="init">
+    <pathconvert property="manifest.class-path" pathsep=" " >
+      <map from="${basedir}/${lib.runtime}/" to=""/>
+      <fileset dir="${basedir}/${lib.runtime}">
+        <exclude name=".*" />
+        <include name="*.jar" />
+      </fileset>
+    </pathconvert>
+
+    <jar destfile="${build.jars}/${ant.project.name}.jar">
+      <!-- The attributes are structured into section has described here:
+      https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#Main_Attributes
+      https://docs.oracle.com/javase/8/docs/technotes/guides/deploy/manifest.html
+      -->
+      <manifest>
+        <!--
+          ~ Main Attributes
+        -->
+        <!-- general main attributes -->
+        <attribute name="Manifest-Version" value="1.0"/>
+        <attribute name="Created-By" value="${manifest.implementation-vendor}"/>
+        <attribute name="Signature-Version" value="1.0"/>
+        <attribute name="Class-Path" value="${manifest.class-path}"/>
+
+        <!-- attribute defined for stand-alone applications -->
+        <attribute name="Main-Class" value="${manifest.main-class}"/>
+
+        <!-- attribute defined for extension identification -->
+        <!-- attribute name="Extension-Name" value="..."/-->
+
+        <!-- attributes defined for extension and package versioning and sealing information -->
+        <attribute name="Implementation-Title" value="${manifest.application-name}"/>
+        <attribute name="Implementation-Version" value="${manifest.implementation-version}"/>
+        <attribute name="Implementation-Vendor" value="${manifest.implementation-vendor}"/>
+        <attribute name="Specification-Title" value="${manifest.application-name}"/>
+        <attribute name="Specification-Version" value="${manifest.implementation-version}"/>
+        <attribute name="Specification-Vendor" value="${manifest.implementation-vendor}"/>
+        <attribute name="Sealed" value="false"/>
+
+        <!-- attributes for security -->
+        <attribute name="Permissions" value="all-permissions"/>
+        <attribute name="Codebase" value="*"/>
+        <attribute name="Application-Name" value="${manifest.application-name}"/>
+        <attribute name="Application-Library-Allowable-Codebase" value="*"/>
+        <attribute name="Caller-Allowable-Codebase" value="*"/>
+        <attribute name="Entry-Point" value="ch.systransis.arl.editor.EditorMain"/>
+        <attribute name="Trusted-Only" value="false"/>
+        <attribute name="Trusted-Library" value="false"/>
+      </manifest>
+      <fileset dir="${build.classes}">
+        <exclude name=".*"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="do-dist" depends="init">
+    <mkdir dir="${dist.standalone}"/>
+    <mkdir dir="${dist.standalone}/lib"/>
+    <copy todir="${dist.standalone}/lib">
+      <fileset dir="${build.jars}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${lib.runtime}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist.standalone}/config">
+      <fileset dir="${src.main.config}">
+        <exclude name=".*"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist.standalone}">
+      <fileset dir="${src.main.bash}">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${build.doc}">
+        <exclude name=".*"/>
+        <include name="*.pdf"/>
+      </fileset>
+    </copy>
+    <chmod dir="${dist.standalone}" perm="ug+rx" includes="**/*.command"/>
+  </target>
+
+  <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
+  </target>
+  <target name="compile" depends="clean,do-compile" description="compiles the java sources and copies resource files">
+  </target>
+  <target name="jar" depends="compile,do-jar" description="bundles the class files into a jar file">
+  </target>
+  <target name="javadoc" depends="clean,do-javadoc" description="generates javadoc documentation">
+  </target>
+  <target name="dist" depends="jar,javadoc,do-dist" description="Erstellt eine Distribution für eine Stand-Alone Applikation">
+  </target>
+  <target name="all" depends="dist" description="Erstellt alles">
+  </target>
+</project>
+

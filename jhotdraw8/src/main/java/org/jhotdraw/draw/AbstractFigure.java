@@ -23,7 +23,7 @@ import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import org.jhotdraw.beans.SimplePropertyBean;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.css.AbstractStyleablePropertyBean;
+import org.jhotdraw.draw.css.SimpleStyleablePropertyBean;
 import org.jhotdraw.draw.css.StyleableKey;
 import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
 import org.jhotdraw.draw.css.StyleableStyleManager;
@@ -34,7 +34,7 @@ import org.jhotdraw.draw.css.StyleableStyleManager;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure {
+public abstract class AbstractFigure extends SimpleStyleablePropertyBean implements Figure {
 
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
 
@@ -95,7 +95,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
             if (key instanceof StyleableKey) {
                 StyleableKey sk = (StyleableKey) key;
 
-                list.add(sk.createCssMetaData());
+                list.add(sk.getCssMetaData());
             }
         }
         return list;

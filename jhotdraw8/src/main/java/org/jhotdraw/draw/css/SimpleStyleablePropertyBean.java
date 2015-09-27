@@ -1,4 +1,4 @@
-/* @(#)AbstractStyleablePropertyBean.java
+/* @(#)SimpleStyleablePropertyBean.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -7,16 +7,17 @@ package org.jhotdraw.draw.css;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.FXCollections;
+import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.beans.PropertyBean;
 import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 
 /**
- * AbstractStyleablePropertyBean.
+ * SimpleStyleablePropertyBean.
  * @author Werner Randelshofer
  */
-public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
+public class SimpleStyleablePropertyBean implements StyleablePropertyBean {
     /**
      * Holds the properties.
      */
@@ -37,5 +38,10 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     @Override
     public <T> T getStyled(Key<T> key) {
         return key.get(styleableProperties.outputProperties());
+    }
+
+    @Override
+    public <T> T remove(StyleOrigin origin, Key<T> key) {
+        return styleableProperties.remove(origin,key);
     }
 }

@@ -16,16 +16,16 @@ import org.jhotdraw.collection.Key;
 public interface StyleableKey<T> extends Key<T> {
 
     /**
-     * Creates the CssMetaData for a {@code StyleablePropertyBean}.
+     * Gets the CssMetaData.
+     * @return the meta data
      */
-    CssMetaData createCssMetaData();
+    CssMetaData getCssMetaData();
 
     /**
      * Returns the CSS name string.
      * <p>
-     * The default implementation converts the name from camel case to lower
-     * case. Before each upper case character which was not preceded by an upper
-     * case character a dash is inserted.
+     * The default implementation converts the name from "camel case" to 
+     * "dash separated words".
      *
      * @return name string.
      */
