@@ -35,6 +35,7 @@ import static java.lang.Math.max;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
+import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
@@ -171,10 +172,13 @@ public interface Figure extends StyleablePropertyBean {
      */
     public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     /**
-     * Defines the visibility of the figure.
-     * Default value: {@code true}.
+     * Defines the visibility of the figure. Default value: {@code true}.
      */
     public static BooleanStyleableFigureKey VISIBLE = new BooleanStyleableFigureKey("visible", DirtyMask.of(DirtyBits.NODE), true);
+    /**
+     * Whether the figure is disabled. Default value: {@code false}.
+     */
+    public static BooleanKey DISABLED = new BooleanKey("disabled", false);
     /**
      * Defines the id of the figure. The id is used for styling the figure with
      * CSS.
@@ -456,6 +460,22 @@ public interface Figure extends StyleablePropertyBean {
     boolean isSelectable();
 
     /**
+     * Whether the figure or one if its ancestors is disabled.
+     *
+     * @return true if the user may select the figure
+     */
+    default boolean isDisabled() {
+        Figure node = this;
+        while (node != null) {
+            if (node.get(DISABLED)) {
+                return true;
+            }
+            node = node.getParent();
+        }
+        return false;
+    }
+
+    /**
      * Whether the figure is decomposable.
      *
      * @return true if the figure is decomposable
@@ -479,10 +499,10 @@ public interface Figure extends StyleablePropertyBean {
         } else {
             List<Handle> list = new LinkedList<>();
             list.add(new BoundsInLocalHandle(this, dv, Handle.STYLECLASS_HANDLE_OUTLINE));
-            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 0,0));
-            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 1,0));
-            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 0,1));
-            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 1,1));
+            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 0, 0));
+            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 1, 0));
+            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 0, 1));
+            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 1, 1));
             return list;
         }
     }
