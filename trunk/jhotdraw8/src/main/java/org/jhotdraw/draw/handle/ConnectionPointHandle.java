@@ -6,12 +6,9 @@ package org.jhotdraw.draw.handle;
 
 import java.util.List;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -57,7 +54,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         r.setStroke(Color.BLUE);
         r.getStyleClass().add(styleclass);
         // FIXME Value must come from stylesheet
-        r.setRadius(4);
+        r.setRadius(3);
     }
 
     @Override

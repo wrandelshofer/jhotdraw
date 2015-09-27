@@ -174,4 +174,10 @@ public interface DrawingModel extends Observable {
      * @param event the event
      */
     void fire(DrawingModelEvent event);
+    
+    /** Validates the model. 
+     * This method is invoked by {@code DrawingView} each time before it renders
+     * the model.
+     */
+    void validate();
 }

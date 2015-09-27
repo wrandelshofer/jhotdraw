@@ -476,6 +476,22 @@ public interface Figure extends StyleablePropertyBean {
     }
 
     /**
+     * Whether the figure and all its ancestors are visible.
+     *
+     * @return true if the user can see the figure
+     */
+    default boolean isVisible() {
+        Figure node = this;
+        while (node != null) {
+            if (!node.get(VISIBLE)) {
+                return false;
+            }
+            node = node.getParent();
+        }
+        return true;
+    }
+
+    /**
      * Whether the figure is decomposable.
      *
      * @return true if the figure is decomposable

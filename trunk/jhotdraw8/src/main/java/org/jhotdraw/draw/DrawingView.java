@@ -33,6 +33,15 @@ import org.jhotdraw.draw.handle.Handle;
  * <li>Grid. Displays a grid.</li>
  * <li>Tools. Displays the handles used for editing figures.</li>
  * </ul>
+ * <p>
+ * {@code DrawingView} uses a {@code DrawingModel} to listen for changes on
+ * a {@code Drawing}. Once a drawing is showing in a drawing view, all changes
+ * to the drawing must be performed on the drawing model.</p>
+ * <p>
+ * {@code DrawingView} invokes {@code validate()} on its {@code DrawingModel}
+ * each time before it renders the drawing to ensure that the figures are laid
+ * out and that CSS styles are applied before rendering the drawing.
+ * </p>
  *
  *
  * @author Werner Randelshofer

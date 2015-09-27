@@ -497,6 +497,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void updateView() {
+        getDrawingModel().validate();
         LinkedList<Figure> updateNodes = new LinkedList<>(dirtyFigureNodes);
         dirtyFigureNodes.clear();
         for (Figure f : updateNodes) {
@@ -596,7 +597,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                         f = findFigureRecursive((Parent) n, pl);
                     }
                 }
-                if (!f.isDisabled()) {
+                if (f!=null&&!f.isDisabled()) {
                     return f;
                 }
             }
