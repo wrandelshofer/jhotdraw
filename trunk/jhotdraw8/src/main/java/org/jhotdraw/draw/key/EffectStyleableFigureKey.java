@@ -12,10 +12,7 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
-import org.jhotdraw.draw.DirtyBits;
-import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
  * EffectStyleableFigureKey.

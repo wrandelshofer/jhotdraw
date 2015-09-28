@@ -12,7 +12,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.SimpleFigureKey;
+import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.model.DrawingModel;
 

@@ -4,6 +4,9 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.key.DirtyBits;
+import org.jhotdraw.draw.key.DirtyMask;
+import org.jhotdraw.draw.key.SimpleFigureKey;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.BoundingBox;

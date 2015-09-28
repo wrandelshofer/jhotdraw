@@ -5,6 +5,9 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.key.DirtyBits;
+import org.jhotdraw.draw.key.DirtyMask;
+import org.jhotdraw.draw.key.SimpleFigureKey;
 import java.util.Collections;
 import java.util.List;
 import javafx.geometry.VPos;

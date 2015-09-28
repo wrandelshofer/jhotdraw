@@ -11,10 +11,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
-import org.jhotdraw.draw.DirtyBits;
-import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.SimpleFigureKey;
 import org.jhotdraw.text.CSSSizeConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 

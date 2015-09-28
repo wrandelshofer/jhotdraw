@@ -8,10 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
-import org.jhotdraw.draw.DirtyBits;
-import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
  * DoubleStyleableFigureKey.
