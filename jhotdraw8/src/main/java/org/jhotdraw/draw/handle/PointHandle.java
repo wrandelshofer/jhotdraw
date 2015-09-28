@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.SimpleFigureKey;
+import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * Handle for the point of a figure.

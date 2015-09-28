@@ -9,10 +9,7 @@ import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
-import org.jhotdraw.draw.DirtyBits;
-import org.jhotdraw.draw.DirtyMask;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.SimpleFigureKey;
 
 /**
  * BlendModeStyleableFigureKey.

@@ -4,6 +4,9 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.key.DirtyBits;
+import org.jhotdraw.draw.key.DirtyMask;
+import org.jhotdraw.draw.key.SimpleFigureKey;
 import java.io.IOException;
 import static java.lang.Math.*;
 import java.lang.reflect.Field;

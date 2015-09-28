@@ -4,6 +4,10 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.key.DirtyBits;
+import org.jhotdraw.draw.key.DirtyMask;
+import org.jhotdraw.draw.key.FigureKey;
+import org.jhotdraw.draw.key.SimpleFigureKey;
 import java.net.URL;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;

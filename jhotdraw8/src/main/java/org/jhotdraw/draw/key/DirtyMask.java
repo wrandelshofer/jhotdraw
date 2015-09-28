@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.key;
 
 /**
  * Represents a bitmask of {@code DirtyBits}.
