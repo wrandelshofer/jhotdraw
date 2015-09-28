@@ -26,7 +26,7 @@
     <property name="bin" value="bin"/>
     <property name="doc" value="doc"/>
     <property name="dist" value="dist"/>
-    <property name="javadoc" value="${dist}/javadoc"/>
+    <property name="build.javadoc" value="${build}/javadoc"/>
     <property name="lib" value="lib"/>
     <property name="lib.runtime" value="${lib}/runtime"/>
     <property name="lib.compile" value="${lib}/compile"/>
@@ -79,8 +79,8 @@
     </copy>
   </target>
     <target depends="init" name="do-javadoc">
-        <mkdir dir="${javadoc}"/>
-        <javadoc destdir="${javadoc}" 
+        <mkdir dir="${build.javadoc}"/>
+        <javadoc destdir="${build.javadoc}" 
         footer="&lt;font size=-2>${copyright}/font>"
         header="${ant.project.name} ${version}" 
         windowtitle="${ant.project.name} ${version}"
@@ -156,8 +156,7 @@
 
   <target name="do-dist" depends="init">
     <mkdir dir="${dist}"/>
-    <mkdir dir="${dist}/lib"/>
-    <copy todir="${dist}/lib">
+    <copy todir="${dist}">
       <fileset dir="${build.jars}">
         <exclude name=".*"/>
         <include name="*.jar"/>
@@ -172,6 +171,11 @@
             <exclude name=".*"/>
             <exclude name="build/**"/>
             <exclude name="dist/**"/>
+        </fileset>
+    </jar>
+    <jar file="${dist}/${ant.project.name}-javadoc.jar">
+        <fileset dir="${build.javadoc}">
+            <exclude name=".*"/>
         </fileset>
     </jar>
   </target>
