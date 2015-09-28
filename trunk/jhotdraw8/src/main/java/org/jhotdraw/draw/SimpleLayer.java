@@ -75,7 +75,7 @@ public class SimpleLayer extends AbstractCompositeFigure implements Layer {
      * @throws IllegalArgumentException if newParent is an illegal parent
      */
     protected void checkParent(Figure newParent) {
-        if (!(newParent instanceof Drawing)) {
+        if (newParent!=null&&!(newParent instanceof Drawing)) {
             throw new IllegalArgumentException("illegal parent:" + newParent);
         }
     }
