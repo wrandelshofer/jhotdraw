@@ -79,10 +79,10 @@ public class CssSample extends Application {
         layer.add(edge3Null);
         layer.add(edgeNullNull);
         
-        vertex1.set(Figure.ID,"vertex1");
-        vertex2.set(Figure.ID,"vertex2");
-        vertex3.set(Figure.ID,"vertex3");
-        vertex4.set(Figure.ID,"vertex4");
+        vertex1.set(Figure.STYLE_ID,"vertex1");
+        vertex2.set(Figure.STYLE_ID,"vertex2");
+        vertex3.set(Figure.STYLE_ID,"vertex3");
+        vertex4.set(Figure.STYLE_ID,"vertex4");
         
         drawing.layout();
         drawing.set(Drawing.STYLESHEET, CssSample.class.getResource("CssSample.css"));

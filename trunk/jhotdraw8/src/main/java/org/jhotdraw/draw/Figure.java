@@ -184,12 +184,11 @@ public interface Figure extends StyleablePropertyBean {
      */
     public static BooleanKey DISABLED = new BooleanKey("disabled", false);
     /**
-     * Defines the id of the figure. The id is used for styling the figure with
-     * CSS.
+     * Defines the id for styling the figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> ID = new SimpleFigureKey<>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public static SimpleFigureKey<String> STYLE_ID = new SimpleFigureKey<>("styleId", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling the figure with CSS.
@@ -682,7 +681,7 @@ public interface Figure extends StyleablePropertyBean {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyFigureProperties(Node node) {
-        node.setId(get(ID));
+        node.setId(get(STYLE_ID));
         node.setVisible(getStyled(VISIBLE));
         node.setBlendMode(getStyled(BLEND_MODE));
         node.setEffect(getStyled(EFFECT));
@@ -885,7 +884,7 @@ public interface Figure extends StyleablePropertyBean {
 
     @Override
     default String getId() {
-        return get(ID);
+        return get(STYLE_ID);
     }
 
     /**
