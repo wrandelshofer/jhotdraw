@@ -27,14 +27,15 @@ import org.jhotdraw.draw.RenderContext;
  * @version $Id$
  */
 public class RectangleFigure extends AbstractShapeFigure {
+
     /**
      * The CSS type selector for this object is {@code "Rectangle"}.
      */
     public final static String TYPE_SELECTOR = "Rectangle";
 
-    public final static SimpleFigureKey<Rectangle2D> RECTANGLE = new SimpleFigureKey<>("rectangle", Rectangle2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT),new Rectangle2D(0, 0, 1, 1));
-    public final static SimpleFigureKey<Double> ARC_HEIGHT = new SimpleFigureKey<>("arcHeight",Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static SimpleFigureKey<Double> ARC_WIDTH = new SimpleFigureKey<>("arcWidth", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static SimpleFigureKey<Rectangle2D> RECTANGLE = new SimpleFigureKey<>("rectangle", Rectangle2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Rectangle2D(0, 0, 1, 1));
+    public final static SimpleFigureKey<Double> ARC_HEIGHT = new SimpleFigureKey<>("arcHeight", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static SimpleFigureKey<Double> ARC_WIDTH = new SimpleFigureKey<>("arcWidth", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
 
     public RectangleFigure() {
         this(0, 0, 1, 1);
@@ -50,8 +51,8 @@ public class RectangleFigure extends AbstractShapeFigure {
 
     @Override
     public Bounds getBoundsInLocal() {
-        Rectangle2D r= get(RECTANGLE);
-        return new BoundingBox(r.getMinX(),r.getMinY(),r.getWidth(),r.getHeight());
+        Rectangle2D r = get(RECTANGLE);
+        return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
     @Override
@@ -64,7 +65,7 @@ public class RectangleFigure extends AbstractShapeFigure {
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(RECTANGLE, new Rectangle2D(x+min(width,0),y+min(height,0),abs(width),abs(height)));
+        set(RECTANGLE, new Rectangle2D(x + min(width, 0), y + min(height, 0), abs(width), abs(height)));
     }
 
     @Override
@@ -86,11 +87,12 @@ public class RectangleFigure extends AbstractShapeFigure {
         rectangleNode.setArcHeight(get(ARC_HEIGHT));
         rectangleNode.applyCss();
     }
+
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopRectangleConnector();
     }
-    
+
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

@@ -26,13 +26,14 @@ import org.jhotdraw.draw.RenderContext;
  * @version $Id$
  */
 public class CircleFigure extends AbstractShapeFigure {
+
     /**
      * The CSS type selector for this object is {@code "Circle"}.
      */
     public final static String TYPE_SELECTOR = "Circle";
 
-    public final static SimpleFigureKey<Point2D> CENTER = new SimpleFigureKey<>("center", Point2D.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT),new Point2D(0, 0));
-    public final static SimpleFigureKey<Double> RADIUS = new SimpleFigureKey<>("radius", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT),1.0);
+    public final static SimpleFigureKey<Point2D> CENTER = new SimpleFigureKey<>("center", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static SimpleFigureKey<Double> RADIUS = new SimpleFigureKey<>("radius", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
 
     public CircleFigure() {
         this(0, 0, 1);
@@ -91,6 +92,7 @@ public class CircleFigure extends AbstractShapeFigure {
     public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopEllipseConnector();
     }
+
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

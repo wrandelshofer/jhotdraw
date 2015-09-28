@@ -28,12 +28,13 @@ import org.jhotdraw.draw.RenderContext;
  * @version $Id$
  */
 public class TextFigure extends AbstractShapeFigure implements TextHolderFigure {
+
     /**
      * The CSS type selector for this object is {@code "Text"}.
      */
     public final static String TYPE_SELECTOR = "Text";
 
-    public final static SimpleFigureKey<Point2D> ORIGIN = new SimpleFigureKey<>("origin", Point2D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static SimpleFigureKey<Point2D> ORIGIN = new SimpleFigureKey<>("origin", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
 
     private Text textNode;
 
@@ -93,7 +94,7 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
     public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopRectangleConnector();
     }
-    
+
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

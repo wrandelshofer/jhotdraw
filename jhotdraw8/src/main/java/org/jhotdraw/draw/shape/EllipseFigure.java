@@ -26,17 +26,18 @@ import org.jhotdraw.draw.RenderContext;
  * @version $Id$
  */
 public class EllipseFigure extends AbstractShapeFigure {
+
     /**
      * The CSS type selector for this object is {@code "Ellipse"}.
      */
     public final static String TYPE_SELECTOR = "Ellipse";
 
-    public final static SimpleFigureKey<Point2D> CENTER = new SimpleFigureKey<>("center", Point2D.class,DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), new Point2D(0, 0));
-    public final static SimpleFigureKey<Double> RADIUS_X = new SimpleFigureKey<>("radiusX", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), 1.0);
-    public final static SimpleFigureKey<Double> RADIUS_Y = new SimpleFigureKey<>("radiusY", Double.class, DirtyMask.of(DirtyBits.NODE,DirtyBits.CONNECTION_LAYOUT,DirtyBits.LAYOUT), 1.0);
+    public final static SimpleFigureKey<Point2D> CENTER = new SimpleFigureKey<>("center", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static SimpleFigureKey<Double> RADIUS_X = new SimpleFigureKey<>("radiusX", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
+    public final static SimpleFigureKey<Double> RADIUS_Y = new SimpleFigureKey<>("radiusY", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
 
     public EllipseFigure() {
-        this(0, 0, 1,1);
+        this(0, 0, 1, 1);
     }
 
     public EllipseFigure(double x, double y, double radiusx, double radiusy) {
@@ -64,16 +65,16 @@ public class EllipseFigure extends AbstractShapeFigure {
         Bounds r = getBoundsInLocal();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
-        set(CENTER, new Point2D(b.getMinX()+b.getWidth()/2 , b.getMinY()+b.getHeight()/2));
-        set(RADIUS_X, abs(b.getWidth())/2 );
-        set(RADIUS_Y, abs(b.getHeight())/2 );
+        set(CENTER, new Point2D(b.getMinX() + b.getWidth() / 2, b.getMinY() + b.getHeight() / 2));
+        set(RADIUS_X, abs(b.getWidth()) / 2);
+        set(RADIUS_Y, abs(b.getHeight()) / 2);
     }
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(CENTER, new Point2D(x+width/2, y+height/2 ));
-        set(RADIUS_X, abs(width)/2 );
-        set(RADIUS_Y, abs(height)/2 );
+        set(CENTER, new Point2D(x + width / 2, y + height / 2));
+        set(RADIUS_X, abs(width) / 2);
+        set(RADIUS_Y, abs(height) / 2);
     }
 
     @Override
@@ -93,10 +94,12 @@ public class EllipseFigure extends AbstractShapeFigure {
         n.setRadiusY(get(RADIUS_Y));
         n.applyCss();
     }
+
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopEllipseConnector();
     }
+
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
