@@ -76,6 +76,7 @@
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
         <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
       </fileset>
     </copy>
   </target>

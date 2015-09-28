@@ -231,7 +231,7 @@ public class StyleablePropertyMap {
         } else if (author != null && author.containsKey(key)) {
             return StyleOrigin.AUTHOR;
         } else if (user != null && user.containsKey(key)) {
-            return StyleOrigin.INLINE;
+            return StyleOrigin.USER;
         } else if (userAgent != null && userAgent.containsKey(key)) {
             return StyleOrigin.USER_AGENT;
         } else {
