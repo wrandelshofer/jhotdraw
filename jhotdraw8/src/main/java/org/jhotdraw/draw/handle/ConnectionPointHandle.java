@@ -54,7 +54,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         r.setStroke(Color.BLUE);
         r.getStyleClass().add(styleclass);
         // FIXME Value must come from stylesheet
-        r.setRadius(3);
+        r.setRadius(4);
     }
 
     @Override

@@ -37,20 +37,15 @@ public class ZoomToolbar extends BorderPane {
     private Slider zoomSlider;
     private final DoubleProperty zoomPower;
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor") {
-
         @Override
-        public void set(double newValue) {
-            double oldValue = get();
-            super.set(newValue);
-            if (newValue != oldValue) {
-                zoomPower.set(log(newValue) / LOG2);
-            }
+        protected void fireValueChangedEvent() {
+            super.fireValueChangedEvent();
+            zoomPower.set(log(get()) / LOG2);
         }
-
     };
 
     {
-        zoomPower = new SimpleDoubleProperty(this, "zoomPower",0.0) {
+        zoomPower = new SimpleDoubleProperty(this, "zoomPower", 0.0) {
 
             @Override
             public void set(double newValue) {
@@ -62,16 +57,15 @@ public class ZoomToolbar extends BorderPane {
             }
         };
     }
-    private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<DrawingView>(this,"drawingView") {
+    private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<DrawingView>(this, "drawingView") {
 
         @Override
-        public void set(DrawingView newValue) {
-            DrawingView oldValue = get();
-            super.set(newValue); 
-            
+        protected void fireValueChangedEvent() {
+            super.fireValueChangedEvent();
             zoomFactor.unbind();
-            if (newValue!=null) {
-            zoomFactor.bindBidirectional(newValue.zoomFactorProperty());
+            DrawingView newValue=get();
+            if (newValue != null) {
+                zoomFactor.bindBidirectional(newValue.zoomFactorProperty());
                 newValue.zoomFactorProperty().set(1.0);
             }
         }
@@ -94,11 +88,12 @@ public class ZoomToolbar extends BorderPane {
         zoomSlider.valueProperty().bindBidirectional(zoomPower);
 
         zoomSlider.setLabelFormatter(new StringConverter<Double>() {
-private final String[] labels = {"⅛","¼","½","1","2","4","8"};
+            private final String[] labels = {"⅛", "¼", "½", "1", "2", "4", "8"};
+
             @Override
             public String toString(Double object) {
-                int index = object.intValue()+labels.length/2;
-                return (index>=0&&index<labels.length)?labels[index]:"";
+                int index = object.intValue() + labels.length / 2;
+                return (index >= 0 && index < labels.length) ? labels[index] : "";
             }
 
             @Override
@@ -106,7 +101,7 @@ private final String[] labels = {"⅛","¼","½","1","2","4","8"};
                 return 0.0;
             }
         });
-        
+
         /*new DoubleBinding() {{super.bind(zoomFactorProperty);}
 
          @Override
@@ -129,7 +124,7 @@ private final String[] labels = {"⅛","¼","½","1","2","4","8"};
     public double getZoomFactor() {
         return zoomFactor.get();
     }
-    
+
     public void setDrawingView(DrawingView newValue) {
         drawingView().set(newValue);
     }

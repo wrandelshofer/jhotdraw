@@ -9,6 +9,7 @@ import static java.lang.Math.*;
 
 /**
  * ClampedDoubleProperty.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -27,5 +28,10 @@ public class ClampedDoubleProperty extends SimpleDoubleProperty {
     public void set(double newValue) {
         super.set(max(minValue, min(newValue, maxValue)));
     }
-
+    @Override
+    public double get() {
+        // note we must override get too, so that values are still clamped, 
+        // when we are bound to another property
+        return max(minValue, min(super.get(), maxValue));
+    }
 }
