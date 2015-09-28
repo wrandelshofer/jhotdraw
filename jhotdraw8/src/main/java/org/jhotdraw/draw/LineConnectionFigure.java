@@ -202,4 +202,13 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         return TYPE_SELECTOR;
     }
 
+    /** Returns true if this figure can connect to the specified figure with the specified connector.
+     * 
+     * @param figure The figure to which we want connect
+     * @param connector The connector that we want to use
+     * @return true if the connection is supported
+     */
+    public boolean canConnect(Figure figure, Connector connector) {
+        return true;
+    }
 }
