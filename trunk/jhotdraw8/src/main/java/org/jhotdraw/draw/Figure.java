@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import java.io.IOException;
 import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -882,5 +883,29 @@ public interface Figure extends StyleablePropertyBean {
     @Override
     default String getId() {
         return get(ID);
+    }
+    
+    /** Dumps the figure and its descendants to system.out.
+     */
+    default void dumpTree() {
+        try {
+            dumpTree(System.out,0);
+        } catch (IOException e) {
+            throw new InternalError(e);
+        }
+    }
+    /** Dumps the figure and its descendants.
+     * 
+     * @param out an output stream
+     * @param depth the indentation depth
+     * @throws java.io.IOException from appendable
+     */
+    default void dumpTree(Appendable out, int depth) throws IOException {
+        for (int i=0;i<depth;i++) out.append('.');
+        out.append(toString());
+        out.append('\n');
+        for (Figure child:children()) {
+            child.dumpTree(out,depth+1);
+        }
     }
 }

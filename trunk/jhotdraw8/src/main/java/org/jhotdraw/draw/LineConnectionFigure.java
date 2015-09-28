@@ -87,7 +87,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         // We must update the start and end point when ever one of
         // the connected figures or one of the connectors changes
         ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
-            if (oldValue != null) {
+            if (oldValue != null&&get(END_FIGURE)!=oldValue) {
                 oldValue.connections().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
@@ -95,7 +95,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
             }
         };
         ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
-            if (oldValue != null) {
+            if (oldValue != null&&get(START_FIGURE)!=oldValue) {
                 oldValue.connections().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
