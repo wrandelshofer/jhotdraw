@@ -41,13 +41,7 @@ public class CreationTool extends AbstractTool {
     public CreationTool(String name, Resources rsrc, Supplier<Figure> factory) {
         super(name, rsrc);
         this.figureFactory = factory;
-        this.layerFactory = new Supplier<Layer>() {
-
-            @Override
-            public Layer get() {
-                return new SimpleLayer();
-            }
-        };
+        this.layerFactory = SimpleLayer::new;
     }
 
     public void setFactory(Supplier<Figure> factory) {
