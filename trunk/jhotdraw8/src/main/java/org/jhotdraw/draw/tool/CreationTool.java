@@ -16,6 +16,7 @@ import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.util.Resources;
 import org.jhotdraw.draw.Layer;
+import org.jhotdraw.util.ReversedList;
 
 /**
  * CreationTool.
@@ -69,18 +70,11 @@ public class CreationTool extends AbstractTool {
         figure.reshape(c.getX(), c.getY(), 1, 1);
         DrawingModel dm = dv.getDrawingModel();
         Drawing drawing = dm.getRoot();
-        Layer activeLayer = dv.getActiveLayer();
-        if (activeLayer == null) {
-            Figure lastChild = drawing.getLastChild();
-            if (lastChild instanceof Layer) {
-                activeLayer = (Layer) lastChild;
-            } else {
-                activeLayer = layerFactory.get();
-                dm.addChildTo(activeLayer,drawing);
-            }
-        }
-        dv.setActiveLayer(activeLayer);
-        dm.addChildTo(figure, activeLayer);
+        
+        Layer layer = getOrCreateLayer(dv,figure);
+        dv.setActiveLayer(layer);
+        
+        dm.addChildTo(figure, layer);
     }
 
     @Override
@@ -118,6 +112,34 @@ public class CreationTool extends AbstractTool {
 
     @Override
     protected void onMouseClicked(MouseEvent event, DrawingView dv) {
+    }
+
+    /** Finds a layer for the specified figure.
+     * Creates a new layer if no suitable layer can be found.
+     * @param dv the drawing view
+     * @param newFigure the figure 
+     * @return a suitable layer for the figure
+     */
+    protected Layer getOrCreateLayer(DrawingView dv, Figure newFigure) {
+        // try to use the active layer
+        Layer activeLayer = dv.getActiveLayer();
+        if (activeLayer != null&&!activeLayer.get(Figure.DISABLED)&&activeLayer.allowsChildren()) {
+            return activeLayer;
+        }
+        // search for a suitable layer front to back
+        Layer layer=null;
+        for (Figure candidate:new ReversedList<>(dv.getDrawing().children())) {
+            if (!candidate.get(Figure.DISABLED)&&candidate.allowsChildren()) {
+                layer=(Layer)candidate;
+                break;
+            }
+        }
+        // create a new layer if necessary
+        if (layer==null) {
+            layer=layerFactory.get();
+            dv.getDrawingModel().addChildTo(layer,dv.getDrawing());
+        }
+        return layer;
     }
 
 }
