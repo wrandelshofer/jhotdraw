@@ -37,8 +37,8 @@ public class PointHandle extends AbstractHandle {
 
     protected void initNode(Rectangle r) {
         // FIXME width and height must come from stylesheet
-        r.setWidth(4);
-        r.setHeight(4);
+        r.setWidth(7);
+        r.setHeight(7);
         r.setFill(Color.WHITE);
         r.setStroke(Color.BLUE);
         r.getStyleClass().add(styleclass);

@@ -39,9 +39,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
 
         @Override
-        public void set(Figure newValue) {
-            checkParent(newValue);
-            super.set(newValue);
+        protected void fireValueChangedEvent() {
+            checkParent(get());
+            super.fireValueChangedEvent();
         }
 
     };

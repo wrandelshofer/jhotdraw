@@ -339,10 +339,10 @@ public class StyleablePropertyMap {
                 }
             }
         }
-
         @Override
-        public void set(T v) {
-            applyStyle(StyleOrigin.USER, v);
+        protected void fireValueChangedEvent() {
+            super.fireValueChangedEvent();
+            applyStyle(StyleOrigin.USER, get());
         }
 
         @Override

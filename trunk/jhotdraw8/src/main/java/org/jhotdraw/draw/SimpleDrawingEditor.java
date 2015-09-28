@@ -55,10 +55,10 @@ public class SimpleDrawingEditor implements DrawingEditor {
     private final ObjectProperty<Tool> activeTool = new SimpleObjectProperty<Tool>(this,"activeTool") {
 
         @Override
-        public void set(Tool newValue) {
-            super.set(newValue);
+        protected void fireValueChangedEvent() {
+            super.fireValueChangedEvent();
             if (getActiveDrawingView()!=null) {
-                getActiveDrawingView().setTool(newValue);
+                getActiveDrawingView().setTool(get());
             }
         }
     };

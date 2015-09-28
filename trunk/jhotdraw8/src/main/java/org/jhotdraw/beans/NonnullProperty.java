@@ -28,17 +28,12 @@ public class NonnullProperty<T> extends SimpleObjectProperty<T> {
         super(bean, name, initialValue);
     }
 
-    /** Sets a new value.
-     * 
-     * @param newValue a value
-     * @throws NullPointerException if newValue is null.
-     */
     @Override
-    public void set(T newValue) {
-        if (newValue == null) {
-            throw new NullPointerException("newValue");
+    protected void fireValueChangedEvent() {
+        if (get() == null) {
+            throw new NullPointerException("newValue is null");
         }
-        super.set(newValue);
+        super.fireValueChangedEvent();
     }
 
 

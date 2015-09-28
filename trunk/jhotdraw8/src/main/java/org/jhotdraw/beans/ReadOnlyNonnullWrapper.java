@@ -2,13 +2,13 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.beans;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 
 /**
  * ReadOnlyNonnullWrapper.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -19,11 +19,11 @@ public class ReadOnlyNonnullWrapper<T> extends ReadOnlyObjectWrapper<T> {
     }
 
     @Override
-    public void set(T newValue) {
-        if (newValue == null) {
-            throw new IllegalArgumentException("newValue is null");
+    protected void fireValueChangedEvent() {
+        if (get() == null) {
+            throw new NullPointerException("newValue is null");
         }
-        super.set(newValue);
+        super.fireValueChangedEvent();
     }
 
 }

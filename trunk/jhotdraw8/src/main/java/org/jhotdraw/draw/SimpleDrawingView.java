@@ -127,14 +127,15 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      */
     private final NonnullProperty<DrawingModel> drawingModel //
             = new NonnullProperty<DrawingModel>(this, DRAWING_MODEL_PROPERTY, new ConnectionsNoLayoutDrawingModel()) {
+                private DrawingModel oldValue = null;
 
                 @Override
-                public void set(DrawingModel newValue) {
-                    DrawingModel oldValue = get();
-                    super.set(newValue); //To change body of generated methods, choose Tools | Templates.
+                protected void fireValueChangedEvent() {
+                    DrawingModel newValue = get();
+                    super.fireValueChangedEvent();
                     handleNewDrawingModel(oldValue, newValue);
+                    oldValue = newValue;
                 }
-
             };
 
     /**
@@ -182,8 +183,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, ZOOM_FACTOR_PROPERTY, 1.0) {
 
         @Override
-        public void set(double newValue) {
-            super.set(newValue);
+        protected void fireValueChangedEvent() {
+            double newValue = get();
             Scale st = new Scale(newValue, newValue);
             if (drawingPane != null) {
                 if (drawingPane.getTransforms().isEmpty()) {
@@ -597,7 +598,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                         f = findFigureRecursive((Parent) n, pl);
                     }
                 }
-                if (f!=null&&!f.isDisabled()) {
+                if (f != null && !f.isDisabled()) {
                     return f;
                 }
             }
