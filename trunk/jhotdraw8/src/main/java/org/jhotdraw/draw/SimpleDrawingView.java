@@ -306,7 +306,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         loader.setController(this);
 
         try {
-            node = loader.load(getClass().getResourceAsStream("SimpleDrawingView.fxml"));
+            node = loader.load(SimpleDrawingView.class.getResourceAsStream("SimpleDrawingView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
