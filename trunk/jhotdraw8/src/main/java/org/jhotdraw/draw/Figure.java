@@ -82,9 +82,9 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * state of a figure is changed, method {@code layout()} needs to be invoked on
  * the root of the tree hierarchy to incrementally update the state of all
  * dependent figures and then all figures need to be rendered again. This is
- * time consuming. The interface {@link FigureKey} provides hints about which
- * figures need to be laid out and rendered again. The hints are given by a
- * {@link DirtyMask}.
+ * time consuming. The interface {@link org.jhotdraw.draw.key.FigureKey}
+ * provides hints about which figures need to be laid out and rendered again.
+ * The hints are given by a {@link DirtyMask}.
  * </p>
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
@@ -887,28 +887,33 @@ public interface Figure extends StyleablePropertyBean {
     default String getId() {
         return get(ID);
     }
-    
-    /** Dumps the figure and its descendants to system.out.
+
+    /**
+     * Dumps the figure and its descendants to system.out.
      */
     default void dumpTree() {
         try {
-            dumpTree(System.out,0);
+            dumpTree(System.out, 0);
         } catch (IOException e) {
             throw new InternalError(e);
         }
     }
-    /** Dumps the figure and its descendants.
-     * 
+
+    /**
+     * Dumps the figure and its descendants.
+     *
      * @param out an output stream
      * @param depth the indentation depth
      * @throws java.io.IOException from appendable
      */
     default void dumpTree(Appendable out, int depth) throws IOException {
-        for (int i=0;i<depth;i++) out.append('.');
+        for (int i = 0; i < depth; i++) {
+            out.append('.');
+        }
         out.append(toString());
         out.append('\n');
-        for (Figure child:children()) {
-            child.dumpTree(out,depth+1);
+        for (Figure child : children()) {
+            child.dumpTree(out, depth + 1);
         }
     }
 }

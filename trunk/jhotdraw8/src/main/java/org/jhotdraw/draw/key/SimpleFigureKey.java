@@ -26,7 +26,7 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
      * @param dirtyMask the dirty mask
      */
     public SimpleFigureKey(String key, Class<T> clazz, DirtyMask dirtyMask) {
-        this(key, clazz, "", dirtyMask,null);
+        this(key, clazz, "", dirtyMask, null);
     }
 
     /**
@@ -38,13 +38,13 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
      * @param defaultValue The default value.
      * @param dirtyMask the dirty bits
      */
-    public SimpleFigureKey(String key,Class<T> clazz, DirtyMask dirtyMask, T defaultValue) {
-        this(key, clazz, "",  dirtyMask,defaultValue);
+    public SimpleFigureKey(String key, Class<T> clazz, DirtyMask dirtyMask, T defaultValue) {
+        this(key, clazz, "", dirtyMask, defaultValue);
     }
 
     /**
      * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * value, and allowing null values.
      *
      * @param name The name of the key.
      * @param clazz The type of the value.
@@ -54,13 +54,42 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
      * @param dirtyMask the dirty bits
      */
     public SimpleFigureKey(String name, Class<?> clazz, String typeParameters, DirtyMask dirtyMask, T defaultValue) {
-        super(name, clazz, typeParameters, defaultValue);
+        this(name, clazz, typeParameters, true, dirtyMask, defaultValue);
+    }
+    /**
+     * Creates a new instance with the specified name, type token class, default
+     * value, and allowing or disallowing null values.
+     *
+     * @param name The name of the key.
+     * @param clazz The type of the value.
+     * @param isNullable Whether the value may be set to null
+     * @param defaultValue The default value.
+     * @param dirtyMask the dirty bits
+     */
+    public SimpleFigureKey(String name, Class<?> clazz, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
+        this(name, clazz, "", isNullable, dirtyMask, defaultValue);
+    }
+
+
+    /**
+     * Creates a new instance with the specified name, type token class, default
+     * value, and allowing or disallowing null values.
+     *
+     * @param name The name of the key.
+     * @param clazz The type of the value.
+     * @param typeParameters The type parameters of the class. Specify "" if no
+     * type parameters are given. Otherwise specify them in arrow brackets.
+     * @param isNullable Whether the value may be set to null
+     * @param defaultValue The default value.
+     * @param dirtyMask the dirty bits
+     */
+    public SimpleFigureKey(String name, Class<?> clazz, String typeParameters, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
+        super(name, clazz, typeParameters, isNullable, defaultValue);
         this.dirtyMask = dirtyMask;
     }
 
     public DirtyMask getDirtyMask() {
         return dirtyMask;
     }
-    
-    
+
 }

@@ -487,6 +487,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             handleFigureRemoved0(child);
         }
         removeNode(f);
+        selection.remove(f);
+        invalidateHandles();
     }
 
     private void handleNodeInvalidated(Figure f) {

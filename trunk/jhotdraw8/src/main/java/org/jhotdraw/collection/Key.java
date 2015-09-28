@@ -138,6 +138,11 @@ public interface Key<T> extends Serializable {
         }
     }
 
+    /** Whether the value may be set to null.
+     * @return  true if nullable
+     */
+    boolean isNullable();
+    
     /**
      * Returns true if the specified value is assignable with this key.
      *
@@ -145,7 +150,7 @@ public interface Key<T> extends Serializable {
      * @return True if assignable.
      */
     default boolean isAssignable(Object value) {
-        return value == null || getValueType().isInstance(value);
+        return value == null&&isNullable() || getValueType().isInstance(value);
     }
 
     /**

@@ -62,6 +62,9 @@ public class SimpleKey<T> implements Key<T> {
      * to specify the type parameters as a string.
      */
     private final String typeParameters;
+    
+    /** Whether the value may be set to null. */
+    private final boolean isNullable;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -97,6 +100,20 @@ public class SimpleKey<T> implements Key<T> {
      * @param defaultValue The default value.
      */
     public SimpleKey(String name, Class<?> clazz, String typeParameters, T defaultValue) {
+        this(name, clazz, "", true,defaultValue);
+    }
+    /**
+     * Creates a new instance with the specified name, type token class, default
+     * value, and allowing or disallowing null values.
+     *
+     * @param name The name of the key.
+     * @param clazz The type of the value.
+     * @param typeParameters The type parameters of the class. Specify "" if no
+     * type parameters are given. Otherwise specify them in arrow brackets.
+     * @param isNullable Whether the value may be set to null
+     * @param defaultValue The default value.
+     */
+    public SimpleKey(String name, Class<?> clazz, String typeParameters, boolean isNullable, T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -112,9 +129,16 @@ public class SimpleKey<T> implements Key<T> {
                         + typeParameters);
             }
         }
+        
+        if (!isNullable&&defaultValue==null) {
+            throw new IllegalArgumentException("defaultValue may not be null if isNullable==false");
+        }
+    
+        
         this.name = name;
         this.clazz = clazz;
         this.typeParameters = typeParameters;
+        this.isNullable=isNullable;
         this.defaultValue = defaultValue;
     }
 
@@ -150,6 +174,10 @@ public class SimpleKey<T> implements Key<T> {
     @Override
     public T getDefaultValue() {
         return defaultValue;
+    }
+    @Override
+    public boolean isNullable() {
+        return isNullable;
     }
 
     /**
