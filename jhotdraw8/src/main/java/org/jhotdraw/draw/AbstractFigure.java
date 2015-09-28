@@ -114,4 +114,26 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         }
 
     }
+
+    @Override
+    public String toString() {
+        String className = getClass().getName();
+        className = className.substring(className.lastIndexOf('.') + 1);
+        StringBuilder buf = new StringBuilder();
+        buf.append(className).append('@').append(hashCode()).append("{properties=").append(properties().get()).append(", connections={");
+        boolean isFirst = true;
+        for (Figure f : connections) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                buf.append(',');
+            }
+            className = f.getClass().getName();
+            className = className.substring(className.lastIndexOf('.') + 1);
+            buf.append(className).append('@').append(f.hashCode());
+        }
+        buf.append("}}");
+        return buf.toString();
+    }
+
 }

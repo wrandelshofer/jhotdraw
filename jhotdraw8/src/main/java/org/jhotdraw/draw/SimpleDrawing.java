@@ -47,7 +47,9 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
     @Override
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
-        g.getProperties().put("page", new Rectangle());
+        Rectangle background = new Rectangle();
+        background.setId("background");
+        g.getProperties().put("background", background);
         return g;
     }
 
@@ -57,7 +59,7 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
         ObservableList<Node> children = ((Group) n).getChildren();
         children.clear();
         Rectangle2D bounds = get(BOUNDS);
-        Rectangle page = (Rectangle) g.getProperties().get("page");
+        Rectangle page = (Rectangle) g.getProperties().get("background");
         page.setX(bounds.getMinX());
         page.setY(bounds.getMinY());
         page.setWidth(bounds.getWidth());

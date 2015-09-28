@@ -8,6 +8,8 @@
  */
 
 * {
-    -jhotdraw-stroke: red;
-    -jhotdraw-fill: yellow;
+    -jhotdraw-stroke-width: 2.0;
+    -jhotdraw-stroke: black;
+    -jhotdraw-fill: white;
+    -jhotdraw-font: 24.0 "Palatino";
 }
