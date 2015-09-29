@@ -62,7 +62,7 @@ public class CreationTool extends AbstractTool {
         figure = figureFactory.get();
         Point2D c = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(new Point2D(x1, y1)));
         figure.reshape(c.getX(), c.getY(), 1, 1);
-        DrawingModel dm = dv.getDrawingModel();
+        DrawingModel dm = dv.getModel();
         Drawing drawing = dm.getRoot();
         
         Layer layer = getOrCreateLayer(dv,figure);
@@ -81,7 +81,7 @@ public class CreationTool extends AbstractTool {
                 if (c2.equals(c1)) {
                     c2 = new Point2D(c1.getX() + 10, c1.getY() + 10);
                 }
-                DrawingModel dm = dv.getDrawingModel();
+                DrawingModel dm = dv.getModel();
                 dm.reshape(figure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
                         - c1.getY());
             }
@@ -98,7 +98,7 @@ public class CreationTool extends AbstractTool {
             y2 = event.getY();
             Point2D c1 = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(x1, y1));
             Point2D c2 = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(x2, y2));
-            DrawingModel dm = dv.getDrawingModel();
+            DrawingModel dm = dv.getModel();
             dm.reshape(figure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
                     - c1.getY());
         }
@@ -131,7 +131,7 @@ public class CreationTool extends AbstractTool {
         // create a new layer if necessary
         if (layer==null) {
             layer=layerFactory.get();
-            dv.getDrawingModel().addChildTo(layer,dv.getDrawing());
+            dv.getModel().addChildTo(layer,dv.getDrawing());
         }
         return layer;
     }

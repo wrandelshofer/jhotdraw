@@ -126,7 +126,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * view.
      */
     private final NonnullProperty<DrawingModel> drawingModel //
-            = new NonnullProperty<DrawingModel>(this, DRAWING_MODEL_PROPERTY, new ConnectionsNoLayoutDrawingModel()) {
+            = new NonnullProperty<DrawingModel>(this, MODEL_PROPERTY, new ConnectionsNoLayoutDrawingModel()) {
                 private DrawingModel oldValue = null;
 
                 @Override
@@ -390,7 +390,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     @Override
-    public NonnullProperty<DrawingModel> drawingModelProperty() {
+    public NonnullProperty<DrawingModel> modelProperty() {
         return drawingModel;
     }
 
@@ -419,7 +419,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             boundsProperty = null;
             activeLayer.set(null);
         }
-        Drawing d = getDrawingModel().getRoot();
+        Drawing d = getModel().getRoot();
         drawing.set(d);
         if (d != null) {
             boundsProperty = Drawing.BOUNDS.propertyAt(d.properties());
@@ -500,7 +500,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void updateView() {
-        getDrawingModel().validate();
+        getModel().validate();
         LinkedList<Figure> updateNodes = new LinkedList<>(dirtyFigureNodes);
         dirtyFigureNodes.clear();
         for (Figure f : updateNodes) {
@@ -514,7 +514,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
     }
 
-    /** Repaints the view. */
+    /**
+     * Repaints the view.
+     */
     public void repaint() {
         if (repainter == null) {
             repainter = () -> {
@@ -731,7 +733,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     @Override
-    public DrawingModel getDrawingModel() {
+    public DrawingModel getModel() {
         return drawingModel.get();
     }
 
@@ -815,24 +817,25 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         handlesPane.getChildren().clear();
         // FIXME rethink detailLevel
 
-        List<Handle> handles = createSelectionHandles();
-        if (handles != null) {
-            for (Handle handle : handles) {
-                selectionHandles.add(handle);
-                Node n = handle.getNode();
-                nodeToHandleMap.put(n, handle);
-                handlesPane.getChildren().add(n);
-                handle.updateNode(this);
-            }
+        ArrayList<Handle> handles = new ArrayList<>();
+        createSelectionHandles(handles);
+        for (Handle handle : handles) {
+            selectionHandles.add(handle);
+            Node n = handle.getNode();
+            nodeToHandleMap.put(n, handle);
+            handlesPane.getChildren().add(n);
+            handle.updateNode(this);
         }
     }
 
-    protected List<Handle> createSelectionHandles() {
-        ArrayList<Handle> list = new ArrayList<>();
+    /**
+     * Creates selection handles and adds them to the provided list.
+     * @param list The provided list
+     */
+    protected void createSelectionHandles(List<Handle> list) {
         for (Figure figure : getSelectedFigures()) {
-            list.addAll(figure.createHandles(HandleType.SELECTION, this));
+            figure.createHandles(HandleType.SELECTION, this, list);
         }
-        return list;
     }
 
     private void invalidateDrawingViewTransforms() {

@@ -14,8 +14,8 @@ import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
- * This drawing model assumes that the drawing contains no figures which
- * perform layouts and no connections between figures.
+ * This drawing model assumes that the drawing contains no figures which perform
+ * layouts and no connections between figures.
  *
  *
  * @author Werner Randelshofer
@@ -50,15 +50,16 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public <T> void set(Figure figure, Key<T> key, T value) {
-        figure.set(key,value);
+    public <T> T set(Figure figure, Key<T> key, T value) {
+        T oldValue = figure.set(key, value);
         if (key instanceof FigureKey) {
-            FigureKey<T> fk = (FigureKey<T>)key;
+            FigureKey<T> fk = (FigureKey<T>) key;
             DirtyMask dm = fk.getDirtyMask();
             if (dm.containsOneOf(DirtyBits.NODE)) {
                 fire(DrawingModelEvent.nodeInvalidated(this, figure));
             }
         }
+        return oldValue;
     }
 
     @Override
@@ -69,8 +70,8 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void reshape(Figure f, double x, double y, double width, double height) {
-        f.reshape(x,y,width,height);
-        fire(DrawingModelEvent.subtreeNodesInvalidated(this,f));
+        f.reshape(x, y, width, height);
+        fire(DrawingModelEvent.subtreeNodesInvalidated(this, f));
     }
 
     @Override
@@ -78,6 +79,7 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
         f.layout();
         // no event fired! fire(DrawingModelEvent.subtreeNodesInvalidated(this,f));
     }
+
     @Override
     public void applyCss(Figure figure) {
         figure.applyCss();

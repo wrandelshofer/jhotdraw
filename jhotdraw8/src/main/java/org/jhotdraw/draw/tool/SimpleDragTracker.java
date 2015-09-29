@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.tool;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.NonInvertibleTransformException;
@@ -65,13 +66,22 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView view) {
-        Point2D anchor=new Point2D(event.getX(),event.getY());
-        Point2D newPoint = view.getConstrainer().constrainPoint(anchorFigure,view.viewToDrawing(anchor));
+        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+        if (!event.isAltDown() && !event.isControlDown()) {
+            // alt or control turns the constrainer off
+            newPoint = view.getConstrainer().constrainPoint(anchorFigure, newPoint);
+        }
+        if (event.isMetaDown()) {
+            // meta snaps the center of the anchor figure to the grid
+            Bounds b = anchorFigure.getBoundsInLocal();
+            Point2D loc = new Point2D( b.getMinX()+b.getWidth()/2,b.getMinY()+b.getHeight()/2);
+            oldPoint = anchorFigure.localToDrawing(loc);
+        }
 
         Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY()- oldPoint.getY());
-        DrawingModel dm = view.getDrawingModel();
+        DrawingModel dm = view.getModel();
         for (Figure f : view.getSelectedFigures()) {
-            dm.reshape(f, tx);
+            dm.reshape(f, f.getDrawingToParent().createConcatenation(tx));
         }
 
         oldPoint = newPoint;

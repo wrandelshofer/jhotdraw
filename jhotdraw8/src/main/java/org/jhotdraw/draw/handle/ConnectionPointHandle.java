@@ -15,6 +15,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.model.DrawingModel;
+import org.jhotdraw.draw.model.DrawingModelEvent;
 
 /**
  * Handle for the start or end point of a connection figure.
@@ -29,9 +30,8 @@ public class ConnectionPointHandle extends AbstractHandle {
     private final SimpleFigureKey<Point2D> pointKey;
     private final SimpleFigureKey<Figure> figureKey;
     private final SimpleFigureKey<Connector> connectorKey;
-    private double startX, startY;
-    private Point2D startPoint;
-    private Point2D unconstrainedPoint;
+    private Point2D oldPoint;
+    private Point2D anchor;
 
     private final Circle node;
     private final String styleclass;
@@ -79,49 +79,50 @@ public class ConnectionPointHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(MouseEvent event, DrawingView dv) {
-        startX = event.getX();
-        startY = event.getY();
-        startPoint = getOwner().get(pointKey);
+    public void onMousePressed(MouseEvent event, DrawingView view) {
+        oldPoint = anchor = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
     }
 
     @Override
-    public void onMouseDragged(MouseEvent event, DrawingView dv) {
-        double newX = event.getX();
-        double newY = event.getY();
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
+        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
-        Figure f = getOwner();
-        Transform t = f.getDrawingToLocal().createConcatenation(dv.getViewToDrawing());
-
-        Point2D delta = t.deltaTransform(newX - startX, newY - startY);
-        Point2D p = startPoint;
-        unconstrainedPoint = new Point2D(p.getX() + delta.getX(), p.getY() + delta.getY());
-        Point2D newPoint = dv.getConstrainer().constrainPoint(f, unconstrainedPoint);
-
-        Connector newConnector = null;
-        Figure newFigure = null;
         if (!event.isAltDown() && !event.isControlDown()) {
-            List<Figure> list = dv.findFigures(newPoint, true);
+            // alt or control turns the constrainer off
+            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+        }
+
+        Figure o = getOwner();
+        Connector newConnector = null;
+        Figure newConnectedFigure = null;
+        if (!event.isMetaDown()) {
+            List<Figure> list = view.findFigures(newPoint, true);
             for (Figure ff : list) {
-                newConnector = ff.findConnector(newPoint, f);
+                newConnector = ff.findConnector(newPoint, o);
                 if (newConnector != null) {
-                    newFigure = ff;
+                    newConnectedFigure = ff;
                     break;
                 }
             }
         }
 
-        DrawingModel dm = dv.getDrawingModel();
-        dm.set(f, pointKey, newPoint);
-        dm.set(f, figureKey, newFigure);
-        dm.set(f, connectorKey, newConnector);
-        dm.layout(f);
+        DrawingModel model = view.getModel();
+        model.set(o, pointKey, getOwner().drawingToLocal(newPoint));
+        Figure oldConnectedFigure = model.set(o, figureKey, newConnectedFigure);
+        model.set(o, connectorKey, newConnector);
+        if (oldConnectedFigure != null) {
+            model.fire(DrawingModelEvent.nodeInvalidated(model, oldConnectedFigure));
+        }
+        if (newConnectedFigure != null) {
+            model.fire(DrawingModelEvent.nodeInvalidated(model, newConnectedFigure));
+        }
+        model.layout(o);
     }
 
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
-        unconstrainedPoint = null;
     }
+
     @Override
     public boolean isSelectable() {
         return true;

@@ -75,7 +75,7 @@ public class GrapherView extends AbstractView {
         drawingView.setConstrainer(new GridConstrainer(0, 0, 1, 1, 1));
         
         // 
-        drawingView.getDrawingModel().addListener((InvalidationListener)drawingModel -> {
+        drawingView.getModel().addListener((InvalidationListener)drawingModel -> {
             modified.set(true);
         });
         

@@ -22,6 +22,7 @@ import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.shape.TextFigure;
@@ -92,6 +93,7 @@ public class CssSample extends Application {
         DrawingView drawingView = new SimpleDrawingView();
 
         drawingView.setDrawing(drawing);
+        drawingView.setConstrainer(new GridConstrainer(30,30));
 
         DrawingEditor drawingEditor = new SimpleDrawingEditor();
         drawingEditor.drawingViewsProperty().add(drawingView);

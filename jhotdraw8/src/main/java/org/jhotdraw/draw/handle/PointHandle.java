@@ -21,9 +21,8 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 public class PointHandle extends AbstractHandle {
 
     private final SimpleFigureKey<Point2D> pointKey;
-    private double startX, startY;
-    private Point2D startPoint;
-    private Point2D unconstrainedPoint;
+    private Point2D oldPoint;
+    private Point2D anchor;
     private final Rectangle node;
     private final String styleclass;
 
@@ -62,30 +61,24 @@ public class PointHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(MouseEvent event, DrawingView dv) {
-        startX = event.getX();
-        startY = event.getY();
-        startPoint = getOwner().get(pointKey);
+    public void onMousePressed(MouseEvent event, DrawingView view) {
+        oldPoint = anchor = view.getConstrainer().constrainPoint(getOwner(),view.viewToDrawing(new Point2D(event.getX(),event.getY())));
     }
 
     @Override
-    public void onMouseDragged(MouseEvent event, DrawingView dv) {
-        double newX = event.getX();
-        double newY = event.getY();
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
+        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
-        Figure f = getOwner();
-        Transform t = f.getDrawingToLocal().createConcatenation(dv.getViewToDrawing());
-
-        Point2D delta = t.deltaTransform(newX - startX, newY - startY);
-        Point2D p = startPoint;
-        unconstrainedPoint = new Point2D(p.getX() + delta.getX(), p.getY() + delta.getY());
-        Point2D newPoint = dv.getConstrainer().constrainPoint(f, unconstrainedPoint);
-        dv.getDrawingModel().set(f, pointKey, newPoint);
+        if (!event.isAltDown() && !event.isControlDown()) {
+            // alt or control switches the grid off
+            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+        }
+        
+        view.getModel().set(getOwner(), pointKey, getOwner().drawingToLocal(newPoint));
     }
 
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
-        unconstrainedPoint = null;
     }
     @Override
     public boolean isSelectable() {
