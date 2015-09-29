@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
 import org.jhotdraw.beans.ClampedDoubleProperty;
 import org.jhotdraw.beans.NonnullProperty;
-import static org.jhotdraw.draw.DrawingView.DRAWING_MODEL_PROPERTY;
+import static org.jhotdraw.draw.DrawingView.MODEL_PROPERTY;
 import org.jhotdraw.draw.model.ConnectionsNoLayoutDrawingModel;
 import org.jhotdraw.draw.model.DrawingModel;
 /* @(#)Scratchpad.java

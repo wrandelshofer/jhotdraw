@@ -53,9 +53,9 @@ public interface DrawingView extends RenderContext {
     // property names
     // ----
     /**
-     * The name of the drawingModel property.
+     * The name of the model property.
      */
-    public final static String DRAWING_MODEL_PROPERTY = "drawingModel";
+    public final static String MODEL_PROPERTY = "model";
     /**
      * The name of the tool property.
      */
@@ -98,7 +98,7 @@ public interface DrawingView extends RenderContext {
      * @return the drawing model property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
-    NonnullProperty<DrawingModel> drawingModelProperty();
+    NonnullProperty<DrawingModel> modelProperty();
 
     /**
      * The drawing model.
@@ -310,11 +310,11 @@ public interface DrawingView extends RenderContext {
     }
 
     default void setDrawing(Drawing newValue) {
-        drawingModelProperty().get().setRoot(newValue);
+        modelProperty().get().setRoot(newValue);
     }
 
     default Drawing getDrawing() {
-        return drawingModelProperty().get().getRoot();
+        return modelProperty().get().getRoot();
     }
 
     default void setConstrainer(Constrainer newValue) {
@@ -422,7 +422,17 @@ public interface DrawingView extends RenderContext {
      *
      * @return a drawing model
      */
-    DrawingModel getDrawingModel();
+    default DrawingModel getModel() {
+        return modelProperty().get();
+    }
+    /**
+     * Sets a new underlying drawing model.
+     *
+     * @param newValue a drawing model
+     */
+    default void setModel(DrawingModel newValue) {
+        modelProperty().set(newValue);
+    }
 
     // Handles
     /**

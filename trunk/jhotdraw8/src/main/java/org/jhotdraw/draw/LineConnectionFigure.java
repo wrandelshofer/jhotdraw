@@ -196,14 +196,12 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public List<Handle> createHandles(HandleType handleType, DrawingView dv) {
-        ArrayList<Handle> list = new ArrayList<>();
+    public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECTION) {
             list.add(new LineWireframeHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
             list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, START, START_FIGURE, START_CONNECTOR));
             list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, END, END_FIGURE, END_CONNECTOR));
         }
-        return list;
     }
 
     @Override

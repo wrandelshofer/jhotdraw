@@ -38,6 +38,7 @@ public class GroupFigure extends AbstractCompositeFigure {
 
     @Override
     public void reshape(Transform transform) {
+        // FIXME needs to transform the transform into local coordinates
         for (Figure child : childrenProperty()) {
             child.reshape(transform);
         }

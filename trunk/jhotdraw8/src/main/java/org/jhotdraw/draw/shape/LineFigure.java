@@ -103,14 +103,12 @@ public class LineFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public List<Handle> createHandles(HandleType handleType, DrawingView dv) {
-        ArrayList<Handle> list = new ArrayList<>();
+    public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECTION) {
             list.add(new LineWireframeHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
         }
-        return list;
     }
 
     @Override

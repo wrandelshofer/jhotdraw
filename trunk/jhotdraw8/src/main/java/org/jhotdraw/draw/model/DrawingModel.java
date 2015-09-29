@@ -118,9 +118,10 @@ public interface DrawingModel extends Observable {
      * @param <T> the value type
      * @param figure the figure
      * @param key the key
-     * @param value the value
+     * @param newValue the new value
+     * @return the old value
      */
-    <T> void set(Figure figure, Key<T> key, T value);
+    <T> T set(Figure figure, Key<T> key, T newValue);
 
     /** Gets the specified property from the figure.
      *

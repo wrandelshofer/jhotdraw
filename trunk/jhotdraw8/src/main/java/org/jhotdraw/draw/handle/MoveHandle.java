@@ -61,22 +61,33 @@ public class MoveHandle extends LocatorHandle {
         Rectangle r = node;
         r.setX(p.getX() - r.getWidth() / 2);
         r.setY(p.getY() - r.getHeight() / 2);
+        f.applyFigureProperties(r);
     }
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = anchor = view.getConstrainer().constrainPoint(getOwner(),view.viewToDrawing(new Point2D(event.getX(),event.getY())));
+        oldPoint = anchor = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
     }
 
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
-        Point2D anchor=new Point2D(event.getX(),event.getY());
-        Point2D newPoint = view.getConstrainer().constrainPoint(getOwner(),view.viewToDrawing(anchor));
+        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
-        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY()- oldPoint.getY());
-        view.getDrawingModel().reshape(getOwner(), tx);
-        
-        oldPoint=newPoint;
+        if (!event.isAltDown() && !event.isControlDown()) {
+            // alt or control turns the constrainer off
+            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+        }
+        if (event.isMetaDown()) {
+            // meta snaps the location of the handle to the grid
+            Point2D loc = getLocation();
+            oldPoint = getOwner().localToDrawing(loc);
+        }
+
+        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
+        tx = getOwner().getDrawingToParent().createConcatenation(tx);
+        view.getModel().reshape(getOwner(), tx);
+
+        oldPoint = newPoint;
     }
 
     @Override
@@ -116,6 +127,7 @@ public class MoveHandle extends LocatorHandle {
             Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.west());
     }
+
     @Override
     public boolean isSelectable() {
         return true;

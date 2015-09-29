@@ -51,7 +51,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public <T> void set(Figure figure, Key<T> key, T newValue) {
+    public <T> T set(Figure figure, Key<T> key, T newValue) {
         T oldValue = figure.set(key, newValue);
         if (oldValue != newValue) {
             if (key instanceof FigureKey) {
@@ -67,6 +67,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
                 }
             }
         }
+        return oldValue;
     }
 
     @Override

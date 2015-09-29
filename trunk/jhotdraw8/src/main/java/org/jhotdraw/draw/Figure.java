@@ -338,7 +338,7 @@ public interface Figure extends StyleablePropertyBean {
      * Reshape typically changes property values in this figure. The way how
      * this is performed is implementation specific.
      *
-     * @param transform the desired transformation
+     * @param transform the desired transformation in parent coordinates
      */
     void reshape(Transform transform);
 
@@ -350,10 +350,10 @@ public interface Figure extends StyleablePropertyBean {
      * If the layout bounds of the figure changes, it fires an invalidation
      * event.
      *
-     * @param x desired x-position
-     * @param y desired y-position
-     * @param width desired width, may be negative
-     * @param height desired height, may be negative
+     * @param x desired x-position in parent coordinates
+     * @param y desired y-position in parent coordinates
+     * @param width desired width in parent coordinates, may be negative
+     * @param height desired height in parent coordinates, may be negative
      */
     default void reshape(double x, double y, double width, double height) {
         Bounds oldBounds = getBoundsInLocal();
@@ -505,15 +505,13 @@ public interface Figure extends StyleablePropertyBean {
 
     /**
      * Creates handles of the specified level and for the specified drawing
-     * view.
+     * view and adds them to the provided list.
      *
      * @param handleType The desired handle type
      * @param dv The drawing view which will display the handles
-     * @return The handles. Returns an empty list if the figure does not provide
-     * handles at the desired detail level.
+     * @param list The handles.
      */
-    default List<Handle> createHandles(HandleType handleType, DrawingView dv) {
-        List<Handle> list = new LinkedList<>();
+    default void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECTION) {
             list.add(new BoundsInLocalHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
             list.add(MoveHandle.northEast(this, Handle.STYLECLASS_HANDLE_MOVE));
@@ -521,7 +519,6 @@ public interface Figure extends StyleablePropertyBean {
             list.add(MoveHandle.southEast(this, Handle.STYLECLASS_HANDLE_MOVE));
             list.add(MoveHandle.southWest(this, Handle.STYLECLASS_HANDLE_MOVE));
         }
-        return list;
     }
 
     /**
@@ -786,9 +783,9 @@ public interface Figure extends StyleablePropertyBean {
     default Transform getParentToLocal() {
         Point2D center = getCenterInLocal();
 
-        Transform translate = Transform.translate(-get(TRANSLATE_X), -get(TRANSLATE_Y));
-        Transform scale = Transform.scale(1.0 / get(SCALE_X), 1.0 / get(SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(-get(ROTATE), center.getX(), center.getY());
+        Transform translate = Transform.translate(-getStyled(TRANSLATE_X), -get(TRANSLATE_Y));
+        Transform scale = Transform.scale(1.0 / getStyled(SCALE_X), 1.0 / get(SCALE_Y), center.getX(), center.getY());
+        Transform rotate = Transform.rotate(-getStyled(ROTATE), center.getX(), center.getY());
 
         Transform t = scale.createConcatenation(rotate).createConcatenation(translate);
         return t;
@@ -802,9 +799,9 @@ public interface Figure extends StyleablePropertyBean {
      */
     default Transform getLocalToParent() {
         Point2D center = getCenterInLocal();
-        Transform translate = Transform.translate(get(TRANSLATE_X), get(TRANSLATE_Y));
-        Transform scale = Transform.scale(get(SCALE_X), get(SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(get(ROTATE), center.getX(), center.getY());
+        Transform translate = Transform.translate(getStyled(TRANSLATE_X), get(TRANSLATE_Y));
+        Transform scale = Transform.scale(getStyled(SCALE_X), get(SCALE_Y), center.getX(), center.getY());
+        Transform rotate = Transform.rotate(getStyled(ROTATE), center.getX(), center.getY());
 
         Transform t = translate.createConcatenation(rotate).createConcatenation(scale);
         return t;
@@ -818,6 +815,17 @@ public interface Figure extends StyleablePropertyBean {
      */
     default Transform getDrawingToLocal() {
         Transform t = getParentToLocal();
+        return getParent() == null ? t : t.createConcatenation(getParent().getDrawingToLocal());
+    }
+
+    /**
+     * Returns the transformation from drawing coordinates into local
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform getDrawingToParent() {
+        Transform t = new Translate(0,0);
         return getParent() == null ? t : t.createConcatenation(getParent().getDrawingToLocal());
     }
 

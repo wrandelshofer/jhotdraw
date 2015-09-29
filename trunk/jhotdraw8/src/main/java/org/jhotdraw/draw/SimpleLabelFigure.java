@@ -79,6 +79,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderF
         textNode.setX(get(ORIGIN).getX());
         textNode.setY(get(ORIGIN).getY());
         textNode.setBoundsType(TextBoundsType.VISUAL);
+        applyFigureProperties(textNode);
         applyTextProperties(textNode);
         applyLabelProperties(textNode);
     }

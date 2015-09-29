@@ -86,6 +86,7 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
         tn.setX(get(ORIGIN).getX());
         tn.setY(get(ORIGIN).getY());
         tn.setBoundsType(TextBoundsType.VISUAL);
+        applyFigureProperties(tn);
         applyTextProperties(tn);
         applyShapeProperties(tn);
         tn.applyCss();
