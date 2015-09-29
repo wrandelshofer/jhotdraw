@@ -784,7 +784,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     /**
      * Invalidates the handles.
      */
-    private void invalidateHandles() {
+    public void invalidateHandles() {
         if (handlesAreValid) {
             handlesAreValid = false;
         }
