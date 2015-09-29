@@ -571,7 +571,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         for (Node n : handlesPane.getChildren()) {
             Point2D pl = n.parentToLocal(vx, vy);
             if (n.contains(pl)) {
-                return nodeToHandleMap.get(n);
+                Handle h = nodeToHandleMap.get(n);
+                if (h.isSelectable()) {
+                    return h;
+                }
             }
         }
         return null;
@@ -809,29 +812,26 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
         selectionHandles.clear();
         handlesPane.getChildren().clear();
-        while (true) {
-            for (Figure figure : getSelectedFigures()) {
-                List<Handle> handles = figure.createHandles(detailLevel, this);
-                if (handles != null) {
-                    for (Handle handle : handles) {
-                        selectionHandles.add(handle);
-                        Node n = handle.getNode();
-                        nodeToHandleMap.put(n, handle);
-                        handlesPane.getChildren().add(n);
-                        handle.updateNode(this);
-//                        handle.addHandleListener(eventHandler);
-                    }
-                }
-            }
+        // FIXME rethink detailLevel
 
-            if (selectionHandles.isEmpty() && detailLevel != 0) {
-                // No handles are available at the desired detail level.
-                // Retry with detail level 0.
-                detailLevel = 0;
-                continue;
+        List<Handle> handles = createSelectionHandles();
+        if (handles != null) {
+            for (Handle handle : handles) {
+                selectionHandles.add(handle);
+                Node n = handle.getNode();
+                nodeToHandleMap.put(n, handle);
+                handlesPane.getChildren().add(n);
+                handle.updateNode(this);
             }
-            break;
         }
+    }
+
+    protected List<Handle> createSelectionHandles() {
+        ArrayList<Handle> list = new ArrayList<>();
+        for (Figure figure : getSelectedFigures()) {
+            list.addAll(figure.createHandles(HandleType.SELECTION, this));
+        }
+        return list;
     }
 
     private void invalidateDrawingViewTransforms() {

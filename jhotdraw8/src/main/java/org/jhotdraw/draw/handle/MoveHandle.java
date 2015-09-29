@@ -116,5 +116,9 @@ public class MoveHandle extends LocatorHandle {
             Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.west());
     }
+    @Override
+    public boolean isSelectable() {
+        return true;
+    }
 
 }

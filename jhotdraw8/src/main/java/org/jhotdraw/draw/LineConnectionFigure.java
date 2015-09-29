@@ -33,14 +33,19 @@ import org.jhotdraw.draw.shape.LineFigure;
  * @version $Id$
  */
 public class LineConnectionFigure extends AbstractShapeFigure {
+
     /**
      * The CSS type selector for this object is {@code "LineConnection"}.
      */
     public final static String TYPE_SELECTOR = "LineConnection";
 
-    /** Holds a strong reference to the property. */
+    /**
+     * Holds a strong reference to the property.
+     */
     private Property<Figure> startFigureProperty;
-    /** Holds a strong reference to the property. */
+    /**
+     * Holds a strong reference to the property.
+     */
     private Property<Figure> endFigureProperty;
     /**
      * The start position of the line.
@@ -51,19 +56,17 @@ public class LineConnectionFigure extends AbstractShapeFigure {
      */
     public static SimpleFigureKey<Point2D> END = LineFigure.END;
     /**
-     * The start figure.
-     * Is null if the figure is not connected at the start.
+     * The start figure. Is null if the figure is not connected at the start.
      * <p>
-     * If the value is changed. This figure must add or remove itself from
-     * the list of connections on the {@code ConnectableFigure}.</p>
+     * If the value is changed. This figure must add or remove itself from the
+     * list of connections on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> START_FIGURE = new SimpleFigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
-     * The end figure.
-     * Is null if the figure is not connected at the end.
+     * The end figure. Is null if the figure is not connected at the end.
      * <p>
-     * If the value is changed. This figure must add or remove itself from
-     * the list of connections on the {@code ConnectableFigure}.</p>
+     * If the value is changed. This figure must add or remove itself from the
+     * list of connections on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> END_FIGURE = new SimpleFigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
@@ -90,7 +93,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         // We must update the start and end point when ever one of
         // the connected figures or one of the connectors changes
         ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
-            if (oldValue != null&&get(END_FIGURE)!=oldValue) {
+            if (oldValue != null && get(END_FIGURE) != oldValue) {
                 oldValue.connections().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
@@ -98,7 +101,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
             }
         };
         ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
-            if (oldValue != null&&get(START_FIGURE)!=oldValue) {
+            if (oldValue != null && get(START_FIGURE) != oldValue) {
                 oldValue.connections().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
@@ -193,20 +196,25 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public List<Handle> createHandles(int detailLevel, DrawingView dv) {
-        ArrayList<Handle> list=new ArrayList<>();
-        list.add(new LineWireframeHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
-        list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, START,START_FIGURE,START_CONNECTOR));
-        list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED,Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED,  END,END_FIGURE,END_CONNECTOR));
+    public List<Handle> createHandles(HandleType handleType, DrawingView dv) {
+        ArrayList<Handle> list = new ArrayList<>();
+        if (handleType == HandleType.SELECTION) {
+            list.add(new LineWireframeHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
+            list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, START, START_FIGURE, START_CONNECTOR));
+            list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, END, END_FIGURE, END_CONNECTOR));
+        }
         return list;
     }
+
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
-    /** Returns true if this figure can connect to the specified figure with the specified connector.
-     * 
+    /**
+     * Returns true if this figure can connect to the specified figure with the
+     * specified connector.
+     *
      * @param figure The figure to which we want connect
      * @param connector The connector that we want to use
      * @return true if the connection is supported

@@ -17,6 +17,7 @@ import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.HandleType;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
@@ -102,11 +103,13 @@ public class LineFigure extends AbstractShapeFigure {
     }
 
     @Override
-    public List<Handle> createHandles(int detailLevel, DrawingView dv) {
+    public List<Handle> createHandles(HandleType handleType, DrawingView dv) {
         ArrayList<Handle> list = new ArrayList<>();
-        list.add(new LineWireframeHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
-        list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
-        list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
+        if (handleType == HandleType.SELECTION) {
+            list.add(new LineWireframeHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
+            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
+            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
+        }
         return list;
     }
 

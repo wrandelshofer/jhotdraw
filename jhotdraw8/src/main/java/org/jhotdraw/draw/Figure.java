@@ -507,23 +507,21 @@ public interface Figure extends StyleablePropertyBean {
      * Creates handles of the specified level and for the specified drawing
      * view.
      *
-     * @param detailLevel The desired detail level
+     * @param handleType The desired handle type
      * @param dv The drawing view which will display the handles
      * @return The handles. Returns an empty list if the figure does not provide
      * handles at the desired detail level.
      */
-    default List<Handle> createHandles(int detailLevel, DrawingView dv) {
-        if (detailLevel > 0) {
-            return Collections.emptyList();
-        } else {
-            List<Handle> list = new LinkedList<>();
+    default List<Handle> createHandles(HandleType handleType, DrawingView dv) {
+        List<Handle> list = new LinkedList<>();
+        if (handleType == HandleType.SELECTION) {
             list.add(new BoundsInLocalHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
-            list.add( MoveHandle.northEast(this, Handle.STYLECLASS_HANDLE_MOVE));
-            list.add( MoveHandle.northWest(this, Handle.STYLECLASS_HANDLE_MOVE));
-            list.add( MoveHandle.southEast(this, Handle.STYLECLASS_HANDLE_MOVE));
-            list.add( MoveHandle.southWest(this, Handle.STYLECLASS_HANDLE_MOVE));
-            return list;
+            list.add(MoveHandle.northEast(this, Handle.STYLECLASS_HANDLE_MOVE));
+            list.add(MoveHandle.northWest(this, Handle.STYLECLASS_HANDLE_MOVE));
+            list.add(MoveHandle.southEast(this, Handle.STYLECLASS_HANDLE_MOVE));
+            list.add(MoveHandle.southWest(this, Handle.STYLECLASS_HANDLE_MOVE));
         }
+        return list;
     }
 
     /**

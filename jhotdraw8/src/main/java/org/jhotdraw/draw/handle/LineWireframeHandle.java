@@ -65,4 +65,8 @@ public class LineWireframeHandle extends AbstractHandle<Figure> {
             pp.set(i, points[i]);
         }
     }
+    @Override
+    public boolean isSelectable() {
+        return false;
+    }
 }
