@@ -254,7 +254,10 @@ public interface DrawingView extends RenderContext {
      * @return A list of figures from front to back
      */
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
-
+    /**
+     * Invalidates the handles of the view.
+     */
+    void invalidateHandles();
     // ---
     // convenience methods
     // ---
