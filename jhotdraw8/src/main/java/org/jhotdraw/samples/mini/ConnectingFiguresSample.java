@@ -22,6 +22,7 @@ import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
+import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
@@ -66,19 +67,6 @@ public class ConnectingFiguresSample extends Application {
         GroupFigure vertex2Group = new GroupFigure();
         vertex2Group.add(vertex2);
         vertex2Group.add(vertex2b);
-
-        /*
-                  edge23.set(Figure.ROTATE, 10.0);
-
-        
-          vertex2Group.set(Figure.ROTATE, -50.0);
-          vertex2Group.set(Figure.SCALE_Y, 3.0);
-          vertex2.set(Figure.ROTATE, 45.0);
-          
-          vertex3.set(Figure.ROTATE, 20.0);
-          //vertex3.set(Figure.ROTATION_AXIS, new Point3D(0,1.0,0));
-          */
-         
 
         Layer layer = new SimpleLayer();
         drawing.add(layer);

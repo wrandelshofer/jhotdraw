@@ -17,21 +17,19 @@ import org.jhotdraw.event.Listener;
  * AbstractHandle.
  * @author Werner Randelshofer
  * @version $Id$
- * @param <F> the supported figure type
+ * @param <F> the supported owner type
  */
 public abstract class AbstractHandle<F extends Figure> implements Handle<F> {
     // ---
     // Fields
     // ---
-    protected final F figure;
-    protected final DrawingView dv;
+    protected final F owner;
 
     // ---
     // Constructors
     // ---
-    public AbstractHandle(F figure, DrawingView dv) {
-        this.figure = figure;
-        this.dv = dv;
+    public AbstractHandle(F owner) {
+        this.owner = owner;
     }
 
     // ---
@@ -42,7 +40,7 @@ public abstract class AbstractHandle<F extends Figure> implements Handle<F> {
     }
 
     @Override
-    public F getFigure() {
-       return figure;
+    public F getOwner() {
+       return owner;
     }
 }

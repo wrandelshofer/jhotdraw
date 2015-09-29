@@ -13,6 +13,8 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.key.SimpleFigureKey;
+import org.jhotdraw.draw.locator.Locator;
+import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.geom.Geom;
 
 /**
@@ -20,22 +22,17 @@ import org.jhotdraw.geom.Geom;
  *
  * @author Werner Randelshofer
  */
-public class MoveHandle extends AbstractHandle {
+public class MoveHandle extends LocatorHandle {
 
-    private double prevX, prevY;
-    private Point2D startPoint;
-    private Point2D unconstrainedPoint;
+    private Point2D oldPoint;
+    private Point2D anchor;
     private final Rectangle node;
     private final String styleclass;
-    private double relativeX;
-    private double relativeY;
 
-    public MoveHandle(Figure figure, DrawingView dv, String styleclass, double relativeX, double relativeY) {
-        super(figure, dv);
+    public MoveHandle(Figure figure, String styleclass, Locator locator) {
+        super(figure, locator);
         this.styleclass = styleclass;
         node = new Rectangle();
-        this.relativeX = Geom.clamp(relativeX, 0, 1);
-        this.relativeY = Geom.clamp(relativeY, 0, 1);
         initNode(node);
     }
 
@@ -55,10 +52,10 @@ public class MoveHandle extends AbstractHandle {
 
     @Override
     public void updateNode(DrawingView view) {
-        Figure f = getFigure();
+        Figure f = getOwner();
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
         Bounds b = f.getBoundsInLocal();
-        Point2D p = new Point2D(b.getMinX() + b.getWidth() * relativeX, b.getMinY() + b.getHeight() * relativeY);
+        Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         p = t.transform(p);
         Rectangle r = node;
@@ -67,34 +64,57 @@ public class MoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(MouseEvent event, DrawingView dv) {
-        prevX = event.getX();
-        prevY = event.getY();
+    public void onMousePressed(MouseEvent event, DrawingView view) {
+        oldPoint = anchor = view.getConstrainer().constrainPoint(getOwner(),view.viewToDrawing(new Point2D(event.getX(),event.getY())));
     }
 
     @Override
-    public void onMouseDragged(MouseEvent event, DrawingView dv) {
-        // FIXME implement me properly
-        double newX = event.getX();
-        double newY = event.getY();
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
+        Point2D anchor=new Point2D(event.getX(),event.getY());
+        Point2D newPoint = view.getConstrainer().constrainPoint(getOwner(),view.viewToDrawing(anchor));
 
-        Figure f = getFigure();
-        Transform t = f.getDrawingToLocal().createConcatenation(dv.getViewToDrawing());
-
-        Point2D delta = t.deltaTransform(newX - prevX, newY - prevY);
-        Transform tx = Transform.translate(delta.getX(), delta.getY());
-        /*
-         Point2D newPoint = dv.getConstrainer().constrainPoint(f, unconstrainedPoint);
-         */
-        for (Figure selected : dv.getSelectedFigures()) {
-            dv.getDrawingModel().reshape(selected, tx);
-        }
-        prevX = newX;
-        prevY = newY;
+        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY()- oldPoint.getY());
+        view.getDrawingModel().reshape(getOwner(), tx);
+        
+        oldPoint=newPoint;
     }
 
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
-        unconstrainedPoint = null;
+        // FIXME fire undoable edit
     }
+
+    static public Handle south(Figure owner, String styleclass) {
+        return new MoveHandle(owner, styleclass, RelativeLocator.south());
+    }
+
+    static public Handle southEast(Figure owner, String styleclass) {
+        return new MoveHandle(owner, styleclass, RelativeLocator.southEast());
+    }
+
+    static public Handle southWest(Figure owner, String styleclass) {
+        return new MoveHandle(owner, styleclass, RelativeLocator.southWest());
+    }
+
+    static public Handle north(Figure owner, String styleclass) {
+        return new MoveHandle(owner, styleclass, RelativeLocator.north());
+    }
+
+    static public Handle northEast(Figure owner, String styleclass) {
+        return new MoveHandle(owner, styleclass, RelativeLocator.northEast());
+    }
+
+    static public Handle northWest(Figure owner, String styleclass) {
+        return new MoveHandle(owner, styleclass, RelativeLocator.northWest());
+    }
+
+    static public Handle east(Figure owner, String styleclass) {
+        return new MoveHandle(owner, styleclass, RelativeLocator.east());
+    }
+
+    static public Handle west(
+            Figure owner, String styleclass) {
+        return new MoveHandle(owner, styleclass, RelativeLocator.west());
+    }
+
 }

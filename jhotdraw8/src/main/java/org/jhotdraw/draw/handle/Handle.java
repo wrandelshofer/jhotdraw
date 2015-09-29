@@ -59,7 +59,7 @@ public interface Handle<F extends Figure> {
      *
      * @return a figure
      */
-    F getFigure();
+    F getOwner();
 
     /**
      * Returns the node which is used to visualize the handle. The node is

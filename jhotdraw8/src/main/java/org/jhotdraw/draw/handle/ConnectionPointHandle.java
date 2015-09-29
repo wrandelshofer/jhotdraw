@@ -37,9 +37,9 @@ public class ConnectionPointHandle extends AbstractHandle {
     private final String styleclass;
     private final String styleclassConnected;
 
-    public ConnectionPointHandle(Figure figure, DrawingView dv, String styleclass, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
+    public ConnectionPointHandle(Figure figure, String styleclass, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
             SimpleFigureKey<Figure> figureKey, SimpleFigureKey<Connector> connectorKey) {
-        super(figure, dv);
+        super(figure);
         this.pointKey = pointKey;
         this.figureKey = figureKey;
         this.connectorKey = connectorKey;
@@ -64,7 +64,7 @@ public class ConnectionPointHandle extends AbstractHandle {
 
     @Override
     public void updateNode(DrawingView view) {
-        Figure f = getFigure();
+        Figure f = getOwner();
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
         Point2D p = f.get(pointKey);
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
@@ -82,7 +82,7 @@ public class ConnectionPointHandle extends AbstractHandle {
     public void onMousePressed(MouseEvent event, DrawingView dv) {
         startX = event.getX();
         startY = event.getY();
-        startPoint = getFigure().get(pointKey);
+        startPoint = getOwner().get(pointKey);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         double newX = event.getX();
         double newY = event.getY();
 
-        Figure f = getFigure();
+        Figure f = getOwner();
         Transform t = f.getDrawingToLocal().createConcatenation(dv.getViewToDrawing());
 
         Point2D delta = t.deltaTransform(newX - startX, newY - startY);
