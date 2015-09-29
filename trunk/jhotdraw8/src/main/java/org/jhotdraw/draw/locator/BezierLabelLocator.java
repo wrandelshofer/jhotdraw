@@ -62,6 +62,8 @@ public class BezierLabelLocator implements Locator {
     /**
      * Returns the coordinates of the relative point on the path
      * of the specified bezier figure.
+     * @param owner the owner
+     * @return the coordinates
      */
     public Point2D getRelativePoint(BezierFigure owner) {
        Point2D point = owner.getPointOnPath((float) relativePosition, 3);
@@ -89,6 +91,9 @@ public class BezierLabelLocator implements Locator {
     /**
      * Returns aPoint2D on the polyline that is at the provided relative position.
      * XXX - Implement this and move it to BezierPath
+     * @param owner the owner
+     * @param label the label
+     * @return the position
      */
     public Point2D getRelativeLabelPoint(BezierFigure owner, Figure label) {
         // Get a point on the path an the next point on the path
