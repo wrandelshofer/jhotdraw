@@ -23,6 +23,8 @@ public abstract class LocatorHandle<F extends Figure> extends AbstractHandle<F> 
 
     /**
      * Initializes the LocatorHandle with the given Locator.
+     * @param owner the figure which owns the handle
+     * @param l the location
      */
     public LocatorHandle(F owner, Locator l) {
         super(owner);
@@ -31,6 +33,7 @@ public abstract class LocatorHandle<F extends Figure> extends AbstractHandle<F> 
 
     /**
      * Returns the location in local figure coordinates.
+     * @return the location
      */
     protected Point2D getLocation() {
         return locator.locate(owner);
