@@ -20,7 +20,8 @@
 }
 
 #vertex3 {
-    -jhotdraw-text-fill: blue;
+    -jhotdraw-stroke-width: 0.0;
+    -jhotdraw-fill: blue;
     -jhotdraw-font: 24.0 "Andale Mono";
 }
 
