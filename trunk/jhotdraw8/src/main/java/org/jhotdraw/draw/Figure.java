@@ -517,11 +517,11 @@ public interface Figure extends StyleablePropertyBean {
             return Collections.emptyList();
         } else {
             List<Handle> list = new LinkedList<>();
-            list.add(new BoundsInLocalHandle(this, dv, Handle.STYLECLASS_HANDLE_OUTLINE));
-            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 0, 0));
-            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 1, 0));
-            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 0, 1));
-            list.add(new MoveHandle(this, dv, Handle.STYLECLASS_HANDLE_MOVE, 1, 1));
+            list.add(new BoundsInLocalHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
+            list.add( MoveHandle.northEast(this, Handle.STYLECLASS_HANDLE_MOVE));
+            list.add( MoveHandle.northWest(this, Handle.STYLECLASS_HANDLE_MOVE));
+            list.add( MoveHandle.southEast(this, Handle.STYLECLASS_HANDLE_MOVE));
+            list.add( MoveHandle.southWest(this, Handle.STYLECLASS_HANDLE_MOVE));
             return list;
         }
     }

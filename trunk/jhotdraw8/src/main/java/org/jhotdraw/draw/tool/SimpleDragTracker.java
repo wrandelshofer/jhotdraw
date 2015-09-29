@@ -41,8 +41,8 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
 
     private static final long serialVersionUID = 1L;
     protected Figure anchorFigure;
-    private Point2D previous;
-    private Point2D start;
+    private Point2D oldPoint;
+    private Point2D anchor;
 
     // --- 
     // Behaviors
@@ -53,36 +53,28 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     }
 
     @Override
-    public void trackMousePressed(MouseEvent evt, DrawingView view) {
-        // FIXME implement me properly
-        previous = start = view.viewToDrawing(evt.getX(), evt.getY());
-    }
+    public void trackMousePressed(MouseEvent event, DrawingView view) {
+         oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure,view.viewToDrawing(new Point2D(event.getX(),event.getY())));
+   }
 
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
+// FIXME fire undoable edit
         fireToolDone();
     }
 
     @Override
-    public void trackMouseDragged(MouseEvent evt, DrawingView dv) {
-        // FIXME implement me properly
-        Point2D current = dv.viewToDrawing(evt.getX(), evt.getY());
-        if (evt.isControlDown()) {
-            if (Math.abs(current.getX() - start.getX()) < Math.abs(current.getY() - start.getY())) {
-                current = new Point2D(start.getX(), current.getY());
-            } else {
-                current = new Point2D(current.getX(), start.getY());
-            }
-        }
-        // Convert point into drawing coordinates
-        Point2D dp = current.subtract(previous);
-        Transform t = Transform.translate(dp.getX(), dp.getY());
-        DrawingModel dm = dv.getDrawingModel();
-        for (Figure f : dv.getSelectedFigures()) {
-            dm.reshape(f, t);
+    public void trackMouseDragged(MouseEvent event, DrawingView view) {
+        Point2D anchor=new Point2D(event.getX(),event.getY());
+        Point2D newPoint = view.getConstrainer().constrainPoint(anchorFigure,view.viewToDrawing(anchor));
+
+        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY()- oldPoint.getY());
+        DrawingModel dm = view.getDrawingModel();
+        for (Figure f : view.getSelectedFigures()) {
+            dm.reshape(f, tx);
         }
 
-        previous = current;
+        oldPoint = newPoint;
     }
 
 }

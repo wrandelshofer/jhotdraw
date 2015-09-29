@@ -30,8 +30,8 @@ public class LineWireframeHandle extends AbstractHandle<Figure> {
     private double[] points;
     private String styleclass;
 
-    public LineWireframeHandle(Figure figure, DrawingView dv, String styleclass) {
-        super(figure, dv);
+    public LineWireframeHandle(Figure figure, String styleclass) {
+        super(figure);
 
         points = new double[4];
         node = new Polyline(points);
@@ -51,9 +51,9 @@ public class LineWireframeHandle extends AbstractHandle<Figure> {
 
     @Override
     public void updateNode(DrawingView view) {
-        Figure f = getFigure();
+        Figure f = getOwner();
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
-        Bounds b = getFigure().getBoundsInLocal();
+        Bounds b = getOwner().getBoundsInLocal();
         points[0] = f.get(LineConnectionFigure.START).getX();
         points[1] = f.get(LineConnectionFigure.START).getY();
         points[2] = f.get(LineConnectionFigure.END).getX();

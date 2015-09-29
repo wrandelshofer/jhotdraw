@@ -28,8 +28,8 @@ public class BoundsInLocalHandle extends AbstractHandle<Figure> {
     private Polygon node;
     private double[] points;
 private String styleclass;
-    public BoundsInLocalHandle(Figure figure, DrawingView dv, String styleclass) {
-        super(figure, dv);
+    public BoundsInLocalHandle(Figure figure, String styleclass) {
+        super(figure);
 
         points = new double[8];
         node = new Polygon(points);
@@ -50,7 +50,7 @@ private String styleclass;
 
     @Override
     public void updateNode(DrawingView view) {
-        Figure f = getFigure();
+        Figure f = getOwner();
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
 
         Bounds b = f.getBoundsInLocal();

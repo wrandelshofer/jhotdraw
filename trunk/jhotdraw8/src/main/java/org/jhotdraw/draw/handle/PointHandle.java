@@ -27,8 +27,8 @@ public class PointHandle extends AbstractHandle {
     private final Rectangle node;
     private final String styleclass;
 
-    public PointHandle(Figure figure, DrawingView dv, String styleclass, SimpleFigureKey<Point2D> pointKey) {
-        super(figure, dv);
+    public PointHandle(Figure figure, String styleclass, SimpleFigureKey<Point2D> pointKey) {
+        super(figure);
         this.pointKey = pointKey;
         this.styleclass = styleclass;
         node = new Rectangle();
@@ -51,7 +51,7 @@ public class PointHandle extends AbstractHandle {
 
     @Override
     public void updateNode(DrawingView view) {
-        Figure f = getFigure();
+        Figure f = getOwner();
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
         Point2D p = f.get(pointKey);
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
@@ -65,7 +65,7 @@ public class PointHandle extends AbstractHandle {
     public void onMousePressed(MouseEvent event, DrawingView dv) {
         startX = event.getX();
         startY = event.getY();
-        startPoint = getFigure().get(pointKey);
+        startPoint = getOwner().get(pointKey);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PointHandle extends AbstractHandle {
         double newX = event.getX();
         double newY = event.getY();
 
-        Figure f = getFigure();
+        Figure f = getOwner();
         Transform t = f.getDrawingToLocal().createConcatenation(dv.getViewToDrawing());
 
         Point2D delta = t.deltaTransform(newX - startX, newY - startY);

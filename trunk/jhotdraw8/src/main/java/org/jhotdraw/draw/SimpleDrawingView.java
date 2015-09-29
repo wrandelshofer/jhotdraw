@@ -747,13 +747,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         HashSet<Figure> owners = new HashSet<Figure>();
         LinkedList<Handle> compatibleHandles = new LinkedList<Handle>();
-        owners.add(master.getFigure());
+        owners.add(master.getOwner());
         compatibleHandles.add(master);
 
         for (Handle handle : getSelectionHandles()) {
-            if (!owners.contains(handle.getFigure()) /* &&
+            if (!owners.contains(handle.getOwner()) /* &&
                      * handle.isCombinableWith(master) */) {
-                owners.add(handle.getFigure());
+                owners.add(handle.getOwner());
                 compatibleHandles.add(handle);
             }
 
