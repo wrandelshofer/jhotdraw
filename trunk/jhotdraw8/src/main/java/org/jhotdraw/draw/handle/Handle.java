@@ -78,6 +78,12 @@ public interface Handle<F extends Figure> {
     Node getNode();
 
     void updateNode(DrawingView drawingView);
+    
+    /** Whether the handle is selectable. 
+     * 
+     * @return true if selectable
+     */
+    boolean isSelectable();
 
     /**
      * Updates a handle node with all {@code Key}s which define the

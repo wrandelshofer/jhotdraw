@@ -69,4 +69,9 @@ private String styleclass;
             pp.set(i, points[i]);
         }
     }
+
+    @Override
+    public boolean isSelectable() {
+        return false;
+    }
 }

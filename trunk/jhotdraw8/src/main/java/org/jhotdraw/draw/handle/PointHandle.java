@@ -87,4 +87,8 @@ public class PointHandle extends AbstractHandle {
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
         unconstrainedPoint = null;
     }
+    @Override
+    public boolean isSelectable() {
+        return true;
+    }
 }

@@ -197,7 +197,7 @@ public interface DrawingView extends RenderContext {
 
     /**
      * Finds the handle at the given view coordinates. Handles are searched in
-     * Z-order from front to back.
+     * Z-order from front to back. Skips handles which are not selectable.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
