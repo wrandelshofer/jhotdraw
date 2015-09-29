@@ -67,60 +67,12 @@ public interface TextHolderFigure extends Figure {
      * Text wrapping width. Default value: {@code 0.0} (no wrapping).
      */
     public static DoubleStyleableFigureKey WRAPPING_WIDTH = new DoubleStyleableFigureKey("wrappingWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    // shape properties
-    /**
-     * Defines the paint used for filling the interior of the text. Default
-     * value: {@code null}.
-     */
-    public static PaintStyleableFigureKey TEXT_FILL = new PaintStyleableFigureKey("textFill", Color.BLACK);
-    /**
-     * Defines whether anti-aliasing hints are used. Default value:
-     * {@code true}. Note: This should be off for printing!
-     */
-    public static BooleanStyleableFigureKey TEXT_SMOOTH = new BooleanStyleableFigureKey("textSmooth", DirtyMask.of(DirtyBits.NODE), true);
-    /**
-     * Defines the distance in user coordinates for the dashing pattern. Default
-     * value: {@code 0}.
-     */
-    public static DoubleStyleableFigureKey TEXT_STROKE_DASH_OFFSET = new DoubleStyleableFigureKey("textStrokeDashOffset", DirtyMask.of(DirtyBits.NODE), 0.0);
-    /**
-     * Defines the end cap style. Default value: {@code SQUARE}.
-     */
-    public static EnumStyleableFigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableFigureKey("textStrokeLineCap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.SQUARE);
-    /**
-     * Defines the style applied where path segments meet. Default value:
-     * {@code MITER}.
-     */
-    public static EnumStyleableFigureKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("textStrokeLineJoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
-    /**
-     * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
-     * value: {@code 10.0}.
-     */
-    public static DoubleStyleableFigureKey TEXT_STROKE_MITER_LIMIT = new DoubleStyleableFigureKey("textStrokeMiterLimit", DirtyMask.of(DirtyBits.NODE), 10.0);
-    /**
-     * Defines the paint used for filling the outline of the text. Default
-     * value: {@code null}.
-     */
-    public static PaintStyleableFigureKey TEXT_STROKE = new PaintStyleableFigureKey("textStroke", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), null);
-    /**
-     * Defines the stroke type used for drawing the outline of the text. Default
-     * value: {@code StrokeType.CENTERED}.
-     */
-    public static EnumStyleableFigureKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableFigureKey<>("textStrokeType", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.CENTERED);
-    /**
-     * Defines the width of the outline of the text. Default value: {@code 1.0}.
-     */
-    public static DoubleStyleableFigureKey TEXT_STROKE_WIDTH = new DoubleStyleableFigureKey("textStrokeWidth", DirtyMask.of(DirtyBits.NODE), 1.0);
-    /**
-     * Defines the dash array used for the text. Default value:
-     * {@code empty list}.
-     */
-    public static DoubleListStyleableFigureKey TEXT_STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("textStrokeDashArray", DirtyMask.of(DirtyBits.NODE), Collections.emptyList());
 
+    /** The text. Default value: {@code ""}. */
     public final static SimpleFigureKey<String> TEXT = new SimpleFigureKey<>("text", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), "");
 
     /**
-     * Updates a text node.
+     * Updates a text node with text properties except {@code TEXT}.
      *
      * @param text a text node
      */
@@ -133,16 +85,5 @@ public interface TextHolderFigure extends Figure {
         text.setTextOrigin(getStyled(TEXT_ORIGIN));
         text.setUnderline(getStyled(UNDERLINE));
         text.setWrappingWidth(getStyled(WRAPPING_WIDTH));
-
-        text.setFill(getStyled(TEXT_FILL));
-        text.setSmooth(getStyled(TEXT_SMOOTH));
-        text.setStrokeDashOffset(getStyled(TEXT_STROKE_DASH_OFFSET));
-        text.setStrokeLineCap(getStyled(TEXT_STROKE_LINE_CAP));
-        text.setStrokeLineJoin(getStyled(TEXT_STROKE_LINE_JOIN));
-        text.setStrokeMiterLimit(getStyled(TEXT_STROKE_MITER_LIMIT));
-        text.setStroke(getStyled(TEXT_STROKE));
-        text.setStrokeType(getStyled(TEXT_STROKE_TYPE));
-        text.setStrokeWidth(getStyled(TEXT_STROKE_WIDTH));
-        text.getStrokeDashArray().setAll(getStyled(TEXT_STROKE_DASH_ARRAY));
     }
 }
