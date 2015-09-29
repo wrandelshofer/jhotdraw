@@ -258,6 +258,10 @@ public interface DrawingView extends RenderContext {
      * Invalidates the handles of the view.
      */
     void invalidateHandles();
+    
+    /** Repaints the view. */
+    void repaint();
+        
     // ---
     // convenience methods
     // ---

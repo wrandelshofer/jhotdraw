@@ -514,7 +514,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
     }
 
-    private void repaint() {
+    /** Repaints the view. */
+    public void repaint() {
         if (repainter == null) {
             repainter = () -> {
                 repainter = null;
