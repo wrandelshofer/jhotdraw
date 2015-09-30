@@ -68,10 +68,12 @@ import org.jhotdraw.beans.SimplePropertyBean;
  */
 public class SimpleDrawingView extends SimplePropertyBean implements DrawingView {
 
-    @FXML
-    private SubScene drawingSubScene;
-    @FXML
-    private SubScene overlaysSubScene;
+    private static class FixedSizedGroup extends Group{
+        
+    }
+    
+    private Group drawingSubScene;
+    private Group overlaysSubScene;
 
     private BorderPane toolPane;
 
@@ -265,18 +267,22 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         double x = bounds.getMinX() * f;
         double y = bounds.getMinY() * f;
         // A scene in JavaFX may not be larger than 16384 pixels.
-        double w = min(16384,bounds.getWidth() * f);
-        double h = min(16384,bounds.getHeight() * f);
+        double w = min(8192,bounds.getWidth() * f);
+        double h = min(8192,bounds.getHeight() * f);
         
         drawingPane.setTranslateX(max(0, -x));
         drawingPane.setTranslateY(max(0, -y));
-        drawingSubScene.setWidth(w);
+        /*drawingSubScene.setWidth(w);
         drawingSubScene.setHeight(h);
         overlaysSubScene.setWidth(w);
-        overlaysSubScene.setHeight(h);
+        overlaysSubScene.setHeight(h);*/
 
         toolPane.resize(w, h);
         toolPane.layout();
+        
+        node.setPrefSize(w,h);
+        
+        
         invalidateDrawingViewTransforms();
     }
 
@@ -329,10 +335,16 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         node.setFocusTraversable(true);
         focused.bind(node.focusedProperty());
 
+        drawingSubScene=new Group();
+        drawingSubScene.setManaged(false);
+        overlaysSubScene=new Group();
+        overlaysSubScene.setManaged(false);
+        node.getChildren().addAll(drawingSubScene,overlaysSubScene);
+        
         drawingPane = new Group();
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
-        drawingSubScene.setRoot(drawingPane);
+        drawingSubScene.getChildren().add(drawingPane);
 
         toolPane = new BorderPane();
         toolPane.setBackground(Background.EMPTY);
@@ -344,7 +356,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         overlaysPane.setBackground(Background.EMPTY);
         overlaysPane.getChildren().addAll(handlesPane, toolPane);
         overlaysPane.setManaged(false);
-        overlaysSubScene.setRoot(overlaysPane);
+        overlaysSubScene.getChildren().add(overlaysPane);
 
         drawingPane.layoutBoundsProperty().addListener(observer -> {
             updateLayout();
@@ -398,22 +410,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         return constrainer;
     }
 
-    private InvalidationListener preferredSizeHandler = new InvalidationListener() {
-
-        @Override
-        public void invalidated(Observable observable) {
-            updatePreferredSize();
-        }
-
-    };
-
     private Property<Rectangle2D> boundsProperty;
 
     private void updateDrawing() {
         clearNodes();
         drawingPane.getChildren().clear();
         if (boundsProperty != null) {
-            boundsProperty.removeListener(preferredSizeHandler);
             boundsProperty.unbind();
             boundsProperty = null;
             activeLayer.set(null);
@@ -422,10 +424,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         drawing.set(d);
         if (d != null) {
             boundsProperty = Drawing.BOUNDS.propertyAt(d.properties());
-            boundsProperty.addListener(preferredSizeHandler);
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
-            updatePreferredSize();
+            updateLayout();
             updateTreeNodes(d);
             repaint();
         }
@@ -525,15 +526,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             };
             Platform.runLater(repainter);
         }
-    }
-
-    private void updatePreferredSize() {
-        Rectangle2D r = getDrawing().get(Drawing.BOUNDS);
-        Rectangle2D visible = new Rectangle2D(max(r.getMinX(), 0), max(r.getMinY(), 0), (r.getWidth()
-                + max(r.getMinX(), 0)),
-                r.getHeight() + max(r.getMinY(), 0));
-        node.setPrefHeight(visible.getHeight());
-        node.setPrefHeight(visible.getWidth());
     }
 
     @Override
