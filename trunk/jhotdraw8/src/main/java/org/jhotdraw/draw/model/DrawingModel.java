@@ -181,4 +181,15 @@ public interface DrawingModel extends Observable {
      * the model.
      */
     void validate();
+    
+    // ---
+    // convenience methods
+    // ---
+    /**
+     * Fires "node invalidated" event for the specified figure.
+     * @param f the figure
+     */
+    default void fireNodeInvalidated(Figure f) {
+        fire(DrawingModelEvent.nodeInvalidated(this, f));
+    }
 }

@@ -4,6 +4,9 @@
  */
 package org.jhotdraw.draw.model;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
@@ -17,7 +20,9 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 /**
  * This drawing model assumes that the drawing contains figures which perform
  * layouts and has connections between figures.
- *
+ * <p>
+ * Assumes that a figure which has connections to other figures may have
+ * in turn connections from other figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -61,12 +66,10 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
                     fire(DrawingModelEvent.nodeInvalidated(this, figure));
                 }
                 if (dm.containsOneOf(DirtyBits.LAYOUT)) {
-                        fire(DrawingModelEvent.layoutInvalidated(this, figure));
+                    fire(DrawingModelEvent.layoutInvalidated(this, figure));
                 }
                 if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
-                    for (Figure c : figure.connections()) {
-                        fire(DrawingModelEvent.layoutInvalidated(this, c));
-                    }
+                    fireLayoutInvalidatedForConnectionsOfFigure(figure);
                 }
             }
         }
@@ -78,11 +81,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
         figure.reshape(transform);
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
-        for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
-                fire(DrawingModelEvent.layoutInvalidated(this, c));
-            }
-        }
+        fireLayoutInvalidatedForConnectionsOfSubtree(figure);
     }
 
     @Override
@@ -90,32 +89,20 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
         figure.reshape(x, y, width, height);
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
-        for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
-                fire(DrawingModelEvent.layoutInvalidated(this, c));
-            }
-        }
+        fireLayoutInvalidatedForConnectionsOfSubtree(figure);
     }
 
     @Override
     public void layout(Figure figure) {
         figure.layout();
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
-        for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
-                fire(DrawingModelEvent.layoutInvalidated(this, c));
-            }
-        }
+        fireLayoutInvalidatedForConnectionsOfSubtree(figure);
     }
 
     @Override
     public void applyCss(Figure figure) {
         figure.applyCss();
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
-        for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
-                fire(DrawingModelEvent.layoutInvalidated(this, c));
-            }
-        }
+        fireLayoutInvalidatedForConnectionsOfSubtree(figure);
     }
 }

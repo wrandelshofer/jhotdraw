@@ -17,7 +17,8 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 /**
  * This drawing model assumes that the drawing contains no figures which perform
  * layouts but has connections between figures.
- *
+ * <p>
+ * Further assumes that a connection figure has no further connections.
  *
  * @author Werner Randelshofer
  * @version $Id$
