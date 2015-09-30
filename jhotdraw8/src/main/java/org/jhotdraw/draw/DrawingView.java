@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.model.DrawingModel;
 import java.util.Collection;
 import java.util.List;
@@ -89,6 +90,10 @@ public interface DrawingView extends RenderContext {
      * The name of the drawing property.
      */
     public final static String DRAWING_PROPERTY = "drawing";
+    /**
+     * The name of the handle type property.
+     */
+    public final static String HANDLE_TYPE_PROPERTY = "handleType";
 
     // ---
     // properties
@@ -176,6 +181,12 @@ public interface DrawingView extends RenderContext {
      * @return the active handle if present
      */
     ObjectProperty<Handle> activeHandleProperty();
+    /**
+     * The handle type.
+     *
+     * @return the handle key
+     */
+    ObjectProperty<HandleType> handleTypeProperty();
 
     // ---
     // methods
@@ -351,6 +362,14 @@ public interface DrawingView extends RenderContext {
 
     default Handle getActiveHandle() {
         return activeHandleProperty().get();
+    }
+
+    default void setHandleType(HandleType newValue) {
+        handleTypeProperty().set(newValue);
+    }
+
+    default HandleType getHandleType() {
+        return handleTypeProperty().get();
     }
 
     default void setActiveLayer(Layer newValue) {

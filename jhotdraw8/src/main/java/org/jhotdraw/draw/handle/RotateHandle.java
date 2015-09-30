@@ -1,7 +1,8 @@
-/* @(#)ConnectionFigureConnectionHandle.java
+/* @(#)RotateHandle.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
+
 package org.jhotdraw.draw.handle;
 
 import javafx.geometry.Bounds;
@@ -14,40 +15,37 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 
 /**
- * Handle for the point of a figure.
- *
+ * A Handle to rotate a Figure.
  * @author Werner Randelshofer
  */
-public class MoveHandle extends LocatorHandle {
+public class RotateHandle extends AbstractHandle {
 
     private Point2D oldPoint;
     private final Region node;
     private final String styleclass;
-    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE,  BorderStrokeStyle.SOLID, null, null));
+    private static final Circle REGION_SHAPE = new Circle(4);
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
 
-    public MoveHandle(Figure figure, Locator locator) {
-        this(figure, STYLECLASS_HANDLE_MOVE, locator);
+    public RotateHandle(Figure figure) {
+        this(figure,STYLECLASS_HANDLE_ROTATE);
     }
-
-    public MoveHandle(Figure figure, String styleclass, Locator locator) {
-        super(figure, locator);
+    public RotateHandle(Figure figure, String styleclass) {
+        super(figure);
         this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
-        node.resize(11, 11);
+        node.resize(10, 10);
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);
@@ -79,6 +77,7 @@ public class MoveHandle extends LocatorHandle {
 
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
+        // FIXME implement me!
         Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -101,31 +100,6 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fire undoable edit
-    }
-
-    static public Handle south(Figure owner) {
-        return south(owner, STYLECLASS_HANDLE_MOVE);
-    }
-    static public Handle southEast(Figure owner) {
-        return southEast(owner, STYLECLASS_HANDLE_MOVE);
-    }
-    static public Handle southWest(Figure owner) {
-        return southWest(owner, STYLECLASS_HANDLE_MOVE);
-    }
-    static public Handle north(Figure owner) {
-        return north(owner, STYLECLASS_HANDLE_MOVE);
-    }
-    static public Handle northEast(Figure owner) {
-        return northEast(owner, STYLECLASS_HANDLE_MOVE);
-    }
-    static public Handle northWest(Figure owner) {
-        return northWest(owner, STYLECLASS_HANDLE_MOVE);
-    }
-    static public Handle east(Figure owner) {
-        return northEast(owner, STYLECLASS_HANDLE_MOVE);
-    }
-    static public Handle west(Figure owner) {
-        return northWest(owner, STYLECLASS_HANDLE_MOVE);
     }
 
     static public Handle south(Figure owner, String styleclass) {
@@ -166,4 +140,11 @@ public class MoveHandle extends LocatorHandle {
         return true;
     }
 
+    private Point2D getLocation() {
+        Figure owner=getOwner();
+        Bounds bounds = owner.getBoundsInLocal();
+        return new Point2D(bounds.getMinX()+bounds.getWidth()/2,bounds.getMinY()-10);
+    }
+
 }
+

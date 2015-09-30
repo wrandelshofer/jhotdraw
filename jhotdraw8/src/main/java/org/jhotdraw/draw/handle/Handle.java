@@ -23,16 +23,20 @@ public interface Handle<F extends Figure> {
     // ---
     // CSS style classes
     // ---
-
     /**
      * Style class for handles which draw the outline of a shape.
      */
-    public final static String STYLECLASS_HANDLE_OUTLINE = "handle-outline";
+    public final static String STYLECLASS_HANDLE_SELECT_OUTLINE = "handle-select-outline";
 
     /**
      * Style class for handles which draw the wire frame of a shape for editing.
      */
-    public final static String STYLECLASS_HANDLE_WIREFRAME = "handle-wireframe";
+    public final static String STYLECLASS_HANDLE_MOVE_OUTLINE = "handle-move-outline";
+
+    /**
+     * Style class for handles which draw the wire frame of a shape for editing.
+     */
+    public final static String STYLECLASS_HANDLE_RESHAPE_OUTLINE = "handle-reshape-outline";
 
     /**
      * Style class for handles which move a shape.
@@ -50,6 +54,14 @@ public interface Handle<F extends Figure> {
      * Style class for handles which draw a connection point of a shape.
      */
     public final static String STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED = "handle-connection-point-connected";
+    /**
+     * Style class for handles which allow to resize a shape.
+     */
+    public final static String STYLECLASS_HANDLE_RESIZE = "handle-resize";
+    /**
+     * Style class for handles which allow to rotate a shape.
+     */
+    public final static String STYLECLASS_HANDLE_ROTATE = "handle-rotate";
 
     // ---
     // Behavior
@@ -78,9 +90,10 @@ public interface Handle<F extends Figure> {
     Node getNode();
 
     void updateNode(DrawingView drawingView);
-    
-    /** Whether the handle is selectable. 
-     * 
+
+    /**
+     * Whether the handle is selectable.
+     *
      * @return true if selectable
      */
     boolean isSelectable();
@@ -97,8 +110,7 @@ public interface Handle<F extends Figure> {
      * node.setScaleX(f.get(SCALE_X)); node.setScaleY(f.get(SCALE_Y));
      * node.setScaleZ(f.get(SCALE_Z)); node.setTranslateX(f.get(TRANSLATE_X));
      * node.setTranslateY(f.get(TRANSLATE_Y));
-     * node.setTranslateZ(f.get(TRANSLATE_Z));
-    }
+     * node.setTranslateZ(f.get(TRANSLATE_Z)); }
      */
     /**
      * Disposes of all resources acquired by the handler.
