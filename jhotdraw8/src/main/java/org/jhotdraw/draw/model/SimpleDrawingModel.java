@@ -11,6 +11,6 @@ package org.jhotdraw.draw.model;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class SimpleDrawingModel extends ConnectionsNoLayoutDrawingModel {
+public class SimpleDrawingModel extends ConnectionsAndLayoutDrawingModel {
 
 }

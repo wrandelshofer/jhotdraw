@@ -55,6 +55,7 @@ import org.jhotdraw.event.Listener;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleEvent;
 import static java.lang.Math.*;
+import java.util.Set;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.Background;
@@ -598,6 +599,36 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     }
                 }
                 if (f != null && !f.isDisabled()) {
+                    return f;
+                }
+            }
+        }
+        return null;
+    }
+    @Override
+    public Figure findFigure(double vx, double vy, Set<Figure> figures) {
+        Drawing dr = getDrawing();
+        Figure f = findFigureRecursiveInSet((Parent) getNode(dr), viewToDrawing(vx, vy), figures);
+
+        return f;
+    }
+
+    private Figure findFigureRecursiveInSet(Parent p, Point2D pp, Set<Figure> figures) {
+        ObservableList<Node> list = p.getChildrenUnmodifiable();
+        for (int i = list.size() - 1; i >= 0; i--) {// front to back
+            Node n = list.get(i);
+            if (!n.isVisible()) {
+                continue;
+            }
+            Point2D pl = n.parentToLocal(pp);
+            if (n.contains(pl)) {
+                Figure f = nodeToFigureMap.get(n);
+                if (f == null || !f.isSelectable() && !f.isDisabled()) {
+                    if (n instanceof Parent) {
+                        f = findFigureRecursiveInSet((Parent) n, pl, figures);
+                    }
+                }
+                if (f != null && !f.isDisabled()&&figures.contains(f)) {
                     return f;
                 }
             }
