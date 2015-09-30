@@ -31,11 +31,14 @@ public class SimpleFigureFactory implements FigureFactory {
     private final Map<String, Converter> valueToXML = new HashMap<>();
     private final Map<String, Converter> valueFromXML = new HashMap<>();
     private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureKeys = new HashMap<>();
+    private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
+    private final Set<String> skipElements = new HashSet<>();
 
     public SimpleFigureFactory() {
     }
 
-    /** Adds the provided keys to the figure.
+    /**
+     * Adds the provided keys to the figure.
      *
      * @param f the figure
      * @param keys the keys
@@ -55,8 +58,8 @@ public class SimpleFigureFactory implements FigureFactory {
         }
     }
 
-    /** Adds the provided mapping of XML attribute names from/to
-     * {@code Key}s.
+    /**
+     * Adds the provided mapping of XML attribute names from/to {@code Key}s.
      * <p>
      * The same key can be added more than once.
      *
@@ -82,8 +85,8 @@ public class SimpleFigureFactory implements FigureFactory {
         }
     }
 
-    /** Adds the provided mapping of XML attribute names from/to
-     * {@code Key}s.
+    /**
+     * Adds the provided mapping of XML attribute names from/to {@code Key}s.
      * <p>
      * The same key can be added more than once.
      *
@@ -96,14 +99,16 @@ public class SimpleFigureFactory implements FigureFactory {
         }
     }
 
-    /** Clears the mapping of XML attributes from/to {@code Key}s.
+    /**
+     * Clears the mapping of XML attributes from/to {@code Key}s.
      */
     public void clearAttributeMap() {
         attrToKey.clear();
         keyToAttr.clear();
     }
 
-    /** Adds the provided mappings of XML attribute names from/to
+    /**
+     * Adds the provided mappings of XML attribute names from/to
      * {@code Figure}s.
      *
      * @param name The element name
@@ -118,7 +123,28 @@ public class SimpleFigureFactory implements FigureFactory {
         }
     }
 
-    /** Clears the mapping of XML attributes from/to {@code Key}s.
+    /**
+     * Adds a figure class to the list of {@code Figure}s which will be skipped
+     * when writing the DOM.
+     *
+     * @param figure The figure class
+     */
+    public void addSkipFigure(Class<? extends Figure> figure) {
+        skipFigures.add(figure);
+    }
+
+    /**
+     * Adds an element to the list of elements which will be skipped when
+     * reading the DOM.
+     *
+     * @param figure The figure class
+     */
+    public void addSkipElement(String elementName) {
+        skipElements.add(elementName);
+    }
+
+    /**
+     * Clears the mapping of XML attributes from/to {@code Key}s.
      */
     public void clearElementMap() {
         attrToKey.clear();
@@ -128,6 +154,9 @@ public class SimpleFigureFactory implements FigureFactory {
     @Override
     public String figureToName(Figure f) throws IOException {
         if (!figureToElem.containsKey(f.getClass())) {
+            if (skipFigures.contains(f.getClass())) {
+                return null;
+            }
             throw new IOException("no mapping for figure " + f.getClass());
         }
         return figureToElem.get(f.getClass());
@@ -136,6 +165,9 @@ public class SimpleFigureFactory implements FigureFactory {
     @Override
     public Figure nameToFigure(String elementName) throws IOException {
         if (!elemToFigure.containsKey(elementName)) {
+            if (skipElements.contains(elementName)) {
+                return null;
+            }
             throw new IOException("no mapping for element " + elementName);
         }
         Class<? extends Figure> clazz = elemToFigure.get(elementName);
@@ -172,7 +204,8 @@ public class SimpleFigureFactory implements FigureFactory {
         return strToKey.get(attributeName);
     }
 
-    /** Adds a converter.
+    /**
+     * Adds a converter.
      *
      * @param valueType A value type returned by {@code Key.getValueType();}.
      * @param converter the converter
@@ -182,7 +215,8 @@ public class SimpleFigureFactory implements FigureFactory {
 
     }
 
-    /** Adds a converter.
+    /**
+     * Adds a converter.
      *
      * @param fullValueType A value type returned by
      * {@code Key.getFullValueType();}.

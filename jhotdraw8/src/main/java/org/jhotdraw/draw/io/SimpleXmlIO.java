@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import org.jhotdraw.draw.Drawing;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -49,6 +50,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     private FigureFactory factory;
     private IdFactory ids = new SimpleIdFactory();
+    private ArrayList<Element> figureElements = new ArrayList<>();
 
     public SimpleXmlIO(FigureFactory factory) {
         this.factory = factory;
@@ -108,7 +110,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document doc = builder.newDocument();
             if (factory.figureToName(drawing) != null) {
-                doc.appendChild(writeNode(doc, drawing));
+                doc.appendChild(writeNodeRecursively(doc, drawing));
             }
             return doc;
         } catch (ParserConfigurationException ex) {
@@ -116,7 +118,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
     }
 
-    private Node writeNode(Document doc, Figure figure) throws IOException {
+    private Node writeNodeRecursively(Document doc, Figure figure) throws IOException {
         Element elem = doc.createElement(factory.figureToName(figure));
         elem.setAttribute("id", ids.createId(figure));
         for (Key<?> k : factory.figureKeys(figure)) {
@@ -134,7 +136,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         for (Figure child : figure.childrenProperty()) {
             if (factory.figureToName(child) != null) {
                 elem.appendChild(doc.createTextNode("\n"));
-                elem.appendChild(writeNode(doc, child));
+                elem.appendChild(writeNodeRecursively(doc, child));
             }
         }
         if (!figure.childrenProperty().isEmpty()) {
@@ -145,17 +147,18 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     public Drawing fromDocument(Document doc) throws IOException {
         ids.reset();
+        figureElements.clear();
         Drawing drawing = null;
         NodeList list = doc.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
-            Figure f = readNode(list.item(i));
+            Figure f = readNodeRecursively(list.item(i));
             if (f instanceof Drawing) {
                 drawing = (Drawing) f;
                 break;
             }
         }
-        for (int i = 0; i < list.getLength(); i++) {
-            readElementAttributes(list.item(i));
+        for (Element elem:figureElements) {
+            readElementAttributes(elem);
         }
         if (drawing != null) {
             return drawing;
@@ -167,7 +170,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     /**
      * Creates a figure but does not process the properties.
      */
-    private Figure readNode(Node node) throws IOException {
+    private Figure readNodeRecursively(Node node) throws IOException {
         if (node instanceof Element) {
             Element elem = (Element) node;
 
@@ -175,13 +178,14 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             if (figure == null) {
                 return null;
             }
+            figureElements.add(elem);
             String id = elem.getAttribute("id");
             if (id != null) {
                 ids.putId(figure, id);
             }
             NodeList list = elem.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
-                Figure child = readNode(list.item(i));
+                Figure child = readNodeRecursively(list.item(i));
                 if (child instanceof Figure) {
                     figure.add(child);
                 }
@@ -194,9 +198,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     /**
      * Creates a figure but does not process the properties.
      */
-    private void readElementAttributes(Node node) throws IOException {
-        if (node instanceof Element) {
-            Element elem = (Element) node;
+    private void readElementAttributes(Element elem) throws IOException {
 
             Figure figure = null;
             String id = elem.getAttribute("id");
@@ -222,11 +224,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                     }
                 }
             }
-            NodeList list = elem.getChildNodes();
-            for (int i = 0, n = list.getLength(); i < n; i++) {
-                readElementAttributes(list.item(i));
-            }
-        }
     }
 
     public Figure getFigure(String id) throws IOException {
