@@ -39,18 +39,12 @@ public class ConnectionPointHandle extends AbstractHandle {
     private final SimpleFigureKey<Point2D> pointKey;
     private final SimpleFigureKey<Figure> figureKey;
     private final SimpleFigureKey<Connector> connectorKey;
-    private Point2D oldPoint;
-    private Point2D anchor;
 
     private final Region node;
     private final String styleclassDisconnected;
     private final String styleclassConnected;
 
-    private static final Circle REGION_SHAPE = new Circle();
-
-    static {
-        REGION_SHAPE.setRadius(4);
-    }
+    private static final Circle REGION_SHAPE = new Circle(4);
 
     private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.CYAN, null, null));
@@ -86,16 +80,14 @@ public class ConnectionPointHandle extends AbstractHandle {
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
         Point2D p = f.get(pointKey);
         p = t.transform(p);
-        Region r = node;
         boolean isConnected = f.get(figureKey) != null && f.get(connectorKey) != null;
-        r.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
-        r.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
-        r.relocate(p.getX() - 5, p.getY() - 5);
+        node.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
+        node.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
+        node.relocate(p.getX() - 5, p.getY() - 5);
     }
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = anchor = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
     }
 
     @Override

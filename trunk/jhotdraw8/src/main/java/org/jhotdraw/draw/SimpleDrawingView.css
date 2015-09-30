@@ -26,8 +26,8 @@
 /* Styles move and point handles. See {@code Handle}. */
 .handle-move,
 .handle-point {
-    -fx-stroke: blue;
-    -fx-fill: white;
+    -fx-border-color: blue;
+    -fx-background-color: white;
 }
 
 /* Styles disconnected connection point handles. See {@code Handle}. */
