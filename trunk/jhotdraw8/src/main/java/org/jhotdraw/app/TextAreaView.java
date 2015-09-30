@@ -76,8 +76,8 @@ public class TextAreaView extends AbstractView implements Initializable {
     @Override
     public void clear(EventHandler<TaskCompletionEvent> handler) {
         textArea.setText(null);
+        clearModified();
         handler.handle(new TaskCompletionEvent());
-
     }
 
     @Override
@@ -103,6 +103,7 @@ public class TextAreaView extends AbstractView implements Initializable {
                 } else {
                     textArea.setText(value);
                 }
+                clearModified();
             }
         };
         t.addCompletionHandler(handler);

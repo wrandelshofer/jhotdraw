@@ -264,9 +264,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         double f = getZoomFactor();
         double x = bounds.getMinX() * f;
         double y = bounds.getMinY() * f;
-        double w = bounds.getWidth() * f;
-        double h = bounds.getHeight() * f;
-
+        // A scene in JavaFX may not be larger than 16384 pixels.
+        double w = min(16384,bounds.getWidth() * f);
+        double h = min(16384,bounds.getHeight() * f);
+        
         drawingPane.setTranslateX(max(0, -x));
         drawingPane.setTranslateY(max(0, -y));
         drawingSubScene.setWidth(w);
@@ -332,7 +333,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
         drawingSubScene.setRoot(drawingPane);
-        drawingSubScene.setManaged(false);
 
         toolPane = new BorderPane();
         toolPane.setBackground(Background.EMPTY);
@@ -345,7 +345,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         overlaysPane.getChildren().addAll(handlesPane, toolPane);
         overlaysPane.setManaged(false);
         overlaysSubScene.setRoot(overlaysPane);
-        overlaysSubScene.setManaged(false);
 
         drawingPane.layoutBoundsProperty().addListener(observer -> {
             updateLayout();

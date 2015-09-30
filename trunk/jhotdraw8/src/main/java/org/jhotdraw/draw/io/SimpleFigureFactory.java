@@ -137,7 +137,7 @@ public class SimpleFigureFactory implements FigureFactory {
      * Adds an element to the list of elements which will be skipped when
      * reading the DOM.
      *
-     * @param figure The figure class
+     * @param elementName the element name
      */
     public void addSkipElement(String elementName) {
         skipElements.add(elementName);

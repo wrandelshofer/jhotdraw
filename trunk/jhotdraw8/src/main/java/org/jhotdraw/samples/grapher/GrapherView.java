@@ -120,6 +120,8 @@ public class GrapherView extends AbstractView {
                     FigureFactory factory = new DefaultFigureFactory();
                     SimpleXmlIO io = new SimpleXmlIO(factory);
                     SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
+                    drawing.applyCss();
+                    drawing.layout();
                     return drawing;
                 } catch (Exception e) {
                     throw e;
@@ -156,7 +158,6 @@ public class GrapherView extends AbstractView {
     @Override
     public void clear(EventHandler<TaskCompletionEvent> callback) {
         Drawing d = new SimpleDrawing();
-        d.set(Drawing.STYLESHEET, GrapherView.class.getResource("GrapherDrawing.css"));
         drawingView.setDrawing(d);
         callback.handle(new TaskCompletionEvent());
     }

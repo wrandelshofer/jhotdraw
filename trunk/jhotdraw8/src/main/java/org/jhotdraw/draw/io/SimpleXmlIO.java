@@ -157,8 +157,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 break;
             }
         }
-        for (Element elem:figureElements) {
-            readElementAttributes(elem);
+        try {
+            for (Element elem : figureElements) {
+                readElementAttributes(elem);
+            }
+        } finally {
+            figureElements.clear();
         }
         if (drawing != null) {
             return drawing;
@@ -200,30 +204,30 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
      */
     private void readElementAttributes(Element elem) throws IOException {
 
-            Figure figure = null;
-            String id = elem.getAttribute("id");
-            if (id != null) {
-                figure = getFigure(id);
-            }
-            if (figure != null) {
-                NamedNodeMap attrs = elem.getAttributes();
-                for (int i = 0, n = attrs.getLength(); i < n; i++) {
-                    Attr attr = (Attr) attrs.item(i);
-                    if ("id".equals(attr.getName())) {
-                        continue;
+        Figure figure = null;
+        String id = elem.getAttribute("id");
+        if (id != null) {
+            figure = getFigure(id);
+        }
+        if (figure != null) {
+            NamedNodeMap attrs = elem.getAttributes();
+            for (int i = 0, n = attrs.getLength(); i < n; i++) {
+                Attr attr = (Attr) attrs.item(i);
+                if ("id".equals(attr.getName())) {
+                    continue;
+                }
+                Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getName());
+                if (key != null && factory.figureKeys(figure).contains(key)) {
+                    Object value = null;
+                    if (Figure.class.isAssignableFrom(key.getValueType())) {
+                        value = getFigure(attr.getValue());
+                    } else {
+                        value = factory.stringToValue(key, attr.getValue());
                     }
-                    Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getName());
-                    if (key != null && factory.figureKeys(figure).contains(key)) {
-                        Object value = null;
-                        if (Figure.class.isAssignableFrom(key.getValueType())) {
-                            value = getFigure(attr.getValue());
-                        } else {
-                            value = factory.stringToValue(key, attr.getValue());
-                        }
-                        figure.set(key, value);
-                    }
+                    figure.set(key, value);
                 }
             }
+        }
     }
 
     public Figure getFigure(String id) throws IOException {

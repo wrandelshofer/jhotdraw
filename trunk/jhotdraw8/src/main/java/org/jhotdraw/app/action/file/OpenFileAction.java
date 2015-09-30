@@ -34,7 +34,7 @@ public class OpenFileAction extends AbstractApplicationAction {
     private static final long serialVersionUID = 1L;
     public final static Key<URIChooser> OPEN_CHOOSER_KEY = new SimpleKey<>("openChooser", URIChooser.class);
     public static final String ID = "file.open";
-    private boolean reuseEmptyViews = false;
+    private boolean reuseEmptyViews = true;
 
     /** Creates a new instance.
      * @param app the application */
