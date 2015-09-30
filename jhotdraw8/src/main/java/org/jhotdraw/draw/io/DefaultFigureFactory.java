@@ -5,6 +5,7 @@
 
 package org.jhotdraw.draw.io;
 
+import java.net.URL;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw.draw.Figure;
@@ -21,6 +22,7 @@ import org.jhotdraw.text.DefaultConverter;
 import org.jhotdraw.text.Point2DConverter;
 import org.jhotdraw.text.NumberConverter;
 import org.jhotdraw.text.Rectangle2DConverter;
+import org.jhotdraw.text.URLConverter;
 
 /**
  * DefaultFigureFactory.
@@ -49,5 +51,6 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(String.class, new DefaultConverter());
         addConverter(Point2D.class, new Point2DConverter());
         addConverter(Double.class, new NumberConverter());
+        addConverter(URL.class, new URLConverter());
     }
 }
