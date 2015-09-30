@@ -5,14 +5,9 @@
 package org.jhotdraw.text;
 
 import java.io.IOException;
-import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import java.util.HashMap;
-import javafx.css.StyleConverter;
-import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
