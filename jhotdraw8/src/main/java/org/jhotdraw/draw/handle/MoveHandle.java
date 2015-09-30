@@ -7,15 +7,18 @@ package org.jhotdraw.draw.handle;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
-import org.jhotdraw.geom.Geom;
 
 /**
  * Handle for the point of a figure.
@@ -25,28 +28,29 @@ import org.jhotdraw.geom.Geom;
 public class MoveHandle extends LocatorHandle {
 
     private Point2D oldPoint;
-    private Point2D anchor;
-    private final Rectangle node;
+    private final Region node;
     private final String styleclass;
+    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.CYAN, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.CYAN, null, null, null));
 
     public MoveHandle(Figure figure, String styleclass, Locator locator) {
         super(figure, locator);
         this.styleclass = styleclass;
-        node = new Rectangle();
-        initNode(node);
-    }
-
-    protected void initNode(Rectangle r) {
-        // FIXME width and height must come from stylesheet
-        r.setWidth(7);
-        r.setHeight(7);
-        r.setFill(Color.WHITE);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().add(styleclass);
+        node = new Region();
+        node.setShape(REGION_SHAPE);
+        node.setManaged(false);
+        node.setScaleShape(false);
+        node.setCenterShape(true);
+        node.resize(10, 10);
+        node.getStyleClass().clear();
+        node.getStyleClass().add(styleclass);
+        node.setBorder(REGION_BORDER);
+        node.setBackground(REGION_BACKGROUND);
     }
 
     @Override
-    public Rectangle getNode() {
+    public Region getNode() {
         return node;
     }
 
@@ -58,15 +62,14 @@ public class MoveHandle extends LocatorHandle {
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         p = t.transform(p);
-        Rectangle r = node;
-        r.setX(p.getX() - r.getWidth() / 2);
-        r.setY(p.getY() - r.getHeight() / 2);
-        f.applyFigureProperties(r);
+        node.relocate(p.getX() - 5, p.getY() - 5);
+        // rotates the node:
+        f.applyFigureProperties(node);
     }
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = anchor = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
     }
 
     @Override

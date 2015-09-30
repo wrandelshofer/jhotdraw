@@ -6,6 +6,11 @@ package org.jhotdraw.draw.handle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
@@ -21,30 +26,30 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 public class PointHandle extends AbstractHandle {
 
     private final SimpleFigureKey<Point2D> pointKey;
-    private Point2D oldPoint;
-    private Point2D anchor;
-    private final Rectangle node;
+    private final Region node;
     private final String styleclass;
+    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.CYAN, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.CYAN, null, null, null));
 
     public PointHandle(Figure figure, String styleclass, SimpleFigureKey<Point2D> pointKey) {
         super(figure);
         this.pointKey = pointKey;
         this.styleclass = styleclass;
-        node = new Rectangle();
-        initNode(node);
-    }
-
-    protected void initNode(Rectangle r) {
-        // FIXME width and height must come from stylesheet
-        r.setWidth(7);
-        r.setHeight(7);
-        r.setFill(Color.WHITE);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().add(styleclass);
+        node = new Region();
+        node.setShape(REGION_SHAPE);
+        node.setManaged(false);
+        node.setScaleShape(false);
+        node.setCenterShape(true);
+        node.resize(10, 10);
+        node.getStyleClass().clear();
+        node.getStyleClass().add(styleclass);
+        node.setBorder(REGION_BORDER);
+        node.setBackground(REGION_BACKGROUND);
     }
 
     @Override
-    public Rectangle getNode() {
+    public Region getNode() {
         return node;
     }
 
@@ -53,16 +58,12 @@ public class PointHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
         Point2D p = f.get(pointKey);
-        //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         p = t.transform(p);
-        Rectangle r = node;
-        r.setX(p.getX() - r.getWidth() / 2);
-        r.setY(p.getY() - r.getHeight() / 2);
+        node.relocate(p.getX() - 5, p.getY() - 5);
     }
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = anchor = view.getConstrainer().constrainPoint(getOwner(),view.viewToDrawing(new Point2D(event.getX(),event.getY())));
     }
 
     @Override
@@ -70,7 +71,7 @@ public class PointHandle extends AbstractHandle {
         Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
-            // alt or control switches the grid off
+            // alt or control switches the constrainer off
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
         
