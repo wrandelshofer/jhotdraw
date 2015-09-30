@@ -57,7 +57,9 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 import org.jhotdraw.beans.SimplePropertyBean;
+import org.jhotdraw.geom.Geom;
 
 /**
  * FXML Controller class
@@ -66,10 +68,10 @@ import org.jhotdraw.beans.SimplePropertyBean;
  */
 public class SimpleDrawingView extends SimplePropertyBean implements DrawingView {
 
-    private static class FixedSizedGroup extends Group{
-        
+    private static class FixedSizedGroup extends Group {
+
     }
-    
+
     private Group drawingSubScene;
     private Group overlaysSubScene;
 
@@ -90,33 +92,33 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {
-            case FIGURE_ADDED:
-                handleFigureAdded(event.getFigure());
-                break;
-            case FIGURE_REMOVED:
-                handleFigureRemoved(event.getFigure());
-                break;
-            case NODE_INVALIDATED:
-                handleNodeInvalidated(event.getFigure());
-                break;
-            case LAYOUT_INVALIDATED:
-                // none of my business
-                break;
-            case ROOT_CHANGED:
-                updateDrawing();
-                updateLayout();
-                repaint();
-                break;
-            case SUBTREE_NODES_INVALIDATED:
-                updateTreeNodes(event.getFigure());
-                repaint();
-                break;
-            case SUBTREE_STRUCTURE_CHANGED:
-                updateTreeStructure(event.getFigure());
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + "not supported");
+                case FIGURE_ADDED:
+                    handleFigureAdded(event.getFigure());
+                    break;
+                case FIGURE_REMOVED:
+                    handleFigureRemoved(event.getFigure());
+                    break;
+                case NODE_INVALIDATED:
+                    handleNodeInvalidated(event.getFigure());
+                    break;
+                case LAYOUT_INVALIDATED:
+                    // none of my business
+                    break;
+                case ROOT_CHANGED:
+                    updateDrawing();
+                    updateLayout();
+                    repaint();
+                    break;
+                case SUBTREE_NODES_INVALIDATED:
+                    updateTreeNodes(event.getFigure());
+                    repaint();
+                    break;
+                case SUBTREE_STRUCTURE_CHANGED:
+                    updateTreeStructure(event.getFigure());
+                    break;
+                default:
+                    throw new UnsupportedOperationException(event.getEventType()
+                            + "not supported");
             }
         }
 
@@ -150,6 +152,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private final ReadOnlySetProperty<Figure> selection = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
     private Transform viewToDrawingTransform = null;
     private Transform drawingToViewTransform = null;
+
+    private final double TOLERANCE = 10;
 
     /**
      * Installs a handler for changes in the seletionProperty.
@@ -265,22 +269,21 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         double x = bounds.getMinX() * f;
         double y = bounds.getMinY() * f;
         // A scene in JavaFX may not be larger than 16384 pixels.
-        double w = min(8192,bounds.getWidth() * f);
-        double h = min(8192,bounds.getHeight() * f);
-        
+        double w = min(8192, bounds.getWidth() * f);
+        double h = min(8192, bounds.getHeight() * f);
+
         drawingPane.setTranslateX(max(0, -x));
         drawingPane.setTranslateY(max(0, -y));
         /*drawingSubScene.setWidth(w);
-        drawingSubScene.setHeight(h);
-        overlaysSubScene.setWidth(w);
-        overlaysSubScene.setHeight(h);*/
+         drawingSubScene.setHeight(h);
+         overlaysSubScene.setWidth(w);
+         overlaysSubScene.setHeight(h);*/
 
         toolPane.resize(w, h);
         toolPane.layout();
-        
-        node.setPrefSize(w,h);
-        
-        
+
+        node.setPrefSize(w, h);
+
         invalidateDrawingViewTransforms();
     }
 
@@ -333,12 +336,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         node.setFocusTraversable(true);
         focused.bind(node.focusedProperty());
 
-        drawingSubScene=new Group();
+        drawingSubScene = new Group();
         drawingSubScene.setManaged(false);
-        overlaysSubScene=new Group();
+        overlaysSubScene = new Group();
         overlaysSubScene.setManaged(false);
-        node.getChildren().addAll(drawingSubScene,overlaysSubScene);
-        
+        node.getChildren().addAll(drawingSubScene, overlaysSubScene);
+
         drawingPane = new Group();
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
@@ -562,7 +565,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     public Handle findHandle(double vx, double vy) {
         for (Node n : handlesPane.getChildren()) {
             Point2D pl = n.parentToLocal(vx, vy);
-            if (n.contains(pl)) {
+            if (contains(n, pl, TOLERANCE)) {
                 Handle h = nodeToHandleMap.get(n);
                 if (h.isSelectable()) {
                     return h;
@@ -575,12 +578,14 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     @Override
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
-        Figure f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy));
-
+        Figure f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), 0.0);
+        if (f == null) {
+            f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), TOLERANCE);
+        }
         return f;
     }
 
-    private Figure findFigureRecursive(Parent p, Point2D pp) {
+    private Figure findFigureRecursive(Parent p, Point2D pp, double tolerance) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -588,11 +593,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 continue;
             }
             Point2D pl = n.parentToLocal(pp);
-            if (n.contains(pl)) {
+            if (contains(n, pl, tolerance)) {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null || !f.isSelectable() && !f.isDisabled()) {
                     if (n instanceof Parent) {
-                        f = findFigureRecursive((Parent) n, pl);
+                        f = findFigureRecursive((Parent) n, pl, tolerance);
                     }
                 }
                 if (f != null && !f.isDisabled()) {
@@ -602,6 +607,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
         return null;
     }
+
     @Override
     public Figure findFigure(double vx, double vy, Set<Figure> figures) {
         Drawing dr = getDrawing();
@@ -618,19 +624,44 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 continue;
             }
             Point2D pl = n.parentToLocal(pp);
-            if (n.contains(pl)) {
+            if (contains(n, pl, TOLERANCE)) {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null || !f.isSelectable() && !f.isDisabled()) {
                     if (n instanceof Parent) {
                         f = findFigureRecursiveInSet((Parent) n, pl, figures);
                     }
                 }
-                if (f != null && !f.isDisabled()&&figures.contains(f)) {
+                if (f != null && !f.isDisabled() && figures.contains(f)) {
                     return f;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * Returns true if the node contains the specified point within a a
+     * tolerance.
+     *
+     * @param node The node
+     * @param point The point in local coordinates
+     * @param tolerance The maximal distance the point is allowed to be away
+     * from the
+     * @return true if the node contains the point
+     */
+    private boolean contains(Node node, Point2D point, double tolerance) {
+        if (tolerance == 0) {
+            return node.contains(point);
+        }
+        if (node instanceof Line) {
+            Line line = (Line) node;
+            boolean contains = Geom.lineContainsPoint(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), point.getX(), point.getY(), tolerance);
+            return contains;
+        } else if (node instanceof Group) {
+            return node.getBoundsInLocal().contains(point);
+        } else {
+            return node.contains(point);
+        }
     }
 
     @Override
@@ -649,7 +680,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             Figure f1 = nodeToFigureMap.get(n);
             if (f1 != null && f1.isSelectable()) {
                 Point2D pl = n.parentToLocal(pp);
-                if (n.contains(pl)) { // only drill down if the parent contains the point
+                if (contains(n, pl, TOLERANCE)) { // only drill down if the parent contains the point
                     Figure f = nodeToFigureMap.get(n);
                     if (f != null && f.isSelectable() && !f.isDisabled()) {
                         found.add(f);
@@ -662,7 +693,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 }
             } else {
                 Point2D pl = n.parentToLocal(pp);
-                if (n.contains(pl)) { // only drill down if the parent intersects the point
+                if (contains(n, pl, TOLERANCE)) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
                         findFiguresRecursive((Parent) n, pl, found, decompose);
                     }
@@ -849,6 +880,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     /**
      * Creates selection handles and adds them to the provided list.
+     *
      * @param list The provided list
      */
     protected void createSelectionHandles(List<Handle> list) {
