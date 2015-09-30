@@ -7,6 +7,7 @@ package org.jhotdraw.draw;
 import org.jhotdraw.draw.model.DrawingModel;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -204,6 +205,17 @@ public interface DrawingView extends RenderContext {
      * @return A handle or null
      */
     public Handle findHandle(double vx, double vy);
+
+    /**
+     * Finds the figure at the given view coordinates. Figures are searched in
+     * Z-order from front to back. Skips disabled figures.
+     *
+     * @param vx x in view coordinates
+     * @param vy y in view coordinates
+     * @param figures Only searches in the provided list of figures
+     * @return A figure or null
+     */
+    Figure findFigure(double vx, double vy, Set<Figure> figures);
 
     /**
      * Finds the figure at the given view coordinates. Figures are searched in

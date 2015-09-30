@@ -128,30 +128,38 @@ public class SelectionTool extends AbstractTool {
 
         Handle h = view.findHandle(vx, vy);
         if (h != null) {
-                setTracker(getHandleTracker(h));
+            setTracker(getHandleTracker(h));
         } else {
 
-            pressedFigure = view.findFigure(vx, vy);
-            if (pressedFigure == null&&tolerance!=0) {
-                List<Figure> fs = view.findFiguresIntersecting(vx - tolerance, vy
-                        - tolerance, tolerance * 2, tolerance * 2,false);
-                if (!fs.isEmpty()) {
-                    pressedFigure = fs.get(0);
-                }
-            }
+            /*
+             if (pressedFigure == null && tolerance != 0) {
+             List<Figure> fs = view.findFiguresIntersecting(vx - tolerance, vy
+             - tolerance, tolerance * 2, tolerance * 2, false);
+             if (!fs.isEmpty()) {
+             pressedFigure = fs.get(0);
+             }
+             }*/
             // "alt" modifier selects figure behind.
             if (isSelectBehindEnabled() && (evt.isAltDown())) {
-            // Select a figure behind the current selection
+                // Select a figure behind the current selection
                 pressedFigure = null;
                 boolean selectionFound = false;
                 for (Figure f : view.findFigures(vx, vy, false)) {
                     if (view.selectionProperty().contains(f)) {
-                        selectionFound=true;
+                        selectionFound = true;
+                        continue;
                     }
                     if (selectionFound) {
-                        pressedFigure=f;
+                        pressedFigure = f;
                         break;
                     }
+                }
+            } else {
+                // find in selection
+                pressedFigure = view.findFigure(vx, vy, view.getSelectedFigures());
+                // find in entire drawing
+                if (pressedFigure == null) {
+                    pressedFigure = view.findFigure(vx, vy);
                 }
             }
 

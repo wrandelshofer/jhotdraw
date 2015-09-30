@@ -1,4 +1,4 @@
-/* @(#)NoLayoutNoConnectionsDrawingModel.java
+/* @(#)ConnectionsAndLayoutDrawingModel.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,14 +15,14 @@ import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
- * This drawing model assumes that the drawing contains no figures which perform
- * layouts but has connections between figures.
+ * This drawing model assumes that the drawing contains figures which perform
+ * layouts and has connections between figures.
  *
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
+public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void setRoot(Drawing root) {
@@ -60,6 +60,9 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
                 if (dm.containsOneOf(DirtyBits.NODE)) {
                     fire(DrawingModelEvent.nodeInvalidated(this, figure));
                 }
+                if (dm.containsOneOf(DirtyBits.LAYOUT)) {
+                        fire(DrawingModelEvent.layoutInvalidated(this, figure));
+                }
                 if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
                     for (Figure c : figure.connections()) {
                         fire(DrawingModelEvent.layoutInvalidated(this, c));
@@ -74,6 +77,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
     public void reshape(Figure figure, Transform transform) {
         figure.reshape(transform);
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
+        fire(DrawingModelEvent.layoutInvalidated(this, figure));
         for (Figure f : figure.preorderIterable()) {
             for (Figure c : f.connections()) {
                 fire(DrawingModelEvent.layoutInvalidated(this, c));
@@ -85,6 +89,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
     public void reshape(Figure figure, double x, double y, double width, double height) {
         figure.reshape(x, y, width, height);
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
+        fire(DrawingModelEvent.layoutInvalidated(this, figure));
         for (Figure f : figure.preorderIterable()) {
             for (Figure c : f.connections()) {
                 fire(DrawingModelEvent.layoutInvalidated(this, c));
