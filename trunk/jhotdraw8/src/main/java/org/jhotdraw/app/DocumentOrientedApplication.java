@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.beans.Observable;
@@ -78,7 +79,13 @@ public class DocumentOrientedApplication extends javafx.application.Application 
 
     private final static Key<ChangeListener> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, null);
     private boolean isSystemMenuSupported;
-    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
+        Thread t = new Thread(r);
+        t.setUncaughtExceptionHandler((Thread t1, Throwable e) -> {
+            throw (RuntimeException) e;
+        });
+        return t;
+    });
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
     private final ReadOnlyObjectWrapper<View> activeView = new ReadOnlyObjectWrapper<>();
@@ -119,7 +126,11 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             }
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
         }
-        createView(v ->{ add(v);v.addDisabler(this);v.clear(e->v.removeDisabler(this));});
+        createView(v -> {
+            add(v);
+            v.addDisabler(this);
+            v.clear(e -> v.removeDisabler(this));
+        });
     }
 
     @Override
@@ -146,11 +157,11 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                 v.getActionMap().setParent(getActionMap());
                 v.setApplication(DocumentOrientedApplication.this);
                 v.init(e -> {
-                   // FIXME - check if initialisation succeeded!
+                    // FIXME - check if initialisation succeeded!
 
                     v.setTitle(getLabels().getString("unnamedFile"));
                     HierarchicalMap<String, Action> map = v.getActionMap();
-                    map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this,v));
+                    map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, v));
                     callback.accept(v);
                 });
             }
@@ -298,15 +309,15 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener focusListener = view.get(FOCUS_LISTENER_KEY);
-        if (focusListener!=null) {
+        if (focusListener != null) {
             stage.focusedProperty().removeListener(focusListener);
         }
         stage.close();
         view.dispose();
         view.setApplication(null);
         view.getActionMap().setParent(null);
-        
-        if (activeView.get()==view) {
+
+        if (activeView.get() == view) {
             activeView.set(null);
         }
 
@@ -341,7 +352,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                     todo.add((Menu) mi);
                 } else {
                     Action a = actions.get(mi.getId());
-                    if (a!=null) {
+                    if (a != null) {
                         Actions.bindMenuItem(mi, a);
                     } else if (mi.getId() != null) {
                         System.err.println("No action for menu item with id="

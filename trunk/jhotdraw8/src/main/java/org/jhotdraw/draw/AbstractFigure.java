@@ -79,7 +79,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      */
     protected void checkParent(Figure newParent) {
         if (newParent instanceof Drawing) {
-            throw new IllegalArgumentException("illegal parent:" + newParent);
+            throw new IllegalArgumentException("illegal parent:" + newParent+" for:"+this);
         }
     }
 
