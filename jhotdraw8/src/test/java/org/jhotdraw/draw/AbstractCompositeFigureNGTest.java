@@ -26,7 +26,7 @@ public class AbstractCompositeFigureNGTest {
     public void testInvariantsAfterInstantiation() {
         Figure f = new AbstractCompositeFigureImpl();
         
-        assertTrue(f.children().isEmpty());
+        assertTrue(f.getChildren().isEmpty());
         assertNull(f.getParent());
     }
     @Test
@@ -36,7 +36,7 @@ public class AbstractCompositeFigureNGTest {
         
         parent.add(child);
         
-        assertTrue(parent.children().contains(child));
+        assertTrue(parent.getChildren().contains(child));
         assertEquals(child.getParent(),parent);
     }
     @Test
@@ -47,7 +47,7 @@ public class AbstractCompositeFigureNGTest {
         parent.add(child);
         parent.remove(child);
         
-        assertFalse(parent.children().contains(child));
+        assertFalse(parent.getChildren().contains(child));
         assertNull(child.getParent());
     }
     @Test
@@ -59,8 +59,8 @@ public class AbstractCompositeFigureNGTest {
         parent1.add(child);
         parent2.add(child);
         
-        assertFalse(parent1.children().contains(child));
-        assertTrue(parent2.children().contains(child));
+        assertFalse(parent1.getChildren().contains(child));
+        assertTrue(parent2.getChildren().contains(child));
         assertEquals(child.getParent(),equals(parent2));
     }
 

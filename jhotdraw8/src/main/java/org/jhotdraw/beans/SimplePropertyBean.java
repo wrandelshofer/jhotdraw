@@ -18,13 +18,17 @@ import org.jhotdraw.collection.Key;
  * @version $Id$
  */
 public class SimplePropertyBean implements PropertyBean {
+
     /**
      * Holds the properties.
      */
-    protected final ReadOnlyMapProperty<Key<?>, Object> properties = new ReadOnlyMapWrapper<Key<?>, Object>(this, PROPERTIES_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+    protected final ReadOnlyMapProperty<Key<?>, Object> properties//
+            = new ReadOnlyMapWrapper<Key<?>, Object>(//
+                    this, PROPERTIES_PROPERTY, //
+                    FXCollections.observableHashMap()).getReadOnlyProperty();
 
     @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> properties() {
+    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
         return properties;
     }
 }

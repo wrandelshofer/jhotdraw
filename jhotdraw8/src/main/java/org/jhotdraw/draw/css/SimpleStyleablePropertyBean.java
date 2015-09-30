@@ -19,13 +19,13 @@ import org.jhotdraw.collection.Key;
  */
 public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBean {
     /**
-     * Holds the properties.
+     * Holds the getProperties.
      */
     protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
     
-    /** Returns the user properties. */
+    /** Returns the user getProperties. */
     @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> properties() {
+    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
         return styleableProperties.userProperties();
     }
 

@@ -4,24 +4,11 @@
  */
 package org.jhotdraw.draw;
 
-import static java.lang.Math.*;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.css.CssMetaData;
-import javafx.css.PseudoClass;
-import javafx.css.Styleable;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.Connector;
 
 /**

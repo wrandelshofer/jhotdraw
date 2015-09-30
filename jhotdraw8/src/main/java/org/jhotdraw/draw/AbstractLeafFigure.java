@@ -27,7 +27,7 @@ public abstract class AbstractLeafFigure extends AbstractFigure {
     }
 
     @Override
-    public final boolean allowsChildren() {
+    public final boolean isAllowsChildren() {
         return false;
     }
 

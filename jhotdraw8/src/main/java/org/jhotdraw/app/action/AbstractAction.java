@@ -15,7 +15,13 @@ import org.jhotdraw.collection.Key;
  * @author Werner Randelshofer
  */
 public abstract class AbstractAction extends AbstractDisableable implements Action {
-   private final ReadOnlyMapWrapper<Key<?>, Object> properties = new ReadOnlyMapWrapper<>(this,"properties",FXCollections.observableHashMap());
+    /**
+     * Holds the properties.
+     */
+    protected final ReadOnlyMapProperty<Key<?>, Object> properties//
+            = new ReadOnlyMapWrapper<Key<?>, Object>(//
+                    this, PROPERTIES_PROPERTY, //
+                    FXCollections.observableHashMap()).getReadOnlyProperty();
 
     /** Creates a new instance.
      * Binds {@code disabled} to {@code disable}.
@@ -35,7 +41,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     }
 
     @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> properties() {
-        return properties.getReadOnlyProperty();
+    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
+        return properties;
     }
 }

@@ -54,17 +54,17 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * property map.</p>
  * <p>
  * <b>Tree Structure.</b> A figure can be composed of other figures in a tree
- * structure. The composition is implemented with the {@code children} and the
- * {@code parent} properties. The composition can be restricted to a specific
- * parent type. By convention all children of a {@code Drawing} must be
+ * structure. The composition is implemented with the {@code getChildren} and the
+ * {@code parent} getProperties. The composition can be restricted to a specific
+ parent type. By convention all getChildren of a {@code Drawing} must be
  * {@link Layer}s, and the parent of a {@code Layer} must be a
  * {@code Drawing}.</p>
  * <p>
  * <b>Connections.</b> A figure can be connected to other figures. The
- * connections are directed. By convention, when a figure "A" is connected to an
- * other figure "B", then "A" adds itself in the {@code connections} property of
+ getConnections are directed. By convention, when a figure "A" is connected to an
+ other figure "B", then "A" adds itself in the {@code getConnections} property of
  * "B". When "A" is disconnected from "B", then "A" removes itself from the
- * {@code connections} property of "B".</p>
+ * {@code getConnections} property of "B".</p>
  * <p>
  * <b>Rendering.</b> A figure can render its graphical representation into a
  * JavaFX {@code Node} with the help of a {@link RenderContext}.</p>
@@ -73,8 +73,8 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * graphically change the state of the figure in a {@link DrawingView}.</p>
  * <p>
  * <b>Layout.</b> The state of a figure may depend on the state of other
- * figures. The dependencies can be cyclic due to connections. A figure does not
- * automatically update its dependent state. Method {@code layout()} must be
+ figures. The dependencies can be cyclic due to getConnections. A figure does not
+ automatically update its dependent state. Method {@code layout()} must be
  * invoked to incrementally update the state of a figure and its descendants
  * based on the current state of all other figures in the tree structure.</p>
  * <p>
@@ -90,8 +90,8 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
  * {@link org.jhotdraw.draw.css.StyleableKey}. The style information is cached
- * in the figure properties. When the position of a figure in the tree structure
- * is changed, method {@code applyCss()} must be called to update the style
+ in the figure getProperties. When the position of a figure in the tree structure
+ is changed, method {@code applyCss()} must be called to update the style
  * information of the figure and its descendants.</p>
  *
  * @author Werner Randelshofer
@@ -104,7 +104,7 @@ public interface Figure extends StyleablePropertyBean {
     // ----
     /**
      * To avoid name clashes in the stylesheet, all styleable JHotDraw
-     * properties use the prefix {@code "-jhotdraw-"}.
+ getProperties use the prefix {@code "-jhotdraw-"}.
      */
     public final static String JHOTDRAW_CSS_PREFIX = "-jhotdraw-";
     // ----
@@ -208,7 +208,7 @@ public interface Figure extends StyleablePropertyBean {
     // property names
     // ----
     /**
-     * The name of the children property.
+     * The name of the getChildren property.
      */
     public final static String CHILDREN_PROPERTY = "children";
     /**
@@ -216,7 +216,7 @@ public interface Figure extends StyleablePropertyBean {
      */
     public final static String PARENT_PROPERTY = "parent";
     /**
-     * The name of the connections property.
+     * The name of the getConnections property.
      */
     public final static String CONNECTIONS_PROPERTY = "connections";
 
@@ -245,7 +245,7 @@ public interface Figure extends StyleablePropertyBean {
      * }</pre>
      *
      *
-     * @return the children property, with {@code getBean()} returning this
+     * @return the getChildren property, with {@code getBean()} returning this
      * figure, and {@code getName()} returning {@code CHILDREN_PROPERTY}.
      */
     ReadOnlyListProperty<Figure> childrenProperty();
@@ -259,7 +259,7 @@ public interface Figure extends StyleablePropertyBean {
      * corresponding {@code START_FIGURE} or {@code END_FIGURE} property to
      * null.
      *
-     * @return the connections property, with {@code getBean()} returning this
+     * @return the getConnections property, with {@code getBean()} returning this
      * figure, and {@code getName()} returning {@code CONNECTIONS_PROPERTY}.
      */
     ReadOnlySetProperty<Figure> connectionsProperty();
@@ -412,10 +412,10 @@ public interface Figure extends StyleablePropertyBean {
      * This method is invoked by a {@code RenderContext}, when it needs to
      * update the node which represents the scene graph in the figure.
      * <p>
-     * A figure which is composed from child figures, must add the nodes of its
-     * children to its node. This ensures that coordinate space transformations
-     * of the composed figure are properly propagated to its children.
-     * </p>
+ A figure which is composed from child figures, must add the nodes of its
+ getChildren to its node. This ensures that coordinate space transformations
+ of the composed figure are properly propagated to its getChildren.
+ </p>
      * <pre>
      * public void updateNode(RenderContext rc, Node n) {
      *     ObservableList&lt;Node&gt; group = ((Group) n).getChildren();
@@ -442,11 +442,11 @@ public interface Figure extends StyleablePropertyBean {
     void updateNode(RenderContext renderer, Node node);
 
     /**
-     * Whether children may be added to this figure.
+     * Whether getChildren may be added to this figure.
      *
-     * @return true if children are allowed
+     * @return true if getChildren are allowed
      */
-    boolean allowsChildren();
+    boolean isAllowsChildren();
 
     /**
      * Whether the {@code layout} method of this figure does anything.
@@ -578,7 +578,7 @@ public interface Figure extends StyleablePropertyBean {
     /**
      * Gets the last child.
      *
-     * @return The last child. Returns null if the figure has no children.
+     * @return The last child. Returns null if the figure has no getChildren.
      */
     default Figure getLastChild() {
         return childrenProperty().isEmpty() ? null : childrenProperty().get(0);
@@ -587,7 +587,7 @@ public interface Figure extends StyleablePropertyBean {
     /**
      * Gets the first child.
      *
-     * @return The first child. Returns null if the figure has no children.
+     * @return The first child. Returns null if the figure has no getChildren.
      */
     default Figure getFirstChild() {
         return childrenProperty().isEmpty() //
@@ -596,11 +596,11 @@ public interface Figure extends StyleablePropertyBean {
     }
 
     /**
-     * Returns all children of the figure.
+     * Returns all getChildren of the figure.
      *
-     * @return a list of the children
+     * @return a list of the getChildren
      */
-    default ObservableList<Figure> children() {
+    default ObservableList<Figure> getChildren() {
         return childrenProperty().get();
     }
 
@@ -659,11 +659,11 @@ public interface Figure extends StyleablePropertyBean {
     }
 
     /**
-     * Returns all connections of the figure.
+     * Returns all getConnections of the figure.
      *
-     * @return a list of the children
+     * @return a list of the getChildren
      */
-    default ObservableSet<Figure> connections() {
+    default ObservableSet<Figure> getConnections() {
         return connectionsProperty().get();
     }
 
@@ -746,7 +746,7 @@ public interface Figure extends StyleablePropertyBean {
         public Figure next() {
             Iterator<Figure> iter = stack.peek();
             Figure node = iter.next();
-            Iterator<Figure> children = node.children().iterator();
+            Iterator<Figure> children = node.getChildren().iterator();
 
             if (!iter.hasNext()) {
                 stack.pop();
@@ -917,7 +917,7 @@ public interface Figure extends StyleablePropertyBean {
         }
         out.append(toString());
         out.append('\n');
-        for (Figure child : children()) {
+        for (Figure child : getChildren()) {
             child.dumpTree(out, depth + 1);
         }
     }

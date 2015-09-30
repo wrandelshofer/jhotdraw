@@ -50,8 +50,8 @@ import org.jhotdraw.app.action.Action;
  * <ul>
  * <li>{@code string} This is the default format.</li>
  * <li>{@code accelerator} This format replaces all occurences of the keywords
- * shift, control, ctrl, meta, alt, altGraph by properties which start with
- * {@code accelerator.}. For example, shift is replaced by {@code accelerator.shift}.
+ shift, control, ctrl, meta, alt, altGraph by getProperties which start with
+ {@code accelerator.}. For example, shift is replaced by {@code accelerator.shift}.
  * </li>
  * </ul>
  *
