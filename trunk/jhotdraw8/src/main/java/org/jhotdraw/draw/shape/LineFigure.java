@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import static java.lang.Math.*;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -17,12 +16,12 @@ import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.HandleType;
+import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.LineWireframeHandle;
+import org.jhotdraw.draw.handle.LineOutlineHandle;
 import org.jhotdraw.draw.handle.PointHandle;
 
 /**
@@ -104,10 +103,14 @@ public class LineFigure extends AbstractShapeFigure {
 
     @Override
     public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
-        if (handleType == HandleType.SELECTION) {
-            list.add(new LineWireframeHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
+        if (handleType == HandleType.SELECT) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
+        }else{
+            super.createHandles(handleType, dv, list);
         }
     }
 

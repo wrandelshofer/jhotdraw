@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
@@ -33,7 +34,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.BoundsInLocalHandle;
+import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import javafx.css.Styleable;
@@ -42,6 +43,8 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandle;
+import org.jhotdraw.draw.handle.ResizeHandle;
+import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
 import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw.draw.key.EffectStyleableFigureKey;
@@ -54,17 +57,17 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * property map.</p>
  * <p>
  * <b>Tree Structure.</b> A figure can be composed of other figures in a tree
- * structure. The composition is implemented with the {@code getChildren} and the
- * {@code parent} getProperties. The composition can be restricted to a specific
- parent type. By convention all getChildren of a {@code Drawing} must be
- * {@link Layer}s, and the parent of a {@code Layer} must be a
+ * structure. The composition is implemented with the {@code getChildren} and
+ * the {@code parent} getProperties. The composition can be restricted to a
+ * specific parent type. By convention all getChildren of a {@code Drawing} must
+ * be {@link Layer}s, and the parent of a {@code Layer} must be a
  * {@code Drawing}.</p>
  * <p>
  * <b>Connections.</b> A figure can be connected to other figures. The
- getConnections are directed. By convention, when a figure "A" is connected to an
- other figure "B", then "A" adds itself in the {@code getConnections} property of
- * "B". When "A" is disconnected from "B", then "A" removes itself from the
- * {@code getConnections} property of "B".</p>
+ * getConnections are directed. By convention, when a figure "A" is connected to
+ * an other figure "B", then "A" adds itself in the {@code getConnections}
+ * property of "B". When "A" is disconnected from "B", then "A" removes itself
+ * from the {@code getConnections} property of "B".</p>
  * <p>
  * <b>Rendering.</b> A figure can render its graphical representation into a
  * JavaFX {@code Node} with the help of a {@link RenderContext}.</p>
@@ -73,8 +76,8 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * graphically change the state of the figure in a {@link DrawingView}.</p>
  * <p>
  * <b>Layout.</b> The state of a figure may depend on the state of other
- figures. The dependencies can be cyclic due to getConnections. A figure does not
- automatically update its dependent state. Method {@code layout()} must be
+ * figures. The dependencies can be cyclic due to getConnections. A figure does
+ * not automatically update its dependent state. Method {@code layout()} must be
  * invoked to incrementally update the state of a figure and its descendants
  * based on the current state of all other figures in the tree structure.</p>
  * <p>
@@ -90,9 +93,9 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
  * {@link org.jhotdraw.draw.css.StyleableKey}. The style information is cached
- in the figure getProperties. When the position of a figure in the tree structure
- is changed, method {@code applyCss()} must be called to update the style
- * information of the figure and its descendants.</p>
+ * in the figure getProperties. When the position of a figure in the tree
+ * structure is changed, method {@code applyCss()} must be called to update the
+ * style information of the figure and its descendants.</p>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -104,7 +107,7 @@ public interface Figure extends StyleablePropertyBean {
     // ----
     /**
      * To avoid name clashes in the stylesheet, all styleable JHotDraw
- getProperties use the prefix {@code "-jhotdraw-"}.
+     * getProperties use the prefix {@code "-jhotdraw-"}.
      */
     public final static String JHOTDRAW_CSS_PREFIX = "-jhotdraw-";
     // ----
@@ -259,8 +262,9 @@ public interface Figure extends StyleablePropertyBean {
      * corresponding {@code START_FIGURE} or {@code END_FIGURE} property to
      * null.
      *
-     * @return the getConnections property, with {@code getBean()} returning this
-     * figure, and {@code getName()} returning {@code CONNECTIONS_PROPERTY}.
+     * @return the getConnections property, with {@code getBean()} returning
+     * this figure, and {@code getName()} returning
+     * {@code CONNECTIONS_PROPERTY}.
      */
     ReadOnlySetProperty<Figure> connectionsProperty();
 
@@ -412,10 +416,11 @@ public interface Figure extends StyleablePropertyBean {
      * This method is invoked by a {@code RenderContext}, when it needs to
      * update the node which represents the scene graph in the figure.
      * <p>
- A figure which is composed from child figures, must add the nodes of its
- getChildren to its node. This ensures that coordinate space transformations
- of the composed figure are properly propagated to its getChildren.
- </p>
+     * A figure which is composed from child figures, must add the nodes of its
+     * getChildren to its node. This ensures that coordinate space
+     * transformations of the composed figure are properly propagated to its
+     * getChildren.
+     * </p>
      * <pre>
      * public void updateNode(RenderContext rc, Node n) {
      *     ObservableList&lt;Node&gt; group = ((Group) n).getChildren();
@@ -504,20 +509,29 @@ public interface Figure extends StyleablePropertyBean {
     }
 
     /**
-     * Creates handles of the specified level and for the specified drawing
-     * view and adds them to the provided list.
+     * Creates handles of the specified level and for the specified drawing view
+     * and adds them to the provided list.
      *
      * @param handleType The desired handle type
      * @param dv The drawing view which will display the handles
      * @param list The handles.
      */
     default void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
-        if (handleType == HandleType.SELECTION) {
-            list.add(new BoundsInLocalHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
-            list.add(MoveHandle.northEast(this, Handle.STYLECLASS_HANDLE_MOVE));
-            list.add(MoveHandle.northWest(this, Handle.STYLECLASS_HANDLE_MOVE));
-            list.add(MoveHandle.southEast(this, Handle.STYLECLASS_HANDLE_MOVE));
-            list.add(MoveHandle.southWest(this, Handle.STYLECLASS_HANDLE_MOVE));
+        if (handleType == HandleType.SELECT) {
+            list.add(new BoundsInLocalOutlineHandle(this));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(MoveHandle.northEast(this));
+            list.add(MoveHandle.northWest(this));
+            list.add(MoveHandle.southEast(this));
+            list.add(MoveHandle.southWest(this));
+        } else if (handleType == HandleType.RESHAPE) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESHAPE_OUTLINE));
+            list.add(ResizeHandle.northEast(this));
+            list.add(ResizeHandle.northWest(this));
+            list.add(ResizeHandle.southEast(this));
+            list.add(ResizeHandle.southWest(this));
+            list.add(new RotateHandle(this));
         }
     }
 
@@ -715,15 +729,19 @@ public interface Figure extends StyleablePropertyBean {
     public static Set<Key<?>> getDeclaredAndInheritedKeys(Class<?> c) {
         try {
             HashSet<Key<?>> keys = new HashSet<>();
+
             for (Field f : c.getFields()) {
-                if (Key.class.isAssignableFrom(f.getType())) {
+                if (Key.class
+                        .isAssignableFrom(f.getType())) {
                     Key<?> k = (Key<?>) f.get(null);
+
                     keys.add(k);
                 }
             }
             return keys;
         } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys");
+
         }
     }
 
@@ -825,7 +843,7 @@ public interface Figure extends StyleablePropertyBean {
      * @return the transformation
      */
     default Transform getDrawingToParent() {
-        Transform t = new Translate(0,0);
+        Transform t = new Translate(0, 0);
         return getParent() == null ? t : t.createConcatenation(getParent().getDrawingToLocal());
     }
 

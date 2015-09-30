@@ -13,14 +13,18 @@
     -fx-stroke: black;
 }
 
-/* Styles the outline drawn by handles. See {@code Handle}. */
-.handle-outline {
+/* Styles the selection outline drawn by handles. See {@code Handle}. */
+.handle-select-outline {
     -fx-stroke: blue;
 }
 
-/* Styles the wireframe drawn by handles. See {@code Handle}. */
-.handle-wireframe {
-    -fx-stroke: cyan;
+/* Styles the move outline drawn by handles. See {@code Handle}. */
+.handle-move-outline {
+    -fx-stroke: blue;
+}
+/* Styles the reshape outline drawn by handles. See {@code Handle}. */
+.handle-reshape-outline {
+    -fx-stroke: purple;
 }
 
 /* Styles move and point handles. See {@code Handle}. */
@@ -40,4 +44,16 @@
 .handle-connection-point-connected {
     -fx-border-color: blue;
     -fx-background-color: blue;
+}
+
+/* Styles the resize handles. See {@code Handle}. */
+.handle-resize {
+    -fx-border-color: purple;
+    -fx-background-color: white;
+}
+
+/* Styles the rotate handles. See {@code Handle}. */
+.handle-resize {
+    -fx-border-color: purple;
+    -fx-background-color: white;
 }

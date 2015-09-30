@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.model.ConnectionsNoLayoutDrawingModel;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.draw.model.DrawingModel;
@@ -173,6 +174,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
+    private final ObjectProperty<HandleType> handleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.MOVE);
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
 
@@ -543,6 +545,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     public ObjectProperty<Handle> activeHandleProperty() {
         return activeHandle;
     }
+    @Override
+    public ObjectProperty<HandleType> handleTypeProperty() {
+        return handleType;
+    }
 
     private void updateTool(Tool oldValue, Tool newValue) {
         if (oldValue != null) {
@@ -868,7 +874,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         // FIXME rethink detailLevel
 
         ArrayList<Handle> handles = new ArrayList<>();
-        createSelectionHandles(handles);
+        createHandles(handles);
         for (Handle handle : handles) {
             selectionHandles.add(handle);
             Node n = handle.getNode();
@@ -883,9 +889,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      *
      * @param list The provided list
      */
-    protected void createSelectionHandles(List<Handle> list) {
+    protected void createHandles(List<Handle> list) {
+        HandleType ht = getHandleType();
         for (Figure figure : getSelectedFigures()) {
-            figure.createHandles(HandleType.SELECTION, this, list);
+            figure.createHandles(ht, this, list);
         }
     }
 

@@ -15,6 +15,7 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GroupFigure;
+import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;
@@ -24,6 +25,7 @@ import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
+import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
@@ -67,6 +69,10 @@ public class CssSample extends Application {
         edgeNullNull.set(LineConnectionFigure.END, new Point2D(145, 95));
 
 
+        LineFigure line1 = new LineFigure();
+        line1.set(LineFigure.START, new Point2D(50,150));
+        line1.set(LineFigure.END, new Point2D(100,150));
+        
         Layer layer = new SimpleLayer();
         drawing.add(layer);
 
@@ -79,6 +85,7 @@ public class CssSample extends Application {
         layer.add(edge23);
         layer.add(edge3Null);
         layer.add(edgeNullNull);
+        layer.add(line1);
         
         vertex1.set(Figure.STYLE_ID,"vertex1");
         vertex2.set(Figure.STYLE_ID,"vertex2");
@@ -93,7 +100,8 @@ public class CssSample extends Application {
         DrawingView drawingView = new SimpleDrawingView();
 
         drawingView.setDrawing(drawing);
-        drawingView.setConstrainer(new GridConstrainer(30,30));
+        drawingView.setConstrainer(new GridConstrainer(10,10));
+        //drawingView.setHandleType(HandleType.RESHAPE);
 
         DrawingEditor drawingEditor = new SimpleDrawingEditor();
         drawingEditor.drawingViewsProperty().add(drawingView);

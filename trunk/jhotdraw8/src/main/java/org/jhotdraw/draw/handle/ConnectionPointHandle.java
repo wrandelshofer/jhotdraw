@@ -11,6 +11,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -46,17 +47,23 @@ public class ConnectionPointHandle extends AbstractHandle {
 
     private static final Circle REGION_SHAPE = new Circle(4);
 
-    private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
-    private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.CYAN, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.CYAN, null, null, null));
+    private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE,  BorderStrokeStyle.SOLID, null, null));
 
-    public ConnectionPointHandle(Figure figure, String styleclass, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
+    public ConnectionPointHandle(Figure figure, SimpleFigureKey<Point2D> pointKey,
+            SimpleFigureKey<Figure> figureKey, SimpleFigureKey<Connector> connectorKey) {
+        this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
+                figureKey, connectorKey);
+    }
+
+    public ConnectionPointHandle(Figure figure, String styleclassDisconnected, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
             SimpleFigureKey<Figure> figureKey, SimpleFigureKey<Connector> connectorKey) {
         super(figure);
         this.pointKey = pointKey;
         this.figureKey = figureKey;
         this.connectorKey = connectorKey;
-        this.styleclassDisconnected = styleclass;
+        this.styleclassDisconnected = styleclassDisconnected;
         this.styleclassConnected = styleclassConnected;
         node = new Region();
         node.setShape(REGION_SHAPE);

@@ -10,6 +10,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -29,9 +30,12 @@ public class PointHandle extends AbstractHandle {
     private final Region node;
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.CYAN, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.CYAN, null, null, null));
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE,  BorderStrokeStyle.SOLID, null, null));
 
+    public PointHandle(Figure figure, SimpleFigureKey<Point2D> pointKey) {
+        this(figure,STYLECLASS_HANDLE_POINT,pointKey);
+    }
     public PointHandle(Figure figure, String styleclass, SimpleFigureKey<Point2D> pointKey) {
         super(figure);
         this.pointKey = pointKey;
@@ -41,7 +45,7 @@ public class PointHandle extends AbstractHandle {
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
-        node.resize(10, 10);
+        node.resize(11, 11);
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);

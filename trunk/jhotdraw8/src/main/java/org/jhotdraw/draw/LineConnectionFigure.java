@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
@@ -20,9 +21,12 @@ import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import static java.lang.Math.*;
 import java.util.List;
 import org.jhotdraw.draw.connector.CenterConnector;
+import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.LineWireframeHandle;
+import org.jhotdraw.draw.handle.LineOutlineHandle;
+import org.jhotdraw.draw.handle.ResizeHandle;
+import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.shape.LineFigure;
 
 /**
@@ -57,15 +61,15 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     /**
      * The start figure. Is null if the figure is not connected at the start.
      * <p>
- If the value is changed. This figure must add or remove itself from the
- list of getConnections on the {@code ConnectableFigure}.</p>
+     * If the value is changed. This figure must add or remove itself from the
+     * list of getConnections on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> START_FIGURE = new SimpleFigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
      * The end figure. Is null if the figure is not connected at the end.
      * <p>
- If the value is changed. This figure must add or remove itself from the
- list of getConnections on the {@code ConnectableFigure}.</p>
+     * If the value is changed. This figure must add or remove itself from the
+     * list of getConnections on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> END_FIGURE = new SimpleFigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
@@ -196,10 +200,14 @@ public class LineConnectionFigure extends AbstractShapeFigure {
 
     @Override
     public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
-        if (handleType == HandleType.SELECTION) {
-            list.add(new LineWireframeHandle(this, Handle.STYLECLASS_HANDLE_OUTLINE));
-            list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, START, START_FIGURE, START_CONNECTOR));
-            list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, Handle.STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, END, END_FIGURE, END_CONNECTOR));
+        if (handleType == HandleType.SELECT) {
+            list.add(new LineOutlineHandle(this));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE));
+            list.add(new ConnectionPointHandle(this, START, START_FIGURE, START_CONNECTOR));
+            list.add(new ConnectionPointHandle(this, END, END_FIGURE, END_CONNECTOR));
+        } else {
+            super.createHandles(handleType, dv, list);
         }
     }
 

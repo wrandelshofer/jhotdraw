@@ -1,4 +1,4 @@
-/* @(#)BoundsInLocalHandle.java
+/* @(#)BoundsInLocalOutlineHandle.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -6,15 +6,12 @@ package org.jhotdraw.draw.handle;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import static java.lang.Math.*;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -23,17 +20,21 @@ import static java.lang.Math.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BoundsInParentHandle extends AbstractHandle<Figure> {
+public class BoundsInLocalOutlineHandle extends AbstractHandle<Figure> {
 
     private Polygon node;
     private double[] points;
-private String styleclass;
-    public BoundsInParentHandle(Figure figure, String styleclass) {
+    private String styleclass;
+
+    public BoundsInLocalOutlineHandle(Figure figure) {
+        this(figure,STYLECLASS_HANDLE_SELECT_OUTLINE);
+    }
+    public BoundsInLocalOutlineHandle(Figure figure, String styleclass) {
         super(figure);
 
         points = new double[8];
         node = new Polygon(points);
-        this.styleclass=styleclass;
+        this.styleclass = styleclass;
         initNode(node);
     }
 
@@ -51,9 +52,9 @@ private String styleclass;
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getDrawingToView().createConcatenation(f.getParentToDrawing());
+        Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
 
-        Bounds b = f.getBoundsInParent();
+        Bounds b = f.getBoundsInLocal();
         points[0] = b.getMinX();
         points[1] = b.getMinY();
         points[2] = b.getMaxX();
@@ -63,12 +64,13 @@ private String styleclass;
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
         t.transform2DPoints(points, 0, points, 0, 4);
-        
+
         ObservableList<Double> pp = node.getPoints();
         for (int i = 0; i < points.length; i++) {
             pp.set(i, points[i]);
         }
     }
+
     @Override
     public boolean isSelectable() {
         return false;
