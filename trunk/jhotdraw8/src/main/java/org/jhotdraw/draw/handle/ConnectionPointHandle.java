@@ -29,8 +29,8 @@ import org.jhotdraw.draw.model.DrawingModelEvent;
  * connecting the point.
  * <p>
  * This handle is drawn using a {@code Region}, which can be styled using
- * {@code styleclassDisconnected} and {@code styleclassConnected} given
- * in the constructor.
+ * {@code styleclassDisconnected} and {@code styleclassConnected} given in the
+ * constructor.
  *
  * @author werni
  */
@@ -51,12 +51,12 @@ public class ConnectionPointHandle extends AbstractHandle {
     static {
         REGION_SHAPE.setRadius(4);
     }
-    
-    private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE,null,null));
-    private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.CYAN,null,null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.CYAN,null,null,null));
 
-    public ConnectionPointHandle(Figure figure, DrawingView dv, String styleclass, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
+    private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.CYAN, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.CYAN, null, null, null));
+
+    public ConnectionPointHandle(Figure figure, String styleclass, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
             SimpleFigureKey<Figure> figureKey, SimpleFigureKey<Connector> connectorKey) {
         super(figure);
         this.pointKey = pointKey;
@@ -69,7 +69,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
-        node.resize(10,10);
+        node.resize(10, 10);
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclassDisconnected);
         node.setBorder(REGION_BORDER);
@@ -88,9 +88,9 @@ public class ConnectionPointHandle extends AbstractHandle {
         p = t.transform(p);
         Region r = node;
         boolean isConnected = f.get(figureKey) != null && f.get(connectorKey) != null;
-        r.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED:REGION_BACKGROUND_DISCONNECTED);
-        r.getStyleClass().set(0,isConnected ? styleclassConnected : styleclassDisconnected);
-        r.relocate(p.getX()-5,p.getY()-5);
+        r.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
+        r.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
+        r.relocate(p.getX() - 5, p.getY() - 5);
     }
 
     @Override
