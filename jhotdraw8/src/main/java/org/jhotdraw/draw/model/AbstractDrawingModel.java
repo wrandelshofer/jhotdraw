@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.model;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import javafx.beans.InvalidationListener;
@@ -94,10 +95,10 @@ public abstract class AbstractDrawingModel implements DrawingModel {
     protected void invalidateLayout(Figure figure) {
         dirtyLayouts.add(figure);
     }
+
     protected void invalidateStyle(Figure figure) {
         dirtyStyles.add(figure);
     }
-
 
     @Override
     public void validate() {
@@ -119,5 +120,55 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             }
             isValidating = false;
         }
+    }
+
+    /**
+     * Fires {@code LayoutInvalidated} for all figure which are transitively
+     * connected to the subtree starting at the specified figure, and which
+     * are not in the {@code done} set. Handles connection cycles.
+     *
+     * @param figure the figure
+     */
+    private void fireLayoutInvalidatedForConnectionsOf(Collection<Figure> todo, HashSet<Figure> done) {
+        HashSet<Figure> todoNext = new HashSet<>();
+        for (Figure figure : todo) {
+            for (Figure c : figure.connections()) {
+                if (done.add(c)) {
+                    fire(DrawingModelEvent.layoutInvalidated(this, c));
+                } else {
+                    todoNext.add(c);
+                }
+            }
+        }
+        if (!todoNext.isEmpty()) {
+            fireLayoutInvalidatedForConnectionsOf(todoNext, done);
+        }
+    }
+
+    /**
+     * Fires {@code LayoutInvalidated} for all figure which are transitively
+     * connected to the specified figure. Handles connection cycles.
+     *
+     * @param figure the figure
+     */
+    protected void fireLayoutInvalidatedForConnectionsOfFigure(Figure figure) {
+        LinkedList<Figure> todo = new LinkedList();
+        todo.add(figure);
+        fireLayoutInvalidatedForConnectionsOf(todo, new HashSet<Figure>());
+    }
+
+    /**
+     * Fires {@code LayoutInvalidated} for all figure which are transitively
+     * connected to the subtree starting at the specified figure. Handles
+     * connection cycles.
+     *
+     * @param figure the figure
+     */
+    protected void fireLayoutInvalidatedForConnectionsOfSubtree(Figure figure) {
+        LinkedList<Figure> todo = new LinkedList();
+        for (Figure f : figure.preorderIterable()) {
+            todo.add(f);
+        }
+        fireLayoutInvalidatedForConnectionsOf(todo, new HashSet<Figure>());
     }
 }
