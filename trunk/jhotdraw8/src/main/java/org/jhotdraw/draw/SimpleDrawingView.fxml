@@ -6,18 +6,4 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <SubScene fx:id="drawingSubScene" fill="TRANSPARENT" height="200.0" width="200.0" StackPane.alignment="TOP_LEFT">
-        <root>
-          <Region />
-        </root>
-      </SubScene>
-      <SubScene fx:id="overlaysSubScene" fill="TRANSPARENT" height="200.0" width="200.0" StackPane.alignment="TOP_LEFT">
-        <root>
-          <Region />
-        </root>
-      </SubScene>
-   </children>
-</StackPane>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
