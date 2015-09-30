@@ -1,4 +1,4 @@
-/* @(#)DrawingView.java
+/* @(#)SimpleDrawingView.css
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -32,12 +32,12 @@
 
 /* Styles disconnected connection point handles. See {@code Handle}. */
 .handle-connection-point-disconnected {
-    -fx-stroke: blue;
-    -fx-fill: white;
+    -fx-border-color: blue;
+    -fx-background-color: white;
 }
 
 /* Styles connected connection point handles. See {@code Handle}. */
 .handle-connection-point-connected {
-    -fx-stroke: blue;
-    -fx-fill: blue;
+    -fx-border-color: blue;
+    -fx-background-color: blue;
 }
