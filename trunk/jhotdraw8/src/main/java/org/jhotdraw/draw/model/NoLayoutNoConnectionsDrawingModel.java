@@ -15,7 +15,7 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains no figures which perform
- * layouts and no connections between figures.
+ layouts and no getConnections between figures.
  *
  *
  * @author Werner Randelshofer
@@ -33,9 +33,9 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
     public void removeFromParent(Figure child) {
         Figure parent = child.getParent();
         if (parent != null) {
-            int index = parent.children().indexOf(child);
+            int index = parent.getChildren().indexOf(child);
             if (index != -1) {
-                parent.children().remove(index);
+                parent.getChildren().remove(index);
                 fire(DrawingModelEvent.figureRemoved(this, parent, child, index));
                 fire(DrawingModelEvent.nodeInvalidated(this, parent));
             }
@@ -44,7 +44,7 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
-        parent.children().add(index, child);
+        parent.getChildren().add(index, child);
         fire(DrawingModelEvent.figureAdded(this, parent, child, index));
         fire(DrawingModelEvent.nodeInvalidated(this, parent));
     }

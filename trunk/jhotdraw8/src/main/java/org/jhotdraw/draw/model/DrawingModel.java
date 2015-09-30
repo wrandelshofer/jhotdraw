@@ -58,19 +58,19 @@ public interface DrawingModel extends Observable {
      */
     void setRoot(Drawing root);
 
-    /** Gets the children of the specified figure.
+    /** Gets the getChildren of the specified figure.
      *
      * @param figure the figure.
-     * @return the children.
+     * @return the getChildren.
      */
     default List<Figure> getChildren(Figure figure) {
-        return figure.children();
+        return figure.getChildren();
     }
 
     /** Gets the child count of the specified figure.
      *
      * @param figure the parent.
-     * @return the number of children
+     * @return the number of getChildren
      */
     default int getChildCount(Figure figure) {
         return getChildren(figure).size();

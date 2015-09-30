@@ -19,10 +19,10 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains figures which perform
- * layouts and has connections between figures.
+ layouts and has getConnections between figures.
  * <p>
- * Assumes that a figure which has connections to other figures may have
- * in turn connections from other figures.
+ Assumes that a figure which has getConnections to other figures may have
+ in turn getConnections from other figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -39,9 +39,9 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
     public void removeFromParent(Figure child) {
         Figure parent = child.getParent();
         if (parent != null) {
-            int index = parent.children().indexOf(child);
+            int index = parent.getChildren().indexOf(child);
             if (index != -1) {
-                parent.children().remove(index);
+                parent.getChildren().remove(index);
                 fire(DrawingModelEvent.figureRemoved(this, parent, child, index));
                 fire(DrawingModelEvent.nodeInvalidated(this, parent));
             }
@@ -50,7 +50,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
-        parent.children().add(index, child);
+        parent.getChildren().add(index, child);
         fire(DrawingModelEvent.figureAdded(this, parent, child, index));
         fire(DrawingModelEvent.nodeInvalidated(this, parent));
     }

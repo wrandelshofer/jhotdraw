@@ -27,6 +27,8 @@ import org.jhotdraw.collection.HierarchicalMap;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SetProperty;
@@ -62,6 +64,7 @@ import org.jhotdraw.app.action.file.NewFileAction;
 import org.jhotdraw.app.action.file.OpenFileAction;
 import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.app.action.file.SaveFileAsAction;
+import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.binding.BindingUtil;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
@@ -92,6 +95,8 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     private final SetProperty<View> views = new SimpleSetProperty<>(FXCollections.observableSet());
     private final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper();
     private final SetProperty<Object> disablers = new SimpleSetProperty<>(FXCollections.observableSet());
+    private ReadOnlyMapProperty<Key<?>, Object> properties;
+
 
     public DocumentOrientedApplication() {
         disabled.bind(Bindings.not(disablers.emptyProperty()));
@@ -438,12 +443,13 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         }
     }
 
-    private MapProperty<Key<?>, Object> properties;
-
     @Override
-    public final MapProperty<Key<?>, Object> properties() {
+    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
         if (properties == null) {
-            properties = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<Key<?>, Object>()));
+            properties//
+                    = new ReadOnlyMapWrapper<Key<?>, Object>(//
+                            this, PROPERTIES_PROPERTY, //
+                            FXCollections.observableHashMap()).getReadOnlyProperty();
         }
         return properties;
     }

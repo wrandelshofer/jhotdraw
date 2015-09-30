@@ -17,7 +17,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -31,7 +30,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -40,7 +38,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.SubScene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -424,7 +421,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         Drawing d = getModel().getRoot();
         drawing.set(d);
         if (d != null) {
-            boundsProperty = Drawing.BOUNDS.propertyAt(d.properties());
+            boundsProperty = Drawing.BOUNDS.propertyAt(d.propertiesProperty());
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
             updateLayout();
@@ -435,7 +432,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void updateTreeNodes(Figure parent) {
         dirtyFigureNodes.add(parent);
-        for (Figure child : parent.children()) {
+        for (Figure child : parent.getChildren()) {
             updateTreeNodes(child);
         }
     }

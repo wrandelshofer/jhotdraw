@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -21,6 +23,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.jhotdraw.app.AbstractDisableable;
+import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.model.DrawingModelEvent;
@@ -41,9 +44,9 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // Fields
     // ---
     /**
-     * The properties.
+     * The getProperties.
      */
-    private MapProperty<Key<?>, Object> properties;
+    private ReadOnlyMapProperty<Key<?>, Object> properties;
     /**
      * The active view.
      */
@@ -132,9 +135,12 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // Properties
     // ---
     @Override
-    public final MapProperty<Key<?>, Object> properties() {
+    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
         if (properties == null) {
-            properties = new SimpleMapProperty<>(FXCollections.observableMap(new HashMap<Key<?>, Object>()));
+            properties 
+            = new ReadOnlyMapWrapper<Key<?>, Object>(//
+                    this, PROPERTIES_PROPERTY, //
+                    FXCollections.observableHashMap()).getReadOnlyProperty();
         }
         return properties;
     }
@@ -170,7 +176,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     public void editDelete() {
         if (getDrawingView() != null) {
             DrawingView v = getDrawingView();
-            v.getDrawing().children().removeAll(v.getSelectedFigures());
+            v.getDrawing().getChildren().removeAll(v.getSelectedFigures());
         }
     }
 

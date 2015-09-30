@@ -117,13 +117,13 @@ public class CreationTool extends AbstractTool {
     protected Layer getOrCreateLayer(DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Layer activeLayer = dv.getActiveLayer();
-        if (activeLayer != null&&!activeLayer.get(Figure.DISABLED)&&activeLayer.allowsChildren()) {
+        if (activeLayer != null&&!activeLayer.get(Figure.DISABLED)&&activeLayer.isAllowsChildren()) {
             return activeLayer;
         }
         // search for a suitable layer front to back
         Layer layer=null;
-        for (Figure candidate:new ReversedList<>(dv.getDrawing().children())) {
-            if (!candidate.get(Figure.DISABLED)&&candidate.allowsChildren()) {
+        for (Figure candidate:new ReversedList<>(dv.getDrawing().getChildren())) {
+            if (!candidate.get(Figure.DISABLED)&&candidate.isAllowsChildren()) {
                 layer=(Layer)candidate;
                 break;
             }

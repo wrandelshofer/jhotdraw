@@ -21,7 +21,7 @@ import org.jhotdraw.collection.Key;
 
 /**
  * {@code StyleablePropertyMap} provides an acceleration structure for
- * properties which can by styled from CSS.
+ getProperties which can by styled from CSS.
  * <p>
  * {@code StyleablePropertyMap} consists internally of four input maps and one
  * output map.
@@ -63,32 +63,32 @@ public class StyleablePropertyMap {
     // field declarations
     // ---
     /**
-     * Holds the user properties.
+     * Holds the user getProperties.
      */
     protected final ReadOnlyMapProperty<Key<?>, Object> user = new ReadOnlyMapWrapper<Key<?>, Object>(this, USER_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
     /**
-     * Holds the inline properties.
+     * Holds the inline getProperties.
      */
     protected ReadOnlyMapProperty<Key<?>, Object> inline;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, INLINE_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
     /**
-     * Holds the author properties.
+     * Holds the author getProperties.
      */
     protected ReadOnlyMapProperty<Key<?>, Object> author;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, AUTHOR_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
     /**
-     * Holds the user agent properties.
+     * Holds the user agent getProperties.
      */
     protected ReadOnlyMapProperty<Key<?>, Object> userAgent;// 
     /**
-     * Holds the outputReadonly properties.
+     * Holds the outputReadonly getProperties.
      */
     protected final ObservableMap<Key<?>, Object> output = FXCollections.observableHashMap();
     /**
-     * Read-only wrapper for the outputReadonly properties.
+     * Read-only wrapper for the outputReadonly getProperties.
      */
     protected final ReadOnlyMapProperty<Key<?>, Object> outputReadonly = new ReadOnlyMapWrapper<Key<?>, Object>(this, OUTPUT_PROPERTY, FXCollections.unmodifiableObservableMap(output)).getReadOnlyProperty();
 
     /**
-     * Holds the styleable properties.
+     * Holds the styleable getProperties.
      */
     protected final HashMap<Key<?>, StyleableProperty<?>> styleableProperties = new HashMap<>();
 
@@ -181,7 +181,7 @@ public class StyleablePropertyMap {
     // behavior
     // ---
     /**
-     * Clears all properties except the user properties.
+     * Clears all getProperties except the user getProperties.
      */
     public void clearNonUserProperties() {
         if (userAgent != null) {

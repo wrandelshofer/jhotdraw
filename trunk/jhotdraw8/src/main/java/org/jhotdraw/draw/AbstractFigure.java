@@ -5,27 +5,20 @@
 package org.jhotdraw.draw;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
-import org.jhotdraw.beans.SimplePropertyBean;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.css.SimpleStyleablePropertyBean;
 import org.jhotdraw.draw.css.StyleableKey;
-import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
 import org.jhotdraw.draw.css.StyleableStyleManager;
 
 /**
@@ -108,7 +101,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         if (d != null) {
             StyleableStyleManager styleManager = d.getStyleManager();
             styleManager.applyStylesTo(this);
-            for (Figure child : children()) {
+            for (Figure child : getChildren()) {
                 child.applyCss();
             }
         }
@@ -120,7 +113,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         String className = getClass().getName();
         className = className.substring(className.lastIndexOf('.') + 1);
         StringBuilder buf = new StringBuilder();
-        buf.append(className).append('@').append(hashCode()).append("{properties=").append(properties().get()).append(", connections={");
+        buf.append(className).append('@').append(hashCode()).append("{properties=").append(getProperties()).append(", connections={");
         boolean isFirst = true;
         for (Figure f : connections) {
             if (isFirst) {

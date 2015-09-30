@@ -72,7 +72,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public final boolean allowsChildren() {
+    public final boolean isAllowsChildren() {
         return true;
     }
 
@@ -96,7 +96,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        ObservableList<Figure> cs = children();
+        ObservableList<Figure> cs = getChildren();
         for (int i = cs.size() - 1; i >= 0; i--) {
             Figure c = cs.get(i);
             Connector cr = c.findConnector(p, prototype);
@@ -107,10 +107,10 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return null;
     }
 
-    /** First layout all children and then layout self. */
+    /** First layout all getChildren and then layout self. */
     @Override
     public final void layout() {
-        for (Figure child:children()) {
+        for (Figure child:getChildren()) {
             child.layout();
         }
         doLayout();

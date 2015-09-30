@@ -16,9 +16,9 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains no figures which perform
- * layouts but has connections between figures.
+ layouts but has getConnections between figures.
  * <p>
- * Further assumes that a connection figure has no further connections.
+ Further assumes that a connection figure has no further getConnections.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -35,9 +35,9 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
     public void removeFromParent(Figure child) {
         Figure parent = child.getParent();
         if (parent != null) {
-            int index = parent.children().indexOf(child);
+            int index = parent.getChildren().indexOf(child);
             if (index != -1) {
-                parent.children().remove(index);
+                parent.getChildren().remove(index);
                 fire(DrawingModelEvent.figureRemoved(this, parent, child, index));
                 fire(DrawingModelEvent.nodeInvalidated(this, parent));
             }
@@ -46,7 +46,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
-        parent.children().add(index, child);
+        parent.getChildren().add(index, child);
         fire(DrawingModelEvent.figureAdded(this, parent, child, index));
         fire(DrawingModelEvent.nodeInvalidated(this, parent));
     }
@@ -62,7 +62,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
                     fire(DrawingModelEvent.nodeInvalidated(this, figure));
                 }
                 if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
-                    for (Figure c : figure.connections()) {
+                    for (Figure c : figure.getConnections()) {
                         fire(DrawingModelEvent.layoutInvalidated(this, c));
                     }
                 }
@@ -76,7 +76,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
         figure.reshape(transform);
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
+            for (Figure c : f.getConnections()) {
                 fire(DrawingModelEvent.layoutInvalidated(this, c));
             }
         }
@@ -87,7 +87,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
         figure.reshape(x, y, width, height);
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
+            for (Figure c : f.getConnections()) {
                 fire(DrawingModelEvent.layoutInvalidated(this, c));
             }
         }
@@ -98,7 +98,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
         figure.layout();
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
+            for (Figure c : f.getConnections()) {
                 fire(DrawingModelEvent.layoutInvalidated(this, c));
             }
         }
@@ -109,7 +109,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
         figure.applyCss();
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         for (Figure f : figure.preorderIterable()) {
-            for (Figure c : f.connections()) {
+            for (Figure c : f.getConnections()) {
                 fire(DrawingModelEvent.layoutInvalidated(this, c));
             }
         }

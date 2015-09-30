@@ -47,7 +47,7 @@ public class SimpleDrawingRenderer extends SimplePropertyBean implements RenderC
      */
     private void renderRecursive(Figure figure) {
         figure.updateNode(this, getNode(figure));
-        for (Figure child:figure.children()) {
+        for (Figure child:figure.getChildren()) {
             renderRecursive(child);
         }
     }

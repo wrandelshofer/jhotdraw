@@ -10,6 +10,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleMapProperty;
@@ -18,6 +20,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import org.jhotdraw.app.action.Action;
+import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -34,7 +37,10 @@ public abstract class AbstractView extends AbstractDisableable implements View {
      */
     protected final BooleanProperty modified = new SimpleBooleanProperty();
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
-    protected final MapProperty<Key<?>, Object> values = new SimpleMapProperty<>(FXCollections.observableHashMap());
+    protected final ReadOnlyMapProperty<Key<?>, Object> properties//
+            = new ReadOnlyMapWrapper<Key<?>, Object>(//
+                    this, PROPERTIES_PROPERTY, //
+                    FXCollections.observableHashMap()).getReadOnlyProperty();
     protected final StringProperty title = new SimpleStringProperty();
     private final IntegerProperty disambiguation = new SimpleIntegerProperty();
 
@@ -78,8 +84,8 @@ public abstract class AbstractView extends AbstractDisableable implements View {
     }
 
     @Override
-    public MapProperty<Key<?>, Object> properties() {
-        return values;
+    public ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
+        return properties;
     }
 
     @Override

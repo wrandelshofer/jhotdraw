@@ -18,7 +18,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import static java.lang.Math.*;
-import java.util.ArrayList;
 import java.util.List;
 import org.jhotdraw.draw.connector.CenterConnector;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
@@ -58,15 +57,15 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     /**
      * The start figure. Is null if the figure is not connected at the start.
      * <p>
-     * If the value is changed. This figure must add or remove itself from the
-     * list of connections on the {@code ConnectableFigure}.</p>
+ If the value is changed. This figure must add or remove itself from the
+ list of getConnections on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> START_FIGURE = new SimpleFigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
      * The end figure. Is null if the figure is not connected at the end.
      * <p>
-     * If the value is changed. This figure must add or remove itself from the
-     * list of connections on the {@code ConnectableFigure}.</p>
+ If the value is changed. This figure must add or remove itself from the
+ list of getConnections on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> END_FIGURE = new SimpleFigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
@@ -94,24 +93,24 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         // the connected figures or one of the connectors changes
         ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(END_FIGURE) != oldValue) {
-                oldValue.connections().remove(LineConnectionFigure.this);
+                oldValue.getConnections().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.connections().add(LineConnectionFigure.this);
+                newValue.getConnections().add(LineConnectionFigure.this);
             }
         };
         ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(START_FIGURE) != oldValue) {
-                oldValue.connections().remove(LineConnectionFigure.this);
+                oldValue.getConnections().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.connections().add(LineConnectionFigure.this);
+                newValue.getConnections().add(LineConnectionFigure.this);
             }
         };
 
-        startFigureProperty = START_FIGURE.propertyAt(properties());
+        startFigureProperty = START_FIGURE.propertyAt(propertiesProperty());
         startFigureProperty.addListener(clStart);
-        endFigureProperty = END_FIGURE.propertyAt(properties());
+        endFigureProperty = END_FIGURE.propertyAt(propertiesProperty());
         endFigureProperty.addListener(clEnd);
     }
 

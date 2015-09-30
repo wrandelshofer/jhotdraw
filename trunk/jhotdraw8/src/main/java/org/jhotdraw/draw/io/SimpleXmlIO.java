@@ -38,9 +38,9 @@ import org.xml.sax.SAXException;
  * All attribute values are treated as value types, except if an attribute type
  * is an instance of Figure.
  * <p>
- * This i/o-format only works, if a drawing can be described entirely based on
- * the properties of its figures.
- * <p>
+ This i/o-format only works, if a drawing can be described entirely based on
+ the getProperties of its figures.
+ <p>
  *
  *
  * @author Werner Randelshofer
@@ -98,7 +98,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         Drawing tmp = fromDocument(in);
         if (drawing != null) {
             drawing.childrenProperty().addAll(tmp.childrenProperty());
-            drawing.properties().putAll(tmp.properties());
+            drawing.getProperties().putAll(tmp.getProperties());
             tmp = drawing;
         }
         return tmp;
@@ -172,7 +172,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     /**
-     * Creates a figure but does not process the properties.
+     * Creates a figure but does not process the getProperties.
      */
     private Figure readNodeRecursively(Node node) throws IOException {
         if (node instanceof Element) {
@@ -200,7 +200,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     /**
-     * Creates a figure but does not process the properties.
+     * Creates a figure but does not process the getProperties.
      */
     private void readElementAttributes(Element elem) throws IOException {
 
