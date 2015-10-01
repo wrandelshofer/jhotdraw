@@ -98,11 +98,17 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 case FIGURE_REMOVED_FROM_PARENT:
                     handleFigureRemoved(event.getFigure());
                     break;
+                case FIGURE_ADDED_TO_DRAWING:
+                    // not my business
+                    break;
+                case FIGURE_REMOVED_FROM_DRAWING:
+                    // not my business
+                    break;
                 case NODE_INVALIDATED:
                     handleNodeInvalidated(event.getFigure());
                     break;
                 case LAYOUT_INVALIDATED:
-                    // none of my business
+                    // not my business
                     break;
                 case ROOT_CHANGED:
                     updateDrawing();
@@ -118,7 +124,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     break;
                 default:
                     throw new UnsupportedOperationException(event.getEventType()
-                            + "not supported");
+                            + " not supported");
             }
         }
 

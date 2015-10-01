@@ -72,7 +72,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      */
     protected void checkParent(Figure newParent) {
         if (newParent instanceof Drawing) {
-            throw new IllegalArgumentException("illegal parent:" + newParent+" for:"+this);
+            throw new IllegalArgumentException("illegal parent:" + newParent + " for:" + this);
         }
     }
 
@@ -129,15 +129,37 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return buf.toString();
     }
 
-    /** This implementation is empty. */
+    /**
+     * This implementation is empty.
+     */
     @Override
     public void removeAllConnectionsWith(Figure connectedFigure) {
         // empty
     }
 
-    /** This implementation is empty. */
+    /**
+     * This implementation is empty.
+     */
     @Override
     public void removeAllConnections() {
         // empty
+    }
+
+    /**
+     * This implementation is empty.
+     *
+     * @param drawing the drawing to which this figure has been added
+     */
+    @Override
+    public void removeNotify(Drawing drawing) {
+    }
+
+    /**
+     * This implementation is empty.
+     *
+     * @param drawing the drawing from which this figure has been removed
+     */
+    @Override
+    public void addNotify(Drawing drawing) {
     }
 }

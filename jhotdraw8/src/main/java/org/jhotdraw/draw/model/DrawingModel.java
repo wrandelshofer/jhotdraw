@@ -25,6 +25,11 @@ import org.jhotdraw.event.Listener;
  * drawing. If the assumptions are wrong, then the drawing view will not
  * properly update its view!</p>
  * <p>
+ * {@code DrawingModel} invokes {@code addNotify()} and {@code removeNotify()}
+ * methods on a {@code Figure} when it detects that the figure has been
+ * added or removed from a {@code Drawing}.
+ * </p>
+ * <p>
  * A {@code DrawingView} will only be updated properly, if all {@code Tool}s,
  * {@code Handle}s and inspectors update the drawing using the
  * {@code DrawingModel}.
