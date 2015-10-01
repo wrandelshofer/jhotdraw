@@ -346,7 +346,7 @@ public class Geom {
      * @param y1 the y-coordinate of point 1 on the line
      * @param x2 the x-coordinate of point 2 on the line
      * @param y2 the y-coordinate of point 2 on the line
-     * @return the angle
+     * @return the angle in radians
      */
     public static double angle(double x1, double y1, double x2, double y2) {
         return atan2(y2 - y1, x2 - x1);

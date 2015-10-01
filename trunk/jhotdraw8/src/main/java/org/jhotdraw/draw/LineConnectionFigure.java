@@ -25,7 +25,7 @@ import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
-import org.jhotdraw.draw.handle.ResizeHandle;
+import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.shape.LineFigure;
 

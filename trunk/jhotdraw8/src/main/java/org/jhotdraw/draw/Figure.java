@@ -43,7 +43,7 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandle;
-import org.jhotdraw.draw.handle.ResizeHandle;
+import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
 import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
@@ -527,10 +527,10 @@ public interface Figure extends StyleablePropertyBean {
             list.add(MoveHandle.southWest(this));
         } else if (handleType == HandleType.RESHAPE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESHAPE_OUTLINE));
-            list.add(ResizeHandle.northEast(this));
-            list.add(ResizeHandle.northWest(this));
-            list.add(ResizeHandle.southEast(this));
-            list.add(ResizeHandle.southWest(this));
+            list.add(ResizeHandleKit.northEast(this));
+            list.add(ResizeHandleKit.northWest(this));
+            list.add(ResizeHandleKit.southEast(this));
+            list.add(ResizeHandleKit.southWest(this));
             list.add(new RotateHandle(this));
         }
     }
