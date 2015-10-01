@@ -40,6 +40,8 @@ public class ResizeHandleKit {
     /**
      * Creates handles for each corner of a figure and adds them to the provided
      * collection.
+     * @param f the figure which will own the handles
+     * @param handles the list to which the handles should be added
      */
     static public void addCornerResizeHandles(Figure f, Collection<Handle> handles) {
         handles.add(southEast(f));
@@ -51,6 +53,8 @@ public class ResizeHandleKit {
     /**
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
+     * @param f the figure which will own the handles
+     * @param handles the list to which the handles should be added
      */
     static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles) {
         handles.add(south(f));
@@ -62,45 +66,87 @@ public class ResizeHandleKit {
     /**
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
+     * @param f the figure which will own the handles
+     * @param handles the list to which the handles should be added
      */
     static public void addResizeHandles(Figure f, Collection<Handle> handles) {
         addCornerResizeHandles(f, handles);
         addEdgeResizeHandles(f, handles);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle south(Figure owner) {
         return new SouthHandle(owner);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle southEast(Figure owner) {
         return new SouthEastHandle(owner);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle southWest(Figure owner) {
         return new SouthWestHandle(owner);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle north(Figure owner) {
         return new NorthHandle(owner);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle northEast(Figure owner) {
         return new NorthEastHandle(owner);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle northWest(Figure owner) {
         return new NorthWestHandle(owner);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle east(Figure owner) {
         return new EastHandle(owner);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle west(Figure owner) {
         return new WestHandle(owner);
     }
 
-    static class AbstractResizeHandle extends LocatorHandle {
+    private static class AbstractResizeHandle extends LocatorHandle {
 
         private Point2D oldPoint;
         private final Region node;
