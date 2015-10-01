@@ -217,7 +217,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         if (drawing != null) {
             return drawing;
         } else {
-            throw new IOException("document does not contain a drawing");
+            throw new IOException(//
+                    namespaceURI == null//
+                            ? "document does not contain a drawing"//
+                            : "document does not contain a drawing in namespace " + namespaceURI//
+            );
         }
     }
 
