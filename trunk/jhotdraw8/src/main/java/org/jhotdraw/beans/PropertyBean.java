@@ -21,8 +21,8 @@ import org.jhotdraw.collection.Key;
  *
  * <pre><code>
  * public class MyBean implements PropertyBean {
- *     protected final ReadOnlyMapProperty<Key<?>, Object> properties//
- *            = new ReadOnlyMapWrapper<Key<?>, Object>(//
+ *     protected final ReadOnlyMapProperty{@literal <Key<?>, Object>} properties//
+ *            = new ReadOnlyMapWrapper{@literal <Key<?>, Object>}(//
  *                    this, PROPERTIES_PROPERTY, //
  *                    FXCollections.observableHashMap()).getReadOnlyProperty();
  *
