@@ -61,15 +61,15 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     /**
      * The start figure. Is null if the figure is not connected at the start.
      * <p>
-     * If the value is changed. This figure must add or remove itself from the
-     * list of getConnections on the {@code ConnectableFigure}.</p>
+ If the value is changed. This figure must add or remove itself from the
+ list of getConnectedFigures on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> START_FIGURE = new SimpleFigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
      * The end figure. Is null if the figure is not connected at the end.
      * <p>
-     * If the value is changed. This figure must add or remove itself from the
-     * list of getConnections on the {@code ConnectableFigure}.</p>
+ If the value is changed. This figure must add or remove itself from the
+ list of getConnectedFigures on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> END_FIGURE = new SimpleFigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
@@ -97,18 +97,18 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         // the connected figures or one of the connectors changes
         ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(END_FIGURE) != oldValue) {
-                oldValue.getConnections().remove(LineConnectionFigure.this);
+                oldValue.getConnectedFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getConnections().add(LineConnectionFigure.this);
+                newValue.getConnectedFigures().add(LineConnectionFigure.this);
             }
         };
         ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(START_FIGURE) != oldValue) {
-                oldValue.getConnections().remove(LineConnectionFigure.this);
+                oldValue.getConnectedFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getConnections().add(LineConnectionFigure.this);
+                newValue.getConnectedFigures().add(LineConnectionFigure.this);
             }
         };
 

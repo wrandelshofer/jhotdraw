@@ -19,10 +19,10 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains figures which perform
- layouts and has getConnections between figures.
+ layouts and has getConnectedFigures between figures.
  * <p>
- Assumes that a figure which has getConnections to other figures may have
- in turn getConnections from other figures.
+ Assumes that a figure which has getConnectedFigures to other figures may have
+ in turn getConnectedFigures from other figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
