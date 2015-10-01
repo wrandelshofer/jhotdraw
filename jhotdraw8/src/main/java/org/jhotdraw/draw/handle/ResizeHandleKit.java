@@ -1,4 +1,4 @@
-/* @(#)ResizeHandle.java
+/* @(#)ResizeHandleKit.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -29,11 +29,11 @@ import org.jhotdraw.draw.locator.RelativeLocator;
  *
  * @author Werner Randelshofer
  */
-public class ResizeHandle {
+public class ResizeHandleKit {
     /**
      * Prevent instance creation.
      */
-    private ResizeHandle() {
+    private ResizeHandleKit() {
 
     }
 

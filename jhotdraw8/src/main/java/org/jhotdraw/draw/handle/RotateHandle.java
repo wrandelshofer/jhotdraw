@@ -20,6 +20,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.geom.Geom;
 
 /**
  * A Handle to rotate a Figure.
@@ -80,6 +81,13 @@ public class RotateHandle extends AbstractHandle {
         // FIXME implement me!
         Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
+        Point2D center = getOwner().getCenterInLocal();
+        
+        double oldRotate = Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
+        double newRotate = Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
+        
+        double ownerAngle = getOwner().get(Figure.ROTATE);
+        
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
