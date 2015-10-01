@@ -30,7 +30,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -93,10 +92,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {
-                case FIGURE_ADDED:
+                case FIGURE_ADDED_TO_PARENT:
                     handleFigureAdded(event.getFigure());
                     break;
-                case FIGURE_REMOVED:
+                case FIGURE_REMOVED_FROM_PARENT:
                     handleFigureRemoved(event.getFigure());
                     break;
                 case NODE_INVALIDATED:
@@ -322,18 +321,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             throw new InternalError(ex);
         }
 
-        node.addEventFilter(MouseEvent.MOUSE_PRESSED,
-                new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent evt) {
-                        if (!node.isFocused()) {
-                            node.requestFocus();
-                            if (!node.getScene().getWindow().isFocused()) {
-                                evt.consume();
-                            }
-                        }
-                    }
-                ;
+        node.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent evt) -> {
+            if (!node.isFocused()) {
+                node.requestFocus();
+                if (!node.getScene().getWindow().isFocused()) {
+                    evt.consume();
+                }
+            }
         });
         node.setFocusTraversable(true);
         focused.bind(node.focusedProperty());

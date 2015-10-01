@@ -11,7 +11,6 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 import java.io.IOException;
 import static java.lang.Math.*;
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -37,6 +36,7 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import java.util.ArrayList;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
@@ -64,10 +64,11 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * {@code Drawing}.</p>
  * <p>
  * <b>Connections.</b> A figure can be connected to other figures. The
- getConnectedFigures are directed. By convention, when a figure "A" is connected to
- an other figure "B", then "A" adds itself in the {@code getConnectedFigures}
- * property of "B". When "A" is disconnected from "B", then "A" removes itself
- * from the {@code getConnectedFigures} property of "B".</p>
+ * getConnectedFigures are directed. By convention, when a figure "A" is
+ * connected to an other figure "B", then "A" adds itself in the
+ * {@code getConnectedFigures} property of "B". When "A" is disconnected from
+ * "B", then "A" removes itself from the {@code getConnectedFigures} property of
+ * "B".</p>
  * <p>
  * <b>Rendering.</b> A figure can render its graphical representation into a
  * JavaFX {@code Node} with the help of a {@link RenderContext}.</p>
@@ -76,10 +77,11 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * graphically change the state of the figure in a {@link DrawingView}.</p>
  * <p>
  * <b>Layout.</b> The state of a figure may depend on the state of other
- figures. The dependencies can be cyclic due to getConnectedFigures. A figure does
- not automatically update its dependent state. Method {@code layout()} must be
- * invoked to incrementally update the state of a figure and its descendants
- * based on the current state of all other figures in the tree structure.</p>
+ * figures. The dependencies can be cyclic due to getConnectedFigures. A figure
+ * does not automatically update its dependent state. Method {@code layout()}
+ * must be invoked to incrementally update the state of a figure and its
+ * descendants based on the current state of all other figures in the tree
+ * structure.</p>
  * <p>
  * <b>Layout hints and node update hints.</b> Essentially each time when the
  * state of a figure is changed, method {@code layout()} needs to be invoked on
@@ -254,8 +256,8 @@ public interface Figure extends StyleablePropertyBean {
     ReadOnlyListProperty<Figure> childrenProperty();
 
     /**
-     * The connected figures property references all figures which have a 
-     * layout dependency on this figure. 
+     * The connected figures property references all figures which have a layout
+     * dependency on this figure.
      * <p>
      * By convention this set is maintained by the connected figures.
      * <p>
@@ -263,11 +265,24 @@ public interface Figure extends StyleablePropertyBean {
      * corresponding {@code START_FIGURE} or {@code END_FIGURE} property to
      * null.
      *
-     * @return the getConnectedFigures property, with {@code getBean()} returning
-     * this figure, and {@code getName()} returning
+     * @return the getConnectedFigures property, with {@code getBean()}
+     * returning this figure, and {@code getName()} returning
      * {@code CONNECTED_FIGURES_PROPERTY}.
      */
     ReadOnlySetProperty<Figure> connectedFiguresProperty();
+
+    /**
+     * Requests to remove all connections to the specified figure.
+     *
+     * @param connectedFigure a Figure which is in the list of connected
+     * figures.
+     */
+    void removeAllConnectionsWith(Figure connectedFigure);
+
+    /**
+     * Requests to remove all connections to other figures.
+     */
+    void removeAllConnections();
 
     /**
      * The parent figure.
@@ -680,6 +695,17 @@ public interface Figure extends StyleablePropertyBean {
      */
     default ObservableSet<Figure> getConnectedFigures() {
         return connectedFiguresProperty().get();
+    }
+
+    /**
+     * Asks all connected figures to remove all their connections with this
+     * figure, and then removes all connections of this figure with other figures.
+     */
+    default void disconnect() {
+        for (Figure connectedFigure : new ArrayList<Figure>(getConnectedFigures())) {
+            connectedFigure.removeAllConnectionsWith(this);
+        }
+        removeAllConnections();
     }
 
     /**

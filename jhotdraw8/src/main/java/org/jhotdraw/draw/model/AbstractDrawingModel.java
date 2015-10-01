@@ -71,10 +71,10 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             return;
         }
         switch (event.getEventType()) {
-        case FIGURE_ADDED:
+        case FIGURE_ADDED_TO_PARENT:
             invalidateStyle(event.getFigure());
             break;
-        case FIGURE_REMOVED:
+        case FIGURE_REMOVED_FROM_PARENT:
         case NODE_INVALIDATED:
         case ROOT_CHANGED:
         case SUBTREE_NODES_INVALIDATED:

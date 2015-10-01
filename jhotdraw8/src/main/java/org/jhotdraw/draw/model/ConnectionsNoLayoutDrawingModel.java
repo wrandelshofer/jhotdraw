@@ -16,9 +16,9 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains no figures which perform
- layouts but has getConnectedFigures between figures.
+ * layouts but has getConnectedFigures between figures.
  * <p>
- Further assumes that a connection figure has no further getConnectedFigures.
+ * Further assumes that a connection figure has no further getConnectedFigures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -33,22 +33,42 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void removeFromParent(Figure child) {
+        Drawing oldDrawing = child.getDrawing();
         Figure parent = child.getParent();
         if (parent != null) {
             int index = parent.getChildren().indexOf(child);
             if (index != -1) {
                 parent.getChildren().remove(index);
-                fire(DrawingModelEvent.figureRemoved(this, parent, child, index));
+                fire(DrawingModelEvent.figureRemovedFromParent(this, parent, child, index));
                 fire(DrawingModelEvent.nodeInvalidated(this, parent));
+            }
+        }
+        Drawing newDrawing = child.getDrawing();
+        if (oldDrawing != newDrawing) {
+            if (oldDrawing != null) {
+                fire(DrawingModelEvent.figureRemovedFromDrawing(this, oldDrawing, child));
+            }
+            if (newDrawing != null) {
+                fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
             }
         }
     }
 
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
+        Drawing oldDrawing = child.getDrawing();
         parent.getChildren().add(index, child);
-        fire(DrawingModelEvent.figureAdded(this, parent, child, index));
+        fire(DrawingModelEvent.figureAddedToParent(this, parent, child, index));
         fire(DrawingModelEvent.nodeInvalidated(this, parent));
+        Drawing newDrawing = child.getDrawing();
+        if (oldDrawing != newDrawing) {
+            if (oldDrawing != null) {
+                fire(DrawingModelEvent.figureRemovedFromDrawing(this, oldDrawing, child));
+            }
+            if (newDrawing != null) {
+                fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
+            }
+        }
     }
 
     @Override

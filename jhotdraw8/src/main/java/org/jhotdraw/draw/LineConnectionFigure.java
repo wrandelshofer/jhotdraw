@@ -21,12 +21,9 @@ import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import static java.lang.Math.*;
 import java.util.List;
 import org.jhotdraw.draw.connector.CenterConnector;
-import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
-import org.jhotdraw.draw.handle.ResizeHandleKit;
-import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.shape.LineFigure;
 
 /**
@@ -61,15 +58,15 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     /**
      * The start figure. Is null if the figure is not connected at the start.
      * <p>
- If the value is changed. This figure must add or remove itself from the
- list of getConnectedFigures on the {@code ConnectableFigure}.</p>
+     * If the value is changed. This figure must add or remove itself from the
+     * list of getConnectedFigures on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> START_FIGURE = new SimpleFigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
      * The end figure. Is null if the figure is not connected at the end.
      * <p>
- If the value is changed. This figure must add or remove itself from the
- list of getConnectedFigures on the {@code ConnectableFigure}.</p>
+     * If the value is changed. This figure must add or remove itself from the
+     * list of getConnectedFigures on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> END_FIGURE = new SimpleFigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
@@ -226,5 +223,27 @@ public class LineConnectionFigure extends AbstractShapeFigure {
      */
     public boolean canConnect(Figure figure, Connector connector) {
         return true;
+    }
+
+    @Override
+    public void removeAllConnectionsWith(Figure connectedFigure) {
+        if (connectedFigure != null) {
+            if (connectedFigure == START_FIGURE) {
+                set(START_FIGURE, null);
+                set(START_CONNECTOR, null);
+            }
+            if (connectedFigure == END_FIGURE) {
+                set(END_FIGURE, null);
+                set(END_CONNECTOR, null);
+            }
+        }
+    }
+
+    @Override
+    public void removeAllConnections() {
+        set(START_FIGURE, null);
+        set(START_CONNECTOR, null);
+        set(END_FIGURE, null);
+        set(END_CONNECTOR, null);
     }
 }
