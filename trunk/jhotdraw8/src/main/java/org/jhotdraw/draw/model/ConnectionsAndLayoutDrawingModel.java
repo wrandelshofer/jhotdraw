@@ -51,10 +51,8 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
                 fire(DrawingModelEvent.figureRemovedFromDrawing(this, oldDrawing, child));
-                child.removeNotify(oldDrawing);
             }
             if (newDrawing != null) {
-                child.addNotify(newDrawing);
                 fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
             }
         }
@@ -70,10 +68,8 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
                 fire(DrawingModelEvent.figureRemovedFromDrawing(this, oldDrawing, child));
-                child.removeNotify(oldDrawing);
             }
             if (newDrawing != null) {
-                child.addNotify(newDrawing);
                 fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
             }
         }
