@@ -44,11 +44,9 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
         Drawing newDrawing = child.getDrawing();
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
-                child.removeNotify(oldDrawing);
                 fire(DrawingModelEvent.figureRemovedFromDrawing(this, oldDrawing, child));
             }
             if (newDrawing != null) {
-                child.addNotify(newDrawing);
                 fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
             }
         }
@@ -63,11 +61,9 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
         Drawing newDrawing = child.getDrawing();
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
-                child.removeNotify(oldDrawing);
                 fire(DrawingModelEvent.figureRemovedFromDrawing(this, oldDrawing, child));
             }
             if (newDrawing != null) {
-                child.addNotify(newDrawing);
                 fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
             }
         }

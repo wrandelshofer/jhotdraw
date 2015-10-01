@@ -22,6 +22,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Figure;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -38,9 +39,9 @@ import org.xml.sax.SAXException;
  * All attribute values are treated as value types, except if an attribute type
  * is an instance of Figure.
  * <p>
- This i/o-format only works, if a drawing can be described entirely based on
- the getProperties of its figures.
- <p>
+ * This i/o-format only works, if a drawing can be described entirely based on
+ * the getProperties of its figures.
+ * <p>
  *
  *
  * @author Werner Randelshofer
@@ -51,15 +52,28 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     private FigureFactory factory;
     private IdFactory ids = new SimpleIdFactory();
     private ArrayList<Element> figureElements = new ArrayList<>();
+    private String namespaceURI;
+    private String namespaceQualifier;
 
     public SimpleXmlIO(FigureFactory factory) {
+        this(factory, null, null);
+    }
+
+    public SimpleXmlIO(FigureFactory factory, String namespaceURI, String namespaceQualifier) {
         this.factory = factory;
+        this.namespaceURI = namespaceURI;
+        this.namespaceQualifier = namespaceQualifier;
     }
 
     @Override
     public Drawing read(InputStream in, Drawing drawing) throws IOException {
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            if (namespaceURI != null) {
+                builderFactory.setNamespaceAware(true);
+            }
+            builderFactory.setNamespaceAware(true);
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse(in);
             return read(doc, drawing);
         } catch (SAXException | ParserConfigurationException ex) {
@@ -107,10 +121,23 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     public Document toDocument(Drawing drawing) throws IOException {
         try {
             ids.reset();
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = builder.newDocument();
-            if (factory.figureToName(drawing) != null) {
-                doc.appendChild(writeNodeRecursively(doc, drawing));
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            Document doc;
+            if (namespaceURI != null) {
+                builderFactory.setNamespaceAware(true);
+                DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                DOMImplementation domImpl = builder.getDOMImplementation();
+                doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? factory.figureToName(drawing) : namespaceQualifier + ":" + factory.figureToName(drawing), null);
+            } else {
+                DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                doc = builder.newDocument();
+                Element elem = doc.createElement(factory.figureToName(drawing));
+                doc.appendChild(elem);
+            }
+            Element docElement = doc.getDocumentElement();
+            writeElementAttributes(docElement, drawing);
+            for (Figure child : drawing.getChildren()) {
+                docElement.appendChild(writeNodeRecursively(doc, child));
             }
             return doc;
         } catch (ParserConfigurationException ex) {
@@ -118,20 +145,20 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
     }
 
-    private Node writeNodeRecursively(Document doc, Figure figure) throws IOException {
-        Element elem = doc.createElement(factory.figureToName(figure));
-        elem.setAttribute("id", ids.createId(figure));
-        for (Key<?> k : factory.figureKeys(figure)) {
-            Key<Object> key = (Key<Object>) k;
-            Object value = figure.get(key);
-            if (!factory.isDefaultValue(key, value)) {
-                if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    elem.setAttribute(factory.keyToName(figure, key), ids.createId(value));
-                } else {
-                    elem.setAttribute(factory.keyToName(figure, key), factory.valueToString(key, value));
-                }
-            }
+    private Element createElement(Document doc, String unqualifiedName) throws IOException {
+        if (namespaceURI == null || namespaceQualifier == null) {
+            return doc.createElement(unqualifiedName);
         }
+        if (namespaceQualifier == null) {
+            return doc.createElementNS(namespaceURI, unqualifiedName);
+        } else {
+            return doc.createElementNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName);
+        }
+    }
+
+    private Node writeNodeRecursively(Document doc, Figure figure) throws IOException {
+        Element elem = createElement(doc, factory.figureToName(figure));
+        writeElementAttributes(elem, figure);
 
         for (Figure child : figure.childrenProperty()) {
             if (factory.figureToName(child) != null) {
@@ -143,6 +170,29 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             elem.appendChild(doc.createTextNode("\n"));
         }
         return elem;
+    }
+
+    private void setAttribute(Element elem, String unqualifiedName, String value) throws IOException {
+        if (namespaceURI == null || namespaceQualifier == null) {
+            elem.setAttribute(unqualifiedName, value);
+        } else {
+            elem.setAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName, value);
+        }
+    }
+
+    private void writeElementAttributes(Element elem, Figure figure) throws IOException {
+        setAttribute(elem, "id", ids.createId(figure));
+        for (Key<?> k : factory.figureKeys(figure)) {
+            Key<Object> key = (Key<Object>) k;
+            Object value = figure.get(key);
+            if (!factory.isDefaultValue(key, value)) {
+                if (Figure.class.isAssignableFrom(key.getValueType())) {
+                    setAttribute(elem, factory.keyToName(figure, key), ids.createId(value));
+                } else {
+                    setAttribute(elem, factory.keyToName(figure, key), factory.valueToString(key, value));
+                }
+            }
+        }
     }
 
     public Drawing fromDocument(Document doc) throws IOException {
@@ -171,19 +221,38 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
     }
 
+    private String getAttribute(Element elem, String unqualifiedName) {
+        if (namespaceURI == null) {
+            return elem.getAttribute(unqualifiedName);
+        } else {
+            if (elem.hasAttributeNS(namespaceURI, unqualifiedName)) {
+                return elem.getAttributeNS(namespaceURI, unqualifiedName);
+            } else {
+                if (elem.isDefaultNamespace(namespaceURI)) {
+                    return elem.getAttribute(unqualifiedName);
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Creates a figure but does not process the getProperties.
      */
     private Figure readNodeRecursively(Node node) throws IOException {
         if (node instanceof Element) {
             Element elem = (Element) node;
-
-            Figure figure = factory.nameToFigure(elem.getTagName());
+            if (namespaceURI != null) {
+                if (!namespaceURI.equals(elem.getNamespaceURI())) {
+                    return null;
+                }
+            }
+            Figure figure = factory.nameToFigure(elem.getLocalName());
             if (figure == null) {
                 return null;
             }
             figureElements.add(elem);
-            String id = elem.getAttribute("id");
+            String id = getAttribute(elem, "id");
             if (id != null) {
                 ids.putId(figure, id);
             }
@@ -200,23 +269,31 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     /**
-     * Creates a figure but does not process the getProperties.
+     * Reads the attributes of the specified element.
      */
     private void readElementAttributes(Element elem) throws IOException {
-
+        if (namespaceURI != null && !namespaceURI.equals(elem.getNamespaceURI())) {
+            return;
+        }
         Figure figure = null;
-        String id = elem.getAttribute("id");
-        if (id != null) {
+        String id = getAttribute(elem, "id");
+        if (id
+                != null) {
             figure = getFigure(id);
         }
-        if (figure != null) {
+        if (figure
+                != null) {
             NamedNodeMap attrs = elem.getAttributes();
             for (int i = 0, n = attrs.getLength(); i < n; i++) {
                 Attr attr = (Attr) attrs.item(i);
-                if ("id".equals(attr.getName())) {
+                if (attr.getNamespaceURI() != null && !attr.getNamespaceURI().equals(namespaceURI)) {
                     continue;
                 }
-                Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getName());
+
+                if ("id".equals(attr.getLocalName())) {
+                    continue;
+                }
+                Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getLocalName());
                 if (key != null && factory.figureKeys(figure).contains(key)) {
                     Object value = null;
                     if (Figure.class.isAssignableFrom(key.getValueType())) {

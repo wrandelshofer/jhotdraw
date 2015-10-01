@@ -56,6 +56,8 @@ public class GrapherView extends AbstractView {
     private DrawingView drawingView;
 
     private DrawingEditor editor;
+    
+    private final static String GRAPHER_NAMESPACE_URI="jhotdraw.org/samples/grapher";
 
     @Override
     public void init(EventHandler<TaskCompletionEvent> callback) {
@@ -115,7 +117,7 @@ public class GrapherView extends AbstractView {
             protected SimpleDrawing call() throws Exception {
                 try {
                     FigureFactory factory = new DefaultFigureFactory();
-                    SimpleXmlIO io = new SimpleXmlIO(factory);
+                    SimpleXmlIO io = new SimpleXmlIO(factory,GRAPHER_NAMESPACE_URI,null);
                     SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
                     drawing.applyCss();
                     drawing.layout();
@@ -143,7 +145,7 @@ public class GrapherView extends AbstractView {
             @Override
             protected Void call() throws Exception {
                 FigureFactory factory = new DefaultFigureFactory();
-                SimpleXmlIO io = new SimpleXmlIO(factory);
+                    SimpleXmlIO io = new SimpleXmlIO(factory,GRAPHER_NAMESPACE_URI,null);
                 io.write(uri, drawingView.getDrawing());
                 return null;
             }
