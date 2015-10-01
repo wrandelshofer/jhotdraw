@@ -573,10 +573,23 @@ public interface Figure extends StyleablePropertyBean {
      * Applies the stylesheet on this figure and on its descendant figures.
      */
     void applyCss();
+
+    /**
+     * Invoked by {@code DrawingModel} when the figure is added to a drawing.
+     * @param drawing the drawing to which this figure has been added
+     */
+    void addNotify(Drawing drawing);
+
+    /**
+     * Invoked by {@code DrawingModel} when the figure is removed from a
+     * drawing.
+     * @param drawing the drawing from which this figure has been removed
+     */
+    void removeNotify(Drawing drawing);
+
     // ----
     // convenience methods
     // ----
-
     /**
      * Adds a new child to the figure.
      *
@@ -699,7 +712,8 @@ public interface Figure extends StyleablePropertyBean {
 
     /**
      * Asks all connected figures to remove all their connections with this
-     * figure, and then removes all connections of this figure with other figures.
+     * figure, and then removes all connections of this figure with other
+     * figures.
      */
     default void disconnect() {
         for (Figure connectedFigure : new ArrayList<Figure>(getConnectedFigures())) {
