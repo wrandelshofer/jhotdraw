@@ -22,7 +22,7 @@ import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 
 /**
- * Handle for the point of a figure.
+ * Handle for moving (translating) a figure.
  *
  * @author Werner Randelshofer
  */
