@@ -5,25 +5,14 @@
 package org.jhotdraw.draw;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.URI;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.css.StyleableStyleManager;
 import org.jhotdraw.xml.css.CSSParser;
 

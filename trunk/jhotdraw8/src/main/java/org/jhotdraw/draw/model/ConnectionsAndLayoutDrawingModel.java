@@ -19,10 +19,10 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains figures which perform
- layouts and has getConnectedFigures between figures.
+ * layouts and has getConnectedFigures between figures.
  * <p>
- Assumes that a figure which has getConnectedFigures to other figures may have
- in turn getConnectedFigures from other figures.
+ * Assumes that a figure which has getConnectedFigures to other figures may have
+ * in turn getConnectedFigures from other figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -37,22 +37,42 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void removeFromParent(Figure child) {
+        Drawing oldDrawing = child.getDrawing();
         Figure parent = child.getParent();
         if (parent != null) {
             int index = parent.getChildren().indexOf(child);
             if (index != -1) {
                 parent.getChildren().remove(index);
-                fire(DrawingModelEvent.figureRemoved(this, parent, child, index));
+                fire(DrawingModelEvent.figureRemovedFromParent(this, parent, child, index));
                 fire(DrawingModelEvent.nodeInvalidated(this, parent));
+            }
+        }
+        Drawing newDrawing = child.getDrawing();
+        if (oldDrawing != newDrawing) {
+            if (oldDrawing != null) {
+                fire(DrawingModelEvent.figureRemovedFromDrawing(this, oldDrawing, child));
+            }
+            if (newDrawing != null) {
+                fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
             }
         }
     }
 
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
+        Drawing oldDrawing = child.getDrawing();
         parent.getChildren().add(index, child);
-        fire(DrawingModelEvent.figureAdded(this, parent, child, index));
+        fire(DrawingModelEvent.figureAddedToParent(this, parent, child, index));
         fire(DrawingModelEvent.nodeInvalidated(this, parent));
+        Drawing newDrawing = child.getDrawing();
+        if (oldDrawing != newDrawing) {
+            if (oldDrawing != null) {
+                fire(DrawingModelEvent.figureRemovedFromDrawing(this, oldDrawing, child));
+            }
+            if (newDrawing != null) {
+                fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
+            }
+        }
     }
 
     @Override

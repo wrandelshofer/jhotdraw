@@ -129,4 +129,15 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return buf.toString();
     }
 
+    /** This implementation is empty. */
+    @Override
+    public void removeAllConnectionsWith(Figure connectedFigure) {
+        // empty
+    }
+
+    /** This implementation is empty. */
+    @Override
+    public void removeAllConnections() {
+        // empty
+    }
 }
