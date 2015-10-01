@@ -33,7 +33,7 @@ public class MoveHandle extends LocatorHandle {
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE,  BorderStrokeStyle.SOLID, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
     public MoveHandle(Figure figure, Locator locator) {
         this(figure, STYLECLASS_HANDLE_MOVE, locator);
@@ -103,59 +103,178 @@ public class MoveHandle extends LocatorHandle {
         // FIXME fire undoable edit
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle south(Figure owner) {
         return south(owner, STYLECLASS_HANDLE_MOVE);
     }
+
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle southEast(Figure owner) {
         return southEast(owner, STYLECLASS_HANDLE_MOVE);
     }
+
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle southWest(Figure owner) {
         return southWest(owner, STYLECLASS_HANDLE_MOVE);
     }
+
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle north(Figure owner) {
         return north(owner, STYLECLASS_HANDLE_MOVE);
     }
+
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle northEast(Figure owner) {
         return northEast(owner, STYLECLASS_HANDLE_MOVE);
     }
+
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle northWest(Figure owner) {
         return northWest(owner, STYLECLASS_HANDLE_MOVE);
     }
+
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle east(Figure owner) {
         return northEast(owner, STYLECLASS_HANDLE_MOVE);
     }
+
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @return the handle
+     */
     static public Handle west(Figure owner) {
         return northWest(owner, STYLECLASS_HANDLE_MOVE);
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @param styleclass the styleclass used for styling the JavaFX Node of the
+     * handle
+     * @return the handle
+     */
     static public Handle south(Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.south());
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @param styleclass the styleclass used for styling the JavaFX Node of the
+     * handle
+     * @return the handle
+     */
     static public Handle southEast(Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.southEast());
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @param styleclass the styleclass used for styling the JavaFX Node of the
+     * handle
+     * @return the handle
+     */
     static public Handle southWest(Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.southWest());
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @param styleclass the styleclass used for styling the JavaFX Node of the
+     * handle
+     * @return the handle
+     */
     static public Handle north(Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.north());
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @param styleclass the styleclass used for styling the JavaFX Node of the
+     * handle
+     * @return the handle
+     */
     static public Handle northEast(Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.northEast());
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @param styleclass the styleclass used for styling the JavaFX Node of the
+     * handle
+     * @return the handle
+     */
     static public Handle northWest(Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.northWest());
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @param styleclass the styleclass used for styling the JavaFX Node of the
+     * handle
+     * @return the handle
+     */
     static public Handle east(Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.east());
     }
 
+    /**
+     * Creates a handle for the specified figure.
+     *
+     * @param owner the figure which will own the handle
+     * @param styleclass the styleclass used for styling the JavaFX Node of the
+     * handle
+     * @return the handle
+     */
     static public Handle west(
             Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.west());
