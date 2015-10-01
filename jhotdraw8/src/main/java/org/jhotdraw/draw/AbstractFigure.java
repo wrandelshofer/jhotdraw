@@ -38,12 +38,12 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         }
 
     };
-    private ReadOnlySetProperty<Figure> connections = new ReadOnlySetWrapper<>(this, CONNECTIONS_PROPERTY, FXCollections.observableSet(new HashSet<Figure>())).getReadOnlyProperty();
+    private ReadOnlySetProperty<Figure> connections = new ReadOnlySetWrapper<>(this, CONNECTED_FIGURES_PROPERTY, FXCollections.observableSet(new HashSet<Figure>())).getReadOnlyProperty();
 
     private ObservableSet<PseudoClass> pseudoClassStates = FXCollections.observableSet(new HashSet<>());
 
     @Override
-    public final ReadOnlySetProperty<Figure> connectionsProperty() {
+    public final ReadOnlySetProperty<Figure> connectedFiguresProperty() {
         return connections;
     }
 
