@@ -105,7 +105,7 @@ public class LineFigure extends AbstractShapeFigure {
     public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
-        } else if (handleType == HandleType.MOVE) {
+        } else if (handleType == HandleType.MOVE||handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));

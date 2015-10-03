@@ -41,7 +41,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle<Figure> {
     protected void initNode(Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().add(styleclass);
+        r.getStyleClass().setAll(styleclass);
     }
 
     @Override

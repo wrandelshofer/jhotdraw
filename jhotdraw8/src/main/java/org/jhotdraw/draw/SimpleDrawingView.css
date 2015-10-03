@@ -23,7 +23,11 @@
     -fx-stroke: blue;
 }
 /* Styles the reshape outline drawn by handles. See {@code Handle}. */
-.handle-reshape-outline {
+.handle-resize-outline {
+    -fx-stroke: darkcyan;
+}
+/* Styles the transform outline drawn by handles. See {@code Handle}. */
+.handle-transform-outline {
     -fx-stroke: purple;
 }
 
@@ -54,6 +58,6 @@
 
 /* Styles the rotate handles. See {@code Handle}. */
 .handle-resize {
-    -fx-border-color: purple;
+    -fx-border-color: darkcyan;
     -fx-background-color: white;
 }

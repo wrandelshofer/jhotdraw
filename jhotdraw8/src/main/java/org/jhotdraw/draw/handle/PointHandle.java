@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.handle;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -50,6 +51,7 @@ public class PointHandle extends AbstractHandle {
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
+        node.setCursor(Cursor.MOVE);
     }
 
     @Override

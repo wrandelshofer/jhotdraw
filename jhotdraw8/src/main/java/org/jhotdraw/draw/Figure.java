@@ -541,12 +541,12 @@ public interface Figure extends StyleablePropertyBean {
             list.add(MoveHandle.northWest(this));
             list.add(MoveHandle.southEast(this));
             list.add(MoveHandle.southWest(this));
-        } else if (handleType == HandleType.RESHAPE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESHAPE_OUTLINE));
-            list.add(ResizeHandleKit.northEast(this));
-            list.add(ResizeHandleKit.northWest(this));
-            list.add(ResizeHandleKit.southEast(this));
-            list.add(ResizeHandleKit.southWest(this));
+        } else if (handleType == HandleType.RESIZE) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
+            ResizeHandleKit.addCornerResizeHandles(this, list);
+            ResizeHandleKit.addEdgeResizeHandles(this, list);
+        } else if (handleType == HandleType.TRANSFORM) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             list.add(new RotateHandle(this));
         }
     }

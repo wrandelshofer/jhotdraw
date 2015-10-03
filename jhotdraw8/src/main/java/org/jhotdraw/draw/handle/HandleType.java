@@ -22,7 +22,11 @@ public class HandleType {
      */
     public final static HandleType MOVE=new HandleType();
     /** 
-     * Handle of this type should allow to reshape (resize and rotate) a figure.
+     * Handle of this type should allow to reshape (resize) a figure.
      */
-    public final static HandleType RESHAPE=new HandleType();
+    public final static HandleType RESIZE=new HandleType();
+    /** 
+     * Handle of this type should allow to transform (scale and rotate) a figure.
+     */
+    public final static HandleType TRANSFORM=new HandleType();
 }

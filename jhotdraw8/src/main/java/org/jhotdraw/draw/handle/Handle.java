@@ -36,7 +36,11 @@ public interface Handle<F extends Figure> {
     /**
      * Style class for handles which draw the wire frame of a shape for editing.
      */
-    public final static String STYLECLASS_HANDLE_RESHAPE_OUTLINE = "handle-reshape-outline";
+    public final static String STYLECLASS_HANDLE_RESIZE_OUTLINE = "handle-resize-outline";
+    /**
+     * Style class for handles which draw the wire frame of a shape for editing.
+     */
+    public final static String STYLECLASS_HANDLE_TRANSFORM_OUTLINE = "handle-transform-outline";
 
     /**
      * Style class for handles which move a shape.

@@ -33,6 +33,7 @@ import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.gui.ToolsToolbar;
 import org.jhotdraw.draw.gui.ZoomToolbar;
+import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.io.DefaultFigureFactory;
 import org.jhotdraw.draw.io.FigureFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
@@ -76,8 +77,8 @@ public class GrapherView extends AbstractView {
         }
 
         drawingView = new SimpleDrawingView();
-        drawingView.setConstrainer(new GridConstrainer(0, 0, 1, 1, 1));
-        
+        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 1));
+        drawingView.setHandleType(HandleType.RESIZE);
         // 
         drawingView.getModel().addListener((InvalidationListener)drawingModel -> {
             modified.set(true);
