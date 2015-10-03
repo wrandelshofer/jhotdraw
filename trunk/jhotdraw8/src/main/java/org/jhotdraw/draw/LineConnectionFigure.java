@@ -199,7 +199,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
-        } else if (handleType == HandleType.MOVE) {
+        } else if (handleType == HandleType.MOVE||handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE));
             list.add(new ConnectionPointHandle(this, START, START_FIGURE, START_CONNECTOR));
             list.add(new ConnectionPointHandle(this, END, END_FIGURE, END_CONNECTOR));

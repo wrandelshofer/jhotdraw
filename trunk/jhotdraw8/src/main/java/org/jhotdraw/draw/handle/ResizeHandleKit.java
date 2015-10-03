@@ -7,6 +7,7 @@ package org.jhotdraw.draw.handle;
 import java.util.Collection;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -21,6 +22,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.draw.model.DrawingModel;
 
 /**
  * /**
@@ -30,6 +32,7 @@ import org.jhotdraw.draw.locator.RelativeLocator;
  * @author Werner Randelshofer
  */
 public class ResizeHandleKit {
+
     /**
      * Prevent instance creation.
      */
@@ -40,6 +43,7 @@ public class ResizeHandleKit {
     /**
      * Creates handles for each corner of a figure and adds them to the provided
      * collection.
+     *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
@@ -53,6 +57,7 @@ public class ResizeHandleKit {
     /**
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
+     *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
@@ -66,6 +71,7 @@ public class ResizeHandleKit {
     /**
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
+     *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
@@ -76,6 +82,7 @@ public class ResizeHandleKit {
 
     /**
      * Creates a handle for the specified figure.
+     *
      * @param owner the figure which will own the handle
      * @return the handle
      */
@@ -85,6 +92,7 @@ public class ResizeHandleKit {
 
     /**
      * Creates a handle for the specified figure.
+     *
      * @param owner the figure which will own the handle
      * @return the handle
      */
@@ -94,6 +102,7 @@ public class ResizeHandleKit {
 
     /**
      * Creates a handle for the specified figure.
+     *
      * @param owner the figure which will own the handle
      * @return the handle
      */
@@ -103,6 +112,7 @@ public class ResizeHandleKit {
 
     /**
      * Creates a handle for the specified figure.
+     *
      * @param owner the figure which will own the handle
      * @return the handle
      */
@@ -112,6 +122,7 @@ public class ResizeHandleKit {
 
     /**
      * Creates a handle for the specified figure.
+     *
      * @param owner the figure which will own the handle
      * @return the handle
      */
@@ -121,6 +132,7 @@ public class ResizeHandleKit {
 
     /**
      * Creates a handle for the specified figure.
+     *
      * @param owner the figure which will own the handle
      * @return the handle
      */
@@ -130,6 +142,7 @@ public class ResizeHandleKit {
 
     /**
      * Creates a handle for the specified figure.
+     *
      * @param owner the figure which will own the handle
      * @return the handle
      */
@@ -139,6 +152,7 @@ public class ResizeHandleKit {
 
     /**
      * Creates a handle for the specified figure.
+     *
      * @param owner the figure which will own the handle
      * @return the handle
      */
@@ -146,18 +160,20 @@ public class ResizeHandleKit {
         return new WestHandle(owner);
     }
 
-    private static class AbstractResizeHandle extends LocatorHandle {
+    private abstract static class AbstractResizeHandle extends LocatorHandle {
 
         private Point2D oldPoint;
-        private final Region node;
+        protected final Region node;
         private final String styleclass;
+        private Bounds startBounds;
         private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
         private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-        private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
+        private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
 
         public AbstractResizeHandle(Figure owner, Locator locator) {
-            this(owner,STYLECLASS_HANDLE_RESIZE,locator);
+            this(owner, STYLECLASS_HANDLE_RESIZE, locator);
         }
+
         public AbstractResizeHandle(Figure owner, String styleclass, Locator locator) {
             super(owner, locator);
             this.styleclass = styleclass;
@@ -194,6 +210,7 @@ public class ResizeHandleKit {
         @Override
         public void onMousePressed(MouseEvent event, DrawingView view) {
             oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+            startBounds = getOwner().getBoundsInLocal();
         }
 
         @Override
@@ -210,11 +227,7 @@ public class ResizeHandleKit {
                 oldPoint = getOwner().localToDrawing(loc);
             }
 
-            Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
-            tx = getOwner().getDrawingToParent().createConcatenation(tx);
-            view.getModel().reshape(getOwner(), tx);
-
-            oldPoint = newPoint;
+            resize(newPoint, getOwner(),startBounds,view.getModel());
         }
 
         @Override
@@ -226,54 +239,111 @@ public class ResizeHandleKit {
         public boolean isSelectable() {
             return true;
         }
+
+        protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model);
     }
 
     private static class NorthEastHandle extends AbstractResizeHandle {
 
         NorthEastHandle(Figure owner) {
-            super(owner, null, RelativeLocator.northEast());
+            super(owner, RelativeLocator.northEast());
+            node.setCursor(Cursor.NE_RESIZE);
+        }
+
+        @Override
+        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model) {
+            model.reshape(owner, bounds.getMinX(), newPoint.getY(), newPoint.getX()-bounds.getMinX(), bounds.getMaxY()-newPoint.getY());
         }
     }
+
     private static class EastHandle extends AbstractResizeHandle {
 
         EastHandle(Figure owner) {
             super(owner, RelativeLocator.east());
+            node.setCursor(Cursor.E_RESIZE);
+        }
+
+        @Override
+        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model) {
+            model.reshape(owner, bounds.getMinX(), bounds.getMinY(), newPoint.getX()-bounds.getMinX(), bounds.getMaxY()-bounds.getMinY());
         }
     }
+
     private static class NorthHandle extends AbstractResizeHandle {
 
         NorthHandle(Figure owner) {
             super(owner, RelativeLocator.north());
+            node.setCursor(Cursor.N_RESIZE);
+        }
+
+        @Override
+        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model) {
+            model.reshape(owner, bounds.getMinX(), newPoint.getY(), bounds.getMaxX()-bounds.getMinX(), bounds.getMaxY()-newPoint.getY());
         }
     }
+
     private static class NorthWestHandle extends AbstractResizeHandle {
 
         NorthWestHandle(Figure owner) {
             super(owner, RelativeLocator.northWest());
+            node.setCursor(Cursor.NW_RESIZE);
+        }
+
+        @Override
+        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model) {
+            model.reshape(owner, newPoint.getX(), newPoint.getY(), bounds.getMaxX()-newPoint.getX(), bounds.getMaxY()-newPoint.getY());
         }
     }
+
     private static class SouthEastHandle extends AbstractResizeHandle {
 
         SouthEastHandle(Figure owner) {
             super(owner, RelativeLocator.southEast());
+            node.setCursor(Cursor.SE_RESIZE);
+        }
+
+        @Override
+        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model) {
+            model.reshape(owner, bounds.getMinX(), bounds.getMinY(), newPoint.getX()-bounds.getMinX(), newPoint.getY()-bounds.getMinY());
         }
     }
+
     private static class SouthHandle extends AbstractResizeHandle {
 
         SouthHandle(Figure owner) {
             super(owner, RelativeLocator.south());
+            node.setCursor(Cursor.S_RESIZE);
+        }
+
+        @Override
+        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model) {
+            model.reshape(owner, bounds.getMinX(), bounds.getMinY(), bounds.getMaxX()-bounds.getMinX(), newPoint.getY()-bounds.getMinY());
         }
     }
+
     private static class SouthWestHandle extends AbstractResizeHandle {
 
         SouthWestHandle(Figure owner) {
             super(owner, RelativeLocator.southWest());
+            node.setCursor(Cursor.SW_RESIZE);
+        }
+
+        @Override
+        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model) {
+            model.reshape(owner, newPoint.getX(), bounds.getMinY(), bounds.getMaxX()-newPoint.getX(), newPoint.getY()-bounds.getMinY());
         }
     }
+
     private static class WestHandle extends AbstractResizeHandle {
 
         WestHandle(Figure owner) {
             super(owner, RelativeLocator.west());
+            node.setCursor(Cursor.W_RESIZE);
+        }
+
+        @Override
+        protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model) {
+            model.reshape(owner, newPoint.getX(), bounds.getMinY(), bounds.getMaxX()-newPoint.getX(), bounds.getMaxY()-bounds.getMinY());
         }
     }
 }

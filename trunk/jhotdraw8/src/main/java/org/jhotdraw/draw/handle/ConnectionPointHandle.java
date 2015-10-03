@@ -6,6 +6,7 @@ package org.jhotdraw.draw.handle;
 
 import java.util.List;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -74,6 +75,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclassDisconnected);
         node.setBorder(REGION_BORDER);
+        node.setCursor(Cursor.MOVE);
     }
 
     @Override
