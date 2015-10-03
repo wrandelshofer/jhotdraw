@@ -70,6 +70,15 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
             }
         }
     }
+    @Override
+    public void disconnect(Figure figure) {
+        for (Figure connectedFigure : figure.getConnectedFigures()) {
+            fire(DrawingModelEvent.nodeInvalidated(this, connectedFigure));
+
+        }
+        figure.disconnect();
+        fire(DrawingModelEvent.nodeInvalidated(this, figure));
+    }
 
     @Override
     public <T> T set(Figure figure, Key<T> key, T newValue) {

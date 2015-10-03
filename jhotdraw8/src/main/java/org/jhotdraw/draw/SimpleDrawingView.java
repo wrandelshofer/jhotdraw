@@ -982,8 +982,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
         DrawingModel model=getModel();
         for (Figure f:figures) {
+            model.disconnect(f);
             model.removeFromParent(f);
-            f.disconnect();
         }
     }
 

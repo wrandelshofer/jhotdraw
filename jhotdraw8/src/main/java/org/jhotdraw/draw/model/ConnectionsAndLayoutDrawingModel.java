@@ -59,6 +59,18 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
+    public void disconnect(Figure figure) {
+        for (Figure connectedFigure : figure.getConnectedFigures()) {
+            fire(DrawingModelEvent.layoutInvalidated(this, connectedFigure));
+
+        }
+        fireLayoutInvalidatedForFiguresConnectedWith(figure);
+        figure.disconnect();
+        fire(DrawingModelEvent.nodeInvalidated(this, figure));
+        fire(DrawingModelEvent.layoutInvalidated(this, figure));
+    }
+
+    @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
         Drawing oldDrawing = child.getDrawing();
         parent.getChildren().add(index, child);
@@ -89,7 +101,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
                     fire(DrawingModelEvent.layoutInvalidated(this, figure));
                 }
                 if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
-                    fireLayoutInvalidatedForConnectionsOfFigure(figure);
+                    fireLayoutInvalidatedForFiguresConnectedWith(figure);
                 }
             }
         }
@@ -101,7 +113,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
         figure.reshape(transform);
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
-        fireLayoutInvalidatedForConnectionsOfSubtree(figure);
+        fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
     }
 
     @Override
@@ -109,20 +121,20 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
         figure.reshape(x, y, width, height);
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
-        fireLayoutInvalidatedForConnectionsOfSubtree(figure);
+        fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
     }
 
     @Override
     public void layout(Figure figure) {
         figure.layout();
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
-        fireLayoutInvalidatedForConnectionsOfSubtree(figure);
+        fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
     }
 
     @Override
     public void applyCss(Figure figure) {
         figure.applyCss();
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
-        fireLayoutInvalidatedForConnectionsOfSubtree(figure);
+        fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
     }
 }

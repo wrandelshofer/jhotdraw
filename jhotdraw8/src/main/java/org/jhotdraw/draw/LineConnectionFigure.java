@@ -228,11 +228,11 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     @Override
     public void removeAllConnectionsWith(Figure connectedFigure) {
         if (connectedFigure != null) {
-            if (connectedFigure == START_FIGURE) {
+            if (connectedFigure == get(START_FIGURE)) {
                 set(START_FIGURE, null);
                 set(START_CONNECTOR, null);
             }
-            if (connectedFigure == END_FIGURE) {
+            if (connectedFigure == get(END_FIGURE)) {
                 set(END_FIGURE, null);
                 set(END_CONNECTOR, null);
             }

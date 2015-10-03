@@ -168,6 +168,13 @@ public interface DrawingModel extends Observable {
      */
     void layout(Figure f);
     /**
+     * Invokes the disconnect method of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
+     *
+     * @param f the figure
+     */
+    void disconnect(Figure f);
+    /**
      * Invokes the applyCss method of the figure and fires appropriate
      * {@code DrawingModelEvent}s.
      *
