@@ -130,12 +130,13 @@ public abstract class AbstractDrawingModel implements DrawingModel {
 
     /**
      * Fires {@code LayoutInvalidated} for all figure which are transitively
-     * connected to the subtree starting at the specified figure, and which
-     * are not in the {@code done} set. Handles connection cycles.
+     * connected to the figures in the {@code todo} list, and which
+     * are not in the {@code done} list. Handles connection cycles.
      *
-     * @param figure the figure
+     * @param todo the todo list
+     * @param done the done list
      */
-    private void fireLayoutInvalidatedForConnectionsOf(Collection<Figure> todo, HashSet<Figure> done) {
+    private void fireLayoutInvalidatedForFiguresConnectedWithTodo(Collection<Figure> todo, HashSet<Figure> done) {
         HashSet<Figure> todoNext = new HashSet<>();
         for (Figure figure : todo) {
             for (Figure c : figure.getConnectedFigures()) {
@@ -147,7 +148,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             }
         }
         if (!todoNext.isEmpty()) {
-            fireLayoutInvalidatedForConnectionsOf(todoNext, done);
+            fireLayoutInvalidatedForFiguresConnectedWithTodo(todoNext, done);
         }
     }
 
@@ -157,10 +158,10 @@ public abstract class AbstractDrawingModel implements DrawingModel {
      *
      * @param figure the figure
      */
-    protected void fireLayoutInvalidatedForConnectionsOfFigure(Figure figure) {
+    protected void fireLayoutInvalidatedForFiguresConnectedWith(Figure figure) {
         LinkedList<Figure> todo = new LinkedList();
         todo.add(figure);
-        fireLayoutInvalidatedForConnectionsOf(todo, new HashSet<Figure>());
+        fireLayoutInvalidatedForFiguresConnectedWithTodo(todo, new HashSet<Figure>());
     }
 
     /**
@@ -168,14 +169,14 @@ public abstract class AbstractDrawingModel implements DrawingModel {
      * connected to the subtree starting at the specified figure. Handles
      * connection cycles.
      *
-     * @param figure the figure
+     * @param subtreeRoot the figure
      */
-    protected void fireLayoutInvalidatedForConnectionsOfSubtree(Figure figure) {
+    protected void fireLayoutInvalidatedForFiguresConnectedWithSubtree(Figure subtreeRoot) {
         LinkedList<Figure> todo = new LinkedList();
-        for (Figure f : figure.preorderIterable()) {
+        for (Figure f : subtreeRoot.preorderIterable()) {
             todo.add(f);
         }
-        fireLayoutInvalidatedForConnectionsOf(todo, new HashSet<Figure>());
+        fireLayoutInvalidatedForFiguresConnectedWithTodo(todo, new HashSet<Figure>());
     }
 
     /** Invokes {@code removeNotify} on the figure.

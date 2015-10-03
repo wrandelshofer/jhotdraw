@@ -38,13 +38,13 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         }
 
     };
-    private ReadOnlySetProperty<Figure> connections = new ReadOnlySetWrapper<>(this, CONNECTED_FIGURES_PROPERTY, FXCollections.observableSet(new HashSet<Figure>())).getReadOnlyProperty();
+    private ReadOnlySetProperty<Figure> connectedFigures = new ReadOnlySetWrapper<>(this, CONNECTED_FIGURES_PROPERTY, FXCollections.observableSet(new HashSet<Figure>())).getReadOnlyProperty();
 
     private ObservableSet<PseudoClass> pseudoClassStates = FXCollections.observableSet(new HashSet<>());
 
     @Override
     public final ReadOnlySetProperty<Figure> connectedFiguresProperty() {
-        return connections;
+        return connectedFigures;
     }
 
     @Override
@@ -115,7 +115,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         StringBuilder buf = new StringBuilder();
         buf.append(className).append('@').append(hashCode()).append("{properties=").append(getProperties()).append(", connections={");
         boolean isFirst = true;
-        for (Figure f : connections) {
+        for (Figure f : connectedFigures) {
             if (isFirst) {
                 isFirst = false;
             } else {
