@@ -10,7 +10,7 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Slider fx:id="zoomSlider" blockIncrement="1.0" majorTickUnit="1.0" max="4.0" min="-4.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Slider fx:id="zoomSlider" blockIncrement="1.0" majorTickUnit="1.0" max="4.0" min="-4.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
    </children>
    <opaqueInsets>
       <Insets />

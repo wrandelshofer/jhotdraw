@@ -10,7 +10,7 @@ import javafx.beans.property.SetProperty;
 import org.jhotdraw.draw.tool.Tool;
 
 /**
- * The DrawingEditor can be used to edit multiple {@code DrawingView}s with a 
+ * The DrawingEditor can be used to edit multiple {@code DrawingView}s with a
  * single {@code Tool}.
  * <p>
  *
@@ -18,66 +18,133 @@ import org.jhotdraw.draw.tool.Tool;
  * @version $Id$
  */
 public interface DrawingEditor {
+
+    // ----
+    // property names
+    // ----
+
+    /**
+     * The name of the drawingViews property.
+     */
+    public final static String DRAWING_VIEWS_PROPERTY = "drawingViews";
+    /**
+     * The name of the activeDrawingView property.
+     */
+    public final static String ACTIVE_DRAWING_VIEW_PROPERTY = "activeDrawingView";
+    /**
+     * The name of the activeTool property.
+     */
+    public final static String ACTIVE_TOOL_PROPERTY = "activeTool";
+    /**
+     * The name of the defaultTool property.
+     */
+    public final static String DEFAULT_TOOL_PROPERTY = "defaultTool";
+
     // ---
     // properties
     // ---
-    /** The drawing views associated with this editor.
-     * @return  the property */
-    ReadOnlySetProperty<DrawingView> drawingViewsProperty();
-    
-    /** The currently active drawing view.
+    /**
+     * The drawing views associated with this editor.
+     *
      * @return the property
-    */
+     */
+    ReadOnlySetProperty<DrawingView> drawingViewsProperty();
+
+    /**
+     * The currently active drawing view.
+     *
+     * @return the property
+     */
     ObjectProperty<DrawingView> activeDrawingViewProperty();
 
-    /** The currently active tool.
+    /**
+     * The currently active tool.
+     *
      * @return the property
-    */
+     */
     ObjectProperty<Tool> activeToolProperty();
+
+    /**
+     * The default tool. When the value is not null, the default tool is made
+     * the active tool whenever another tool fires {@code ToolEvent.TOOL_DONE}.
+     *
+     * @return the property
+     */
+    ObjectProperty<Tool> defaultToolProperty();
 
     // ---
     // convenience methods
     // ---
-    /** Adds a drawing view to this editor.
+    /**
+     * Adds a drawing view to this editor.
+     *
      * @param drawingView the drawing view
-    */
+     */
     default void addDrawingView(DrawingView drawingView) {
         drawingViewsProperty().add(drawingView);
     }
-    /** Removes a drawing view to this editor.
+
+    /**
+     * Removes a drawing view to this editor.
+     *
      * @param drawingView the drawing view
-    */
+     */
     default void removeDrawingView(DrawingView drawingView) {
         drawingViewsProperty().remove(drawingView);
     }
-    
-    /** Gets the active drawing view.
+
+    /**
+     * Gets the active drawing view.
+     *
      * @return the active drawing view or empty
-    */
+     */
     default DrawingView getActiveDrawingView() {
         return activeDrawingViewProperty().get();
     }
 
-    /** Sets the active drawing view.
+    /**
+     * Sets the active drawing view.
+     *
      * @param drawingView the drawing view or null if none is active
-    */
+     */
     default void setActiveDrawingView(DrawingView drawingView) {
         activeDrawingViewProperty().set(drawingView);
     }
 
-    /** Gets the active tool.
-     * @return the active tool or empty
-    */
+    /**
+     * Gets the active tool.
+     *
+     * @return the active tool or null
+     */
     default Tool getActiveTool() {
         return activeToolProperty().get();
     }
 
-    /** Sets the active tool.
+    /**
+     * Sets the active tool.
+     *
      * @param tool the active tool or null if none is active
-    */
+     */
     default void setActiveTool(Tool tool) {
         activeToolProperty().set(tool);
     }
 
-    
+    /**
+     * Gets the default tool.
+     *
+     * @return the default tool or null
+     */
+    default Tool getDefaultTool() {
+        return defaultToolProperty().get();
+    }
+
+    /**
+     * Sets the default tool.
+     *
+     * @param tool the default tool or null if no default tool is desired
+     */
+    default void setDefaultTool(Tool tool) {
+        defaultToolProperty().set(tool);
+    }
+
 }

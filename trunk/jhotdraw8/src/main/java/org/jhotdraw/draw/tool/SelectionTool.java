@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.tool;
 
 import java.util.List;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
@@ -119,12 +120,13 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMousePressed(MouseEvent evt, DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
+        Platform.runLater(()->view.getNode().requestFocus());
         mouseDragged = false;
         Bounds b = getNode().getBoundsInParent();
         Drawing drawing = view.getDrawing();
-        double vx = evt.getX();
-        double vy = evt.getY();
+        double vx = event.getX();
+        double vy = event.getY();
 
         Handle h = view.findHandle(vx, vy);
         if (h != null) {
@@ -140,7 +142,7 @@ public class SelectionTool extends AbstractTool {
              }
              }*/
             // "alt" modifier selects figure behind.
-            if (isSelectBehindEnabled() && (evt.isAltDown())) {
+            if (isSelectBehindEnabled() && (event.isAltDown())) {
                 // Select a figure behind the current selection
                 pressedFigure = null;
                 boolean selectionFound = false;
@@ -164,12 +166,12 @@ public class SelectionTool extends AbstractTool {
             }
 
             // "shift" without "meta" adds the pressed figure to the selection
-            if (evt.isShiftDown() && !evt.isMetaDown()) {
+            if (event.isShiftDown() && !event.isMetaDown()) {
                 if (pressedFigure != null) {
                     view.getSelectedFigures().add(pressedFigure);
                 }
             } else // "meta" without "shift"  toggles the selection for the pressed figure
-            if (!evt.isShiftDown() && evt.isMetaDown()) {
+            if (!event.isShiftDown() && event.isMetaDown()) {
                 if (pressedFigure != null) {
                     if (view.selectionProperty().contains(pressedFigure)) {
                         view.selectionProperty().remove(pressedFigure);
@@ -178,7 +180,7 @@ public class SelectionTool extends AbstractTool {
                     }
                 }
             } else // neither "meta" nor "shift" sets the selection to the pressed figure
-            if (!evt.isShiftDown() && !evt.isMetaDown()) {
+            if (!event.isShiftDown() && !event.isMetaDown()) {
                 if (pressedFigure != null && !view.selectionProperty().contains(pressedFigure)) {
                     view.selectionProperty().clear();
                     view.selectionProperty().add(pressedFigure);
@@ -187,7 +189,7 @@ public class SelectionTool extends AbstractTool {
 
             // "control" modifier enforces the select area tracker
             if (pressedFigure != null
-                    && (!(evt.isControlDown())
+                    && (!(event.isControlDown())
                     || view.selectionProperty().contains(pressedFigure))) {
                 DragTracker t = getDragTracker(pressedFigure, view);
                 setTracker(t);
@@ -197,9 +199,10 @@ public class SelectionTool extends AbstractTool {
             }
         }
         if (tracker != null) {
-            tracker.trackMousePressed(evt, view);
+            tracker.trackMousePressed(event, view);
         }
         fireToolStarted();
+        event.consume();
     }
 
     @Override
@@ -208,6 +211,7 @@ public class SelectionTool extends AbstractTool {
         if (tracker != null) {
             tracker.trackMouseDragged(event, dv);
         }
+        event.consume();
     }
 
     @Override
@@ -218,6 +222,7 @@ public class SelectionTool extends AbstractTool {
         setTracker(null);
 
         fireToolDone();
+        event.consume();
     }
 
     /**

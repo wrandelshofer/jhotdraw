@@ -5,19 +5,14 @@
  */
 package org.jhotdraw.draw.tool;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
-import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventType;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -25,10 +20,7 @@ import javafx.scene.layout.BorderPane;
 import org.jhotdraw.app.AbstractDisableable;
 import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.model.DrawingModel;
-import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.HandleEvent;
 import org.jhotdraw.event.Listener;
 import org.jhotdraw.util.Resources;
@@ -128,7 +120,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         if (rsrc != null) {
             applyResources(rsrc);
         }
-
     }
 
     // ---
@@ -215,34 +206,40 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Event handlers
     // ----
-    protected void onMouseMoved(MouseEvent event, DrawingView dv) {
+    protected void onMouseMoved(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
+    protected void onMouseDragged(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseExited(MouseEvent event, DrawingView dv) {
+    protected void onMouseExited(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseEntered(MouseEvent event, DrawingView dv) {
+    protected void onMouseEntered(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
+    protected void onMouseReleased(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMousePressed(MouseEvent event, DrawingView dv) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView view) {
     }
 
-    protected void onKeyPressed(KeyEvent event, DrawingView dv) {
+    protected void onKeyPressed(KeyEvent event, DrawingView view) {
+        System.out.println("keyPressed:"+event);
+        event.consume();
     }
 
-    protected void onKeyReleased(KeyEvent event, DrawingView dv) {
+    protected void onKeyReleased(KeyEvent event, DrawingView view) {
+        System.out.println("keyReleased:"+event);
+        event.consume();
     }
 
-    protected void onKeyTyped(KeyEvent event, DrawingView dv) {
+    protected void onKeyTyped(KeyEvent event, DrawingView view) {
+        System.out.println("keyTyped:"+event);
+        event.consume();
     }
 
     // ---
@@ -275,6 +272,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     /**
      * Gets the active drawing view.
      */
+    @Override
     public DrawingView getDrawingView() {
         return drawingViewProperty().get();
     }

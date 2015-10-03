@@ -10,6 +10,7 @@ package org.jhotdraw.app.action.edit;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractFocusOwnerAction;
 import org.jhotdraw.util.Resources;
@@ -42,6 +43,10 @@ public class DeleteAction extends AbstractFocusOwnerAction {
             if (n instanceof TextInputControl) {
                 TextInputControl tic=(TextInputControl)n;
                 tic.deleteNextChar();
+            }
+            if (n instanceof EditableComponent) {
+                EditableComponent tic=(EditableComponent)n;
+                tic.deleteSelection();
             }
         }
     }

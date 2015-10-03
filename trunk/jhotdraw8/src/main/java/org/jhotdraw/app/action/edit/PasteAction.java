@@ -10,6 +10,7 @@ package org.jhotdraw.app.action.edit;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractFocusOwnerAction;
 import org.jhotdraw.util.*;
@@ -51,6 +52,9 @@ public class PasteAction extends AbstractFocusOwnerAction {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
                 TextInputControl tic=(TextInputControl)n;
+                tic.paste();
+            } else if (n instanceof EditableComponent) {
+                EditableComponent tic = (EditableComponent) n;
                 tic.paste();
             }
         }

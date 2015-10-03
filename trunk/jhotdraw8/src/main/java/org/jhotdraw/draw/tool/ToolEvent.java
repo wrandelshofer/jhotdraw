@@ -4,9 +4,6 @@
  */
 package org.jhotdraw.draw.tool;
 
-import org.jhotdraw.draw.handle.*;
-import org.jhotdraw.draw.*;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.event.Event;
 
 /**
@@ -16,7 +13,7 @@ import org.jhotdraw.event.Event;
  */
 public class ToolEvent extends Event<Tool> {
 
-    enum EventType {
+    public enum EventType {
 
         TOOL_STARTED,
         TOOL_DONE

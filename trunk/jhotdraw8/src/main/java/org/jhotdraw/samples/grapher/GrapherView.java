@@ -23,9 +23,11 @@ import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.LabelFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
+import org.jhotdraw.draw.SimpleLabelFigure;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.gui.ToolsToolbar;
@@ -38,6 +40,7 @@ import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.SelectionTool;
+import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -83,16 +86,18 @@ public class GrapherView extends AbstractView {
 
         scrollPane.setContent(drawingView.getNode());
         
-        drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
+        //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         
-        ToolsToolbar ttbar = new ToolsToolbar();
+        ToolsToolbar ttbar = new ToolsToolbar(editor);
         Resources rsrc = Resources.getResources("org.jhotdraw.draw.Labels");
-        ttbar.addTool(new SelectionTool("selectionTool", rsrc), 0, 0);
+        Tool defaultTool;
+        ttbar.addTool(defaultTool=new SelectionTool("selectionTool", rsrc), 0, 0);
         ttbar.addTool(new CreationTool("edit.createRectangle", rsrc,RectangleFigure::new), 1, 0);
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new), 2, 0);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new), 1, 1);
-        ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new TextFigure(0, 0, "Hello")), 2, 1);
+        ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new SimpleLabelFigure(0, 0, "Hello")), 2, 1);
         ttbar.setDrawingEditor(editor);
+        editor.setDefaultTool(defaultTool);
         toolBar.getItems().add(ttbar);
 
         ZoomToolbar ztbar = new ZoomToolbar();

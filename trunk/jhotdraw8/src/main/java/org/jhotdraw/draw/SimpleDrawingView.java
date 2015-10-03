@@ -55,9 +55,11 @@ import static java.lang.Math.*;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.beans.SimplePropertyBean;
 import org.jhotdraw.geom.Geom;
 
@@ -68,6 +70,7 @@ import org.jhotdraw.geom.Geom;
  */
 public class SimpleDrawingView extends SimplePropertyBean implements DrawingView {
 
+ 
     private static class FixedSizedGroup extends Group {
 
     }
@@ -85,7 +88,53 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * This is the JavaFX Node which is used to represent this drawing view. in
      * a JavaFX scene graph.
      */
-    private StackPane node;
+    private StackPane stackPane;
+
+    private class SimpleDrawingViewNode extends StackPane implements EditableComponent {
+
+        @Override
+        public void selectAll() {
+            SimpleDrawingView.this.selectAll();
+        }
+
+        @Override
+        public void clearSelection() {
+            SimpleDrawingView.this.clearSelection();
+        }
+
+        @Override
+        public boolean isSelectionEmpty() {
+            return SimpleDrawingView.this.getSelectedFigures().isEmpty();
+        }
+
+        @Override
+        public void deleteSelection() {
+            SimpleDrawingView.this.deleteSelection();
+        }
+
+        @Override
+        public void duplicateSelection() {
+            SimpleDrawingView.this.duplicateSelection();
+        }
+
+        @Override
+        public void cut() {
+            SimpleDrawingView.this.cut();
+        }
+
+        @Override
+        public void copy() {
+            SimpleDrawingView.this.copy();
+        }
+
+        @Override
+        public void paste() {
+            SimpleDrawingView.this.paste();
+        }
+
+    }
+
+    private SimpleDrawingViewNode node = new SimpleDrawingViewNode();
 
     private final Listener<DrawingModelEvent> modelHandler = new Listener<DrawingModelEvent>() {
 
@@ -171,8 +220,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         });
     }
 
-    private int detailLevel = 0;
-
     private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
 
     {
@@ -211,6 +258,17 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     };
 
     /**
+     * XXX use this to center scroll pane on view when zooming.
+     */
+    private ScrollPane getScrollPane() {
+        Parent p = (Parent) getNode();
+        while (p != null && !(p instanceof ScrollPane)) {
+            p = p.getParent();
+        }
+        return (ScrollPane) p;
+    }
+
+    /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
     private final HashMap<Node, Handle> nodeToHandleMap = new HashMap<>();
@@ -240,7 +298,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private final LinkedList<Handle> secondaryHandles = new LinkedList<>();
 
     private Runnable repainter = null;
-    private final Listener<HandleEvent> eventHandler;
 
     private void invalidateFigureNode(Figure f) {
         dirtyFigureNodes.add(f);
@@ -281,15 +338,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         drawingPane.setTranslateX(max(0, -x));
         drawingPane.setTranslateY(max(0, -y));
-        /*drawingSubScene.setWidth(w);
-         drawingSubScene.setHeight(h);
-         overlaysSubScene.setWidth(w);
-         overlaysSubScene.setHeight(h);*/
 
         toolPane.resize(w, h);
         toolPane.layout();
 
-        node.setPrefSize(w, h);
+        stackPane.setPrefSize(w, h);
 
         invalidateDrawingViewTransforms();
     }
@@ -299,22 +352,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         return drawing.getReadOnlyProperty();
     }
 
-    private class HandleEventHandler implements Listener<HandleEvent> {
-
-        @Override
-        public void handle(HandleEvent event) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-    }
-
     public SimpleDrawingView() {
         init();
-        eventHandler = createEventHandler();
-    }
-
-    protected Listener<HandleEvent> createEventHandler() {
-        return new HandleEventHandler();
     }
 
     private void init() {
@@ -322,27 +361,27 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         loader.setController(this);
 
         try {
-            node = loader.load(SimpleDrawingView.class.getResourceAsStream("SimpleDrawingView.fxml"));
+            stackPane = loader.load(SimpleDrawingView.class.getResourceAsStream("SimpleDrawingView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
 
-        node.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent evt) -> {
-            if (!node.isFocused()) {
-                node.requestFocus();
-                if (!node.getScene().getWindow().isFocused()) {
+        stackPane.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent evt) -> {
+            if (!stackPane.isFocused()) {
+                stackPane.requestFocus();
+                if (!stackPane.getScene().getWindow().isFocused()) {
                     evt.consume();
                 }
             }
         });
-        node.setFocusTraversable(true);
-        focused.bind(node.focusedProperty());
+        stackPane.setFocusTraversable(true);
+        focused.bind(stackPane.focusedProperty());
 
         drawingSubScene = new Group();
         drawingSubScene.setManaged(false);
         overlaysSubScene = new Group();
         overlaysSubScene.setManaged(false);
-        node.getChildren().addAll(drawingSubScene, overlaysSubScene);
+        stackPane.getChildren().addAll(drawingSubScene, overlaysSubScene);
 
         drawingPane = new Group();
         drawingPane.setScaleX(zoomFactor.get());
@@ -371,8 +410,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         // Set stylesheet
         overlaysPane.getStylesheets().add("org/jhotdraw/draw/SimpleDrawingView.css");
+
+        // set root
+        node.getChildren().add(stackPane);
     }
 
+    @Override
     public Node getNode() {
         return node;
     }
@@ -545,6 +588,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     public ObjectProperty<Handle> activeHandleProperty() {
         return activeHandle;
     }
+
     @Override
     public ObjectProperty<HandleType> handleTypeProperty() {
         return handleType;
@@ -908,4 +952,56 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     public ObservableList<String> overlayStylesheets() {
         return overlaysPane.getStylesheets();
     }
+
+    /**
+     * Selects all enabled and selectable figures in all enabled layers.
+     */
+    private void selectAll() {
+        ArrayList<Figure> figures = new ArrayList<>();
+        Drawing d = getDrawing();
+        if (d != null) {
+            for (Figure layer : d.getChildren()) {
+                if (!layer.isDisabled()) {
+                    for (Figure f : layer.getChildren()) {
+                        if (!f.isDisabled() && f.isSelectable()) {
+                            figures.add(f);
+                        }
+                    }
+                }
+            }
+        }
+        getSelectedFigures().clear();
+        getSelectedFigures().addAll(figures);
+    }   
+    
+    private void clearSelection() {
+        getSelectedFigures().clear();
+    }
+
+    private void deleteSelection() {
+        ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
+        DrawingModel model=getModel();
+        for (Figure f:figures) {
+            model.removeFromParent(f);
+            f.disconnect();
+        }
+    }
+
+    private void duplicateSelection() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void cut() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void copy() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void paste() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
 }
