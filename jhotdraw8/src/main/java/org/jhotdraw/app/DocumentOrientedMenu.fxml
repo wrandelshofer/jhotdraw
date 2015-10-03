@@ -24,6 +24,7 @@
             <MenuItem id="edit.delete" mnemonicParsing="false" text="Delete" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem id="edit.selectAll" mnemonicParsing="false" text="Select All" />
+            <MenuItem id="edit.clearSelection" mnemonicParsing="false" text="Clear Selection" />
       </items>
     </Menu>
     <Menu id="help" mnemonicParsing="false" text="%help.text.mac">

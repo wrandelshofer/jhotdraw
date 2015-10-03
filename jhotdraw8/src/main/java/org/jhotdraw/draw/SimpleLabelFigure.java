@@ -16,7 +16,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
+import static org.jhotdraw.draw.shape.TextFigure.ORIGIN;
 
 /**
  * TextFigure.
@@ -31,8 +33,6 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderF
      * The CSS type selector for a label object is {@code "Label"}.
      */
     public final static String TYPE_SELECTOR = "Label";
-
-    private ReadOnlyObjectWrapper<Bounds> layoutBounds = null;
 
     private Text textNode;
 
@@ -66,7 +66,11 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderF
         o = transform.transform(o);
         set(ORIGIN, o);
     }
-
+    @Override
+    public void reshape(double x, double y, double width, double height) {
+        set(ORIGIN, new Point2D(x, y));
+    }
+    
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Text();
@@ -74,14 +78,14 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderF
 
     @Override
     public void updateNode(RenderContext drawingView, Node node) {
-        Text textNode = (Text) node;
-        textNode.setText(get(TEXT));
-        textNode.setX(get(ORIGIN).getX());
-        textNode.setY(get(ORIGIN).getY());
-        textNode.setBoundsType(TextBoundsType.VISUAL);
-        applyFigureProperties(textNode);
-        applyTextProperties(textNode);
-        applyLabelProperties(textNode);
+        Text tn = (Text) node;
+        tn.setText(get(TEXT));
+        tn.setX(get(ORIGIN).getX());
+        tn.setY(get(ORIGIN).getY());
+        tn.setBoundsType(TextBoundsType.VISUAL);
+        applyFigureProperties(tn);
+        applyTextProperties(tn);
+        applyLabelProperties(tn);
     }
 
     @Override
@@ -91,7 +95,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderF
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return null;
+        return new ChopRectangleConnector();
     }
 
     @Override

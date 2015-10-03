@@ -10,6 +10,7 @@ package org.jhotdraw.app.action.edit;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.View;
 //import org.jhotdraw.gui.datatransfer.ClipboardUtil;
 import org.jhotdraw.util.*;
@@ -50,6 +51,9 @@ public class CutAction extends AbstractSelectionAction {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
                 TextInputControl tic=(TextInputControl)n;
+                tic.cut();
+            } else if (n instanceof EditableComponent) {
+                EditableComponent tic = (EditableComponent) n;
                 tic.cut();
             }
         }

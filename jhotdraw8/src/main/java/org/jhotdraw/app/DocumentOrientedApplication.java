@@ -18,13 +18,11 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import org.jhotdraw.collection.HierarchicalMap;
-import javafx.beans.property.MapProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyMapProperty;
@@ -32,7 +30,6 @@ import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -54,6 +51,7 @@ import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.Actions;
 import org.jhotdraw.app.action.app.AboutAction;
 import org.jhotdraw.app.action.app.ExitAction;
+import org.jhotdraw.app.action.edit.ClearSelectionAction;
 import org.jhotdraw.app.action.edit.CopyAction;
 import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DeleteAction;
@@ -384,6 +382,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         map.put(PasteAction.ID, new PasteAction(this));
         map.put(DeleteAction.ID, new DeleteAction(this));
         map.put(SelectAllAction.ID, new SelectAllAction(this));
+        map.put(ClearSelectionAction.ID, new ClearSelectionAction(this));
         return map;
     }
 
