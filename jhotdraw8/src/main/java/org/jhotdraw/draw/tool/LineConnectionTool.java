@@ -40,11 +40,6 @@ public class LineConnectionTool extends AbstractTool {
     private Figure figure;
 
     /**
-     * The rubber band.
-     */
-    private double x1, y1, x2, y2;
-
-    /**
      * The minimum size of a created figure (in view coordinates.
      */
     private double minSize = 2;
@@ -67,12 +62,9 @@ public class LineConnectionTool extends AbstractTool {
     @Override
     protected void onMousePressed(MouseEvent event, DrawingView view) {
         Platform.runLater(() -> view.getNode().requestFocus());
-        x1 = event.getX();
-        y1 = event.getY();
-        x2 = x1;
-        y2 = y1;
         figure = figureFactory.get();
-        Point2D newPoint = view.getConstrainer().constrainPoint(figure, view.viewToDrawing(new Point2D(x1, y1)));
+        Point2D pointInViewCoordinates =new Point2D(event.getX(), event.getY());
+        Point2D newPoint = view.getConstrainer().constrainPoint(figure, view.viewToDrawing(pointInViewCoordinates));
         figure.reshape(newPoint.getX(), newPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getRoot();
@@ -83,7 +75,7 @@ public class LineConnectionTool extends AbstractTool {
         Connector newConnector = null;
         Figure newConnectedFigure = null;
         if (!event.isMetaDown()) {
-            List<Figure> list = view.findFigures(newPoint, true);
+            List<Figure> list = view.findFigures(pointInViewCoordinates, true);
             for (Figure ff : list) {
                 newConnector = ff.findConnector(newPoint, figure);
                 if (newConnector != null) {

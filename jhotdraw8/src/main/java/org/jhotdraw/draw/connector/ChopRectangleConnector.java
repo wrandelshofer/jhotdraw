@@ -23,26 +23,23 @@ public class ChopRectangleConnector extends CenterConnector {
     public Point2D chopStart(Figure target, Figure connection, double startX, double startY, double endX, double endY) {
         // FIXME implement me properly
         Bounds bounds = target.getBoundsInLocal();
-        
-        
-        
         Rectangle2D r = new Rectangle2D(bounds.getMinX(), bounds.getMinY(),
                 bounds.getWidth(), bounds.getHeight());
-        if (target.get(STROKE) != null) {
+        if (target.getStyled(STROKE) != null) {
             double grow;
-            switch (target.get(STROKE_TYPE)) {
+            switch (target.getStyled(STROKE_TYPE)) {
                 case CENTERED:
                 default:
-                    grow = target.get(STROKE_WIDTH) / 2d;
+                    grow = target.getStyled(STROKE_WIDTH) / 2d;
                     break;
                 case OUTSIDE:
-                    grow = target.get(STROKE_WIDTH);
+                    grow = target.getStyled(STROKE_WIDTH);
                     break;
                 case INSIDE:
                     grow = 0d;
                     break;
             }
-            Geom.grow(r, grow, grow);
+            r = Geom.grow(r, grow, grow);
         }
         return target.localToDrawing(Geom.angleToPoint(r, Geom.pointToAngle(r, target.drawingToLocal(new Point2D(endX, endY)))));
     }

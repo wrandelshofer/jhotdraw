@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.draw.connector;
 
 import javafx.geometry.Bounds;
@@ -16,6 +15,7 @@ import org.jhotdraw.geom.Geom;
 
 /**
  * ChopEllipseConnector.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -24,26 +24,26 @@ public class ChopEllipseConnector extends CenterConnector {
     @Override
     public Point2D chopStart(Figure target, Figure connection, double startX, double startY, double endX, double endY) {
         // FIXME implement me properly
-        // FIXME implement me properly
         Bounds bounds = target.getBoundsInLocal();
         Rectangle2D r = new Rectangle2D(bounds.getMinX(), bounds.getMinY(),
                 bounds.getWidth(), bounds.getHeight());
-        if (target.get(STROKE) != null) {
+        if (target.getStyled(STROKE) != null) {
             double grow;
-            switch (target.get(STROKE_TYPE)) {
+            switch (target.getStyled(STROKE_TYPE)) {
                 case CENTERED:
                 default:
-                    grow = target.get(STROKE_WIDTH) / 2d;
+                    grow = target.getStyled(STROKE_WIDTH) / 2d;
                     break;
                 case OUTSIDE:
-                    grow = target.get(STROKE_WIDTH);
+                    grow = target.getStyled(STROKE_WIDTH);
                     break;
                 case INSIDE:
                     grow = 0d;
                     break;
             }
-            Geom.grow(r, grow, grow);
+            r = Geom.grow(r, grow, grow);
         }
-        return target.localToDrawing(Geom.angleToPoint(r, Geom.pointToAngle(r, target.drawingToLocal(new Point2D(endX, endY)))));
+        double angle = Geom.pointToAngle(r, new Point2D(endX, endY));
+        return target.localToDrawing(Geom.ovalAngleToPoint(r, angle));
     }
 }
