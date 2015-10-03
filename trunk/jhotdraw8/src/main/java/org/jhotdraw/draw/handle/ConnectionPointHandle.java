@@ -101,7 +101,8 @@ public class ConnectionPointHandle extends AbstractHandle {
 
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
-        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+        Point2D pointInViewCoordinates =new Point2D(event.getX(), event.getY());
+        Point2D newPoint = view.viewToDrawing(pointInViewCoordinates);
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
@@ -112,9 +113,10 @@ public class ConnectionPointHandle extends AbstractHandle {
         Connector newConnector = null;
         Figure newConnectedFigure = null;
         if (!event.isMetaDown()) {
-            List<Figure> list = view.findFigures(newPoint, true);
+            List<Figure> list = view.findFigures(pointInViewCoordinates, true);
             for (Figure ff : list) {
-                newConnector = ff.findConnector(newPoint, o);
+                Point2D pointInLocal = ff.drawingToLocal(newPoint);
+                newConnector = ff.findConnector(pointInLocal, o);
                 if (newConnector != null) {
                     newConnectedFigure = ff;
                     break;

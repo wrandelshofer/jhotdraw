@@ -53,7 +53,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle<Figure> {
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
-
+t=Transform.translate(0.5, 0.5).createConcatenation(t);
         Bounds b = f.getBoundsInLocal();
         points[0] = b.getMinX();
         points[1] = b.getMinY();

@@ -141,8 +141,8 @@ public class Geom {
     }
 
     public static Point2D center(Rectangle2D r) {
-        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY()
-                + r.getHeight() / 2);
+        return new Point2D(r.getMinX() + r.getWidth() / 2.0, r.getMinY()
+                + r.getHeight() / 2.0);
     }
 
     /**
@@ -334,8 +334,8 @@ public class Geom {
      * @return the angle
      */
     public static double pointToAngle(Rectangle2D r, Point2D p) {
-        double px = p.getX() - (r.getMinX() + r.getWidth() / 2);
-        double py = p.getY() - (r.getMinY() + r.getHeight() / 2);
+        double px = p.getX() - (r.getMinX() + r.getWidth() / 2.0);
+        double py = p.getY() - (r.getMinY() + r.getHeight() / 2.0);
         return atan2(py * r.getWidth(), px * r.getHeight());
     }
 
@@ -391,7 +391,7 @@ public class Geom {
     public static Point2D polarToPoint(double angle, double fx, double fy) {
         double si = sin(angle);
         double co = cos(angle);
-        return new Point2D((int) (fx * co + 0.5), (int) (fy * si + 0.5));
+        return new Point2D((int) (fx * co), (int) (fy * si));
     }
 
     /**
@@ -403,7 +403,7 @@ public class Geom {
      */
     public static Point2D ovalAngleToPoint(Rectangle2D r, double angle) {
         Point2D center = Geom.center(r);
-        Point2D p = Geom.polarToPoint(angle, r.getWidth() / 2, r.getHeight() / 2);
+        Point2D p = Geom.polarToPoint(angle, r.getWidth() / 2.0, r.getHeight() / 2.0);
         return new Point2D(center.getX() + p.getX(), center.getY() + p.getY());
     }
 
