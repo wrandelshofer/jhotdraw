@@ -72,7 +72,8 @@ public class GridConstrainer implements Constrainer {
      * @param y The y-origin of the grid
      * @param width The width of the grid. 0 turns the grid of for the x-axis.
      * @param height The width of the grid. 0 turns the grid of for the y-axis.
-     * @param theta The angle of the grid (in degrees). 0 turns the grid off for rotations.
+     * @param theta The angle of the grid (in degrees). 0 turns the grid off for
+     * rotations.
      */
     public GridConstrainer(double x, double y, double width, double height, double theta) {
         this.x = x;
@@ -132,6 +133,9 @@ public class GridConstrainer implements Constrainer {
 
     @Override
     public double translateAngle(Figure f, double angle, double dir) {
+        if (theta == 0) {
+            return angle;
+        }
         double ta = angle / theta;
 
         if (Double.isNaN(dir) || dir == 0) {

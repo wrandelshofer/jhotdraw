@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.draw.handle;
 
 import javafx.geometry.Bounds;
@@ -25,6 +24,7 @@ import org.jhotdraw.geom.Geom;
 
 /**
  * A Handle to rotate a Figure.
+ *
  * @author Werner Randelshofer
  */
 public class RotateHandle extends AbstractHandle {
@@ -35,10 +35,12 @@ public class RotateHandle extends AbstractHandle {
     private static final Circle REGION_SHAPE = new Circle(4);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
+    private Point2D center;
 
     public RotateHandle(Figure figure) {
-        this(figure,STYLECLASS_HANDLE_ROTATE);
+        this(figure, STYLECLASS_HANDLE_ROTATE);
     }
+
     public RotateHandle(Figure figure, String styleclass) {
         super(figure);
         this.styleclass = styleclass;
@@ -76,6 +78,8 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+        center = getOwner().getCenterInLocal();
+
     }
 
     @Override
@@ -83,26 +87,24 @@ public class RotateHandle extends AbstractHandle {
         // FIXME implement me!
         Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
-        Point2D center = getOwner().getCenterInLocal();
-        
-        double oldRotate = Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
-        double newRotate = Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
-        
+        double oldRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
+        double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
+
         double ownerAngle = getOwner().get(Figure.ROTATE);
-        
+
+        newRotate = newRotate % 360;
+        if (newRotate < 0) {
+            newRotate += 360;
+        }
+
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            newRotate = view.getConstrainer().constrainAngle(getOwner(), newRotate);
         }
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
-            Point2D loc = getLocation();
-            oldPoint = getOwner().localToDrawing(loc);
         }
-
-        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
-        tx = getOwner().getDrawingToParent().createConcatenation(tx);
-        view.getModel().reshape(getOwner(), tx);
+        view.getModel().set(getOwner(), Figure.ROTATE, newRotate);
 
         oldPoint = newPoint;
     }
@@ -151,10 +153,9 @@ public class RotateHandle extends AbstractHandle {
     }
 
     private Point2D getLocation() {
-        Figure owner=getOwner();
+        Figure owner = getOwner();
         Bounds bounds = owner.getBoundsInLocal();
-        return new Point2D(bounds.getMinX()+bounds.getWidth()/2,bounds.getMinY()-10);
+        return new Point2D(bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() - 10);
     }
 
 }
-

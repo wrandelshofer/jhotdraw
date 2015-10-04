@@ -23,7 +23,6 @@ import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.LabelFigure;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
@@ -39,7 +38,6 @@ import org.jhotdraw.draw.io.FigureFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
-import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.LineConnectionTool;
 import org.jhotdraw.draw.tool.SelectionTool;
@@ -77,8 +75,8 @@ public class GrapherView extends AbstractView {
         }
 
         drawingView = new SimpleDrawingView();
-        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 1));
-        drawingView.setHandleType(HandleType.RESIZE);
+        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25));
+        drawingView.setHandleType(HandleType.TRANSFORM);
         // 
         drawingView.getModel().addListener((InvalidationListener)drawingModel -> {
             modified.set(true);
