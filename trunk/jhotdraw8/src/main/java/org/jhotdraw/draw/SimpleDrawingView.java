@@ -226,7 +226,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
-    private final ObjectProperty<HandleType> handleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.MOVE);
+    private final ObjectProperty<HandleType> handleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
 

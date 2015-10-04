@@ -57,6 +57,9 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
         Drawing oldDrawing = child.getDrawing();
+        if (child.getParent()!=null) {
+            child.getParent().remove(child);
+        }
         parent.getChildren().add(index, child);
         fire(DrawingModelEvent.figureAddedToParent(this, parent, child, index));
         fire(DrawingModelEvent.nodeInvalidated(this, parent));
