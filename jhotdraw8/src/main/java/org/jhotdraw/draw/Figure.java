@@ -576,6 +576,7 @@ public interface Figure extends StyleablePropertyBean {
 
     /**
      * Invoked by {@code DrawingModel} when the figure is added to a drawing.
+     *
      * @param drawing the drawing to which this figure has been added
      */
     void addNotify(Drawing drawing);
@@ -583,6 +584,7 @@ public interface Figure extends StyleablePropertyBean {
     /**
      * Invoked by {@code DrawingModel} when the figure is removed from a
      * drawing.
+     *
      * @param drawing the drawing from which this figure has been removed
      */
     void removeNotify(Drawing drawing);
@@ -786,6 +788,18 @@ public interface Figure extends StyleablePropertyBean {
         }
     }
 
+    /**
+     * Returns the preferred aspect ratio of the figure. The aspect ratio is
+     * defined as the height divided by the width of the figure. If a figure
+     * does not have a preference it should return its current aspect ratio.
+     *
+     * @return the preferred aspect ratio of the figure.
+     */
+    default double getPreferredAspectRatio() {
+        Bounds bounds = getBoundsInLocal();
+        return (bounds.getHeight() == 0 || bounds.getWidth() == 0) ? 1 : bounds.getHeight() / bounds.getWidth();
+    }
+
     static class PreorderIterator implements Iterator<Figure> {
 
         private final LinkedList<Iterator<Figure>> stack = new LinkedList<>();
@@ -920,6 +934,7 @@ public interface Figure extends StyleablePropertyBean {
     default Point2D drawingToLocal(Point2D p) {
         return getDrawingToLocal().transform(p);
     }
+
     /**
      * Transforms the specified point from drawing coordinates into parent
      * coordinates.
