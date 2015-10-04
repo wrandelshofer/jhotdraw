@@ -5,6 +5,7 @@
 package org.jhotdraw.draw;
 
 import java.io.IOException;
+import java.net.URL;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -82,14 +83,18 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
 
     @Override
     public StyleableStyleManager getStyleManager() {
-        if (styleManager==null) {
+        if (styleManager == null) {
             styleManager = new StyleableStyleManager();
-            if (get(STYLESHEET)!=null) {
-                CSSParser parser=new CSSParser();
+            if (get(STYLESHEETS) != null) {
+                URL documentHome = get(DOCUMENT_HOME);
+                CSSParser parser = new CSSParser();
                 try {
-                    parser.parse(get(STYLESHEET),styleManager);
+                    for (URL url : get(STYLESHEETS)) {
+                        URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
+                        parser.parse(absoluteUrl, styleManager);
+                    }
                 } catch (IOException ex) {
-                    System.err.println("Warning could not load stylesheet "+get(STYLESHEET));
+                    System.err.println("Warning could not load stylesheet " + get(STYLESHEETS));
                     ex.printStackTrace();
                 }
             }
