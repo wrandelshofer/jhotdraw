@@ -4,9 +4,6 @@
  */
 package org.jhotdraw.draw.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
@@ -15,7 +12,6 @@ import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.key.FigureKey;
-import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains figures which perform

@@ -177,11 +177,14 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         if (endFigure != null && endConnector != null) {
             end = endConnector.getPosition(endFigure, this);
         }
+        
+        // We must switch off rotations for the following computations
+        // because
         if (startFigure != null && startConnector != null) {
-            set(START, drawingToLocal(startConnector.chopStart(startFigure, this, start, end)));
+            set(START, drawingToParent(startConnector.chopStart(startFigure, this, start, end)));
         }
         if (endFigure != null && endConnector != null) {
-            set(END, drawingToLocal(endConnector.chopEnd(endFigure, this, start, end)));
+            set(END, drawingToParent(endConnector.chopEnd(endFigure, this, start, end)));
         }
     }
 

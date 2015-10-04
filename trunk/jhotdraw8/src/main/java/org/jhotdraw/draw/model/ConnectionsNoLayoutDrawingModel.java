@@ -70,6 +70,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
             }
         }
     }
+
     @Override
     public void disconnect(Figure figure) {
         for (Figure connectedFigure : figure.getConnectedFigures()) {
@@ -89,6 +90,9 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
                 DirtyMask dm = fk.getDirtyMask();
                 if (dm.containsOneOf(DirtyBits.NODE)) {
                     fire(DrawingModelEvent.nodeInvalidated(this, figure));
+                }
+                if (dm.containsOneOf(DirtyBits.LAYOUT)) {
+                    fire(DrawingModelEvent.layoutInvalidated(this, figure));
                 }
                 if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
                     for (Figure c : figure.getConnectedFigures()) {

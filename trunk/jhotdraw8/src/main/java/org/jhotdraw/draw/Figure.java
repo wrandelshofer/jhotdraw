@@ -145,41 +145,41 @@ public interface Figure extends StyleablePropertyBean {
      * Defines the angle of rotation around the center of the figure in degrees.
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey ROTATE = new DoubleStyleableFigureKey("rotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey ROTATE = new DoubleStyleableFigureKey("rotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     /**
      * Defines the rotation axis used. Default value: {@code Rotate.Z_AXIS}.
      */
-    public static SimpleFigureKey<Point3D> ROTATION_AXIS = new SimpleFigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), Rotate.Z_AXIS);
+    public static SimpleFigureKey<Point3D> ROTATION_AXIS = new SimpleFigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey SCALE_X = new DoubleStyleableFigureKey("scaleX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public static DoubleStyleableFigureKey SCALE_X = new DoubleStyleableFigureKey("scaleX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey SCALE_Y = new DoubleStyleableFigureKey("scaleY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public static DoubleStyleableFigureKey SCALE_Y = new DoubleStyleableFigureKey("scaleY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 1.0);
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey TRANSLATE_X = new DoubleStyleableFigureKey("translateX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_X = new DoubleStyleableFigureKey("translateX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     /**
      * Defines the translation on the y axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey TRANSLATE_Y = new DoubleStyleableFigureKey("translateY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_Y = new DoubleStyleableFigureKey("translateY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     /**
      * Defines the translation on the z axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     /**
      * Defines the visibility of the figure. Default value: {@code true}.
      */
@@ -919,6 +919,16 @@ public interface Figure extends StyleablePropertyBean {
      */
     default Point2D drawingToLocal(Point2D p) {
         return getDrawingToLocal().transform(p);
+    }
+    /**
+     * Transforms the specified point from drawing coordinates into parent
+     * coordinates.
+     *
+     * @param p point in drawing coordinates
+     * @return point in local coordinates
+     */
+    default Point2D drawingToParent(Point2D p) {
+        return getDrawingToParent().transform(p);
     }
 
     /**
