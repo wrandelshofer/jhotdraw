@@ -9,6 +9,7 @@ import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import java.net.URL;
+import java.util.List;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import org.jhotdraw.collection.Key;
@@ -40,12 +41,20 @@ import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 public interface Drawing extends Figure {
 
     /**
-     * Holds an URL to a CSS stylesheet. If the value is null, then no
-     * stylesheet is used.
+     * Specifies the home address of all relative URLs used in a drawing.
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<URL> STYLESHEET = new SimpleFigureKey<>("stylesheet", URL.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<URL> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URL.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    /**
+     * Holds a list of URLs to CSS stylesheets. If the value is null, then no
+     * stylesheets are used.
+     * <p>
+     * If an URL is relative, then it is relative to {@code DOCUMENT_HOME}.
+     * <p>
+     * This property is not styleable.</p>
+     */
+    public final static Key<List<URL>> STYLESHEETS = new SimpleFigureKey<>("stylesheets", List.class,"<URL>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
     /**
      * Defines the (clip) bounds of the drawing.
      * <p>

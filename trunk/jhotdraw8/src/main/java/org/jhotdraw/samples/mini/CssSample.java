@@ -4,6 +4,8 @@
  */
 package org.jhotdraw.samples.mini;
 
+import java.net.URL;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -93,7 +95,9 @@ public class CssSample extends Application {
         vertex4.set(Figure.STYLE_ID,"vertex4");
         
         drawing.layout();
-        drawing.set(Drawing.STYLESHEET, CssSample.class.getResource("CssSample.css"));
+        ArrayList<URL> stylesheets=new ArrayList();
+        stylesheets.add(CssSample.class.getResource("CssSample.css"));
+        drawing.set(Drawing.STYLESHEETS,stylesheets);
         drawing.applyCss();
         drawing.layout();
 
