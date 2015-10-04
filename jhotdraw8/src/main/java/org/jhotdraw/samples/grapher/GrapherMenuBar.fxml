@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <menus>
+    <Menu id="file" mnemonicParsing="false" text="%file.text">
+      <items>
+            <MenuItem id="file.new" mnemonicParsing="false" text="New" />
+            <MenuItem id="file.open" mnemonicParsing="false" text="Open" />
+            <MenuItem id="file.save" mnemonicParsing="false" text="Save" />
+            <MenuItem id="file.saveAs" mnemonicParsing="false" text="Save as..." />
+        <MenuItem id="file.close" mnemonicParsing="false" text="Close" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem id="application.exit" mnemonicParsing="false" text="Exit" />
+      </items>
+    </Menu>
+    <Menu id="edit" mnemonicParsing="false" text="%edit.text">
+      <items>
+        <MenuItem id="edit.cut" mnemonicParsing="false" text="Cut" />
+            <MenuItem id="edit.copy" mnemonicParsing="false" text="Copy" />
+            <MenuItem id="edit.paste" mnemonicParsing="false" text="Paste" />
+            <MenuItem id="edit.delete" mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem id="edit.selectAll" mnemonicParsing="false" text="Select All" />
+            <MenuItem id="edit.clearSelection" mnemonicParsing="false" text="Clear Selection" />
+      </items>
+    </Menu>
+      <Menu mnemonicParsing="false" text="%arrange.text">
+        <items>
+          <MenuItem id="edit.bringToFront" mnemonicParsing="false" text="Bring to Front" />
+            <MenuItem id="edit.sendToBack" mnemonicParsing="false" text="Send to Back" />
+        </items>
+      </Menu>
+    <Menu id="help" mnemonicParsing="false" text="%help.text.mac">
+      <items>
+        <MenuItem id="application.about" mnemonicParsing="false" text="About" />
+      </items>
+    </Menu>
+  </menus>
+</MenuBar>

@@ -5,8 +5,11 @@
  */
 package org.jhotdraw.samples.grapher;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.View;
@@ -50,6 +53,16 @@ public class GrapherApplication extends DocumentOrientedApplication {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    @Override
+    public MenuBar createMenuBar() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setResources(getModel().getResources());
+        try {
+            return loader.load(GrapherApplication.class.getResourceAsStream("GrapherMenuBar.fxml"));
+        } catch (IOException ex) {
+            throw new InternalError(ex);
+        }
     }
     
 }

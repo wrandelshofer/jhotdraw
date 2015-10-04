@@ -118,7 +118,6 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     @Override
     public void start(Stage primaryStage) throws Exception {
         isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
-        // isSystemMenuSupported=false;
         actionMap = createApplicationActionMap();
         if (isSystemMenuSupported) {
             Platform.setImplicitExit(false);
@@ -225,11 +224,11 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
-        if (!isSystemMenuSupported) {
+        //if (!isSystemMenuSupported) {
             MenuBar mb = createMenuBar(view.getActionMap());
-            //mb.setUseSystemMenuBar(true);
+            mb.setUseSystemMenuBar(true);
             borderPane.setTop(mb);
-        }
+        //}
         Scene scene = new Scene(borderPane);
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> {

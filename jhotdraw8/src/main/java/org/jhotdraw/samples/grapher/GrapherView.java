@@ -29,6 +29,8 @@ import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleLabelFigure;
 import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.gui.ToolsToolbar;
 import org.jhotdraw.draw.gui.ZoomToolbar;
@@ -76,7 +78,7 @@ public class GrapherView extends AbstractView {
 
         drawingView = new SimpleDrawingView();
         drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25));
-        drawingView.setHandleType(HandleType.TRANSFORM);
+        //drawingView.setHandleType(HandleType.TRANSFORM);
         // 
         drawingView.getModel().addListener((InvalidationListener)drawingModel -> {
             modified.set(true);
@@ -105,6 +107,9 @@ public class GrapherView extends AbstractView {
         ZoomToolbar ztbar = new ZoomToolbar();
         ztbar.setDrawingView(drawingView);
         toolBar.getItems().add(ztbar);
+        
+        getActionMap().put(SendToBackAction.ID, new SendToBackAction(editor));
+        getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(editor));
         
         callback.handle(new TaskCompletionEvent());
     }
@@ -178,4 +183,6 @@ public class GrapherView extends AbstractView {
             }
         }
     }
+    
+    
 }
