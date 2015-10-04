@@ -21,12 +21,12 @@ public enum DirtyBits {
      * All cached JavaFX {@code Node}s created by the figure, should be updated.</p>
      */
     NODE,
-    /** Affects the layout of connection figures.
+    /** Affects the layout of connected figures.
      * <p>
      * All connection figures which perform layouts should by laid out.</p>
      */
     CONNECTION_LAYOUT,
-    /** Affects the layout of parent figures.
+    /** Affects the layout of this figure and its ancestors.
      * <p>
      * All parent figures which perform layouts should by laid out.</p>
      */
