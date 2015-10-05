@@ -21,7 +21,7 @@ import org.jhotdraw.collection.Key;
 
 /**
  * {@code StyleablePropertyMap} provides an acceleration structure for
- getProperties which can by styled from CSS.
+ * getProperties which can by styled from CSS.
  * <p>
  * {@code StyleablePropertyMap} consists internally of four input maps and one
  * output map.
@@ -201,20 +201,20 @@ public class StyleablePropertyMap {
             output.remove(key);
         } else {
             switch (origin) {
-                case INLINE:
-                    output.put(key, inlineProperties().get(key));
-                    break;
-                case AUTHOR:
-                    output.put(key, authorProperties().get(key));
-                    break;
-                case USER:
-                    output.put(key, userProperties().get(key));
-                    break;
-                case USER_AGENT:
-                    output.put(key, userAgentProperties().get(key));
-                    break;
-                default:
-                    throw new InternalError("unknown enum value " + origin);
+            case INLINE:
+                output.put(key, inlineProperties().get(key));
+                break;
+            case AUTHOR:
+                output.put(key, authorProperties().get(key));
+                break;
+            case USER:
+                output.put(key, userProperties().get(key));
+                break;
+            case USER_AGENT:
+                output.put(key, userAgentProperties().get(key));
+                break;
+            default:
+                throw new InternalError("unknown enum value " + origin);
             }
         }
     }
@@ -260,28 +260,36 @@ public class StyleablePropertyMap {
     public <T> T remove(StyleOrigin origin, Key<T> key) {
         T value = null;
         switch (origin) {
-            case INLINE:
-                if (inline != null) {
-                    value = (T) inline.remove(key);
-                }
-                break;
-            case AUTHOR:
-                if (author != null) {
-                    value = (T) author.remove(key);
-                }
-                break;
-            case USER:
-                if (user != null) {
-                    value = (T) user.remove(key);
-                }
-                break;
-            case USER_AGENT:
-                if (userAgent != null) {
-                    value = (T) userAgent.remove(key);
-                }
-                break;
-            default:
-                throw new InternalError("unknown enum value " + origin);
+        case INLINE:
+            if (inline != null) {
+                @SuppressWarnings("unchecked")
+                T temp = (T) inline.remove(key);
+                value = temp;
+            }
+            break;
+        case AUTHOR:
+            if (author != null) {
+                @SuppressWarnings("unchecked")
+                T temp = (T) author.remove(key);
+                value = temp;
+            }
+            break;
+        case USER:
+            if (user != null) {
+                @SuppressWarnings("unchecked")
+                T temp = (T) user.remove(key);
+                value = temp;
+            }
+            break;
+        case USER_AGENT:
+            if (userAgent != null) {
+                @SuppressWarnings("unchecked")
+                T temp = (T) userAgent.remove(key);
+                value = temp;
+            }
+            break;
+        default:
+            throw new InternalError("unknown enum value " + origin);
         }
         return value;
     }
@@ -292,7 +300,7 @@ public class StyleablePropertyMap {
     public class MapStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
         private final Key<T> key;
-        private final CssMetaData metaData;
+        private final CssMetaData<?,T> metaData;
 
         public MapStyleableProperty(Key<T> key, CssMetaData metaData) {
             this.key = key;
@@ -310,7 +318,7 @@ public class StyleablePropertyMap {
         }
 
         @Override
-        public CssMetaData getCssMetaData() {
+        public CssMetaData<?,T> getCssMetaData() {
             return metaData;
         }
 
@@ -323,23 +331,24 @@ public class StyleablePropertyMap {
                 throw new IllegalArgumentException("origin must not be null");
             } else {
                 switch (origin) {
-                    case INLINE:
-                        inlineProperties().put(key, value);
-                        break;
-                    case AUTHOR:
-                        authorProperties().put(key, value);
-                        break;
-                    case USER:
-                        userProperties().put(key, value);
-                        break;
-                    case USER_AGENT:
-                        userAgentProperties().put(key, value);
-                        break;
-                    default:
-                        throw new InternalError("unknown enum value " + origin);
+                case INLINE:
+                    inlineProperties().put(key, value);
+                    break;
+                case AUTHOR:
+                    authorProperties().put(key, value);
+                    break;
+                case USER:
+                    userProperties().put(key, value);
+                    break;
+                case USER_AGENT:
+                    userAgentProperties().put(key, value);
+                    break;
+                default:
+                    throw new InternalError("unknown enum value " + origin);
                 }
             }
         }
+
         @Override
         protected void fireValueChangedEvent() {
             super.fireValueChangedEvent();
