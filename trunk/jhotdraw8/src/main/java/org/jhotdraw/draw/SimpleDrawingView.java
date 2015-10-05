@@ -93,7 +93,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         private ReadOnlyBooleanWrapper selectionEmpty = new ReadOnlyBooleanWrapper(this, EditableComponent.SELECTION_EMPTY);
         {
-            selectionEmpty.bind(selection.emptyProperty());
+            selectionEmpty.bind(selectedFigures.emptyProperty());
         }
         
         @Override
@@ -205,9 +205,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private boolean handlesAreValid;
 
     /**
-     * The selectionProperty holds the list of selected figures.
+     * The selectedFiguresProperty holds the list of selected figures.
      */
-    private final ReadOnlySetProperty<Figure> selection = new ReadOnlySetWrapper<>(this, SELECTION_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
+    private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
     private Transform viewToDrawingTransform = null;
     private Transform drawingToViewTransform = null;
 
@@ -217,7 +217,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * Installs a handler for changes in the seletionProperty.
      */
     {
-        selection.addListener((Observable o) -> {
+        selectedFigures.addListener((Observable o) -> {
             invalidateHandles();
             repaint();
         });
@@ -538,7 +538,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             handleFigureRemoved0(child);
         }
         removeNode(f);
-        selection.remove(f);
+        selectedFigures.remove(f);
         invalidateHandles();
     }
 
@@ -828,8 +828,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     @Override
-    public ReadOnlySetProperty<Figure> selectionProperty() {
-        return selection;
+    public ReadOnlySetProperty<Figure> selectedFiguresProperty() {
+        return selectedFigures;
     }
 
     @Override

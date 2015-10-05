@@ -77,7 +77,7 @@ public interface DrawingView extends RenderContext {
     /**
      * The name of the selection property.
      */
-    public final static String SELECTION_PROPERTY = "selection";
+    public final static String SELECTED_FIGURES_PROPERTY = "selectedFigures";
     /**
      * The name of the active handle property.
      */
@@ -173,7 +173,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return a list of the selected figures
      */
-    public ReadOnlySetProperty<Figure> selectionProperty();
+    public ReadOnlySetProperty<Figure> selectedFiguresProperty();
 
     /**
      * The active handle.
@@ -215,7 +215,7 @@ public interface DrawingView extends RenderContext {
      * @param vy y in view coordinates
      * @return A handle or null
      */
-    public Handle findHandle(double vx, double vy);
+    public Handle<?> findHandle(double vx, double vy);
 
     /**
      * Finds the figure at the given view coordinates. Figures are searched in
@@ -356,11 +356,11 @@ public interface DrawingView extends RenderContext {
         return toolProperty().get();
     }
 
-    default void setActiveHandle(Handle newValue) {
+    default void setActiveHandle(Handle<?> newValue) {
         activeHandleProperty().set(newValue);
     }
 
-    default Handle getActiveHandle() {
+    default Handle<?> getActiveHandle() {
         return activeHandleProperty().get();
     }
 
@@ -389,7 +389,7 @@ public interface DrawingView extends RenderContext {
     }
 
     default ObservableSet<Figure> getSelectedFigures() {
-        return selectionProperty();
+        return selectedFiguresProperty();
     }
 
     /**
@@ -472,6 +472,6 @@ public interface DrawingView extends RenderContext {
      * @param handle a handle
      * @return A collection containing the handle and all compatible handles.
      */
-    public Collection<Handle> getCompatibleHandles(Handle handle);
+    public Collection<Handle<?>> getCompatibleHandles(Handle<?> handle);
 
 }
