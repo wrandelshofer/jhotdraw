@@ -112,7 +112,7 @@ public class GrapherApplicationView extends AbstractView {
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(editor));
         
-        callback.handle(new TaskCompletionEvent());
+        callback.handle(new TaskCompletionEvent<Void>());
     }
 
     @Override

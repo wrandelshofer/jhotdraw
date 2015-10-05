@@ -4,8 +4,6 @@
  */
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.*;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.event.Event;
 
 /**
@@ -14,6 +12,8 @@ import org.jhotdraw.event.Event;
  * @version $Id$
  */
 public class HandleEvent extends Event<Handle> {
+
+    private final static long serialVersionUID = 1L;
 
     enum EventType {
 

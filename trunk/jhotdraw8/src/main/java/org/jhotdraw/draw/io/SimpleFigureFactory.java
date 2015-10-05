@@ -28,8 +28,8 @@ public class SimpleFigureFactory implements FigureFactory {
     private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToAttr = new HashMap<>();
     private final Map<String, Class<? extends Figure>> elemToFigure = new HashMap<>();
     private final Map<Class<? extends Figure>, String> figureToElem = new HashMap<>();
-    private final Map<String, Converter> valueToXML = new HashMap<>();
-    private final Map<String, Converter> valueFromXML = new HashMap<>();
+    private final Map<String, Converter<?>> valueToXML = new HashMap<>();
+    private final Map<String, Converter<?>> valueFromXML = new HashMap<>();
     private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureKeys = new HashMap<>();
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
@@ -229,18 +229,21 @@ public class SimpleFigureFactory implements FigureFactory {
 
     @Override
     public String valueToString(Key<?> key, Object value) throws IOException {
-        Converter converter = valueToXML.get(key.getFullValueType());
+        @SuppressWarnings("unchecked")
+        Converter<Object> converter = (Converter<Object>) valueToXML.get(key.getFullValueType());
         if (converter == null) {
             throw new IOException("no converter for attribute type "
                     + key.getFullValueType());
         }
-        return converter.toString(value);
+        @SuppressWarnings("unchecked")
+        String string = converter.toString(value);
+        return string;
     }
 
     @Override
     public Object stringToValue(Key<?> key, String string) throws IOException {
         try {
-            Converter converter = valueFromXML.get(key.getFullValueType());
+            Converter<?> converter = valueFromXML.get(key.getFullValueType());
             if (converter == null) {
                 throw new IOException("no converter for attribute type "
                         + key.getClass());

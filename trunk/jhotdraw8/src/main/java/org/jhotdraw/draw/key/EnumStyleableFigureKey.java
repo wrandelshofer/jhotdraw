@@ -5,11 +5,8 @@
 package org.jhotdraw.draw.key;
 
 import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
-import javafx.scene.effect.Effect;
-import javafx.scene.paint.Paint;
-import org.jhotdraw.collection.Key;
-import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
@@ -19,9 +16,11 @@ import org.jhotdraw.draw.Figure;
  *
  * @author werni
  */
-public class EnumStyleableFigureKey<T extends Enum> extends SimpleFigureKey<T> implements StyleableKey<T> {
+public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T> implements StyleableKey<T> {
 
-    private final CssMetaData cssMetaData;
+    private final static long serialVersionUID = 1L;
+
+    private final CssMetaData<?,T> cssMetaData;
 
     /**
      * Creates a new instance with the specified name, enum class, mask and with
@@ -47,7 +46,7 @@ public class EnumStyleableFigureKey<T extends Enum> extends SimpleFigureKey<T> i
     public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask, T defaultValue) {
         super(name, clazz, mask, defaultValue);
 
-        StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
+        StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<Styleable>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
                     StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -56,7 +55,7 @@ public class EnumStyleableFigureKey<T extends Enum> extends SimpleFigureKey<T> i
     }
 
     @Override
-    public CssMetaData getCssMetaData() {
+    public CssMetaData<?,T> getCssMetaData() {
         return cssMetaData;
 
     }

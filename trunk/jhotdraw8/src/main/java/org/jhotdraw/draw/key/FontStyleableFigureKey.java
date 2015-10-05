@@ -9,16 +9,11 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.css.StyleablePropertyFactory;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import org.jhotdraw.collection.Key;
-import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.CSSFontConverter;
-import org.jhotdraw.text.CSSSizeConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
@@ -28,7 +23,9 @@ import org.jhotdraw.text.StyleConverterConverterWrapper;
  */
 public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements StyleableKey<Font> {
 
-    private final CssMetaData cssMetaData;
+    private final static long serialVersionUID = 1L;
+
+    private final CssMetaData<?, Font> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -73,7 +70,7 @@ public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements Sty
     }
 
     @Override
-    public CssMetaData getCssMetaData() {
+    public CssMetaData<?, Font> getCssMetaData() {
         return cssMetaData;
 
     }

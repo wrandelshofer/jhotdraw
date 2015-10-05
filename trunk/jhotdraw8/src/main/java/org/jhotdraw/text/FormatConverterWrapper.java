@@ -16,11 +16,15 @@ import java.text.ParsePosition;
  * @version $Id$
  */
 public class FormatConverterWrapper extends Format {
+    private final static long serialVersionUID = 1L;
+
 
     private final Converter<Object> converter;
 
     public FormatConverterWrapper(Converter<?> converter) {
-        this.converter = (Converter<Object>) converter;
+        @SuppressWarnings("unchecked")
+        Converter<Object> temp=(Converter<Object>) converter;
+        this.converter = temp;
     }
 
     @Override
