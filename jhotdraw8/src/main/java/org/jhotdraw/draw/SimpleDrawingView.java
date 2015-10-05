@@ -274,7 +274,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
-    private final HashMap<Node, Handle> nodeToHandleMap = new HashMap<>();
+    private final HashMap<Node, Handle<?>> nodeToHandleMap = new HashMap<>();
     /**
      * Maps each JavaFX node to a figure in the drawing.
      */
@@ -293,12 +293,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     /**
      * The set of all handles which were produced by selected figures.
      */
-    private final LinkedList<Handle> selectionHandles = new LinkedList<>();
+    private final LinkedList<Handle<?>> selectionHandles = new LinkedList<>();
     /**
      * The set of all secondary handles. One handle at a time may create
      * secondary handles.
      */
-    private final LinkedList<Handle> secondaryHandles = new LinkedList<>();
+    private final LinkedList<Handle<?>> secondaryHandles = new LinkedList<>();
 
     private Runnable repainter = null;
 
@@ -557,10 +557,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         for (Figure f : updateNodes) {
             f.updateNode(this, getNode(f));
         }
-        for (Handle h : selectionHandles) {
+        for (Handle<?> h : selectionHandles) {
             h.updateNode(this);
         }
-        for (Handle h : secondaryHandles) {
+        for (Handle<?> h : secondaryHandles) {
             h.updateNode(this);
         }
     }
@@ -713,7 +713,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             boolean contains = Geom.lineContainsPoint(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), point.getX(), point.getY(), tolerance);
             return contains;
         } else if (node instanceof Group) {
-            return node.getBoundsInLocal().contains(point);
+            Bounds bounds = node.getBoundsInLocal();
+            bounds = Geom.grow(bounds, tolerance, tolerance);
+            return bounds.contains(point);
         } else {
             return node.contains(point);
         }
@@ -853,15 +855,15 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * @return A collection containing the handle and all compatible handles.
      */
     @Override
-    public Collection<Handle> getCompatibleHandles(Handle master) {
+    public Collection<Handle<?>> getCompatibleHandles(Handle<?> master) {
         validateHandles();
 
         HashSet<Figure> owners = new HashSet<Figure>();
-        LinkedList<Handle> compatibleHandles = new LinkedList<Handle>();
+        LinkedList<Handle<?>> compatibleHandles = new LinkedList<>();
         owners.add(master.getOwner());
         compatibleHandles.add(master);
 
-        for (Handle handle : getSelectionHandles()) {
+        for (Handle<?> handle : getSelectionHandles()) {
             if (!owners.contains(handle.getOwner()) /* &&
                      * handle.isCombinableWith(master) */) {
                 owners.add(handle.getOwner());

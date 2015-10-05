@@ -10,6 +10,8 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import static java.lang.Math.*;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 
@@ -668,7 +670,7 @@ public class Geom {
     /**
      * Resizes the <code>Rectangle2D</code> both horizontally and vertically.
      * <p>
-     * This method modifies the <code>Rectangle2D</code> so that it is
+     * This method returns a new <code>Rectangle2D</code> so that it is
      * <code>h</code> units larger on both the left and right side,
      * and <code>v</code> units larger at both the top and bottom.
      * <p>
@@ -693,6 +695,39 @@ public class Geom {
      */
     public static Rectangle2D grow(Rectangle2D r, double h, double v) {
         return new Rectangle2D(
+                r.getMinX() - h,
+                r.getMinY() - v,
+                r.getWidth() + h * 2d,
+                r.getHeight() + v * 2d);
+    }
+    /**
+     * Resizes the <code>Bounds</code> both horizontally and vertically.
+     * <p>
+     * This method returns a new <code>Bounds</code> so that it is
+     * <code>h</code> units larger on both the left and right side,
+     * and <code>v</code> units larger at both the top and bottom.
+     * <p>
+     * The new <code>Bounds</code> has (<code>x&nbsp;-&nbsp;h</code>,
+     * <code>y&nbsp;-&nbsp;v</code>) as its top-left corner, a
+     * width of
+     * <code>width</code>&nbsp;<code>+</code>&nbsp;<code>2h</code>,
+     * and a height of
+     * <code>height</code>&nbsp;<code>+</code>&nbsp;<code>2v</code>.
+     * <p>
+     * If negative values are supplied for <code>h</code> and
+     * <code>v</code>, the size of the <code>Rectangle2D</code>
+     * decreases accordingly.
+     * The <code>grow</code> method does not check whether the resulting
+     * values of <code>width</code> and <code>height</code> are
+     * non-negative.
+     *
+     * @param r the bounds
+     * @param h the horizontal expansion
+     * @param v the vertical expansion
+     * @return the new rectangle
+     */
+    public static Bounds grow(Bounds r, double h, double v) {
+        return new BoundingBox(
                 r.getMinX() - h,
                 r.getMinY() - v,
                 r.getWidth() + h * 2d,
