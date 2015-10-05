@@ -94,8 +94,8 @@ public class CreationTool extends AbstractTool {
                 dm.reshape(figure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
                         - c1.getY());
             }
-            dv.selectionProperty().clear();
-            dv.selectionProperty().add(figure);
+            dv.selectedFiguresProperty().clear();
+            dv.selectedFiguresProperty().add(figure);
             figure = null;
         }
         event.consume();

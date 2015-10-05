@@ -147,7 +147,7 @@ public class SelectionTool extends AbstractTool {
                 pressedFigure = null;
                 boolean selectionFound = false;
                 for (Figure f : view.findFigures(vx, vy, false)) {
-                    if (view.selectionProperty().contains(f)) {
+                    if (view.selectedFiguresProperty().contains(f)) {
                         selectionFound = true;
                         continue;
                     }
@@ -173,24 +173,24 @@ public class SelectionTool extends AbstractTool {
             } else // "meta" without "shift"  toggles the selection for the pressed figure
             if (!event.isShiftDown() && event.isMetaDown()) {
                 if (pressedFigure != null) {
-                    if (view.selectionProperty().contains(pressedFigure)) {
-                        view.selectionProperty().remove(pressedFigure);
+                    if (view.selectedFiguresProperty().contains(pressedFigure)) {
+                        view.selectedFiguresProperty().remove(pressedFigure);
                     } else {
-                        view.selectionProperty().add(pressedFigure);
+                        view.selectedFiguresProperty().add(pressedFigure);
                     }
                 }
             } else // neither "meta" nor "shift" sets the selection to the pressed figure
             if (!event.isShiftDown() && !event.isMetaDown()) {
-                if (pressedFigure != null && !view.selectionProperty().contains(pressedFigure)) {
-                    view.selectionProperty().clear();
-                    view.selectionProperty().add(pressedFigure);
+                if (pressedFigure != null && !view.selectedFiguresProperty().contains(pressedFigure)) {
+                    view.selectedFiguresProperty().clear();
+                    view.selectedFiguresProperty().add(pressedFigure);
                 }
             }
 
             // "control" modifier enforces the select area tracker
             if (pressedFigure != null
                     && (!(event.isControlDown())
-                    || view.selectionProperty().contains(pressedFigure))) {
+                    || view.selectedFiguresProperty().contains(pressedFigure))) {
                 DragTracker t = getDragTracker(pressedFigure, view);
                 setTracker(t);
             } else {
@@ -232,7 +232,7 @@ public class SelectionTool extends AbstractTool {
      * @param handle a handle
      * @return a handle tracker
      */
-    protected HandleTracker getHandleTracker(Handle handle) {
+    protected HandleTracker getHandleTracker(Handle<?> handle) {
         if (handleTracker == null) {
             handleTracker = new SimpleHandleTracker();
         }

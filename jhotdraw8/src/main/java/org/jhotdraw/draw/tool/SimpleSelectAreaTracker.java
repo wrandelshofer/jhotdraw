@@ -100,9 +100,9 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
         double h = y - event.getY();
         List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h),false);
         if (!event.isShiftDown()) {
-            dv.selectionProperty().clear();
+            dv.selectedFiguresProperty().clear();
         }
-        dv.selectionProperty().addAll(f);
+        dv.selectedFiguresProperty().addAll(f);
         fireToolDone();
     }
 
