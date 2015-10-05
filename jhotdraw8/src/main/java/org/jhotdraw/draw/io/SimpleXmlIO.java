@@ -137,7 +137,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             Element docElement = doc.getDocumentElement();
             writeElementAttributes(docElement, drawing);
             for (Figure child : drawing.getChildren()) {
-                docElement.appendChild(writeNodeRecursively(doc, child));
+                Node childNode = writeNodeRecursively(doc, child);
+                if (childNode != null) {
+                    // => the factory decided that we should skip the figure
+                    docElement.appendChild(childNode);
+                }
             }
             return doc;
         } catch (ParserConfigurationException ex) {
@@ -157,13 +161,22 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     private Node writeNodeRecursively(Document doc, Figure figure) throws IOException {
-        Element elem = createElement(doc, factory.figureToName(figure));
+        String elementName = factory.figureToName(figure);
+        if (elementName == null) {
+            // => the factory decided that we should skip the figure
+            return null;
+        }
+        Element elem = createElement(doc, elementName);
         writeElementAttributes(elem, figure);
 
         for (Figure child : figure.childrenProperty()) {
             if (factory.figureToName(child) != null) {
                 elem.appendChild(doc.createTextNode("\n"));
-                elem.appendChild(writeNodeRecursively(doc, child));
+                Node childNode = writeNodeRecursively(doc, child);
+                if (childNode != null) {
+                    // => the factory decided that we should skip the figure
+                    elem.appendChild(childNode);
+                }
             }
         }
         if (!figure.childrenProperty().isEmpty()) {

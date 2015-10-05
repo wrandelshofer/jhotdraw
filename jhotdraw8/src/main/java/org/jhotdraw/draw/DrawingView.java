@@ -180,7 +180,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return the active handle if present
      */
-    ObjectProperty<Handle> activeHandleProperty();
+    ObjectProperty<Handle<?>> activeHandleProperty();
     /**
      * The handle type.
      *
