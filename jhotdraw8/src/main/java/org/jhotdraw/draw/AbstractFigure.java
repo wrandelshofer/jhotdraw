@@ -88,7 +88,8 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
             if (key instanceof StyleableKey<?>) {
                 StyleableKey<?> sk = (StyleableKey<?>) key;
 
-                list.add(sk.getCssMetaData());
+                CssMetaData<? extends Styleable, ?> md = sk.getCssMetaData();
+                list.add(md);
             }
         }
         return list;

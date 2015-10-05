@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.key;
 
 import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
@@ -20,8 +21,9 @@ import org.jhotdraw.draw.Figure;
  */
 public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements StyleableKey<Effect> {
 
+    final static long serialVersionUID = 1L;
     
-    private final CssMetaData cssMetaData;
+    private final CssMetaData<? extends Styleable, Effect> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -42,7 +44,7 @@ public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements
     public EffectStyleableFigureKey(String name, Effect defaultValue) {
         super(name, Effect.class, DirtyMask.of(DirtyBits.NODE), defaultValue);
 
-        StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
+        StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createEffectCssMetaData(
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
                     StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -51,7 +53,7 @@ public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements
     }
 
     @Override
-    public CssMetaData getCssMetaData() {
+    public CssMetaData<? extends Styleable, Effect> getCssMetaData() {
         return cssMetaData;
 
     }
