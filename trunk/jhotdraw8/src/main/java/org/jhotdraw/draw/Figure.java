@@ -392,11 +392,11 @@ public interface Figure extends StyleablePropertyBean {
                 && !(sx < 0.0001) && !(sy < 0.0001)) {
             reshape.append(tx);
             tx.setToIdentity();
-            tx.scale(sx, sy);
+            tx.appendScale(sx, sy);
             reshape.append(tx);
             tx.setToIdentity();
         }
-        tx.translate(newBounds.getMinX(), newBounds.getMinY());
+        tx.appendTranslation(newBounds.getMinX(), newBounds.getMinY());
         reshape.append(tx);
         reshape(reshape);
     }
@@ -532,7 +532,7 @@ public interface Figure extends StyleablePropertyBean {
      * @param dv The drawing view which will display the handles
      * @param list The handles.
      */
-    default void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
+    default void createHandles(HandleType handleType, DrawingView dv, List<Handle<?>> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {

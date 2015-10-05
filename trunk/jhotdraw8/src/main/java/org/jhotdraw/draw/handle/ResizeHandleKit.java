@@ -47,7 +47,7 @@ public class ResizeHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addCornerResizeHandles(Figure f, Collection<Handle> handles) {
+    static public void addCornerResizeHandles(Figure f, Collection<Handle<?>> handles) {
         handles.add(southEast(f));
         handles.add(southWest(f));
         handles.add(northEast(f));
@@ -61,7 +61,7 @@ public class ResizeHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles) {
+    static public void addEdgeResizeHandles(Figure f, Collection<Handle<?>> handles) {
         handles.add(south(f));
         handles.add(north(f));
         handles.add(east(f));
@@ -75,7 +75,7 @@ public class ResizeHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addResizeHandles(Figure f, Collection<Handle> handles) {
+    static public void addResizeHandles(Figure f, Collection<Handle<?>> handles) {
         addCornerResizeHandles(f, handles);
         addEdgeResizeHandles(f, handles);
     }

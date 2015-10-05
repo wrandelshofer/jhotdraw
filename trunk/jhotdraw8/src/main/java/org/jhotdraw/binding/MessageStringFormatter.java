@@ -51,7 +51,7 @@ public abstract class MessageStringFormatter extends StringBinding {
                 dependencies.add((ObservableValue<?>) obj);
             }
         }
-        return dependencies.toArray(new ObservableValue[dependencies.size()]);
+        return dependencies.toArray(new ObservableValue<?>[dependencies.size()]);
     }
     
     public static StringExpression format(final String format, final Object... args) {
