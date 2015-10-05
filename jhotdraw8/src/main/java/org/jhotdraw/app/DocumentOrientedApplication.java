@@ -78,7 +78,7 @@ import org.jhotdraw.util.Resources;
  */
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
 
-    private final static Key<ChangeListener> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, null);
+    private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, "<Boolean>",null);
     private boolean isSystemMenuSupported;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
         Thread t = new Thread(r);
@@ -310,7 +310,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     protected void onViewRemoved(View view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
-        ChangeListener focusListener = view.get(FOCUS_LISTENER_KEY);
+        ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
         if (focusListener != null) {
             stage.focusedProperty().removeListener(focusListener);
         }

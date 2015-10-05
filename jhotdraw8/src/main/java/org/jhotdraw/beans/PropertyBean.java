@@ -100,6 +100,8 @@ public interface PropertyBean {
      * @return the removed value
      */
     default <T> T remove(Key<T> key) {
-        return (T) getProperties().remove(key);
+        @SuppressWarnings("unchecked")
+        T removedValue= (T) getProperties().remove(key);
+        return removedValue;
     }
 }

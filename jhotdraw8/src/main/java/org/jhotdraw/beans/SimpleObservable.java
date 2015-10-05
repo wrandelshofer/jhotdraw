@@ -4,12 +4,8 @@
  */
 package org.jhotdraw.beans;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.WeakListener;
-import javafx.beans.value.ObservableValueBase;
 
 /**
  * SimpleObservable.
@@ -19,7 +15,7 @@ import javafx.beans.value.ObservableValueBase;
  */
 public class SimpleObservable implements Observable {
 
-    protected final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport();
+    protected final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport<>();
 
     @Override
     public void addListener(InvalidationListener listener) {

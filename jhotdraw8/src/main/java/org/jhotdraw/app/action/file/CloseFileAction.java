@@ -41,10 +41,10 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
     }
 
     @Override
-    protected void doIt(View view, EventHandler<TaskCompletionEvent> callback) {
+    protected void doIt(View view, EventHandler<TaskCompletionEvent<?>> callback) {
         if (view != null) {
             app.remove(view);
         }
-        callback.handle(new TaskCompletionEvent());
+        callback.handle(new TaskCompletionEvent<Void>());
     }
 }

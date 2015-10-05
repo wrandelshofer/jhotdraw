@@ -66,7 +66,7 @@ public class GrapherView extends AbstractView {
     private final static String GRAPHER_NAMESPACE_URI="jhotdraw.org/samples/grapher";
 
     @Override
-    public void init(EventHandler<TaskCompletionEvent> callback) {
+    public void init(EventHandler<TaskCompletionEvent<?>> callback) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -122,7 +122,7 @@ public class GrapherView extends AbstractView {
    
 
     @Override
-    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent> callback) {
+    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent<?>> callback) {
         BackgroundTask<SimpleDrawing> t = new BackgroundTask<SimpleDrawing>() {
 
             @Override
@@ -151,7 +151,7 @@ public class GrapherView extends AbstractView {
     }
 
     @Override
-    public void write(URI uri, EventHandler<TaskCompletionEvent> callback) {
+    public void write(URI uri, EventHandler<TaskCompletionEvent<?>> callback) {
         BackgroundTask<Void> t = new BackgroundTask<Void>() {
 
             @Override
@@ -167,7 +167,7 @@ public class GrapherView extends AbstractView {
     }
 
     @Override
-    public void clear(EventHandler<TaskCompletionEvent> callback) {
+    public void clear(EventHandler<TaskCompletionEvent<?>> callback) {
         Drawing d = new SimpleDrawing();
         drawingView.setDrawing(d);
         callback.handle(new TaskCompletionEvent());

@@ -170,7 +170,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
     }*/
 
     @Override
-    protected void doIt(View p, EventHandler<TaskCompletionEvent> callback) {
+    protected void doIt(View p, EventHandler<TaskCompletionEvent<?>> callback) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

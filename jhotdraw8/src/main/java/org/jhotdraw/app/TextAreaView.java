@@ -35,7 +35,7 @@ import org.jhotdraw.concurrent.TaskCompletionEvent;
 public class TextAreaView extends AbstractView implements Initializable {
 
     @Override
-    public void init(EventHandler<TaskCompletionEvent> handler) {
+    public void init(EventHandler<TaskCompletionEvent<?>> handler) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -44,7 +44,7 @@ public class TextAreaView extends AbstractView implements Initializable {
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
-        handler.handle(new TaskCompletionEvent());
+        handler.handle(new TaskCompletionEvent<Void>());
     }
 
     @FXML
@@ -74,14 +74,14 @@ public class TextAreaView extends AbstractView implements Initializable {
     }
 
     @Override
-    public void clear(EventHandler<TaskCompletionEvent> handler) {
+    public void clear(EventHandler<TaskCompletionEvent<?>> handler) {
         textArea.setText(null);
         clearModified();
-        handler.handle(new TaskCompletionEvent());
+        handler.handle(new TaskCompletionEvent<Void>());
     }
 
     @Override
-    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent> handler) {
+    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent<?>> handler) {
         BackgroundTask<String> t = new BackgroundTask<String>() {
 
             @Override
@@ -112,7 +112,7 @@ public class TextAreaView extends AbstractView implements Initializable {
     }
 
     @Override
-    public void write(URI uri, EventHandler<TaskCompletionEvent> handler) {
+    public void write(URI uri, EventHandler<TaskCompletionEvent<?>> handler) {
         final String text = textArea.getText();
         BackgroundTask<Void> t = new BackgroundTask<Void>() {
 

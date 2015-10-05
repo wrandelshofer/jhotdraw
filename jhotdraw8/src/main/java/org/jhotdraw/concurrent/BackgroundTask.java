@@ -30,7 +30,7 @@ public abstract class BackgroundTask<V> extends Task<V> {
      *
      * @param handler the handler
      */
-    public void addCompletionHandler(EventHandler<TaskCompletionEvent> handler) {
+    public void addCompletionHandler(EventHandler<TaskCompletionEvent<?>> handler) {
         addEventHandler(TaskCompletionEvent.ANY, handler);
     }
 
@@ -39,7 +39,7 @@ public abstract class BackgroundTask<V> extends Task<V> {
      *
      * @param handler the handler
      */
-    public void removeCompletionHandler(EventHandler<TaskCompletionEvent> handler) {
+    public void removeCompletionHandler(EventHandler<TaskCompletionEvent<?>> handler) {
         removeEventHandler(TaskCompletionEvent.ANY, handler);
     }
 

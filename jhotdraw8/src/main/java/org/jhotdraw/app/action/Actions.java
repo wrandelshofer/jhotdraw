@@ -36,7 +36,7 @@ public class Actions {
         // create a strong reference to name binding:
         Binding<String> nameBinding = Action.LABEL.valueAt(action.propertiesProperty());
         control.getProperties().put("ActionsNameBinding", nameBinding);
-        control.textProperty().bind(action.LABEL.valueAt(action.propertiesProperty()));
+        control.textProperty().bind(Action.LABEL.valueAt(action.propertiesProperty()));
 
         control.setOnAction(action);
         control.disableProperty().bind(action.disabledProperty());
@@ -51,7 +51,7 @@ public class Actions {
         // create a strong reference to name binding:
         Binding<String> nameBinding = Action.LABEL.valueAt(action.propertiesProperty());
         control.getProperties().put("ActionsNameBinding", nameBinding);
-        control.textProperty().bind(action.LABEL.valueAt(action.propertiesProperty()));
+        control.textProperty().bind(Action.LABEL.valueAt(action.propertiesProperty()));
 
         if (control instanceof CheckMenuItem) {
             Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.propertiesProperty());
