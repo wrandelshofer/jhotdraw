@@ -244,6 +244,7 @@ public class StyleablePropertyMap {
     }
 
     public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
+        @SuppressWarnings("unchecked")
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
         if (sp == null) {
             if (key instanceof StyleableKey) {
