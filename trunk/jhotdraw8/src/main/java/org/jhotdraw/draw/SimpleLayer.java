@@ -27,7 +27,6 @@ public class SimpleLayer extends AbstractCompositeFigure implements Layer {
 
     @Override
     public void updateNode(RenderContext v, Node n) {
-
         applyFigureProperties(n);
         ObservableList<Node> group = ((Group) n).getChildren();
         group.clear();

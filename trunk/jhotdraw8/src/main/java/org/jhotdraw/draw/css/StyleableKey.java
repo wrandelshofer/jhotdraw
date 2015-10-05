@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.css;
 
 import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -15,17 +16,20 @@ import org.jhotdraw.collection.Key;
  */
 public interface StyleableKey<T> extends Key<T> {
 
+    final static long serialVersionUID = 1L;
+
     /**
      * Gets the CssMetaData.
+     *
      * @return the meta data
      */
-    CssMetaData getCssMetaData();
+    CssMetaData<? extends Styleable, T> getCssMetaData();
 
     /**
      * Returns the CSS name string.
      * <p>
-     * The default implementation converts the name from "camel case" to 
-     * "dash separated words".
+     * The default implementation converts the name from "camel case" to "dash
+     * separated words".
      *
      * @return name string.
      */

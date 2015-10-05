@@ -22,7 +22,8 @@ import org.jhotdraw.text.StyleConverterConverterWrapper;
  */
 public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements StyleableKey<Double> {
 
-    private final CssMetaData cssMetaData;
+    final static long serialVersionUID = 1L;
+    private final CssMetaData<? extends Styleable, Double> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -76,7 +77,7 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
     }
 
     @Override
-    public CssMetaData getCssMetaData() {
+    public CssMetaData<? extends Styleable, Double> getCssMetaData() {
         return cssMetaData;
 
     }

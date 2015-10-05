@@ -120,9 +120,9 @@ public interface Figure extends StyleablePropertyBean {
      * Specifies a blend mode applied to the figure. The {@code null} value is
      * interpreted as {@code SRC_OVER}.
      * <p>
-     * Default value: {@code SRC_OVER}.
+     * Default value: {@code null}.
      */
-    public static BlendModeStyleableFigureKey BLEND_MODE = new BlendModeStyleableFigureKey("blendMode", BlendMode.SRC_OVER);
+    public static BlendModeStyleableFigureKey BLEND_MODE = new BlendModeStyleableFigureKey("blendMode", null);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
@@ -733,7 +733,8 @@ public interface Figure extends StyleablePropertyBean {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyFigureProperties(Node node) {
-        node.setId(get(STYLE_ID));
+        String styleId = get(STYLE_ID);
+        node.setId(styleId == null ? "" : styleId);
         node.setVisible(getStyled(VISIBLE));
         node.setBlendMode(getStyled(BLEND_MODE));
         node.setEffect(getStyled(EFFECT));

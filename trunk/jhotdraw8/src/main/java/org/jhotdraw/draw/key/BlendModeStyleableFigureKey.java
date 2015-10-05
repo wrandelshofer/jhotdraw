@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.key;
 
 import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw.draw.css.StyleableKey;
@@ -16,9 +17,9 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  */
 public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> implements StyleableKey<BlendMode> {
-
+    final static long serialVersionUID = 1L;
     
-    private final CssMetaData cssMetaData;
+    private final CssMetaData<? extends Styleable, BlendMode> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -40,7 +41,7 @@ public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> impl
     public BlendModeStyleableFigureKey(String name, BlendMode defaultValue) {
         super(name, BlendMode.class, DirtyMask.of(DirtyBits.NODE), defaultValue);
 
-        StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
+        StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createEnumCssMetaData(BlendMode.class,
                 Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
                     StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -49,7 +50,7 @@ public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> impl
     }
 
     @Override
-    public CssMetaData getCssMetaData() {
+    public CssMetaData<? extends Styleable,BlendMode> getCssMetaData() {
         return cssMetaData;
 
     }

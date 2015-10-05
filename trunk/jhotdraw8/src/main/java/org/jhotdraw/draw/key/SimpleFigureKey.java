@@ -14,6 +14,7 @@ import org.jhotdraw.collection.SimpleKey;
  * @version $Id$
  */
 public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
+    final static long serialVersionUID = 1L;
 
     private final DirtyMask dirtyMask;
 
