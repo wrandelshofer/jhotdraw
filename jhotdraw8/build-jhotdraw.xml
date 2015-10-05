@@ -64,8 +64,7 @@
            source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.classes}"
            debug="true"
              >
-        <!-- XXX compile with -Xlint -->
-        <!-- compilerarg value="-Xlint"/-->
+        <compilerarg value="-Xlint"/>
       <src path="${src.main.java}"/>
       <classpath>
         <fileset dir="${lib.compile}" />

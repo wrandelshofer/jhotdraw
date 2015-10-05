@@ -137,7 +137,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
     }
 
-    private SimpleDrawingViewNode node = new SimpleDrawingViewNode();
+    private SimpleDrawingViewNode node;
 
     private final Listener<DrawingModelEvent> modelHandler = new Listener<DrawingModelEvent>() {
 
@@ -414,7 +414,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         // Set stylesheet
         overlaysPane.getStylesheets().add("org/jhotdraw/draw/SimpleDrawingView.css");
 
+        
         // set root
+        node = new SimpleDrawingViewNode();
         node.getChildren().add(stackPane);
     }
 
@@ -920,7 +922,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         handlesPane.getChildren().clear();
         // FIXME rethink detailLevel
 
-        ArrayList<Handle> handles = new ArrayList<>();
+        ArrayList<Handle<?>> handles = new ArrayList<>();
         createHandles(handles);
         for (Handle handle : handles) {
             selectionHandles.add(handle);
@@ -936,7 +938,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      *
      * @param list The provided list
      */
-    protected void createHandles(List<Handle> list) {
+    protected void createHandles(List<Handle<?>> list) {
         HandleType ht = getHandleType();
         for (Figure figure : getSelectedFigures()) {
             figure.createHandles(ht, this, list);
