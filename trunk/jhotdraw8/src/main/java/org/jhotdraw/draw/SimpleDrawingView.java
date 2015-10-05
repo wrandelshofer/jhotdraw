@@ -70,7 +70,6 @@ import org.jhotdraw.geom.Geom;
  */
 public class SimpleDrawingView extends SimplePropertyBean implements DrawingView {
 
- 
     private static class FixedSizedGroup extends Group {
 
     }
@@ -92,6 +91,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private class SimpleDrawingViewNode extends StackPane implements EditableComponent {
 
+        private ReadOnlyBooleanWrapper selectionEmpty = new ReadOnlyBooleanWrapper(this, EditableComponent.SELECTION_EMPTY);
+        {
+            selectionEmpty.bind(selection.emptyProperty());
+        }
+        
         @Override
         public void selectAll() {
             SimpleDrawingView.this.selectAll();
@@ -103,8 +107,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
 
         @Override
-        public boolean isSelectionEmpty() {
-            return SimpleDrawingView.this.getSelectedFigures().isEmpty();
+        public ReadOnlyBooleanProperty selectionEmptyProperty() {
+            return selectionEmpty;
         }
 
         @Override
@@ -131,7 +135,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         public void paste() {
             SimpleDrawingView.this.paste();
         }
-
     }
 
     private SimpleDrawingViewNode node = new SimpleDrawingViewNode();
@@ -141,39 +144,39 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {
-                case FIGURE_ADDED_TO_PARENT:
-                    handleFigureAdded(event.getFigure());
-                    break;
-                case FIGURE_REMOVED_FROM_PARENT:
-                    handleFigureRemoved(event.getFigure());
-                    break;
-                case FIGURE_ADDED_TO_DRAWING:
-                    // not my business
-                    break;
-                case FIGURE_REMOVED_FROM_DRAWING:
-                    // not my business
-                    break;
-                case NODE_INVALIDATED:
-                    handleNodeInvalidated(event.getFigure());
-                    break;
-                case LAYOUT_INVALIDATED:
-                    // not my business
-                    break;
-                case ROOT_CHANGED:
-                    updateDrawing();
-                    updateLayout();
-                    repaint();
-                    break;
-                case SUBTREE_NODES_INVALIDATED:
-                    updateTreeNodes(event.getFigure());
-                    repaint();
-                    break;
-                case SUBTREE_STRUCTURE_CHANGED:
-                    updateTreeStructure(event.getFigure());
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + " not supported");
+            case FIGURE_ADDED_TO_PARENT:
+                handleFigureAdded(event.getFigure());
+                break;
+            case FIGURE_REMOVED_FROM_PARENT:
+                handleFigureRemoved(event.getFigure());
+                break;
+            case FIGURE_ADDED_TO_DRAWING:
+                // not my business
+                break;
+            case FIGURE_REMOVED_FROM_DRAWING:
+                // not my business
+                break;
+            case NODE_INVALIDATED:
+                handleNodeInvalidated(event.getFigure());
+                break;
+            case LAYOUT_INVALIDATED:
+                // not my business
+                break;
+            case ROOT_CHANGED:
+                updateDrawing();
+                updateLayout();
+                repaint();
+                break;
+            case SUBTREE_NODES_INVALIDATED:
+                updateTreeNodes(event.getFigure());
+                repaint();
+                break;
+            case SUBTREE_STRUCTURE_CHANGED:
+                updateTreeStructure(event.getFigure());
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
             }
         }
 
@@ -972,16 +975,16 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
         getSelectedFigures().clear();
         getSelectedFigures().addAll(figures);
-    }   
-    
+    }
+
     private void clearSelection() {
         getSelectedFigures().clear();
     }
 
     private void deleteSelection() {
         ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
-        DrawingModel model=getModel();
-        for (Figure f:figures) {
+        DrawingModel model = getModel();
+        for (Figure f : figures) {
             model.disconnect(f);
             model.removeFromParent(f);
         }
@@ -1002,6 +1005,5 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private void paste() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 
 }

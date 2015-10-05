@@ -24,6 +24,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
 
     /**
      * Creates a new instance.
+     * @param editor the drawing editor
      */
     public BringToFrontAction(DrawingEditor editor) {
         super(editor);
@@ -32,12 +33,13 @@ public class BringToFrontAction extends AbstractSelectedAction {
         labels.configureAction(this, ID);
     }
 
+    @Override
     public void handle(ActionEvent e) {
         final DrawingView view = getView();
         if (view == null) {
             return;
         }
-        final LinkedList<Figure> figures = new LinkedList<Figure>(view.getSelectedFigures());
+        final LinkedList<Figure> figures = new LinkedList<>(view.getSelectedFigures());
         bringToFront(view, figures);
 
     }

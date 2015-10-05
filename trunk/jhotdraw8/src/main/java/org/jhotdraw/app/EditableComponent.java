@@ -4,11 +4,15 @@
  */
 package org.jhotdraw.app;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
+
 /**
  * EditableComponent.
  * @author Werner Randelshofer
  */
 public interface EditableComponent {
+    /** The name of the selectionEmpty property. */
+    public final static String SELECTION_EMPTY="selectionEmpty";
     // ---
     // selection actions
     // ---
@@ -24,8 +28,9 @@ public interface EditableComponent {
     /**
      * Returns true if the selection is empty.
      * This is a bound property.
+     * @return true if empty
      */
-    boolean isSelectionEmpty();
+    ReadOnlyBooleanProperty selectionEmptyProperty();
     
     // ---
     // edit actions on selection
