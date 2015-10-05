@@ -6,6 +6,7 @@ package org.jhotdraw.draw.gui;
 
 import static java.lang.Math.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -72,15 +73,18 @@ public class ZoomToolbar extends BorderPane {
     };
 
     public ZoomToolbar() {
-        init();
+        this(ZoomToolbar.class.getResource("ZoomToolbar.fxml"));
+    }
+    public ZoomToolbar(URL fxmlUrl) {
+        init(fxmlUrl);
     }
 
-    public void init() {
+    private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
-        try {
-            setCenter(loader.load(getClass().getResourceAsStream("ZoomToolbar.fxml")));
+        try(InputStream in=fxmlUrl.openStream()) {
+            setCenter(loader.load(in));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
