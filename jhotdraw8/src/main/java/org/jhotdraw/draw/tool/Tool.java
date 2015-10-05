@@ -1,5 +1,4 @@
-/*
- * @(#)Tool.java
+/* @(#)Tool.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,6 +14,7 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.collection.StringKey;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.event.Listener;
 
 /**
@@ -28,7 +28,6 @@ public interface Tool extends PropertyBean, Disableable {
     // ---
     // Property Names
     // ----
-
     /**
      * The name of the drawing view property.
      */
@@ -146,7 +145,6 @@ public interface Tool extends PropertyBean, Disableable {
     // ---
     // Listeners
     // ---
-
     /**
      * Adds a listener for this tool.
      *
@@ -164,7 +162,6 @@ public interface Tool extends PropertyBean, Disableable {
     // ---
     // Convenience Methods
     // ----
-
     /**
      * The localized name of the action for use in controls.
      *
@@ -203,5 +200,17 @@ public interface Tool extends PropertyBean, Disableable {
     default void setDrawingView(DrawingView drawingView) {
         drawingViewProperty().set(drawingView);
     }
+
+    /**
+     * Deactivates the tool. This method is called whenever the user switches to
+     * another tool.
+     */
+    public void deactivate(SimpleDrawingEditor editor);
+
+    /**
+     * Activates the tool for the given editor. This method is called whenever
+     * the user switches to this tool.
+     */
+    public void activate(SimpleDrawingEditor editor);
 
 }

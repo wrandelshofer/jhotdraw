@@ -23,7 +23,7 @@ import static java.lang.Math.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BoundsInParentOutlineHandle extends AbstractHandle<Figure> {
+public class BoundsInParentOutlineHandle extends AbstractHandle {
 
     private Polygon node;
     private double[] points;

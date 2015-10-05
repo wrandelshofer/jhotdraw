@@ -50,7 +50,7 @@ import org.jhotdraw.util.Resources;
  *
  * @author werni
  */
-public class GrapherView extends AbstractView {
+public class GrapherApplicationView extends AbstractView {
 
     private Node node;
 
@@ -71,7 +71,7 @@ public class GrapherView extends AbstractView {
         loader.setController(this);
 
         try {
-            node = loader.load(getClass().getResourceAsStream("GrapherView.fxml"));
+            node = loader.load(getClass().getResourceAsStream("GrapherApplicationView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -95,6 +95,7 @@ public class GrapherView extends AbstractView {
         Resources rsrc = Resources.getResources("org.jhotdraw.draw.Labels");
         Tool defaultTool;
         ttbar.addTool(defaultTool=new SelectionTool("selectionTool", rsrc), 0, 0);
+        ttbar.addTool(new SelectionTool("selectionTool", HandleType.MOVE,rsrc), 0, 1);
         ttbar.addTool(new CreationTool("edit.createRectangle", rsrc,RectangleFigure::new), 1, 0);
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new), 2, 0);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new), 1, 1);
@@ -170,7 +171,7 @@ public class GrapherView extends AbstractView {
     public void clear(EventHandler<TaskCompletionEvent<?>> callback) {
         Drawing d = new SimpleDrawing();
         drawingView.setDrawing(d);
-        callback.handle(new TaskCompletionEvent());
+        callback.handle(new TaskCompletionEvent<Void>());
     }
 
     @FXML

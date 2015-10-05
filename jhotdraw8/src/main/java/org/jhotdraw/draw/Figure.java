@@ -532,7 +532,7 @@ public interface Figure extends StyleablePropertyBean {
      * @param dv The drawing view which will display the handles
      * @param list The handles.
      */
-    default void createHandles(HandleType handleType, DrawingView dv, List<Handle<?>> list) {
+    default void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {

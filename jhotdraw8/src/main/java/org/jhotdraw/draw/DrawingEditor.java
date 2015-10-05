@@ -7,12 +7,15 @@ package org.jhotdraw.draw;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
+import javafx.collections.ObservableSet;
 import org.jhotdraw.draw.tool.Tool;
 
 /**
  * The DrawingEditor can be used to edit multiple {@code DrawingView}s with a
  * single {@code Tool}.
  * <p>
+ * The DrawingEditor invokes {@code activate()} and {@code deactivate()} methods
+ * on the {@code Tool} if it becomes the active tool or loses this status.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -22,7 +25,6 @@ public interface DrawingEditor {
     // ----
     // property names
     // ----
-
     /**
      * The name of the drawingViews property.
      */
@@ -100,6 +102,14 @@ public interface DrawingEditor {
      */
     default DrawingView getActiveDrawingView() {
         return activeDrawingViewProperty().get();
+    }
+    /**
+     * Gets the drawing views.
+     *
+     * @return the active drawing view or empty
+     */
+    default ObservableSet<DrawingView> getDrawingViews() {
+        return drawingViewsProperty().get();
     }
 
     /**

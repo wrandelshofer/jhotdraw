@@ -20,7 +20,7 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BoundsInLocalOutlineHandle extends AbstractHandle<Figure> {
+public class BoundsInLocalOutlineHandle extends AbstractHandle {
 
     private Polygon node;
     private double[] points;

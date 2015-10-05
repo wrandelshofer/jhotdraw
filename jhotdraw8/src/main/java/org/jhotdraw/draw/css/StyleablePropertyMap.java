@@ -8,15 +8,12 @@ import java.util.HashMap;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
-import javafx.css.StyleableObjectProperty;
 import javafx.css.StyleableProperty;
-import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -302,7 +299,7 @@ public class StyleablePropertyMap {
         private final Key<T> key;
         private final CssMetaData<?,T> metaData;
 
-        public MapStyleableProperty(Key<T> key, CssMetaData metaData) {
+        public MapStyleableProperty(Key<T> key, CssMetaData<?,T> metaData) {
             this.key = key;
             this.metaData = metaData;
         }

@@ -14,7 +14,9 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -92,16 +94,21 @@ public class SelectionTool extends AbstractTool {
     private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
     private boolean mouseDragged;
     private Figure pressedFigure;
+    private HandleType handleType;
 
     // ---
     // Constructors
     // ---
     public SelectionTool() {
-        this("selectionTool", Resources.getResources("org.jhotdraw.draw.Labels"));
+        this("selectionTool", HandleType.RESIZE, Resources.getResources("org.jhotdraw.draw.Labels"));
     }
 
     public SelectionTool(String name, Resources rsrc) {
+        this(name, HandleType.RESIZE, rsrc);
+    }
+    public SelectionTool(String name, HandleType handleType, Resources rsrc) {
         super(name, rsrc);
+        this.handleType=handleType;
     }
 
     // ---
@@ -221,7 +228,7 @@ public class SelectionTool extends AbstractTool {
         }
         setTracker(null);
 
-        fireToolDone();
+       // fireToolDone();
         event.consume();
     }
 
@@ -232,7 +239,7 @@ public class SelectionTool extends AbstractTool {
      * @param handle a handle
      * @return a handle tracker
      */
-    protected HandleTracker getHandleTracker(Handle<?> handle) {
+    protected HandleTracker getHandleTracker(Handle handle) {
         if (handleTracker == null) {
             handleTracker = new SimpleHandleTracker();
         }
@@ -310,6 +317,15 @@ public class SelectionTool extends AbstractTool {
             node.layout();
         }
     }
+    
+  @Override
+    public void activate(SimpleDrawingEditor editor) {
+        for (DrawingView view:editor.getDrawingViews()) {
+            view.setHandleType(handleType);
+        }
+    }
+
+    
 
     // ---
     // Convenience Methods

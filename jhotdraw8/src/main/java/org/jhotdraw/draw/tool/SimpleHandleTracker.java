@@ -39,7 +39,7 @@ public class SimpleHandleTracker extends AbstractTool implements HandleTracker {
     private Handle handle;
 
     @Override
-    public void setHandles(Handle<?> handle, Collection<Handle<?>> compatibleHandles) {
+    public void setHandles(Handle handle, Collection<Handle> compatibleHandles) {
         this.handle = handle;
     }
 

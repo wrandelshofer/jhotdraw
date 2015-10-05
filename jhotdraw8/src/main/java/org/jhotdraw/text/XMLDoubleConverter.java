@@ -218,7 +218,7 @@ public class XMLDoubleConverter implements Converter<Double> {
             return;
         }
 
-        double v = ((Double) value).doubleValue();
+        double v = value.doubleValue();
         if (factor != 1.0) {
             v = v * factor;
         }

@@ -17,7 +17,7 @@ import org.jhotdraw.draw.locator.Locator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class LocatorHandle<F extends Figure> extends AbstractHandle<F> {
+public abstract class LocatorHandle extends AbstractHandle {
 
     private Locator locator;
 
@@ -26,7 +26,7 @@ public abstract class LocatorHandle<F extends Figure> extends AbstractHandle<F> 
      * @param owner the figure which owns the handle
      * @param l the location
      */
-    public LocatorHandle(F owner, Locator l) {
+    public LocatorHandle(Figure owner, Locator l) {
         super(owner);
         locator = l;
     }
