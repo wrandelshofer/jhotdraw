@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.tool;
 
+import java.util.HashSet;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -49,14 +50,14 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     // Behaviors
     // ---
     @Override
-    public void setDraggedFigure(Figure f, DrawingView view) {
-        anchorFigure = f;
+    public void setDraggedFigure(Figure anchor, DrawingView view) {
+        this.anchorFigure = anchor;
     }
 
     @Override
     public void trackMousePressed(MouseEvent event, DrawingView view) {
-         oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure,view.viewToDrawing(new Point2D(event.getX(),event.getY())));
-   }
+        oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure, view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+    }
 
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
@@ -71,14 +72,8 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
             // alt or control turns the constrainer off
             newPoint = view.getConstrainer().constrainPoint(anchorFigure, newPoint);
         }
-        if (event.isMetaDown()) {
-            // meta snaps the center of the anchor figure to the grid
-            Bounds b = anchorFigure.getBoundsInLocal();
-            Point2D loc = new Point2D( b.getMinX()+b.getWidth()/2,b.getMinY()+b.getHeight()/2);
-            oldPoint = anchorFigure.localToDrawing(loc);
-        }
 
-        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY()- oldPoint.getY());
+        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
         DrawingModel dm = view.getModel();
         for (Figure f : view.getSelectedFigures()) {
             dm.reshape(f, f.getDrawingToParent().createConcatenation(tx));
