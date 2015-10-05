@@ -83,7 +83,7 @@ public class PaintStyleableFigureKey extends SimpleFigureKey<Paint> implements S
     }
 
     @Override
-    public CssMetaData getCssMetaData() {
+    public CssMetaData<?,Paint> getCssMetaData() {
         return cssMetaData;
 
     }

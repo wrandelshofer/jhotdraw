@@ -24,7 +24,7 @@ import org.jhotdraw.draw.LineConnectionFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineOutlineHandle extends AbstractHandle<Figure> {
+public class LineOutlineHandle extends AbstractHandle {
 
     private Polyline node;
     private double[] points;

@@ -223,7 +223,7 @@ public class PatternConverter implements Converter<Object[]> {
 
         protected String type;
         protected String style;
-        protected Converter converter;
+        protected Converter<Object> converter;
 
         @Override
         public String toString() {
@@ -238,7 +238,7 @@ public class PatternConverter implements Converter<Object[]> {
         @Override
         public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             if (converter == null) {
-                converter = factory.apply(type, style);
+                converter = (Converter<Object>)factory.apply(type, style);
             }
             converter.toString(out,value[indices[index]]);
         }
@@ -246,7 +246,7 @@ public class PatternConverter implements Converter<Object[]> {
         @Override
         public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
             if (converter == null) {
-                converter = factory.apply(type, style);
+                converter =(Converter<Object>) factory.apply(type, style);
             }
             Object v = converter.fromString(buf);
             while (value.size()<=index) {

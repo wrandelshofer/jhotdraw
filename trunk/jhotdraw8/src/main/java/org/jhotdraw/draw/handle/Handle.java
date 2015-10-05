@@ -18,7 +18,7 @@ import static org.jhotdraw.draw.Figure.*;
  * @version $Id$
  * @param <F> The figure type which this handle supports
  */
-public interface Handle<F extends Figure> {
+public interface Handle {
 
     // ---
     // CSS style classes
@@ -75,7 +75,7 @@ public interface Handle<F extends Figure> {
      *
      * @return a figure
      */
-    F getOwner();
+    Figure getOwner();
 
     /**
      * Returns the node which is used to visualize the handle. The node is

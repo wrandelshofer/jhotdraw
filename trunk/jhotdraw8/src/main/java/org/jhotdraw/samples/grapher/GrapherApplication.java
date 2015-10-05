@@ -29,7 +29,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
    
     @Override
     public View instantiateView() {
-        GrapherView v = new GrapherView();
+        GrapherApplicationView v = new GrapherApplicationView();
         return v;
     }
 

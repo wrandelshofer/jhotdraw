@@ -21,6 +21,7 @@ import org.jhotdraw.app.AbstractDisableable;
 import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.handle.HandleEvent;
 import org.jhotdraw.event.Listener;
 import org.jhotdraw.util.Resources;
@@ -98,9 +99,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * Listeners.
      */
     private final LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
+
     // ---
     // Constructors
     // ---
+
     /**
      * Creates a new instance.
      */
@@ -128,10 +131,10 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     @Override
     public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
         if (properties == null) {
-            properties 
-            = new ReadOnlyMapWrapper<Key<?>, Object>(//
-                    this, PROPERTIES_PROPERTY, //
-                    FXCollections.observableHashMap()).getReadOnlyProperty();
+            properties
+                    = new ReadOnlyMapWrapper<Key<?>, Object>(//
+                            this, PROPERTIES_PROPERTY, //
+                            FXCollections.observableHashMap()).getReadOnlyProperty();
         }
         return properties;
     }
@@ -228,18 +231,32 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     protected void onKeyPressed(KeyEvent event, DrawingView view) {
-        System.out.println("keyPressed:"+event);
+        System.out.println("keyPressed:" + event);
         event.consume();
     }
 
     protected void onKeyReleased(KeyEvent event, DrawingView view) {
-        System.out.println("keyReleased:"+event);
+        System.out.println("keyReleased:" + event);
         event.consume();
     }
 
     protected void onKeyTyped(KeyEvent event, DrawingView view) {
-        System.out.println("keyTyped:"+event);
+        System.out.println("keyTyped:" + event);
         event.consume();
+    }
+
+    /**
+     * This implementation is empty.
+     */
+    @Override
+    public void activate(SimpleDrawingEditor editor) {
+    }
+
+    /**
+     * This implementation is empty.
+     */
+    @Override
+    public void deactivate(SimpleDrawingEditor editor) {
     }
 
     // ---

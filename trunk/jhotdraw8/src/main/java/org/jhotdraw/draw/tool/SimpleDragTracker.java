@@ -4,11 +4,9 @@
  */
 package org.jhotdraw.draw.tool;
 
-import java.util.HashSet;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.DrawingView;
@@ -71,6 +69,12 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
             newPoint = view.getConstrainer().constrainPoint(anchorFigure, newPoint);
+        }
+        if (event.isMetaDown()) {
+            // meta snaps the top left corner of the anchor figure to the grid
+            Bounds bounds= anchorFigure.getBoundsInLocal();
+            Point2D loc = new Point2D(bounds.getMinX(),bounds.getMinY());
+            oldPoint = anchorFigure.localToDrawing(loc);
         }
 
         Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());

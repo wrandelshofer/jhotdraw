@@ -228,8 +228,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     {
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
-    private final ObjectProperty<Handle<?>> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
+    private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
     private final ObjectProperty<HandleType> handleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    {
+        handleType.addListener((observable, oldValue, newValue) -> {invalidateHandles();repaint();});
+    }
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
 
@@ -274,7 +277,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
-    private final HashMap<Node, Handle<?>> nodeToHandleMap = new HashMap<>();
+    private final HashMap<Node, Handle> nodeToHandleMap = new HashMap<>();
     /**
      * Maps each JavaFX node to a figure in the drawing.
      */
@@ -293,12 +296,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     /**
      * The set of all handles which were produced by selected figures.
      */
-    private final LinkedList<Handle<?>> selectionHandles = new LinkedList<>();
+    private final LinkedList<Handle> selectionHandles = new LinkedList<>();
     /**
      * The set of all secondary handles. One handle at a time may create
      * secondary handles.
      */
-    private final LinkedList<Handle<?>> secondaryHandles = new LinkedList<>();
+    private final LinkedList<Handle> secondaryHandles = new LinkedList<>();
 
     private Runnable repainter = null;
 
@@ -557,10 +560,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         for (Figure f : updateNodes) {
             f.updateNode(this, getNode(f));
         }
-        for (Handle<?> h : selectionHandles) {
+        for (Handle h : selectionHandles) {
             h.updateNode(this);
         }
-        for (Handle<?> h : secondaryHandles) {
+        for (Handle h : secondaryHandles) {
             h.updateNode(this);
         }
     }
@@ -590,7 +593,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     @Override
-    public ObjectProperty<Handle<?>> activeHandleProperty() {
+    public ObjectProperty<Handle> activeHandleProperty() {
         return activeHandle;
     }
 
@@ -855,15 +858,15 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * @return A collection containing the handle and all compatible handles.
      */
     @Override
-    public Collection<Handle<?>> getCompatibleHandles(Handle<?> master) {
+    public Collection<Handle> getCompatibleHandles(Handle master) {
         validateHandles();
 
         HashSet<Figure> owners = new HashSet<Figure>();
-        LinkedList<Handle<?>> compatibleHandles = new LinkedList<>();
+        LinkedList<Handle> compatibleHandles = new LinkedList<>();
         owners.add(master.getOwner());
         compatibleHandles.add(master);
 
-        for (Handle<?> handle : getSelectionHandles()) {
+        for (Handle handle : getSelectionHandles()) {
             if (!owners.contains(handle.getOwner()) /* &&
                      * handle.isCombinableWith(master) */) {
                 owners.add(handle.getOwner());
@@ -924,7 +927,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         handlesPane.getChildren().clear();
         // FIXME rethink detailLevel
 
-        ArrayList<Handle<?>> handles = new ArrayList<>();
+        ArrayList<Handle> handles = new ArrayList<>();
         createHandles(handles);
         for (Handle handle : handles) {
             selectionHandles.add(handle);
@@ -940,7 +943,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      *
      * @param list The provided list
      */
-    protected void createHandles(List<Handle<?>> list) {
+    protected void createHandles(List<Handle> list) {
         HandleType ht = getHandleType();
         for (Figure figure : getSelectedFigures()) {
             figure.createHandles(ht, this, list);
