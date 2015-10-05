@@ -10,12 +10,16 @@ import org.jhotdraw.collection.SimpleKey;
 
 /**
  * SimpleStyleableKey.
+ *
  * @author werni
  */
 public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<T> {
-    private final CssMetaData cssMetaData;
-    
-        /**
+
+    private final static long serialVersionUID = 1L;
+
+    private final CssMetaData<?, T> cssMetaData;
+
+    /**
      * Creates a new instance with the specified name, type token class, default
      * value null, and allowing null values.
      *
@@ -23,7 +27,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param clazz The type of the value.
      * @param metaData The CSS meta data.
      */
-    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData metaData) {
+    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData) {
         this(key, clazz, "", metaData, null);
     }
 
@@ -36,7 +40,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param metaData The CSS meta data.
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData metaData, T defaultValue) {
+    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, T defaultValue) {
         this(key, clazz, "", metaData, defaultValue);
     }
 
@@ -51,13 +55,13 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param metaData The CSS meta data.
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<?> clazz, String typeParameters, CssMetaData metaData, T defaultValue) {
-        super(key,clazz,typeParameters, defaultValue);
-        this.cssMetaData=metaData;
+    public SimpleStyleableKey(String key, Class<?> clazz, String typeParameters, CssMetaData<?, T> metaData, T defaultValue) {
+        super(key, clazz, typeParameters, defaultValue);
+        this.cssMetaData = metaData;
     }
 
     @Override
-    public CssMetaData getCssMetaData() {
+    public CssMetaData<?, T> getCssMetaData() {
         return null;
     }
 

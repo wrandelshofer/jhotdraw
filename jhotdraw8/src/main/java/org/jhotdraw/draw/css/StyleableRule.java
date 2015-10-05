@@ -129,13 +129,15 @@ class StyleableRule {
         }
 
         for (Map.Entry<String, PropertyValue> entry : properties.entrySet()) {
+            @SuppressWarnings("unchecked")
             CssMetaData<Styleable, Object> meta = (CssMetaData<Styleable, Object>) map.get(entry.getKey());
 
             if (meta != null && meta.isSettable(elem)) {
-                StyleableProperty styleableProperty = meta.getStyleableProperty(elem);
+                StyleableProperty<Object> styleableProperty = meta.getStyleableProperty(elem);
                 PropertyValue pv = entry.getValue();
                 if (pv.convertedValue == null) {
                     // only convert once and then foolishly assume no other object will request a different conversion
+                    @SuppressWarnings("unchecked")
                     StyleConverter<String, Object> converter = (StyleConverter<String, Object>) meta.getConverter();
                     ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(pv.unparsedValue, null);
                     pv.convertedValue = converter.convert(parsedValue, null);

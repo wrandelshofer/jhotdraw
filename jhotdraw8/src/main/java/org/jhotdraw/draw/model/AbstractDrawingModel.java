@@ -159,7 +159,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
      * @param figure the figure
      */
     protected void fireLayoutInvalidatedForFiguresConnectedWith(Figure figure) {
-        LinkedList<Figure> todo = new LinkedList();
+        LinkedList<Figure> todo = new LinkedList<>();
         todo.add(figure);
         fireLayoutInvalidatedForFiguresConnectedWithTodo(todo, new HashSet<Figure>());
     }
@@ -172,7 +172,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
      * @param subtreeRoot the figure
      */
     protected void fireLayoutInvalidatedForFiguresConnectedWithSubtree(Figure subtreeRoot) {
-        LinkedList<Figure> todo = new LinkedList();
+        LinkedList<Figure> todo = new LinkedList<>();
         for (Figure f : subtreeRoot.preorderIterable()) {
             todo.add(f);
         }

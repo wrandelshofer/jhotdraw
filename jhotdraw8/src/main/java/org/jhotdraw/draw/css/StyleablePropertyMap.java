@@ -245,9 +245,13 @@ public class StyleablePropertyMap {
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
         if (sp == null) {
             if (key instanceof StyleableKey) {
-                sp = new MapStyleableProperty<>(key, ((StyleableKey) key).getCssMetaData());
+                @SuppressWarnings("unchecked")
+                StyleableProperty<T> temp = new MapStyleableProperty<>(key, ((StyleableKey) key).getCssMetaData());
+                sp=temp;
             } else {
-                sp = new MapStyleableProperty<>(key, null);
+                @SuppressWarnings("unchecked")
+                StyleableProperty<T> temp  = new MapStyleableProperty<>(key, null);
+                sp=temp;
             }
             styleableProperties.put(key, sp);
         }

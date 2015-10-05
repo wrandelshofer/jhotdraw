@@ -91,8 +91,8 @@ import org.jhotdraw.io.StreamPosTokenizer;
  * balanced.
  * </p>
  * <p>
- * The {@code ChoicePattern} works like in {@code java.text.ChoiceFormat}.
- * The choice is specified with an ascending list of doubles, where each item
+ * The {@code ChoicePattern} works like in {@code java.text.ChoiceFormat}. The
+ * choice is specified with an ascending list of doubles, where each item
  * specifies a half-open interval up to the next item:
  * </p>
  * <pre>
@@ -105,8 +105,8 @@ import org.jhotdraw.io.StreamPosTokenizer;
  * also accepts {@code \u221E} as equivalent to infinity(INF).
  * </p>
  * <p>
- * If the separator of a list contains arguments, then their argument
- * indices should be smaller than the argument index.
+ * If the separator of a list contains arguments, then their argument indices
+ * should be smaller than the argument index.
  * </p>
  *
  * @author Werner Randelshofer
@@ -116,7 +116,9 @@ public class PatternConverter implements Converter<Object[]> {
 
     private AST ast;
     private ConverterFactory factory;
-    /** Number of argument indices needed. */
+    /**
+     * Number of argument indices needed.
+     */
     private int numIndices;
 
     public PatternConverter(String pattern, ConverterFactory factory) {
@@ -142,7 +144,7 @@ public class PatternConverter implements Converter<Object[]> {
     @Override
     public Object[] fromString(CharBuffer buf) throws ParseException, IOException {
         ArrayList<Object> value = new ArrayList<>();
-        ast.fromString(buf,factory, value);
+        ast.fromString(buf, factory, value);
         return value.toArray();
     }
 
@@ -160,8 +162,8 @@ public class PatternConverter implements Converter<Object[]> {
 
     }
 
-    /** Pattern AST.
-     * This class is package visible for testing purposes.
+    /**
+     * Pattern AST. This class is package visible for testing purposes.
      */
     static class AST {
 
@@ -188,7 +190,7 @@ public class PatternConverter implements Converter<Object[]> {
 
         public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
             for (AST child : children) {
-                child.fromString(buf,factory, value);
+                child.fromString(buf, factory, value);
             }
         }
 
@@ -238,28 +240,33 @@ public class PatternConverter implements Converter<Object[]> {
         @Override
         public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
             if (converter == null) {
-                converter = (Converter<Object>)factory.apply(type, style);
+                @SuppressWarnings("unchecked")
+                Converter<Object> temp = (Converter<Object>) factory.apply(type, style);
+                converter = temp;
             }
-            converter.toString(out,value[indices[index]]);
+            converter.toString(out, value[indices[index]]);
         }
-        
+
         @Override
         public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
             if (converter == null) {
-                converter =(Converter<Object>) factory.apply(type, style);
+                @SuppressWarnings("unchecked")
+                Converter<Object> temp = (Converter<Object>) factory.apply(type, style);
+                converter = temp;
             }
             Object v = converter.fromString(buf);
-            while (value.size()<=index) {
+            while (value.size() <= index) {
                 value.add(null);
             }
-            value.set(index,v);
+            value.set(index, v);
 //            converter.toString(value[indices[index]], out);
         }
-        
 
     }
 
-    /** Each child represents a choice. */
+    /**
+     * Each child represents a choice.
+     */
     static class ChoiceArgument extends Argument {
 
         protected double[] limits;
@@ -289,7 +296,7 @@ public class PatternConverter implements Converter<Object[]> {
         public void fromString(CharBuffer buf, ConverterFactory factory, ArrayList<Object> value) throws IOException, ParseException {
             int pos = buf.position();
             int choice = -1;
-            int greediest=-1;
+            int greediest = -1;
             for (int i = 0, n = children.size(); i < n; i++) {
                 buf.position(pos);
                 AST child = children.get(i);
@@ -297,16 +304,16 @@ public class PatternConverter implements Converter<Object[]> {
                 // try to parse each choice, take the greediest one
                 try {
                     child.fromString(buf, factory, value);
-                    if (buf.position()>greediest) {
-                    choice = i;
-                    greediest=buf.position();
+                    if (buf.position() > greediest) {
+                        choice = i;
+                        greediest = buf.position();
                     }
                 } catch (ParseException e) {
                     // empty because we try again with a different choice
                     //e.printStackTrace();
                 }
             }
-            if (greediest>0) {
+            if (greediest > 0) {
                 buf.position(greediest);
             }
             while (value.size() <= index) {
@@ -317,7 +324,9 @@ public class PatternConverter implements Converter<Object[]> {
 
     }
 
-    /** First child represents item, second child represents separator. */
+    /**
+     * First child represents item, second child represents separator.
+     */
     static class ListArgument extends Argument {
 
         protected int maxIndex;
@@ -475,7 +484,7 @@ public class PatternConverter implements Converter<Object[]> {
 
                     // try to parse each choice, break on success
                     try {
-                        child.fromString(buf, factory,value);
+                        child.fromString(buf, factory, value);
                         break;
                     } catch (ParseException e) {
                         if (j < n - 1) {// reset position since more choices are left
@@ -637,6 +646,7 @@ public class PatternConverter implements Converter<Object[]> {
                             + (tt.getStartPosition() + offset));
                 case '\'':
                     regex.chars += (tt.sval.isEmpty()) ? "\'" : tt.sval;
+                    break;
                 default:
                     regex.chars += (char) tt.ttype;
                     break;

@@ -196,6 +196,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     private void writeElementAttributes(Element elem, Figure figure) throws IOException {
         setAttribute(elem, "id", ids.createId(figure));
         for (Key<?> k : factory.figureKeys(figure)) {
+                @SuppressWarnings("unchecked")
             Key<Object> key = (Key<Object>) k;
             Object value = figure.get(key);
             if (!factory.isDefaultValue(key, value)) {
@@ -310,6 +311,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 if ("id".equals(attr.getLocalName())) {
                     continue;
                 }
+                @SuppressWarnings("unchecked")
                 Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getLocalName());
                 if (key != null && factory.figureKeys(figure).contains(key)) {
                     Object value = null;

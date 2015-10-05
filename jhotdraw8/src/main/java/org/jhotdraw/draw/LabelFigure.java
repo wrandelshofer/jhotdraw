@@ -86,7 +86,7 @@ public interface LabelFigure extends Figure {
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      */
-    public static EnumStyleableFigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableFigureKey("textStrokeLineCap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.SQUARE);
+    public static EnumStyleableFigureKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("textStrokeLineCap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.SQUARE);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
