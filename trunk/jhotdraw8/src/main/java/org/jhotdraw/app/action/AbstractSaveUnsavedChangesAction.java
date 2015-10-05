@@ -230,5 +230,5 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         });
     }
 
-    protected abstract void doIt(View p, EventHandler<TaskCompletionEvent> callback);
+    protected abstract void doIt(View p, EventHandler<TaskCompletionEvent<?>> callback);
 }

@@ -17,31 +17,32 @@ import javafx.event.EventType;
  * @param <V> the value type
  */
 public class TaskCompletionEvent<V> extends Event {
+    private final static long serialVersionUID=1L;
      /**
      * Common supertype for all result event types.
      */
-    public static final EventType<TaskCompletionEvent> ANY =
+    public static final EventType<TaskCompletionEvent<?>> ANY =
             new EventType<>(Event.ANY, "WORK_RESULT");
 
     /**
      * This event occurs when the state of a Worker implementation has
      * transitioned to the SUCCEEDED state.
      */
-    public static final EventType<TaskCompletionEvent> SUCCEEDED =
+    public static final EventType<TaskCompletionEvent<?>> SUCCEEDED =
             new EventType<>(TaskCompletionEvent.ANY, "WORKER_SUCCEEDED");
 
     /**
      * This event occurs when the state of a Worker implementation has
      * transitioned to the CANCELLED state.
      */
-    public static final EventType<TaskCompletionEvent> CANCELLED =
+    public static final EventType<TaskCompletionEvent<?>> CANCELLED =
             new EventType<>(TaskCompletionEvent.ANY, "WORKER_CANCELLED");
 
     /**
      * This event occurs when the state of a Worker implementation has
      * transitioned to the FAILED state.
      */
-    public static final EventType<TaskCompletionEvent> FAILED =
+    public static final EventType<TaskCompletionEvent<?>> FAILED =
             new EventType<>(TaskCompletionEvent.ANY, "WORKER_FAILED");
     /** The exception. */
     private final Throwable exception;
@@ -80,7 +81,9 @@ public class TaskCompletionEvent<V> extends Event {
      * @return The Worker on which the Event initially occurred.
      */
     @Override public Worker<V> getSource() {
-        return (Worker<V>) super.getSource();
+        @SuppressWarnings("unchecked")
+        Worker<V> s = (Worker<V>) super.getSource();
+        return s;
     }
    /**
      * The result state.

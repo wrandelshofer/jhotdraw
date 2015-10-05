@@ -35,7 +35,7 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
         labels.configureAction(this, "file.clear");
     }
     
-    @Override public void doIt(final View view, EventHandler<TaskCompletionEvent> callback) {
+    @Override public void doIt(final View view, EventHandler<TaskCompletionEvent<?>> callback) {
         view.clear(callback);
     }
 }

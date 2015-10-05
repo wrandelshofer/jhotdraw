@@ -43,6 +43,8 @@ import javafx.collections.MapChangeListener;
  */
 public interface Key<T> extends Serializable {
 
+    final static long serialVersionUID = 1L;
+
     /**
      * Returns the name string.
      *
@@ -65,8 +67,9 @@ public interface Key<T> extends Serializable {
      * @return The value of the attribute.
      */
     default T get(Map<? super Key<?>, Object> a) {
+        @SuppressWarnings("unchecked")
         T value = a.containsKey(this) ? (T) a.get(this) : getDefaultValue();
-        assert isAssignable(value):value+" is not assignable to "+getValueType();
+        assert isAssignable(value) : value + " is not assignable to " + getValueType();
         return value;
     }
 
@@ -80,6 +83,7 @@ public interface Key<T> extends Serializable {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<T>(getDefaultValue()));
         }
+        @SuppressWarnings("unchecked")
         SimpleObjectProperty<T> value = (SimpleObjectProperty<T>) a.get(this);
         return value;
     }
@@ -94,6 +98,7 @@ public interface Key<T> extends Serializable {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<T>(getDefaultValue()));
         }
+        @SuppressWarnings("unchecked")
         SimpleObjectProperty<T> value = (SimpleObjectProperty<T>) a.get(this);
         return value.get();
     }
@@ -111,7 +116,9 @@ public interface Key<T> extends Serializable {
             throw new IllegalArgumentException("Value is not assignable to key. key="
                     + this + ", value=" + value);
         }
-        return (T) a.put(this, value);
+        @SuppressWarnings("unchecked")
+        T oldValue = (T) a.put(this, value);
+        return oldValue;
     }
 
     /**
@@ -128,6 +135,7 @@ public interface Key<T> extends Serializable {
                     + this + ", value=" + value);
         }
         if (a.containsKey(this)) {
+            @SuppressWarnings("unchecked")
             ObjectProperty<T> p = (ObjectProperty<T>) a.get(this);
             T oldValue = p.get();
             p.set(value);
@@ -138,11 +146,13 @@ public interface Key<T> extends Serializable {
         }
     }
 
-    /** Whether the value may be set to null.
-     * @return  true if nullable
+    /**
+     * Whether the value may be set to null.
+     *
+     * @return true if nullable
      */
     boolean isNullable();
-    
+
     /**
      * Returns true if the specified value is assignable with this key.
      *
@@ -150,7 +160,7 @@ public interface Key<T> extends Serializable {
      * @return True if assignable.
      */
     default boolean isAssignable(Object value) {
-        return value == null&&isNullable() || getValueType().isInstance(value);
+        return value == null && isNullable() || getValueType().isInstance(value);
     }
 
     /**
@@ -172,7 +182,9 @@ public interface Key<T> extends Serializable {
      */
     default Binding<T> valueAt(MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
-        return (ObjectBinding<T>) value;
+        @SuppressWarnings("unchecked")
+        Binding<T> binding = (ObjectBinding<T>) value;
+        return binding;
     }
 
     /**
@@ -191,7 +203,9 @@ public interface Key<T> extends Serializable {
             this.mapListener = (MapChangeListener.Change<? extends Key<?>, ? extends Object> change) -> {
                 if (this.key.equals(change.getKey())) {
                     if (super.get() != change.getValueAdded()) {
-                        set((T) change.getValueAdded());
+                        @SuppressWarnings("unchecked")
+                        T valueAdded = (T) change.getValueAdded();
+                        set(valueAdded);
                     }
                 }
             };

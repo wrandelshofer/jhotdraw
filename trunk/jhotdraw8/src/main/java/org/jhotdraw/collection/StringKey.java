@@ -11,6 +11,7 @@ package org.jhotdraw.collection;
  * @version $Id$
  */
 public class StringKey extends SimpleKey<String> {
+    private final static long serialVersionUID=1L;
 
     public StringKey(String key) {
         super(key, String.class);

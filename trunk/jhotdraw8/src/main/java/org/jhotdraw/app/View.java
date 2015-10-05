@@ -81,7 +81,7 @@ public interface View extends Disableable, PropertyBean {
      * @param callback Must be called by the view to report the completion of
      * the operation.
      */
-    public void init(EventHandler<TaskCompletionEvent> callback);
+    public void init(EventHandler<TaskCompletionEvent<?>> callback);
 
     /**
      * Returns the scene node which renders the view.
@@ -161,7 +161,7 @@ public interface View extends Disableable, PropertyBean {
      * @param callback Must be called by the view to report the completion of
      * the operation.
      */
-    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent> callback);
+    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent<?>> callback);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -174,7 +174,7 @@ public interface View extends Disableable, PropertyBean {
      * @param callback Must be called by the view to report the completion of
      * the operation.
      */
-    public void write(URI uri, EventHandler<TaskCompletionEvent> callback);
+    public void write(URI uri, EventHandler<TaskCompletionEvent<?>> callback);
 
     /**
      * Clears the view.
@@ -182,7 +182,7 @@ public interface View extends Disableable, PropertyBean {
      * @param callback Must be called by the view to report the completion of
      * the operation.
      */
-    public void clear(EventHandler<TaskCompletionEvent> callback);
+    public void clear(EventHandler<TaskCompletionEvent<?>> callback);
 
     /**
      * The action map of the view.
