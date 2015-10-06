@@ -42,7 +42,7 @@ import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
-import org.jhotdraw.draw.handle.MoveHandle;
+import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
@@ -537,10 +537,10 @@ public interface Figure extends StyleablePropertyBean {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(MoveHandle.northEast(this));
-            list.add(MoveHandle.northWest(this));
-            list.add(MoveHandle.southEast(this));
-            list.add(MoveHandle.southWest(this));
+            list.add(MoveHandleKit.northEast(this));
+            list.add(MoveHandleKit.northWest(this));
+            list.add(MoveHandleKit.southEast(this));
+            list.add(MoveHandleKit.southWest(this));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             ResizeHandleKit.addCornerResizeHandles(this, list);

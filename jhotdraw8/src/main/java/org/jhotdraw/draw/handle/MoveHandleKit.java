@@ -27,82 +27,91 @@ import org.jhotdraw.draw.locator.RelativeLocator;
  *
  * @author Werner Randelshofer
  */
-public class MoveHandle extends LocatorHandle {
+public class MoveHandleKit {
 
-    private Point2D oldPoint;
-    private final Region node;
-    private final String styleclass;
-    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    public static class MoveHandle extends LocatorHandle {
 
-    public MoveHandle(Figure figure, Locator locator) {
-        this(figure, STYLECLASS_HANDLE_MOVE, locator);
-    }
+        private Point2D oldPoint;
+        private final Region node;
+        private final String styleclass;
+        private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+        private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+        private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
-    public MoveHandle(Figure figure, String styleclass, Locator locator) {
-        super(figure, locator);
-        this.styleclass = styleclass;
-        node = new Region();
-        node.setShape(REGION_SHAPE);
-        node.setManaged(false);
-        node.setScaleShape(false);
-        node.setCenterShape(true);
-        node.resize(11, 11);
-        node.getStyleClass().clear();
-        node.getStyleClass().add(styleclass);
-        node.setBorder(REGION_BORDER);
-        node.setBackground(REGION_BACKGROUND);
-        node.setCursor(Cursor.MOVE);
-    }
-
-    @Override
-    public Region getNode() {
-        return node;
-    }
-
-    @Override
-    public void updateNode(DrawingView view) {
-        Figure f = getOwner();
-        Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
-        Bounds b = f.getBoundsInLocal();
-        Point2D p = getLocation();
-        //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        p = t.transform(p);
-        node.relocate(p.getX() - 5, p.getY() - 5);
-        // rotates the node:
-        f.applyFigureProperties(node);
-    }
-
-    @Override
-    public void onMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
-    }
-
-    @Override
-    public void onMouseDragged(MouseEvent event, DrawingView view) {
-        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
-
-        if (!event.isAltDown() && !event.isControlDown()) {
-            // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
-        }
-        if (event.isMetaDown()) {
-            // meta snaps the location of the handle to the grid
-            Point2D loc = getLocation();
-            oldPoint = getOwner().localToDrawing(loc);
+        public MoveHandle(Figure figure, Locator locator) {
+            this(figure, STYLECLASS_HANDLE_MOVE, locator);
         }
 
-        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
-        tx = getOwner().getDrawingToParent().createConcatenation(tx);
-        view.getModel().reshape(getOwner(), tx);
+        public MoveHandle(Figure figure, String styleclass, Locator locator) {
+            super(figure, locator);
+            this.styleclass = styleclass;
+            node = new Region();
+            node.setShape(REGION_SHAPE);
+            node.setManaged(false);
+            node.setScaleShape(false);
+            node.setCenterShape(true);
+            node.resize(11, 11);
+            node.getStyleClass().clear();
+            node.getStyleClass().add(styleclass);
+            node.setBorder(REGION_BORDER);
+            node.setBackground(REGION_BACKGROUND);
+            node.setCursor(Cursor.MOVE);
+        }
 
-        oldPoint = newPoint;
-    }
+        @Override
+        public Region getNode() {
+            return node;
+        }
 
-    @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
-        // FIXME fire undoable edit
+        @Override
+        public void updateNode(DrawingView view) {
+            Figure f = getOwner();
+            Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
+            Bounds b = f.getBoundsInLocal();
+            Point2D p = getLocation();
+            //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
+            p = t.transform(p);
+            node.relocate(p.getX() - 5, p.getY() - 5);
+            // rotates the node:
+            f.applyFigureProperties(node);
+        }
+
+        @Override
+        public void onMousePressed(MouseEvent event, DrawingView view) {
+            oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+        }
+
+        @Override
+        public void onMouseDragged(MouseEvent event, DrawingView view) {
+            Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+
+            if (!event.isAltDown() && !event.isControlDown()) {
+                // alt or control turns the constrainer off
+                newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            }
+            if (event.isMetaDown()) {
+                // meta snaps the location of the handle to the grid
+                Point2D loc = getLocation();
+                oldPoint = getOwner().localToDrawing(loc);
+            }
+
+            Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
+            if (!tx.isIdentity()) {
+                tx = getOwner().getDrawingToParent().createConcatenation(tx);
+                view.getModel().reshape(getOwner(), tx);
+            }
+            oldPoint = newPoint;
+        }
+
+        @Override
+        public void onMouseReleased(MouseEvent event, DrawingView dv) {
+            // FIXME fire undoable edit
+        }
+
+        @Override
+        public boolean isSelectable() {
+            return true;
+        }
     }
 
     /**
@@ -112,7 +121,7 @@ public class MoveHandle extends LocatorHandle {
      * @return the handle
      */
     static public Handle south(Figure owner) {
-        return south(owner, STYLECLASS_HANDLE_MOVE);
+        return south(owner, Handle.STYLECLASS_HANDLE_MOVE);
     }
 
     /**
@@ -122,7 +131,7 @@ public class MoveHandle extends LocatorHandle {
      * @return the handle
      */
     static public Handle southEast(Figure owner) {
-        return southEast(owner, STYLECLASS_HANDLE_MOVE);
+        return southEast(owner, Handle.STYLECLASS_HANDLE_MOVE);
     }
 
     /**
@@ -132,7 +141,7 @@ public class MoveHandle extends LocatorHandle {
      * @return the handle
      */
     static public Handle southWest(Figure owner) {
-        return southWest(owner, STYLECLASS_HANDLE_MOVE);
+        return southWest(owner, Handle.STYLECLASS_HANDLE_MOVE);
     }
 
     /**
@@ -142,7 +151,7 @@ public class MoveHandle extends LocatorHandle {
      * @return the handle
      */
     static public Handle north(Figure owner) {
-        return north(owner, STYLECLASS_HANDLE_MOVE);
+        return north(owner, Handle.STYLECLASS_HANDLE_MOVE);
     }
 
     /**
@@ -152,7 +161,7 @@ public class MoveHandle extends LocatorHandle {
      * @return the handle
      */
     static public Handle northEast(Figure owner) {
-        return northEast(owner, STYLECLASS_HANDLE_MOVE);
+        return northEast(owner, Handle.STYLECLASS_HANDLE_MOVE);
     }
 
     /**
@@ -162,7 +171,7 @@ public class MoveHandle extends LocatorHandle {
      * @return the handle
      */
     static public Handle northWest(Figure owner) {
-        return northWest(owner, STYLECLASS_HANDLE_MOVE);
+        return northWest(owner, Handle.STYLECLASS_HANDLE_MOVE);
     }
 
     /**
@@ -172,7 +181,7 @@ public class MoveHandle extends LocatorHandle {
      * @return the handle
      */
     static public Handle east(Figure owner) {
-        return northEast(owner, STYLECLASS_HANDLE_MOVE);
+        return northEast(owner, Handle.STYLECLASS_HANDLE_MOVE);
     }
 
     /**
@@ -182,7 +191,7 @@ public class MoveHandle extends LocatorHandle {
      * @return the handle
      */
     static public Handle west(Figure owner) {
-        return northWest(owner, STYLECLASS_HANDLE_MOVE);
+        return northWest(owner, Handle.STYLECLASS_HANDLE_MOVE);
     }
 
     /**
@@ -280,11 +289,6 @@ public class MoveHandle extends LocatorHandle {
     static public Handle west(
             Figure owner, String styleclass) {
         return new MoveHandle(owner, styleclass, RelativeLocator.west());
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return true;
     }
 
 }
