@@ -72,17 +72,18 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
         }
         if (event.isMetaDown()) {
             // meta snaps the top left corner of the anchor figure to the grid
-            Bounds bounds= anchorFigure.getBoundsInLocal();
-            Point2D loc = new Point2D(bounds.getMinX(),bounds.getMinY());
+            Bounds bounds = anchorFigure.getBoundsInLocal();
+            Point2D loc = new Point2D(bounds.getMinX(), bounds.getMinY());
             oldPoint = anchorFigure.localToDrawing(loc);
         }
 
         Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
-        DrawingModel dm = view.getModel();
-        for (Figure f : view.getSelectedFigures()) {
-            dm.reshape(f, f.getDrawingToParent().createConcatenation(tx));
+        if (!tx.isIdentity()) {
+            DrawingModel dm = view.getModel();
+            for (Figure f : view.getSelectedFigures()) {
+                dm.reshape(f, f.getDrawingToParent().createConcatenation(tx));
+            }
         }
-
         oldPoint = newPoint;
     }
 

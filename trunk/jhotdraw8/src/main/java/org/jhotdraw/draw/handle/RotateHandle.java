@@ -114,39 +114,6 @@ public class RotateHandle extends AbstractHandle {
         // FIXME fire undoable edit
     }
 
-    static public Handle south(Figure owner, String styleclass) {
-        return new MoveHandle(owner, styleclass, RelativeLocator.south());
-    }
-
-    static public Handle southEast(Figure owner, String styleclass) {
-        return new MoveHandle(owner, styleclass, RelativeLocator.southEast());
-    }
-
-    static public Handle southWest(Figure owner, String styleclass) {
-        return new MoveHandle(owner, styleclass, RelativeLocator.southWest());
-    }
-
-    static public Handle north(Figure owner, String styleclass) {
-        return new MoveHandle(owner, styleclass, RelativeLocator.north());
-    }
-
-    static public Handle northEast(Figure owner, String styleclass) {
-        return new MoveHandle(owner, styleclass, RelativeLocator.northEast());
-    }
-
-    static public Handle northWest(Figure owner, String styleclass) {
-        return new MoveHandle(owner, styleclass, RelativeLocator.northWest());
-    }
-
-    static public Handle east(Figure owner, String styleclass) {
-        return new MoveHandle(owner, styleclass, RelativeLocator.east());
-    }
-
-    static public Handle west(
-            Figure owner, String styleclass) {
-        return new MoveHandle(owner, styleclass, RelativeLocator.west());
-    }
-
     @Override
     public boolean isSelectable() {
         return true;
