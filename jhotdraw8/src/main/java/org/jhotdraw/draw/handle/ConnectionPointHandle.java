@@ -104,9 +104,12 @@ public class ConnectionPointHandle extends AbstractHandle {
         Point2D pointInViewCoordinates =new Point2D(event.getX(), event.getY());
         Point2D newPoint = view.viewToDrawing(pointInViewCoordinates);
 
+        Point2D constrainedPoint; 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            constrainedPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+        }else{
+            constrainedPoint=newPoint;
         }
 
         Figure o = getOwner();
@@ -125,7 +128,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         }
 
         DrawingModel model = view.getModel();
-        model.set(o, pointKey, getOwner().drawingToLocal(newPoint));
+        model.set(o, pointKey, getOwner().drawingToLocal(constrainedPoint));
         Figure oldConnectedFigure = model.set(o, figureKey, newConnectedFigure);
         model.set(o, connectorKey, newConnector);
         if (oldConnectedFigure != null) {

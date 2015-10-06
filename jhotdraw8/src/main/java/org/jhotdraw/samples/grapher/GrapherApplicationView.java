@@ -41,7 +41,7 @@ import org.jhotdraw.draw.io.SimpleXmlIO;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.tool.CreationTool;
-import org.jhotdraw.draw.tool.LineConnectionTool;
+import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.util.Resources;
@@ -100,7 +100,7 @@ public class GrapherApplicationView extends AbstractView {
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new), 2, 0);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new), 1, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new SimpleLabelFigure(0, 0, "Hello")), 3, 1);
-        ttbar.addTool(new LineConnectionTool("edit.createLineConnection", rsrc,LineConnectionFigure::new), 2, 1);
+        ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc,LineConnectionFigure::new), 2, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolBar.getItems().add(ttbar);

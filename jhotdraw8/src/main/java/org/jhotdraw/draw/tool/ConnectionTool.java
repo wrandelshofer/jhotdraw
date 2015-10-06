@@ -1,4 +1,4 @@
-/* @(#)LineConnectionTool.java
+/* @(#)ConnectionTool.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -24,12 +24,12 @@ import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.util.ReversedList;
 
 /**
- * LineConnectionTool.
+ * ConnectionTool.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineConnectionTool extends AbstractTool {
+public class ConnectionTool extends AbstractTool {
 
     private Supplier<LineConnectionFigure> figureFactory;
     private Supplier<Layer> layerFactory;
@@ -44,7 +44,7 @@ public class LineConnectionTool extends AbstractTool {
      */
     private double minSize = 2;
 
-    public LineConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> factory) {
+    public ConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> factory) {
         super(name, rsrc);
         this.figureFactory = factory;
         this.layerFactory = SimpleLayer::new;
@@ -64,8 +64,9 @@ public class LineConnectionTool extends AbstractTool {
         Platform.runLater(() -> view.getNode().requestFocus());
         figure = figureFactory.get();
         Point2D pointInViewCoordinates =new Point2D(event.getX(), event.getY());
-        Point2D newPoint = view.getConstrainer().constrainPoint(figure, view.viewToDrawing(pointInViewCoordinates));
-        figure.reshape(newPoint.getX(), newPoint.getY(), 1, 1);
+        Point2D newPoint = view.viewToDrawing(pointInViewCoordinates);
+        Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, newPoint);
+        figure.reshape(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getRoot();
 
@@ -107,11 +108,6 @@ public class LineConnectionTool extends AbstractTool {
         if (figure != null) {
             Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
-            if (!event.isAltDown() && !event.isControlDown()) {
-                // alt or control turns the constrainer off
-                newPoint = view.getConstrainer().constrainPoint(figure, newPoint);
-            }
-
             Connector newConnector = null;
             Figure newConnectedFigure = null;
             if (!event.isMetaDown()) {
@@ -125,8 +121,16 @@ public class LineConnectionTool extends AbstractTool {
                 }
             }
 
+            Point2D constrainedPoint;
+            if (!event.isAltDown() && !event.isControlDown()) {
+                // alt or control turns the constrainer off
+                constrainedPoint = view.getConstrainer().constrainPoint(figure, newPoint);
+            }else{
+                constrainedPoint=newPoint;
+            }
+            
             DrawingModel model = view.getModel();
-            model.set(figure, LineConnectionFigure.END, figure.drawingToLocal(newPoint));
+            model.set(figure, LineConnectionFigure.END, figure.drawingToLocal(constrainedPoint));
             Figure oldConnectedFigure = model.set(figure, LineConnectionFigure.END_FIGURE, newConnectedFigure);
             model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
             if (oldConnectedFigure != null) {
