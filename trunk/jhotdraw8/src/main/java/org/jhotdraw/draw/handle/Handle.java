@@ -9,14 +9,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.Figure.*;
 
 /**
  * Handle.
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <F> The figure type which this handle supports
  */
 public interface Handle {
 
