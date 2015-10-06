@@ -5,7 +5,6 @@
 package org.jhotdraw.draw.css;
 
 import javafx.css.CssMetaData;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
 
 /**
