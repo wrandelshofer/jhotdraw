@@ -204,12 +204,14 @@ public interface Tool extends PropertyBean, Disableable {
     /**
      * Deactivates the tool. This method is called whenever the user switches to
      * another tool.
+     * @param editor the editor
      */
     public void deactivate(SimpleDrawingEditor editor);
 
     /**
      * Activates the tool for the given editor. This method is called whenever
      * the user switches to this tool.
+     * @param editor the editor
      */
     public void activate(SimpleDrawingEditor editor);
 

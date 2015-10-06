@@ -17,7 +17,6 @@ import org.jhotdraw.event.Listener;
  * AbstractHandle.
  * @author Werner Randelshofer
  * @version $Id$
- * @param <F> the supported owner type
  */
 public abstract class AbstractHandle implements Handle {
     // ---

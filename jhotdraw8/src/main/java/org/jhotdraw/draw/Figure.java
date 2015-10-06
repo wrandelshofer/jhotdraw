@@ -728,17 +728,64 @@ public interface Figure extends StyleablePropertyBean {
      * Updates a figure node with all applicable {@code SimpleFigureKey}s
      * defined in this interface.
      * <p>
+     * Invokes the methods {@link #applyStyleProperties(javafx.scene.Node) },
+     * {@link #applyEffectProperties(javafx.scene.Node) }, 
+     * {@link #applyTransformProperties(javafx.scene.Node) }.
+     * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyFigureProperties(Node node) {
+        applyStyleProperties(node);
+        applyEffectProperties(node);
+        applyTransformProperties(node);
+    }
+    /**
+     * Updates a figure node with all style and effect properties
+     * defined in this interface.
+     * <p>
+     * Applies the following properties: {@code STYLE_ID},
+     * {@code VISIBLE}.
+     * <p>
+     * This method is intended to be used by {@link #updateNode}.
+     *
+     * @param node a node which was created with method {@link #createNode}.
+     */
+    default void applyStyleProperties(Node node) {
         String styleId = get(STYLE_ID);
         node.setId(styleId == null ? "" : styleId);
         node.setVisible(getStyled(VISIBLE));
+    }
+    /**
+     * Updates a figure node with all effect properties
+     * defined in this interface.
+     * <p>
+     * Applies the following properties: {@code BLEND_MODE},
+     * {@code EFFECT}, {@code OPACITY}.
+     * <p>
+     * This method is intended to be used by {@link #updateNode}.
+     *
+     * @param node a node which was created with method {@link #createNode}.
+     */
+    default void applyEffectProperties(Node node) {
         node.setBlendMode(getStyled(BLEND_MODE));
         node.setEffect(getStyled(EFFECT));
         node.setOpacity(getStyled(OPACITY));
+    }
+    /**
+     * Updates a figure node with all transformation properties
+     * defined in this interface.
+     * <p>
+     * Applies the following properties: {@code ROTATE}, {@code ROTATION_AXIS},
+     * {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, {@code TRANSLATE_X},
+     * {@code TRANSLATE_Y}, {@code TRANSLATE_Z}.
+     * <p>
+     * This method is intended to be used by {@link #updateNode}.
+     *
+     * @param node a node which was created with method {@link #createNode}.
+     */
+    default void applyTransformProperties(Node node) {
         node.setRotate(getStyled(ROTATE));
         node.setRotationAxis(getStyled(ROTATION_AXIS));
         node.setScaleX(getStyled(SCALE_X));
