@@ -19,7 +19,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.geom.Geom;
 
 /**
