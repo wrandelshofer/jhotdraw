@@ -128,22 +128,26 @@ public interface FigureFactory {
      *
      * @param internal an internal representation of the drawing
      * @return An external representation of the drawing.
+     * @throws java.io.IOException if no external representation can be
+     * created
      */
-    default Drawing toExternalDrawing(Drawing internal) {
+    default Drawing toExternalDrawing(Drawing internal) throws IOException {
         return internal;
     }
 
     /**
      * Creates an internal representation of the drawing.
      * <p>
-     * Note: this method must not change the provided external drawing.
+     * Note: this method may change the provided external drawing.
      * <p>
      * The default implementation returns the same drawing.
      *
      * @param external an external representation of the drawing
      * @return An internal representation of the drawing.
+     * @throws java.io.IOException if no internal representation can be
+     * created
      */
-    default Drawing fromExternalDrawing(Drawing external) {
+    default Drawing fromExternalDrawing(Drawing external) throws IOException {
         return external;
     }
 }
