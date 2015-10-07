@@ -130,7 +130,7 @@ public class GrapherApplicationView extends AbstractView {
             protected SimpleDrawing call() throws Exception {
                 try {
                     FigureFactory factory = new DefaultFigureFactory();
-                    SimpleXmlIO io = new SimpleXmlIO(factory,GRAPHER_NAMESPACE_URI,null);
+                    SimpleXmlIO io = new SimpleXmlIO(factory,null,GRAPHER_NAMESPACE_URI,null);
                     SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
                     drawing.applyCss();
                     drawing.layout();
@@ -158,7 +158,7 @@ public class GrapherApplicationView extends AbstractView {
             @Override
             protected Void call() throws Exception {
                 FigureFactory factory = new DefaultFigureFactory();
-                    SimpleXmlIO io = new SimpleXmlIO(factory,GRAPHER_NAMESPACE_URI,null);
+                    SimpleXmlIO io = new SimpleXmlIO(factory,null,GRAPHER_NAMESPACE_URI,null);
                 io.write(uri, drawingView.getDrawing());
                 return null;
             }

@@ -50,17 +50,18 @@ import org.xml.sax.SAXException;
 public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     private FigureFactory factory;
-    private IdFactory ids = new SimpleIdFactory();
+    private IdFactory ids;
     private ArrayList<Element> figureElements = new ArrayList<>();
     private String namespaceURI;
     private String namespaceQualifier;
 
     public SimpleXmlIO(FigureFactory factory) {
-        this(factory, null, null);
+        this(factory, null, null, null);
     }
 
-    public SimpleXmlIO(FigureFactory factory, String namespaceURI, String namespaceQualifier) {
+    public SimpleXmlIO(FigureFactory factory, IdFactory idFactory, String namespaceURI, String namespaceQualifier) {
         this.factory = factory;
+        this.ids = idFactory == null ? new SimpleIdFactory() : idFactory;
         this.namespaceURI = namespaceURI;
         this.namespaceQualifier = namespaceQualifier;
     }
@@ -120,8 +121,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     public Document toDocument(Drawing internal) throws IOException {
         try {
-            Drawing external=factory.toExternalDrawing(internal);
-            
+            Drawing external = factory.toExternalDrawing(internal);
+
             ids.reset();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             Document doc;
@@ -231,10 +232,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             figureElements.clear();
         }
         if (external != null) {
-            for (Figure f:external.preorderIterable()) {
+            for (Figure f : external.preorderIterable()) {
                 f.addNotify(f.getDrawing());
             }
-            
+
             return factory.fromExternalDrawing(external);
         } else {
             throw new IOException(//
@@ -301,12 +302,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
         Figure figure = null;
         String id = getAttribute(elem, "id");
-        if (id
-                != null) {
+        if (id != null) {
             figure = getFigure(id);
         }
-        if (figure
-                != null) {
+        if (figure != null) {
             NamedNodeMap attrs = elem.getAttributes();
             for (int i = 0, n = attrs.getLength(); i < n; i++) {
                 Attr attr = (Attr) attrs.item(i);
