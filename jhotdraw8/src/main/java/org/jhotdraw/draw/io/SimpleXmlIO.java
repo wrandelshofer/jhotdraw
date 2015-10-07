@@ -118,8 +118,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         return tmp;
     }
 
-    public Document toDocument(Drawing drawing) throws IOException {
+    public Document toDocument(Drawing internal) throws IOException {
         try {
+            Drawing external=factory.toExternalDrawing(internal);
+            
             ids.reset();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             Document doc;
@@ -127,16 +129,16 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 builderFactory.setNamespaceAware(true);
                 DocumentBuilder builder = builderFactory.newDocumentBuilder();
                 DOMImplementation domImpl = builder.getDOMImplementation();
-                doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? factory.figureToName(drawing) : namespaceQualifier + ":" + factory.figureToName(drawing), null);
+                doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? factory.figureToName(external) : namespaceQualifier + ":" + factory.figureToName(internal), null);
             } else {
                 DocumentBuilder builder = builderFactory.newDocumentBuilder();
                 doc = builder.newDocument();
-                Element elem = doc.createElement(factory.figureToName(drawing));
+                Element elem = doc.createElement(factory.figureToName(external));
                 doc.appendChild(elem);
             }
             Element docElement = doc.getDocumentElement();
-            writeElementAttributes(docElement, drawing);
-            for (Figure child : drawing.getChildren()) {
+            writeElementAttributes(docElement, external);
+            for (Figure child : external.getChildren()) {
                 Node childNode = writeNodeRecursively(doc, child);
                 if (childNode != null) {
                     // => the factory decided that we should skip the figure
@@ -212,12 +214,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     public Drawing fromDocument(Document doc) throws IOException {
         ids.reset();
         figureElements.clear();
-        Drawing drawing = null;
+        Drawing external = null;
         NodeList list = doc.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
             Figure f = readNodeRecursively(list.item(i));
             if (f instanceof Drawing) {
-                drawing = (Drawing) f;
+                external = (Drawing) f;
                 break;
             }
         }
@@ -228,8 +230,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         } finally {
             figureElements.clear();
         }
-        if (drawing != null) {
-            return drawing;
+        if (external != null) {
+            for (Figure f:external.preorderIterable()) {
+                f.addNotify(f.getDrawing());
+            }
+            
+            return factory.fromExternalDrawing(external);
         } else {
             throw new IOException(//
                     namespaceURI == null//
@@ -333,5 +339,4 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
         return f;
     }
-
 }
