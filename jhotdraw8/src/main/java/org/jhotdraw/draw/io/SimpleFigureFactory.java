@@ -149,7 +149,7 @@ public class SimpleFigureFactory implements FigureFactory {
      * @param figureClass The figure class is used for determining the name of a
      * figure.
      */
-    public void addFigure(String name, Supplier<Figure> figureSupplier, Class<? extends Figure> figureClass) {
+    public void addFigure(String name, Class<? extends Figure> figureClass, Supplier<Figure> figureSupplier) {
         if (!nameToFigure.containsKey(name)) {
             nameToFigure.put(name, figureSupplier);
         }
