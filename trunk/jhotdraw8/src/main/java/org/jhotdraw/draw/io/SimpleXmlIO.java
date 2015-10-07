@@ -110,13 +110,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     public Drawing read(Document in, Drawing drawing) throws IOException {
-        Drawing tmp = fromDocument(in);
-        if (drawing != null) {
-            drawing.childrenProperty().addAll(tmp.childrenProperty());
-            drawing.getProperties().putAll(tmp.getProperties());
-            tmp = drawing;
-        }
-        return tmp;
+        return fromDocument(in);
     }
 
     public Document toDocument(Drawing internal) throws IOException {
@@ -232,10 +226,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             figureElements.clear();
         }
         if (external != null) {
-            for (Figure f : external.preorderIterable()) {
-                f.addNotify(f.getDrawing());
-            }
-
             return factory.fromExternalDrawing(external);
         } else {
             throw new IOException(//

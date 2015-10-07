@@ -114,7 +114,11 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         String className = getClass().getName();
         className = className.substring(className.lastIndexOf('.') + 1);
         StringBuilder buf = new StringBuilder();
-        buf.append(className).append('@').append(hashCode()).append("{properties=").append(getProperties()).append(", connections={");
+        buf.append(className).append('@')//
+                .append(Integer.toHexString(hashCode()))//
+                .append("{properties=")//
+                .append(getProperties())//
+                .append(", connections={");
         boolean isFirst = true;
         for (Figure f : connectedFigures) {
             if (isFirst) {
