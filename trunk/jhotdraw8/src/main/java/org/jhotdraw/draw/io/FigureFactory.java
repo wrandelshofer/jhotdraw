@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 
 /**
@@ -18,7 +19,8 @@ import org.jhotdraw.draw.Figure;
  */
 public interface FigureFactory {
 
-    /** Maps a figure to an XML element name.
+    /**
+     * Maps a figure to an XML element name.
      *
      * @param f the figure
      * @return the name
@@ -27,7 +29,8 @@ public interface FigureFactory {
      */
     String figureToName(Figure f) throws IOException;
 
-    /** Maps an XML element name to a figure.
+    /**
+     * Maps an XML element name to a figure.
      *
      * @param name the name
      * @return the figure
@@ -36,9 +39,9 @@ public interface FigureFactory {
      */
     Figure nameToFigure(String name) throws IOException;
 
-    /** Maps a key to a XML attribute name.
-     * The name used for persistent storage may be different from the name
-     * defined in the key.
+    /**
+     * Maps a key to a XML attribute name. The name used for persistent storage
+     * may be different from the name defined in the key.
      *
      * @param f the figure
      * @param key the key
@@ -49,42 +52,45 @@ public interface FigureFactory {
      */
     String keyToName(Figure f, Key<?> key) throws IOException;
 
-    /** Maps an XML attribute name to a key.
+    /**
+     * Maps an XML attribute name to a key.
      *
      * @param f the figure
      * @param name the name
      * @return the key
      *
-     * @throws java.io.IOException if the factory does not support the name
-     * for the specified figure
+     * @throws java.io.IOException if the factory does not support the name for
+     * the specified figure
      */
     Key<?> nameToKey(Figure f, String name) throws IOException;
 
-    /** Maps a value to an XML attribute value.
+    /**
+     * Maps a value to an XML attribute value.
      *
      * @param key the key
      * @param value the value
      * @return the mapped attribute value
      *
-     * @throws java.io.IOException if the factory does not support a mapping
-     * for the specified key
+     * @throws java.io.IOException if the factory does not support a mapping for
+     * the specified key
      */
     String valueToString(Key<?> key, Object value) throws IOException;
 
-    /** Maps an XML attribute value to a value.
+    /**
+     * Maps an XML attribute value to a value.
      *
      * @param key the key
      * @param cdata the XML attribute value
      * @return the mapped value
      *
-     * @throws java.io.IOException if the factory does not support a mapping
-     * for the specified key
+     * @throws java.io.IOException if the factory does not support a mapping for
+     * the specified key
      */
     Object stringToValue(Key<?> key, String cdata) throws IOException;
 
-    /** Returns the default for the key.
-     * The default value used for persistent storage may be different from
-     * the default value defined in the key.
+    /**
+     * Returns the default for the key. The default value used for persistent
+     * storage may be different from the default value defined in the key.
      *
      * @param <T> The type of the value
      * @param key The key
@@ -92,7 +98,8 @@ public interface FigureFactory {
      */
     <T> T getDefaultValue(Key<T> key);
 
-    /** Returns true if the specified value is the default for the given key.
+    /**
+     * Returns true if the specified value is the default for the given key.
      *
      * @param <T> The type of the value
      * @param key The key
@@ -104,10 +111,39 @@ public interface FigureFactory {
         return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
     }
 
-    /** Returns all persistent keys for the specified figure.
+    /**
+     * Returns all persistent keys for the specified figure.
      *
      * @param f The figure
      * @return an immutable set
      */
     Set<Key<?>> figureKeys(Figure f);
+
+    /**
+     * Creates an external representation of the drawing.
+     * <p>
+     * Note: this method must not change the provided internal drawing.
+     * <p>
+     * The default implementation returns the same drawing.
+     *
+     * @param internal an internal representation of the drawing
+     * @return An external representation of the drawing.
+     */
+    default Drawing toExternalDrawing(Drawing internal) {
+        return internal;
+    }
+
+    /**
+     * Creates an internal representation of the drawing.
+     * <p>
+     * Note: this method must not change the provided external drawing.
+     * <p>
+     * The default implementation returns the same drawing.
+     *
+     * @param external an external representation of the drawing
+     * @return An internal representation of the drawing.
+     */
+    default Drawing fromExternalDrawing(Drawing external) {
+        return external;
+    }
 }
