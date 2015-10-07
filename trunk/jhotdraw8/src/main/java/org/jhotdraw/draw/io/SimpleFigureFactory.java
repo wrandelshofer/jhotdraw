@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
@@ -26,8 +29,8 @@ public class SimpleFigureFactory implements FigureFactory {
 
     private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> attrToKey = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToAttr = new HashMap<>();
-    private final Map<String, Class<? extends Figure>> elemToFigure = new HashMap<>();
-    private final Map<Class<? extends Figure>, String> figureToElem = new HashMap<>();
+    private final Map<String, Supplier<Figure>> nameToFigure = new HashMap<>();
+    private final Map<Class<? extends Figure>, String> figureToName = new HashMap<>();
     private final Map<String, Converter<?>> valueToXML = new HashMap<>();
     private final Map<String, Converter<?>> valueFromXML = new HashMap<>();
     private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureKeys = new HashMap<>();
@@ -110,16 +113,48 @@ public class SimpleFigureFactory implements FigureFactory {
     /**
      * Adds the provided mappings of XML attribute names from/to
      * {@code Figure}s.
+     * <p>
+     * {@code figureClass.newInstance()} is used to instantiate a figure from a
+     * name.</p>
      *
      * @param name The element name
-     * @param figure The figure class
+     * @param figureClass The figure class is used both for instantiation of a
+     * new figure and for determining the name of a figure.
      */
-    public void addFigure(String name, Class<? extends Figure> figure) {
-        if (!elemToFigure.containsKey(name)) {
-            elemToFigure.put(name, figure);
+    public void addFigure(String name, Class<? extends Figure> figureClass) {
+        if (!nameToFigure.containsKey(name)) {
+            nameToFigure.put(name, () -> {
+                try {
+                    return figureClass.newInstance();
+                } catch (InstantiationException | IllegalAccessException e) {
+                    throw new InternalError("Couldn't instantiate " + figureClass, e);
+                }
+            });
         }
-        if (!figureToElem.containsKey(figure)) {
-            figureToElem.put(figure, name);
+        if (!figureToName.containsKey(figureClass)) {
+            figureToName.put(figureClass, name);
+        }
+    }
+
+    /**
+     * Adds the provided mappings of XML attribute names from/to
+     * {@code Figure}s.
+     * <p>
+     * The provided {@code figureSupplier} is used to instantiate a figure from
+     * a name.</p>
+     *
+     * @param name The element name
+     * @param figureSupplier The figure supplier is used for instantiating a
+     * figure from a name.
+     * @param figureClass The figure class is used for determining the name of a
+     * figure.
+     */
+    public void addFigure(String name, Supplier<Figure> figureSupplier, Class<? extends Figure> figureClass) {
+        if (!nameToFigure.containsKey(name)) {
+            nameToFigure.put(name, figureSupplier);
+        }
+        if (!figureToName.containsKey(figureClass)) {
+            figureToName.put(figureClass, name);
         }
     }
 
@@ -153,29 +188,25 @@ public class SimpleFigureFactory implements FigureFactory {
 
     @Override
     public String figureToName(Figure f) throws IOException {
-        if (!figureToElem.containsKey(f.getClass())) {
+        if (!figureToName.containsKey(f.getClass())) {
             if (skipFigures.contains(f.getClass())) {
                 return null;
             }
             throw new IOException("no mapping for figure " + f.getClass());
         }
-        return figureToElem.get(f.getClass());
+        return figureToName.get(f.getClass());
     }
 
     @Override
     public Figure nameToFigure(String elementName) throws IOException {
-        if (!elemToFigure.containsKey(elementName)) {
+        if (!nameToFigure.containsKey(elementName)) {
             if (skipElements.contains(elementName)) {
                 return null;
             }
             throw new IOException("no mapping for element " + elementName);
         }
-        Class<? extends Figure> clazz = elemToFigure.get(elementName);
-        try {
-            return (Figure) clazz.newInstance();
-        } catch (InstantiationException | IllegalAccessException ex) {
-            throw new IOException("can not instantiate " + clazz);
-        }
+        Supplier<Figure> supplier = nameToFigure.get(elementName);
+        return supplier.get();
     }
 
     @Override

@@ -196,7 +196,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     private void writeElementAttributes(Element elem, Figure figure) throws IOException {
         setAttribute(elem, "id", ids.createId(figure));
         for (Key<?> k : factory.figureKeys(figure)) {
-                @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked")
             Key<Object> key = (Key<Object>) k;
             Object value = figure.get(key);
             if (!factory.isDefaultValue(key, value)) {
