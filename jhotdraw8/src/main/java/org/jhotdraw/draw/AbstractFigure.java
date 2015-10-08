@@ -131,7 +131,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      * This implementation is empty.
      */
     @Override
-    public void removeAllConnectionsWith(Figure connectedFigure) {
+    public void removeConnectionTarget(Figure connectedFigure) {
         // empty
     }
 
@@ -139,7 +139,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      * This implementation is empty.
      */
     @Override
-    public void removeAllConnections() {
+    public void removeAllConnectionTargets() {
         // empty
     }
 

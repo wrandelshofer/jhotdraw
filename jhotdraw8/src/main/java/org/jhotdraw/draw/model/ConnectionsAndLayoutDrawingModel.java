@@ -15,10 +15,10 @@ import org.jhotdraw.draw.key.FigureKey;
 
 /**
  * This drawing model assumes that the drawing contains figures which perform
- layouts and has getConnectionsFromFigures between figures.
+ layouts and has getConnectedFigures between figures.
  * <p>
- Assumes that a figure which has getConnectionsFromFigures to other figures may have
- in turn getConnectionsFromFigures from other figures.
+ Assumes that a figure which has getConnectedFigures to other figures may have
+ in turn getConnectedFigures from other figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -56,7 +56,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void disconnect(Figure figure) {
-        for (Figure connectedFigure : figure.getConnectionsFromFigures()) {
+        for (Figure connectedFigure : figure.getConnectedFigures()) {
             fire(DrawingModelEvent.layoutInvalidated(this, connectedFigure));
 
         }
