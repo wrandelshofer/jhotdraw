@@ -251,7 +251,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
      * @return a list of connected figures
      */
     @Override
-    public Set<Figure> getConnectionTargetFigures() {
+    public Set<Figure> getConnectionTargets() {
         HashSet<Figure> ctf = new HashSet<>();
         if (get(START_FIGURE) != null) {
             ctf.add(get(START_FIGURE));
