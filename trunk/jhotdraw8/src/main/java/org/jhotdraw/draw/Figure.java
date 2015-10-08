@@ -267,7 +267,7 @@ public interface Figure extends StyleablePropertyBean {
     /**
      * The connected figures property contains all figures which are connected
      * to this figure.
-     * <p>
+     * 
      * <pre><code>
      * +-----------------+                    +-------------------------+
      * | ConnectedFigure |-----connection----&gt;| ConnectionTarget (this) |
