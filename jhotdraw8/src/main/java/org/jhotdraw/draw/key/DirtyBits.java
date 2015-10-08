@@ -19,22 +19,22 @@ public enum DirtyBits {
     STATE,
     /** Affects the JavaFX {@code Node} created by the figure.
      * <p>
-     * All cached JavaFX {@code Node}s created by the figure, should be updated.</p>
+     * All cached JavaFX {@code Node}s created by the figure need to be updated.</p>
      */
     NODE,
     /** Affects the layout of connected figures.
      * <p>
-     * All connection figures which perform layouts should by laid out.</p>
+     * All connected figures which perform layouts need to be laid out.</p>
      */
     CONNECTION_LAYOUT,
     /** Affects the layout of this figure and its ancestors.
      * <p>
-     * All parent figures which perform layouts should by laid out.</p>
+     * All parent figures which perform layouts need to be laid out.</p>
      */
     LAYOUT,
     /** Affects the style of the figure.
      * <p>
-     * The CSS needs to be applied on the figure.
+     * The CSS needs to be applied again on the figure.
      */
     STYLE
     ;

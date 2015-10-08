@@ -134,7 +134,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         if (oldConnectedFigure != null) {
             model.fireNodeInvalidated(oldConnectedFigure);
         }
-        for (Figure f : o.getConnectionTargetFigures()) {
+        for (Figure f : o.getConnectionTargets()) {
             model.fireNodeInvalidated(f);
         }
 
