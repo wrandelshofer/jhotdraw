@@ -194,8 +194,9 @@ public class PatternConverter implements Converter<Object[]> {
             }
         }
 
-        static String escape(char charAt) {
-            if (Character.isISOControl(charAt)) {
+        static String escape(int charAt) {
+            if (charAt==-1) return "end of file";
+            if (Character.isISOControl((char)charAt)) {
                 String hex = "000" + Integer.toHexString(charAt);
                 return "\\u" + hex.substring(hex.length() - 4);
             } else {
@@ -405,7 +406,7 @@ public class PatternConverter implements Converter<Object[]> {
                         if (i < minRepeat) {
                             throw new ParseException("Expected character '"
                                     + escape(chars.charAt(j)) + "' but found '"
-                                    + escape((char) ch) + "'.", buf.position());
+                                    + escape(ch) + "'.", buf.position());
                         } else {
                             buf.position(reset);
                             return;

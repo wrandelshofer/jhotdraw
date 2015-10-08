@@ -10,6 +10,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import static java.lang.Math.*;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
@@ -18,6 +19,7 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
+import static org.jhotdraw.draw.shape.RectangleFigure.BOUNDS;
 
 /**
  * Renders a {@code javafx.scene.shape.Circle}.
@@ -32,49 +34,37 @@ public class EllipseFigure extends AbstractShapeFigure {
      */
     public final static String TYPE_SELECTOR = "Ellipse";
 
-    public final static SimpleFigureKey<Point2D> CENTER = new SimpleFigureKey<>("center", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
-    public final static SimpleFigureKey<Double> RADIUS_X = new SimpleFigureKey<>("radiusX", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
-    public final static SimpleFigureKey<Double> RADIUS_Y = new SimpleFigureKey<>("radiusY", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
+    public final static SimpleFigureKey<Rectangle2D> BOUNDS = RectangleFigure.BOUNDS;
 
     public EllipseFigure() {
         this(0, 0, 1, 1);
     }
 
-    public EllipseFigure(double x, double y, double radiusx, double radiusy) {
-        set(CENTER, new Point2D(x, y));
-        set(RADIUS_X, radiusx);
-        set(RADIUS_Y, radiusy);
+    public EllipseFigure(double x, double y, double width, double height) {
+        set(BOUNDS, new Rectangle2D(x, y, width, height));
     }
 
-    public EllipseFigure(Point2D center, double radiusx, double radiusy) {
-        set(CENTER, center);
-        set(RADIUS_X, radiusx);
-        set(RADIUS_Y, radiusy);
+    public EllipseFigure(Rectangle2D rect) {
+        set(BOUNDS, rect);
     }
 
     @Override
     public Bounds getBoundsInLocal() {
-        Point2D c = get(CENTER);
-        double rx = get(RADIUS_X);
-        double ry = get(RADIUS_Y);
-        return new BoundingBox(c.getX() - rx, c.getY() - ry, rx * 2, ry * 2);
+        Rectangle2D r = get(BOUNDS);
+        return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
     @Override
     public void reshape(Transform transform) {
-        Bounds r = getBoundsInLocal();
+        Rectangle2D r = get(BOUNDS);
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
-        set(CENTER, new Point2D(b.getMinX() + b.getWidth() / 2, b.getMinY() + b.getHeight() / 2));
-        set(RADIUS_X, abs(b.getWidth()) / 2);
-        set(RADIUS_Y, abs(b.getHeight()) / 2);
+        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(CENTER, new Point2D(x + width / 2, y + height / 2));
-        set(RADIUS_X, abs(width) / 2);
-        set(RADIUS_Y, abs(height) / 2);
+        set(BOUNDS, new Rectangle2D(x + min(width, 0), y + min(height, 0), abs(width), abs(height)));
     }
 
     @Override
@@ -87,11 +77,11 @@ public class EllipseFigure extends AbstractShapeFigure {
         Ellipse n = (Ellipse) node;
         applyFigureProperties(n);
         applyShapeProperties(n);
-        Point2D c = get(CENTER);
-        n.setCenterX(c.getX());
-        n.setCenterY(c.getY());
-        n.setRadiusX(get(RADIUS_X));
-        n.setRadiusY(get(RADIUS_Y));
+        Rectangle2D r = get(BOUNDS);
+        n.setCenterX(r.getMinX() + r.getWidth() * 0.5);
+        n.setCenterY(r.getMinY() + r.getHeight() * 0.5);
+        n.setRadiusX(r.getWidth() * 0.5);
+        n.setRadiusY(r.getHeight() * 0.5);
         n.applyCss();
     }
 

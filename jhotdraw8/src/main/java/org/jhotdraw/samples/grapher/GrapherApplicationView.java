@@ -37,6 +37,8 @@ import org.jhotdraw.draw.gui.ZoomToolbar;
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.io.DefaultFigureFactory;
 import org.jhotdraw.draw.io.FigureFactory;
+import org.jhotdraw.draw.io.IdFactory;
+import org.jhotdraw.draw.io.SimpleIdFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
@@ -62,8 +64,8 @@ public class GrapherApplicationView extends AbstractView {
     private DrawingView drawingView;
 
     private DrawingEditor editor;
-    
-    private final static String GRAPHER_NAMESPACE_URI="jhotdraw.org/samples/grapher";
+
+    private final static String GRAPHER_NAMESPACE_URI = "jhotdraw.org/samples/grapher";
 
     @Override
     public void init(EventHandler<TaskCompletionEvent<?>> callback) {
@@ -80,27 +82,26 @@ public class GrapherApplicationView extends AbstractView {
         drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         // 
-        drawingView.getModel().addListener((InvalidationListener)drawingModel -> {
+        drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
             modified.set(true);
         });
-        
+
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
 
         scrollPane.setContent(drawingView.getNode());
-        
+
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
-        
         ToolsToolbar ttbar = new ToolsToolbar(editor);
         Resources rsrc = Resources.getResources("org.jhotdraw.draw.Labels");
         Tool defaultTool;
-        ttbar.addTool(defaultTool=new SelectionTool("selectionTool", rsrc), 0, 0);
-        ttbar.addTool(new SelectionTool("selectionTool", HandleType.MOVE,rsrc), 0, 1);
-        ttbar.addTool(new CreationTool("edit.createRectangle", rsrc,RectangleFigure::new), 1, 0);
+        ttbar.addTool(defaultTool = new SelectionTool("selectionTool", rsrc), 0, 0);
+        ttbar.addTool(new SelectionTool("selectionTool", HandleType.MOVE, rsrc), 0, 1);
+        ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, RectangleFigure::new), 1, 0);
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new), 2, 0);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new), 1, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new SimpleLabelFigure(0, 0, "Hello")), 3, 1);
-        ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc,LineConnectionFigure::new), 2, 1);
+        ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new), 2, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolBar.getItems().add(ttbar);
@@ -108,10 +109,10 @@ public class GrapherApplicationView extends AbstractView {
         ZoomToolbar ztbar = new ZoomToolbar();
         ztbar.setDrawingView(drawingView);
         toolBar.getItems().add(ztbar);
-        
+
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(editor));
-        
+
         callback.handle(new TaskCompletionEvent<Void>());
     }
 
@@ -120,8 +121,6 @@ public class GrapherApplicationView extends AbstractView {
         return node;
     }
 
-   
-
     @Override
     public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent<?>> callback) {
         BackgroundTask<SimpleDrawing> t = new BackgroundTask<SimpleDrawing>() {
@@ -129,11 +128,11 @@ public class GrapherApplicationView extends AbstractView {
             @Override
             protected SimpleDrawing call() throws Exception {
                 try {
-                    FigureFactory factory = new DefaultFigureFactory();
-                    SimpleXmlIO io = new SimpleXmlIO(factory,null,GRAPHER_NAMESPACE_URI,null);
+                    IdFactory idFactory = new SimpleIdFactory();
+                    FigureFactory factory = new DefaultFigureFactory(idFactory);
+                    SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
                     SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
                     drawing.applyCss();
-                    drawing.layout();
                     return drawing;
                 } catch (Exception e) {
                     throw e;
@@ -157,8 +156,9 @@ public class GrapherApplicationView extends AbstractView {
 
             @Override
             protected Void call() throws Exception {
-                FigureFactory factory = new DefaultFigureFactory();
-                    SimpleXmlIO io = new SimpleXmlIO(factory,null,GRAPHER_NAMESPACE_URI,null);
+                IdFactory idFactory = new SimpleIdFactory();
+                FigureFactory factory = new DefaultFigureFactory(idFactory);
+                SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
                 io.write(uri, drawingView.getDrawing());
                 return null;
             }
@@ -171,6 +171,7 @@ public class GrapherApplicationView extends AbstractView {
     public void clear(EventHandler<TaskCompletionEvent<?>> callback) {
         Drawing d = new SimpleDrawing();
         drawingView.setDrawing(d);
+        clearModified();
         callback.handle(new TaskCompletionEvent<Void>());
     }
 
@@ -184,6 +185,5 @@ public class GrapherApplicationView extends AbstractView {
             }
         }
     }
-    
-    
+
 }

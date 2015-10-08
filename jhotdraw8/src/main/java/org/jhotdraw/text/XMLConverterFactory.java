@@ -6,6 +6,12 @@ package org.jhotdraw.text;
 
 /**
  * XMLConverterFactory.
+ * <p>
+ * Supports the following types:
+ * <ul>
+ * <li>number</li>
+ * <li>word</li>
+ * </ul>
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -19,6 +25,8 @@ public class XMLConverterFactory implements ConverterFactory {
         switch (type) {
             case "number":
                 return new XMLDoubleConverter();
+            case "word":
+                return new WordConverter();
             default:
                 throw new IllegalArgumentException("illegal type:"+type);
         }

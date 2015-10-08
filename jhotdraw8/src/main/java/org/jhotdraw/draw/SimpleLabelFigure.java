@@ -68,7 +68,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderF
     }
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(ORIGIN, new Point2D(x, y));
+        set(ORIGIN, new Point2D(x, y+height));
     }
     
     @Override
