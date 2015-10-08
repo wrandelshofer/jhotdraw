@@ -137,6 +137,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         if (newConnectedFigure != null) {
             model.fire(DrawingModelEvent.nodeInvalidated(model, newConnectedFigure));
         }
+        o.connectNotify();
         model.layout(o);
     }
 
