@@ -13,7 +13,8 @@ package org.jhotdraw.draw.key;
  */
 public enum DirtyBits {
     /** Affects the state of the figure.
-     *//** Affects the state of the figure.
+     * <p>
+     * A GUI element which shows the state of the figure needs to be updated.
      */
     STATE,
     /** Affects the JavaFX {@code Node} created by the figure.
@@ -30,7 +31,13 @@ public enum DirtyBits {
      * <p>
      * All parent figures which perform layouts should by laid out.</p>
      */
-    LAYOUT;
+    LAYOUT,
+    /** Affects the style of the figure.
+     * <p>
+     * The CSS needs to be applied on the figure.
+     */
+    STYLE
+    ;
 
     private int mask;
 

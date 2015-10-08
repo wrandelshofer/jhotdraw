@@ -67,7 +67,11 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         /**
          * The layout of a single figure has been invalidated.
          */
-        LAYOUT_INVALIDATED
+        LAYOUT_INVALIDATED,
+        /**
+         * The style of a single figure has been invalidated.
+         */
+        STYLE_INVALIDATED,
     }
     private final Figure figure;
     private final Key<?> key;
@@ -123,6 +127,9 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return new DrawingModelEvent(source, EventType.LAYOUT_INVALIDATED, figure, null, null, -1, null, null, null);
     }
 
+    public static <T> DrawingModelEvent styleInvalidated(DrawingModel source, Figure figure) {
+        return new DrawingModelEvent(source, EventType.STYLE_INVALIDATED, figure, null, null, -1, null, null, null);
+    }
     public static <T> DrawingModelEvent rootChanged(DrawingModel source, Drawing figure) {
         return new DrawingModelEvent(source, EventType.ROOT_CHANGED, figure, null, null, -1, null, null, null);
     }
