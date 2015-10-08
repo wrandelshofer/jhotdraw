@@ -90,7 +90,7 @@ public class CircleFigure extends AbstractShapeFigure {
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopEllipseConnector();
+        return new ChopEllipseConnector(this);
     }
 
     @Override

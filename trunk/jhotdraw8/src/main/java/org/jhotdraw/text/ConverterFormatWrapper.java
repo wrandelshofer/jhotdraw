@@ -10,6 +10,7 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * Allows to use a {@code java.text.Format} with the {@code Converter} API.
@@ -31,18 +32,18 @@ public class ConverterFormatWrapper implements Converter<Object> {
     }
 
   
-    public Object fromString(String string, ParsePosition pp) {
+    public Object fromString(String string, IdFactory idFactory, ParsePosition pp) {
         Object value = format.parseObject(string, pp);
         return value;
     }
 
     @Override
-    public void toString(Appendable out, Object value) {
+    public void toString(Appendable out, IdFactory idFactory, Object value) {
         throw new UnsupportedOperationException("Not supported yet."+format); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object fromString(CharBuffer buf) throws ParseException {
+    public Object fromString(CharBuffer buf, IdFactory idFactory) throws ParseException {
         int pos=buf.position();
         String str=buf.toString();
         ParsePosition pp=new ParsePosition(0);

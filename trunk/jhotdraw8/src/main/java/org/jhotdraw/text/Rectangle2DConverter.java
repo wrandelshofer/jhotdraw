@@ -10,6 +10,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import javafx.geometry.Rectangle2D;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * Rectangle2DConverter.
@@ -22,13 +23,13 @@ public class Rectangle2DConverter implements Converter<Rectangle2D> {
     private final PatternConverter formatter = new PatternConverter("{0,number} {1,number} {2,number} {3,number}", new XMLConverterFactory());
 
     @Override
-    public void toString(Appendable out, Rectangle2D value) throws IOException {
-        formatter.toString(out, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
+    public void toString(Appendable out, IdFactory idFactory, Rectangle2D value) throws IOException {
+        formatter.toString(out, idFactory, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
     }
 
     @Override
-    public Rectangle2D fromString(CharBuffer buf) throws ParseException, IOException {
-       Object[] v = formatter.fromString(buf);
+    public Rectangle2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        Object[] v = formatter.fromString(buf);
         if (v == null) {
             return null;
         }

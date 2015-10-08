@@ -14,10 +14,14 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CenterConnector implements Connector {
+public class CenterConnector extends AbstractConnector {
+
+    public CenterConnector(Figure target) {
+        super(target);
+    }
 
     @Override
-    public Point2D getPosition(Figure target, Figure connection) {
+    public Point2D getPosition(Figure connection) {
         // FIXME implement me properly
         final Bounds b = target.getBoundsInLocal();
         return target.localToDrawing(new Point2D(b.getMinX() + b.getWidth() / 2.0, (b.getMinY()
@@ -25,7 +29,7 @@ public class CenterConnector implements Connector {
     }
 
     @Override
-    public Point2D chopStart(Figure target, Figure connection, double startX, double startY, double endX, double endY) {
-        return getPosition(target, connection);
+    public Point2D chopStart(Figure connection, double startX, double startY, double endX, double endY) {
+        return getPosition(connection);
     }
 }

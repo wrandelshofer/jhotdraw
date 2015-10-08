@@ -267,7 +267,7 @@ public interface Figure extends StyleablePropertyBean {
     /**
      * The connected figures property contains all figures which are connected
      * to this figure.
-     * 
+     *
      * <pre><code>
      * +-----------------+                    +-------------------------+
      * | ConnectedFigure |-----connection----&gt;| ConnectionTarget (this) |
@@ -278,7 +278,7 @@ public interface Figure extends StyleablePropertyBean {
      * <p>
      * The API for establishing a connection is specific for each figure. For
      * example, to connect a {@link LineConnectionFigure} to this figure, you
-     * need to set its {@code START_FIGURE} and/or {@code END_FIGURE} property 
+     * need to set its {@code START_FIGURE} and/or {@code END_FIGURE} property
      * to this figure.
      * <p>
      * A connection can be removed by using the specific API of the figure or by
@@ -303,8 +303,9 @@ public interface Figure extends StyleablePropertyBean {
     void removeAllConnectionTargets();
 
     /**
-     * This method is invoked by connection tools and connection handles after
-     * they have changed the connected state of the figure.
+     * This method is invoked on the connection targets by
+     * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
+     * connection targets of the figure have changed.
      * <p>
      * The default implementation of this method is empty.
      */

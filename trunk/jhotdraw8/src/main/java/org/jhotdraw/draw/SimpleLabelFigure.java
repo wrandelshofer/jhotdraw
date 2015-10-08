@@ -95,7 +95,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderF
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopRectangleConnector();
+        return new ChopRectangleConnector(this);
     }
 
     @Override

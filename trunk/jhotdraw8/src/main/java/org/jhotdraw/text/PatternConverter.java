@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.jhotdraw.draw.io.IdFactory;
 import org.jhotdraw.io.StreamPosTokenizer;
 
 /**
@@ -132,7 +133,7 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     @Override
-    public void toString(Appendable out, Object... value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, Object... value) throws IOException {
         int[] indices = new int[numIndices];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = i;
@@ -141,7 +142,7 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     @Override
-    public Object[] fromString(CharBuffer buf) throws ParseException, IOException {
+    public Object[] fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         ArrayList<Object> value = new ArrayList<>();
         ast.fromString(buf, factory, value);
         return value.toArray();

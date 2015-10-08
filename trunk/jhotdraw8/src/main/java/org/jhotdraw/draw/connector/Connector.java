@@ -15,7 +15,13 @@ import org.jhotdraw.draw.Figure;
  * @version $Id$
  */
 public interface Connector {
-
+    
+    /** The target figure.
+     * 
+     * @return the target figure
+     */
+    Figure getTarget();
+    
     /**
      * Returns a point on the target figure for the specified connection figure
      * in drawing coordinates.
@@ -24,7 +30,7 @@ public interface Connector {
      * @param connection a connection figure
      * @return A point on the target figure.
      */
-    Point2D getPosition(Figure target, Figure connection);
+    Point2D getPosition(Figure connection);
 
     /**
      * Chops the start of the provided line given in drawing coordinates.
@@ -37,7 +43,7 @@ public interface Connector {
      * @param endY y-coordinate at the end of the line
      * @return the new start point in drawing coordinates
      */
-    Point2D chopStart(Figure target, Figure connection, double startX, double startY, double endX, double endY);
+    Point2D chopStart(Figure connection, double startX, double startY, double endX, double endY);
 
     /**
      * Chops the end of the provided line.
@@ -50,8 +56,8 @@ public interface Connector {
      * @param endY y-coordinate at the end of the line
      * @return the new end point
      */
-    default Point2D chopEnd(Figure target, Figure connection, double startX, double startY, double endX, double endY) {
-        return chopStart(target, connection, endX, endY, startX, startY);
+    default Point2D chopEnd(Figure connection, double startX, double startY, double endX, double endY) {
+        return chopStart(connection, endX, endY, startX, startY);
     }
 
     /**
@@ -63,8 +69,8 @@ public interface Connector {
      * @param end the end of the line
      * @return the new start point in drawing coordinates
      */
-    default Point2D chopStart(Figure target, Figure connection, Point2D start, Point2D end) {
-        return chopStart(target, connection, start.getX(), start.getY(), end.getX(), end.getY());
+    default Point2D chopStart(Figure connection, Point2D start, Point2D end) {
+        return chopStart(connection, start.getX(), start.getY(), end.getX(), end.getY());
     }
 
     /**
@@ -76,7 +82,7 @@ public interface Connector {
      * @param end the end of the line
      * @return the new end point in drawing coordinates
      */
-    default Point2D chopEnd(Figure target, Figure connection, Point2D start, Point2D end) {
-        return chopStart(target, connection, end.getX(), end.getY(), start.getX(), start.getY());
+    default Point2D chopEnd(Figure connection, Point2D start, Point2D end) {
+        return chopStart(connection, end.getX(), end.getY(), start.getX(), start.getY());
     }
 }

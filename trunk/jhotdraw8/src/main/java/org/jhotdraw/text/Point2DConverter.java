@@ -10,6 +10,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import javafx.geometry.Point2D;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
@@ -23,12 +24,12 @@ public class Point2DConverter implements Converter<Point2D> {
     private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new XMLConverterFactory());
 
     @Override
-    public void toString(Appendable out, Point2D value) throws IOException {
-        formatter.toString(out, value.getX(), value.getY());
+    public void toString(Appendable out, IdFactory idFactory, Point2D value) throws IOException {
+        formatter.toString(out,idFactory, value.getX(), value.getY());
     }
 
     @Override
-    public Point2D fromString(CharBuffer buf) throws ParseException, IOException {
+    public Point2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
         return new Point2D((double) v[0], (double) v[1]);

@@ -13,6 +13,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * Formats real numbers.
@@ -219,7 +220,7 @@ public class NumberConverter implements Converter<Number> {
     }
 
     @Override
-    public void toString(Appendable buf, Number value) throws IOException {
+    public void toString(Appendable buf, IdFactory idFactory, Number value) throws IOException {
         if (value == null && allowsNullValue) {
             return;
         }
@@ -288,7 +289,7 @@ public class NumberConverter implements Converter<Number> {
     }
 
     @Override
-    public Number fromString(CharBuffer str) throws ParseException {
+    public Number fromString(CharBuffer str, IdFactory idFactory) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
         }

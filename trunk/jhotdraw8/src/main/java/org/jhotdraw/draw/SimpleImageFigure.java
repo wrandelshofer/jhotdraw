@@ -100,7 +100,7 @@ public class SimpleImageFigure extends AbstractLeafFigure {
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopRectangleConnector();
+        return new ChopRectangleConnector(this);
     }
 
     @Override

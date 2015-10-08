@@ -11,6 +11,7 @@ import java.text.ParseException;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import org.jhotdraw.draw.io.IdFactory;
 import org.jhotdraw.io.StreamPosTokenizer;
 
 /**
@@ -38,7 +39,7 @@ public class CSSFontConverter implements Converter<Font> {
     private final XMLDoubleConverter doubleConverter = new XMLDoubleConverter();
 
     @Override
-    public void toString(Appendable out, Font font) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, Font font) throws IOException {
         double fontSize = font.getSize();
         String fontStyle = font.getStyle();
         String fontFamily = font.getFamily();
@@ -57,7 +58,7 @@ public class CSSFontConverter implements Converter<Font> {
     }
 
     @Override
-    public Font fromString(CharBuffer buf) throws ParseException, IOException {
+    public Font fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(buf.toString()));
 
         FontPosture fontPosture = FontPosture.REGULAR;

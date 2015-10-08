@@ -36,7 +36,12 @@ public enum DirtyBits {
      * <p>
      * The CSS needs to be applied again on the figure.
      */
-    STYLE
+    STYLE,
+    /** Affects the connection of the figure.
+     * <p>
+     * Method connectNotify needs to be invoked on the figure.
+     */
+    CONNECTION
     ;
 
     private int mask;

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * CSSPaintConverter.
@@ -42,7 +43,7 @@ import javafx.scene.paint.Paint;
  */
 public class CSSPaintConverter implements Converter<Paint> {
 
-    public void toString(Appendable out, Paint value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
         if (value instanceof Color) {
             Color c = (Color) value;
             if (c.getOpacity() == 1.0) {
@@ -69,7 +70,7 @@ public class CSSPaintConverter implements Converter<Paint> {
     }
 
     @Override
-    public Paint fromString(CharBuffer buf) throws ParseException, IOException {
+    public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         try {
             Color c = Color.web(buf.toString());
             buf.position(buf.limit());

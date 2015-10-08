@@ -83,7 +83,6 @@ public class ConnectionTool extends AbstractTool {
                 }
             }
         }
-        figure.set(LineConnectionFigure.START_FIGURE, newConnectedFigure);
         figure.set(LineConnectionFigure.START_CONNECTOR, newConnector);
 
         dm.addChildTo(figure, layer);
@@ -107,13 +106,11 @@ public class ConnectionTool extends AbstractTool {
             Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
 
             Connector newConnector = null;
-            Figure newConnectedFigure = null;
             if (!event.isMetaDown()) {
                 List<Figure> list = view.findFigures(newPoint, true);
                 for (Figure ff : list) {
                     newConnector = ff.findConnector(newPoint, figure);
                     if (newConnector != null) {
-                        newConnectedFigure = ff;
                         break;
                     }
                 }
@@ -129,13 +126,7 @@ public class ConnectionTool extends AbstractTool {
 
             DrawingModel model = view.getModel();
             model.set(figure, LineConnectionFigure.END, figure.drawingToLocal(constrainedPoint));
-            Figure oldConnectedFigure = model.set(figure, LineConnectionFigure.END_FIGURE, newConnectedFigure);
             model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
-            for (Figure c:figure.getConnectionTargets()) {
-                model.fireNodeInvalidated(c);
-            }
-            figure.connectNotify();
-            model.layout(figure);
         }
         event.consume();
     }

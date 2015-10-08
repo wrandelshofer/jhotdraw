@@ -8,6 +8,7 @@ package org.jhotdraw.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * Converts an {@code Object} to a {@code String} but can not a {@code String}
@@ -31,7 +32,7 @@ import java.text.ParseException;
 public class DefaultConverter implements Converter<Object> {
 
     @Override
-    public Object fromString(CharBuffer buf) throws ParseException, IOException {
+    public Object fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = buf.read(out);
         out.position(0);
@@ -40,7 +41,7 @@ public class DefaultConverter implements Converter<Object> {
     }
 
     @Override
-    public void toString(Appendable out, Object value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, Object value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
 
