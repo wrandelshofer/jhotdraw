@@ -50,7 +50,7 @@ public class ConnectionPointHandle extends AbstractHandle {
 
     private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE,  BorderStrokeStyle.SOLID, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
     public ConnectionPointHandle(Figure figure, SimpleFigureKey<Point2D> pointKey,
             SimpleFigureKey<Figure> figureKey, SimpleFigureKey<Connector> connectorKey) {
@@ -101,15 +101,15 @@ public class ConnectionPointHandle extends AbstractHandle {
 
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
-        Point2D pointInViewCoordinates =new Point2D(event.getX(), event.getY());
+        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D newPoint = view.viewToDrawing(pointInViewCoordinates);
 
-        Point2D constrainedPoint; 
+        Point2D constrainedPoint;
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
             constrainedPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
-        }else{
-            constrainedPoint=newPoint;
+        } else {
+            constrainedPoint = newPoint;
         }
 
         Figure o = getOwner();
@@ -132,11 +132,12 @@ public class ConnectionPointHandle extends AbstractHandle {
         Figure oldConnectedFigure = model.set(o, figureKey, newConnectedFigure);
         model.set(o, connectorKey, newConnector);
         if (oldConnectedFigure != null) {
-            model.fire(DrawingModelEvent.nodeInvalidated(model, oldConnectedFigure));
+            model.fireNodeInvalidated(oldConnectedFigure);
         }
-        if (newConnectedFigure != null) {
-            model.fire(DrawingModelEvent.nodeInvalidated(model, newConnectedFigure));
+        for (Figure f : o.getConnectionsToFigures()) {
+            model.fireNodeInvalidated(f);
         }
+
         o.connectNotify();
         model.layout(o);
     }

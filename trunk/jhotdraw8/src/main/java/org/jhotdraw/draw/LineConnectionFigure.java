@@ -19,7 +19,10 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import static java.lang.Math.*;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.jhotdraw.draw.connector.CenterConnector;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
@@ -59,14 +62,14 @@ public class LineConnectionFigure extends AbstractShapeFigure {
      * The start figure. Is null if the figure is not connected at the start.
      * <p>
      * If the value is changed. This figure must add or remove itself from the
-     * list of getConnectedFigures on the {@code ConnectableFigure}.</p>
+     * list of getConnectionsFromFigures on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> START_FIGURE = new SimpleFigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
      * The end figure. Is null if the figure is not connected at the end.
      * <p>
      * If the value is changed. This figure must add or remove itself from the
-     * list of getConnectedFigures on the {@code ConnectableFigure}.</p>
+     * list of getConnectionsFromFigures on the {@code ConnectableFigure}.</p>
      */
     public static SimpleFigureKey<Figure> END_FIGURE = new SimpleFigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
@@ -94,18 +97,18 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         // the connected figures or one of the connectors changes
         ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(END_FIGURE) != oldValue) {
-                oldValue.getConnectedFigures().remove(LineConnectionFigure.this);
+                oldValue.getConnectionsFromFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getConnectedFigures().add(LineConnectionFigure.this);
+                newValue.getConnectionsFromFigures().add(LineConnectionFigure.this);
             }
         };
         ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(START_FIGURE) != oldValue) {
-                oldValue.getConnectedFigures().remove(LineConnectionFigure.this);
+                oldValue.getConnectionsFromFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getConnectedFigures().add(LineConnectionFigure.this);
+                newValue.getConnectionsFromFigures().add(LineConnectionFigure.this);
             }
         };
 
@@ -177,7 +180,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         if (endFigure != null && endConnector != null) {
             end = endConnector.getPosition(endFigure, this);
         }
-        
+
         // We must switch off rotations for the following computations
         // because
         if (startFigure != null && startConnector != null) {
@@ -202,7 +205,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
-        } else if (handleType == HandleType.MOVE||handleType == HandleType.RESIZE) {
+        } else if (handleType == HandleType.MOVE || handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE));
             list.add(new ConnectionPointHandle(this, START, START_FIGURE, START_CONNECTOR));
             list.add(new ConnectionPointHandle(this, END, END_FIGURE, END_CONNECTOR));
@@ -240,6 +243,23 @@ public class LineConnectionFigure extends AbstractShapeFigure {
                 set(END_CONNECTOR, null);
             }
         }
+    }
+
+    /**
+     * Returns all figures which are connected by this figure.
+     *
+     * @return a list of connected figures
+     */
+    @Override
+    public Set<Figure> getConnectionsToFigures() {
+        HashSet<Figure> ctf = new HashSet<>();
+        if (get(START_FIGURE) != null) {
+            ctf.add(get(START_FIGURE));
+        }
+        if (get(END_FIGURE) != null) {
+            ctf.add(get(END_FIGURE));
+        }
+        return ctf;
     }
 
     @Override

@@ -61,7 +61,7 @@ public class ConnectionTool extends AbstractTool {
     protected void onMousePressed(MouseEvent event, DrawingView view) {
         Platform.runLater(() -> view.getNode().requestFocus());
         figure = figureFactory.get();
-        Point2D pointInViewCoordinates =new Point2D(event.getX(), event.getY());
+        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D newPoint = view.viewToDrawing(pointInViewCoordinates);
         Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, newPoint);
         figure.reshape(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
@@ -96,7 +96,7 @@ public class ConnectionTool extends AbstractTool {
             onMouseDragged(event, view);
             view.getSelectedFigures().clear();
             view.getSelectedFigures().add(figure);
-            figure=null;
+            figure = null;
         }
         fireToolDone();
     }
@@ -123,10 +123,10 @@ public class ConnectionTool extends AbstractTool {
             if (!event.isAltDown() && !event.isControlDown()) {
                 // alt or control turns the constrainer off
                 constrainedPoint = view.getConstrainer().constrainPoint(figure, newPoint);
-            }else{
-                constrainedPoint=newPoint;
+            } else {
+                constrainedPoint = newPoint;
             }
-            
+
             DrawingModel model = view.getModel();
             model.set(figure, LineConnectionFigure.END, figure.drawingToLocal(constrainedPoint));
             Figure oldConnectedFigure = model.set(figure, LineConnectionFigure.END_FIGURE, newConnectedFigure);
@@ -137,6 +137,7 @@ public class ConnectionTool extends AbstractTool {
             if (newConnectedFigure != null) {
                 model.fire(DrawingModelEvent.nodeInvalidated(model, newConnectedFigure));
             }
+            model.fire(DrawingModelEvent.nodeInvalidated(model, figure.get(LineConnectionFigure.START_FIGURE)));
             figure.connectNotify();
             model.layout(figure);
         }
