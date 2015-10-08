@@ -131,13 +131,9 @@ public class ConnectionTool extends AbstractTool {
             model.set(figure, LineConnectionFigure.END, figure.drawingToLocal(constrainedPoint));
             Figure oldConnectedFigure = model.set(figure, LineConnectionFigure.END_FIGURE, newConnectedFigure);
             model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
-            if (oldConnectedFigure != null) {
-                model.fire(DrawingModelEvent.nodeInvalidated(model, oldConnectedFigure));
+            for (Figure c:figure.getConnectionsToFigures()) {
+                model.fireNodeInvalidated(c);
             }
-            if (newConnectedFigure != null) {
-                model.fire(DrawingModelEvent.nodeInvalidated(model, newConnectedFigure));
-            }
-            model.fire(DrawingModelEvent.nodeInvalidated(model, figure.get(LineConnectionFigure.START_FIGURE)));
             figure.connectNotify();
             model.layout(figure);
         }
