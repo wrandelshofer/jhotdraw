@@ -37,6 +37,8 @@ import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
@@ -193,21 +195,28 @@ public interface Figure extends StyleablePropertyBean {
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> STYLE_ID = new SimpleFigureKey<>("styleId", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public static SimpleFigureKey<String> STYLE_ID = new SimpleFigureKey<>("styleId", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
-     * styling the figure with CSS.
+     * styling a figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<ObservableList<String>> STYLE_CLASS = new SimpleFigureKey<>("styleClass", ObservableList.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public static SimpleFigureKey<ObservableList<String>> STYLE_CLASS = new SimpleFigureKey<>("styleClass", ObservableList.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
     /**
-     * Defines the style of the figure. The style is used for styling the figure
+     * Defines the pseudo class states of the figure. The pseudo class states
+     * are used for styling a figure with CSS.
+     *
+     * Default value: {@code null}.
+     */
+    public static SimpleFigureKey<ObservableSet<PseudoClass>> PSEUDO_CLASS_STATES = new SimpleFigureKey<>("pseudoClassStates", ObservableSet.class, "<PseudoClass>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableSet());
+    /**
+     * Defines the style of the figure. The style is used for styling a figure
      * with CSS.
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", List.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", List.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
 
     // ----
     // property names
@@ -729,7 +738,7 @@ public interface Figure extends StyleablePropertyBean {
      * defined in this interface.
      * <p>
      * Invokes the methods {@link #applyStyleProperties(javafx.scene.Node) },
-     * {@link #applyEffectProperties(javafx.scene.Node) }, 
+     * {@link #applyEffectProperties(javafx.scene.Node) },
      * {@link #applyTransformProperties(javafx.scene.Node) }.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
@@ -741,12 +750,12 @@ public interface Figure extends StyleablePropertyBean {
         applyEffectProperties(node);
         applyTransformProperties(node);
     }
+
     /**
-     * Updates a figure node with all style and effect properties
-     * defined in this interface.
+     * Updates a figure node with all style and effect properties defined in
+     * this interface.
      * <p>
-     * Applies the following properties: {@code STYLE_ID},
-     * {@code VISIBLE}.
+     * Applies the following properties: {@code STYLE_ID}, {@code VISIBLE}.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
@@ -757,12 +766,13 @@ public interface Figure extends StyleablePropertyBean {
         node.setId(styleId == null ? "" : styleId);
         node.setVisible(getStyled(VISIBLE));
     }
+
     /**
-     * Updates a figure node with all effect properties
-     * defined in this interface.
+     * Updates a figure node with all effect properties defined in this
+     * interface.
      * <p>
-     * Applies the following properties: {@code BLEND_MODE},
-     * {@code EFFECT}, {@code OPACITY}.
+     * Applies the following properties: {@code BLEND_MODE}, {@code EFFECT},
+     * {@code OPACITY}.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
@@ -773,9 +783,10 @@ public interface Figure extends StyleablePropertyBean {
         node.setEffect(getStyled(EFFECT));
         node.setOpacity(getStyled(OPACITY));
     }
+
     /**
-     * Updates a figure node with all transformation properties
-     * defined in this interface.
+     * Updates a figure node with all transformation properties defined in this
+     * interface.
      * <p>
      * Applies the following properties: {@code ROTATE}, {@code ROTATION_AXIS},
      * {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, {@code TRANSLATE_X},
@@ -1019,7 +1030,10 @@ public interface Figure extends StyleablePropertyBean {
     default ObservableList<String> getStyleClass() {
         return get(STYLE_CLASS);
     }
-
+    @Override
+    default ObservableSet<PseudoClass> getPseudoClassStates() {
+        return get(PSEUDO_CLASS_STATES);
+    }
     @Override
     default String getId() {
         return get(STYLE_ID);

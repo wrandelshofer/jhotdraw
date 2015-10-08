@@ -89,6 +89,9 @@ public abstract class AbstractDrawingModel implements DrawingModel {
         case LAYOUT_INVALIDATED:
             invalidateLayout(event.getFigure());
             break;
+        case STYLE_INVALIDATED:
+            invalidateStyle(event.getFigure());
+            break;
         case SUBTREE_STRUCTURE_CHANGED:
             invalidateLayout(event.getFigure());
             break;

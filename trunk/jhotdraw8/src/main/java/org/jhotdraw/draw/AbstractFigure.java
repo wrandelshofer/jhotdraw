@@ -40,8 +40,6 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     };
     private ReadOnlySetProperty<Figure> connectedFigures = new ReadOnlySetWrapper<>(this, CONNECTED_FIGURES_PROPERTY, FXCollections.observableSet(new HashSet<Figure>())).getReadOnlyProperty();
 
-    private ObservableSet<PseudoClass> pseudoClassStates = FXCollections.observableSet(new HashSet<>());
-
     @Override
     public final ReadOnlySetProperty<Figure> connectedFiguresProperty() {
         return connectedFigures;
@@ -74,11 +72,6 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         if (newParent instanceof Drawing) {
             throw new IllegalArgumentException("illegal parent:" + newParent + " for:" + this);
         }
-    }
-
-    @Override
-    public ObservableSet<PseudoClass> getPseudoClassStates() {
-        return pseudoClassStates;
     }
 
     @Override
