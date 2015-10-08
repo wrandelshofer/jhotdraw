@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.io;
 
 import java.io.IOException;
+import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,7 +26,7 @@ import org.jhotdraw.text.Converter;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleFigureFactory implements FigureFactory {
+public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactory {
 
     private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> attrToKey = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToAttr = new HashMap<>();
@@ -37,6 +38,7 @@ public class SimpleFigureFactory implements FigureFactory {
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
 
+    
     public SimpleFigureFactory() {
     }
 
@@ -54,6 +56,13 @@ public class SimpleFigureFactory implements FigureFactory {
         }
     }
 
+    public void addFigureKeysAndNames(String figureName, Class<? extends Figure> f, Collection<Key<?>> keys) {
+        addFigure(figureName,f);
+        addFigureKeys(f, keys);
+        for (Key<?> key : keys) {
+            addKey(f, key.getName(), key);
+        }
+    }
     public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<Key<?>> keys) {
         addFigureKeys(f, keys);
         for (Key<?> key : keys) {
@@ -266,9 +275,9 @@ public class SimpleFigureFactory implements FigureFactory {
             throw new IOException("no converter for attribute type "
                     + key.getFullValueType());
         }
-        @SuppressWarnings("unchecked")
-        String string = converter.toString(value);
-        return string;
+        StringBuilder builder=new StringBuilder();
+        converter.toString(builder,this, value);
+        return builder.toString();
     }
 
     @Override
@@ -279,7 +288,7 @@ public class SimpleFigureFactory implements FigureFactory {
                 throw new IOException("no converter for attribute type "
                         + key.getClass());
             }
-            return converter.fromString(string);
+            return converter.fromString(CharBuffer.wrap(string), this);
         } catch (ParseException ex) {
             throw new IOException(ex);
         }

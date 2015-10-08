@@ -50,7 +50,6 @@ import org.xml.sax.SAXException;
 public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     private FigureFactory factory;
-    private IdFactory ids;
     private ArrayList<Element> figureElements = new ArrayList<>();
     private String namespaceURI;
     private String namespaceQualifier;
@@ -61,7 +60,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     public SimpleXmlIO(FigureFactory factory, IdFactory idFactory, String namespaceURI, String namespaceQualifier) {
         this.factory = factory;
-        this.ids = idFactory == null ? new SimpleIdFactory() : idFactory;
         this.namespaceURI = namespaceURI;
         this.namespaceQualifier = namespaceQualifier;
     }
@@ -117,7 +115,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         try {
             Drawing external = factory.toExternalDrawing(internal);
 
-            ids.reset();
+            factory.reset();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             Document doc;
             if (namespaceURI != null) {
@@ -136,10 +134,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             for (Figure child : external.getChildren()) {
                 Node childNode = writeNodeRecursively(doc, child);
                 if (childNode != null) {
-                    // => the factory decided that we should skip the figure
+                    // => the factory decided that we should not skip the figure
+                    docElement.appendChild(doc.createTextNode("\n"));
                     docElement.appendChild(childNode);
                 }
             }
+            docElement.appendChild(doc.createTextNode("\n"));
             return doc;
         } catch (ParserConfigurationException ex) {
             throw new IOException(ex);
@@ -191,14 +191,14 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     private void writeElementAttributes(Element elem, Figure figure) throws IOException {
-        setAttribute(elem, "id", ids.createId(figure));
+        setAttribute(elem, "id", factory.createId(figure));
         for (Key<?> k : factory.figureKeys(figure)) {
             @SuppressWarnings("unchecked")
             Key<Object> key = (Key<Object>) k;
             Object value = figure.get(key);
             if (!factory.isDefaultValue(key, value)) {
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    setAttribute(elem, factory.keyToName(figure, key), ids.createId(value));
+                    setAttribute(elem, factory.keyToName(figure, key), factory.createId(value));
                 } else {
                     setAttribute(elem, factory.keyToName(figure, key), factory.valueToString(key, value));
                 }
@@ -207,7 +207,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     public Drawing fromDocument(Document doc) throws IOException {
-        ids.reset();
+        factory.reset();
         figureElements.clear();
         Drawing external = null;
         NodeList list = doc.getChildNodes();
@@ -269,7 +269,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             figureElements.add(elem);
             String id = getAttribute(elem, "id");
             if (id != null) {
-                ids.putId(figure, id);
+                factory.putId(figure, id);
             }
             NodeList list = elem.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
@@ -322,7 +322,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     public Figure getFigure(String id) throws IOException {
-        Figure f = (Figure) ids.getObject(id);
+        Figure f = (Figure) factory.getObject(id);
         if (f == null) {
             throw new IOException("no figure for id:" + id);
         }

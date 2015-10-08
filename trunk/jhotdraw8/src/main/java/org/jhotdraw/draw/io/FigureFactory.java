@@ -17,7 +17,7 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface FigureFactory {
+public interface FigureFactory extends IdFactory {
 
     /**
      * Maps a figure to an XML element name.

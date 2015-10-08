@@ -33,31 +33,30 @@ public class RectangleFigure extends AbstractShapeFigure {
      */
     public final static String TYPE_SELECTOR = "Rectangle";
 
-    public final static SimpleFigureKey<Rectangle2D> RECTANGLE = new SimpleFigureKey<>("rectangle", Rectangle2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Rectangle2D(0, 0, 1, 1));
-    public final static SimpleFigureKey<Double> ARC_HEIGHT = new SimpleFigureKey<>("arcHeight", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static SimpleFigureKey<Double> ARC_WIDTH = new SimpleFigureKey<>("arcWidth", Double.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static SimpleFigureKey<Rectangle2D> BOUNDS = new SimpleFigureKey<>("bounds", Rectangle2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Rectangle2D(0, 0, 1, 1));
+    public final static SimpleFigureKey<Point2D> ARC = new SimpleFigureKey<>("arc", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), Point2D.ZERO);
 
     public RectangleFigure() {
         this(0, 0, 1, 1);
     }
 
     public RectangleFigure(double x, double y, double width, double height) {
-        set(RECTANGLE, new Rectangle2D(x, y, width, height));
+        set(BOUNDS, new Rectangle2D(x, y, width, height));
     }
 
     public RectangleFigure(Rectangle2D rect) {
-        set(RECTANGLE, rect);
+        set(BOUNDS, rect);
     }
 
     @Override
     public Bounds getBoundsInLocal() {
-        Rectangle2D r = get(RECTANGLE);
+        Rectangle2D r = get(BOUNDS);
         return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
     @Override
     public void reshape(Transform transform) {
-        Rectangle2D r = get(RECTANGLE);
+        Rectangle2D r = get(BOUNDS);
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
@@ -65,7 +64,7 @@ public class RectangleFigure extends AbstractShapeFigure {
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(RECTANGLE, new Rectangle2D(x + min(width, 0), y + min(height, 0), abs(width), abs(height)));
+        set(BOUNDS, new Rectangle2D(x + min(width, 0), y + min(height, 0), abs(width), abs(height)));
     }
 
     @Override
@@ -78,13 +77,13 @@ public class RectangleFigure extends AbstractShapeFigure {
         Rectangle rectangleNode = (Rectangle) node;
         applyFigureProperties(rectangleNode);
         applyShapeProperties(rectangleNode);
-        Rectangle2D r = get(RECTANGLE);
+        Rectangle2D r = get(BOUNDS);
         rectangleNode.setX(r.getMinX());
         rectangleNode.setY(r.getMinY());
         rectangleNode.setWidth(r.getWidth());
         rectangleNode.setHeight(r.getHeight());
-        rectangleNode.setArcWidth(get(ARC_WIDTH));
-        rectangleNode.setArcHeight(get(ARC_HEIGHT));
+        rectangleNode.setArcWidth(get(ARC).getX());
+        rectangleNode.setArcHeight(get(ARC).getY());
         rectangleNode.applyCss();
     }
 
