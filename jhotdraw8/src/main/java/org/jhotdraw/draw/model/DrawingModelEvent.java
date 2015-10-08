@@ -72,6 +72,10 @@ public class DrawingModelEvent extends Event<DrawingModel> {
          * The style of a single figure has been invalidated.
          */
         STYLE_INVALIDATED,
+        /**
+         * The connection of a figure has changed.
+         */
+        CONNECTION_CHANGED,
     }
     private final Figure figure;
     private final Key<?> key;
@@ -121,6 +125,9 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
     public static <T> DrawingModelEvent nodeInvalidated(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.NODE_INVALIDATED, figure, null, null, -1, null, null, null);
+    }
+    public static <T> DrawingModelEvent connectionChanged(DrawingModel source, Figure figure) {
+        return new DrawingModelEvent(source, EventType.CONNECTION_CHANGED, figure, null, null, -1, null, null, null);
     }
 
     public static <T> DrawingModelEvent layoutInvalidated(DrawingModel source, Figure figure) {

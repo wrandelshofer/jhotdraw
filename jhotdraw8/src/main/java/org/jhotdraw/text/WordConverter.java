@@ -7,6 +7,7 @@ package org.jhotdraw.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * WordConverter.
@@ -16,7 +17,7 @@ import java.text.ParseException;
 public class WordConverter implements Converter<String> {
 
     @Override
-    public void toString(Appendable out, String value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {
         for (char ch : value.toCharArray()) {
             if (Character.isWhitespace(ch)) {
                 break;
@@ -26,7 +27,7 @@ public class WordConverter implements Converter<String> {
     }
 
     @Override
-    public String fromString(CharBuffer in) throws ParseException, IOException {
+    public String fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {

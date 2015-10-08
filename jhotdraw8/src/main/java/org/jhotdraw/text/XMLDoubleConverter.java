@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import javafx.scene.shape.SVGPath;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * Converts a {@code Double} into the XML String representation.
@@ -213,7 +214,7 @@ public class XMLDoubleConverter implements Converter<Double> {
     }
 
     @Override
-    public void toString(Appendable buf, Double value) throws IOException {
+    public void toString(Appendable buf, IdFactory idFactory, Double value) throws IOException {
         if (value == null && allowsNullValue) {
             return;
         }
@@ -242,7 +243,7 @@ public class XMLDoubleConverter implements Converter<Double> {
     }
 
     @Override
-    public Double fromString(CharBuffer str) throws ParseException {
+    public Double fromString(CharBuffer str, IdFactory idFactory) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
         }

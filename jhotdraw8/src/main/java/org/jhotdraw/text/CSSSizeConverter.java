@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point2D;
+import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * CSSSizeConverter.
@@ -30,12 +31,12 @@ public class CSSSizeConverter implements Converter<Double> {
     private final PatternConverter formatter = new PatternConverter("{0,number}{1,choice,0#{2,word}|1#}", new CSSConverterFactory());
 
     @Override
-    public void toString(Appendable out, Double value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, Double value) throws IOException {
         formatter.toString(out, new Object[]{value});
     }
 
     @Override
-    public Double fromString(CharBuffer buf) throws ParseException, IOException {
+    public Double fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // FIXME currently ignores the units!
         Object[] v = formatter.fromString(buf);
 

@@ -39,7 +39,6 @@ import org.jhotdraw.draw.model.DrawingModelEvent;
 public class ConnectionPointHandle extends AbstractHandle {
 
     private final SimpleFigureKey<Point2D> pointKey;
-    private final SimpleFigureKey<Figure> figureKey;
     private final SimpleFigureKey<Connector> connectorKey;
 
     private final Region node;
@@ -53,16 +52,15 @@ public class ConnectionPointHandle extends AbstractHandle {
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
     public ConnectionPointHandle(Figure figure, SimpleFigureKey<Point2D> pointKey,
-            SimpleFigureKey<Figure> figureKey, SimpleFigureKey<Connector> connectorKey) {
+            SimpleFigureKey<Connector> connectorKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
-                figureKey, connectorKey);
+                connectorKey);
     }
 
     public ConnectionPointHandle(Figure figure, String styleclassDisconnected, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
-            SimpleFigureKey<Figure> figureKey, SimpleFigureKey<Connector> connectorKey) {
+            SimpleFigureKey<Connector> connectorKey) {
         super(figure);
         this.pointKey = pointKey;
-        this.figureKey = figureKey;
         this.connectorKey = connectorKey;
         this.styleclassDisconnected = styleclassDisconnected;
         this.styleclassConnected = styleclassConnected;
@@ -89,7 +87,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
         Point2D p = f.get(pointKey);
         p = t.transform(p);
-        boolean isConnected = f.get(figureKey) != null && f.get(connectorKey) != null;
+        boolean isConnected = f.get(connectorKey) != null;
         node.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         node.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
         node.relocate(p.getX() - 5, p.getY() - 5);
@@ -129,16 +127,8 @@ public class ConnectionPointHandle extends AbstractHandle {
 
         DrawingModel model = view.getModel();
         model.set(o, pointKey, getOwner().drawingToLocal(constrainedPoint));
-        Figure oldConnectedFigure = model.set(o, figureKey, newConnectedFigure);
         model.set(o, connectorKey, newConnector);
-        if (oldConnectedFigure != null) {
-            model.fireNodeInvalidated(oldConnectedFigure);
-        }
-        for (Figure f : o.getConnectionTargets()) {
-            model.fireNodeInvalidated(f);
-        }
 
-        o.connectNotify();
         model.layout(o);
     }
 

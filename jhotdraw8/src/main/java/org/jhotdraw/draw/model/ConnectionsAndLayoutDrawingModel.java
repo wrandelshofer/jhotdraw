@@ -4,6 +4,8 @@
  */
 package org.jhotdraw.draw.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
@@ -15,10 +17,10 @@ import org.jhotdraw.draw.key.FigureKey;
 
 /**
  * This drawing model assumes that the drawing contains figures which perform
- layouts and has getConnectedFigures between figures.
+ * layouts and has getConnectedFigures between figures.
  * <p>
- Assumes that a figure which has getConnectedFigures to other figures may have
- in turn getConnectedFigures from other figures.
+ * Assumes that a figure which has getConnectedFigures to other figures may have
+ * in turn getConnectedFigures from other figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -60,7 +62,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
             fire(DrawingModelEvent.layoutInvalidated(this, connectedFigure));
 
         }
-        fireLayoutInvalidatedForFiguresConnectedWith(figure);
+        fireLayoutInvalidatedConnectedFigures(figure);
         figure.disconnect();
         fire(DrawingModelEvent.nodeInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
@@ -69,7 +71,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
         Drawing oldDrawing = child.getDrawing();
-        if (child.getParent()!=null) {
+        if (child.getParent() != null) {
             child.getParent().remove(child);
         }
         parent.getChildren().add(index, child);
@@ -88,6 +90,16 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public <T> T set(Figure figure, Key<T> key, T newValue) {
+        Set<Figure> connectionsBefore = null;
+        if (key instanceof FigureKey) {
+            FigureKey<T> fk = (FigureKey<T>) key;
+            DirtyMask dm = fk.getDirtyMask();
+            if (dm.containsOneOf(DirtyBits.CONNECTION)) {
+                connectionsBefore = figure.getConnectionTargets();
+            }
+
+        }
+
         T oldValue = figure.set(key, newValue);
         if (oldValue != newValue) {
             if (key instanceof FigureKey) {
@@ -100,7 +112,18 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
                     fire(DrawingModelEvent.layoutInvalidated(this, figure));
                 }
                 if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
-                    fireLayoutInvalidatedForFiguresConnectedWith(figure);
+                    fireLayoutInvalidatedConnectedFigures(figure);
+                }
+                if (dm.containsOneOf(DirtyBits.CONNECTION)) {
+                    Set<Figure> connectionsAfter = figure.getConnectionTargets();
+                    if (!connectionsBefore.equals(connectionsAfter)) {
+                        Set<Figure> changed=new HashSet<>();
+                        changed.addAll(connectionsBefore);
+                        changed.addAll(connectionsAfter);
+                        for (Figure f : changed) {
+                            fire(DrawingModelEvent.connectionChanged(this, f));
+                        }
+                    }
                 }
             }
         }

@@ -19,11 +19,9 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import static java.lang.Math.*;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.jhotdraw.draw.connector.CenterConnector;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
@@ -45,11 +43,11 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     /**
      * Holds a strong reference to the property.
      */
-    private Property<Figure> startFigureProperty;
+    private Property<Connector> startConnectorProperty;
     /**
      * Holds a strong reference to the property.
      */
-    private Property<Figure> endFigureProperty;
+    private Property<Connector> endConnectorProperty;
     /**
      * The start position of the line.
      */
@@ -59,27 +57,13 @@ public class LineConnectionFigure extends AbstractShapeFigure {
      */
     public static SimpleFigureKey<Point2D> END = LineFigure.END;
     /**
-     * The start figure. Is null if the figure is not connected at the start.
-     * <p>
- If the value is changed. This figure must add or remove itself from the
- list of getConnectedFigures on the {@code ConnectableFigure}.</p>
-     */
-    public static SimpleFigureKey<Figure> START_FIGURE = new SimpleFigureKey<>("startFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
-    /**
-     * The end figure. Is null if the figure is not connected at the end.
-     * <p>
- If the value is changed. This figure must add or remove itself from the
- list of getConnectedFigures on the {@code ConnectableFigure}.</p>
-     */
-    public static SimpleFigureKey<Figure> END_FIGURE = new SimpleFigureKey<>("endFigure", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
-    /**
      * The start connector.
      */
-    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
+    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE,DirtyBits.CONNECTION, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
     /**
      * The end connector.
      */
-    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
+    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE,DirtyBits.CONNECTION, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
@@ -94,28 +78,28 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         set(END, new Point2D(endX, endY));
 
         // We must update the start and end point when ever one of
-        // the connected figures or one of the connectors changes
-        ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
-            if (oldValue != null && get(END_FIGURE) != oldValue) {
-                oldValue.getConnectedFigures().remove(LineConnectionFigure.this);
+        // the connected figures on one of the connectors changes
+        ChangeListener<Connector> clStart = (observable, oldValue, newValue) -> {
+            if (oldValue != null && get(END_CONNECTOR)!=null&&get(END_CONNECTOR).getTarget() != oldValue.getTarget()) {
+                oldValue.getTarget().getConnectedFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getConnectedFigures().add(LineConnectionFigure.this);
+                newValue.getTarget().getConnectedFigures().add(LineConnectionFigure.this);
             }
         };
-        ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
-            if (oldValue != null && get(START_FIGURE) != oldValue) {
-                oldValue.getConnectedFigures().remove(LineConnectionFigure.this);
+        ChangeListener<Connector> clEnd = (observable, oldValue, newValue) -> {
+            if (oldValue != null && get(START_CONNECTOR)!=null&&get(START_CONNECTOR).getTarget() != oldValue.getTarget()) {
+                oldValue.getTarget().getConnectedFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getConnectedFigures().add(LineConnectionFigure.this);
+                newValue.getTarget().getConnectedFigures().add(LineConnectionFigure.this);
             }
         };
 
-        startFigureProperty = START_FIGURE.propertyAt(propertiesProperty());
-        startFigureProperty.addListener(clStart);
-        endFigureProperty = END_FIGURE.propertyAt(propertiesProperty());
-        endFigureProperty.addListener(clEnd);
+        startConnectorProperty = START_CONNECTOR.propertyAt(propertiesProperty());
+        startConnectorProperty.addListener(clStart);
+        endConnectorProperty = END_CONNECTOR.propertyAt(propertiesProperty());
+        endConnectorProperty.addListener(clEnd);
     }
 
     @Override
@@ -131,20 +115,20 @@ public class LineConnectionFigure extends AbstractShapeFigure {
 
     @Override
     public void reshape(Transform transform) {
-        if (get(START_FIGURE) == null) {
+        if (get(START_CONNECTOR) == null) {
             set(START, transform.transform(get(START)));
         }
-        if (get(END_FIGURE) == null) {
+        if (get(END_CONNECTOR) == null) {
             set(END, transform.transform(get(END)));
         }
     }
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        if (get(START_FIGURE) == null) {
+        if (get(START_CONNECTOR) == null) {
             set(START, new Point2D(x, y));
         }
-        if (get(END_FIGURE) == null) {
+        if (get(END_CONNECTOR) == null) {
             set(END, new Point2D(x + width, y + height));
         }
     }
@@ -170,24 +154,22 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     public void layout() {
         Point2D start = get(START);
         Point2D end = get(END);
-        Figure startFigure = get(START_FIGURE);
-        Figure endFigure = get(END_FIGURE);
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
-        if (startFigure != null && startConnector != null) {
-            start = startConnector.getPosition(startFigure, this);
+        if (startConnector != null) {
+            start = startConnector.getPosition(this);
         }
-        if (endFigure != null && endConnector != null) {
-            end = endConnector.getPosition(endFigure, this);
+        if (endConnector != null) {
+            end = endConnector.getPosition(this);
         }
 
         // We must switch off rotations for the following computations
         // because
-        if (startFigure != null && startConnector != null) {
-            set(START, drawingToParent(startConnector.chopStart(startFigure, this, start, end)));
+        if (startConnector != null) {
+            set(START, drawingToParent(startConnector.chopStart(this, start, end)));
         }
-        if (endFigure != null && endConnector != null) {
-            set(END, drawingToParent(endConnector.chopEnd(endFigure, this, start, end)));
+        if (endConnector != null) {
+            set(END, drawingToParent(endConnector.chopEnd(this, start, end)));
         }
     }
 
@@ -207,8 +189,8 @@ public class LineConnectionFigure extends AbstractShapeFigure {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE || handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE));
-            list.add(new ConnectionPointHandle(this, START, START_FIGURE, START_CONNECTOR));
-            list.add(new ConnectionPointHandle(this, END, END_FIGURE, END_CONNECTOR));
+            list.add(new ConnectionPointHandle(this, START, START_CONNECTOR));
+            list.add(new ConnectionPointHandle(this, END, END_CONNECTOR));
         } else {
             super.createHandles(handleType, dv, list);
         }
@@ -234,12 +216,10 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     @Override
     public void removeConnectionTarget(Figure connectedFigure) {
         if (connectedFigure != null) {
-            if (connectedFigure == get(START_FIGURE)) {
-                set(START_FIGURE, null);
+            if (get(START_CONNECTOR)!=null && connectedFigure == get(START_CONNECTOR).getTarget()) {
                 set(START_CONNECTOR, null);
             }
-            if (connectedFigure == get(END_FIGURE)) {
-                set(END_FIGURE, null);
+            if (get(END_CONNECTOR)!=null && connectedFigure == get(END_CONNECTOR).getTarget()) {
                 set(END_CONNECTOR, null);
             }
         }
@@ -253,20 +233,20 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     @Override
     public Set<Figure> getConnectionTargets() {
         HashSet<Figure> ctf = new HashSet<>();
-        if (get(START_FIGURE) != null) {
-            ctf.add(get(START_FIGURE));
+        if (get(START_CONNECTOR) != null) {
+            ctf.add(get(START_CONNECTOR).getTarget());
         }
-        if (get(END_FIGURE) != null) {
-            ctf.add(get(END_FIGURE));
+        if (get(END_CONNECTOR) != null) {
+            ctf.add(get(END_CONNECTOR).getTarget());
         }
         return ctf;
     }
 
     @Override
     public void removeAllConnectionTargets() {
-        set(START_FIGURE, null);
         set(START_CONNECTOR, null);
-        set(END_FIGURE, null);
+        set(START_CONNECTOR, null);
+        set(END_CONNECTOR, null);
         set(END_CONNECTOR, null);
     }
 }

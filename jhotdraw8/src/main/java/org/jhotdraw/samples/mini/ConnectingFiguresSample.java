@@ -48,17 +48,12 @@ public class ConnectingFiguresSample extends Application {
         LineConnectionFigure edge3Null = new LineConnectionFigure();
         LineConnectionFigure edgeNullNull = new LineConnectionFigure();
 
-        edge12.set(LineConnectionFigure.START_FIGURE, vertex1);
-        edge12.set(LineConnectionFigure.END_FIGURE, vertex2);
-        edge12.set(LineConnectionFigure.START_CONNECTOR, new ChopRectangleConnector());
-        edge12.set(LineConnectionFigure.END_CONNECTOR, new ChopRectangleConnector());
+        edge12.set(LineConnectionFigure.START_CONNECTOR, new ChopRectangleConnector(vertex1));
+        edge12.set(LineConnectionFigure.END_CONNECTOR, new ChopRectangleConnector(vertex2));
 
-        edge23.set(LineConnectionFigure.START_FIGURE, vertex2);
-        edge23.set(LineConnectionFigure.END_FIGURE, vertex3);
-        edge23.set(LineConnectionFigure.START_CONNECTOR, new ChopRectangleConnector());
-        edge23.set(LineConnectionFigure.END_CONNECTOR, new ChopRectangleConnector());
-        edge3Null.set(LineConnectionFigure.START_FIGURE, vertex3);
-        edge3Null.set(LineConnectionFigure.START_CONNECTOR, new ChopRectangleConnector());
+        edge23.set(LineConnectionFigure.START_CONNECTOR, new ChopRectangleConnector(vertex2));
+        edge23.set(LineConnectionFigure.END_CONNECTOR, new ChopRectangleConnector(vertex3));
+        edge3Null.set(LineConnectionFigure.START_CONNECTOR, new ChopRectangleConnector(vertex3));
         edge3Null.set(LineConnectionFigure.END, new Point2D(145, 15));
         edgeNullNull.set(LineConnectionFigure.START, new Point2D(65, 90));
         edgeNullNull.set(LineConnectionFigure.END, new Point2D(145, 95));

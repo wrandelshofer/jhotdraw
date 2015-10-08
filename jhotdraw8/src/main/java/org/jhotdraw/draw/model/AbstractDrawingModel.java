@@ -80,6 +80,10 @@ public abstract class AbstractDrawingModel implements DrawingModel {
         case FIGURE_REMOVED_FROM_DRAWING:
             invokeRemoveNotify(event.getFigure(),event.getDrawing());
             break;
+        case CONNECTION_CHANGED:
+            invokeConnectNotify(event.getFigure());
+            break;
+            
         case FIGURE_REMOVED_FROM_PARENT:
         case NODE_INVALIDATED:
         case ROOT_CHANGED:
@@ -161,7 +165,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
      *
      * @param figure the figure
      */
-    protected void fireLayoutInvalidatedForFiguresConnectedWith(Figure figure) {
+    protected void fireLayoutInvalidatedConnectedFigures(Figure figure) {
         LinkedList<Figure> todo = new LinkedList<>();
         todo.add(figure);
         fireLayoutInvalidatedForFiguresConnectedWithTodo(todo, new HashSet<Figure>());
@@ -198,5 +202,13 @@ public abstract class AbstractDrawingModel implements DrawingModel {
      */
     private void invokeAddNotify(Figure figure, Drawing drawing) {
        figure.addNotify(drawing);
+    }
+    /** Invokes {@code connectNotify} on the figure.
+     * 
+     * @param figure the figure
+     * @param drawing the drawing
+     */
+    private void invokeConnectNotify(Figure figure) {
+       figure.connectNotify();
     }
 }
