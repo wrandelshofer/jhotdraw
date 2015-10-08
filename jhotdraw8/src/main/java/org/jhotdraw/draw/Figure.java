@@ -37,6 +37,7 @@ import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
@@ -66,10 +67,10 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * {@code Drawing}.</p>
  * <p>
  * <b>Connections.</b> A figure can be connected to other figures. The
- * getConnectedFigures are directed. By convention, when a figure "A" is
- * connected to an other figure "B", then "A" adds itself in the
- * {@code getConnectedFigures} property of "B". When "A" is disconnected from
- * "B", then "A" removes itself from the {@code getConnectedFigures} property of
+ getConnectionsFromFigures are directed. By convention, when a figure "A" is
+ connected to an other figure "B", then "A" adds itself in the
+ {@code getConnectionsFromFigures} property of "B". When "A" is disconnected from
+ * "B", then "A" removes itself from the {@code getConnectionsFromFigures} property of
  * "B".</p>
  * <p>
  * <b>Rendering.</b> A figure can render its graphical representation into a
@@ -79,8 +80,8 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * graphically change the state of the figure in a {@link DrawingView}.</p>
  * <p>
  * <b>Layout.</b> The state of a figure may depend on the state of other
- * figures. The dependencies can be cyclic due to getConnectedFigures. A figure
- * does not automatically update its dependent state. Method {@code layout()}
+ figures. The dependencies can be cyclic due to getConnectionsFromFigures. A figure
+ does not automatically update its dependent state. Method {@code layout()}
  * must be invoked to incrementally update the state of a figure and its
  * descendants based on the current state of all other figures in the tree
  * structure.</p>
@@ -274,7 +275,7 @@ public interface Figure extends StyleablePropertyBean {
      * corresponding {@code START_FIGURE} or {@code END_FIGURE} property to
      * null.
      *
-     * @return the getConnectedFigures property, with {@code getBean()}
+     * @return the getConnectionsFromFigures property, with {@code getBean()}
      * returning this figure, and {@code getName()} returning
      * {@code CONNECTED_FIGURES_PROPERTY}.
      */
@@ -724,8 +725,18 @@ public interface Figure extends StyleablePropertyBean {
      *
      * @return a list of connected figures
      */
-    default ObservableSet<Figure> getConnectedFigures() {
+    default ObservableSet<Figure> getConnectionsFromFigures() {
         return connectedFiguresProperty().get();
+    }
+    /**
+     * Returns all figures which are connected by this figure.
+     * <p>
+     * The default implementation returns an empty set.
+     * 
+     * @return a list of connected figures
+     */
+    default Set<Figure> getConnectionsToFigures() {
+        return Collections.emptySet();
     }
 
     /**
@@ -734,7 +745,7 @@ public interface Figure extends StyleablePropertyBean {
      * figures.
      */
     default void disconnect() {
-        for (Figure connectedFigure : new ArrayList<Figure>(getConnectedFigures())) {
+        for (Figure connectedFigure : new ArrayList<Figure>(getConnectionsFromFigures())) {
             connectedFigure.removeAllConnectionsWith(this);
         }
         removeAllConnections();
