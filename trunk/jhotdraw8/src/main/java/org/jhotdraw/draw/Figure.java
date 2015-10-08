@@ -292,6 +292,13 @@ public interface Figure extends StyleablePropertyBean {
      * Requests to remove all connections to other figures.
      */
     void removeAllConnections();
+    
+    /** This method is empty. 
+     * This method is invoked by connection tools and connection handles
+     * after they have changed the connected state of the figure.
+     */
+    default void connectNotify() {}
+    
 
     /**
      * The parent figure.

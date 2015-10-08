@@ -137,6 +137,7 @@ public class ConnectionTool extends AbstractTool {
             if (newConnectedFigure != null) {
                 model.fire(DrawingModelEvent.nodeInvalidated(model, newConnectedFigure));
             }
+            figure.connectNotify();
             model.layout(figure);
         }
         event.consume();
