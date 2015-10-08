@@ -67,11 +67,11 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * {@code Drawing}.</p>
  * <p>
  * <b>Connections.</b> A figure can be connected to other figures. The
- getConnectionsFromFigures are directed. By convention, when a figure "A" is
+ getConnectedFigures are directed. By convention, when a figure "A" is
  connected to an other figure "B", then "A" adds itself in the
- {@code getConnectionsFromFigures} property of "B". When "A" is disconnected from
- * "B", then "A" removes itself from the {@code getConnectionsFromFigures} property of
- * "B".</p>
+ {@code getConnectedFigures} property of "B". When "A" is disconnected
+ * from "B", then "A" removes itself from the {@code getConnectedFigures}
+ * property of "B".</p>
  * <p>
  * <b>Rendering.</b> A figure can render its graphical representation into a
  * JavaFX {@code Node} with the help of a {@link RenderContext}.</p>
@@ -80,11 +80,11 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * graphically change the state of the figure in a {@link DrawingView}.</p>
  * <p>
  * <b>Layout.</b> The state of a figure may depend on the state of other
- figures. The dependencies can be cyclic due to getConnectionsFromFigures. A figure
- does not automatically update its dependent state. Method {@code layout()}
- * must be invoked to incrementally update the state of a figure and its
- * descendants based on the current state of all other figures in the tree
- * structure.</p>
+ figures. The dependencies can be cyclic due to getConnectedFigures. A
+ figure does not automatically update its dependent state. Method
+ {@code layout()} must be invoked to incrementally update the state of a
+ * figure and its descendants based on the current state of all other figures in
+ * the tree structure.</p>
  * <p>
  * <b>Layout hints and node update hints.</b> Essentially each time when the
  * state of a figure is changed, method {@code layout()} needs to be invoked on
@@ -266,40 +266,46 @@ public interface Figure extends StyleablePropertyBean {
     ReadOnlyListProperty<Figure> childrenProperty();
 
     /**
-     * The connected figures property references all figures which have a layout
-     * dependency on this figure.
+     * The connected figures property contains all figures which connect to
+     * this figure.
      * <p>
      * By convention this set is maintained by the connected figures.
      * <p>
-     * For example, to remove a {@code ConnectionFigure} from this set set its
-     * corresponding {@code START_FIGURE} or {@code END_FIGURE} property to
-     * null.
+     * The API for establishing a connection is specific for each figure.
+     * For example, to connect a {@code ConnectionFigure} to this figure,
+     * this set its {@code START_FIGURE} and/or {@code END_FIGURE} property to
+     * this figure.
+     * <p>
+     * A connection can be removed by using the specific API of the figure
+     * or by invoking the {@link #removeConnectionTarget(Figure)} method.
      *
-     * @return the getConnectionsFromFigures property, with {@code getBean()}
+     * @return the connectedFigures property, with {@code getBean()}
      * returning this figure, and {@code getName()} returning
      * {@code CONNECTED_FIGURES_PROPERTY}.
      */
     ReadOnlySetProperty<Figure> connectedFiguresProperty();
 
     /**
-     * Requests to remove all connections to the specified figure.
+     * Removes the specified connection target.
      *
-     * @param connectedFigure a Figure which is in the list of connected
-     * figures.
+     * @param targetFigure a Figure which is a connection target.
      */
-    void removeAllConnectionsWith(Figure connectedFigure);
+    void removeConnectionTarget(Figure targetFigure);
 
     /**
-     * Requests to remove all connections to other figures.
+     * Requests to remove all connection targets.
      */
-    void removeAllConnections();
-    
-    /** This method is empty. 
-     * This method is invoked by connection tools and connection handles
-     * after they have changed the connected state of the figure.
+    void removeAllConnectionTargets();
+
+    /**
+     * This method is invoked by connection tools and
+     * connection handles after they have changed the connected state of the
+     * figure.
+     * <p>
+     * The default implementation of this method is empty.
      */
-    default void connectNotify() {}
-    
+    default void connectNotify() {
+    }
 
     /**
      * The parent figure.
@@ -722,33 +728,48 @@ public interface Figure extends StyleablePropertyBean {
 
     /**
      * Returns all figures which are connected to this figure.
+     * <pre><code>
+     * +-----------+                          +---------------+
+     * | Connected |-----connection----&gt;| ConnectionTarget (this) |
+     * +-----------+                          +---------------+
+     * </code></pre>
      *
      * @return a list of connected figures
      */
-    default ObservableSet<Figure> getConnectionsFromFigures() {
+    default ObservableSet<Figure> getConnectedFigures() {
         return connectedFiguresProperty().get();
     }
+
     /**
-     * Returns all figures which are connected by this figure.
-     * <p>
-     * The default implementation returns an empty set.
-     * 
-     * @return a list of connected figures
+     * Returns all figures which are connection targets of this figure.
+     * <pre><code>
+     * +------------------+                          +--------+
+     * | Connected (this) |-----connection----&gt;| ConnectionTarget |
+     * +------------------+                          +--------+
+     * </code></pre>
+     *
+     * @return a list of connection target figures
      */
-    default Set<Figure> getConnectionsToFigures() {
+    default Set<Figure> getConnectionTargetFigures() {
         return Collections.emptySet();
     }
 
     /**
      * Asks all connected figures to remove all their connections with this
-     * figure, and then removes all connections of this figure with other
+     * figure, and then removes all connections of this figure to connection target
      * figures.
+     * <pre><code>
+     * +-----------+                    +------+                    +------------------+
+     * | Connected |-----connection----&gt;| this |-----connection----&gt;| ConnectionTarget |
+     * +-----------+                    +------+                    +------------------+
+     * </code></pre>
+     * 
      */
     default void disconnect() {
-        for (Figure connectedFigure : new ArrayList<Figure>(getConnectionsFromFigures())) {
-            connectedFigure.removeAllConnectionsWith(this);
+        for (Figure connectedFigure : new ArrayList<Figure>(getConnectedFigures())) {
+            connectedFigure.removeConnectionTarget(this);
         }
-        removeAllConnections();
+        removeAllConnectionTargets();
     }
 
     /**
@@ -1048,10 +1069,12 @@ public interface Figure extends StyleablePropertyBean {
     default ObservableList<String> getStyleClass() {
         return get(STYLE_CLASS);
     }
+
     @Override
     default ObservableSet<PseudoClass> getPseudoClassStates() {
         return get(PSEUDO_CLASS_STATES);
     }
+
     @Override
     default String getId() {
         return get(STYLE_ID);
