@@ -19,6 +19,12 @@ import org.jhotdraw.draw.Figure;
  */
 public interface FigureFactory extends IdFactory {
 
+    /** Returns a comment which will be added at the beginning of the file.
+     * 
+     * @return a comment or null
+     */
+    String createFileComment();
+    
     /**
      * Maps a figure to an XML element name.
      *

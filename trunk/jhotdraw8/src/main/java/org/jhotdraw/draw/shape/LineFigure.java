@@ -37,8 +37,8 @@ public class LineFigure extends AbstractShapeFigure {
      */
     public final static String TYPE_SELECTOR = "Line";
 
-    public final static SimpleFigureKey<Point2D> START = new SimpleFigureKey<>("start", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
-    public final static SimpleFigureKey<Point2D> END = new SimpleFigureKey<>("end", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static SimpleFigureKey<Point2D> START = new SimpleFigureKey<>("start", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), new Point2D(0, 0));
+    public final static SimpleFigureKey<Point2D> END = new SimpleFigureKey<>("end", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), new Point2D(0, 0));
 
     public LineFigure() {
         this(0, 0, 1, 1);

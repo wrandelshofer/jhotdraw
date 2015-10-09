@@ -21,6 +21,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.draw.model.DrawingModel;
 
 /**
  * Handle for moving (translating) a figure.
@@ -97,8 +98,18 @@ public class MoveHandleKit {
 
             Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
             if (!tx.isIdentity()) {
-                tx = getOwner().getDrawingToParent().createConcatenation(tx);
-                view.getModel().reshape(getOwner(), tx);
+                DrawingModel model = view.getModel();
+
+                if (event.isShiftDown()) {
+                    // shift transforms all selected figures
+                    for (Figure f : view.getSelectedFiguresWithCompatibleHandle(this)) {
+                        tx = f.getDrawingToParent().createConcatenation(tx);
+                        model.reshape(f, tx);
+                    }
+                } else {
+                    tx = getOwner().getDrawingToParent().createConcatenation(tx);
+                    model.reshape(getOwner(), tx);
+                }
             }
             oldPoint = newPoint;
         }

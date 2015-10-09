@@ -128,8 +128,6 @@ public class ConnectionPointHandle extends AbstractHandle {
         DrawingModel model = view.getModel();
         model.set(o, pointKey, getOwner().drawingToLocal(constrainedPoint));
         model.set(o, connectorKey, newConnector);
-
-        model.layout(o);
     }
 
     @Override

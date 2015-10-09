@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.draw.handle;
 
 import javafx.event.EventType;
@@ -15,13 +14,16 @@ import org.jhotdraw.event.Listener;
 
 /**
  * AbstractHandle.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public abstract class AbstractHandle implements Handle {
+
     // ---
     // Fields
     // ---
+
     protected final Figure owner;
 
     // ---
@@ -40,6 +42,14 @@ public abstract class AbstractHandle implements Handle {
 
     @Override
     public Figure getOwner() {
-       return owner;
+        return owner;
+    }
+
+    /**
+     * Returns true if both handles have the same class.
+     */
+    @Override
+    public boolean isCompatible(Handle that) {
+        return that.getClass() == this.getClass();
     }
 }

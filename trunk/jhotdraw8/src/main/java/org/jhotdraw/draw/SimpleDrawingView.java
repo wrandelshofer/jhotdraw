@@ -5,7 +5,6 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.handle.HandleType;
-import org.jhotdraw.draw.model.ConnectionsNoLayoutDrawingModel;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.draw.model.DrawingModel;
 import java.io.IOException;
@@ -52,6 +51,8 @@ import org.jhotdraw.event.Listener;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleEvent;
 import static java.lang.Math.*;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -61,6 +62,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.beans.SimplePropertyBean;
+import org.jhotdraw.draw.model.SimpleDrawingModel;
 import org.jhotdraw.geom.Geom;
 
 /**
@@ -83,6 +85,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private Group drawingPane;
     private Pane overlaysPane;
+
+    /**
+     * The number of nodes that are maximally updated per frame.
+     */
+    private int maxUpdate = 100;
+
     /**
      * This is the JavaFX Node which is used to represent this drawing view. in
      * a JavaFX scene graph.
@@ -92,10 +100,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private class SimpleDrawingViewNode extends StackPane implements EditableComponent {
 
         private ReadOnlyBooleanWrapper selectionEmpty = new ReadOnlyBooleanWrapper(this, EditableComponent.SELECTION_EMPTY);
+
         {
             selectionEmpty.bind(selectedFigures.emptyProperty());
         }
-        
+
         @Override
         public void selectAll() {
             SimpleDrawingView.this.selectAll();
@@ -174,6 +183,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             case SUBTREE_STRUCTURE_CHANGED:
                 updateTreeStructure(event.getFigure());
                 break;
+            case CONNECTION_CHANGED:
+            case TRANSFORM_CHANGED:
+                // not my business
+                break;
             default:
                 throw new UnsupportedOperationException(event.getEventType()
                         + " not supported");
@@ -186,7 +199,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * view.
      */
     private final NonnullProperty<DrawingModel> drawingModel //
-            = new NonnullProperty<DrawingModel>(this, MODEL_PROPERTY, new ConnectionsNoLayoutDrawingModel()) {
+            = new NonnullProperty<DrawingModel>(this, MODEL_PROPERTY, new SimpleDrawingModel()) {
                 private DrawingModel oldValue = null;
 
                 @Override
@@ -214,7 +227,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private final double TOLERANCE = 10;
 
     /**
-     * Installs a handler for changes in the seletionProperty.
+     * Installs a handler for changes in the selectionProperty.
      */
     {
         selectedFigures.addListener((Observable o) -> {
@@ -230,8 +243,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
     private final ObjectProperty<HandleType> handleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+
     {
-        handleType.addListener((observable, oldValue, newValue) -> {invalidateHandles();repaint();});
+        handleType.addListener((observable, oldValue, newValue) -> {
+            invalidateHandles();
+            repaint();
+        });
     }
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
@@ -258,9 +275,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 }
             }
             updateLayout();
-            updateHandles();
+            invalidateHandleNodes();
         }
-
     };
 
     /**
@@ -294,9 +310,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      */
     private final HashSet<Figure> dirtyFigureNodes = new HashSet<>();
     /**
+     * This is the set of handles which are out of sync with their JavaFX node.
+     */
+    private final HashSet<Figure> dirtyHandles = new HashSet<>();
+    /**
      * The set of all handles which were produced by selected figures.
      */
-    private final LinkedList<Handle> selectionHandles = new LinkedList<>();
+    private final HashMap<Figure, List<Handle>> handles = new HashMap<>();
     /**
      * The set of all secondary handles. One handle at a time may create
      * secondary handles.
@@ -307,6 +327,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void invalidateFigureNode(Figure f) {
         dirtyFigureNodes.add(f);
+        if (handles.containsKey(f)) {
+            dirtyHandles.add(f);
+        }
     }
 
     @Override
@@ -338,9 +361,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         double f = getZoomFactor();
         double x = bounds.getMinX() * f;
         double y = bounds.getMinY() * f;
-        // A scene in JavaFX may not be larger than 16384 pixels.
-        double w = min(8192, bounds.getWidth() * f);
-        double h = min(8192, bounds.getHeight() * f);
+        double w = bounds.getWidth() * f;
+        double h = bounds.getHeight() * f;
 
         drawingPane.setTranslateX(max(0, -x));
         drawingPane.setTranslateY(max(0, -y));
@@ -351,6 +373,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         stackPane.setPrefSize(w, h);
 
         invalidateDrawingViewTransforms();
+        invalidateHandleNodes();
     }
 
     @Override
@@ -417,7 +440,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         // Set stylesheet
         overlaysPane.getStylesheets().add("org/jhotdraw/draw/SimpleDrawingView.css");
 
-        
         // set root
         node = new SimpleDrawingViewNode();
         node.getChildren().add(stackPane);
@@ -488,6 +510,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void updateTreeNodes(Figure parent) {
         dirtyFigureNodes.add(parent);
+        dirtyHandles.add(parent);
         for (Figure child : parent.getChildren()) {
             updateTreeNodes(child);
         }
@@ -555,14 +578,20 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void updateView() {
         getModel().validate();
-        LinkedList<Figure> updateNodes = new LinkedList<>(dirtyFigureNodes);
-        dirtyFigureNodes.clear();
-        for (Figure f : updateNodes) {
+        for (Figure f : dirtyFigureNodes) {
             f.updateNode(this, getNode(f));
+
         }
-        for (Handle h : selectionHandles) {
-            h.updateNode(this);
+        dirtyFigureNodes.clear();
+        for (Figure f : dirtyHandles) {
+            List<Handle> hh = handles.get(f);
+            if (hh != null) {
+                for (Handle h : hh) {
+                    h.updateNode(this);
+                }
+            }
         }
+        dirtyHandles.clear();
         for (Handle h : secondaryHandles) {
             h.updateNode(this);
         }
@@ -858,42 +887,30 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * @return A collection containing the handle and all compatible handles.
      */
     @Override
-    public Collection<Handle> getCompatibleHandles(Handle master) {
+    public Collection<Figure> getSelectedFiguresWithCompatibleHandle(Handle master) {
         validateHandles();
-
-        HashSet<Figure> owners = new HashSet<Figure>();
-        LinkedList<Handle> compatibleHandles = new LinkedList<>();
-        owners.add(master.getOwner());
-        compatibleHandles.add(master);
-
-        for (Handle handle : getSelectionHandles()) {
-            if (!owners.contains(handle.getOwner()) /* &&
-                     * handle.isCombinableWith(master) */) {
-                owners.add(handle.getOwner());
-                compatibleHandles.add(handle);
+        ArrayList<Figure> figures=new ArrayList<>();
+        for (Map.Entry<Figure,List<Handle>> entry: handles.entrySet()){
+            for (Handle h:entry.getValue()) {
+                if (h.isCompatible(master)) {
+                    figures.add(entry.getKey());
+                    break;
+                }
             }
-
         }
-        return compatibleHandles;
-
+        return figures;
     }
 
     /**
-     * Gets the currently active selection handles.
+     * Gets the currently active selection handles. / private
+     * java.util.List<Handle> getSelectionHandles() { validateHandles(); return
+     * Collections.unmodifiableList(handles); }
      */
-    private java.util.List<Handle> getSelectionHandles() {
-        validateHandles();
-        return Collections.unmodifiableList(selectionHandles);
-    }
-
     /**
-     * Gets the currently active secondary handles.
+     * Gets the currently active secondary handles. / private
+     * java.util.List<Handle> getSecondaryHandles() { validateHandles(); return
+     * Collections.unmodifiableList(secondaryHandles); }
      */
-    private java.util.List<Handle> getSecondaryHandles() {
-        validateHandles();
-        return Collections.unmodifiableList(secondaryHandles);
-    }
-
     /**
      * Invalidates the handles.
      */
@@ -901,6 +918,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         if (handlesAreValid) {
             handlesAreValid = false;
         }
+    }
+
+    private void invalidateHandleNodes() {
+        dirtyHandles.addAll(handles.keySet());
+        repaint();
     }
 
     /**
@@ -919,34 +941,39 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void updateHandles() {
-        nodeToHandleMap.clear();
-        for (Handle h : selectionHandles) {
-            h.dispose();
+        for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
+            for (Handle h : entry.getValue()) {
+                h.dispose();
+            }
         }
-        selectionHandles.clear();
+        nodeToHandleMap.clear();
+        handles.clear();
         handlesPane.getChildren().clear();
-        // FIXME rethink detailLevel
+        dirtyHandles.clear();
 
-        ArrayList<Handle> handles = new ArrayList<>();
         createHandles(handles);
-        for (Handle handle : handles) {
-            selectionHandles.add(handle);
-            Node n = handle.getNode();
-            nodeToHandleMap.put(n, handle);
-            handlesPane.getChildren().add(n);
-            handle.updateNode(this);
+        for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
+            dirtyHandles.add(entry.getKey());
+            for (Handle handle : entry.getValue()) {
+                Node n = handle.getNode();
+                nodeToHandleMap.put(n, handle);
+                handlesPane.getChildren().add(n);
+                handle.updateNode(this);
+            }
         }
     }
 
     /**
      * Creates selection handles and adds them to the provided list.
      *
-     * @param list The provided list
+     * @param hh The provided list
      */
-    protected void createHandles(List<Handle> list) {
+    protected void createHandles(HashMap<Figure, List<Handle>> hh) {
         HandleType ht = getHandleType();
         for (Figure figure : getSelectedFigures()) {
+            ArrayList<Handle> list = new ArrayList<>();
             figure.createHandles(ht, this, list);
+            hh.put(figure, list);
         }
     }
 

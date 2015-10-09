@@ -7,6 +7,7 @@ package org.jhotdraw.draw.tool;
 import java.util.Collection;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.Handle;
 
 /**
@@ -37,10 +38,12 @@ import org.jhotdraw.draw.handle.Handle;
 public class SimpleHandleTracker extends AbstractTool implements HandleTracker {
 
     private Handle handle;
+    protected Collection<Figure> compatibleFigures;
 
     @Override
-    public void setHandles(Handle handle, Collection<Handle> compatibleHandles) {
+    public void setHandles(Handle handle, Collection<Figure> compatibleFigures) {
         this.handle = handle;
+        this.compatibleFigures = compatibleFigures;
     }
 
     @Override

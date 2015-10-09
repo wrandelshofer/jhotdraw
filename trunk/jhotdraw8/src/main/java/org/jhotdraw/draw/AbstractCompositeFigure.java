@@ -113,11 +113,11 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         for (Figure child:getChildren()) {
             child.layout();
         }
-        doLayout();
+        layoutImpl();
     }
     
     /** Layout self. */
-    protected void doLayout() {
+    protected void layoutImpl() {
         
     }
     

@@ -26,7 +26,6 @@ public interface Connector {
      * Returns a point on the target figure for the specified connection figure
      * in drawing coordinates.
      *
-     * @param target the target figure
      * @param connection a connection figure
      * @return A point on the target figure.
      */
@@ -35,7 +34,6 @@ public interface Connector {
     /**
      * Chops the start of the provided line given in drawing coordinates.
      *
-     * @param target the target figure
      * @param connection a connection figure
      * @param startX x-coordinate at the start of the line
      * @param startY x-coordinate at the start of the line
@@ -48,7 +46,6 @@ public interface Connector {
     /**
      * Chops the end of the provided line.
      *
-     * @param target the target figure
      * @param connection a connection figure
      * @param startX x-coordinate at the start of the line
      * @param startY x-coordinate at the start of the line
@@ -63,7 +60,6 @@ public interface Connector {
     /**
      * Chops the start of the provided line in drawing coordinates.
      *
-     * @param target the target figure
      * @param connection a connection figure
      * @param start the start of the line
      * @param end the end of the line
@@ -76,7 +72,6 @@ public interface Connector {
     /**
      * Chops the end of the provided line in drawing coordinates.
      *
-     * @param target the target figure
      * @param connection a connection figure
      * @param start the start of the line
      * @param end the end of the line

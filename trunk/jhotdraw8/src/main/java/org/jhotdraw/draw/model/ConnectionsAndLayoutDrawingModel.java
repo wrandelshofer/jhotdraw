@@ -90,12 +90,12 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public <T> T set(Figure figure, Key<T> key, T newValue) {
-        Set<Figure> connectionsBefore = null;
+        Set<Figure> connectionChange = null;
         if (key instanceof FigureKey) {
             FigureKey<T> fk = (FigureKey<T>) key;
             DirtyMask dm = fk.getDirtyMask();
             if (dm.containsOneOf(DirtyBits.CONNECTION)) {
-                connectionsBefore = figure.getConnectionTargets();
+                connectionChange = figure.getConnectionTargets();
             }
 
         }
@@ -114,15 +114,16 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
                 if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
                     fireLayoutInvalidatedConnectedFigures(figure);
                 }
+                if (dm.containsOneOf(DirtyBits.TRANSFORM)) {
+                    fire(DrawingModelEvent.transformChanged(this, figure));
+                }
                 if (dm.containsOneOf(DirtyBits.CONNECTION)) {
+                    fire(DrawingModelEvent.connectionChanged(this, figure));
                     Set<Figure> connectionsAfter = figure.getConnectionTargets();
-                    if (!connectionsBefore.equals(connectionsAfter)) {
-                        Set<Figure> changed=new HashSet<>();
-                        changed.addAll(connectionsBefore);
-                        changed.addAll(connectionsAfter);
-                        for (Figure f : changed) {
-                            fire(DrawingModelEvent.connectionChanged(this, f));
-                        }
+                    connectionChange.addAll(connectionsAfter);
+                    for (Figure f : connectionChange) {
+                        fire(DrawingModelEvent.connectionChanged(this, f));
+                        fire(DrawingModelEvent.nodeInvalidated(this, f));
                     }
                 }
             }
@@ -133,6 +134,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
     @Override
     public void reshape(Figure figure, Transform transform) {
         figure.reshape(transform);
+        fire(DrawingModelEvent.transformChanged(this, figure));
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
         fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
@@ -141,6 +143,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
     @Override
     public void reshape(Figure figure, double x, double y, double width, double height) {
         figure.reshape(x, y, width, height);
+        fire(DrawingModelEvent.transformChanged(this, figure));
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
         fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
@@ -149,6 +152,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
     @Override
     public void layout(Figure figure) {
         figure.layout();
+        fire(DrawingModelEvent.transformChanged(this, figure));
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
     }
