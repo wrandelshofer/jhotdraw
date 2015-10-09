@@ -747,7 +747,14 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         } else if (node instanceof Group) {
             Bounds bounds = node.getBoundsInLocal();
             bounds = Geom.grow(bounds, tolerance, tolerance);
-            return bounds.contains(point);
+            if (bounds.contains(point)) {
+                for (Node child : ((Group) node).getChildren()) {
+                    if (contains(child, child.parentToLocal(point), tolerance)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         } else {
             return node.contains(point);
         }
@@ -889,9 +896,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     @Override
     public Collection<Figure> getSelectedFiguresWithCompatibleHandle(Handle master) {
         validateHandles();
-        ArrayList<Figure> figures=new ArrayList<>();
-        for (Map.Entry<Figure,List<Handle>> entry: handles.entrySet()){
-            for (Handle h:entry.getValue()) {
+        ArrayList<Figure> figures = new ArrayList<>();
+        for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
+            for (Handle h : entry.getValue()) {
                 if (h.isCompatible(master)) {
                     figures.add(entry.getKey());
                     break;
