@@ -7,19 +7,22 @@ package org.jhotdraw.draw;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
+import javafx.collections.MapChangeListener;
 import javafx.css.CssMetaData;
-import javafx.css.PseudoClass;
 import javafx.css.Styleable;
+import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.css.SimpleStyleablePropertyBean;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleableStyleManager;
+import org.jhotdraw.draw.key.DirtyBits;
+import org.jhotdraw.draw.key.FigureKey;
 
 /**
  * AbstractFigure.
@@ -28,6 +31,13 @@ import org.jhotdraw.draw.css.StyleableStyleManager;
  * @version $Id$
  */
 public abstract class AbstractFigure extends SimpleStyleablePropertyBean implements Figure {
+
+    private Transform parentToDrawing;
+    private Transform drawingToParent;
+    private Transform localToDrawing;
+    private Transform drawingToLocal;
+    private Transform localToParent;
+    private Transform parentToLocal;
 
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
 
@@ -109,10 +119,27 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         StringBuilder buf = new StringBuilder();
         buf.append(className).append('@')//
                 .append(Integer.toHexString(hashCode()))//
-                .append("{properties=")//
-                .append(getProperties())//
-                .append(", connections={");
+                .append('{');//
         boolean isFirst = true;
+        for (Map.Entry<Key<?>, Object> e : getProperties().entrySet()) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                buf.append(',');
+            }
+            buf.append(e.getKey());
+            buf.append('=');
+            if (e.getValue() instanceof Figure) {
+                Figure f = (Figure) e.getValue();
+                className = f.getClass().getName();
+                className = className.substring(className.lastIndexOf('.') + 1);
+                buf.append(className).append('@').append(f.hashCode());
+            } else {
+                buf.append(e.getValue());
+            }
+        }
+        buf.append(", connections={");
+        isFirst = true;
         for (Figure f : connectedFigures) {
             if (isFirst) {
                 isFirst = false;
@@ -160,4 +187,65 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     @Override
     public void addNotify(Drawing drawing) {
     }
+
+    /**
+     * Clears all cached transformations.
+     */
+    public void transformNotify() {
+        parentToDrawing
+                = drawingToParent
+                = localToDrawing
+                = drawingToLocal
+                = localToParent
+                = parentToLocal = null;
+    }
+
+    @Override
+    public Transform getParentToDrawing() {
+        if (parentToDrawing == null) {
+            parentToDrawing = Figure.super.getParentToDrawing();
+        }
+        return parentToDrawing;
+    }
+
+    @Override
+    public Transform getLocalToDrawing() {
+        if (localToDrawing == null) {
+            localToDrawing = Figure.super.getLocalToDrawing();
+        }
+        return localToDrawing;
+    }
+
+    @Override
+    public Transform getDrawingToParent() {
+        if (drawingToParent == null) {
+            drawingToParent = Figure.super.getDrawingToParent();
+        }
+        return drawingToParent;
+    }
+
+    @Override
+    public Transform getDrawingToLocal() {
+        if (drawingToLocal == null) {
+            drawingToLocal = Figure.super.getDrawingToLocal();
+        }
+        return drawingToLocal;
+    }
+
+    @Override
+    public Transform getLocalToParent() {
+        if (localToParent == null) {
+            localToParent = Figure.super.getLocalToParent();
+        }
+        return localToParent;
+    }
+
+    @Override
+    public Transform getParentToLocal() {
+        if (parentToLocal == null) {
+            parentToLocal = Figure.super.getParentToLocal();
+        }
+        return parentToLocal;
+    }
+
 }

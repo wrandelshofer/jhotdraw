@@ -76,6 +76,10 @@ public class DrawingModelEvent extends Event<DrawingModel> {
          * The connection of a figure has changed.
          */
         CONNECTION_CHANGED,
+        /**
+         * The transform of a figure has changed.
+         */
+        TRANSFORM_CHANGED,
     }
     private final Figure figure;
     private final Key<?> key;
@@ -128,6 +132,9 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     }
     public static <T> DrawingModelEvent connectionChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.CONNECTION_CHANGED, figure, null, null, -1, null, null, null);
+    }
+    public static <T> DrawingModelEvent transformChanged(DrawingModel source, Figure figure) {
+        return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null);
     }
 
     public static <T> DrawingModelEvent layoutInvalidated(DrawingModel source, Figure figure) {

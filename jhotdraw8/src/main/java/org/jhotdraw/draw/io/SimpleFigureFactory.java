@@ -38,7 +38,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
 
-    
+  
     public SimpleFigureFactory() {
     }
 
@@ -303,5 +303,14 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     @Override
     public <T> T getDefaultValue(Key<T> key) {
         return key.getDefaultValue();
+    }
+
+    /** This implementation returns null.
+     * 
+     * @return null
+     */
+    @Override
+    public String createFileComment() {
+        return null;
     }
 }

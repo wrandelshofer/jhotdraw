@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.tool;
 
 import java.util.Collection;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.handle.Handle;
 
 /**
@@ -28,6 +29,6 @@ import org.jhotdraw.draw.handle.Handle;
  */
 public interface HandleTracker extends Tracker {
 
-    public void setHandles(Handle handle, Collection<Handle> compatibleHandles);
+    public void setHandles(Handle handle, Collection<Figure> compatibleFigures);
 
 }

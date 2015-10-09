@@ -75,16 +75,24 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             invalidateStyle(event.getFigure());
             break;
         case FIGURE_ADDED_TO_DRAWING:
-            invokeAddNotify(event.getFigure(),event.getDrawing());
+            invokeAddNotify(event.getFigure(), event.getDrawing());
             break;
         case FIGURE_REMOVED_FROM_DRAWING:
-            invokeRemoveNotify(event.getFigure(),event.getDrawing());
+            invokeRemoveNotify(event.getFigure(), event.getDrawing());
+            dirtyLayouts.remove(event.getFigure());
+            dirtyStyles.remove(event.getFigure());
             break;
         case CONNECTION_CHANGED:
             invokeConnectNotify(event.getFigure());
             break;
-            
+        case TRANSFORM_CHANGED:
+            invokeTransformNotify(event.getFigure());
+            break;
+
         case FIGURE_REMOVED_FROM_PARENT:
+            dirtyLayouts.remove(event.getFigure());
+            dirtyStyles.remove(event.getFigure());
+            break;
         case NODE_INVALIDATED:
         case ROOT_CHANGED:
         case SUBTREE_NODES_INVALIDATED:
@@ -130,6 +138,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             dirtyLayouts.clear();
             for (Figure f : fs) {
                 layout(f);
+                f.transformNotify();
             }
             isValidating = false;
         }
@@ -137,8 +146,8 @@ public abstract class AbstractDrawingModel implements DrawingModel {
 
     /**
      * Fires {@code LayoutInvalidated} for all figure which are transitively
-     * connected to the figures in the {@code todo} list, and which
-     * are not in the {@code done} list. Handles connection cycles.
+     * connected to the figures in the {@code todo} list, and which are not in
+     * the {@code done} list. Handles connection cycles.
      *
      * @param todo the todo list
      * @param done the done list
@@ -186,29 +195,45 @@ public abstract class AbstractDrawingModel implements DrawingModel {
         fireLayoutInvalidatedForFiguresConnectedWithTodo(todo, new HashSet<Figure>());
     }
 
-    /** Invokes {@code removeNotify} on the figure.
-     * 
+    /**
+     * Invokes {@code removeNotify} on the figure.
+     *
      * @param figure the figure
      * @param drawing the drawing
      */
     private void invokeRemoveNotify(Figure figure, Drawing drawing) {
-       figure.removeNotify(drawing);
+        figure.removeNotify(drawing);
     }
 
-    /** Invokes {@code addNotify} on the figure.
-     * 
+    /**
+     * Invokes {@code addNotify} on the figure.
+     *
      * @param figure the figure
      * @param drawing the drawing
      */
     private void invokeAddNotify(Figure figure, Drawing drawing) {
-       figure.addNotify(drawing);
+        figure.addNotify(drawing);
     }
-    /** Invokes {@code connectNotify} on the figure.
-     * 
+
+    /**
+     * * Invokes {@code connectNotify} on the figure.
+     *
      * @param figure the figure
      * @param drawing the drawing
      */
     private void invokeConnectNotify(Figure figure) {
-       figure.connectNotify();
+        figure.connectNotify();
+    }
+
+    /**
+     * Invokes {@code transformNotify} on the figure and all its descendants.
+     *
+     * @param figure the figure
+     * @param drawing the drawing
+     */
+    private void invokeTransformNotify(Figure figure) {
+        for (Figure f : figure.preorderIterable()) {
+            figure.transformNotify();
+        }
     }
 }

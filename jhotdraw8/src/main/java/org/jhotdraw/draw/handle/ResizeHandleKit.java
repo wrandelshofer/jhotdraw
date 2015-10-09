@@ -231,6 +231,8 @@ public class ResizeHandleKit {
                 Point2D loc = getLocation();
                 oldPoint = getOwner().localToDrawing(loc);
             }
+            // shift keeps the aspect ratio
+            // this is not consistent - shift should apply it to all?
             boolean keepAspect = event.isShiftDown();
 
             resize(newPoint, getOwner(), startBounds, view.getModel(), keepAspect);

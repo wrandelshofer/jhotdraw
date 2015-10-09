@@ -24,6 +24,7 @@ import org.jhotdraw.beans.NonnullProperty;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.MoveHandleKit;
 
 /**
  * A {@code DrawingView} can display a {@code Drawing} in a JavaFX scene graph.
@@ -467,11 +468,10 @@ public interface DrawingView extends RenderContext {
 
     // Handles
     /**
-     * Gets compatible handles.
+     * Gets selected figures with the same handle.
      *
      * @param handle a handle
      * @return A collection containing the handle and all compatible handles.
      */
-    public Collection<Handle> getCompatibleHandles(Handle handle);
-
+    public Collection<Figure> getSelectedFiguresWithCompatibleHandle(Handle handle);
 }

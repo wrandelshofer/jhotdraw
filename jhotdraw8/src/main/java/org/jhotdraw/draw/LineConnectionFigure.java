@@ -59,11 +59,11 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     /**
      * The start connector.
      */
-    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE,DirtyBits.CONNECTION, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
+    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE,DirtyBits.CONNECTION, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
     /**
      * The end connector.
      */
-    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE,DirtyBits.CONNECTION, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), null);
+    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE,DirtyBits.CONNECTION, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
@@ -151,6 +151,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         lineNode.setEndY(end.getY());
     }
 
+    @Override
     public void layout() {
         Point2D start = get(START);
         Point2D end = get(END);

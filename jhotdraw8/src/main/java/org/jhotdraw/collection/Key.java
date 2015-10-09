@@ -69,7 +69,7 @@ public interface Key<T> extends Serializable {
     default T get(Map<? super Key<?>, Object> a) {
         @SuppressWarnings("unchecked")
         T value = a.containsKey(this) ? (T) a.get(this) : getDefaultValue();
-        assert isAssignable(value) : value + " is not assignable to " + getValueType();
+        //assert isAssignable(value) : value + " is not assignable to " + getValueType();
         return value;
     }
 

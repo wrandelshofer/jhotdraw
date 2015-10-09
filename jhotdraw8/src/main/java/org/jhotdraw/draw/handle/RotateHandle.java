@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.geom.Geom;
 
 /**
@@ -103,7 +104,17 @@ public class RotateHandle extends AbstractHandle {
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
         }
-        view.getModel().set(getOwner(), Figure.ROTATE, newRotate);
+
+        DrawingModel model = view.getModel();
+
+        if (event.isShiftDown()) {
+            // shift transforms all selected figures
+            for (Figure f : view.getSelectedFiguresWithCompatibleHandle(this)) {
+                model.set(f, Figure.ROTATE, newRotate);
+            }
+        } else {
+            model.set(getOwner(), Figure.ROTATE, newRotate);
+        }
 
         oldPoint = newPoint;
     }

@@ -22,6 +22,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Figure;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Comment;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -130,6 +131,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 doc.appendChild(elem);
             }
             Element docElement = doc.getDocumentElement();
+
+            String commentText = factory.createFileComment();
+            if (commentText != null) {
+                docElement.getParentNode().insertBefore(doc.createComment(commentText), docElement);
+            }
+
             writeElementAttributes(docElement, external);
             for (Figure child : external.getChildren()) {
                 Node childNode = writeNodeRecursively(doc, child);

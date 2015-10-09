@@ -5,10 +5,13 @@
  */
 package org.jhotdraw.draw;
 
+import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.HandleType;
 
 /**
  * SimpleLayer.
@@ -73,9 +76,18 @@ public class SimpleLayer extends AbstractCompositeFigure implements Layer {
      * @param newParent the new parent
      * @throws IllegalArgumentException if newParent is an illegal parent
      */
+    @Override
     protected void checkParent(Figure newParent) {
         if (newParent!=null&&!(newParent instanceof Drawing)) {
             throw new IllegalArgumentException("illegal parent:" + newParent+" for:"+this);
         }
     }
+
+    /** Layers never create handles. */
+    @Override
+    public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
+        // empty
+    }
+    
+    
 }
