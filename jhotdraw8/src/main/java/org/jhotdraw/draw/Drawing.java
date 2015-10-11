@@ -26,8 +26,8 @@ import org.jhotdraw.draw.key.PaintStyleableFigureKey;
  * <b>Nested Drawings.</b> Since {@code Drawing} implements the {@code Figure}
  * interface, a drawing may be contained in another drawing.</p>
  * <p>
- * <b>Styling.</b> A drawing can have a style sheet which may affect the
- * state of its descendant figures. Since figures cache style sheet data, method
+ * <b>Styling.</b> A drawing can have a style sheet which may affect the state
+ * of its descendant figures. Since figures cache style sheet data, method
  * {@code applyCss} must be invoked on the drawing, when its style sheet is
  * changed, and on a figure when its location in the descendant tree structure
  * changes.</p>
@@ -47,23 +47,31 @@ public interface Drawing extends Figure {
      */
     public final static Key<URL> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URL.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
     /**
-     * Holds a list of URLs to author stylesheets. If the value is null, then no
+     * Holds a list of author stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
-     * If an URL is relative, then it is relative to {@code DOCUMENT_HOME}.
+     * Supports the following data types for list entries:
+     * <ul>
+     * <li>URL. The URL poinst to a CSS file. If the URL is relative, then it is
+     * relative to {@code DOCUMENT_HOME}.</li>
+     * <li>String. The String contains a CSS as a literal.</li>
+     * </ul>
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URL>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class,"<URL>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM,DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<List<Object>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class, "<Object>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT), null);
     /**
-     * Holds a list of URLs to user agent stylesheets. If the value is null, then no
+     * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
-     * <p>
-     * If an URL is relative, then it is relative to {@code DOCUMENT_HOME}.
+     * <ul>
+     * <li>URL. The URL poinst to a CSS file. If the URL is relative, then it is
+     * relative to {@code DOCUMENT_HOME}.</li>
+     * <li>String. The String contains a CSS as a literal.</li>
+     * </ul>
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URL>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class,"<URL>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM,DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<List<Object>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class, "<Object>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT), null);
     /**
      * Defines the (clip) bounds of the drawing.
      * <p>

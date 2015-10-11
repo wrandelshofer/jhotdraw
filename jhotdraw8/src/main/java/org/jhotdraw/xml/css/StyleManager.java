@@ -40,10 +40,10 @@ public interface StyleManager {
     // ---
     // convenience methods
     // ---
-
     default ObservableList<Stylesheet> getUserAgentStylesheets() {
         return userAgentStylesheetsProperty().get();
     }
+
     default ObservableList<Stylesheet> getAuthorStylesheets() {
         return authorStylesheetsProperty().get();
     }
@@ -58,6 +58,27 @@ public interface StyleManager {
      */
     default void addStylesheet(StyleOrigin origin, URL stylesheetUrl) throws IOException {
         Stylesheet sh = new CssParser().parseStylesheet(stylesheetUrl);
+        switch (origin) {
+        case USER_AGENT:
+            getUserAgentStylesheets().add(sh);
+            break;
+        case AUTHOR:
+            getAuthorStylesheets().add(sh);
+            break;
+        default:
+            throw new IllegalArgumentException("Illegal origin:" + origin);
+        }
+    }
+
+    /**
+     * Adds a stylesheet to the specified origin.
+     *
+     * @param origin the style origin
+     * @param str the stylesheet as a literal string
+     * @throws java.io.IOException if the stylesheet can not be parsed properly
+     */
+    default void addStylesheet(StyleOrigin origin, String str) throws IOException {
+        Stylesheet sh = new CssParser().parseStylesheet(str);
         switch (origin) {
         case USER_AGENT:
             getUserAgentStylesheets().add(sh);

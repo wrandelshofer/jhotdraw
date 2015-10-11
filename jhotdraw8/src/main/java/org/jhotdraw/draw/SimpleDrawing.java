@@ -88,23 +88,35 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
             styleManager = new StyleableStyleManager();
             URL documentHome = get(DOCUMENT_HOME);
             if (get(USER_AGENT_STYLESHEETS) != null) {
-                for (URL url : get(USER_AGENT_STYLESHEETS)) {
+                for (Object urlOrString : get(USER_AGENT_STYLESHEETS)) {
                     try {
-                        URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
-                        styleManager.addStylesheet(StyleOrigin.USER_AGENT, absoluteUrl);
+                        if (urlOrString instanceof URL) {
+                            URL url = (URL) urlOrString;
+                            URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
+                            styleManager.addStylesheet(StyleOrigin.USER_AGENT, absoluteUrl);
+                        } else {
+                            String str=(String) urlOrString;
+                            styleManager.addStylesheet(StyleOrigin.USER_AGENT, str);
+                        }
                     } catch (IOException ex) {
-                        System.err.println("Warning could not load stylesheet " + url);
+                        System.err.println("Warning could not load stylesheet " + urlOrString);
                         ex.printStackTrace();
                     }
                 }
             }
             if (get(AUTHOR_STYLESHEETS) != null) {
-                for (URL url : get(AUTHOR_STYLESHEETS)) {
+                for (Object urlOrString : get(AUTHOR_STYLESHEETS)) {
                     try {
+                        if (urlOrString instanceof URL) {
+                            URL url = (URL) urlOrString;
                         URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
                         styleManager.addStylesheet(StyleOrigin.AUTHOR, absoluteUrl);
+                        } else {
+                            String str=(String) urlOrString;
+                            styleManager.addStylesheet(StyleOrigin.USER_AGENT, str);
+                        }
                     } catch (IOException ex) {
-                        System.err.println("Warning could not load stylesheet " + url);
+                        System.err.println("Warning could not load stylesheet " + urlOrString);
                         ex.printStackTrace();
                     }
                 }
