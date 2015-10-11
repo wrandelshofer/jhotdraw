@@ -140,7 +140,9 @@ public interface Handle {
     default void onKeyTyped(KeyEvent event, DrawingView dv) {
     }
     
-    /** Returns true if that handle is compatible with this handle. */
+    /** Returns true if that handle is compatible with this handle.
+     * @param that tje other handle
+     * @return true if compatible */
     boolean isCompatible(Handle that);
 
 }

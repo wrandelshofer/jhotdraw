@@ -42,7 +42,7 @@ import org.jhotdraw.xml.css.ast.UniversalSelector;
  *
  * selector_group = selector , { "," , selector } ;
  * selector     = simple_selector , { [combinator] , selector } ;
- * combinator   = "+" | ">" | " " | "," | '~' ;
+ * combinator   = "+" | {@literal ">"} | " " | "," | '~' ;
  * simple_selector = universal_selector | type_selector | id_selector
  *                 | class_selector | pseudoclass_selector | attribute_selector ;
  * universal_selector   = "*" ;
@@ -65,7 +65,7 @@ import org.jhotdraw.xml.css.ast.UniversalSelector;
  * <ul>
  * <li><a href="http://www.w3.org/TR/CSS2/">W3C CSS2</a></li>
  * <li><a href="http://www.w3.org/TR/selectors/">Selectors Level 3</a></li>
- * </li>
+ * </ul>
  *
  * @author Werner Randelshofer
  * @version $Id$

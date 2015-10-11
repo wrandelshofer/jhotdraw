@@ -51,8 +51,10 @@ public interface StyleManager {
     /**
      * Adds a stylesheet to the specified origin.
      *
-     * @param origin
-     * @param stylesheetUrl
+     * @param origin the style origin
+     * @param stylesheetUrl the stylesheet url
+     * @throws java.io.IOException if the stylesheet can not be loaded and
+     * parsed properly
      */
     default void addStylesheet(StyleOrigin origin, URL stylesheetUrl) throws IOException {
         Stylesheet sh = new CssParser().parseStylesheet(stylesheetUrl);

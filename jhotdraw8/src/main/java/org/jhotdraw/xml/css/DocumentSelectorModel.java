@@ -9,7 +9,7 @@ import org.w3c.dom.Node;
 
 /**
  * {@code DocumentSelectorModel} provides an API for CSS
- * {@link SelectorGroup}'s.
+ * {@link org.jhotdraw.xml.css.ast.SelectorGroup}'s.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
