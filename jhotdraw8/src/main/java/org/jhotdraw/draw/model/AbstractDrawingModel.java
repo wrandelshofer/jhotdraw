@@ -128,7 +128,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             LinkedList<Figure> fs = new LinkedList<>(dirtyStyles);
             dirtyStyles.clear();
             for (Figure f : fs) {
-                applyCss(f);
+                invokeStylesheetNotify(f);
             }
             isValidating = false;
         }
@@ -137,8 +137,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             LinkedList<Figure> fs = new LinkedList<>(dirtyLayouts);
             dirtyLayouts.clear();
             for (Figure f : fs) {
-                layout(f);
-                f.transformNotify();
+                invokeLayoutNotify(f);
             }
             isValidating = false;
         }
@@ -235,5 +234,17 @@ public abstract class AbstractDrawingModel implements DrawingModel {
         for (Figure f : figure.preorderIterable()) {
             figure.transformNotify();
         }
+    }
+    public void invokeLayoutNotify(Figure figure) {
+        figure.layoutNotify();
+        fire(DrawingModelEvent.transformChanged(this, figure));
+        fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
+        fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
+    }
+
+    public void invokeStylesheetNotify(Figure figure) {
+        figure.stylesheetNotify();
+        fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
+        fireLayoutInvalidatedForFiguresConnectedWithSubtree(figure);
     }
 }
