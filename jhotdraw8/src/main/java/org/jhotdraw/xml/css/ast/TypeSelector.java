@@ -29,7 +29,7 @@ public class TypeSelector extends  SimpleSelector {
 
         @Override
         public <T> T match(SelectorModel<T> model, T element) {
-            return (element != null && model.hasStyleType(element, type)) //
+            return (element != null && model.hasType(element, type)) //
                     ? element : null;
         }
     }

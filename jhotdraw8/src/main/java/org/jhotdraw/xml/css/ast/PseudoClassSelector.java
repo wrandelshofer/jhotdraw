@@ -29,7 +29,7 @@ public class PseudoClassSelector extends SimpleSelector {
 
     @Override
     public <T> T match(SelectorModel<T> model, T element) {
-        return (element != null && model.hasStylePseudoClass(element, pseudoClass)) //
+        return (element != null && model.hasPseudoClass(element, pseudoClass)) //
                 ? element : null;
     }
 }
