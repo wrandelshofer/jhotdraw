@@ -17,13 +17,13 @@ import org.w3c.dom.Node;
 public class DocumentSelectorModel implements SelectorModel<Element> {
 
     @Override
-    public boolean hasStyleId(Element elem, String id) {
+    public boolean hasId(Element elem, String id) {
         String value = elem.getAttribute("id");
         return value != null && value.equals(id);
     }
 
     @Override
-    public boolean hasStyleType(Element elem, String type) {
+    public boolean hasType(Element elem, String type) {
         String value = elem.getNodeName();
         return value != null && value.equals(type);
     }
@@ -44,7 +44,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasStylePseudoClass(Element element, String pseudoClass) {
+    public boolean hasPseudoClass(Element element, String pseudoClass) {
         return false;
     }
 
@@ -64,6 +64,16 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
             n = n.getPreviousSibling();
         }
         return (Element) n;
+    }
+
+    @Override
+    public boolean hasAttribute(Element element, String attributeName) {
+        return element.hasAttribute(attributeName);
+    }
+
+    @Override
+    public String getAttribute(Element element, String attributeName) {
+       return element.getAttribute(attributeName);
     }
 
 }

@@ -28,7 +28,7 @@ public class IdSelector extends SimpleSelector {
 
     @Override
     public <T> T match(SelectorModel<T> model, T element) {
-        return (element != null && model.hasStyleId(element, id)) //
+        return (element != null && model.hasId(element, id)) //
                 ? element : null;
     }
 }

@@ -15,6 +15,11 @@ import java.util.List;
 import org.jhotdraw.io.StreamPosTokenizer;
 import org.jhotdraw.xml.css.ast.AdjacentSiblingCombinator;
 import org.jhotdraw.xml.css.ast.AndCombinator;
+import org.jhotdraw.xml.css.ast.AttributeLanguageSubcodeSelector;
+import org.jhotdraw.xml.css.ast.AttributePresenceSelector;
+import org.jhotdraw.xml.css.ast.AttributeSelector;
+import org.jhotdraw.xml.css.ast.AttributeValueSelector;
+import org.jhotdraw.xml.css.ast.AttributeWordListItemSelector;
 import org.jhotdraw.xml.css.ast.ChildCombinator;
 import org.jhotdraw.xml.css.ast.ClassSelector;
 import org.jhotdraw.xml.css.ast.Declaration;
@@ -50,7 +55,9 @@ import org.jhotdraw.xml.css.ast.UniversalSelector;
  * id_selector          = "#" , IDENT;
  * class_selector       = "." , IDENT ;
  * pseudoclass_selector = ":" , IDENT ;
- * attribute_selector   = (* not supported *) ;
+ * attribute_selector   = "[" , IDENT
+ *                            , [ ( "=" | "~=" | "|=" ) , ( IDENT | STRING ) ],
+ *                        "]" ;
  *
  * declarations = [ declaration ] , { ";" , [ declaration ] } ;
  * declaration  = property, ":",  expr ;
@@ -205,9 +212,60 @@ public class CssParser {
                 throw new IOException("SimpleSelector: identifier instead of " + value(tt) + " expected after ':' in line " + tt.lineno());
             }
             return new PseudoClassSelector(tt.sval);
+        case '[':
+            tt.pushBack();
+            return parseAttributeSelector(tt);
         default:
             throw new IOException("SimpleSelector: SimpleSelector instead of " + value(tt) + " expected in line " + tt.lineno());
         }
+    }
+
+    private AttributeSelector parseAttributeSelector(StreamPosTokenizer tt) throws IOException {
+        if (tt.nextToken() != '[') {
+            throw new IOException("AttributeSelector: '[' instead of " + value(tt) + " expected in line " + tt.lineno());
+        }
+        if (tt.nextToken() != StreamPosTokenizer.TT_WORD) {
+            throw new IOException("AttributeSelector: word instead of " + value(tt) + " expected in line " + tt.lineno());
+        }
+        String attributeName = tt.sval;
+        AttributeSelector selector;
+        switch (tt.nextToken()) {
+        case '=':
+            if (tt.nextToken() != StreamPosTokenizer.TT_WORD && tt.ttype != '\'' && tt.ttype != '"') {
+                throw new IOException("AttributeSelector: word or string instead of " + value(tt) + " expected in line " + tt.lineno());
+            }
+            selector = new AttributeValueSelector(attributeName, tt.sval);
+            break;
+        case '~':
+            if (tt.nextToken() != '=') {
+                throw new IOException("AttributeSelector: '=' instead of " + value(tt) + " expected in line " + tt.lineno());
+            }
+            if (tt.nextToken() != StreamPosTokenizer.TT_WORD && tt.ttype != '\'' && tt.ttype != '"') {
+                throw new IOException("AttributeSelector: word or string instead of " + value(tt) + " expected in line " + tt.lineno());
+            }
+            selector = new AttributeWordListItemSelector(attributeName, tt.sval);
+            break;
+        case '|':
+            if (tt.nextToken() != '=') {
+                throw new IOException("AttributeSelector: '=' instead of " + value(tt) + " expected in line " + tt.lineno());
+            }
+            if (tt.nextToken() != StreamPosTokenizer.TT_WORD && tt.ttype != '\'' && tt.ttype != '"') {
+                throw new IOException("AttributeSelector: word or string instead of " + value(tt) + " expected in line " + tt.lineno());
+            }
+            selector = new AttributeLanguageSubcodeSelector(attributeName, tt.sval);
+            break;
+        case ']':
+            selector = new AttributePresenceSelector(attributeName);
+            tt.pushBack();
+            break;
+        default:
+            throw new IOException("AttributeSelector: operator '=', '~=' or '|=' instead of " + value(tt) + " expected in line " + tt.lineno());
+
+        }
+        if (tt.nextToken() != ']') {
+            throw new IOException("AttributeSelector: ']' instead of " + value(tt) + " expected in line " + tt.lineno());
+        }
+        return selector;
     }
 
     private List<Declaration> parseDeclarations(StreamPosTokenizer tt) throws IOException {
