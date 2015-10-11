@@ -86,7 +86,7 @@ public class CssSample extends Application {
         vertex4.set(Figure.STYLE_ID,"vertex4");
         
         drawing.layout();
-        ArrayList<URL> stylesheets=new ArrayList<>();
+        ArrayList<Object> stylesheets=new ArrayList<>();
         stylesheets.add(CssSample.class.getResource("CssSample.css"));
         drawing.set(Drawing.USER_AGENT_STYLESHEETS,stylesheets);
         drawing.applyCss();
