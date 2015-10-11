@@ -86,42 +86,28 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
     public StyleableStyleManager getStyleManager() {
         if (styleManager == null) {
             styleManager = new StyleableStyleManager();
-            URL documentHome = get(DOCUMENT_HOME);
-            if (get(USER_AGENT_STYLESHEETS) != null) {
-                for (Object urlOrString : get(USER_AGENT_STYLESHEETS)) {
-                    try {
-                        if (urlOrString instanceof URL) {
-                            URL url = (URL) urlOrString;
-                            URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
-                            styleManager.addStylesheet(StyleOrigin.USER_AGENT, absoluteUrl);
-                        } else {
-                            String str=(String) urlOrString;
-                            styleManager.addStylesheet(StyleOrigin.USER_AGENT, str);
-                        }
-                    } catch (IOException ex) {
-                        System.err.println("Warning could not load stylesheet " + urlOrString);
-                        ex.printStackTrace();
-                    }
-                }
-            }
-            if (get(AUTHOR_STYLESHEETS) != null) {
-                for (Object urlOrString : get(AUTHOR_STYLESHEETS)) {
-                    try {
-                        if (urlOrString instanceof URL) {
-                            URL url = (URL) urlOrString;
-                        URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
-                        styleManager.addStylesheet(StyleOrigin.AUTHOR, absoluteUrl);
-                        } else {
-                            String str=(String) urlOrString;
-                            styleManager.addStylesheet(StyleOrigin.USER_AGENT, str);
-                        }
-                    } catch (IOException ex) {
-                        System.err.println("Warning could not load stylesheet " + urlOrString);
-                        ex.printStackTrace();
-                    }
-                }
+            try {
+                styleManager.updateStylesheets(StyleOrigin.USER_AGENT, get(USER_AGENT_STYLESHEETS));
+                styleManager.updateStylesheets(StyleOrigin.AUTHOR, get(AUTHOR_STYLESHEETS));
+            } catch (IOException ex) {
+                System.err.println("Warning could not load user agent stylesheets.");
+                ex.printStackTrace();
             }
         }
         return styleManager;
+    }
+
+    @Override
+    public void stylesheetNotify() {
+        if (styleManager != null) {
+            try {
+                styleManager.updateStylesheets(StyleOrigin.USER_AGENT, get(USER_AGENT_STYLESHEETS));
+                styleManager.updateStylesheets(StyleOrigin.AUTHOR, get(AUTHOR_STYLESHEETS));
+            } catch (IOException ex) {
+                System.err.println("Warning could not load user agent stylesheets.");
+                ex.printStackTrace();
+            }
+        }
+        super.stylesheetNotify();
     }
 }

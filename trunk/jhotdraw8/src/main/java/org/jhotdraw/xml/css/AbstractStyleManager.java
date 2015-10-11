@@ -33,6 +33,21 @@ public class AbstractStyleManager implements StyleManager {
                     this, AUTHOR_STYLESHEETS_PROPERTY, //
                     FXCollections.observableArrayList()).getReadOnlyProperty();
 
+    /**
+     * Holds the user agent stylesheets.
+     */
+    protected final ReadOnlyListProperty<Object>userAgentStylesheetUrlOrString//
+            = new ReadOnlyListWrapper<Object>(//
+                    this, USER_AGENT_STYLESHEET_URL_OR_STRING_PROPERTY, //
+                    FXCollections.observableArrayList()).getReadOnlyProperty();
+    /**
+     * Holds the author stylesheets.
+     */
+    protected final ReadOnlyListProperty<Object> authorStylesheetUrlOrString//
+            = new ReadOnlyListWrapper<Object>(//
+                    //
+                    this, AUTHOR_STYLESHEET_URL_OR_STRING_PROPERTY, //
+                    FXCollections.observableArrayList()).getReadOnlyProperty();
     @Override
     public ReadOnlyListProperty<Stylesheet> userAgentStylesheetsProperty() {
         return userAgentStylesheets;
@@ -41,6 +56,16 @@ public class AbstractStyleManager implements StyleManager {
     @Override
     public ReadOnlyListProperty<Stylesheet> authorStylesheetsProperty() {
         return authorStylesheets;
+    }
+
+    @Override
+    public ReadOnlyListProperty<Object> userAgentStylesheetUrlOrStringProperty() {
+        return userAgentStylesheetUrlOrString;
+    }
+
+    @Override
+    public ReadOnlyListProperty<Object> authorStylesheetUrlOrStringProperty() {
+        return authorStylesheetUrlOrString;
     }
 
    
