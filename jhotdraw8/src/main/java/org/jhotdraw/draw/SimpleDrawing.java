@@ -7,6 +7,7 @@ package org.jhotdraw.draw;
 import java.io.IOException;
 import java.net.URL;
 import javafx.collections.ObservableList;
+import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
@@ -15,7 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.css.StyleableStyleManager;
-import org.jhotdraw.xml.css.CSSParser;
+import org.jhotdraw.xml.css.CssParser;
 
 /**
  * SimpleDrawing.
@@ -85,17 +86,27 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
     public StyleableStyleManager getStyleManager() {
         if (styleManager == null) {
             styleManager = new StyleableStyleManager();
-            if (get(STYLESHEETS) != null) {
-                URL documentHome = get(DOCUMENT_HOME);
-                CSSParser parser = new CSSParser();
-                try {
-                    for (URL url : get(STYLESHEETS)) {
+            URL documentHome = get(DOCUMENT_HOME);
+            if (get(USER_AGENT_STYLESHEETS) != null) {
+                for (URL url : get(USER_AGENT_STYLESHEETS)) {
+                    try {
                         URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
-                        parser.parse(absoluteUrl, styleManager);
+                        styleManager.addStylesheet(StyleOrigin.USER_AGENT, absoluteUrl);
+                    } catch (IOException ex) {
+                        System.err.println("Warning could not load stylesheet " + url);
+                        ex.printStackTrace();
                     }
-                } catch (IOException ex) {
-                    System.err.println("Warning could not load stylesheet " + get(STYLESHEETS));
-                    ex.printStackTrace();
+                }
+            }
+            if (get(AUTHOR_STYLESHEETS) != null) {
+                for (URL url : get(AUTHOR_STYLESHEETS)) {
+                    try {
+                        URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
+                        styleManager.addStylesheet(StyleOrigin.AUTHOR, absoluteUrl);
+                    } catch (IOException ex) {
+                        System.err.println("Warning could not load stylesheet " + url);
+                        ex.printStackTrace();
+                    }
                 }
             }
         }

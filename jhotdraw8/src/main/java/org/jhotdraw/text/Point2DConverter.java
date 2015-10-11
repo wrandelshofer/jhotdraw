@@ -25,7 +25,7 @@ public class Point2DConverter implements Converter<Point2D> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point2D value) throws IOException {
-        formatter.toString(out,idFactory, value.getX(), value.getY());
+        formatter.toStr(out,idFactory, value.getX(), value.getY());
     }
 
     @Override

@@ -24,7 +24,7 @@ public class Rectangle2DConverter implements Converter<Rectangle2D> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Rectangle2D value) throws IOException {
-        formatter.toString(out, idFactory, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
+        formatter.toStr(out, idFactory, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
     }
 
     @Override

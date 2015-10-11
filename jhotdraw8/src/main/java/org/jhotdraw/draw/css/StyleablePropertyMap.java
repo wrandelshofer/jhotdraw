@@ -295,6 +295,33 @@ public class StyleablePropertyMap {
         return value;
     }
 
+    public void removeAll(StyleOrigin origin) {
+        switch (origin) {
+        case INLINE:
+            if (inline != null) {
+                inline.clear();
+            }
+            break;
+        case AUTHOR:
+            if (author != null) {
+                author.clear();
+            }
+            break;
+        case USER:
+            if (user != null) {
+                user.clear();
+            }
+            break;
+        case USER_AGENT:
+            if (userAgent != null) {
+                userAgent.clear();
+            }
+            break;
+        default:
+            throw new InternalError("unknown enum value " + origin);
+        }
+    }
+
     // ---
     // static inner classes
     // ---

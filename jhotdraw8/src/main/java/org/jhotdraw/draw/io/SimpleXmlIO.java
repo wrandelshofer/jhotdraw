@@ -72,7 +72,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             if (namespaceURI != null) {
                 builderFactory.setNamespaceAware(true);
             }
-            builderFactory.setNamespaceAware(true);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse(in);
             return read(doc, drawing);

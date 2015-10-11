@@ -48,21 +48,21 @@ public class GridConstrainer implements Constrainer {
     private double theta;
 
     /**
-     * Creates a grid of 10x10 pixels at origin 0,0 and 90 degree rotations.
+     * Creates a grid of 10x10 pixels at origin 0,0 and 45 degree rotations.
      */
     public GridConstrainer() {
-        this(0, 0, 10, 10, 90);
+        this(0, 0, 10, 10, 45);
     }
 
     /**
-     * Creates a grid of width x height pixels at origin 0,0 and 90 degree
+     * Creates a grid of width x height pixels at origin 0,0 and 45 degree
      * rotations.
      *
      * @param width The width of the grid. 0 turns the grid of for the x-axis.
      * @param height The width of the grid. 0 turns the grid of for the y-axis.
      */
     public GridConstrainer(double width, double height) {
-        this(0, 0, width, height, 90);
+        this(0, 0, width, height, 45);
     }
 
     /**
