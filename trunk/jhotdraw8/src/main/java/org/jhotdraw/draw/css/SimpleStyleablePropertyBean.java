@@ -5,12 +5,8 @@
 package org.jhotdraw.draw.css;
 
 import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.collections.FXCollections;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.jhotdraw.beans.PropertyBean;
-import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -44,4 +40,11 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     public <T> T remove(StyleOrigin origin, Key<T> key) {
         return styleableProperties.remove(origin,key);
     }
+
+    @Override
+    public void removeAll(StyleOrigin origin) {
+         styleableProperties.removeAll(origin);
+    }
+    
+    
 }

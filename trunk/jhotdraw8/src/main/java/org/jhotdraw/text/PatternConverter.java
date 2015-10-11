@@ -132,8 +132,12 @@ public class PatternConverter implements Converter<Object[]> {
         this.factory = factory;
     }
 
+    public void toStr(Appendable out, IdFactory idFactory, Object... value) throws IOException {
+        toString(out, idFactory, value);
+    }
+
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Object... value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, Object[] value) throws IOException {
         int[] indices = new int[numIndices];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = i;
@@ -195,8 +199,10 @@ public class PatternConverter implements Converter<Object[]> {
         }
 
         static String escape(int charAt) {
-            if (charAt==-1) return "end of file";
-            if (Character.isISOControl((char)charAt)) {
+            if (charAt == -1) {
+                return "end of file";
+            }
+            if (Character.isISOControl((char) charAt)) {
                 String hex = "000" + Integer.toHexString(charAt);
                 return "\\u" + hex.substring(hex.length() - 4);
             } else {
@@ -526,63 +532,63 @@ public class PatternConverter implements Converter<Object[]> {
 
     private static void parsePatternElement(StreamPosTokenizer tt, AST parent, int offset) throws IOException {
         switch (tt.nextToken()) {
-            case StreamPosTokenizer.TT_EOF:
-                return;
-            case '{':
-                tt.pushBack();
-                parseArgument(tt, parent, offset);
-                break;
-            default:
-                tt.pushBack();
-                parseRegex(tt, parent, offset);
-                break;
+        case StreamPosTokenizer.TT_EOF:
+            return;
+        case '{':
+            tt.pushBack();
+            parseArgument(tt, parent, offset);
+            break;
+        default:
+            tt.pushBack();
+            parseRegex(tt, parent, offset);
+            break;
         }
     }
 
     private static void parseRegex(StreamPosTokenizer tt, AST parent, int offset) throws IOException {
         switch (tt.nextToken()) {
-            case StreamPosTokenizer.TT_EOF:
-                throw new IOException("RegexExpression expected @"
-                        + (tt.getStartPosition() + offset));
+        case StreamPosTokenizer.TT_EOF:
+            throw new IOException("RegexExpression expected @"
+                    + (tt.getStartPosition() + offset));
 
-            case '(':
-                tt.pushBack();
-                parseRegexChoice(tt, parent, offset);
-                break;
-            case '[':
-                tt.pushBack();
-                parseRegexCharclass(tt, parent, offset);
-                break;
-            case '+':
-            case '*':
-            case ')':
-            case ']':
-                throw new IOException("RegexExpression may not start with '"
-                        + (char) tt.ttype + "' @"
-                        + (tt.getStartPosition() + offset));
-            case '\'':
-            default:
-                tt.pushBack();
-                parseRegexChars(tt, parent, offset);
-                break;
+        case '(':
+            tt.pushBack();
+            parseRegexChoice(tt, parent, offset);
+            break;
+        case '[':
+            tt.pushBack();
+            parseRegexCharclass(tt, parent, offset);
+            break;
+        case '+':
+        case '*':
+        case ')':
+        case ']':
+            throw new IOException("RegexExpression may not start with '"
+                    + (char) tt.ttype + "' @"
+                    + (tt.getStartPosition() + offset));
+        case '\'':
+        default:
+            tt.pushBack();
+            parseRegexChars(tt, parent, offset);
+            break;
         }
     }
 
     private static void parseRegexRepeat(StreamPosTokenizer tt, Regex regex, int offset) throws IOException {
         switch (tt.nextToken()) {
-            case '+':
-                regex.minRepeat = 1;
-                regex.maxRepeat = Integer.MAX_VALUE;
-                break;
-            case '*':
-                regex.minRepeat = 0;
-                regex.maxRepeat = Integer.MAX_VALUE;
-                break;
-            default:
-                regex.minRepeat = 1;
-                regex.maxRepeat = 1;
-                tt.pushBack();
-                break;
+        case '+':
+            regex.minRepeat = 1;
+            regex.maxRepeat = Integer.MAX_VALUE;
+            break;
+        case '*':
+            regex.minRepeat = 0;
+            regex.maxRepeat = Integer.MAX_VALUE;
+            break;
+        default:
+            regex.minRepeat = 1;
+            regex.maxRepeat = 1;
+            tt.pushBack();
+            break;
         }
     }
 
@@ -590,26 +596,26 @@ public class PatternConverter implements Converter<Object[]> {
         RegexChars regex = new RegexChars();
         regex.chars = "";
         switch (tt.nextToken()) {
-            case StreamPosTokenizer.TT_EOF:
-                throw new IOException("RegexChars expected @"
-                        + (tt.getStartPosition() + offset));
-            case '\'':
-                regex.chars += tt.sval.isEmpty() ? "'" : tt.sval;
+        case StreamPosTokenizer.TT_EOF:
+            throw new IOException("RegexChars expected @"
+                    + (tt.getStartPosition() + offset));
+        case '\'':
+            regex.chars += tt.sval.isEmpty() ? "'" : tt.sval;
 
-                break;
-            case '(':
-            case '[':
-            case '+':
-            case '*':
-            case ')':
-            case ']':
-                throw new IOException("RegexChars may not start with '"
-                        + (char) tt.ttype + "' @"
-                        + (tt.getStartPosition() + offset));
+            break;
+        case '(':
+        case '[':
+        case '+':
+        case '*':
+        case ')':
+        case ']':
+            throw new IOException("RegexChars may not start with '"
+                    + (char) tt.ttype + "' @"
+                    + (tt.getStartPosition() + offset));
 
-            default:
-                regex.chars += (char) tt.ttype;
-                break;
+        default:
+            regex.chars += (char) tt.ttype;
+            break;
         }
         parseRegexRepeat(tt, regex, offset);
         parent.children.add(regex);
@@ -642,15 +648,15 @@ public class PatternConverter implements Converter<Object[]> {
         while (tt.nextToken() != ']') {
             tt.pushBack();
             switch (tt.nextToken()) {
-                case StreamPosTokenizer.TT_EOF:
-                    throw new IOException("RegexCharclass character expected @"
-                            + (tt.getStartPosition() + offset));
-                case '\'':
-                    regex.chars += (tt.sval.isEmpty()) ? "\'" : tt.sval;
-                    break;
-                default:
-                    regex.chars += (char) tt.ttype;
-                    break;
+            case StreamPosTokenizer.TT_EOF:
+                throw new IOException("RegexCharclass character expected @"
+                        + (tt.getStartPosition() + offset));
+            case '\'':
+                regex.chars += (tt.sval.isEmpty()) ? "\'" : tt.sval;
+                break;
+            default:
+                regex.chars += (char) tt.ttype;
+                break;
             }
         }
         if (regex.chars.isEmpty()) {
@@ -680,18 +686,18 @@ public class PatternConverter implements Converter<Object[]> {
                 != StreamPosTokenizer.TT_EOF) {
 
             switch (tt.ttype) {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    index = index * 10 + tt.ttype - '0';
-                    break;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                index = index * 10 + tt.ttype - '0';
+                break;
             }
         }
         // parse argument type
@@ -701,12 +707,12 @@ public class PatternConverter implements Converter<Object[]> {
                     != StreamPosTokenizer.TT_EOF) {
 
                 switch (tt.ttype) {
-                    case '\'':
-                        type.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
-                        break;
-                    default:
-                        type.append((char) tt.ttype);
-                        break;
+                case '\'':
+                    type.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                    break;
+                default:
+                    type.append((char) tt.ttype);
+                    break;
                 }
             }
         }
@@ -716,15 +722,15 @@ public class PatternConverter implements Converter<Object[]> {
         String typeStr = type.toString();
 
         switch (typeStr) {
-            case "choice":
-                parseChoiceArgumentStyle(tt, parent, index, offset);
-                break;
-            case "list":
-                parseListArgumentStyle(tt, parent, index, offset);
-                break;
-            default:
-                parseSimpleArgumentStyle(tt, parent, index, typeStr, offset);
-                break;
+        case "choice":
+            parseChoiceArgumentStyle(tt, parent, index, offset);
+            break;
+        case "list":
+            parseListArgumentStyle(tt, parent, index, offset);
+            break;
+        default:
+            parseSimpleArgumentStyle(tt, parent, index, typeStr, offset);
+            break;
         }
     }
 
@@ -738,20 +744,20 @@ public class PatternConverter implements Converter<Object[]> {
                 != StreamPosTokenizer.TT_EOF) {
 
             switch (tt.ttype) {
-                case '\'':
-                    style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
-                    break;
-                case '{':
-                    style.append('{');
-                    depth++;
-                    break;
-                case '}':
-                    style.append('}');
-                    depth--;
-                    break;
-                default:
-                    style.append((char) tt.ttype);
-                    break;
+            case '\'':
+                style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                break;
+            case '{':
+                style.append('{');
+                depth++;
+                break;
+            case '}':
+                style.append('}');
+                depth--;
+                break;
+            default:
+                style.append((char) tt.ttype);
+                break;
             }
         }
 
@@ -780,12 +786,12 @@ public class PatternConverter implements Converter<Object[]> {
             while (((tt.nextToken() != '#' && tt.ttype != '}') || depth > 0)
                     && tt.ttype != StreamPosTokenizer.TT_EOF) {
                 switch (tt.ttype) {
-                    case '\'':
-                        style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
-                        break;
-                    default:
-                        style.append((char) tt.ttype);
-                        break;
+                case '\'':
+                    style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                    break;
+                default:
+                    style.append((char) tt.ttype);
+                    break;
                 }
             }
             try {
@@ -805,20 +811,20 @@ public class PatternConverter implements Converter<Object[]> {
             while (((tt.nextToken() != '|' && tt.ttype != '}') || depth > 0)
                     && tt.ttype != StreamPosTokenizer.TT_EOF) {
                 switch (tt.ttype) {
-                    case '\'':
-                        style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
-                        break;
-                    case '{':
-                        style.append('{');
-                        depth++;
-                        break;
-                    case '}':
-                        style.append('}');
-                        depth--;
-                        break;
-                    default:
-                        style.append((char) tt.ttype);
-                        break;
+                case '\'':
+                    style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                    break;
+                case '{':
+                    style.append('{');
+                    depth++;
+                    break;
+                case '}':
+                    style.append('}');
+                    depth--;
+                    break;
+                default:
+                    style.append((char) tt.ttype);
+                    break;
                 }
             }
             AST child = new AST();
@@ -854,20 +860,20 @@ public class PatternConverter implements Converter<Object[]> {
             while (((tt.nextToken() != '|' && tt.ttype != '}') || depth > 0)
                     && tt.ttype != StreamPosTokenizer.TT_EOF) {
                 switch (tt.ttype) {
-                    case '\'':
-                        style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
-                        break;
-                    case '{':
-                        style.append('{');
-                        depth++;
-                        break;
-                    case '}':
-                        style.append('}');
-                        depth--;
-                        break;
-                    default:
-                        style.append((char) tt.ttype);
-                        break;
+                case '\'':
+                    style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                    break;
+                case '{':
+                    style.append('{');
+                    depth++;
+                    break;
+                case '}':
+                    style.append('}');
+                    depth--;
+                    break;
+                default:
+                    style.append((char) tt.ttype);
+                    break;
                 }
             }
             AST child = new AST();

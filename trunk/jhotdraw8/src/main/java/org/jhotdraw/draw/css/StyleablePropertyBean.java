@@ -58,4 +58,11 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @return The removed value.
      */
     public <T> T remove(StyleOrigin origin, Key<T> key);
+
+    /**
+     * Removes all values of that style origin.
+     *
+     * @param origin The origin.
+     */
+    public void removeAll(StyleOrigin origin);
 }

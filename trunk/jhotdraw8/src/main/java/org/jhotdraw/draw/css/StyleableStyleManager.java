@@ -2,44 +2,141 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.draw.css;
 
-import com.sun.javafx.css.parser.CSSParser;
-import java.util.ArrayList;
-import java.util.Map;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.WeakHashMap;
+import javafx.css.CssMetaData;
+import javafx.css.ParsedValue;
+import javafx.css.StyleConverter;
+import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
-import org.jhotdraw.xml.css.DOMRule;
-import org.jhotdraw.xml.css.DOMStyleManager;
-import org.jhotdraw.xml.css.StyleManager;
-import org.w3c.dom.Element;
+import javafx.css.StyleableProperty;
+import org.jhotdraw.xml.css.AbstractStyleManager;
+import org.jhotdraw.xml.css.CssParser;
+import org.jhotdraw.xml.css.ast.Declaration;
+import org.jhotdraw.xml.css.ast.Ruleset;
+import org.jhotdraw.xml.css.ast.Stylesheet;
 
 /**
  * StyleableStyleManager.
+ *
  * @author Werner Randelshofer
  */
-public class StyleableStyleManager implements StyleManager {
-    private java.util.List<StyleableRule> rules;
-CSSParser parser;
+public class StyleableStyleManager extends AbstractStyleManager {
+
+    private final StyleableSelectorModel selectorModel = new StyleableSelectorModel();
+
+    private final CssParser parser = new CssParser();
+
+    private final WeakHashMap<Declaration, Object> convertedValues = new WeakHashMap<>();
+
     public StyleableStyleManager() {
-        rules = new ArrayList<StyleableRule>();
     }
 
-    public void addRule(String selector, Map<String, String> properties) {
-        StyleableRule rule = new StyleableRule(selector, properties);
-        rules.add(rule);
-    }
-
+    /**
+     * Applies the stylesheets to the specified element.
+     *
+     * @param elem The element
+     */
     public void applyStylesTo(Styleable elem) {
-        for (StyleableRule rule : rules) {
-            if (rule.matches(elem)) {
-                rule.apply(elem);
+        applyStylesTo(null, elem);
+    }
+
+    /**
+     * Applies the stylesheets to the specified element.
+     *
+     * @param origin The style origin. Specify null to apply all origins.
+     * @param elem The element
+     */
+    public void applyStylesTo(StyleOrigin origin, Styleable elem) {
+        List<CssMetaData<? extends Styleable, ?>> metaList = elem.getCssMetaData();
+        HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
+        for (CssMetaData<? extends Styleable, ?> m : metaList) {
+            metaMap.put(m.getProperty(), m);
+        }
+
+        // user agent stylesheet can not override element attributes
+        if (origin == null || origin == StyleOrigin.USER_AGENT) {
+            for (Stylesheet s : userAgentStylesheets) {
+                applyStylesTo(StyleOrigin.USER_AGENT, s, metaMap, elem);
+            }
+        }
+
+        // author stylesheet override user agent stylesheet and element attributes
+        if (origin == null || origin == StyleOrigin.AUTHOR) {
+            for (Stylesheet s : authorStylesheets) {
+                applyStylesTo(StyleOrigin.AUTHOR, s, metaMap, elem);
+            }
+        }
+
+        // inline styles can override all other values
+        if (origin == null || origin == StyleOrigin.INLINE) {
+            applyInlineStylesTo(metaMap, elem);
+        }
+
+        //
+        metaMap.clear();
+    }
+
+    private void applyStylesTo(StyleOrigin origin, Stylesheet s, HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap, Styleable elem) {
+        for (Ruleset r : s.getRulesets()) {
+            if (r.getSelectorGroup().matches(selectorModel, elem)) {
+                for (Declaration d : r.getDeclarations()) {
+                    @SuppressWarnings("unchecked")
+                    CssMetaData<Styleable, ?> m = (CssMetaData<Styleable, ?>) metaMap.get(d.getProperty());
+                    if (m != null && m.isSettable(elem)) {
+                        if (!convertedValues.containsKey(d)) {
+                            @SuppressWarnings("unchecked")
+                            StyleConverter<String, Object> converter = (StyleConverter<String, Object>) m.getConverter();
+                            ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(d.getTerms(), null);
+                            convertedValues.put(d, converter.convert(parsedValue, null));
+                        }
+                        Object convertedValue = convertedValues.get(d);
+                        @SuppressWarnings("unchecked")
+                        StyleableProperty<Object> styleableProperty = (StyleableProperty<Object>) m.getStyleableProperty(elem);
+                        styleableProperty.applyStyle(origin, convertedValue);
+                    }
+                }
             }
         }
     }
 
-    public void clear() {
-        rules.clear();
+    private void applyInlineStylesTo(HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap, Styleable elem) {
+        // inline styles can override all other values
+        String style = elem.getStyle();
+        if (style != null) {
+            try {
+                for (Declaration d : parser.parseDeclarations(style)) {
+                    @SuppressWarnings("unchecked")
+                    CssMetaData<Styleable, ?> m = (CssMetaData<Styleable, ?>) metaMap.get(d.getProperty());
+                    if (m != null && m.isSettable(elem)) {
+                        if (!convertedValues.containsKey(d)) {
+                            @SuppressWarnings("unchecked")
+                            StyleConverter<String, Object> converter = (StyleConverter<String, Object>) m.getConverter();
+                            ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(d.getTerms(), null);
+                            convertedValues.put(d, converter.convert(parsedValue, null));
+                        }
+                        Object convertedValue = convertedValues.get(d);
+                        @SuppressWarnings("unchecked")
+                        StyleableProperty<Object> styleableProperty = (StyleableProperty<Object>) m.getStyleableProperty(elem);
+                        styleableProperty.applyStyle(StyleOrigin.USER_AGENT, convertedValue);
+                    }
+                }
+            } catch (IOException ex) {
+                System.err.println("DOMStyleManager: Invalid style attribute on element. style=" + style);
+                ex.printStackTrace();
+            }
+        }
     }
 
+    private static class ParsedValueImpl<V, T> extends ParsedValue<V, T> {
+
+        public ParsedValueImpl(V value, StyleConverter<V, T> converter) {
+            super(value, converter);
+        }
+
+    }
 }

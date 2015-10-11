@@ -8,12 +8,9 @@ import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
-import java.io.IOException;
 import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import javafx.beans.property.ObjectProperty;
@@ -26,7 +23,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
@@ -44,6 +40,7 @@ import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.BooleanKey;
+import org.jhotdraw.collection.IterableTree;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
@@ -104,7 +101,7 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Figure extends StyleablePropertyBean {
+public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
 
     // ----
     // various declarations
@@ -724,16 +721,7 @@ public interface Figure extends StyleablePropertyBean {
         return (Drawing) parent;
     }
 
-    /**
-     * Returns an iterable which can iterate through this figure and all its
-     * descendants in preorder sequence.
-     *
-     * @return the iterable
-     */
-    default public Iterable<Figure> preorderIterable() {
 
-        return () -> new PreorderIterator(Figure.this);
-    }
 
     /**
      * Returns all figures which are connected to this figure.
@@ -905,42 +893,7 @@ public interface Figure extends StyleablePropertyBean {
         return (bounds.getHeight() == 0 || bounds.getWidth() == 0) ? 1 : bounds.getHeight() / bounds.getWidth();
     }
 
-    static class PreorderIterator implements Iterator<Figure> {
-
-        private final LinkedList<Iterator<Figure>> stack = new LinkedList<>();
-
-        private PreorderIterator(Figure root) {
-            LinkedList<Figure> v = new LinkedList<>();
-            v.add(root);
-            stack.push(v.iterator());
-        }
-
-        @Override
-        public boolean hasNext() {
-            return (!stack.isEmpty() && stack.peek().hasNext());
-        }
-
-        @Override
-        public Figure next() {
-            Iterator<Figure> iter = stack.peek();
-            Figure node = iter.next();
-            Iterator<Figure> children = node.getChildren().iterator();
-
-            if (!iter.hasNext()) {
-                stack.pop();
-            }
-            if (children.hasNext()) {
-                stack.push(children);
-            }
-            return node;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-    }
-
+    
     /**
      * Returns the center of the figure in the local coordinates of the figure.
      *
@@ -1085,34 +1038,5 @@ public interface Figure extends StyleablePropertyBean {
     @Override
     default String getId() {
         return get(STYLE_ID);
-    }
-
-    /**
-     * Dumps the figure and its descendants to system.out.
-     */
-    default void dumpTree() {
-        try {
-            dumpTree(System.out, 0);
-        } catch (IOException e) {
-            throw new InternalError(e);
-        }
-    }
-
-    /**
-     * Dumps the figure and its descendants.
-     *
-     * @param out an output stream
-     * @param depth the indentation depth
-     * @throws java.io.IOException from appendable
-     */
-    default void dumpTree(Appendable out, int depth) throws IOException {
-        for (int i = 0; i < depth; i++) {
-            out.append('.');
-        }
-        out.append(toString());
-        out.append('\n');
-        for (Figure child : getChildren()) {
-            child.dumpTree(out, depth + 1);
-        }
-    }
+    }   
 }

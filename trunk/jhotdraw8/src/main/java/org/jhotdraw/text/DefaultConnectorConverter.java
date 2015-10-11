@@ -53,7 +53,7 @@ public class DefaultConnectorConverter implements Converter<Connector> {
     public void toString(Appendable out, IdFactory idFactory, Connector value) throws IOException {
         double choice = connectorToChoiceMap.get(value.getClass());
 
-        formatter.toString(out, idFactory, idFactory.createId(value.getTarget()), choice);
+        formatter.toStr(out, idFactory, idFactory.createId(value.getTarget()), choice);
     }
 
     @Override

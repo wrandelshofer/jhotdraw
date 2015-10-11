@@ -4,17 +4,15 @@
  */
 package org.jhotdraw.draw.css;
 
-import org.jhotdraw.xml.css.*;
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javafx.css.CssMetaData;
 import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.scene.Node;
-import org.w3c.dom.Element;
 
 /**
  * Rule matches on a CSS selector.
