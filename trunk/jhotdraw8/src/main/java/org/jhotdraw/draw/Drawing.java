@@ -54,7 +54,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URL>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class,"<URL>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<List<URL>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class,"<URL>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM,DirtyBits.CONNECTION_LAYOUT), null);
     /**
      * Holds a list of URLs to user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -63,7 +63,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URL>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class,"<URL>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<List<URL>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class,"<URL>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM,DirtyBits.CONNECTION_LAYOUT), null);
     /**
      * Defines the (clip) bounds of the drawing.
      * <p>

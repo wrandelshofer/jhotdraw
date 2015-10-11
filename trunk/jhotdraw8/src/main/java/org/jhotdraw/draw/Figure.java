@@ -317,7 +317,26 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      */
     default void transformNotify() {
     }
-
+   /**
+     * This method is invoked on a figure by
+     * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
+     * figure needs to be laid out again.
+     * <p>
+     * The default implementation of this method calls {@link #layout}.
+     */
+    default void layoutNotify() {
+        layout();
+    }
+       /**
+     * This method is invoked on a figure by
+     * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
+     * figure needs to apply its stylesheet agin.
+     * <p>
+     * The default implementation of this method calls {@link #applyCss}.
+     */
+    default void stylesheetNotify() {
+        applyCss();
+    }
     /**
      * The parent figure.
      * <p>

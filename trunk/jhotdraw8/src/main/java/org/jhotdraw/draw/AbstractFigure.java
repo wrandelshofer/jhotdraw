@@ -109,7 +109,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
                 child.applyCss();
             }
         }
-
+        invalidateTransforms();
     }
 
     @Override
@@ -189,9 +189,13 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     }
 
     /**
-     * Clears all cached transformations.
+     * Calls {@link #invalidateTransforms()}.
      */
     public void transformNotify() {
+        invalidateTransforms();
+    }
+    /** Clears all cached transformation matrices.*/
+    public void invalidateTransforms() {
         parentToDrawing
                 = drawingToParent
                 = localToDrawing
@@ -200,6 +204,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
                 = parentToLocal = null;
     }
 
+    /** Warning: this method caches the transformation.
+     * 
+     * @return transform
+     */
     @Override
     public Transform getParentToDrawing() {
         if (parentToDrawing == null) {
@@ -208,6 +216,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return parentToDrawing;
     }
 
+    /** Warning: this method caches the transformation.
+     * 
+     * @return transform
+     */
     @Override
     public Transform getLocalToDrawing() {
         if (localToDrawing == null) {
@@ -216,6 +228,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return localToDrawing;
     }
 
+    /** Warning: this method caches the transformation.
+     * 
+     * @return transform
+     */
     @Override
     public Transform getDrawingToParent() {
         if (drawingToParent == null) {
@@ -224,6 +240,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return drawingToParent;
     }
 
+    /** Warning: this method caches the transformation.
+     * 
+     * @return transform
+     */
     @Override
     public Transform getDrawingToLocal() {
         if (drawingToLocal == null) {
@@ -232,6 +252,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return drawingToLocal;
     }
 
+    /** Warning: this method caches the transformation.
+     * 
+     * @return transform
+     */
     @Override
     public Transform getLocalToParent() {
         if (localToParent == null) {
@@ -240,6 +264,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return localToParent;
     }
 
+    /** Warning: this method caches the transformation.
+     * 
+     * @return transform
+     */
     @Override
     public Transform getParentToLocal() {
         if (parentToLocal == null) {
