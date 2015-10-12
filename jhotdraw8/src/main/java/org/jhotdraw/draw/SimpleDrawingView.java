@@ -973,14 +973,18 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     /**
      * Creates selection handles and adds them to the provided list.
      *
-     * @param hh The provided list
+     * @param handles The provided list
      */
-    protected void createHandles(HashMap<Figure, List<Handle>> hh) {
-        HandleType ht = getHandleType();
+    protected void createHandles(HashMap<Figure, List<Handle>> handles) {
+        HandleType handleType = getHandleType();
         for (Figure figure : getSelectedFigures()) {
-            ArrayList<Handle> list = new ArrayList<>();
-            figure.createHandles(ht, this, list);
-            hh.put(figure, list);
+            List<Handle> list = handles.get(figure);
+            if (list == null) {
+                list = new ArrayList<>();
+                handles.put(figure, list);
+            }
+            figure.createHandles(handleType, this, list);
+            handles.put(figure, list);
         }
     }
 
