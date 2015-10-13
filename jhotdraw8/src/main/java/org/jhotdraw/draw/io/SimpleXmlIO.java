@@ -278,11 +278,14 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             }
             figureElements.add(elem);
             String id = getAttribute(elem, "id");
+            if (id == null) {
+                throw new IOException("No \"id\" attribute in element " + elem.getTagName());
+            }
             if (id != null) {
-                if (factory.getObject(id)!=null) {
-                    throw new IOException("Duplicate id "+id+" in element "+elem.getTagName());
+                if (factory.getObject(id) != null) {
+                    throw new IOException("Duplicate id " + id + " in element " + elem.getTagName());
                 }
-                
+
                 factory.putId(figure, id);
             }
             NodeList list = elem.getChildNodes();
