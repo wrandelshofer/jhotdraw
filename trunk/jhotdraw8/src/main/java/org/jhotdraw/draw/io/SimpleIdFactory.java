@@ -10,6 +10,7 @@ import org.jhotdraw.draw.Figure;
 
 /**
  * SimpleIdFactory.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -31,7 +32,9 @@ public class SimpleIdFactory implements IdFactory {
     public String createId(Object object) {
         String id = objectToId.get(object);
         if (id == null) {
-            id = Long.toString(nextId++);
+            do { // XXX linear search
+                id = Long.toString(nextId++);
+            } while (idToObject.containsKey(id));
             objectToId.put(object, id);
             idToObject.put(id, object);
         }
