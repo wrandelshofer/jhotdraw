@@ -38,27 +38,21 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
             @Override
             public void onChanged(ListChangeListener.Change<? extends Figure> c) {
                 while (c.next()) {
-                    final int from = c.getFrom();
-                    final int to = c.getTo();
-                    final ObservableList<? extends Figure> list = c.getList();
-                    if (c.wasPermutated()) {
-                    } else if (c.wasUpdated()) {
-                    } else {
-                        if (c.wasRemoved()) {
-                            final List<? extends Figure> removed = c.getRemoved();
-                            for (Figure child : removed) {
-                                child.parentProperty().set(null);
-                            }
+                    if (c.wasRemoved()) {
+                        final List<? extends Figure> removedList = c.getRemoved();
+                        for (Figure removed : removedList) {
+                            removed.parentProperty().set(null);
                         }
-                        if (c.wasAdded()) {
-                            for (int i = from; i < to; i++) {
-                                Figure f = list.get(i);
-                                Figure oldParent = f.getParent();
-                                if (oldParent != null) {
-                                    oldParent.remove(f);
-                                }
-                                f.parentProperty().set(AbstractCompositeFigure.this);
+                    }
+                    if (c.wasAdded()) {
+                        final ObservableList<? extends Figure> addedList = c.getList();
+                        for (int i = c.getFrom(), to = c.getTo(); i < to; i++) {
+                            Figure added = addedList.get(i);
+                            Figure oldParentOfAdded = added.getParent();
+                            if (oldParentOfAdded != null) {
+                                oldParentOfAdded.remove(added);
                             }
+                            added.parentProperty().set(AbstractCompositeFigure.this);
                         }
                     }
                 }
@@ -107,19 +101,22 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return null;
     }
 
-    /** First layout all getChildren and then layout self. */
+    /**
+     * First layout all getChildren and then layout self.
+     */
     @Override
     public final void layout() {
-        for (Figure child:getChildren()) {
+        for (Figure child : getChildren()) {
             child.layout();
         }
         layoutImpl();
     }
-    
-    /** Layout self. */
+
+    /**
+     * Layout self.
+     */
     protected void layoutImpl() {
-        
+
     }
-    
 
 }

@@ -164,28 +164,32 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     private Node writeNodeRecursively(Document doc, Figure figure) throws IOException {
-        String elementName = factory.figureToName(figure);
-        if (elementName == null) {
-            // => the factory decided that we should skip the figure
-            return null;
-        }
-        Element elem = createElement(doc, elementName);
-        writeElementAttributes(elem, figure);
+        try {
+            String elementName = factory.figureToName(figure);
+            if (elementName == null) {
+                // => the factory decided that we should skip the figure
+                return null;
+            }
+            Element elem = createElement(doc, elementName);
+            writeElementAttributes(elem, figure);
 
-        for (Figure child : figure.childrenProperty()) {
-            if (factory.figureToName(child) != null) {
-                elem.appendChild(doc.createTextNode("\n"));
-                Node childNode = writeNodeRecursively(doc, child);
-                if (childNode != null) {
-                    // => the factory decided that we should skip the figure
-                    elem.appendChild(childNode);
+            for (Figure child : figure.childrenProperty()) {
+                if (factory.figureToName(child) != null) {
+                    elem.appendChild(doc.createTextNode("\n"));
+                    Node childNode = writeNodeRecursively(doc, child);
+                    if (childNode != null) {
+                        // => the factory decided that we should skip the figure
+                        elem.appendChild(childNode);
+                    }
                 }
             }
+            if (!figure.childrenProperty().isEmpty()) {
+                elem.appendChild(doc.createTextNode("\n"));
+            }
+            return elem;
+        } catch (IOException e) {
+            throw new IOException("Error writing figure " + figure, e);
         }
-        if (!figure.childrenProperty().isEmpty()) {
-            elem.appendChild(doc.createTextNode("\n"));
-        }
-        return elem;
     }
 
     private void setAttribute(Element elem, String unqualifiedName, String value) throws IOException {
