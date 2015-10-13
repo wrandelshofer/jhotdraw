@@ -24,30 +24,39 @@ import java.util.*;
  * BezierPath allows the construction of paths consisting of straight lines,
  * quadratic curves and cubic curves.
  * <p>
- * A BezierPath is defined by its nodes. Each node has three control points:
- * C0, C1, C2. A mask defines which control points are in use. At a node, 
- * the path passes through C0. C1 controls the curve going towards C0. C2
- * controls the curve going away from C0.
+ * A BezierPath is defined by its nodes. Each node has three control points: C0,
+ * C1, C2. A mask defines which control points are in use. At a node, the path
+ * passes through C0. C1 controls the curve going towards C0. C2 controls the
+ * curve going away from C0.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class BezierPath extends ArrayList<BezierPath.Node>
         implements Shape, Serializable, Cloneable {
-    private static final long serialVersionUID=1L;
 
-    /** Constant for having only control point C0 in effect. C0 is the point
-     * through whitch the curve passes. */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Constant for having only control point C0 in effect. C0 is the point
+     * through whitch the curve passes.
+     */
     public static final int C0_MASK = 0;
-    /** Constant for having control point C1 in effect (in addition
-     * to C0). C1 controls the curve going towards C0.
-     * */
+    /**
+     * Constant for having control point C1 in effect (in addition to C0). C1
+     * controls the curve going towards C0.
+     *
+     */
     public static final int C1_MASK = 1;
-    /** Constant for having control point C2 in effect (in addition to C0).
-     * C2 controls the curve going away from C0.
+    /**
+     * Constant for having control point C2 in effect (in addition to C0). C2
+     * controls the curve going away from C0.
      */
     public static final int C2_MASK = 2;
-    /** Constant for having control points C1 and C2 in effect (in addition to C0). */
+    /**
+     * Constant for having control points C1 and C2 in effect (in addition to
+     * C0).
+     */
     public static final int C1C2_MASK = C1_MASK | C2_MASK;
     /**
      * We cache a Path2D.Double instance to speed up Shape operations.
@@ -58,7 +67,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      */
     private transient Rectangle2D.Double bounds;
     /**
-     * We cache the index of the outermost node to speed up method indexOfOutermostNode();
+     * We cache the index of the outermost node to speed up method
+     * indexOfOutermostNode();
      */
     private int outer = -1;
     /**
@@ -82,22 +92,30 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * </ul>
      */
     public static class Node implements Cloneable, Serializable {
-    private static final long serialVersionUID=1L;
+
+        private static final long serialVersionUID = 1L;
 
         /**
-         * This mask is used to describe which control points in addition to
-         * C0 are in effect.
+         * This mask is used to describe which control points in addition to C0
+         * are in effect.
          */
         public int mask = 0;
-        /** Control point x coordinates. */
+        /**
+         * Control point x coordinates.
+         */
         public double[] x = new double[3];
-        /** Control point y coordinates. */
+        /**
+         * Control point y coordinates.
+         */
         public double[] y = new double[3];
-        /** This is a hint for editing tools. If this is set to true,
-         * the editing tools shall keep all control points on the same
-         * line.
+        /**
+         * This is a hint for editing tools. If this is set to true, the editing
+         * tools shall keep all control points on the same line.
          */
         public boolean keepColinear = true;
+        
+        /** Whether a C0 node is a lineto or a moveTo. */
+        public boolean moveTo=false;
 
         public Node() {
         }
@@ -185,7 +203,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             }
         }
 
-    @Override
+        @Override
         public Object clone() {
             try {
                 Node that = (Node) super.clone();
@@ -199,7 +217,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             }
         }
 
-    @Override
+        @Override
         public String toString() {
             StringBuilder buf = new StringBuilder();
             buf.append(super.toString());
@@ -226,14 +244,14 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             return buf.toString();
         }
 
-    @Override
+        @Override
         public int hashCode() {
             return (mask & 0x3) << 29
                     | (Arrays.hashCode(x) & 0x3fff0000)
                     | (Arrays.hashCode(y) & 0xffff);
         }
 
-    @Override
+        @Override
         public boolean equals(Object o) {
             if (o instanceof BezierPath.Node) {
                 BezierPath.Node that = (BezierPath.Node) o;
@@ -245,7 +263,9 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         }
     }
 
-    /** Creates a new instance. */
+    /**
+     * Creates a new instance.
+     */
     public BezierPath() {
     }
 
@@ -254,6 +274,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * This is a convenience method for adding a node with a single control
      * point C0 to the path.
+     *
      * @param c0 the point
      */
     public void add(Point2D.Double c0) {
@@ -265,6 +286,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * This is a convenience method for adding a node with a single control
      * point C0 to the path.
+     *
      * @param x x-coordinate of the point
      * @param y y-coordinate of the point
      */
@@ -292,6 +314,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * Convenience method for adding multiple nodes with a single control point
      * C0.
+     *
      * @param points the points
      */
     public void addPolyline(Collection<Point2D.Double> points) {
@@ -345,8 +368,11 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         }
     }
 
-    /** Converts the BezierPath into a Path2D.Double.
-     * @return the path */
+    /**
+     * Converts the BezierPath into a Path2D.Double.
+     *
+     * @return the path
+     */
     public Path2D.Double toGeneralPath() {
         Path2D.Double gp = new Path2D.Double();
         gp.setWindingRule(windingRule);
@@ -369,6 +395,10 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
                 if ((previous.mask & C2_MASK) == 0) {
                     if ((current.mask & C1_MASK) == 0) {
+                        if (current.moveTo)
+                        gp.moveTo(
+                                current.x[0], current.y[0]);
+                            else
                         gp.lineTo(
                                 current.x[0], current.y[0]);
                     } else {
@@ -649,7 +679,9 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         return isClosed;
     }
 
-    /** Creates a deep copy of the BezierPath. */
+    /**
+     * Creates a deep copy of the BezierPath.
+     */
     @Override
     public BezierPath clone() {
         BezierPath that = (BezierPath) super.clone();
@@ -661,6 +693,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Transforms the BezierPath.
+     *
      * @param tx the transformation.
      */
     public void transform(AffineTransform tx) {
@@ -680,6 +713,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Sets all values of this bezier path to that bezier path, so that this
      * path becomes identical to that path.
+     *
      * @param that that path
      */
     public void setTo(BezierPath that) {
@@ -696,6 +730,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Returns the point at the center of the bezier path.
+     *
      * @return the center
      */
     public Point2D.Double getCenter() {
@@ -712,20 +747,23 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Returns a point on the edge of the bezier path which crosses the line
-     * from the center of the bezier path to the specified point.
-     * If no edge crosses the line, the nearest C0 control point is returned.
+     * from the center of the bezier path to the specified point. If no edge
+     * crosses the line, the nearest C0 control point is returned.
+     *
      * @param p the point
      * @return the chopped point
      */
     public Point2D.Double chop(Point2D.Double p) {
-       javafx.geometry.Point2D chopped=  Geom.chop(this, new javafx.geometry.Point2D(p.x,p.y));
-       return new Point2D.Double(chopped.getX(),chopped.getY());
+        javafx.geometry.Point2D chopped = Geom.chop(this, new javafx.geometry.Point2D(p.x, p.y));
+        return new Point2D.Double(chopped.getX(), chopped.getY());
     }
 
     /**
      * Return the index of the node that is the furthest away from the center
+     *
      * @return the index
-     **/
+     *
+     */
     public int indexOfOutermostNode() {
         if (outer == -1) {
             Point2D.Double ctr = getCenter();
@@ -747,9 +785,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     }
 
     /**
-     * Returns a relative point on the path.
-     * Where 0 is the start point of the path and 1 is the end point of the
-     * path.
+     * Returns a relative point on the path. Where 0 is the start point of the
+     * path and 1 is the end point of the path.
      *
      * @param relative a value between 0 and 1.
      * @param flatness the flatness
@@ -785,10 +822,10 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 //if (true) return new Point2D.Double(coords[0], coords[1]);
                 // Compute the relative Point2D.Double on the line
                 /*
-                return new Point2D.Double(
-                prevX * pos / len + coords[0] * (pos + segLen) / len,
-                prevY * pos / len + coords[1] * (pos + segLen) / len
-                );*/
+                 return new Point2D.Double(
+                 prevX * pos / len + coords[0] * (pos + segLen) / len,
+                 prevY * pos / len + coords[1] * (pos + segLen) / len
+                 );*/
                 double factor = (relativeLen - pos) / segLen;
 
                 return new Point2D.Double(
@@ -887,8 +924,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     }
 
     /**
-     * Gets the segment of the polyline that is hit by
-     * the given Point2D.Double.
+     * Gets the segment of the polyline that is hit by the given Point2D.Double.
+     *
      * @param find the point
      * @param tolerance the tolerance
      * @return the index of the segment or -1 if no segment was hit.
@@ -937,8 +974,9 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     }
 
     /**
-     * Joins two segments into one if the given Point2D.Double hits a node
-     * of the bezier path.
+     * Joins two segments into one if the given Point2D.Double hits a node of
+     * the bezier path.
+     *
      * @param join the point
      * @param tolerance the tolerance
      * @return the index of the joined segment or -1 if no segment was joined.
@@ -956,6 +994,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Splits the segment at the given Point2D.Double if a segment was hit.
+     *
      * @param split the point
      * @param tolerance the tolerance
      * @return the index of the segment or -1 if no segment was hit.
@@ -989,6 +1028,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * This is a convenience method for adding the first node with a single
      * control point C0 to the bezier path.
+     *
      * @param x1 the x-coordinate of the point
      * @param y1 the y-coordinate of the point
      */
@@ -998,6 +1038,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         }
         Node node = new Node(x1, y1);
         node.keepColinear = false;
+        node.moveTo=true;
         add(node);
     }
 
@@ -1011,13 +1052,11 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * point C0.
      * <p>
      * The bezier path must already have at least one node.
+     *
      * @param x1 the x-coordinate of the point
      * @param y1 the y-coordinate of the point
      */
     public void lineTo(double x1, double y1) {
-        if (size() == 0) {
-            throw new IllegalPathStateException("lineTo only allowed when not empty");
-        }
         get(size() - 1).keepColinear = false;
         add(new Node(x1, y1));
     }
@@ -1032,6 +1071,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * C1 (incoming curve) to the bezier path.
      * <p>
      * The bezier path must already have at least one node.
+     *
      * @param x1 the x-coordinate of the first point
      * @param y1 the y-coordinate of the first point
      * @param x2 the x-coordinate of the second point
@@ -1054,6 +1094,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * point C2 (outgoing curve) of the previous node.
      * <p>
      * The bezier path must already have at least one node.
+     *
      * @param x1 the x-coordinate of the first point
      * @param y1 the y-coordinate of the first point
      * @param x2 the x-coordinate of the second point
@@ -1076,38 +1117,38 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         if ((lastPoint.mask & C1C2_MASK) == C1C2_MASK) {
             lastPoint.keepColinear = Math.abs(
                     Geom.angle(lastPoint.x[0], lastPoint.y[0],
-                    lastPoint.x[1], lastPoint.y[1])
+                            lastPoint.x[1], lastPoint.y[1])
                     - Geom.angle(lastPoint.x[2], lastPoint.y[2],
-                    lastPoint.x[0], lastPoint.y[0])) < 0.001;
+                            lastPoint.x[0], lastPoint.y[0])) < 0.001;
         }
 
         add(new Node(C1_MASK, x3, y3, x2, y2, x3, y3));
     }
 
     /**
-     * Adds an elliptical arc, defined by two radii, an angle from the
-     * x-axis, a flag to choose the large arc or not, a flag to
-     * indicate if we increase or decrease the angles and the final
-     * point of the arc.
+     * Adds an elliptical arc, defined by two radii, an angle from the x-axis, a
+     * flag to choose the large arc or not, a flag to indicate if we increase or
+     * decrease the angles and the final point of the arc.
      * <p>
-     * As specified in http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
+     * As specified in
+     * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
      * <p>
-     * The implementation of this method has been derived from
-     * Apache Batik class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc
+     * The implementation of this method has been derived from Apache Batik
+     * class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc
      *
      * @param rx the x radius of the ellipse
      * @param ry the y radius of the ellipse
      *
-     * @param xAxisRotation the angle from the x-axis of the current
-     * coordinate system to the x-axis of the ellipse in degrees.
+     * @param xAxisRotation the angle from the x-axis of the current coordinate
+     * system to the x-axis of the ellipse in degrees.
      *
-     * @param largeArcFlag the large arc flag. If true the arc
-     * spanning less than or equal to 180 degrees is chosen, otherwise
-     * the arc spanning greater than 180 degrees is chosen
+     * @param largeArcFlag the large arc flag. If true the arc spanning less
+     * than or equal to 180 degrees is chosen, otherwise the arc spanning
+     * greater than 180 degrees is chosen
      *
-     * @param sweepFlag the sweep flag. If true the line joining
-     * center to arc sweeps through decreasing angles otherwise it
-     * sweeps through increasing angles
+     * @param sweepFlag the sweep flag. If true the line joining center to arc
+     * sweeps through decreasing angles otherwise it sweeps through increasing
+     * angles
      *
      * @param x the absolute x coordinate of the final point of the arc.
      * @param y the absolute y coordinate of the final point of the arc.
@@ -1116,7 +1157,6 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             double xAxisRotation,
             boolean largeArcFlag, boolean sweepFlag,
             double x, double y) {
-
 
         // Ensure radii are valid
         if (rx == 0 || ry == 0) {
@@ -1222,29 +1262,29 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         // Create a path iterator of the rotated arc
         PathIterator i = arc.getPathIterator(
                 AffineTransform.getRotateInstance(
-                angle, arc.getCenterX(), arc.getCenterY()));
+                        angle, arc.getCenterX(), arc.getCenterY()));
 
         // Add the segments to the bezier path
         double[] coords = new double[6];
-        i.next(); // skip first moveto
+        i.next(); // skip first moveTo
         while (!i.isDone()) {
             int type = i.currentSegment(coords);
             switch (type) {
-                case PathIterator.SEG_CLOSE:
-                    // ignore
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
-                    break;
-                case PathIterator.SEG_LINETO:
-                    lineTo(coords[0], coords[1]);
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    // ignore
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    quadTo(coords[0], coords[1], coords[2], coords[3]);
-                    break;
+            case PathIterator.SEG_CLOSE:
+                // ignore
+                break;
+            case PathIterator.SEG_CUBICTO:
+                curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
+                break;
+            case PathIterator.SEG_LINETO:
+                lineTo(coords[0], coords[1]);
+                break;
+            case PathIterator.SEG_MOVETO:
+                // ignore
+                break;
+            case PathIterator.SEG_QUADTO:
+                quadTo(coords[0], coords[1], coords[2], coords[3]);
+                break;
             }
             i.next();
         }
@@ -1254,8 +1294,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * Creates a polygon/polyline array of the bezier path which only includes
      * the C0 control points of the bezier nodes.
      * <p>
-     * If the bezier path is closed, the array describes a polygon.
-     * If the bezier path is open, the array describes a polyline.
+     * If the bezier path is closed, the array describes a polygon. If the
+     * bezier path is open, the array describes a polyline.
      * <p>
      * @return Point array.
      */
@@ -1269,7 +1309,9 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Sets winding rule for filling the bezier path.
-     * @param newValue Must be Path2D.Double.WIND_EVEN_ODD or Path2D.Double.WIND_NON_ZERO.
+     *
+     * @param newValue Must be Path2D.Double.WIND_EVEN_ODD or
+     * Path2D.Double.WIND_NON_ZERO.
      */
     public void setWindingRule(int newValue) {
         if (newValue != windingRule) {
@@ -1281,6 +1323,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Gets winding rule for filling the bezier path.
+     *
      * @return Path2D.Double.WIND_EVEN_ODD or Path2D.Double.WIND_NON_ZERO.
      */
     public int getWindingRule() {

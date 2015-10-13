@@ -578,12 +578,17 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void updateView() {
         getModel().validate();
-        for (Figure f : dirtyFigureNodes) {
-            f.updateNode(this, getNode(f));
-
-        }
+        
+        // create copies of the lists to allow for concurrent modification
+        ArrayList<Figure> copyOfDirtyFigureNodes=new ArrayList<>(dirtyFigureNodes);
+        ArrayList<Figure> copyOfDirtyHandles=new ArrayList<>(dirtyHandles);
         dirtyFigureNodes.clear();
-        for (Figure f : dirtyHandles) {
+        dirtyHandles.clear();
+        
+        for (Figure f : copyOfDirtyFigureNodes) {
+            f.updateNode(this, getNode(f));
+        }
+        for (Figure f : copyOfDirtyHandles) {
             List<Handle> hh = handles.get(f);
             if (hh != null) {
                 for (Handle h : hh) {
@@ -591,7 +596,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 }
             }
         }
-        dirtyHandles.clear();
         for (Handle h : secondaryHandles) {
             h.updateNode(this);
         }
