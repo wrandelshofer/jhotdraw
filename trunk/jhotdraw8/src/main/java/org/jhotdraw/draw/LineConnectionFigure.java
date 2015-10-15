@@ -158,10 +158,10 @@ public class LineConnectionFigure extends AbstractShapeFigure {
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
         if (startConnector != null) {
-            start = startConnector.getPosition(this);
+            start = startConnector.getPositionInDrawing(this);
         }
         if (endConnector != null) {
-            end = endConnector.getPosition(this);
+            end = endConnector.getPositionInDrawing(this);
         }
 
         // We must switch off rotations for the following computations

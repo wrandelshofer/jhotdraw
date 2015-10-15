@@ -88,8 +88,24 @@ public class Shapes {
      * @return An AWT Transform.
      */
     public static AffineTransform awtTransformFromFX(javafx.scene.transform.Transform fxT) {
-        return new AffineTransform(fxT.toArray(MatrixType.MT_2D_2x3));
+        if (fxT==null)
+            return null;
+        
+        double[] m=fxT.toArray(MatrixType.MT_2D_2x3);
+        return fxT == null ? null : new AffineTransform(m[0],m[3],m[1],m[4],m[2],m[5]);
     }
+
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @param fxT Optional transformation which is applied to the shape
+     * @return JavaFX Shape
+     */
+    public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape, javafx.scene.transform.Transform fxT) {
+        return fxShapeFromAWT(shape.getPathIterator(awtTransformFromFX(fxT)));
+    }
+
     /**
      * Converts a Java AWT Shape iterator to a JavaFX Shape.
      *
@@ -100,6 +116,7 @@ public class Shapes {
     public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape, AffineTransform at) {
         return fxShapeFromAWT(shape.getPathIterator(at));
     }
+
     /**
      * Converts a Java Path iterator to a JavaFX shape.
      *
@@ -120,7 +137,7 @@ public class Shapes {
             throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
         }
 
-        List<PathElement> fxelem=fxpath.getElements();
+        List<PathElement> fxelem = fxpath.getElements();
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
@@ -128,16 +145,16 @@ public class Shapes {
                 fxelem.add(new ClosePath());
                 break;
             case PathIterator.SEG_CUBICTO:
-                fxelem.add(new CubicCurveTo(coords[0],coords[1],coords[2],coords[3],coords[4],coords[5]));
+                fxelem.add(new CubicCurveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]));
                 break;
             case PathIterator.SEG_LINETO:
-                fxelem.add(new LineTo(coords[0],coords[1]));
+                fxelem.add(new LineTo(coords[0], coords[1]));
                 break;
             case PathIterator.SEG_MOVETO:
-                fxelem.add(new MoveTo(coords[0],coords[1]));
+                fxelem.add(new MoveTo(coords[0], coords[1]));
                 break;
             case PathIterator.SEG_QUADTO:
-                fxelem.add(new QuadCurveTo(coords[0],coords[1],coords[2],coords[3]));
+                fxelem.add(new QuadCurveTo(coords[0], coords[1], coords[2], coords[3]));
                 break;
             }
         }

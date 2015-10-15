@@ -50,15 +50,18 @@ public class ClearSelectionAction extends AbstractSelectionAction {
 
     @Override
     public void handle(javafx.event.ActionEvent event) {
-        View v = app.getActiveView();
-        if (v != null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic = (TextInputControl) n;
-                tic.deselect();
-            } else if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.clearSelection();
+        if (event.isConsumed()) {
+            event.consume();
+            View v = app.getActiveView();
+            if (v != null && !v.isDisabled()) {
+                Node n = v.getNode().getScene().getFocusOwner();
+                if (n instanceof TextInputControl) {
+                    TextInputControl tic = (TextInputControl) n;
+                    tic.deselect();
+                } else if (n instanceof EditableComponent) {
+                    EditableComponent tic = (EditableComponent) n;
+                    tic.clearSelection();
+                }
             }
         }
     }

@@ -23,38 +23,47 @@ import org.jhotdraw.util.*;
  * @version $Id: CutAction.java 788 2014-03-22 07:56:28Z rawcoder $
  */
 public class CutAction extends AbstractSelectionAction {
+
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "edit.cut";
 
-    /** Creates a new instance which acts on the currently focused component. 
-     * @param app the application */
+    /**
+     * Creates a new instance which acts on the currently focused component.
+     *
+     * @param app the application
+     */
     public CutAction(Application app) {
         this(app, null);
     }
 
-    /** Creates a new instance which acts on the specified component.
+    /**
+     * Creates a new instance which acts on the specified component.
      *
-     * @param app the application 
+     * @param app the application
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public CutAction(Application app,Node target) {
-        super(app,target);
+    public CutAction(Application app, Node target) {
+        super(app, target);
         Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, ID);
     }
+
     @Override
     public void handle(javafx.event.ActionEvent event) {
-        View v = app.getActiveView();
-        if (v!=null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic=(TextInputControl)n;
-                tic.cut();
-            } else if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.cut();
+        if (event.isConsumed()) {
+            event.consume();
+            View v = app.getActiveView();
+            if (v != null && !v.isDisabled()) {
+                Node n = v.getNode().getScene().getFocusOwner();
+                if (n instanceof TextInputControl) {
+                    TextInputControl tic = (TextInputControl) n;
+                    tic.cut();
+                } else if (n instanceof EditableComponent) {
+                    EditableComponent tic = (EditableComponent) n;
+                    tic.cut();
+                }
             }
         }
     }
