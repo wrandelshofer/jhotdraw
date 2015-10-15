@@ -52,6 +52,8 @@ public class CopyAction extends AbstractSelectionAction {
 
     @Override
     public void handle(javafx.event.ActionEvent event) {
+        if (event.isConsumed()) {
+        event.consume();
         View v = app.getActiveView();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
@@ -62,6 +64,6 @@ public class CopyAction extends AbstractSelectionAction {
                 EditableComponent tic = (EditableComponent) n;
                 tic.copy();
             }
-        }
+        }}
     }
 }

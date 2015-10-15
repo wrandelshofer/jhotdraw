@@ -21,15 +21,15 @@ public class CenterConnector extends AbstractConnector {
     }
 
     @Override
-    public Point2D getPosition(Figure connection) {
+    public Point2D getPositionInLocal(Figure connection) {
         // FIXME implement me properly
         final Bounds b = target.getBoundsInLocal();
-        return target.localToDrawing(new Point2D(b.getMinX() + b.getWidth() / 2.0, (b.getMinY()
-                + b.getHeight() / 2.0)));
+        return new Point2D(b.getMinX() + b.getWidth() / 2.0, (b.getMinY()
+                + b.getHeight() / 2.0));
     }
 
     @Override
     public Point2D chopStart(Figure connection, double startX, double startY, double endX, double endY) {
-        return getPosition(connection);
+        return getPositionInDrawing(connection);
     }
 }

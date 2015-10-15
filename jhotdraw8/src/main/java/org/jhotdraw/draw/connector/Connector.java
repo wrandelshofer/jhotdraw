@@ -15,21 +15,34 @@ import org.jhotdraw.draw.Figure;
  * @version $Id$
  */
 public interface Connector {
-    
-    /** The target figure.
-     * 
+
+    /**
+     * The target figure.
+     *
      * @return the target figure
      */
     Figure getTarget();
-    
+
+    /**
+     * Returns a point on the target figure for the specified connection figure
+     * in local coordinates.
+     *
+     * @param connection a connection figure
+     * @return A point on the target figure in local coordinates of the target
+     * figure.
+     */
+    Point2D getPositionInLocal(Figure connection);
+
     /**
      * Returns a point on the target figure for the specified connection figure
      * in drawing coordinates.
      *
      * @param connection a connection figure
-     * @return A point on the target figure.
+     * @return A point on the target figure in drawing coordinates.
      */
-    Point2D getPosition(Figure connection);
+    default Point2D getPositionInDrawing(Figure connection) {
+        return getTarget().localToDrawing(getPositionInLocal(connection));
+    }
 
     /**
      * Chops the start of the provided line given in drawing coordinates.
