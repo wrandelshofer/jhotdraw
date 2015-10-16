@@ -10,6 +10,7 @@ import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import org.jhotdraw.xml.css.SelectorModel;
+import org.w3c.dom.Element;
 
 /**
  * StyleableSelectorModel.
@@ -61,8 +62,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         return false;
     }
 
-    @Override
-    public String getAttribute(Styleable element, String attributeName) {
+    private String getAttribute(Styleable element, String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!
         for (CssMetaData<? extends Styleable, ?> i : list) {
@@ -71,7 +71,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
             if (attributeName.equals(item.getProperty())) {
                 Object value = item.getStyleableProperty(element).getValue();
 
-               // this is messy. we should be able to use the converter to 
+                // this is messy. we should be able to use the converter to 
                 // convert the value from the object type to a CSS String.
                 return value == null ? "" : value.toString();
             }
@@ -79,4 +79,30 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         return null;
     }
 
+    @Override
+    public boolean attributeValueEquals(Styleable element, String attributeName, String attributeValue) {
+        String actualValue = getAttribute(element, attributeName);
+        return actualValue != null && actualValue.equals(attributeValue);
+    }
+
+    @Override
+    public boolean attributeValueStartsWith(Styleable element, String attributeName, String string) {
+        String actualValue = getAttribute(element, attributeName);
+        return actualValue != null && (actualValue.equals(string)
+                || actualValue.startsWith(string + "-"));
+    }
+
+    @Override
+    public boolean attributeValueContainsWord(Styleable element, String attributeName, String word) {
+        String value = getAttribute(element, attributeName);
+        if (value != null) {
+            String[] words = value.split("\\s+");
+            for (int i = 0; i < words.length; i++) {
+                if (word.equals(words[i])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

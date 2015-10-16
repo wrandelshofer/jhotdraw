@@ -8,7 +8,8 @@ package org.jhotdraw.xml.css.ast;
 import org.jhotdraw.xml.css.SelectorModel;
 
 /**
- * An "id selector" matches an element based on the value of its "id" attribute.
+ * An "id selector" matches an element if the element has an id with the 
+ * specified value.
  *
  * @author Werner Randelshofer
  * @version $$Id$$

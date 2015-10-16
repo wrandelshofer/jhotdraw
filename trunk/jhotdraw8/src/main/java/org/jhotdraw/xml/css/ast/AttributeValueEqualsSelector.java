@@ -1,5 +1,5 @@
 /*
- * @(#)AttributeValueSelector.java
+ * @(#)AttributeValueEqualsSelector.java
  * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
  * Alle Rechte vorbehalten. 
  */
@@ -14,19 +14,18 @@ import org.jhotdraw.xml.css.SelectorModel;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class AttributeValueSelector extends AttributeSelector {
+public class AttributeValueEqualsSelector extends AbstractAttributeSelector {
 
     private final String attributeName;
     private final String attributeValue;
 
-    public AttributeValueSelector(String attributeName, String attributeValue) {
+    public AttributeValueEqualsSelector(String attributeName, String attributeValue) {
         this.attributeName = attributeName;
         this.attributeValue = attributeValue;
     }
 
     @Override
     protected <T> T match(SelectorModel<T> model, T element) {
-        String value = model.getAttribute(element, attributeName);
-        return attributeValue.equals(value) ? element : null;
+        return model.attributeValueEquals(element, attributeName, attributeValue) ? element : null;
     }
 }
