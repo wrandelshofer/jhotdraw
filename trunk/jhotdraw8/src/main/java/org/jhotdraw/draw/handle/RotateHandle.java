@@ -4,6 +4,8 @@
  */
 package org.jhotdraw.draw.handle;
 
+import java.util.HashSet;
+import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -36,7 +38,8 @@ public class RotateHandle extends AbstractHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
     private Point2D center;
-
+        protected Set<Figure> groupReshapeableFigures;
+        
     public RotateHandle(Figure figure) {
         this(figure, STYLECLASS_HANDLE_ROTATE);
     }
@@ -79,6 +82,15 @@ public class RotateHandle extends AbstractHandle {
     public void onMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
         center = getOwner().getCenterInLocal();
+            // determine which figures can be reshaped together as a group
+            Set<Figure> selectedFigures = view.getSelectedFigures();
+            groupReshapeableFigures = new HashSet<>();
+            for (Figure f :  view.getSelectedFigures()) {
+                if (f.isGroupReshapeableWith(selectedFigures)) {
+                    groupReshapeableFigures.add(f);
+                }
+            }
+            groupReshapeableFigures=view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
 
     }
 
@@ -109,7 +121,7 @@ public class RotateHandle extends AbstractHandle {
 
         if (event.isShiftDown()) {
             // shift transforms all selected figures
-            for (Figure f : view.getSelectedFiguresWithCompatibleHandle(this)) {
+            for (Figure f : groupReshapeableFigures) {
                 model.set(f, Figure.ROTATE, newRotate);
             }
         } else {

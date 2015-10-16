@@ -578,13 +578,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void updateView() {
         getModel().validate();
-        
+
         // create copies of the lists to allow for concurrent modification
-        ArrayList<Figure> copyOfDirtyFigureNodes=new ArrayList<>(dirtyFigureNodes);
-        ArrayList<Figure> copyOfDirtyHandles=new ArrayList<>(dirtyHandles);
+        ArrayList<Figure> copyOfDirtyFigureNodes = new ArrayList<>(dirtyFigureNodes);
+        ArrayList<Figure> copyOfDirtyHandles = new ArrayList<>(dirtyHandles);
         dirtyFigureNodes.clear();
         dirtyHandles.clear();
-        
+
         for (Figure f : copyOfDirtyFigureNodes) {
             f.updateNode(this, getNode(f));
         }
@@ -892,24 +892,22 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     // Handles
-    /**
-     * Gets compatible handles.
-     *
-     * @return A collection containing the handle and all compatible handles.
-     */
+
     @Override
-    public Collection<Figure> getSelectedFiguresWithCompatibleHandle(Handle master) {
+    public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle master) {
         validateHandles();
-        ArrayList<Figure> figures = new ArrayList<>();
+        HashSet<Figure> result = new HashSet<>();
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
-            for (Handle h : entry.getValue()) {
-                if (h.isCompatible(master)) {
-                    figures.add(entry.getKey());
-                    break;
+            if (figures.contains(entry.getKey())) {
+                for (Handle h : entry.getValue()) {
+                    if (h.isCompatible(master)) {
+                        result.add(entry.getKey());
+                        break;
+                    }
                 }
             }
         }
-        return figures;
+        return result;
     }
 
     /**

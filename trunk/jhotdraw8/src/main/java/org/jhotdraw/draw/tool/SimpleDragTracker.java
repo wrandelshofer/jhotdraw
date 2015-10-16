@@ -4,6 +4,8 @@
  */
 package org.jhotdraw.draw.tool;
 
+import java.util.HashSet;
+import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +42,7 @@ import org.jhotdraw.draw.Figure;
 public class SimpleDragTracker extends AbstractTool implements DragTracker {
 
     private static final long serialVersionUID = 1L;
+    protected Set<Figure> groupReshapeableFigures;
     protected Figure anchorFigure;
     private Point2D oldPoint;
     private Point2D anchor;
@@ -50,6 +53,15 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     @Override
     public void setDraggedFigure(Figure anchor, DrawingView view) {
         this.anchorFigure = anchor;
+        
+        // determine which figures can be reshaped together as a group
+        Set<Figure> selectedFigures = view.getSelectedFigures();
+        groupReshapeableFigures=new HashSet<>();
+        for (Figure f:selectedFigures) {
+            if (f.isGroupReshapeableWith(selectedFigures)) {
+                groupReshapeableFigures.add(f);
+            }
+        }
     }
 
     @Override
@@ -80,8 +92,13 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
         Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
         if (!tx.isIdentity()) {
             DrawingModel dm = view.getModel();
-            for (Figure f : view.getSelectedFigures()) {
-                dm.reshape(f, f.getDrawingToParent().createConcatenation(tx));
+            if (event.isShiftDown()) {
+                // shift only reshapes the anchor figure
+                dm.reshape(anchorFigure, anchorFigure.getDrawingToParent().createConcatenation(tx));
+            } else {
+                for (Figure f : groupReshapeableFigures) {
+                    dm.reshape(f, f.getDrawingToParent().createConcatenation(tx));
+                }
             }
         }
         oldPoint = newPoint;

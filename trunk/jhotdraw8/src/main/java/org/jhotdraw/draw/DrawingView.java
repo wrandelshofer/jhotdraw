@@ -287,11 +287,11 @@ public interface DrawingView extends RenderContext {
      * Z-order from front to back. Skips disabled figures and unselectable
      * figures.
      *
-     * @param v point in view coordinates
+     * @param pointInView point in view coordinates
      * @return A figure or empty
      */
-    default Figure findFigure(Point2D v) {
-        return findFigure(v.getX(), v.getY());
+    default Figure findFigure(Point2D pointInView) {
+        return findFigure(pointInView.getX(), pointInView.getY());
     }
 
     /**
@@ -299,12 +299,12 @@ public interface DrawingView extends RenderContext {
      * Z-order from front to back. Skips disabled figures and unselectable
      * figures.
      *
-     * @param v point in view coordinates
+     * @param pointInView point in view coordinates
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFigures(Point2D v, boolean decompose) {
-        return findFigures(v.getX(), v.getY(), decompose);
+    default List<Figure> findFigures(Point2D pointInView, boolean decompose) {
+        return findFigures(pointInView.getX(), pointInView.getY(), decompose);
     }
 
     /**
@@ -312,12 +312,12 @@ public interface DrawingView extends RenderContext {
      * coordinates. The figures are returned in Z-order from front to back.
      * Skips disabled figures and unselectable figures.
      *
-     * @param v rectangle in view coordinates
+     * @param rectangleInView rectangle in view coordinates
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFiguresInside(Rectangle2D v, boolean decompose) {
-        return findFiguresInside(v.getMinX(), v.getMinY(), v.getWidth(), v.getHeight(), decompose);
+    default List<Figure> findFiguresInside(Rectangle2D rectangleInView, boolean decompose) {
+        return findFiguresInside(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
     /**
@@ -325,12 +325,12 @@ public interface DrawingView extends RenderContext {
      * coordinates. The figures are returned in Z-order from back to front.
      * Skips disabled figures and unselectable figures.
      *
-     * @param v rectangle in view coordinates
+     * @param rectangleInView rectangle in view coordinates
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFiguresIntersecting(Rectangle2D v, boolean decompose) {
-        return findFiguresIntersecting(v.getMinX(), v.getMinY(), v.getWidth(), v.getHeight(), decompose);
+    default List<Figure> findFiguresIntersecting(Rectangle2D rectangleInView, boolean decompose) {
+        return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
     default void setDrawing(Drawing newValue) {
@@ -470,8 +470,9 @@ public interface DrawingView extends RenderContext {
     /**
      * Gets selected figures with the same handle.
      *
+     * @param figures selected figures
      * @param handle a handle
-     * @return A collection containing the handle and all compatible handles.
+     * @return A collection containing the figures with compatible handles.
      */
-    public Collection<Figure> getSelectedFiguresWithCompatibleHandle(Handle handle);
+    public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
 }

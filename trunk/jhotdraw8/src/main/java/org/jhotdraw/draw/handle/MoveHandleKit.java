@@ -4,6 +4,8 @@
  */
 package org.jhotdraw.draw.handle;
 
+import java.util.HashSet;
+import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -38,6 +40,7 @@ public class MoveHandleKit {
         private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
         private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
         private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+        protected Set<Figure> groupReshapeableFigures;
 
         public MoveHandle(Figure figure, Locator locator) {
             this(figure, STYLECLASS_HANDLE_MOVE, locator);
@@ -80,6 +83,16 @@ public class MoveHandleKit {
         @Override
         public void onMousePressed(MouseEvent event, DrawingView view) {
             oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+            
+            // determine which figures can be reshaped together as a group
+            Set<Figure> selectedFigures = view.getSelectedFigures();
+            groupReshapeableFigures = new HashSet<>();
+            for (Figure f :  view.getSelectedFigures()) {
+                if (f.isGroupReshapeableWith(selectedFigures)) {
+                    groupReshapeableFigures.add(f);
+                }
+            }
+            groupReshapeableFigures=view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
         }
 
         @Override
@@ -102,7 +115,7 @@ public class MoveHandleKit {
 
                 if (event.isShiftDown()) {
                     // shift transforms all selected figures
-                    for (Figure f : view.getSelectedFiguresWithCompatibleHandle(this)) {
+                    for (Figure f : groupReshapeableFigures) {
                         tx = f.getDrawingToParent().createConcatenation(tx);
                         model.reshape(f, tx);
                     }
