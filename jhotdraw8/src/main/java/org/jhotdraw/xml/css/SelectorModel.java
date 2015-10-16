@@ -6,8 +6,8 @@
 package org.jhotdraw.xml.css;
 
 /**
- * This is a model on which a {@code CssAST.SelectorGroup} can
- * perform a match operation.
+ * This is a model on which a {@code CssAST.SelectorGroup} can perform a match
+ * operation.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
@@ -42,7 +42,7 @@ public interface SelectorModel<T> {
     boolean hasStyleClass(T element, String clazz);
 
     /**
-     * Returns true if the element defines a value for the specified attribute.
+     * Returns true if the element has the specified attribute.
      *
      * @param element An element of the document
      * @param attributeName an attribute name
@@ -51,15 +51,41 @@ public interface SelectorModel<T> {
     boolean hasAttribute(T element, String attributeName);
 
     /**
-     * Returns a String representation of the attribute value.
+     * Returns true if the element has an attribute with the specified name and
+     * value.
      *
      * @param element An element of the document
      * @param attributeName an attribute name
-     * @return a String representation of the attribute value.
-     * This method returns null if the element does not define a value
-     * for the attribute.
+     * @param attributeValue the attribute value
+     * @return true if the element has an attribute with the specified name and
+     * value
      */
-    String getAttribute(T element, String attributeName);
+    boolean attributeValueEquals(T element, String attributeName, String attributeValue);
+
+    /**
+     * Returns true if the element has an attribute with the specified name and
+     * the attribute value starts with the specified string followed by the
+     * character '-'.
+     *
+     * @param element An element of the document
+     * @param attributeName an attribute name
+     * @param string the start string
+     * @return true if the element has an attribute with the specified name and
+     * the value starts with the specified string followed by the character '-'.
+     */
+    boolean attributeValueStartsWith(T element, String attributeName, String string);
+
+    /**
+     * Returns true if the element has an attribute with the specified name and
+     * the value contains the specified word.
+     *
+     * @param element An element of the document
+     * @param attributeName an attribute name
+     * @param word the word
+     * @return true if the element has an attribute with the specified name and
+     * the value contains the specified word.
+     */
+    boolean attributeValueContainsWord(T element, String attributeName, String word);
 
     /**
      * Returns true if the element has the specified pseudo class.

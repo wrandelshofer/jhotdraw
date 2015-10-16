@@ -72,8 +72,30 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public String getAttribute(Element element, String attributeName) {
-       return element.getAttribute(attributeName);
+    public boolean attributeValueEquals(Element element, String attributeName, String attributeValue) {
+       String actualValue= element.getAttribute(attributeName);
+       return actualValue != null && actualValue.equals(attributeValue);
+    }
+
+    @Override
+    public boolean attributeValueStartsWith(Element element, String attributeName, String string) {
+       String actualValue= element.getAttribute(attributeName);
+       return actualValue != null && (actualValue.equals(string)||
+               actualValue.startsWith(string+"-"));
+    }
+
+    @Override
+    public boolean attributeValueContainsWord(Element element, String attributeName, String word) {
+        String value =element.getAttribute(attributeName);
+        if (value != null) {
+            String[] words = value.split("\\s+");
+            for (int i = 0; i < words.length; i++) {
+                if (word.equals(words[i])) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

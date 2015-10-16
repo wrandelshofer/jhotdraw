@@ -1,5 +1,5 @@
 /*
- * @(#)AttributeSelector.java
+ * @(#)AbstractAttributeSelector.java
  * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
  * Alle Rechte vorbehalten. 
  */
@@ -17,22 +17,19 @@ import org.jhotdraw.xml.css.SelectorModel;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class AttributeLanguageSubcodeSelector extends AttributeSelector {
+public class AttributeValueStartsWithSelector extends AbstractAttributeSelector {
 
     private final String attributeName;
-    private final String attributeValue;
+    private final String prefix;
 
-    public AttributeLanguageSubcodeSelector(String attributeName, String attributeValue) {
+    public AttributeValueStartsWithSelector(String attributeName, String prefix) {
         this.attributeName = attributeName;
-        this.attributeValue = attributeValue;
+        this.prefix = prefix;
     }
 
     @Override
     protected <T> T match(SelectorModel<T> model, T element) {
-        String value = model.getAttribute(element, attributeName);
-         return (value != null && (attributeValue.equals(value)
-                || value.startsWith(attributeValue + "-")))
-                        ? element : null;
+        return model.attributeValueStartsWith(element, attributeName, prefix) ? element : null;
     }
 
 }

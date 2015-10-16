@@ -15,11 +15,11 @@ import java.util.List;
 import org.jhotdraw.io.StreamPosTokenizer;
 import org.jhotdraw.xml.css.ast.AdjacentSiblingCombinator;
 import org.jhotdraw.xml.css.ast.AndCombinator;
-import org.jhotdraw.xml.css.ast.AttributeLanguageSubcodeSelector;
-import org.jhotdraw.xml.css.ast.AttributePresenceSelector;
+import org.jhotdraw.xml.css.ast.AttributeValueStartsWithSelector;
 import org.jhotdraw.xml.css.ast.AttributeSelector;
-import org.jhotdraw.xml.css.ast.AttributeValueSelector;
-import org.jhotdraw.xml.css.ast.AttributeWordListItemSelector;
+import org.jhotdraw.xml.css.ast.AbstractAttributeSelector;
+import org.jhotdraw.xml.css.ast.AttributeValueEqualsSelector;
+import org.jhotdraw.xml.css.ast.AttributeValueContainsWordSelector;
 import org.jhotdraw.xml.css.ast.ChildCombinator;
 import org.jhotdraw.xml.css.ast.ClassSelector;
 import org.jhotdraw.xml.css.ast.Declaration;
@@ -220,7 +220,7 @@ public class CssParser {
         }
     }
 
-    private AttributeSelector parseAttributeSelector(StreamPosTokenizer tt) throws IOException {
+    private AbstractAttributeSelector parseAttributeSelector(StreamPosTokenizer tt) throws IOException {
         if (tt.nextToken() != '[') {
             throw new IOException("AttributeSelector: '[' instead of " + value(tt) + " expected in line " + tt.lineno());
         }
@@ -228,13 +228,13 @@ public class CssParser {
             throw new IOException("AttributeSelector: word instead of " + value(tt) + " expected in line " + tt.lineno());
         }
         String attributeName = tt.sval;
-        AttributeSelector selector;
+        AbstractAttributeSelector selector;
         switch (tt.nextToken()) {
         case '=':
             if (tt.nextToken() != StreamPosTokenizer.TT_WORD && tt.ttype != '\'' && tt.ttype != '"') {
                 throw new IOException("AttributeSelector: word or string instead of " + value(tt) + " expected in line " + tt.lineno());
             }
-            selector = new AttributeValueSelector(attributeName, tt.sval);
+            selector = new AttributeValueEqualsSelector(attributeName, tt.sval);
             break;
         case '~':
             if (tt.nextToken() != '=') {
@@ -243,7 +243,7 @@ public class CssParser {
             if (tt.nextToken() != StreamPosTokenizer.TT_WORD && tt.ttype != '\'' && tt.ttype != '"') {
                 throw new IOException("AttributeSelector: word or string instead of " + value(tt) + " expected in line " + tt.lineno());
             }
-            selector = new AttributeWordListItemSelector(attributeName, tt.sval);
+            selector = new AttributeValueContainsWordSelector(attributeName, tt.sval);
             break;
         case '|':
             if (tt.nextToken() != '=') {
@@ -252,10 +252,10 @@ public class CssParser {
             if (tt.nextToken() != StreamPosTokenizer.TT_WORD && tt.ttype != '\'' && tt.ttype != '"') {
                 throw new IOException("AttributeSelector: word or string instead of " + value(tt) + " expected in line " + tt.lineno());
             }
-            selector = new AttributeLanguageSubcodeSelector(attributeName, tt.sval);
+            selector = new AttributeValueStartsWithSelector(attributeName, tt.sval);
             break;
         case ']':
-            selector = new AttributePresenceSelector(attributeName);
+            selector = new AttributeSelector(attributeName);
             tt.pushBack();
             break;
         default:

@@ -8,8 +8,8 @@ package org.jhotdraw.xml.css.ast;
 import org.jhotdraw.xml.css.SelectorModel;
 
 /**
- * A "class selector" matches an element based on the value of its "class"
- * attribute.
+ * A "class selector" matches an element if the element has a style class with 
+ * the specified value.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
