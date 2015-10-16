@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.handle;
 
 import java.util.Collection;
+import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -232,7 +233,8 @@ public class ResizeHandleKit {
                 oldPoint = getOwner().localToDrawing(loc);
             }
             // shift keeps the aspect ratio
-            // this is not consistent - shift should apply it to all?
+            // this is not consistent with other handles:
+            // shift should apply the handle to all group reshapeable figures.
             boolean keepAspect = event.isShiftDown();
 
             resize(newPoint, getOwner(), startBounds, view.getModel(), keepAspect);

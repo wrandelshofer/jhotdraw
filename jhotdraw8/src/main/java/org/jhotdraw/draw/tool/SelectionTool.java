@@ -243,7 +243,8 @@ public class SelectionTool extends AbstractTool {
         if (handleTracker == null) {
             handleTracker = new SimpleHandleTracker();
         }
-        handleTracker.setHandles(handle, getDrawingView().getSelectedFiguresWithCompatibleHandle(handle));
+        handleTracker.setHandles(handle, getDrawingView().getFiguresWithCompatibleHandle(
+                getDrawingView().getSelectedFigures(), handle));
         return handleTracker;
     }
 

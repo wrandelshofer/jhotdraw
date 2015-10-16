@@ -535,6 +535,21 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @return true if the user may select the figure
      */
     boolean isSelectable();
+    /**
+     * Whether the figure can be reshaped as a group together with other figures.
+     * <p>
+     * If this figure uses one of the other figures for computing its position
+     * or its layout, then it will return false.
+     * <p>
+     * The default implementation always returns true.
+     * 
+     * @param others A set of figures.
+     * @return true if the user may reshape this figure together with those
+     * in the set.
+     */
+    default boolean isGroupReshapeableWith(Set<Figure> others) {
+        return true;
+    }
 
     /**
      * Whether the figure or one if its ancestors is disabled.
@@ -608,14 +623,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Gets a connector for this figure at the given location.
      *
-     * @param p the location of the connector.
+     * @param pointInLocal the location of the connector in local coordinates.
      * @param prototype The prototype used to create a connection or null if
      * unknown. This allows for specific connectors for different connection
      * figures.
      * @return Returns the connector. Returns null if there is no connector at
      * the given location.
      */
-    Connector findConnector(Point2D p, Figure prototype);
+    Connector findConnector(Point2D pointInLocal, Figure prototype);
 
     /**
      * Updates the layout of this figure and of its descendant figures. Does not
@@ -1005,22 +1020,22 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Transforms the specified point from drawing coordinates into local
      * coordinates.
      *
-     * @param p point in drawing coordinates
+     * @param pointInDrawing point in drawing coordinates
      * @return point in local coordinates
      */
-    default Point2D drawingToLocal(Point2D p) {
-        return getDrawingToLocal().transform(p);
+    default Point2D drawingToLocal(Point2D pointInDrawing) {
+        return getDrawingToLocal().transform(pointInDrawing);
     }
 
     /**
      * Transforms the specified point from drawing coordinates into parent
      * coordinates.
      *
-     * @param p point in drawing coordinates
+     * @param pointInDrawing point in drawing coordinates
      * @return point in local coordinates
      */
-    default Point2D drawingToParent(Point2D p) {
-        return getDrawingToParent().transform(p);
+    default Point2D drawingToParent(Point2D pointInDrawing) {
+        return getDrawingToParent().transform(pointInDrawing);
     }
 
     /**
