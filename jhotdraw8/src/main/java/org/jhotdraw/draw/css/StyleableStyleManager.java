@@ -14,11 +14,11 @@ import javafx.css.StyleConverter;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw.xml.css.AbstractStyleManager;
-import org.jhotdraw.xml.css.CssParser;
-import org.jhotdraw.xml.css.ast.Declaration;
-import org.jhotdraw.xml.css.ast.Ruleset;
-import org.jhotdraw.xml.css.ast.Stylesheet;
+import org.jhotdraw.css.AbstractStyleManager;
+import org.jhotdraw.css.CssParserOld;
+import org.jhotdraw.css.ast.Declaration;
+import org.jhotdraw.css.ast.Ruleset;
+import org.jhotdraw.css.ast.Stylesheet;
 
 /**
  * StyleableStyleManager.
@@ -29,7 +29,7 @@ public class StyleableStyleManager extends AbstractStyleManager {
 
     private final StyleableSelectorModel selectorModel = new StyleableSelectorModel();
 
-    private final CssParser parser = new CssParser();
+    private final CssParserOld parser = new CssParserOld();
 
     private final WeakHashMap<Declaration, Object> convertedValues = new WeakHashMap<>();
 
