@@ -86,10 +86,9 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public boolean attributeValueStartsWith(Styleable element, String attributeName, String string) {
+    public boolean attributeValueStartsWith(Styleable element, String attributeName, String substring) {
         String actualValue = getAttribute(element, attributeName);
-        return actualValue != null && (actualValue.equals(string)
-                || actualValue.startsWith(string + "-"));
+        return actualValue != null && actualValue.startsWith(substring);
     }
 
     @Override
@@ -104,5 +103,17 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean attributeValueEndsWith(Styleable element, String attributeName, String substring) {
+        String actualValue = getAttribute(element, attributeName);
+        return actualValue != null && actualValue.endsWith(substring);
+    }
+
+    @Override
+    public boolean attributeValueContains(Styleable element, String attributeName, String substring) {
+        String actualValue = getAttribute(element, attributeName);
+        return actualValue != null && actualValue.contains(substring);
     }
 }
