@@ -896,7 +896,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     // Handles
-
     @Override
     public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle master) {
         validateHandles();
@@ -1036,8 +1035,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
         DrawingModel model = getModel();
         for (Figure f : figures) {
-            model.disconnect(f);
-            model.removeFromParent(f);
+            if (f.isDeletable()) {
+                model.disconnect(f);
+                model.removeFromParent(f);
+            }
         }
     }
 
