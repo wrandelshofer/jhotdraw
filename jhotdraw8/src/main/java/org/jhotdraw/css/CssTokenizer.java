@@ -143,9 +143,9 @@ public class CssTokenizer {
 
     private int currentToken;
 
-    private Object value;
-
-    private int lineno;
+    private String value;
+    private int lineNumber;
+    private int position;
 
     public CssTokenizer(Reader reader) {
         in = new CssScanner(reader);
@@ -155,14 +155,18 @@ public class CssTokenizer {
         return currentToken;
     }
 
-    public Object currentValue() {
+    public String currentStringValue() {
         return value;
     }
 
     public int nextToken() throws IOException {
         if (pushBack) {
+            pushBack = false;
             return currentToken;
         }
+
+        lineNumber = (int) in.getLineNumber();
+        position = (int) in.getPosition();
 
         int ch = in.nextChar();
         value = null;
@@ -191,7 +195,7 @@ public class CssTokenizer {
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) ch);
                 }
                 break;
             }
@@ -206,7 +210,7 @@ public class CssTokenizer {
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -218,7 +222,7 @@ public class CssTokenizer {
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -230,7 +234,7 @@ public class CssTokenizer {
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -242,7 +246,7 @@ public class CssTokenizer {
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) ch);
                 }
                 break;
             }
@@ -254,7 +258,7 @@ public class CssTokenizer {
                 } else {
                     in.pushBack(ch);
                     currentToken = '@';
-                    value = (char) currentToken;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -266,7 +270,7 @@ public class CssTokenizer {
                 } else {
                     in.pushBack(ch);
                     currentToken = '#';
-                    value = (char) currentToken;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -308,7 +312,7 @@ public class CssTokenizer {
                     value = buf.toString();
                 } else {
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
 
@@ -326,7 +330,7 @@ public class CssTokenizer {
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
 
@@ -342,26 +346,36 @@ public class CssTokenizer {
                         in.pushBack(next2);
                         in.pushBack(next1);
                         currentToken = ch;
-                        value = (char) ch;
+                        value = String.valueOf((char) currentToken);
                     }
                 } else {
-                    // FIXME look ahead for the sequence '-',digit or '-','.',digit
-                    //       then parse as number token
-
-                    in.pushBack(next1);
                     StringBuilder buf = new StringBuilder();
-                    if (identMacro(ch, buf)) {
-                        next1 = in.nextChar();
-                        if (next1 == '(') {
-                            currentToken = TT_FUNCTION;
+                    if (numMacro(ch, buf)) {
+                        ch = in.nextChar();
+                        if (ch == '%') {
+                            currentToken = TT_PERCENTAGE;
+                        } else if (identMacro(ch, buf)) {
+                            currentToken = TT_DIMENSION;
                         } else {
-                            in.pushBack(next1);
-                            currentToken = TT_IDENT;
+                            in.pushBack(ch);
+                            currentToken = TT_NUMBER;
                         }
                         value = buf.toString();
                     } else {
-                        currentToken = ch;
-                        value = (char) ch;
+                        in.pushBack(next1);
+                        if (identMacro(ch, buf)) {
+                            next1 = in.nextChar();
+                            if (next1 == '(') {
+                                currentToken = TT_FUNCTION;
+                            } else {
+                                in.pushBack(next1);
+                                currentToken = TT_IDENT;
+                            }
+                            value = buf.toString();
+                        } else {
+                            currentToken = ch;
+                            value = String.valueOf((char) currentToken);
+                        }
                     }
                 }
                 break;
@@ -380,20 +394,20 @@ public class CssTokenizer {
                             in.pushBack(next2);
                             in.pushBack(next1);
                             currentToken = ch;
-                            value = (char) ch;
+                            value = String.valueOf((char) currentToken);
                         }
                     } else {
                         in.pushBack(next2);
                         in.pushBack(next1);
                         StringBuilder buf = new StringBuilder();
                         currentToken = ch;
-                        value = (char) ch;
+                        value = String.valueOf((char) currentToken);
                     }
                 } else {
                     in.pushBack(next1);
                     StringBuilder buf = new StringBuilder();
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -406,7 +420,7 @@ public class CssTokenizer {
                     int next1 = in.nextChar();
                     if (next1 == '(') {
                         value = buf.toString();
-                        if (((String) value).equalsIgnoreCase("url")) {
+                        if (value.equalsIgnoreCase("url")) {
                             buf.setLength(0);
                             if (uriMacro(buf)) {
                                 currentToken = TT_URI;
@@ -424,7 +438,7 @@ public class CssTokenizer {
                     }
                 } else {
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -443,13 +457,13 @@ public class CssTokenizer {
                     }
                 } else {
                     currentToken = ch;
-                    value = (char) ch;
+                    value = String.valueOf((char) currentToken);
                 }
                 break;
             }
         }
 
-        return currentToken;
+        return (currentToken == TT_COMMENT) ? nextToken() : currentToken;
     }
 
     /**
@@ -457,6 +471,10 @@ public class CssTokenizer {
      */
     public void pushBack() {
         pushBack = true;
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
     }
 
     /**
@@ -815,6 +833,10 @@ public class CssTokenizer {
                 buf.append((char) ch);
             }
         }
+    }
+
+    public int getPosition() {
+        return position;
     }
 
 }

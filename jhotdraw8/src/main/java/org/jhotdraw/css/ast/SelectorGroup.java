@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.css.ast;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.jhotdraw.css.SelectorModel;
@@ -19,6 +20,9 @@ public class SelectorGroup extends AST {
 
     private final List<Selector> selectors;
 
+    public SelectorGroup(Selector selector) {
+        this.selectors=Arrays.asList(new Selector[]{selector});
+    }
     public SelectorGroup(List<Selector> selectors) {
         this.selectors = Collections.unmodifiableList(selectors);
     }

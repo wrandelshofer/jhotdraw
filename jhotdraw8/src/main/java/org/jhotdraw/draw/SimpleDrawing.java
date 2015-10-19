@@ -16,7 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.css.StyleableStyleManager;
-import org.jhotdraw.css.CssParserOld;
+import org.jhotdraw.css.CssParser;
 
 /**
  * SimpleDrawing.

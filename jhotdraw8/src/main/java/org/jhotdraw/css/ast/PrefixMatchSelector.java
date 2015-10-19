@@ -29,5 +29,8 @@ public class PrefixMatchSelector extends AbstractAttributeSelector {
         return (model.attributeValueStartsWith(element, attributeName, substring))//
                         ? element : null;
     }
-
+    @Override
+    public String toString() {
+        return "[" + attributeName + "^=" + substring + ']';
+    }
 }
