@@ -26,10 +26,9 @@ import java.io.Reader;
  * BAD_URI     = baduri ;
  * BAD_COMMENT = badcomment ;
  * HASH        = '#' , name ;
- * NUMBER      = [ '+' | '-' ] , num ,
- *               [ 'e'  , [ '+' | '-' ] , { digit } ] ;
- * PERCENTAGE  = NUMBER , '%' ;
- * DIMENSION   = NUMBER , ident ;
+ * NUMBER      = num
+ * PERCENTAGE  = num , '%' ;
+ * DIMENSION   = num , ident ;
  * URI         = ( "url(" , w , string , w , ')'
  *               | "url(" , w, { urichar | nonascii | escape }-, w, ')'
  *               )
@@ -72,9 +71,11 @@ import java.io.Reader;
  *                 | '\' , -( newline | hexd)
  *                 ) ;
  * nmchar        = '_' | letter | digit | '-' | nonascii | escape ;
- * num           = ( { digit }-
+ * num           = [ '+' | '-' ] ,
+ *                 ( { digit }-
  *                 | { digit } , '.' , { digit }-
- *                 ) ;
+ *                 )
+ *                 [ 'e'  , [ '+' | '-' ] , { digit }- ] ;
  * digit         = ? '0' through '9' ?
  * letter        = ? 'a' through 'z' ? | ? 'A' through 'Z' ? ;
  * string        = string1 | string2 ;
@@ -344,6 +345,9 @@ public class CssTokenizer {
                         value = (char) ch;
                     }
                 } else {
+                    // FIXME look ahead for the sequence '-',digit or '-','.',digit
+                    //       then parse as number token
+
                     in.pushBack(next1);
                     StringBuilder buf = new StringBuilder();
                     if (identMacro(ch, buf)) {
@@ -509,6 +513,13 @@ public class CssTokenizer {
      * @return true on success
      */
     private boolean numMacro(int ch, StringBuilder buf) throws IOException {
+        if (ch == '-') {
+            buf.append('-');
+            ch = in.nextChar();
+        } else if (ch == '+') {
+            ch = in.nextChar();
+        }
+
         boolean hasDecimals = false;
         while ('0' <= ch && ch <= '9') {
             hasDecimals = true;
@@ -530,6 +541,28 @@ public class CssTokenizer {
             while ('0' <= ch && ch <= '9') {
                 buf.append((char) ch);
                 ch = in.nextChar();
+            }
+        }
+
+        if (ch == 'e' || ch == 'E') {
+            buf.append('E');
+            ch = in.nextChar();
+
+            if (ch == '-') {
+                buf.append('-');
+                ch = in.nextChar();
+            } else if (ch == '+') {
+                ch = in.nextChar();
+            }
+            boolean hasExponents = false;
+            while ('0' <= ch && ch <= '9') {
+                hasExponents = true;
+                buf.append((char) ch);
+                ch = in.nextChar();
+            }
+            if (!hasExponents) {
+                in.pushBack(ch);
+                return false;
             }
         }
         in.pushBack(ch);

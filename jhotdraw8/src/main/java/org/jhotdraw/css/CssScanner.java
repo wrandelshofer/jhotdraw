@@ -6,6 +6,7 @@ package org.jhotdraw.css;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -13,22 +14,23 @@ import java.util.LinkedList;
  * The {@code CssScanner} preprocesses an input stream of UTF-16 code points for
  * the {@code CssTokenizer}.
  * <p>
- * The scanner also keeps track of the current position and line number and
- * supports lookahead of characters.
- * <p>
- * The scanner implements the following ISO 14977 EBNF productions:
+ * The scanner filters out the characters '\r', '\f' and '\000' using the
+ * following ISO 14977 EBNF productions:
  * <pre>
  * char          = inline | newline;
  * newline       = ( '\r' , ['\n']
  *                 | '\n' | '\t' | '\f
  *                 );
  * inline        = legalInline | illegalInline ;
- * legalInline   = ? all UTF-16 code points except '\r', '\n', '\t', '\f', '\0' ?
- * illegaInline  = '\0' ;
+ * legalInline   = -( '\r' | '\n' | '\t' | '\f' | '\000' ) ;
+ * illegaInline  = '\000' ;
  * </pre>
  * <p>Any {@code illegalInline} production is replaced with U+FFFD
  * REPLACEMENT CHARACTER. Any {@code newline} production is replaced with U+000A
  * LINE FEED CHARACTER.
+ * <p>
+ * The scanner also keeps track of the current position and line number and
+ * supports lookahead of multiple characters.
  *
  * <p>
  * References:
@@ -69,7 +71,7 @@ public class CssScanner {
     /**
      * Stack of pushed back characters.
      */
-    private final Deque<Integer> pushedChars = new LinkedList<>();
+    private final ArrayList<Integer> pushedChars = new ArrayList<>();
 
     public CssScanner(Reader reader) {
         this.in = reader;
@@ -84,7 +86,7 @@ public class CssScanner {
      */
     public int nextChar() throws IOException {
         if (!pushedChars.isEmpty()) {
-            currentChar = pushedChars.pop();
+            currentChar = pushedChars.remove(pushedChars.size()-1);
             return currentChar;
         }
 
@@ -138,7 +140,7 @@ public class CssScanner {
      * @param ch The character to be pushed back
      */
     public void pushBack(int ch) {
-        pushedChars.push(ch);
+        pushedChars.add(ch);
     }
 
     /**
