@@ -99,6 +99,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private class SimpleDrawingViewNode extends StackPane implements EditableComponent {
 
+        public SimpleDrawingViewNode() {
+            setFocusTraversable(true);
+        }
+
         private ReadOnlyBooleanWrapper selectionEmpty = new ReadOnlyBooleanWrapper(this, EditableComponent.SELECTION_EMPTY);
 
         {
