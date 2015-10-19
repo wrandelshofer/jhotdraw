@@ -52,15 +52,18 @@ public class SelectAllAction extends AbstractFocusOwnerAction {
 
     @Override
     public void handle(javafx.event.ActionEvent event) {
-        View v = app.getActiveView();
-        if (v != null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic = (TextInputControl) n;
-                tic.selectAll();
-            } else if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.selectAll();
+        if (!event.isConsumed()) {
+            event.consume();
+            View v = app.getActiveView();
+            if (v != null && !v.isDisabled()) {
+                Node n = v.getNode().getScene().getFocusOwner();
+                if (n instanceof TextInputControl) {
+                    TextInputControl tic = (TextInputControl) n;
+                    tic.selectAll();
+                } else if (n instanceof EditableComponent) {
+                    EditableComponent tic = (EditableComponent) n;
+                    tic.selectAll();
+                }
             }
         }
     }

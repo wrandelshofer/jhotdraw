@@ -52,7 +52,7 @@ public class CopyAction extends AbstractSelectionAction {
 
     @Override
     public void handle(javafx.event.ActionEvent event) {
-        if (event.isConsumed()) {
+        if (!event.isConsumed()) {
         event.consume();
         View v = app.getActiveView();
         if (v != null && !v.isDisabled()) {
