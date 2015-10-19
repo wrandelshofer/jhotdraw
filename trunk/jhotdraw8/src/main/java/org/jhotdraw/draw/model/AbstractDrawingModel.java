@@ -157,7 +157,6 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             for (Figure c : figure.getConnectedFigures()) {
                 if (done.add(c)) {
                     fire(DrawingModelEvent.layoutInvalidated(this, c));
-                } else {
                     todoNext.add(c);
                 }
             }
