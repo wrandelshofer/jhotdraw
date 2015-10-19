@@ -536,6 +536,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      */
     boolean isSelectable();
     /**
+     * Whether the figure is deletable.
+     * <p>
+     * The default implementation returns true.
+     *
+     * @return true if the user may delete the figure
+     */
+    default boolean isDeletable() { return true; }
+    /**
      * Whether the figure can be reshaped as a group together with other figures.
      * <p>
      * If this figure uses one of the other figures for computing its position
