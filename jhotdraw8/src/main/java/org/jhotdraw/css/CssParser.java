@@ -80,7 +80,7 @@ package org.jhotdraw.css;
  *                (* There is a constraint on the color that it must
  *                   have either 3 or 6 hex-digits (i.e., [0-9a-fA-F])
  *                   after the "#"; e.g., "#000" is OK, but "#abcd" is not. *)
- * <p>
+ * </pre>
  * References:
  * <ul>
  * <li><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">CSS Syntax
