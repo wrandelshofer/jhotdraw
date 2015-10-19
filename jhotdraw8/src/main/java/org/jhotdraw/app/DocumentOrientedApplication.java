@@ -64,6 +64,7 @@ import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.app.action.file.SaveFileAsAction;
 import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.binding.BindingUtil;
+import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.concurrent.BackgroundTask;
@@ -79,6 +80,7 @@ import org.jhotdraw.util.Resources;
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
 
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, "<Boolean>",null);
+    private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
     private boolean isSystemMenuSupported;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
         Thread t = new Thread(r);
@@ -224,15 +226,23 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
-        //if (!isSystemMenuSupported) {
+        if (!isSystemMenuSupported) {
             MenuBar mb = createMenuBar(view.getActionMap());
             mb.setUseSystemMenuBar(true);
             borderPane.setTop(mb);
-        //}
+        }
         Scene scene = new Scene(borderPane);
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> {
             event.consume();
+            
+            for (StackTraceElement element:new Throwable().getStackTrace()) {
+                if (element.getMethodName().contains("Quit")) {
+                    view.set(QUIT_APPLICATION, true);
+                    break;
+                }
+            }
+            
             view.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
         stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
@@ -324,8 +334,8 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         }
 
         // Auto close feature
-        if (views.isEmpty()) {
-            exit();
+        if (views.isEmpty()&&view.get(QUIT_APPLICATION)) {
+           exit();
         }
     }
 
