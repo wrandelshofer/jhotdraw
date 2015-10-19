@@ -1,5 +1,5 @@
 /*
- * @(#)AttributeValueEqualsSelector.java
+ * @(#)EqualsMatchSelector.java
  * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
  * Alle Rechte vorbehalten. 
  */
@@ -14,12 +14,12 @@ import org.jhotdraw.css.SelectorModel;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class AttributeValueEqualsSelector extends AbstractAttributeSelector {
+public class EqualsMatchSelector extends AbstractAttributeSelector {
 
     private final String attributeName;
     private final String attributeValue;
 
-    public AttributeValueEqualsSelector(String attributeName, String attributeValue) {
+    public EqualsMatchSelector(String attributeName, String attributeValue) {
         this.attributeName = attributeName;
         this.attributeValue = attributeValue;
     }
@@ -27,5 +27,10 @@ public class AttributeValueEqualsSelector extends AbstractAttributeSelector {
     @Override
     protected <T> T match(SelectorModel<T> model, T element) {
         return model.attributeValueEquals(element, attributeName, attributeValue) ? element : null;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + attributeName + "=" + attributeValue + ']';
     }
 }

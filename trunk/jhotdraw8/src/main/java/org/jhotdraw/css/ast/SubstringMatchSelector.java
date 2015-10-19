@@ -29,5 +29,9 @@ public class SubstringMatchSelector extends AbstractAttributeSelector {
         return (model.attributeValueContains(element, attributeName, substring))//
                 ? element : null;
     }
+    @Override
+    public String toString() {
+        return "[" + attributeName + "*=" + substring + ']';
+    }
 
 }

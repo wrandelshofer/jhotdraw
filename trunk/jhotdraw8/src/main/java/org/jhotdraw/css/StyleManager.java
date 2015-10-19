@@ -78,7 +78,7 @@ public interface StyleManager {
      * parsed properly
      */
     default void addStylesheet(StyleOrigin origin, URL stylesheetUrl) throws IOException {
-        Stylesheet sh = new CssParserOld().parseStylesheet(stylesheetUrl);
+        Stylesheet sh = new CssParser().parseStylesheet(stylesheetUrl);
         switch (origin) {
         case USER_AGENT:
             getUserAgentStylesheetUrlOrString().add(stylesheetUrl);
@@ -101,7 +101,7 @@ public interface StyleManager {
      * @throws java.io.IOException if the stylesheet can not be parsed properly
      */
     default void addStylesheet(StyleOrigin origin, String str) throws IOException {
-        Stylesheet sh = new CssParserOld().parseStylesheet(str);
+        Stylesheet sh = new CssParser().parseStylesheet(str);
         switch (origin) {
         case USER_AGENT:
             getUserAgentStylesheetUrlOrString().add(str);
@@ -176,9 +176,9 @@ public interface StyleManager {
                 Stylesheet sh;
                 try {
                     if (item instanceof URL) {
-                        sh = new CssParserOld().parseStylesheet((URL) item);
+                        sh = new CssParser().parseStylesheet((URL) item);
                     } else {
-                        sh = new CssParserOld().parseStylesheet((String) item);
+                        sh = new CssParser().parseStylesheet((String) item);
                     }
                 } catch (IOException e) {
                     throw new IOException("Error loading stylesheet " + item, e);

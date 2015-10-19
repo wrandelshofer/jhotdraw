@@ -15,7 +15,7 @@ import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.css.AbstractStyleManager;
-import org.jhotdraw.css.CssParserOld;
+import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.Ruleset;
 import org.jhotdraw.css.ast.Stylesheet;
@@ -29,7 +29,7 @@ public class StyleableStyleManager extends AbstractStyleManager {
 
     private final StyleableSelectorModel selectorModel = new StyleableSelectorModel();
 
-    private final CssParserOld parser = new CssParserOld();
+    private final CssParser parser = new CssParser();
 
     private final WeakHashMap<Declaration, Object> convertedValues = new WeakHashMap<>();
 
@@ -91,7 +91,7 @@ public class StyleableStyleManager extends AbstractStyleManager {
                         if (!convertedValues.containsKey(d)) {
                             @SuppressWarnings("unchecked")
                             StyleConverter<String, Object> converter = (StyleConverter<String, Object>) m.getConverter();
-                            ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(d.getTerms(), null);
+                            ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(d.getTermsAsString(), null);
                             convertedValues.put(d, converter.convert(parsedValue, null));
                         }
                         Object convertedValue = convertedValues.get(d);
@@ -116,7 +116,7 @@ public class StyleableStyleManager extends AbstractStyleManager {
                         if (!convertedValues.containsKey(d)) {
                             @SuppressWarnings("unchecked")
                             StyleConverter<String, Object> converter = (StyleConverter<String, Object>) m.getConverter();
-                            ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(d.getTerms(), null);
+                            ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(d.getTermsAsString(), null);
                             convertedValues.put(d, converter.convert(parsedValue, null));
                         }
                         Object convertedValue = convertedValues.get(d);

@@ -23,7 +23,7 @@ public class DescendantCombinator extends Combinator {
 
     @Override
     public String toString() {
-        return firstSelector + " ::descendant:: " + secondSelector;
+        return firstSelector + ".isAncestorOf(" + secondSelector+")";
     }
 
     @Override

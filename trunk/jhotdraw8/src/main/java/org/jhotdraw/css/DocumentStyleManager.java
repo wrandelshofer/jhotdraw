@@ -5,18 +5,11 @@
 package org.jhotdraw.css;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jhotdraw.util.ReversedList;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.Ruleset;
-import org.jhotdraw.css.ast.SelectorGroup;
 import org.jhotdraw.css.ast.Stylesheet;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -31,7 +24,7 @@ public class DocumentStyleManager extends AbstractStyleManager {
 
     private final DocumentSelectorModel selectorModel = new DocumentSelectorModel();
 
-    private final CssParserOld parser = new CssParserOld();
+    private final CssParser parser = new CssParser();
 
     public DocumentStyleManager() {
     }
@@ -52,7 +45,7 @@ public class DocumentStyleManager extends AbstractStyleManager {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
                         if (!elem.hasAttribute(d.getProperty())) {
-                            applicableDeclarations.put(d.getProperty(), d.getTerms());
+                            applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                         }
                     }
                 }
@@ -64,7 +57,7 @@ public class DocumentStyleManager extends AbstractStyleManager {
             for (Ruleset r : s.getRulesets()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
-                        applicableDeclarations.put(d.getProperty(), d.getTerms());
+                        applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                     }
                 }
             }
@@ -74,7 +67,7 @@ public class DocumentStyleManager extends AbstractStyleManager {
         if (elem.hasAttribute("style")) {
             try {
                 for (Declaration d : parser.parseDeclarations(elem.getAttribute("style"))) {
-                    applicableDeclarations.put(d.getProperty(), d.getTerms());
+                    applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                 }
             } catch (IOException ex) {
                 System.err.println("DOMStyleManager: Invalid style attribute on element. style=" + elem.getAttribute("style"));
