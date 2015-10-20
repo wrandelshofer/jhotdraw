@@ -1,0 +1,39 @@
+/* @(#)FunctionPseudoClassSelector.java
+ * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
+ * Alle Rechte vorbehalten. 
+ */
+package org.jhotdraw.css.ast;
+
+import java.util.Collections;
+import java.util.List;
+import org.jhotdraw.css.SelectorModel;
+
+/**
+ * A "class selector" matches an element based on the value of its "pseudo
+ * class" attribute.
+ *
+ * @author Werner Randelshofer
+ * @version $$Id$$
+ */
+public class FunctionPseudoClassSelector extends PseudoClassSelector {
+
+    private final String functionIdentifier;
+    private final List<Term> terms;
+
+    public FunctionPseudoClassSelector(String functionIdentifier,List<Term> terms) {
+        this.functionIdentifier = functionIdentifier;
+        this.terms=Collections.unmodifiableList(terms);
+    }
+
+    @Override
+    public String toString() {
+        return "FunctionPseudoClass:" + functionIdentifier;
+    }
+
+    @Override
+    public <T> T match(SelectorModel<T> model, T element) {
+        // FIXME implement me
+        return (element != null && model.hasPseudoClass(element, functionIdentifier)) //
+                ? element : null;
+    }
+}

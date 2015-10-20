@@ -17,7 +17,7 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw.css.AbstractStyleManager;
 import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.ast.Declaration;
-import org.jhotdraw.css.ast.Ruleset;
+import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
 
 /**
@@ -82,7 +82,7 @@ public class StyleableStyleManager extends AbstractStyleManager {
     }
 
     private void applyStylesTo(StyleOrigin origin, Stylesheet s, HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap, Styleable elem) {
-        for (Ruleset r : s.getRulesets()) {
+        for (StyleRule r : s.getRulesets()) {
             if (r.getSelectorGroup().matches(selectorModel, elem)) {
                 for (Declaration d : r.getDeclarations()) {
                     @SuppressWarnings("unchecked")
@@ -109,7 +109,7 @@ public class StyleableStyleManager extends AbstractStyleManager {
         String style = elem.getStyle();
         if (style != null) {
             try {
-                for (Declaration d : parser.parseDeclarations(style)) {
+                for (Declaration d : parser.parseDeclarationList(style)) {
                     @SuppressWarnings("unchecked")
                     CssMetaData<Styleable, ?> m = (CssMetaData<Styleable, ?>) metaMap.get(d.getProperty());
                     if (m != null && m.isSettable(elem)) {

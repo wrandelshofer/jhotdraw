@@ -10,7 +10,7 @@ import java.util.List;
 import org.jhotdraw.css.SelectorModel;
 
 /**
- * A "selector group" matches an element if one of its selectors match the
+ * A "selector group" matches an element if one of its selectors matches the
  * element.
  *
  * @author Werner Randelshofer

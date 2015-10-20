@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class Stylesheet extends AST {
 
-    private final List<Ruleset> rulesets;
+    private final List<StyleRule> rulesets;
 
-    public Stylesheet(List<Ruleset> rulesets) {
+    public Stylesheet(List<StyleRule> rulesets) {
         this.rulesets = Collections.unmodifiableList(rulesets);
     }
 
-    public List<Ruleset> getRulesets() {
+    public List<StyleRule> getRulesets() {
         return rulesets;
     }
 
@@ -29,7 +29,7 @@ public class Stylesheet extends AST {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         boolean first = true;
-        for (Ruleset r : rulesets) {
+        for (StyleRule r : rulesets) {
             if (first) {
                 first = false;
             } else {

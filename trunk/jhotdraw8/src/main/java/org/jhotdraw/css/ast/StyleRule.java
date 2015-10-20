@@ -1,4 +1,4 @@
-/* @(#)Ruleset.java
+/* @(#)StyleRule.java
  * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
  * Alle Rechte vorbehalten. 
  */
@@ -8,35 +8,36 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A ruleset consists of a "selector group" and a list of "declaration"s.
+ * A qualified rule consists of a "selector list" and a list of "declaration"s.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class Ruleset extends AST {
+public class StyleRule extends AST {
 
-    private final SelectorGroup selectorGroup;
+    private final SelectorGroup selectorList;
     private final List<Declaration> declarations;
 
-    public Ruleset(SelectorGroup selectorGroup, List<Declaration> declarations) {
-        this.selectorGroup = selectorGroup;
+    public StyleRule(SelectorGroup selectorGroup, List<Declaration> declarations) {
+        this.selectorList = selectorGroup;
         this.declarations = Collections.unmodifiableList(declarations);
     }
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder("Ruleset: ");
-        buf.append(selectorGroup.toString());
+        StringBuilder buf = new StringBuilder("QualifiedRule: ");
+        buf.append(selectorList.toString());
         buf.append("{");
         for (Declaration r : declarations) {
             buf.append(r.toString());
+            buf.append(';');
         }
         buf.append("}");
         return buf.toString();
     }
 
     public SelectorGroup getSelectorGroup() {
-        return selectorGroup;
+        return selectorList;
     }
 
     public List<Declaration> getDeclarations() {

@@ -50,6 +50,6 @@ public class Declaration extends AST {
     @Override
     public String toString() {
 
-        return property + ":" + terms;
+        return property + ":" + getTermsAsString();
     }
 }

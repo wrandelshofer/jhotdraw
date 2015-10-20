@@ -144,12 +144,18 @@ public class CssTokenizer {
     private int currentToken;
 
     private String stringValue;
-    private double numericValue;
+    private Number numericValue;
     private int lineNumber;
     private int position;
+    private final boolean skipComments;
 
     public CssTokenizer(Reader reader) {
+        this(reader, true);
+    }
+
+    public CssTokenizer(Reader reader, boolean skipComments) {
         in = new CssScanner(reader);
+        this.skipComments = skipComments;
     }
 
     public int currentToken() {
@@ -159,7 +165,8 @@ public class CssTokenizer {
     public String currentStringValue() {
         return stringValue;
     }
-    public double currentNumericValue() {
+
+    public Number currentNumericValue() {
         return numericValue;
     }
 
@@ -467,7 +474,10 @@ public class CssTokenizer {
             }
         }
 
-        return (currentToken == TT_COMMENT) ? nextToken() : currentToken;
+        return (skipComments//
+                && (currentToken == TT_COMMENT//
+                || currentToken == TT_BAD_COMMENT)) //
+                        ? nextToken() : currentToken;
     }
 
     /**
@@ -535,20 +545,25 @@ public class CssTokenizer {
      * @return true on success
      */
     private boolean numMacro(int ch, StringBuilder buf) throws IOException {
+        boolean hasSign = false;
         if (ch == '-') {
+            hasSign = true;
             buf.append('-');
             ch = in.nextChar();
         } else if (ch == '+') {
+            hasSign = true;
             ch = in.nextChar();
         }
 
         boolean hasDecimals = false;
+        boolean hasFractionalsOrExponent = false;
         while ('0' <= ch && ch <= '9') {
             hasDecimals = true;
             buf.append((char) ch);
             ch = in.nextChar();
         }
         if (ch == '.') {
+            hasFractionalsOrExponent = true;
             int next = in.nextChar();
             if (!('0' <= next && next <= '9')) {
                 in.pushBack(next);
@@ -566,7 +581,8 @@ public class CssTokenizer {
             }
         }
 
-        if (ch == 'e' || ch == 'E') {
+        if ((hasDecimals || hasFractionalsOrExponent) && (ch == 'e' || ch == 'E')) {
+            hasFractionalsOrExponent = true;
             buf.append('E');
             ch = in.nextChar();
 
@@ -587,6 +603,25 @@ public class CssTokenizer {
                 return false;
             }
         }
+
+        if (!hasDecimals && !hasFractionalsOrExponent) {
+            if (hasSign) {
+                in.pushBack(ch);
+                buf.setLength(buf.length()-1);
+            }
+            return false;
+        }
+
+        try {
+            if (hasFractionalsOrExponent) {
+                numericValue = Double.parseDouble(buf.toString());
+            } else {
+                numericValue = Integer.parseInt(buf.toString());
+            }
+        } catch (NumberFormatException e) {
+            throw new InternalError("Tokenizer is broken.", e);
+        }
+
         in.pushBack(ch);
         return true;
     }
@@ -666,13 +701,13 @@ public class CssTokenizer {
         if (unicodeScalar == -1) {
             return false;
         }
-        int consumed = 1;
-        for (int digit = hexToInt(ch = in.nextChar()); digit != -1 && consumed <= 6; digit = hexToInt(ch = in.nextChar())) {
+        int count = 1;
+        for (int digit = hexToInt(ch = in.nextChar()); digit != -1 && count < 6; digit = hexToInt(ch = in.nextChar())) {
             unicodeScalar = (unicodeScalar << 4) | digit;
-            consumed++;
+            count++;
         }
 
-        if (consumed < 6) { // => could be followed by whitespace
+        if (count < 6) { // => could be followed by whitespace
             switch (ch) {
                 case ' ':
                 case '\t':
@@ -706,6 +741,8 @@ public class CssTokenizer {
             int low = 0b110111_0000000000 | (wxy & 0b11_11111111);
             buf.append((char) high);
             buf.append((char) low);
+        }else{
+            buf.append((char) ch);
         }
         return true;
     }

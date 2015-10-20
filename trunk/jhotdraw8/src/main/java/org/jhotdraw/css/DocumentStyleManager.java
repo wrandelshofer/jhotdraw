@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jhotdraw.css.ast.Declaration;
-import org.jhotdraw.css.ast.Ruleset;
+import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -41,7 +41,7 @@ public class DocumentStyleManager extends AbstractStyleManager {
 
         // user agent stylesheet can not override element attributes
         for (Stylesheet s : userAgentStylesheets) {
-            for (Ruleset r : s.getRulesets()) {
+            for (StyleRule r : s.getRulesets()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
                         if (!elem.hasAttribute(d.getProperty())) {
@@ -54,7 +54,7 @@ public class DocumentStyleManager extends AbstractStyleManager {
 
         // author stylesheet override user agent stylesheet and element attributes
         for (Stylesheet s : authorStylesheets) {
-            for (Ruleset r : s.getRulesets()) {
+            for (StyleRule r : s.getRulesets()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
                         applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
@@ -66,7 +66,7 @@ public class DocumentStyleManager extends AbstractStyleManager {
         // inline styles can override all other values
         if (elem.hasAttribute("style")) {
             try {
-                for (Declaration d : parser.parseDeclarations(elem.getAttribute("style"))) {
+                for (Declaration d : parser.parseDeclarationList(elem.getAttribute("style"))) {
                     applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                 }
             } catch (IOException ex) {

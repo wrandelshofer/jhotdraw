@@ -41,7 +41,9 @@ public class RectangleFigureNGTest {
         List<CssMetaData<? extends Styleable,?>> list=instance.getCssMetaData();
         for (CssMetaData<? extends Styleable,?> meta:list) {
             if (meta.getProperty().equals(cssProperty)) {
+                @SuppressWarnings("unchecked")
                 CssMetaData<Figure,Paint> fm=(CssMetaData<Figure,Paint>)meta;
+                @SuppressWarnings("unchecked")
                 StyleConverter<Object,Paint> converter=(StyleConverter<Object,Paint>)fm.getConverter();
                 SimpleParsedValue<Object,Paint> parsedValue=new SimpleParsedValue<Object,Paint>(expectedOutputValue,converter);
                 Paint convertedCssValue=converter.convert(parsedValue, null);
