@@ -6,6 +6,7 @@
 package org.jhotdraw.css.ast;
 
 import org.jhotdraw.css.CssTokenizer;
+import org.jhotdraw.text.XMLDoubleConverter;
 
 /**
  * Term.
@@ -17,9 +18,12 @@ public class Term extends AST {
     /** The string value. */
     private final String stringValue;
     /** The numeric value. */
-    private final double numericValue;
+    private final Number numericValue;
+    
+    
+    private final static XMLDoubleConverter DOUBLE_CONVERTER = new XMLDoubleConverter();
 
-    public Term(int ttype, String stringValue, double numericValue) {
+    public Term(int ttype, String stringValue, Number numericValue) {
         this.ttype = ttype;
         this.stringValue = stringValue;
         this.numericValue = numericValue;
@@ -31,115 +35,102 @@ public class Term extends AST {
             return stringValue;
         }
         switch (ttype) {
-    case CssTokenizer.TT_IDENT : return fromIDENT(stringValue) ;
-    case CssTokenizer.TT_AT_KEYWORD : return "@"+fromIDENT(stringValue) ;
-    case CssTokenizer.TT_STRING : return fromSTRING(stringValue) ;
+    case CssTokenizer.TT_IDENT : return fromIDENT() ;
+    case CssTokenizer.TT_AT_KEYWORD : return "@"+fromIDENT() ;
+    case CssTokenizer.TT_STRING : return fromSTRING() ;
     //case CssTokenizer.TT_BAD_STRING : return fromBAD_STRING(stringValue) ;
     //case CssTokenizer.TT_BAD_URI : return fromBAD_URI(stringValue) ;
     //case CssTokenizer.TT_BAD_COMMENT : return fromBAD_COMMENT(stringValue) ;
-    case CssTokenizer.TT_HASH : return "#"+fromIDENT(stringValue) ;
-    case CssTokenizer.TT_NUMBER : return fromNUMBER(numericValue) ;
-    case CssTokenizer.TT_PERCENTAGE : return fromNUMBER(numericValue)+"%" ;
-    case CssTokenizer.TT_DIMENSION : return fromNUMBER(numericValue)+fromIDENT(stringValue) ;
-    case CssTokenizer.TT_URI : return fromURI(stringValue) ;
-    case CssTokenizer.TT_UNICODE_RANGE : return fromUNICODE_RANGE(stringValue) ;
-    case CssTokenizer.TT_CDO : return fromCDO(stringValue) ;
-    case CssTokenizer.TT_CDC : return fromCDC(stringValue) ;
-    case CssTokenizer.TT_S : return fromS(stringValue) ;
-    //case CssTokenizer.TT_COMMENT : return fromCOMMENT(stringValue) ;
-    case CssTokenizer.TT_FUNCTION : return fromFUNCTION(stringValue) ;
-    case CssTokenizer.TT_INCLUDE_MATCH : return fromINCLUDE_MATCH(stringValue) ;
-    case CssTokenizer.TT_DASH_MATCH : return fromDASH_MATCH(stringValue) ;
-    case CssTokenizer.TT_PREFIX_MATCH : return fromPREFIX_MATCH(stringValue) ;
-    case CssTokenizer.TT_SUFFIX_MATCH : return fromSUFFIX_MATCH(stringValue) ;
-    case CssTokenizer.TT_SUBSTRING_MATCH : return fromSUBSTRING_MATCH(stringValue) ;
-    case CssTokenizer.TT_COLUMN : return fromCOLUMN(stringValue) ;
+    case CssTokenizer.TT_HASH : return "#"+fromIDENT() ;
+    case CssTokenizer.TT_NUMBER : return fromNUMBER() ;
+    case CssTokenizer.TT_PERCENTAGE : return fromNUMBER()+"%" ;
+    case CssTokenizer.TT_DIMENSION : return fromNUMBER()+fromIDENT() ;
+    case CssTokenizer.TT_URI : return fromURI() ;
+    case CssTokenizer.TT_UNICODE_RANGE : return fromUNICODE_RANGE() ;
+    //case CssTokenizer.TT_CDO : return fromCDO() ;
+    //case CssTokenizer.TT_CDC : return fromCDC() ;
+    case CssTokenizer.TT_S : return fromS() ;
+    //case CssTokenizer.TT_COMMENT : return fromCOMMENT() ;
+    case CssTokenizer.TT_FUNCTION : return fromIDENT()+"(" ;
+    case CssTokenizer.TT_INCLUDE_MATCH : return fromINCLUDE_MATCH() ;
+    case CssTokenizer.TT_DASH_MATCH : return fromDASH_MATCH() ;
+    case CssTokenizer.TT_PREFIX_MATCH : return fromPREFIX_MATCH() ;
+    case CssTokenizer.TT_SUFFIX_MATCH : return fromSUFFIX_MATCH() ;
+    case CssTokenizer.TT_SUBSTRING_MATCH : return fromSUBSTRING_MATCH() ;
+    case CssTokenizer.TT_COLUMN : return fromCOLUMN() ;
 
         }
         throw new InternalError("Unsupported TTYPE:"+ttype);
     }
 
-    private String fromIDENT(String stringValue) {
+    private String fromIDENT() {
        return stringValue;
     }
 
-    private String fromSTRING(String stringValue) {
+    private String fromSTRING() {
+        // FIXME implement proper escaping
+        if (stringValue.contains("'")) {
+         return '"'+stringValue+'"';   
+        }else{
+       return '\''+stringValue+'\'';
+        }
+    }
+
+
+    private String fromNUMBER() {
+        if (numericValue instanceof Double) {
+       return DOUBLE_CONVERTER.toString((Double)numericValue);
+        }else{
+            return numericValue.toString();
+        }
+    }
+
+    private String fromPERCENTAGE() {
        return stringValue;
     }
 
-    private String fromBAD_STRING(String stringValue) {
+    private String fromDIMENSION() {
        return stringValue;
     }
 
-    private String fromBAD_URI(String stringValue) {
+    private String fromURI() {
+        // FIXME escape string value if necessary
        return stringValue;
     }
 
-    private String fromBAD_COMMENT(String stringValue) {
+    private String fromUNICODE_RANGE() {
        return stringValue;
     }
 
-    private String fromNUMBER(double doubleValue) {
-       return Double.toString(doubleValue);
+    private String fromS() {
+       return " ";
     }
 
-    private String fromPERCENTAGE(String stringValue) {
+    private String fromCOMMENT() {
        return stringValue;
     }
 
-    private String fromDIMENSION(String stringValue) {
+    private String fromINCLUDE_MATCH() {
        return stringValue;
     }
 
-    private String fromURI(String stringValue) {
+    private String fromDASH_MATCH() {
        return stringValue;
     }
 
-    private String fromUNICODE_RANGE(String stringValue) {
+    private String fromPREFIX_MATCH() {
        return stringValue;
     }
 
-    private String fromCDO(String stringValue) {
+    private String fromSUFFIX_MATCH() {
        return stringValue;
     }
 
-    private String fromCDC(String stringValue) {
+    private String fromSUBSTRING_MATCH() {
        return stringValue;
     }
 
-    private String fromS(String stringValue) {
-       return stringValue;
-    }
-
-    private String fromCOMMENT(String stringValue) {
-       return stringValue;
-    }
-
-    private String fromFUNCTION(String stringValue) {
-       return stringValue;
-    }
-
-    private String fromINCLUDE_MATCH(String stringValue) {
-       return stringValue;
-    }
-
-    private String fromDASH_MATCH(String stringValue) {
-       return stringValue;
-    }
-
-    private String fromPREFIX_MATCH(String stringValue) {
-       return stringValue;
-    }
-
-    private String fromSUFFIX_MATCH(String stringValue) {
-       return stringValue;
-    }
-
-    private String fromSUBSTRING_MATCH(String stringValue) {
-       return stringValue;
-    }
-
-    private String fromCOLUMN(String stringValue) {
+    private String fromCOLUMN() {
        return stringValue;
     }    
 }

@@ -5,31 +5,13 @@
  */
 package org.jhotdraw.css.ast;
 
-import org.jhotdraw.css.SelectorModel;
-
 /**
- * A "class selector" matches an element based on the value of its "pseudo
- * class" attribute.
+ * A "pseudo class selector" matches an element based on criteria which are
+ * not directly encoded in the element.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class PseudoClassSelector extends SimpleSelector {
+public abstract class PseudoClassSelector extends SimpleSelector {
 
-    private final String pseudoClass;
-
-    public PseudoClassSelector(String pseudoClass) {
-        this.pseudoClass = pseudoClass;
-    }
-
-    @Override
-    public String toString() {
-        return "PseudoClass:" + pseudoClass;
-    }
-
-    @Override
-    public <T> T match(SelectorModel<T> model, T element) {
-        return (element != null && model.hasPseudoClass(element, pseudoClass)) //
-                ? element : null;
-    }
 }

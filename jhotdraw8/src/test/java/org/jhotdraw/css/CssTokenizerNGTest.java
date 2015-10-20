@@ -24,7 +24,7 @@ public class CssTokenizerNGTest {
      */
     @Test(dataProvider = "tokenizerData")
     public void testTokenizer(String inputData, String expectedValue) throws Exception {
-        CssTokenizer s = new CssTokenizer(new StringReader(inputData));
+        CssTokenizer s = new CssTokenizer(new StringReader(inputData),false);
         //
         StringBuilder buf = new StringBuilder();
         while (s.nextToken() != CssTokenizer.TT_EOF) {
