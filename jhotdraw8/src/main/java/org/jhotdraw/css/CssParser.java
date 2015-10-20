@@ -35,6 +35,7 @@ import org.jhotdraw.css.ast.SimpleSelector;
 import org.jhotdraw.css.ast.Stylesheet;
 import org.jhotdraw.css.ast.SubstringMatchSelector;
 import org.jhotdraw.css.ast.SuffixMatchSelector;
+import org.jhotdraw.css.ast.Term;
 import org.jhotdraw.css.ast.TypeSelector;
 import org.jhotdraw.css.ast.UniversalSelector;
 
@@ -387,24 +388,18 @@ public class CssParser {
             throw new ParseException("Declaration: ':' expected instead of \""+tt.currentStringValue()+"\". Line "+tt.getLineNumber()+".",tt.getPosition());
         }
 
-        List<String> terms = parseTerms(tt);
+        List<Term> terms = parseTerms(tt);
 
         return new Declaration(property, terms);
 
     }
 
-    private List<String> parseTerms(CssTokenizer tt) throws IOException, ParseException {
+    private List<Term> parseTerms(CssTokenizer tt) throws IOException, ParseException {
         // FIXME we do not properly parse the terms yet
-        List<String> terms = new ArrayList<>();
+        List<Term> terms = new ArrayList<>();
         skipWhitespace(tt);
         while (tt.nextToken() != CssTokenizer.TT_EOF && tt.currentToken() != '}' && tt.currentToken() != ';') {
-            switch (tt.currentToken()) {
-                case CssTokenizer.TT_S:
-                    break;
-                default:
-                        terms.add(tt.currentStringValue());
-                    break;
-            }
+            terms.add(new Term(tt.currentToken(),tt.currentStringValue(),tt.currentNumericValue()));
         }
         tt.pushBack();
         return terms;

@@ -19,41 +19,30 @@ import java.util.List;
 public class Declaration extends AST {
 
     private final String property;
-    private final List<String> terms;
+    private final List<Term> terms;
 
-    public Declaration(String property, String term) {
+    public Declaration(String property, Term term) {
         this.property = property;
-        this.terms = Arrays.asList(new String[]{term});
+        this.terms = Arrays.asList(new Term[]{term});
     }
-    public Declaration(String property, List<String> terms) {
+    public Declaration(String property, List<Term> terms) {
         this.property = property;
-        this.terms = Collections.unmodifiableList(new ArrayList<String>(terms));
+        this.terms = Collections.unmodifiableList(new ArrayList<Term>(terms));
     }
 
     public String getProperty() {
         return property;
     }
 
-    public List<String> getTerms() {
+    public List<Term> getTerms() {
         return terms;
     }
 
     public String getTermsAsString() {
         StringBuilder buf = new StringBuilder();
 
-        for (String t : terms) {
-            if (buf.length() > 0) {
-                buf.append(' ');
-            }
-            if (t.isEmpty()) {
-                buf.append("''");
-            } else if (t.matches(".*\\s.*")) {// FIXME implement escaping
-                buf.append('\'');
-                buf.append(t);
-                buf.append('\'');
-            }else{
-                buf.append(t);
-            }
+        for (Term t : terms) {
+            buf.append(t.toString());
         }
         return buf.toString();
     }

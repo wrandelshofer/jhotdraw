@@ -143,7 +143,8 @@ public class CssTokenizer {
 
     private int currentToken;
 
-    private String value;
+    private String stringValue;
+    private double numericValue;
     private int lineNumber;
     private int position;
 
@@ -156,7 +157,10 @@ public class CssTokenizer {
     }
 
     public String currentStringValue() {
-        return value;
+        return stringValue;
+    }
+    public double currentNumericValue() {
+        return numericValue;
     }
 
     public int nextToken() throws IOException {
@@ -169,7 +173,7 @@ public class CssTokenizer {
         position = (int) in.getPosition();
 
         int ch = in.nextChar();
-        value = null;
+        stringValue = null;
         switch (ch) {
             case -1:  // EOF
                 currentToken = TT_EOF;
@@ -184,18 +188,18 @@ public class CssTokenizer {
                 }
                 in.pushBack(ch);
                 currentToken = TT_S;
-                value = buf.toString();
+                stringValue = buf.toString();
                 break;
             }
             case '~': {
                 int next = in.nextChar();
                 if (next == '=') {
                     currentToken = TT_INCLUDE_MATCH;
-                    value = "~=";
+                    stringValue = "~=";
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = String.valueOf((char) ch);
+                    stringValue = String.valueOf((char) ch);
                 }
                 break;
             }
@@ -203,14 +207,14 @@ public class CssTokenizer {
                 int next = in.nextChar();
                 if (next == '=') {
                     currentToken = TT_DASH_MATCH;
-                    value = "|=";
+                    stringValue = "|=";
                 } else if (next == '|') {
                     currentToken = TT_COLUMN;
-                    value = "||";
+                    stringValue = "||";
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -218,11 +222,11 @@ public class CssTokenizer {
                 int next = in.nextChar();
                 if (next == '=') {
                     currentToken = TT_PREFIX_MATCH;
-                    value = "^=";
+                    stringValue = "^=";
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -230,11 +234,11 @@ public class CssTokenizer {
                 int next = in.nextChar();
                 if (next == '=') {
                     currentToken = TT_SUFFIX_MATCH;
-                    value = "$=";
+                    stringValue = "$=";
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -242,11 +246,11 @@ public class CssTokenizer {
                 int next = in.nextChar();
                 if (next == '=') {
                     currentToken = TT_SUBSTRING_MATCH;
-                    value = "*=";
+                    stringValue = "*=";
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = String.valueOf((char) ch);
+                    stringValue = String.valueOf((char) ch);
                 }
                 break;
             }
@@ -254,11 +258,11 @@ public class CssTokenizer {
                 StringBuilder buf = new StringBuilder();
                 if (identMacro(ch = in.nextChar(), buf)) {
                     currentToken = TT_AT_KEYWORD;
-                    value = buf.toString();
+                    stringValue = buf.toString();
                 } else {
                     in.pushBack(ch);
                     currentToken = '@';
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -266,11 +270,11 @@ public class CssTokenizer {
                 StringBuilder buf = new StringBuilder();
                 if (nameMacro(ch = in.nextChar(), buf)) {
                     currentToken = TT_HASH;
-                    value = buf.toString();
+                    stringValue = buf.toString();
                 } else {
                     in.pushBack(ch);
                     currentToken = '#';
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -279,10 +283,10 @@ public class CssTokenizer {
                 StringBuilder buf = new StringBuilder();
                 if (stringMacro(ch, buf)) {
                     currentToken = TT_STRING;
-                    value = buf.toString();
+                    stringValue = buf.toString();
                 } else {
                     currentToken = TT_BAD_STRING;
-                    value = buf.toString();
+                    stringValue = buf.toString();
                 }
                 break;
 
@@ -309,10 +313,10 @@ public class CssTokenizer {
                         in.pushBack(ch);
                         currentToken = TT_NUMBER;
                     }
-                    value = buf.toString();
+                    stringValue = buf.toString();
                 } else {
                     currentToken = ch;
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
 
@@ -326,11 +330,11 @@ public class CssTokenizer {
                     } else {
                         currentToken = TT_BAD_COMMENT;
                     }
-                    value = buf.toString();
+                    stringValue = buf.toString();
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
 
@@ -340,13 +344,13 @@ public class CssTokenizer {
                 if (next1 == '-') {
                     int next2 = in.nextChar();
                     if (next2 == '>') {
-                        value = "-->";
+                        stringValue = "-->";
                         currentToken = TT_CDC;
                     } else {
                         in.pushBack(next2);
                         in.pushBack(next1);
                         currentToken = ch;
-                        value = String.valueOf((char) currentToken);
+                        stringValue = String.valueOf((char) currentToken);
                     }
                 } else {
                     StringBuilder buf = new StringBuilder();
@@ -360,7 +364,7 @@ public class CssTokenizer {
                             in.pushBack(ch);
                             currentToken = TT_NUMBER;
                         }
-                        value = buf.toString();
+                        stringValue = buf.toString();
                     } else {
                         in.pushBack(next1);
                         if (identMacro(ch, buf)) {
@@ -371,10 +375,10 @@ public class CssTokenizer {
                                 in.pushBack(next1);
                                 currentToken = TT_IDENT;
                             }
-                            value = buf.toString();
+                            stringValue = buf.toString();
                         } else {
                             currentToken = ch;
-                            value = String.valueOf((char) currentToken);
+                            stringValue = String.valueOf((char) currentToken);
                         }
                     }
                 }
@@ -387,27 +391,27 @@ public class CssTokenizer {
                     if (next2 == '-') {
                         int next3 = in.nextChar();
                         if (next3 == '-') {
-                            value = "<!--";
+                            stringValue = "<!--";
                             currentToken = TT_CDO;
                         } else {
                             in.pushBack(next3);
                             in.pushBack(next2);
                             in.pushBack(next1);
                             currentToken = ch;
-                            value = String.valueOf((char) currentToken);
+                            stringValue = String.valueOf((char) currentToken);
                         }
                     } else {
                         in.pushBack(next2);
                         in.pushBack(next1);
                         StringBuilder buf = new StringBuilder();
                         currentToken = ch;
-                        value = String.valueOf((char) currentToken);
+                        stringValue = String.valueOf((char) currentToken);
                     }
                 } else {
                     in.pushBack(next1);
                     StringBuilder buf = new StringBuilder();
                     currentToken = ch;
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -419,26 +423,26 @@ public class CssTokenizer {
                 if (identMacro(ch, buf)) {
                     int next1 = in.nextChar();
                     if (next1 == '(') {
-                        value = buf.toString();
-                        if (value.equalsIgnoreCase("url")) {
+                        stringValue = buf.toString();
+                        if (stringValue.equalsIgnoreCase("url")) {
                             buf.setLength(0);
                             if (uriMacro(buf)) {
                                 currentToken = TT_URI;
                             } else {
                                 currentToken = TT_BAD_URI;
                             }
-                            value = buf.toString();
+                            stringValue = buf.toString();
                         } else {
                             currentToken = TT_FUNCTION;
                         }
                     } else {
                         in.pushBack(next1);
                         currentToken = TT_IDENT;
-                        value = buf.toString();
+                        stringValue = buf.toString();
                     }
                 } else {
                     currentToken = ch;
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
             }
@@ -448,16 +452,16 @@ public class CssTokenizer {
                 if (identMacro(ch, buf)) {
                     int next1 = in.nextChar();
                     if (next1 == '(') {
-                        value = buf.toString();
+                        stringValue = buf.toString();
                         currentToken = TT_FUNCTION;
                     } else {
                         in.pushBack(next1);
                         currentToken = TT_IDENT;
-                        value = buf.toString();
+                        stringValue = buf.toString();
                     }
                 } else {
                     currentToken = ch;
-                    value = String.valueOf((char) currentToken);
+                    stringValue = String.valueOf((char) currentToken);
                 }
                 break;
             }

@@ -37,7 +37,7 @@ public class CssTokenizerNGTest {
                 buf.append((char) s.currentToken());
             }
             buf.append(':');
-            buf.append(s.currentValue());
+            buf.append(s.currentStringValue());
         }
         String actualValue = buf.toString();
         actualValue=actualValue.replaceAll("\\n", "\\\\n");

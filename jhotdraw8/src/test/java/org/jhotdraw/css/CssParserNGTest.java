@@ -4,10 +4,10 @@
  */
 package org.jhotdraw.css;
 
-import org.jhotdraw.css.CssParserOld;
 import org.jhotdraw.css.DocumentSelectorModel;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.ParseException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -38,14 +38,22 @@ public class CssParserNGTest {
     }
 
     /**
-     * Test of parseStylesheet method, of class CssParserOld.
+     * Test of parseStylesheet method, of class CssParser.
      */
     @Test(dataProvider = "stylesheetData")
     public void testParseStylesheet(String stylesheet, String before, String expectedValue) throws Exception {
         System.out.println(stylesheet);
         //---
-        CssParserOld p = new CssParserOld();
+        CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet);
+        // 
+        System.out.println("AST: "+ast);
+        if (!p.getParseExceptions().isEmpty()){
+        System.out.println("Errors: ");
+        for (ParseException e:p.getParseExceptions()) {
+            System.out.println("\033[31m "+e.getMessage()+" @ "+e.getErrorOffset()+"\033[0m");
+        }
+        }
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
@@ -61,7 +69,7 @@ public class CssParserNGTest {
                 if (sg.matches(dsd, elem)) {
                     System.out.println("  match "+sg.toString()+" "+elem);
                     for (Declaration d : r.getDeclarations()) {
-                        elem.setAttribute(d.getProperty(), d.getTerms());
+                        elem.setAttribute(d.getProperty(), d.getTermsAsString());
                     }
                 }else{
                     System.out.println(" !match "+sg.toString()+" "+elem);
@@ -78,6 +86,12 @@ public class CssParserNGTest {
         String actualValue = w.toString();
         actualValue = actualValue.substring(XML_PREFIX.length());
 
+        if (!actualValue.equals(expectedValue)) {
+        System.out.println(" actual  : \033[31m"+actualValue+"\033[0m");
+        }else{
+        System.out.println(" actual  : "+actualValue);
+        }
+        System.out.println(" expected: "+expectedValue);
         //---
         assertEquals(actualValue, expectedValue);
     }
@@ -97,6 +111,12 @@ public class CssParserNGTest {
             {"box {image:http://imageserver.com/myimage.png blue green}", "<xml/>", "<xml/>"},
             {"box {image:http://imageserver.com/myimage.png}", "<xml/>", "<xml/>"},
             {"box {fill:rgb(12,15,16)}", "<xml/>", "<xml/>"},
+            {"box {image:http://pics.com/myimage.png blue green}", "<xml><box/></xml>", "<xml><box image=\"http://pics.com/myimage.png blue green\"/></xml>"},
+            {"box {image:http://pics.com/myimage.png}", "<xml><box/></xml>", "<xml><box image=\"http://pics.com/myimage.png\"/></xml>"},
+            {"box {fill:rgb(12,15,16)}", "<xml><box/></xml>", "<xml><box fill=\"rgb(12,15,16)\"/></xml>"},
+            {"box {image:url('http://pics.com/myimage.png') blue green}", "<xml><box/></xml>", "<xml><box image=\"http://pics.com/myimage.png blue green\"/></xml>"},
+            {"box {image:url(http://pics.com/myimage.png)}", "<xml><box/></xml>", "<xml><box image=\"http://pics.com/myimage.png\"/></xml>"},
+            {"box {image:url(http://bad com/myimage.png)}", "<xml><box/></xml>", "<xml><box image=\"http://bad com/myimage.png\"/></xml>"},
             {"* {;;;}", "<xml/>", "<xml/>"},
             {"* {k1:k1v1}", "<xml/>", "<xml k1=\"k1v1\"/>"},
             {"* {k1:k1v1;k2:k2v1}", "<xml/>", "<xml k1=\"k1v1\" k2=\"k2v1\"/>"},
@@ -127,7 +147,7 @@ public class CssParserNGTest {
             {"", "<xml/>", "<xml/>"},};
 
     }
-
+/*
     public static void main(String... args) throws Exception {
         CssParserNGTest test = new CssParserNGTest();
         Object[][] data = test.stylesheetData();
@@ -138,6 +158,6 @@ public class CssParserNGTest {
             test.testParseStylesheet(stylesheet, before, expectedValue);
         }
 
-    }
+    }*/
 
 }
