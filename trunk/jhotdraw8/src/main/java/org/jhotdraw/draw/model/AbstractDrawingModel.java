@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -31,6 +32,13 @@ public abstract class AbstractDrawingModel implements DrawingModel {
      * This is the set of figures which are out of sync with their layout.
      */
     private final HashSet<Figure> dirtyLayouts = new HashSet<>();
+    /**
+     * This is a list of figures which are out of sync with their layout. This
+     * list contains the same figures as {@code dirtyLayouts}, but the figures
+     * are ordered in the sequence that the layout needs to be performed.
+     * This list is required to handle transitive layout dependencies.
+     */
+    private final ArrayList<Figure> dirtyLayoutList = new ArrayList<>();
     private boolean isValidating = false;
     protected Drawing root;
 
@@ -79,7 +87,9 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             break;
         case FIGURE_REMOVED_FROM_DRAWING:
             invokeRemoveNotify(event.getFigure(), event.getDrawing());
-            dirtyLayouts.remove(event.getFigure());
+            if (dirtyLayouts.remove(event.getFigure())) {
+                dirtyLayoutList.remove(event.getFigure());
+            }
             dirtyStyles.remove(event.getFigure());
             break;
         case CONNECTION_CHANGED:
@@ -90,7 +100,9 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             break;
 
         case FIGURE_REMOVED_FROM_PARENT:
-            dirtyLayouts.remove(event.getFigure());
+            if (dirtyLayouts.remove(event.getFigure())) {
+                dirtyLayoutList.remove(event.getFigure());
+            }
             dirtyStyles.remove(event.getFigure());
             break;
         case NODE_INVALIDATED:
@@ -114,7 +126,9 @@ public abstract class AbstractDrawingModel implements DrawingModel {
     }
 
     protected void invalidateLayout(Figure figure) {
-        dirtyLayouts.add(figure);
+        if (dirtyLayouts.add(figure)) {
+            dirtyLayoutList.add(figure);
+        }
     }
 
     protected void invalidateStyle(Figure figure) {
@@ -134,8 +148,9 @@ public abstract class AbstractDrawingModel implements DrawingModel {
         }
         if (!dirtyLayouts.isEmpty()) {
             isValidating = true;
-            LinkedList<Figure> fs = new LinkedList<>(dirtyLayouts);
+            ArrayList<Figure> fs = new ArrayList<>(dirtyLayoutList);
             dirtyLayouts.clear();
+            dirtyLayoutList.clear();
             for (Figure f : fs) {
                 invokeLayoutNotify(f);
             }
@@ -234,6 +249,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             figure.transformNotify();
         }
     }
+
     public void invokeLayoutNotify(Figure figure) {
         figure.layoutNotify();
         fire(DrawingModelEvent.transformChanged(this, figure));
