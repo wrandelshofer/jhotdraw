@@ -4,9 +4,7 @@
  */
 package org.jhotdraw.draw.model;
 
-import java.util.HashSet;
 import java.util.Set;
-import org.jhotdraw.draw.model.DrawingModelEvent;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.key.DirtyBits;
