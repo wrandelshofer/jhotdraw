@@ -87,8 +87,8 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
         if (styleManager == null) {
             styleManager = new StyleableStyleManager();
             try {
-                styleManager.updateStylesheets(StyleOrigin.USER_AGENT, get(USER_AGENT_STYLESHEETS));
-                styleManager.updateStylesheets(StyleOrigin.AUTHOR, get(AUTHOR_STYLESHEETS));
+                styleManager.updateStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME),get(USER_AGENT_STYLESHEETS));
+                styleManager.updateStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME),get(AUTHOR_STYLESHEETS));
             } catch (IOException ex) {
                 System.err.println("Warning could not load user agent stylesheets.");
                 ex.printStackTrace();
@@ -101,8 +101,8 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
     public void stylesheetNotify() {
         if (styleManager != null) {
             try {
-                styleManager.updateStylesheets(StyleOrigin.USER_AGENT, get(USER_AGENT_STYLESHEETS));
-                styleManager.updateStylesheets(StyleOrigin.AUTHOR, get(AUTHOR_STYLESHEETS));
+                styleManager.updateStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME),get(USER_AGENT_STYLESHEETS));
+                styleManager.updateStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME),get(AUTHOR_STYLESHEETS));
             } catch (IOException ex) {
                 System.err.println("Warning could not load user agent stylesheets.");
                 ex.printStackTrace();

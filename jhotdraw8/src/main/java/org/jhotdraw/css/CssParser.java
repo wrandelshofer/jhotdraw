@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URI;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -144,6 +145,9 @@ public class CssParser {
         try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream()))) {
             return parseStylesheet(in);
         }
+    }
+    public Stylesheet parseStylesheet(URI css) throws IOException {
+        return parseStylesheet(css.toURL());
     }
 
     public Stylesheet parseStylesheet(String css) throws IOException {
@@ -287,6 +291,12 @@ public class CssParser {
         if (tt.nextToken() != '(') {
             throw new ParseException("RoundBlock: '(' expected in line " + tt.getLineNumber() + ".", tt.getPosition());
         }
+        while (tt.nextToken() != CssTokenizer.TT_EOF
+                && tt.currentToken() != ')') {
+            tt.pushBack();
+            // FIXME do something with component value
+            parseComponentValue(tt);
+        }
         if (tt.nextToken() != ')') {
             throw new ParseException("RoundBlock: ')' expected in line " + tt.getLineNumber() + ".", tt.getPosition());
         }
@@ -296,6 +306,12 @@ public class CssParser {
     private Object parseSquareBlock(CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextToken() != '[') {
             throw new ParseException("SquareBlock: '[' expected in line " + tt.getLineNumber() + ".", tt.getPosition());
+        }
+        while (tt.nextToken() != CssTokenizer.TT_EOF
+                && tt.currentToken() != ']') {
+            tt.pushBack();
+            // FIXME do something with component value
+            parseComponentValue(tt);
         }
         if (tt.nextToken() != ']') {
             throw new ParseException("SquareBlock: ']' expected in line " + tt.getLineNumber() + ".", tt.getPosition());
@@ -338,8 +354,9 @@ public class CssParser {
 
     private StyleRule parseStyleRule(CssTokenizer tt) throws IOException, ParseException {
         SelectorGroup selectorGroup;
+        tt.nextToken();
         skipWhitespace(tt);
-        if (tt.nextToken() == '{') {
+        if (tt.currentToken() == '{') {
             tt.pushBack();
             selectorGroup = new SelectorGroup(new UniversalSelector());
         } else {
@@ -482,31 +499,31 @@ public class CssParser {
                 selector = new EqualsMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizer.TT_INCLUDE_MATCH:
-                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != '\'' && tt.currentToken() != '"') {
+                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != CssTokenizer.TT_STRING) {
                     throw new ParseException("AttributeSelector: identifier or string expected.", tt.getLineNumber());
                 }
                 selector = new IncludeMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizer.TT_DASH_MATCH:
-                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != '\'' && tt.currentToken() != '"') {
+                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != CssTokenizer.TT_STRING) {
                     throw new ParseException("AttributeSelector: identifier or string expected. Line " + tt.getLineNumber() + ".", tt.getPosition());
                 }
                 selector = new DashMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizer.TT_PREFIX_MATCH:
-                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != '\'' && tt.currentToken() != '"') {
+                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != CssTokenizer.TT_STRING) {
                     throw new ParseException("AttributeSelector: identifier or string expected. Line " + tt.getLineNumber() + ".", tt.getPosition());
                 }
                 selector = new PrefixMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizer.TT_SUFFIX_MATCH:
-                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != '\'' && tt.currentToken() != '"') {
+                if (tt.nextToken() != CssTokenizer.TT_IDENT&& tt.currentToken() != CssTokenizer.TT_STRING) {
                     throw new ParseException("AttributeSelector: identifier or string expected. Line " + tt.getLineNumber() + ".", tt.getPosition());
                 }
                 selector = new SuffixMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizer.TT_SUBSTRING_MATCH:
-                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != '\'' && tt.currentToken() != '"') {
+                if (tt.nextToken() != CssTokenizer.TT_IDENT && tt.currentToken() != CssTokenizer.TT_STRING) {
                     throw new ParseException("AttributeSelector: identifier or string expected. Line " + tt.getLineNumber() + ".", tt.getPosition());
                 }
                 selector = new SubstringMatchSelector(attributeName, tt.currentStringValue());

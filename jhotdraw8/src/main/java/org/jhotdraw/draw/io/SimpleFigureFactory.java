@@ -7,10 +7,12 @@ package org.jhotdraw.draw.io;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -19,6 +21,9 @@ import java.util.logging.Logger;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 /**
  * SimpleFigureFactory.
@@ -30,15 +35,17 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
 
     private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> attrToKey = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToAttr = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> elemToKey = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToElem = new HashMap<>();
     private final Map<String, Supplier<Figure>> nameToFigure = new HashMap<>();
     private final Map<Class<? extends Figure>, String> figureToName = new HashMap<>();
     private final Map<String, Converter<?>> valueToXML = new HashMap<>();
     private final Map<String, Converter<?>> valueFromXML = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureKeys = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureAttributeKeys = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureNodeListKeys = new HashMap<>();
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
 
-  
     public SimpleFigureFactory() {
     }
 
@@ -48,23 +55,54 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param f the figure
      * @param keys the keys
      */
-    public void addFigureKeys(Class<? extends Figure> f, Collection<Key<?>> keys) {
-        if (figureKeys.containsKey(f)) {
-            figureKeys.get(f).addAll(keys);
-        } else {
-            figureKeys.put(f, new HashSet<>(keys));
-        }
-    }
-
-    public void addFigureKeysAndNames(String figureName, Class<? extends Figure> f, Collection<Key<?>> keys) {
-        addFigure(figureName,f);
-        addFigureKeys(f, keys);
+    public void addFigureAttributeKeys(Class<? extends Figure> f, Collection<Key<?>> keys) {
         for (Key<?> key : keys) {
             addKey(f, key.getName(), key);
         }
     }
+
+    /**
+     * Adds the provided keys to the figure.
+     *
+     * @param f the figure
+     * @param keys the keys
+     */
+    public void addNodeListKey(Class<? extends Figure> figure, String name, Key<?> key) {
+        if (figureNodeListKeys.containsKey(figure)) {
+            figureNodeListKeys.get(figure).add(key);
+        } else {
+            HashSet<Key<?>> hset = new HashSet<>();
+            hset.add(key);
+            figureNodeListKeys.put(figure, hset);
+        }
+
+        if (!elemToKey.containsKey(figure)) {
+            elemToKey.put(figure, new HashMap<>());
+        }
+        HashMap<String, Key<?>> strToKey = elemToKey.get(figure);
+        if (!strToKey.containsKey(name)) {
+            strToKey.put(name, key);
+        }
+
+        if (!keyToElem.containsKey(figure)) {
+            keyToElem.put(figure, new HashMap<>());
+        }
+        HashMap<Key<?>, String> keyToStr = keyToElem.get(figure);
+        if (!keyToStr.containsKey(key)) {
+            keyToStr.put(key, name);
+        }
+    }
+
+    public void addFigureKeysAndNames(String figureName, Class<? extends Figure> f, Collection<Key<?>> keys) {
+        addFigure(figureName, f);
+        addFigureAttributeKeys(f, keys);
+        for (Key<?> key : keys) {
+            addKey(f, key.getName(), key);
+        }
+    }
+
     public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<Key<?>> keys) {
-        addFigureKeys(f, keys);
+        addFigureAttributeKeys(f, keys);
         for (Key<?> key : keys) {
             addKey(f, key.getName(), key);
         }
@@ -80,6 +118,14 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param key The key
      */
     public void addKey(Class<? extends Figure> figure, String name, Key<?> key) {
+        if (figureAttributeKeys.containsKey(figure)) {
+            figureAttributeKeys.get(figure).add(key);
+        } else {
+            HashSet<Key<?>> hset = new HashSet<>();
+            hset.add(key);
+            figureAttributeKeys.put(figure, hset);
+        }
+
         if (!attrToKey.containsKey(figure)) {
             attrToKey.put(figure, new HashMap<>());
         }
@@ -220,11 +266,11 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
 
     @Override
     public String keyToName(Figure f, Key<?> key) throws IOException {
-        if (!keyToAttr.containsKey(f.getClass())) {
-            throw new IOException("no mapping for figure " + f.getClass());
+        HashMap<Key<?>, String> keyToStr = null;
+        if (keyToAttr.containsKey(f.getClass())) {
+            keyToStr = keyToAttr.get(f.getClass());
         }
-        HashMap<Key<?>, String> keyToStr = keyToAttr.get(f.getClass());
-        if (!keyToStr.containsKey(key)) {
+        if (keyToStr == null || !keyToStr.containsKey(key)) {
             throw new IOException("no mapping for key " + key + " in figure "
                     + f.getClass());
         }
@@ -233,10 +279,35 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
 
     @Override
     public Key<?> nameToKey(Figure f, String attributeName) throws IOException {
-        if (!attrToKey.containsKey(f.getClass())) {
-            throw new IOException("no mapping for figure " + f.getClass());
-        }
         HashMap<String, Key<?>> strToKey = attrToKey.get(f.getClass());
+        if (attrToKey.containsKey(f.getClass())) {
+            strToKey = attrToKey.get(f.getClass());
+        }
+        if (!strToKey.containsKey(attributeName)) {
+            throw new IOException("no mapping for attribute " + attributeName
+                    + " in figure " + f.getClass());
+        }
+        return strToKey.get(attributeName);
+    }
+    @Override
+    public String keyToElementName(Figure f, Key<?> key) throws IOException {
+        HashMap<Key<?>, String> keyToStr = null;
+        if (keyToElem.containsKey(f.getClass())) {
+            keyToStr = keyToElem.get(f.getClass());
+        }
+        if (keyToStr == null || !keyToStr.containsKey(key)) {
+            throw new IOException("no mapping for key " + key + " in figure "
+                    + f.getClass());
+        }
+        return keyToStr.get(key);
+    }
+
+    @Override
+    public Key<?> elementNameToKey(Figure f, String attributeName) throws IOException {
+        HashMap<String, Key<?>> strToKey = elemToKey.get(f.getClass());
+        if (elemToKey.containsKey(f.getClass())) {
+            strToKey = elemToKey.get(f.getClass());
+        }
         if (!strToKey.containsKey(attributeName)) {
             throw new IOException("no mapping for attribute " + attributeName
                     + " in figure " + f.getClass());
@@ -275,8 +346,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             throw new IOException("no converter for attribute type "
                     + key.getFullValueType());
         }
-        StringBuilder builder=new StringBuilder();
-        converter.toString(builder,this, value);
+        StringBuilder builder = new StringBuilder();
+        converter.toString(builder, this, value);
         return builder.toString();
     }
 
@@ -285,8 +356,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         try {
             Converter<?> converter = valueFromXML.get(key.getFullValueType());
             if (converter == null) {
-                throw new IOException("no converter for attribute type "
-                        + key.getClass());
+                throw new IOException("no converter for key \""+key+"\" with attribute type "
+                        + key.getFullValueType());
             }
             return converter.fromString(CharBuffer.wrap(string), this);
         } catch (ParseException ex) {
@@ -295,8 +366,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public Set<Key<?>> figureKeys(Figure f) {
-        Set<Key<?>> keys = figureKeys.get(f.getClass());
+    public Set<Key<?>> figureAttributeKeys(Figure f) {
+        Set<Key<?>> keys = figureAttributeKeys.get(f.getClass());
         return keys == null ? Collections.emptySet() : keys;
     }
 
@@ -305,12 +376,47 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         return key.getDefaultValue();
     }
 
-    /** This implementation returns null.
-     * 
+    /**
+     * This implementation returns null.
+     *
      * @return null
      */
     @Override
     public String createFileComment() {
         return null;
+    }
+
+    @Override
+    public List<Node> valueToNodeList(Key<?> key, Object value, Document document) throws IOException {
+        if (key.getValueType() == String.class) {
+            Text node = document.createTextNode((String) value);
+            List<Node> list = new ArrayList<>();
+            list.add(node);
+            return list;
+        } else {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    }
+
+    @Override
+    public Object nodeListToValue(Key<?> key, List<Node> nodeList) throws IOException {
+        if (key.getValueType() == String.class) {
+            StringBuilder buf = new StringBuilder();
+            for (Node node : nodeList) {
+                if (node.getNodeType() == Node.TEXT_NODE) {
+                    buf.append(node.getNodeValue());
+                }
+            }
+            return buf.toString();
+        } else {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    }
+
+    @Override
+    public Set<Key<?>> figureNodeListKeys(Figure f) {
+        Set<Key<?>> keys = figureNodeListKeys.get(f.getClass());
+        return keys == null ? Collections.emptySet() : keys;
+
     }
 }

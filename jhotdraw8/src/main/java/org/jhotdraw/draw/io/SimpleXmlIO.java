@@ -9,7 +9,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.jhotdraw.draw.Drawing;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,6 +37,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.ProcessingInstruction;
 import org.xml.sax.SAXException;
 
 /**
@@ -40,8 +49,8 @@ import org.xml.sax.SAXException;
  * All attribute values are treated as value types, except if an attribute type
  * is an instance of Figure.
  * <p>
- * This i/o-format only works, if a drawing can be described entirely based on
- * the getProperties of its figures.
+ * This i/o-format only works for drawings which can be described entirely by
+ * the properties of its figures.
  * <p>
  *
  *
@@ -51,9 +60,10 @@ import org.xml.sax.SAXException;
 public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     private FigureFactory factory;
-    private ArrayList<Element> figureElements = new ArrayList<>();
     private String namespaceURI;
     private String namespaceQualifier;
+    private HashMap<Figure, Element> figureToElementMap = new HashMap<>();
+    private URI documentHome;
 
     public SimpleXmlIO(FigureFactory factory) {
         this(factory, null, null, null);
@@ -63,6 +73,20 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         this.factory = factory;
         this.namespaceURI = namespaceURI;
         this.namespaceQualifier = namespaceQualifier;
+    }
+
+    public void setDocumentHome(URI uri) {
+        documentHome = uri;
+    }
+
+    public URI getDocumentHome() {
+        return documentHome;
+    }
+
+    @Override
+    public Drawing read(File file, Drawing drawing) throws IOException {
+        setDocumentHome(file.toURI());
+        return InputFormat.super.read(file, drawing);
     }
 
     @Override
@@ -82,6 +106,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     @Override
     public void write(File file, Drawing drawing) throws IOException {
+        setDocumentHome(file.toURI());
         Document doc = toDocument(drawing);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
@@ -129,7 +154,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 Element elem = doc.createElement(factory.figureToName(external));
                 doc.appendChild(elem);
             }
+
             Element docElement = doc.getDocumentElement();
+
+            writeProcessingInstructions(doc, external);
 
             String commentText = factory.createFileComment();
             if (commentText != null) {
@@ -172,6 +200,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             }
             Element elem = createElement(doc, elementName);
             writeElementAttributes(elem, figure);
+            writeElementNodeList(doc, elem, figure);
 
             for (Figure child : figure.childrenProperty()) {
                 if (factory.figureToName(child) != null) {
@@ -202,7 +231,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     private void writeElementAttributes(Element elem, Figure figure) throws IOException {
         setAttribute(elem, "id", factory.createId(figure));
-        for (Key<?> k : factory.figureKeys(figure)) {
+        for (Key<?> k : factory.figureAttributeKeys(figure)) {
             @SuppressWarnings("unchecked")
             Key<Object> key = (Key<Object>) k;
             Object value = figure.get(key);
@@ -216,24 +245,42 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
     }
 
+    private void writeElementNodeList(Document document, Element elem, Figure figure) throws IOException {
+        for (Key<?> k : factory.figureNodeListKeys(figure)) {
+            @SuppressWarnings("unchecked")
+            Key<Object> key = (Key<Object>) k;
+            Object value = figure.get(key);
+            if (!factory.isDefaultValue(key, value)) {
+                for (Node node : factory.valueToNodeList(key, value, document)) {
+                    elem.appendChild(node);
+                }
+            }
+        }
+    }
+
     public Drawing fromDocument(Document doc) throws IOException {
         factory.reset();
-        figureElements.clear();
+        figureToElementMap.clear();
         Drawing external = null;
         NodeList list = doc.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
-            Figure f = readNodeRecursively(list.item(i));
+            Figure f = readNodesRecursively(list.item(i));
             if (f instanceof Drawing) {
                 external = (Drawing) f;
                 break;
             }
         }
+
+        external.set(Drawing.DOCUMENT_HOME, getDocumentHome());
+        readProcessingInstructions(doc, external);
+
         try {
-            for (Element elem : figureElements) {
-                readElementAttributes(elem);
+            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
+                readElementAttributes(entry.getKey(), entry.getValue());
+                readElementNodeList(entry.getKey(), entry.getValue());
             }
         } finally {
-            figureElements.clear();
+            figureToElementMap.clear();
         }
         if (external != null) {
             return factory.fromExternalDrawing(external);
@@ -264,7 +311,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     /**
      * Creates a figure but does not process the getProperties.
      */
-    private Figure readNodeRecursively(Node node) throws IOException {
+    private Figure readNodesRecursively(Node node) throws IOException {
         if (node instanceof Element) {
             Element elem = (Element) node;
             if (namespaceURI != null) {
@@ -276,7 +323,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             if (figure == null) {
                 return null;
             }
-            figureElements.add(elem);
+            figureToElementMap.put(figure, elem);
             String id = getAttribute(elem, "id");
             if (id == null) {
                 throw new IOException("No \"id\" attribute in element " + elem.getTagName());
@@ -290,7 +337,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             }
             NodeList list = elem.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
-                Figure child = readNodeRecursively(list.item(i));
+                Figure child = readNodesRecursively(list.item(i));
                 if (child instanceof Figure) {
                     figure.add(child);
                 }
@@ -303,39 +350,73 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     /**
      * Reads the attributes of the specified element.
      */
-    private void readElementAttributes(Element elem) throws IOException {
-        if (namespaceURI != null && !namespaceURI.equals(elem.getNamespaceURI())) {
-            return;
-        }
-        Figure figure = null;
-        String id = getAttribute(elem, "id");
-        if (id != null) {
-            figure = getFigure(id);
-        }
-        if (figure != null) {
-            NamedNodeMap attrs = elem.getAttributes();
-            for (int i = 0, n = attrs.getLength(); i < n; i++) {
-                Attr attr = (Attr) attrs.item(i);
-                if (attr.getNamespaceURI() != null && !attr.getNamespaceURI().equals(namespaceURI)) {
-                    continue;
-                }
+    private void readElementAttributes(Figure figure, Element elem) throws IOException {
+        NamedNodeMap attrs = elem.getAttributes();
+        for (int i = 0, n = attrs.getLength(); i < n; i++) {
+            Attr attr = (Attr) attrs.item(i);
+            if (attr.getNamespaceURI() != null && !attr.getNamespaceURI().equals(namespaceURI)) {
+                continue;
+            }
 
-                if ("id".equals(attr.getLocalName())) {
-                    continue;
+            if ("id".equals(attr.getLocalName())) {
+                continue;
+            }
+            @SuppressWarnings("unchecked")
+            Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getLocalName());
+            if (key != null && factory.figureAttributeKeys(figure).contains(key)) {
+                Object value = null;
+                if (Figure.class.isAssignableFrom(key.getValueType())) {
+                    value = getFigure(attr.getValue());
+                } else {
+                    value = factory.stringToValue(key, attr.getValue());
                 }
-                @SuppressWarnings("unchecked")
-                Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getLocalName());
-                if (key != null && factory.figureKeys(figure).contains(key)) {
-                    Object value = null;
-                    if (Figure.class.isAssignableFrom(key.getValueType())) {
-                        value = getFigure(attr.getValue());
-                    } else {
-                        value = factory.stringToValue(key, attr.getValue());
-                    }
-                    figure.set(key, value);
-                }
+                figure.set(key, value);
             }
         }
+    }
+
+    /**
+     * Reads the children of the specified element as a node list.
+     */
+    private void readElementNodeList(Figure figure, Element elem) throws IOException {
+        Set<Key<?>> keys = factory.figureNodeListKeys(figure);
+        for (Key<?> ky : keys) {
+            @SuppressWarnings("unchecked")
+            Key<Object> key = (Key<Object>) ky;
+            String name = factory.keyToElementName(figure, key);
+            if ("".equals(name)) {
+                List<Node> nodeList = new ArrayList<>();
+                NodeList children = elem.getChildNodes();
+                for (int i = 0, n = children.getLength(); i < n; i++) {
+                    Node child = children.item(i);
+                    if (child.getNodeType() == Node.TEXT_NODE) {
+                        nodeList.add(child);
+                    } else if (child.getNodeType() == Node.ELEMENT_NODE) {
+                        // filter out element nodes of child figures
+                        Element childElem = (Element) child;
+                        if (namespaceURI != null) {
+                            if (!namespaceURI.equals(childElem.getNamespaceURI())) {
+                                nodeList.add(child);
+                            }
+                        } else {
+                            try {
+                                if (factory.nameToFigure(childElem.getLocalName()) != null) {
+                                    continue;
+                                }
+                            } catch (IOException e) {
+                                continue;
+                            }
+                            nodeList.add(child);
+                        }
+                    }
+                }
+                Object value = factory.nodeListToValue(key, nodeList);
+                figure.set(key, value);
+            } else {
+                throw new UnsupportedOperationException("Reading of sub-elements is not yet supported");
+            }
+        }
+
     }
 
     public Figure getFigure(String id) throws IOException {
@@ -344,5 +425,46 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             throw new IOException("no figure for id:" + id);
         }
         return f;
+    }
+
+    private void writeProcessingInstructions(Document doc, Drawing external) {
+        Element docElement = doc.getDocumentElement();
+        if (factory.getStylesheetsKey() != null) {
+            for (Object stylesheet : external.get(factory.getStylesheetsKey())) {
+                if (stylesheet instanceof URI) {
+                    URI stylesheetUri = (URI) stylesheet;
+                    if (documentHome != null) {
+                        stylesheetUri = documentHome.relativize(stylesheetUri);
+                    }
+
+                    ProcessingInstruction pi = doc.createProcessingInstruction("xml-stylesheet", //
+                            "type=\"text/css\" href=\"" + stylesheet + "\"");
+                    doc.insertBefore(pi, docElement);
+                }
+            }
+        }
+
+    }
+
+    private void readProcessingInstructions(Document doc, Drawing external) {
+        if (factory.getStylesheetsKey() != null) {
+            Pattern p = Pattern.compile("href=\"([^\"]*)\"");
+            ArrayList<Object> stylesheets = new ArrayList<Object>();
+            NodeList list = doc.getChildNodes();
+            for (int i = 0, n = list.getLength(); i < n; i++) {
+                Node node = list.item(i);
+                if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
+                    ProcessingInstruction pi = (ProcessingInstruction) node;
+                    if ("xml-stylesheet".equals(pi.getNodeName()) && pi.getData() != null) {
+                        Matcher m = p.matcher(pi.getData());
+                        if (m.matches()) {
+                            String href = m.group(1);
+                            stylesheets.add(URI.create(href));
+                        }
+                    }
+                }
+            }
+            external.set(factory.getStylesheetsKey(), stylesheets);
+        }
     }
 }

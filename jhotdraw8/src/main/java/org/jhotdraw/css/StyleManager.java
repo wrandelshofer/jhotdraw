@@ -5,6 +5,7 @@
 package org.jhotdraw.css;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -136,7 +137,7 @@ public interface StyleManager {
         }
     }
 
-    default void updateStylesheets(StyleOrigin origin, List<Object> urlOrString) throws IOException {
+    default void updateStylesheets(StyleOrigin origin, URI documentHome, List<Object> urlOrString) throws IOException {
         ObservableList<Object> myUrlOrString;
         ObservableList<Stylesheet> myStylesheet;
         switch (origin) {
@@ -175,8 +176,8 @@ public interface StyleManager {
             if (!item.equals(myUrlOrString.get(i))) {
                 Stylesheet sh;
                 try {
-                    if (item instanceof URL) {
-                        sh = new CssParser().parseStylesheet((URL) item);
+                   if (item instanceof URI) {
+                        sh = new CssParser().parseStylesheet(documentHome==null?(URI)item:documentHome.resolve((URI) item));
                     } else {
                         sh = new CssParser().parseStylesheet((String) item);
                     }
