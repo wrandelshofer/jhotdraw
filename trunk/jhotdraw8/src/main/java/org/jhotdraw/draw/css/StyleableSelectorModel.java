@@ -5,11 +5,13 @@
  */
 package org.jhotdraw.draw.css;
 
+import java.util.Arrays;
 import java.util.List;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import org.jhotdraw.css.SelectorModel;
+import org.jhotdraw.draw.Figure;
 import org.w3c.dom.Element;
 
 /**
@@ -93,11 +95,14 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
     @Override
     public boolean attributeValueContainsWord(Styleable element, String attributeName, String word) {
+System.out.println("attributeValueContainsWord "+element);        
         String value = getAttribute(element, attributeName);
+System.out.println(attributeName+"  value "+value);        
         if (value != null) {
             String[] words = value.split("\\s+");
             for (int i = 0; i < words.length; i++) {
                 if (word.equals(words[i])) {
+System.out.println("  words "+Arrays.asList(words));        
                     return true;
                 }
             }

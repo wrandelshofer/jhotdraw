@@ -10,6 +10,9 @@ import java.util.Set;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * FigureFactory.
@@ -19,12 +22,13 @@ import org.jhotdraw.draw.Figure;
  */
 public interface FigureFactory extends IdFactory {
 
-    /** Returns a comment which will be added at the beginning of the file.
-     * 
+    /**
+     * Returns a comment which will be added at the beginning of the file.
+     *
      * @return a comment or null
      */
     String createFileComment();
-    
+
     /**
      * Maps a figure to an XML element name.
      *
@@ -46,12 +50,12 @@ public interface FigureFactory extends IdFactory {
     Figure nameToFigure(String name) throws IOException;
 
     /**
-     * Maps a key to a XML attribute name. The name used for persistent storage
-     * may be different from the name defined in the key.
-     *
+     * Maps a key to a XML attribute name. The name used
+     * for persistent storage may be different from the name defined in the key.
+     * 
      * @param f the figure
      * @param key the key
-     * @return the name
+     * @return The name. 
      *
      * @throws java.io.IOException if the factory does not support the key for
      * the specified figure
@@ -69,6 +73,37 @@ public interface FigureFactory extends IdFactory {
      * the specified figure
      */
     Key<?> nameToKey(Figure f, String name) throws IOException;
+    /**
+     * Maps a key to a XML element name. The name used
+     * for persistent storage may be different from the name defined in the key.
+     * <p>
+     * The name can be an empty String {@code ""} for the key
+     * returned by {@link #figureNodeListKeys} if the figure has exactly one
+     * node list key. In this case, the node list will be added directly as
+     * children to the figure. The name of a node list key must not be equal
+     * to the name of a figure, because child figure elements are also added as
+     * child elements.
+     * 
+     * @param f the figure
+     * @param key the key
+     * @return The name. 
+     *
+     * @throws java.io.IOException if the factory does not support the key for
+     * the specified figure
+     */
+    String keyToElementName(Figure f, Key<?> key) throws IOException;
+
+    /**
+     * Maps an XML element name to a key.
+     *
+     * @param f the figure
+     * @param name the name
+     * @return the key
+     *
+     * @throws java.io.IOException if the factory does not support the name for
+     * the specified figure
+     */
+    Key<?> elementNameToKey(Figure f, String name) throws IOException;
 
     /**
      * Maps a value to an XML attribute value.
@@ -81,6 +116,37 @@ public interface FigureFactory extends IdFactory {
      * the specified key
      */
     String valueToString(Key<?> key, Object value) throws IOException;
+
+    /**
+     * Maps a value to a XML node list.
+     * <p>
+     * The node list may not contain elements with a name that conflicts
+     * with the names returned by {@link #figureToName}.
+     *
+     * @param key the key
+     * @param value the value
+     * @param document the document for creating the node list.
+     * @return the mapped attribute value
+     *
+     * @throws java.io.IOException if the factory does not support a mapping for
+     * the specified key
+     */
+    List<Node> valueToNodeList(Key<?> key, Object value, Document document) throws IOException;
+
+    /**
+     * Maps a XML node list to a value.
+     * <p>
+     * The node list does not contain elements with a name that conflicts
+     * with the names returned by {@link #figureToName}.
+     *
+     * @param key the key
+     * @param nodeList the nodeList
+     * @return the mapped attribute value.
+     *
+     * @throws java.io.IOException if the factory does not support a mapping for
+     * the specified key
+     */
+    Object nodeListToValue(Key<?> key, List<Node> nodeList) throws IOException;
 
     /**
      * Maps an XML attribute value to a value.
@@ -118,12 +184,22 @@ public interface FigureFactory extends IdFactory {
     }
 
     /**
-     * Returns all persistent keys for the specified figure.
+     * Returns all keys for the specified figure which should be converted into
+     * element attributes.
      *
      * @param f The figure
      * @return an immutable set
      */
-    Set<Key<?>> figureKeys(Figure f);
+    Set<Key<?>> figureAttributeKeys(Figure f);
+
+    /**
+     * Returns all keys for the specified figure which should be converted into
+     * a node list.
+     *
+     * @param f The figure
+     * @return an immutable set
+     */
+    Set<Key<?>> figureNodeListKeys(Figure f);
 
     /**
      * Creates an external representation of the drawing.
@@ -134,8 +210,7 @@ public interface FigureFactory extends IdFactory {
      *
      * @param internal an internal representation of the drawing
      * @return An external representation of the drawing.
-     * @throws java.io.IOException if no external representation can be
-     * created
+     * @throws java.io.IOException if no external representation can be created
      */
     default Drawing toExternalDrawing(Drawing internal) throws IOException {
         return internal;
@@ -150,10 +225,20 @@ public interface FigureFactory extends IdFactory {
      *
      * @param external an external representation of the drawing
      * @return An internal representation of the drawing.
-     * @throws java.io.IOException if no internal representation can be
-     * created
+     * @throws java.io.IOException if no internal representation can be created
      */
     default Drawing fromExternalDrawing(Drawing external) throws IOException {
         return external;
+    }
+    
+    /**
+     * Returns the stylesheets keys.
+     * 
+     * @return The stylesheets key of the Drawing object. Return null if 
+     * stylesheets shall not be supported. The default implementation returns
+     *{@link org.jhotdraw.draw.Drawing.AUTHOR_STYLESHEETS}.
+     */
+    default Key<List<Object>> getStylesheetsKey() {
+        return Drawing.AUTHOR_STYLESHEETS;
     }
 }

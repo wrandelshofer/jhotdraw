@@ -241,6 +241,7 @@ public class StyleablePropertyMap {
     }
 
     public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
+System.out.println("StyleablePropertyMap.getStyleableProperty "+key);        
         @SuppressWarnings("unchecked")
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
         if (sp == null) {

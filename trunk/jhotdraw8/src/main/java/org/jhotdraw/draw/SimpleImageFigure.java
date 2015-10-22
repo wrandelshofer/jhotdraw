@@ -7,6 +7,7 @@ package org.jhotdraw.draw;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,11 +41,11 @@ public class SimpleImageFigure extends AbstractLeafFigure {
      */
     public final static String TYPE_SELECTOR = "Image";
 
-    public final static SimpleFigureKey<URL> IMAGE_URL = new SimpleFigureKey<>("imageUrl", URL.class, false, DirtyMask.of(DirtyBits.NODE), null);
+    public final static SimpleFigureKey<URI> IMAGE_URI = new SimpleFigureKey<>("imageUri", URI.class, false, DirtyMask.of(DirtyBits.NODE), null);
     public final static SimpleFigureKey<Rectangle2D> IMAGE_RECTANGLE = new SimpleFigureKey<>("imageRectangle", Rectangle2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Rectangle2D(0, 0, 1, 1));
 
     private Image cachedImage;
-    private URL cachedImageUrl;
+    private URI cachedImageUri;
 
     public SimpleImageFigure() {
         this(0, 0, 1, 1);
@@ -126,22 +127,18 @@ public class SimpleImageFigure extends AbstractLeafFigure {
     }
 
     private void validateImage() {
-        URL url = get(IMAGE_URL);
-        if (url == null) {
-            cachedImageUrl = null;
+        URI uri = get(IMAGE_URI);
+        if (uri == null) {
+            cachedImageUri = null;
             cachedImage = null;
             return;
         }
         Drawing drawing = getDrawing();
-        URL documentHome = drawing == null ? null : drawing.get(Drawing.DOCUMENT_HOME);
-        try {
-            URL absoluteUrl = (documentHome == null) ? url : new URL(documentHome, url.toString());
-            if (cachedImageUrl == null || !cachedImageUrl.equals(absoluteUrl)) {
-                cachedImageUrl = absoluteUrl;
-                cachedImage = new Image(cachedImageUrl.toString(), true);
-            }
-        } catch (MalformedURLException ex) {
-            System.err.println("warning could not load image " + ex);
+        URI documentHome = drawing == null ? null : drawing.get(Drawing.DOCUMENT_HOME);
+        URI absoluteUri = (documentHome == null) ? uri : documentHome.resolve(uri);
+        if (cachedImageUri == null || !cachedImageUri.equals(absoluteUri)) {
+            cachedImageUri = absoluteUri;
+            cachedImage = new Image(cachedImageUri.toString(), true);
         }
     }
 }

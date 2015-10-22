@@ -49,6 +49,8 @@ import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
 import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw.draw.key.EffectStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw.draw.key.ObservableWordListStyleableFigureKey;
+import org.jhotdraw.draw.key.StringStyleableFigureKey;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -110,7 +112,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * To avoid name clashes in the stylesheet, all styleable JHotDraw
      * getProperties use the prefix {@code "-jhotdraw-"}.
      */
-    public final static String JHOTDRAW_CSS_PREFIX = "-jhotdraw-";
+    public final static String JHOTDRAW_CSS_PREFIX = "";
     // ----
     // key declarations
     // ----
@@ -192,14 +194,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> STYLE_ID = new SimpleFigureKey<>("styleId", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static StringStyleableFigureKey STYLE_ID = new StringStyleableFigureKey("styleId", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<ObservableList<String>> STYLE_CLASS = new SimpleFigureKey<>("styleClass", ObservableList.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
+    public static ObservableWordListStyleableFigureKey STYLE_CLASS = new ObservableWordListStyleableFigureKey("class",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.

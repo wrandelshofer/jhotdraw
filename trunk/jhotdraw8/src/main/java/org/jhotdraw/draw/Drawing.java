@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import java.net.URI;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.FigureKey;
@@ -45,14 +46,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<URL> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URL.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<URI> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
     /**
      * Holds a list of author stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * Supports the following data types for list entries:
      * <ul>
-     * <li>URL. The URL poinst to a CSS file. If the URL is relative, then it is
+     * <li>URI. The URI points to a CSS file. If the URI is relative, then it is
      * relative to {@code DOCUMENT_HOME}.</li>
      * <li>String. The String contains a CSS as a literal.</li>
      * </ul>
@@ -64,7 +65,7 @@ public interface Drawing extends Figure {
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
      * <ul>
-     * <li>URL. The URL poinst to a CSS file. If the URL is relative, then it is
+     * <li>URI. The URI points to a CSS file. If the URI is relative, then it is
      * relative to {@code DOCUMENT_HOME}.</li>
      * <li>String. The String contains a CSS as a literal.</li>
      * </ul>

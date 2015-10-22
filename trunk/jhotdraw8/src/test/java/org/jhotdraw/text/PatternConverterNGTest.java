@@ -7,6 +7,7 @@ package org.jhotdraw.text;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -38,6 +39,7 @@ public class PatternConverterNGTest {
         PatternConverter.AST ast = PatternConverter.parseTextFormatPattern(pattern);
         System.out.println("ast:"+ast);
         Object[] actualValue=c.fromString(input);
+        System.out.println(Arrays.asList(actualValue));
         assertEquals(actualValue, expectedValue);
     }
 
@@ -90,6 +92,9 @@ public class PatternConverterNGTest {
             {"{1,word} {0,word}", new Object[]{"world","hello"}, "hello world"},
             {"{0,number}{1,choice,0#|1#px}", new Object[]{0.5,0.0}, "0.5"},
             {"{0,number}{1,choice,0#|1#px}", new Object[]{0.5,1.0}, "0.5px"},
+            { "{0,list,{1,word}|[ ]+}", new Object[]{0}, ""},
+            { "{0,list,{1,word}|[ ]+}", new Object[]{1,"hello"}, "hello"},
+            { "{0,list,{1,word}|[ ]+}", new Object[]{2,"hello","world"}, "hello world"},
         };
 
     }
