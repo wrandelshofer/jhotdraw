@@ -5,8 +5,12 @@
  */
 package org.jhotdraw.draw.css;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
@@ -81,6 +85,39 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         return null;
     }
 
+    private Set<String> getWordListAttribute(Styleable element, String attributeName) {
+        List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
+        // XXX linear time!
+        for (CssMetaData<? extends Styleable, ?> i : list) {
+            @SuppressWarnings("unchecked")
+            CssMetaData<Styleable, ?> item = (CssMetaData<Styleable, ?>) i;
+            if (attributeName.equals(item.getProperty())) {
+                Object value = item.getStyleableProperty(element).getValue();
+
+                if (value instanceof Collection) {
+                     @SuppressWarnings("unchecked")
+                    Collection<Object> olist = (Collection<Object>) value;
+                    Set<String> slist = new HashSet<String>();
+                    for (Object o : olist) {
+                        slist.add(o.toString());
+                    }
+                    return slist;
+                } else {
+                    Set<String> slist = new HashSet<>();
+                    if (value != null) {
+                        String[] words = value.toString().split("\\s+");
+                        for (String word : words) {
+                            slist.add(word);
+                        }
+                    }
+
+                    return slist;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean attributeValueEquals(Styleable element, String attributeName, String attributeValue) {
         String actualValue = getAttribute(element, attributeName);
@@ -95,19 +132,11 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
     @Override
     public boolean attributeValueContainsWord(Styleable element, String attributeName, String word) {
-System.out.println("attributeValueContainsWord "+element);        
-        String value = getAttribute(element, attributeName);
-System.out.println(attributeName+"  value "+value);        
-        if (value != null) {
-            String[] words = value.split("\\s+");
-            for (int i = 0; i < words.length; i++) {
-                if (word.equals(words[i])) {
-System.out.println("  words "+Arrays.asList(words));        
-                    return true;
-                }
-            }
-        }
-        return false;
+        System.out.println("attributeValueContainsWord " + element);
+        Set<String> value = getWordListAttribute(element, attributeName);
+        System.out.println(attributeName + "  value " + value);
+
+        return value != null && value.contains(word);
     }
 
     @Override
