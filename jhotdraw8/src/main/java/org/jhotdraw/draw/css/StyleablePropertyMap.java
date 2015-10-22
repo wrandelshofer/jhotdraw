@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.css;
 
 import java.util.HashMap;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
@@ -241,7 +242,6 @@ public class StyleablePropertyMap {
     }
 
     public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
-System.out.println("StyleablePropertyMap.getStyleableProperty "+key);        
         @SuppressWarnings("unchecked")
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
         if (sp == null) {
@@ -334,6 +334,8 @@ System.out.println("StyleablePropertyMap.getStyleableProperty "+key);
         public MapStyleableProperty(Key<T> key, CssMetaData<?,T> metaData) {
             this.key = key;
             this.metaData = metaData;
+            
+            bindBidirectional(new Key.PropertyAt<>(user, key));            
         }
 
         @Override

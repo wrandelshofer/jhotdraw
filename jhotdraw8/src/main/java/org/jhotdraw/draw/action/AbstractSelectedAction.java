@@ -1,8 +1,12 @@
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractAction;
+import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.EditorView;
 
 /* @(#)AbstractSelectedAction.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
@@ -18,7 +22,7 @@ import org.jhotdraw.draw.DrawingView;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSelectedAction extends AbstractAction {
+public abstract class AbstractSelectedAction extends AbstractViewAction {
 
     private DrawingEditor editor;
 
@@ -28,7 +32,8 @@ public abstract class AbstractSelectedAction extends AbstractAction {
      *
      * @param editor the drawing editor
      */
-    public AbstractSelectedAction(DrawingEditor editor) {
+    public AbstractSelectedAction(Application app, DrawingEditor editor) {
+        super(app, null);
         setEditor(editor);
     }
 
@@ -59,6 +64,14 @@ public abstract class AbstractSelectedAction extends AbstractAction {
      * drawing view is active.
      */
     protected DrawingView getView() {
+        if (editor == null) {
+            View v = getActiveView();
+            if (v instanceof EditorView) {
+                EditorView ev = (EditorView) v;
+                return ev.getEditor() != null ? ev.getEditor().getActiveDrawingView() : null;
+            }
+        }
+
         return (editor == null) ? null : editor.getActiveDrawingView();
     }
 }

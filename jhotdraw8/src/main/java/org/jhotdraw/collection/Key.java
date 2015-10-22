@@ -190,13 +190,13 @@ public interface Key<T> extends Serializable {
     /**
      * This property is bound to a value in the map.
      */
-    static class PropertyAt<T> extends ReadOnlyObjectWrapper<T> {
+    public static class PropertyAt<T> extends ReadOnlyObjectWrapper<T> {
 
         private MapExpression<Key<?>, Object> map;
         private Key<T> key;
         private MapChangeListener<Key<?>, Object> mapListener;
 
-        private PropertyAt(MapExpression<Key<?>, Object> map, Key<T> key) {
+        public PropertyAt(MapExpression<Key<?>, Object> map, Key<T> key) {
             this.map = map;
             this.key = key;
 

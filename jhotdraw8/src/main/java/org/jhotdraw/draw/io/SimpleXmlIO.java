@@ -270,7 +270,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 break;
             }
         }
-
+        if (external == null) {
+            if (namespaceURI == null) {
+                throw new IOException("The document does not contain a drawing.");
+            } else {
+                throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
+            }
+        }
         external.set(Drawing.DOCUMENT_HOME, getDocumentHome());
         readProcessingInstructions(doc, external);
 
@@ -448,7 +454,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     private void readProcessingInstructions(Document doc, Drawing external) {
         if (factory.getStylesheetsKey() != null) {
-            Pattern p = Pattern.compile("href=\"([^\"]*)\"");
+            Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
+            Pattern typePattern = Pattern.compile("(?:^|.* )type=\"([^\"]*)\".*");
             ArrayList<Object> stylesheets = new ArrayList<Object>();
             NodeList list = doc.getChildNodes();
             for (int i = 0, n = list.getLength(); i < n; i++) {
@@ -456,9 +463,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
                     ProcessingInstruction pi = (ProcessingInstruction) node;
                     if ("xml-stylesheet".equals(pi.getNodeName()) && pi.getData() != null) {
-                        Matcher m = p.matcher(pi.getData());
+                        Matcher m = hrefPattern.matcher(pi.getData());
                         if (m.matches()) {
                             String href = m.group(1);
+                            
+                            m = typePattern.matcher(pi.getData());
+                            if (m.matches()) {
+                                String type=m.group(1);
+                                if (!"text/css".equals(type)) {
+                                    continue;
+                                }
+                            }
                             stylesheets.add(URI.create(href));
                         }
                     }

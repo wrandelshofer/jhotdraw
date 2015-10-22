@@ -7,6 +7,7 @@ package org.jhotdraw.draw.action;
 import java.util.Collection;
 import java.util.LinkedList;
 import javafx.event.ActionEvent;
+import org.jhotdraw.app.Application;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -26,8 +27,8 @@ public class BringToFrontAction extends AbstractSelectedAction {
      * Creates a new instance.
      * @param editor the drawing editor
      */
-    public BringToFrontAction(DrawingEditor editor) {
-        super(editor);
+    public BringToFrontAction(Application app,DrawingEditor editor) {
+        super(app,editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw.draw.Labels");
         labels.configureAction(this, ID);
@@ -35,6 +36,8 @@ public class BringToFrontAction extends AbstractSelectedAction {
 
     @Override
     public void handle(ActionEvent e) {
+        if (e.isConsumed())return;
+        e.consume();
         final DrawingView view = getView();
         if (view == null) {
             return;

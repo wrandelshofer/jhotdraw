@@ -13,6 +13,10 @@ import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.View;
+import org.jhotdraw.app.action.Action;
+import org.jhotdraw.collection.HierarchicalMap;
+import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.gui.FileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 
@@ -24,6 +28,15 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
     public GrapherApplication() {
         super();
+    }
+
+    @Override
+    public HierarchicalMap<String, Action> getActionMap() {
+        HierarchicalMap<String, Action> map= super.getActionMap();
+           map.put(SendToBackAction.ID, new SendToBackAction(this,null));
+        map.put(BringToFrontAction.ID, new BringToFrontAction(this,null));
+        
+        return map;
     }
     
    

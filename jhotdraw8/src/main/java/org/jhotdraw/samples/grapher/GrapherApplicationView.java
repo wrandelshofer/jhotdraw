@@ -22,6 +22,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.EditorView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
@@ -52,7 +53,7 @@ import org.jhotdraw.util.Resources;
  *
  * @author werni
  */
-public class GrapherApplicationView extends AbstractView {
+public class GrapherApplicationView extends AbstractView implements EditorView {
 
     private Node node;
 
@@ -65,7 +66,7 @@ public class GrapherApplicationView extends AbstractView {
 
     private DrawingEditor editor;
 
-    private final static String GRAPHER_NAMESPACE_URI = "jhotdraw.org/samples/grapher";
+    private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
 
     @Override
     public void init(EventHandler<TaskCompletionEvent<?>> callback) {
@@ -110,8 +111,8 @@ public class GrapherApplicationView extends AbstractView {
         ztbar.setDrawingView(drawingView);
         toolBar.getItems().add(ztbar);
 
-        getActionMap().put(SendToBackAction.ID, new SendToBackAction(editor));
-        getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(editor));
+        getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(),editor));
+        getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(),editor));
 
         callback.handle(new TaskCompletionEvent<Void>());
     }
@@ -184,6 +185,11 @@ public class GrapherApplicationView extends AbstractView {
                 tf.set(TextHolderFigure.TEXT, now.toString());
             }
         }
+    }
+
+    @Override
+    public DrawingEditor getEditor() {
+        return editor;
     }
 
 }

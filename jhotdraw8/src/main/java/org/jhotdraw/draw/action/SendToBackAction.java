@@ -7,6 +7,7 @@ package org.jhotdraw.draw.action;
 import java.util.Collection;
 import java.util.LinkedList;
 import javafx.event.ActionEvent;
+import org.jhotdraw.app.Application;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -26,8 +27,8 @@ public class SendToBackAction extends AbstractSelectedAction {
      * Creates a new instance.
      * @param editor the drawing editor
      */
-    public SendToBackAction(DrawingEditor editor) {
-        super(editor);
+    public SendToBackAction(Application app,DrawingEditor editor) {
+        super(app,editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw.draw.Labels");
         labels.configureAction(this, ID);
