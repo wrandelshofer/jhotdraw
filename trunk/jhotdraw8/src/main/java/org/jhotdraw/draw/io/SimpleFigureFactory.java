@@ -45,6 +45,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureNodeListKeys = new HashMap<>();
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
+    private String objectIdAttribute="oid";
 
     public SimpleFigureFactory() {
     }
@@ -419,4 +420,30 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         return keys == null ? Collections.emptySet() : keys;
 
     }
+    
+    public void checkConverters() {
+        for (HashMap<Key<?>, String> map:keyToAttr.values()) {
+            for (Key<?> k:map.keySet()) {
+                String fullValueType=k.getFullValueType();
+                if (! valueToXML.containsKey(fullValueType)) {
+                    System.err.println(this+" WARNING can not convert "+fullValueType+" to XML");
+                }
+            }
+        }
+    }
+    /**
+     * Returns the name of the object id attribute. The object id attribute is
+     * used for referencing other objects in the XML file.
+     *
+     * @return name of the object id attribute
+     */
+    public String getObjectIdAttribute() {return objectIdAttribute;}
+    /**
+     * SEts the name of the object id attribute. The object id attribute is
+     * used for referencing other objects in the XML file.
+     *
+     * @return name of the object id attribute
+     */
+    public void setObjectIdAttribute(String newValue) { objectIdAttribute=newValue;}
+    
 }

@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -71,6 +72,7 @@ import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.gui.FileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**
  * DocumentOrientedApplication.
@@ -232,6 +234,9 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             borderPane.setTop(mb);
         }
         Scene scene = new Scene(borderPane);
+        
+        PreferencesUtil.installStagePrefsHandler(Preferences.userNodeForPackage(DocumentOrientedApplication.class), "stage", stage);
+        
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> {
             event.consume();
@@ -268,15 +273,15 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             Random r = new Random();
             if (activeView.get() != null) {
                 Window w = activeView.get().getNode().getScene().getWindow();
-                stage.setWidth(w.getWidth());
-                stage.setHeight(w.getHeight());
+                //stage.setWidth(w.getWidth());
+                //stage.setHeight(w.getHeight());
                 stage.setX(Math.min(w.getX() + 22, bounds.getMaxX()
                         - stage.getWidth()));
                 stage.setY(Math.min(w.getY() + 22, bounds.getMaxY()
                         - stage.getHeight()));
             } else {
-                stage.setWidth(bounds.getWidth() / 4);
-                stage.setHeight(bounds.getHeight() / 3);
+                //stage.setWidth(bounds.getWidth() / 4);
+                //stage.setHeight(bounds.getHeight() / 3);
                 stage.setX(bounds.getMinX());
                 stage.setY(bounds.getMinY());
             }

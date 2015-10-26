@@ -13,7 +13,7 @@ import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.text.CSSPaintConverter;
+import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
@@ -73,7 +73,7 @@ public class PaintStyleableFigureKey extends SimpleFigureKey<Paint> implements S
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Paint> converter
-                = new StyleConverterConverterWrapper<Paint>(new CSSPaintConverter());
+                = new StyleConverterConverterWrapper<Paint>(new CssPaintConverter());
         CssMetaData<Styleable, Paint> md
                 = new SimpleCssMetaData<Styleable, Paint>(property, function,
                         converter, defaultValue, inherits);

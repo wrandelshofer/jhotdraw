@@ -1,15 +1,21 @@
-/* @(#)CSSConverterFactory.java
+/* @(#)XmlConverterFactory.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.text;
 
 /**
- * CSSConverterFactory.
+ * XmlConverterFactory.
+ * <p>
+ * Supports the following types:
+ * <ul>
+ * <li>number</li>
+ * <li>word</li>
+ * </ul>
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CSSConverterFactory implements ConverterFactory {
+public class XmlConverterFactory implements ConverterFactory {
 
     @Override
     public Converter<?> apply(String type, String style) {
@@ -18,15 +24,9 @@ public class CSSConverterFactory implements ConverterFactory {
         }
         switch (type) {
             case "number":
-                return new XMLDoubleConverter();
-            case "size":
-                return new CSSSizeConverter();
+                return new XmlDoubleConverter();
             case "word":
                 return new WordConverter();
-            case "paint":
-                return new CSSPaintConverter();
-            case "font":
-                return new CSSFontConverter();
             default:
                 throw new IllegalArgumentException("illegal type:"+type);
         }

@@ -7,14 +7,24 @@ package org.jhotdraw.samples.grapher;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.prefs.Preferences;
 import javafx.beans.InvalidationListener;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
@@ -33,6 +43,10 @@ import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
+import org.jhotdraw.draw.gui.CanvasInspector;
+import org.jhotdraw.draw.gui.Inspector;
+import org.jhotdraw.draw.gui.LayerInspector;
+import org.jhotdraw.draw.gui.StylesheetsInspector;
 import org.jhotdraw.draw.gui.ToolsToolbar;
 import org.jhotdraw.draw.gui.ZoomToolbar;
 import org.jhotdraw.draw.handle.HandleType;
@@ -48,6 +62,7 @@ import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**
  *
@@ -65,6 +80,9 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
     private DrawingView drawingView;
 
     private DrawingEditor editor;
+
+    @FXML
+    private HBox inspectorsHBox;
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
 
@@ -111,10 +129,55 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         ztbar.setDrawingView(drawingView);
         toolBar.getItems().add(ztbar);
 
-        getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(),editor));
-        getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(),editor));
+        getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
+        getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
 
+        getApplication().execute(
+                new BackgroundTask<List<Node>>() {
+
+                    @Override
+                    protected List<Node> call() throws Exception {
+                        List<Node> list = new LinkedList<>();
+                        addInspector(new CanvasInspector(), "canvas", list);
+                        addInspector(new StylesheetsInspector(), "stylesheets", list);
+                        addInspector(new LayerInspector(), "layers", list);
+                        return list;
+                    }
+
+                    @Override
+                    protected void succeeded(List<Node> value) {
+                        inspectorsHBox.getChildren().addAll(value);
+                    }
+                });
+
+        inspectorsHBox.getStyleClass().add("inspector");
         callback.handle(new TaskCompletionEvent<Void>());
+    }
+
+    private void addInspector(Inspector inspector, String id, List<Node> list) {
+        Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
+
+        Accordion a = new Accordion();
+        Node n = inspector.getNode();
+        n.setRotate(90);
+        ((Pane) n).setPrefHeight(133);
+        Group g = new Group();
+        g.getChildren().add(n);
+        TitledPane t = new TitledPane(r.getString(id + ".toolbar"), g);
+
+        a.getPanes().add(t);
+
+        g = new Group();
+        a.setRotate(-90);
+        g.getChildren().add(a);
+        list.add(g);
+
+        PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherApplicationView.class), id + ".expanded", t.expandedProperty());
+        if (t.isExpanded()) {
+            a.setExpandedPane(t);
+        }
+
+        inspector.setDrawingView(drawingView);
     }
 
     @Override

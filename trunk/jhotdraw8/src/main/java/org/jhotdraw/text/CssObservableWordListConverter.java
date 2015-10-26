@@ -20,7 +20,7 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class CssObservableWordListConverter implements Converter<ObservableList<String>> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ ]+}", new CSSConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ ]+}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ObservableList<String> value) throws IOException {

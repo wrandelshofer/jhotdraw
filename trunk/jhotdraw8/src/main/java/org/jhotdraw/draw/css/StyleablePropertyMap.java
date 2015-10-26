@@ -353,6 +353,11 @@ public class StyleablePropertyMap {
             return metaData;
         }
 
+        /**
+         * 
+         * @param origin the style origin
+         * @param value the value null removes the key from the style origin
+         */
         @Override
         public void applyStyle(StyleOrigin origin, T value) {
             if (!key.isAssignable(value)) {
@@ -363,15 +368,27 @@ public class StyleablePropertyMap {
             } else {
                 switch (origin) {
                 case INLINE:
+                    if (value==null)
+                        inlineProperties().remove(key);
+                    else
                     inlineProperties().put(key, value);
                     break;
                 case AUTHOR:
+                    if (value==null)
+                        authorProperties().remove(key);
+                    else
                     authorProperties().put(key, value);
                     break;
                 case USER:
+                    if (value==null)
+                        userProperties().remove(key);
+                    else
                     userProperties().put(key, value);
                     break;
                 case USER_AGENT:
+                    if (value==null)
+                        userAgentProperties().remove(key);
+                    else
                     userAgentProperties().put(key, value);
                     break;
                 default:

@@ -34,7 +34,7 @@ public class StringConverterConverterWrapper<T> extends StringConverter<T> {
         try {
             return converter.fromString(string);
         } catch (ParseException ex) {
-            throw new IllegalArgumentException(ex);
+            return null;
         }
     }
 

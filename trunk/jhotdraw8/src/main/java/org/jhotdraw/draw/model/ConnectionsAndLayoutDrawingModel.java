@@ -115,6 +115,9 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
                 if (dm.containsOneOf(DirtyBits.TRANSFORM)) {
                     fire(DrawingModelEvent.transformChanged(this, figure));
                 }
+                if (dm.containsOneOf(DirtyBits.STYLE)) {
+                    fire(DrawingModelEvent.styleInvalidated(this, figure));
+                }
                 if (dm.containsOneOf(DirtyBits.CONNECTION)) {
                     fire(DrawingModelEvent.connectionChanged(this, figure));
                     Set<Figure> connectionsAfter = figure.getConnectionTargets();

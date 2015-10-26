@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import java.io.File;
 import java.net.URI;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
@@ -46,7 +47,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<URI> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<URI> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT),new File(System.getProperty("user.home")).toURI());
     /**
      * Holds a list of author stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -60,7 +61,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<Object>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class, "<Object>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<List<URI>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class, "<URI>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -72,7 +73,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<Object>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class, "<Object>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT), null);
+    public final static Key<List<URI>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class, "<URI>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the (clip) bounds of the drawing.
      * <p>
@@ -84,7 +85,19 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static FigureKey<Rectangle2D> BOUNDS = new SimpleFigureKey<>("bounds", Rectangle2D.class, DirtyMask.of(DirtyBits.NODE), new Rectangle2D(0, 0, 640, 480));
+    public final static FigureKey<Double> WIDTH = new SimpleFigureKey<Double>("width", Double.class, DirtyMask.of(DirtyBits.NODE), 640.0);
+    /**
+     * Defines the (clip) bounds of the drawing.
+     * <p>
+     * The bounds are used to determine the area of the drawing when it is
+     * printed or exported to an image. {@code DrawingView} typically ignores
+     * this value so that the user can still edit figures which are outside of
+     * the bounds of the drawing.
+     * </p>
+     * <p>
+     * This property is not styleable.</p>
+     */
+    public final static FigureKey<Double> HEIGHT = new SimpleFigureKey<Double>("height", Double.class, DirtyMask.of(DirtyBits.NODE), 480.0);
     /**
      * Defines the background paint of the drawing.
      * <p>

@@ -1,4 +1,4 @@
-/* @(#)CSSSizeConverter.java
+/* @(#)CssSizeConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * CSSSizeConverter.
+ * CssSizeConverter.
  * <p>
  * Parses the following EBNF from the
  * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
@@ -26,9 +26,9 @@ import org.jhotdraw.draw.io.IdFactory;
  * 
  * @author Werner Randelshofer
  */
-public class CSSSizeConverter implements Converter<Double> {
+public class CssSizeConverter implements Converter<Double> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,number}{1,choice,0#{2,word}|1#}", new CSSConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,number}{1,choice,0#{2,word}|1#}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Double value) throws IOException {

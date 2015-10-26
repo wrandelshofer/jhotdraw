@@ -1,4 +1,4 @@
-/* @(#)CSSFontConverter.java
+/* @(#)CssFontConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,7 +15,7 @@ import org.jhotdraw.draw.io.IdFactory;
 import org.jhotdraw.io.StreamPosTokenizer;
 
 /**
- * CSSFontConverter.
+ * CssFontConverter.
  * <p>
  * Parses the following EBNF from the
  * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
@@ -34,9 +34,9 @@ import org.jhotdraw.io.StreamPosTokenizer;
  *
  * @author Werner Randelshofer
  */
-public class CSSFontConverter implements Converter<Font> {
+public class CssFontConverter implements Converter<Font> {
 
-    private final XMLDoubleConverter doubleConverter = new XMLDoubleConverter();
+    private final XmlDoubleConverter doubleConverter = new XmlDoubleConverter();
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Font font) throws IOException {

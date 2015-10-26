@@ -1,0 +1,7 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.inspector * {
+    -fx-font-size: 10px;
+}

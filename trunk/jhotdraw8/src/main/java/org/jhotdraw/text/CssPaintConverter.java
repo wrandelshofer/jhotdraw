@@ -1,4 +1,4 @@
-/* @(#)CSSPaintConverter.java
+/* @(#)CssPaintConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -14,10 +14,11 @@ import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * CSSPaintConverter.
+ * CssPaintConverter.
  * <p>
  * Parses the following EBNF from the
- * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX CSS Reference Guide</a>.
+ * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
+ * CSS Reference Guide</a>.
  * </p>
  * <pre>
  * Paint := (Color|LinearGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
@@ -41,10 +42,15 @@ import org.jhotdraw.draw.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CSSPaintConverter implements Converter<Paint> {
-
+public class CssPaintConverter implements Converter<Paint> {
+private XmlDoubleConverter doubleConverter=new XmlDoubleConverter();
+{
+    doubleConverter.setMaximumFractionDigits(3);
+}
     public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
-        if (value instanceof Color) {
+        if (value == null) {
+            out.append("transparent");
+        } else if (value instanceof Color) {
             Color c = (Color) value;
             if (c.getOpacity() == 1.0) {
                 int rgb = ((((int) (c.getRed() * 255)) & 0xff) << 16)
@@ -61,9 +67,10 @@ public class CSSPaintConverter implements Converter<Paint> {
                 out.append(',');
                 out.append(Integer.toString((int) (c.getBlue() * 255)));
                 out.append(',');
-                out.append(Double.toString(c.getOpacity()));
+                out.append(doubleConverter.toString(c.getOpacity()));
                 out.append(')');
             }
+
         } else {
             throw new UnsupportedOperationException("not yet implemented");
         }

@@ -29,7 +29,7 @@ import org.jhotdraw.draw.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class XMLDoubleConverter implements Converter<Double> {
+public class XmlDoubleConverter implements Converter<Double> {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +58,7 @@ public class XMLDoubleConverter implements Converter<Double> {
      * <code>NumberFormat</code> instance obtained from
      * <code>NumberFormat.getNumberInstance()</code>.
      */
-    public XMLDoubleConverter() {
+    public XmlDoubleConverter() {
         super();
         initFormats();
     }
@@ -70,7 +70,7 @@ public class XMLDoubleConverter implements Converter<Double> {
      * @param max the max
      * @param multiplier the multiplier
      */
-    public XMLDoubleConverter(double min, double max, double multiplier) {
+    public XmlDoubleConverter(double min, double max, double multiplier) {
         this(min, max, multiplier, false, null);
     }
 
@@ -82,7 +82,7 @@ public class XMLDoubleConverter implements Converter<Double> {
      * @param multiplier the multiplier
      * @param allowsNullValue whether null values are allowed
      */
-    public XMLDoubleConverter(double min, double max, double multiplier, boolean allowsNullValue) {
+    public XmlDoubleConverter(double min, double max, double multiplier, boolean allowsNullValue) {
         this(min, max, multiplier, allowsNullValue, null);
     }
 
@@ -95,7 +95,7 @@ public class XMLDoubleConverter implements Converter<Double> {
      * @param allowsNullValue whether null values are allowed
      * @param unit the unit string
      */
-    public XMLDoubleConverter(double min, double max, double multiplier, boolean allowsNullValue, String unit) {
+    public XmlDoubleConverter(double min, double max, double multiplier, boolean allowsNullValue, String unit) {
         super();
         initFormats();
         this.min = min;

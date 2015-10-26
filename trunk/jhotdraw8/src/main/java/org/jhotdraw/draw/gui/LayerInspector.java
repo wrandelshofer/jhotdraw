@@ -11,16 +11,17 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
+import org.jhotdraw.draw.Drawing;
 
 /**
  * FXML Controller class
  *
  * @author werni
  */
-public class LayerInspector extends BorderPane {
+public class LayerInspector extends AbstractDrawingInspector {
 
    public LayerInspector() {
-        this(LayerInspector.class.getResource("ZoomToolbar.fxml"));
+        this(LayerInspector.class.getResource("LayerInspector.fxml"));
     }
     public LayerInspector(URL fxmlUrl) {
         init(fxmlUrl);
@@ -35,5 +36,9 @@ public class LayerInspector extends BorderPane {
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
+    }
+    
+    protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
+        
     }
 }

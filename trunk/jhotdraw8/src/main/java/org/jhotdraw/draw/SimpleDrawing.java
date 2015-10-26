@@ -49,7 +49,7 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
         Group g = (Group) n;
         ObservableList<Node> children = ((Group) n).getChildren();
         children.clear();
-        Rectangle2D bounds = get(BOUNDS);
+        Bounds bounds = getBoundsInLocal();
         Rectangle page = (Rectangle) g.getProperties().get("background");
         page.setX(bounds.getMinX());
         page.setY(bounds.getMinY());
@@ -65,8 +65,7 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
 
     @Override
     public Bounds getBoundsInLocal() {
-        Rectangle2D bounds = get(BOUNDS);
-        return new BoundingBox(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
+        return new BoundingBox(0.0, 0.0, get(WIDTH), get(HEIGHT));
 
     }
 

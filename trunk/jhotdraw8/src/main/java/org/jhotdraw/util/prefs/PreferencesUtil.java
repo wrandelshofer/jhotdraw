@@ -14,6 +14,10 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.NodeChangeListener;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
+import javafx.beans.property.BooleanProperty;
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Stage;
 
 /**
  * {@code PreferencesUtil} provides utility methods for {@code
@@ -205,8 +209,9 @@ public class PreferencesUtil
         //
     }
 
-    /** Gets the system node for the package of the class if
-     * permitted, gets a proxy otherwise.
+    /**
+     * Gets the system node for the package of the class if permitted, gets a
+     * proxy otherwise.
      *
      * @param c The class
      * @return system node or a proxy.
@@ -219,7 +224,6 @@ public class PreferencesUtil
             return systemNodes.get(c.getPackage());
         }
 
-
         try {
             return Preferences.systemNodeForPackage(c);
         } catch (Throwable t) {
@@ -230,8 +234,9 @@ public class PreferencesUtil
         }
     }
 
-    /** Gets the user node for the package of the class if
-     * permitted, gets a proxy otherwise.
+    /**
+     * Gets the user node for the package of the class if permitted, gets a
+     * proxy otherwise.
      *
      * @param c The class
      * @return user node or a proxy.
@@ -254,9 +259,66 @@ public class PreferencesUtil
         }
     }
 
-    /** Creates a new instance. */
+    /**
+     * Creates a new instance.
+     */
     private PreferencesUtil() {
     }
 
+    /**
+     * Installs a frame preferences handler. On first run, sets the window to
+     * its preferred size at the top left corner of the screen. On subsequent
+     * runs, sets the window the last size and location where the user had
+     * placed it before.
+     * <p>
+     * If no preferences are stored yet for this window, a default size of 400 x
+     * 300 pixels is used.
+     *
+     * @param prefs Preferences for storing/retrieving preferences values.
+     * @param name Base name of the preference.
+     * @param window The window for which to track preferences.
+     */
+    public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage) {
+        installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
+    }
 
+    /**
+     * Installs a frame preferences handler. On first run, sets the window to
+     * its preferred size at the top left corner of the screen. On subsequent
+     * runs, sets the window the last size and location where the user had
+     * placed it before.
+     *
+     * @param prefs Preferences for storing/retrieving preferences values.
+     * @param name Base name of the preference.
+     * @param stage The window for which to track preferences.
+     * @param defaultSize This size is used when no prefences are stored yet for
+     * this window.
+     *
+     */
+    public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage, Dimension2D defaultSize) {
+
+        double prefWidth;
+        double prefHeight;
+
+        prefWidth = prefs.getDouble(name + ".width", defaultSize.getWidth());
+        prefHeight = prefs.getDouble(name + ".height", defaultSize.getHeight());
+
+        stage.setWidth(prefWidth);
+        stage.setHeight(prefHeight);
+
+        stage.widthProperty().addListener((o, oldValue, newValue) -> {
+            prefs.putDouble(name + ".width", newValue.doubleValue());
+        });
+        stage.heightProperty().addListener((o, oldValue, newValue) -> {
+            prefs.putDouble(name + ".height", newValue.doubleValue());
+        });
+    }
+
+    public static void installBooleanPropertyHandler(final Preferences prefs, final String name, BooleanProperty property) {
+        boolean prefValue = prefs.getBoolean(name, true);
+        property.setValue(prefValue);
+        property.addListener((o, oldValue, newValue) -> {
+            prefs.putBoolean(name, newValue);
+        });
+    }
 }

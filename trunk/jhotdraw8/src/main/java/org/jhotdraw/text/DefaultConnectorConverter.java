@@ -35,7 +35,7 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class DefaultConnectorConverter implements Converter<Connector> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,word} +{1,choice,0#center|1#rectangle|2#ellipse}", new XMLConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,word} +{1,choice,0#center|1#rectangle|2#ellipse}", new XmlConverterFactory());
 
     private final static HashMap<Double, Class<?>> choiceToConnectorMap = new HashMap<>();
     private final static HashMap<Class<?>, Double> connectorToChoiceMap = new HashMap<>();

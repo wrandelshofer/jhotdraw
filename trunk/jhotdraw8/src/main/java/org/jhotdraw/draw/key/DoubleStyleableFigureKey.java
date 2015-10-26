@@ -12,7 +12,7 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.text.CSSSizeConverter;
+import org.jhotdraw.text.CssSizeConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
@@ -69,7 +69,7 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Double> converter
-                = new StyleConverterConverterWrapper<Double>(new CSSSizeConverter());
+                = new StyleConverterConverterWrapper<Double>(new CssSizeConverter());
         CssMetaData<Styleable, Double> md
                 = new SimpleCssMetaData<Styleable, Double>(property, function,
                         converter, defaultValue, inherits);
