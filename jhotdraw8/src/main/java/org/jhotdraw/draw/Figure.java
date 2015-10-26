@@ -194,14 +194,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * Default value: {@code null}.
      */
-    public static StringStyleableFigureKey STYLE_ID = new StringStyleableFigureKey("styleId", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static StringStyleableFigureKey STYLE_ID = new StringStyleableFigureKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static ObservableWordListStyleableFigureKey STYLE_CLASS = new ObservableWordListStyleableFigureKey("class",DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
+    public static ObservableWordListStyleableFigureKey STYLE_CLASS = new ObservableWordListStyleableFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
@@ -310,16 +310,18 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      */
     default void connectNotify() {
     }
+
     /**
      * This method is invoked on a figure and all its descendants by
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
      * transformation of the figure has changed.
-     * <p> 
+     * <p>
      * The default implementation of this method is empty.
      */
     default void transformNotify() {
     }
-   /**
+
+    /**
      * This method is invoked on a figure by
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
      * figure needs to be laid out again.
@@ -329,7 +331,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default void layoutNotify() {
         layout();
     }
-       /**
+
+    /**
      * This method is invoked on a figure by
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
      * figure needs to apply its stylesheet agin.
@@ -339,6 +342,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default void stylesheetNotify() {
         applyCss();
     }
+
     /**
      * The parent figure.
      * <p>
@@ -537,6 +541,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @return true if the user may select the figure
      */
     boolean isSelectable();
+
     /**
      * Whether the figure is deletable.
      * <p>
@@ -544,18 +549,22 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return true if the user may delete the figure
      */
-    default boolean isDeletable() { return true; }
+    default boolean isDeletable() {
+        return true;
+    }
+
     /**
-     * Whether the figure can be reshaped as a group together with other figures.
+     * Whether the figure can be reshaped as a group together with other
+     * figures.
      * <p>
      * If this figure uses one of the other figures for computing its position
      * or its layout, then it will return false.
      * <p>
      * The default implementation always returns true.
-     * 
+     *
      * @param others A set of figures.
-     * @return true if the user may reshape this figure together with those
-     * in the set.
+     * @return true if the user may reshape this figure together with those in
+     * the set.
      */
     default boolean isGroupReshapeableWith(Set<Figure> others) {
         return true;
@@ -765,8 +774,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         return (Drawing) parent;
     }
 
-
-
     /**
      * Returns all figures which are connected to this figure.
      * <pre><code>
@@ -919,7 +926,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
                 }
             }
             return keys;
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
+        }catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys");
 
         }
@@ -937,7 +944,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         return (bounds.getHeight() == 0 || bounds.getWidth() == 0) ? 1 : bounds.getHeight() / bounds.getWidth();
     }
 
-    
     /**
      * Returns the center of the figure in the local coordinates of the figure.
      *
@@ -1082,5 +1088,5 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     @Override
     default String getId() {
         return get(STYLE_ID);
-    }   
+    }
 }

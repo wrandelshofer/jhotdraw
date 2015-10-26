@@ -13,7 +13,7 @@ import javafx.scene.text.Font;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.text.CSSFontConverter;
+import org.jhotdraw.text.CssFontConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
@@ -62,7 +62,7 @@ public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements Sty
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Font> converter
-                = new StyleConverterConverterWrapper<Font>(new CSSFontConverter());
+                = new StyleConverterConverterWrapper<Font>(new CssFontConverter());
         CssMetaData<Styleable, Font> md
                 = new SimpleCssMetaData<Styleable, Font>(property, function,
                         converter, defaultValue, inherits);

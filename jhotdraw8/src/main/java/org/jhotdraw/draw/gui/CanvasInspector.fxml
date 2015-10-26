@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox styleClass="inspector" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER_LEFT" fillHeight="false">
+         <children>
+            <TextField fx:id="backgroundColorField">
+               <tooltip>
+                  <Tooltip text="%attribute.canvasFillColor.toolTipText" />
+               </tooltip></TextField>
+            <ColorPicker fx:id="backgroundColorPicker" style="-fx-color-label-visible: false;" />
+         </children>
+         <opaqueInsets>
+            <Insets bottom="4.0" left="4.0" right="4.0" />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets left="4.0" right="4.0" top="4.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="BASELINE_LEFT" fillHeight="false">
+         <children>
+            <Label fx:id="widthLabel" text="%attribute.canvasWidth.text" />
+            <TextField fx:id="widthField" prefColumnCount="5">
+               <tooltip>
+                  <Tooltip text="%attribute.canvasWidth.toolTipText" />
+               </tooltip>
+               <HBox.margin>
+                  <Insets left="2.0" />
+               </HBox.margin></TextField>
+            <Label fx:id="heightLabel" text="%attribute.canvasHeight.text">
+               <padding>
+                  <Insets left="4.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets left="8.0" />
+               </HBox.margin></Label>
+            <TextField fx:id="heightField" prefColumnCount="5">
+               <tooltip>
+                  <Tooltip text="%attribute.canvasWidth.toolTipText" />
+               </tooltip>
+               <HBox.margin>
+                  <Insets left="2.0" />
+               </HBox.margin></TextField>
+         </children>
+         <VBox.margin>
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</VBox>

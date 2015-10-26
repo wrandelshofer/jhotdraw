@@ -1,0 +1,7 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.drawingViewScrollPane>* {
+    -fx-background-color: #555;
+}

@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.io;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import org.jhotdraw.collection.Key;
@@ -23,7 +24,7 @@ import org.w3c.dom.NodeList;
 public interface FigureFactory extends IdFactory {
 
     /**
-     * Returns a comment which will be added at the beginning of the file.
+     * Returns a comment which will be added to the beginning of the file.
      *
      * @return a comment or null
      */
@@ -50,12 +51,12 @@ public interface FigureFactory extends IdFactory {
     Figure nameToFigure(String name) throws IOException;
 
     /**
-     * Maps a key to a XML attribute name. The name used
-     * for persistent storage may be different from the name defined in the key.
-     * 
+     * Maps a key to a XML attribute name. The name used for persistent storage
+     * may be different from the name defined in the key.
+     *
      * @param f the figure
      * @param key the key
-     * @return The name. 
+     * @return The name.
      *
      * @throws java.io.IOException if the factory does not support the key for
      * the specified figure
@@ -73,20 +74,20 @@ public interface FigureFactory extends IdFactory {
      * the specified figure
      */
     Key<?> nameToKey(Figure f, String name) throws IOException;
+
     /**
-     * Maps a key to a XML element name. The name used
-     * for persistent storage may be different from the name defined in the key.
+     * Maps a key to a XML element name. The name used for persistent storage
+     * may be different from the name defined in the key.
      * <p>
-     * The name can be an empty String {@code ""} for the key
-     * returned by {@link #figureNodeListKeys} if the figure has exactly one
-     * node list key. In this case, the node list will be added directly as
-     * children to the figure. The name of a node list key must not be equal
-     * to the name of a figure, because child figure elements are also added as
-     * child elements.
-     * 
+     * The name can be an empty String {@code ""} for the key returned by
+     * {@link #figureNodeListKeys} if the figure has exactly one node list key.
+     * In this case, the node list will be added directly as children to the
+     * figure. The name of a node list key must not be equal to the name of a
+     * figure, because child figure elements are also added as child elements.
+     *
      * @param f the figure
      * @param key the key
-     * @return The name. 
+     * @return The name.
      *
      * @throws java.io.IOException if the factory does not support the key for
      * the specified figure
@@ -120,8 +121,8 @@ public interface FigureFactory extends IdFactory {
     /**
      * Maps a value to a XML node list.
      * <p>
-     * The node list may not contain elements with a name that conflicts
-     * with the names returned by {@link #figureToName}.
+     * The node list may not contain elements with a name that conflicts with
+     * the names returned by {@link #figureToName}.
      *
      * @param key the key
      * @param value the value
@@ -136,8 +137,8 @@ public interface FigureFactory extends IdFactory {
     /**
      * Maps a XML node list to a value.
      * <p>
-     * The node list does not contain elements with a name that conflicts
-     * with the names returned by {@link #figureToName}.
+     * The node list does not contain elements with a name that conflicts with
+     * the names returned by {@link #figureToName}.
      *
      * @param key the key
      * @param nodeList the nodeList
@@ -230,15 +231,23 @@ public interface FigureFactory extends IdFactory {
     default Drawing fromExternalDrawing(Drawing external) throws IOException {
         return external;
     }
-    
+
     /**
      * Returns the stylesheets keys.
-     * 
-     * @return The stylesheets key of the Drawing object. Return null if 
+     *
+     * @return The stylesheets key of the Drawing object. Return null if
      * stylesheets shall not be supported. The default implementation returns
-     *{@link org.jhotdraw.draw.Drawing.AUTHOR_STYLESHEETS}.
+     * {@link org.jhotdraw.draw.Drawing.AUTHOR_STYLESHEETS}.
      */
-    default Key<List<Object>> getStylesheetsKey() {
+    default Key<List<URI>> getStylesheetsKey() {
         return Drawing.AUTHOR_STYLESHEETS;
     }
+
+    /**
+     * Returns the name of the object id attribute. The object id attribute is
+     * used for referencing other objects in the XML file.
+     *
+     * @return name of the object id attribute
+     */
+    String getObjectIdAttribute();
 }

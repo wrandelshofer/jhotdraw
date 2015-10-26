@@ -1,4 +1,4 @@
-/* @(#)URLConverter.java
+/* @(#)UrlConverter.java
  * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
  * Alle Rechte vorbehalten. 
  */
@@ -12,11 +12,11 @@ import java.text.ParseException;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * URLConverter.
+ * UrlConverter.
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class URLConverter implements Converter<URL> {
+public class UrlConverter implements Converter<URL> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, URL value) throws IOException {

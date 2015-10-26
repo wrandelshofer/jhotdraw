@@ -213,20 +213,21 @@ public interface Key<T> extends Serializable {
         }
 
         @Override
-        public T get() {
+        public T getValue() {
             return key.get(map);
         }
 
         @Override
         public void setValue(T value) {
+            // We must put the value before we invoke super.setValue(), so that
+            // getValue() can return the new value.
+            map.put(key, value);
             super.setValue(value);
-            if (value != key.get(map)) {
-                map.put(key, value);
-            }
         }
 
         @Override
         public void unbind() {
+            super.unbind();
             if (map != null) {
                 map.removeListener(mapListener);
                 mapListener = null;

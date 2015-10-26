@@ -173,6 +173,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 handleNodeInvalidated(event.getFigure());
                 break;
             case LAYOUT_INVALIDATED:
+            case STYLE_INVALIDATED:
                 // not my business
                 break;
             case ROOT_CHANGED:
@@ -490,20 +491,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         return constrainer;
     }
 
-    private Property<Rectangle2D> boundsProperty;
-
     private void updateDrawing() {
         clearNodes();
         drawingPane.getChildren().clear();
-        if (boundsProperty != null) {
-            boundsProperty.unbind();
-            boundsProperty = null;
             activeLayer.set(null);
-        }
         Drawing d = getModel().getRoot();
         drawing.set(d);
         if (d != null) {
-            boundsProperty = Drawing.BOUNDS.propertyAt(d.propertiesProperty());
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
             updateLayout();

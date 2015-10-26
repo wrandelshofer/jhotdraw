@@ -12,7 +12,7 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.css.StyleableKey;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.text.CSSSizeConverter;
+import org.jhotdraw.text.CssSizeConverter;
 import org.jhotdraw.text.CssStringConverter;
 import org.jhotdraw.text.DefaultConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;

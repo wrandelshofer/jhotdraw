@@ -132,9 +132,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
     @Override
     public boolean attributeValueContainsWord(Styleable element, String attributeName, String word) {
-        System.out.println("attributeValueContainsWord " + element);
         Set<String> value = getWordListAttribute(element, attributeName);
-        System.out.println(attributeName + "  value " + value);
 
         return value != null && value.contains(word);
     }

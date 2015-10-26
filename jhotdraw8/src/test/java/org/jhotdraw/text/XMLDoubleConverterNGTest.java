@@ -17,11 +17,11 @@ import org.testng.annotations.Test;
 public class XMLDoubleConverterNGTest {
 
     /**
-     * Test of toString method, of class XMLDoubleConverter.
+     * Test of toString method, of class XmlDoubleConverter.
      */
     @Test(dataProvider = "doubleData")
     public void testToString(Double inputValue, String expectedValue) {
-        XMLDoubleConverter c = new XMLDoubleConverter();
+        XmlDoubleConverter c = new XmlDoubleConverter();
 
         String actualValue = c.toString(inputValue);
 
@@ -29,11 +29,11 @@ public class XMLDoubleConverterNGTest {
     }
 
     /**
-     * Test of toString method, of class XMLDoubleConverter.
+     * Test of toString method, of class XmlDoubleConverter.
      */
     @Test(dataProvider = "doubleData")
     public void testFromString(Double expectedValue, String inputValue) throws ParseException {
-        XMLDoubleConverter c = new XMLDoubleConverter();
+        XmlDoubleConverter c = new XmlDoubleConverter();
 
         Double actualValue = c.fromString(inputValue);
 

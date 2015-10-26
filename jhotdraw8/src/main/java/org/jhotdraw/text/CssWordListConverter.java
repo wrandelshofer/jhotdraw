@@ -18,7 +18,7 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class CssWordListConverter implements Converter<List<String>> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ ]+}", new CSSConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ ]+}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, List<String> value) throws IOException {

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.css;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -81,16 +82,16 @@ public interface StyleManager {
     default void addStylesheet(StyleOrigin origin, URL stylesheetUrl) throws IOException {
         Stylesheet sh = new CssParser().parseStylesheet(stylesheetUrl);
         switch (origin) {
-        case USER_AGENT:
-            getUserAgentStylesheetUrlOrString().add(stylesheetUrl);
-            getUserAgentStylesheets().add(sh);
-            break;
-        case AUTHOR:
-            getAuthorStylesheetUrlOrString().add(stylesheetUrl);
-            getAuthorStylesheets().add(sh);
-            break;
-        default:
-            throw new IllegalArgumentException("Illegal origin:" + origin);
+            case USER_AGENT:
+                getUserAgentStylesheetUrlOrString().add(stylesheetUrl);
+                getUserAgentStylesheets().add(sh);
+                break;
+            case AUTHOR:
+                getAuthorStylesheetUrlOrString().add(stylesheetUrl);
+                getAuthorStylesheets().add(sh);
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal origin:" + origin);
         }
     }
 
@@ -104,16 +105,16 @@ public interface StyleManager {
     default void addStylesheet(StyleOrigin origin, String str) throws IOException {
         Stylesheet sh = new CssParser().parseStylesheet(str);
         switch (origin) {
-        case USER_AGENT:
-            getUserAgentStylesheetUrlOrString().add(str);
-            getUserAgentStylesheets().add(sh);
-            break;
-        case AUTHOR:
-            getAuthorStylesheetUrlOrString().add(str);
-            getAuthorStylesheets().add(sh);
-            break;
-        default:
-            throw new IllegalArgumentException("Illegal origin:" + origin);
+            case USER_AGENT:
+                getUserAgentStylesheetUrlOrString().add(str);
+                getUserAgentStylesheets().add(sh);
+                break;
+            case AUTHOR:
+                getAuthorStylesheetUrlOrString().add(str);
+                getAuthorStylesheets().add(sh);
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal origin:" + origin);
         }
     }
 
@@ -124,68 +125,62 @@ public interface StyleManager {
      */
     default void clearStylesheets(StyleOrigin origin) {
         switch (origin) {
-        case USER_AGENT:
-            getUserAgentStylesheetUrlOrString().clear();
-            getUserAgentStylesheets().clear();
-            break;
-        case AUTHOR:
-            getAuthorStylesheetUrlOrString().clear();
-            getAuthorStylesheets().clear();
-            break;
-        default:
-            throw new IllegalArgumentException("Illegal origin:" + origin);
+            case USER_AGENT:
+                getUserAgentStylesheetUrlOrString().clear();
+                getUserAgentStylesheets().clear();
+                break;
+            case AUTHOR:
+                getAuthorStylesheetUrlOrString().clear();
+                getAuthorStylesheets().clear();
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal origin:" + origin);
         }
     }
 
-    default void updateStylesheets(StyleOrigin origin, URI documentHome, List<Object> urlOrString) throws IOException {
+    default void updateStylesheets(StyleOrigin origin, URI documentHome, List<URI> urlOrString) throws IOException {
+        if (documentHome == null) {
+            documentHome = new File(System.getProperty("user.home")).toURI();
+        }
+
         ObservableList<Object> myUrlOrString;
         ObservableList<Stylesheet> myStylesheet;
         switch (origin) {
-        case USER_AGENT:
-            myUrlOrString = getUserAgentStylesheetUrlOrString();
-            myStylesheet = getUserAgentStylesheets();
-            break;
-        case AUTHOR:
-            myUrlOrString = getAuthorStylesheetUrlOrString();
-            myStylesheet = getAuthorStylesheets();
-            break;
-        default:
-            throw new IllegalArgumentException("Illegal origin:" + origin);
+            case USER_AGENT:
+                myUrlOrString = getUserAgentStylesheetUrlOrString();
+                myStylesheet = getUserAgentStylesheets();
+                break;
+            case AUTHOR:
+                myUrlOrString = getAuthorStylesheetUrlOrString();
+                myStylesheet = getAuthorStylesheets();
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal origin:" + origin);
         }
 
-        if (urlOrString==null||urlOrString.isEmpty()) {
-            myUrlOrString.clear();
-            myStylesheet.clear();
+        myStylesheet.clear();
+        if (urlOrString == null) {
             return;
-        }
-        
-        // XXX implement smarter merging algorithm
-        // fix sizes
-        while (myUrlOrString.size() > urlOrString.size()) {
-            myUrlOrString.remove(myUrlOrString.size() - 1);
-            myStylesheet.remove(myUrlOrString.size() - 1);
-        }
-        while (myUrlOrString.size() < urlOrString.size()) {
-            myUrlOrString.add(null);
-            myStylesheet.add(null);
         }
 
         // update stylesheets
         for (int i = 0, n = urlOrString.size(); i < n; i++) {
             Object item = urlOrString.get(i);
-            if (!item.equals(myUrlOrString.get(i))) {
-                Stylesheet sh;
-                try {
-                   if (item instanceof URI) {
-                        sh = new CssParser().parseStylesheet(documentHome==null?(URI)item:documentHome.resolve((URI) item));
-                    } else {
-                        sh = new CssParser().parseStylesheet((String) item);
-                    }
-                } catch (IOException e) {
-                    throw new IOException("Error loading stylesheet " + item, e);
+            Stylesheet sh;
+            try {
+                // FIXME don't perform IO in user event thread!
+                if (item instanceof URI) {
+                    sh = new CssParser().parseStylesheet(documentHome.resolve((URI) item));
+                } else {
+                    sh = new CssParser().parseStylesheet((String) item);
                 }
-                myUrlOrString.set(i, item);
-                myStylesheet.set(i, sh);
+            } catch (IOException e) {
+                System.err.println("Warning: Could not load stylesheet \"" + item+"\". "+e.getMessage());
+                sh = null;
+            }
+            if (sh != null) {
+                myUrlOrString.add(i, item);
+                myStylesheet.add(i, sh);
             }
         }
     }

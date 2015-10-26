@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.samples.mini;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import javafx.application.Application;
@@ -86,8 +87,8 @@ public class CssSample extends Application {
         vertex4.set(Figure.STYLE_ID,"vertex4");
         
         drawing.layout();
-        ArrayList<Object> stylesheets=new ArrayList<>();
-        stylesheets.add(CssSample.class.getResource("CssSample.css"));
+        ArrayList<URI> stylesheets=new ArrayList<>();
+        stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());
         drawing.set(Drawing.USER_AGENT_STYLESHEETS,stylesheets);
         drawing.applyCss();
         drawing.layout();

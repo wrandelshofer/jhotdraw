@@ -56,19 +56,31 @@ public class StyleableStyleManager extends AbstractStyleManager {
         HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
         for (CssMetaData<? extends Styleable, ?> m : metaList) {
             metaMap.put(m.getProperty(), m);
+            /*
+            CssMetaData<Styleable, Object> mObject = (CssMetaData<Styleable, Object>) m;
+            if (origin == null || origin == StyleOrigin.USER_AGENT) {
+                mObject.getStyleableProperty(elem).applyStyle(StyleOrigin.USER_AGENT, null);
+            }
+            if (origin == null || origin == StyleOrigin.AUTHOR) {
+                mObject.getStyleableProperty(elem).applyStyle(StyleOrigin.AUTHOR, null);
+            }*/
         }
 
         // user agent stylesheet can not override element attributes
         if (origin == null || origin == StyleOrigin.USER_AGENT) {
             for (Stylesheet s : userAgentStylesheets) {
-                applyStylesTo(StyleOrigin.USER_AGENT, s, metaMap, elem);
+                if (s != null) {
+                    applyStylesTo(StyleOrigin.USER_AGENT, s, metaMap, elem);
+                }
             }
         }
 
         // author stylesheet override user agent stylesheet and element attributes
         if (origin == null || origin == StyleOrigin.AUTHOR) {
             for (Stylesheet s : authorStylesheets) {
-                applyStylesTo(StyleOrigin.AUTHOR, s, metaMap, elem);
+                if (s != null) {
+                    applyStylesTo(StyleOrigin.AUTHOR, s, metaMap, elem);
+                }
             }
         }
 

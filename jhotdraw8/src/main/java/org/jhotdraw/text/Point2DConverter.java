@@ -21,7 +21,7 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class Point2DConverter implements Converter<Point2D> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new XMLConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new XmlConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point2D value) throws IOException {

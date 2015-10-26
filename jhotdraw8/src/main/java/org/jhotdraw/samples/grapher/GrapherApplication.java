@@ -19,6 +19,7 @@ import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.gui.FileURIChooser;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.util.Resources;
 
 /**
  *
@@ -28,6 +29,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
     public GrapherApplication() {
         super();
+        Resources.setVerbose(true);
     }
 
     @Override
@@ -76,6 +78,15 @@ public class GrapherApplication extends DocumentOrientedApplication {
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
+    }
+
+    @Override
+    protected void onViewAdded(View view) {
+        super.onViewAdded(view); 
+        view.getNode().getScene().getStylesheets().addAll(//
+                GrapherApplication.class.getResource("/org/jhotdraw/draw/gui/inspector.css").toString(),//
+                GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
+                );
     }
     
 }

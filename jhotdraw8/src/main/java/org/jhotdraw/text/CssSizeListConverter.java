@@ -1,4 +1,4 @@
-/* @(#)CSSSizeListConverter.java
+/* @(#)CssSizeListConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -13,15 +13,15 @@ import javafx.geometry.Point2D;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * CSSSizeListConverter.
+ * CssSizeListConverter.
  * <p>
  * Parses a list of sizes.
  * 
  * @author Werner Randelshofer
  */
-public class CSSSizeListConverter implements Converter<List<Double>> {
+public class CssSizeListConverter implements Converter<List<Double>> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CSSConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, List<Double> value) throws IOException {

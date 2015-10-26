@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Figure;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Comment;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -230,7 +228,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     private void writeElementAttributes(Element elem, Figure figure) throws IOException {
-        setAttribute(elem, "id", factory.createId(figure));
+        setAttribute(elem, factory.getObjectIdAttribute(), factory.createId(figure));
         for (Key<?> k : factory.figureAttributeKeys(figure)) {
             @SuppressWarnings("unchecked")
             Key<Object> key = (Key<Object>) k;
@@ -288,15 +286,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         } finally {
             figureToElementMap.clear();
         }
-        if (external != null) {
-            return factory.fromExternalDrawing(external);
-        } else {
-            throw new IOException(//
-                    namespaceURI == null//
-                            ? "document does not contain a drawing"//
-                            : "document does not contain a drawing in namespace " + namespaceURI//
-            );
-        }
+
+        return factory.fromExternalDrawing(external);
+
     }
 
     private String getAttribute(Element elem, String unqualifiedName) {
@@ -330,11 +322,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 return null;
             }
             figureToElementMap.put(figure, elem);
-            String id = getAttribute(elem, "id");
-            if (id == null) {
-                throw new IOException("No \"id\" attribute in element " + elem.getTagName());
-            }
-            if (id != null) {
+            String id = getAttribute(elem, factory.getObjectIdAttribute());
+
+            if (id != null&&!id.isEmpty()) {
                 if (factory.getObject(id) != null) {
                     throw new IOException("Duplicate id " + id + " in element " + elem.getTagName());
                 }
@@ -364,7 +354,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 continue;
             }
 
-            if ("id".equals(attr.getLocalName())) {
+            if (factory.getObjectIdAttribute().equals(attr.getLocalName())) {
                 continue;
             }
             @SuppressWarnings("unchecked")
@@ -433,18 +423,19 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         return f;
     }
 
+    // XXX maybe this should not be in SimpleXmlIO?
     private void writeProcessingInstructions(Document doc, Drawing external) {
         Element docElement = doc.getDocumentElement();
         if (factory.getStylesheetsKey() != null) {
             for (Object stylesheet : external.get(factory.getStylesheetsKey())) {
                 if (stylesheet instanceof URI) {
-                    URI stylesheetUri = (URI) stylesheet;
-                    if (documentHome != null) {
-                        stylesheetUri = documentHome.relativize(stylesheetUri);
+                    String stylesheetString = stylesheet.toString();
+                    String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
+                    if ("text/".equals(type)) {
+                        type = "text/css";
                     }
-
                     ProcessingInstruction pi = doc.createProcessingInstruction("xml-stylesheet", //
-                            "type=\"text/css\" href=\"" + stylesheet + "\"");
+                            "type=\"" + type + "\" href=\"" + stylesheet + "\"");
                     doc.insertBefore(pi, docElement);
                 }
             }
@@ -452,11 +443,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     }
 
+    // XXX maybe this should not be in SimpleXmlIO?
     private void readProcessingInstructions(Document doc, Drawing external) {
         if (factory.getStylesheetsKey() != null) {
             Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
-            Pattern typePattern = Pattern.compile("(?:^|.* )type=\"([^\"]*)\".*");
-            ArrayList<Object> stylesheets = new ArrayList<Object>();
+            ArrayList<URI> stylesheets = new ArrayList<URI>();
             NodeList list = doc.getChildNodes();
             for (int i = 0, n = list.getLength(); i < n; i++) {
                 Node node = list.item(i);
@@ -466,14 +457,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                         Matcher m = hrefPattern.matcher(pi.getData());
                         if (m.matches()) {
                             String href = m.group(1);
-                            
-                            m = typePattern.matcher(pi.getData());
-                            if (m.matches()) {
-                                String type=m.group(1);
-                                if (!"text/css".equals(type)) {
-                                    continue;
-                                }
-                            }
                             stylesheets.add(URI.create(href));
                         }
                     }
@@ -482,4 +465,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             external.set(factory.getStylesheetsKey(), stylesheets);
         }
     }
+
+    
 }

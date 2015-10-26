@@ -20,7 +20,7 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class Rectangle2DConverter implements Converter<Rectangle2D> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number} {2,number} {3,number}", new XMLConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number} {2,number} {3,number}", new XmlConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Rectangle2D value) throws IOException {
