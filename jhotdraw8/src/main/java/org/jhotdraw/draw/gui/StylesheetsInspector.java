@@ -28,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -36,6 +37,8 @@ import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.gui.ClipboardIO;
+import org.jhotdraw.gui.ListViewUtil;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.UriConverter;
 
@@ -91,7 +94,6 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         removeButton.disableProperty().bind(Bindings.equal(listView.getSelectionModel().selectedIndexProperty(), -1));
 
         listView.setEditable(true);
-        setCellFactory(listView);
         listView.setFixedCellSize(24.0);
 
         listView.setOnEditCommit(new EventHandler<ListView.EditEvent<URI>>() {
@@ -102,77 +104,54 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
         });
 
-        
-        // XXX move this into a separate class
-        
-        EventHandler<? super DragEvent> dndHandler = new EventHandler<DragEvent>() {
+        ClipboardIO<URI> io = new ClipboardIO<URI>() {
 
             @Override
-            public void handle(DragEvent event) {
-                EventType<DragEvent> t = event.getEventType();
-
-                boolean isAcceptable = event.getDragboard().hasUrl()
-                        || event.getDragboard().hasFiles();
-
-                if (t == DragEvent.DRAG_DROPPED) {
-                    boolean success = false;
-                    if (isAcceptable) {
-                        ListView<?> gestureTargetListView = null;
-                        if (event.getGestureSource() instanceof ListCell) {
-                            ListCell<?> gestureTargetCell = (ListCell<?>) event.getGestureSource();
-                            gestureTargetListView = gestureTargetCell.getListView();
-                        }
-                        @SuppressWarnings("unchecked")
-                        ListView<URI> sourceListView = (ListView<URI>) event.getSource();
-                        TransferMode mode = (sourceListView == gestureTargetListView) ? TransferMode.MOVE : TransferMode.COPY;
-                        event.acceptTransferModes(mode);
-
-                        // XXX assume fixed cell height
-                        double cellHeight = listView.getFixedCellSize();
-                        int index = Math.max(0, Math.min((int) (event.getY() / cellHeight), listView.getItems().size()));
-
-                        if (event.getDragboard()
-                                .hasUrl()) {
-                            URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
-                            URI dragboardUri = URI.create(event.getDragboard().getUrl());
-                            URI stylesheetUri = documentHome.relativize(dragboardUri);
-                            sourceListView.getItems().add(index, stylesheetUri);
-                            if (index <= draggedCellIndex) {
-                                draggedCellIndex++;
-                            }
-                            success = true;
-                        } else if (event.getDragboard().hasFiles()) {
-                            URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
-                            for (File f : event.getDragboard().getFiles()) {
-                                URI dragboardUri = f.toURI();
-                                URI stylesheetUri = documentHome.relativize(dragboardUri);
-                                sourceListView.getItems().add(index++, stylesheetUri);
-                                if (index <= draggedCellIndex) {
-                                    draggedCellIndex++;
-                                }
-                            }
-                            success = true;
-                        }
-                    }
-                    event.setDropCompleted(success);
-                    event.consume();
-                } else if (t == DragEvent.DRAG_OVER) {
-                    if (isAcceptable) {
-                        ListView<?> gestureTargetListView = null;
-                        if (event.getGestureSource() instanceof ListCell) {
-                            ListCell<?> gestureTargetCell = (ListCell<?>) event.getGestureSource();
-                            gestureTargetListView = gestureTargetCell.getListView();
-                        }
-                        ListView<?> sourceListView = (ListView<?>) event.getSource();
-                        TransferMode mode = (sourceListView == gestureTargetListView) ? TransferMode.MOVE : TransferMode.COPY;
-                        event.acceptTransferModes(mode);
-                    }
-                    event.consume();
+            public void write(Clipboard clipboard, List<URI> items) {
+                if (items.size()!=1) {
+                throw new UnsupportedOperationException("Not supported yet."); 
                 }
+                 ClipboardContent content = new ClipboardContent();
+                URI stylesheetUri = items.get(0);
+                    URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
+                    stylesheetUri = documentHome.resolve(stylesheetUri);
+
+                    content.putUrl(stylesheetUri.toString());
+                    clipboard.setContent(content);
+            }
+
+            @Override
+            public List<URI> read(Clipboard clipboard) {
+                List<URI> list;
+                if (clipboard.hasUrl()) {
+                    list = new ArrayList<>();
+                    URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
+                    URI dragboardUri = URI.create(clipboard.getUrl());
+                    URI stylesheetUri = documentHome.relativize(dragboardUri);
+                    list.add(stylesheetUri);
+                } else if (clipboard.hasFiles()) {
+                    list = new ArrayList<>();
+                    URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
+                    for (File f : clipboard.getFiles()) {
+                        URI dragboardUri = f.toURI();
+                        URI stylesheetUri = documentHome.relativize(dragboardUri);
+                        list.add(stylesheetUri);
+                    }
+                } else {
+                    list = null;
+                }
+                return list;
+            }
+
+            @Override
+            public boolean canRead(Clipboard clipboard) {
+               return clipboard.hasFiles()||clipboard.hasUrl();
             }
 
         };
-        listView.addEventHandler(DragEvent.ANY, dndHandler);
+         StringConverter<URI> uriConverter = new StringConverterConverterWrapper<>(new UriConverter());
+        ListViewUtil.addDragAndDropSupport(listView,(ListView<URI> param) -> 
+             new TextFieldListCell<>(uriConverter), io);
     }
 
     @Override
@@ -193,64 +172,4 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     private void onListChanged() {
         drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, new ArrayList<>(listView.getItems()));
     }
-
-    private int draggedCellIndex;
-
-    private void setCellFactory(ListView<URI> listView) {
-        StringConverter<URI> uriConverter = new StringConverterConverterWrapper<>(new UriConverter());
-        EventHandler<? super DragEvent> dndHandler = new EventHandler<DragEvent>() {
-
-            @Override
-            public void handle(DragEvent event) {
-                if (event.isConsumed()) {
-                    return;
-                }
-                EventType<DragEvent> t = event.getEventType();
-                if (t == DragEvent.DRAG_DONE) {
-                    ListCell<?> cell = (ListCell<?>) event.getSource();
-                    if (event.getAcceptedTransferMode() == TransferMode.MOVE) {
-                        listView.getItems().remove(draggedCellIndex);
-                    }
-                    event.consume();
-                }
-            }
-        };
-
-        EventHandler<? super MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
-                    @SuppressWarnings("unchecked")
-                    TextFieldListCell<URI> draggedCell = (TextFieldListCell<URI>) event.getSource();
-                    draggedCellIndex = draggedCell.getIndex();
-                    // XXX we currently only support single selection!!
-                    if (!listView.getSelectionModel().isSelected(draggedCell.getIndex())) {
-                        return;
-                    }
-
-                    Dragboard dragboard = draggedCell.startDragAndDrop(TransferMode.COPY_OR_MOVE);
-                    ClipboardContent content = new ClipboardContent();
-
-                    URI stylesheetUri = draggedCell.getItem();
-                    URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
-                    stylesheetUri = documentHome.resolve(stylesheetUri);
-
-                    content.putUrl(stylesheetUri.toString());
-                    dragboard.setDragView(draggedCell.snapshot(new SnapshotParameters(), null));
-                    dragboard.setContent(content);
-                    event.consume();
-                }
-            }
-
-        };
-
-        listView.setCellFactory((ListView<URI> param) -> {
-            TextFieldListCell<URI> cell = new TextFieldListCell<>(uriConverter);
-            cell.addEventHandler(DragEvent.ANY, dndHandler);
-            cell.addEventHandler(MouseEvent.DRAG_DETECTED, mouseHandler);
-            return cell;
-        });
-    }
-
 }
