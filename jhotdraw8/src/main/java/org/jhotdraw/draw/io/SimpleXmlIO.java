@@ -334,7 +334,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             NodeList list = elem.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
                 Figure child = readNodesRecursively(list.item(i));
-                if (child instanceof Figure) {
+                if (child instanceof Figure){
+                    if (!child.isSuitableParent(figure)) {
+                        throw new IOException(list.item(i).getNodeName()+" is not a suitable child for "+elem.getTagName()+".");
+                    }
                     figure.add(child);
                 }
             }
@@ -426,7 +429,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     // XXX maybe this should not be in SimpleXmlIO?
     private void writeProcessingInstructions(Document doc, Drawing external) {
         Element docElement = doc.getDocumentElement();
-        if (factory.getStylesheetsKey() != null) {
+        if (factory.getStylesheetsKey() != null&&external.get(factory.getStylesheetsKey())!=null) {
             for (Object stylesheet : external.get(factory.getStylesheetsKey())) {
                 if (stylesheet instanceof URI) {
                     String stylesheetString = stylesheet.toString();

@@ -59,7 +59,7 @@ public class CanvasInspector extends AbstractDrawingInspector {
     private InvalidationListener drawingUpdater = o->onDrawingPropertyValueChanged();
     
     public CanvasInspector() {
-        this(LayerInspector.class.getResource("CanvasInspector.fxml"));
+        this(LayersInspector.class.getResource("CanvasInspector.fxml"));
     }
 
     public CanvasInspector(URL fxmlUrl) {

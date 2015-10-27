@@ -36,6 +36,7 @@ import org.jhotdraw.text.Rectangle2DConverter;
 import org.jhotdraw.text.UrlConverter;
 import org.jhotdraw.text.CssWordListConverter;
 import org.jhotdraw.text.UriConverter;
+import org.jhotdraw.text.XmlBooleanConverter;
 import org.jhotdraw.text.XmlPaintConverter;
 
 /**
@@ -55,6 +56,8 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
             Set<Key<?>> keys = Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class);
             keys.remove(Drawing.USER_AGENT_STYLESHEETS);
             keys.remove(Drawing.AUTHOR_STYLESHEETS);
+            keys.remove(Drawing.INLINE_STYLESHEETS);
+            keys.remove(Drawing.DOCUMENT_HOME);
             addNodeListKey(TextFigure.class, "", TextFigure.TEXT);
             addFigureKeysAndNames("Drawing", SimpleDrawing.class, keys);
         }
@@ -84,6 +87,7 @@ System.out.println("DefaultFigureFactory line:"+Figure.getDeclaredAndInheritedKe
         addConverter(URI.class, new UriConverter());
         addConverter(Connector.class, new DefaultConnectorConverter());
         addConverter(Paint.class, new XmlPaintConverter());
+        addConverter(Boolean.class, new XmlBooleanConverter());
 
         addConverter(Figure.STYLE_CLASS.getFullValueType(), new CssObservableWordListConverter());
         checkConverters();

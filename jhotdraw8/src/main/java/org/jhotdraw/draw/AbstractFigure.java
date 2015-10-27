@@ -43,7 +43,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
 
         @Override
         protected void fireValueChangedEvent() {
-            checkParent(get());
+            if (!isSuitableParent(get())) {
+                throw new IllegalArgumentException(get()+" is not a suitable parent for this figure.");
+            }
             super.fireValueChangedEvent();
         }
 
@@ -69,19 +71,19 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     }
 
     /**
-     * This method should throw an illegal argument exception if the provided
-     * figure is not a suitable parent for this figure.
+     * This method whether the provided figure is a suitable parent for this
+     * figure.
      * <p>
-     * This implementation fires an illegal argument exception if the parent is
-     * an instanceof {@code Drawing}.
+     * This implementation returns false if {@code newParent} is a
+     * {@link Drawing}. Because only {@link Layer}s may have {@code Drawing} as
+     * a parent.
      *
      * @param newParent The new parent figure.
-     * @throws IllegalArgumentException if newParent is an illegal parent
+     * @return true if {@code newParent} is an acceptable parent
      */
-    protected void checkParent(Figure newParent) {
-        if (newParent instanceof Drawing) {
-            throw new IllegalArgumentException("illegal parent:" + newParent + " for:" + this);
-        }
+    @Override
+    public boolean isSuitableParent(Figure newParent) {
+        return newParent != null && !(newParent instanceof Drawing);
     }
 
     @Override
@@ -194,7 +196,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     public void transformNotify() {
         invalidateTransforms();
     }
-    /** Clears all cached transformation matrices.*/
+
+    /**
+     * Clears all cached transformation matrices.
+     */
     public void invalidateTransforms() {
         parentToDrawing
                 = drawingToParent
@@ -204,8 +209,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
                 = parentToLocal = null;
     }
 
-    /** Warning: this method caches the transformation.
-     * 
+    /**
+     * Warning: this method caches the transformation.
+     *
      * @return transform
      */
     @Override
@@ -216,8 +222,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return parentToDrawing;
     }
 
-    /** Warning: this method caches the transformation.
-     * 
+    /**
+     * Warning: this method caches the transformation.
+     *
      * @return transform
      */
     @Override
@@ -228,8 +235,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return localToDrawing;
     }
 
-    /** Warning: this method caches the transformation.
-     * 
+    /**
+     * Warning: this method caches the transformation.
+     *
      * @return transform
      */
     @Override
@@ -240,8 +248,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return drawingToParent;
     }
 
-    /** Warning: this method caches the transformation.
-     * 
+    /**
+     * Warning: this method caches the transformation.
+     *
      * @return transform
      */
     @Override
@@ -252,8 +261,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return drawingToLocal;
     }
 
-    /** Warning: this method caches the transformation.
-     * 
+    /**
+     * Warning: this method caches the transformation.
+     *
      * @return transform
      */
     @Override
@@ -264,8 +274,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         return localToParent;
     }
 
-    /** Warning: this method caches the transformation.
-     * 
+    /**
+     * Warning: this method caches the transformation.
+     *
      * @return transform
      */
     @Override

@@ -67,20 +67,19 @@ public class SimpleLayer extends AbstractCompositeFigure implements Layer {
         return false;
     }
 
-    /** This method should throw an illegal argument exception if the provided
-     * figure is not a suitable parent for this figure.
+    /**
+     * This method whether the provided figure is a suitable parent for this
+     * figure.
      * <p>
-     * This implementation fires an illegal argument exception if the parent
-     * is not an instance of {@code Drawing}.
+     * This implementation returns true if {@code newParent} is a
+     * {@link Drawing}. 
      *
-     * @param newParent the new parent
-     * @throws IllegalArgumentException if newParent is an illegal parent
+     * @param newParent The new parent figure.
+     * @return true if {@code newParent} is an acceptable parent
      */
     @Override
-    protected void checkParent(Figure newParent) {
-        if (newParent!=null&&!(newParent instanceof Drawing)) {
-            throw new IllegalArgumentException("illegal parent:" + newParent+" for:"+this);
-        }
+    public boolean isSuitableParent(Figure newParent) {
+        return (newParent instanceof Drawing);
     }
 
     /** Layers never create handles. */
