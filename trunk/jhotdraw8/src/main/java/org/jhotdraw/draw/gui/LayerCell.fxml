@@ -8,27 +8,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="inspector" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <ListView fx:id="listView" editable="true" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </center>
-   <bottom>
-      <HBox BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="addButton" mnemonicParsing="false" text="+">
-               <HBox.margin>
-                  <Insets top="4.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="removeButton" mnemonicParsing="false" text="-">
-               <HBox.margin>
-                  <Insets left="4.0" top="4.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-   </bottom>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" styleClass="inspector" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <padding>
       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
    </padding>
+   <left>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <CheckBox fx:id="visibleCheckBox" mnemonicParsing="false" text="visible" />
+            <CheckBox fx:id="lockedCheckBox" mnemonicParsing="false" text="locked">
+               <HBox.margin>
+                  <Insets left="4.0" />
+               </HBox.margin>
+            </CheckBox>
+         </children>
+      </HBox>
+   </left>
+   <center>
+      <Label fx:id="idLabel" text="id" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="4.0" />
+         </BorderPane.margin>
+      </Label>
+   </center>
+   <right>
+      <Label fx:id="selectionLabel" text="[#]" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="4.0" />
+         </BorderPane.margin>
+      </Label>
+   </right>
 </BorderPane>
