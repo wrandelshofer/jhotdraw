@@ -25,13 +25,19 @@ public abstract class AbstractDrawingInspector extends BorderPane implements Ins
     @Override
     public void setDrawingView(DrawingView newValue) {
         DrawingView oldValue = drawingView;
+        Drawing oldDrawing = null;
         if (oldValue != null) {
             oldValue.drawingProperty().removeListener(drawingListener);
+            oldDrawing=oldValue.getDrawing();
         }
         this.drawingView = newValue;
+        Drawing newDrawing = null;
         if (newValue != null) {
             newValue.drawingProperty().addListener(drawingListener);
+            newDrawing=newValue.getDrawing();
         }
+        onDrawingViewChanged(oldValue, newValue);
+        onDrawingChanged(oldDrawing, newDrawing);
     }
 
     @Override
@@ -39,5 +45,9 @@ public abstract class AbstractDrawingInspector extends BorderPane implements Ins
         return this;
     }
 
+    /** Can be overridden by subclasses. This implementation is empty. */
+    protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+        
+    }
     protected abstract void onDrawingChanged(Drawing oldValue, Drawing newValue);
 }

@@ -8,22 +8,58 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
 
 /**
  * FXML Controller class
  *
  * @author werni
  */
-public class LayerCell extends AbstractDrawingInspector {
+public class LayerCell extends ListCell<Figure> {
 
-   public LayerCell() {
-        this(LayerInspector.class.getResource("LayerCell.fxml"));
+    private Node node;
+
+    @FXML
+    private CheckBox visibleCheckBox;
+
+    @FXML
+    private CheckBox lockedCheckBox;
+
+    @FXML
+    private Label idLabel;
+
+    @FXML
+    private Label selectionLabel;
+
+    private DrawingView drawingView;
+
+    private boolean isUpdating;
+
+    private Figure item;
+
+    public LayerCell(DrawingView drawingView) {
+        this(LayersInspector.class.getResource("LayerCell.fxml"), drawingView);
     }
-    public LayerCell(URL fxmlUrl) {
+
+    public LayerCell(URL fxmlUrl, DrawingView drawingView) {
+        this.drawingView = drawingView;
         init(fxmlUrl);
     }
 
@@ -31,14 +67,51 @@ public class LayerCell extends AbstractDrawingInspector {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
-        try(InputStream in=fxmlUrl.openStream()) {
-            setCenter(loader.load(in));
+        try (InputStream in = fxmlUrl.openStream()) {
+            node = loader.load(in);
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
+
+        visibleCheckBox.selectedProperty().addListener(o -> updateLayerVisible());
+        lockedCheckBox.selectedProperty().addListener(o -> updateLayerLocked());
     }
-    
-    protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
-        
+
+    protected void updateItem(Figure item, boolean empty) {
+        super.updateItem(item, empty);
+
+        if (empty || item == null) {
+            setText(null);
+            setGraphic(null);
+            this.item = null;
+        } else {
+            this.item = item;
+            isUpdating = true;
+            idLabel.setText(item.get(Figure.STYLE_ID));
+            setGraphic(node);
+            
+            // FIXME - we must listen to these properties!
+            
+
+            visibleCheckBox.setSelected(item.get(Figure.VISIBLE));
+            lockedCheckBox.setSelected(item.get(Figure.DISABLED));
+            isUpdating = false;
+        }
+    }
+
+    public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingView drawingView) {
+        return list -> new LayerCell(drawingView);
+    }
+
+    private void updateLayerVisible() {
+        if (!isUpdating) {
+            drawingView.getModel().set(item, Figure.VISIBLE, visibleCheckBox.isSelected());
+        }
+    }
+
+    private void updateLayerLocked() {
+        if (!isUpdating) {
+            drawingView.getModel().set(item, Figure.DISABLED, lockedCheckBox.isSelected());
+        }
     }
 }

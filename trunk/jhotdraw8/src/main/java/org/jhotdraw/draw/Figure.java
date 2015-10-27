@@ -527,6 +527,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @return true if getChildren are allowed
      */
     boolean isAllowsChildren();
+    /**
+     * This method whether the provided figure is a suitable parent for this
+     * figure.
+     *
+     * @param newParent The new parent figure.
+     * @return true if {@code newParent} is an acceptable parent
+     */
+    public boolean isSuitableParent(Figure newParent);
 
     /**
      * Whether the {@code layout} method of this figure does anything.

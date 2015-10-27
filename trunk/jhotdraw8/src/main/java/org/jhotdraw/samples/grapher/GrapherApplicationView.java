@@ -45,7 +45,7 @@ import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.gui.CanvasInspector;
 import org.jhotdraw.draw.gui.Inspector;
-import org.jhotdraw.draw.gui.LayerInspector;
+import org.jhotdraw.draw.gui.LayersInspector;
 import org.jhotdraw.draw.gui.StylesheetsInspector;
 import org.jhotdraw.draw.gui.ToolsToolbar;
 import org.jhotdraw.draw.gui.ZoomToolbar;
@@ -132,15 +132,14 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
 
-        getApplication().execute(
-                new BackgroundTask<List<Node>>() {
+        getApplication().execute(new BackgroundTask<List<Node>>() {
 
                     @Override
                     protected List<Node> call() throws Exception {
                         List<Node> list = new LinkedList<>();
                         addInspector(new CanvasInspector(), "canvas", list);
                         addInspector(new StylesheetsInspector(), "stylesheets", list);
-                        addInspector(new LayerInspector(), "layers", list);
+                        addInspector(new LayersInspector(), "layers", list);
                         return list;
                     }
 

@@ -178,7 +178,6 @@ public class ListViewUtil {
 
     private static <T> void addDragAndDropSupport(ListView<T> listView, Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO,
             boolean reorderingOnly) {
-if (cellFactory==null)throw new NullPointerException("cellFactory==null");
         DnDSupport<T> dndSupport = new DnDSupport<T>(listView, clipboardIO, reorderingOnly);
 
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {

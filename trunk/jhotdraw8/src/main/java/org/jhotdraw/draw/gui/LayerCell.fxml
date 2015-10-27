@@ -15,8 +15,8 @@
    <left>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <CheckBox fx:id="visibleCheckBox" mnemonicParsing="false" text="visible" />
-            <CheckBox fx:id="lockedCheckBox" mnemonicParsing="false" text="locked">
+            <CheckBox id="layerVisibleCheckBox" fx:id="visibleCheckBox" mnemonicParsing="false" />
+            <CheckBox id="layerLockCheckBox" fx:id="lockedCheckBox" mnemonicParsing="false">
                <HBox.margin>
                   <Insets left="4.0" />
                </HBox.margin>
