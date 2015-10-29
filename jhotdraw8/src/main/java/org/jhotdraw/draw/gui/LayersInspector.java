@@ -53,12 +53,8 @@ public class LayersInspector extends AbstractDrawingInspector {
     private Button removeButton;
 
     private ObservableList<Figure> layers;
-    /**
-     * Counter for incrementing layer names.
-     */
-    private int counter;
 
-    private Supplier<Layer> layerFactory = () -> new SimpleLayer();
+    private Supplier<Layer> layerFactory;
     
     private ChangeListener<Layer> selectedLayerHandler = new ChangeListener<Layer>() {
 
@@ -75,8 +71,17 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     public LayersInspector(URL fxmlUrl) {
+        this(fxmlUrl, SimpleLayer::new);
+    }
+
+    public LayersInspector(URL fxmlUrl, Supplier<Layer> layerFactory) {
+        this.layerFactory=layerFactory;
         init(fxmlUrl);
     }
+    public LayersInspector(Supplier<Layer> layerFactory) {
+        this(LayersInspector.class.getResource("LayersInspector.fxml"), layerFactory);
+    }
+
 
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
@@ -103,7 +108,6 @@ public class LayersInspector extends AbstractDrawingInspector {
 
         addButton.addEventHandler(ActionEvent.ACTION, o -> {
             Layer layer = layerFactory.get();
-            layer.set(Figure.STYLE_ID, "layer" + (++counter));
             int index = listView.getSelectionModel().getSelectedIndex();
             if (index < 0) {
                 index = 0;
