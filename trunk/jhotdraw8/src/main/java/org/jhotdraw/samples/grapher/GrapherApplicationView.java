@@ -9,6 +9,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 import javafx.beans.InvalidationListener;
 import javafx.concurrent.Worker;
@@ -34,11 +35,13 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.EditorView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleLabelFigure;
+import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
@@ -86,6 +89,11 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
 
+    /**
+     * Counter for incrementing layer names.
+     */
+    private int counter;
+
     @Override
     public void init(EventHandler<TaskCompletionEvent<?>> callback) {
         FXMLLoader loader = new FXMLLoader();
@@ -113,14 +121,15 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
         Resources rsrc = Resources.getResources("org.jhotdraw.draw.Labels");
+        Supplier<Layer> layerFactory = this::createLayer;
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("selectionTool", rsrc), 0, 0);
         ttbar.addTool(new SelectionTool("selectionTool", HandleType.MOVE, rsrc), 0, 1);
-        ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, RectangleFigure::new), 1, 0);
-        ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new), 2, 0);
-        ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new), 1, 1);
-        ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new SimpleLabelFigure(0, 0, "Hello")), 3, 1);
-        ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new), 2, 1);
+        ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, RectangleFigure::new, layerFactory), 1, 0);
+        ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new, layerFactory), 2, 0);
+        ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new, layerFactory), 1, 1);
+        ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new SimpleLabelFigure(0, 0, "Hello"), layerFactory), 3, 1);
+        ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new, layerFactory), 2, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolBar.getItems().add(ttbar);
@@ -134,20 +143,20 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
 
         getApplication().execute(new BackgroundTask<List<Node>>() {
 
-                    @Override
-                    protected List<Node> call() throws Exception {
-                        List<Node> list = new LinkedList<>();
-                        addInspector(new CanvasInspector(), "canvas", list);
-                        addInspector(new StylesheetsInspector(), "stylesheets", list);
-                        addInspector(new LayersInspector(), "layers", list);
-                        return list;
-                    }
+            @Override
+            protected List<Node> call() throws Exception {
+                List<Node> list = new LinkedList<>();
+                addInspector(new CanvasInspector(), "canvas", list);
+                addInspector(new StylesheetsInspector(), "stylesheets", list);
+                addInspector(new LayersInspector(layerFactory), "layers", list);
+                return list;
+            }
 
-                    @Override
-                    protected void succeeded(List<Node> value) {
-                        inspectorsHBox.getChildren().addAll(value);
-                    }
-                });
+            @Override
+            protected void succeeded(List<Node> value) {
+                inspectorsHBox.getChildren().addAll(value);
+            }
+        });
 
         inspectorsHBox.getStyleClass().add("inspector");
         callback.handle(new TaskCompletionEvent<Void>());
@@ -182,6 +191,12 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
     @Override
     public Node getNode() {
         return node;
+    }
+
+    public Layer createLayer() {
+        Layer layer = new SimpleLayer();
+        layer.set(Figure.STYLE_ID, "layer" + (++counter));
+        return layer;
     }
 
     @Override

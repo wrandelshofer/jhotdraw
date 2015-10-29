@@ -42,10 +42,14 @@ public class ConnectionTool extends AbstractTool {
      */
     private double minSize = 2;
 
-    public ConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> factory) {
+    public ConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> figureFactory) {
+        this(name, rsrc, figureFactory, SimpleLayer::new);
+    }
+    public ConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> figureFactory,
+            Supplier<Layer> layerFactory) {
         super(name, rsrc);
-        this.figureFactory = factory;
-        this.layerFactory = SimpleLayer::new;
+        this.figureFactory = figureFactory;
+        this.layerFactory = layerFactory;
     }
 
     public void setFactory(Supplier<LineConnectionFigure> factory) {

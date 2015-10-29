@@ -46,13 +46,19 @@ public class CreationTool extends AbstractTool {
     private double minSize = 2;
 
     public CreationTool(String name, Resources rsrc, Supplier<Figure> factory) {
+        this(name, rsrc, factory, SimpleLayer::new);
+    }
+    public CreationTool(String name, Resources rsrc, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc);
-        this.figureFactory = factory;
-        this.layerFactory = SimpleLayer::new;
+        this.figureFactory = figureFactory;
+        this.layerFactory = layerFactory;
     }
 
-    public void setFactory(Supplier<Figure> factory) {
+    public void setFigureFactory(Supplier<Figure> factory) {
         this.figureFactory = factory;
+    }
+    public void setLayerFactory(Supplier<Layer> factory) {
+        this.layerFactory = factory;
     }
 
     @Override
