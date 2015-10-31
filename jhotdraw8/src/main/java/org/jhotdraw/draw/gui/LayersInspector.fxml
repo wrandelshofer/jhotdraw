@@ -15,15 +15,21 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="addButton" mnemonicParsing="false" text="+">
+            <Button fx:id="addButton" mnemonicParsing="false" text="%addButton.text">
                <HBox.margin>
                   <Insets top="4.0" />
                </HBox.margin>
+               <tooltip>
+                  <Tooltip text="%addButton.toolTipText" />
+               </tooltip>
             </Button>
-            <Button fx:id="removeButton" mnemonicParsing="false" text="-">
+            <Button fx:id="removeButton" mnemonicParsing="false" text="%removeButton.text">
                <HBox.margin>
                   <Insets left="4.0" top="4.0" />
                </HBox.margin>
+               <tooltip>
+                  <Tooltip text="%removeButton.toolTipText" />
+               </tooltip>
             </Button>
          </children>
       </HBox>

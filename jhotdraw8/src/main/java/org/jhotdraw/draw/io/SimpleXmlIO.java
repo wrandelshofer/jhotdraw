@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.collections.ObservableSet;
+import javafx.css.PseudoClass;
 import org.jhotdraw.draw.Drawing;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,6 +30,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -83,7 +86,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     @Override
     public Drawing read(File file, Drawing drawing) throws IOException {
-        setDocumentHome(file.toURI());
+        setDocumentHome(file.getParentFile().toURI());
         return InputFormat.super.read(file, drawing);
     }
 

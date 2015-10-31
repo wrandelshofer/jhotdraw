@@ -70,6 +70,11 @@ public interface TextHolderFigure extends Figure {
 
     /** The text. Default value: {@code ""}. */
     public final static SimpleFigureKey<String> TEXT = new SimpleFigureKey<>("text", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), "");
+    /**
+     * Defines the paint used for filling the interior of the text. Default
+     * value: {@code Color.BLACK}.
+     */
+    public static PaintStyleableFigureKey TEXT_FILL_COLOR = new PaintStyleableFigureKey("textFillColor", Color.BLACK);
 
     /**
      * Updates a text node with text properties except {@code TEXT}.
@@ -78,6 +83,7 @@ public interface TextHolderFigure extends Figure {
      */
     default void applyTextProperties(Text text) {
         text.setFont(getStyled(FONT));
+        text.setFill(getStyled(TEXT_FILL_COLOR));
         text.setFontSmoothingType(getStyled(FONT_SMOOTHING_TYPE));
         text.setLineSpacing(getStyled(LINE_SPACING));
         text.setStrikethrough(getStyled(STRIKETHROUGH));

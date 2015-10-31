@@ -41,6 +41,7 @@ import org.jhotdraw.gui.ClipboardIO;
 import org.jhotdraw.gui.ListViewUtil;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.UriConverter;
+import org.jhotdraw.util.Resources;
 
 /**
  * FXML Controller class
@@ -74,6 +75,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
+        loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
         loader.setController(this);
         try (InputStream in = fxmlUrl.openStream()) {
             setCenter(loader.load(in));

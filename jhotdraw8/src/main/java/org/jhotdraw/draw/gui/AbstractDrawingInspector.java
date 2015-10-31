@@ -45,9 +45,18 @@ public abstract class AbstractDrawingInspector extends BorderPane implements Ins
         return this;
     }
 
-    /** Can be overridden by subclasses. This implementation is empty. */
+    /** Can be overridden by subclasses. This implementation is empty. 
+     * 
+     * @param oldValue the old drawing view
+     * @param newValue the new drawing view
+     */
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         
     }
+    /** Must be implemented by subclasses.
+     * 
+     * @param oldValue the old drawing 
+     * @param newValue the new drawing 
+     */
     protected abstract void onDrawingChanged(Drawing oldValue, Drawing newValue);
 }

@@ -14,6 +14,11 @@
    <children>
       <HBox alignment="CENTER_LEFT" fillHeight="false">
          <children>
+            <Label text="%attribute.canvasFillColor.shortLabelText">
+               <tooltip>
+                  <Tooltip text="%attribute.canvasFillColor.toolTipText" />
+               </tooltip>
+            </Label>
             <TextField fx:id="backgroundColorField">
                <tooltip>
                   <Tooltip text="%attribute.canvasFillColor.toolTipText" />
@@ -29,25 +34,25 @@
       </HBox>
       <HBox alignment="BASELINE_LEFT" fillHeight="false">
          <children>
-            <Label fx:id="widthLabel" text="%attribute.canvasWidth.text" />
-            <TextField fx:id="widthField" prefColumnCount="5">
+            <Label fx:id="widthLabel" text="%attribute.canvasWidth.shortLabelText">
                <tooltip>
                   <Tooltip text="%attribute.canvasWidth.toolTipText" />
-               </tooltip>
+               </tooltip></Label>
+            <TextField fx:id="widthField" prefColumnCount="5">
                <HBox.margin>
                   <Insets left="2.0" />
                </HBox.margin></TextField>
-            <Label fx:id="heightLabel" text="%attribute.canvasHeight.text">
+            <Label fx:id="heightLabel" text="%attribute.canvasHeight.shortLabelText">
                <padding>
                   <Insets left="4.0" />
                </padding>
                <HBox.margin>
                   <Insets left="8.0" />
-               </HBox.margin></Label>
-            <TextField fx:id="heightField" prefColumnCount="5">
+               </HBox.margin>
                <tooltip>
-                  <Tooltip text="%attribute.canvasWidth.toolTipText" />
-               </tooltip>
+                  <Tooltip text="%attribute.canvasHeight.toolTipText" />
+               </tooltip></Label>
+            <TextField fx:id="heightField" prefColumnCount="5">
                <HBox.margin>
                   <Insets left="2.0" />
                </HBox.margin></TextField>

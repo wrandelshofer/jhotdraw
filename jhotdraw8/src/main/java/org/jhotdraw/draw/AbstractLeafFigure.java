@@ -8,6 +8,7 @@ package org.jhotdraw.draw;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
+import org.jhotdraw.collection.IndexedSet;
 import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
 
 /**

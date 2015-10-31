@@ -8,6 +8,8 @@ package org.jhotdraw.samples.grapher;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
