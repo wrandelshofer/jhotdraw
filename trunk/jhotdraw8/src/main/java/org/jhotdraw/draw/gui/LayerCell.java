@@ -26,6 +26,7 @@ import javafx.util.StringConverter;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.util.Resources;
 
 /**
  * FXML Controller class
@@ -40,10 +41,7 @@ public class LayerCell extends ListCell<Figure> {
     private CheckBox visibleCheckBox;
 
     @FXML
-    private CheckBox lockedCheckBox;
-
-    @FXML
-    private Label idLabel;
+    private CheckBox disabledCheckBox;
 
     @FXML
     private Label selectionLabel;
@@ -66,6 +64,7 @@ public class LayerCell extends ListCell<Figure> {
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
+        loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
 
         try (InputStream in = fxmlUrl.openStream()) {
             node = loader.load(in);
@@ -74,7 +73,7 @@ public class LayerCell extends ListCell<Figure> {
         }
 
         visibleCheckBox.selectedProperty().addListener(o -> updateLayerVisible());
-        lockedCheckBox.selectedProperty().addListener(o -> updateLayerLocked());
+        disabledCheckBox.selectedProperty().addListener(o -> updateLayerLocked());
     }
 
     protected void updateItem(Figure item, boolean empty) {
@@ -87,14 +86,15 @@ public class LayerCell extends ListCell<Figure> {
         } else {
             this.item = item;
             isUpdating = true;
-            idLabel.setText(item.get(Figure.STYLE_ID));
+            setText(item.get(Figure.STYLE_ID));
+            //idLabel.setText(item.get(Figure.STYLE_ID));
             setGraphic(node);
             
             // FIXME - we must listen to these properties!
             
 
             visibleCheckBox.setSelected(item.get(Figure.VISIBLE));
-            lockedCheckBox.setSelected(item.get(Figure.DISABLED));
+            disabledCheckBox.setSelected(item.get(Figure.DISABLED));
             isUpdating = false;
         }
     }
@@ -111,7 +111,7 @@ public class LayerCell extends ListCell<Figure> {
 
     private void updateLayerLocked() {
         if (!isUpdating) {
-            drawingView.getModel().set(item, Figure.DISABLED, lockedCheckBox.isSelected());
+            drawingView.getModel().set(item, Figure.DISABLED, disabledCheckBox.isSelected());
         }
     }
 }

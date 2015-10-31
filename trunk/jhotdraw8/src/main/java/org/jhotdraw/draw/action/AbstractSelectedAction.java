@@ -30,6 +30,7 @@ public abstract class AbstractSelectedAction extends AbstractViewAction {
      * Creates an action which acts on the selected figures on the current view
      * of the specified editor.
      *
+     * @param app the application
      * @param editor the drawing editor
      */
     public AbstractSelectedAction(Application app, DrawingEditor editor) {

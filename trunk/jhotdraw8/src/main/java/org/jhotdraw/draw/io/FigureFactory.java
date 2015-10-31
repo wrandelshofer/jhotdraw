@@ -237,7 +237,7 @@ public interface FigureFactory extends IdFactory {
      *
      * @return The stylesheets key of the Drawing object. Return null if
      * stylesheets shall not be supported. The default implementation returns
-     * {@link org.jhotdraw.draw.Drawing.AUTHOR_STYLESHEETS}.
+     * {@link org.jhotdraw.draw.Drawing#AUTHOR_STYLESHEETS}.
      */
     default Key<List<URI>> getStylesheetsKey() {
         return Drawing.AUTHOR_STYLESHEETS;

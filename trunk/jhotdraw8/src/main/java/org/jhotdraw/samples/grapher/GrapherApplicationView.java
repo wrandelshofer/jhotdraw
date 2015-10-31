@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -106,7 +107,7 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         }
 
         drawingView = new SimpleDrawingView();
-        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25));
+        drawingView.setConstrainer(new GridConstrainer(0, 0, 1, 1, 1));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         // 
         drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
@@ -141,22 +142,18 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
 
-        getApplication().execute(new BackgroundTask<List<Node>>() {
-
-            @Override
-            protected List<Node> call() throws Exception {
+        {   // XXX the inspectors should be created on a worker thread
                 List<Node> list = new LinkedList<>();
                 addInspector(new CanvasInspector(), "canvas", list);
                 addInspector(new StylesheetsInspector(), "stylesheets", list);
                 addInspector(new LayersInspector(layerFactory), "layers", list);
-                return list;
-            }
-
-            @Override
-            protected void succeeded(List<Node> value) {
-                inspectorsHBox.getChildren().addAll(value);
-            }
-        });
+                           
+                inspectorsHBox.getChildren().addAll(list);
+                for (Node n : list) {
+                    Inspector i = (Inspector) n.getProperties().get("inspector");
+                    i.setDrawingView(drawingView);
+                }
+    }
 
         inspectorsHBox.getStyleClass().add("inspector");
         callback.handle(new TaskCompletionEvent<Void>());
@@ -179,13 +176,13 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         a.setRotate(-90);
         g.getChildren().add(a);
         list.add(g);
+        g.getProperties().put("inspector", inspector);
 
         PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherApplicationView.class), id + ".expanded", t.expandedProperty());
         if (t.isExpanded()) {
             a.setExpandedPane(t);
         }
 
-        inspector.setDrawingView(drawingView);
     }
 
     @Override

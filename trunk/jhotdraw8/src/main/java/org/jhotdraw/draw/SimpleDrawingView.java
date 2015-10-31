@@ -10,7 +10,6 @@ import org.jhotdraw.draw.model.DrawingModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -20,7 +19,6 @@ import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
@@ -33,7 +31,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -49,9 +46,7 @@ import org.jhotdraw.draw.constrain.NullConstrainer;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.event.Listener;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.HandleEvent;
 import static java.lang.Math.*;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -177,7 +172,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 // not my business
                 break;
             case ROOT_CHANGED:
-                updateDrawing();
+                rebuildNodes();
                 updateLayout();
                 repaint();
                 break;
@@ -491,7 +486,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         return constrainer;
     }
 
-    private void updateDrawing() {
+    private void rebuildNodes() {
         clearNodes();
         drawingPane.getChildren().clear();
             activeLayer.set(null);
@@ -535,7 +530,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
         if (newValue != null) {
             newValue.addDrawingModelListener(modelHandler);
-            updateDrawing();
+            rebuildNodes();
             updateLayout();
         }
     }
@@ -574,7 +569,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         repaint();
     }
 
-    private void updateView() {
+    private void updateNodes() {
         getModel().validate();
 
         // create copies of the lists to allow for concurrent modification
@@ -606,7 +601,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         if (repainter == null) {
             repainter = () -> {
                 repainter = null;
-                updateView();
+                updateNodes();
                 validateHandles();
             };
             Platform.runLater(repainter);
@@ -816,7 +811,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
             Figure f1 = nodeToFigureMap.get(n);
-            if (f1 != null && f1.isSelectable()) {
+            if (f1 != null && f1.isSelectable() && f1.isVisible()) {
                 Bounds pl = n.parentToLocal(pp);
                 if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent bounds contains the point
                     Figure f = nodeToFigureMap.get(n);

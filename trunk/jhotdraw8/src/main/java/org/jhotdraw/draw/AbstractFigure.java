@@ -43,7 +43,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
 
         @Override
         protected void fireValueChangedEvent() {
-            if (!isSuitableParent(get())) {
+            if (get()!=null&&!isSuitableParent(get())) {
                 throw new IllegalArgumentException(get()+" is not a suitable parent for this figure.");
             }
             super.fireValueChangedEvent();

@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +46,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureNodeListKeys = new HashMap<>();
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
-    private String objectIdAttribute="oid";
+    private String objectIdAttribute = "oid";
 
     public SimpleFigureFactory() {
     }
@@ -65,8 +66,9 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     /**
      * Adds the provided keys to the figure.
      *
-     * @param f the figure
-     * @param keys the keys
+     * @param figure the figure
+     * @param name the element name
+     * @param key the keys
      */
     public void addNodeListKey(Class<? extends Figure> figure, String name, Key<?> key) {
         if (figureNodeListKeys.containsKey(figure)) {
@@ -290,6 +292,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
         return strToKey.get(attributeName);
     }
+
     @Override
     public String keyToElementName(Figure f, Key<?> key) throws IOException {
         HashMap<Key<?>, String> keyToStr = null;
@@ -357,7 +360,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         try {
             Converter<?> converter = valueFromXML.get(key.getFullValueType());
             if (converter == null) {
-                throw new IOException("no converter for key \""+key+"\" with attribute type "
+                throw new IOException("no converter for key \"" + key + "\" with attribute type "
                         + key.getFullValueType());
             }
             return converter.fromString(CharBuffer.wrap(string), this);
@@ -420,30 +423,72 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         return keys == null ? Collections.emptySet() : keys;
 
     }
-    
+
     public void checkConverters() {
-        for (HashMap<Key<?>, String> map:keyToAttr.values()) {
-            for (Key<?> k:map.keySet()) {
-                String fullValueType=k.getFullValueType();
-                if (! valueToXML.containsKey(fullValueType)) {
-                    System.err.println(this+" WARNING can not convert "+fullValueType+" to XML");
+        for (HashMap<Key<?>, String> map : keyToAttr.values()) {
+            for (Key<?> k : map.keySet()) {
+                String fullValueType = k.getFullValueType();
+                if (!valueToXML.containsKey(fullValueType)) {
+                    System.err.println(this + " WARNING can not convert " + fullValueType + " to XML for key "+k+".");
                 }
             }
         }
     }
+
     /**
      * Returns the name of the object id attribute. The object id attribute is
      * used for referencing other objects in the XML file.
+     * <p>
+     * The default value is "oid".
      *
      * @return name of the object id attribute
      */
-    public String getObjectIdAttribute() {return objectIdAttribute;}
+    @Override
+    public String getObjectIdAttribute() {
+        return objectIdAttribute;
+    }
+
     /**
-     * SEts the name of the object id attribute. The object id attribute is
-     * used for referencing other objects in the XML file.
+     * Sets the name of the object id attribute. The object id attribute is used
+     * for referencing other objects in the XML file.
      *
-     * @return name of the object id attribute
+     * @param newValue name of the object id attribute
      */
-    public void setObjectIdAttribute(String newValue) { objectIdAttribute=newValue;}
-    
+    public void setObjectIdAttribute(String newValue) {
+        objectIdAttribute = newValue;
+    }
+
+    /**
+     * Globally removes the specified key.
+     */
+    public void removeKey(Key<?> key) {
+        for (Map.Entry<Class<? extends Figure>, HashMap<String, Key<?>>> entry : attrToKey.entrySet()) {
+            for (Map.Entry<String, Key<?>> e : new ArrayList<>(entry.getValue().entrySet())) {
+                if (e.getValue() == key) {
+                    entry.getValue().remove(e.getKey());
+                }
+            }
+        }
+        for (Map.Entry<Class<? extends Figure>, HashMap<Key<?>, String>> entry : keyToAttr.entrySet()) {
+            entry.getValue().remove(key);
+        }
+        for (Map.Entry<Class<? extends Figure>, HashMap<String, Key<?>>> entry : elemToKey.entrySet()) {
+            for (Map.Entry<String, Key<?>> e : new ArrayList<>(entry.getValue().entrySet())) {
+                if (e.getValue() == key) {
+                    entry.getValue().remove(e.getKey());
+                }
+            }
+        }
+        for (Map.Entry<Class<? extends Figure>, HashMap<Key<?>, String>> entry : keyToElem.entrySet()) {
+            entry.getValue().remove(key);
+        }
+        for (Map.Entry<Class<? extends Figure>, HashSet<Key<?>>> entry : figureAttributeKeys.entrySet()) {
+            entry.getValue().remove(key);
+
+        }
+        for (Map.Entry<Class<? extends Figure>, HashSet<Key<?>>> entry : figureNodeListKeys.entrySet()) {
+            entry.getValue().remove(key);
+        }
+    }
+
 }

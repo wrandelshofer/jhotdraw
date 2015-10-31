@@ -6,13 +6,12 @@ package org.jhotdraw.draw.gui;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.function.Supplier;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,21 +20,23 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
-import org.jhotdraw.collection.ReversedObservableList;
-import org.jhotdraw.draw.AbstractCompositeFigure;
+import org.jhotdraw.collection.ReversedList;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.model.DrawingModel;
+import org.jhotdraw.gui.ClipboardIO;
 import org.jhotdraw.gui.ListViewUtil;
-import org.jhotdraw.util.ReversedList;
+import org.jhotdraw.util.Resources;
 
 /**
  * FXML Controller class
@@ -55,15 +56,24 @@ public class LayersInspector extends AbstractDrawingInspector {
     private ObservableList<Figure> layers;
 
     private Supplier<Layer> layerFactory;
-    
+
     private ChangeListener<Layer> selectedLayerHandler = new ChangeListener<Layer>() {
 
         @Override
         public void changed(ObservableValue<? extends Layer> observable, Layer oldValue, Layer newValue) {
-            if (newValue!=null) {
+            if (newValue != null) {
                 listView.getSelectionModel().select(newValue);
             }
         }
+    };
+    private InvalidationListener listInvalidationListener = new InvalidationListener() {
+
+        @Override
+        public void invalidated(Observable observable) {
+            if (drawingView!=null)
+            drawingView.getModel().fireNodeInvalidated(drawingView.getDrawing());
+        }
+        
     };
 
     public LayersInspector() {
@@ -75,17 +85,18 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     public LayersInspector(URL fxmlUrl, Supplier<Layer> layerFactory) {
-        this.layerFactory=layerFactory;
+        this.layerFactory = layerFactory;
         init(fxmlUrl);
     }
+
     public LayersInspector(Supplier<Layer> layerFactory) {
         this(LayersInspector.class.getResource("LayersInspector.fxml"), layerFactory);
     }
 
-
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
+        loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
 
         try (InputStream in = fxmlUrl.openStream()) {
             setCenter(loader.load(in));
@@ -134,24 +145,81 @@ public class LayersInspector extends AbstractDrawingInspector {
             }
 
         });
-        /*
-         ListViewUtil.addDragAndDropSupport(listView, (ListView<Layer> param)
-         -> new TextFieldListCell<>(uriConverter), io);*/
+
+        ClipboardIO<Figure> io = new ClipboardIO<Figure>() {
+
+            @Override
+            public void write(Clipboard clipboard, List<Figure> items) {
+                if (items.size() != 1) {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+                ClipboardContent content = new ClipboardContent();
+                Figure f = items.get(0);
+                String id = f.get(Figure.STYLE_ID);
+                content.putString(id == null ? "" : id);
+                clipboard.setContent(content);
+            }
+
+            @Override
+            public List<Figure> read(Clipboard clipboard) {
+                List<Figure> list;
+                if (clipboard.hasString()) {
+                    list = new ArrayList<>();
+                    Layer layer = layerFactory.get();
+                    layer.set(Figure.STYLE_ID, clipboard.getString());
+                    list.add(layer);
+                } else {
+                    list = null;
+                }
+                return list;
+            }
+
+            @Override
+            public boolean canRead(Clipboard clipboard) {
+                return clipboard.hasString();
+            }
+        };
+
+        listView.setFixedCellSize(24.0);
+        ListViewUtil.addReorderingSupport(listView, this::createCell, io);
     }
- protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+
+    public ListCell<Figure> createCell(ListView<Figure> listView) {
+          StringConverter<Figure> converter = new StringConverter<Figure>() {
+
+            @Override
+            public String toString(Figure object) {
+                return object.get(Figure.STYLE_ID);
+            }
+
+            @Override
+            public Figure fromString(String string) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        return new LayerCell(drawingView);
+        // return new TextFieldListCell<>(converter);
+    }
+
+    protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         if (oldValue != null) {
             oldValue.activeLayerProperty().removeListener(selectedLayerHandler);
         }
         if (newValue != null) {
             newValue.activeLayerProperty().addListener(selectedLayerHandler);
-        listView.setCellFactory(LayerCell.forListView(newValue));
+            //listView.setCellFactory(LayerCell.forListView(newValue));
         }
-        
+
     }
+
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
+        if (oldValue!=null) {
+            oldValue.getChildren().removeListener(listInvalidationListener);
+        }
         if (newValue != null) {
-            layers = new ReversedObservableList<>(newValue.getChildren());
+            layers = new ReversedList<>(newValue.getChildren());
             listView.setItems(layers);
+            newValue.getChildren().addListener(listInvalidationListener);
         }
     }
 }

@@ -33,7 +33,10 @@ import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import javafx.beans.property.ListProperty;
 import javafx.collections.FXCollections;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
@@ -41,6 +44,7 @@ import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.IterableTree;
+import org.jhotdraw.collection.IndexedSet;
 import org.jhotdraw.draw.css.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
@@ -111,6 +115,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * To avoid name clashes in the stylesheet, all styleable JHotDraw
      * getProperties use the prefix {@code "-jhotdraw-"}.
+     *
+     * XXX mapping of css attribute names to keys should be done elsewhere!
      */
     public final static String JHOTDRAW_CSS_PREFIX = "";
     // ----
@@ -215,7 +221,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", List.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
 
     // ----
     // property names
@@ -249,9 +255,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * If a child is removed from this figure, this figure must set parent to
      * null immediately before the child is removed.</p>
      * <p>
-     * Note that this method returns a {@code ReadOnlyListProperty} and not just
-     * an {@code ObservableList}. {@code ListChangeListener}s can get the
-     * associated {@code Figure} using the following code:</p>
+     * Note that this method returns a {@code ReadOnlyListProperty} which holds
+     * an instance of {@link IndexedSet}. {@code ListChangeListener}s can get
+     * the associated {@code Figure} using the following code:</p>
      * <pre>{@code
      * (ListChangeListener.Change change) -> Figure figure =
      *      (Figure) ((ReadOnlyProperty) change.getList()).getBean();
@@ -527,6 +533,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @return true if getChildren are allowed
      */
     boolean isAllowsChildren();
+
     /**
      * This method whether the provided figure is a suitable parent for this
      * figure.
@@ -694,7 +701,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @param newChild the new child
      */
     default void add(Figure newChild) {
-        childrenProperty().add(newChild);
+        getChildren().add(newChild);
     }
 
     /**
@@ -703,7 +710,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @param child a child of the figure
      */
     default void remove(Figure child) {
-        childrenProperty().remove(child);
+        getChildren().remove(child);
     }
 
     /**
@@ -713,7 +720,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @return the child
      */
     default Figure getChild(int index) {
-        return childrenProperty().get(index);
+        return getChildren().get(index);
     }
 
     /**
@@ -741,6 +748,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return a list of the getChildren
      */
+    @Override
     default ObservableList<Figure> getChildren() {
         return childrenProperty().get();
     }
@@ -921,20 +929,32 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @param c A figure class.
      * @return the keys
      */
-    public static Set<Key<?>> getDeclaredAndInheritedKeys(Class<?> c) {
+    public static Set<Key<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {
         try {
             HashSet<Key<?>> keys = new HashSet<>();
-
-            for (Field f : c.getFields()) {
-                if (Key.class
-                        .isAssignableFrom(f.getType())) {
-                    Key<?> k = (Key<?>) f.get(null);
-
-                    keys.add(k);
+            LinkedList<Class<?>> todo = new LinkedList<>();
+            HashSet<Class<?>> done = new HashSet<>();
+            todo.add(clazz);
+            while (!todo.isEmpty()) {
+                Class<?> c = todo.removeFirst();
+                for (Field f : c.getDeclaredFields()) {
+                    if (Key.class.isAssignableFrom(f.getType())) {
+                        Key<?> k = (Key<?>) f.get(null);
+                        keys.add(k);
+                    }
                 }
+                if (c.getSuperclass() != null) {
+                    todo.add(c.getSuperclass());
+                }
+                for (Class<?> i : c.getInterfaces()) {
+                    if (done.add(i)) {
+                        todo.add(i);
+                    }
+                }
+
             }
             return keys;
-        }catch (IllegalArgumentException | IllegalAccessException ex) {
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys");
 
         }

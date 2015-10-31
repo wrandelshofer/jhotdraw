@@ -6,9 +6,7 @@ package org.jhotdraw.draw.io;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.List;
 import java.util.Set;
-import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Paint;
@@ -17,24 +15,21 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleLabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
-import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.TextFigure;
+import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.text.DefaultConnectorConverter;
 import org.jhotdraw.text.DefaultConverter;
 import org.jhotdraw.text.Point2DConverter;
 import org.jhotdraw.text.NumberConverter;
 import org.jhotdraw.text.CssObservableWordListConverter;
-import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.Rectangle2DConverter;
 import org.jhotdraw.text.UrlConverter;
-import org.jhotdraw.text.CssWordListConverter;
 import org.jhotdraw.text.UriConverter;
 import org.jhotdraw.text.XmlBooleanConverter;
 import org.jhotdraw.text.XmlPaintConverter;
@@ -76,7 +71,6 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         }
 
         addFigureKeysAndNames("Line", LineFigure.class, Figure.getDeclaredAndInheritedKeys(LineFigure.class));
-System.out.println("DefaultFigureFactory line:"+Figure.getDeclaredAndInheritedKeys(LineFigure.class))   ;     
         addFigureKeysAndNames("Ellipse", EllipseFigure.class, Figure.getDeclaredAndInheritedKeys(EllipseFigure.class));
         addFigureKeysAndNames("LineConnection", LineConnectionFigure.class, Figure.getDeclaredAndInheritedKeys(LineConnectionFigure.class));
         addConverter(Rectangle2D.class, new Rectangle2DConverter());
@@ -90,6 +84,10 @@ System.out.println("DefaultFigureFactory line:"+Figure.getDeclaredAndInheritedKe
         addConverter(Boolean.class, new XmlBooleanConverter());
 
         addConverter(Figure.STYLE_CLASS.getFullValueType(), new CssObservableWordListConverter());
+        
+          removeKey(Drawing.PSEUDO_CLASS_STATES);
+
+        
         checkConverters();
     }
 

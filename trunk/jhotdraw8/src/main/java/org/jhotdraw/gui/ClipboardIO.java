@@ -16,13 +16,13 @@ public interface ClipboardIO<T> {
     /** Writes items to the clipboard
      * 
      * @param clipboard The clipboard
-     * @param the items
+     * @param items the items
      */
     void write(Clipboard clipboard, List<T> items);
     /** Returns null if read failed.
      * 
      * @param clipboard The clipboard
-     * @return the items
+     * @return izrmd the items
      */
     List<T> read(Clipboard clipboard);
     /**

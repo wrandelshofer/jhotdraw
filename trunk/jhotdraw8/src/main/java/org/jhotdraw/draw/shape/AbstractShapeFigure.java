@@ -34,12 +34,7 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * Defines the paint used for filling the interior of the figure. Default
      * value: {@code Color.WHITE}.
      */
-    public static PaintStyleableFigureKey FILL = new PaintStyleableFigureKey("fill", Color.WHITE);
-    /**
-     * Defines whether anti aliasing hints are used. Default value:
-     * {@code true}.
-     */
-    public static BooleanStyleableFigureKey SMOOTH = new BooleanStyleableFigureKey("smooth",  DirtyMask.of(DirtyBits.NODE), true);
+    public static PaintStyleableFigureKey FILL_COLOR = new PaintStyleableFigureKey("fillColor", Color.WHITE);
     /**
      * Defines the distance in user coordinates for the dashing pattern. Default
      * value: {@code 0}.
@@ -63,7 +58,7 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
      */
-    public static PaintStyleableFigureKey STROKE = new PaintStyleableFigureKey("stroke", Color.BLACK);
+    public static PaintStyleableFigureKey STROKE_COLOR = new PaintStyleableFigureKey("strokeColor", Color.BLACK);
     /**
      * Defines the stroke type used for drawing outline of the figure. Default
      * value: {@code StrokeType.CENTERED}.
@@ -85,13 +80,12 @@ public abstract class AbstractShapeFigure extends AbstractLeafFigure {
      * @param shape a shape node
      */
     protected void applyShapeProperties(Shape shape) {
-        shape.setFill(getStyled(FILL));
-        shape.setSmooth(getStyled(SMOOTH));
+        shape.setFill(getStyled(FILL_COLOR));
         shape.setStrokeDashOffset(getStyled(STROKE_DASH_OFFSET));
         shape.setStrokeLineCap(getStyled(STROKE_LINE_CAP));
         shape.setStrokeLineJoin(getStyled(STROKE_LINE_JOIN));
         shape.setStrokeMiterLimit(getStyled(STROKE_MITER_LIMIT));
-        shape.setStroke(getStyled(STROKE));
+        shape.setStroke(getStyled(STROKE_COLOR));
         shape.setStrokeType(getStyled(STROKE_TYPE));
         shape.setStrokeWidth(getStyled(STROKE_WIDTH));
         shape.getStrokeDashArray().setAll(getStyled(STROKE_DASH_ARRAY));

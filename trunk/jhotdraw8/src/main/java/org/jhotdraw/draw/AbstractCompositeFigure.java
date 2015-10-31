@@ -21,6 +21,9 @@ import javafx.geometry.Point2D;
 import org.jhotdraw.draw.connector.Connector;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import org.jhotdraw.collection.IndexedSet;
 
 /**
  * This base class can be used to implement figures which support child figures.
@@ -29,9 +32,39 @@ import static java.lang.Math.min;
  * @version $Id$
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
+    private class ChildList extends IndexedSet<Figure> {
 
-    private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this, CHILDREN_PROPERTY, FXCollections.observableList(new ArrayList<Figure>())).getReadOnlyProperty();
+        @Override
+        public int indexOf(Object o) {
+            if ((o instanceof Figure) && ((Figure)o).getParent()==AbstractCompositeFigure.this){
+                return super.indexOf(o);
+            }
+            return -1;
+        }
 
+        @Override
+        public boolean contains(Object o) {
+            return ((o instanceof Figure) && ((Figure)o).getParent()==AbstractCompositeFigure.this);
+        }
+
+        @Override
+        protected void onAdded(Figure e) {
+            Figure oldParent=e.getParent();
+            if (oldParent!=null&&oldParent!=AbstractCompositeFigure.this) {
+                oldParent.remove(e);
+            }
+            e.parentProperty().set(AbstractCompositeFigure.this);
+        }
+
+        @Override
+        protected void onRemoved(Figure e) {
+            e.parentProperty().set(null);
+        }
+        
+    }
+
+    private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this, CHILDREN_PROPERTY, new ChildList()).getReadOnlyProperty();
+/*
     {
         children.addListener(new ListChangeListener<Figure>() {
 
@@ -50,7 +83,16 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
                             Figure added = addedList.get(i);
                             Figure oldParentOfAdded = added.getParent();
                             if (oldParentOfAdded != null) {
-                                oldParentOfAdded.remove(added);
+                                if (oldParentOfAdded == AbstractCompositeFigure.this) {
+                                    int lastIndex = children.lastIndexOf(added);
+                                    int firstIndex = children.indexOf(added);
+                                    if (lastIndex != firstIndex) {
+                                        children.remove(firstIndex == i ? lastIndex : firstIndex);
+                                    }
+                                } else {
+                                    System.out.println("AbstractCompositeFigure.oldParentOfAdded " + oldParentOfAdded);
+                                    oldParentOfAdded.remove(added);
+                                }
                             }
                             added.parentProperty().set(AbstractCompositeFigure.this);
                         }
@@ -58,7 +100,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
                 }
             }
         });
-    }
+    }*/
 
     @Override
     public final ReadOnlyListProperty<Figure> childrenProperty() {

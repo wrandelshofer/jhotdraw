@@ -276,7 +276,7 @@ public class PreferencesUtil
      *
      * @param prefs Preferences for storing/retrieving preferences values.
      * @param name Base name of the preference.
-     * @param window The window for which to track preferences.
+     * @param stage The window for which to track preferences.
      */
     public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage) {
         installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
