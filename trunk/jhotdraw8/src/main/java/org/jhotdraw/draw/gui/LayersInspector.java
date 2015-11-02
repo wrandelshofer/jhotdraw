@@ -106,8 +106,8 @@ public class LayersInspector extends AbstractDrawingInspector {
             Drawing d=drawingView.getDrawing();
             Set<Figure> selection=drawingView.getSelectedFigures();
             HashMap<Figure,Integer> count=new HashMap<>();
-            for (Figure f:d.getChildren()) {
-                count.put(f,0);
+            for (Figure layer:d.getChildren()) {
+                count.put(layer,0);
             }
             for (Figure f:selection) {
                 
@@ -230,7 +230,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         }
         if (newValue != null) {
             newValue.activeLayerProperty().addListener(selectedLayerHandler);
-            oldValue.selectedFiguresProperty().addListener(selectionInvalidationListener);
+            newValue.selectedFiguresProperty().addListener(selectionInvalidationListener);
         }
 
     }
