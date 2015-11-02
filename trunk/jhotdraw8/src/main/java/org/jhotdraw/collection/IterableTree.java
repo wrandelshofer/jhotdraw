@@ -20,7 +20,15 @@ import org.jhotdraw.draw.Figure;
  */
 public interface IterableTree<T extends IterableTree<T>> {
 
+    /**
+     * Returns the children of the tree node.
+     */
     List<T> getChildren();
+
+    /**
+     * Returns the parent of the tree node.
+     */
+    T getParent();
 
     /**
      * Returns an iterable which can iterate through this figure and all its
@@ -149,4 +157,17 @@ public interface IterableTree<T extends IterableTree<T>> {
         }
     }
 
+    /**
+     * Returns the path to this node.
+     *
+     * @return path including this node
+     */
+    @SuppressWarnings("unchecked")
+    default List<T> getPath() {
+        LinkedList<T> path = new LinkedList<>();
+        for (T node = (T) this; node != null; node = node.getParent()) {
+            path.addFirst(node);
+        }
+        return path;
+    }
 }

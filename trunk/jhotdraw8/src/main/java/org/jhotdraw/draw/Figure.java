@@ -760,6 +760,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return parent figure or null, if the figure has no parent.
      */
+    @Override
     default Figure getParent() {
         return parentProperty().get();
     }
@@ -778,16 +779,30 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Returns the nearest parent Drawing.
+     * Returns the ancestor Drawing.
      *
      * @return the drawing or null if no ancestor is a drawing.
+     * Returns this, if this figure is a drawing.
      */
     default Drawing getDrawing() {
         Figure parent = this;
         while (parent != null && !(parent instanceof Drawing)) {
             parent = parent.getParent();
         }
-        return (Drawing) parent;
+        return (Drawing)parent;
+    }
+    /**
+     * Returns the ancestor Layer.
+     *
+     * @return the drawing or null if no ancestor is a layer.
+     * Returns this, if this figure is a layer.
+     */
+    default Layer getLayer() {
+        Figure parent = this;
+        while (parent != null && !(parent instanceof Layer)) {
+            parent = parent.getParent();
+        }
+        return (Layer)parent;
     }
 
     /**
