@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -27,7 +29,9 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
+import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.ReversedList;
+import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -56,9 +60,11 @@ public class LayersInspector extends AbstractDrawingInspector {
     private ObservableList<Figure> layers;
 
     private Supplier<Layer> layerFactory;
+    
+    /** This key is used to store the selection count in the layers. */
+    private final static Key<Integer> SELECTION_COUNT = new SimpleKey<Integer>("selectionCount",Integer.class,0);
 
     private ChangeListener<Layer> selectedLayerHandler = new ChangeListener<Layer>() {
-
         @Override
         public void changed(ObservableValue<? extends Layer> observable, Layer oldValue, Layer newValue) {
             if (newValue != null) {
@@ -67,13 +73,17 @@ public class LayersInspector extends AbstractDrawingInspector {
         }
     };
     private InvalidationListener listInvalidationListener = new InvalidationListener() {
-
         @Override
         public void invalidated(Observable observable) {
             if (drawingView!=null)
             drawingView.getModel().fireNodeInvalidated(drawingView.getDrawing());
         }
-        
+    };
+    private InvalidationListener selectionInvalidationListener = new InvalidationListener() {
+        @Override
+        public void invalidated(Observable observable) {
+            onSelectionChanged();
+        }
     };
 
     public LayersInspector() {
@@ -92,7 +102,18 @@ public class LayersInspector extends AbstractDrawingInspector {
     public LayersInspector(Supplier<Layer> layerFactory) {
         this(LayersInspector.class.getResource("LayersInspector.fxml"), layerFactory);
     }
-
+        private void onSelectionChanged() {
+            Drawing d=drawingView.getDrawing();
+            Set<Figure> selection=drawingView.getSelectedFigures();
+            HashMap<Figure,Integer> count=new HashMap<>();
+            for (Figure f:d.getChildren()) {
+                count.put(f,0);
+            }
+            for (Figure f:selection) {
+                
+            }
+        }
+    
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
@@ -201,17 +222,20 @@ public class LayersInspector extends AbstractDrawingInspector {
         // return new TextFieldListCell<>(converter);
     }
 
+    @Override
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         if (oldValue != null) {
             oldValue.activeLayerProperty().removeListener(selectedLayerHandler);
+            oldValue.selectedFiguresProperty().removeListener(selectionInvalidationListener);
         }
         if (newValue != null) {
             newValue.activeLayerProperty().addListener(selectedLayerHandler);
-            //listView.setCellFactory(LayerCell.forListView(newValue));
+            oldValue.selectedFiguresProperty().addListener(selectionInvalidationListener);
         }
 
     }
 
+    @Override
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
         if (oldValue!=null) {
             oldValue.getChildren().removeListener(listInvalidationListener);

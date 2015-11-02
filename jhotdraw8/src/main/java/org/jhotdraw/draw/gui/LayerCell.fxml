@@ -30,13 +30,6 @@
          </children>
       </HBox>
    </left>
-   <center>
-      <Label fx:id="idLabel" text="id" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets left="4.0" />
-         </BorderPane.margin>
-      </Label>
-   </center>
    <right>
       <Label fx:id="selectionLabel" text="[#]" BorderPane.alignment="CENTER">
          <BorderPane.margin>

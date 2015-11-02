@@ -172,7 +172,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 // not my business
                 break;
             case ROOT_CHANGED:
-                rebuildNodes();
+                handleDrawingChanged();
                 updateLayout();
                 repaint();
                 break;
@@ -486,7 +486,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         return constrainer;
     }
 
-    private void rebuildNodes() {
+    private void handleDrawingChanged() {
         clearNodes();
         drawingPane.getChildren().clear();
             activeLayer.set(null);
@@ -498,6 +498,15 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             updateLayout();
             updateTreeNodes(d);
             repaint();
+            
+            for (int i=d.getChildren().size()-1;i>=0;i--) {
+                Layer layer=(Layer)d.getChild(i);
+                if (!layer.isDisabled()&&layer.isVisible()) {
+                    activeLayer.set(layer);
+                    break;
+                }
+                
+            }
         }
     }
 
@@ -530,7 +539,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
         if (newValue != null) {
             newValue.addDrawingModelListener(modelHandler);
-            rebuildNodes();
+            handleDrawingChanged();
             updateLayout();
         }
     }
