@@ -31,6 +31,25 @@ public interface IterableTree<T extends IterableTree<T>> {
     T getParent();
 
     /**
+     * Returns the nearest ancestor of the specified type.
+     *
+     * @param <TT> The ancestor type
+     * @param ancestorType The ancestor type
+     * @return Nearest ancestor of type {@literal <T>} or null if no ancestor of
+     * this type is present. Returns {@code this} if this object is of type {@literal <T>}.
+     */
+    default <TT> TT getAncestor(Class<TT> ancestorType) {
+        @SuppressWarnings("unchecked")
+        T ancestor = (T) this;
+        while (ancestor != null && !ancestorType.isAssignableFrom(ancestor.getClass())) {
+            ancestor = ancestor.getParent();
+        }
+        @SuppressWarnings("unchecked")
+        TT temp= (TT) ancestor;
+        return temp;
+    }
+
+    /**
      * Returns an iterable which can iterate through this figure and all its
      * descendants in preorder sequence.
      *

@@ -99,5 +99,17 @@ public class ReversedList<E> extends TransformationList<E, E> {
         ObservableList<E> src = (ObservableList<E>) getSource();
         src.add(size-index, element);
     }
+    /**
+     * Notifies all listeners of a change
+     * @param from start of range
+     * @param to end of range + 1
+     */
+    public void fireUpdated(int from, int to) {
+        beginChange();
+        for (int i=from;i<to;i++) {
+            nextUpdate(i);
+        }
+        endChange();
+    }
 
 }
