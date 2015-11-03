@@ -13,7 +13,7 @@ import javafx.scene.paint.Paint;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.css.SimpleParsedValue;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.shape.AbstractShapeFigure.FILL;
+import static org.jhotdraw.draw.shape.AbstractShapeFigure.FILL_COLOR;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -63,7 +63,7 @@ public class RectangleFigureNGTest {
     @DataProvider
     public Object[][] cssData() {
         return new Object[][]{
-            {FILL,"-jhotdraw-fill", Color.RED,"blue",Color.BLUE},
+            {FILL_COLOR,"-jhotdraw-fill", Color.RED,"blue",Color.BLUE},
         };
 
     }     
