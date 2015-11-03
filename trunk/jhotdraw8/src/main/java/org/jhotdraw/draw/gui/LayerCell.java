@@ -89,6 +89,8 @@ public class LayerCell extends ListCell<Figure> {
             setText(item.get(Figure.STYLE_ID));
             //idLabel.setText(item.get(Figure.STYLE_ID));
             setGraphic(node);
+            Integer count=item.get(LayersInspector.SELECTION_COUNT);
+            selectionLabel.setText(count==null?"":"("+count.toString()+")");
             
             // FIXME - we must listen to these properties!
             
@@ -114,4 +116,6 @@ public class LayerCell extends ListCell<Figure> {
             drawingView.getModel().set(item, Figure.DISABLED, disabledCheckBox.isSelected());
         }
     }
+    
+    public Label getSelectionLabel() {return selectionLabel;}
 }

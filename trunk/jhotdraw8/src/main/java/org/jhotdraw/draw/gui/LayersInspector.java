@@ -18,16 +18,23 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.ReversedList;
@@ -57,12 +64,14 @@ public class LayersInspector extends AbstractDrawingInspector {
     @FXML
     private Button removeButton;
 
-    private ObservableList<Figure> layers;
+    private ReversedList<Figure> layers;
 
     private Supplier<Layer> layerFactory;
-    
-    /** This key is used to store the selection count in the layers. */
-    private final static Key<Integer> SELECTION_COUNT = new SimpleKey<Integer>("selectionCount",Integer.class,0);
+
+    /**
+     * This key is used to store the selection count in the layers.
+     */
+    final static Key<Integer> SELECTION_COUNT = new SimpleKey<Integer>("selectionCount", Integer.class, 0);
 
     private ChangeListener<Layer> selectedLayerHandler = new ChangeListener<Layer>() {
         @Override
@@ -75,8 +84,10 @@ public class LayersInspector extends AbstractDrawingInspector {
     private InvalidationListener listInvalidationListener = new InvalidationListener() {
         @Override
         public void invalidated(Observable observable) {
-            if (drawingView!=null)
-            drawingView.getModel().fireNodeInvalidated(drawingView.getDrawing());
+            // FIXME must perform change via the model so that undo/redo will work
+            if (drawingView != null) {
+                drawingView.getModel().fireNodeInvalidated(drawingView.getDrawing());
+            }
         }
     };
     private InvalidationListener selectionInvalidationListener = new InvalidationListener() {
@@ -102,18 +113,29 @@ public class LayersInspector extends AbstractDrawingInspector {
     public LayersInspector(Supplier<Layer> layerFactory) {
         this(LayersInspector.class.getResource("LayersInspector.fxml"), layerFactory);
     }
-        private void onSelectionChanged() {
-            Drawing d=drawingView.getDrawing();
-            Set<Figure> selection=drawingView.getSelectedFigures();
-            HashMap<Figure,Integer> count=new HashMap<>();
-            for (Figure layer:d.getChildren()) {
-                count.put(layer,0);
-            }
-            for (Figure f:selection) {
-                
+
+    private void onSelectionChanged() {
+        Drawing d = drawingView.getDrawing();
+        Set<Figure> selection = drawingView.getSelectedFigures();
+        HashMap<Figure, Integer> layerToIndex = new HashMap<>();
+        List<Figure> children = d.getChildren();
+        int[] count = new int[children.size()];
+        for (int i = 0, n = children.size(); i < n; i++) {
+            layerToIndex.put(children.get(i), i);
+        }
+        for (Figure f : selection) {
+            Layer l = f.getLayer();
+            Integer index = layerToIndex.get(l);
+            if (index != null) {
+                count[index]++;
             }
         }
-    
+        for (int i = 0, n = children.size(); i < n; i++) {
+            children.get(i).set(SELECTION_COUNT, count[i]);
+        }
+        layers.fireUpdated(0, layers.size());
+    }
+
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
@@ -124,19 +146,6 @@ public class LayersInspector extends AbstractDrawingInspector {
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
-
-        StringConverter<Layer> uriConverter = new StringConverter<Layer>() {
-
-            @Override
-            public String toString(Layer object) {
-                return object.toString();
-            }
-
-            @Override
-            public Layer fromString(String string) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
 
         addButton.addEventHandler(ActionEvent.ACTION, o -> {
             Layer layer = layerFactory.get();
@@ -202,11 +211,12 @@ public class LayersInspector extends AbstractDrawingInspector {
         };
 
         listView.setFixedCellSize(24.0);
-        ListViewUtil.addReorderingSupport(listView, this::createCell, io);
+
+        ListViewUtil.addReorderingSupport(listView, addSelectionLabelDndSupport(listView, this::createCell, io), io);
     }
 
-    public ListCell<Figure> createCell(ListView<Figure> listView) {
-          StringConverter<Figure> converter = new StringConverter<Figure>() {
+    public LayerCell createCell(ListView<Figure> listView) {
+        StringConverter<Figure> converter = new StringConverter<Figure>() {
 
             @Override
             public String toString(Figure object) {
@@ -237,7 +247,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     @Override
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
-        if (oldValue!=null) {
+        if (oldValue != null) {
             oldValue.getChildren().removeListener(listInvalidationListener);
         }
         if (newValue != null) {
@@ -246,4 +256,112 @@ public class LayersInspector extends AbstractDrawingInspector {
             newValue.getChildren().addListener(listInvalidationListener);
         }
     }
+
+    private static Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(ListView<Figure> listView, Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
+    ) {
+        SelectionLabelDnDSupport dndSupport = new SelectionLabelDnDSupport(listView, clipboardIO);
+        Callback<ListView<Figure>, ListCell<Figure>> dndCellFactory = lv -> {
+            try {
+                LayerCell cell = cellFactory.call(lv);
+                cell.getSelectionLabel().addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
+                return cell;
+            } catch (Throwable t) {
+                t.printStackTrace();
+                return null;
+            }
+        };
+        listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
+        return dndCellFactory;
+    }
+
+    /**
+     * Implements DnD support for the selectionLabel. Dragging the
+     * selectionLabel to a layer will move the selected items to another layer.
+     */
+    private static class SelectionLabelDnDSupport {
+
+        private final ListView<Figure> listView;
+        private int draggedCellIndex;
+        private final ClipboardIO<Figure> io;
+
+        public SelectionLabelDnDSupport(ListView<Figure> listView, ClipboardIO<Figure> io) {
+            this.listView = listView;
+            this.io = io;
+        }
+
+        private EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
+
+                    draggedCellIndex = (int) Math.floor(listView.screenToLocal(0, event.getScreenY()).getY() / listView.getFixedCellSize());
+                    if (0 <= draggedCellIndex && draggedCellIndex < listView.getItems().size()) {
+                        Label draggedLabel = (Label) event.getSource();
+                        Dragboard dragboard = draggedLabel.startDragAndDrop(new TransferMode[]{TransferMode.MOVE});
+                        ArrayList<Figure> items = new ArrayList<>();
+                        items.add(listView.getItems().get(draggedCellIndex));
+                        io.write(dragboard, items);
+                        dragboard.setDragView(draggedLabel.snapshot(new SnapshotParameters(), null));
+
+                        // consume the event, so that it won't interfere with dnd of the underlying listview.
+                        event.consume();
+                    }
+                } else {
+                    draggedCellIndex = -1;
+                }
+            }
+
+        };
+
+        EventHandler<? super DragEvent> listDragHandler = new EventHandler<DragEvent>() {
+
+            @Override
+            public void handle(DragEvent event) {
+                EventType<DragEvent> t = event.getEventType();
+System.out.println("LayersInspector "+t);                
+                if (t == DragEvent.DRAG_DROPPED) {
+                    onDragDropped(event);
+                } else if (t == DragEvent.DRAG_OVER) {
+                    onDragOver(event);
+                }
+            }
+
+            private void onDragDropped(DragEvent event) {
+System.out.println("LayersInspector onDragDropped");                
+                if (isAcceptable(event)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+
+                    // XXX foolishly assumes fixed cell height
+                    double cellHeight = listView.getFixedCellSize();
+                    int index = Math.max(0, Math.min((int) (event.getY() / cellHeight), listView.getItems().size()));
+
+                    Figure item = listView.getItems().get(draggedCellIndex);
+                    System.out.println("LayersInspector selectionLabel dropped. Implement me! " + index + " " + item);
+                    /*
+                     listView.getItems().add(index, item);
+                     */
+
+                    event.setDropCompleted(true);
+                    event.consume();
+                }
+            }
+
+            private boolean isAcceptable(DragEvent event) {
+                boolean isAcceptable = (event.getGestureSource() instanceof Label)
+                        && (((Label) event.getGestureSource()).getParent().getParent() instanceof LayerCell)
+                        && ((LayerCell) ((Label) event.getGestureSource()).getParent().getParent()).getListView() == listView;
+                return isAcceptable;
+            }
+
+            private void onDragOver(DragEvent event) {
+                if (isAcceptable(event)) {
+System.out.println("LaysersInspector DRAG_OVER ACCEPT MOVE")    ;                
+                    event.acceptTransferModes(TransferMode.MOVE);
+                    event.consume();
+                }
+            }
+        };
+    }
+
 }

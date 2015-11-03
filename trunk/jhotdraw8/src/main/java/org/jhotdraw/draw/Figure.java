@@ -785,12 +785,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Returns this, if this figure is a drawing.
      */
     default Drawing getDrawing() {
-        Figure parent = this;
-        while (parent != null && !(parent instanceof Drawing)) {
-            parent = parent.getParent();
-        }
-        return (Drawing)parent;
+        return getAncestor(Drawing.class);
     }
+    
     /**
      * Returns the ancestor Layer.
      *
@@ -798,11 +795,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Returns this, if this figure is a layer.
      */
     default Layer getLayer() {
-        Figure parent = this;
-        while (parent != null && !(parent instanceof Layer)) {
-            parent = parent.getParent();
-        }
-        return (Layer)parent;
+        return getAncestor(Layer.class);
     }
 
     /**

@@ -93,6 +93,7 @@ public class ListViewUtil {
             public void handle(DragEvent event) {
                 EventType<DragEvent> t = event.getEventType();
                 if (t == DragEvent.DRAG_DROPPED) {
+                    System.out.println("ListViewUtil DRAG_DROPPED");
                     onDragDropped(event);
                 } else if (t == DragEvent.DRAG_OVER) {
                     onDragOver(event);
@@ -122,8 +123,8 @@ public class ListViewUtil {
 
             private void onDragDropped(DragEvent event) {
                 boolean isAcceptable = io.canRead(event.getDragboard());
-                boolean success = false;
                 if (isAcceptable) {
+                    boolean success = false;
                     TransferMode mode = acceptMode(event);
 
                     // XXX foolishly assumes fixed cell height
@@ -149,17 +150,17 @@ public class ListViewUtil {
                             }
                         }
                     }
+                    event.setDropCompleted(success);
+                    event.consume();
                 }
-                event.setDropCompleted(success);
-                event.consume();
             }
 
             private void onDragOver(DragEvent event) {
                 boolean isAcceptable = io.canRead(event.getDragboard());
                 if (isAcceptable) {
                     acceptMode(event);
+                    event.consume();
                 }
-                event.consume();
             }
         };
     }
@@ -195,7 +196,7 @@ public class ListViewUtil {
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
             try {
                 ListCell<T> cell = cellFactory.call(lv);
-                cell.addEventHandler(DragEvent.ANY, dndSupport.cellDragHandler);
+                cell.addEventHandler(DragEvent.DRAG_DONE, dndSupport.cellDragHandler);
                 cell.addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
                 return cell;
             } catch (Throwable t) {
@@ -212,7 +213,7 @@ public class ListViewUtil {
      *
      * @param <T> the data type of the list view
      * @param listView the list view
-     * @param clipboardIO the clipboard i/o 
+     * @param clipboardIO the clipboard i/o
      */
     public static <T> void addReorderingSupport(ListView<T> listView, ClipboardIO<T> clipboardIO) {
         addReorderingSupport(listView, listView.getCellFactory(), clipboardIO);
