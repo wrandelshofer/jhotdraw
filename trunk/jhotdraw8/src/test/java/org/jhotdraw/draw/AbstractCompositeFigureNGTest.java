@@ -61,7 +61,41 @@ public class AbstractCompositeFigureNGTest {
         
         assertFalse(parent1.getChildren().contains(child));
         assertTrue(parent2.getChildren().contains(child));
-        assertEquals(child.getParent(),equals(parent2));
+        assertEquals(child.getParent(),parent2);
+    }
+    @Test
+    public void testMoveChildToSameParentUpdatesParentAndChildrenProperties() {
+        Figure parent1 = new AbstractCompositeFigureImpl();
+        Figure child1 = new AbstractCompositeFigureImpl();
+        Figure child2 = new AbstractCompositeFigureImpl();
+        
+        parent1.add(child1);
+        parent1.add(child2);
+        parent1.add(child1);
+        
+        assertEquals(parent1.getChildren().size(),2   );
+        assertTrue(parent1.getChildren().contains(child1));
+        assertEquals(child1.getParent(),parent1);
+        assertEquals(parent1.getChildren().get(0),child2);
+        assertEquals(parent1.getChildren().get(1),child1);
+        assertEquals(child1.getParent(),parent1);
+    }
+    @Test
+    public void testMoveChildToSampeParentUpdatesParentAndChildrenProperties2() {
+        Figure parent1 = new AbstractCompositeFigureImpl();
+        Figure child1 = new AbstractCompositeFigureImpl();
+        Figure child2 = new AbstractCompositeFigureImpl();
+        
+        parent1.add(child2);
+        parent1.add(child1);
+        parent1.getChildren().add(0,child1);
+        
+        assertEquals(parent1.getChildren().size(),2   );
+        assertTrue(parent1.getChildren().contains(child1));
+        assertEquals(child1.getParent(),parent1);
+        assertEquals(parent1.getChildren().get(0),child1);
+        assertEquals(parent1.getChildren().get(1),child2);
+        assertEquals(child1.getParent(),parent1);
     }
 
 

@@ -5,22 +5,8 @@
 package org.jhotdraw.draw;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlySetProperty;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.css.Styleable;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -61,9 +47,10 @@ public class FigureNGTest {
     public void testGetDeclaredAndInheritedKeys() {
        Set<Key<?>> figureKeys = Figure.getDeclaredAndInheritedKeys(Figure.class);
          Set<Key<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedKeys(RectangleFigure.class);
+System.out.println("rr:"+rectangleFigureKeys);         
          Set<Key<?>> intersection=new HashSet<>(figureKeys);
          intersection.retainAll(rectangleFigureKeys);
-System.out.println("r:"+rectangleFigureKeys);         
+System.out.println("ri:"+intersection);         
         assertEquals(figureKeys,intersection);
     }
     
