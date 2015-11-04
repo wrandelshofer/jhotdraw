@@ -35,7 +35,8 @@ public class SendToBackAction extends AbstractSelectedAction {
         labels.configureAction(this, ID);
     }
 
-    public void handle(ActionEvent e) {
+    @Override
+    protected void onActionPerformed(ActionEvent e) {
         final DrawingView view = getView();
         if (view == null) {
             return;

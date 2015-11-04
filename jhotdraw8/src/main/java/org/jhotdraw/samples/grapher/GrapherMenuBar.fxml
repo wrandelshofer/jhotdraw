@@ -33,6 +33,11 @@
             <MenuItem id="edit.sendToBack" mnemonicParsing="false" text="Send to Back" />
         </items>
       </Menu>
+      <Menu mnemonicParsing="false" text="%view.text">
+        <items>
+            <CheckMenuItem id="view.toggleProperties" mnemonicParsing="false" text="Property Panels" />
+        </items>
+      </Menu>
     <Menu id="help" mnemonicParsing="false" text="%help.text.mac">
       <items>
         <MenuItem id="application.about" mnemonicParsing="false" text="About" />

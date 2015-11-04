@@ -49,10 +49,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     @Override
-    public void handle(ActionEvent evt) {
-        if (isDisabled()) {
-            return;
-        }
+    protected void onActionPerformed(ActionEvent evt) {
         app.addDisabler(this);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;

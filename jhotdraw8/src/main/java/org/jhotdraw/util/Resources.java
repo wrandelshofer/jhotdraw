@@ -23,14 +23,14 @@ import org.jhotdraw.app.action.Action;
  * ResourceBundle.
  * <p>
  * <b>Placeholders</b><br>
- * On top of the functionality provided by ResourceBundle, a property value
- * can include text from another property, by specifying the desired
- * property name and format type between <code>"${"</code> and <code>"}"</code>.
+ * On top of the functionality provided by ResourceBundle, a property value can
+ * include text from another property, by specifying the desired property name
+ * and format type between <code>"${"</code> and <code>"}"</code>.
  * <p>
  * For example, if there is a {@code "imagedir"} property with the value
  * {@code "/org/jhotdraw/undo/images"}, then this could be used in an attribute
- * like this: <code>${imagedir}/editUndo.png</code>. This is resolved at run-time
- * as {@code /org/jhotdraw/undo/images/editUndo.png}.
+ * like this: <code>${imagedir}/editUndo.png</code>. This is resolved at
+ * run-time as {@code /org/jhotdraw/undo/images/editUndo.png}.
  * <p>
  * Property names in placeholders can contain modifiers. Modifiers are written
  * between @code "[$"} and {@code "]"}. Each modifier has a fallback chain.
@@ -38,24 +38,25 @@ import org.jhotdraw.app.action.Action;
  * For example, if the property name modifier {@code "os"} has the value "win",
  * and its fallback chain is {@code "mac","default"}, then the property name
  * <code>${preferences.text.[$os]}</code> is first evaluted to {@code
- * preferences.text.win},  and - if no property with this name exists -
- * it is evaluated to {@code preferences.text.mac}, and then to
+ * preferences.text.win}, and - if no property with this name exists - it is
+ * evaluated to {@code preferences.text.mac}, and then to
  * {@code preferences.text.default}.
  * <p>
  * The property name modifier "os" is defined by default. It can assume the
  * values "win", "mac" and "other". Its fallback chain is "default".
  * <p>
- * The format type can be optinally specified after a comma.
- * The following format types are supported:
+ * The format type can be optinally specified after a comma. The following
+ * format types are supported:
  * <ul>
  * <li>{@code string} This is the default format.</li>
  * <li>{@code accelerator} This format replaces all occurences of the keywords
- shift, control, ctrl, meta, alt, altGraph by getProperties which start with
- {@code accelerator.}. For example, shift is replaced by {@code accelerator.shift}.
+ * shift, control, ctrl, meta, alt, altGraph by getProperties which start with
+ * {@code accelerator.}. For example, shift is replaced by
+ * {@code accelerator.shift}.
  * </li>
  * </ul>
  *
- * @author  Werner Randelshofer
+ * @author Werner Randelshofer
  * @version $Id$
  */
 public class Resources extends ResourceBundle implements Serializable {
@@ -66,11 +67,17 @@ public class Resources extends ResourceBundle implements Serializable {
             Arrays.asList(new String[]{
                 "shift", "control", "ctrl", "meta", "alt", "altGraph"
             }));
-    /** The wrapped resource bundle. */
+    /**
+     * The wrapped resource bundle.
+     */
     private transient ResourceBundle resource;
-    /** The locale. */
+    /**
+     * The locale.
+     */
     private Locale locale;
-    /** The base class */
+    /**
+     * The base class
+     */
     private Class<?> baseClass = getClass();
     /**
      * The base name of the resource bundle.
@@ -81,9 +88,9 @@ public class Resources extends ResourceBundle implements Serializable {
      */
     private static boolean isVerbose = false;
     /**
-     * The global map of property name modifiers.
-     * The key of this map is the name of the property name modifier,
-     * the value of this map is a fallback chain.
+     * The global map of property name modifiers. The key of this map is the
+     * name of the property name modifier, the value of this map is a fallback
+     * chain.
      */
     private static HashMap<String, String[]> propertyNameModifiers = new HashMap<String, String[]>();
 
@@ -101,8 +108,8 @@ public class Resources extends ResourceBundle implements Serializable {
     }
 
     /**
-     * Creates a new ResouceBundleUtil which wraps
-     * the provided resource bundle.
+     * Creates a new ResouceBundleUtil which wraps the provided resource bundle.
+     *
      * @param baseName the base name
      * @param locale the locale
      */
@@ -114,6 +121,7 @@ public class Resources extends ResourceBundle implements Serializable {
 
     /**
      * Returns the wrapped resource bundle.
+     *
      * @return The wrapped resource bundle.
      */
     public ResourceBundle getWrappedBundle() {
@@ -125,24 +133,16 @@ public class Resources extends ResourceBundle implements Serializable {
      * <br>Convenience method to save casting.
      *
      * @param key The key of the property.
-     * @return The value of the property. Returns the key
-     *          if the property is missing.
-     * /
-    public String getString(String key) {
-        try {
-            String value = getStringRecursive(key);
-            // System.out.println("Resources "+baseName+" get("+key+"):"+value);
-            return value;
-        } catch (MissingResourceException e) {
-            // System.out.println("Resources "+baseName+" get("+key+"):***MISSING***");
-            if (isVerbose) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + "\" not found.");
-                //e.printStackTrace();
-            }
-            return key;
-        }
-    }*/
-
+     * @return The value of the property. Returns the key if the property is
+     * missing. / public String getString(String key) { try { String value =
+     * getStringRecursive(key); // System.out.println("Resources "+baseName+"
+     * get("+key+"):"+value); return value; } catch (MissingResourceException e)
+     * { // System.out.println("Resources "+baseName+"
+     * get("+key+"):***MISSING***"); if (isVerbose) {
+     * System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" +
+     * key + "\" not found."); //e.printStackTrace(); } return key; }
+    }
+     */
     /**
      * Recursive part of the getString method.
      *
@@ -150,63 +150,71 @@ public class Resources extends ResourceBundle implements Serializable {
      * @throws java.util.MissingResourceException
      */
     private String getStringRecursive(String key) throws MissingResourceException {
-        String value = resource.getString(key);
+        try {
+            String value = resource.getString(key);
 
-        // Substitute placeholders in the value
-        for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
-            int p2 = value.indexOf('}', p1 + 2);
-            if (p2 == -1) {
-                break;
-            }
-
-            String placeholderKey = value.substring(p1 + 2, p2);
-            String placeholderFormat;
-            int p3 = placeholderKey.indexOf(',');
-            if (p3 != -1) {
-                placeholderFormat = placeholderKey.substring(p3 + 1);
-                placeholderKey = placeholderKey.substring(0, p3);
-            } else {
-                placeholderFormat = "string";
-            }
-            ArrayList<String> fallbackKeys = new ArrayList<String>();
-            generateFallbackKeys(placeholderKey, fallbackKeys);
-
-            String placeholderValue = null;
-            for (String fk : fallbackKeys) {
-                try {
-                    placeholderValue = getStringRecursive(fk);
+            // Substitute placeholders in the value
+            for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
+                int p2 = value.indexOf('}', p1 + 2);
+                if (p2 == -1) {
                     break;
-                } catch (MissingResourceException e) {
                 }
-            }
-            if (placeholderValue == null) {
-                throw new MissingResourceException("Placeholder value for fallback keys \"" + fallbackKeys + "\" in key \"" + key + "\" not found in " + baseName, baseName, key);
-            }
 
-            // Do post-processing depending on placeholder format 
-            if ("accelerator".equals(placeholderFormat)) {
-                // Localize the keywords shift, control, ctrl, meta, alt, altGraph
-                StringBuilder b = new StringBuilder();
-                for (String s : placeholderValue.split(" ")) {
-                    if (acceleratorKeys.contains(s)) {
-                        b.append(getString("accelerator." + s));
-                    } else {
-                        b.append(s);
+                String placeholderKey = value.substring(p1 + 2, p2);
+                String placeholderFormat;
+                int p3 = placeholderKey.indexOf(',');
+                if (p3 != -1) {
+                    placeholderFormat = placeholderKey.substring(p3 + 1);
+                    placeholderKey = placeholderKey.substring(0, p3);
+                } else {
+                    placeholderFormat = "string";
+                }
+                ArrayList<String> fallbackKeys = new ArrayList<String>();
+                generateFallbackKeys(placeholderKey, fallbackKeys);
+
+                String placeholderValue = null;
+                for (String fk : fallbackKeys) {
+                    try {
+                        placeholderValue = getStringRecursive(fk);
+                        break;
+                    } catch (MissingResourceException e) {
                     }
                 }
-                placeholderValue = b.toString();
+                if (placeholderValue == null) {
+                    throw new MissingResourceException("Placeholder value for fallback keys \"" + fallbackKeys + "\" in key \"" + key + "\" not found in " + baseName, baseName, key);
+                }
+
+                // Do post-processing depending on placeholder format 
+                if ("accelerator".equals(placeholderFormat)) {
+                    // Localize the keywords shift, control, ctrl, meta, alt, altGraph
+                    StringBuilder b = new StringBuilder();
+                    for (String s : placeholderValue.split(" ")) {
+                        if (acceleratorKeys.contains(s)) {
+                            b.append(getString("accelerator." + s));
+                        } else {
+                            b.append(s);
+                        }
+                    }
+                    placeholderValue = b.toString();
+                }
+
+                // Insert placeholder value into value
+                value = value.substring(0, p1) + placeholderValue + value.substring(p2 + 1);
             }
 
-            // Insert placeholder value into value
-            value = value.substring(0, p1) + placeholderValue + value.substring(p2 + 1);
+            return value;
+        } catch (MissingResourceException e) {
+            if (isVerbose) {
+                System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + "\" not found.");
+                //e.printStackTrace();
+            }
+            return null;
         }
-
-        return value;
     }
 
     /**
-     * Generates fallback keys by processing all property name modifiers
-     * in the key.
+     * Generates fallback keys by processing all property name modifiers in the
+     * key.
      */
     private void generateFallbackKeys(String key, ArrayList<String> fallbackKeys) {
         int p1 = key.indexOf("[$");
@@ -230,6 +238,7 @@ public class Resources extends ResourceBundle implements Serializable {
 
     /**
      * Returns a formatted string using javax.text.MessageFormat.
+     *
      * @param key the key
      * @param arguments the arguments
      * @return formatted String
@@ -240,6 +249,7 @@ public class Resources extends ResourceBundle implements Serializable {
 
     /**
      * Returns a formatted string using java.util.Formatter().
+     *
      * @param key the key
      * @param arguments the arguments
      * @return formatted String
@@ -254,8 +264,7 @@ public class Resources extends ResourceBundle implements Serializable {
      * <br>Convenience method to save casting.
      *
      * @param key The key of the property.
-     * @return The value of the property. Returns -1
-     *          if the property is missing.
+     * @return The value of the property. Returns -1 if the property is missing.
      */
     public Integer getInteger(String key) {
         try {
@@ -270,28 +279,30 @@ public class Resources extends ResourceBundle implements Serializable {
     }
 
     /**
-     * Get a small image icon from the ResourceBundle for use on a {@code JMenuItem}.
+     * Get a small image icon from the ResourceBundle for use on a
+     * {@code JMenuItem}.
      * <br>Convenience method .
      *
-     * @param key The key of the property. 
-     *        This method appends ".smallIcon" to the key.
+     * @param key The key of the property. This method appends ".smallIcon" to
+     * the key.
      * @param baseClass the base class used to retrieve the image resource
-     * @return The value of the property. Returns null
-     *          if the property is missing.
+     * @return The value of the property. Returns null if the property is
+     * missing.
      */
     public Node getSmallIconProperty(String key, Class<?> baseClass) {
         return getIconProperty(key, ".smallIcon", baseClass);
     }
 
     /**
-     * Get a large image icon from the ResourceBundle for use on a {@code JButton}.
+     * Get a large image icon from the ResourceBundle for use on a
+     * {@code JButton}.
      * <br>Convenience method .
      *
-     * @param key The key of the property. 
-     *         This method appends ".largeIcon" to the key.
+     * @param key The key of the property. This method appends ".largeIcon" to
+     * the key.
      * @param baseClass the base class used to retrieve the image resource
-     * @return The value of the property. Returns null
-     *          if the property is missing.
+     * @return The value of the property. Returns null if the property is
+     * missing.
      */
     public Node getLargeIconProperty(String key, Class<?> baseClass) {
         return getIconProperty(key, ".largeIcon", baseClass);
@@ -301,7 +312,7 @@ public class Resources extends ResourceBundle implements Serializable {
         try {
             String rsrcName = getStringRecursive(key + suffix);
 
-            if ("".equals(rsrcName)) {
+            if ("".equals(rsrcName)||rsrcName==null) {
                 return null;
             }
 
@@ -324,8 +335,8 @@ public class Resources extends ResourceBundle implements Serializable {
      * <br>Convenience method.
      *
      * @param key The key of the property.
-     * @return The first char of the value of the property.
-     *          Returns '\0' if the property is missing.
+     * @return The first char of the value of the property. Returns '\0' if the
+     * property is missing.
      */
     public char getMnemonic(String key) {
         String s = getStringRecursive(key);
@@ -336,9 +347,10 @@ public class Resources extends ResourceBundle implements Serializable {
      * Gets a char for a JavaBeans "mnemonic" property from the ResourceBundle.
      * <br>Convenience method.
      *
-     * @param key The key of the property. This method appends ".mnemonic" to the key.
-     * @return The first char of the value of the property.
-     *          Returns '\0' if the property is missing.
+     * @param key The key of the property. This method appends ".mnemonic" to
+     * the key.
+     * @return The first char of the value of the property. Returns '\0' if the
+     * property is missing.
      */
     public KeyCombination getMnemonicProperty(String key) {
         String s;
@@ -355,10 +367,12 @@ public class Resources extends ResourceBundle implements Serializable {
     }
 
     /**
-     * Get a String for a JavaBeans "toolTipText" property from the ResourceBundle.
+     * Get a String for a JavaBeans "toolTipText" property from the
+     * ResourceBundle.
      * <br>Convenience method.
      *
-     * @param key The key of the property. This method appends ".toolTipText" to the key.
+     * @param key The key of the property. This method appends ".toolTipText" to
+     * the key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
     public String getToolTipTextProperty(String key) {
@@ -378,7 +392,8 @@ public class Resources extends ResourceBundle implements Serializable {
      * Get a String for a JavaBeans "text" property from the ResourceBundle.
      * <br>Convenience method.
      *
-     * @param key The key of the property. This method appends ".text" to the key.
+     * @param key The key of the property. This method appends ".text" to the
+     * key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
     public String getTextProperty(String key) {
@@ -394,8 +409,10 @@ public class Resources extends ResourceBundle implements Serializable {
         }
     }
 
-    /** Translate a String defining a {@code javax.swing.KeyStroke} into
-     * a String for {@code javafx.input.KeyCombination}. 
+    /**
+     * Translate a String defining a {@code javax.swing.KeyStroke} into a String
+     * for {@code javafx.input.KeyCombination}.
+     *
      * @param s The KeyStroke String
      * @return The KeyCombination String
      */
@@ -414,8 +431,8 @@ public class Resources extends ResourceBundle implements Serializable {
      * <BR>Convenience method.
      *
      * @param key The key of the property.
-     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>.
-     *          Returns null if the property is missing.
+     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
+     * null if the property is missing.
      */
     public KeyCombination getKeyCombination(String key) {
         KeyCombination ks = null;
@@ -429,12 +446,14 @@ public class Resources extends ResourceBundle implements Serializable {
     }
 
     /**
-     * Gets a KeyStroke for a JavaBeans "accelerator" property from the ResourceBundle.
+     * Gets a KeyStroke for a JavaBeans "accelerator" property from the
+     * ResourceBundle.
      * <BR>Convenience method.
      *
-     * @param key The key of the property. This method adds ".accelerator" to the key.
-     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>.
-     *          Returns null if the property is missing.
+     * @param key The key of the property. This method adds ".accelerator" to
+     * the key.
+     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
+     * null if the property is missing.
      */
     public KeyCombination getAcceleratorProperty(String key) {
         return getKeyCombination(key + ".accelerator");
@@ -504,8 +523,10 @@ public class Resources extends ResourceBundle implements Serializable {
         button.setTooltip(new Tooltip(getToolTipTextProperty(argument)));
     }
 
-    /** Configures a menu item with a text, an accelerator, a mnemonic and
-     * a menu icon.
+    /**
+     * Configures a menu item with a text, an accelerator, a mnemonic and a menu
+     * icon.
+     *
      * @param menu the menu
      * @param argument the argument
      */
@@ -556,14 +577,17 @@ public class Resources extends ResourceBundle implements Serializable {
 
     /**
      * Removes a property name modifier.
+     *
      * @param name The name of the modifier.
      */
     public static void removePropertyNameModifier(String name) {
         propertyNameModifiers.remove(name);
     }
 
-    /** Read object from ObjectInputStream and re-establish ResourceBundle.
-     * @param in the input stream 
+    /**
+     * Read object from ObjectInputStream and re-establish ResourceBundle.
+     *
+     * @param in the input stream
      * @throws IOException if reading fails
      * @throws ClassNotFoundException if the class can not be found
      */
@@ -576,7 +600,7 @@ public class Resources extends ResourceBundle implements Serializable {
 
     @Override
     protected Object handleGetObject(String key) {
-        Object obj=resource.getObject(key);
+        Object obj = resource.getObject(key);
         if (obj instanceof String) {
             obj = getStringRecursive(key);
         }

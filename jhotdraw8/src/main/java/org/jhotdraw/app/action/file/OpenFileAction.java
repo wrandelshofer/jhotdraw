@@ -54,11 +54,7 @@ public class OpenFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    public void handle(ActionEvent evt) {
-        if (isDisabled()) {
-            return;
-        }
-
+    protected void onActionPerformed(ActionEvent evt) {
         final Application app = getApplication();
         {
             app.addDisabler(this);
@@ -76,14 +72,14 @@ public class OpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView==null) {
-                app.getModel().createView(v -> handle(v, true));
+                app.getModel().createView(v -> doIt(v, true));
             } else {
-                handle(emptyView, false);
+                doIt(emptyView, false);
             }
         }
     }
 
-    public void handle(View view, boolean disposeView) {
+    public void doIt(View view, boolean disposeView) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri!=null) {

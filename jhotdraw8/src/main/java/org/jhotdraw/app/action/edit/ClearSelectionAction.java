@@ -49,9 +49,7 @@ public class ClearSelectionAction extends AbstractSelectionAction {
     }
 
     @Override
-    public void handle(javafx.event.ActionEvent event) {
-        if (!event.isConsumed()) {
-            event.consume();
+    protected void onActionPerformed(javafx.event.ActionEvent event) {
             View v = app.getActiveView();
             if (v != null && !v.isDisabled()) {
                 Node n = v.getNode().getScene().getFocusOwner();
@@ -63,6 +61,5 @@ public class ClearSelectionAction extends AbstractSelectionAction {
                     tic.clearSelection();
                 }
             }
-        }
     }
 }

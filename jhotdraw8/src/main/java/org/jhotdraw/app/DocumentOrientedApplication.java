@@ -372,7 +372,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                     if (a != null) {
                         Actions.bindMenuItem(mi, a);
                     } else if (mi.getId() != null) {
-                        System.err.println("No action for menu item with id="
+                        System.err.println("DocumentOrientedApplication: Warning: no action for menu item with id="
                                 + mi.getId());
                         mi.setVisible(false);
                     }

@@ -42,9 +42,7 @@ public class DeleteAction extends AbstractFocusOwnerAction {
     }
 
     @Override
-    public void handle(javafx.event.ActionEvent event) {
-        if (!event.isConsumed()) {
-            event.consume();
+    protected void onActionPerformed(javafx.event.ActionEvent event) {
             View v = app.getActiveView();
             if (v != null && !v.isDisabled()) {
                 Node n = v.getNode().getScene().getFocusOwner();
@@ -57,6 +55,5 @@ public class DeleteAction extends AbstractFocusOwnerAction {
                     tic.deleteSelection();
                 }
             }
-        }
     }
 }

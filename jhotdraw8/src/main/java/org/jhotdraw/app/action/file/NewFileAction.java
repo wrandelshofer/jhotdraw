@@ -41,7 +41,7 @@ public class NewFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    public void handle(ActionEvent evt) {
+    protected void onActionPerformed(ActionEvent evt) {
         Application app = getApplication();
         app.getModel().createView(newView -> {
             /*
