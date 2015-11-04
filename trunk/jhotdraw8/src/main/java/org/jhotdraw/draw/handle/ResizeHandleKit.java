@@ -237,7 +237,7 @@ public class ResizeHandleKit {
             // shift should apply the handle to all group reshapeable figures.
             boolean keepAspect = event.isShiftDown();
 
-            resize(newPoint, getOwner(), startBounds, view.getModel(), keepAspect);
+            resize(getOwner().drawingToLocal(newPoint), getOwner(), startBounds, view.getModel(), keepAspect);
         }
 
         @Override
@@ -250,6 +250,16 @@ public class ResizeHandleKit {
             return true;
         }
 
+        /**
+         * Resizes the figure.
+         * 
+         * @param newPoint new point in local coordinates
+         * @param owner the figure
+         * @param bounds the bounds of the figure on mouse pressed
+         * @param model the drawing model
+         * @param keepAspect whether the aspect should be preserved. The
+         * bounds of the figure on mouse pressed can be used as a reference.
+         */
         protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect);
     }
 
