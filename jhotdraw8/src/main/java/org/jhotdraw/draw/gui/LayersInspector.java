@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -30,6 +31,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -211,8 +213,8 @@ public class LayersInspector extends AbstractDrawingInspector {
         };
 
         listView.setFixedCellSize(24.0);
-
-        ListViewUtil.addReorderingSupport(listView, addSelectionLabelDndSupport(listView, this::createCell, io), io);
+        listView.setCellFactory(addSelectionLabelDndSupport(listView, this::createCell, io));
+        ListViewUtil.addReorderingSupport(listView, io);
     }
 
     public LayerCell createCell(ListView<Figure> listView) {
@@ -256,8 +258,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             newValue.getChildren().addListener(listInvalidationListener);
         }
     }
-
-    private static Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(ListView<Figure> listView, Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
+    private Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(ListView<Figure> listView, Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
     ) {
         SelectionLabelDnDSupport dndSupport = new SelectionLabelDnDSupport(listView, clipboardIO);
         Callback<ListView<Figure>, ListCell<Figure>> dndCellFactory = lv -> {
@@ -278,7 +279,7 @@ public class LayersInspector extends AbstractDrawingInspector {
      * Implements DnD support for the selectionLabel. Dragging the
      * selectionLabel to a layer will move the selected items to another layer.
      */
-    private static class SelectionLabelDnDSupport {
+    private class SelectionLabelDnDSupport {
 
         private final ListView<Figure> listView;
         private int draggedCellIndex;
@@ -288,11 +289,13 @@ public class LayersInspector extends AbstractDrawingInspector {
             this.listView = listView;
             this.io = io;
         }
+        
 
         private EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
+                if (event.isConsumed()) return;
                 if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
 
                     draggedCellIndex = (int) Math.floor(listView.screenToLocal(0, event.getScreenY()).getY() / listView.getFixedCellSize());
@@ -318,8 +321,8 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             @Override
             public void handle(DragEvent event) {
+                if (event.isConsumed()) return;
                 EventType<DragEvent> t = event.getEventType();
-System.out.println("LayersInspector "+t);                
                 if (t == DragEvent.DRAG_DROPPED) {
                     onDragDropped(event);
                 } else if (t == DragEvent.DRAG_OVER) {
@@ -328,20 +331,16 @@ System.out.println("LayersInspector "+t);
             }
 
             private void onDragDropped(DragEvent event) {
-System.out.println("LayersInspector onDragDropped");                
                 if (isAcceptable(event)) {
                     event.acceptTransferModes(TransferMode.MOVE);
 
                     // XXX foolishly assumes fixed cell height
                     double cellHeight = listView.getFixedCellSize();
-                    int index = Math.max(0, Math.min((int) (event.getY() / cellHeight), listView.getItems().size()));
+                    List<Figure> items=listView.getItems();
+                    int index = Math.max(0, Math.min((int) (event.getY() / cellHeight),items.size()));
 
-                    Figure item = listView.getItems().get(draggedCellIndex);
-                    System.out.println("LayersInspector selectionLabel dropped. Implement me! " + index + " " + item);
-                    /*
-                     listView.getItems().add(index, item);
-                     */
-
+                    Figure from = items.get(draggedCellIndex);
+                    moveSelectedFiguresFromToLayer((Layer)from,(Layer)items.get(index));
                     event.setDropCompleted(true);
                     event.consume();
                 }
@@ -356,11 +355,29 @@ System.out.println("LayersInspector onDragDropped");
 
             private void onDragOver(DragEvent event) {
                 if (isAcceptable(event)) {
-System.out.println("LaysersInspector DRAG_OVER ACCEPT MOVE")    ;                
                     event.acceptTransferModes(TransferMode.MOVE);
                     event.consume();
                 }
             }
+            
+            private void moveSelectedFiguresFromToLayer(Layer from, Layer to) {
+                DrawingModel model=drawingView.getModel();
+                LinkedHashSet<Figure> selection=new LinkedHashSet<>(drawingView.getSelectedFigures());
+                for (Figure f:selection) {
+                    if (f.getLayer()==from) {
+                        // add child moves a figure, so we do not need to
+                        // remove it explicitly
+                        model.addChildTo(f,to);
+                    }
+                }
+                
+                // Update the selection. The selection still contains the
+                // same figures but they have now a different ancestor.
+                drawingView.getSelectedFigures().clear();
+                drawingView.getSelectedFigures().addAll(selection);
+            }
+
+
         };
     }
 

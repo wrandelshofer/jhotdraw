@@ -28,7 +28,7 @@ public class ListViewUtil {
     private static class DnDSupport<T> {
 
         private final ListView<T> listView;
-        private int draggedCellIndex;
+        private int draggedCellIndex = -1;
         private final ClipboardIO<T> io;
         private boolean reorderingOnly;
 
@@ -41,6 +41,7 @@ public class ListViewUtil {
         private EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
+                if (event.isConsumed()) return;
                 EventType<DragEvent> t = event.getEventType();
                 if (t == DragEvent.DRAG_DONE) {
                     onDragDone(event);
@@ -49,7 +50,8 @@ public class ListViewUtil {
 
             private void onDragDone(DragEvent event) {
                 if (reorderingOnly) {
-                    // XXX assumes that the list autodetects reordering!
+                    // XXX assumes that the ListView autodetects reordering!
+                    draggedCellIndex = -1;
                     event.consume();
                     return;
                 }
@@ -67,6 +69,7 @@ public class ListViewUtil {
 
             @Override
             public void handle(MouseEvent event) {
+                if (event.isConsumed()) return;
                 if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
                     @SuppressWarnings("unchecked")
                     ListCell<T> draggedCell = (ListCell<T>) event.getSource();
@@ -91,33 +94,28 @@ public class ListViewUtil {
 
             @Override
             public void handle(DragEvent event) {
+                if (event.isConsumed()) return;
                 EventType<DragEvent> t = event.getEventType();
                 if (t == DragEvent.DRAG_DROPPED) {
-                    System.out.println("ListViewUtil DRAG_DROPPED");
                     onDragDropped(event);
                 } else if (t == DragEvent.DRAG_OVER) {
                     onDragOver(event);
                 }
             }
 
-            private TransferMode acceptMode(DragEvent event) {
+            private TransferMode[] acceptModes(DragEvent event) {
                 ListView<?> gestureTargetListView = null;
                 if (event.getGestureSource() instanceof ListCell) {
                     ListCell<?> gestureTargetCell = (ListCell<?>) event.getGestureSource();
                     gestureTargetListView = gestureTargetCell.getListView();
                 }
-                TransferMode mode;
+                TransferMode[] mode;
                 if (reorderingOnly) {
-                    mode = (listView == gestureTargetListView) ? TransferMode.MOVE : null;
+                    mode = (listView == gestureTargetListView) ? new TransferMode[]{TransferMode.MOVE} :  TransferMode.NONE;
                 } else {
-                    mode = (listView == gestureTargetListView) ? TransferMode.MOVE : TransferMode.COPY;
+                    mode = (listView == gestureTargetListView) ? new TransferMode[]{TransferMode.MOVE} :new TransferMode[]{TransferMode.COPY};
                 }
 
-                if (mode == null) {
-                    event.acceptTransferModes(TransferMode.NONE);
-                } else {
-                    event.acceptTransferModes(mode);
-                }
                 return mode;
             }
 
@@ -125,7 +123,11 @@ public class ListViewUtil {
                 boolean isAcceptable = io.canRead(event.getDragboard());
                 if (isAcceptable) {
                     boolean success = false;
-                    TransferMode mode = acceptMode(event);
+                    TransferMode[] mode = acceptModes(event);
+                    if (mode.length==0) {
+                        return;
+                    }
+                    event.acceptTransferModes(mode);
 
                     // XXX foolishly assumes fixed cell height
                     double cellHeight = listView.getFixedCellSize();
@@ -157,8 +159,8 @@ public class ListViewUtil {
 
             private void onDragOver(DragEvent event) {
                 boolean isAcceptable = io.canRead(event.getDragboard());
-                if (isAcceptable) {
-                    acceptMode(event);
+                if (isAcceptable && (!reorderingOnly || draggedCellIndex != -1)) {
+                    event.acceptTransferModes(acceptModes(event));
                     event.consume();
                 }
             }
@@ -194,15 +196,10 @@ public class ListViewUtil {
             boolean reorderingOnly) {
         DnDSupport<T> dndSupport = new DnDSupport<T>(listView, clipboardIO, reorderingOnly);
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
-            try {
                 ListCell<T> cell = cellFactory.call(lv);
                 cell.addEventHandler(DragEvent.DRAG_DONE, dndSupport.cellDragHandler);
                 cell.addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
                 return cell;
-            } catch (Throwable t) {
-                t.printStackTrace();
-                return null;
-            }
         };
         listView.setCellFactory(dndCellFactory);
         listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);

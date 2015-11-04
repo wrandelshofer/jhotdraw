@@ -218,7 +218,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private boolean handlesAreValid;
 
     /**
-     * The selectedFiguresProperty holds the list of selected figures.
+     * The selectedFiguresProperty holds the list of selected figures
+     * in the sequence they were selected by the user.
      */
     private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
     private Transform viewToDrawingTransform = null;
