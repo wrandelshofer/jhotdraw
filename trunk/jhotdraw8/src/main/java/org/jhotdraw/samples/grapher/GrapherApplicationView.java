@@ -149,18 +149,29 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
 
-        {   // XXX the inspectors should be created on a worker thread
-            List<Node> list = new LinkedList<>();
-            addInspector(new CanvasInspector(), "canvas", list);
-            addInspector(new StylesheetsInspector(), "stylesheets", list);
-            addInspector(new LayersInspector(layerFactory), "layers", list);
+        BackgroundTask<List<Node>> bg=new BackgroundTask<List<Node>>() {
 
-            inspectorsHBox.getChildren().addAll(list);
-            for (Node n : list) {
-                Inspector i = (Inspector) n.getProperties().get("inspector");
-                i.setDrawingView(drawingView);
+            @Override
+            protected List<Node> call() throws Exception {
+                List<Node> list = new LinkedList<>();
+                addInspector(new CanvasInspector(), "canvas", list);
+                addInspector(new StylesheetsInspector(), "stylesheets", list);
+                addInspector(new LayersInspector(layerFactory), "layers", list);
+
+                return list;
             }
-        }
+
+            @Override
+            protected void succeeded(List<Node> list) {
+                for (Node n : list) {
+                    Inspector i = (Inspector) n.getProperties().get("inspector");
+                    i.setDrawingView(drawingView);
+                }
+                inspectorsHBox.getChildren().addAll(list);
+            }
+
+        };
+        getApplication().execute(bg);
 
         Preferences prefs = Preferences.userNodeForPackage(GrapherApplicationView.class);
         propertiesPane.setMinHeight(0.0);

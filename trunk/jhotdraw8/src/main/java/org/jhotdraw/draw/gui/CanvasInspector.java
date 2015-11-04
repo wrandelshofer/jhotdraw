@@ -24,6 +24,7 @@ import javafx.scene.paint.Paint;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.model.DrawingModelEvent;
+import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.XmlDoubleConverter;
@@ -51,13 +52,12 @@ public class CanvasInspector extends AbstractDrawingInspector {
     @FXML
     private TextField opacityField;
 
-
     private Property<Double> widthProperty;
     private Property<Double> heightProperty;
     private Property<Paint> backgroundProperty;
-    
-    private InvalidationListener drawingUpdater = o->onDrawingPropertyValueChanged();
-    
+
+    private InvalidationListener drawingUpdater = o -> onDrawingPropertyValueChanged();
+
     public CanvasInspector() {
         this(LayersInspector.class.getResource("CanvasInspector.fxml"));
     }
@@ -67,15 +67,19 @@ public class CanvasInspector extends AbstractDrawingInspector {
     }
 
     private void init(URL fxmlUrl) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
-        loader.setController(this);
+        // We must use invoke and wait here, because we instantiate Tooltips
+        // which immediately instanciate a Window and a Scene. 
+        PlatformUtil.invokeAndWait(() -> {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
+            loader.setController(this);
 
-        try (InputStream in = fxmlUrl.openStream()) {
-            setCenter(loader.load(in));
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
+            try (InputStream in = fxmlUrl.openStream()) {
+                setCenter(loader.load(in));
+            } catch (IOException ex) {
+                throw new InternalError(ex);
+            }
+        });
     }
 
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
@@ -106,7 +110,7 @@ public class CanvasInspector extends AbstractDrawingInspector {
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssPaintConverter()));
             @SuppressWarnings("unchecked")
-            Property<Color> colorProperty=(Property<Color>)(Property<?>)backgroundProperty;
+            Property<Color> colorProperty = (Property<Color>) (Property<?>) backgroundProperty;
             backgroundColorPicker.valueProperty().bindBidirectional(colorProperty);
         }
     }

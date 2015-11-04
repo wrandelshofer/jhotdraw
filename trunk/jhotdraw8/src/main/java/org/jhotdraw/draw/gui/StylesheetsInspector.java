@@ -39,6 +39,7 @@ import javafx.util.StringConverter;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.gui.ClipboardIO;
 import org.jhotdraw.gui.ListViewUtil;
+import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.UriConverter;
 import org.jhotdraw.util.Resources;
@@ -74,86 +75,91 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     }
 
     private void init(URL fxmlUrl) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
-        loader.setController(this);
-        try (InputStream in = fxmlUrl.openStream()) {
-            setCenter(loader.load(in));
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
-        listView.getItems().addListener((InvalidationListener) (o -> onListChanged()));
-        // int counter = 0;
-        addButton.addEventHandler(ActionEvent.ACTION, o -> listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css")));
-        removeButton.addEventHandler(ActionEvent.ACTION, o -> {
-            ObservableList<URI> items = listView.getItems();
-            ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
-            Collections.sort(indices);
-            for (int i = indices.size() - 1; i >= 0; i--) {
-                items.remove((int) indices.get(i));
+        // We must use invoke and wait here, because we instantiate Tooltips
+        // which immediately instanciate a Window and a Scene. 
+        PlatformUtil.invokeAndWait(() -> {
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
+            loader.setController(this);
+            try (InputStream in = fxmlUrl.openStream()) {
+                setCenter(loader.load(in));
+            } catch (IOException ex) {
+                throw new InternalError(ex);
             }
-        });
-        removeButton.disableProperty().bind(Bindings.equal(listView.getSelectionModel().selectedIndexProperty(), -1));
-
-        listView.setEditable(true);
-        listView.setFixedCellSize(24.0);
-
-        listView.setOnEditCommit(new EventHandler<ListView.EditEvent<URI>>() {
-            @Override
-            public void handle(ListView.EditEvent<URI> t) {
-                listView.getItems().set(t.getIndex(), t.getNewValue());
-            }
-
-        });
-
-        ClipboardIO<URI> io = new ClipboardIO<URI>() {
-
-            @Override
-            public void write(Clipboard clipboard, List<URI> items) {
-                if (items.size()!=1) {
-                throw new UnsupportedOperationException("Not supported yet."); 
+            listView.getItems().addListener((InvalidationListener) (o -> onListChanged()));
+            // int counter = 0;
+            addButton.addEventHandler(ActionEvent.ACTION, o -> listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css")));
+            removeButton.addEventHandler(ActionEvent.ACTION, o -> {
+                ObservableList<URI> items = listView.getItems();
+                ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
+                Collections.sort(indices);
+                for (int i = indices.size() - 1; i >= 0; i--) {
+                    items.remove((int) indices.get(i));
                 }
-                 ClipboardContent content = new ClipboardContent();
-                URI stylesheetUri = items.get(0);
+            });
+            removeButton.disableProperty().bind(Bindings.equal(listView.getSelectionModel().selectedIndexProperty(), -1));
+
+            listView.setEditable(true);
+            listView.setFixedCellSize(24.0);
+
+            listView.setOnEditCommit(new EventHandler<ListView.EditEvent<URI>>() {
+                @Override
+                public void handle(ListView.EditEvent<URI> t) {
+                    listView.getItems().set(t.getIndex(), t.getNewValue());
+                }
+
+            });
+
+            ClipboardIO<URI> io = new ClipboardIO<URI>() {
+
+                @Override
+                public void write(Clipboard clipboard, List<URI> items) {
+                    if (items.size() != 1) {
+                        throw new UnsupportedOperationException("Not supported yet.");
+                    }
+                    ClipboardContent content = new ClipboardContent();
+                    URI stylesheetUri = items.get(0);
                     URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
                     stylesheetUri = documentHome.resolve(stylesheetUri);
 
                     content.putUrl(stylesheetUri.toString());
                     clipboard.setContent(content);
-            }
+                }
 
-            @Override
-            public List<URI> read(Clipboard clipboard) {
-                List<URI> list;
-                if (clipboard.hasUrl()) {
-                    list = new ArrayList<>();
-                    URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
-                    URI dragboardUri = URI.create(clipboard.getUrl());
-                    URI stylesheetUri = documentHome.relativize(dragboardUri);
-                    list.add(stylesheetUri);
-                } else if (clipboard.hasFiles()) {
-                    list = new ArrayList<>();
-                    URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
-                    for (File f : clipboard.getFiles()) {
-                        URI dragboardUri = f.toURI();
+                @Override
+                public List<URI> read(Clipboard clipboard) {
+                    List<URI> list;
+                    if (clipboard.hasUrl()) {
+                        list = new ArrayList<>();
+                        URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
+                        URI dragboardUri = URI.create(clipboard.getUrl());
                         URI stylesheetUri = documentHome.relativize(dragboardUri);
                         list.add(stylesheetUri);
+                    } else if (clipboard.hasFiles()) {
+                        list = new ArrayList<>();
+                        URI documentHome = drawingView.getDrawing().get(Drawing.DOCUMENT_HOME);
+                        for (File f : clipboard.getFiles()) {
+                            URI dragboardUri = f.toURI();
+                            URI stylesheetUri = documentHome.relativize(dragboardUri);
+                            list.add(stylesheetUri);
+                        }
+                    } else {
+                        list = null;
                     }
-                } else {
-                    list = null;
+                    return list;
                 }
-                return list;
-            }
 
-            @Override
-            public boolean canRead(Clipboard clipboard) {
-               return clipboard.hasFiles()||clipboard.hasUrl();
-            }
+                @Override
+                public boolean canRead(Clipboard clipboard) {
+                    return clipboard.hasFiles() || clipboard.hasUrl();
+                }
 
-        };
-         StringConverter<URI> uriConverter = new StringConverterConverterWrapper<>(new UriConverter());
-        ListViewUtil.addDragAndDropSupport(listView,(ListView<URI> param) -> 
-             new TextFieldListCell<>(uriConverter), io);
+            };
+            StringConverter<URI> uriConverter = new StringConverterConverterWrapper<>(new UriConverter());
+            ListViewUtil.addDragAndDropSupport(listView, (ListView<URI> param)
+                    -> new TextFieldListCell<>(uriConverter), io);
+        });
     }
 
     @Override

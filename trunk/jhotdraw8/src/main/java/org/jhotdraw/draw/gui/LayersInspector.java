@@ -49,6 +49,7 @@ import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.gui.ClipboardIO;
 import org.jhotdraw.gui.ListViewUtil;
+import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -139,6 +140,10 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     private void init(URL fxmlUrl) {
+        // We must use invoke and wait here, because we instantiate Tooltips
+        // which immediately instanciate a Window and a Scene. 
+        PlatformUtil.invokeAndWait(() -> {
+        
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
@@ -215,6 +220,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         listView.setFixedCellSize(24.0);
         listView.setCellFactory(addSelectionLabelDndSupport(listView, this::createCell, io));
         ListViewUtil.addReorderingSupport(listView, io);
+        });
     }
 
     public LayerCell createCell(ListView<Figure> listView) {
