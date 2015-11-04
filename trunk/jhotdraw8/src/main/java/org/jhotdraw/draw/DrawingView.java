@@ -169,8 +169,8 @@ public interface DrawingView extends RenderContext {
     /**
      * The selected figures.
      * <p>
-     * Note: Selection is a set. However, the sequence of the selection is
-     * important.
+     * Note: The selection is represent by a {@code LinkedHasSet} because
+     * the sequence of the selection is important.
      *
      * @return a list of the selected figures
      */

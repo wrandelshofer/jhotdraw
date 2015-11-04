@@ -190,7 +190,9 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
 
         @Override
         public List<E> getRemoved() {
-            return (List<E>) change.getRemoved();
+            @SuppressWarnings("unchecked")
+            List<E> temp= (List<E>) change.getRemoved();
+            return temp;
         }
 
         @Override
