@@ -10,12 +10,14 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.Action;
+import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
@@ -36,21 +38,24 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
     @Override
     public HierarchicalMap<String, Action> getActionMap() {
-        HierarchicalMap<String, Action> map= super.getActionMap();
-           map.put(SendToBackAction.ID, new SendToBackAction(this,null));
-        map.put(BringToFrontAction.ID, new BringToFrontAction(this,null));
-        
+        HierarchicalMap<String, Action> map = super.getActionMap();
+        map.put(SendToBackAction.ID, new SendToBackAction(this, null));
+        map.put(BringToFrontAction.ID, new BringToFrontAction(this, null));
+        Action a;
+        map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherApplicationView) view).getPropertiesPane(),
+                "view.toggleProperties",
+                Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
+        a.set(Action.SELECTED_KEY, Preferences.userNodeForPackage(GrapherApplication.class).getBoolean("view.propertiesPane.visible", true));
         return map;
     }
-    
-   
+
     @Override
     public View instantiateView() {
         GrapherApplicationView v = new GrapherApplicationView();
         return v;
     }
 
-   @Override
+    @Override
     public URIChooser createOpenChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.OPEN);
@@ -65,12 +70,14 @@ public class GrapherApplication extends DocumentOrientedApplication {
         c.getFileChooser().getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
         return c;
     }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
     }
+
     @Override
     public MenuBar createMenuBar() {
         FXMLLoader loader = new FXMLLoader();
@@ -84,11 +91,11 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
     @Override
     protected void onViewAdded(View view) {
-        super.onViewAdded(view); 
+        super.onViewAdded(view);
         view.getNode().getScene().getStylesheets().addAll(//
                 GrapherApplication.class.getResource("/org/jhotdraw/draw/gui/inspector.css").toString(),//
                 GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
-                );
+        );
     }
-    
+
 }

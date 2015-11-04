@@ -16,7 +16,7 @@
       <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </top>
    <bottom>
-      <ScrollPane hbarPolicy="ALWAYS" pannable="true" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="propertiesPane" hbarPolicy="ALWAYS" pannable="true" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
          <content>
             <HBox fx:id="inspectorsHBox" alignment="BOTTOM_LEFT" />
          </content>

@@ -36,9 +36,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
     }
 
     @Override
-    public void handle(ActionEvent e) {
-        if (e.isConsumed())return;
-        e.consume();
+    protected void onActionPerformed(ActionEvent e) {
         final DrawingView view = getView();
         if (view == null) {
             return;

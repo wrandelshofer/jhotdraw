@@ -64,7 +64,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
     }
 
     @Override
-    public void handle(ActionEvent evt) {
+    protected void onActionPerformed(ActionEvent evt) {
         Application app = getApplication();
         View av = getActiveView();
         if (av != null) {

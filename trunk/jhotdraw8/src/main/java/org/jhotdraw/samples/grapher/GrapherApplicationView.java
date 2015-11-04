@@ -28,6 +28,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.draw.Drawing;
@@ -80,6 +81,8 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
     private ToolBar toolBar;
     @FXML
     private ScrollPane scrollPane;
+    @FXML
+    private ScrollPane propertiesPane;
 
     private DrawingView drawingView;
 
@@ -141,19 +144,31 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
 
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
+        getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction(getApplication(), this,
+                propertiesPane.visibleProperty(),
+                "view.toggleProperties",
+                Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
 
         {   // XXX the inspectors should be created on a worker thread
-                List<Node> list = new LinkedList<>();
-                addInspector(new CanvasInspector(), "canvas", list);
-                addInspector(new StylesheetsInspector(), "stylesheets", list);
-                addInspector(new LayersInspector(layerFactory), "layers", list);
-                           
-                inspectorsHBox.getChildren().addAll(list);
-                for (Node n : list) {
-                    Inspector i = (Inspector) n.getProperties().get("inspector");
-                    i.setDrawingView(drawingView);
-                }
-    }
+            List<Node> list = new LinkedList<>();
+            addInspector(new CanvasInspector(), "canvas", list);
+            addInspector(new StylesheetsInspector(), "stylesheets", list);
+            addInspector(new LayersInspector(layerFactory), "layers", list);
+
+            inspectorsHBox.getChildren().addAll(list);
+            for (Node n : list) {
+                Inspector i = (Inspector) n.getProperties().get("inspector");
+                i.setDrawingView(drawingView);
+            }
+        }
+
+        Preferences prefs = Preferences.userNodeForPackage(GrapherApplicationView.class);
+        propertiesPane.setMinHeight(0.0);
+        propertiesPane.visibleProperty().addListener((o, oldValue, newValue) -> {
+            prefs.putBoolean("view.propertiesPane.visible", newValue);
+            propertiesPane.setPrefHeight(newValue ? ScrollPane.USE_COMPUTED_SIZE : 0.0);
+        });
+        propertiesPane.visibleProperty().set(prefs.getBoolean("view.propertiesPane.visible", true));
 
         inspectorsHBox.getStyleClass().add("inspector");
         callback.handle(new TaskCompletionEvent<Void>());
@@ -264,6 +279,10 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
     @Override
     public DrawingEditor getEditor() {
         return editor;
+    }
+
+    public Node getPropertiesPane() {
+        return propertiesPane;
     }
 
 }

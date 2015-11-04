@@ -81,13 +81,13 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
     /** The localized name of the action for use in controls.
      * @return The name 
      */
-    default public String getLabel() {
+    default String getLabel() {
         return get(LABEL);
     }
     /** The name of the action for use in action maps and for resource bundles.
      * @return The id 
      */
-    default public String getName() {
+    default String getName() {
         return get(NAME);
     }
 }

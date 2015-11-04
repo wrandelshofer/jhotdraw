@@ -71,7 +71,7 @@ public class SaveFileAction extends AbstractViewAction {
     }
 
     @Override
-    public void handle(ActionEvent evt) {
+    protected void onActionPerformed(ActionEvent evt) {
         if (isDisabled()) {
             return;
         }
