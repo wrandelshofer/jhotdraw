@@ -56,7 +56,7 @@ public class CanvasInspector extends AbstractDrawingInspector {
     private Property<Double> heightProperty;
     private Property<Paint> backgroundProperty;
 
-    private InvalidationListener drawingUpdater = o -> onDrawingPropertyValueChanged();
+    private InvalidationListener commitHandler = o -> commitEdits();
 
     public CanvasInspector() {
         this(LayersInspector.class.getResource("CanvasInspector.fxml"));
@@ -82,18 +82,19 @@ public class CanvasInspector extends AbstractDrawingInspector {
         });
     }
 
+    @Override
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
         if (widthProperty != null) {
             widthField.textProperty().unbindBidirectional(widthProperty);
-            widthProperty.removeListener(drawingUpdater);
+            widthProperty.removeListener(commitHandler);
         }
         if (heightProperty != null) {
             heightField.textProperty().unbindBidirectional(heightProperty);
-            heightProperty.removeListener(drawingUpdater);
+            heightProperty.removeListener(commitHandler);
         }
         if (backgroundProperty != null) {
             backgroundColorField.textProperty().unbindBidirectional(backgroundProperty);
-            backgroundProperty.removeListener(drawingUpdater);
+            backgroundProperty.removeListener(commitHandler);
         }
         widthProperty = null;
         heightProperty = null;
@@ -102,10 +103,11 @@ public class CanvasInspector extends AbstractDrawingInspector {
             widthProperty = Drawing.WIDTH.propertyAt(newValue.propertiesProperty());
             heightProperty = Drawing.HEIGHT.propertyAt(newValue.propertiesProperty());
             backgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.propertiesProperty());
-            widthProperty.addListener(drawingUpdater);
-            heightProperty.addListener(drawingUpdater);
-            backgroundProperty.addListener(drawingUpdater);
+            widthProperty.addListener(commitHandler);
+            heightProperty.addListener(commitHandler);
+            backgroundProperty.addListener(commitHandler);
 
+            // FIXME binding to figure properties bypasses the DrawingModel!
             widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssPaintConverter()));
@@ -115,7 +117,7 @@ public class CanvasInspector extends AbstractDrawingInspector {
         }
     }
 
-    private void onDrawingPropertyValueChanged() {
+    private void commitEdits() {
         drawingView.getModel().fire(DrawingModelEvent.nodeInvalidated(drawingView.getModel(), drawingView.getDrawing()));
     }
 

@@ -7,23 +7,19 @@ package org.jhotdraw.draw.gui;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Cell;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.util.Resources;
@@ -35,7 +31,7 @@ import org.jhotdraw.util.Resources;
  */
 public class LayerCell extends ListCell<Figure> {
 
-    private Node node;
+    private HBox node;
 
     @FXML
     private CheckBox visibleCheckBox;
@@ -51,6 +47,8 @@ public class LayerCell extends ListCell<Figure> {
     private boolean isUpdating;
 
     private Figure item;
+
+    private TextField textField;
 
     public LayerCell(DrawingView drawingView) {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingView);
@@ -72,10 +70,11 @@ public class LayerCell extends ListCell<Figure> {
             throw new InternalError(ex);
         }
 
-        visibleCheckBox.selectedProperty().addListener(o -> updateLayerVisible());
-        disabledCheckBox.selectedProperty().addListener(o -> updateLayerLocked());
+        visibleCheckBox.selectedProperty().addListener(o -> commitLayerVisible());
+        disabledCheckBox.selectedProperty().addListener(o -> commitLayerDisabled());
     }
 
+    @Override
     protected void updateItem(Figure item, boolean empty) {
         super.updateItem(item, empty);
 
@@ -84,16 +83,29 @@ public class LayerCell extends ListCell<Figure> {
             setGraphic(null);
             this.item = null;
         } else {
-            this.item = item;
             isUpdating = true;
-            setText(item.get(Figure.STYLE_ID));
-            //idLabel.setText(item.get(Figure.STYLE_ID));
+            this.item = item;
+            if (isEditing()) {
+                if (textField == null) {
+                    textField = createTextField();
+                }
+                if (textField != null) {
+                    textField.setText(getItemText());
+                }
+                setText(null);
+
+                if (textField.getParent() == null) {
+                    node.getChildren().add(textField);
+                }
+            } else {
+                setText(getItemText());
+                if (textField!=null&&textField.getParent() != null) {
+                    node.getChildren().remove(textField);
+                }
+            }
             setGraphic(node);
-            Integer count=item.get(LayersInspector.SELECTION_COUNT);
-            selectionLabel.setText(count==null?"":"("+count.toString()+")");
-            
-            // FIXME - we must listen to these properties!
-            
+            Integer count = item.get(LayersInspector.SELECTION_COUNT);
+            selectionLabel.setText(count == null ? "" : "(" + count.toString() + ")");
 
             visibleCheckBox.setSelected(item.get(Figure.VISIBLE));
             disabledCheckBox.setSelected(item.get(Figure.DISABLED));
@@ -105,17 +117,77 @@ public class LayerCell extends ListCell<Figure> {
         return list -> new LayerCell(drawingView);
     }
 
-    private void updateLayerVisible() {
+    private void commitLayerVisible() {
         if (!isUpdating) {
             drawingView.getModel().set(item, Figure.VISIBLE, visibleCheckBox.isSelected());
         }
     }
 
-    private void updateLayerLocked() {
+    private void commitLayerDisabled() {
         if (!isUpdating) {
             drawingView.getModel().set(item, Figure.DISABLED, disabledCheckBox.isSelected());
         }
     }
-    
-    public Label getSelectionLabel() {return selectionLabel;}
+
+    public Label getSelectionLabel() {
+        return selectionLabel;
+    }
+
+    /**
+     * Returns the {@link StringConverter} used in this cell.
+     */
+    public final StringConverter<Figure> getConverter() {
+        return null;//converterProperty().get(); 
+    }
+
+    @Override
+    public void startEdit() {
+        if (!isEditable() || !getListView().isEditable()) {
+            return;
+        }
+        super.startEdit();
+        updateItem(getItem(),false);
+        textField.selectAll();
+        textField.requestFocus();
+    }
+
+    @Override
+    public void cancelEdit() {
+        super.cancelEdit();
+        setText(getItemText());
+        if (textField != null) {
+            node.getChildren().remove(textField);
+        }
+    }
+
+    private String getItemText() {
+        return getItem() == null ? "" : getItem().get(Figure.STYLE_ID);
+    }
+
+    private TextField createTextField() {
+        final TextField textField = new TextField();
+
+        // Use onAction here rather than onKeyReleased (with check for Enter),
+        // as otherwise we encounter RT-34685
+        textField.setOnAction(event -> {
+            commitEdit(item);
+            event.consume();
+        });
+        textField.setOnKeyReleased(t -> {
+            if (t.getCode() == KeyCode.ESCAPE) {
+                cancelEdit();
+                t.consume();
+            }
+        });
+        return textField;
+    }
+
+    @Override
+    public void commitEdit(Figure newValue) {
+        if (textField != null && isEditing()) {
+            drawingView.getModel().set(
+                    item, Figure.STYLE_ID, textField.getText());
+        }
+        super.commitEdit(newValue);
+    }
 }
