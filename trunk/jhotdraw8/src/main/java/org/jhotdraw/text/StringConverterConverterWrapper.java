@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.text;
 
+import java.io.IOException;
 import java.text.ParseException;
 import javafx.util.StringConverter;
 
@@ -33,8 +34,8 @@ public class StringConverterConverterWrapper<T> extends StringConverter<T> {
     public T fromString(String string) {
         try {
             return converter.fromString(string);
-        } catch (ParseException ex) {
-            return null;
+        } catch (ParseException|IOException ex) {
+            return converter.getDefaultValue();
         }
     }
 

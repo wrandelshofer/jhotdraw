@@ -5,6 +5,7 @@
 
 package org.jhotdraw.text;
 
+import java.io.IOException;
 import java.text.ParseException;
 import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
@@ -26,10 +27,8 @@ public class StyleConverterConverterWrapper<T> extends StyleConverter<String,T>{
     public T convert(ParsedValue<String, T> value, Font font) {
         try {
             return converter.fromString(value.getValue());
-        } catch (ParseException ex) {
-            System.err.println("StyleConverterConverterWrapper. Warning could not convert "+value+" with "+converter);
-            ex.printStackTrace();
-            return null;
+        } catch (ParseException|IOException ex) {
+            return converter.getDefaultValue();
         }
     }
 }

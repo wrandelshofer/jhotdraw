@@ -91,6 +91,7 @@ public interface Handle {
      */
     Node getNode();
 
+    /** Updates the node. */
     void updateNode(DrawingView drawingView);
 
     /**

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -29,5 +30,8 @@ public class UrlConverter implements Converter<URL> {
         in.position(in.limit());
         return value;
     }
-
+    @Override
+    public URL getDefaultValue() {
+        return null;
+    }
 }

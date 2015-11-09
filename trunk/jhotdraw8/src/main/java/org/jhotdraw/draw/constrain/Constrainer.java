@@ -7,6 +7,8 @@ package org.jhotdraw.draw.constrain;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
 /**
@@ -117,4 +119,9 @@ public interface Constrainer {
      * direction.
      */
     public double translateAngle(Figure f, double angle, double dir);
+    
+    /** Returns a node that renders the grid in view coordinates. */
+    public Node getNode();
+    /** Updates the node. */
+    public void updateNode(DrawingView drawingView);
 }

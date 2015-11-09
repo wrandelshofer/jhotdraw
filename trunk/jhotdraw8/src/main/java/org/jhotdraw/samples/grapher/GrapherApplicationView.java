@@ -49,6 +49,7 @@ import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.gui.CanvasInspector;
+import org.jhotdraw.draw.gui.GridInspector;
 import org.jhotdraw.draw.gui.Inspector;
 import org.jhotdraw.draw.gui.LayersInspector;
 import org.jhotdraw.draw.gui.StylesheetsInspector;
@@ -157,6 +158,7 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
                 addInspector(new CanvasInspector(), "canvas", list);
                 addInspector(new StylesheetsInspector(), "stylesheets", list);
                 addInspector(new LayersInspector(layerFactory), "layers", list);
+                addInspector(new GridInspector(), "grid", list);
 
                 return list;
             }

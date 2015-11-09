@@ -49,9 +49,6 @@ public class CanvasInspector extends AbstractDrawingInspector {
     @FXML
     private TextField widthField;
 
-    @FXML
-    private TextField opacityField;
-
     private Property<Double> widthProperty;
     private Property<Double> heightProperty;
     private Property<Paint> backgroundProperty;

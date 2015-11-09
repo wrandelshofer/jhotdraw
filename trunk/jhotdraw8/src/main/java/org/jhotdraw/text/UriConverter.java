@@ -10,6 +10,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -30,5 +31,8 @@ public class UriConverter implements Converter<URI> {
         in.position(in.limit());
         return value;
     }
-
+    @Override
+    public URI getDefaultValue() {
+        return null;
+    }
 }

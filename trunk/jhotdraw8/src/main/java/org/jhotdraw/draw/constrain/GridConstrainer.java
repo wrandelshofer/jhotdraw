@@ -7,6 +7,15 @@ package org.jhotdraw.draw.constrain;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import static java.lang.Math.*;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.transform.Transform;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
 /**
@@ -17,17 +26,19 @@ import org.jhotdraw.draw.Figure;
  */
 public class GridConstrainer implements Constrainer {
 
+    private Path node = new Path();
+
     /**
      * Up-Vector.
      */
     private final Point2D UP = new Point2D(0, 1);
 
     /**
-     * The origin of the grid.
+     * The x-origin of the grid.
      */
     private double x;
     /**
-     * The origin of the grid.
+     * The y-origin of the grid.
      */
     private double y;
 
@@ -48,7 +59,7 @@ public class GridConstrainer implements Constrainer {
     private double theta;
 
     /**
-     * Creates a grid of 10x10 pixels at origin 0,0 and  22.5 degree rotations.
+     * Creates a grid of 10x10 pixels at origin 0,0 and 22.5 degree rotations.
      */
     public GridConstrainer() {
         this(0, 0, 10, 10, 22.5);
@@ -148,5 +159,43 @@ public class GridConstrainer implements Constrainer {
 
         double result = (ta * theta) % 360;
         return result < 0 ? 360 + result : result;
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    @Override
+    public void updateNode(DrawingView drawingView) {
+        Drawing drawing = drawingView.getDrawing();
+        Transform t = drawingView.getDrawingToView();
+        Point2D gxy = t.transform(x, y);
+        Point2D gwh = t.transform(width, height);
+        Point2D dwh = t.transform(drawing.get(Drawing.WIDTH), drawing.get(Drawing.HEIGHT));
+        Point2D zxy = t.transform(0, 0);
+        ObservableList<PathElement> elements = node.getElements();
+        elements.clear();
+        double zx = zxy.getX();
+        double zy = zxy.getY();
+        double gx = gxy.getX();
+        double gy = gxy.getY();
+        double gw = gwh.getX();
+        double gh = gwh.getY();
+        double dw=dwh.getX();
+        double dh=dwh.getY();
+        
+        if (gh > 5) {
+            for (double iy = zy; iy < dh; iy += gh) {
+                elements.add(new MoveTo(zx, iy + gy));
+                elements.add(new LineTo(dw, iy + gy));
+            }
+        }
+        if (gw > 5) {
+            for (double ix = zx; ix < dw; ix += gw) {
+                elements.add(new MoveTo(ix + gx,zy));
+                elements.add(new LineTo(ix + gx,dh));
+            }
+        }
     }
 }

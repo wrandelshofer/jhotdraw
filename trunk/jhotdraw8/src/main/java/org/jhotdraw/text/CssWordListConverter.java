@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -39,5 +41,8 @@ public class CssWordListConverter implements Converter<List<String>> {
         }
         return l;
     }
-
+    @Override
+    public List<String> getDefaultValue() {
+        return Collections.emptyList();
+    }
 }

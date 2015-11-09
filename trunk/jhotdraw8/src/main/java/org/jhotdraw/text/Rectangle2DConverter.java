@@ -10,6 +10,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -35,5 +36,8 @@ public class Rectangle2DConverter implements Converter<Rectangle2D> {
         }
         return new Rectangle2D((double) v[0], (double) v[1], (double) v[2], (double) v[3]);
     }
-
+    @Override
+    public Rectangle2D getDefaultValue() {
+        return new Rectangle2D(0,0,0,0);
+    }
 }

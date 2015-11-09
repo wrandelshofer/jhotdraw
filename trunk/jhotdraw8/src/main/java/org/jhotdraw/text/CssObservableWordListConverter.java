@@ -41,5 +41,9 @@ public class CssObservableWordListConverter implements Converter<ObservableList<
         }
         return l;
     }
+    @Override
+    public ObservableList<String> getDefaultValue() {
+        return FXCollections.emptyObservableList();
+    }
 
 }

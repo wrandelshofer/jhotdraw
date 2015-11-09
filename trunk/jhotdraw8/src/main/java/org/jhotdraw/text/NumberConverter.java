@@ -13,6 +13,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -603,5 +604,8 @@ public class NumberConverter implements Converter<Number> {
     public void setValueClass(Class<? extends Number> valueClass) {
         this.valueClass = valueClass;
     }
-
+    @Override
+    public Number getDefaultValue() {
+        return 0.0;
+    }
 }

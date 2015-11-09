@@ -88,4 +88,9 @@ private XmlDoubleConverter doubleConverter=new XmlDoubleConverter();
             throw pe;
         }
     }
+    
+    @Override
+    public Paint getDefaultValue() {
+        return null;
+    }
 }

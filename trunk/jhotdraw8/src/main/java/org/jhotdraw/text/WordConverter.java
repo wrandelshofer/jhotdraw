@@ -7,6 +7,7 @@ package org.jhotdraw.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -39,5 +40,8 @@ public class WordConverter implements Converter<String> {
         }
         return out.toString();
     }
-
+    @Override
+    public String getDefaultValue() {
+        return "";
+    }
 }
