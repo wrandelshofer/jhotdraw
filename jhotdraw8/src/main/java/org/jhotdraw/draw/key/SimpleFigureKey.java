@@ -32,7 +32,7 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
 
     /**
      * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
+     * value.
      *
      * @param key The name of the name.
      * @param clazz The type of the value.

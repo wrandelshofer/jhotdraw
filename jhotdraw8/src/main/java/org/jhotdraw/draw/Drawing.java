@@ -93,7 +93,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static FigureKey<Double> WIDTH = new SimpleFigureKey<Double>("width", Double.class, DirtyMask.of(DirtyBits.NODE), 640.0);
+    public final static FigureKey<Double> WIDTH = new SimpleFigureKey<Double>("width", Double.class,false, DirtyMask.of(DirtyBits.NODE), 640.0);
     /**
      * Defines the (clip) bounds of the drawing.
      * <p>
@@ -105,7 +105,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static FigureKey<Double> HEIGHT = new SimpleFigureKey<Double>("height", Double.class, DirtyMask.of(DirtyBits.NODE), 480.0);
+    public final static FigureKey<Double> HEIGHT = new SimpleFigureKey<Double>("height", Double.class,false, DirtyMask.of(DirtyBits.NODE), 480.0);
     /**
      * Defines the background paint of the drawing.
      * <p>

@@ -56,4 +56,8 @@ public class ConverterFormatWrapper implements Converter<Object> {
         }
         return value;
     }
+    @Override
+    public Object getDefaultValue() {
+        return null;
+    }
 }

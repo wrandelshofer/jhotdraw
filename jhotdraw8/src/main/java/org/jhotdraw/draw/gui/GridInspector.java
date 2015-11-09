@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.model.DrawingModelEvent;
+import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.XmlDoubleConverter;
@@ -49,8 +50,6 @@ public class GridInspector extends AbstractDrawingInspector {
     private Property<Double> heightProperty;
     private Property<Paint> backgroundProperty;
     
-    private InvalidationListener drawingUpdater = o->onDrawingPropertyValueChanged();
-    
     public GridInspector() {
         this(LayersInspector.class.getResource("GridInspector.fxml"));
     }
@@ -60,52 +59,23 @@ public class GridInspector extends AbstractDrawingInspector {
     }
 
     private void init(URL fxmlUrl) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
-        loader.setController(this);
+        // We must use invoke and wait here, because we instantiate Tooltips
+        // which immediately instanciate a Window and a Scene. 
+        PlatformUtil.invokeAndWait(() -> {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
+            loader.setController(this);
 
-        try (InputStream in = fxmlUrl.openStream()) {
-            setCenter(loader.load(in));
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
+            try (InputStream in = fxmlUrl.openStream()) {
+                setCenter(loader.load(in));
+            } catch (IOException ex) {
+                throw new InternalError(ex);
+            }
+        });
     }
 
+    @Override
     protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
-        if (widthProperty != null) {
-          //  widthField.textProperty().unbindBidirectional(widthProperty);
-            widthProperty.removeListener(drawingUpdater);
-        }
-        if (heightProperty != null) {
-          //  heightField.textProperty().unbindBidirectional(heightProperty);
-            heightProperty.removeListener(drawingUpdater);
-        }
-        if (backgroundProperty != null) {
-          //  backgroundColorField.textProperty().unbindBidirectional(backgroundProperty);
-            backgroundProperty.removeListener(drawingUpdater);
-        }
-        widthProperty = null;
-        heightProperty = null;
-        backgroundProperty = null;
-        if (newValue != null) {
-            widthProperty = Drawing.WIDTH.propertyAt(newValue.propertiesProperty());
-            heightProperty = Drawing.HEIGHT.propertyAt(newValue.propertiesProperty());
-            backgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.propertiesProperty());
-            widthProperty.addListener(drawingUpdater);
-            heightProperty.addListener(drawingUpdater);
-            backgroundProperty.addListener(drawingUpdater);
-
-         //   widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-          //  heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-          //  backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssPaintConverter()));
-            @SuppressWarnings("unchecked")
-            Property<Color> colorProperty=(Property<Color>)(Property<?>)backgroundProperty;
-            backgroundColorPicker.valueProperty().bindBidirectional(colorProperty);
-        }
+        // empty, because this is not actually a drawing inspector
     }
-
-    private void onDrawingPropertyValueChanged() {
-        drawingView.getModel().fire(DrawingModelEvent.nodeInvalidated(drawingView.getModel(), drawingView.getDrawing()));
-    }
-
 }

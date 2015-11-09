@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -41,5 +42,10 @@ public class CssSizeConverter implements Converter<Double> {
         Object[] v = formatter.fromString(buf);
 
         return (double) v[0];
+    }
+    
+        @Override
+    public Double getDefaultValue() {
+        return 0.0;
     }
 }

@@ -15,6 +15,7 @@ import java.text.ParsePosition;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import org.jhotdraw.draw.io.IdFactory;
 
@@ -194,8 +195,8 @@ public class XmlDoubleConverter implements Converter<Double> {
     }
 
     /**
-     * Specifies how many "0" are appended to double and float
-     * values. By default this is 0.
+     * Specifies how many "0" are appended to double and float values. By
+     * default this is 0.
      *
      * @param newValue the value
      */
@@ -308,8 +309,11 @@ public class XmlDoubleConverter implements Converter<Double> {
             }
         }
 
-        Object value;
+        if (text.isEmpty()) {
+            throw new ParseException("invalid value", str.position());
+        }
 
+        Object value;
         double v = Double.parseDouble(text);
         if (factor != 1.0) {
             v = (v / factor);
@@ -333,9 +337,8 @@ public class XmlDoubleConverter implements Converter<Double> {
     /**
      * Returns true if <code>value</code> is between the min/max.
      *
-     * @param wantsCCE If false, and a ClassCastException is thrown in
-     * comparing the values, the exception is consumed and
-     * false is returned.
+     * @param wantsCCE If false, and a ClassCastException is thrown in comparing
+     * the values, the exception is consumed and false is returned.
      */
     @SuppressWarnings("unchecked")
     boolean isValidValue(Object value, boolean wantsCCE) {
@@ -363,16 +366,20 @@ public class XmlDoubleConverter implements Converter<Double> {
         return true;
     }
 
-    /** If non-null the unit string is appended to the value.
+    /**
+     * If non-null the unit string is appended to the value.
      *
-     * @param value the unit string */
+     * @param value the unit string
+     */
     public void setUnit(String value) {
         unit = value;
     }
 
-    /** If non-null the unit string is appended to the value.
+    /**
+     * If non-null the unit string is appended to the value.
      *
-     * @return the unit string */
+     * @return the unit string
+     */
     public String getUnit() {
         return unit;
     }
@@ -495,5 +502,11 @@ public class XmlDoubleConverter implements Converter<Double> {
      */
     public void setUsesScientificNotation(boolean newValue) {
         this.usesScientificNotation = newValue;
+    }
+    
+    
+        @Override
+    public Double getDefaultValue() {
+        return 0.0;
     }
 }

@@ -221,6 +221,9 @@ public interface Key<T> extends Serializable {
         public void setValue(T value) {
             // We must put the value before we invoke super.setValue(), so that
             // getValue() can return the new value.
+            if (! key.isAssignable(value)) {
+                throw new IllegalArgumentException("value is not assignable to key. key="+key+" value="+value);
+            }
             map.put(key, value);
             super.setValue(value);
         }

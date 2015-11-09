@@ -15,6 +15,7 @@ import java.text.ParsePosition;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import org.jhotdraw.draw.io.IdFactory;
 
@@ -63,5 +64,10 @@ public class XmlBooleanConverter implements Converter<Boolean> {
             in.position(pos);
             throw new ParseException("\"" + trueString + "\" or \"" + falseString + "\" expected instead of \"" + str + "\".", pos);
         }
+    }
+    
+        @Override
+    public Boolean getDefaultValue() {
+        return false;
     }
 }

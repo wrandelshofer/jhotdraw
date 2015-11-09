@@ -7,6 +7,7 @@ package org.jhotdraw.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -28,5 +29,8 @@ public class CssStringConverter implements Converter<String> {
     public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {
         out.append(value);
     }
-
+    @Override
+    public String getDefaultValue() {
+        return "";
+    }
 }

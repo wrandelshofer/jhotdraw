@@ -10,59 +10,62 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox styleClass="inspector" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane hgap="4.0" styleClass="inspector" vgap="4.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER_LEFT" fillHeight="false">
+      <Label text="%grid.x.shortLabelText" GridPane.rowIndex="1">
+         <tooltip>
+            <Tooltip text="%grid.x.toolTipText" />
+         </tooltip>
+      </Label>
+      <Label fx:id="widthLabel" text="%grid.width.shortLabelText" GridPane.rowIndex="2">
+         <tooltip>
+            <Tooltip text="%grid.width.toolTipText" />
+         </tooltip>
+      </Label>
+      <TextField fx:id="widthField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="heightLabel" text="%grid.angle.shortLabelText" GridPane.rowIndex="3">
+         <tooltip>
+            <Tooltip text="%grid.angle.toolTipText" />
+         </tooltip>
+      </Label>
+      <TextField fx:id="angleField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <TextField prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="xField" />
+      <Label text="%grid.y.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <tooltip>
+            <Tooltip text="%grid.y.toolTipText" />
+         </tooltip>
+      </Label>
+      <Label text="%grid.height.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="2">
+         <tooltip>
+            <Tooltip text="%grid.height.toolTipText" />
+         </tooltip>
+      </Label>
+      <TextField fx:id="yField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <TextField fx:id="heightField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+      <HBox GridPane.columnSpan="2147483647">
          <children>
-            <Label text="%attribute.canvasFillColor.shortLabelText">
-               <tooltip>
-                  <Tooltip text="%attribute.canvasFillColor.toolTipText" />
-               </tooltip>
-            </Label>
-            <TextField fx:id="backgroundColorField">
-               <tooltip>
-                  <Tooltip text="%attribute.canvasFillColor.toolTipText" />
-               </tooltip></TextField>
-            <ColorPicker fx:id="backgroundColorPicker" style="-fx-color-label-visible: false;" />
-         </children>
-         <opaqueInsets>
-            <Insets bottom="4.0" left="4.0" right="4.0" />
-         </opaqueInsets>
-         <VBox.margin>
-            <Insets left="4.0" right="4.0" top="4.0" />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="BASELINE_LEFT" fillHeight="false">
-         <children>
-            <Label fx:id="widthLabel" text="%attribute.canvasWidth.shortLabelText">
-               <tooltip>
-                  <Tooltip text="%attribute.canvasWidth.toolTipText" />
-               </tooltip></Label>
-            <TextField fx:id="widthField" prefColumnCount="5">
-               <HBox.margin>
-                  <Insets left="2.0" />
-               </HBox.margin></TextField>
-            <Label fx:id="heightLabel" text="%attribute.canvasHeight.shortLabelText">
-               <padding>
-                  <Insets left="4.0" />
-               </padding>
+            <CheckBox fx:id="alignToGridCheckBox" mnemonicParsing="false" text="%snapToGrid.checkBoxText" />
+            <CheckBox mnemonicParsing="false" text="%showGrid.checkBoxText">
                <HBox.margin>
                   <Insets left="8.0" />
                </HBox.margin>
-               <tooltip>
-                  <Tooltip text="%attribute.canvasHeight.toolTipText" />
-               </tooltip></Label>
-            <TextField fx:id="heightField" prefColumnCount="5">
-               <HBox.margin>
-                  <Insets left="2.0" />
-               </HBox.margin></TextField>
+            </CheckBox>
          </children>
-         <VBox.margin>
-            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-         </VBox.margin>
       </HBox>
    </children>
-   <opaqueInsets>
-      <Insets />
-   </opaqueInsets>
-</VBox>
+   <columnConstraints>
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+   </columnConstraints>
+   <padding>
+      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+   </padding>
+   <rowConstraints>
+      <RowConstraints vgrow="NEVER" />
+      <RowConstraints vgrow="NEVER" />
+      <RowConstraints vgrow="NEVER" />
+      <RowConstraints vgrow="NEVER" />
+   </rowConstraints>
+</GridPane>

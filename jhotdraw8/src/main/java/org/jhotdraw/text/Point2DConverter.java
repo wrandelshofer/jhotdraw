@@ -10,6 +10,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -34,5 +35,8 @@ public class Point2DConverter implements Converter<Point2D> {
 
         return new Point2D((double) v[0], (double) v[1]);
     }
-
+    @Override
+    public Point2D getDefaultValue() {
+        return new Point2D(0,0);
+    }
 }

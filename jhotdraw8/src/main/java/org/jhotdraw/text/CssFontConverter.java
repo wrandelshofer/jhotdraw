@@ -179,4 +179,8 @@ public class CssFontConverter implements Converter<Font> {
         }
         return Font.font(fontFamily,fontWeight,fontPosture,fontSize);
     }
+    @Override
+    public Font getDefaultValue() {
+        return null;
+    }
 }

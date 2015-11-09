@@ -6,6 +6,9 @@ package org.jhotdraw.draw.constrain;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.shape.Path;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
 /**
@@ -14,6 +17,7 @@ import org.jhotdraw.draw.Figure;
  * @version $Id$
  */
 public class NullConstrainer implements Constrainer {
+    private final Path node=new Path();
 
     @Override
     public Point2D translatePoint(Figure f, Point2D p, Point2D dir) {
@@ -28,6 +32,15 @@ public class NullConstrainer implements Constrainer {
     @Override
     public double translateAngle(Figure f, double angle, double dir) {
         return angle+dir;
+    }
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    @Override
+    public void updateNode(DrawingView drawingView) {
+        // empty
     }
 
 }

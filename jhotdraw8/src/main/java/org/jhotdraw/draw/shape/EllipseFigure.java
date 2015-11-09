@@ -22,7 +22,7 @@ import org.jhotdraw.draw.RenderContext;
 import static org.jhotdraw.draw.shape.RectangleFigure.BOUNDS;
 
 /**
- * Renders a {@code javafx.scene.shape.Circle}.
+ * Renders a {@code javafx.scene.shape.Ellipse}.
  *
  * @author Werner Randelshofer
  * @version $Id$

@@ -132,17 +132,19 @@ public interface Converter<T> {
      *
      * @throws ParseException if conversion failed.
      */
-    default T fromString(CharSequence in) throws ParseException {
+    default T fromString(CharSequence in) throws ParseException, IOException {
         CharBuffer buf = CharBuffer.wrap(in);
-        T value;
-        try {
-            value = fromString(buf);
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
+        T value = fromString(buf);
         if (buf.remaining()!=0) {
             throw new ParseException(buf.remaining()+" remaining character(s) not consumed.",buf.position());
         }
         return value;
     }
+    
+    /** Provides a default value for APIs which always require a value even
+     * if conversion from String failed.
+     * 
+     * @return The default value to use when conversion from String failed.
+     */
+    T getDefaultValue();
 }

@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.connector.CenterConnector;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
@@ -80,5 +81,8 @@ public class DefaultConnectorConverter implements Converter<Connector> {
             throw new InternalError(ex);
         }
     }
-
+    @Override
+    public Connector getDefaultValue() {
+        return null;
+    }
 }

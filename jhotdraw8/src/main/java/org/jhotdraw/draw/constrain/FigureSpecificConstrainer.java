@@ -12,6 +12,9 @@ import javafx.geometry.Rectangle2D;
 import org.jhotdraw.beans.NonnullProperty;
 import org.jhotdraw.draw.Figure;
 import java.util.Map;
+import javafx.scene.Node;
+import javafx.scene.shape.Path;
+import org.jhotdraw.draw.DrawingView;
 
 /**
  * Allows to use different constrainers for different figure types.
@@ -25,6 +28,7 @@ import java.util.Map;
  * @version $$Id$$
  */
 public class FigureSpecificConstrainer implements Constrainer {
+    private final Path node = new Path();
     // ----
     // property names
     // ----
@@ -114,6 +118,16 @@ public class FigureSpecificConstrainer implements Constrainer {
     @Override
     public double constrainAngle(Figure f, double angle) {
         return getConstrainer(f).constrainAngle(f, angle);
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    @Override
+    public void updateNode(DrawingView drawingView) {
+        // empty
     }
 
 }

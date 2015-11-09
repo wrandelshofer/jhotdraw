@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 import org.jhotdraw.io.StreamPosTokenizer;
 
@@ -933,5 +934,8 @@ public class PatternConverter implements Converter<Object[]> {
 
         parent.children.add(argument);
     }
-
+    @Override
+    public Object[] getDefaultValue() {
+        return new Object[0];
+    }
 }
