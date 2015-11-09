@@ -16,7 +16,7 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class NullConstrainer implements Constrainer {
+public class NullConstrainer extends AbstractConstrainer {
     private final Path node=new Path();
 
     @Override

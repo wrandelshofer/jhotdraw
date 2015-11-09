@@ -77,6 +77,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private BorderPane toolPane;
 
     private Group handlesPane;
+    private Group gridPane;
 
     private Group drawingPane;
     private Pane overlaysPane;
@@ -152,44 +153,44 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {
-            case FIGURE_ADDED_TO_PARENT:
-                handleFigureAdded(event.getFigure());
-                break;
-            case FIGURE_REMOVED_FROM_PARENT:
-                handleFigureRemoved(event.getFigure());
-                break;
-            case FIGURE_ADDED_TO_DRAWING:
-                // not my business
-                break;
-            case FIGURE_REMOVED_FROM_DRAWING:
-                // not my business
-                break;
-            case NODE_INVALIDATED:
-                handleNodeInvalidated(event.getFigure());
-                break;
-            case LAYOUT_INVALIDATED:
-            case STYLE_INVALIDATED:
-                // not my business
-                break;
-            case ROOT_CHANGED:
-                handleDrawingChanged();
-                updateLayout();
-                repaint();
-                break;
-            case SUBTREE_NODES_INVALIDATED:
-                updateTreeNodes(event.getFigure());
-                repaint();
-                break;
-            case SUBTREE_STRUCTURE_CHANGED:
-                updateTreeStructure(event.getFigure());
-                break;
-            case CONNECTION_CHANGED:
-            case TRANSFORM_CHANGED:
-                // not my business
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + " not supported");
+                case FIGURE_ADDED_TO_PARENT:
+                    handleFigureAdded(event.getFigure());
+                    break;
+                case FIGURE_REMOVED_FROM_PARENT:
+                    handleFigureRemoved(event.getFigure());
+                    break;
+                case FIGURE_ADDED_TO_DRAWING:
+                    // not my business
+                    break;
+                case FIGURE_REMOVED_FROM_DRAWING:
+                    // not my business
+                    break;
+                case NODE_INVALIDATED:
+                    handleNodeInvalidated(event.getFigure());
+                    break;
+                case LAYOUT_INVALIDATED:
+                case STYLE_INVALIDATED:
+                    // not my business
+                    break;
+                case ROOT_CHANGED:
+                    handleDrawingChanged();
+                    updateLayout();
+                    repaint();
+                    break;
+                case SUBTREE_NODES_INVALIDATED:
+                    updateTreeNodes(event.getFigure());
+                    repaint();
+                    break;
+                case SUBTREE_STRUCTURE_CHANGED:
+                    updateTreeStructure(event.getFigure());
+                    break;
+                case CONNECTION_CHANGED:
+                case TRANSFORM_CHANGED:
+                    // not my business
+                    break;
+                default:
+                    throw new UnsupportedOperationException(event.getEventType()
+                            + " not supported");
             }
         }
 
@@ -212,14 +213,18 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             };
 
     /**
-     * The constrainerProperty holds the constrainer for this drawing view
+     * The constrainer property holds the constrainer for this drawing view
      */
     private final NonnullProperty<Constrainer> constrainer = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
+
+    {
+        constrainer.addListener((o, oldValue, newValue) -> updateConstrainer(oldValue, newValue));
+    }
     private boolean handlesAreValid;
 
     /**
-     * The selectedFiguresProperty holds the list of selected figures
-     * in the sequence they were selected by the user.
+     * The selectedFiguresProperty holds the list of selected figures in the
+     * sequence they were selected by the user.
      */
     private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
     private Transform viewToDrawingTransform = null;
@@ -277,6 +282,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             }
             updateLayout();
             invalidateHandleNodes();
+            if (constrainer.get() != null) {
+                constrainer.get().updateNode(SimpleDrawingView.this);
+            }
         }
     };
 
@@ -424,9 +432,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         toolPane.setManaged(false);
         handlesPane = new Group();
         handlesPane.setManaged(false);
+        gridPane = new Group();
+        gridPane.setManaged(false);
         overlaysPane = new Pane();
         overlaysPane.setBackground(Background.EMPTY);
-        overlaysPane.getChildren().addAll(handlesPane, toolPane);
+        overlaysPane.getChildren().addAll(gridPane, handlesPane, toolPane);
         overlaysPane.setManaged(false);
         overlaysSubScene.getChildren().add(overlaysPane);
 
@@ -490,7 +500,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private void handleDrawingChanged() {
         clearNodes();
         drawingPane.getChildren().clear();
-            activeLayer.set(null);
+        activeLayer.set(null);
         Drawing d = getModel().getRoot();
         drawing.set(d);
         if (d != null) {
@@ -499,14 +509,14 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             updateLayout();
             updateTreeNodes(d);
             repaint();
-            
-            for (int i=d.getChildren().size()-1;i>=0;i--) {
-                Layer layer=(Layer)d.getChild(i);
-                if (!layer.isDisabled()&&layer.isVisible()) {
+
+            for (int i = d.getChildren().size() - 1; i >= 0; i--) {
+                Layer layer = (Layer) d.getChild(i);
+                if (!layer.isDisabled() && layer.isVisible()) {
                     activeLayer.set(layer);
                     break;
                 }
-                
+
             }
         }
     }
@@ -516,6 +526,27 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         dirtyHandles.add(parent);
         for (Figure child : parent.getChildren()) {
             updateTreeNodes(child);
+        }
+    }
+
+    private void updateConstrainer(Constrainer oldValue, Constrainer newValue) {
+        if (oldValue != null) {
+            gridPane.getChildren().remove(oldValue.getNode());
+            oldValue.removeListener(this::onConstrainerInvalidated);
+        }
+        if (newValue != null) {
+            gridPane.getChildren().add(newValue.getNode());
+            newValue.getNode().applyCss();
+            newValue.updateNode(this);
+            newValue.addListener(this::onConstrainerInvalidated);
+        }
+    }
+
+    private void onConstrainerInvalidated(Observable o) {
+        // XXX maybe we should use repaint here as well?
+        Constrainer c = (Constrainer) o;
+        if (c != null) {
+            c.updateNode(this);
         }
     }
 
@@ -575,6 +606,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         invalidateFigureNode(f);
         if (f == getDrawing()) {
             updateLayout();
+            if (constrainer.get() != null) {
+                onConstrainerInvalidated(constrainer.get());
+            }
         }
         repaint();
     }
@@ -656,6 +690,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         return zoomFactor;
     }
 
+    @Override
     public Handle findHandle(double vx, double vy) {
         for (Node n : handlesPane.getChildren()) {
             Point2D pl = n.parentToLocal(vx, vy);

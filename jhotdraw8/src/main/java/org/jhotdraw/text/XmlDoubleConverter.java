@@ -11,12 +11,7 @@ import java.nio.CharBuffer;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.SVGPath;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -30,7 +25,7 @@ import org.jhotdraw.draw.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class XmlDoubleConverter implements Converter<Double> {
+public class XmlDoubleConverter implements Converter<Number> {
 
     private static final long serialVersionUID = 1L;
 
@@ -215,7 +210,7 @@ public class XmlDoubleConverter implements Converter<Double> {
     }
 
     @Override
-    public void toString(Appendable buf, IdFactory idFactory, Double value) throws IOException {
+    public void toString(Appendable buf, IdFactory idFactory, Number value) throws IOException {
         if (value == null && allowsNullValue) {
             return;
         }

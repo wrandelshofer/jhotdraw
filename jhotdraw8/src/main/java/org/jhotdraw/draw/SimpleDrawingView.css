@@ -61,3 +61,7 @@
     -fx-border-color: darkcyan;
     -fx-background-color: white;
 }
+
+.constrainer-grid {
+    -fx-stroke: yellowgreen;
+}
