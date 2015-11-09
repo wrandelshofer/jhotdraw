@@ -5,8 +5,11 @@
  */
 package org.jhotdraw.text;
 
+import java.io.IOException;
+import java.nio.CharBuffer;
 import java.text.FieldPosition;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.ParsePosition;
 
 /**
@@ -35,7 +38,16 @@ public class FormatConverterWrapper extends Format {
 
     @Override
     public Object parseObject(String source, ParsePosition pos) {
-        return null;
-     //   return converter.fromString(source, pos);
+        try {
+            CharBuffer buf=CharBuffer.wrap(source);
+            Object value= converter.fromString(buf,null);
+            pos.setIndex(buf.position());
+            return value;
+        } catch (ParseException ex) {
+            pos.setErrorIndex(ex.getErrorOffset());
+            return null;
+        } catch (IOException ex) {
+            return null;
+        }
     }
 }

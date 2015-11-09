@@ -26,6 +26,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.text.CssPaintConverter;
+import org.jhotdraw.text.FormatConverterWrapper;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.XmlDoubleConverter;
 import org.jhotdraw.util.Resources;
@@ -105,9 +106,9 @@ public class CanvasInspector extends AbstractDrawingInspector {
             backgroundProperty.addListener(commitHandler);
 
             // FIXME binding to figure properties bypasses the DrawingModel!
-            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssPaintConverter()));
+            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper(new XmlDoubleConverter()));
+            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper(new XmlDoubleConverter()));
+            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper(new CssPaintConverter()));
             @SuppressWarnings("unchecked")
             Property<Color> colorProperty = (Property<Color>) (Property<?>) backgroundProperty;
             backgroundColorPicker.valueProperty().bindBidirectional(colorProperty);

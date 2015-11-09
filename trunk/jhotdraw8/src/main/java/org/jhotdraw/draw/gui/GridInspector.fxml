@@ -44,8 +44,8 @@
       <TextField fx:id="heightField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="2" />
       <HBox GridPane.columnSpan="2147483647">
          <children>
-            <CheckBox fx:id="alignToGridCheckBox" mnemonicParsing="false" text="%snapToGrid.checkBoxText" />
-            <CheckBox mnemonicParsing="false" text="%showGrid.checkBoxText">
+            <CheckBox fx:id="snapToGridCheckBox" mnemonicParsing="false" text="%snapToGrid.checkBoxText" />
+            <CheckBox fx:id="drawGridCheckBox" mnemonicParsing="false" text="%showGrid.checkBoxText">
                <HBox.margin>
                   <Insets left="8.0" />
                </HBox.margin>

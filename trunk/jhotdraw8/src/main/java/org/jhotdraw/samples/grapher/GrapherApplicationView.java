@@ -111,7 +111,7 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         }
 
         drawingView = new SimpleDrawingView();
-        drawingView.setConstrainer(new GridConstrainer(0, 0, 1, 1, 1));
+        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 12.25));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         // 
         drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
