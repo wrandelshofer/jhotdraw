@@ -26,7 +26,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.StringConverterConverterWrapper;
-import org.jhotdraw.text.XmlDoubleConverter;
+import org.jhotdraw.text.XmlNumberConverter;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -102,8 +102,8 @@ public class StyleclassInspector extends AbstractDrawingInspector {
             heightProperty.addListener(drawingUpdater);
             backgroundProperty.addListener(drawingUpdater);
 
-          //  widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-           // heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
+          //  widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlNumberConverter()));
+           // heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlNumberConverter()));
           //  backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssPaintConverter()));
             @SuppressWarnings("unchecked")
             Property<Color> colorProperty=(Property<Color>)(Property<?>)backgroundProperty;

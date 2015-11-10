@@ -6,7 +6,7 @@
 package org.jhotdraw.css.ast;
 
 import org.jhotdraw.css.CssTokenizer;
-import org.jhotdraw.text.XmlDoubleConverter;
+import org.jhotdraw.text.XmlNumberConverter;
 
 /**
  * Term.
@@ -21,7 +21,7 @@ public class Term extends AST {
     private final Number numericValue;
     
     
-    private final static XmlDoubleConverter DOUBLE_CONVERTER = new XmlDoubleConverter();
+    private final static XmlNumberConverter DOUBLE_CONVERTER = new XmlNumberConverter();
 
     public Term(int ttype, String stringValue, Number numericValue) {
         this.ttype = ttype;

@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.text;
 
+import java.io.IOException;
 import java.text.ParseException;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
@@ -17,11 +18,11 @@ import org.testng.annotations.Test;
 public class XMLDoubleConverterNGTest {
 
     /**
-     * Test of toString method, of class XmlDoubleConverter.
+     * Test of toString method, of class XmlNumberConverter.
      */
     @Test(dataProvider = "doubleData")
     public void testToString(Double inputValue, String expectedValue) {
-        XmlDoubleConverter c = new XmlDoubleConverter();
+        XmlNumberConverter c = new XmlNumberConverter();
 
         String actualValue = c.toString(inputValue);
 
@@ -29,13 +30,13 @@ public class XMLDoubleConverterNGTest {
     }
 
     /**
-     * Test of toString method, of class XmlDoubleConverter.
+     * Test of toString method, of class XmlNumberConverter.
      */
     @Test(dataProvider = "doubleData")
-    public void testFromString(Double expectedValue, String inputValue) throws ParseException {
-        XmlDoubleConverter c = new XmlDoubleConverter();
+    public void testFromString(Double expectedValue, String inputValue) throws ParseException, IOException {
+        XmlNumberConverter c = new XmlNumberConverter();
 
-        Double actualValue = c.fromString(inputValue);
+        Number actualValue = c.fromString(inputValue);
 
         assertEquals(actualValue, expectedValue);
     }

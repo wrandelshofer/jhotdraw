@@ -24,7 +24,7 @@ public class XmlConverterFactory implements ConverterFactory {
         }
         switch (type) {
             case "number":
-                return new XmlDoubleConverter();
+                return new XmlNumberConverter();
             case "word":
                 return new WordConverter();
             default:

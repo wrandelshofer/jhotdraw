@@ -24,6 +24,7 @@ import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.constrain.GridConstrainer;
+import org.jhotdraw.draw.shape.AbstractShapeFigure;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.shape.TextFigure;
@@ -91,6 +92,9 @@ public class CssSample extends Application {
         stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());
         drawing.set(Drawing.USER_AGENT_STYLESHEETS,stylesheets);
         drawing.applyCss();
+        
+       System.out.println("V3 Fill color (should be blue!):" +vertex3.getStyled(AbstractShapeFigure.FILL_COLOR));
+        
         drawing.layout();
 
         DrawingView drawingView = new SimpleDrawingView();

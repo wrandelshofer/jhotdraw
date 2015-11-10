@@ -18,7 +18,7 @@ import org.jhotdraw.draw.io.IdFactory;
  * CssSizeListConverter.
  * <p>
  * Parses a list of sizes.
- * 
+ *
  * @author Werner Randelshofer
  */
 public class CssSizeListConverter implements Converter<List<Double>> {
@@ -27,10 +27,10 @@ public class CssSizeListConverter implements Converter<List<Double>> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, List<Double> value) throws IOException {
-        Object[] v = new Object[value.size()+1];
-        v[0]=value.size();
-        for (int i=0,n=value.size();i<n;i++) {
-            v[i+1]=value.get(i);
+        Object[] v = new Object[value.size() + 1];
+        v[0] = value.size();
+        for (int i = 0, n = value.size(); i < n; i++) {
+            v[i + 1] = value.get(i);
         }
         formatter.toString(out, v);
     }
@@ -38,15 +38,15 @@ public class CssSizeListConverter implements Converter<List<Double>> {
     @Override
     public List<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ArrayList<Double> l = new ArrayList<>((int)v[0]);
-        for (int i=0,n=(int)v[0];i<n;i++) {
-            l.add((Double)v[i+1]);
+        ArrayList<Double> l = new ArrayList<>((int) v[0]);
+        for (int i = 0, n = (int) v[0]; i < n; i++) {
+            l.add((Double) v[i + 1]);
         }
         return l;
     }
-    
-        @Override
+
+    @Override
     public List<Double> getDefaultValue() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 }

@@ -199,20 +199,20 @@ public class StyleablePropertyMap {
             output.remove(key);
         } else {
             switch (origin) {
-            case INLINE:
-                output.put(key, inlineProperties().get(key));
-                break;
-            case AUTHOR:
-                output.put(key, authorProperties().get(key));
-                break;
-            case USER:
-                output.put(key, userProperties().get(key));
-                break;
-            case USER_AGENT:
-                output.put(key, userAgentProperties().get(key));
-                break;
-            default:
-                throw new InternalError("unknown enum value " + origin);
+                case INLINE:
+                    output.put(key, inlineProperties().get(key));
+                    break;
+                case AUTHOR:
+                    output.put(key, authorProperties().get(key));
+                    break;
+                case USER:
+                    output.put(key, userProperties().get(key));
+                    break;
+                case USER_AGENT:
+                    output.put(key, userAgentProperties().get(key));
+                    break;
+                default:
+                    throw new InternalError("unknown enum value " + origin);
             }
         }
     }
@@ -248,11 +248,11 @@ public class StyleablePropertyMap {
             if (key instanceof StyleableKey) {
                 @SuppressWarnings("unchecked")
                 StyleableProperty<T> temp = new MapStyleableProperty<>(key, ((StyleableKey) key).getCssMetaData());
-                sp=temp;
+                sp = temp;
             } else {
                 @SuppressWarnings("unchecked")
-                StyleableProperty<T> temp  = new MapStyleableProperty<>(key, null);
-                sp=temp;
+                StyleableProperty<T> temp = new MapStyleableProperty<>(key, null);
+                sp = temp;
             }
             styleableProperties.put(key, sp);
         }
@@ -262,64 +262,64 @@ public class StyleablePropertyMap {
     public <T> T remove(StyleOrigin origin, Key<T> key) {
         T value = null;
         switch (origin) {
-        case INLINE:
-            if (inline != null) {
-                @SuppressWarnings("unchecked")
-                T temp = (T) inline.remove(key);
-                value = temp;
-            }
-            break;
-        case AUTHOR:
-            if (author != null) {
-                @SuppressWarnings("unchecked")
-                T temp = (T) author.remove(key);
-                value = temp;
-            }
-            break;
-        case USER:
-            if (user != null) {
-                @SuppressWarnings("unchecked")
-                T temp = (T) user.remove(key);
-                value = temp;
-            }
-            break;
-        case USER_AGENT:
-            if (userAgent != null) {
-                @SuppressWarnings("unchecked")
-                T temp = (T) userAgent.remove(key);
-                value = temp;
-            }
-            break;
-        default:
-            throw new InternalError("unknown enum value " + origin);
+            case INLINE:
+                if (inline != null) {
+                    @SuppressWarnings("unchecked")
+                    T temp = (T) inline.remove(key);
+                    value = temp;
+                }
+                break;
+            case AUTHOR:
+                if (author != null) {
+                    @SuppressWarnings("unchecked")
+                    T temp = (T) author.remove(key);
+                    value = temp;
+                }
+                break;
+            case USER:
+                if (user != null) {
+                    @SuppressWarnings("unchecked")
+                    T temp = (T) user.remove(key);
+                    value = temp;
+                }
+                break;
+            case USER_AGENT:
+                if (userAgent != null) {
+                    @SuppressWarnings("unchecked")
+                    T temp = (T) userAgent.remove(key);
+                    value = temp;
+                }
+                break;
+            default:
+                throw new InternalError("unknown enum value " + origin);
         }
         return value;
     }
 
     public void removeAll(StyleOrigin origin) {
         switch (origin) {
-        case INLINE:
-            if (inline != null) {
-                inline.clear();
-            }
-            break;
-        case AUTHOR:
-            if (author != null) {
-                author.clear();
-            }
-            break;
-        case USER:
-            if (user != null) {
-                user.clear();
-            }
-            break;
-        case USER_AGENT:
-            if (userAgent != null) {
-                userAgent.clear();
-            }
-            break;
-        default:
-            throw new InternalError("unknown enum value " + origin);
+            case INLINE:
+                if (inline != null) {
+                    inline.clear();
+                }
+                break;
+            case AUTHOR:
+                if (author != null) {
+                    author.clear();
+                }
+                break;
+            case USER:
+                if (user != null) {
+                    user.clear();
+                }
+                break;
+            case USER_AGENT:
+                if (userAgent != null) {
+                    userAgent.clear();
+                }
+                break;
+            default:
+                throw new InternalError("unknown enum value " + origin);
         }
     }
 
@@ -329,13 +329,13 @@ public class StyleablePropertyMap {
     public class MapStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
         private final Key<T> key;
-        private final CssMetaData<?,T> metaData;
+        private final CssMetaData<?, T> metaData;
 
-        public MapStyleableProperty(Key<T> key, CssMetaData<?,T> metaData) {
+        public MapStyleableProperty(Key<T> key, CssMetaData<?, T> metaData) {
             this.key = key;
             this.metaData = metaData;
-            
-            bindBidirectional(new Key.PropertyAt<>(user, key));            
+
+            bindBidirectional(new Key.PropertyAt<>(user, key));
         }
 
         @Override
@@ -349,12 +349,12 @@ public class StyleablePropertyMap {
         }
 
         @Override
-        public CssMetaData<?,T> getCssMetaData() {
+        public CssMetaData<?, T> getCssMetaData() {
             return metaData;
         }
 
         /**
-         * 
+         *
          * @param origin the style origin
          * @param value the value null removes the key from the style origin
          */
@@ -367,32 +367,36 @@ public class StyleablePropertyMap {
                 throw new IllegalArgumentException("origin must not be null");
             } else {
                 switch (origin) {
-                case INLINE:
-                    if (value==null)
-                        inlineProperties().remove(key);
-                    else
-                    inlineProperties().put(key, value);
-                    break;
-                case AUTHOR:
-                    if (value==null)
-                        authorProperties().remove(key);
-                    else
-                    authorProperties().put(key, value);
-                    break;
-                case USER:
-                    if (value==null)
-                        userProperties().remove(key);
-                    else
-                    userProperties().put(key, value);
-                    break;
-                case USER_AGENT:
-                    if (value==null)
-                        userAgentProperties().remove(key);
-                    else
-                    userAgentProperties().put(key, value);
-                    break;
-                default:
-                    throw new InternalError("unknown enum value " + origin);
+                    case INLINE:
+                        if (value == null) {
+                            inlineProperties().remove(key);
+                        } else {
+                            inlineProperties().put(key, value);
+                        }
+                        break;
+                    case AUTHOR:
+                        if (value == null) {
+                            authorProperties().remove(key);
+                        } else {
+                            authorProperties().put(key, value);
+                        }
+                        break;
+                    case USER:
+                        if (value == null) {
+                            userProperties().remove(key);
+                        } else {
+                            userProperties().put(key, value);
+                        }
+                        break;
+                    case USER_AGENT:
+                        if (value == null) {
+                            userAgentProperties().remove(key);
+                        } else {
+                            userAgentProperties().put(key, value);
+                        }
+                        break;
+                    default:
+                        throw new InternalError("unknown enum value " + origin);
                 }
             }
         }

@@ -8,24 +8,24 @@
  */
 
 * {
-    -jhotdraw-stroke-width: 2;
+    stroke-width: 2;
 }
 
 #vertex1 {
-    -jhotdraw-fill: red;
+    fill-color: red;
 }
 
 #vertex2 {
-    -jhotdraw-fill: green;
+    fill-color: green;
 }
 
 #vertex3 {
-    -jhotdraw-stroke-width: 0.0;
-    -jhotdraw-fill: blue;
-    -jhotdraw-font: 24.0 "Andale Mono";
-    -jhotdraw-rotate: 20;
+    stroke-width: 0.0;
+    fill-color: blue;
+    font: 24.0 "Andale Mono";
+    rotate: 20;
 }
 
 #vertex4 {
-    -jhotdraw-fill: yellow;
+    fill-color: yellow;
 }
