@@ -93,7 +93,8 @@ public class CssSample extends Application {
         drawing.set(Drawing.USER_AGENT_STYLESHEETS,stylesheets);
         drawing.applyCss();
         
-       System.out.println("V3 Fill color (should be blue!):" +vertex3.getStyled(AbstractShapeFigure.FILL_COLOR));
+       System.out.println("V3 Fill color (should be blue!):" +vertex3.getStyled(AbstractShapeFigure.FILL_COLOR)+" o:"+
+               vertex3.getStyleableProperty(AbstractShapeFigure.FILL_COLOR).getStyleOrigin());
         
         drawing.layout();
 
