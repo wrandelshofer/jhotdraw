@@ -116,7 +116,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    String valueToString(Key<?> key, Object value) throws IOException;
+    <T> String valueToString(Key<T> key, T value) throws IOException;
 
     /**
      * Maps a value to a XML node list.
@@ -147,7 +147,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    Object nodeListToValue(Key<?> key, List<Node> nodeList) throws IOException;
+    <T> T nodeListToValue(Key<T> key, List<Node> nodeList) throws IOException;
 
     /**
      * Maps an XML attribute value to a value.
@@ -159,7 +159,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    Object stringToValue(Key<?> key, String cdata) throws IOException;
+    <T> T stringToValue(Key<T> key, String cdata) throws IOException;
 
     /**
      * Returns the default for the key. The default value used for persistent

@@ -19,7 +19,7 @@ import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.text.FormatConverterWrapper;
 import org.jhotdraw.text.StringConverterConverterWrapper;
-import org.jhotdraw.text.XmlDoubleConverter;
+import org.jhotdraw.text.XmlNumberConverter;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -91,7 +91,7 @@ public class GridInspector extends AbstractDrawingInspector {
                 newValue.setConstrainer(gc);
             }
             StringConverter<Number> cc
-                    = new StringConverterConverterWrapper<>(new XmlDoubleConverter());
+                    = new StringConverterConverterWrapper<>(new XmlNumberConverter());
             heightField.textProperty().bindBidirectional(gc.heightProperty(), cc);
             widthField.textProperty().bindBidirectional(gc.widthProperty(), cc);
             xField.textProperty().bindBidirectional(gc.xProperty(), cc);

@@ -36,7 +36,7 @@ import org.jhotdraw.io.StreamPosTokenizer;
  */
 public class CssFontConverter implements Converter<Font> {
 
-    private final XmlDoubleConverter doubleConverter = new XmlDoubleConverter();
+    private final XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Font font) throws IOException {

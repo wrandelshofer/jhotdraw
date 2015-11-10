@@ -9,24 +9,16 @@ import java.io.InputStream;
 import java.net.URL;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.text.CssPaintConverter;
-import org.jhotdraw.text.FormatConverterWrapper;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.XmlDoubleConverter;
 import org.jhotdraw.util.Resources;
@@ -106,9 +98,9 @@ public class CanvasInspector extends AbstractDrawingInspector {
             backgroundProperty.addListener(commitHandler);
 
             // FIXME binding to figure properties bypasses the DrawingModel!
-            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper(new XmlDoubleConverter()));
-            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper(new XmlDoubleConverter()));
-            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper(new CssPaintConverter()));
+            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
+            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
+            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssPaintConverter()));
             @SuppressWarnings("unchecked")
             Property<Color> colorProperty = (Property<Color>) (Property<?>) backgroundProperty;
             backgroundColorPicker.valueProperty().bindBidirectional(colorProperty);

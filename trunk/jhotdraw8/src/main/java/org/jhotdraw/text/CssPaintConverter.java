@@ -43,7 +43,7 @@ import org.jhotdraw.draw.io.IdFactory;
  * @author Werner Randelshofer
  */
 public class CssPaintConverter implements Converter<Paint> {
-private XmlDoubleConverter doubleConverter=new XmlDoubleConverter();
+private XmlNumberConverter doubleConverter=new XmlNumberConverter();
 {
     doubleConverter.setMaximumFractionDigits(3);
 }

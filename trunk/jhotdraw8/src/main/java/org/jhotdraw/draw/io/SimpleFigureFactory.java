@@ -343,9 +343,9 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public String valueToString(Key<?> key, Object value) throws IOException {
+    public <T> String valueToString(Key<T> key, T value) throws IOException {
         @SuppressWarnings("unchecked")
-        Converter<Object> converter = (Converter<Object>) valueToXML.get(key.getFullValueType());
+        Converter<T> converter = (Converter<T>) valueToXML.get(key.getFullValueType());
         if (converter == null) {
             throw new IOException("no converter for attribute type "
                     + key.getFullValueType());
@@ -356,9 +356,10 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public Object stringToValue(Key<?> key, String string) throws IOException {
+    public <T> T stringToValue(Key<T> key, String string) throws IOException {
         try {
-            Converter<?> converter = valueFromXML.get(key.getFullValueType());
+            @SuppressWarnings("unchecked")
+            Converter<T> converter = (Converter<T>) valueFromXML.get(key.getFullValueType());
             if (converter == null) {
                 throw new IOException("no converter for key \"" + key + "\" with attribute type "
                         + key.getFullValueType());
@@ -403,7 +404,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public Object nodeListToValue(Key<?> key, List<Node> nodeList) throws IOException {
+    public <T> T nodeListToValue(Key<T> key, List<Node> nodeList) throws IOException {
         if (key.getValueType() == String.class) {
             StringBuilder buf = new StringBuilder();
             for (Node node : nodeList) {
@@ -411,7 +412,9 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
                     buf.append(node.getNodeValue());
                 }
             }
-            return buf.toString();
+            @SuppressWarnings("unchecked")
+            T temp= (T) buf.toString();
+            return temp;
         } else {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
@@ -429,7 +432,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             for (Key<?> k : map.keySet()) {
                 String fullValueType = k.getFullValueType();
                 if (!valueToXML.containsKey(fullValueType)) {
-                    System.err.println(this + " WARNING can not convert " + fullValueType + " to XML for key "+k+".");
+                    System.err.println(this + " WARNING can not convert " + fullValueType + " to XML for key " + k + ".");
                 }
             }
         }
