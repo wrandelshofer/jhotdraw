@@ -87,7 +87,10 @@ public class CssSample extends Application {
         vertex3.set(Figure.STYLE_ID,"vertex3");
         vertex4.set(Figure.STYLE_ID,"vertex4");
         
-        drawing.layout();
+       System.out.println("V3 Fill color (should be white!):" +vertex3.getStyled(AbstractShapeFigure.FILL_COLOR)+" o:"+
+               vertex3.getStyleableProperty(AbstractShapeFigure.FILL_COLOR).getStyleOrigin());
+       
+System.out.println("V3:"+vertex3.getStyleableProperties());       
         ArrayList<URI> stylesheets=new ArrayList<>();
         stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());
         drawing.set(Drawing.USER_AGENT_STYLESHEETS,stylesheets);
@@ -95,6 +98,7 @@ public class CssSample extends Application {
         
        System.out.println("V3 Fill color (should be blue!):" +vertex3.getStyled(AbstractShapeFigure.FILL_COLOR)+" o:"+
                vertex3.getStyleableProperty(AbstractShapeFigure.FILL_COLOR).getStyleOrigin());
+System.out.println("V3:"+vertex3.getStyleableProperties());       
         
         drawing.layout();
 

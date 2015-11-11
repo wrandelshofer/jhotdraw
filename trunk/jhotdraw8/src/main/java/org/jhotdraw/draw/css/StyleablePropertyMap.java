@@ -4,413 +4,986 @@
  */
 package org.jhotdraw.draw.css;
 
+import java.util.Collection;
 import java.util.HashMap;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.collections.FXCollections;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.MapPropertyBase;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanPropertyBase;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerPropertyBase;
+import javafx.beans.property.ReadOnlyMapPropertyBase;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
-import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
-import javafx.css.StyleableProperty;
-import org.jhotdraw.collection.Key;
+import org.jhotdraw.beans.ListenerSupport;
 
 /**
- * {@code StyleablePropertyMap} provides an acceleration structure for
- * getProperties which can by styled from CSS.
- * <p>
- * {@code StyleablePropertyMap} consists internally of four input maps and one
- * output map.
- * <ul>
- * <li>An input map is provided for each {@link StyleOrigin}.</li>
- * <li>The output map contains the styled value. The style origins have the
- * precedence as defined in {@link StyleableProperty} which is
- * {@code INLINE, AUTHOR, USER, USER_AGENT}.</li>
- * </ul>
+ * {@code StyleablePropertyMap} is a map which stores a value for each key and
+ * each {@link StyleOrigin}.
  *
  * @author Werner Randelshofer
  */
-public class StyleablePropertyMap {
+public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
-    // ---
-    // constant declarations
-    // ---
-    /**
-     * The name of the "user" property.
-     */
-    public final String USER_PROPERTY = "user";
-    /**
-     * The name of the "user agent" property.
-     */
-    public final String USER_AGENT_PROPERTY = "userAgent";
-    /**
-     * The name of the "inline" property.
-     */
-    public final String INLINE_PROPERTY = "inline";
-    /**
-     * The name of the "author" property.
-     */
-    public final String AUTHOR_PROPERTY = "author";
-    /**
-     * The name of the "author" property.
-     */
-    public final String OUTPUT_PROPERTY = "output";
-    // ---
-    // field declarations
-    // ---
-    /**
-     * Holds the user getProperties.
-     */
-    protected final ReadOnlyMapProperty<Key<?>, Object> user = new ReadOnlyMapWrapper<Key<?>, Object>(this, USER_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
-    /**
-     * Holds the inline getProperties.
-     */
-    protected ReadOnlyMapProperty<Key<?>, Object> inline;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, INLINE_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
-    /**
-     * Holds the author getProperties.
-     */
-    protected ReadOnlyMapProperty<Key<?>, Object> author;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, AUTHOR_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
-    /**
-     * Holds the user agent getProperties.
-     */
-    protected ReadOnlyMapProperty<Key<?>, Object> userAgent;// 
-    /**
-     * Holds the outputReadonly getProperties.
-     */
-    protected final ObservableMap<Key<?>, Object> output = FXCollections.observableHashMap();
-    /**
-     * Read-only wrapper for the outputReadonly getProperties.
-     */
-    protected final ReadOnlyMapProperty<Key<?>, Object> outputReadonly = new ReadOnlyMapWrapper<Key<?>, Object>(this, OUTPUT_PROPERTY, FXCollections.unmodifiableObservableMap(output)).getReadOnlyProperty();
 
-    /**
-     * Holds the styleable getProperties.
-     */
-    protected final HashMap<Key<?>, StyleableProperty<?>> styleableProperties = new HashMap<>();
-
-    private MapChangeListener<Key<?>, Object> inputHandler = new MapChangeListener<Key<?>, Object>() {
-
-        @Override
-        public void onChanged(MapChangeListener.Change<? extends Key<?>, ? extends Object> change) {
-            updateOutput(change.getKey());
-        }
-    };
-    private final Object bean;
-
-    private boolean willUpdateLater;
-    // ---
-    // constructors
-    // ---
-
-    public StyleablePropertyMap() {
-        this(null);
-    }
-
-    public StyleablePropertyMap(Object bean) {
-        user.addListener(inputHandler);
-        this.bean = bean;
-    }
-
-    // ---
-    // property methods
-    // ---
-    /**
-     * Returns an observable map of property keys and their values.
-     *
-     * @return the map
-     */
-    ReadOnlyMapProperty<Key<?>, Object> userProperties() {
-        return user;
-    }
-
-    /**
-     * Returns an observable map of property keys and their values.
-     *
-     * @return the map
-     */
-    ReadOnlyMapProperty<Key<?>, Object> userAgentProperties() {
-        if (userAgent == null) {
-            userAgent = new ReadOnlyMapWrapper<Key<?>, Object>(this, USER_AGENT_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
-            userAgent.addListener(inputHandler);
-        }
-        return userAgent;
-    }
-
-    /**
-     * Returns an observable map of property keys and their values.
-     *
-     * @return the map
-     */
-    ReadOnlyMapProperty<Key<?>, Object> authorProperties() {
-        if (author == null) {
-            author = new ReadOnlyMapWrapper<Key<?>, Object>(this, AUTHOR_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
-            author.addListener(inputHandler);
-        }
-        return author;
-    }
-
-    /**
-     * Returns an observable map of property keys and their values.
-     *
-     * @return the map
-     */
-    ReadOnlyMapProperty<Key<?>, Object> inlineProperties() {
-        if (inline == null) {
-            inline = new ReadOnlyMapWrapper<Key<?>, Object>(this, INLINE_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
-            inline.addListener(inputHandler);
-        }
-        return inline;
-    }
-
-    /**
-     * Returns an observable map of property keys and their values.
-     * <p>
-     * The map is unmodifiable.
-     *
-     * @return the map
-     */
-    ReadOnlyMapProperty<Key<?>, Object> outputProperties() {
-        return outputReadonly;
-    }
-
-    // ---
-    // behavior
-    // ---
-    /**
-     * Clears all getProperties except the user getProperties.
-     */
-    public void clearNonUserProperties() {
-        if (userAgent != null) {
-            userAgent.clear();
-        }
-        if (inline != null) {
-            inline.clear();
-        }
-        if (author != null) {
-            author.clear();
-        }
-    }
-
-    private void updateOutput(Key<?> key) {
-        StyleOrigin origin = getStyleOrigin(key);
-        if (origin == null) {
-            output.remove(key);
-        } else {
-            switch (origin) {
-                case INLINE:
-                    output.put(key, inlineProperties().get(key));
-                    break;
-                case AUTHOR:
-                    output.put(key, authorProperties().get(key));
-                    break;
-                case USER:
-                    output.put(key, userProperties().get(key));
-                    break;
-                case USER_AGENT:
-                    output.put(key, userAgentProperties().get(key));
-                    break;
-                default:
-                    throw new InternalError("unknown enum value " + origin);
-            }
-        }
-    }
-
-    /**
-     * Returns the style origin for the specified value.
-     *
-     * @param key The key identifying the value.
-     * @return The style origin or null if the key is not contained in the map.
-     */
-    public StyleOrigin getStyleOrigin(Key<?> key) {
-        if (inline != null && inline.containsKey(key)) {
-            return StyleOrigin.INLINE;
-        } else if (author != null && author.containsKey(key)) {
-            return StyleOrigin.AUTHOR;
-        } else if (user != null && user.containsKey(key)) {
-            return StyleOrigin.USER;
-        } else if (userAgent != null && userAgent.containsKey(key)) {
-            return StyleOrigin.USER_AGENT;
-        } else {
-            return null;
-        }
-    }
-
-    public Object getBean() {
-        return bean;
-    }
-
-    public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
-        @SuppressWarnings("unchecked")
-        StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
-        if (sp == null) {
-            if (key instanceof StyleableKey) {
-                @SuppressWarnings("unchecked")
-                StyleableProperty<T> temp = new MapStyleableProperty<>(key, ((StyleableKey) key).getCssMetaData());
-                sp = temp;
-            } else {
-                @SuppressWarnings("unchecked")
-                StyleableProperty<T> temp = new MapStyleableProperty<>(key, null);
-                sp = temp;
-            }
-            styleableProperties.put(key, sp);
-        }
-        return sp;
-    }
-
-    public <T> T remove(StyleOrigin origin, Key<T> key) {
-        T value = null;
-        switch (origin) {
-            case INLINE:
-                if (inline != null) {
-                    @SuppressWarnings("unchecked")
-                    T temp = (T) inline.remove(key);
-                    value = temp;
-                }
-                break;
-            case AUTHOR:
-                if (author != null) {
-                    @SuppressWarnings("unchecked")
-                    T temp = (T) author.remove(key);
-                    value = temp;
-                }
-                break;
-            case USER:
-                if (user != null) {
-                    @SuppressWarnings("unchecked")
-                    T temp = (T) user.remove(key);
-                    value = temp;
-                }
-                break;
-            case USER_AGENT:
-                if (userAgent != null) {
-                    @SuppressWarnings("unchecked")
-                    T temp = (T) userAgent.remove(key);
-                    value = temp;
-                }
-                break;
-            default:
-                throw new InternalError("unknown enum value " + origin);
-        }
-        return value;
-    }
-
-    public void removeAll(StyleOrigin origin) {
-        switch (origin) {
-            case INLINE:
-                if (inline != null) {
-                    inline.clear();
-                }
-                break;
-            case AUTHOR:
-                if (author != null) {
-                    author.clear();
-                }
-                break;
-            case USER:
-                if (user != null) {
-                    user.clear();
-                }
-                break;
-            case USER_AGENT:
-                if (userAgent != null) {
-                    userAgent.clear();
-                }
-                break;
-            default:
-                throw new InternalError("unknown enum value " + origin);
-        }
-    }
-
-    // ---
-    // static inner classes
-    // ---
-    public class MapStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
-
-        private final Key<T> key;
-        private final CssMetaData<?, T> metaData;
-
-        public MapStyleableProperty(Key<T> key, CssMetaData<?, T> metaData) {
-            this.key = key;
-            this.metaData = metaData;
-
-            bindBidirectional(new Key.PropertyAt<>(user, key));
-        }
-
-        @Override
-        public Object getBean() {
-            return StyleablePropertyMap.this.getBean();
-        }
-
-        @Override
-        public String getName() {
-            return key.getName();
-        }
-
-        @Override
-        public CssMetaData<?, T> getCssMetaData() {
-            return metaData;
-        }
+    private static class StyledValue {
 
         /**
-         *
-         * @param origin the style origin
-         * @param value the value null removes the key from the style origin
+         * Magic value object to indicate that we have not stored a value.
          */
-        @Override
-        public void applyStyle(StyleOrigin origin, T value) {
-            if (!key.isAssignable(value)) {
-                throw new ClassCastException("value is not assignable. key:" + key + " value:" + value);
-            }
-            if (origin == null) {
-                throw new IllegalArgumentException("origin must not be null");
-            } else {
-                switch (origin) {
-                    case INLINE:
-                        if (value == null) {
-                            inlineProperties().remove(key);
-                        } else {
-                            inlineProperties().put(key, value);
+        private final static Object NO_VALUE = new Object();
+        private final static StyleOrigin[] ORIGINS = StyleOrigin.values();
+        public StyleOrigin origin;
+        /**
+         * Contains a slot for each of the four possible origins. The ordinal
+         * number of StyleOrigin is used as an index.
+         */
+        private Object[] values = {NO_VALUE,NO_VALUE,NO_VALUE,NO_VALUE};
+
+        public <T> T removeValue(StyleOrigin origin) {
+            if (hasValue(origin)) {
+                int i = origin.ordinal();
+                @SuppressWarnings("unchecked")
+                T oldValue = (T) values[i];
+                values[i] = NO_VALUE;
+                if (this.origin == origin) {
+                    for (int j = origin.ordinal() - 1; j <= 0; j--) {
+                        if (values[j]!=NO_VALUE) {
+                            this.origin = ORIGINS[j];
+                            break;
                         }
-                        break;
-                    case AUTHOR:
-                        if (value == null) {
-                            authorProperties().remove(key);
-                        } else {
-                            authorProperties().put(key, value);
-                        }
-                        break;
-                    case USER:
-                        if (value == null) {
-                            userProperties().remove(key);
-                        } else {
-                            userProperties().put(key, value);
-                        }
-                        break;
-                    case USER_AGENT:
-                        if (value == null) {
-                            userAgentProperties().remove(key);
-                        } else {
-                            userAgentProperties().put(key, value);
-                        }
-                        break;
-                    default:
-                        throw new InternalError("unknown enum value " + origin);
+                    }
+                    this.origin = null;
                 }
+                return oldValue;
+            } else {
+                return null;
             }
         }
 
-        @Override
-        protected void fireValueChangedEvent() {
-            super.fireValueChangedEvent();
-            applyStyle(StyleOrigin.USER, get());
+        public <T> T setValue(StyleOrigin origin, T newValue) {
+            int i = origin.ordinal();
+            @SuppressWarnings("unchecked")
+            T oldValue = (T) values[i];
+            values[i] = newValue;
+            if (this.origin == null || origin.ordinal() > this.origin.ordinal()) {
+                this.origin = origin;
+            }
+            return oldValue;
+        }
+
+        public boolean hasValue(StyleOrigin origin) {
+            return values[origin.ordinal()]!=NO_VALUE;
+        }
+
+        public boolean isEmpty() {
+            return origin == null;
+        }
+
+        private <T> T getValue(StyleOrigin styleOrigin) {
+            @SuppressWarnings("unchecked")
+            T ret = (T) values[styleOrigin.ordinal()];
+            return ret;
+        }
+
+        private StyleOrigin getOrigin() {
+            return origin;
+        }
+    }
+    private ObservableEntrySet entrySet;
+    private ObservableKeySet keySet;
+    private ObservableValues values;
+
+    private ListenerSupport<MapChangeListener<? super K, ? super V>> changeListenerSupport;
+    private ListenerSupport<InvalidationListener> invalidationListenerSupport;
+    private final Map<K, StyledValue> backingMap;
+
+    public StyleablePropertyMap() {
+        this.backingMap = new HashMap<>();
+    }
+
+    private class SimpleChange extends MapChangeListener.Change<K, V> {
+
+        private final K key;
+        private final V old;
+        private final V added;
+        private final boolean wasAdded;
+        private final boolean wasRemoved;
+
+        public SimpleChange(K key, V old, V added, boolean wasAdded, boolean wasRemoved) {
+            super(StyleablePropertyMap.this);
+            assert (wasAdded || wasRemoved);
+            this.key = key;
+            this.old = old;
+            this.added = added;
+            this.wasAdded = wasAdded;
+            this.wasRemoved = wasRemoved;
         }
 
         @Override
-        public StyleOrigin getStyleOrigin() {
-            return StyleablePropertyMap.this.getStyleOrigin(key);
+        public boolean wasAdded() {
+            return wasAdded;
+        }
+
+        @Override
+        public boolean wasRemoved() {
+            return wasRemoved;
+        }
+
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValueAdded() {
+            return added;
+        }
+
+        @Override
+        public V getValueRemoved() {
+            return old;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            if (wasAdded) {
+                if (wasRemoved) {
+                    builder.append("replaced ").append(old).append("by ").append(added);
+                } else {
+                    builder.append("added ").append(added);
+                }
+            } else {
+                builder.append("removed ").append(old);
+            }
+            builder.append(" at key ").append(key);
+            return builder.toString();
         }
 
     }
+
+    protected void callObservers(MapChangeListener.Change<K, V> change) {
+        if (changeListenerSupport != null) {
+            changeListenerSupport.fire(l -> l.onChanged(change));
+        }
+        if (invalidationListenerSupport != null) {
+            invalidationListenerSupport.fire(l -> l.invalidated(this));
+        }
+    }
+
+    @Override
+    public void addListener(InvalidationListener listener) {
+        if (invalidationListenerSupport == null) {
+            invalidationListenerSupport = new ListenerSupport<>();
+        }
+        invalidationListenerSupport.add(listener);
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+        if (invalidationListenerSupport != null) {
+            invalidationListenerSupport.remove(listener);
+        }
+    }
+
+    @Override
+    public void addListener(MapChangeListener<? super K, ? super V> observer) {
+        if (changeListenerSupport == null) {
+            changeListenerSupport = new ListenerSupport<>();
+        }
+        changeListenerSupport.add(observer);
+    }
+
+    @Override
+    public void removeListener(MapChangeListener<? super K, ? super V> observer) {
+        if (changeListenerSupport != null) {
+            changeListenerSupport.remove(observer);
+        }
+    }
+
+    @Override
+    public int size() {
+        return size(StyleOrigin.USER);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return isEmpty(StyleOrigin.USER);
+    }
+
+    public int size(StyleOrigin o) {
+        int count = 0;
+        for (Map.Entry<K, StyledValue> e : backingMap.entrySet()) {
+            if (e.getValue().hasValue(o)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean isEmpty(StyleOrigin o) {
+        for (Map.Entry<K, StyledValue> e : backingMap.entrySet()) {
+            if (e.getValue().hasValue(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return containsKey(StyleOrigin.USER, key);
+    }
+
+    public boolean containsKey(StyleOrigin o, Object key) {
+        StyledValue sv = backingMap.get(key);
+        return sv == null ? false : sv.hasValue(o);
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return containsValue(StyleOrigin.USER, value);
+    }
+
+    public boolean containsValue(StyleOrigin o, Object value) {
+        for (Map.Entry<K, StyledValue> e : backingMap.entrySet()) {
+            if (e.getValue().hasValue(o)) {
+                Object v = e.getValue().getValue(o);
+                if (v == value
+                        || (value != null && value.equals(v))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public V get(Object key) {
+        return get(StyleOrigin.USER, key);
+    }
+
+    public V get(StyleOrigin o, Object key) {
+        StyledValue sv = backingMap.get(key);
+        @SuppressWarnings("unchecked")
+        V ret = sv == null ? null : (V) sv.getValue(o);
+        return ret;
+    }
+
+    public V getStyled(Object key) {
+        StyledValue sv = backingMap.get(key);
+        @SuppressWarnings("unchecked")
+        V ret = sv == null ? null : (V) sv.getValue(sv.getOrigin());
+        return ret;
+    }
+
+    @Override
+    public V put(K key, V value) {
+        return put(StyleOrigin.USER, key, value);
+    }
+
+    public V put(StyleOrigin o, K key, V value) {
+        StyledValue sv = backingMap.get(key);
+        if (sv == null) {
+            sv = new StyledValue();
+            backingMap.put(key, sv);
+        }
+
+        boolean hadValue = sv.hasValue(o);
+        V ret = sv.setValue(o, value);
+        if (o == StyleOrigin.USER) {
+            if (ret == null && value != null || ret != null && !ret.equals(value)) {
+                callObservers(new SimpleChange(key, ret, value, true, hadValue));
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public V remove(Object key) {
+
+        return remove(StyleOrigin.USER, key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public V remove(StyleOrigin o, Object key) {
+        StyledValue sv = backingMap.get(key);
+        V ret = null;
+        boolean hadValue;
+        if (sv != null && sv.hasValue(o)) {
+            hadValue = true;
+            ret = (V) sv.removeValue(o);
+            if (sv.isEmpty()) {
+                backingMap.remove(key);
+            }
+        } else {
+            hadValue = false;
+            ret = null;
+        }
+        if (hadValue && o == StyleOrigin.USER) {
+            callObservers(new SimpleChange((K) key, ret, null, false, true));
+        }
+        return ret;
+    }
+
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m) {
+        for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
+            put(e.getKey(), e.getValue());
+        }
+    }
+
+    public void putAll(StyleOrigin o, Map<? extends K, ? extends V> m) {
+        for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
+            put(o, e.getKey(), e.getValue());
+        }
+    }
+
+    @Override
+    public void clear() {
+        clear(StyleOrigin.USER);
+    }
+
+    public void clear(StyleOrigin o) {
+        for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
+            Entry<K, StyledValue> e = i.next();
+            K key = e.getKey();
+            StyledValue sv = e.getValue();
+            @SuppressWarnings("unchecked")
+            V val = (V) sv.removeValue(o);
+            if (sv.isEmpty()) {
+                i.remove();
+            }
+            callObservers(new SimpleChange(key, val, null, false, true));
+        }
+    }
+
+    @Override
+    public Set<K> keySet() {
+        if (keySet == null) {
+            keySet = new ObservableKeySet(StyleOrigin.USER);
+        }
+        return keySet;
+    }
+
+    public Set<K> keySet(StyleOrigin o) {
+        return new ObservableKeySet(o);
+    }
+
+    @Override
+    public Collection<V> values() {
+        if (values == null) {
+            values = new ObservableValues(StyleOrigin.USER);
+        }
+        return values;
+    }
+
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+        if (entrySet == null) {
+            entrySet = new ObservableEntrySet(StyleOrigin.USER);
+        }
+        return entrySet;
+    }
+
+    @Override
+    public String toString() {
+        return backingMap.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return backingMap.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return backingMap.hashCode();
+    }
+
+    private class ObservableKeySet implements Set<K> {
+
+        private final StyleOrigin ksetOrigin;
+
+        public ObservableKeySet(StyleOrigin o) {
+            this.ksetOrigin = o;
+        }
+
+        @Override
+        public int size() {
+            return StyleablePropertyMap.this.size(ksetOrigin);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return StyleablePropertyMap.this.isEmpty(ksetOrigin);
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            return StyleablePropertyMap.this.containsKey(ksetOrigin, o);
+        }
+
+        @Override
+        public Iterator<K> iterator() {
+            return new Iterator<K>() {
+
+                private Iterator<Entry<K, StyledValue>> entryIt = backingMap.entrySet().iterator();
+                private boolean hasNext;
+                private K nextKey;
+                private K lastKey;
+
+                {
+                    advance();
+                }
+
+                private void advance() {
+                    while (entryIt.hasNext()) {
+                        Entry<K, StyledValue> entry = entryIt.next();
+                        if (entry.getValue().hasValue(ksetOrigin)) {
+                            nextKey = entry.getKey();
+                            hasNext = true;
+                            return;
+                        }
+                    }
+                    hasNext = false;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return hasNext;
+                }
+
+                @Override
+                public K next() {
+                    lastKey = nextKey;
+                    advance();
+                    return lastKey;
+                }
+
+                @Override
+                public void remove() {
+                    StyleablePropertyMap.this.remove(ksetOrigin, lastKey);
+                }
+
+            };
+        }
+
+        @Override
+        public Object[] toArray() {
+            Object[] a = new Object[size()];
+            int i = 0;
+            for (Iterator<K> it = iterator(); it.hasNext();) {
+                a[i++] = it.next();
+            }
+            return a;
+        }
+
+        @Override
+        public <T> T[] toArray(T[] a) {
+            int size = size();
+            @SuppressWarnings("unchecked")
+            T[] r = a.length >= size ? a
+                    : (T[]) java.lang.reflect.Array
+                    .newInstance(a.getClass().getComponentType(), size);
+            a = r;
+            int i = 0;
+            for (Iterator<K> it = iterator(); it.hasNext();) {
+                @SuppressWarnings("unchecked")
+                T tmp = (T) it.next();
+                a[i++] = tmp;
+            }
+            return a;
+        }
+
+        @Override
+        public boolean add(K e) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            return StyleablePropertyMap.this.remove(o) != null;
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            for (Object k : c) {
+                if (!containsKey(ksetOrigin, k)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends K> c) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return removeRetain(c, false);
+        }
+
+        private boolean removeRetain(Collection<?> c, boolean remove) {
+            boolean removed = false;
+            for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
+                Entry<K, StyledValue> e = i.next();
+                if (remove == c.contains(e.getKey())) {
+                    K key = e.getKey();
+                    StyledValue sv = e.getValue();
+                    if (sv.hasValue(ksetOrigin)) {
+                        removed = true;
+                        V value = sv.removeValue(ksetOrigin);
+                        if (sv.isEmpty()) {
+                            i.remove();
+                        }
+                        callObservers(new SimpleChange(key, value, null, false, true));
+                    }
+                }
+            }
+            return removed;
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return removeRetain(c, true);
+        }
+
+        @Override
+        public void clear() {
+            StyleablePropertyMap.this.clear(ksetOrigin);
+        }
+
+        @Override
+        public String toString() {
+            Iterator<K> it = iterator();
+            if (!it.hasNext()) {
+                return "[]";
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append('[');
+            for (;;) {
+                K e = it.next();
+                sb.append(e == this ? "(this Collection)" : e);
+                if (!it.hasNext()) {
+                    return sb.append(']').toString();
+                }
+                sb.append(',').append(' ');
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return backingMap.keySet().equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return backingMap.keySet().hashCode();
+        }
+
+    }
+
+    private class ObservableValues implements Collection<V> {
+
+        private final StyleOrigin ksetOrigin;
+
+        public ObservableValues(StyleOrigin o) {
+            this.ksetOrigin = o;
+        }
+
+        @Override
+        public int size() {
+            return StyleablePropertyMap.this.size(ksetOrigin);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return StyleablePropertyMap.this.isEmpty(ksetOrigin);
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            return StyleablePropertyMap.this.containsValue(ksetOrigin, o);
+        }
+
+        @Override
+        public Iterator<V> iterator() {
+            return new Iterator<V>() {
+
+                private Iterator<Entry<K, StyledValue>> entryIt = backingMap.entrySet().iterator();
+                private boolean hasNext;
+                private K nextKey;
+                private K lastKey;
+                private V nextValue;
+                private V lastValue;
+
+                {
+                    advance();
+                }
+
+                private void advance() {
+                    while (entryIt.hasNext()) {
+                        Entry<K, StyledValue> entry = entryIt.next();
+                        if (entry.getValue().hasValue(ksetOrigin)) {
+                            nextKey = entry.getKey();
+                            nextValue = entry.getValue().getValue(ksetOrigin);
+                            hasNext = true;
+                            return;
+                        }
+                    }
+                    hasNext = false;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return hasNext;
+                }
+
+                @Override
+                public V next() {
+                    lastKey = nextKey;
+                    lastValue = nextValue;
+                    advance();
+                    return lastValue;
+                }
+
+                @Override
+                public void remove() {
+                    StyleablePropertyMap.this.remove(ksetOrigin, lastKey);
+                }
+
+            };
+        }
+
+        @Override
+        public Object[] toArray() {
+            Object[] a = new Object[size()];
+            int i = 0;
+            for (Iterator<V> it = iterator(); it.hasNext();) {
+                a[i++] = it.next();
+            }
+            return a;
+        }
+
+        @Override
+        public <T> T[] toArray(T[] a) {
+            int size = size();
+            @SuppressWarnings("unchecked")
+            T[] r = a.length >= size ? a
+                    : (T[]) java.lang.reflect.Array
+                    .newInstance(a.getClass().getComponentType(), size);
+            a = r;
+            int i = 0;
+            for (Iterator<V> it = iterator(); it.hasNext();) {
+                @SuppressWarnings("unchecked")
+                T tmp = (T) it.next();
+                a[i++] = tmp;
+            }
+            return a;
+        }
+
+        @Override
+        public boolean add(V e) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            for (Iterator<V> i = iterator(); i.hasNext();) {
+                if (i.next().equals(o)) {
+                    i.remove();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            for (Object k : c) {
+                if (!containsValue(ksetOrigin, k)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends V> c) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return removeRetain(c, true);
+        }
+
+        private boolean removeRetain(Collection<?> c, boolean remove) {
+            boolean removed = false;
+            for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
+                Entry<K, StyledValue> e = i.next();
+                if (remove == c.contains(e.getValue())) {
+                    K key = e.getKey();
+                    StyledValue sv = e.getValue();
+                    if (sv.hasValue(ksetOrigin)) {
+                        removed = true;
+                        V value = sv.removeValue(ksetOrigin);
+                        if (sv.isEmpty()) {
+                            i.remove();
+                        }
+                        callObservers(new SimpleChange(key, value, null, false, true));
+                    }
+                }
+            }
+            return removed;
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return removeRetain(c, false);
+        }
+
+        @Override
+        public void clear() {
+            StyleablePropertyMap.this.clear(ksetOrigin);
+        }
+
+        @Override
+        public String toString() {
+            Iterator<V> it = iterator();
+            if (!it.hasNext()) {
+                return "[]";
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append('[');
+            for (;;) {
+                V e = it.next();
+                sb.append(e == this ? "(this Collection)" : e);
+                if (!it.hasNext()) {
+                    return sb.append(']').toString();
+                }
+                sb.append(',').append(' ');
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return backingMap.values().equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return backingMap.values().hashCode();
+        }
+
+    }
+
+    private class ObservableEntry implements Entry<K, V> {
+
+        private final StyleOrigin oeOrigin;
+        private final Entry<K, StyledValue> backingEntry;
+
+        public ObservableEntry(StyleOrigin o, Entry<K, StyledValue> backingEntry) {
+            this.oeOrigin = o;
+            this.backingEntry = backingEntry;
+        }
+
+        @Override
+        public K getKey() {
+            return backingEntry.getKey();
+        }
+
+        @Override
+        public V getValue() {
+            return backingEntry.getValue().getValue(oeOrigin);
+        }
+
+        @Override
+        public V setValue(V value) {
+            V oldValue = backingEntry.getValue().setValue(oeOrigin, value);
+            callObservers(new SimpleChange(getKey(), oldValue, value, true, true));
+            return oldValue;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (!(o instanceof Map.Entry)) {
+                return false;
+            }
+            @SuppressWarnings("unchecked")
+            Map.Entry<K, V> e = (Map.Entry<K, V>) o;
+            Object k1 = getKey();
+            Object k2 = e.getKey();
+            if (k1 == k2 || (k1 != null && k1.equals(k2))) {
+                Object v1 = getValue();
+                Object v2 = e.getValue();
+                if (v1 == v2 || (v1 != null && v1.equals(v2))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public final int hashCode() {
+            return (getKey() == null ? 0 : getKey().hashCode())
+                    ^ (getValue() == null ? 0 : getValue().hashCode());
+        }
+
+        @Override
+        public final String toString() {
+            return getKey() + "=" + getValue();
+        }
+
+    }
+
+    private class ObservableEntrySet implements Set<Entry<K, V>> {
+
+        private final StyleOrigin oesOrigin;
+
+        public ObservableEntrySet(StyleOrigin oesOrigin) {
+            this.oesOrigin = oesOrigin;
+        }
+
+        @Override
+        public int size() {
+            return StyleablePropertyMap.this.size(oesOrigin);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return StyleablePropertyMap.this.isEmpty(oesOrigin);
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public Iterator<Entry<K, V>> iterator() {
+            return new Iterator<Entry<K, V>>() {
+
+                private Iterator<Entry<K, StyledValue>> entryIt = backingMap.entrySet().iterator();
+                private boolean hasNext;
+                private Entry<K, StyledValue> nextEntry;
+                private Entry<K, StyledValue> lastEntry;
+
+                {
+                    advance();
+                }
+
+                private void advance() {
+                    while (entryIt.hasNext()) {
+                        Entry<K, StyledValue> entry = entryIt.next();
+                        if (entry.getValue().hasValue(oesOrigin)) {
+                            nextEntry = entry;
+                            hasNext = true;
+                            return;
+                        }
+                    }
+                    hasNext = false;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return hasNext;
+                }
+
+                @Override
+                public Entry<K, V> next() {
+                    lastEntry = nextEntry;
+                    advance();
+                    return new ObservableEntry(oesOrigin, lastEntry);
+                }
+
+                @Override
+                public void remove() {
+                    StyleablePropertyMap.this.remove(oesOrigin, lastEntry.getKey());
+                }
+
+            };
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Object[] toArray() {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T[] toArray(T[] a) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean add(Entry<K, V> e) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public boolean remove(Object o) {
+            Entry<K, V> entry = (Entry<K, V>) o;
+            return StyleablePropertyMap.this.remove(oesOrigin, entry.getKey()) != null;
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends Entry<K, V>> c) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return removeRetain(c, false);
+        }
+
+        private boolean removeRetain(Collection<?> c, boolean remove) {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return removeRetain(c, true);
+        }
+
+        @Override
+        public void clear() {
+            StyleablePropertyMap.this.clear(oesOrigin);
+        }
+
+        @Override
+        public String toString() {
+            return backingMap.entrySet().toString();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return backingMap.entrySet().equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return backingMap.entrySet().hashCode();
+        }
+
+    }
+
 }
