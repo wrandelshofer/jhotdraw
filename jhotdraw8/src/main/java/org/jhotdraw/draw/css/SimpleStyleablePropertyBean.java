@@ -11,15 +11,19 @@ import org.jhotdraw.collection.Key;
 
 /**
  * SimpleStyleablePropertyBean.
+ *
  * @author Werner Randelshofer
  */
 public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBean {
+
     /**
      * Holds the getProperties.
      */
-    protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
-    
-    /** Returns the user getProperties. */
+    protected StyleablePropertyMap1 styleableProperties = new StyleablePropertyMap1();
+
+    /**
+     * Returns the user getProperties.
+     */
     @Override
     public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
         return styleableProperties.userProperties();
@@ -29,8 +33,10 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
         return styleableProperties.getStyleableProperty(key);
     }
-    
-    /** Returns  the style value. */
+
+    /**
+     * Returns the style value.
+     */
     @Override
     public <T> T getStyled(Key<T> key) {
         return key.get(styleableProperties.outputProperties());
@@ -38,13 +44,15 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
 
     @Override
     public <T> T remove(StyleOrigin origin, Key<T> key) {
-        return styleableProperties.remove(origin,key);
+        return styleableProperties.remove(origin, key);
     }
 
     @Override
     public void removeAll(StyleOrigin origin) {
-         styleableProperties.removeAll(origin);
+        styleableProperties.removeAll(origin);
     }
-    
-    
+
+    public StyleablePropertyMap1 getStyleableProperties() {
+        return styleableProperties;
+    }
 }
