@@ -2,8 +2,9 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.css;
+package org.jhotdraw.styleable;
 
+import org.jhotdraw.styleable.StyleableKey;
 import java.util.HashMap;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.ReadOnlyMapProperty;
@@ -15,6 +16,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.KeyMapEntryProperty;
 
 /**
  * {@code StyleablePropertyMap} provides an acceleration structure for
@@ -34,7 +36,7 @@ import org.jhotdraw.collection.Key;
  *
  * @author Werner Randelshofer
  */
-public class StyleablePropertyMap1 {
+public class StyleablePropertyMap {
 
     // ---
     // constant declarations
@@ -105,11 +107,11 @@ public class StyleablePropertyMap1 {
     // constructors
     // ---
 
-    public StyleablePropertyMap1() {
+    public StyleablePropertyMap() {
         this(null);
     }
 
-    public StyleablePropertyMap1(Object bean) {
+    public StyleablePropertyMap(Object bean) {
         user.addListener(inputHandler);
         this.bean = bean;
     }
@@ -336,12 +338,12 @@ public class StyleablePropertyMap1 {
             this.key = key;
             this.metaData = metaData;
 
-            bindBidirectional(new Key.PropertyAt<>(user, key));
+            bindBidirectional(new KeyMapEntryProperty<T>(user, key));
         }
 
         @Override
         public Object getBean() {
-            return StyleablePropertyMap1.this.getBean();
+            return StyleablePropertyMap.this.getBean();
         }
 
         @Override
@@ -404,7 +406,7 @@ public class StyleablePropertyMap1 {
 
         @Override
         public StyleOrigin getStyleOrigin() {
-            return StyleablePropertyMap1.this.getStyleOrigin(key);
+            return StyleablePropertyMap.this.getStyleOrigin(key);
         }
 
     }

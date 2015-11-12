@@ -7,9 +7,12 @@ package org.jhotdraw.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.text.Converter;
+import org.jhotdraw.text.CssBooleanConverter;
+import org.jhotdraw.text.XmlBooleanConverter;
 
 /**
  * DoubleStyleableFigureKey.
@@ -67,4 +70,13 @@ public class BooleanStyleableFigureKey extends SimpleFigureKey<Boolean> implemen
 
     }
 
+    private Converter<Boolean> converter;
+
+    @Override
+    public Converter<Boolean> getConverter() {
+        if (converter == null) {
+            converter = new CssBooleanConverter();
+        }
+        return converter;
+    }
 }

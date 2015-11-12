@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.css;
+package org.jhotdraw.styleable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,17 +15,20 @@ import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.css.AbstractStyleManager;
+import org.jhotdraw.css.AbstractStyleManager;
+import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
+import org.jhotdraw.styleable.StyleableSelectorModel;
 
 /**
  * StyleableStyleManager.
  *
  * @author Werner Randelshofer
  */
-public class StyleableStyleManager extends AbstractStyleManager {
+public class StyleableStyleManager extends AbstractStyleManager<Styleable> {
 
     private final StyleableSelectorModel selectorModel = new StyleableSelectorModel();
 
@@ -41,6 +44,7 @@ public class StyleableStyleManager extends AbstractStyleManager {
      *
      * @param elem The element
      */
+    @Override
     public void applyStylesTo(Styleable elem) {
         applyStylesTo(null, elem);
     }
@@ -56,30 +60,33 @@ public class StyleableStyleManager extends AbstractStyleManager {
         HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
         for (CssMetaData<? extends Styleable, ?> m : metaList) {
             metaMap.put(m.getProperty(), m);
-            /*
-            CssMetaData<Styleable, Object> mObject = (CssMetaData<Styleable, Object>) m;
-            if (origin == null || origin == StyleOrigin.USER_AGENT) {
-                mObject.getStyleableProperty(elem).applyStyle(StyleOrigin.USER_AGENT, null);
-            }
-            if (origin == null || origin == StyleOrigin.AUTHOR) {
-                mObject.getStyleableProperty(elem).applyStyle(StyleOrigin.AUTHOR, null);
-            }*/
         }
 
-        // user agent stylesheet can not override element attributes
+        // user agent stylesheets can not override element attributes
         if (origin == null || origin == StyleOrigin.USER_AGENT) {
-            for (Stylesheet s : userAgentStylesheets) {
+            for (Entry e : getUserAgentStylesheets()) {
+                Stylesheet s = e.getStylesheet();
                 if (s != null) {
                     applyStylesTo(StyleOrigin.USER_AGENT, s, metaMap, elem);
                 }
             }
         }
 
-        // author stylesheet override user agent stylesheet and element attributes
+        // author stylesheet override user agent stylesheets and element attributes
         if (origin == null || origin == StyleOrigin.AUTHOR) {
-            for (Stylesheet s : authorStylesheets) {
+            for (Entry e : getAuthorStylesheets()) {
+                Stylesheet s = e.getStylesheet();
                 if (s != null) {
                     applyStylesTo(StyleOrigin.AUTHOR, s, metaMap, elem);
+                }
+            }
+        }
+        // inline stylesheets override user agent stylesheets, element attributes and author stylesheets
+        if (origin == null || origin == StyleOrigin.INLINE) {
+            for (Entry e : getAuthorStylesheets()) {
+                Stylesheet s = e.getStylesheet();
+                if (s != null) {
+                    applyStylesTo(StyleOrigin.INLINE, s, metaMap, elem);
                 }
             }
         }

@@ -9,12 +9,15 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import javafx.scene.paint.Paint;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.text.Converter;
+import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.CssSizeConverter;
 import org.jhotdraw.text.CssStringConverter;
-import org.jhotdraw.text.DefaultConverter;
+import org.jhotdraw.text.XmlStringConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
@@ -84,4 +87,13 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
 
     }
 
+    private Converter<String> converter;
+
+    @Override
+    public Converter<String> getConverter() {
+        if (converter == null) {
+            converter = new XmlStringConverter();
+        }
+        return converter;
+    }     
 }

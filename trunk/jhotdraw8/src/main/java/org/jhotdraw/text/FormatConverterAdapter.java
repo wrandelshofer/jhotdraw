@@ -1,5 +1,5 @@
 /*
- * @(#)FormatConverterWrapper.java
+ * @(#)FormatConverterAdapter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -18,13 +18,13 @@ import java.text.ParsePosition;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class FormatConverterWrapper extends Format {
+public class FormatConverterAdapter extends Format {
     private final static long serialVersionUID = 1L;
 
 
     private final Converter<Object> converter;
 
-    public FormatConverterWrapper(Converter<?> converter) {
+    public FormatConverterAdapter(Converter<?> converter) {
         @SuppressWarnings("unchecked")
         Converter<Object> temp=(Converter<Object>) converter;
         this.converter = temp;

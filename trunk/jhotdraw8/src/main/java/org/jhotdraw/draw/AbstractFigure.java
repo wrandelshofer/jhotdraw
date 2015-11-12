@@ -18,9 +18,10 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.css.SimpleStyleablePropertyBean;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleableStyleManager;
+import org.jhotdraw.css.StyleManager;
+import org.jhotdraw.styleable.SimpleStyleablePropertyBean;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleableStyleManager;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.FigureKey;
 
@@ -89,7 +90,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
-        for (Key<?> key : Figure.getSupportedKeys(this)) {
+        for (Key<?> key : getSupportedKeys()) {
             if (key instanceof StyleableKey<?>) {
                 StyleableKey<?> sk = (StyleableKey<?>) key;
 
@@ -102,10 +103,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
 
     @Override
     public void applyCss() {
-        styleableProperties.clearNonUserProperties();
+        getStyleableMap().clearNonUserValues();
         Drawing d = getDrawing();
         if (d != null) {
-            StyleableStyleManager styleManager = d.getStyleManager();
+            StyleManager<Figure> styleManager = d.getStyleManager();
             styleManager.applyStylesTo(this);
             for (Figure child : getChildren()) {
                 child.applyCss();

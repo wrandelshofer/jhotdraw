@@ -18,11 +18,11 @@ import org.jhotdraw.draw.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ConverterFormatWrapper implements Converter<Object> {
+public class ConverterFormatAdapter implements Converter<Object> {
 
     private final Format format;
 
-    public ConverterFormatWrapper(Format format) {
+    public ConverterFormatAdapter(Format format) {
         this.format = format;
     }
 

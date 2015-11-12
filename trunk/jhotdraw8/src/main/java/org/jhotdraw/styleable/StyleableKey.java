@@ -2,11 +2,12 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.css;
+package org.jhotdraw.styleable;
 
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.text.Converter;
 
 /**
  * Interface for keys which support styled values from CSS.
@@ -24,6 +25,11 @@ public interface StyleableKey<T> extends Key<T> {
      * @return the meta data
      */
     CssMetaData<? extends Styleable, T> getCssMetaData();
+
+    /**
+     * FIXME this is horribly inefficient since we have already parsed the CSS.
+     */
+    Converter<T> getConverter();
 
     /**
      * Returns the CSS name string.

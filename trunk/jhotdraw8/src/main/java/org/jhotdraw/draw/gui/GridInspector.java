@@ -17,7 +17,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.gui.PlatformUtil;
-import org.jhotdraw.text.FormatConverterWrapper;
+import org.jhotdraw.text.FormatConverterAdapter;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.XmlNumberConverter;
 import org.jhotdraw.util.Resources;

@@ -6,6 +6,7 @@ package org.jhotdraw.css;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * {@code DocumentSelectorModel} provides an API for CSS
@@ -43,8 +44,109 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return false;
     }
 
+    /**
+     * Supports the following pseudo classes:
+     * <ul>
+     * <li>root</li>
+     * <li>nth-child(odd)</li>
+     * <li>nth-child(even)</li>
+     * <li>first-child</li>
+     * <li>last-child</li>
+     * </ul>
+     * Does not support the following pseudo classes:
+     * <ul>
+     * <li>nth-child(2n+1)</li>
+     * <li>nth-last-child(2n+1)</li>
+     * <li>nth-last-child(odd)</li>
+     * <li>nth-last-child(even)</li>
+     * <li>nth-of-type(2n+1)</li>
+     * <li>nth-of-type(even)</li>
+     * <li>nth-of-type(odd)</li>
+     * <li>nth-last-of-type(2n+1)</li>
+     * <li>nth-last-of-type(even)</li>
+     * <li>nth-last-of-type(odd)</li>
+     * <li>first-of-type()</li>
+     * <li>last-of-type()</li>
+     * <li>only-child()</li>
+     * <li>only-of-type()</li>
+     * <li>empty</li>
+     * <li>not(...)</li>
+     * </ul>
+     *
+     * @param element
+     * @param pseudoClass
+     * @return
+     */
     @Override
     public boolean hasPseudoClass(Element element, String pseudoClass) {
+        switch (pseudoClass) {
+            case "root":
+                return element.getOwnerDocument() != null
+                        && element.getOwnerDocument().getDocumentElement() == element;
+            case "nth-child(even)": {
+                int i = getChildIndex(element);
+                return i != -1 && i % 2 == 0;
+            }
+            case "nth-child(odd)": {
+                int i = getChildIndex(element);
+                return i != -1 && i % 2 == 1;
+            }
+            case "first-child": {
+                return isFirstChild(element);
+            }
+            case "last-child": {
+                return isLastChild(element);
+            }
+            default:
+                return false;
+        }
+    }
+
+    private int getChildIndex(Element element) {
+        if (element.getParentNode() != null) {
+            NodeList list = element.getParentNode().getChildNodes();
+
+            for (int i = 0, j = 0, n = list.getLength(); i < n; i++) {
+                if (list.item(i) == element) {
+                    return j;
+                }
+                if (list.item(i) instanceof Element) {
+                    j++;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private boolean isFirstChild(Element element) {
+        if (element.getParentNode() != null) {
+            NodeList list = element.getParentNode().getChildNodes();
+
+            for (int i = 0, n = list.getLength(); i < n; i++) {
+                if (list.item(i) == element) {
+                    return true;
+                }
+                if (list.item(i) instanceof Element) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isLastChild(Element element) {
+        if (element.getParentNode() != null) {
+            NodeList list = element.getParentNode().getChildNodes();
+
+            for (int i = list.getLength()-1; i >= 0; i--) {
+                if (list.item(i) == element) {
+                    return true;
+                }
+                if (list.item(i) instanceof Element) {
+                    return false;
+                }
+            }
+        }
         return false;
     }
 

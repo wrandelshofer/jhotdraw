@@ -11,9 +11,11 @@ import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.text.Converter;
+import org.jhotdraw.text.EnumConverter;
 
 /**
  * EffectStyleableFigureKey.
@@ -57,5 +59,8 @@ public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements
         return cssMetaData;
 
     }
-
+   @Override
+    public Converter<Effect> getConverter() {
+        throw new UnsupportedOperationException("not implemented");
+    }
 }

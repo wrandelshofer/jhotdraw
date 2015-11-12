@@ -15,8 +15,9 @@ import java.util.List;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.css.ast.Stylesheet;
-import org.jhotdraw.draw.css.StyleableStyleManager;
+import org.jhotdraw.styleable.StyleableStyleManager;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
 /**
@@ -81,7 +82,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<Stylesheet>> INLINE_STYLESHEETS = new SimpleFigureKey<>("inlineStylesheets", List.class, "<Stylesheet>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public final static Key<List<String>> INLINE_STYLESHEETS = new SimpleFigureKey<>("inlineStylesheets", List.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the (clip) bounds of the drawing.
      * <p>
@@ -133,5 +134,5 @@ public interface Drawing extends Figure {
      *
      * @return the style manager
      */
-    StyleableStyleManager getStyleManager();
+    StyleManager<Figure> getStyleManager();
 }

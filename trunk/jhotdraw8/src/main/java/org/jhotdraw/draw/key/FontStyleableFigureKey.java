@@ -10,9 +10,10 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.text.Font;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssFontConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
@@ -75,4 +76,13 @@ public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements Sty
 
     }
 
+    private Converter<Font> converter;
+
+    @Override
+    public Converter<Font> getConverter() {
+        if (converter == null) {
+            converter = new CssFontConverter();
+        }
+        return converter;
+    }
 }

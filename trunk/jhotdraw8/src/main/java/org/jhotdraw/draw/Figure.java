@@ -33,10 +33,8 @@ import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
-import javafx.beans.property.ListProperty;
 import javafx.collections.FXCollections;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
@@ -45,7 +43,7 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.IterableTree;
 import org.jhotdraw.collection.IndexedSet;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
@@ -99,7 +97,7 @@ import org.jhotdraw.draw.key.StringStyleableFigureKey;
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
- * {@link org.jhotdraw.draw.css.StyleableKey}. The style information is cached
+ * {@link org.jhotdraw.css.StyleableKey}. The style information is cached
  * in the figure getProperties. When the position of a figure in the tree
  * structure is changed, method {@code applyCss()} must be called to update the
  * style information of the figure and its descendants.</p>
@@ -920,14 +918,15 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     // static methods
     // ---
     /**
-     * Returns all keys declared in the figure class and inherited from parent
-     * classes.
+     * Returns all supported keys of the figure.
+     * <p>
+     * The default implementation returns all declared and inherited keys.
      *
      * @param f A figure.
      * @return the keys
      */
-    public static Set<Key<?>> getSupportedKeys(Figure f) {
-        return getDeclaredAndInheritedKeys(f.getClass());
+    default Set<Key<?>> getSupportedKeys() {
+        return Figure.getDeclaredAndInheritedKeys(this.getClass());
     }
 
     /**

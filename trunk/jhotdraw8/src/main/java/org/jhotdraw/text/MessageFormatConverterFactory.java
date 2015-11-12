@@ -64,49 +64,49 @@ public class MessageFormatConverterFactory implements ConverterFactory {
                 return new WordConverter();
             case "number":
                 if (style == null || style.isEmpty()) {
-                    return new ConverterFormatWrapper(NumberFormat.getInstance(locale));
+                    return new ConverterFormatAdapter(NumberFormat.getInstance(locale));
                 }
                 switch (style) {
                     case "integer":
-                        return new ConverterFormatWrapper(NumberFormat.getIntegerInstance(locale));
+                        return new ConverterFormatAdapter(NumberFormat.getIntegerInstance(locale));
                     case "currency":
-                        return new ConverterFormatWrapper(NumberFormat.getCurrencyInstance(locale));
+                        return new ConverterFormatAdapter(NumberFormat.getCurrencyInstance(locale));
                     case "percent":
-                        return new ConverterFormatWrapper(NumberFormat.getPercentInstance(locale));
+                        return new ConverterFormatAdapter(NumberFormat.getPercentInstance(locale));
                     default:
-                        return new ConverterFormatWrapper(new DecimalFormat(style, DecimalFormatSymbols.getInstance(locale)));
+                        return new ConverterFormatAdapter(new DecimalFormat(style, DecimalFormatSymbols.getInstance(locale)));
                 }
             case "date":
                 if (style == null || style.isEmpty()) {
-                    return new ConverterFormatWrapper(DateFormat.getDateInstance(DateFormat.DEFAULT, locale));
+                    return new ConverterFormatAdapter(DateFormat.getDateInstance(DateFormat.DEFAULT, locale));
                 }
                 switch (style) {
                     case "short":
-                        return new ConverterFormatWrapper(DateFormat.getDateInstance(DateFormat.SHORT, locale));
+                        return new ConverterFormatAdapter(DateFormat.getDateInstance(DateFormat.SHORT, locale));
                     case "medium":
-                        return new ConverterFormatWrapper(DateFormat.getDateInstance(DateFormat.MEDIUM, locale));
+                        return new ConverterFormatAdapter(DateFormat.getDateInstance(DateFormat.MEDIUM, locale));
                     case "long":
-                        return new ConverterFormatWrapper(DateFormat.getDateInstance(DateFormat.LONG, locale));
+                        return new ConverterFormatAdapter(DateFormat.getDateInstance(DateFormat.LONG, locale));
                     case "full":
-                        return new ConverterFormatWrapper(DateFormat.getDateInstance(DateFormat.FULL, locale));
+                        return new ConverterFormatAdapter(DateFormat.getDateInstance(DateFormat.FULL, locale));
                     default:
-                        return new ConverterFormatWrapper(new SimpleDateFormat(style, locale));
+                        return new ConverterFormatAdapter(new SimpleDateFormat(style, locale));
                 }
             case "time":
                 if (style == null || style.isEmpty()) {
-                    return new ConverterFormatWrapper(DateFormat.getTimeInstance(DateFormat.DEFAULT, locale));
+                    return new ConverterFormatAdapter(DateFormat.getTimeInstance(DateFormat.DEFAULT, locale));
                 }
                 switch (style) {
                     case "short":
-                        return new ConverterFormatWrapper(DateFormat.getTimeInstance(DateFormat.SHORT, locale));
+                        return new ConverterFormatAdapter(DateFormat.getTimeInstance(DateFormat.SHORT, locale));
                     case "medium":
-                        return new ConverterFormatWrapper(DateFormat.getTimeInstance(DateFormat.MEDIUM, locale));
+                        return new ConverterFormatAdapter(DateFormat.getTimeInstance(DateFormat.MEDIUM, locale));
                     case "long":
-                        return new ConverterFormatWrapper(DateFormat.getTimeInstance(DateFormat.LONG, locale));
+                        return new ConverterFormatAdapter(DateFormat.getTimeInstance(DateFormat.LONG, locale));
                     case "full":
-                        return new ConverterFormatWrapper(DateFormat.getTimeInstance(DateFormat.FULL, locale));
+                        return new ConverterFormatAdapter(DateFormat.getTimeInstance(DateFormat.FULL, locale));
                     default:
-                        return new ConverterFormatWrapper(new SimpleDateFormat(style, locale));
+                        return new ConverterFormatAdapter(new SimpleDateFormat(style, locale));
                 }
 
             default:

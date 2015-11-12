@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
+import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
@@ -15,8 +16,9 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.draw.css.StyleableStyleManager;
+import org.jhotdraw.styleable.StyleableStyleManager;
 import org.jhotdraw.css.CssParser;
+import org.jhotdraw.css.StyleManager;
 
 /**
  * SimpleDrawing.
@@ -30,7 +32,7 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
      * The style manager is created lazily. If the stylesheet property is
      * changed, the style manager is set to null again.
      */
-    private StyleableStyleManager styleManager = null;
+    private StyleManager<Figure> styleManager = null;
 
     public SimpleDrawing() {
     }
@@ -82,30 +84,28 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
     }
 
     @Override
-    public StyleableStyleManager getStyleManager() {
+    public StyleManager<Figure> getStyleManager() {
         if (styleManager == null) {
-            styleManager = new StyleableStyleManager();
-            try {
-                styleManager.updateStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME),get(USER_AGENT_STYLESHEETS));
-                styleManager.updateStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME),get(AUTHOR_STYLESHEETS));
-            } catch (IOException ex) {
-                System.err.println("Warning could not load user agent stylesheets.");
-                ex.printStackTrace();
-            }
+            styleManager = createStyleManager();
+            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
         }
         return styleManager;
+    }
+    protected StyleManager<Figure> createStyleManager() {
+        StyleManager<?> ret= (StyleManager<Styleable>)new StyleableStyleManager();
+        @SuppressWarnings("unchecked")
+        StyleManager<Figure> rf=(StyleManager<Figure>)ret;
+        return rf;
     }
 
     @Override
     public void stylesheetNotify() {
         if (styleManager != null) {
-            try {
-                styleManager.updateStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME),get(USER_AGENT_STYLESHEETS));
-                styleManager.updateStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME),get(AUTHOR_STYLESHEETS));
-            } catch (IOException ex) {
-                System.err.println("Warning could not load user agent stylesheets.");
-                ex.printStackTrace();
-            }
+            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
         }
         super.stylesheetNotify();
     }

@@ -52,7 +52,7 @@ public interface Key<T> extends Serializable {
      */
     String getName();
 
-    public Class<?> getValueType();
+    public Class<T> getValueType();
 
     public String getValueTypeParameters();
 
@@ -187,58 +187,6 @@ public interface Key<T> extends Serializable {
         return binding;
     }
 
-    /**
-     * This property is bound to a value in the map.
-     */
-    public static class PropertyAt<T> extends ReadOnlyObjectWrapper<T> {
-
-        private MapExpression<Key<?>, Object> map;
-        private Key<T> key;
-        private MapChangeListener<Key<?>, Object> mapListener;
-
-        public PropertyAt(MapExpression<Key<?>, Object> map, Key<T> key) {
-            this.map = map;
-            this.key = key;
-
-            this.mapListener = (MapChangeListener.Change<? extends Key<?>, ? extends Object> change) -> {
-                if (this.key.equals(change.getKey())) {
-                    if (super.get() != change.getValueAdded()) {
-                        @SuppressWarnings("unchecked")
-                        T valueAdded = (T) change.getValueAdded();
-                        set(valueAdded);
-                    }
-                }
-            };
-            map.addListener(mapListener);
-        }
-
-        @Override
-        public T getValue() {
-            return key.get(map);
-        }
-
-        @Override
-        public void setValue(T value) {
-            // We must put the value before we invoke super.setValue(), so that
-            // getValue() can return the new value.
-            if (! key.isAssignable(value)) {
-                throw new IllegalArgumentException("value is not assignable to key. key="+key+" value="+value);
-            }
-            map.put(key, value);
-            super.setValue(value);
-        }
-
-        @Override
-        public void unbind() {
-            super.unbind();
-            if (map != null) {
-                map.removeListener(mapListener);
-                mapListener = null;
-                map = null;
-                key = null;
-            }
-        }
-    }
 
     /**
      * Creates a new property for the map entry specified by this key.
@@ -248,7 +196,7 @@ public interface Key<T> extends Serializable {
      */
     default Property<T> propertyAt(final MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
-        return new PropertyAt<>(map, this);
+        return new KeyMapEntryProperty<>(map, this);
     }
 
     /**
@@ -259,7 +207,7 @@ public interface Key<T> extends Serializable {
      */
     default ReadOnlyProperty<T> readOnlyPropertyAt(final MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
-        return new PropertyAt<>(map, this).getReadOnlyProperty();
+        return new KeyMapEntryProperty<>(map, this);
     }
 
 }
