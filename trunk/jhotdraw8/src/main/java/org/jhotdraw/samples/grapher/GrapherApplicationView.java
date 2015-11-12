@@ -100,7 +100,7 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
     private int counter;
 
     @Override
-    public void init(EventHandler<TaskCompletionEvent<?>> callback) {
+    public void init() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -184,7 +184,6 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         propertiesPane.visibleProperty().set(prefs.getBoolean("view.propertiesPane.visible", true));
 
         inspectorsHBox.getStyleClass().add("inspector");
-        callback.handle(new TaskCompletionEvent<Void>());
     }
 
     private void addInspector(Inspector inspector, String id, List<Node> list) {

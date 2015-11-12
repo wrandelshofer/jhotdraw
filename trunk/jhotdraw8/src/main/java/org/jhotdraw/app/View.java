@@ -6,23 +6,15 @@ package org.jhotdraw.app;
 
 import org.jhotdraw.collection.HierarchicalMap;
 import java.net.URI;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
-import org.jhotdraw.gui.URIChooser;
 
 /**
  * View.
@@ -73,15 +65,8 @@ public interface View extends Disableable, PropertyBean {
     /**
      * Initializes the view. This method must be called before the view can be
      * used.
-     * <p>
-     * The application typically installs a disabler on the view during an init
-     * operation. The disabler is removed when the callback is invoked.
-     * </p>
-     *
-     * @param callback Must be called by the view to report the completion of
-     * the operation.
      */
-    public void init(EventHandler<TaskCompletionEvent<?>> callback);
+    public void init();
 
     /**
      * Returns the scene node which renders the view.
