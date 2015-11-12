@@ -22,8 +22,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
-import org.jhotdraw.app.action.Action;
-import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
 
@@ -35,7 +33,7 @@ import org.jhotdraw.concurrent.TaskCompletionEvent;
 public class TextAreaView extends AbstractView implements Initializable {
 
     @Override
-    public void init(EventHandler<TaskCompletionEvent<?>> handler) {
+    public void init() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -44,7 +42,6 @@ public class TextAreaView extends AbstractView implements Initializable {
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
-        handler.handle(new TaskCompletionEvent<Void>());
     }
 
     @FXML

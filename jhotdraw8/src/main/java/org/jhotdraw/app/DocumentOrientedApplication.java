@@ -81,7 +81,7 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  */
 public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
 
-    private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, "<Boolean>",null);
+    private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, "<Boolean>", null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
     private boolean isSystemMenuSupported;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
@@ -98,7 +98,6 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     private final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper();
     private final SetProperty<Object> disablers = new SimpleSetProperty<>(FXCollections.observableSet());
     private ReadOnlyMapProperty<Key<?>, Object> properties;
-
 
     public DocumentOrientedApplication() {
         disabled.bind(Bindings.not(disablers.emptyProperty()));
@@ -162,14 +161,11 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             protected void succeeded(View v) {
                 v.getActionMap().setParent(getActionMap());
                 v.setApplication(DocumentOrientedApplication.this);
-                v.init(e -> {
-                    // FIXME - check if initialisation succeeded!
-
-                    v.setTitle(getLabels().getString("unnamedFile"));
-                    HierarchicalMap<String, Action> map = v.getActionMap();
-                    map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, v));
-                    callback.accept(v);
-                });
+                v.init();
+                v.setTitle(getLabels().getString("unnamedFile"));
+                HierarchicalMap<String, Action> map = v.getActionMap();
+                map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, v));
+                callback.accept(v);
             }
         };
         execute(t);
@@ -228,26 +224,26 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
-        if (!isSystemMenuSupported) {
+        {
             MenuBar mb = createMenuBar(view.getActionMap());
             mb.setUseSystemMenuBar(true);
             borderPane.setTop(mb);
         }
         Scene scene = new Scene(borderPane);
-        
+
         PreferencesUtil.installStagePrefsHandler(Preferences.userNodeForPackage(DocumentOrientedApplication.class), "stage", stage);
-        
+
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> {
             event.consume();
-            
-            for (StackTraceElement element:new Throwable().getStackTrace()) {
+
+            for (StackTraceElement element : new Throwable().getStackTrace()) {
                 if (element.getMethodName().contains("Quit")) {
                     view.set(QUIT_APPLICATION, true);
                     break;
                 }
             }
-            
+
             view.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
         stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
@@ -340,7 +336,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
 
         // Auto close feature
         if (views.isEmpty()/*&&view.get(QUIT_APPLICATION)*/) {
-           exit();
+            exit();
         }
     }
 
