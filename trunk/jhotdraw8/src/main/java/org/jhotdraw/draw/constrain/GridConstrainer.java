@@ -105,7 +105,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * Whether to snap to the grid.
      */
-    private final BooleanProperty snapToGrid = new SimpleBooleanProperty(this, "snapToGrid") {
+    private final BooleanProperty snapToGrid = new SimpleBooleanProperty(this, "snapToGrid", true) {
 
         @Override
         public void invalidated() {
