@@ -7,6 +7,7 @@ package org.jhotdraw.css;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.css.StyleOrigin;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
@@ -20,7 +21,7 @@ import org.w3c.dom.NodeList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DocumentStyleManager extends AbstractStyleManager {
+public class DocumentStyleManager extends AbstractStyleManager<Element> {
 
     private final DocumentSelectorModel selectorModel = new DocumentSelectorModel();
 
@@ -36,11 +37,16 @@ public class DocumentStyleManager extends AbstractStyleManager {
         }
     }
 
+    @Override
     public void applyStylesTo(Element elem) {
         HashMap<String, String> applicableDeclarations = new HashMap<>();
 
-        // user agent stylesheet can not override element attributes
-        for (Stylesheet s : userAgentStylesheets) {
+        // user agent stylesheets can not override element attributes
+        for (Entry e : getUserAgentStylesheets()) {
+            Stylesheet s = e.getStylesheet();
+            if (s == null) {
+                continue;
+            }
             for (StyleRule r : s.getRulesets()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
@@ -52,14 +58,34 @@ public class DocumentStyleManager extends AbstractStyleManager {
             }
         }
 
-        // author stylesheet override user agent stylesheet and element attributes
-        for (Stylesheet s : authorStylesheets) {
+        // author stylesheets override user agent stylesheet and element attributes
+        for (Entry e : getAuthorStylesheets()) {
+            Stylesheet s = e.getStylesheet();
+            if (s == null) {
+                continue;
+            }
             for (StyleRule r : s.getRulesets()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
                         applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                     }
                 }
+
+            }
+        }
+        // inline stylesheets override user agent stylesheet, element attributes and author stylesheets
+        for (Entry e : getInlineStylesheets()) {
+            Stylesheet s = e.getStylesheet();
+            if (s == null) {
+                continue;
+            }
+            for (StyleRule r : s.getRulesets()) {
+                if (r.getSelectorGroup().matches(selectorModel, elem)) {
+                    for (Declaration d : r.getDeclarations()) {
+                        applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
+                    }
+                }
+
             }
         }
 

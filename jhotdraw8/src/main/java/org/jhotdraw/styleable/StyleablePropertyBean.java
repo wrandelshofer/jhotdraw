@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.css;
+package org.jhotdraw.styleable;
 
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;

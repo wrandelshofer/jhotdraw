@@ -7,9 +7,11 @@ package org.jhotdraw.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.text.Converter;
+import org.jhotdraw.text.EnumConverter;
 
 /**
  * EnumStyleableFigureKey.
@@ -60,4 +62,13 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
 
     }
 
+    private Converter<T> converter;
+
+    @Override
+    public Converter<T> getConverter() {
+        if (converter == null) {
+            converter = new EnumConverter<T>(getValueType());
+        }
+        return converter;
+    }
 }

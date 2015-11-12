@@ -2,10 +2,12 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.css;
+package org.jhotdraw.styleable;
 
+import org.jhotdraw.styleable.StyleableKey;
 import javafx.css.CssMetaData;
 import org.jhotdraw.collection.SimpleKey;
+import org.jhotdraw.text.Converter;
 
 /**
  * SimpleStyleableKey.
@@ -17,6 +19,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
     private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, T> cssMetaData;
+    private final Converter<T> converter;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -26,8 +29,8 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param clazz The type of the value.
      * @param metaData The CSS meta data.
      */
-    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData) {
-        this(key, clazz, "", metaData, null);
+    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
+        this(key, clazz, "", metaData, converter, null);
     }
 
     /**
@@ -39,8 +42,8 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param metaData The CSS meta data.
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, T defaultValue) {
-        this(key, clazz, "", metaData, defaultValue);
+    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+        this(key, clazz, "", metaData, converter, defaultValue);
     }
 
     /**
@@ -54,14 +57,20 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param metaData The CSS meta data.
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<?> clazz, String typeParameters, CssMetaData<?, T> metaData, T defaultValue) {
+    public SimpleStyleableKey(String key, Class<?> clazz, String typeParameters, CssMetaData<?, T> metaData,  Converter<T> converter,T defaultValue) {
         super(key, clazz, typeParameters, defaultValue);
+        this.converter=converter;
         this.cssMetaData = metaData;
     }
 
     @Override
     public CssMetaData<?, T> getCssMetaData() {
         return null;
+    }
+
+    @Override
+    public Converter<T> getConverter() {
+        return converter;
     }
 
 }

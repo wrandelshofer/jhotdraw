@@ -4,19 +4,6 @@
  */
 package org.jhotdraw.collection;
 
-import java.io.Serializable;
-import java.util.Map;
-import java.util.Objects;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.MapExpression;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.MapChangeListener;
-
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
  * <p>
@@ -62,8 +49,10 @@ public class SimpleKey<T> implements Key<T> {
      * to specify the type parameters as a string.
      */
     private final String typeParameters;
-    
-    /** Whether the value may be set to null. */
+
+    /**
+     * Whether the value may be set to null.
+     */
     private final boolean isNullable;
 
     /**
@@ -100,8 +89,9 @@ public class SimpleKey<T> implements Key<T> {
      * @param defaultValue The default value.
      */
     public SimpleKey(String name, Class<?> clazz, String typeParameters, T defaultValue) {
-        this(name, clazz, "", true,defaultValue);
+        this(name, clazz, "", true, defaultValue);
     }
+
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
@@ -129,16 +119,15 @@ public class SimpleKey<T> implements Key<T> {
                         + typeParameters);
             }
         }
-        
-        if (!isNullable&&defaultValue==null) {
+
+        if (!isNullable && defaultValue == null) {
             throw new IllegalArgumentException("defaultValue may not be null if isNullable==false");
         }
-    
-        
+
         this.name = name;
         this.clazz = clazz;
         this.typeParameters = typeParameters;
-        this.isNullable=isNullable;
+        this.isNullable = isNullable;
         this.defaultValue = defaultValue;
     }
 
@@ -151,9 +140,12 @@ public class SimpleKey<T> implements Key<T> {
     public String getName() {
         return name;
     }
-     @Override
-    public Class<?> getValueType() {
-        return clazz;
+
+    @Override
+    public Class<T> getValueType() {
+        @SuppressWarnings("unchecked")
+        Class<T> ret= (Class<T>) clazz;
+        return ret;
     }
 
     @Override
@@ -175,6 +167,7 @@ public class SimpleKey<T> implements Key<T> {
     public T getDefaultValue() {
         return defaultValue;
     }
+
     @Override
     public boolean isNullable() {
         return isNullable;

@@ -1,8 +1,8 @@
-/* @(#)StyleablePropertyMap.java
+/* @(#)StyleableMap.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.css;
+package org.jhotdraw.styleable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,25 +10,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.MapPropertyBase;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanPropertyBase;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerPropertyBase;
-import javafx.beans.property.ReadOnlyMapPropertyBase;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
 import org.jhotdraw.beans.ListenerSupport;
+import org.jhotdraw.collection.Key;
 
 /**
- * {@code StyleablePropertyMap} is a map which stores a value for each key and
- * each {@link StyleOrigin}.
+ * {@code StyleableMap} is a map which stores separate values for each
+ * {@code StyleOrigin}.
  *
  * @author Werner Randelshofer
  */
-public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
-
+public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
     private static class StyledValue {
 
@@ -42,7 +36,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
          * Contains a slot for each of the four possible origins. The ordinal
          * number of StyleOrigin is used as an index.
          */
-        private Object[] values = {NO_VALUE,NO_VALUE,NO_VALUE,NO_VALUE};
+        private Object[] values = {NO_VALUE, NO_VALUE, NO_VALUE, NO_VALUE};
 
         public <T> T removeValue(StyleOrigin origin) {
             if (hasValue(origin)) {
@@ -52,7 +46,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
                 values[i] = NO_VALUE;
                 if (this.origin == origin) {
                     for (int j = origin.ordinal() - 1; j <= 0; j--) {
-                        if (values[j]!=NO_VALUE) {
+                        if (values[j] != NO_VALUE) {
                             this.origin = ORIGINS[j];
                             break;
                         }
@@ -77,7 +71,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
         }
 
         public boolean hasValue(StyleOrigin origin) {
-            return values[origin.ordinal()]!=NO_VALUE;
+            return values[origin.ordinal()] != NO_VALUE;
         }
 
         public boolean isEmpty() {
@@ -102,7 +96,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
     private ListenerSupport<InvalidationListener> invalidationListenerSupport;
     private final Map<K, StyledValue> backingMap;
 
-    public StyleablePropertyMap() {
+    public StyleableMap() {
         this.backingMap = new HashMap<>();
     }
 
@@ -115,7 +109,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
         private final boolean wasRemoved;
 
         public SimpleChange(K key, V old, V added, boolean wasAdded, boolean wasRemoved) {
-            super(StyleablePropertyMap.this);
+            super(StyleableMap.this);
             assert (wasAdded || wasRemoved);
             this.key = key;
             this.old = old;
@@ -245,6 +239,10 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
         return sv == null ? false : sv.hasValue(o);
     }
 
+    public <T> boolean containsStyledKey(Key<T> key) {
+        return backingMap.containsKey(key);
+    }
+
     @Override
     public boolean containsValue(Object value) {
         return containsValue(StyleOrigin.USER, value);
@@ -265,21 +263,28 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
     @Override
     public V get(Object key) {
-        return get(StyleOrigin.USER, key);
+        @SuppressWarnings("unchecked")
+        V ret = get(StyleOrigin.USER, (K) key);
+        return ret;
     }
 
-    public V get(StyleOrigin o, Object key) {
+    public V get(StyleOrigin o, K key) {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
         V ret = sv == null ? null : (V) sv.getValue(o);
         return ret;
     }
 
-    public V getStyled(Object key) {
+    public V getStyled(K key) {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
         V ret = sv == null ? null : (V) sv.getValue(sv.getOrigin());
         return ret;
+    }
+
+    public StyleOrigin getStyleOrigin(Object key) {
+        StyledValue sv = backingMap.get(key);
+        return sv == null ? null : sv.getOrigin();
     }
 
     @Override
@@ -307,27 +312,27 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
     @Override
     @SuppressWarnings("unchecked")
     public V remove(Object key) {
-
-        return remove(StyleOrigin.USER, key);
+        return remove(StyleOrigin.USER, (K) key);
     }
 
-    @SuppressWarnings("unchecked")
-    public V remove(StyleOrigin o, Object key) {
+    public V remove(StyleOrigin o, K key) {
         StyledValue sv = backingMap.get(key);
         V ret = null;
         boolean hadValue;
         if (sv != null && sv.hasValue(o)) {
             hadValue = true;
-            ret = (V) sv.removeValue(o);
-            if (sv.isEmpty()) {
-                backingMap.remove(key);
-            }
+            ret = sv.removeValue(o);
+            // We do not remove empty values because the values will be
+            // probably set right again after the map was cleared.
+            /*if (sv.isEmpty()) {
+             backingMap.remove(key);
+             }*/
         } else {
             hadValue = false;
             ret = null;
         }
         if (hadValue && o == StyleOrigin.USER) {
-            callObservers(new SimpleChange((K) key, ret, null, false, true));
+            callObservers(new SimpleChange(key, ret, null, false, true));
         }
         return ret;
     }
@@ -350,6 +355,10 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
         clear(StyleOrigin.USER);
     }
 
+    public void removeAll(StyleOrigin o) {
+        clear(o);
+    }
+
     public void clear(StyleOrigin o) {
         for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
             Entry<K, StyledValue> e = i.next();
@@ -357,10 +366,30 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
             StyledValue sv = e.getValue();
             @SuppressWarnings("unchecked")
             V val = (V) sv.removeValue(o);
-            if (sv.isEmpty()) {
-                i.remove();
+            // We do not remove empty values because the values will be
+            // probably set right again after the map was cleared.
+            /*if (sv.isEmpty()) {
+             i.remove();
+             }*/
+            if (o == StyleOrigin.USER) {
+                callObservers(new SimpleChange(key, val, null, false, true));
             }
-            callObservers(new SimpleChange(key, val, null, false, true));
+        }
+    }
+
+    public void clearNonUserValues() {
+        for (Iterator<Entry<K, StyledValue>> i = backingMap.entrySet().iterator(); i.hasNext();) {
+            Entry<K, StyledValue> e = i.next();
+            K key = e.getKey();
+            StyledValue sv = e.getValue();
+            sv.removeValue(StyleOrigin.INLINE);
+            sv.removeValue(StyleOrigin.AUTHOR);
+            sv.removeValue(StyleOrigin.USER_AGENT);
+             // We do not remove empty values because the values will be
+            // probably set right again after the map was cleared.
+            /*if (sv.isEmpty()) {
+             i.remove();
+             }*/
         }
     }
 
@@ -417,17 +446,17 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
         @Override
         public int size() {
-            return StyleablePropertyMap.this.size(ksetOrigin);
+            return StyleableMap.this.size(ksetOrigin);
         }
 
         @Override
         public boolean isEmpty() {
-            return StyleablePropertyMap.this.isEmpty(ksetOrigin);
+            return StyleableMap.this.isEmpty(ksetOrigin);
         }
 
         @Override
         public boolean contains(Object o) {
-            return StyleablePropertyMap.this.containsKey(ksetOrigin, o);
+            return StyleableMap.this.containsKey(ksetOrigin, o);
         }
 
         @Override
@@ -469,7 +498,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
                 @Override
                 public void remove() {
-                    StyleablePropertyMap.this.remove(ksetOrigin, lastKey);
+                    StyleableMap.this.remove(ksetOrigin, lastKey);
                 }
 
             };
@@ -509,7 +538,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
         @Override
         public boolean remove(Object o) {
-            return StyleablePropertyMap.this.remove(o) != null;
+            return StyleableMap.this.remove(o) != null;
         }
 
         @Override
@@ -542,9 +571,11 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
                     if (sv.hasValue(ksetOrigin)) {
                         removed = true;
                         V value = sv.removeValue(ksetOrigin);
-                        if (sv.isEmpty()) {
+                        // We do not remove empty values because the values will be
+                        // probably set right again after the map was cleared.
+                        /*if (sv.isEmpty()) {
                             i.remove();
-                        }
+                        }*/
                         callObservers(new SimpleChange(key, value, null, false, true));
                     }
                 }
@@ -559,7 +590,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
         @Override
         public void clear() {
-            StyleablePropertyMap.this.clear(ksetOrigin);
+            StyleableMap.this.clear(ksetOrigin);
         }
 
         @Override
@@ -603,17 +634,17 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
         @Override
         public int size() {
-            return StyleablePropertyMap.this.size(ksetOrigin);
+            return StyleableMap.this.size(ksetOrigin);
         }
 
         @Override
         public boolean isEmpty() {
-            return StyleablePropertyMap.this.isEmpty(ksetOrigin);
+            return StyleableMap.this.isEmpty(ksetOrigin);
         }
 
         @Override
         public boolean contains(Object o) {
-            return StyleablePropertyMap.this.containsValue(ksetOrigin, o);
+            return StyleableMap.this.containsValue(ksetOrigin, o);
         }
 
         @Override
@@ -659,7 +690,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
                 @Override
                 public void remove() {
-                    StyleablePropertyMap.this.remove(ksetOrigin, lastKey);
+                    StyleableMap.this.remove(ksetOrigin, lastKey);
                 }
 
             };
@@ -755,7 +786,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
         @Override
         public void clear() {
-            StyleablePropertyMap.this.clear(ksetOrigin);
+            StyleableMap.this.clear(ksetOrigin);
         }
 
         @Override
@@ -858,12 +889,12 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
         @Override
         public int size() {
-            return StyleablePropertyMap.this.size(oesOrigin);
+            return StyleableMap.this.size(oesOrigin);
         }
 
         @Override
         public boolean isEmpty() {
-            return StyleablePropertyMap.this.isEmpty(oesOrigin);
+            return StyleableMap.this.isEmpty(oesOrigin);
         }
 
         @Override
@@ -910,7 +941,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
                 @Override
                 public void remove() {
-                    StyleablePropertyMap.this.remove(oesOrigin, lastEntry.getKey());
+                    StyleableMap.this.remove(oesOrigin, lastEntry.getKey());
                 }
 
             };
@@ -937,7 +968,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
         @SuppressWarnings("unchecked")
         public boolean remove(Object o) {
             Entry<K, V> entry = (Entry<K, V>) o;
-            return StyleablePropertyMap.this.remove(oesOrigin, entry.getKey()) != null;
+            return StyleableMap.this.remove(oesOrigin, entry.getKey()) != null;
         }
 
         @Override
@@ -966,7 +997,7 @@ public class StyleablePropertyMap<K, V> implements ObservableMap<K, V> {
 
         @Override
         public void clear() {
-            StyleablePropertyMap.this.clear(oesOrigin);
+            StyleableMap.this.clear(oesOrigin);
         }
 
         @Override

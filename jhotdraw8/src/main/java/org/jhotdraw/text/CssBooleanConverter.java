@@ -11,17 +11,12 @@ import java.text.ParseException;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * Converts a {@code Boolean} into the XML String representation.
- * <p>
- * Reference:
- * <a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#double">W3C: XML
- * Schema Part 2: Datatypes Second Edition: 3.2.5 double</a>
- * </p>
+ * Converts a {@code Boolean} into the CSS String representation.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class XmlBooleanConverter implements Converter<Boolean> {
+public class CssBooleanConverter implements Converter<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +26,7 @@ public class XmlBooleanConverter implements Converter<Boolean> {
     /**
      * Creates a new instance.
      */
-    public XmlBooleanConverter() {
+    public CssBooleanConverter() {
     }
 
     @Override

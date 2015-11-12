@@ -5,14 +5,16 @@
 package org.jhotdraw.draw.key;
 
 import java.util.function.Function;
+import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.paint.Paint;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
@@ -86,4 +88,13 @@ public class PaintStyleableFigureKey extends SimpleFigureKey<Paint> implements S
 
     }
 
+    private Converter<Paint> converter;
+
+    @Override
+    public Converter<Paint> getConverter() {
+        if (converter == null) {
+            converter = new CssPaintConverter();
+        }
+        return converter;
+    }   
 }

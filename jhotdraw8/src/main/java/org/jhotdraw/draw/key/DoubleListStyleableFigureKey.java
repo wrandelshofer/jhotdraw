@@ -11,8 +11,9 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleablePropertyBean;
+import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssSizeListConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
@@ -88,6 +89,18 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> 
     @Override
     public CssMetaData<?, List<Double>> getCssMetaData() {
         return cssMetaData;
-
     }
+
+
+    private Converter<List<Double>> converter;
+
+    @Override
+    public Converter<List<Double>> getConverter() {
+        if (converter == null) {
+            converter = new CssSizeListConverter();
+        }
+        return converter;
+    }
+    
+    
 }

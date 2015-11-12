@@ -12,8 +12,9 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.css.StyleableKey;
-import org.jhotdraw.draw.css.StyleablePropertyBean;
+import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleablePropertyBean;
+import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssObservableWordListConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
@@ -91,4 +92,14 @@ public class ObservableWordListStyleableFigureKey extends SimpleFigureKey<Observ
         return cssMetaData;
 
     }
+
+    private Converter<ObservableList<String>> converter;
+
+    @Override
+    public Converter<ObservableList<String>> getConverter() {
+        if (converter == null) {
+            converter = new CssObservableWordListConverter();
+        }
+        return converter;
+    }    
 }

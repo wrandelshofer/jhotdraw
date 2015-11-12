@@ -3,7 +3,7 @@
  * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
  * Alle Rechte vorbehalten. 
  */
-package org.jhotdraw.draw.css;
+package org.jhotdraw.styleable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,7 +77,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
             if (attributeName.equals(item.getProperty())) {
                 Object value = item.getStyleableProperty(element).getValue();
 
-                // this is messy. we should be able to use the converter to 
+                // FIXME this is wrong. we should be able to use the converter to 
                 // convert the value from the object type to a CSS String.
                 return value == null ? "" : value.toString();
             }
