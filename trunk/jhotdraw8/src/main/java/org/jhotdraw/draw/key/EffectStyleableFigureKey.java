@@ -15,6 +15,7 @@ import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
+import org.jhotdraw.text.CssEffectConverter;
 import org.jhotdraw.text.EnumConverter;
 
 /**
@@ -24,7 +25,7 @@ import org.jhotdraw.text.EnumConverter;
 public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements StyleableKey<Effect> {
 
     final static long serialVersionUID = 1L;
-    
+    private final CssEffectConverter converter=new CssEffectConverter();
     private final CssMetaData<? extends Styleable, Effect> cssMetaData;
 
     /**
@@ -61,6 +62,6 @@ public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements
     }
    @Override
     public Converter<Effect> getConverter() {
-        throw new UnsupportedOperationException("not implemented");
+       return converter;
     }
 }

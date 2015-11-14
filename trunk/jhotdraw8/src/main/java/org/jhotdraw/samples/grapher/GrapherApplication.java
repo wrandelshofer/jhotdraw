@@ -42,7 +42,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
         map.put(SendToBackAction.ID, new SendToBackAction(this, null));
         map.put(BringToFrontAction.ID, new BringToFrontAction(this, null));
         Action a;
-        map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherApplicationView) view).getPropertiesPane(),
+        map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherView) view).getPropertiesPane(),
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
         a.set(Action.SELECTED_KEY, Preferences.userNodeForPackage(GrapherApplication.class).getBoolean("view.propertiesPane.visible", true));
@@ -51,7 +51,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
     @Override
     public View instantiateView() {
-        GrapherApplicationView v = new GrapherApplicationView();
+        GrapherView v = new GrapherView();
         return v;
     }
 

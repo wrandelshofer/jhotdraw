@@ -48,6 +48,16 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @return The styled value.
      */
     public <T> T getStyled(Key<T> key);
+    /**
+     * Sets a styled value.
+     *
+     * @param <T> The value type
+     * @param origin The style origin
+     * @param key The property key
+     * @param value The new value
+     * @return The old value of that origin
+     */
+    public <T> T setStyled(StyleOrigin origin, Key<T> key, T value);
 
     /**
      * Removes a value.

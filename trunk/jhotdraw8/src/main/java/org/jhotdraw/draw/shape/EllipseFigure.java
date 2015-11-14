@@ -12,14 +12,12 @@ import javafx.scene.transform.Transform;
 import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
-import org.jhotdraw.draw.key.DirtyBits;
-import org.jhotdraw.draw.key.DirtyMask;
+import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
-import static org.jhotdraw.draw.shape.RectangleFigure.BOUNDS;
 
 /**
  * Renders a {@code javafx.scene.shape.Ellipse}.
@@ -27,7 +25,7 @@ import static org.jhotdraw.draw.shape.RectangleFigure.BOUNDS;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends AbstractShapeFigure {
+public class EllipseFigure extends AbstractLeafFigure implements StrokedShapeFigure, FilledShapeFigure {
 
     /**
      * The CSS type selector for this object is {@code "Ellipse"}.
@@ -76,7 +74,8 @@ public class EllipseFigure extends AbstractShapeFigure {
     public void updateNode(RenderContext drawingView, Node node) {
         Ellipse n = (Ellipse) node;
         applyFigureProperties(n);
-        applyShapeProperties(n);
+        applyStrokedShapeProperties(n);
+        applyFilledShapeProperties(n);
         Rectangle2D r = get(BOUNDS);
         n.setCenterX(r.getMinX() + r.getWidth() * 0.5);
         n.setCenterY(r.getMinY() + r.getHeight() * 0.5);
@@ -94,4 +93,15 @@ public class EllipseFigure extends AbstractShapeFigure {
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
+
+    @Override
+    public void layout() {
+        // empty
+    }
+    
+    @Override
+    public boolean isLayoutable() {
+        return false;
+    }
+
 }

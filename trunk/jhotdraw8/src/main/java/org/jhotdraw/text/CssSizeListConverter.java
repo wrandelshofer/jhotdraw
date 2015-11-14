@@ -10,8 +10,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javafx.geometry.Point2D;
-import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
@@ -23,14 +21,15 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class CssSizeListConverter implements Converter<List<Double>> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,choice,0#none|1#{1,list,{2,size}|[ ]+}}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, List<Double> value) throws IOException {
-        Object[] v = new Object[value.size() + 1];
+        Object[] v = new Object[value.size() + 2];
         v[0] = value.size();
+        v[1] = value.size();
         for (int i = 0, n = value.size(); i < n; i++) {
-            v[i + 1] = value.get(i);
+            v[i + 2] = value.get(i);
         }
         formatter.toString(out, v);
     }
@@ -38,9 +37,10 @@ public class CssSizeListConverter implements Converter<List<Double>> {
     @Override
     public List<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ArrayList<Double> l = new ArrayList<>((int) v[0]);
-        for (int i = 0, n = (int) v[0]; i < n; i++) {
-            l.add((Double) v[i + 1]);
+        if ((double)v[0]==0.0) return Collections.emptyList();
+        ArrayList<Double> l = new ArrayList<>((int) v[1]);
+        for (int i = 0, n = (int) v[1]; i < n; i++) {
+            l.add((Double) v[i + 2]);
         }
         return l;
     }

@@ -16,7 +16,7 @@ import org.jhotdraw.draw.DrawingView;
  * AbstractDrawingInspector.
  * @author Werner Randelshofer
  */
-public abstract class AbstractDrawingInspector extends BorderPane implements Inspector {
+public abstract class AbstractDrawingInspector implements Inspector {
     protected DrawingView drawingView;
 
     private final ChangeListener<Drawing> drawingListener = (ObservableValue<? extends Drawing> o, Drawing oldValue, Drawing newValue) -> {
@@ -38,11 +38,6 @@ public abstract class AbstractDrawingInspector extends BorderPane implements Ins
         }
         onDrawingViewChanged(oldValue, newValue);
         onDrawingChanged(oldDrawing, newDrawing);
-    }
-
-    @Override
-    public Node getNode() {
-        return this;
     }
 
     /** Can be overridden by subclasses. This implementation is empty. 

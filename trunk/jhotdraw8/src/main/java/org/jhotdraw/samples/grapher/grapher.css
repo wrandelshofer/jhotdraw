@@ -1,7 +1,62 @@
-/*
- * Empty Stylesheet file.
+/* @(#)grapher.css
+ * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
  */
 
-.drawingViewScrollPane>* {
+/* The layout of the grapher is as follows:
+
+   .tools
+      this is a ToolBar
+
+   .main
+      main is a divider pane with .master, .view and .details panes.
+      each pane is a BorderPane
+
+   .status
+      this is a HBox to which we add labels and progress bars as needed
+*/
+
+.tools  {
+}
+
+.main {
+    
+}
+
+.master {
+    -fx-background-color: #fff;
+}
+
+.view > * {
     -fx-background-color: #555;
+}
+
+.details {
+}
+
+.status  {
+}
+
+
+.main > .split-pane-divider {  
+    -fx-padding: 0 1px 0 1px;  
+} 
+
+/* A control which is placed flush to all sides
+ * does not need a border.
+ */
+.flush {
+    -fx-background-insets: 0, 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+.flush:focused {
+    -fx-background-insets: 0, 0;
+}
+.flush .corner {
+    -fx-background-insets: 0, 0;
+}
+
+.flush > .scroll-bar {
+    -fx-background-insets: 0;
 }

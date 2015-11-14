@@ -12,16 +12,16 @@
 
 <GridPane hgap="4.0" styleClass="inspector" vgap="4.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label text="%attribute.canvasFillColor.shortLabelText">
+      <Label text="%attribute.drawingFillColor.shortLabelText">
          <tooltip>
-            <Tooltip text="%attribute.canvasFillColor.toolTipText" />
+            <Tooltip text="%attribute.drawingFillColor.toolTipText" />
          </tooltip>
       </Label>
       <HBox alignment="CENTER_LEFT" fillHeight="false" GridPane.columnIndex="1">
          <children>
             <TextField fx:id="backgroundColorField" prefColumnCount="10">
                <tooltip>
-                  <Tooltip text="%attribute.canvasFillColor.toolTipText" />
+                  <Tooltip text="%attribute.drawingFillColor.toolTipText" />
                </tooltip>
             </TextField>
             <ColorPicker fx:id="backgroundColorPicker" style="-fx-color-label-visible: false;" />
@@ -30,15 +30,15 @@
             <Insets bottom="4.0" left="4.0" right="4.0" />
          </opaqueInsets>
       </HBox>
-      <Label fx:id="widthLabel" text="%attribute.canvasWidth.shortLabelText" GridPane.rowIndex="1">
+      <Label fx:id="widthLabel" text="%attribute.drawingWidth.shortLabelText" GridPane.rowIndex="1">
          <tooltip>
-            <Tooltip text="%attribute.canvasWidth.toolTipText" />
+            <Tooltip text="%attribute.drawingWidth.toolTipText" />
          </tooltip>
       </Label>
       <TextField fx:id="widthField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label fx:id="heightLabel" text="%attribute.canvasHeight.shortLabelText" GridPane.rowIndex="2">
+      <Label fx:id="heightLabel" text="%attribute.drawingHeight.shortLabelText" GridPane.rowIndex="2">
          <tooltip>
-            <Tooltip text="%attribute.canvasHeight.toolTipText" />
+            <Tooltip text="%attribute.drawingHeight.toolTipText" />
          </tooltip>
       </Label>
       <TextField fx:id="heightField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="2" />

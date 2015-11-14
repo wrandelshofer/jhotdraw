@@ -17,7 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.shape.AbstractShapeFigure;
+import org.jhotdraw.draw.shape.StrokedShapeFigure;
 import static java.lang.Math.*;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +33,7 @@ import org.jhotdraw.draw.shape.LineFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineConnectionFigure extends AbstractShapeFigure {
+public class LineConnectionFigure extends AbstractLeafFigure implements StrokedShapeFigure {
 
     /**
      * The CSS type selector for this object is {@code "LineConnection"}.
@@ -142,7 +142,7 @@ public class LineConnectionFigure extends AbstractShapeFigure {
     public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
         applyFigureProperties(lineNode);
-        applyShapeProperties(lineNode);
+        applyStrokedShapeProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());

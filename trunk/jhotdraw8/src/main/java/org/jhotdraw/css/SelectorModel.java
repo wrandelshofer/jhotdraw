@@ -5,6 +5,9 @@
  */
 package org.jhotdraw.css;
 
+import java.util.Set;
+import org.jhotdraw.draw.Figure;
+
 /**
  * This is a model on which a {@code CssAST.SelectorGroup} can perform a match
  * operation.
@@ -49,6 +52,14 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name
      */
     boolean hasAttribute(T element, String attributeName);
+
+    /**
+     * Returns all styleable attributes of the element.
+     *
+     * @param element An element of the document
+     * @return a set of styleable attributes.
+     */
+    Set<String> getAttributeNames(T element);
 
     /**
      * Returns true if the element has an attribute with the specified name and
@@ -133,4 +144,34 @@ public interface SelectorModel<T> {
      * sibling.
      */
     T getPreviousSibling(T element);
+
+    /** Returns the attribute value with the given name.
+     * 
+     * @param element The element
+     * @param name The attribute name
+     * @return The attribute value. Returns null if the element does not have
+     * an attribute with this value.
+     */
+    public String getAttributeValue(T element, String name);
+
+    
+    /** Returns the id of the element.
+     * 
+     * @param e
+     * @return the id or null if the element does not have an id.
+     */
+    public String getId(T element);
+    /** Returns the type of the element.
+     * 
+     * @param e
+     * @return the type of the element.
+     */
+    public String getType(T element);
+    
+    /** Returns the style classes of the element.
+     * 
+     * @param e
+     * @return the style classes or an empty set.
+     */
+    public Set<String> getStyleClasses(T element);
 }

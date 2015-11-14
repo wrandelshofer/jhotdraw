@@ -7,6 +7,8 @@ package org.jhotdraw.styleable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import javafx.css.CssMetaData;
 import javafx.css.ParsedValue;
@@ -18,9 +20,11 @@ import org.jhotdraw.css.AbstractStyleManager;
 import org.jhotdraw.css.AbstractStyleManager;
 import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.CssParser;
+import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.styleable.StyleableSelectorModel;
 
 /**
@@ -45,7 +49,7 @@ public class StyleableStyleManager extends AbstractStyleManager<Styleable> {
      * @param elem The element
      */
     @Override
-    public void applyStylesTo(Styleable elem) {
+    public void applyStylesTo(Styleable elem, Map<String, Set<Styleable>> pseudoClassStates) {
         applyStylesTo(null, elem);
     }
 
@@ -149,6 +153,16 @@ public class StyleableStyleManager extends AbstractStyleManager<Styleable> {
                 ex.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public SelectorModel<Styleable> getSelectorModel() {
+        return selectorModel;
+    }
+
+    @Override
+    public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, Figure f, HashMap<String, Set<Figure>> pseudoStyles) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private static class ParsedValueImpl<V, T> extends ParsedValue<V, T> {

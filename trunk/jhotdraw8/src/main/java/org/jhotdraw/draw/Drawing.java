@@ -84,10 +84,10 @@ public interface Drawing extends Figure {
      */
     public final static Key<List<String>> INLINE_STYLESHEETS = new SimpleFigureKey<>("inlineStylesheets", List.class, "<String>", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
-     * Defines the (clip) bounds of the drawing.
+     * Defines the canvas width.
      * <p>
-     * The bounds are used to determine the area of the drawing when it is
-     * printed or exported to an image. {@code DrawingView} typically ignores
+     * Canvas width and height are used to determine the bounds of the drawing
+     * when it is printed or exported. {@code DrawingView} typically ignores
      * this value so that the user can still edit figures which are outside of
      * the bounds of the drawing.
      * </p>
@@ -96,22 +96,20 @@ public interface Drawing extends Figure {
      */
     public final static FigureKey<Double> WIDTH = new SimpleFigureKey<Double>("width", Double.class,false, DirtyMask.of(DirtyBits.NODE), 640.0);
     /**
-     * Defines the (clip) bounds of the drawing.
+     * Defines the canvas height.
      * <p>
-     * The bounds are used to determine the area of the drawing when it is
-     * printed or exported to an image. {@code DrawingView} typically ignores
-     * this value so that the user can still edit figures which are outside of
-     * the bounds of the drawing.
+     * See {@link #WIDTH} for a description.
      * </p>
      * <p>
      * This property is not styleable.</p>
      */
     public final static FigureKey<Double> HEIGHT = new SimpleFigureKey<Double>("height", Double.class,false, DirtyMask.of(DirtyBits.NODE), 480.0);
     /**
-     * Defines the background paint of the drawing.
+     * Defines the canvas color.
      * <p>
      * A drawing typically renders a rectangle with the dimensions given by
-     * {@code BOUNDS} and fills it with the {@code BACKGROUND} paint.
+     * {@code WIDTH} and {@code HEIGHT} and fills it with the 
+     * {@code BACKGROUND} paint.
      * </p>
      * <p>
      * This property is styleable with the key
@@ -130,7 +128,7 @@ public interface Drawing extends Figure {
     }
 
     /**
-     * Gets the style manager.
+     * Gets the style manager of the drawing.
      *
      * @return the style manager
      */

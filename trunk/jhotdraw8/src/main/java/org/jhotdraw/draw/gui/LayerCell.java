@@ -108,7 +108,7 @@ public class LayerCell extends ListCell<Figure> {
             selectionLabel.setText(count == null ? "" : "(" + count.toString() + ")");
 
             visibleCheckBox.setSelected(item.get(Figure.VISIBLE));
-            disabledCheckBox.setSelected(item.get(Figure.DISABLED));
+            disabledCheckBox.setSelected(item.get(Figure.LOCKED));
             isUpdating = false;
         }
     }
@@ -125,7 +125,7 @@ public class LayerCell extends ListCell<Figure> {
 
     private void commitLayerDisabled() {
         if (!isUpdating) {
-            drawingView.getModel().set(item, Figure.DISABLED, disabledCheckBox.isSelected());
+            drawingView.getModel().set(item, Figure.LOCKED, disabledCheckBox.isSelected());
         }
     }
 

@@ -33,14 +33,13 @@ public class CssSizeConverter implements Converter<Double> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Double value) throws IOException {
-        formatter.toString(out, new Object[]{value});
+        formatter.toString(out, new Object[]{value,0,""});
     }
 
     @Override
     public Double fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // FIXME currently ignores the units!
         Object[] v = formatter.fromString(buf);
-
         return (double) v[0];
     }
     

@@ -7,10 +7,12 @@ package org.jhotdraw.css;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javafx.css.StyleOrigin;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
+import org.jhotdraw.draw.Figure;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -38,7 +40,8 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
     }
 
     @Override
-    public void applyStylesTo(Element elem) {
+    public void applyStylesTo(Element elem, Map<String, Set<Element>> pseudoClassStates) {
+        selectorModel.additionalPseudoClassStatesProperty().putAll(pseudoClassStates);
         HashMap<String, String> applicableDeclarations = new HashMap<>();
 
         // user agent stylesheets can not override element attributes
@@ -105,5 +108,19 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
             elem.setAttribute(entry.getKey(), entry.getValue());
         }
         applicableDeclarations.clear();
+
+        selectorModel.additionalPseudoClassStatesProperty().clear();
     }
+
+    @Override
+    public DocumentSelectorModel getSelectorModel() {
+        return selectorModel;
+    }
+
+    @Override
+    public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, Figure f, HashMap<String, Set<Figure>> pseudoStyles) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+ 
 }

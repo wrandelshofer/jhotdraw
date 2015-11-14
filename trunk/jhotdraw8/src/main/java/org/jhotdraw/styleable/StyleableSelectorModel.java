@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleMapProperty;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
@@ -26,9 +28,20 @@ import org.w3c.dom.Element;
  */
 public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
+    private final MapProperty<String, Set<Element>> additionalPseudoClassStates = new SimpleMapProperty<>();
+
+    public MapProperty<String, Set<Element>> additionalPseudoClassStatesProperty() {
+        return additionalPseudoClassStates;
+    }
+
     @Override
     public boolean hasId(Styleable element, String id) {
         return id.equals(element.getId());
+    }
+
+    @Override
+    public String getId(Styleable element) {
+        return element.getId();
     }
 
     @Override
@@ -37,8 +50,18 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
+    public String getType(Styleable element) {
+        return element.getTypeSelector();
+    }
+
+    @Override
     public boolean hasStyleClass(Styleable element, String clazz) {
         return element.getStyleClass().contains(clazz);
+    }
+
+    @Override
+    public Set<String> getStyleClasses(Styleable element) {
+        return new HashSet<String>(element.getStyleClass());
     }
 
     @Override
@@ -95,7 +118,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
                 Object value = item.getStyleableProperty(element).getValue();
 
                 if (value instanceof Collection) {
-                     @SuppressWarnings("unchecked")
+                    @SuppressWarnings("unchecked")
                     Collection<Object> olist = (Collection<Object>) value;
                     Set<String> slist = new HashSet<String>();
                     for (Object o : olist) {
@@ -148,4 +171,19 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         String actualValue = getAttribute(element, attributeName);
         return actualValue != null && actualValue.contains(substring);
     }
+
+    @Override
+    public Set<String> getAttributeNames(Styleable element) {
+        Set<String> attr = new HashSet<>();
+        for (CssMetaData<? extends Styleable, ?> item : element.getCssMetaData()) {
+            attr.add(item.getProperty());
+        }
+        return attr;
+    }
+
+    @Override
+    public String getAttributeValue(Styleable element, String name) {
+        return getAttribute(element, name);
+    }
+
 }

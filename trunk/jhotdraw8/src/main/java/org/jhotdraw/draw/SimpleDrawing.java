@@ -4,21 +4,18 @@
  */
 package org.jhotdraw.draw;
 
-import java.io.IOException;
-import java.net.URL;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.styleable.StyleableStyleManager;
-import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.StyleManager;
+import org.jhotdraw.draw.css.FigureStyleManager;
 
 /**
  * SimpleDrawing.
@@ -29,8 +26,7 @@ import org.jhotdraw.css.StyleManager;
 public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
 
     /**
-     * The style manager is created lazily. If the stylesheet property is
-     * changed, the style manager is set to null again.
+     * The style manager is created lazily. 
      */
     private StyleManager<Figure> styleManager = null;
 
@@ -49,6 +45,7 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
     @Override
     public void updateNode(RenderContext v, Node n) {
         Group g = (Group) n;
+        applyFigureProperties(n);
         ObservableList<Node> children = ((Group) n).getChildren();
         children.clear();
         Bounds bounds = getBoundsInLocal();
@@ -94,7 +91,13 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
         return styleManager;
     }
     protected StyleManager<Figure> createStyleManager() {
+        if (true) return new FigureStyleManager();
+        
+        
         StyleManager<?> ret= (StyleManager<Styleable>)new StyleableStyleManager();
+        
+        // We can safely cast StylebleStyleManager to StyleManager<Figure>
+        // because the Figure interface extends the Styleable interface.
         @SuppressWarnings("unchecked")
         StyleManager<Figure> rf=(StyleManager<Figure>)ret;
         return rf;

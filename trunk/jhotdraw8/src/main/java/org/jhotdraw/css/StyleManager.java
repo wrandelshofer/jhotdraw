@@ -4,12 +4,15 @@
  */
 package org.jhotdraw.css;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javafx.css.StyleOrigin;
-import org.jhotdraw.draw.AbstractFigure;
+import org.jhotdraw.css.ast.Stylesheet;
+import org.jhotdraw.draw.Figure;
 
 /**
  * StyleManager.
@@ -72,5 +75,21 @@ public interface StyleManager<E> {
     <T> void setStylesheets(StyleOrigin origin, URI documentHome, List<T> stylesheets);
 
     /** Applies styles to the specified element. */
-    public void applyStylesTo(E e);
+    default void applyStylesTo(E e) {
+        applyStylesTo(e, Collections.emptyMap());
+    }
+    
+    /** Applies styles to the specified element and adds the given
+     * pseudo class states to the element during evaluation.
+     * 
+     * @param e The element
+     * @param pseudoClassStates pseudo class states given to the specified elements
+     */
+    public void applyStylesTo(E e, Map<String,Set<E>> pseudoClassStates);
+    
+    /** Returns the selector model of the style manager.
+     */
+    public SelectorModel<E> getSelectorModel();
+
+    public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, Figure f, HashMap<String, Set<Figure>> pseudoStyles);
 }

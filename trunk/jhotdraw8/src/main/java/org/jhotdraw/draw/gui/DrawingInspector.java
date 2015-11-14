@@ -1,4 +1,4 @@
-/* @(#)CanvasInspector.java
+/* @(#)DrawingInspector.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -11,6 +11,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -28,7 +29,7 @@ import org.jhotdraw.util.Resources;
  *
  * @author werni
  */
-public class CanvasInspector extends AbstractDrawingInspector {
+public class DrawingInspector extends AbstractDrawingInspector {
 
     @FXML
     private TextField backgroundColorField;
@@ -47,12 +48,14 @@ public class CanvasInspector extends AbstractDrawingInspector {
     private Property<Paint> backgroundProperty;
 
     private InvalidationListener commitHandler = o -> commitEdits();
+    
+    private Node node;
 
-    public CanvasInspector() {
-        this(LayersInspector.class.getResource("CanvasInspector.fxml"));
+    public DrawingInspector() {
+        this(LayersInspector.class.getResource("DrawingInspector.fxml"));
     }
 
-    public CanvasInspector(URL fxmlUrl) {
+    public DrawingInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -65,7 +68,7 @@ public class CanvasInspector extends AbstractDrawingInspector {
             loader.setController(this);
 
             try (InputStream in = fxmlUrl.openStream()) {
-                setCenter(loader.load(in));
+                node=loader.load(in);
             } catch (IOException ex) {
                 throw new InternalError(ex);
             }
@@ -109,6 +112,11 @@ public class CanvasInspector extends AbstractDrawingInspector {
 
     private void commitEdits() {
         drawingView.getModel().fire(DrawingModelEvent.nodeInvalidated(drawingView.getModel(), drawingView.getDrawing()));
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
     }
 
 }

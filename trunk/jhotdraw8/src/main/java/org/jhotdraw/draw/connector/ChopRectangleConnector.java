@@ -8,7 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.shape.AbstractShapeFigure.*;
+import static org.jhotdraw.draw.shape.StrokedShapeFigure.*;
 import org.jhotdraw.geom.Geom;
 
 /**

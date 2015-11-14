@@ -18,6 +18,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import static org.jhotdraw.draw.Figure.ROTATE;
+import static org.jhotdraw.draw.Figure.ROTATION_AXIS;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
@@ -52,6 +54,9 @@ public class PointHandle extends AbstractHandle {
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
         node.setCursor(Cursor.MOVE);
+        // rotates the node:
+        node.setRotate(figure.getStyled(ROTATE));
+        node.setRotationAxis(figure.getStyled(ROTATION_AXIS));
     }
 
     @Override

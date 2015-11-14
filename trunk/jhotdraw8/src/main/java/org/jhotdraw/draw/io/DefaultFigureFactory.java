@@ -73,17 +73,17 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Line", LineFigure.class, Figure.getDeclaredAndInheritedKeys(LineFigure.class));
         addFigureKeysAndNames("Ellipse", EllipseFigure.class, Figure.getDeclaredAndInheritedKeys(EllipseFigure.class));
         addFigureKeysAndNames("LineConnection", LineConnectionFigure.class, Figure.getDeclaredAndInheritedKeys(LineConnectionFigure.class));
-        addConverter(Rectangle2D.class, new Rectangle2DConverter());
-        addConverter(String.class, new DefaultConverter());
-        addConverter(Point2D.class, new Point2DConverter());
-        addConverter(Double.class, new NumberConverter());
-        addConverter(URL.class, new UrlConverter());
-        addConverter(URI.class, new UriConverter());
-        addConverter(Connector.class, new DefaultConnectorConverter());
-        addConverter(Paint.class, new XmlPaintConverter());
-        addConverter(Boolean.class, new XmlBooleanConverter());
+        addConverterForType(Rectangle2D.class, new Rectangle2DConverter());
+        addConverterForType(String.class, new DefaultConverter());
+        addConverterForType(Point2D.class, new Point2DConverter());
+        addConverterForType(Double.class, new NumberConverter());
+        addConverterForType(URL.class, new UrlConverter());
+        addConverterForType(URI.class, new UriConverter());
+        addConverterForType(Connector.class, new DefaultConnectorConverter());
+        addConverterForType(Paint.class, new XmlPaintConverter());
+        addConverterForType(Boolean.class, new XmlBooleanConverter());
 
-        addConverter(Figure.STYLE_CLASS.getFullValueType(), new CssObservableWordListConverter());
+        addConverterForType(Figure.STYLE_CLASS.getFullValueType(), new CssObservableWordListConverter());
         
           removeKey(Drawing.PSEUDO_CLASS_STATES);
 

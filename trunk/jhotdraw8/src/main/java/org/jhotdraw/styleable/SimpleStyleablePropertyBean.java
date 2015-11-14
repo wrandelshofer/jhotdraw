@@ -62,6 +62,16 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
         T ret = (T) (map.containsStyledKey(key) ? map.getStyled(key) : key.getDefaultValue());
         return ret;
     }
+    /**
+     * Sets the style value.
+     */
+    @Override
+    public <T> T setStyled(StyleOrigin origin, Key<T> key, T newValue) {
+        StyleableMap<Key<?>, Object> map = getStyleableMap();
+        @SuppressWarnings("unchecked")
+        T ret = (T) map.put(origin, key, newValue);
+        return ret;
+    }
 
     @Override
     public <T> T remove(StyleOrigin origin, Key<T> key) {

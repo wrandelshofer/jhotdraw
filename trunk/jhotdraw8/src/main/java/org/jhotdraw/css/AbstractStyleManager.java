@@ -5,14 +5,10 @@
  */
 package org.jhotdraw.css;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
