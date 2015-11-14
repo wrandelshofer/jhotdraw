@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Figure;
@@ -27,7 +28,7 @@ import org.jhotdraw.draw.RenderContext;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractShapeFigure implements TextHolderFigure {
+public class TextFigure extends AbstractLeafFigure implements StrokedShapeFigure, FilledShapeFigure, TextHolderFigure {
 
     /**
      * The CSS type selector for this object is {@code "Text"}.
@@ -87,8 +88,9 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
         tn.setY(get(ORIGIN).getY());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyFigureProperties(tn);
-        applyTextProperties(tn);
-        applyShapeProperties(tn);
+        applyTextHolderProperties(tn);
+        applyStrokedShapeProperties(tn);
+        applyFilledShapeProperties(tn);
         tn.applyCss();
     }
 
@@ -100,5 +102,15 @@ public class TextFigure extends AbstractShapeFigure implements TextHolderFigure 
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
+    }
+    
+    @Override
+    public void layout() {
+        // empty
+    }
+    
+    @Override
+    public boolean isLayoutable() {
+        return false;
     }
 }

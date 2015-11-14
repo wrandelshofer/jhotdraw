@@ -11,9 +11,8 @@ import javafx.css.Styleable;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.css.SimpleParsedValue;
+import org.jhotdraw.styleable.SimpleParsedValue;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.shape.AbstractShapeFigure.FILL_COLOR;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -31,7 +30,7 @@ public class RectangleFigureNGTest {
     public void testCSS(Key<Object> key,String cssProperty, Object userValue,Object cssValue, Object expectedOutputValue) {
         RectangleFigure instance = new RectangleFigure();
         //
-        System.out.println(Figure.getSupportedKeys(instance));
+        System.out.println(instance.getSupportedKeys());
         //
         System.out.println(instance.getCssMetaData());
         
@@ -63,7 +62,7 @@ public class RectangleFigureNGTest {
     @DataProvider
     public Object[][] cssData() {
         return new Object[][]{
-            {FILL_COLOR,"-jhotdraw-fill", Color.RED,"blue",Color.BLUE},
+            {FilledShapeFigure.FILL_COLOR,"-jhotdraw-fill", Color.RED,"blue",Color.BLUE},
         };
 
     }     

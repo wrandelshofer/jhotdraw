@@ -33,7 +33,7 @@ import org.w3c.dom.Text;
  * @version $Id$
  */
 public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactory {
-    
+
     private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> attrToKey = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToAttr = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> elemToKey = new HashMap<>();
@@ -42,13 +42,15 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     private final Map<Class<? extends Figure>, String> figureToName = new HashMap<>();
     private final Map<String, Converter<?>> valueToXML = new HashMap<>();
     private final Map<String, Converter<?>> valueFromXML = new HashMap<>();
+    private final Map<Key<?>, Converter<?>> keyValueToXML = new HashMap<>();
+    private final Map<Key<?>, Converter<?>> keyValueFromXML = new HashMap<>();
     private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureAttributeKeys = new HashMap<>();
     private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureNodeListKeys = new HashMap<>();
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
     private final Map<String, HashSet<Class<? extends Figure>>> skipAttributes = new HashMap<>();
     private String objectIdAttribute = "oid";
-    
+
     public SimpleFigureFactory() {
     }
 
@@ -79,7 +81,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             hset.add(key);
             figureNodeListKeys.put(figure, hset);
         }
-        
+
         if (!elemToKey.containsKey(figure)) {
             elemToKey.put(figure, new HashMap<>());
         }
@@ -87,7 +89,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (!strToKey.containsKey(name)) {
             strToKey.put(name, key);
         }
-        
+
         if (!keyToElem.containsKey(figure)) {
             keyToElem.put(figure, new HashMap<>());
         }
@@ -96,7 +98,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             keyToStr.put(key, name);
         }
     }
-    
+
     public void addFigureKeysAndNames(String figureName, Class<? extends Figure> f, Collection<Key<?>> keys) {
         addFigure(figureName, f);
         addFigureAttributeKeys(f, keys);
@@ -104,7 +106,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             addKey(f, key.getName(), key);
         }
     }
-    
+
     public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<Key<?>> keys) {
         addFigureAttributeKeys(f, keys);
         for (Key<?> key : keys) {
@@ -129,7 +131,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             hset.add(key);
             figureAttributeKeys.put(figure, hset);
         }
-        
+
         if (!attrToKey.containsKey(figure)) {
             attrToKey.put(figure, new HashMap<>());
         }
@@ -137,7 +139,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (!strToKey.containsKey(name)) {
             strToKey.put(name, key);
         }
-        
+
         if (!keyToAttr.containsKey(figure)) {
             keyToAttr.put(figure, new HashMap<>());
         }
@@ -259,7 +261,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         attrToKey.clear();
         keyToAttr.clear();
     }
-    
+
     @Override
     public String figureToName(Figure f) throws IOException {
         if (!figureToName.containsKey(f.getClass())) {
@@ -270,7 +272,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
         return figureToName.get(f.getClass());
     }
-    
+
     @Override
     public Figure nameToFigure(String elementName) throws IOException {
         if (!nameToFigure.containsKey(elementName)) {
@@ -282,7 +284,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         Supplier<Figure> supplier = nameToFigure.get(elementName);
         return supplier.get();
     }
-    
+
     @Override
     public String keyToName(Figure f, Key<?> key) throws IOException {
         HashMap<Key<?>, String> keyToStr = null;
@@ -295,7 +297,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
         return keyToStr.get(key);
     }
-    
+
     @Override
     public Key<?> nameToKey(Figure f, String attributeName) throws IOException {
         HashMap<String, Key<?>> strToKey = attrToKey.get(f.getClass());
@@ -311,7 +313,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
         return strToKey.get(attributeName);
     }
-    
+
     @Override
     public String keyToElementName(Figure f, Key<?> key) throws IOException {
         HashMap<Key<?>, String> keyToStr = null;
@@ -324,7 +326,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
         return keyToStr.get(key);
     }
-    
+
     @Override
     public Key<?> elementNameToKey(Figure f, String attributeName) throws IOException {
         HashMap<String, Key<?>> strToKey = elemToKey.get(f.getClass());
@@ -344,9 +346,20 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param valueType A value type returned by {@code Key.getValueType();}.
      * @param converter the converter
      */
-    public void addConverter(Class<?> valueType, Converter<?> converter) {
-        addConverter(valueType.getName(), converter);
-        
+    public void addConverterForType(Class<?> valueType, Converter<?> converter) {
+        SimpleFigureFactory.this.addConverterForType(valueType.getName(), converter);
+
+    }
+
+    /**
+     * Adds a converter for the specified key.
+     *
+     * @param valueType A value type returned by {@code Key.getValueType();}.
+     * @param converter the converter
+     */
+    public <T> void addConverter(Key<T> key, Converter<T> converter) {
+        keyValueToXML.put(key, converter);
+        keyValueFromXML.put(key, converter);
     }
 
     /**
@@ -356,15 +369,22 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * {@code Key.getFullValueType();}.
      * @param converter the converter
      */
-    public void addConverter(String fullValueType, Converter<?> converter) {
+    public void addConverterForType(String fullValueType, Converter<?> converter) {
         valueToXML.put(fullValueType, converter);
         valueFromXML.put(fullValueType, converter);
     }
-    
+
     @Override
     public <T> String valueToString(Key<T> key, T value) throws IOException {
-        @SuppressWarnings("unchecked")
-        Converter<T> converter = (Converter<T>) valueToXML.get(key.getFullValueType());
+
+        Converter<T> converter;
+        if (keyValueToXML.containsKey(key)) {
+            @SuppressWarnings("unchecked")
+            Converter<T> suppress = converter = (Converter<T>) keyValueToXML.get(key);
+        } else {
+            @SuppressWarnings("unchecked")
+            Converter<T> suppress = converter = (Converter<T>) valueToXML.get(key.getFullValueType());
+        }
         if (converter == null) {
             throw new IOException("no converter for attribute type "
                     + key.getFullValueType());
@@ -373,12 +393,18 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         converter.toString(builder, this, value);
         return builder.toString();
     }
-    
+
     @Override
     public <T> T stringToValue(Key<T> key, String string) throws IOException {
         try {
-            @SuppressWarnings("unchecked")
-            Converter<T> converter = (Converter<T>) valueFromXML.get(key.getFullValueType());
+            Converter<T> converter;
+            if (keyValueFromXML.containsKey(key)) {
+                @SuppressWarnings("unchecked")
+                Converter<T> suppress = converter = (Converter<T>) keyValueFromXML.get(key);
+            } else {
+                @SuppressWarnings("unchecked")
+                Converter<T> suppress = converter = (Converter<T>) valueFromXML.get(key.getFullValueType());
+            }
             if (converter == null) {
                 throw new IOException("no converter for key \"" + key + "\" with attribute type "
                         + key.getFullValueType());
@@ -388,13 +414,13 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             throw new IOException(ex);
         }
     }
-    
+
     @Override
     public Set<Key<?>> figureAttributeKeys(Figure f) {
         Set<Key<?>> keys = figureAttributeKeys.get(f.getClass());
         return keys == null ? Collections.emptySet() : keys;
     }
-    
+
     @Override
     public <T> T getDefaultValue(Key<T> key) {
         return key.getDefaultValue();
@@ -409,7 +435,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     public String createFileComment() {
         return null;
     }
-    
+
     @Override
     public List<Node> valueToNodeList(Key<?> key, Object value, Document document) throws IOException {
         if (key.getValueType() == String.class) {
@@ -421,7 +447,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
-    
+
     @Override
     public <T> T nodeListToValue(Key<T> key, List<Node> nodeList) throws IOException {
         if (key.getValueType() == String.class) {
@@ -438,19 +464,19 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
-    
+
     @Override
     public Set<Key<?>> figureNodeListKeys(Figure f) {
         Set<Key<?>> keys = figureNodeListKeys.get(f.getClass());
         return keys == null ? Collections.emptySet() : keys;
-        
+
     }
-    
+
     public void checkConverters() {
         for (HashMap<Key<?>, String> map : keyToAttr.values()) {
             for (Key<?> k : map.keySet()) {
                 String fullValueType = k.getFullValueType();
-                if (!valueToXML.containsKey(fullValueType)) {
+                if (!keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
                     System.err.println(this + " WARNING can not convert " + fullValueType + " to XML for key " + k + ".");
                 }
             }
@@ -506,11 +532,11 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
         for (Map.Entry<Class<? extends Figure>, HashSet<Key<?>>> entry : figureAttributeKeys.entrySet()) {
             entry.getValue().remove(key);
-            
+
         }
         for (Map.Entry<Class<? extends Figure>, HashSet<Key<?>>> entry : figureNodeListKeys.entrySet()) {
             entry.getValue().remove(key);
         }
     }
-    
+
 }

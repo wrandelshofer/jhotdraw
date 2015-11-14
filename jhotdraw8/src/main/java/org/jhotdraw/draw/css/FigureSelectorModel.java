@@ -7,12 +7,15 @@ package org.jhotdraw.draw.css;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleMapProperty;
+import javafx.collections.FXCollections;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.Figure.*;
-import org.jhotdraw.styleable.SimpleParsedValue;
 import org.jhotdraw.styleable.StyleableKey;
+import org.w3c.dom.Element;
 
 /**
  * FigureSelectorModel.
@@ -23,10 +26,22 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     private HashSet<Class<?>> mappedFigureClasses = new HashSet<>();
     private HashMap<String, StyleableKey<?>> nameToKeyMap = new HashMap<>();
+    private HashMap<StyleableKey<?>, String> keyToNameMap = new HashMap<>();
+
+    private final MapProperty<String, Set<Figure>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
+
+    public MapProperty<String, Set<Figure>> additionalPseudoClassStatesProperty() {
+        return additionalPseudoClassStates;
+    }
 
     @Override
     public boolean hasId(Figure element, String id) {
         return id.equals(element.getId());
+    }
+
+    @Override
+    public String getId(Figure element) {
+        return element.getId();
     }
 
     @Override
@@ -35,8 +50,18 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
+    public String getType(Figure element) {
+        return element.getTypeSelector();
+    }
+
+    @Override
     public boolean hasStyleClass(Figure element, String clazz) {
         return element.getStyleClass().contains(clazz);
+    }
+
+    @Override
+    public Set<String> getStyleClasses(Figure element) {
+        return new HashSet<String>(element.getStyleClass());
     }
 
     private StyleableKey<?> findKey(Figure element, String attributeName) {
@@ -54,8 +79,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean hasAttribute(Figure element, String attributeName) {
-        StyleableKey<?> k = findKey(element, attributeName);
-        return k != null && element.propertiesProperty().containsKey(k);
+        for (Key<?> key : element.getSupportedKeys()) {
+            if (key.getName().equals(attributeName) && (key instanceof StyleableKey)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -132,6 +161,11 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean hasPseudoClass(Figure element, String pseudoClass) {
+        Set<Figure> fs = additionalPseudoClassStates.get(pseudoClass);
+        if (fs != null && fs.contains(element)) {
+            return true;
+        }
+
         // XXX we unnecessarily create many pseudo class states!
         return element.getPseudoClassStates().contains(pseudoClass);
     }
@@ -148,6 +182,29 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         int i = element.getParent().getChildren().indexOf(element);
         return i == 0 ? null : element.getParent().getChild(i - 1);
+    }
+
+    @Override
+    public Set<String> getAttributeNames(Figure element) {
+        // FIXME use keyToName map
+        Set<String> attr = new HashSet<>();
+        for (Key<?> key : element.getSupportedKeys()) {
+            if (key instanceof StyleableKey) {
+                StyleableKey<?> sk = (StyleableKey<?>) key;
+                attr.add(sk.getCssName());
+            }
+        }
+        return attr;
+    }
+
+    @Override
+    public String getAttributeValue(Figure element, String attributeName) {
+        @SuppressWarnings("unchecked")
+        StyleableKey<Object> k = (StyleableKey<Object>) findKey(element, attributeName);
+        if (k == null) {
+            return null;
+        }
+        return k.getConverter().toString(element.get(k));
     }
 
 }

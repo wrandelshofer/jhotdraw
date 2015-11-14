@@ -8,33 +8,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="inspector" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="inspector" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <ListView fx:id="listView" editable="true" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="listView" editable="true" prefHeight="100.0" prefWidth="200.0" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
    </center>
    <bottom>
       <HBox BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+         </BorderPane.margin>
          <children>
             <Button fx:id="addButton" mnemonicParsing="false" text="%addButton.text">
-               <HBox.margin>
-                  <Insets top="4.0" />
-               </HBox.margin>
                <tooltip>
                   <Tooltip text="%addButton.toolTipText" />
                </tooltip>
             </Button>
             <Button fx:id="removeButton" mnemonicParsing="false" text="%removeButton.text">
-               <HBox.margin>
-                  <Insets left="4.0" top="4.0" />
-               </HBox.margin>
                <tooltip>
                   <Tooltip text="%removeButton.toolTipText" />
                </tooltip>
+               <HBox.margin>
+                  <Insets left="4.0" />
+               </HBox.margin>
             </Button>
          </children>
       </HBox>
    </bottom>
-   <padding>
-      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-   </padding>
+   <styleClass>
+      <String fx:value="inspector" />
+      <String fx:value="flush" />
+   </styleClass>
 </BorderPane>

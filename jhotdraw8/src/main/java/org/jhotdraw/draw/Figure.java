@@ -51,6 +51,8 @@ import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
 import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw.draw.key.EffectStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw.draw.key.FigureKey;
+import org.jhotdraw.draw.key.ObservableWordListFigureKey;
 import org.jhotdraw.draw.key.ObservableWordListStyleableFigureKey;
 import org.jhotdraw.draw.key.StringStyleableFigureKey;
 
@@ -190,7 +192,23 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      */
     public static BooleanStyleableFigureKey VISIBLE = new BooleanStyleableFigureKey("visible", DirtyMask.of(DirtyBits.NODE), true);
     /**
+     * Whether the figure is locked. Default value: {@code false}.
+     * <p>
+     * A locked figure can not be selected or changed by the user,
+     * unless the user explicity unlocks the figure.
+     * <p>
+     * This key is used by the user to prevent accidental selection or
+     * editing of a figure.
+     */
+    public static BooleanKey LOCKED = new BooleanKey("locked", false);
+    /**
      * Whether the figure is disabled. Default value: {@code false}.
+     * <p>
+     * A disabled figure can not be selected or changed by the user, 
+     * unless the application enables the figure.
+     * <p>
+     * This key is used to programmatically prevent that a user can 
+     * select or edit a figure.
      */
     public static BooleanKey DISABLED = new BooleanKey("disabled", false);
     /**
@@ -198,14 +216,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * Default value: {@code null}.
      */
-    public static StringStyleableFigureKey STYLE_ID = new StringStyleableFigureKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static FigureKey<String> STYLE_ID = new SimpleFigureKey<String>("id",String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static ObservableWordListStyleableFigureKey STYLE_CLASS = new ObservableWordListStyleableFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
+    public static ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
@@ -584,9 +602,39 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Whether the figure or one if its ancestors is disabled.
+     * Whether the figure or one if its ancestors is disabled or locked.
      *
      * @return true if the user may select the figure
+     */
+    default boolean isDisabledOrLocked() {
+        Figure node = this;
+        while (node != null) {
+            if (node.get(DISABLED)||node.get(LOCKED)) {
+                return true;
+            }
+            node = node.getParent();
+        }
+        return false;
+    }
+    /**
+     * Whether the figure or one if its ancestors is locked.
+     *
+     * @return true if the figure or one its ancestors is locked
+     */
+    default boolean isLocked() {
+        Figure node = this;
+        while (node != null) {
+            if (node.get(LOCKED)) {
+                return true;
+            }
+            node = node.getParent();
+        }
+        return false;
+    }
+    /**
+     * Whether the figure or one if its ancestors is disabled.
+     *
+     * @return true if the figure or one its ancestors is disabled
      */
     default boolean isDisabled() {
         Figure node = this;
@@ -598,7 +646,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         }
         return false;
     }
-
     /**
      * Whether the figure and all its ancestors are visible.
      *

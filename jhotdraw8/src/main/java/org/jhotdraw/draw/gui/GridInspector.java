@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.Format;
+import java.util.prefs.Preferences;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
@@ -27,7 +29,7 @@ import org.jhotdraw.util.Resources;
  *
  * @author werni
  */
-public class GridInspector extends AbstractDrawingInspector {
+public class GridInspector extends AbstractDrawingViewInspector {
 
     @FXML
     private TextField heightField;
@@ -47,6 +49,8 @@ public class GridInspector extends AbstractDrawingInspector {
     @FXML
     private CheckBox drawGridCheckBox;
 
+    private Node node;
+
     public GridInspector() {
         this(LayersInspector.class.getResource("GridInspector.fxml"));
     }
@@ -64,11 +68,19 @@ public class GridInspector extends AbstractDrawingInspector {
             loader.setController(this);
 
             try (InputStream in = fxmlUrl.openStream()) {
-                setCenter(loader.load(in));
+                node = loader.load(in);
             } catch (IOException ex) {
                 throw new InternalError(ex);
             }
         });
+        
+        Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
+        snapToGridCheckBox.setSelected(prefs.getBoolean("snapToGrid", true));
+        snapToGridCheckBox.selectedProperty().addListener((o, oldValue, newValue)
+                -> prefs.putBoolean("snapToGrid", newValue));
+        drawGridCheckBox.setSelected(prefs.getBoolean("drawGrid", true));
+        drawGridCheckBox.selectedProperty().addListener((o, oldValue, newValue)
+                -> prefs.putBoolean("drawGrid", newValue));
     }
 
     @Override
@@ -97,13 +109,16 @@ public class GridInspector extends AbstractDrawingInspector {
             xField.textProperty().bindBidirectional(gc.xProperty(), cc);
             yField.textProperty().bindBidirectional(gc.yProperty(), cc);
             angleField.textProperty().bindBidirectional(gc.angleProperty(), cc);
+            gc.drawGridProperty().set(drawGridCheckBox.isSelected());
             drawGridCheckBox.selectedProperty().bindBidirectional(gc.drawGridProperty());
+            gc.snapToGridProperty().set(snapToGridCheckBox.isSelected());
             snapToGridCheckBox.selectedProperty().bindBidirectional(gc.snapToGridProperty());
         }
     }
 
     @Override
-    protected void onDrawingChanged(Drawing oldValue, Drawing newValue) {
-        // empty, because this is not actually a drawing inspector
+    public Node getNode() {
+        return node;
     }
+
 }

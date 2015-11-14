@@ -16,6 +16,7 @@ import org.jhotdraw.draw.io.IdFactory;
  * @author Werner Randelshofer
  */
 public class EnumConverter<E extends Enum<E>> implements Converter<E> {
+
     private final Class<E> enumClass;
 
     public EnumConverter(Class<E> enumClass) {
@@ -24,11 +25,15 @@ public class EnumConverter<E extends Enum<E>> implements Converter<E> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, E value) throws IOException {
-        for (char ch : value.toString().toCharArray()) {
-            if (Character.isWhitespace(ch)) {
-                break;
+        if (value == null) {
+            out.append("null");
+        } else {
+            for (char ch : value.toString().toLowerCase().toCharArray()) {
+                if (Character.isWhitespace(ch)) {
+                    break;
+                }
+                out.append(ch);
             }
-            out.append(ch);
         }
     }
 
@@ -39,16 +44,19 @@ public class EnumConverter<E extends Enum<E>> implements Converter<E> {
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
             out.append(in.get());
         }
-        if (out.length()==0) {
+        if (out.length() == 0) {
             in.position(pos);
-            throw new ParseException("word expected",pos);
+            throw new ParseException("word expected", pos);
         }
-        return Enum.valueOf(enumClass, out.toString());
+        if (out.toString().equals("null")) {
+            return null;
+        }
+        return Enum.valueOf(enumClass, out.toString().toUpperCase());
     }
+
     @Override
     public E getDefaultValue() {
         return null;
     }
 
-    
 }

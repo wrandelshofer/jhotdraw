@@ -24,6 +24,7 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -71,6 +72,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     private Supplier<Layer> layerFactory;
 
+    private Node node;
     /**
      * This key is used to store the selection count in the layers.
      */
@@ -143,83 +145,83 @@ public class LayersInspector extends AbstractDrawingInspector {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
-        
-        FXMLLoader loader = new FXMLLoader();
-        loader.setController(this);
-        loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
 
-        try (InputStream in = fxmlUrl.openStream()) {
-            setCenter(loader.load(in));
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
+            FXMLLoader loader = new FXMLLoader();
+            loader.setController(this);
+            loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
 
-        addButton.addEventHandler(ActionEvent.ACTION, o -> {
-            Layer layer = layerFactory.get();
-            int index = listView.getSelectionModel().getSelectedIndex();
-            if (index < 0) {
-                index = 0;
-            }
-            Drawing drawing = drawingView.getDrawing();
-            DrawingModel model = drawingView.getModel();
-            int size = drawing.getChildren().size();
-            model.insertChildAt(layer, drawing, size - index);
-        });
-        removeButton.addEventHandler(ActionEvent.ACTION, o -> {
-            ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
-            Drawing drawing = drawingView.getDrawing();
-            DrawingModel model = drawingView.getModel();
-            for (int i = indices.size() - 1; i >= 0; i--) {
-                model.removeFromParent(layers.get(indices.get(i)));
-            }
-        });
-        removeButton.disableProperty().bind(Bindings.equal(listView.getSelectionModel().selectedIndexProperty(), -1));
-
-        listView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Figure>) c -> {
-            Layer selected = (Layer) listView.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                drawingView.setActiveLayer(selected);
+            try (InputStream in = fxmlUrl.openStream()) {
+                node = loader.load(in);
+            } catch (IOException ex) {
+                throw new InternalError(ex);
             }
 
-        });
-
-        ClipboardIO<Figure> io = new ClipboardIO<Figure>() {
-
-            @Override
-            public void write(Clipboard clipboard, List<Figure> items) {
-                if (items.size() != 1) {
-                    throw new UnsupportedOperationException("Not supported yet.");
+            addButton.addEventHandler(ActionEvent.ACTION, o -> {
+                Layer layer = layerFactory.get();
+                int index = listView.getSelectionModel().getSelectedIndex();
+                if (index < 0) {
+                    index = 0;
                 }
-                ClipboardContent content = new ClipboardContent();
-                Figure f = items.get(0);
-                String id = f.get(Figure.STYLE_ID);
-                content.putString(id == null ? "" : id);
-                clipboard.setContent(content);
-            }
-
-            @Override
-            public List<Figure> read(Clipboard clipboard) {
-                List<Figure> list;
-                if (clipboard.hasString()) {
-                    list = new ArrayList<>();
-                    Layer layer = layerFactory.get();
-                    layer.set(Figure.STYLE_ID, clipboard.getString());
-                    list.add(layer);
-                } else {
-                    list = null;
+                Drawing drawing = drawingView.getDrawing();
+                DrawingModel model = drawingView.getModel();
+                int size = drawing.getChildren().size();
+                model.insertChildAt(layer, drawing, size - index);
+            });
+            removeButton.addEventHandler(ActionEvent.ACTION, o -> {
+                ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
+                Drawing drawing = drawingView.getDrawing();
+                DrawingModel model = drawingView.getModel();
+                for (int i = indices.size() - 1; i >= 0; i--) {
+                    model.removeFromParent(layers.get(indices.get(i)));
                 }
-                return list;
-            }
+            });
+            removeButton.disableProperty().bind(Bindings.equal(listView.getSelectionModel().selectedIndexProperty(), -1));
 
-            @Override
-            public boolean canRead(Clipboard clipboard) {
-                return clipboard.hasString();
-            }
-        };
+            listView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Figure>) c -> {
+                Layer selected = (Layer) listView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    drawingView.setActiveLayer(selected);
+                }
 
-        listView.setFixedCellSize(24.0);
-        listView.setCellFactory(addSelectionLabelDndSupport(listView, this::createCell, io));
-        ListViewUtil.addReorderingSupport(listView, io);
+            });
+
+            ClipboardIO<Figure> io = new ClipboardIO<Figure>() {
+
+                @Override
+                public void write(Clipboard clipboard, List<Figure> items) {
+                    if (items.size() != 1) {
+                        throw new UnsupportedOperationException("Not supported yet.");
+                    }
+                    ClipboardContent content = new ClipboardContent();
+                    Figure f = items.get(0);
+                    String id = f.get(Figure.STYLE_ID);
+                    content.putString(id == null ? "" : id);
+                    clipboard.setContent(content);
+                }
+
+                @Override
+                public List<Figure> read(Clipboard clipboard) {
+                    List<Figure> list;
+                    if (clipboard.hasString()) {
+                        list = new ArrayList<>();
+                        Layer layer = layerFactory.get();
+                        layer.set(Figure.STYLE_ID, clipboard.getString());
+                        list.add(layer);
+                    } else {
+                        list = null;
+                    }
+                    return list;
+                }
+
+                @Override
+                public boolean canRead(Clipboard clipboard) {
+                    return clipboard.hasString();
+                }
+            };
+
+            listView.setFixedCellSize(24.0);
+            listView.setCellFactory(addSelectionLabelDndSupport(listView, this::createCell, io));
+            ListViewUtil.addReorderingSupport(listView, io);
         });
     }
 
@@ -264,6 +266,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             newValue.getChildren().addListener(listInvalidationListener);
         }
     }
+
     private Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(ListView<Figure> listView, Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
     ) {
         SelectionLabelDnDSupport dndSupport = new SelectionLabelDnDSupport(listView, clipboardIO);
@@ -295,13 +298,14 @@ public class LayersInspector extends AbstractDrawingInspector {
             this.listView = listView;
             this.io = io;
         }
-        
 
         private EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
-                if (event.isConsumed()) return;
+                if (event.isConsumed()) {
+                    return;
+                }
                 if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
 
                     draggedCellIndex = (int) Math.floor(listView.screenToLocal(0, event.getScreenY()).getY() / listView.getFixedCellSize());
@@ -327,7 +331,9 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             @Override
             public void handle(DragEvent event) {
-                if (event.isConsumed()) return;
+                if (event.isConsumed()) {
+                    return;
+                }
                 EventType<DragEvent> t = event.getEventType();
                 if (t == DragEvent.DRAG_DROPPED) {
                     onDragDropped(event);
@@ -342,11 +348,11 @@ public class LayersInspector extends AbstractDrawingInspector {
 
                     // XXX foolishly assumes fixed cell height
                     double cellHeight = listView.getFixedCellSize();
-                    List<Figure> items=listView.getItems();
-                    int index = Math.max(0, Math.min((int) (event.getY() / cellHeight),items.size()));
+                    List<Figure> items = listView.getItems();
+                    int index = Math.max(0, Math.min((int) (event.getY() / cellHeight), items.size()));
 
                     Figure from = items.get(draggedCellIndex);
-                    moveSelectedFiguresFromToLayer((Layer)from,(Layer)items.get(index));
+                    moveSelectedFiguresFromToLayer((Layer) from, (Layer) items.get(index));
                     event.setDropCompleted(true);
                     event.consume();
                 }
@@ -365,26 +371,30 @@ public class LayersInspector extends AbstractDrawingInspector {
                     event.consume();
                 }
             }
-            
+
             private void moveSelectedFiguresFromToLayer(Layer from, Layer to) {
-                DrawingModel model=drawingView.getModel();
-                LinkedHashSet<Figure> selection=new LinkedHashSet<>(drawingView.getSelectedFigures());
-                for (Figure f:selection) {
-                    if (f.getLayer()==from) {
+                DrawingModel model = drawingView.getModel();
+                LinkedHashSet<Figure> selection = new LinkedHashSet<>(drawingView.getSelectedFigures());
+                for (Figure f : selection) {
+                    if (f.getLayer() == from) {
                         // add child moves a figure, so we do not need to
                         // remove it explicitly
-                        model.addChildTo(f,to);
+                        model.addChildTo(f, to);
                     }
                 }
-                
+
                 // Update the selection. The selection still contains the
                 // same figures but they have now a different ancestor.
                 drawingView.getSelectedFigures().clear();
                 drawingView.getSelectedFigures().addAll(selection);
             }
 
-
         };
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
     }
 
 }

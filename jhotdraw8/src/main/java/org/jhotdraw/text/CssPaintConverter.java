@@ -43,13 +43,16 @@ import org.jhotdraw.draw.io.IdFactory;
  * @author Werner Randelshofer
  */
 public class CssPaintConverter implements Converter<Paint> {
-private XmlNumberConverter doubleConverter=new XmlNumberConverter();
-{
-    doubleConverter.setMaximumFractionDigits(3);
-}
+
+    private XmlNumberConverter doubleConverter = new XmlNumberConverter();
+
+    {
+        doubleConverter.setMaximumFractionDigits(3);
+    }
+
     public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
         if (value == null) {
-            out.append("transparent");
+            out.append("none");
         } else if (value instanceof Color) {
             Color c = (Color) value;
             if (c.getOpacity() == 1.0) {
@@ -79,7 +82,13 @@ private XmlNumberConverter doubleConverter=new XmlNumberConverter();
     @Override
     public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         try {
-            Color c = Color.web(buf.toString());
+            String str = buf.toString();
+            Color c;
+            if ("none".equals(str)) {
+                c = null;
+            } else {
+                c = Color.web(str);
+            }
             buf.position(buf.limit());
             return c;
         } catch (IllegalArgumentException e) {
@@ -88,7 +97,7 @@ private XmlNumberConverter doubleConverter=new XmlNumberConverter();
             throw pe;
         }
     }
-    
+
     @Override
     public Paint getDefaultValue() {
         return null;

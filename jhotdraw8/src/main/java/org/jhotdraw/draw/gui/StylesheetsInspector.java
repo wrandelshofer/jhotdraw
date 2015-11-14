@@ -20,11 +20,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.Pane;
 import javafx.util.StringConverter;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.gui.ClipboardIO;
@@ -50,7 +52,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     private Button removeButton;
 
     private ListProperty<URI> stylesheetsProperty;
-
+    private Node node;
     /**
      * Counter for incrementing stylesheet names.
      */
@@ -73,7 +75,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
             loader.setController(this);
             try (InputStream in = fxmlUrl.openStream()) {
-                setCenter(loader.load(in));
+                node = loader.load(in);
             } catch (IOException ex) {
                 throw new InternalError(ex);
             }
@@ -170,4 +172,10 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     private void onListChanged() {
         drawingView.getModel().set(drawingView.getDrawing(), Drawing.AUTHOR_STYLESHEETS, new ArrayList<>(listView.getItems()));
     }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
 }

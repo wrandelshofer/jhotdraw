@@ -4,7 +4,14 @@
  */
 package org.jhotdraw.css;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleMapProperty;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -17,16 +24,30 @@ import org.w3c.dom.NodeList;
  */
 public class DocumentSelectorModel implements SelectorModel<Element> {
 
+    private final MapProperty<String, Set<Element>> additionalPseudoClassStates = new SimpleMapProperty<>();
+
+    public MapProperty<String, Set<Element>> additionalPseudoClassStatesProperty() {
+        return additionalPseudoClassStates;
+    }
+
     @Override
     public boolean hasId(Element elem, String id) {
         String value = elem.getAttribute("id");
         return value != null && value.equals(id);
+    }
+    @Override
+    public String getId(Element elem) {
+        return elem.getAttribute("id");
     }
 
     @Override
     public boolean hasType(Element elem, String type) {
         String value = elem.getNodeName();
         return value != null && value.equals(type);
+    }
+    @Override
+    public String getType(Element elem) {
+        return elem.getNodeName();
     }
 
     @Override
@@ -42,6 +63,15 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
             }
         }
         return false;
+    }
+    @Override
+    public Set<String> getStyleClasses(Element elem) {
+        String value = elem.getAttribute("class");
+        if (value == null) {
+            return Collections.emptySet();
+        }
+        String[] clazzes = value.split(" +");
+        return new HashSet<>(Arrays.asList(clazzes));
     }
 
     /**
@@ -138,7 +168,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         if (element.getParentNode() != null) {
             NodeList list = element.getParentNode().getChildNodes();
 
-            for (int i = list.getLength()-1; i >= 0; i--) {
+            for (int i = list.getLength() - 1; i >= 0; i--) {
                 if (list.item(i) == element) {
                     return true;
                 }
@@ -170,6 +200,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
 
     @Override
     public boolean hasAttribute(Element element, String attributeName) {
+        // FIXME we need the XML schema to return the correct result
         return element.hasAttribute(attributeName);
     }
 
@@ -196,6 +227,11 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.contains(substring));
     }
+    
+    @Override
+    public String getAttributeValue(Element element, String attributeName) {
+        return element.getAttribute(attributeName);
+    }
 
     @Override
     public boolean attributeValueContainsWord(Element element, String attributeName, String word) {
@@ -209,6 +245,18 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
             }
         }
         return false;
+    }
+
+    @Override
+    public Set<String> getAttributeNames(Element element) {
+        // FIXME we need the XML schema to return the correct result
+        Set<String> attr = new HashSet<String>();
+        NamedNodeMap nnm = element.getAttributes();
+        for (int i = 0, n = nnm.getLength(); i < n; i++) {
+            Node node = nnm.item(i);
+            attr.add(node.getLocalName());
+        }
+        return attr;
     }
 
 }

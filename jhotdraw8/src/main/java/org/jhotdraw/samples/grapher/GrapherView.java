@@ -25,8 +25,12 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.concurrent.BackgroundTask;
@@ -48,10 +52,11 @@ import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
-import org.jhotdraw.draw.gui.CanvasInspector;
+import org.jhotdraw.draw.gui.DrawingInspector;
 import org.jhotdraw.draw.gui.GridInspector;
 import org.jhotdraw.draw.gui.Inspector;
 import org.jhotdraw.draw.gui.LayersInspector;
+import org.jhotdraw.draw.gui.StyleAttributesInspector;
 import org.jhotdraw.draw.gui.StylesheetsInspector;
 import org.jhotdraw.draw.gui.ToolsToolbar;
 import org.jhotdraw.draw.gui.ZoomToolbar;
@@ -74,23 +79,23 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  *
  * @author werni
  */
-public class GrapherApplicationView extends AbstractView implements EditorView {
+public class GrapherView extends AbstractView implements EditorView {
 
     private Node node;
 
     @FXML
-    private ToolBar toolBar;
+    private ToolBar toolsToolBar;
     @FXML
-    private ScrollPane scrollPane;
+    private ScrollPane viewScrollPane;
     @FXML
-    private ScrollPane propertiesPane;
+    private ScrollPane detailsScrollPane;
 
     private DrawingView drawingView;
 
     private DrawingEditor editor;
 
     @FXML
-    private HBox inspectorsHBox;
+    private VBox detailsVBox;
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
 
@@ -105,13 +110,14 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         loader.setController(this);
 
         try {
-            node = loader.load(getClass().getResourceAsStream("GrapherApplicationView.fxml"));
+            node = loader.load(getClass().getResourceAsStream("GrapherView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
 
         drawingView = new SimpleDrawingView();
-        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 12.25));
+        // FIXME should use preferences!
+        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         // 
         drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
@@ -121,7 +127,7 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
 
-        scrollPane.setContent(drawingView.getNode());
+        viewScrollPane.setContent(drawingView.getNode());
 
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
@@ -137,16 +143,16 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new, layerFactory), 2, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
-        toolBar.getItems().add(ttbar);
+        toolsToolBar.getItems().add(ttbar);
 
         ZoomToolbar ztbar = new ZoomToolbar();
         ztbar.setDrawingView(drawingView);
-        toolBar.getItems().add(ztbar);
+        toolsToolBar.getItems().add(ztbar);
 
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
         getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction(getApplication(), this,
-                propertiesPane.visibleProperty(),
+                detailsScrollPane.visibleProperty(),
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
 
@@ -155,10 +161,11 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
             @Override
             protected List<Node> call() throws Exception {
                 List<Node> list = new LinkedList<>();
-                addInspector(new CanvasInspector(), "canvas", list);
-                addInspector(new StylesheetsInspector(), "stylesheets", list);
-                addInspector(new LayersInspector(layerFactory), "layers", list);
-                addInspector(new GridInspector(), "grid", list);
+                addInspector(new StyleAttributesInspector(), "styleAttributes",Priority.ALWAYS, list);
+                addInspector(new DrawingInspector(), "drawing",Priority.NEVER, list);
+                addInspector(new StylesheetsInspector(), "stylesheets",Priority.ALWAYS, list);
+                addInspector(new LayersInspector(layerFactory), "layers",Priority.ALWAYS, list);
+                addInspector(new GridInspector(), "grid",Priority.NEVER, list);
 
                 return list;
             }
@@ -169,30 +176,55 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
                     Inspector i = (Inspector) n.getProperties().get("inspector");
                     i.setDrawingView(drawingView);
                 }
-                inspectorsHBox.getChildren().addAll(list);
+                detailsVBox.getChildren().addAll(list);
             }
 
         };
         getApplication().execute(bg);
 
-        Preferences prefs = Preferences.userNodeForPackage(GrapherApplicationView.class);
-        propertiesPane.setMinHeight(0.0);
-        propertiesPane.visibleProperty().addListener((o, oldValue, newValue) -> {
+        Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
+        detailsScrollPane.setMinSize(0.0,0.0);
+        detailsScrollPane.visibleProperty().addListener((o, oldValue, newValue) -> {
             prefs.putBoolean("view.propertiesPane.visible", newValue);
-            propertiesPane.setPrefHeight(newValue ? ScrollPane.USE_COMPUTED_SIZE : 0.0);
+            detailsScrollPane.setPrefHeight(newValue ? ScrollPane.USE_COMPUTED_SIZE : 0.0);
         });
-        propertiesPane.visibleProperty().set(prefs.getBoolean("view.propertiesPane.visible", true));
+        detailsScrollPane.visibleProperty().set(prefs.getBoolean("view.propertiesPane.visible", true));
 
-        inspectorsHBox.getStyleClass().add("inspector");
+        detailsVBox.getStyleClass().add("inspector");
     }
 
-    private void addInspector(Inspector inspector, String id, List<Node> list) {
+    private void addInspector(Inspector inspector, String id, Priority grow, List<Node> list) {
         Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
 
         Accordion a = new Accordion();
+        a.getStyleClass().setAll("inspector","flush");
+        Pane n = (Pane)inspector.getNode();
+        TitledPane t = new TitledPane(r.getString(id + ".toolbar"), n);
+        a.getPanes().add(t);
+        list.add(a);
+        a.getProperties().put("inspector", inspector);
+
+        // Make sure that an expanded accordion has the specified grow priority.
+        // But when it is collapsed it should have none.
+        t.expandedProperty().addListener((o,oldValue,newValue) ->{
+            VBox.setVgrow(a, newValue?grow:Priority.NEVER);
+        });
+        
+        PreferencesUtil.installBooleanPropertyHandler(//
+                Preferences.userNodeForPackage(GrapherView.class), id + ".expanded", t.expandedProperty());
+        if (t.isExpanded()) {
+            a.setExpandedPane(t);
+            VBox.setVgrow(a, grow);
+        }
+    }
+    private void addHInspector(Inspector inspector, String id, List<Node> list) {
+        Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
+
+        Accordion a = new Accordion();
+        a.getStyleClass().setAll("inspector","flush");
         Node n = inspector.getNode();
         n.setRotate(90);
-        ((Pane) n).setPrefHeight(133);
+        ((Pane) n).setPrefHeight(129);
         Group g = new Group();
         g.getChildren().add(n);
         TitledPane t = new TitledPane(r.getString(id + ".toolbar"), g);
@@ -205,7 +237,7 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
         list.add(g);
         g.getProperties().put("inspector", inspector);
 
-        PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherApplicationView.class), id + ".expanded", t.expandedProperty());
+        PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherView.class), id + ".expanded", t.expandedProperty());
         if (t.isExpanded()) {
             a.setExpandedPane(t);
         }
@@ -294,7 +326,7 @@ public class GrapherApplicationView extends AbstractView implements EditorView {
     }
 
     public Node getPropertiesPane() {
-        return propertiesPane;
+        return detailsScrollPane;
     }
 
 }

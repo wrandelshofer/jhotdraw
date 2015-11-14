@@ -19,6 +19,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import static org.jhotdraw.draw.Figure.ROTATE;
+import static org.jhotdraw.draw.Figure.ROTATION_AXIS;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.model.DrawingModel;
@@ -91,6 +93,9 @@ public class ConnectionPointHandle extends AbstractHandle {
         node.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         node.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
         node.relocate(p.getX() - 5, p.getY() - 5);
+        // rotates the node:
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }
 
     @Override

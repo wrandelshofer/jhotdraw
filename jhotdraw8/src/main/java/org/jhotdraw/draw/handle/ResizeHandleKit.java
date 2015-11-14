@@ -21,6 +21,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import static org.jhotdraw.draw.Figure.ROTATE;
+import static org.jhotdraw.draw.Figure.ROTATION_AXIS;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.model.DrawingModel;
@@ -209,7 +211,9 @@ public class ResizeHandleKit {
             p = t.transform(p);
             node.relocate(p.getX() - 5, p.getY() - 5);
             // rotates the node:
-            f.applyFigureProperties(node);
+           // f.applyFigureProperties(node);
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
         }
 
         @Override

@@ -12,6 +12,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Figure;
@@ -19,6 +20,7 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.
@@ -26,7 +28,7 @@ import org.jhotdraw.draw.RenderContext;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends AbstractShapeFigure {
+public class RectangleFigure extends AbstractLeafFigure implements StrokedShapeFigure, FilledShapeFigure {
 
     /**
      * The CSS type selector for this object is {@code "Rectangle"}.
@@ -34,7 +36,8 @@ public class RectangleFigure extends AbstractShapeFigure {
     public final static String TYPE_SELECTOR = "Rectangle";
 
     public final static SimpleFigureKey<Rectangle2D> BOUNDS = new SimpleFigureKey<>("bounds", Rectangle2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Rectangle2D(0, 0, 1, 1));
-    public final static SimpleFigureKey<Point2D> ARC = new SimpleFigureKey<>("arc", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), Point2D.ZERO);
+    public final static DoubleStyleableFigureKey ARC_HEIGHT = new DoubleStyleableFigureKey("arcHeight",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
 
     public RectangleFigure() {
         this(0, 0, 1, 1);
@@ -76,14 +79,15 @@ public class RectangleFigure extends AbstractShapeFigure {
     public void updateNode(RenderContext drawingView, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyFigureProperties(rectangleNode);
-        applyShapeProperties(rectangleNode);
+        applyFilledShapeProperties(rectangleNode);
+        applyStrokedShapeProperties(rectangleNode);
         Rectangle2D r = get(BOUNDS);
         rectangleNode.setX(r.getMinX());
         rectangleNode.setY(r.getMinY());
         rectangleNode.setWidth(r.getWidth());
         rectangleNode.setHeight(r.getHeight());
-        rectangleNode.setArcWidth(get(ARC).getX());
-        rectangleNode.setArcHeight(get(ARC).getY());
+        rectangleNode.setArcWidth(get(ARC_WIDTH));
+        rectangleNode.setArcHeight(get(ARC_HEIGHT));
         rectangleNode.applyCss();
     }
 
@@ -95,5 +99,15 @@ public class RectangleFigure extends AbstractShapeFigure {
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
+    }
+    
+    @Override
+    public void layout() {
+        // empty
+    }
+    
+    @Override
+    public boolean isLayoutable() {
+        return false;
     }
 }

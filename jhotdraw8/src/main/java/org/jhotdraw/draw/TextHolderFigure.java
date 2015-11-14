@@ -40,10 +40,6 @@ public interface TextHolderFigure extends Figure {
      */
     public static FontStyleableFigureKey FONT = new FontStyleableFigureKey("font", new Font("System", 12.0));
     /**
-     * The smoothing type. Default value: {@code GRAY}.
-     */
-    public static EnumStyleableFigureKey<FontSmoothingType> FONT_SMOOTHING_TYPE = new EnumStyleableFigureKey<>("fontSmoothingType", FontSmoothingType.class, DirtyMask.of(DirtyBits.NODE), FontSmoothingType.GRAY);
-    /**
      * The line spacing. Default value: {@code 12.0}
      */
     public static DoubleStyleableFigureKey LINE_SPACING = new DoubleStyleableFigureKey("lineSpacing", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 12.0);
@@ -70,21 +66,14 @@ public interface TextHolderFigure extends Figure {
 
     /** The text. Default value: {@code ""}. */
     public final static SimpleFigureKey<String> TEXT = new SimpleFigureKey<>("text", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), "");
-    /**
-     * Defines the paint used for filling the interior of the text. Default
-     * value: {@code Color.BLACK}.
-     */
-    public static PaintStyleableFigureKey TEXT_FILL_COLOR = new PaintStyleableFigureKey("textFillColor", Color.BLACK);
 
     /**
      * Updates a text node with text properties except {@code TEXT}.
      *
      * @param text a text node
      */
-    default void applyTextProperties(Text text) {
+    default void applyTextHolderProperties(Text text) {
         text.setFont(getStyled(FONT));
-        text.setFill(getStyled(TEXT_FILL_COLOR));
-        text.setFontSmoothingType(getStyled(FONT_SMOOTHING_TYPE));
         text.setLineSpacing(getStyled(LINE_SPACING));
         text.setStrikethrough(getStyled(STRIKETHROUGH));
         text.setTextAlignment(getStyled(TEXT_ALIGNMENT));

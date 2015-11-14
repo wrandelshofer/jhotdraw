@@ -12,6 +12,7 @@ import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Line;
+import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.DrawingView;
@@ -30,7 +31,7 @@ import org.jhotdraw.draw.handle.PointHandle;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineFigure extends AbstractShapeFigure {
+public class LineFigure extends AbstractLeafFigure implements StrokedShapeFigure {
 
     /**
      * The CSS type selector for this object is {@code "Line"}.
@@ -86,7 +87,7 @@ public class LineFigure extends AbstractShapeFigure {
     public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
         applyFigureProperties(lineNode);
-        applyShapeProperties(lineNode);
+        applyStrokedShapeProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());
@@ -117,6 +118,15 @@ public class LineFigure extends AbstractShapeFigure {
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
+    }
+    @Override
+    public void layout() {
+        // empty
+    }
+    
+    @Override
+    public boolean isLayoutable() {
+        return false;
     }
 
 }

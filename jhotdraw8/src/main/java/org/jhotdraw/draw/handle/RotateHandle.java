@@ -21,6 +21,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import static org.jhotdraw.draw.Figure.ROTATE;
+import static org.jhotdraw.draw.Figure.ROTATION_AXIS;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.geom.Geom;
 
@@ -75,7 +77,8 @@ public class RotateHandle extends AbstractHandle {
         p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
-        f.applyFigureProperties(node);
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }
 
     @Override
