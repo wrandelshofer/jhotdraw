@@ -8,23 +8,14 @@ package org.jhotdraw.draw;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
-import java.util.Collections;
-import java.util.List;
 import javafx.geometry.VPos;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw.draw.key.DoubleListStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw.draw.key.FontStyleableFigureKey;
-import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
 /**
  * TextHolderFigure.
