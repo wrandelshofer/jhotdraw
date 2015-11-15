@@ -19,8 +19,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.Figure.ROTATE;
-import static org.jhotdraw.draw.Figure.ROTATION_AXIS;
+import static org.jhotdraw.draw.TransformableFigure.ROTATE;
+import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.model.DrawingModel;
@@ -86,7 +86,7 @@ public class ConnectionPointHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
+        Transform t = view.getWorldToView().createConcatenation(f.getLocalToDrawing());
         Point2D p = f.get(pointKey);
         p = t.transform(p);
         boolean isConnected = f.get(connectorKey) != null;
@@ -105,7 +105,7 @@ public class ConnectionPointHandle extends AbstractHandle {
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-        Point2D newPoint = view.viewToDrawing(pointInViewCoordinates);
+        Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
 
         Point2D constrainedPoint;
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -121,7 +121,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
             for (Figure ff : list) {
-                Point2D pointInLocal = ff.drawingToLocal(newPoint);
+                Point2D pointInLocal = ff.worldToLocal(newPoint);
                 newConnector = ff.findConnector(pointInLocal, o);
                 if (newConnector != null) {
                     newConnectedFigure = ff;
@@ -131,7 +131,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         }
 
         DrawingModel model = view.getModel();
-        model.set(o, pointKey, getOwner().drawingToLocal(constrainedPoint));
+        model.set(o, pointKey, getOwner().worldToLocal(constrainedPoint));
         model.set(o, connectorKey, newConnector);
     }
 

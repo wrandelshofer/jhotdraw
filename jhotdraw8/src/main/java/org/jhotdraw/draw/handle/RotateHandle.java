@@ -21,8 +21,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.Figure.ROTATE;
-import static org.jhotdraw.draw.Figure.ROTATION_AXIS;
+import org.jhotdraw.draw.TransformableFigure;
+import static org.jhotdraw.draw.TransformableFigure.ROTATE;
+import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.geom.Geom;
 
@@ -42,11 +43,11 @@ public class RotateHandle extends AbstractHandle {
     private Point2D center;
         protected Set<Figure> groupReshapeableFigures;
         
-    public RotateHandle(Figure figure) {
+    public RotateHandle(TransformableFigure figure) {
         this(figure, STYLECLASS_HANDLE_ROTATE);
     }
 
-    public RotateHandle(Figure figure, String styleclass) {
+    public RotateHandle(TransformableFigure figure, String styleclass) {
         super(figure);
         this.styleclass = styleclass;
         node = new Region();
@@ -70,7 +71,7 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
+        Transform t = view.getWorldToView().createConcatenation(f.getLocalToDrawing());
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
@@ -83,7 +84,7 @@ public class RotateHandle extends AbstractHandle {
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
         center = getOwner().getCenterInLocal();
             // determine which figures can be reshaped together as a group
             Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -100,12 +101,12 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
         // FIXME implement me!
-        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         double oldRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
         double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
 
-        double ownerAngle = getOwner().get(Figure.ROTATE);
+        double ownerAngle = getOwner().get(TransformableFigure.ROTATE);
 
         newRotate = newRotate % 360;
         if (newRotate < 0) {
@@ -125,10 +126,11 @@ public class RotateHandle extends AbstractHandle {
         if (event.isShiftDown()) {
             // shift transforms all selected figures
             for (Figure f : groupReshapeableFigures) {
-                model.set(f, Figure.ROTATE, newRotate);
+                if (f instanceof TransformableFigure)
+                model.set(f, TransformableFigure.ROTATE, newRotate);
             }
         } else {
-            model.set(getOwner(), Figure.ROTATE, newRotate);
+            model.set(getOwner(), TransformableFigure.ROTATE, newRotate);
         }
 
         oldPoint = newPoint;

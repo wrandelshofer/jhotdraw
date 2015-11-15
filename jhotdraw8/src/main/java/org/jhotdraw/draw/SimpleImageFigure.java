@@ -34,7 +34,7 @@ import org.jhotdraw.draw.shape.StrokedShapeFigure;
  *
  * @author Werner Randelshofer
  */
-public class SimpleImageFigure extends AbstractLeafFigure {
+public class SimpleImageFigure extends AbstractLeafFigure implements TransformableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Image"}.
@@ -90,7 +90,7 @@ public class SimpleImageFigure extends AbstractLeafFigure {
         ImageView imageView = (ImageView) node;
         validateImage();
         imageView.setImage(cachedImage);
-        applyFigureProperties(imageView);
+        applyTransformableFigureProperties(imageView);
         Rectangle2D r = get(IMAGE_RECTANGLE);
         imageView.setX(r.getMinX());
         imageView.setY(r.getMinY());

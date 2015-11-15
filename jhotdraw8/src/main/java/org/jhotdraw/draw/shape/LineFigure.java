@@ -86,7 +86,7 @@ public class LineFigure extends AbstractLeafFigure implements StrokedShapeFigure
     @Override
     public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
-        applyFigureProperties(lineNode);
+        applyTransformableFigureProperties(lineNode);
         applyStrokedShapeProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());

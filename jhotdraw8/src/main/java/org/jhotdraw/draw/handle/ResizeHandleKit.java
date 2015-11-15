@@ -21,8 +21,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.Figure.ROTATE;
-import static org.jhotdraw.draw.Figure.ROTATION_AXIS;
+import static org.jhotdraw.draw.TransformableFigure.ROTATE;
+import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.model.DrawingModel;
@@ -204,28 +204,28 @@ public class ResizeHandleKit {
         @Override
         public void updateNode(DrawingView view) {
             Figure f = getOwner();
-            Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
+            Transform t = view.getWorldToView().createConcatenation(f.getLocalToDrawing());
             Bounds b = f.getBoundsInLocal();
             Point2D p = getLocation();
             //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
             p = t.transform(p);
             node.relocate(p.getX() - 5, p.getY() - 5);
             // rotates the node:
-           // f.applyFigureProperties(node);
+           // f.applyTransformableFigureProperties(node);
         node.setRotate(f.getStyled(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
         }
 
         @Override
         public void onMousePressed(MouseEvent event, DrawingView view) {
-            oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+            oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
             startBounds = getOwner().getBoundsInLocal();
             preferredAspectRatio = getOwner().getPreferredAspectRatio();
         }
 
         @Override
         public void onMouseDragged(MouseEvent event, DrawingView view) {
-            Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+            Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
             if (!event.isAltDown() && !event.isControlDown()) {
                 // alt or control turns the constrainer off
@@ -241,7 +241,7 @@ public class ResizeHandleKit {
             // shift should apply the handle to all group reshapeable figures.
             boolean keepAspect = event.isShiftDown();
 
-            resize(getOwner().drawingToLocal(newPoint), getOwner(), startBounds, view.getModel(), keepAspect);
+            resize(getOwner().worldToLocal(newPoint), getOwner(), startBounds, view.getModel(), keepAspect);
         }
 
         @Override

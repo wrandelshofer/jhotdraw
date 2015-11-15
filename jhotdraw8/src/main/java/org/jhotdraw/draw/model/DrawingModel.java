@@ -211,4 +211,11 @@ public interface DrawingModel extends Observable {
     default void fireTransformInvalidated(Figure f) {
         fire(DrawingModelEvent.transformChanged(this, f));
     }
+    /**
+     * Fires "node invalidated" event for the specified figure.
+     * @param f the figure
+     */
+    default void fireLayoutInvalidated(Figure f) {
+        fire(DrawingModelEvent.layoutInvalidated(this, f));
+    }
 }

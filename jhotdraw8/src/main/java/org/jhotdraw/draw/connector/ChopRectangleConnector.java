@@ -45,7 +45,7 @@ public class ChopRectangleConnector extends CenterConnector {
             }
             r = Geom.grow(r, grow, grow);
         }
-        return target.localToDrawing(Geom.angleToPoint(r, Geom.pointToAngle(r, target.drawingToLocal(new Point2D(endX, endY)))));
+        return target.localToDrawing(Geom.angleToPoint(r, Geom.pointToAngle(r, target.worldToLocal(new Point2D(endX, endY)))));
     }
 
 }

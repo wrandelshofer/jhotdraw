@@ -73,7 +73,7 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokedShapeFig
     @Override
     public void updateNode(RenderContext drawingView, Node node) {
         Ellipse n = (Ellipse) node;
-        applyFigureProperties(n);
+        applyTransformableFigureProperties(n);
         applyStrokedShapeProperties(n);
         applyFilledShapeProperties(n);
         Rectangle2D r = get(BOUNDS);

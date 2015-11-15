@@ -18,8 +18,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.Figure.ROTATE;
-import static org.jhotdraw.draw.Figure.ROTATION_AXIS;
+import static org.jhotdraw.draw.TransformableFigure.ROTATE;
+import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
@@ -54,9 +54,6 @@ public class PointHandle extends AbstractHandle {
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
         node.setCursor(Cursor.MOVE);
-        // rotates the node:
-        node.setRotate(figure.getStyled(ROTATE));
-        node.setRotationAxis(figure.getStyled(ROTATION_AXIS));
     }
 
     @Override
@@ -67,10 +64,13 @@ public class PointHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
+        Transform t = view.getWorldToView().createConcatenation(f.getLocalToDrawing());
         Point2D p = f.get(pointKey);
         p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
+        // rotates the node:
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }
 
     @Override
@@ -79,14 +79,14 @@ public class PointHandle extends AbstractHandle {
 
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
-        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control switches the constrainer off
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
         
-        view.getModel().set(getOwner(), pointKey, getOwner().drawingToLocal(newPoint));
+        view.getModel().set(getOwner(), pointKey, getOwner().worldToLocal(newPoint));
     }
 
     @Override

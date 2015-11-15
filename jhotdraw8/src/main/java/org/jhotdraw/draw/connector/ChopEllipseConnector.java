@@ -47,7 +47,7 @@ public class ChopEllipseConnector extends CenterConnector {
             }
             r = Geom.grow(r, grow, grow);
         }
-        double angle = Geom.pointToAngle(r, target.drawingToLocal(new Point2D(endX, endY)));
+        double angle = Geom.pointToAngle(r, target.worldToLocal(new Point2D(endX, endY)));
         return target.localToDrawing(Geom.ovalAngleToPoint(r, angle));
     }
 }

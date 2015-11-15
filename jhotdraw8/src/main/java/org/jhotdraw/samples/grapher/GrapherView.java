@@ -11,25 +11,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
-import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
@@ -162,9 +156,9 @@ public class GrapherView extends AbstractView implements EditorView {
             protected List<Node> call() throws Exception {
                 List<Node> list = new LinkedList<>();
                 addInspector(new StyleAttributesInspector(), "styleAttributes",Priority.ALWAYS, list);
-                addInspector(new DrawingInspector(), "drawing",Priority.NEVER, list);
                 addInspector(new StylesheetsInspector(), "stylesheets",Priority.ALWAYS, list);
                 addInspector(new LayersInspector(layerFactory), "layers",Priority.ALWAYS, list);
+                addInspector(new DrawingInspector(), "drawing",Priority.NEVER, list);
                 addInspector(new GridInspector(), "grid",Priority.NEVER, list);
 
                 return list;

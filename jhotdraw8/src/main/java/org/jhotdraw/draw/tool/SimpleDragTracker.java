@@ -66,7 +66,7 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
 
     @Override
     public void trackMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure, view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+        oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure, view.viewToWorld(new Point2D(event.getX(), event.getY())));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView view) {
-        Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
             newPoint = view.getConstrainer().constrainPoint(anchorFigure, newPoint);
@@ -94,10 +94,10 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
             DrawingModel dm = view.getModel();
             if (event.isShiftDown()) {
                 // shift only reshapes the anchor figure
-                dm.reshape(anchorFigure, anchorFigure.getDrawingToParent().createConcatenation(tx));
+                dm.reshape(anchorFigure, anchorFigure.getWorldToParent().createConcatenation(tx));
             } else {
                 for (Figure f : groupReshapeableFigures) {
-                    dm.reshape(f, f.getDrawingToParent().createConcatenation(tx));
+                    dm.reshape(f, f.getWorldToParent().createConcatenation(tx));
                 }
             }
         }

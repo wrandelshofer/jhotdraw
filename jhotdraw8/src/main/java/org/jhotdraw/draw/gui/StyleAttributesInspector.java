@@ -183,6 +183,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 sm.applyStylesheetTo(StyleOrigin.USER, s, f, pseudoStyles);
                 m.fireNodeInvalidated(f);
                 m.fireTransformInvalidated(f);
+                m.fireLayoutInvalidated(f);
             }
 
         } catch (IOException ex) {

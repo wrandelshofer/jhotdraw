@@ -45,7 +45,7 @@ public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
     @Override
     public void updateNode(RenderContext v, Node n) {
         Group g = (Group) n;
-        applyFigureProperties(n);
+        //applyTransformableFigureProperties(n);
         ObservableList<Node> children = ((Group) n).getChildren();
         children.clear();
         Bounds bounds = getBoundsInLocal();
