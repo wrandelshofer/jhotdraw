@@ -1,5 +1,5 @@
 /*
- * @(#)TextHolderFigure.java
+ * @(#)TextableFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -10,12 +10,13 @@ import javafx.scene.text.Text;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
 /**
- * TextHolderFigure.
+ * {@code LabelFigure} is a {@code TextableFigure} which allows to change
+ * the fill color of the text.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface LabelFigure extends TextHolderFigure {
+public interface LabelFigure extends TextableFigure, TransformableFigure {
 
     /**
      * Defines the paint used for filling the interior of the text. Default

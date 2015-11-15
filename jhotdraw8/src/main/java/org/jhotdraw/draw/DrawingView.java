@@ -422,7 +422,7 @@ public interface DrawingView extends RenderContext {
      * @return the transformation;
      */
     default Transform getViewToDrawing() {
-        return getWorldToView().createConcatenation(getDrawing().getParentToLocal());
+        return getViewToWorld().createConcatenation(getDrawing().getParentToLocal());
     }
     /**
      * Converts view coordinates into drawing coordinates.
