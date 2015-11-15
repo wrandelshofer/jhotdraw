@@ -6,6 +6,7 @@ package org.jhotdraw.css;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.text.ParseException;
 
 /**
  * {@code CssTokenizer} processes an input stream of characters into tokens for
@@ -360,6 +361,7 @@ public class CssTokenizer {
                         stringValue = String.valueOf((char) currentToken);
                     }
                 } else {
+                    in.pushBack(next1);
                     StringBuilder buf = new StringBuilder();
                     if (numMacro(ch, buf)) {
                         ch = in.nextChar();
@@ -878,6 +880,21 @@ public class CssTokenizer {
 
     public int getPosition() {
         return position;
+    }
+    
+    /** Consumes tokens until a non-whitespace token arrives.
+     * That token is then pushed back.
+     * 
+     * @param tt
+     * @throws IOException
+     * @throws ParseException 
+     */
+    public void skipWhitespace() throws IOException {
+        while (nextToken() == TT_S//
+                || currentToken() == TT_CDC//
+                || currentToken() == TT_CDO) {
+        }
+        pushBack();
     }
 
 }
