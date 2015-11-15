@@ -17,7 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.shape.StrokedShapeFigure;
 import static java.lang.Math.*;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +24,13 @@ import java.util.Set;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
+import org.jhotdraw.draw.handle.MoveHandleKit;
+import org.jhotdraw.draw.handle.PointHandle;
+import org.jhotdraw.draw.handle.RotateHandle;
+import org.jhotdraw.draw.locator.PointLocator;
 import org.jhotdraw.draw.shape.LineFigure;
+import static org.jhotdraw.draw.shape.LineFigure.END;
+import static org.jhotdraw.draw.shape.LineFigure.START;
 
 /**
  * LineConnectionFigure.
@@ -33,7 +38,7 @@ import org.jhotdraw.draw.shape.LineFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineConnectionFigure extends AbstractLeafFigure implements StrokedShapeFigure, TransformableFigure {
+public class LineConnectionFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure {
 
     /**
      * The CSS type selector for this object is {@code "LineConnection"}.
@@ -141,8 +146,8 @@ public class LineConnectionFigure extends AbstractLeafFigure implements StrokedS
     @Override
     public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
-        applyTransformableFigureProperties(lineNode);
-        applyStrokedShapeProperties(lineNode);
+        applyHideableFigureProperties(lineNode);
+        applyStrokeableFigureProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());
@@ -188,8 +193,16 @@ public class LineConnectionFigure extends AbstractLeafFigure implements StrokedS
     public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
-        } else if (handleType == HandleType.MOVE || handleType == HandleType.RESIZE) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            if (get(START_CONNECTOR) == null) {
+                list.add(new MoveHandleKit.MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(START)));
+            }
+            if (get(END_CONNECTOR) == null) {
+                list.add(new MoveHandleKit.MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(END)));
+            }
+        } else if (handleType == HandleType.RESIZE) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             list.add(new ConnectionPointHandle(this, START, START_CONNECTOR));
             list.add(new ConnectionPointHandle(this, END, END_CONNECTOR));
         } else {

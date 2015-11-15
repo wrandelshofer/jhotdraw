@@ -15,7 +15,7 @@ package org.jhotdraw.draw;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Layer extends Figure {
+public interface Layer extends HideableFigure {
     /**
      * The CSS type selector for a layer figure is {@code "layer"}.
      */

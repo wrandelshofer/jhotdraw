@@ -124,54 +124,29 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     // ----
 
     /**
-     * Specifies a blend mode applied to the figure. The {@code null} value is
-     * interpreted as {@code SRC_OVER}.
-     * <p>
-     * Default value: {@code null}.
-     */
-    public static BlendModeStyleableFigureKey BLEND_MODE = new BlendModeStyleableFigureKey("blendMode", null);
-    /**
-     * Specifies an effect applied to the figure. The {@code null} value means
-     * that no effect is applied.
-     * <p>
-     * Default value: {@code null}.
-     */
-    public static EffectStyleableFigureKey EFFECT = new EffectStyleableFigureKey("effect", null);
-    /**
-     * Specifies the opacity of the figure. A figure with {@code 0} opacity is
-     * completely translucent. A figure with {@code 1} opacity is completely
-     * opaque.
-     * <p>
-     * Values smaller than {@code 0} are treated as {@code 0}. Values larger
-     * than {@code 1} are treated as {@code 1}.
-     * <p>
-     * Default value: {@code 1}.
-     */
-    public static DoubleStyleableFigureKey OPACITY = new DoubleStyleableFigureKey("opacity", 1.0);
-    /**
-     * Defines the visibility of the figure. Default value: {@code true}.
-     */
-    public static BooleanStyleableFigureKey VISIBLE = new BooleanStyleableFigureKey("visible", DirtyMask.of(DirtyBits.NODE), true);
-    /**
      * Whether the figure is locked. Default value: {@code false}.
      * <p>
      * A locked figure can not be selected or changed by the user, unless the
      * user explicity unlocks the figure.
+     * <p>
+     * Locking a figure also locks all its child figures.
      * <p>
      * This key is used by the user to prevent accidental selection or editing
      * of a figure.
      */
     public static BooleanKey LOCKED = new BooleanKey("locked", false);
     /**
-     * Whether the figure is disabled. Default value: {@code false}.
+     * Whether the figure is editable by the user. Default value: {@code true}.
      * <p>
-     * A disabled figure can not be selected or changed by the user, unless the
-     * application enables the figure.
+     * A non-editable figure can not be selected or changed by the user, unless the
+     * application makes the figure editable.
+     * <p>
+     * Making a figure non-editable also makes all its child figures non-editable.
      * <p>
      * This key is used to programmatically prevent that a user can select or
      * edit a figure.
      */
-    public static BooleanKey DISABLED = new BooleanKey("disabled", false);
+    public static BooleanKey USER_EDITABLE = new BooleanKey("userEditable", true);
     /**
      * Defines the id for styling the figure with CSS.
      *
@@ -560,10 +535,10 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return true if the user may select the figure
      */
-    default boolean isDisabledOrLocked() {
+    default boolean isDisabledOrUneditable() {
         Figure node = this;
         while (node != null) {
-            if (node.get(DISABLED) || node.get(LOCKED)) {
+            if (!node.get(USER_EDITABLE) || node.get(LOCKED)) {
                 return true;
             }
             node = node.getParent();
@@ -588,14 +563,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Whether the figure or one if its ancestors is disabled.
+     * Whether the figure or one if its ancestors is uneditable.
      *
-     * @return true if the figure or one its ancestors is disabled
+     * @return true if the figure or one its ancestors is uneditable.
      */
-    default boolean isDisabled() {
+    default boolean isUneditable() {
         Figure node = this;
         while (node != null) {
-            if (node.get(DISABLED)) {
+            if (!node.get(USER_EDITABLE)) {
                 return true;
             }
             node = node.getParent();
@@ -611,7 +586,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default boolean isVisible() {
         Figure node = this;
         while (node != null) {
-            if (!node.get(VISIBLE)) {
+            if (!node.get(HideableFigure.VISIBLE)) {
                 return false;
             }
             node = node.getParent();
@@ -849,23 +824,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Updates a figure node with all applicable {@code SimpleFigureKey}s
-     * defined in this interface.
-     * <p>
-     * Invokes the methods {@link #applyStyleProperties(javafx.scene.Node) },
-     * {@link #applyEffectProperties(javafx.scene.Node) },
-     * {@link #applyTransformProperties(javafx.scene.Node) }.
-     * <p>
-     * This method is intended to be used by {@link #updateNode}.
-     *
-     * @param node a node which was created with method {@link #createNode}.
-     */
-    default void applyFigureProperties(Node node) {
-        applyStyleProperties(node);
-        applyEffectProperties(node);
-    }
-
-    /**
      * Updates a figure node with all style and effect properties defined in
      * this interface.
      * <p>
@@ -875,27 +833,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyStyleProperties(Node node) {
+    default void applyStyleableFigureProperties(Node node) {
         String styleId = get(STYLE_ID);
         node.setId(styleId == null ? "" : styleId);
-        node.setVisible(getStyled(VISIBLE));
-    }
-
-    /**
-     * Updates a figure node with all effect properties defined in this
-     * interface.
-     * <p>
-     * Applies the following properties: {@code BLEND_MODE}, {@code EFFECT},
-     * {@code OPACITY}.
-     * <p>
-     * This method is intended to be used by {@link #updateNode}.
-     *
-     * @param node a node which was created with method {@link #createNode}.
-     */
-    default void applyEffectProperties(Node node) {
-        node.setBlendMode(getStyled(BLEND_MODE));
-        node.setEffect(getStyled(EFFECT));
-        node.setOpacity(getStyled(OPACITY));
     }
 
     // ---
