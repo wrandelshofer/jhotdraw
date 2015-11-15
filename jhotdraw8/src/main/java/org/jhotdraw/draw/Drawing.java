@@ -118,9 +118,9 @@ public interface Drawing extends Figure {
     public final static PaintStyleableFigureKey BACKGROUND = new PaintStyleableFigureKey("background", Color.WHITE);
 
     /**
-     * The CSS type selector for a drawing figure is {@code "drawing"}.
+     * The CSS type selector for a drawing figure is {@code "Drawing"}.
      */
-    public final static String TYPE_SELECTOR = "drawing";
+    public final static String TYPE_SELECTOR = "Drawing";
 
     @Override
     default String getTypeSelector() {
