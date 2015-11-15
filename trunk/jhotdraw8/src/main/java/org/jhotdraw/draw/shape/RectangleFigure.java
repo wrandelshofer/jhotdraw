@@ -78,7 +78,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokedShapeF
     @Override
     public void updateNode(RenderContext drawingView, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
-        applyFigureProperties(rectangleNode);
+        applyTransformableFigureProperties(rectangleNode);
         applyFilledShapeProperties(rectangleNode);
         applyStrokedShapeProperties(rectangleNode);
         Rectangle2D r = get(BOUNDS);

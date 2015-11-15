@@ -87,7 +87,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokedShapeFigure
         tn.setX(get(ORIGIN).getX());
         tn.setY(get(ORIGIN).getY());
         tn.setBoundsType(TextBoundsType.VISUAL);
-        applyFigureProperties(tn);
+        applyTransformableFigureProperties(tn);
         applyTextHolderProperties(tn);
         applyStrokedShapeProperties(tn);
         applyFilledShapeProperties(tn);

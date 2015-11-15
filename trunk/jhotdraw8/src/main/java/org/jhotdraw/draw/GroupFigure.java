@@ -17,7 +17,7 @@ import org.jhotdraw.draw.connector.Connector;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GroupFigure extends AbstractCompositeFigure {
+public class GroupFigure extends AbstractCompositeFigure implements TransformableFigure {
     /**
      * The CSS type selector for group objects is @code("group"}.
      */
@@ -33,7 +33,7 @@ public class GroupFigure extends AbstractCompositeFigure {
 
     @Override
     public void updateNode(RenderContext v, Node n) {
-        applyFigureProperties(n);
+        applyTransformableFigureProperties(n);
         ObservableList<Node> group = ((Group) n).getChildren();
         group.clear();
         for (Figure child : childrenProperty()) {

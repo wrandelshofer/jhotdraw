@@ -55,7 +55,7 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getDrawingToView().createConcatenation(f.getParentToDrawing());
+        Transform t = view.getWorldToView().createConcatenation(f.getParentToDrawing());
 
         Bounds b = f.getBoundsInParent();
         points[0] = b.getMinX();

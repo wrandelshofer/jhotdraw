@@ -394,19 +394,36 @@ public interface DrawingView extends RenderContext {
     }
 
     /**
+     * Returns the world to view transformation.
+     *
+     * @return the transformation
+     */
+    Transform getWorldToView();
+
+    /**
+     * Returns the view to world transformation.
+     *
+     * @return the transformation;
+     */
+    Transform getViewToWorld();
+
+    /**
      * Returns the drawing to view transformation.
      *
      * @return the transformation
      */
-    Transform getDrawingToView();
+    default Transform getDrawingToView() {
+        return getDrawing().getLocalToParent().createConcatenation(getWorldToView());
+    }
 
     /**
      * Returns the view to drawing transformation.
      *
      * @return the transformation;
      */
-    Transform getViewToDrawing();
-
+    default Transform getViewToDrawing() {
+        return getWorldToView().createConcatenation(getDrawing().getParentToLocal());
+    }
     /**
      * Converts view coordinates into drawing coordinates.
      *
@@ -420,13 +437,31 @@ public interface DrawingView extends RenderContext {
     /**
      * Converts drawing coordinates into view coordinates.
      *
-     * @param drawing a point in drawing coordinates
-     * @return the corresponding point in view coordinates
+     * @param drawing a point in world coordinates
+     * @return the corresponding point in drawing coordinates
      */
     default Point2D drawingToView(Point2D drawing) {
         return getDrawingToView().transform(drawing);
     }
+    /**
+     * Converts view coordinates into world coordinates.
+     *
+     * @param view a point in view coordinates
+     * @return the corresponding point in world coordinates
+     */
+    default Point2D viewToWorld(Point2D view) {
+        return getViewToWorld().transform(view);
+    }
 
+    /**
+     * Converts world coordinates into view coordinates.
+     *
+     * @param world a point in world coordinates
+     * @return the corresponding point in view coordinates
+     */
+    default Point2D worldToView(Point2D world) {
+        return getWorldToView().transform(world);
+    }
     /**
      * Converts view coordinates into drawing coordinates.
      *
@@ -447,6 +482,27 @@ public interface DrawingView extends RenderContext {
      */
     default Point2D drawingToView(double dx, double dy) {
         return getDrawingToView().transform(dx, dy);
+    }
+    /**
+     * Converts view coordinates into world coordinates.
+     *
+     * @param vx the x coordinate of a point in view coordinates
+     * @param vy the y coordinate of a point in view coordinates
+     * @return the corresponding point in world coordinates
+     */
+    default Point2D viewToWorld(double vx, double vy) {
+        return getViewToWorld().transform(vx, vy);
+    }
+
+    /**
+     * Converts world coordinates into view coordinates.
+     *
+     * @param dx the x coordinate of a point in world coordinates
+     * @param dy the y coordinate of a point in world coordinates
+     * @return the corresponding point in view coordinates
+     */
+    default Point2D worldToView(double dx, double dy) {
+        return getWorldToView().transform(dx, dy);
     }
 
     /**

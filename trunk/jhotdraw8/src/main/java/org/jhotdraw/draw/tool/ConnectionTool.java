@@ -66,7 +66,7 @@ public class ConnectionTool extends AbstractTool {
         Platform.runLater(() -> view.getNode().requestFocus());
         figure = figureFactory.get();
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-        Point2D newPoint = view.viewToDrawing(pointInViewCoordinates);
+        Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
         Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, newPoint);
         figure.reshape(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
@@ -107,7 +107,7 @@ public class ConnectionTool extends AbstractTool {
     @Override
     protected void onMouseDragged(MouseEvent event, DrawingView view) {
         if (figure != null) {
-            Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+            Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
             Connector newConnector = null;
             if (!event.isMetaDown()) {
@@ -129,7 +129,7 @@ public class ConnectionTool extends AbstractTool {
             }
 
             DrawingModel model = view.getModel();
-            model.set(figure, LineConnectionFigure.END, figure.drawingToLocal(constrainedPoint));
+            model.set(figure, LineConnectionFigure.END, figure.worldToLocal(constrainedPoint));
             model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
         }
         event.consume();

@@ -26,7 +26,7 @@ import static org.jhotdraw.draw.shape.TextFigure.ORIGIN;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderFigure, LabelFigure {
+public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderFigure, LabelFigure, TransformableFigure {
 
     public final static Key<Point2D> ORIGIN = new SimpleFigureKey<>("origin", Point2D.class, DirtyMask.of(DirtyBits.NODE),new Point2D(0, 0));
     /**
@@ -83,7 +83,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextHolderF
         tn.setX(get(ORIGIN).getX());
         tn.setY(get(ORIGIN).getY());
         tn.setBoundsType(TextBoundsType.VISUAL);
-        applyFigureProperties(tn);
+        applyTransformableFigureProperties(tn);
         applyTextHolderProperties(tn);
         applyLabelProperties(tn);
     }

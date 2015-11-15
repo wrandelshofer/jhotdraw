@@ -99,10 +99,10 @@ import org.jhotdraw.draw.key.StringStyleableFigureKey;
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
- * {@link org.jhotdraw.css.StyleableKey}. The style information is cached
- * in the figure getProperties. When the position of a figure in the tree
- * structure is changed, method {@code applyCss()} must be called to update the
- * style information of the figure and its descendants.</p>
+ * {@link org.jhotdraw.css.StyleableKey}. The style information is cached in the
+ * figure getProperties. When the position of a figure in the tree structure is
+ * changed, method {@code applyCss()} must be called to update the style
+ * information of the figure and its descendants.</p>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -149,66 +149,27 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      */
     public static DoubleStyleableFigureKey OPACITY = new DoubleStyleableFigureKey("opacity", 1.0);
     /**
-     * Defines the angle of rotation around the center of the figure in degrees.
-     * Default value: {@code 0}.
-     */
-    public static DoubleStyleableFigureKey ROTATE = new DoubleStyleableFigureKey("rotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 0.0);
-    /**
-     * Defines the rotation axis used. Default value: {@code Rotate.Z_AXIS}.
-     */
-    public static SimpleFigureKey<Point3D> ROTATION_AXIS = new SimpleFigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), Rotate.Z_AXIS);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the x axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
-    public static DoubleStyleableFigureKey SCALE_X = new DoubleStyleableFigureKey("scaleX", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 1.0);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the y axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
-    public static DoubleStyleableFigureKey SCALE_Y = new DoubleStyleableFigureKey("scaleY", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 1.0);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the z axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
-    public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 1.0);
-    /**
-     * Defines the translation on the x axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
-    public static DoubleStyleableFigureKey TRANSLATE_X = new DoubleStyleableFigureKey("translateX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 0.0);
-    /**
-     * Defines the translation on the y axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
-    public static DoubleStyleableFigureKey TRANSLATE_Y = new DoubleStyleableFigureKey("translateY", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 0.0);
-    /**
-     * Defines the translation on the z axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
-    public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 0.0);
-    /**
      * Defines the visibility of the figure. Default value: {@code true}.
      */
     public static BooleanStyleableFigureKey VISIBLE = new BooleanStyleableFigureKey("visible", DirtyMask.of(DirtyBits.NODE), true);
     /**
      * Whether the figure is locked. Default value: {@code false}.
      * <p>
-     * A locked figure can not be selected or changed by the user,
-     * unless the user explicity unlocks the figure.
+     * A locked figure can not be selected or changed by the user, unless the
+     * user explicity unlocks the figure.
      * <p>
-     * This key is used by the user to prevent accidental selection or
-     * editing of a figure.
+     * This key is used by the user to prevent accidental selection or editing
+     * of a figure.
      */
     public static BooleanKey LOCKED = new BooleanKey("locked", false);
     /**
      * Whether the figure is disabled. Default value: {@code false}.
      * <p>
-     * A disabled figure can not be selected or changed by the user, 
-     * unless the application enables the figure.
+     * A disabled figure can not be selected or changed by the user, unless the
+     * application enables the figure.
      * <p>
-     * This key is used to programmatically prevent that a user can 
-     * select or edit a figure.
+     * This key is used to programmatically prevent that a user can select or
+     * edit a figure.
      */
     public static BooleanKey DISABLED = new BooleanKey("disabled", false);
     /**
@@ -216,7 +177,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * Default value: {@code null}.
      */
-    public static FigureKey<String> STYLE_ID = new SimpleFigureKey<String>("id",String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static FigureKey<String> STYLE_ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
@@ -424,13 +385,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    default public Bounds getBoundsInDrawing() {
-        // FIXME apply parent transforms until root
-        // also implementations have to transform their
-        // geometry so that we get tighter bounds
-        return getBoundsInLocal();
-    }
-
     /**
      * Attempts to change the layout bounds of the figure.
      * <p>
@@ -609,13 +563,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default boolean isDisabledOrLocked() {
         Figure node = this;
         while (node != null) {
-            if (node.get(DISABLED)||node.get(LOCKED)) {
+            if (node.get(DISABLED) || node.get(LOCKED)) {
                 return true;
             }
             node = node.getParent();
         }
         return false;
     }
+
     /**
      * Whether the figure or one if its ancestors is locked.
      *
@@ -631,6 +586,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         }
         return false;
     }
+
     /**
      * Whether the figure or one if its ancestors is disabled.
      *
@@ -646,6 +602,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         }
         return false;
     }
+
     /**
      * Whether the figure and all its ancestors are visible.
      *
@@ -690,12 +647,16 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
             list.add(MoveHandleKit.southWest(this));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
-            list.add(new RotateHandle(this));
+            if (this instanceof TransformableFigure) {
+                list.add(new RotateHandle((TransformableFigure) this));
+            }
             ResizeHandleKit.addCornerResizeHandles(this, list);
             ResizeHandleKit.addEdgeResizeHandles(this, list);
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
-            list.add(new RotateHandle(this));
+            if (this instanceof TransformableFigure) {
+                list.add(new RotateHandle((TransformableFigure) this));
+            }
         }
     }
 
@@ -826,18 +787,18 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Returns the ancestor Drawing.
      *
-     * @return the drawing or null if no ancestor is a drawing.
-     * Returns this, if this figure is a drawing.
+     * @return the drawing or null if no ancestor is a drawing. Returns this, if
+     * this figure is a drawing.
      */
     default Drawing getDrawing() {
         return getAncestor(Drawing.class);
     }
-    
+
     /**
      * Returns the ancestor Layer.
      *
-     * @return the drawing or null if no ancestor is a layer.
-     * Returns this, if this figure is a layer.
+     * @return the drawing or null if no ancestor is a layer. Returns this, if
+     * this figure is a layer.
      */
     default Layer getLayer() {
         return getAncestor(Layer.class);
@@ -902,7 +863,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default void applyFigureProperties(Node node) {
         applyStyleProperties(node);
         applyEffectProperties(node);
-        applyTransformProperties(node);
     }
 
     /**
@@ -936,29 +896,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         node.setBlendMode(getStyled(BLEND_MODE));
         node.setEffect(getStyled(EFFECT));
         node.setOpacity(getStyled(OPACITY));
-    }
-
-    /**
-     * Updates a figure node with all transformation properties defined in this
-     * interface.
-     * <p>
-     * Applies the following properties: {@code ROTATE}, {@code ROTATION_AXIS},
-     * {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, {@code TRANSLATE_X},
-     * {@code TRANSLATE_Y}, {@code TRANSLATE_Z}.
-     * <p>
-     * This method is intended to be used by {@link #updateNode}.
-     *
-     * @param node a node which was created with method {@link #createNode}.
-     */
-    default void applyTransformProperties(Node node) {
-        node.setRotate(getStyled(ROTATE));
-        node.setRotationAxis(getStyled(ROTATION_AXIS));
-        node.setScaleX(getStyled(SCALE_X));
-        node.setScaleY(getStyled(SCALE_Y));
-        node.setScaleZ(getStyled(SCALE_Z));
-        node.setTranslateX(getStyled(TRANSLATE_X));
-        node.setTranslateY(getStyled(TRANSLATE_Y));
-        node.setTranslateZ(getStyled(TRANSLATE_Z));
     }
 
     // ---
@@ -1046,9 +983,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default Transform getParentToLocal() {
         Point2D center = getCenterInLocal();
 
-        Transform translate = Transform.translate(-getStyled(TRANSLATE_X), -get(TRANSLATE_Y));
-        Transform scale = Transform.scale(1.0 / getStyled(SCALE_X), 1.0 / get(SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(-getStyled(ROTATE), center.getX(), center.getY());
+        Transform translate = Transform.translate(-getStyled(TransformableFigure.TRANSLATE_X), -get(TransformableFigure.TRANSLATE_Y));
+        Transform scale = Transform.scale(1.0 / getStyled(TransformableFigure.SCALE_X), 1.0 / get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
+        Transform rotate = Transform.rotate(-getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
 
         Transform t = scale.createConcatenation(rotate).createConcatenation(translate);
         return t;
@@ -1062,34 +999,33 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      */
     default Transform getLocalToParent() {
         Point2D center = getCenterInLocal();
-        Transform translate = Transform.translate(getStyled(TRANSLATE_X), get(TRANSLATE_Y));
-        Transform scale = Transform.scale(getStyled(SCALE_X), get(SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(getStyled(ROTATE), center.getX(), center.getY());
+        Transform translate = Transform.translate(getStyled(TransformableFigure.TRANSLATE_X), get(TransformableFigure.TRANSLATE_Y));
+        Transform scale = Transform.scale(getStyled(TransformableFigure.SCALE_X), get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
+        Transform rotate = Transform.rotate(getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
 
         Transform t = translate.createConcatenation(rotate).createConcatenation(scale);
         return t;
     }
 
     /**
-     * Returns the transformation from drawing coordinates into local
-     * coordinates.
+     * Returns the transformation from world coordinates into local coordinates.
      *
      * @return the transformation
      */
-    default Transform getDrawingToLocal() {
+    default Transform getWorldToLocal() {
         Transform t = getParentToLocal();
-        return getParent() == null ? t : t.createConcatenation(getParent().getDrawingToLocal());
+        return getParent() == null ? t : t.createConcatenation(getParent().getWorldToLocal());
     }
 
     /**
-     * Returns the transformation from drawing coordinates into local
+     * Returns the transformation from world coordinates into parent
      * coordinates.
      *
      * @return the transformation
      */
-    default Transform getDrawingToParent() {
+    default Transform getWorldToParent() {
         Transform t = new Translate(0, 0);
-        return getParent() == null ? t : t.createConcatenation(getParent().getDrawingToLocal());
+        return getParent() == null ? t : t.createConcatenation(getParent().getWorldToLocal());
     }
 
     /**
@@ -1115,25 +1051,25 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Transforms the specified point from drawing coordinates into local
+     * Transforms the specified point from world coordinates into local
      * coordinates.
      *
-     * @param pointInDrawing point in drawing coordinates
+     * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
      */
-    default Point2D drawingToLocal(Point2D pointInDrawing) {
-        return getDrawingToLocal().transform(pointInDrawing);
+    default Point2D worldToLocal(Point2D pointInWorld) {
+        return getWorldToLocal().transform(pointInWorld);
     }
 
     /**
-     * Transforms the specified point from drawing coordinates into parent
+     * Transforms the specified point from world coordinates into parent
      * coordinates.
      *
-     * @param pointInDrawing point in drawing coordinates
+     * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
      */
-    default Point2D drawingToParent(Point2D pointInDrawing) {
-        return getDrawingToParent().transform(pointInDrawing);
+    default Point2D worldToParent(Point2D pointInWorld) {
+        return getWorldToParent().transform(pointInWorld);
     }
 
     /**

@@ -242,9 +242,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      * @return transform
      */
     @Override
-    public Transform getDrawingToParent() {
+    public Transform getWorldToParent() {
         if (drawingToParent == null) {
-            drawingToParent = Figure.super.getDrawingToParent();
+            drawingToParent = Figure.super.getWorldToParent();
         }
         return drawingToParent;
     }
@@ -255,9 +255,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      * @return transform
      */
     @Override
-    public Transform getDrawingToLocal() {
+    public Transform getWorldToLocal() {
         if (drawingToLocal == null) {
-            drawingToLocal = Figure.super.getDrawingToLocal();
+            drawingToLocal = Figure.super.getWorldToLocal();
         }
         return drawingToLocal;
     }

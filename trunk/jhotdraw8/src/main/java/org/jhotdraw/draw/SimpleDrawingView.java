@@ -67,6 +67,8 @@ import org.jhotdraw.geom.Geom;
  */
 public class SimpleDrawingView extends SimplePropertyBean implements DrawingView {
 
+    private boolean constrainerNodeValid;
+
     private static class FixedSizedGroup extends Group {
 
     }
@@ -152,12 +154,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         @Override
         public void handle(DrawingModelEvent event) {
+            Figure f = event.getFigure();
             switch (event.getEventType()) {
                 case FIGURE_ADDED_TO_PARENT:
-                    handleFigureAdded(event.getFigure());
+                    handleFigureAdded(f);
                     break;
                 case FIGURE_REMOVED_FROM_PARENT:
-                    handleFigureRemoved(event.getFigure());
+                    handleFigureRemoved(f);
                     break;
                 case FIGURE_ADDED_TO_DRAWING:
                     // not my business
@@ -166,9 +169,15 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     // not my business
                     break;
                 case NODE_INVALIDATED:
-                    handleNodeInvalidated(event.getFigure());
+                    handleNodeInvalidated(f);
                     break;
                 case LAYOUT_INVALIDATED:
+                    if (f == getDrawing()) {
+                        invalidateConstrainerNode();
+                        invalidateWorldViewTransforms();
+                        repaint();
+                    }
+                    break;
                 case STYLE_INVALIDATED:
                     // not my business
                     break;
@@ -178,11 +187,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     repaint();
                     break;
                 case SUBTREE_NODES_INVALIDATED:
-                    updateTreeNodes(event.getFigure());
+                    updateTreeNodes(f);
                     repaint();
                     break;
                 case SUBTREE_STRUCTURE_CHANGED:
-                    updateTreeStructure(event.getFigure());
+                    updateTreeStructure(f);
                     break;
                 case CONNECTION_CHANGED:
                 case TRANSFORM_CHANGED:
@@ -227,8 +236,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * sequence they were selected by the user.
      */
     private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
-    private Transform viewToDrawingTransform = null;
-    private Transform drawingToViewTransform = null;
+    private Transform viewToWorldTransform = null;
+    private Transform worldToViewTransform = null;
 
     private final double TOLERANCE = 10;
 
@@ -342,23 +351,23 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     @Override
-    public Transform getDrawingToView() {
-        if (drawingToViewTransform == null) {
+    public Transform getWorldToView() {
+        if (worldToViewTransform == null) {
             Transform st = new Scale(zoomFactor.get(), zoomFactor.get());
             Transform tr = new Translate(drawingPane.getTranslateX(), drawingPane.getTranslateY());
-            drawingToViewTransform = tr.createConcatenation(st);
+            worldToViewTransform = tr.createConcatenation(st);
         }
-        return drawingToViewTransform;
+        return worldToViewTransform;
     }
 
     @Override
-    public Transform getViewToDrawing() {
-        if (viewToDrawingTransform == null) {
+    public Transform getViewToWorld() {
+        if (viewToWorldTransform == null) {
             Transform st = new Scale(1.0 / zoomFactor.get(), 1.0 / zoomFactor.get());
             Transform tr = new Translate(-drawingPane.getTranslateX(), -drawingPane.getTranslateY());
-            viewToDrawingTransform = st.createConcatenation(tr);
+            viewToWorldTransform = st.createConcatenation(tr);
         }
-        return viewToDrawingTransform;
+        return viewToWorldTransform;
     }
 
     /**
@@ -381,7 +390,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         stackPane.setPrefSize(w, h);
 
-        invalidateDrawingViewTransforms();
+        invalidateWorldViewTransforms();
         invalidateHandleNodes();
     }
 
@@ -532,22 +541,21 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private void updateConstrainer(Constrainer oldValue, Constrainer newValue) {
         if (oldValue != null) {
             gridPane.getChildren().remove(oldValue.getNode());
-            oldValue.removeListener(this::onConstrainerInvalidated);
+            oldValue.removeListener(this::handleConstrainerInvalidated);
         }
         if (newValue != null) {
             gridPane.getChildren().add(newValue.getNode());
             newValue.getNode().applyCss();
             newValue.updateNode(this);
-            newValue.addListener(this::onConstrainerInvalidated);
+            newValue.addListener(this::handleConstrainerInvalidated);
+            invalidateConstrainerNode();
+            repaint();
         }
     }
 
-    private void onConstrainerInvalidated(Observable o) {
-        // XXX maybe we should use repaint here as well?
-        Constrainer c = (Constrainer) o;
-        if (c != null) {
-            c.updateNode(this);
-        }
+    private void handleConstrainerInvalidated(Observable o) {
+        invalidateConstrainerNode();
+        repaint();
     }
 
     private void updateTreeStructure(Figure parent) {
@@ -607,7 +615,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         if (f == getDrawing()) {
             updateLayout();
             if (constrainer.get() != null) {
-                onConstrainerInvalidated(constrainer.get());
+                handleConstrainerInvalidated(constrainer.get());
             }
         }
         repaint();
@@ -635,6 +643,14 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
         for (Handle h : secondaryHandles) {
             h.updateNode(this);
+        }
+
+        if (!constrainerNodeValid) {
+            constrainerNodeValid = true;
+            Constrainer c = getConstrainer();
+            if (c != null) {
+                c.updateNode(this);
+            }
         }
     }
 
@@ -711,6 +727,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         if (f == null) {
             f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), TOLERANCE);
         }
+System.out.println("SimpleDrawigView.findFigure "+f);        
         return f;
     }
 
@@ -740,7 +757,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     @Override
     public Figure findFigure(double vx, double vy, Set<Figure> figures) {
         Drawing dr = getDrawing();
-        Figure f = findFigureRecursiveInSet((Parent) getNode(dr), viewToDrawing(vx, vy), figures);
+        Figure f = findFigureRecursiveInSet((Parent) getNode(dr), viewToWorld(vx, vy), figures);
 
         return f;
     }
@@ -804,7 +821,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     @Override
     public List<Figure> findFigures(double vx, double vy, boolean decompose) {
-        Transform vt = getViewToDrawing();
+        Transform vt = getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
         List<Figure> list = new LinkedList<Figure>();
         findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose);
@@ -842,7 +859,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     @Override
     public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
-        Transform vt = getViewToDrawing();
+        Transform vt = getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
@@ -882,7 +899,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     @Override
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
-        Transform vt = getViewToDrawing();
+        Transform vt = getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
@@ -1027,8 +1044,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
     }
 
-    private void invalidateDrawingViewTransforms() {
-        drawingToViewTransform = viewToDrawingTransform = null;
+    private void invalidateWorldViewTransforms() {
+        worldToViewTransform = viewToWorldTransform = null;
+    }
+
+    private void invalidateConstrainerNode() {
+        constrainerNodeValid = false;
     }
 
     /**

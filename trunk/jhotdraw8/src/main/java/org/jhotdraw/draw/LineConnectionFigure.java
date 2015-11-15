@@ -33,7 +33,7 @@ import org.jhotdraw.draw.shape.LineFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineConnectionFigure extends AbstractLeafFigure implements StrokedShapeFigure {
+public class LineConnectionFigure extends AbstractLeafFigure implements StrokedShapeFigure, TransformableFigure {
 
     /**
      * The CSS type selector for this object is {@code "LineConnection"}.
@@ -141,7 +141,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements StrokedS
     @Override
     public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
-        applyFigureProperties(lineNode);
+        applyTransformableFigureProperties(lineNode);
         applyStrokedShapeProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
@@ -167,10 +167,10 @@ public class LineConnectionFigure extends AbstractLeafFigure implements StrokedS
         // We must switch off rotations for the following computations
         // because
         if (startConnector != null) {
-            set(START, drawingToParent(startConnector.chopStart(this, start, end)));
+            set(START, worldToParent(startConnector.chopStart(this, start, end)));
         }
         if (endConnector != null) {
-            set(END, drawingToParent(endConnector.chopEnd(this, start, end)));
+            set(END, worldToParent(endConnector.chopEnd(this, start, end)));
         }
     }
 

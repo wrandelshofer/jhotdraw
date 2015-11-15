@@ -21,6 +21,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.model.DrawingModel;
@@ -70,19 +71,21 @@ public class MoveHandleKit {
         @Override
         public void updateNode(DrawingView view) {
             Figure f = getOwner();
-            Transform t = view.getDrawingToView().createConcatenation(f.getLocalToDrawing());
+            Transform t = view.getWorldToView().createConcatenation(f.getLocalToDrawing());
             Bounds b = f.getBoundsInLocal();
             Point2D p = getLocation();
             //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
             p = t.transform(p);
             node.relocate(p.getX() - 5, p.getY() - 5);
             // rotates the node:
-            f.applyFigureProperties(node);
+            if (f instanceof TransformableFigure) {
+            ((TransformableFigure)f).applyTransformableFigureProperties(node);
+            }
         }
 
         @Override
         public void onMousePressed(MouseEvent event, DrawingView view) {
-            oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToDrawing(new Point2D(event.getX(), event.getY())));
+            oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
             
             // determine which figures can be reshaped together as a group
             Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -97,7 +100,7 @@ public class MoveHandleKit {
 
         @Override
         public void onMouseDragged(MouseEvent event, DrawingView view) {
-            Point2D newPoint = view.viewToDrawing(new Point2D(event.getX(), event.getY()));
+            Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
             if (!event.isAltDown() && !event.isControlDown()) {
                 // alt or control turns the constrainer off
@@ -116,11 +119,11 @@ public class MoveHandleKit {
                 if (event.isShiftDown()) {
                     // shift transforms all selected figures
                     for (Figure f : groupReshapeableFigures) {
-                        tx = f.getDrawingToParent().createConcatenation(tx);
+                        tx = f.getWorldToParent().createConcatenation(tx);
                         model.reshape(f, tx);
                     }
                 } else {
-                    tx = getOwner().getDrawingToParent().createConcatenation(tx);
+                    tx = getOwner().getWorldToParent().createConcatenation(tx);
                     model.reshape(getOwner(), tx);
                 }
             }

@@ -7,18 +7,13 @@ package org.jhotdraw.draw.shape;
 import java.util.Collections;
 import java.util.List;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.AbstractLeafFigure;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
-import org.jhotdraw.draw.key.SimpleFigureKey;
-import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleListStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.EnumStyleableFigureKey;
@@ -31,7 +26,7 @@ import org.jhotdraw.draw.key.PaintStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface StrokedShapeFigure extends Figure {
+public interface StrokedShapeFigure extends TransformableFigure {
 
     /**
      * Defines the distance in user coordinates for the dashing pattern. Default

@@ -15,7 +15,7 @@
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
          </BorderPane.margin>
          <children>
-            <CheckBox fx:id="updateContentsCheckBox" mnemonicParsing="false" selected="true" text="%updateContentsCheckBox.text" />
+            <CheckBox fx:id="updateContentsCheckBox" minWidth="24.0" mnemonicParsing="false" selected="true" text="%updateContentsCheckBox.text" />
             <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
             <Button fx:id="applyButton" mnemonicParsing="false" text="%applyButton.text">
                <HBox.margin>
@@ -26,7 +26,7 @@
       </HBox>
    </bottom>
    <center>
-      <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="6" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
    </center>
    <styleClass>
       <String fx:value="inspector" />

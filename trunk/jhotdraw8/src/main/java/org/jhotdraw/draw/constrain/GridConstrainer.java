@@ -253,34 +253,37 @@ public class GridConstrainer extends AbstractConstrainer {
         if (drawGrid.get()) {
             Drawing drawing = drawingView.getDrawing();
             Transform t = drawingView.getDrawingToView();
-            Point2D gxy = t.transform(x.get(), y.get());
-            Point2D gwh = t.transform(width.get(), height.get());
-            Point2D dwh = t.transform(drawing.get(Drawing.WIDTH), drawing.get(Drawing.HEIGHT));
-            Point2D zxy = t.transform(0, 0);
-            double zx = zxy.getX();
-            double zy = zxy.getY();
-            double gx = gxy.getX();
-            double gy = gxy.getY();
-            double gw = gwh.getX();
-            double gh = gwh.getY();
-            double dw = dwh.getX();
-            double dh = dwh.getY();
-
-            if (gh > 1) {
-                for (double iy = zy; iy < dh; iy += gh) {
-                    double yrounded = Math.round(iy + gy) + 0.5;
-                    elements.add(new MoveTo(zx, yrounded));
-                    elements.add(new LineTo(dw, yrounded));
-                }
+            
+            double dw = drawing.get(Drawing.WIDTH);
+            double dh = drawing.get(Drawing.HEIGHT);
+            
+            double gx0 = x.get();
+            double gy0 = y.get();
+            double gxdelta = width.get();
+            double gydelta = height.get();
+            
+            for (double x=gx0; x<dw; x+=gxdelta) {
+                double x1=x;
+                double y1=0;
+                double x2=x;
+                double y2=dh;
+                
+                Point2D p1=t.transform(x1,y1);
+                Point2D p2=t.transform(x2,y2);
+                    elements.add(new MoveTo(Math.round(p1.getX())+0.5, p1.getY()));
+                    elements.add(new LineTo(Math.round(p2.getX())+0.5, p2.getY()));
             }
-            if (gw > 1) {
-                for (double ix = zx; ix < dw; ix += gw) {
-                    double xrounded = Math.round(ix + gx) + 0.5;
-                    elements.add(new MoveTo(xrounded, zy));
-                    elements.add(new LineTo(xrounded, dh));
-                }
-            }
-        }
+            for (double y=gy0; y<dh; y+=gydelta) {
+                double x1=0;
+                double y1=y;
+                double x2=dw;
+                double y2=y;
+                
+                Point2D p1=t.transform(x1,y1);
+                Point2D p2=t.transform(x2,y2);
+                    elements.add(new MoveTo(p1.getX(),Math.round(p1.getY())+0.5));
+                    elements.add(new LineTo(p2.getX(),Math.round(p2.getY())+0.5));
+            }}
     }
 
     public DoubleProperty xProperty() {
