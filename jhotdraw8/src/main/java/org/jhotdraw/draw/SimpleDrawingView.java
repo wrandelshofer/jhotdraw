@@ -521,7 +521,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
                 Layer layer = (Layer) d.getChild(i);
-                if (!layer.isDisabledOrLocked() && layer.isVisible()) {
+                if (!layer.isDisabledOrUneditable() && layer.isVisible()) {
                     activeLayer.set(layer);
                     break;
                 }
@@ -727,7 +727,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         if (f == null) {
             f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), TOLERANCE);
         }
-System.out.println("SimpleDrawigView.findFigure "+f);        
         return f;
     }
 
@@ -741,12 +740,12 @@ System.out.println("SimpleDrawigView.findFigure "+f);
             Point2D pl = n.parentToLocal(pp);
             if (contains(n, pl, tolerance)) {
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable() && !f.isDisabledOrLocked()) {
+                if (f == null || !f.isSelectable() && !f.isDisabledOrUneditable()) {
                     if (n instanceof Parent) {
                         f = findFigureRecursive((Parent) n, pl, tolerance);
                     }
                 }
-                if (f != null && !f.isDisabledOrLocked()) {
+                if (f != null && !f.isDisabledOrUneditable()) {
                     return f;
                 }
             }
@@ -772,12 +771,12 @@ System.out.println("SimpleDrawigView.findFigure "+f);
             Point2D pl = n.parentToLocal(pp);
             if (contains(n, pl, TOLERANCE)) {
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable() && !f.isDisabledOrLocked()) {
+                if (f == null || !f.isSelectable() && !f.isDisabledOrUneditable()) {
                     if (n instanceof Parent) {
                         f = findFigureRecursiveInSet((Parent) n, pl, figures);
                     }
                 }
-                if (f != null && !f.isDisabledOrLocked() && figures.contains(f)) {
+                if (f != null && !f.isDisabledOrUneditable() && figures.contains(f)) {
                     return f;
                 }
             }
@@ -837,10 +836,10 @@ System.out.println("SimpleDrawigView.findFigure "+f);
                 Point2D pl = n.parentToLocal(pp);
                 if (contains(n, pl, TOLERANCE)) { // only drill down if the parent contains the point
                     Figure f = nodeToFigureMap.get(n);
-                    if (f != null && f.isSelectable() && !f.isDisabledOrLocked()) {
+                    if (f != null && f.isSelectable() && !f.isDisabledOrUneditable()) {
                         found.add(f);
                     }
-                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrLocked()) {
+                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrUneditable()) {
                         if (n instanceof Parent) {
                             findFiguresRecursive((Parent) n, pl, found, decompose);
                         }
@@ -877,10 +876,10 @@ System.out.println("SimpleDrawigView.findFigure "+f);
                 Bounds pl = n.parentToLocal(pp);
                 if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent bounds contains the point
                     Figure f = nodeToFigureMap.get(n);
-                    if (f != null && f.isSelectable() && !f.isDisabledOrLocked()) {
+                    if (f != null && f.isSelectable() && !f.isDisabledOrUneditable()) {
                         found.add(f);
                     }
-                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrLocked()) {
+                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrUneditable()) {
                         if (n instanceof Parent) {
                             findFiguresInsideRecursive((Parent) n, pl, found, decompose);
                         }
@@ -915,10 +914,10 @@ System.out.println("SimpleDrawigView.findFigure "+f);
             Bounds pl = n.parentToLocal(pp);
             if (n.intersects(pl)) { // only drill down if the parent intersects the point
                 Figure f = nodeToFigureMap.get(n);
-                if (f != null && f.isSelectable() && !f.isDisabledOrLocked()) {
+                if (f != null && f.isSelectable() && !f.isDisabledOrUneditable()) {
                     found.add(f);
                 }
-                if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrLocked()) {
+                if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrUneditable()) {
                     if (n instanceof Parent) {
                         findFiguresIntersectingRecursive((Parent) n, pl, found, decompose);
                     }
@@ -1069,9 +1068,9 @@ System.out.println("SimpleDrawigView.findFigure "+f);
         Drawing d = getDrawing();
         if (d != null) {
             for (Figure layer : d.getChildren()) {
-                if (!layer.isDisabledOrLocked()) {
+                if (!layer.isDisabledOrUneditable()) {
                     for (Figure f : layer.getChildren()) {
-                        if (!f.isDisabledOrLocked() && f.isSelectable()) {
+                        if (!f.isDisabledOrUneditable() && f.isSelectable()) {
                             figures.add(f);
                         }
                     }

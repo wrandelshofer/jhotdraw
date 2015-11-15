@@ -27,7 +27,6 @@ import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
-import org.jhotdraw.draw.shape.StrokedShapeFigure;
 
 /**
  * SimpleImageFigure.

@@ -40,14 +40,14 @@
 
 /* Styles disconnected connection point handles. See {@code Handle}. */
 .handle-connection-point-disconnected {
-    -fx-border-color: blue;
+    -fx-border-color: darkcyan;
     -fx-background-color: white;
 }
 
 /* Styles connected connection point handles. See {@code Handle}. */
 .handle-connection-point-connected {
-    -fx-border-color: blue;
-    -fx-background-color: blue;
+    -fx-border-color: darkcyan;
+    -fx-background-color: darkcyan;
 }
 
 /* Styles the resize handles. See {@code Handle}. */
