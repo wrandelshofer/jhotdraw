@@ -4,57 +4,13 @@
  */
 package org.jhotdraw.draw;
 
-import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
-import static java.lang.Math.*;
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlySetProperty;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import javafx.collections.FXCollections;
-import javafx.css.PseudoClass;
-import javafx.css.Styleable;
-import javafx.geometry.BoundingBox;
-import javafx.scene.transform.Translate;
-import org.jhotdraw.collection.BooleanKey;
-import org.jhotdraw.collection.IterableTree;
-import org.jhotdraw.collection.IndexedSet;
-import org.jhotdraw.styleable.StyleablePropertyBean;
-import org.jhotdraw.draw.handle.MoveHandleKit;
-import org.jhotdraw.draw.handle.ResizeHandleKit;
-import org.jhotdraw.draw.handle.RotateHandle;
-import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
-import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw.draw.key.EffectStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw.draw.key.FigureKey;
-import org.jhotdraw.draw.key.ObservableWordListFigureKey;
-import org.jhotdraw.draw.key.ObservableWordListStyleableFigureKey;
-import org.jhotdraw.draw.key.StringStyleableFigureKey;
 
 /**
  * Transformable figure.
@@ -115,7 +71,7 @@ public interface TransformableFigure extends Figure {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyTransformProperties(Node node) {
+    default void applyTransformableFigureProperties(Node node) {
         node.setRotate(getStyled(ROTATE));
         node.setRotationAxis(getStyled(ROTATION_AXIS));
         node.setScaleX(getStyled(SCALE_X));
@@ -124,21 +80,5 @@ public interface TransformableFigure extends Figure {
         node.setTranslateX(getStyled(TRANSLATE_X));
         node.setTranslateY(getStyled(TRANSLATE_Y));
         node.setTranslateZ(getStyled(TRANSLATE_Z));
-    }
-    /**
-     * Updates a figure node with all applicable {@code Key}s
-     * defined in this interface and the Figure interface.
-     * <p>
-     * Invokes the methods {@link #applyStyleProperties(javafx.scene.Node) },
-     * {@link #applyEffectProperties(javafx.scene.Node) },
-     * {@link #applyTransformProperties(javafx.scene.Node) }.
-     * <p>
-     * This method is intended to be used by {@link #updateNode}.
-     *
-     * @param node a node which was created with method {@link #createNode}.
-     */
-    default void applyTransformableFigureProperties(Node node) {
-        applyFigureProperties(node);
-        applyTransformProperties(node);
     }
 }
