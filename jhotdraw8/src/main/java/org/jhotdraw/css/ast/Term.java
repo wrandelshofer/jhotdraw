@@ -6,6 +6,7 @@
 package org.jhotdraw.css.ast;
 
 import org.jhotdraw.css.CssTokenizer;
+import org.jhotdraw.text.CssStringConverter;
 import org.jhotdraw.text.XmlNumberConverter;
 
 /**
@@ -67,13 +68,17 @@ public class Term extends AST {
        return stringValue;
     }
 
+    private final static CssStringConverter cssStringConverter=new CssStringConverter();
+    
     private String fromSTRING() {
+        return cssStringConverter.toString(stringValue);
+        /*
         // FIXME implement proper escaping
         if (stringValue.contains("'")) {
-         return '"'+stringValue+'"';   
+         return '"'+stringValue.replaceAll("\n", "\\\n")+'"';   
         }else{
-       return '\''+stringValue+'\'';
-        }
+       return '\''+stringValue.replaceAll("\n", "\\\n")+'\'';
+        }*/
     }
 
 
