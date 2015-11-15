@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.shape;
 
+import org.jhotdraw.draw.FillableFigure;
 import java.util.List;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
@@ -62,7 +63,7 @@ public class RectangleFigureNGTest {
     @DataProvider
     public Object[][] cssData() {
         return new Object[][]{
-            {FilledShapeFigure.FILL_COLOR,"-jhotdraw-fill", Color.RED,"blue",Color.BLUE},
+            {FillableFigure.FILL_COLOR,"-jhotdraw-fill", Color.RED,"blue",Color.BLUE},
         };
 
     }     
