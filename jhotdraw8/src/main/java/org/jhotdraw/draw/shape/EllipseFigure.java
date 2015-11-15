@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.shape;
 
+import org.jhotdraw.draw.FillableFigure;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -14,10 +15,16 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.HideableFigure;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.TransformableFigure;
+import org.jhotdraw.draw.StrokeableFigure;
+import org.jhotdraw.draw.key.DirtyBits;
+import org.jhotdraw.draw.key.DirtyMask;
+import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 
 /**
  * Renders a {@code javafx.scene.shape.Ellipse}.
@@ -25,36 +32,40 @@ import org.jhotdraw.draw.RenderContext;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends AbstractLeafFigure implements StrokedShapeFigure, FilledShapeFigure {
+public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Ellipse"}.
      */
     public final static String TYPE_SELECTOR = "Ellipse";
 
-    public final static SimpleFigureKey<Rectangle2D> BOUNDS = RectangleFigure.BOUNDS;
+    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("cx",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("cy",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("rx",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("ry",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
 
     public EllipseFigure() {
         this(0, 0, 1, 1);
     }
 
     public EllipseFigure(double x, double y, double width, double height) {
-        set(BOUNDS, new Rectangle2D(x, y, width, height));
+        reshape(x,y,width,height);
     }
 
     public EllipseFigure(Rectangle2D rect) {
-        set(BOUNDS, rect);
+        reshape(rect.getMinX(),rect.getMinY(),rect.getWidth(),rect.getHeight());
     }
 
     @Override
     public Bounds getBoundsInLocal() {
-        Rectangle2D r = get(BOUNDS);
-        return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+        double rx=get(RADIUS_X);
+        double ry=get(RADIUS_Y);
+        return new BoundingBox(get(CENTER_X)-rx, get(CENTER_Y)-ry, rx*2.0, ry*2.0);
     }
 
     @Override
     public void reshape(Transform transform) {
-        Rectangle2D r = get(BOUNDS);
+        Bounds r = getBoundsInLocal();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
@@ -62,7 +73,12 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokedShapeFig
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(BOUNDS, new Rectangle2D(x + min(width, 0), y + min(height, 0), abs(width), abs(height)));
+        double rx=abs(width)/2.0;
+        double ry=abs(height)/2.0;
+        set(CENTER_X,x+rx);
+        set(CENTER_Y,y+ry);
+        set(RADIUS_X,rx);
+        set(RADIUS_Y,ry);
     }
 
     @Override
@@ -73,14 +89,14 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokedShapeFig
     @Override
     public void updateNode(RenderContext drawingView, Node node) {
         Ellipse n = (Ellipse) node;
+        applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);
-        applyStrokedShapeProperties(n);
-        applyFilledShapeProperties(n);
-        Rectangle2D r = get(BOUNDS);
-        n.setCenterX(r.getMinX() + r.getWidth() * 0.5);
-        n.setCenterY(r.getMinY() + r.getHeight() * 0.5);
-        n.setRadiusX(r.getWidth() * 0.5);
-        n.setRadiusY(r.getHeight() * 0.5);
+        applyStrokeableFigureProperties(n);
+        applyFilleableFigureProperties(n);
+        n.setCenterX(get(CENTER_X));
+        n.setCenterY(get(CENTER_Y));
+        n.setRadiusX(get(RADIUS_X));
+        n.setRadiusY(get(RADIUS_Y));
         n.applyCss();
     }
 

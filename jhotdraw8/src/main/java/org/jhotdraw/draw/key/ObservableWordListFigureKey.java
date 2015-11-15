@@ -5,18 +5,7 @@
 package org.jhotdraw.draw.key;
 
 import java.util.List;
-import java.util.function.Function;
 import javafx.collections.ObservableList;
-import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.styleable.StyleableKey;
-import org.jhotdraw.styleable.StyleablePropertyBean;
-import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.CssObservableWordListConverter;
-import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
  * ObservableWordListStyleableFigureKey.
@@ -55,6 +44,6 @@ public class ObservableWordListFigureKey extends SimpleFigureKey<ObservableList<
      * @param defaultValue The default value.
      */
     public ObservableWordListFigureKey(String name, DirtyMask mask, ObservableList<String> defaultValue) {
-        super(name, List.class, "<Double>", mask, defaultValue);
+        super(name, List.class, "<String>", mask, defaultValue);
     }
 }

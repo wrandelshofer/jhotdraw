@@ -23,7 +23,7 @@ public abstract class AbstractSelectionInspector implements Inspector {
     protected DrawingView drawingView;
 
     private final SetChangeListener<Figure> selectionListener = change -> {
-        onSelectionChanged(drawingView==null?FXCollections.emptyObservableSet():drawingView.getSelectedFigures());
+        handleSelectionChanged(drawingView==null?FXCollections.emptyObservableSet():drawingView.getSelectedFigures());
     };
 
     @Override
@@ -36,13 +36,23 @@ public abstract class AbstractSelectionInspector implements Inspector {
         if (newValue != null) {
             newValue.selectedFiguresProperty().addListener(selectionListener);
         }
+        handleDrawingViewChanged(oldValue,newValue);
     }
 
+    /**
+     * Can be implemented by subclasses.
+     *
+     * @param oldValue the old selection
+     * @param newValue the new selection
+     */
+    protected void handleDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+        
+    }
     /**
      * Must be implemented by subclasses.
      *
      * @param oldValue the old selection
      * @param newValue the new selection
      */
-    protected abstract void onSelectionChanged(Set<Figure> newValue);
+    protected abstract void handleSelectionChanged(Set<Figure> newValue);
 }

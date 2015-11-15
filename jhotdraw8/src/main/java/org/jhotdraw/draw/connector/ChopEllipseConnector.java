@@ -8,9 +8,9 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.shape.StrokedShapeFigure.STROKE_COLOR;
-import static org.jhotdraw.draw.shape.StrokedShapeFigure.STROKE_TYPE;
-import static org.jhotdraw.draw.shape.StrokedShapeFigure.STROKE_WIDTH;
+import static org.jhotdraw.draw.StrokeableFigure.STROKE_COLOR;
+import static org.jhotdraw.draw.StrokeableFigure.STROKE_TYPE;
+import static org.jhotdraw.draw.StrokeableFigure.STROKE_WIDTH;
 import org.jhotdraw.geom.Geom;
 
 /**

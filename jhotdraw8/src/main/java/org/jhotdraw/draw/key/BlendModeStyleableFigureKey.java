@@ -12,7 +12,7 @@ import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.EnumConverter;
+import org.jhotdraw.text.CssEnumConverter;
 
 /**
  * BlendModeStyleableFigureKey.
@@ -61,7 +61,7 @@ public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> impl
     @Override
     public Converter<BlendMode> getConverter() {
         if (converter == null) {
-            converter = new EnumConverter<BlendMode>(BlendMode.class);
+            converter = new CssEnumConverter<BlendMode>(BlendMode.class);
         }
         return converter;
     }

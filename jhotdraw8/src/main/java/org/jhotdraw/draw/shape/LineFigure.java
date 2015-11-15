@@ -17,13 +17,19 @@ import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.HideableFigure;
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
 import org.jhotdraw.draw.handle.PointHandle;
+import org.jhotdraw.draw.StrokeableFigure;
+import org.jhotdraw.draw.handle.MoveHandleKit;
+import org.jhotdraw.draw.handle.RotateHandle;
+import org.jhotdraw.draw.locator.PointLocator;
 
 /**
  * Renders a {@code javafx.scene.shape.Line}.
@@ -31,7 +37,7 @@ import org.jhotdraw.draw.handle.PointHandle;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineFigure extends AbstractLeafFigure implements StrokedShapeFigure {
+public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Line"}.
@@ -86,8 +92,9 @@ public class LineFigure extends AbstractLeafFigure implements StrokedShapeFigure
     @Override
     public void updateNode(RenderContext drawingView, Node node) {
         Line lineNode = (Line) node;
-        applyTransformableFigureProperties(lineNode);
-        applyStrokedShapeProperties(lineNode);
+        applyHideableFigureProperties(node);
+        //applyTransformableFigureProperties(lineNode);
+        applyStrokeableFigureProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());
@@ -106,10 +113,15 @@ public class LineFigure extends AbstractLeafFigure implements StrokedShapeFigure
     public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
-        } else if (handleType == HandleType.MOVE||handleType == HandleType.RESIZE) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
-            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
-            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new MoveHandleKit.MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator( START)));
+            list.add(new MoveHandleKit.MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator( END)));
+        } else if (handleType == HandleType.RESIZE) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
+            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_RESIZE, START));
+            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_RESIZE, END));
+            //list.add(new RotateHandle(this, Handle.STYLECLASS_HANDLE_ROTATE));
         }else{
             super.createHandles(handleType, dv, list);
         }

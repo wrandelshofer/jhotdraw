@@ -11,15 +11,15 @@ import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * WordConverter.
+ * CssEnumConverter. Converts all enum names to lower-case.
  *
  * @author Werner Randelshofer
  */
-public class EnumConverter<E extends Enum<E>> implements Converter<E> {
+public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
 
     private final Class<E> enumClass;
 
-    public EnumConverter(Class<E> enumClass) {
+    public CssEnumConverter(Class<E> enumClass) {
         this.enumClass = enumClass;
     }
 
@@ -28,7 +28,7 @@ public class EnumConverter<E extends Enum<E>> implements Converter<E> {
         if (value == null) {
             out.append("null");
         } else {
-            for (char ch : value.toString().toCharArray()) {
+            for (char ch : value.toString().toLowerCase().toCharArray()) {
                 if (Character.isWhitespace(ch)) {
                     break;
                 }
@@ -51,7 +51,7 @@ public class EnumConverter<E extends Enum<E>> implements Converter<E> {
         if (out.toString().equals("null")) {
             return null;
         }
-        return Enum.valueOf(enumClass, out.toString());
+        return Enum.valueOf(enumClass, out.toString().toUpperCase());
     }
 
     @Override

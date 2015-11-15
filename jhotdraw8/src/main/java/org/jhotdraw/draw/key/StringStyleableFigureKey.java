@@ -31,13 +31,13 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
     private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
-     * Creates a new instance with the specified name and with null as the
+     * Creates a new instance with the specified name and with an empty String as the
      * default value.
      *
      * @param name The name of the key.
      */
     public StringStyleableFigureKey(String name) {
-        this(name, null);
+        this(name, "");
     }
 
     /**
@@ -58,7 +58,7 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
      * @param defaultValue The default value.
      */
     public StringStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
-        super(name, String.class, mask, defaultValue);
+        super(name, String.class, false, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
          cssMetaData = factory.createSizeCssMetaData(
@@ -92,7 +92,7 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
     @Override
     public Converter<String> getConverter() {
         if (converter == null) {
-            converter = new XmlStringConverter();
+            converter = new CssStringConverter();
         }
         return converter;
     }     
