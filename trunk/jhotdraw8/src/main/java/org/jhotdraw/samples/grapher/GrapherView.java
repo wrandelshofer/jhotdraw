@@ -42,7 +42,7 @@ import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleLabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
-import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.draw.TextableFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
@@ -203,7 +203,7 @@ public class GrapherView extends AbstractView implements EditorView {
         t.expandedProperty().addListener((o,oldValue,newValue) ->{
             VBox.setVgrow(a, newValue?grow:Priority.NEVER);
         });
-        
+
         PreferencesUtil.installBooleanPropertyHandler(//
                 Preferences.userNodeForPackage(GrapherView.class), id + ".expanded", t.expandedProperty());
         if (t.isExpanded()) {
@@ -307,9 +307,9 @@ public class GrapherView extends AbstractView implements EditorView {
     public void buttonPerformed(ActionEvent event) {
         Instant now = Instant.now();
         for (Figure f : drawingView.getDrawing().childrenProperty()) {
-            if (f instanceof TextHolderFigure) {
-                TextHolderFigure tf = (TextHolderFigure) f;
-                tf.set(TextHolderFigure.TEXT, now.toString());
+            if (f instanceof TextableFigure) {
+                TextableFigure tf = (TextableFigure) f;
+                tf.set(TextableFigure.TEXT, now.toString());
             }
         }
     }

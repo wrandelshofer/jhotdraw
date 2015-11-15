@@ -347,7 +347,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param converter the converter
      */
     public void addConverterForType(Class<?> valueType, Converter<?> converter) {
-        SimpleFigureFactory.this.addConverterForType(valueType.getName(), converter);
+        addConverterForType(valueType.getName(), converter);
 
     }
 

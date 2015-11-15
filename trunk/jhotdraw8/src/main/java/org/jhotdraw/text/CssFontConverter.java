@@ -11,8 +11,9 @@ import java.text.ParseException;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import org.jhotdraw.css.CssTokenizer;
 import org.jhotdraw.draw.io.IdFactory;
-import org.jhotdraw.io.StreamPosTokenizer;
+import org.jhotdraw.io.CharBufferReader;
 
 /**
  * CssFontConverter.
@@ -41,10 +42,10 @@ public class CssFontConverter implements Converter<Font> {
     @Override
     public void toString(Appendable out, IdFactory idFactory, Font font) throws IOException {
         double fontSize = font.getSize();
-        String fontStyle = font.getStyle();
+        String fontStyle = font.getStyle().toLowerCase();
         String fontFamily = font.getFamily();
         
-        out.append(fontStyle);
+        out.append(fontStyle.equals("regular")?"normal":fontStyle);
         out.append(' ');
         doubleConverter.toString(out, fontSize);
         out.append(' ');
@@ -59,7 +60,7 @@ public class CssFontConverter implements Converter<Font> {
 
     @Override
     public Font fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(buf.toString()));
+        CssTokenizer tt = new CssTokenizer(new StringReader(buf.toString()));
 
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
@@ -67,8 +68,8 @@ public class CssFontConverter implements Converter<Font> {
         String fontFamily = "System";
 
         // parse FontStyle
-        if (tt.nextToken() == StreamPosTokenizer.TT_WORD) {
-            switch (tt.sval.toLowerCase()) {
+        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+            switch (tt.currentStringValue().toLowerCase()) {
                 case "normal":
                     fontPosture = FontPosture.REGULAR;
                     break;
@@ -84,10 +85,13 @@ public class CssFontConverter implements Converter<Font> {
             tt.pushBack();
         }
 
+        tt.skipWhitespace();
+        
+        
         // parse FontWeight
         boolean fontWeightConsumed = false;
-        if (tt.nextToken() == StreamPosTokenizer.TT_WORD) {
-            switch (tt.sval.toLowerCase()) {
+        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+            switch (tt.currentStringValue().toLowerCase()) {
                 case "normal":
                     fontWeight = FontWeight.NORMAL;
                     fontWeightConsumed = true;
@@ -113,21 +117,24 @@ public class CssFontConverter implements Converter<Font> {
         } else {
             tt.pushBack();
         }
+        
+        tt.skipWhitespace();
 
         double fontWeightOrFontSize = 0.0;
         boolean fontWeightOrFontSizeConsumed = false;
         if (!fontWeightConsumed) {
-            if (tt.nextToken() == StreamPosTokenizer.TT_NUMBER) {
-                fontWeightOrFontSize = tt.nval;
+            if (tt.nextToken() == CssTokenizer.TT_NUMBER) {
+                fontWeightOrFontSize = tt.currentNumericValue().doubleValue();
                 fontWeightOrFontSizeConsumed = true;
             } else {
                 tt.pushBack();
             }
         }
+        tt.skipWhitespace();
 
         // parse FontSize
-        if (tt.nextToken() == StreamPosTokenizer.TT_NUMBER) {
-            fontSize = tt.nval;
+        if (tt.nextToken() == CssTokenizer.TT_NUMBER) {
+            fontSize = tt.currentNumericValue().doubleValue();
 
             if (fontWeightOrFontSizeConsumed) {
                 switch ((int) fontWeightOrFontSize) {
@@ -159,7 +166,7 @@ public class CssFontConverter implements Converter<Font> {
                         fontWeight = FontWeight.BLACK;
                         break;
                     default:
-                        throw new ParseException("illegal font weight " + fontWeightOrFontSize, buf.position() + tt.getStartPosition());
+                        throw new ParseException("illegal font weight " + fontWeightOrFontSize, buf.position() + tt.getPosition());
                 }
             }
 
@@ -169,14 +176,16 @@ public class CssFontConverter implements Converter<Font> {
         } else {
             tt.pushBack();
         }
+        tt.skipWhitespace();
 
-        if (tt.nextToken() == StreamPosTokenizer.TT_WORD || tt.ttype == '\'' || tt.ttype == '"') {
-            fontFamily = tt.sval;
+        if (tt.nextToken() == CssTokenizer.TT_IDENT || tt.currentToken() == CssTokenizer.TT_STRING) {
+            fontFamily = tt.currentStringValue();
             // consume buffer
             buf.position(buf.limit());
         } else {
-            throw new ParseException("font family expected", buf.position() + tt.getStartPosition());
+            throw new ParseException("font family expected", buf.position() + tt.getPosition());
         }
+        
         return Font.font(fontFamily,fontWeight,fontPosture,fontSize);
     }
     @Override

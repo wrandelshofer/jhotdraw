@@ -11,7 +11,7 @@ import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.EnumConverter;
+import org.jhotdraw.text.CssEnumConverter;
 
 /**
  * EnumStyleableFigureKey.
@@ -67,7 +67,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
     @Override
     public Converter<T> getConverter() {
         if (converter == null) {
-            converter = new EnumConverter<T>(getValueType());
+            converter = new CssEnumConverter<T>(getValueType());
         }
         return converter;
     }

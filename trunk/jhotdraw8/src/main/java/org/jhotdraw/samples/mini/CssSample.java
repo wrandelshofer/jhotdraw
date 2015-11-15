@@ -24,7 +24,6 @@ import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.constrain.GridConstrainer;
-import org.jhotdraw.draw.shape.StrokedShapeFigure;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
 import org.jhotdraw.draw.shape.TextFigure;

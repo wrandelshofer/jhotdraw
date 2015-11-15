@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.net.URL;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.control.Cell;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -22,6 +20,7 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.HideableFigure;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -37,7 +36,7 @@ public class LayerCell extends ListCell<Figure> {
     private CheckBox visibleCheckBox;
 
     @FXML
-    private CheckBox disabledCheckBox;
+    private CheckBox lockedCheckBox;
 
     @FXML
     private Label selectionLabel;
@@ -71,7 +70,7 @@ public class LayerCell extends ListCell<Figure> {
         }
 
         visibleCheckBox.selectedProperty().addListener(o -> commitLayerVisible());
-        disabledCheckBox.selectedProperty().addListener(o -> commitLayerDisabled());
+        lockedCheckBox.selectedProperty().addListener(o -> commitLayerLocked());
     }
 
     @Override
@@ -107,8 +106,8 @@ public class LayerCell extends ListCell<Figure> {
             Integer count = item.get(LayersInspector.SELECTION_COUNT);
             selectionLabel.setText(count == null ? "" : "(" + count.toString() + ")");
 
-            visibleCheckBox.setSelected(item.get(Figure.VISIBLE));
-            disabledCheckBox.setSelected(item.get(Figure.LOCKED));
+            visibleCheckBox.setSelected(item.get(HideableFigure.VISIBLE));
+            lockedCheckBox.setSelected(item.get(Figure.LOCKED));
             isUpdating = false;
         }
     }
@@ -119,13 +118,13 @@ public class LayerCell extends ListCell<Figure> {
 
     private void commitLayerVisible() {
         if (!isUpdating) {
-            drawingView.getModel().set(item, Figure.VISIBLE, visibleCheckBox.isSelected());
+            drawingView.getModel().set(item, HideableFigure.VISIBLE, visibleCheckBox.isSelected());
         }
     }
 
-    private void commitLayerDisabled() {
+    private void commitLayerLocked() {
         if (!isUpdating) {
-            drawingView.getModel().set(item, Figure.LOCKED, disabledCheckBox.isSelected());
+            drawingView.getModel().set(item, Figure.LOCKED, lockedCheckBox.isSelected());
         }
     }
 

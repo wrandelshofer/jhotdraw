@@ -15,9 +15,9 @@
             <Tooltip text="%attribute.visible.toolTipText" />
          </tooltip>
       </CheckBox>
-      <CheckBox id="layerLockCheckBox" fx:id="disabledCheckBox" mnemonicParsing="false">
+      <CheckBox id="layerLockCheckBox" fx:id="lockedCheckBox" mnemonicParsing="false">
          <tooltip>
-            <Tooltip text="%attribute.disabled.toolTipText" />
+            <Tooltip text="%attribute.locked.toolTipText" />
          </tooltip>
          <HBox.margin>
             <Insets left="2.0" />

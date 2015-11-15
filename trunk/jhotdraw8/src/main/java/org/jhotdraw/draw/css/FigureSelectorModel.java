@@ -15,6 +15,8 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.text.Converter;
+import org.jhotdraw.text.CssStringConverter;
 import org.w3c.dom.Element;
 
 /**
@@ -95,7 +97,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             return false;
         }
         Object value = element.get(k);
-        String stringValue = k.getConverter().toString(value);
+        
+        // FIXME get rid of special treatment for CssStringConverter
+        @SuppressWarnings("unchecked")
+        Converter<Object> c = k.getConverter();
+        String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
+        
         return attributeValue.equals(stringValue);
     }
 
@@ -107,7 +114,9 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             return false;
         }
         Object value = element.get(k);
-        String stringValue = k.getConverter().toString(value);
+        @SuppressWarnings("unchecked")
+        Converter<Object> c = k.getConverter();
+        String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
         return stringValue.startsWith(substring);
     }
 
@@ -119,7 +128,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             return false;
         }
         Object value = element.get(k);
-        String stringValue = k.getConverter().toString(value);
+        
+        // FIXME get rid of special treatment for CssStringConverter
+        @SuppressWarnings("unchecked")
+        Converter<Object> c = k.getConverter();
+        String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
+        
         return stringValue.endsWith(substring);
     }
 
@@ -131,7 +145,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             return false;
         }
         Object value = element.get(k);
-        String stringValue = k.getConverter().toString(value);
+        
+        // FIXME get rid of special treatment for CssStringConverter
+        @SuppressWarnings("unchecked")
+        Converter<Object> c = k.getConverter();
+        String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
+        
         return stringValue.contains(substring);
     }
 

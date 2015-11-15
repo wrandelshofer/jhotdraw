@@ -16,7 +16,6 @@ import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssEffectConverter;
-import org.jhotdraw.text.EnumConverter;
 
 /**
  * EffectStyleableFigureKey.

@@ -57,21 +57,7 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> 
      */
     public DoubleListStyleableFigureKey(String name, DirtyMask mask, List<Double> defaultValue) {
         super(name, List.class, "<Double>", mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
 
-         Function<Styleable, StyleableProperty<List<Double>>> function = s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         };
-         boolean inherits = false;
-         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-         final StyleConverter<ParsedValue[], List<Double>> converter
-         = DoubleListStyleConverter.getInstance();
-         CssMetaData<Styleable, List<Double>> md
-         = new SimpleCssMetaData<Styleable, List<Double>>(property, function,
-         converter, defaultValue, inherits);
-         cssMetaData = md;*/
         Function<Styleable, StyleableProperty<List<Double>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);

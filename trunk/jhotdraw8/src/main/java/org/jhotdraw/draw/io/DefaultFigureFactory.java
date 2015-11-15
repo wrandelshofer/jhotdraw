@@ -10,6 +10,9 @@ import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
@@ -18,16 +21,19 @@ import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleLabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
+import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
 import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
+import org.jhotdraw.text.CssEnumConverter;
 import org.jhotdraw.text.DefaultConnectorConverter;
 import org.jhotdraw.text.DefaultConverter;
 import org.jhotdraw.text.Point2DConverter;
 import org.jhotdraw.text.NumberConverter;
 import org.jhotdraw.text.CssObservableWordListConverter;
+import org.jhotdraw.text.CssSizeListConverter;
 import org.jhotdraw.text.Rectangle2DConverter;
 import org.jhotdraw.text.UrlConverter;
 import org.jhotdraw.text.UriConverter;
@@ -83,7 +89,11 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Paint.class, new XmlPaintConverter());
         addConverterForType(Boolean.class, new XmlBooleanConverter());
 
-        addConverterForType(Figure.STYLE_CLASS.getFullValueType(), new CssObservableWordListConverter());
+        addConverter(Figure.STYLE_CLASS, new CssObservableWordListConverter());
+        addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssSizeListConverter());
+        addConverter(StrokeableFigure.STROKE_LINE_CAP, new CssEnumConverter<StrokeLineCap>(StrokeLineCap.class));
+        addConverter(StrokeableFigure.STROKE_LINE_JOIN, new CssEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
+        addConverter(StrokeableFigure.STROKE_TYPE, new CssEnumConverter<StrokeType>(StrokeType.class));
         
           removeKey(Drawing.PSEUDO_CLASS_STATES);
 

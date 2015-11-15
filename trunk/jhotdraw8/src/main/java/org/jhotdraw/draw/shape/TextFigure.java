@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.shape;
 
+import org.jhotdraw.draw.FillableFigure;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -16,19 +17,23 @@ import org.jhotdraw.draw.AbstractLeafFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.HideableFigure;
 import org.jhotdraw.draw.key.SimpleFigureKey;
-import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.draw.TextableFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.TransformableFigure;
+import org.jhotdraw.draw.StrokeableFigure;
 
 /**
- * TextFigure.
+ * {@code TextFigure} is a {@code TextableFigure} which supports stroking
+ * and filling of the text.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractLeafFigure implements StrokedShapeFigure, FilledShapeFigure, TextHolderFigure {
+public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, TextableFigure, HideableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Text"}.
@@ -87,10 +92,11 @@ public class TextFigure extends AbstractLeafFigure implements StrokedShapeFigure
         tn.setX(get(ORIGIN).getX());
         tn.setY(get(ORIGIN).getY());
         tn.setBoundsType(TextBoundsType.VISUAL);
+        applyHideableFigureProperties(node);
         applyTransformableFigureProperties(tn);
         applyTextHolderProperties(tn);
-        applyStrokedShapeProperties(tn);
-        applyFilledShapeProperties(tn);
+        applyStrokeableFigureProperties(tn);
+        applyFilleableFigureProperties(tn);
         tn.applyCss();
     }
 
