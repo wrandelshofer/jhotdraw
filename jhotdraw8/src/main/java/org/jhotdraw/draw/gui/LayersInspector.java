@@ -47,6 +47,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.SimpleLayer;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.gui.ClipboardIO;
 import org.jhotdraw.gui.ListViewUtil;
@@ -205,7 +206,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                     if (clipboard.hasString()) {
                         list = new ArrayList<>();
                         Layer layer = layerFactory.get();
-                        layer.set(Figure.STYLE_ID, clipboard.getString());
+                        layer.set(StyleableFigure.STYLE_ID, clipboard.getString());
                         list.add(layer);
                     } else {
                         list = null;
@@ -230,7 +231,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             @Override
             public String toString(Figure object) {
-                return object.get(Figure.STYLE_ID);
+                return object.get(StyleableFigure.STYLE_ID);
             }
 
             @Override

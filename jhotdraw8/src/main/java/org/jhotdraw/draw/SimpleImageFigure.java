@@ -33,7 +33,7 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
  *
  * @author Werner Randelshofer
  */
-public class SimpleImageFigure extends AbstractLeafFigure implements TransformableFigure {
+public class SimpleImageFigure extends AbstractLeafFigure implements TransformableFigure, StyleableFigure, LockableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Image"}.

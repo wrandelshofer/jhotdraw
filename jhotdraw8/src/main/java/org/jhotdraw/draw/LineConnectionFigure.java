@@ -38,7 +38,7 @@ import static org.jhotdraw.draw.shape.LineFigure.START;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineConnectionFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure {
+public class LineConnectionFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure {
 
     /**
      * The CSS type selector for this object is {@code "LineConnection"}.

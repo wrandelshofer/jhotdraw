@@ -18,6 +18,7 @@ import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.HideableFigure;
+import org.jhotdraw.draw.LockableFigure;
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
@@ -27,6 +28,7 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
 import org.jhotdraw.draw.handle.PointHandle;
 import org.jhotdraw.draw.StrokeableFigure;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.locator.PointLocator;
@@ -37,7 +39,7 @@ import org.jhotdraw.draw.locator.PointLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure {
+public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Line"}.

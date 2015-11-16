@@ -17,7 +17,7 @@ import org.jhotdraw.draw.connector.Connector;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GroupFigure extends AbstractCompositeFigure implements TransformableFigure, HideableFigure {
+public class GroupFigure extends AbstractCompositeFigure implements TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
     /**
      * The CSS type selector for group objects is @code("group"}.
      */
