@@ -50,7 +50,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
         DrawingModel model = view.getModel();
         for (Figure child : figures) { // XXX Shouldn't the figures be sorted here back to front?
             Figure parent = child.getParent();
-            if (parent != null && !parent.isDisabledOrUneditable() && parent.isDecomposable()) {
+            if (parent != null && parent.isEditable() && parent.isDecomposable()) {
                 model.insertChildAt(child, parent, parent.getChildren().size()-1);
             }
         }

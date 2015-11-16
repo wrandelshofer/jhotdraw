@@ -42,6 +42,7 @@ import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleLabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.TextableFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
@@ -245,7 +246,7 @@ public class GrapherView extends AbstractView implements EditorView {
 
     public Layer createLayer() {
         Layer layer = new SimpleLayer();
-        layer.set(Figure.STYLE_ID, "layer" + (++counter));
+        layer.set(StyleableFigure.STYLE_ID, "layer" + (++counter));
         return layer;
     }
 

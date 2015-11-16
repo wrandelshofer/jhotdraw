@@ -22,6 +22,7 @@ import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.shape.LineFigure;
@@ -81,10 +82,10 @@ public class CssSample extends Application {
         layer.add(edgeNullNull);
         layer.add(line1);
         
-        vertex1.set(Figure.STYLE_ID,"vertex1");
-        vertex2.set(Figure.STYLE_ID,"vertex2");
-        vertex3.set(Figure.STYLE_ID,"vertex3");
-        vertex4.set(Figure.STYLE_ID,"vertex4");
+        vertex1.set(StyleableFigure.STYLE_ID,"vertex1");
+        vertex2.set(StyleableFigure.STYLE_ID,"vertex2");
+        vertex3.set(StyleableFigure.STYLE_ID,"vertex3");
+        vertex4.set(StyleableFigure.STYLE_ID,"vertex4");
         
         ArrayList<URI> stylesheets=new ArrayList<>();
         stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());

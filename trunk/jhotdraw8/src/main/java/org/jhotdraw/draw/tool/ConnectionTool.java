@@ -150,13 +150,13 @@ public class ConnectionTool extends AbstractTool {
     protected Layer getOrCreateLayer(DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Layer activeLayer = dv.getActiveLayer();
-        if (activeLayer != null && !activeLayer.get(Figure.LOCKED) && activeLayer.isAllowsChildren()) {
+        if (activeLayer != null && activeLayer.isEditable() && activeLayer.isAllowsChildren()) {
             return activeLayer;
         }
         // search for a suitable layer front to back
         Layer layer = null;
         for (Figure candidate : new ReversedList<>(dv.getDrawing().getChildren())) {
-            if (!candidate.get(Figure.LOCKED) && candidate.isAllowsChildren()) {
+            if (candidate.isEditable() && candidate.isAllowsChildren()) {
                 layer = (Layer) candidate;
                 break;
             }

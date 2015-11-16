@@ -18,12 +18,14 @@ import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.HideableFigure;
+import org.jhotdraw.draw.LockableFigure;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.StrokeableFigure;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 
 /**
@@ -32,7 +34,7 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure {
+public class RectangleFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Rectangle"}.
