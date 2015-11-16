@@ -81,7 +81,12 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         private <T> T getValue(StyleOrigin styleOrigin) {
             @SuppressWarnings("unchecked")
             T ret = (T) values[styleOrigin.ordinal()];
-            return ret;
+            return ret==NO_VALUE?null:ret;
+        }
+        private <T> T getValue(StyleOrigin styleOrigin, T defaultValue) {
+            @SuppressWarnings("unchecked")
+            T ret = (T) values[styleOrigin.ordinal()];
+            return ret==NO_VALUE?defaultValue:ret;
         }
 
         private StyleOrigin getOrigin() {
@@ -279,6 +284,12 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
         V ret = sv == null ? null : (V) sv.getValue(sv.getOrigin());
+        return ret;
+    }
+    public V getStyled(K key, V defaultValue) {
+        StyledValue sv = backingMap.get(key);
+        @SuppressWarnings("unchecked")
+        V ret = (sv == null) ? defaultValue : (V) sv.getValue(sv.getOrigin(),defaultValue);
         return ret;
     }
 

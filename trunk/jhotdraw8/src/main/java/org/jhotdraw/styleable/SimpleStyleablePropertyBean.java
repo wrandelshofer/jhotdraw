@@ -59,7 +59,7 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     public <T> T getStyled(Key<T> key) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
-        T ret = (T) (map.containsStyledKey(key) ? map.getStyled(key) : key.getDefaultValue());
+        T ret = (T)  map.getStyled(key,key.getDefaultValue());
         return ret;
     }
     /**

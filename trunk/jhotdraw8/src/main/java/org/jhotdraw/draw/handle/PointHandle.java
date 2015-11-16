@@ -64,7 +64,7 @@ public class PointHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToDrawing());
+        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Point2D p = f.get(pointKey);
         p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);

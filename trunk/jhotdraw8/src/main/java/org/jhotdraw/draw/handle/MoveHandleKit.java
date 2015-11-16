@@ -71,7 +71,7 @@ public class MoveHandleKit {
         @Override
         public void updateNode(DrawingView view) {
             Figure f = getOwner();
-            Transform t = view.getWorldToView().createConcatenation(f.getLocalToDrawing());
+            Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
             Bounds b = f.getBoundsInLocal();
             Point2D p = getLocation();
             //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);

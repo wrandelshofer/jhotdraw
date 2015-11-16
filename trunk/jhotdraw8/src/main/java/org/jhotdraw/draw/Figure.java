@@ -859,25 +859,25 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Returns the transformation from local coordinates into drawing
+     * Returns the transformation from local coordinates into world
      * coordinates.
      *
      * @return the transformation
      */
-    default Transform getLocalToDrawing() {
+    default Transform getLocalToWorld() {
         Transform t = getLocalToParent();
-        return getParent() == null ? t : getParent().getLocalToDrawing().createConcatenation(t);
+        return getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
     }
 
     /**
-     * Returns the transformation from parent coordinates into drawing
+     * Returns the transformation from world coordinates into drawing
      * coordinates.
      *
      * @return the transformation
      */
-    default Transform getParentToDrawing() {
+    default Transform getParentToWorld() {
         Transform t = new Translate();
-        return getParent() == null ? t : getParent().getLocalToDrawing().createConcatenation(t);
+        return getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
     }
 
     /**
@@ -910,7 +910,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @return point in local coordinates
      */
     default Point2D localToDrawing(Point2D p) {
-        return getLocalToDrawing().transform(p);
+        return getLocalToWorld().transform(p);
     }
 
     @Override

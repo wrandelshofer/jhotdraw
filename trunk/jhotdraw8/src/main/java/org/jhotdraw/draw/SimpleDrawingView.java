@@ -353,9 +353,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     @Override
     public Transform getWorldToView() {
         if (worldToViewTransform == null) {
-            Transform st = new Scale(zoomFactor.get(), zoomFactor.get());
+            // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(drawingPane.getTranslateX(), drawingPane.getTranslateY());
-            worldToViewTransform = tr.createConcatenation(st);
+            double zoom = zoomFactor.get();
+            worldToViewTransform = (zoom == 1.0) ? tr : tr.createConcatenation(new Scale(1.0 / zoom, 1.0 / zoom));
         }
         return worldToViewTransform;
     }
@@ -363,9 +364,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     @Override
     public Transform getViewToWorld() {
         if (viewToWorldTransform == null) {
-            Transform st = new Scale(1.0 / zoomFactor.get(), 1.0 / zoomFactor.get());
+            // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(-drawingPane.getTranslateX(), -drawingPane.getTranslateY());
-            viewToWorldTransform = st.createConcatenation(tr);
+            double zoom = zoomFactor.get();
+            viewToWorldTransform = (zoom == 1.0) ? tr : new Scale(1.0 / zoom, 1.0 / zoom).createConcatenation(tr);
         }
         return viewToWorldTransform;
     }
@@ -449,7 +451,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         overlaysPane.setManaged(false);
         overlaysSubScene.getChildren().add(overlaysPane);
 
-        drawingPane.layoutBoundsProperty().addListener(observer -> {
+        // We use a change listener instead of an invalidation listener here,
+        // because we only want to update the layout, when the new value is
+        // different from the old value!
+        drawingPane.layoutBoundsProperty().addListener((observer, oldValue, newValue) -> {
             updateLayout();
 
         });

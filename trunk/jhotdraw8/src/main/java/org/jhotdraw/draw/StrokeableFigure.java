@@ -124,7 +124,9 @@ public interface StrokeableFigure extends Figure {
 
         List<Double> dashArray = getStyled(STROKE_DASH_ARRAY);
         if (dashArray.isEmpty() || dashArray.get(0) <= 0) {
+            if (!shape.getStrokeDashArray().isEmpty()) {
             shape.getStrokeDashArray().clear();
+            }
         } else {
             shape.getStrokeDashArray().setAll(dashArray);
         }
