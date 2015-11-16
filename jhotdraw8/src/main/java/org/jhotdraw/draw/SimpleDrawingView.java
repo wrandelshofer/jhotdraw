@@ -521,7 +521,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
                 Layer layer = (Layer) d.getChild(i);
-                if (!layer.isDisabledOrUneditable() && layer.isVisible()) {
+                if (!layer.isEditable() && layer.isVisible()) {
                     activeLayer.set(layer);
                     break;
                 }
@@ -740,12 +740,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             Point2D pl = n.parentToLocal(pp);
             if (contains(n, pl, tolerance)) {
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable() && !f.isDisabledOrUneditable()) {
+                if (f == null || !f.isSelectable()) {
                     if (n instanceof Parent) {
                         f = findFigureRecursive((Parent) n, pl, tolerance);
                     }
                 }
-                if (f != null && !f.isDisabledOrUneditable()) {
+                if (f != null && f.isSelectable()) {
                     return f;
                 }
             }
@@ -771,12 +771,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             Point2D pl = n.parentToLocal(pp);
             if (contains(n, pl, TOLERANCE)) {
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable() && !f.isDisabledOrUneditable()) {
+                if (f == null || !f.isSelectable()) {
                     if (n instanceof Parent) {
                         f = findFigureRecursiveInSet((Parent) n, pl, figures);
                     }
                 }
-                if (f != null && !f.isDisabledOrUneditable() && figures.contains(f)) {
+                if (f != null && f.isSelectable() && figures.contains(f)) {
                     return f;
                 }
             }
@@ -836,10 +836,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 Point2D pl = n.parentToLocal(pp);
                 if (contains(n, pl, TOLERANCE)) { // only drill down if the parent contains the point
                     Figure f = nodeToFigureMap.get(n);
-                    if (f != null && f.isSelectable() && !f.isDisabledOrUneditable()) {
+                    if (f != null && f.isSelectable()) {
                         found.add(f);
                     }
-                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrUneditable()) {
+                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
                         if (n instanceof Parent) {
                             findFiguresRecursive((Parent) n, pl, found, decompose);
                         }
@@ -876,10 +876,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 Bounds pl = n.parentToLocal(pp);
                 if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent bounds contains the point
                     Figure f = nodeToFigureMap.get(n);
-                    if (f != null && f.isSelectable() && !f.isDisabledOrUneditable()) {
+                    if (f != null && f.isSelectable()) {
                         found.add(f);
                     }
-                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrUneditable()) {
+                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
                         if (n instanceof Parent) {
                             findFiguresInsideRecursive((Parent) n, pl, found, decompose);
                         }
@@ -914,10 +914,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             Bounds pl = n.parentToLocal(pp);
             if (n.intersects(pl)) { // only drill down if the parent intersects the point
                 Figure f = nodeToFigureMap.get(n);
-                if (f != null && f.isSelectable() && !f.isDisabledOrUneditable()) {
+                if (f != null && f.isSelectable()) {
                     found.add(f);
                 }
-                if (f == null || !f.isSelectable() || decompose && f.isDecomposable() && !f.isDisabledOrUneditable()) {
+                if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
                     if (n instanceof Parent) {
                         findFiguresIntersectingRecursive((Parent) n, pl, found, decompose);
                     }
@@ -1068,9 +1068,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         Drawing d = getDrawing();
         if (d != null) {
             for (Figure layer : d.getChildren()) {
-                if (!layer.isDisabledOrUneditable()) {
+                if (layer.isSelectable()) {
                     for (Figure f : layer.getChildren()) {
-                        if (!f.isDisabledOrUneditable() && f.isSelectable()) {
+                        if (f.isSelectable()) {
                             figures.add(f);
                         }
                     }

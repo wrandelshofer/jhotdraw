@@ -195,7 +195,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                     }
                     ClipboardContent content = new ClipboardContent();
                     Figure f = items.get(0);
-                    String id = f.get(Figure.STYLE_ID);
+                    String id = f.get(StyleableFigure.STYLE_ID);
                     content.putString(id == null ? "" : id);
                     clipboard.setContent(content);
                 }

@@ -445,22 +445,18 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     boolean isLayoutable();
 
     /**
-     * Whether the figure is selectable.
+     * Whether the figure is selectable by the user.
      *
      * @return true if the user may select the figure
      */
     boolean isSelectable();
 
     /**
-     * Whether the figure is deletable.
-     * <p>
-     * The default implementation returns true.
+     * Whether the figure is deletable by the user.
      *
      * @return true if the user may delete the figure
      */
-    default boolean isDeletable() {
-        return true;
-    }
+    boolean isDeletable();
 
     /**
      * Whether the figure can be reshaped as a group together with other
@@ -480,25 +476,11 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Whether the figure or one if its ancestors is disabled.
+     * Whether the figure is editable by the user.
      *
-     * @return true if the user may select the figure
+     * @return true if the user may edit the figure.
      */
-    boolean isDisabledOrUneditable();
-
-    /**
-     * Whether the figure or one if its ancestors is locked.
-     *
-     * @return true if the figure or one its ancestors is locked
-     */
-    boolean isLocked();
-
-    /**
-     * Whether the figure or one if its ancestors is uneditable.
-     *
-     * @return true if the figure or one its ancestors is uneditable.
-     */
-    boolean isUneditable();
+    boolean isEditable();
 
     /**
      * Whether the figure and all its ancestors are visible.
