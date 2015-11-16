@@ -27,7 +27,9 @@ import org.w3c.dom.Element;
 public class FigureSelectorModel implements SelectorModel<Figure> {
 
     private HashSet<Class<?>> mappedFigureClasses = new HashSet<>();
+    /** Maps an attribute name to a key. */
     private HashMap<String, StyleableKey<?>> nameToKeyMap = new HashMap<>();
+    /** Maps a key to an attribute name. */
     private HashMap<StyleableKey<?>, String> keyToNameMap = new HashMap<>();
 
     private final MapProperty<String, Set<Figure>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());

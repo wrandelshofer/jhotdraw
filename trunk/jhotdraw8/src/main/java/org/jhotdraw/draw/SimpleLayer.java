@@ -19,7 +19,7 @@ import org.jhotdraw.draw.handle.HandleType;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLayer extends AbstractCompositeFigure implements Layer {
+public class SimpleLayer extends AbstractCompositeFigure implements Layer, StyleableFigure, LockableFigure {
 
     @Override
     public void reshape(Transform transform) {

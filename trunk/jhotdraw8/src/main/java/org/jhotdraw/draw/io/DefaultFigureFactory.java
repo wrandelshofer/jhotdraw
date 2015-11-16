@@ -22,6 +22,7 @@ import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleLabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.StrokeableFigure;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
@@ -89,13 +90,13 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Paint.class, new XmlPaintConverter());
         addConverterForType(Boolean.class, new XmlBooleanConverter());
 
-        addConverter(Figure.STYLE_CLASS, new CssObservableWordListConverter());
+        addConverter(StyleableFigure.STYLE_CLASS, new CssObservableWordListConverter());
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssSizeListConverter());
         addConverter(StrokeableFigure.STROKE_LINE_CAP, new CssEnumConverter<StrokeLineCap>(StrokeLineCap.class));
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new CssEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
         addConverter(StrokeableFigure.STROKE_TYPE, new CssEnumConverter<StrokeType>(StrokeType.class));
         
-          removeKey(Drawing.PSEUDO_CLASS_STATES);
+          removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
         
         checkConverters();

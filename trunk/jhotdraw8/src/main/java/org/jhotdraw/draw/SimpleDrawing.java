@@ -23,7 +23,7 @@ import org.jhotdraw.draw.css.FigureStyleManager;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleDrawing extends AbstractCompositeFigure implements Drawing {
+public class SimpleDrawing extends AbstractCompositeFigure implements Drawing, StyleableFigure, LockableFigure {
 
     /**
      * The style manager is created lazily. 

@@ -21,10 +21,14 @@ import javafx.util.StringConverter;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.HideableFigure;
+import org.jhotdraw.draw.LockableFigure;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.util.Resources;
 
 /**
- * FXML Controller class
+ * FXML Controller class.
+ * 
+ * XXX all keys must be customizable
  *
  * @author werni
  */
@@ -107,7 +111,7 @@ public class LayerCell extends ListCell<Figure> {
             selectionLabel.setText(count == null ? "" : "(" + count.toString() + ")");
 
             visibleCheckBox.setSelected(item.get(HideableFigure.VISIBLE));
-            lockedCheckBox.setSelected(item.get(Figure.LOCKED));
+            lockedCheckBox.setSelected(item.get(LockableFigure.LOCKED));
             isUpdating = false;
         }
     }
@@ -124,7 +128,7 @@ public class LayerCell extends ListCell<Figure> {
 
     private void commitLayerLocked() {
         if (!isUpdating) {
-            drawingView.getModel().set(item, Figure.LOCKED, lockedCheckBox.isSelected());
+            drawingView.getModel().set(item, LockableFigure.LOCKED, lockedCheckBox.isSelected());
         }
     }
 
@@ -160,7 +164,7 @@ public class LayerCell extends ListCell<Figure> {
     }
 
     private String getItemText() {
-        return getItem() == null ? "" : getItem().get(Figure.STYLE_ID);
+        return getItem() == null ? "" : getItem().get(StyleableFigure.STYLE_ID);
     }
 
     private TextField createTextField() {
@@ -185,7 +189,7 @@ public class LayerCell extends ListCell<Figure> {
     public void commitEdit(Figure newValue) {
         if (textField != null && isEditing()) {
             drawingView.getModel().set(
-                    item, Figure.STYLE_ID, textField.getText());
+                    item, StyleableFigure.STYLE_ID, textField.getText());
         }
         super.commitEdit(newValue);
     }
