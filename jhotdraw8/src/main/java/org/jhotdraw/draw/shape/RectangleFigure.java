@@ -19,7 +19,6 @@ import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.HideableFigure;
 import org.jhotdraw.draw.LockableFigure;
-import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
@@ -98,7 +97,6 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
         rectangleNode.setHeight(get(HEIGHT));
         rectangleNode.setArcWidth(get(ARC_WIDTH));
         rectangleNode.setArcHeight(get(ARC_HEIGHT));
-        rectangleNode.applyCss();
     }
 
     @Override

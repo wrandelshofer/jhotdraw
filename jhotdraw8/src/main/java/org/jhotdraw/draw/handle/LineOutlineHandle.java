@@ -55,7 +55,7 @@ public class LineOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToDrawing());
+        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
         points[0] = f.get(LineConnectionFigure.START).getX();
         points[1] = f.get(LineConnectionFigure.START).getY();

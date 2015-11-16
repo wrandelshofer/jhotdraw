@@ -216,9 +216,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      * @return transform
      */
     @Override
-    public Transform getParentToDrawing() {
+    public Transform getParentToWorld() {
         if (parentToDrawing == null) {
-            parentToDrawing = Figure.super.getParentToDrawing();
+            parentToDrawing = Figure.super.getParentToWorld();
         }
         return parentToDrawing;
     }
@@ -229,9 +229,9 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      * @return transform
      */
     @Override
-    public Transform getLocalToDrawing() {
+    public Transform getLocalToWorld() {
         if (localToDrawing == null) {
-            localToDrawing = Figure.super.getLocalToDrawing();
+            localToDrawing = Figure.super.getLocalToWorld();
         }
         return localToDrawing;
     }
