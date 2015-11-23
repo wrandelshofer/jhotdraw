@@ -4,12 +4,9 @@
  */
 package org.jhotdraw.styleable;
 
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapPropertyBase;
 import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.collections.ObservableMap;
+import javafx.collections.MapChangeListener;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.collection.Key;
@@ -26,7 +23,15 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
      */
     // protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
     protected final ReadOnlyMapProperty<Key<?>, Object> properties =//
-            new ReadOnlyMapWrapper<Key<?>, Object>(this, PROPERTIES_PROPERTY, new StyleableMap<>());
+            new ReadOnlyMapWrapper<Key<?>, Object>(this, PROPERTIES_PROPERTY, new StyleableMap<Key<?>, Object>() {
+
+                @Override
+                protected void callObservers(MapChangeListener.Change<Key<?>, Object> change) {
+                    invalidated(change.getKey());
+                    super.callObservers(change);
+                }
+
+            });
 
     /**
      * Returns the user getProperties.
@@ -59,9 +64,10 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     public <T> T getStyled(Key<T> key) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
-        T ret = (T)  map.getStyled(key,key.getDefaultValue());
+        T ret = (T) map.getStyled(key, key.getDefaultValue());
         return ret;
     }
+
     /**
      * Sets the style value.
      */
@@ -76,7 +82,7 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     @Override
     public <T> T remove(StyleOrigin origin, Key<T> key) {
         @SuppressWarnings("unchecked")
-        T ret = (T)  getStyleableMap().remove(origin, key);
+        T ret = (T) getStyleableMap().remove(origin, key);
         return ret;
     }
 
@@ -85,5 +91,13 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
         getStyleableMap().removeAll(origin);
     }
 
-    
+    /**
+     * This method is invoked just before listeners are notified. This
+     * implementation is empty.
+     *
+     * @param key the invalidated key
+     */
+    protected void invalidated(Key<?> key) {
+    }
+
 }

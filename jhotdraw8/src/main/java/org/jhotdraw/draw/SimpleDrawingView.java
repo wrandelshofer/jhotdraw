@@ -356,7 +356,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(drawingPane.getTranslateX(), drawingPane.getTranslateY());
             double zoom = zoomFactor.get();
-            worldToViewTransform = (zoom == 1.0) ? tr : tr.createConcatenation(new Scale(1.0 / zoom, 1.0 / zoom));
+            worldToViewTransform = (zoom == 1.0) ? tr : tr.createConcatenation(new Scale(zoom, zoom));
         }
         return worldToViewTransform;
     }

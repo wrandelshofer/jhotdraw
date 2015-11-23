@@ -70,7 +70,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     public boolean isSelectable() {
         return true;
     }
-
+    
     /**
      * This method whether the provided figure is a suitable parent for this
      * figure.

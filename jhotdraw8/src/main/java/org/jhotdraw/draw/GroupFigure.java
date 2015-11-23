@@ -18,6 +18,7 @@ import org.jhotdraw.draw.connector.Connector;
  * @version $Id$
  */
 public class GroupFigure extends AbstractCompositeFigure implements TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
+
     /**
      * The CSS type selector for group objects is @code("group"}.
      */
@@ -44,7 +45,9 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
 
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Group();
+        Group g = new Group();
+        g.setAutoSizeChildren(false);
+        return g;
     }
 
     @Override

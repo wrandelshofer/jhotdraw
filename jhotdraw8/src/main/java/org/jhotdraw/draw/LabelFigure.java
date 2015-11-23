@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.draw;
 
+import javafx.scene.control.Labeled;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
@@ -31,5 +32,13 @@ public interface LabelFigure extends TextableFigure, TransformableFigure {
      */
     default void applyLabelProperties(Text text) {
         text.setFill(getStyled(TEXT_FILL));
+    }
+    /**
+     * Updates a text node with label properties.
+     *
+     * @param text a text node
+     */
+    default void applyLabelProperties(Labeled text) {
+        text.setTextFill(getStyled(TEXT_FILL));
     }
 }
