@@ -59,9 +59,16 @@ public class CssPaintConverter implements Converter<Paint> {
                 int rgb = ((((int) (c.getRed() * 255)) & 0xff) << 16)
                         | ((((int) (c.getGreen() * 255)) & 0xff) << 8)
                         | ((((int) (c.getBlue() * 255)) & 0xff) << 0);
-                String hex = "000000" + Integer.toHexString(rgb);
-                out.append("#");
-                out.append(hex.substring(hex.length() - 6));
+
+                if ((rgb & 0xf0f0f0) >>> 4 == (rgb & 0x0f0f0f)) {
+                    String hex = "000" + Integer.toHexString(((rgb & 0xf0000) >>> 8) | ((rgb & 0xf00) >>> 4) | (rgb & 0xf));
+                    out.append("#");
+                    out.append(hex.substring(hex.length() - 3));
+                } else {
+                    String hex = "000000" + Integer.toHexString(rgb);
+                    out.append("#");
+                    out.append(hex.substring(hex.length() - 6));
+                }
             } else {
                 out.append("rgba(");
                 out.append(Integer.toString((int) (c.getRed() * 255)));
@@ -82,7 +89,7 @@ public class CssPaintConverter implements Converter<Paint> {
     @Override
     public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         try {
-            String str = buf.toString();
+            String str = buf.toString().trim();
             Color c;
             if ("none".equals(str)) {
                 c = null;

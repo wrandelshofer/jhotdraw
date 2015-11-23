@@ -27,6 +27,7 @@ import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
+import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
 
 /**
  * {@code TextFigure} is a {@code TextableFigure} which supports stroking
@@ -41,8 +42,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
      * The CSS type selector for this object is {@code "Text"}.
      */
     public final static String TYPE_SELECTOR = "Text";
-
-    public final static SimpleFigureKey<Point2D> ORIGIN = new SimpleFigureKey<>("origin", Point2D.class, false, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
+    public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),new Point2D(0, 0));
 
     private Text textNode;
 

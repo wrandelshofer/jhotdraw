@@ -63,6 +63,7 @@ import org.jhotdraw.draw.io.SimpleIdFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
+import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.SelectionTool;
@@ -136,6 +137,7 @@ public class GrapherView extends AbstractView implements EditorView {
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new, layerFactory), 1, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new SimpleLabelFigure(0, 0, "Hello"), layerFactory), 3, 1);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new, layerFactory), 2, 1);
+        ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new TextFigure(0, 0, "Text"), layerFactory), 4, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);

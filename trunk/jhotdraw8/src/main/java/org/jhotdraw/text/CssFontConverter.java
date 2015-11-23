@@ -186,7 +186,11 @@ public class CssFontConverter implements Converter<Font> {
             throw new ParseException("font family expected", buf.position() + tt.getPosition());
         }
         
-        return Font.font(fontFamily,fontWeight,fontPosture,fontSize);
+        Font font = Font.font(fontFamily,fontWeight,fontPosture,fontSize);
+        if (font==null) {
+           font= Font.font(null,fontWeight,fontPosture,fontSize);
+        }
+        return font;
     }
     @Override
     public Font getDefaultValue() {

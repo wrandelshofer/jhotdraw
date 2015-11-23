@@ -1,4 +1,4 @@
-/* @(#)Point2DConverter.java
+/* @(#)CssPoint2DConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -17,9 +17,9 @@ import org.jhotdraw.draw.io.IdFactory;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Point2DConverter implements Converter<Point2D> {
+public class CssPoint2DConverter implements Converter<Point2D> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new XmlConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point2D value) throws IOException {

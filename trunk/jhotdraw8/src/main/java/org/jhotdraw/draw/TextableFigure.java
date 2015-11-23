@@ -9,6 +9,8 @@ import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import javafx.geometry.VPos;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -72,5 +74,19 @@ public interface TextableFigure extends Figure {
         text.setTextOrigin(getStyled(TEXT_ORIGIN));
         text.setUnderline(getStyled(UNDERLINE));
         text.setWrappingWidth(getStyled(WRAPPING_WIDTH));
+    }
+    /**
+     * Updates a text node with text properties except {@code TEXT}.
+     *
+     * @param text a text node
+     */
+    default void applyTextHolderProperties(Labeled text) {
+        text.setFont(getStyled(FONT));
+        text.setLineSpacing(getStyled(LINE_SPACING));
+        //text.setStrikethrough(getStyled(STRIKETHROUGH));
+        text.setTextAlignment(getStyled(TEXT_ALIGNMENT));
+        //text.setTextOrigin(getStyled(TEXT_ORIGIN));
+        text.setUnderline(getStyled(UNDERLINE));
+        //text.setWrappingWidth(getStyled(WRAPPING_WIDTH));
     }
 }
