@@ -12,14 +12,18 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Pane;
@@ -65,7 +69,6 @@ import org.jhotdraw.draw.io.SimpleIdFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
 import org.jhotdraw.draw.shape.EllipseFigure;
 import org.jhotdraw.draw.shape.LineFigure;
-import org.jhotdraw.draw.shape.TextFigure;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.SelectionTool;
@@ -87,6 +90,8 @@ public class GrapherView extends AbstractView implements EditorView {
     private ScrollPane viewScrollPane;
     @FXML
     private ScrollPane detailsScrollPane;
+    @FXML
+    private SplitPane mainSplitPane;
 
     private DrawingView drawingView;
 
@@ -96,6 +101,8 @@ public class GrapherView extends AbstractView implements EditorView {
     private VBox detailsVBox;
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
+    
+    private final BooleanProperty detailsVisible = new SimpleBooleanProperty(this,"detailsVisible",true);
 
     /**
      * Counter for incrementing layer names.
@@ -152,7 +159,7 @@ public class GrapherView extends AbstractView implements EditorView {
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
         getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction(getApplication(), this,
-                detailsScrollPane.visibleProperty(),
+                detailsVisible,
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
 
@@ -182,6 +189,7 @@ public class GrapherView extends AbstractView implements EditorView {
         };
         getApplication().execute(bg);
 
+        /*
         Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
         detailsScrollPane.setMinSize(0.0, 0.0);
         detailsScrollPane.visibleProperty().addListener((o, oldValue, newValue) -> {
@@ -189,10 +197,16 @@ public class GrapherView extends AbstractView implements EditorView {
             detailsScrollPane.setPrefHeight(newValue ? ScrollPane.USE_COMPUTED_SIZE : 0.0);
         });
         detailsScrollPane.visibleProperty().set(prefs.getBoolean("view.propertiesPane.visible", true));
-
+*/
         detailsVBox.getStyleClass().add("inspector");
     }
 
+    @Override
+    public void start() {
+        Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
+        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
+    }
+    
     private void addInspector(Inspector inspector, String id, Priority grow, List<Node> list) {
         Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
 

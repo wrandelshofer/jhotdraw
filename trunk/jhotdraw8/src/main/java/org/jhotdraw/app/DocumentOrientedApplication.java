@@ -111,9 +111,9 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     {
         views.addListener((SetChangeListener.Change<? extends View> change) -> {
             if (change.wasAdded()) {
-                onViewAdded(change.getElementAdded());
+                handleViewAdded(change.getElementAdded());
             } else {
-                onViewRemoved(change.getElementRemoved());
+                handleViewRemoved(change.getElementRemoved());
             }
         });
     }
@@ -220,7 +220,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
      *
      * @param view the view
      */
-    protected void onViewAdded(View view) {
+    protected void handleViewAdded(View view) {
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
@@ -253,7 +253,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         });
         stage.titleProperty().bind(BindingUtil.formatted(getLabels().getString("frame.title"),
                 view.titleProperty(), getModel().getName(), view.disambiguationProperty(), view.modifiedProperty()));
-        view.titleProperty().addListener(this::onTitleChanged);
+        view.titleProperty().addListener(this::handleTitleChanged);
         ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue == true) {
                 activeView.set(view);
@@ -301,7 +301,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             }
         }
         stage.show();
-        view.start();
+        Platform.runLater(()->view.start());
     }
 
     /**
@@ -309,7 +309,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
      *
      * @param obs the observable
      */
-    protected void onTitleChanged(Observable obs) {
+    protected void handleTitleChanged(Observable obs) {
         disambiguateViews();
     }
 
@@ -318,7 +318,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
      *
      * @param view the view
      */
-    protected void onViewRemoved(View view) {
+    protected void handleViewRemoved(View view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);

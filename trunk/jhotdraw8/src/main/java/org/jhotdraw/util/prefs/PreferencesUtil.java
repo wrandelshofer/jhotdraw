@@ -15,8 +15,14 @@ import java.util.prefs.NodeChangeListener;
 import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
 
 /**
@@ -313,7 +319,52 @@ public class PreferencesUtil
             prefs.putDouble(name + ".height", newValue.doubleValue());
         });
     }
+   /**
+     * Inits handlers which toggle the visibility of the given node in the split
+     * pane and remembers user preferences.
+     * <p>
+     * The name attribute of the {@code visiblityProperty} is used to identify
+     * preferences values.
+     *
+     * @param prefs The preferences object to use.
+     * @param node The node which is added or removed to the split pane. The node
+     * is also made visible/invisible.
+     * @param visibilityProperty the boolean property which holds the visibility
+     * state
+     * @param splitPane splitPane to which the node is added or removed
+     * @param side on which side of the split pane the element should be added
+     */
+    public static void installVisibilityPrefsHandlers(Preferences prefs, Node node, BooleanProperty visibilityProperty, SplitPane splitPane, Side side) {
+        ChangeListener<? super Number> positionListener = (o, oldValue, newValue) -> {
+            prefs.putDouble(visibilityProperty.getName() + ".dividerPosition", newValue.doubleValue());
+        };
 
+        ChangeListener<Boolean> visibilityListener =(o, oldValue, newValue) -> {
+            node.setVisible(newValue);
+            ObservableList<SplitPane.Divider> dividers = splitPane.getDividers();
+            boolean first = side == Side.LEFT || side == Side.TOP;
+            if (newValue) {
+                if (first) {
+                    splitPane.getItems().add(0, node);
+                } else {
+                    splitPane.getItems().add(node);
+                }
+                SplitPane.setResizableWithParent(node, false);
+                DoubleProperty pp = dividers.get(first ? 0 : dividers.size() - 1).positionProperty();
+                pp.set(prefs.getDouble(visibilityProperty.getName() + ".dividerPosition", first ? 0.2 : 0.8));
+                pp.addListener(positionListener);
+            } else {
+                DoubleProperty pp = dividers.get(first ? 0 : dividers.size() - 1).positionProperty();
+                pp.removeListener(positionListener);
+                splitPane.getItems().remove(node);
+            }
+            prefs.putBoolean(visibilityProperty.getName(), newValue);
+        };
+        splitPane.getItems().remove(node);
+        visibilityProperty.set(false);
+        visibilityProperty.addListener(visibilityListener);
+        visibilityProperty.set(prefs.getBoolean(visibilityProperty.getName(), true));
+    }
     public static void installBooleanPropertyHandler(final Preferences prefs, final String name, BooleanProperty property) {
         boolean prefValue = prefs.getBoolean(name, true);
         property.setValue(prefValue);

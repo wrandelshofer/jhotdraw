@@ -90,8 +90,8 @@ public class GrapherApplication extends DocumentOrientedApplication {
     }
 
     @Override
-    protected void onViewAdded(View view) {
-        super.onViewAdded(view);
+    protected void handleViewAdded(View view) {
+        super.handleViewAdded(view);
         view.getNode().getScene().getStylesheets().addAll(//
                 GrapherApplication.class.getResource("/org/jhotdraw/draw/gui/inspector.css").toString(),//
                 GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
