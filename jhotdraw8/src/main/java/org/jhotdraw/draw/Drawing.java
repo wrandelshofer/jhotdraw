@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.css.ast.Stylesheet;
+import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.styleable.StyleableStyleManager;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
@@ -94,7 +95,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static FigureKey<Double> WIDTH = new SimpleFigureKey<Double>("width", Double.class,false, DirtyMask.of(DirtyBits.NODE), 640.0);
+    public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE), 640.0);
     /**
      * Defines the canvas height.
      * <p>
@@ -103,7 +104,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static FigureKey<Double> HEIGHT = new SimpleFigureKey<Double>("height", Double.class,false, DirtyMask.of(DirtyBits.NODE), 480.0);
+    public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE), 480.0);
     /**
      * Defines the canvas color.
      * <p>

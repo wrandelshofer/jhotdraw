@@ -64,9 +64,12 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
         this(position.getX(), position.getY(), text);
     }
 
-    public SimpleLabelFigure(double x, double y, String text) {
+    public SimpleLabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
+        for (int i=0;i<keyValues.length;i+=2) {
+            set((Key<Object>)keyValues[i],keyValues[i+1]);
+        }
     }
 
     @Override
