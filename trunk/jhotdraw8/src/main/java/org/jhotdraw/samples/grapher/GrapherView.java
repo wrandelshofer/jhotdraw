@@ -35,6 +35,7 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.EditorView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.FillableFigure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.shape.RectangleFigure;
@@ -42,6 +43,7 @@ import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleLabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
+import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.TextableFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
@@ -135,9 +137,10 @@ public class GrapherView extends AbstractView implements EditorView {
         ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, RectangleFigure::new, layerFactory), 1, 0);
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new, layerFactory), 2, 0);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new, layerFactory), 1, 1);
-        ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new SimpleLabelFigure(0, 0, "Hello"), layerFactory), 3, 1);
+        ttbar.addTool(new CreationTool("edit.createText", rsrc,//
+                () -> new SimpleLabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null), //
+                layerFactory), 3, 1);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new, layerFactory), 2, 1);
-        ttbar.addTool(new CreationTool("edit.createText", rsrc, () -> new TextFigure(0, 0, "Text"), layerFactory), 4, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
@@ -153,16 +156,16 @@ public class GrapherView extends AbstractView implements EditorView {
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
 
-        BackgroundTask<List<Node>> bg=new BackgroundTask<List<Node>>() {
+        BackgroundTask<List<Node>> bg = new BackgroundTask<List<Node>>() {
 
             @Override
             protected List<Node> call() throws Exception {
                 List<Node> list = new LinkedList<>();
-                addInspector(new StyleAttributesInspector(), "styleAttributes",Priority.ALWAYS, list);
-                addInspector(new StylesheetsInspector(), "stylesheets",Priority.ALWAYS, list);
-                addInspector(new LayersInspector(layerFactory), "layers",Priority.ALWAYS, list);
-                addInspector(new DrawingInspector(), "drawing",Priority.NEVER, list);
-                addInspector(new GridInspector(), "grid",Priority.NEVER, list);
+                addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS, list);
+                addInspector(new StylesheetsInspector(), "stylesheets", Priority.ALWAYS, list);
+                addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS, list);
+                addInspector(new DrawingInspector(), "drawing", Priority.NEVER, list);
+                addInspector(new GridInspector(), "grid", Priority.NEVER, list);
 
                 return list;
             }
@@ -180,7 +183,7 @@ public class GrapherView extends AbstractView implements EditorView {
         getApplication().execute(bg);
 
         Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
-        detailsScrollPane.setMinSize(0.0,0.0);
+        detailsScrollPane.setMinSize(0.0, 0.0);
         detailsScrollPane.visibleProperty().addListener((o, oldValue, newValue) -> {
             prefs.putBoolean("view.propertiesPane.visible", newValue);
             detailsScrollPane.setPrefHeight(newValue ? ScrollPane.USE_COMPUTED_SIZE : 0.0);
@@ -194,8 +197,8 @@ public class GrapherView extends AbstractView implements EditorView {
         Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
 
         Accordion a = new Accordion();
-        a.getStyleClass().setAll("inspector","flush");
-        Pane n = (Pane)inspector.getNode();
+        a.getStyleClass().setAll("inspector", "flush");
+        Pane n = (Pane) inspector.getNode();
         TitledPane t = new TitledPane(r.getString(id + ".toolbar"), n);
         a.getPanes().add(t);
         list.add(a);
@@ -203,8 +206,8 @@ public class GrapherView extends AbstractView implements EditorView {
 
         // Make sure that an expanded accordion has the specified grow priority.
         // But when it is collapsed it should have none.
-        t.expandedProperty().addListener((o,oldValue,newValue) ->{
-            VBox.setVgrow(a, newValue?grow:Priority.NEVER);
+        t.expandedProperty().addListener((o, oldValue, newValue) -> {
+            VBox.setVgrow(a, newValue ? grow : Priority.NEVER);
         });
 
         PreferencesUtil.installBooleanPropertyHandler(//
@@ -214,11 +217,12 @@ public class GrapherView extends AbstractView implements EditorView {
             VBox.setVgrow(a, grow);
         }
     }
+
     private void addHInspector(Inspector inspector, String id, List<Node> list) {
         Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
 
         Accordion a = new Accordion();
-        a.getStyleClass().setAll("inspector","flush");
+        a.getStyleClass().setAll("inspector", "flush");
         Node n = inspector.getNode();
         n.setRotate(90);
         ((Pane) n).setPrefHeight(129);
