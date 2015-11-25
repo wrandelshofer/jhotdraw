@@ -159,12 +159,14 @@ public class DocumentOrientedApplication extends javafx.application.Application 
 
             @Override
             protected void succeeded(View v) {
+                /*
                 v.getActionMap().setParent(getActionMap());
                 v.setApplication(DocumentOrientedApplication.this);
                 v.init();
                 v.setTitle(getLabels().getString("unnamedFile"));
                 HierarchicalMap<String, Action> map = v.getActionMap();
                 map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, v));
+                */
                 callback.accept(v);
             }
         };
@@ -221,6 +223,14 @@ public class DocumentOrientedApplication extends javafx.application.Application 
      * @param view the view
      */
     protected void handleViewAdded(View view) {
+                view.getActionMap().setParent(getActionMap());
+                view.setApplication(DocumentOrientedApplication.this);
+                view.init();
+                view.setTitle(getLabels().getString("unnamedFile"));
+                HierarchicalMap<String, Action> map = view.getActionMap();
+                map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, view));
+        
+        
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
