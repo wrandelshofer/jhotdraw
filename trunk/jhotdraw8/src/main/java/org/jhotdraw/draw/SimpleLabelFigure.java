@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import java.util.List;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import javafx.geometry.BoundingBox;
@@ -27,6 +28,12 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.handle.HandleType;
+import org.jhotdraw.draw.handle.MoveHandleKit;
+import org.jhotdraw.draw.handle.ResizeHandleKit;
+import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.InsetsStyleableFigureKey;
 import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
@@ -67,8 +74,9 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
     public SimpleLabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
-        for (int i=0;i<keyValues.length;i+=2) {
-            set((Key<Object>)keyValues[i],keyValues[i+1]);
+        for (int i = 0; i < keyValues.length; i += 2) {
+            // unchecked warning occurs here:
+            set((Key<Object>) keyValues[i], keyValues[i + 1]);
         }
     }
 
@@ -128,13 +136,13 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
 
     private void updateRegionNode(RenderContext drawingView, Region node) {
         node.setShape(getStyled(SHAPE));
-        
+
         Bounds b = getBoundsInLocal();
         node.resizeRelocate(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
-        
+
         Paint fillColor = getStyled(FILL_COLOR);
         node.setBackground(fillColor == null ? null : new Background(new BackgroundFill(fillColor, null, null)));
-        
+
         Paint strokeColor = getStyled(STROKE_COLOR);
         double strokeWidth = getStyled(STROKE_WIDTH);
         if (strokeColor == null || strokeWidth == 0) {
@@ -184,4 +192,30 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
         }
     }
 
+    @Override
+    public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
+        if (handleType == HandleType.SELECT) {
+            list.add(new BoundsInLocalOutlineHandle(this));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(MoveHandleKit.northEast(this));
+            list.add(MoveHandleKit.northWest(this));
+            list.add(MoveHandleKit.southEast(this));
+            list.add(MoveHandleKit.southWest(this));
+        } else if (handleType == HandleType.RESIZE) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(MoveHandleKit.northEast(this));
+            list.add(MoveHandleKit.northWest(this));
+            list.add(MoveHandleKit.southEast(this));
+            list.add(MoveHandleKit.southWest(this));
+            if (this instanceof TransformableFigure) {
+                list.add(new RotateHandle((TransformableFigure) this));
+            }
+        } else if (handleType == HandleType.TRANSFORM) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
+            if (this instanceof TransformableFigure) {
+                list.add(new RotateHandle((TransformableFigure) this));
+            }
+        }
+    }
 }
