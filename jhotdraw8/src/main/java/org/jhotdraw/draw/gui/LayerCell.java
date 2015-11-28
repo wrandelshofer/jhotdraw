@@ -138,6 +138,7 @@ public class LayerCell extends ListCell<Figure> {
 
     /**
      * Returns the {@link StringConverter} used in this cell.
+     * @return the converter
      */
     public final StringConverter<Figure> getConverter() {
         return null;//converterProperty().get(); 

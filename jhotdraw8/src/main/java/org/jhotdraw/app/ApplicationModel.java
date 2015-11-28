@@ -20,14 +20,12 @@ import org.jhotdraw.gui.URIChooser;
 public interface ApplicationModel {
 
     // Views
-    /** Creates a view and initializes it.
+    /** Instantiates a view. But does not initialize it.
      *
-     * Since this operation may involve class loading, it is performed in
-     * the background.
-     *
-     * @param callback the created view is passed to the callback. 
+     * Since this operation may involve class loading, it should be performed
+     * in the background.
      */
-    public void createView(Consumer<View> callback);
+    public View instantiateView();
     // URI choosers
 
     /** Creates an open chooser.

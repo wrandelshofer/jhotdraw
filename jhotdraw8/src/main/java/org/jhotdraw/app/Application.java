@@ -5,6 +5,7 @@
 package org.jhotdraw.app;
 
 import java.net.URI;
+import java.util.function.Consumer;
 import org.jhotdraw.collection.HierarchicalMap;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SetProperty;
@@ -64,6 +65,9 @@ public interface Application extends Disableable, PropertyBean {
     /** Returns the application model.
      * @return the model */
     public ApplicationModel getModel();
+    /** Sets the application model.
+     * @param newValue the model */
+    public void setModel(ApplicationModel newValue);
 
     /** Exits the application. */
     public void exit();
@@ -75,4 +79,9 @@ public interface Application extends Disableable, PropertyBean {
     /** Adds an URI to the list of recent URIs.
      * @param uri the uri*/
     public void addRecentURI(URI uri);
+    
+    /** Creates a new view, initializes it, then invokes the callback.
+     * @param callback A callback. Can be null.
+     */
+    public void createView(Consumer<View> callback);
 }

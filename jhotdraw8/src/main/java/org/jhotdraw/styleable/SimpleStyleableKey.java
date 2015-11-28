@@ -28,6 +28,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param key The name of the name.
      * @param clazz The type of the value.
      * @param metaData The CSS meta data.
+     * @param converter the converter
      */
     public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
         this(key, clazz, "", metaData, converter, null);
@@ -40,6 +41,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param key The name of the name.
      * @param clazz The type of the value.
      * @param metaData The CSS meta data.
+     * @param converter the converter
      * @param defaultValue The default value.
      */
     public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
@@ -55,6 +57,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param typeParameters The type parameters of the class. Specify "" if no
      * type parameters are given. Otherwise specify them in arrow brackets.
      * @param metaData The CSS meta data.
+     * @param converter the converter
      * @param defaultValue The default value.
      */
     public SimpleStyleableKey(String key, Class<?> clazz, String typeParameters, CssMetaData<?, T> metaData,  Converter<T> converter,T defaultValue) {

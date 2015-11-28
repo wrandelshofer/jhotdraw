@@ -79,7 +79,7 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  *
  * @author Werner Randelshofer
  */
-public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application, ApplicationModel {
+public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application {
 
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, "<Boolean>", null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
@@ -98,6 +98,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     private final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper();
     private final SetProperty<Object> disablers = new SimpleSetProperty<>(FXCollections.observableSet());
     private ReadOnlyMapProperty<Key<?>, Object> properties;
+    private ApplicationModel model;
 
     public DocumentOrientedApplication() {
         disabled.bind(Bindings.not(disablers.emptyProperty()));
@@ -132,7 +133,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
         }
         createView(v -> {
-            add(v);
+                add(v);
             v.addDisabler(this);
             v.clear(e -> v.removeDisabler(this));
         });
@@ -148,66 +149,22 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         return activeView.getReadOnlyProperty();
     }
 
-    @Override
-    public final void createView(Consumer<View> callback) {
+    public void createView(Consumer<View> callback) {
         BackgroundTask<View> t = new BackgroundTask<View>() {
 
             @Override
             protected View call() throws Exception {
-                return instantiateView();
+                return getModel().instantiateView();
             }
 
             @Override
             protected void succeeded(View v) {
-                /*
-                v.getActionMap().setParent(getActionMap());
                 v.setApplication(DocumentOrientedApplication.this);
                 v.init();
-                v.setTitle(getLabels().getString("unnamedFile"));
-                HierarchicalMap<String, Action> map = v.getActionMap();
-                map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, v));
-                */
                 callback.accept(v);
             }
         };
         execute(t);
-
-    }
-
-    protected View instantiateView() {
-        TextAreaView v = new TextAreaView();
-        return v;
-    }
-
-    @Override
-    public URIChooser createOpenChooser() {
-        FileURIChooser c = new FileURIChooser();
-        c.setMode(FileURIChooser.Mode.OPEN);
-        c.getFileChooser().getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        return c;
-    }
-
-    @Override
-    public URIChooser createSaveChooser() {
-        FileURIChooser c = new FileURIChooser();
-        c.setMode(FileURIChooser.Mode.SAVE);
-        c.getFileChooser().getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        return c;
-    }
-
-    @Override
-    public String getName() {
-        return getClass().getName();
-    }
-
-    @Override
-    public String getVersion() {
-        return getClass().getPackage().getImplementationVersion();
-    }
-
-    @Override
-    public String getCopyright() {
-        return getClass().getPackage().getImplementationVendor();
     }
 
     /**
@@ -225,7 +182,6 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     protected void handleViewAdded(View view) {
                 view.getActionMap().setParent(getActionMap());
                 view.setApplication(DocumentOrientedApplication.this);
-                view.init();
                 view.setTitle(getLabels().getString("unnamedFile"));
                 HierarchicalMap<String, Action> map = view.getActionMap();
                 map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, view));
@@ -366,7 +322,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
      * @return the menu bar
      */
     protected MenuBar createMenuBar(HierarchicalMap<String, Action> actions) {
-        MenuBar mb = createMenuBar();
+        MenuBar mb = model.createMenuBar();
 
         LinkedList<Menu> todo = new LinkedList<>(mb.getMenus());
         while (!todo.isEmpty()) {
@@ -418,7 +374,11 @@ public class DocumentOrientedApplication extends javafx.application.Application 
 
     @Override
     public ApplicationModel getModel() {
-        return this;
+        return model;
+    }
+    @Override
+    public void setModel(ApplicationModel newValue) {
+        model=newValue;
     }
 
     @Override
@@ -474,29 +434,7 @@ public class DocumentOrientedApplication extends javafx.application.Application 
     }
 
     @Override
-    public boolean isAllowMultipleViewsPerURI() {
-        return false;
-    }
-
-    @Override
     public void addRecentURI(URI uri) {
         // FIXME implement me
     }
-
-    @Override
-    public MenuBar createMenuBar() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setResources(getModel().getResources());
-        try {
-            return loader.load(DocumentOrientedApplication.class.getResourceAsStream("DocumentOrientedMenu.fxml"));
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
-    }
-
-    @Override
-    public ResourceBundle getResources() {
-        return Resources.getResources("org.jhotdraw.app.Labels");
-    }
-
 }

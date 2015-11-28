@@ -32,7 +32,6 @@ import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.handle.MoveHandleKit;
-import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.InsetsStyleableFigureKey;
@@ -51,7 +50,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
     public final static InsetsStyleableFigureKey PADDING = new InsetsStyleableFigureKey("padding", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Insets(4, 4, 4, 4));
     private final static SVGPath defaultShape = new SVGPath();
 
-    {
+    static {
         defaultShape.setContent("M0,0 L10,0 L10,10 L0,10 Z");
     }
     public final static SVGPathStyleableFigureKey SHAPE = new SVGPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), defaultShape);
@@ -75,8 +74,9 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
-            // unchecked warning occurs here:
-            set((Key<Object>) keyValues[i], keyValues[i + 1]);
+            @SuppressWarnings("unchecked") // the set() method will perform the check for us
+            Key<Object> key = (Key<Object>) keyValues[i];
+            set(key, keyValues[i + 1]);
         }
     }
 

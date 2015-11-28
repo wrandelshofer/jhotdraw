@@ -22,11 +22,13 @@ public interface IterableTree<T extends IterableTree<T>> {
 
     /**
      * Returns the children of the tree node.
+     * @return the children
      */
     List<T> getChildren();
 
     /**
      * Returns the parent of the tree node.
+     * @return the parent. Returns null if the tree node has no parent.
      */
     T getParent();
 

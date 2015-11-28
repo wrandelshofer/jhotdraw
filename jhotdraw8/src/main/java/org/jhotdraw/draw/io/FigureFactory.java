@@ -109,6 +109,7 @@ public interface FigureFactory extends IdFactory {
     /**
      * Maps a value to an XML attribute value.
      *
+     * @param <T> the type of the value
      * @param key the key
      * @param value the value
      * @return the mapped attribute value
@@ -140,6 +141,7 @@ public interface FigureFactory extends IdFactory {
      * The node list does not contain elements with a name that conflicts with
      * the names returned by {@link #figureToName}.
      *
+     * @param <T> the type of the value
      * @param key the key
      * @param nodeList the nodeList
      * @return the mapped attribute value.
@@ -152,6 +154,7 @@ public interface FigureFactory extends IdFactory {
     /**
      * Maps an XML attribute value to a value.
      *
+     * @param <T> the type of the value
      * @param key the key
      * @param cdata the XML attribute value
      * @return the mapped value

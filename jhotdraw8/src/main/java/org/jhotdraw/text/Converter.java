@@ -130,7 +130,8 @@ public interface Converter<T> {
      * @param in The String.
      * @return The value. Nullable.
      *
-     * @throws ParseException if conversion failed.
+     * @throws ParseException on conversion failure
+     * @throws IOException on IO failure
      */
     default T fromString(CharSequence in) throws ParseException, IOException {
         CharBuffer buf = CharBuffer.wrap(in);

@@ -99,7 +99,7 @@ import org.jhotdraw.draw.key.StringStyleableFigureKey;
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
- * {@link org.jhotdraw.css.StyleableKey}. The style information is cached in the
+ * {@link org.jhotdraw.styleable.StyleableKey}. The style information is cached in the
  * figure getProperties. When the position of a figure in the tree structure is
  * changed, method {@code applyCss()} must be called to update the style
  * information of the figure and its descendants.</p>
@@ -736,7 +736,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * The default implementation returns all declared and inherited keys.
      *
-     * @param f A figure.
      * @return the keys
      */
     default Set<Key<?>> getSupportedKeys() {
@@ -747,7 +746,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Returns all keys declared in this class and inherited from parent
      * classes.
      *
-     * @param c A figure class.
+     * @param clazz A figure class.
      * @return the keys
      */
     public static Set<Key<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {

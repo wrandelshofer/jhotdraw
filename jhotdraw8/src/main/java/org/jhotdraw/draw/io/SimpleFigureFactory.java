@@ -243,6 +243,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * Adds an attribute to the list of attributes which will be skipped when
      * reading the DOM.
      *
+     * @param figure the figure class
      * @param attributeName the attribute name
      */
     public void addSkipAttribute(Class<? extends Figure> figure, String attributeName) {
@@ -354,7 +355,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     /**
      * Adds a converter for the specified key.
      *
-     * @param valueType A value type returned by {@code Key.getValueType();}.
+     * @param <T> the type of the value
+     * @param key the key
      * @param converter the converter
      */
     public <T> void addConverter(Key<T> key, Converter<T> converter) {
@@ -508,6 +510,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
 
     /**
      * Globally removes the specified key.
+     * @param key the key
      */
     public void removeKey(Key<?> key) {
         for (Map.Entry<Class<? extends Figure>, HashMap<String, Key<?>>> entry : attrToKey.entrySet()) {

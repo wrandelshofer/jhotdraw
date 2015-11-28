@@ -72,7 +72,7 @@ public class OpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView==null) {
-                app.getModel().createView(v -> doIt(v, true));
+                app.createView(v -> doIt(v, true));
             } else {
                 doIt(emptyView, false);
             }

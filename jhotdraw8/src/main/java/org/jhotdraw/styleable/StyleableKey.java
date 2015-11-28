@@ -28,6 +28,7 @@ public interface StyleableKey<T> extends Key<T> {
 
     /**
      * FIXME this is horribly inefficient since we have already parsed the CSS.
+     * @return the converter
      */
     Converter<T> getConverter();
 

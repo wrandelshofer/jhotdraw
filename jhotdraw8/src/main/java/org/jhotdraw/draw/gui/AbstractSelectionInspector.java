@@ -51,7 +51,6 @@ public abstract class AbstractSelectionInspector implements Inspector {
     /**
      * Must be implemented by subclasses.
      *
-     * @param oldValue the old selection
      * @param newValue the new selection
      */
     protected abstract void handleSelectionChanged(Set<Figure> newValue);
