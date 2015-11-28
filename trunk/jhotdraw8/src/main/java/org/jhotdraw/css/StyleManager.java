@@ -26,8 +26,6 @@ public interface StyleManager<E> {
      *
      * @param origin the style origin
      * @param url the stylesheet url
-     * @throws java.io.IOException if the stylesheet can not be loaded and
-     * parsed properly
      */
     default void addStylesheet(StyleOrigin origin, URI url) {
         addStylesheet(origin,null,url);
@@ -38,8 +36,6 @@ public interface StyleManager<E> {
      * @param origin the style origin
      * @param documentHome the document Home url
      * @param url the stylesheet url
-     * @throws java.io.IOException if the stylesheet can not be loaded and
-     * parsed properly
      */
     void addStylesheet(StyleOrigin origin, URI documentHome, URI url) ;
 
@@ -48,7 +44,6 @@ public interface StyleManager<E> {
      *
      * @param origin the style origin
      * @param stylesheet the stylesheet given as a literal string
-     * @throws java.io.IOException if the stylesheet can not be parsed properly
      */
     void addStylesheet(StyleOrigin origin, String stylesheet) ;
 
@@ -59,22 +54,27 @@ public interface StyleManager<E> {
      */
     void clearStylesheets(StyleOrigin origin);
   
-    /** Returns a list of stylesheets with the specified origin.
+    /** Sets a list of stylesheets with the specified origin.
      * 
-     * @param origin
-     * @param list list entries can be Strings or URIs.
+     * @param <T> type of the list elements
+     * @param origin the origin
+     * @param stylesheets list elements can be Strings or URIs.
      */
     default <T> void setStylesheets(StyleOrigin origin, List<T> stylesheets) {
         setStylesheets(origin,null,stylesheets);
     }
-    /** Returns a list of stylesheets with the specified origin.
+    /** Sets a list of stylesheets with the specified origin.
      * 
-     * @param origin
-     * @param list list entries can be Strings or URIs.
+     * @param <T> type of the list elements
+     * @param origin the origin
+     * @param documentHome the document home
+     * @param stylesheets list elements can be Strings or URIs.
      */
     <T> void setStylesheets(StyleOrigin origin, URI documentHome, List<T> stylesheets);
 
-    /** Applies styles to the specified element. */
+    /** Applies styles to the specified element. 
+     * @param e The element
+     */
     default void applyStylesTo(E e) {
         applyStylesTo(e, Collections.emptyMap());
     }
@@ -88,6 +88,7 @@ public interface StyleManager<E> {
     public void applyStylesTo(E e, Map<String,Set<E>> pseudoClassStates);
     
     /** Returns the selector model of the style manager.
+     * @return the selector model
      */
     public SelectorModel<E> getSelectorModel();
 

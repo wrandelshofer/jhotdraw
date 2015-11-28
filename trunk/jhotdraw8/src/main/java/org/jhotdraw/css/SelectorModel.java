@@ -12,6 +12,7 @@ import org.jhotdraw.draw.Figure;
  * This is a model on which a {@code CssAST.SelectorGroup} can perform a match
  * operation.
  *
+ * @param <T> the element type
  * @author Werner Randelshofer
  * @version $$Id$$
  */
@@ -157,20 +158,20 @@ public interface SelectorModel<T> {
     
     /** Returns the id of the element.
      * 
-     * @param e
+     * @param element the element
      * @return the id or null if the element does not have an id.
      */
     public String getId(T element);
-    /** Returns the type of the element.
+    /** Returns the style type of the element.
      * 
-     * @param e
-     * @return the type of the element.
+     * @param element the element
+     * @return the style type of the element.
      */
     public String getType(T element);
     
     /** Returns the style classes of the element.
      * 
-     * @param e
+     * @param element the element
      * @return the style classes or an empty set.
      */
     public Set<String> getStyleClasses(T element);

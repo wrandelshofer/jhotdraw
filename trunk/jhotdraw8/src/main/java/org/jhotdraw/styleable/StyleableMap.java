@@ -289,7 +289,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     public V getStyled(K key, V defaultValue) {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
-        V ret = (sv == null) ? defaultValue : (V) sv.getValue(sv.getOrigin(),defaultValue);
+        V ret = (sv == null) ? defaultValue : sv.getValue(sv.getOrigin(),defaultValue);
         return ret;
     }
 

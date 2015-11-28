@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
+import org.jhotdraw.app.SimpleApplicationModel;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
@@ -33,7 +34,13 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
     public GrapherApplication() {
         super();
+      SimpleApplicationModel model=  new SimpleApplicationModel("Grapher",()->new GrapherView(),
+                                DocumentOrientedApplication.class.getResource("DocumentOrientedMenu.fxml"),
+"XML Files","*.xml");
+      
         Resources.setVerbose(true);
+        
+        setModel(model);
     }
 
     @Override
@@ -49,27 +56,6 @@ public class GrapherApplication extends DocumentOrientedApplication {
         return map;
     }
 
-    @Override
-    public View instantiateView() {
-        GrapherView v = new GrapherView();
-        return v;
-    }
-
-    @Override
-    public URIChooser createOpenChooser() {
-        FileURIChooser c = new FileURIChooser();
-        c.setMode(FileURIChooser.Mode.OPEN);
-        c.getFileChooser().getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
-        return c;
-    }
-
-    @Override
-    public URIChooser createSaveChooser() {
-        FileURIChooser c = new FileURIChooser();
-        c.setMode(FileURIChooser.Mode.SAVE);
-        c.getFileChooser().getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
-        return c;
-    }
 
     /**
      * @param args the command line arguments
@@ -77,25 +63,4 @@ public class GrapherApplication extends DocumentOrientedApplication {
     public static void main(String[] args) {
         launch(args);
     }
-
-    @Override
-    public MenuBar createMenuBar() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setResources(getModel().getResources());
-        try {
-            return loader.load(GrapherApplication.class.getResourceAsStream("GrapherMenuBar.fxml"));
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
-    }
-
-    @Override
-    protected void handleViewAdded(View view) {
-        super.handleViewAdded(view);
-        view.getNode().getScene().getStylesheets().addAll(//
-                GrapherApplication.class.getResource("/org/jhotdraw/draw/gui/inspector.css").toString(),//
-                GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
-        );
-    }
-
 }

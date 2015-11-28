@@ -885,9 +885,7 @@ public class CssTokenizer {
     /** Consumes tokens until a non-whitespace token arrives.
      * That token is then pushed back.
      * 
-     * @param tt
-     * @throws IOException
-     * @throws ParseException 
+     * @throws IOException on IO failure
      */
     public void skipWhitespace() throws IOException {
         while (nextToken() == TT_S//

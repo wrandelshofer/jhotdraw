@@ -203,6 +203,11 @@ public class GrapherView extends AbstractView implements EditorView {
 
     @Override
     public void start() {
+getNode().getScene().getStylesheets().addAll(//
+                GrapherApplication.class.getResource("/org/jhotdraw/draw/gui/inspector.css").toString(),//
+                GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
+        );
+        
         Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
         PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }

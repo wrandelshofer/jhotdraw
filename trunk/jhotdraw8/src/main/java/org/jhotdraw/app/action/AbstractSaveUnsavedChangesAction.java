@@ -70,7 +70,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         if (av != null) {
             handle(av);
         } else if (isMayCreateView()) {
-            app.getModel().createView(v -> {
+            app.createView(v -> {
                 app.add(v);
                 handle(v);
             });

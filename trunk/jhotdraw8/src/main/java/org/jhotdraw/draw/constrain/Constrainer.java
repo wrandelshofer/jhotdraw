@@ -129,11 +129,13 @@ public interface Constrainer extends Observable {
 
     /**
      * Returns a node that renders the grid in view coordinates.
+     * @return the node
      */
     public Node getNode();
 
     /**
      * Updates the node.
+     * @param drawingView the drawing view
      */
     public void updateNode(DrawingView drawingView);
 }

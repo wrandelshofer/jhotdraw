@@ -103,9 +103,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
      * <li>not(...)</li>
      * </ul>
      *
-     * @param element
-     * @param pseudoClass
-     * @return
+     * @param element the element
+     * @param pseudoClass the desired pseudo clas
+     * @return true if the element has the pseudo class
      */
     @Override
     public boolean hasPseudoClass(Element element, String pseudoClass) {
