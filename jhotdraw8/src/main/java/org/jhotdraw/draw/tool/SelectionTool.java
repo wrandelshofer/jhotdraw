@@ -127,7 +127,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMousePressed(MouseEvent event, DrawingView view) {
+    protected void handleMousePressed(MouseEvent event, DrawingView view) {
         Platform.runLater(()->view.getNode().requestFocus());
         mouseDragged = false;
         Bounds b = getNode().getBoundsInParent();
@@ -213,7 +213,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
+    protected void handleMouseDragged(MouseEvent event, DrawingView dv) {
         mouseDragged = true;
         if (tracker != null) {
             tracker.trackMouseDragged(event, dv);
@@ -222,7 +222,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
+    protected void handleMouseReleased(MouseEvent event, DrawingView dv) {
         if (tracker != null) {
             tracker.trackMouseReleased(event, dv);
         }

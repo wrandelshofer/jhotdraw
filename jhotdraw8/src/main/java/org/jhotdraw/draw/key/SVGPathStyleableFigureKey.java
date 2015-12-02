@@ -14,7 +14,7 @@ import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.CssSVGPathConverter;
+import org.jhotdraw.text.CssSvgPathConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
@@ -74,7 +74,7 @@ public class SVGPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, SVGPath> converter
-                = new StyleConverterConverterWrapper<SVGPath>(new CssSVGPathConverter());
+                = new StyleConverterConverterWrapper<SVGPath>(new CssSvgPathConverter());
         CssMetaData<Styleable, SVGPath> md
                 = new SimpleCssMetaData<Styleable, SVGPath>(property, function,
                         converter, defaultValue, inherits);
@@ -92,7 +92,7 @@ public class SVGPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
     @Override
     public Converter<SVGPath> getConverter() {
         if (converter == null) {
-            converter = new CssSVGPathConverter();
+            converter = new CssSvgPathConverter();
         }
         return converter;
     }   

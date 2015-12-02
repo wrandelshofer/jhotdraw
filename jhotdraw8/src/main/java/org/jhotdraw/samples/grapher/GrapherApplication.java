@@ -1,41 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* @(#)GrapherApplication.java
+ * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.samples.grapher;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.prefs.Preferences;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.MenuBar;
-import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.SimpleApplicationModel;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
-import org.jhotdraw.gui.FileURIChooser;
-import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.Resources;
 
 /**
  *
- * @author werni
+ * @author Werner Randelshofer
  */
 public class GrapherApplication extends DocumentOrientedApplication {
 
     public GrapherApplication() {
         super();
       SimpleApplicationModel model=  new SimpleApplicationModel("Grapher",()->new GrapherView(),
-                                DocumentOrientedApplication.class.getResource("DocumentOrientedMenu.fxml"),
+                                GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
 "XML Files","*.xml");
       
         Resources.setVerbose(true);

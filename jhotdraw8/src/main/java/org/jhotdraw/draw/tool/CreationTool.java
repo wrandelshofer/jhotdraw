@@ -67,7 +67,7 @@ public class CreationTool extends AbstractTool {
     }
 
     @Override
-    protected void onMousePressed(MouseEvent event, DrawingView view) {
+    protected void handleMousePressed(MouseEvent event, DrawingView view) {
         Platform.runLater(()->view.getNode().requestFocus());
         x1 = event.getX();
         y1 = event.getY();
@@ -87,7 +87,7 @@ public class CreationTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
+    protected void handleMouseReleased(MouseEvent event, DrawingView dv) {
         if (figure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
                 Point2D c1 = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(x1, y1));
@@ -109,7 +109,7 @@ public class CreationTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
+    protected void handleMouseDragged(MouseEvent event, DrawingView dv) {
         if (figure != null) {
             x2 = event.getX();
             y2 = event.getY();
@@ -123,7 +123,7 @@ public class CreationTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
     }
 
     /**

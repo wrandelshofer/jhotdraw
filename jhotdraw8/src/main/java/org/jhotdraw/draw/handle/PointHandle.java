@@ -32,7 +32,7 @@ public class PointHandle extends AbstractHandle {
     private final SimpleFigureKey<Point2D> pointKey;
     private final Region node;
     private final String styleclass;
-    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+    private static final Rectangle REGION_SHAPE = new Rectangle(9, 9);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE,  BorderStrokeStyle.SOLID, null, null));
 

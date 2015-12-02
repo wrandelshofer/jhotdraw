@@ -52,9 +52,20 @@ import java.util.Set;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.beans.SimplePropertyBean;
 import org.jhotdraw.draw.model.SimpleDrawingModel;
@@ -77,6 +88,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private Group overlaysSubScene;
 
     private BorderPane toolPane;
+    private Rectangle backgroundPane;
 
     private Group handlesPane;
     private Group gridPane;
@@ -95,7 +107,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      */
     private StackPane stackPane;
 
-    private class SimpleDrawingViewNode extends StackPane implements EditableComponent {
+    private class SimpleDrawingViewNode extends BorderPane implements EditableComponent {
 
         public SimpleDrawingViewNode() {
             setFocusTraversable(true);
@@ -294,6 +306,20 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             if (constrainer.get() != null) {
                 constrainer.get().updateNode(SimpleDrawingView.this);
             }
+
+            // zoom towards the center of the drawing
+            {
+                Parent p = node;
+                while (p != null && !(p instanceof ScrollPane)) {
+                    p = p.getParent();
+                }
+                ScrollPane scrollPane = (ScrollPane) p;
+                if (scrollPane != null) {
+                    scrollPane.setVvalue(0.5);
+                    scrollPane.setHvalue(0.5);
+                }
+            }
+
         }
     };
 
@@ -343,64 +369,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private Runnable repainter = null;
 
-    private void invalidateFigureNode(Figure f) {
-        dirtyFigureNodes.add(f);
-        if (handles.containsKey(f)) {
-            dirtyHandles.add(f);
-        }
-    }
-
-    @Override
-    public Transform getWorldToView() {
-        if (worldToViewTransform == null) {
-            // We try to avoid the Scale transform as it is slower than a Translate transform
-            Transform tr = new Translate(drawingPane.getTranslateX(), drawingPane.getTranslateY());
-            double zoom = zoomFactor.get();
-            worldToViewTransform = (zoom == 1.0) ? tr : tr.createConcatenation(new Scale(zoom, zoom));
-        }
-        return worldToViewTransform;
-    }
-
-    @Override
-    public Transform getViewToWorld() {
-        if (viewToWorldTransform == null) {
-            // We try to avoid the Scale transform as it is slower than a Translate transform
-            Transform tr = new Translate(-drawingPane.getTranslateX(), -drawingPane.getTranslateY());
-            double zoom = zoomFactor.get();
-            viewToWorldTransform = (zoom == 1.0) ? tr : new Scale(1.0 / zoom, 1.0 / zoom).createConcatenation(tr);
-        }
-        return viewToWorldTransform;
-    }
-
-    /**
-     * Updates the layout of the drawing pane and the panes laid over it.
-     */
-    private void updateLayout() {
-        Bounds bounds = drawingPane.getLayoutBounds();
-
-        double f = getZoomFactor();
-        double x = bounds.getMinX() * f;
-        double y = bounds.getMinY() * f;
-        double w = bounds.getWidth() * f;
-        double h = bounds.getHeight() * f;
-
-        drawingPane.setTranslateX(max(0, -x));
-        drawingPane.setTranslateY(max(0, -y));
-
-        toolPane.resize(w, h);
-        toolPane.layout();
-
-        stackPane.setPrefSize(w, h);
-
-        invalidateWorldViewTransforms();
-        invalidateHandleNodes();
-    }
-
-    @Override
-    public ReadOnlyObjectProperty<Drawing> drawingProperty() {
-        return drawing.getReadOnlyProperty();
-    }
-
     public SimpleDrawingView() {
         init();
     }
@@ -426,6 +394,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         stackPane.setFocusTraversable(true);
         focused.bind(stackPane.focusedProperty());
 
+        backgroundPane = new Rectangle();
+        backgroundPane.setFill(new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false));
+
         drawingSubScene = new Group();
         drawingSubScene.setManaged(false);
         overlaysSubScene = new Group();
@@ -435,11 +406,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         drawingPane = new Group();
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
-        drawingSubScene.getChildren().add(drawingPane);
+        drawingSubScene.getChildren().addAll(backgroundPane, drawingPane);
 
         toolPane = new BorderPane();
         toolPane.setBackground(Background.EMPTY);
-        //toolPane.setBackground(new Background(new BackgroundFill(new Color(0,1,0,0.25),null,null)));
+        toolPane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, null, null)));
         toolPane.setManaged(false);
         handlesPane = new Group();
         handlesPane.setManaged(false);
@@ -467,7 +438,87 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         // set root
         node = new SimpleDrawingViewNode();
-        node.getChildren().add(stackPane);
+        node.setCenter(stackPane);
+    }
+
+    private void invalidateFigureNode(Figure f) {
+        dirtyFigureNodes.add(f);
+        if (handles.containsKey(f)) {
+            dirtyHandles.add(f);
+        }
+    }
+
+    @Override
+    public Transform getWorldToView() {
+        if (worldToViewTransform == null) {
+            // We try to avoid the Scale transform as it is slower than a Translate transform
+            Transform tr = new Translate(drawingPane.getTranslateX() - overlaysPane.getTranslateX(), drawingPane.getTranslateY() - overlaysPane.getTranslateX());
+            double zoom = zoomFactor.get();
+            worldToViewTransform = (zoom == 1.0) ? tr : tr.createConcatenation(new Scale(zoom, zoom));
+        }
+        return worldToViewTransform;
+    }
+
+    @Override
+    public Transform getViewToWorld() {
+        if (viewToWorldTransform == null) {
+            // We try to avoid the Scale transform as it is slower than a Translate transform
+            Transform tr = new Translate(-drawingPane.getTranslateX() + overlaysPane.getTranslateX(), -drawingPane.getTranslateY() + overlaysPane.getTranslateX());
+            double zoom = zoomFactor.get();
+            viewToWorldTransform = (zoom == 1.0) ? tr : new Scale(1.0 / zoom, 1.0 / zoom).createConcatenation(tr);
+        }
+        return viewToWorldTransform;
+    }
+
+    /**
+     * Updates the layout of the drawing pane and the panes laid over it.
+     */
+    private void updateLayout() {
+        if (node == null) {
+            return;
+        }
+
+        Bounds bounds = drawingPane.getLayoutBounds();
+
+        double f = getZoomFactor();
+        double x = bounds.getMinX() * f;
+        double y = bounds.getMinY() * f;
+        double w = bounds.getWidth() * f;
+        double h = bounds.getHeight() * f;
+
+        Drawing d = getDrawing();
+        double dw = d.get(Drawing.WIDTH);
+        double dh = d.get(Drawing.HEIGHT);
+
+        drawingPane.setTranslateX(max(0, -x));
+        drawingPane.setTranslateY(max(0, -y));
+
+        if (d != null) {
+            backgroundPane.setTranslateX(max(0, -x));
+            backgroundPane.setTranslateY(max(0, -y));
+            backgroundPane.setWidth(dw * f);
+            backgroundPane.setHeight(dh * f);
+        }
+        //backgroundPane.layout();
+
+        double padding = 20;
+        double lw = max(max(0, x) + w, max(0, -x) + dw * f);
+        double lh = max(max(0, y) + h, max(0, -y) + dh * f);
+        overlaysPane.setTranslateX(-padding);
+        overlaysPane.setTranslateY(-padding);
+        toolPane.resize(lw + padding * 2, lh + padding * 2);
+        toolPane.layout();
+
+        stackPane.setPrefSize(lw, lh);
+        stackPane.setMaxSize(lw, lh);
+
+        invalidateWorldViewTransforms();
+        invalidateHandleNodes();
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<Drawing> drawingProperty() {
+        return drawing.getReadOnlyProperty();
     }
 
     @Override
@@ -1115,6 +1166,20 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void paste() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private Image createCheckerboardImage(Color c1, Color c2, int size) {
+        WritableImage img = new WritableImage(size * 2, size * 2);
+        PixelWriter w = img.getPixelWriter();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                w.setColor(x, y, c1);
+                w.setColor(x + size, y + size, c1);
+                w.setColor(x + size, y, c2);
+                w.setColor(x, y + size, c2);
+            }
+        }
+        return img;
     }
 
 }
