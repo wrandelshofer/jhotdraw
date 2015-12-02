@@ -45,7 +45,7 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
         HashMap<String, String> applicableDeclarations = new HashMap<>();
 
         // user agent stylesheets can not override element attributes
-        for (Entry e : getUserAgentStylesheets()) {
+        for (MyEntry e : getUserAgentStylesheets()) {
             Stylesheet s = e.getStylesheet();
             if (s == null) {
                 continue;
@@ -62,7 +62,7 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
         }
 
         // author stylesheets override user agent stylesheet and element attributes
-        for (Entry e : getAuthorStylesheets()) {
+        for (MyEntry e : getAuthorStylesheets()) {
             Stylesheet s = e.getStylesheet();
             if (s == null) {
                 continue;
@@ -77,7 +77,7 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
             }
         }
         // inline stylesheets override user agent stylesheet, element attributes and author stylesheets
-        for (Entry e : getInlineStylesheets()) {
+        for (MyEntry e : getInlineStylesheets()) {
             Stylesheet s = e.getStylesheet();
             if (s == null) {
                 continue;

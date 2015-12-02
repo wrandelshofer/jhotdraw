@@ -6,6 +6,7 @@
 package org.jhotdraw.draw.gui;
 
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.model.DrawingModel;
 
 /**
  * AbstractDrawingInspector.
@@ -19,6 +20,9 @@ public abstract class AbstractDrawingViewInspector implements Inspector {
         DrawingView oldValue = drawingView;
         this.drawingView = newValue;
         onDrawingViewChanged(oldValue, newValue);
+    }
+    protected DrawingModel getDrawingModel() {
+        return drawingView.getModel();
     }
 
     /** Can be overridden by subclasses. This implementation is empty. 

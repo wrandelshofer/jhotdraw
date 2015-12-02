@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.model.DrawingModel;
 
 /**
  * AbstractDrawingInspector.
@@ -38,6 +39,12 @@ public abstract class AbstractDrawingInspector implements Inspector {
         }
         onDrawingViewChanged(oldValue, newValue);
         onDrawingChanged(oldDrawing, newDrawing);
+    }
+    protected DrawingModel getDrawingModel() {
+        return drawingView.getModel();
+    }
+    protected Drawing getDrawing() {
+        return drawingView.getDrawing();
     }
 
     /** Can be overridden by subclasses. This implementation is empty. 

@@ -57,7 +57,7 @@ public class WordListStyleableFigureKey extends SimpleFigureKey<List<String>> im
      * @param defaultValue The default value.
      */
     public WordListStyleableFigureKey(String name, DirtyMask mask, List<String> defaultValue) {
-        super(name, List.class, "<Double>", mask, defaultValue);
+        super(name, List.class, new Class<?>[]{String.class}, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
 

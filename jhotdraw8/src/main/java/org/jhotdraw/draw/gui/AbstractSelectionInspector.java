@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.gui;
 
+import java.util.Collections;
 import java.util.Set;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,6 +13,7 @@ import javafx.collections.SetChangeListener;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.model.DrawingModel;
 
 /**
  * AbstractSelectionInspector.
@@ -37,6 +39,13 @@ public abstract class AbstractSelectionInspector implements Inspector {
             newValue.selectedFiguresProperty().addListener(selectionListener);
         }
         handleDrawingViewChanged(oldValue,newValue);
+    }
+    
+    protected Set<Figure> getSelectedFigures() {
+        return drawingView==null?Collections.emptySet():drawingView.getSelectedFigures();
+    }
+    protected DrawingModel getDrawingModel() {
+        return drawingView.getModel();
     }
 
     /**

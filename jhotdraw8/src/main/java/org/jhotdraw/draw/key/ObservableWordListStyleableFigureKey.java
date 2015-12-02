@@ -57,7 +57,7 @@ public class ObservableWordListStyleableFigureKey extends SimpleFigureKey<Observ
      * @param defaultValue The default value.
      */
     public ObservableWordListStyleableFigureKey(String name, DirtyMask mask, ObservableList<String> defaultValue) {
-        super(name, List.class, "<Double>", mask, defaultValue);
+        super(name, List.class, new Class<?>[]{Double.class}, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
 

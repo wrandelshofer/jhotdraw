@@ -163,10 +163,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     handleFigureRemoved(f);
                     break;
                 case FIGURE_ADDED_TO_DRAWING:
-                    // not my business
+                    repaint();
                     break;
                 case FIGURE_REMOVED_FROM_DRAWING:
-                    // not my business
+                    repaint();
                     break;
                 case NODE_INVALIDATED:
                     handleNodeInvalidated(f);
@@ -179,7 +179,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     }
                     break;
                 case STYLE_INVALIDATED:
-                    // not my business
+                    repaint();
                     break;
                 case ROOT_CHANGED:
                     handleDrawingChanged();
@@ -195,7 +195,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     break;
                 case CONNECTION_CHANGED:
                 case TRANSFORM_CHANGED:
-                    // not my business
+                    repaint();
                     break;
                 default:
                     throw new UnsupportedOperationException(event.getEventType()

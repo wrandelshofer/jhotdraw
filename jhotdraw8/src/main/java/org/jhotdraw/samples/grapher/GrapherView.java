@@ -59,6 +59,7 @@ import org.jhotdraw.draw.gui.Inspector;
 import org.jhotdraw.draw.gui.LayersInspector;
 import org.jhotdraw.draw.gui.StyleAttributesInspector;
 import org.jhotdraw.draw.gui.StylesheetsInspector;
+import org.jhotdraw.draw.gui.StyleClassesInspector;
 import org.jhotdraw.draw.gui.ToolsToolbar;
 import org.jhotdraw.draw.gui.ZoomToolbar;
 import org.jhotdraw.draw.handle.HandleType;
@@ -170,6 +171,7 @@ public class GrapherView extends AbstractView implements EditorView {
                 List<Node> list = new LinkedList<>();
                 addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS, list);
                 addInspector(new StylesheetsInspector(), "stylesheets", Priority.ALWAYS, list);
+                addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER, list);
                 addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS, list);
                 addInspector(new DrawingInspector(), "drawing", Priority.NEVER, list);
                 addInspector(new GridInspector(), "grid", Priority.NEVER, list);

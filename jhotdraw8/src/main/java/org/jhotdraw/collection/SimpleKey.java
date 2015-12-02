@@ -4,6 +4,10 @@
  */
 package org.jhotdraw.collection;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
  * <p>
@@ -48,7 +52,7 @@ public class SimpleKey<T> implements Key<T> {
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
-    private final String typeParameters;
+    private final List<Class<?>> typeParameters;
 
     /**
      * Whether the value may be set to null.
@@ -89,7 +93,7 @@ public class SimpleKey<T> implements Key<T> {
      * @param defaultValue The default value.
      */
     public SimpleKey(String name, Class<?> clazz, String typeParameters, T defaultValue) {
-        this(name, clazz, "", true, defaultValue);
+        this(name, clazz, null, true, defaultValue);
     }
 
     /**
@@ -98,35 +102,25 @@ public class SimpleKey<T> implements Key<T> {
      *
      * @param name The name of the key.
      * @param clazz The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
+     * @param typeParameters The type parameters of the class. Specify null if no
      * type parameters are given. Otherwise specify them in arrow brackets.
      * @param isNullable Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public SimpleKey(String name, Class<?> clazz, String typeParameters, boolean isNullable, T defaultValue) {
+    public SimpleKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
         if (clazz == null) {
             throw new IllegalArgumentException("clazz is null");
         }
-        if (typeParameters == null) {
-            throw new IllegalArgumentException("type parameters is null");
-        }
-        if (typeParameters.length() > 0) {
-            if (!typeParameters.startsWith("<") || !typeParameters.endsWith(">")) {
-                throw new IllegalArgumentException("type parameters does not have arrow brackets:"
-                        + typeParameters);
-            }
-        }
-
         if (!isNullable && defaultValue == null) {
             throw new IllegalArgumentException("defaultValue may not be null if isNullable==false");
         }
 
         this.name = name;
         this.clazz = clazz;
-        this.typeParameters = typeParameters;
+        this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
         this.isNullable = isNullable;
         this.defaultValue = defaultValue;
     }
@@ -149,13 +143,24 @@ public class SimpleKey<T> implements Key<T> {
     }
 
     @Override
-    public String getValueTypeParameters() {
+    public List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
     @Override
     public String getFullValueType() {
-        return clazz.getName() + typeParameters;
+        StringBuilder buf=new StringBuilder();
+        buf.append(clazz.getName());
+        if (!typeParameters.isEmpty()){
+            buf.append('<');
+        boolean first=true;
+        for (Class<?> tp:typeParameters){
+            if (first)first=false;
+            else buf.append(',');
+            buf.append(tp.getName());
+        }
+            buf.append('>');}
+        return buf.toString();
     }
 
     /**
@@ -178,6 +183,7 @@ public class SimpleKey<T> implements Key<T> {
      */
     @Override
     public String toString() {
-        return name;
+        String keyClass=getClass().getName();
+        return keyClass.substring(keyClass.lastIndexOf('.')+1)+"{name:"+name+" type:"+getFullValueType()+"}";
     }
 }

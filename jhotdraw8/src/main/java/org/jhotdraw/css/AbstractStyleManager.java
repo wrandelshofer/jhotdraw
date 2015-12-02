@@ -24,12 +24,12 @@ import org.jhotdraw.css.ast.Stylesheet;
  */
 public abstract class AbstractStyleManager<E> implements StyleManager<E> {
 
-    protected class Entry {
+    protected class MyEntry {
 
         private StyleOrigin origin;
         private FutureTask<Stylesheet> future;
 
-        public Entry(StyleOrigin origin, URI uri) {
+        public MyEntry(StyleOrigin origin, URI uri) {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
@@ -38,7 +38,7 @@ public abstract class AbstractStyleManager<E> implements StyleManager<E> {
             executor.execute(future);
         }
 
-        public Entry(StyleOrigin origin, String str) {
+        public MyEntry(StyleOrigin origin, String str) {
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
@@ -62,21 +62,21 @@ public abstract class AbstractStyleManager<E> implements StyleManager<E> {
         }
 
     }
-    private LinkedHashMap<Object, Entry> userAgentList = new LinkedHashMap<>();
-    private LinkedHashMap<Object, Entry> authorList = new LinkedHashMap<>();
-    private LinkedHashMap<Object, Entry> inlineList = new LinkedHashMap<>();
+    private LinkedHashMap<Object, MyEntry> userAgentList = new LinkedHashMap<>();
+    private LinkedHashMap<Object, MyEntry> authorList = new LinkedHashMap<>();
+    private LinkedHashMap<Object, MyEntry> inlineList = new LinkedHashMap<>();
 
     private Executor executor = Executors.newCachedThreadPool();
 
     @Override
     public void addStylesheet(StyleOrigin origin, URI documentHome, URI uri) {
         URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
-        getMap(origin).put(resolvedUri, new Entry(origin, resolvedUri));
+        getMap(origin).put(resolvedUri, new MyEntry(origin, resolvedUri));
     }
 
     @Override
     public void addStylesheet(StyleOrigin origin, String str) {
-        getMap(origin).put(str, new Entry(origin, str));
+        getMap(origin).put(str, new MyEntry(origin, str));
     }
 
     @Override
@@ -90,7 +90,7 @@ public abstract class AbstractStyleManager<E> implements StyleManager<E> {
         }
     }
 
-    private LinkedHashMap<Object, Entry> getMap(StyleOrigin origin) {
+    private LinkedHashMap<Object, MyEntry> getMap(StyleOrigin origin) {
         switch (origin) {
             case AUTHOR:
                 return authorList;
@@ -103,7 +103,7 @@ public abstract class AbstractStyleManager<E> implements StyleManager<E> {
         }
     }
 
-    private void setMap(StyleOrigin origin, LinkedHashMap<Object, Entry> newValue) {
+    private void setMap(StyleOrigin origin, LinkedHashMap<Object, MyEntry> newValue) {
         switch (origin) {
             case AUTHOR:
                 authorList = newValue;
@@ -121,28 +121,28 @@ public abstract class AbstractStyleManager<E> implements StyleManager<E> {
 
     @Override
     public <T> void setStylesheets(StyleOrigin origin, URI documentHome, List<T> stylesheets) {
-        LinkedHashMap<Object, Entry> oldMap = getMap(origin);
+        LinkedHashMap<Object, MyEntry> oldMap = getMap(origin);
         if (stylesheets == null) {
             oldMap.clear();
             return;
         }
-        LinkedHashMap<Object, Entry> newMap = new LinkedHashMap<>();
+        LinkedHashMap<Object, MyEntry> newMap = new LinkedHashMap<>();
         for (T t : stylesheets) {
             if (t instanceof URI) {
                 URI uri = (URI) t;
                 URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
-                Entry old = oldMap.get(resolvedUri);
-                if (old != null) {
+                MyEntry old = oldMap.get(resolvedUri);
+                if (false && old != null) { // XXX we always need to reload the file!
                     newMap.put(resolvedUri, old);
                 } else {
-                    newMap.put(resolvedUri, new Entry(origin, resolvedUri));
+                    newMap.put(resolvedUri, new MyEntry(origin, resolvedUri));
                 }
             } else if (t instanceof String) {
-                Entry old = oldMap.get(t);
+                MyEntry old = oldMap.get(t);
                 if (old != null) {
                     newMap.put(t, old);
                 } else {
-                    newMap.put(t, new Entry(origin, (String) t));
+                    newMap.put(t, new MyEntry(origin, (String) t));
                 }
             } else {
                 throw new IllegalArgumentException("illegal item " + t);
@@ -151,15 +151,15 @@ public abstract class AbstractStyleManager<E> implements StyleManager<E> {
         setMap(origin, newMap);
     }
 
-    protected Collection<Entry> getAuthorStylesheets() {
+    protected Collection<MyEntry> getAuthorStylesheets() {
         return authorList.values();
     }
 
-    protected Collection<Entry> getUserAgentStylesheets() {
+    protected Collection<MyEntry> getUserAgentStylesheets() {
         return userAgentList.values();
     }
 
-    protected Collection<Entry> getInlineStylesheets() {
+    protected Collection<MyEntry> getInlineStylesheets() {
         return inlineList.values();
     }
 }

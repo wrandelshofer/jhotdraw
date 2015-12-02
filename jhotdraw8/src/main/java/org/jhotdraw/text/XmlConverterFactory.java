@@ -26,7 +26,7 @@ public class XmlConverterFactory implements ConverterFactory {
             case "number":
                 return new XmlNumberConverter();
             case "word":
-                return new WordConverter();
+                return new XmlWordConverter();
             default:
                 throw new IllegalArgumentException("illegal type:"+type);
         }

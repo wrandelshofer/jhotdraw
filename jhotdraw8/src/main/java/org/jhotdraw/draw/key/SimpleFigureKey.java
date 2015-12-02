@@ -27,7 +27,7 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
      * @param dirtyMask the dirty mask
      */
     public SimpleFigureKey(String key, Class<T> clazz, DirtyMask dirtyMask) {
-        this(key, clazz, "", dirtyMask, null);
+        this(key, clazz, null, dirtyMask, null);
     }
 
     /**
@@ -40,7 +40,7 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
      * @param dirtyMask the dirty bits
      */
     public SimpleFigureKey(String key, Class<T> clazz, DirtyMask dirtyMask, T defaultValue) {
-        this(key, clazz, "", dirtyMask, defaultValue);
+        this(key, clazz, null, dirtyMask, defaultValue);
     }
 
     /**
@@ -54,7 +54,7 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
      * @param defaultValue The default value.
      * @param dirtyMask the dirty bits
      */
-    public SimpleFigureKey(String name, Class<?> clazz, String typeParameters, DirtyMask dirtyMask, T defaultValue) {
+    public SimpleFigureKey(String name, Class<?> clazz, Class<?>[] typeParameters, DirtyMask dirtyMask, T defaultValue) {
         this(name, clazz, typeParameters, true, dirtyMask, defaultValue);
     }
     /**
@@ -68,7 +68,7 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
      * @param dirtyMask the dirty bits
      */
     public SimpleFigureKey(String name, Class<?> clazz, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
-        this(name, clazz, "", isNullable, dirtyMask, defaultValue);
+        this(name, clazz, null, isNullable, dirtyMask, defaultValue);
     }
 
 
@@ -84,7 +84,7 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
      * @param defaultValue The default value.
      * @param dirtyMask the dirty bits
      */
-    public SimpleFigureKey(String name, Class<?> clazz, String typeParameters, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
+    public SimpleFigureKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
         super(name, clazz, typeParameters, isNullable, defaultValue);
         this.dirtyMask = dirtyMask;
     }

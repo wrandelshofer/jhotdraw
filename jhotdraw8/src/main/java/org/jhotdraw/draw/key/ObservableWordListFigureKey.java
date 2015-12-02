@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.key;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
 
@@ -44,6 +45,6 @@ public class ObservableWordListFigureKey extends SimpleFigureKey<ObservableList<
      * @param defaultValue The default value.
      */
     public ObservableWordListFigureKey(String name, DirtyMask mask, ObservableList<String> defaultValue) {
-        super(name, List.class, "<String>", mask, defaultValue);
+        super(name, ObservableList.class, new Class<?>[]{String.class}, mask, defaultValue);
     }
 }

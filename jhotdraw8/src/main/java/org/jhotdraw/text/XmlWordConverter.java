@@ -1,4 +1,4 @@
-/* @(#)WordConverter.java
+/* @(#)XmlWordConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -11,11 +11,11 @@ import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * WordConverter.
+ * XmlWordConverter.
  *
  * @author Werner Randelshofer
  */
-public class WordConverter implements Converter<String> {
+public class XmlWordConverter implements Converter<String> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {

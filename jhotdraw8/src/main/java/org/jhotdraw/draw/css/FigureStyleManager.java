@@ -66,7 +66,8 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
 
         // user agent stylesheets can not override element attributes
         if (origin == null || origin == StyleOrigin.USER_AGENT) {
-            for (Entry e : getUserAgentStylesheets()) {
+            elem.removeAll(StyleOrigin.USER_AGENT);
+            for (MyEntry e : getUserAgentStylesheets()) {
                 Stylesheet s = e.getStylesheet();
                 if (s != null) {
                     applyStylesTo(StyleOrigin.USER_AGENT, s, metaMap, elem);
@@ -76,7 +77,8 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
 
         // author stylesheet override user agent stylesheets and element attributes
         if (origin == null || origin == StyleOrigin.AUTHOR) {
-            for (Entry e : getAuthorStylesheets()) {
+            elem.removeAll(StyleOrigin.AUTHOR);
+            for (MyEntry e : getAuthorStylesheets()) {
                 Stylesheet s = e.getStylesheet();
                 if (s != null) {
                     applyStylesTo(StyleOrigin.AUTHOR, s, metaMap, elem);
@@ -86,16 +88,15 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
 
         // inline stylesheets override user agent stylesheets, element attributes and author stylesheets
         if (origin == null || origin == StyleOrigin.INLINE) {
-            for (Entry e : getAuthorStylesheets()) {
+            elem.removeAll(StyleOrigin.INLINE);
+            for (MyEntry e : getInlineStylesheets()) {
                 Stylesheet s = e.getStylesheet();
                 if (s != null) {
                     applyStylesTo(StyleOrigin.INLINE, s, metaMap, elem);
                 }
             }
-        }
 
         // inline styles can override all other values
-        if (origin == null || origin == StyleOrigin.INLINE) {
             applyInlineStylesTo(metaMap, elem);
         }
 

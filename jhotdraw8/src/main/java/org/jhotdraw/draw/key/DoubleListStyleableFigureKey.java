@@ -56,7 +56,7 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> 
      * @param defaultValue The default value.
      */
     public DoubleListStyleableFigureKey(String name, DirtyMask mask, List<Double> defaultValue) {
-        super(name, List.class, "<Double>", mask, defaultValue);
+        super(name, List.class, new Class<?>[]{Double.class}, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<List<Double>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

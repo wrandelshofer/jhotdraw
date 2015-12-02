@@ -8,26 +8,18 @@ import com.sun.javafx.menu.MenuBase;
 import com.sun.javafx.scene.control.GlobalMenuAdapter;
 import com.sun.javafx.tk.Toolkit;
 
-import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
 import org.jhotdraw.collection.HierarchicalMap;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SetProperty;
@@ -37,14 +29,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -63,14 +53,11 @@ import org.jhotdraw.app.action.file.NewFileAction;
 import org.jhotdraw.app.action.file.OpenFileAction;
 import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.app.action.file.SaveFileAsAction;
-import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.binding.BindingUtil;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.concurrent.BackgroundTask;
-import org.jhotdraw.gui.FileURIChooser;
-import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.Resources;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
@@ -79,7 +66,7 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  *
  * @author Werner Randelshofer
  */
-public class DocumentOrientedApplication extends javafx.application.Application implements org.jhotdraw.app.Application {
+public class DocumentOrientedApplication extends AbstractApplication {
 
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, "<Boolean>", null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
@@ -95,18 +82,9 @@ public class DocumentOrientedApplication extends javafx.application.Application 
 
     private final ReadOnlyObjectWrapper<View> activeView = new ReadOnlyObjectWrapper<>();
     private final SetProperty<View> views = new SimpleSetProperty<>(FXCollections.observableSet());
-    private final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper();
-    private final SetProperty<Object> disablers = new SimpleSetProperty<>(FXCollections.observableSet());
-    private ReadOnlyMapProperty<Key<?>, Object> properties;
     private ApplicationModel model;
 
     public DocumentOrientedApplication() {
-        disabled.bind(Bindings.not(disablers.emptyProperty()));
-    }
-
-    @Override
-    public SetProperty<Object> disablersProperty() {
-        return disablers;
     }
 
     {
@@ -386,10 +364,6 @@ public class DocumentOrientedApplication extends javafx.application.Application 
         System.exit(0);
     }
 
-    @Override
-    public ReadOnlyBooleanProperty disabledProperty() {
-        return disabled.getReadOnlyProperty();
-    }
 
     private void disambiguateViews() {
         HashMap<String, ArrayList<View>> titles = new HashMap<>();
@@ -420,21 +394,5 @@ public class DocumentOrientedApplication extends javafx.application.Application 
                 }
             }
         }
-    }
-
-    @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
-        if (properties == null) {
-            properties//
-                    = new ReadOnlyMapWrapper<Key<?>, Object>(//
-                            this, PROPERTIES_PROPERTY, //
-                            FXCollections.observableHashMap()).getReadOnlyProperty();
-        }
-        return properties;
-    }
-
-    @Override
-    public void addRecentURI(URI uri) {
-        // FIXME implement me
     }
 }

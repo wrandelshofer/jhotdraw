@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.styleable;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,7 +37,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
          * Contains a slot for each of the four possible origins. The ordinal
          * number of StyleOrigin is used as an index.
          */
-        private Object[] values = {NO_VALUE, NO_VALUE, NO_VALUE, NO_VALUE};
+        private final Object[] values = {NO_VALUE, NO_VALUE, NO_VALUE, NO_VALUE};
 
         public <T> T removeValue(StyleOrigin origin) {
             if (hasValue(origin)) {
@@ -45,13 +46,13 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
                 T oldValue = (T) values[i];
                 values[i] = NO_VALUE;
                 if (this.origin == origin) {
-                    for (int j = origin.ordinal() - 1; j <= 0; j--) {
+                    this.origin = null;
+                    for (int j = origin.ordinal() - 1; j >= 0; j--) {
                         if (values[j] != NO_VALUE) {
                             this.origin = ORIGINS[j];
                             break;
                         }
                     }
-                    this.origin = null;
                 }
                 return oldValue;
             } else {
@@ -85,7 +86,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         }
         private <T> T getValue(StyleOrigin styleOrigin, T defaultValue) {
             @SuppressWarnings("unchecked")
-            T ret = (T) values[styleOrigin.ordinal()];
+            T ret = (T) values[styleOrigin==null?0:styleOrigin.ordinal()];
             return ret==NO_VALUE?defaultValue:ret;
         }
 

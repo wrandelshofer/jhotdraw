@@ -6,8 +6,10 @@ package org.jhotdraw.app;
 
 import java.net.URI;
 import java.util.function.Consumer;
+import javafx.beans.property.IntegerProperty;
 import org.jhotdraw.collection.HierarchicalMap;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
 import javafx.scene.Node;
@@ -20,12 +22,29 @@ import org.jhotdraw.beans.PropertyBean;
  */
 public interface Application extends Disableable, PropertyBean {
 
+        public static final String RECENT_URIS_PROPERTY = "recentUris";
+        public static final String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
+        public static final String DISABLERS_PROPERTY = "disablers";
+        public static final String DISABLED_PROPERTY = "disabled";
 
 
     /** The set of views contains all visible views.
      * @return the views  */
     public SetProperty<View> viewsProperty();
 
+    /** The set of recent URIs.
+     * The set must be ordered by most recently used first.
+     * Only the first {@link #maxNumberOfRecentUris) items of the set are used
+     * and persisted in user preferences.
+     * @return the recent Uris  */
+    public ReadOnlySetProperty<URI> recentUrisProperty();
+    
+    /** The maximal number of recent URIs.
+     * Specifies how many items of {@link #recentUris) are used
+     * and persisted in user preferences. This number is also persisted.
+     * @return the number of recent Uris  */
+    public IntegerProperty maxNumberOfRecentUrisProperty();
+    
     // Convenience method
     default public ObservableSet<View> views() {
         return viewsProperty().get();
@@ -75,13 +94,14 @@ public interface Application extends Disableable, PropertyBean {
     /** Returns the application node.
      * @return the node */
     default public Node getNode() {return null;}
-    
-    /** Adds an URI to the list of recent URIs.
-     * @param uri the uri*/
-    public void addRecentURI(URI uri);
-    
+      
     /** Creates a new view, initializes it, then invokes the callback.
      * @param callback A callback. Can be null.
      */
-    public void createView(Consumer<View> callback);
+    void createView(Consumer<View> callback);
+
+    /** Adds a recent URI. */
+    default void addRecentURI(URI uri) {
+        recentUrisProperty().add(uri);
+    }
 }

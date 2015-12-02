@@ -45,12 +45,16 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
     @FXML
     private ListView<URI> listView;
+    
     @FXML
     private Button addButton;
 
     @FXML
     private Button removeButton;
 
+    @FXML
+    private Button refreshButton;
+    
     private ListProperty<URI> stylesheetsProperty;
     private Node node;
     /**
@@ -81,7 +85,10 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             }
             listView.getItems().addListener((InvalidationListener) (o -> onListChanged()));
             // int counter = 0;
-            addButton.addEventHandler(ActionEvent.ACTION, o -> listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css")));
+            addButton.addEventHandler(ActionEvent.ACTION, o -> {
+           
+                listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css"));
+                    });
             removeButton.addEventHandler(ActionEvent.ACTION, o -> {
                 ObservableList<URI> items = listView.getItems();
                 ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
@@ -91,6 +98,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                 }
             });
             removeButton.disableProperty().bind(Bindings.equal(listView.getSelectionModel().selectedIndexProperty(), -1));
+            refreshButton.addEventHandler(ActionEvent.ACTION, o->getDrawingModel().fireStyleInvalidated(getDrawing()));
 
             listView.setEditable(true);
             listView.setFixedCellSize(24.0);
