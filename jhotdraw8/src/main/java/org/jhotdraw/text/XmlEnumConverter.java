@@ -5,6 +5,7 @@
 package org.jhotdraw.text;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.paint.Paint;
@@ -51,12 +52,30 @@ public class XmlEnumConverter<E extends Enum<E>> implements Converter<E> {
         if (out.toString().equals("null")) {
             return null;
         }
-        return Enum.valueOf(enumClass, out.toString().toUpperCase());
+        try {
+            return Enum.valueOf(enumClass, out.toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return getDefaultValue();
+        }
     }
 
     @Override
     public E getDefaultValue() {
-        return null;
+        try {
+            for (Field f : enumClass.getDeclaredFields()) {
+                if (f.isEnumConstant()) {
+                    @SuppressWarnings("unchecked")
+                    E e = (E) f.get(null);
+                    return e;
+                }
+            }
+            return null;
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+            return null;
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
-
 }

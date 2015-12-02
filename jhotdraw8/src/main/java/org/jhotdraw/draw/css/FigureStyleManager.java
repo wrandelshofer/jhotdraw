@@ -96,7 +96,7 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
                 }
             }
 
-        // inline styles can override all other values
+            // inline styles can override all other values
             applyInlineStylesTo(metaMap, elem);
         }
 
@@ -121,8 +121,10 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
                                 ex.printStackTrace();
                             }
                         }
-                        Object convertedValue = convertedValues.get(d);
-                        elem.setStyled(origin, k, convertedValue);
+                        if (convertedValues.containsKey(d)) {
+                            Object convertedValue = convertedValues.get(d);
+                            elem.setStyled(origin, k, convertedValue);
+                        }
                     }
                 }
             }

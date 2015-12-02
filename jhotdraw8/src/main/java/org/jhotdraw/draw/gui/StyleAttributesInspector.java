@@ -166,6 +166,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         String type = null;
         Set<String> styleClasses = new TreeSet<>();
         Map<String, String> attr = new TreeMap<>();
+        Map<String, String> description = new TreeMap<>();
 
         boolean first = true;
         for (Figure f : newValue) {
