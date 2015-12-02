@@ -26,6 +26,7 @@ import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.model.DrawingModel;
+import static java.lang.Math.*;
 
 /**
  * /**
@@ -276,8 +277,10 @@ public class ResizeHandleKit {
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newWidth = newPoint.getX() - bounds.getMinX();
-            double newHeight = bounds.getMaxY() - newPoint.getY();
+            double newX = max(bounds.getMinX(),newPoint.getX());
+            double newY = min(bounds.getMaxY(),newPoint.getY());
+            double newWidth = newX - bounds.getMinX();
+            double newHeight = bounds.getMaxY() - newY;
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
                 if (newRatio > preferredAspectRatio) {
@@ -300,7 +303,7 @@ public class ResizeHandleKit {
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newWidth = newPoint.getX() - bounds.getMinX();
+            double newWidth = max(newPoint.getX(),bounds.getMinX()) - bounds.getMinX();
             double newHeight = bounds.getMaxY() - bounds.getMinY();
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
@@ -319,13 +322,14 @@ public class ResizeHandleKit {
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+            double newY = min(bounds.getMaxY(),newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
-            double newHeight = bounds.getMaxY() - newPoint.getY();
+            double newHeight = bounds.getMaxY() - newY;
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
                 newWidth = newHeight / preferredAspectRatio;
             }
-            model.reshape(owner, (bounds.getMinX() + bounds.getMaxX() - newWidth) * 0.5, newPoint.getY(), newWidth, newHeight);
+            model.reshape(owner, (bounds.getMinX() + bounds.getMaxX() - newWidth) * 0.5, newY, newWidth, newHeight);
         }
     }
 
@@ -338,8 +342,10 @@ public class ResizeHandleKit {
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newWidth = bounds.getMaxX() - newPoint.getX();
-            double newHeight = bounds.getMaxY() - newPoint.getY();
+            double newX = min(bounds.getMaxX(),newPoint.getX());
+            double newY = min(bounds.getMaxY(),newPoint.getY());
+            double newWidth = bounds.getMaxX() - newX;
+            double newHeight = bounds.getMaxY() - newY;
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
                 if (newRatio > preferredAspectRatio) {
@@ -362,8 +368,10 @@ public class ResizeHandleKit {
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newWidth = newPoint.getX() - bounds.getMinX();
-            double newHeight = newPoint.getY() - bounds.getMinY();
+            double newX = max(bounds.getMinX(),newPoint.getX());
+            double newY = max(bounds.getMinY(),newPoint.getY());
+            double newWidth = newX - bounds.getMinX();
+            double newHeight = newY - bounds.getMinY();
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
                 if (newRatio > preferredAspectRatio) {
@@ -385,8 +393,9 @@ public class ResizeHandleKit {
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
+            double newY = max(bounds.getMinY(),newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
-            double newHeight = newPoint.getY() - bounds.getMinY();
+            double newHeight = newY - bounds.getMinY();
             if (keepAspect) {
                 newWidth = newHeight / preferredAspectRatio;
             }
@@ -403,8 +412,10 @@ public class ResizeHandleKit {
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newWidth = bounds.getMaxX() - newPoint.getX();
-            double newHeight = newPoint.getY() - bounds.getMinY();
+            double newX = min(bounds.getMaxX(),newPoint.getX());
+            double newY = max(bounds.getMinY(),newPoint.getY());
+            double newWidth = bounds.getMaxX() - min(bounds.getMaxX(),newX);
+            double newHeight = newY - bounds.getMinY();
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
                 if (newRatio > preferredAspectRatio) {
@@ -426,13 +437,14 @@ public class ResizeHandleKit {
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newWidth = bounds.getMaxX() - newPoint.getX();
-            double newHeight = bounds.getMaxY() - bounds.getMinY();
+            double newX = min(bounds.getMaxX(),newPoint.getX());
+            double newWidth = bounds.getMaxX() - newX;
+            double newHeight = bounds.getHeight();
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
                 newHeight = newWidth * preferredAspectRatio;
             }
-            model.reshape(owner, newPoint.getX(), (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
+            model.reshape(owner, newX, (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
         }
     }
 }

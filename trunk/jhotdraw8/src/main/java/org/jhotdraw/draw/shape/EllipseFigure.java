@@ -75,8 +75,8 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        double rx=abs(width)/2.0;
-        double ry=abs(height)/2.0;
+        double rx=max(0.0,width)/2.0;
+        double ry=max(0.0,height)/2.0;
         set(CENTER_X,x+rx);
         set(CENTER_Y,y+ry);
         set(RADIUS_X,rx);
