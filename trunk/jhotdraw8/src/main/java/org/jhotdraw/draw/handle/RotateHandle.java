@@ -37,7 +37,7 @@ public class RotateHandle extends AbstractHandle {
     private Point2D oldPoint;
     private final Region node;
     private final String styleclass;
-    private static final Circle REGION_SHAPE = new Circle(4);
+    private static final Circle REGION_SHAPE = new Circle(5);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
     private Point2D center;

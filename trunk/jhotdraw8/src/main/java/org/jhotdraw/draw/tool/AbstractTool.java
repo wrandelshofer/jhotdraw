@@ -63,19 +63,19 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                 DrawingView dv = drawingView.get();
                 EventType<? extends MouseEvent> type = event.getEventType();
                 if (type == MouseEvent.MOUSE_MOVED) {
-                    onMouseMoved(event, dv);
+                    handleMouseMoved(event, dv);
                 } else if (type == MouseEvent.MOUSE_DRAGGED) {
-                    onMouseDragged(event, dv);
+                    handleMouseDragged(event, dv);
                 } else if (type == MouseEvent.MOUSE_EXITED) {
-                    onMouseExited(event, dv);
+                    handleMouseExited(event, dv);
                 } else if (type == MouseEvent.MOUSE_ENTERED) {
-                    onMouseEntered(event, dv);
+                    handleMouseEntered(event, dv);
                 } else if (type == MouseEvent.MOUSE_RELEASED) {
-                    onMouseReleased(event, dv);
+                    handleMouseReleased(event, dv);
                 } else if (type == MouseEvent.MOUSE_PRESSED) {
-                    onMousePressed(event, dv);
+                    handleMousePressed(event, dv);
                 } else if (type == MouseEvent.MOUSE_CLICKED) {
-                    onMouseClicked(event, dv);
+                    handleMouseClicked(event, dv);
                 }
                 event.consume();
             }
@@ -85,11 +85,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                 DrawingView dv = drawingView.get();
                 EventType<? extends KeyEvent> type = event.getEventType();
                 if (type == KeyEvent.KEY_PRESSED) {
-                    onKeyPressed(event, dv);
+                    handleKeyPressed(event, dv);
                 } else if (type == KeyEvent.KEY_RELEASED) {
-                    onKeyReleased(event, dv);
+                    handleKeyReleased(event, dv);
                 } else if (type == KeyEvent.KEY_TYPED) {
-                    onKeyTyped(event, dv);
+                    handleKeyTyped(event, dv);
                 }
                 event.consume();
             }
@@ -209,38 +209,38 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Event handlers
     // ----
-    protected void onMouseMoved(MouseEvent event, DrawingView view) {
+    protected void handleMouseMoved(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseDragged(MouseEvent event, DrawingView view) {
+    protected void handleMouseDragged(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseExited(MouseEvent event, DrawingView view) {
+    protected void handleMouseExited(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseEntered(MouseEvent event, DrawingView view) {
+    protected void handleMouseEntered(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseReleased(MouseEvent event, DrawingView view) {
+    protected void handleMouseReleased(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMousePressed(MouseEvent event, DrawingView view) {
+    protected void handleMousePressed(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseClicked(MouseEvent event, DrawingView view) {
+    protected void handleMouseClicked(MouseEvent event, DrawingView view) {
     }
 
-    protected void onKeyPressed(KeyEvent event, DrawingView view) {
+    protected void handleKeyPressed(KeyEvent event, DrawingView view) {
         System.out.println("keyPressed:" + event);
         event.consume();
     }
 
-    protected void onKeyReleased(KeyEvent event, DrawingView view) {
+    protected void handleKeyReleased(KeyEvent event, DrawingView view) {
         System.out.println("keyReleased:" + event);
         event.consume();
     }
 
-    protected void onKeyTyped(KeyEvent event, DrawingView view) {
+    protected void handleKeyTyped(KeyEvent event, DrawingView view) {
         System.out.println("keyTyped:" + event);
         event.consume();
     }

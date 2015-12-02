@@ -30,7 +30,7 @@ import org.jhotdraw.io.CharBufferReader;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSVGPathConverter implements Converter<SVGPath> {
+public class CssSvgPathConverter implements Converter<SVGPath> {
 
 
     @Override
