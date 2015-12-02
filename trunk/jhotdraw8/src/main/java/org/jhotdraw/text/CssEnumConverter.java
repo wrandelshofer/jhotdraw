@@ -5,8 +5,11 @@
 package org.jhotdraw.text;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
@@ -51,12 +54,29 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         if (out.toString().equals("null")) {
             return null;
         }
-        return Enum.valueOf(enumClass, out.toString().toUpperCase());
+        try {
+            return Enum.valueOf(enumClass, out.toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return getDefaultValue();
+        }
     }
 
     @Override
     public E getDefaultValue() {
-        return null;
+        try {
+            for (Field f : enumClass.getDeclaredFields()) {
+                if (f.isEnumConstant()) {
+                    @SuppressWarnings("unchecked")
+                    E e = (E) f.get(null);
+                    return e;
+                }
+            }
+            return null;
+        } catch (IllegalArgumentException ex) {
+            return null;
+        } catch (IllegalAccessException ex) {
+            return null;
+        }
     }
 
 }
