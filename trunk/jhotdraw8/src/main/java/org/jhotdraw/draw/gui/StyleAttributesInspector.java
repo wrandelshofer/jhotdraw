@@ -83,7 +83,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private boolean textAreaValid = true;
 
     public StyleAttributesInspector() {
-        this(LayersInspector.class.getResource("StyleAttributesInspector.fxml"));
+        this(StyleAttributesInspector.class.getResource("StyleAttributesInspector.fxml"));
     }
 
     public StyleAttributesInspector(URL fxmlUrl) {

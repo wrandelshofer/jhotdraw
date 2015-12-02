@@ -22,7 +22,7 @@ public class CssConverterFactory implements ConverterFactory {
             case "size":
                 return new CssSizeConverter();
             case "word":
-                return new WordConverter();
+                return new XmlWordConverter();
             case "paint":
                 return new CssPaintConverter();
             case "font":

@@ -61,7 +61,7 @@ public class MessageFormatConverterFactory implements ConverterFactory {
         }
         switch (type) {
             case "word":
-                return new WordConverter();
+                return new XmlWordConverter();
             case "number":
                 if (style == null || style.isEmpty()) {
                     return new ConverterFormatAdapter(NumberFormat.getInstance(locale));

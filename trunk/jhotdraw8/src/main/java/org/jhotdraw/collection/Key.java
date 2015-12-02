@@ -6,6 +6,7 @@
 package org.jhotdraw.collection;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javafx.beans.binding.Binding;
@@ -54,7 +55,7 @@ public interface Key<T> extends Serializable {
 
     public Class<T> getValueType();
 
-    public String getValueTypeParameters();
+    public List<Class<?>> getValueTypeParameters();
 
     public String getFullValueType();
 

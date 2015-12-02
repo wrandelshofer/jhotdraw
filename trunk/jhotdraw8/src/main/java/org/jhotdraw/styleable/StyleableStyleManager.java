@@ -68,7 +68,7 @@ public class StyleableStyleManager extends AbstractStyleManager<Styleable> {
 
         // user agent stylesheets can not override element attributes
         if (origin == null || origin == StyleOrigin.USER_AGENT) {
-            for (Entry e : getUserAgentStylesheets()) {
+            for (MyEntry e : getUserAgentStylesheets()) {
                 Stylesheet s = e.getStylesheet();
                 if (s != null) {
                     applyStylesTo(StyleOrigin.USER_AGENT, s, metaMap, elem);
@@ -78,7 +78,7 @@ public class StyleableStyleManager extends AbstractStyleManager<Styleable> {
 
         // author stylesheet override user agent stylesheets and element attributes
         if (origin == null || origin == StyleOrigin.AUTHOR) {
-            for (Entry e : getAuthorStylesheets()) {
+            for (MyEntry e : getAuthorStylesheets()) {
                 Stylesheet s = e.getStylesheet();
                 if (s != null) {
                     applyStylesTo(StyleOrigin.AUTHOR, s, metaMap, elem);
@@ -87,7 +87,7 @@ public class StyleableStyleManager extends AbstractStyleManager<Styleable> {
         }
         // inline stylesheets override user agent stylesheets, element attributes and author stylesheets
         if (origin == null || origin == StyleOrigin.INLINE) {
-            for (Entry e : getAuthorStylesheets()) {
+            for (MyEntry e : getAuthorStylesheets()) {
                 Stylesheet s = e.getStylesheet();
                 if (s != null) {
                     applyStylesTo(StyleOrigin.INLINE, s, metaMap, elem);
