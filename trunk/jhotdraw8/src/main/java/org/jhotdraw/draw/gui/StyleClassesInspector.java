@@ -52,7 +52,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     private Key<Collection<String>> tagsKey = (Key<Collection<String>>) (Key<?>) StyleableFigure.STYLE_CLASS;
 
     public StyleClassesInspector() {
-        this(StyleClassesInspector.class.getResource("TagsInspector.fxml"));
+        this(StyleClassesInspector.class.getResource("StyleClassesInspector.fxml"));
     }
 
     public StyleClassesInspector(URL fxmlUrl) {
