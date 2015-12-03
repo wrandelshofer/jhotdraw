@@ -252,6 +252,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private Transform worldToViewTransform = null;
 
     private final double TOLERANCE = 10;
+    private final double HANDLE_TOLERANCE = 100;
 
     /**
      * Installs a handler for changes in the selectionProperty.
@@ -766,7 +767,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     public Handle findHandle(double vx, double vy) {
         for (Node n : handlesPane.getChildren()) {
             Point2D pl = n.parentToLocal(vx, vy);
-            if (contains(n, pl, TOLERANCE)) {
+            if (isInsideRadius(n, pl, HANDLE_TOLERANCE)) {
                 Handle h = nodeToHandleMap.get(n);
                 if (h.isSelectable()) {
                     return h;
@@ -859,9 +860,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             boolean contains = Geom.lineContainsPoint(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), point.getX(), point.getY(), tolerance);
             return contains;
         } else if (node instanceof Group) {
-            Bounds bounds = node.getBoundsInLocal();
-            bounds = Geom.grow(bounds, tolerance, tolerance);
-            if (bounds.contains(point)) {
+            if (Geom.contains(node.getBoundsInLocal(), point,tolerance)) {
                 for (Node child : ((Group) node).getChildren()) {
                     if (contains(child, child.parentToLocal(point), tolerance)) {
                         return true;
@@ -870,9 +869,26 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             }
             return false;
         } else {
-            return node.contains(point);
+           return Geom.contains(node.getBoundsInLocal(), point,tolerance);
         }
     }
+    /**
+     * Returns true if the point is inside the radius from the center of the node.
+     * 
+     * @param node The node
+     * @param point The point in local coordinates
+     * @param squaredRadius The square of the radius in which the node must be
+     * @return true if the node contains the point
+     */
+    private boolean isInsideRadius(Node node, Point2D point, double squaredRadius) {
+        Bounds b = node.getBoundsInLocal();
+        double cx = b.getMinX()+b.getWidth()*0.5;
+        double cy = b.getMinY()+b.getHeight()*0.5;
+        double dx = point.getX()-cx;
+        double dy = point.getY()-cy;
+        return dx*dx+dy*dy<squaredRadius;
+    }
+
 
     @Override
     public List<Figure> findFigures(double vx, double vy, boolean decompose) {

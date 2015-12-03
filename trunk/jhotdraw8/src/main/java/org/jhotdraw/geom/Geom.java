@@ -733,6 +733,34 @@ public class Geom {
                 r.getWidth() + h * 2d,
                 r.getHeight() + v * 2d);
     }
+    /**
+     * Returns true if the bounds contain the specified point within the
+     * given tolerance.
+     * 
+     * @param r the bounds
+     * @param p the point
+     * @param tolerance the tolerance
+     * @return true if inside
+     */
+    public static boolean contains(Bounds r, Point2D p, double tolerance) {
+        return contains(r,p.getX(),p.getY(),tolerance);
+    }
+    /**
+     * Returns true if the bounds contain the specified point within the
+     * given tolerance.
+     * 
+     * @param r the bounds
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @param tolerance the tolerance
+     * @return true if inside
+     */
+    public static boolean contains(Bounds r, double x, double y, double tolerance) {
+        return 
+                r.getMinX() - tolerance <= x && x <= r.getMaxX()+tolerance
+                &&
+                r.getMinY() - tolerance <= y && y <= r.getMaxY()+tolerance;
+    }
 
     /**
      * Returns true, if rectangle 1 contains rectangle 2.
