@@ -7,6 +7,7 @@ package org.jhotdraw.beans;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.collections.ObservableMap;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 
 /**
  * Interface for beans which support an open number of getProperties in a property
@@ -77,7 +78,7 @@ public interface PropertyBean {
      * @param newValue the value
      * @return the old value
      */
-    default <T> T set(Key<T> key, T newValue) {
+    default <T> T set(MapAccessor<T> key, T newValue) {
         return key.put(getProperties(), newValue);
     }
 
@@ -88,7 +89,7 @@ public interface PropertyBean {
      * @param key the key
      * @return the value
      */
-    default <T> T get(Key<T> key) {
+    default <T> T get(MapAccessor<T> key) {
         return key.get(getProperties());
     }
 

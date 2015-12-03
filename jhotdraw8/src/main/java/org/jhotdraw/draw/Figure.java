@@ -43,6 +43,7 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.IterableTree;
 import org.jhotdraw.collection.IndexedSet;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
@@ -738,7 +739,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return the keys
      */
-    default Set<Key<?>> getSupportedKeys() {
+    default Set<MapAccessor<?>> getSupportedKeys() {
         return Figure.getDeclaredAndInheritedKeys(this.getClass());
     }
 
@@ -749,17 +750,17 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @param clazz A figure class.
      * @return the keys
      */
-    public static Set<Key<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {
+    public static Set<MapAccessor<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {
         try {
-            HashSet<Key<?>> keys = new HashSet<>();
+            HashSet<MapAccessor<?>> keys = new HashSet<>();
             LinkedList<Class<?>> todo = new LinkedList<>();
             HashSet<Class<?>> done = new HashSet<>();
             todo.add(clazz);
             while (!todo.isEmpty()) {
                 Class<?> c = todo.removeFirst();
                 for (Field f : c.getDeclaredFields()) {
-                    if (Key.class.isAssignableFrom(f.getType())) {
-                        Key<?> k = (Key<?>) f.get(null);
+                    if (MapAccessor.class.isAssignableFrom(f.getType())) {
+                        MapAccessor<?> k = (MapAccessor<?>) f.get(null);
                         keys.add(k);
                     }
                 }

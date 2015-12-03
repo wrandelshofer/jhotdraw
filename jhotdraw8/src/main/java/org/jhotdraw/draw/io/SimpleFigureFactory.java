@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.w3c.dom.Document;
@@ -60,9 +61,10 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param f the figure
      * @param keys the keys
      */
-    public void addFigureAttributeKeys(Class<? extends Figure> f, Collection<Key<?>> keys) {
-        for (Key<?> key : keys) {
-            addKey(f, key.getName(), key);
+    public void addFigureAttributeKeys(Class<? extends Figure> f, Collection<MapAccessor<?>> keys) {
+        for (MapAccessor<?> key : keys) {
+            if (key instanceof Key) {
+            addKey(f, key.getName(), (Key<?>)key);}
         }
     }
 
@@ -99,18 +101,20 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
     }
 
-    public void addFigureKeysAndNames(String figureName, Class<? extends Figure> f, Collection<Key<?>> keys) {
+    public void addFigureKeysAndNames(String figureName, Class<? extends Figure> f, Collection<MapAccessor<?>> keys) {
         addFigure(figureName, f);
         addFigureAttributeKeys(f, keys);
-        for (Key<?> key : keys) {
-            addKey(f, key.getName(), key);
+        for (MapAccessor<?> key : keys) {
+            if (key instanceof Key)
+            addKey(f, key.getName(), (Key<?>)key);
         }
     }
 
-    public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<Key<?>> keys) {
+    public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<MapAccessor<?>> keys) {
         addFigureAttributeKeys(f, keys);
-        for (Key<?> key : keys) {
-            addKey(f, key.getName(), key);
+        for (MapAccessor<?> key : keys) {
+             if (key instanceof Key)
+            addKey(f, key.getName(), (Key<?>)key);
         }
     }
 

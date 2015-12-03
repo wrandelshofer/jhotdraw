@@ -4,13 +4,11 @@
  */
 package org.jhotdraw.styleable;
 
-import java.util.Map;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.jhotdraw.beans.MapEntryProperty;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.KeyMapEntryProperty;
 import org.jhotdraw.styleable.StyleableMap;
@@ -22,13 +20,13 @@ import org.jhotdraw.styleable.StyleableMap;
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-    private final Key<T> key;
+    private final StyleableKey<T> key;
     private final CssMetaData<?, T> metaData;
     private final ReadOnlyMapProperty<Key<?>, Object> mapp;
     private final String name;
     private final StyleableMap<Key<?>, Object> map;
 
-    public KeyMapEntryStyleableProperty(ReadOnlyMapProperty<Key<?>, Object> mapp, Key<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(ReadOnlyMapProperty<Key<?>, Object> mapp, StyleableKey<T> key, String name, CssMetaData<?, T> metaData) {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> m = (StyleableMap<Key<?>, Object>) mapp.get();
         this.map = m;
@@ -62,11 +60,12 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
      */
     @Override
     public void applyStyle(StyleOrigin origin, T value) {
-        map.put(origin,key, value);
+        key.put(map.getMap(origin), value);
     }
 
     @Override
     public StyleOrigin getStyleOrigin() {
+        //ARGH!!! this does not work!!
        return map.getStyleOrigin(key);
     }
 

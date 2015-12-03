@@ -26,6 +26,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
         this.key = key;
         this.tClazz = tClazz;
 
+        if (key !=null) {
         this.mapListener = (MapChangeListener.Change<? extends K, ? extends V> change) -> {
             if (this.key.equals(change.getKey())) {
                 if (super.get() != change.getValueAdded()) {
@@ -36,6 +37,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
             }
         };
         map.addListener(mapListener);
+        }
     }
 
     @Override

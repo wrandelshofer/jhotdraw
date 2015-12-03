@@ -31,6 +31,7 @@ import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
+import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw.draw.locator.PointLocator;
 
 /**

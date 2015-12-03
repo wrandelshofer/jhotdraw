@@ -10,6 +10,7 @@ import javafx.collections.MapChangeListener;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 
 /**
  * SimpleStyleablePropertyBean.
@@ -42,7 +43,7 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     }
 
     @Override
-    public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
+    public <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key) {
         if (key instanceof StyleableKey) {
             StyleableKey<T> skey = (StyleableKey<T>) key;
             return new KeyMapEntryStyleableProperty<T>(properties, skey, skey.getCssName(), skey.getCssMetaData());
@@ -61,10 +62,10 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
      * Returns the style value.
      */
     @Override
-    public <T> T getStyled(Key<T> key) {
+    public <T> T getStyled(MapAccessor<T> key) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
-        T ret = (T) map.getStyled(key, key.getDefaultValue());
+        T ret = key.get(map.getStyledMap());
         return ret;
     }
 
@@ -72,17 +73,17 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
      * Sets the style value.
      */
     @Override
-    public <T> T setStyled(StyleOrigin origin, Key<T> key, T newValue) {
+    public <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, T newValue) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
-        T ret = (T) map.put(origin, key, newValue);
+        T ret = key.put(map.getMap(origin), newValue);
         return ret;
     }
 
     @Override
-    public <T> T remove(StyleOrigin origin, Key<T> key) {
+    public <T> T remove(StyleOrigin origin, MapAccessor<T> key) {
         @SuppressWarnings("unchecked")
-        T ret = (T) getStyleableMap().remove(origin, key);
+        T ret = key.remove(getStyleableMap().getMap(origin));
         return ret;
     }
 

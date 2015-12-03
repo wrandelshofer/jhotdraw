@@ -8,16 +8,13 @@ package org.jhotdraw.collection;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.MapExpression;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.MapChangeListener;
 
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
@@ -42,24 +39,11 @@ import javafx.collections.MapChangeListener;
  * @version $Id: Key.java 788 2014-03-22 07:56:28Z rawcoder $
  * @param <T> The value type.
  */
-public interface Key<T> extends Serializable {
+public interface Key<T> extends MapAccessor<T> {
 
     final static long serialVersionUID = 1L;
 
-    /**
-     * Returns the name string.
-     *
-     * @return name string.
-     */
-    String getName();
-
-    public Class<T> getValueType();
-
-    public List<Class<?>> getValueTypeParameters();
-
     public String getFullValueType();
-
-    public T getDefaultValue();
 
     /**
      * Gets the value of the attribute denoted by this Key from a Map.
@@ -67,6 +51,7 @@ public interface Key<T> extends Serializable {
      * @param a A Map.
      * @return The value of the attribute.
      */
+    @Override
     default T get(Map<? super Key<?>, Object> a) {
         @SuppressWarnings("unchecked")
         T value = a.containsKey(this) ? (T) a.get(this) : getDefaultValue();
@@ -112,6 +97,7 @@ public interface Key<T> extends Serializable {
      * @param value The new value.
      * @return The old value.
      */
+    @Override
     default T put(Map<? super Key<?>, Object> a, T value) {
         if (!isAssignable(value)) {
             throw new IllegalArgumentException("Value is not assignable to key. key="
@@ -119,6 +105,19 @@ public interface Key<T> extends Serializable {
         }
         @SuppressWarnings("unchecked")
         T oldValue = (T) a.put(this, value);
+        return oldValue;
+    }
+    /**
+     * Use this method to perform a type-safe remove operation of an attribute 
+     * on a Map.
+     *
+     * @param a An attribute map.
+     * @return The old value.
+     */
+    @Override
+    default T remove(Map<? super Key<?>, Object> a) {
+        @SuppressWarnings("unchecked")
+        T oldValue = (T) a.remove(this);
         return oldValue;
     }
 
