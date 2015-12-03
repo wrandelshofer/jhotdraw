@@ -19,7 +19,7 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class CssPoint2DConverter implements Converter<Point2D> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new CssConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,number} +{1,number}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point2D value) throws IOException {

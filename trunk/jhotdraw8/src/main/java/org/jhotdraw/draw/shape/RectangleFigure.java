@@ -26,6 +26,7 @@ import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw.draw.key.Rectangle2DStyleableFigureKey;
 
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.

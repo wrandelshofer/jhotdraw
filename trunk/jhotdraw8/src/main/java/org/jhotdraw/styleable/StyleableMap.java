@@ -82,12 +82,13 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         private <T> T getValue(StyleOrigin styleOrigin) {
             @SuppressWarnings("unchecked")
             T ret = (T) values[styleOrigin.ordinal()];
-            return ret==NO_VALUE?null:ret;
+            return ret == NO_VALUE ? null : ret;
         }
+
         private <T> T getValue(StyleOrigin styleOrigin, T defaultValue) {
             @SuppressWarnings("unchecked")
-            T ret = (T) values[styleOrigin==null?0:styleOrigin.ordinal()];
-            return ret==NO_VALUE?defaultValue:ret;
+            T ret = (T) values[styleOrigin == null ? 0 : styleOrigin.ordinal()];
+            return ret == NO_VALUE ? defaultValue : ret;
         }
 
         private StyleOrigin getOrigin() {
@@ -245,7 +246,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         return sv == null ? false : sv.hasValue(o);
     }
 
-    public <T> boolean containsStyledKey(Key<T> key) {
+    public <T> boolean containsStyledKey(K key) {
         return backingMap.containsKey(key);
     }
 
@@ -281,16 +282,167 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         return ret;
     }
 
+    /**
+     * Returns a map which wraps the {@link #getStyled} method.
+     * <p>
+     * The returned map only supports the {@code get} method and the
+     * {@code containsKey} method.
+     *
+     * @return a map
+     */
+    public Map<K, V> getStyledMap() {
+        return new Map<K, V>() {
+            @Override
+            public int size() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public boolean isEmpty() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean containsKey(Object key) {
+                return containsStyledKey((K) key);
+            }
+
+            @Override
+            public boolean containsValue(Object value) {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public V get(Object key) {
+                return getStyled((K) key);
+            }
+
+            @Override
+            public V put(K key, V value) {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public V remove(Object key) {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public void putAll(Map<? extends K, ? extends V> m) {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public void clear() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public Set<K> keySet() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public Collection<V> values() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public Set<Entry<K, V>> entrySet() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+        };
+    }
+
+    /**
+     * Returns a map which wraps the {@code get(Origin, ...)},
+     *  {@code put(Origin, ...)}, {@code remove(Origin, ...)},
+     * {@code containsKey(Origin, ...)} methods.
+     * <p>
+     * The returned map only supports the {@code get},{@code put},
+     * {@code remove} and {@code containsKey} methods.
+     *
+     * @return a map
+     */
+    public Map<K, V> getMap(StyleOrigin origin) {
+        return new Map<K, V>() {
+            @Override
+            public int size() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public boolean isEmpty() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public boolean containsKey(Object key) {
+                return StyleableMap.this.containsKey(origin, key);
+            }
+
+            @Override
+            public boolean containsValue(Object value) {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public V get(Object key) {
+                return StyleableMap.this.get(origin, (K) key);
+            }
+
+            @Override
+            public V put(K key, V value) {
+                return StyleableMap.this.put(origin, key, value);
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public V remove(Object key) {
+                return StyleableMap.this.remove(origin, (K) key);
+            }
+
+            @Override
+            public void putAll(Map<? extends K, ? extends V> m) {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public void clear() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public Set<K> keySet() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public Collection<V> values() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+
+            @Override
+            public Set<Entry<K, V>> entrySet() {
+                throw new UnsupportedOperationException("Not supported.");
+            }
+        };
+    }
+
     public V getStyled(K key) {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
         V ret = sv == null ? null : (V) sv.getValue(sv.getOrigin());
         return ret;
     }
+
     public V getStyled(K key, V defaultValue) {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
-        V ret = (sv == null) ? defaultValue : sv.getValue(sv.getOrigin(),defaultValue);
+        V ret = (sv == null) ? defaultValue : sv.getValue(sv.getOrigin(), defaultValue);
         return ret;
     }
 
@@ -397,7 +549,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             sv.removeValue(StyleOrigin.INLINE);
             sv.removeValue(StyleOrigin.AUTHOR);
             sv.removeValue(StyleOrigin.USER_AGENT);
-             // We do not remove empty values because the values will be
+            // We do not remove empty values because the values will be
             // probably set right again after the map was cleared.
             /*if (sv.isEmpty()) {
              i.remove();

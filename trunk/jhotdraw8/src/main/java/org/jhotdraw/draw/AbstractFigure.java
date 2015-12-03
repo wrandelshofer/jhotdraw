@@ -18,6 +18,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.styleable.SimpleStyleablePropertyBean;
 import org.jhotdraw.styleable.StyleableKey;
@@ -90,7 +91,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
-        for (Key<?> key : getSupportedKeys()) {
+        for (MapAccessor<?> key : getSupportedKeys()) {
             if (key instanceof StyleableKey<?>) {
                 StyleableKey<?> sk = (StyleableKey<?>) key;
 

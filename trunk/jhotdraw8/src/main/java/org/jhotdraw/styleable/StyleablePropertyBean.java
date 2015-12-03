@@ -9,6 +9,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 
 /**
  * {@code StyleablePropertyBean} provides styleable properties.
@@ -38,7 +39,7 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @param key The property key
      * @return The styleable property.
      */
-    <T> StyleableProperty<T> getStyleableProperty(Key<T> key);
+    <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key);
 
     /**
      * Returns the styled value.
@@ -47,7 +48,7 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @param key The property key
      * @return The styled value.
      */
-    public <T> T getStyled(Key<T> key);
+    public <T> T getStyled(MapAccessor<T> key);
     /**
      * Sets a styled value.
      *
@@ -57,7 +58,7 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @param value The new value
      * @return The old value of that origin
      */
-    public <T> T setStyled(StyleOrigin origin, Key<T> key, T value);
+    public <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, T value);
 
     /**
      * Removes a value.
@@ -67,7 +68,7 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @param key The property key.
      * @return The removed value.
      */
-    public <T> T remove(StyleOrigin origin, Key<T> key);
+    public <T> T remove(StyleOrigin origin, MapAccessor<T> key);
 
     /**
      * Removes all values of that style origin.

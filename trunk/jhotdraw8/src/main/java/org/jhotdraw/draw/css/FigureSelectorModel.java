@@ -12,6 +12,7 @@ import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.styleable.StyleableKey;
@@ -71,7 +72,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     private StyleableKey<?> findKey(Figure element, String attributeName) {
         if (!mappedFigureClasses.contains(element.getClass())) {
 
-            for (Key<?> k : element.getSupportedKeys()) {
+            for (MapAccessor<?> k : element.getSupportedKeys()) {
                 if (k instanceof StyleableKey) {
                     StyleableKey<?> sk = (StyleableKey<?>) k;
                     nameToKeyMap.put(sk.getCssName(), sk);
@@ -83,7 +84,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean hasAttribute(Figure element, String attributeName) {
-        for (Key<?> key : element.getSupportedKeys()) {
+        for (MapAccessor<?> key : element.getSupportedKeys()) {
             if (key.getName().equals(attributeName) && (key instanceof StyleableKey)) {
                 return true;
             }
@@ -209,7 +210,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     public Set<String> getAttributeNames(Figure element) {
         // FIXME use keyToName map
         Set<String> attr = new HashSet<>();
-        for (Key<?> key : element.getSupportedKeys()) {
+        for (MapAccessor<?> key : element.getSupportedKeys()) {
             if (key instanceof StyleableKey) {
                 StyleableKey<?> sk = (StyleableKey<?>) key;
                 attr.add(sk.getCssName());

@@ -7,6 +7,7 @@ package org.jhotdraw.styleable;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.text.Converter;
 
 /**
@@ -15,9 +16,16 @@ import org.jhotdraw.text.Converter;
  * @author werni
  * @param <T> The value type.
  */
-public interface StyleableKey<T> extends Key<T> {
+public interface StyleableKey<T> extends MapAccessor<T> {
 
     final static long serialVersionUID = 1L;
+    /**
+     * Returns the name string.
+     *
+     * @return name string.
+     */
+    String getName();
+
 
     /**
      * Gets the CssMetaData.

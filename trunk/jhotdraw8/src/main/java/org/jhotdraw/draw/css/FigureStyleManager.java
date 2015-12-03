@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import javafx.css.StyleOrigin;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.AbstractStyleManager;
 import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.SelectorModel;
@@ -55,9 +56,9 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
      * @param elem The element
      */
     public void applyStylesTo(StyleOrigin origin, Figure elem) {
-        Set<Key<?>> metaList = elem.getSupportedKeys();
-        HashMap<String, Key<?>> metaMap = new HashMap<>();
-        for (Key<?> k : metaList) {
+        Set<MapAccessor<?>> metaList = elem.getSupportedKeys();
+        HashMap<String, MapAccessor<?>> metaMap = new HashMap<>();
+        for (MapAccessor<?> k : metaList) {
             if (k instanceof StyleableKey) {
                 StyleableKey<?> sk = (StyleableKey<?>) k;
                 metaMap.put(sk.getCssName(), k);
@@ -104,7 +105,7 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
         metaMap.clear();
     }
 
-    private void applyStylesTo(StyleOrigin origin, Stylesheet s, HashMap<String, Key<?>> metaMap, Figure elem) {
+    private void applyStylesTo(StyleOrigin origin, Stylesheet s, HashMap<String, MapAccessor<?>> metaMap, Figure elem) {
         for (StyleRule r : s.getRulesets()) {
             if (r.getSelectorGroup().matches(selectorModel, elem)) {
                 for (Declaration d : r.getDeclarations()) {
@@ -131,7 +132,7 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
         }
     }
 
-    private void applyInlineStylesTo(HashMap<String, Key<?>> metaMap, Figure elem) {
+    private void applyInlineStylesTo(HashMap<String, MapAccessor<?>> metaMap, Figure elem) {
         // inline styles can override all other values
         String style = elem.getStyle();
         if (style != null) {
@@ -170,9 +171,9 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
     public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, Figure elem, HashMap<String, Set<Figure>> pseudoStyles) {
         // FIXME this is very inefficient for a single element
         selectorModel.additionalPseudoClassStatesProperty().putAll(pseudoStyles);
-        Set<Key<?>> metaList = elem.getSupportedKeys();
-        HashMap<String, Key<?>> metaMap = new HashMap<>();
-        for (Key<?> k : metaList) {
+        Set<MapAccessor<?>> metaList = elem.getSupportedKeys();
+        HashMap<String, MapAccessor<?>> metaMap = new HashMap<>();
+        for (MapAccessor<?> k : metaList) {
             if (k instanceof StyleableKey) {
                 StyleableKey<?> sk = (StyleableKey<?>) k;
                 metaMap.put(sk.getCssName(), k);
