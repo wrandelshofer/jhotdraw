@@ -37,7 +37,7 @@ public class RotateHandle extends AbstractHandle {
     private Point2D oldPoint;
     private final Region node;
     private final String styleclass;
-    private static final Circle REGION_SHAPE = new Circle(4);
+    private static final Circle REGION_SHAPE = new Circle(3);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
     private Point2D center;
@@ -60,7 +60,7 @@ public class RotateHandle extends AbstractHandle {
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
-        node.setCursor(Cursor.DEFAULT);
+        node.setCursor(Cursor.CROSSHAIR);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class RotateHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
-        Point2D p = getLocation();
+        Point2D p = getLocation(view);
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
@@ -103,7 +103,7 @@ public class RotateHandle extends AbstractHandle {
         // FIXME implement me!
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
-        double oldRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
+        //double oldRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
         double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
 
         double ownerAngle = getOwner().get(TransformableFigure.ROTATE);
@@ -146,10 +146,11 @@ public class RotateHandle extends AbstractHandle {
         return true;
     }
 
-    private Point2D getLocation() {
+    private Point2D getLocation(DrawingView view) {
         Figure owner = getOwner();
         Bounds bounds = owner.getBoundsInLocal();
-        return new Point2D(bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() - 10);
+        Point2D shift=view.getViewToWorld().deltaTransform(10, 10);
+        return new Point2D(bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() - shift.getY());
     }
 
 }
