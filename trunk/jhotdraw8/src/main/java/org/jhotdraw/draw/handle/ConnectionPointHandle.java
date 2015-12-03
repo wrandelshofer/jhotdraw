@@ -47,7 +47,7 @@ public class ConnectionPointHandle extends AbstractHandle {
     private final String styleclassDisconnected;
     private final String styleclassConnected;
 
-    private static final Circle REGION_SHAPE = new Circle(4);
+    private static final Circle REGION_SHAPE = new Circle(3);
 
     private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));

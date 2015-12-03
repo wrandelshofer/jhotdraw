@@ -38,7 +38,7 @@ public class MoveHandleKit {
         private Point2D oldPoint;
         private final Region node;
         private final String styleclass;
-        private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+        private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
         private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
         private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
         protected Set<Figure> groupReshapeableFigures;

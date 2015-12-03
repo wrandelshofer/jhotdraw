@@ -252,7 +252,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private Transform worldToViewTransform = null;
 
     private final double TOLERANCE = 10;
-    private final double HANDLE_TOLERANCE = 100;
+    private final double HANDLE_TOLERANCE = 25;
 
     /**
      * Installs a handler for changes in the selectionProperty.

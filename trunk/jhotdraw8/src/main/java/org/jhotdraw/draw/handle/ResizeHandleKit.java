@@ -170,7 +170,7 @@ public class ResizeHandleKit {
         protected final Region node;
         private final String styleclass;
         private Bounds startBounds;
-        private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+        private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
         private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
         private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
         /**
