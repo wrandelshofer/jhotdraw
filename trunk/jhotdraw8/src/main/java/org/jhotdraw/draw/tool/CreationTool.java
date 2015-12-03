@@ -11,6 +11,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import static java.lang.Math.*;
 import javafx.application.Platform;
+import javafx.scene.Cursor;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.SimpleLayer;
@@ -52,6 +53,7 @@ public class CreationTool extends AbstractTool {
         super(name, rsrc);
         this.figureFactory = figureFactory;
         this.layerFactory = layerFactory;
+        node.setCursor(Cursor.CROSSHAIR);
     }
 
     public void setFigureFactory(Supplier<Figure> factory) {
