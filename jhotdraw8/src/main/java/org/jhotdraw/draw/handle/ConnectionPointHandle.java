@@ -75,7 +75,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclassDisconnected);
         node.setBorder(REGION_BORDER);
-        node.setCursor(Cursor.MOVE);
+        node.setCursor(Cursor.CROSSHAIR);
     }
 
     @Override

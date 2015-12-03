@@ -10,6 +10,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
@@ -137,8 +138,10 @@ public class SelectionTool extends AbstractTool {
 
         Handle h = view.findHandle(vx, vy);
         if (h != null) {
+            node.setCursor(h.getNode().getCursor());
             setTracker(getHandleTracker(h));
         } else {
+            node.setCursor(Cursor.DEFAULT);
 
             /*
              if (pressedFigure == null && tolerance != 0) {
@@ -231,6 +234,21 @@ public class SelectionTool extends AbstractTool {
        // fireToolDone();
         event.consume();
     }
+
+    @Override
+    protected void handleMouseMoved(MouseEvent event, DrawingView view) {
+        double vx = event.getX();
+        double vy = event.getY();
+        Handle h = view.findHandle(vx, vy);
+        if (h != null) {
+            node.setCursor(h.getNode().getCursor());
+            setTracker(getHandleTracker(h));
+        } else {
+            node.setCursor(Cursor.DEFAULT);
+        }
+    }
+    
+    
 
     /**
      * Method to get a {@code HandleTracker} which handles user interaction for
