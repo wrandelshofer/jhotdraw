@@ -16,6 +16,7 @@ import static java.lang.Math.*;
 import java.util.List;
 import org.jhotdraw.draw.Figure;
 import static java.lang.Math.*;
+import javafx.scene.input.KeyEvent;
 
 /**
  * {@code SimpleSelectAreaTracker} implements interactions with the background
@@ -44,7 +45,7 @@ import static java.lang.Math.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaTracker {
+public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAreaTracker {
 
     /**
      * This tool draws a JavaFX {@code Rectangle} with style class
@@ -66,7 +67,7 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
     }
 
     public SimpleSelectAreaTracker(String name, Resources rsrc) {
-        super(name, rsrc);
+        //super(name, rsrc);
 
         // Add the rubberband to the node with absolute positioning
         node.getChildren().add(rubberband);
@@ -103,7 +104,7 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
             dv.selectedFiguresProperty().clear();
         }
         dv.selectedFiguresProperty().addAll(f);
-        fireToolDone();
+        //fireToolDone();
     }
 
     @Override
@@ -114,6 +115,17 @@ public class SimpleSelectAreaTracker extends AbstractTool implements SelectAreaT
         rubberband.setY(round(min(y, event.getY())) - 0.5);
         rubberband.setWidth(round(abs(w)));
         rubberband.setHeight(round(abs(h)));
+    }
+    @Override
+    public void trackKeyPressed(KeyEvent event, DrawingView view) {
+    }
+
+    @Override
+    public void trackKeyReleased(KeyEvent event, DrawingView view) {
+    }
+
+    @Override
+    public void trackKeyTyped(KeyEvent event, DrawingView view) {
     }
 
 }

@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.tool;
 
 import java.util.Collection;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -35,7 +36,7 @@ import org.jhotdraw.draw.handle.Handle;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleHandleTracker extends AbstractTool implements HandleTracker {
+public class SimpleHandleTracker extends AbstractTracker implements HandleTracker {
 
     private Handle handle;
     protected Collection<Figure> compatibleFigures;
@@ -54,11 +55,22 @@ public class SimpleHandleTracker extends AbstractTool implements HandleTracker {
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
         handle.onMouseReleased(event, dv);
-        fireToolDone();
+       // fireToolDone();
     }
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView dv) {
         handle.onMouseDragged(event, dv);
+    }
+    @Override
+    public void trackKeyPressed(KeyEvent event, DrawingView view) {
+    }
+
+    @Override
+    public void trackKeyReleased(KeyEvent event, DrawingView view) {
+    }
+
+    @Override
+    public void trackKeyTyped(KeyEvent event, DrawingView view) {
     }
 }

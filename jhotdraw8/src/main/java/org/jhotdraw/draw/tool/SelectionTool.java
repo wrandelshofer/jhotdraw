@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
@@ -96,6 +97,7 @@ public class SelectionTool extends AbstractTool {
     private boolean mouseDragged;
     private Figure pressedFigure;
     private HandleType handleType;
+    private boolean mustSelectFirstBeforeDrag = false;
 
     // ---
     // Constructors
@@ -107,9 +109,10 @@ public class SelectionTool extends AbstractTool {
     public SelectionTool(String name, Resources rsrc) {
         this(name, HandleType.RESIZE, rsrc);
     }
+
     public SelectionTool(String name, HandleType handleType, Resources rsrc) {
         super(name, rsrc);
-        this.handleType=handleType;
+        this.handleType = handleType;
     }
 
     // ---
@@ -129,21 +132,27 @@ public class SelectionTool extends AbstractTool {
 
     @Override
     protected void handleMousePressed(MouseEvent event, DrawingView view) {
-        Platform.runLater(()->view.getNode().requestFocus());
+        Platform.runLater(() -> node.requestFocus());
         mouseDragged = false;
         Bounds b = getNode().getBoundsInParent();
         Drawing drawing = view.getDrawing();
         double vx = event.getX();
         double vy = event.getY();
 
-        Handle h = view.findHandle(vx, vy);
-        if (h != null) {
-            node.setCursor(h.getNode().getCursor());
-            setTracker(getHandleTracker(h));
+        if (event.isControlDown()) {
+            SelectAreaTracker t = getSelectAreaTracker();
+            setTracker(t);
         } else {
-            node.setCursor(Cursor.DEFAULT);
+            Handle h = view.findHandle(vx, vy);
+            if (h != null) {
+                node.setCursor(h.getNode().getCursor());
+                setTracker(getHandleTracker(h));
+            } else {
+                node.setCursor(Cursor.DEFAULT);
 
-            /*
+                boolean selectionChanged = false;
+
+                /*
              if (pressedFigure == null && tolerance != 0) {
              List<Figure> fs = view.findFiguresIntersecting(vx - tolerance, vy
              - tolerance, tolerance * 2, tolerance * 2, false);
@@ -151,68 +160,71 @@ public class SelectionTool extends AbstractTool {
              pressedFigure = fs.get(0);
              }
              }*/
-            // "alt" modifier selects figure behind.
-            if (isSelectBehindEnabled() && (event.isAltDown())) {
-                // Select a figure behind the current selection
-                pressedFigure = null;
-                boolean selectionFound = false;
-                for (Figure f : view.findFigures(vx, vy, false)) {
-                    if (view.selectedFiguresProperty().contains(f)) {
-                        selectionFound = true;
-                        continue;
+                // "alt" modifier selects figure behind.
+                if (isSelectBehindEnabled() && (event.isAltDown())) {
+                    // Select a figure behind the current selection
+                    pressedFigure = null;
+                    boolean selectionFound = false;
+                    for (Figure f : view.findFigures(vx, vy, false)) {
+                        if (view.selectedFiguresProperty().contains(f)) {
+                            selectionFound = true;
+                            continue;
+                        }
+                        if (selectionFound) {
+                            pressedFigure = f;
+                            break;
+                        }
                     }
-                    if (selectionFound) {
-                        pressedFigure = f;
-                        break;
+                } else {
+                    // find in selection
+                    pressedFigure = view.findFigure(vx, vy, view.getSelectedFigures());
+                    // find in entire drawing
+                    if (pressedFigure == null) {
+                        pressedFigure = view.findFigure(vx, vy);
                     }
                 }
-            } else {
-                // find in selection
-                pressedFigure = view.findFigure(vx, vy, view.getSelectedFigures());
-                // find in entire drawing
-                if (pressedFigure == null) {
-                    pressedFigure = view.findFigure(vx, vy);
-                }
-            }
 
-            // "shift" without "meta" adds the pressed figure to the selection
-            if (event.isShiftDown() && !event.isMetaDown()) {
-                if (pressedFigure != null) {
-                    view.getSelectedFigures().add(pressedFigure);
-                }
-            } else // "meta" without "shift"  toggles the selection for the pressed figure
-            if (!event.isShiftDown() && event.isMetaDown()) {
-                if (pressedFigure != null) {
-                    if (view.selectedFiguresProperty().contains(pressedFigure)) {
-                        view.selectedFiguresProperty().remove(pressedFigure);
-                    } else {
+                // "shift" without "meta" adds the pressed figure to the selection
+                if (event.isShiftDown() && !event.isMetaDown()) {
+                    if (pressedFigure != null) {
+                        view.getSelectedFigures().add(pressedFigure);
+                        selectionChanged = true;
+                    }
+                } else if (!event.isShiftDown() && event.isMetaDown()) {
+                    // "meta" without "shift"  toggles the selection for the pressed figure
+                    if (pressedFigure != null) {
+                        if (view.selectedFiguresProperty().contains(pressedFigure)) {
+                            view.selectedFiguresProperty().remove(pressedFigure);
+                        } else {
+                            view.selectedFiguresProperty().add(pressedFigure);
+                        }
+                        selectionChanged = true;
+                    }
+                } else if (!event.isShiftDown() && !event.isMetaDown()) {
+                    // neither "meta" nor "shift" sets the selection to the pressed figure
+                    if (pressedFigure != null && !view.selectedFiguresProperty().contains(pressedFigure)) {
+                        view.selectedFiguresProperty().clear();
                         view.selectedFiguresProperty().add(pressedFigure);
+                        selectionChanged = true;
                     }
                 }
-            } else // neither "meta" nor "shift" sets the selection to the pressed figure
-            if (!event.isShiftDown() && !event.isMetaDown()) {
-                if (pressedFigure != null && !view.selectedFiguresProperty().contains(pressedFigure)) {
-                    view.selectedFiguresProperty().clear();
-                    view.selectedFiguresProperty().add(pressedFigure);
-                }
-            }
 
-            // "control" modifier enforces the select area tracker
-            if (pressedFigure != null
-                    && (!(event.isControlDown())
-                    || view.selectedFiguresProperty().contains(pressedFigure))) {
-                DragTracker t = getDragTracker(pressedFigure, view);
-                setTracker(t);
-            } else {
-                SelectAreaTracker t = getSelectAreaTracker();
-                setTracker(t);
+                // "control" modifier enforces the select area tracker
+                if (mustSelectFirstBeforeDrag && selectionChanged) {
+                    setTracker(null);
+                } else if (view.selectedFiguresProperty().contains(pressedFigure)) {
+                    DragTracker t = getDragTracker(pressedFigure, view);
+                    setTracker(t);
+                } else {
+                    SelectAreaTracker t = getSelectAreaTracker();
+                    setTracker(t);
+                }
             }
         }
         if (tracker != null) {
             tracker.trackMousePressed(event, view);
         }
         fireToolStarted();
-        event.consume();
     }
 
     @Override
@@ -221,7 +233,6 @@ public class SelectionTool extends AbstractTool {
         if (tracker != null) {
             tracker.trackMouseDragged(event, dv);
         }
-        event.consume();
     }
 
     @Override
@@ -230,9 +241,6 @@ public class SelectionTool extends AbstractTool {
             tracker.trackMouseReleased(event, dv);
         }
         setTracker(null);
-
-       // fireToolDone();
-        event.consume();
     }
 
     @Override
@@ -247,8 +255,24 @@ public class SelectionTool extends AbstractTool {
             node.setCursor(Cursor.DEFAULT);
         }
     }
-    
-    
+
+    protected void handleKeyPressed(KeyEvent event, DrawingView view) {
+        if (tracker != null) {
+            tracker.trackKeyPressed(event, view);
+        }
+    }
+
+    protected void handleKeyReleased(KeyEvent event, DrawingView view) {
+        if (tracker != null) {
+            tracker.trackKeyReleased(event, view);
+        }
+    }
+
+    protected void handleKeyTyped(KeyEvent event, DrawingView view) {
+        if (tracker != null) {
+            tracker.trackKeyTyped(event, view);
+        }
+    }
 
     /**
      * Method to get a {@code HandleTracker} which handles user interaction for
@@ -326,25 +350,22 @@ public class SelectionTool extends AbstractTool {
     }
 
     private void setTracker(Tracker t) {
-
         if (tracker != null) {
-            node.setCenter(null);
+            drawPane.setCenter(null);
         }
         tracker = t;
         if (tracker != null) {
-            node.setCenter(tracker.getNode());
-            node.layout();
-        }
-    }
-    
-  @Override
-    public void activate(SimpleDrawingEditor editor) {
-        for (DrawingView view:editor.getDrawingViews()) {
-            view.setHandleType(handleType);
+            drawPane.setCenter(tracker.getNode());
+            drawPane.layout();
         }
     }
 
-    
+    @Override
+    public void activate(SimpleDrawingEditor editor) {
+        for (DrawingView view : editor.getDrawingViews()) {
+            view.setHandleType(handleType);
+        }
+    }
 
     // ---
     // Convenience Methods

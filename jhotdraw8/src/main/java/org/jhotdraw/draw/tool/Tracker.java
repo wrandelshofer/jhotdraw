@@ -6,6 +6,7 @@
 package org.jhotdraw.draw.tool;
 
 import javafx.scene.Node;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.draw.DrawingView;
@@ -28,7 +29,6 @@ public interface Tracker {
     // ---
     // Behaviors
     // ---
-
     /**
      * Returns the node which presents tracker.
      *
@@ -59,4 +59,10 @@ public interface Tracker {
      * @param view a view
      */
     void trackMouseDragged(MouseEvent evt, DrawingView view);
+
+    void trackKeyPressed(KeyEvent event, DrawingView view);
+
+    void trackKeyReleased(KeyEvent event, DrawingView view);
+
+    void trackKeyTyped(KeyEvent event, DrawingView view);
 }
