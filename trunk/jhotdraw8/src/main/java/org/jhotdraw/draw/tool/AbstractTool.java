@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import org.jhotdraw.app.AbstractDisableable;
 import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
@@ -50,7 +51,9 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             stopEditing();
         });
     }
-    protected final BorderPane node = new BorderPane();
+    protected final BorderPane eventPane = new BorderPane();
+    protected final BorderPane drawPane = new BorderPane();
+    protected final StackPane node = new StackPane();
 
     /**
      * Listeners.
@@ -58,7 +61,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     private final LinkedList<Listener<HandleEvent>> handleListeners = new LinkedList<>();
 
     {
-        node.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
+        eventPane.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
             if (drawingView.get() != null) {
                 DrawingView dv = drawingView.get();
                 EventType<? extends MouseEvent> type = event.getEventType();
@@ -80,7 +83,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                 event.consume();
             }
         });
-        node.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {
+        eventPane.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {
             if (drawingView.get() != null) {
                 DrawingView dv = drawingView.get();
                 EventType<? extends KeyEvent> type = event.getEventType();
@@ -123,6 +126,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         if (rsrc != null) {
             applyResources(rsrc);
         }
+        
+        node.getChildren().addAll(drawPane,eventPane);
     }
 
     // ---
@@ -231,18 +236,12 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     protected void handleKeyPressed(KeyEvent event, DrawingView view) {
-        System.out.println("keyPressed:" + event);
-        event.consume();
     }
 
     protected void handleKeyReleased(KeyEvent event, DrawingView view) {
-        System.out.println("keyReleased:" + event);
-        event.consume();
     }
 
     protected void handleKeyTyped(KeyEvent event, DrawingView view) {
-        System.out.println("keyTyped:" + event);
-        event.consume();
     }
 
     /**

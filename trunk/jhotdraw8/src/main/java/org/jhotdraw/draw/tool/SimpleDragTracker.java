@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.model.DrawingModel;
@@ -39,7 +40,7 @@ import org.jhotdraw.draw.Figure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleDragTracker extends AbstractTool implements DragTracker {
+public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
     private static final long serialVersionUID = 1L;
     protected Set<Figure> groupReshapeableFigures;
@@ -72,7 +73,7 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
 // FIXME fire undoable edit
-        fireToolDone();
+      //  fireToolDone();
     }
 
     @Override
@@ -102,6 +103,18 @@ public class SimpleDragTracker extends AbstractTool implements DragTracker {
             }
         }
         oldPoint = newPoint;
+    }
+
+    @Override
+    public void trackKeyPressed(KeyEvent event, DrawingView view) {
+    }
+
+    @Override
+    public void trackKeyReleased(KeyEvent event, DrawingView view) {
+    }
+
+    @Override
+    public void trackKeyTyped(KeyEvent event, DrawingView view) {
     }
 
 }
