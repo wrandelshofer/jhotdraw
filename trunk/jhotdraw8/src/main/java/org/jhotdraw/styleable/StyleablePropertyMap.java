@@ -4,7 +4,6 @@
  */
 package org.jhotdraw.styleable;
 
-import org.jhotdraw.styleable.StyleableKey;
 import java.util.HashMap;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.ReadOnlyMapProperty;
@@ -17,6 +16,7 @@ import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.KeyMapEntryProperty;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * {@code StyleablePropertyMap} provides an acceleration structure for
@@ -248,9 +248,9 @@ public class StyleablePropertyMap {
         @SuppressWarnings("unchecked")
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
         if (sp == null) {
-            if (key instanceof StyleableKey) {
+            if (key instanceof StyleableMapAccessor) {
                 @SuppressWarnings("unchecked")
-                StyleableProperty<T> temp = new MapStyleableProperty<>(key, ((StyleableKey) key).getCssMetaData());
+                StyleableProperty<T> temp = new MapStyleableProperty<>(key, ((StyleableMapAccessor) key).getCssMetaData());
                 sp = temp;
             } else {
                 @SuppressWarnings("unchecked")

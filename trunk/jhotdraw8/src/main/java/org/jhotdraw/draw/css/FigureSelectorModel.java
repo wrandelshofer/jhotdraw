@@ -11,14 +11,15 @@ import java.util.Set;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
+import org.jhotdraw.collection.CompositeMapAccessor;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssStringConverter;
 import org.w3c.dom.Element;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * FigureSelectorModel.
@@ -29,9 +30,9 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     private HashSet<Class<?>> mappedFigureClasses = new HashSet<>();
     /** Maps an attribute name to a key. */
-    private HashMap<String, StyleableKey<?>> nameToKeyMap = new HashMap<>();
+    private HashMap<String, StyleableMapAccessor<?>> nameToKeyMap = new HashMap<>();
     /** Maps a key to an attribute name. */
-    private HashMap<StyleableKey<?>, String> keyToNameMap = new HashMap<>();
+    private HashMap<StyleableMapAccessor<?>, String> keyToNameMap = new HashMap<>();
 
     private final MapProperty<String, Set<Figure>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
 
@@ -69,12 +70,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         return new HashSet<String>(element.getStyleClass());
     }
 
-    private StyleableKey<?> findKey(Figure element, String attributeName) {
+    private StyleableMapAccessor<?> findKey(Figure element, String attributeName) {
         if (!mappedFigureClasses.contains(element.getClass())) {
 
             for (MapAccessor<?> k : element.getSupportedKeys()) {
-                if (k instanceof StyleableKey) {
-                    StyleableKey<?> sk = (StyleableKey<?>) k;
+                if (k instanceof StyleableMapAccessor) {
+                    StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) k;
                     nameToKeyMap.put(sk.getCssName(), sk);
                 }
             }
@@ -85,7 +86,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public boolean hasAttribute(Figure element, String attributeName) {
         for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if (key.getName().equals(attributeName) && (key instanceof StyleableKey)) {
+            if (key.getName().equals(attributeName) && (key instanceof StyleableMapAccessor)) {
                 return true;
             }
         }
@@ -95,7 +96,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public boolean attributeValueEquals(Figure element, String attributeName, String attributeValue) {
         @SuppressWarnings("unchecked")
-        StyleableKey<Object> k = (StyleableKey<Object>) findKey(element, attributeName);
+        StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (k == null) {
             return false;
         }
@@ -112,7 +113,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public boolean attributeValueStartsWith(Figure element, String attributeName, String substring) {
         @SuppressWarnings("unchecked")
-        StyleableKey<Object> k = (StyleableKey<Object>) findKey(element, attributeName);
+        StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (k == null) {
             return false;
         }
@@ -126,7 +127,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public boolean attributeValueEndsWith(Figure element, String attributeName, String substring) {
         @SuppressWarnings("unchecked")
-        StyleableKey<Object> k = (StyleableKey<Object>) findKey(element, attributeName);
+        StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (k == null) {
             return false;
         }
@@ -143,7 +144,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public boolean attributeValueContains(Figure element, String attributeName, String substring) {
         @SuppressWarnings("unchecked")
-        StyleableKey<Object> k = (StyleableKey<Object>) findKey(element, attributeName);
+        StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (k == null) {
             return false;
         }
@@ -160,7 +161,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public boolean attributeValueContainsWord(Figure element, String attributeName, String word) {
         @SuppressWarnings("unchecked")
-        StyleableKey<Object> k = (StyleableKey<Object>) findKey(element, attributeName);
+        StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (k == null) {
             return false;
         }
@@ -211,10 +212,31 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         // FIXME use keyToName map
         Set<String> attr = new HashSet<>();
         for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if (key instanceof StyleableKey) {
-                StyleableKey<?> sk = (StyleableKey<?>) key;
+            if (key instanceof StyleableMapAccessor) {
+                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
                 attr.add(sk.getCssName());
             }
+        }
+        return attr;
+    }
+    @Override
+    public Set<String> getNonDecomposedAttributeNames(Figure element) {
+        // FIXME use keyToName map
+        Set<String> attr = new HashSet<>();
+        Set<StyleableMapAccessor<?>> attrk = new HashSet<>();
+        for (MapAccessor<?> key : element.getSupportedKeys()) {
+            if (key instanceof StyleableMapAccessor) {
+                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
+                attrk.add(sk);
+            }
+        }
+        for (MapAccessor<?> key : element.getSupportedKeys()) {
+            if (key instanceof CompositeMapAccessor) {
+                attrk.removeAll( ((CompositeMapAccessor) key).getSubAccessors());
+            }
+        }
+        for (StyleableMapAccessor<?> key : attrk) {
+            attr.add(key.getCssName());
         }
         return attr;
     }
@@ -222,7 +244,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public String getAttributeValue(Figure element, String attributeName) {
         @SuppressWarnings("unchecked")
-        StyleableKey<Object> k = (StyleableKey<Object>) findKey(element, attributeName);
+        StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (k == null) {
             return null;
         }

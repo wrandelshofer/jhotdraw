@@ -8,17 +8,17 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.BlendMode;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssEnumConverter;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * BlendModeStyleableFigureKey.
  * @author Werner Randelshofer
  */
-public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> implements StyleableKey<BlendMode> {
+public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> implements StyleableMapAccessor<BlendMode> {
     final static long serialVersionUID = 1L;
     
     private final CssMetaData<? extends Styleable, BlendMode> cssMetaData;

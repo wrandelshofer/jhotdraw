@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.shape;
 
+import org.jhotdraw.draw.figure.shape.RectangleFigure;
 import org.jhotdraw.draw.FillableFigure;
 import java.util.List;
 import javafx.css.CssMetaData;

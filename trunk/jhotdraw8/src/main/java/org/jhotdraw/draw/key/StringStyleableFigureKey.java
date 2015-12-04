@@ -10,7 +10,6 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.paint.Paint;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
@@ -19,13 +18,14 @@ import org.jhotdraw.text.CssSizeConverter;
 import org.jhotdraw.text.CssStringConverter;
 import org.jhotdraw.text.XmlStringConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * StringStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class StringStyleableFigureKey extends SimpleFigureKey<String> implements StyleableKey<String> {
+public class StringStyleableFigureKey extends SimpleFigureKey<String> implements StyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, String> cssMetaData;

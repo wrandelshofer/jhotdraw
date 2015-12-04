@@ -7,19 +7,19 @@ package org.jhotdraw.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssBooleanConverter;
 import org.jhotdraw.text.XmlBooleanConverter;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * DoubleStyleableFigureKey.
  *
  * @author werni
  */
-public class BooleanStyleableFigureKey extends SimpleFigureKey<Boolean> implements StyleableKey<Boolean> {
+public class BooleanStyleableFigureKey extends SimpleFigureKey<Boolean> implements StyleableMapAccessor<Boolean> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Boolean> cssMetaData;

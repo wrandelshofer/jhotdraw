@@ -12,12 +12,16 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw.draw.key.FontStyleableFigureKey;
+import org.jhotdraw.draw.key.FontStyleableMapAccessor;
+import org.jhotdraw.draw.key.StringOrIdentStyleableFigureKey;
 import org.jhotdraw.draw.key.StringStyleableFigureKey;
 
 /**
@@ -30,9 +34,13 @@ public interface TextableFigure extends Figure {
 
     // text properties
     /**
-     * Defines the font used. Default value: {@code new Font("System",12)}
+     * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    public static FontStyleableFigureKey FONT = new FontStyleableFigureKey("font", new Font("System", 12.0));
+    public static StringOrIdentStyleableFigureKey FONT_FAMILY = new StringOrIdentStyleableFigureKey("fontFamily",DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),"Arial");
+    public static DoubleStyleableFigureKey FONT_SIZE = new DoubleStyleableFigureKey("fontSize",DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),12.0);
+    public static EnumStyleableFigureKey<FontWeight> FONT_WEIGHT = new EnumStyleableFigureKey<FontWeight>("fontWeight",FontWeight.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),FontWeight.NORMAL);
+    public static EnumStyleableFigureKey<FontPosture> FONT_STYLE = new EnumStyleableFigureKey<FontPosture>("fontStyle",FontPosture.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),FontPosture.REGULAR);
+    public static FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY,FONT_WEIGHT,FONT_STYLE,FONT_SIZE);
     /**
      * The line spacing. Default value: {@code 0.0}
      */
@@ -67,7 +75,7 @@ public interface TextableFigure extends Figure {
      * @param text a text node
      */
     default void applyTextHolderProperties(Text text) {
-        text.setFont(getStyled(FONT));
+        text.setFont(getStyled(FONT).getFont());
         text.setLineSpacing(getStyled(LINE_SPACING));
         text.setStrikethrough(getStyled(STRIKETHROUGH));
         text.setTextAlignment(getStyled(TEXT_ALIGNMENT));
@@ -81,7 +89,7 @@ public interface TextableFigure extends Figure {
      * @param text a text node
      */
     default void applyTextHolderProperties(Labeled text) {
-        text.setFont(getStyled(FONT));
+        text.setFont(getStyled(FONT).getFont());
         text.setLineSpacing(getStyled(LINE_SPACING));
         //text.setStrikethrough(getStyled(STRIKETHROUGH));
         text.setTextAlignment(getStyled(TEXT_ALIGNMENT));

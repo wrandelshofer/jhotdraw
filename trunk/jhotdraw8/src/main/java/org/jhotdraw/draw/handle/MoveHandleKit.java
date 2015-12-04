@@ -22,6 +22,8 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.TransformableFigure;
+import static org.jhotdraw.draw.TransformableFigure.ROTATE;
+import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.model.DrawingModel;
@@ -55,7 +57,11 @@ public class MoveHandleKit {
             node.setManaged(false);
             node.setScaleShape(false);
             node.setCenterShape(true);
+            
+            // The node size must be odd. 
+            // This size is independent of the shape that represenst the handle.
             node.resize(11, 11);
+            
             node.getStyleClass().clear();
             node.getStyleClass().add(styleclass);
             node.setBorder(REGION_BORDER);
@@ -76,11 +82,16 @@ public class MoveHandleKit {
             Point2D p = getLocation();
             //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
             p = t.transform(p);
+            
+            // The node is centered around the location. 
+            // (The value 5.5 is half of the node size, which is 11,11.
+            // 0.5 is subtracted from 5.5 so that the node snaps between pixels
+            // so that we get sharp lines. 
             node.relocate(p.getX() - 5, p.getY() - 5);
+            
             // rotates the node:
-            if (f instanceof TransformableFigure) {
-            ((TransformableFigure)f).applyTransformableFigureProperties(node);
-            }
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
         }
 
         @Override

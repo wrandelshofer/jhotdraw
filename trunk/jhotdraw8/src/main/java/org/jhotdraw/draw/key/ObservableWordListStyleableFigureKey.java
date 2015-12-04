@@ -12,18 +12,18 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssObservableWordListConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * ObservableWordListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class ObservableWordListStyleableFigureKey extends SimpleFigureKey<ObservableList<String>> implements StyleableKey<ObservableList<String>> {
+public class ObservableWordListStyleableFigureKey extends SimpleFigureKey<ObservableList<String>> implements StyleableMapAccessor<ObservableList<String>> {
 
     private final static long serialVersionUID = 1L;
 

@@ -25,9 +25,9 @@ import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.constrain.GridConstrainer;
-import org.jhotdraw.draw.shape.LineFigure;
-import org.jhotdraw.draw.shape.RectangleFigure;
-import org.jhotdraw.draw.shape.TextFigure;
+import org.jhotdraw.draw.figure.shape.LineFigure;
+import org.jhotdraw.draw.figure.shape.RectangleFigure;
+import org.jhotdraw.draw.figure.shape.TextFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
 

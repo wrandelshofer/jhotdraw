@@ -63,5 +63,8 @@ public interface MapAccessor <T> extends Serializable {
     /** Returns the default value of this map accessor. */
     public T getDefaultValue();
 
+    /** Returns a string representation of the value type and its type parameters. */
+    public String getFullValueType();
+
 
 }

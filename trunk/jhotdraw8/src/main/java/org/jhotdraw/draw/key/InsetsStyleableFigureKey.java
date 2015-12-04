@@ -10,19 +10,19 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Insets;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssInsetsConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * InsetsStyleableFigureKey.
  *
  * @author werni
  */
-public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements StyleableKey<Insets> {
+public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements StyleableMapAccessor<Insets> {
 
     private final static long serialVersionUID=1L;
 

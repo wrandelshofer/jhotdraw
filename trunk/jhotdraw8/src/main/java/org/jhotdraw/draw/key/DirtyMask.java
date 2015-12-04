@@ -45,4 +45,13 @@ public class DirtyMask {
         }
         return false;
     }
+
+    /** Adds all bits of the specified dirty mask to this mask.
+     * 
+     * @param that that mask
+     * @return a new mask
+     */
+    public DirtyMask add(DirtyMask that) {
+        return new DirtyMask(this.bitmask|that.bitmask);
+    }
 }

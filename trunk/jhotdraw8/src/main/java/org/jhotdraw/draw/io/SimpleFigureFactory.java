@@ -19,7 +19,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.CompositeMapAccessor;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
@@ -35,18 +36,18 @@ import org.w3c.dom.Text;
  */
 public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactory {
 
-    private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> attrToKey = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToAttr = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashMap<String, Key<?>>> elemToKey = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashMap<Key<?>, String>> keyToElem = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> keyToAttr = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> elemToKey = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> keyToElem = new HashMap<>();
     private final Map<String, Supplier<Figure>> nameToFigure = new HashMap<>();
     private final Map<Class<? extends Figure>, String> figureToName = new HashMap<>();
     private final Map<String, Converter<?>> valueToXML = new HashMap<>();
     private final Map<String, Converter<?>> valueFromXML = new HashMap<>();
-    private final Map<Key<?>, Converter<?>> keyValueToXML = new HashMap<>();
-    private final Map<Key<?>, Converter<?>> keyValueFromXML = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureAttributeKeys = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashSet<Key<?>>> figureNodeListKeys = new HashMap<>();
+    private final Map<MapAccessor<?>, Converter<?>> keyValueToXML = new HashMap<>();
+    private final Map<MapAccessor<?>, Converter<?>> keyValueFromXML = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashSet<MapAccessor<?>>> figureAttributeKeys = new HashMap<>();
+    private final Map<Class<? extends Figure>, HashSet<MapAccessor<?>>> figureNodeListKeys = new HashMap<>();
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
     private final Map<String, HashSet<Class<? extends Figure>>> skipAttributes = new HashMap<>();
@@ -63,8 +64,9 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      */
     public void addFigureAttributeKeys(Class<? extends Figure> f, Collection<MapAccessor<?>> keys) {
         for (MapAccessor<?> key : keys) {
-            if (key instanceof Key) {
-            addKey(f, key.getName(), (Key<?>)key);}
+            if (key instanceof MapAccessor) {
+                addKey(f, key.getName(), (MapAccessor<?>) key);
+            }
         }
     }
 
@@ -75,11 +77,11 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param name the element name
      * @param key the keys
      */
-    public void addNodeListKey(Class<? extends Figure> figure, String name, Key<?> key) {
+    public void addNodeListKey(Class<? extends Figure> figure, String name, MapAccessor<?> key) {
         if (figureNodeListKeys.containsKey(figure)) {
             figureNodeListKeys.get(figure).add(key);
         } else {
-            HashSet<Key<?>> hset = new HashSet<>();
+            HashSet<MapAccessor<?>> hset = new HashSet<>();
             hset.add(key);
             figureNodeListKeys.put(figure, hset);
         }
@@ -87,7 +89,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (!elemToKey.containsKey(figure)) {
             elemToKey.put(figure, new HashMap<>());
         }
-        HashMap<String, Key<?>> strToKey = elemToKey.get(figure);
+        HashMap<String, MapAccessor<?>> strToKey = elemToKey.get(figure);
         if (!strToKey.containsKey(name)) {
             strToKey.put(name, key);
         }
@@ -95,7 +97,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (!keyToElem.containsKey(figure)) {
             keyToElem.put(figure, new HashMap<>());
         }
-        HashMap<Key<?>, String> keyToStr = keyToElem.get(figure);
+        HashMap<MapAccessor<?>, String> keyToStr = keyToElem.get(figure);
         if (!keyToStr.containsKey(key)) {
             keyToStr.put(key, name);
         }
@@ -105,21 +107,24 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         addFigure(figureName, f);
         addFigureAttributeKeys(f, keys);
         for (MapAccessor<?> key : keys) {
-            if (key instanceof Key)
-            addKey(f, key.getName(), (Key<?>)key);
+            if (key instanceof MapAccessor) {
+                addKey(f, key.getName(), (MapAccessor<?>) key);
+            }
         }
     }
 
     public void addFigureKeysAndNames(Class<? extends Figure> f, Collection<MapAccessor<?>> keys) {
         addFigureAttributeKeys(f, keys);
         for (MapAccessor<?> key : keys) {
-             if (key instanceof Key)
-            addKey(f, key.getName(), (Key<?>)key);
+            if (key instanceof MapAccessor) {
+                addKey(f, key.getName(), (MapAccessor<?>) key);
+            }
         }
     }
 
     /**
-     * Adds the provided mapping of XML attribute names from/to {@code Key}s.
+     * Adds the provided mapping of XML attribute names from/to
+     * {@code MapAccessor}s.
      * <p>
      * The same key can be added more than once.
      *
@@ -127,11 +132,11 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param name The attribute name
      * @param key The key
      */
-    public void addKey(Class<? extends Figure> figure, String name, Key<?> key) {
+    public void addKey(Class<? extends Figure> figure, String name, MapAccessor<?> key) {
         if (figureAttributeKeys.containsKey(figure)) {
             figureAttributeKeys.get(figure).add(key);
         } else {
-            HashSet<Key<?>> hset = new HashSet<>();
+            HashSet<MapAccessor<?>> hset = new HashSet<>();
             hset.add(key);
             figureAttributeKeys.put(figure, hset);
         }
@@ -139,7 +144,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (!attrToKey.containsKey(figure)) {
             attrToKey.put(figure, new HashMap<>());
         }
-        HashMap<String, Key<?>> strToKey = attrToKey.get(figure);
+        HashMap<String, MapAccessor<?>> strToKey = attrToKey.get(figure);
         if (!strToKey.containsKey(name)) {
             strToKey.put(name, key);
         }
@@ -147,28 +152,29 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (!keyToAttr.containsKey(figure)) {
             keyToAttr.put(figure, new HashMap<>());
         }
-        HashMap<Key<?>, String> keyToStr = keyToAttr.get(figure);
+        HashMap<MapAccessor<?>, String> keyToStr = keyToAttr.get(figure);
         if (!keyToStr.containsKey(key)) {
             keyToStr.put(key, name);
         }
     }
 
     /**
-     * Adds the provided mapping of XML attribute names from/to {@code Key}s.
+     * Adds the provided mapping of XML attribute names from/to
+     * {@code MapAccessor}s.
      * <p>
      * The same key can be added more than once.
      *
      * @param f The figure
      * @param keys The mapping from attribute names to keys
      */
-    public void addKeys(Class<? extends Figure> f, HashMap<String, Key<?>> keys) {
-        for (Map.Entry<String, Key<?>> entry : keys.entrySet()) {
+    public void addKeys(Class<? extends Figure> f, HashMap<String, MapAccessor<?>> keys) {
+        for (Map.Entry<String, MapAccessor<?>> entry : keys.entrySet()) {
             addKey(f, entry.getKey(), entry.getValue());
         }
     }
 
     /**
-     * Clears the mapping of XML attributes from/to {@code Key}s.
+     * Clears the mapping of XML attributes from/to {@code MapAccessor}s.
      */
     public void clearAttributeMap() {
         attrToKey.clear();
@@ -260,7 +266,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     /**
-     * Clears the mapping of XML attributes from/to {@code Key}s.
+     * Clears the mapping of XML attributes from/to {@code MapAccessor}s.
      */
     public void clearElementMap() {
         attrToKey.clear();
@@ -291,8 +297,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public String keyToName(Figure f, Key<?> key) throws IOException {
-        HashMap<Key<?>, String> keyToStr = null;
+    public String keyToName(Figure f, MapAccessor<?> key) throws IOException {
+        HashMap<MapAccessor<?>, String> keyToStr = null;
         if (keyToAttr.containsKey(f.getClass())) {
             keyToStr = keyToAttr.get(f.getClass());
         }
@@ -304,8 +310,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public Key<?> nameToKey(Figure f, String attributeName) throws IOException {
-        HashMap<String, Key<?>> strToKey = attrToKey.get(f.getClass());
+    public MapAccessor<?> nameToKey(Figure f, String attributeName) throws IOException {
+        HashMap<String, MapAccessor<?>> strToKey = attrToKey.get(f.getClass());
         if (attrToKey.containsKey(f.getClass())) {
             strToKey = attrToKey.get(f.getClass());
         }
@@ -320,8 +326,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public String keyToElementName(Figure f, Key<?> key) throws IOException {
-        HashMap<Key<?>, String> keyToStr = null;
+    public String keyToElementName(Figure f, MapAccessor<?> key) throws IOException {
+        HashMap<MapAccessor<?>, String> keyToStr = null;
         if (keyToElem.containsKey(f.getClass())) {
             keyToStr = keyToElem.get(f.getClass());
         }
@@ -333,8 +339,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public Key<?> elementNameToKey(Figure f, String attributeName) throws IOException {
-        HashMap<String, Key<?>> strToKey = elemToKey.get(f.getClass());
+    public MapAccessor<?> elementNameToKey(Figure f, String attributeName) throws IOException {
+        HashMap<String, MapAccessor<?>> strToKey = elemToKey.get(f.getClass());
         if (elemToKey.containsKey(f.getClass())) {
             strToKey = elemToKey.get(f.getClass());
         }
@@ -348,7 +354,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     /**
      * Adds a converter.
      *
-     * @param valueType A value type returned by {@code Key.getValueType();}.
+     * @param valueType A value type returned by
+     * {@code MapAccessor.getValueType();}.
      * @param converter the converter
      */
     public void addConverterForType(Class<?> valueType, Converter<?> converter) {
@@ -363,7 +370,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param key the key
      * @param converter the converter
      */
-    public <T> void addConverter(Key<T> key, Converter<T> converter) {
+    public <T> void addConverter(MapAccessor<T> key, Converter<T> converter) {
         keyValueToXML.put(key, converter);
         keyValueFromXML.put(key, converter);
     }
@@ -372,7 +379,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * Adds a converter.
      *
      * @param fullValueType A value type returned by
-     * {@code Key.getFullValueType();}.
+     * {@code MapAccessor.getFullValueType();}.
      * @param converter the converter
      */
     public void addConverterForType(String fullValueType, Converter<?> converter) {
@@ -381,7 +388,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public <T> String valueToString(Key<T> key, T value) throws IOException {
+    public <T> String valueToString(MapAccessor<T> key, T value) throws IOException {
 
         Converter<T> converter;
         if (keyValueToXML.containsKey(key)) {
@@ -401,7 +408,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public <T> T stringToValue(Key<T> key, String string) throws IOException {
+    public <T> T stringToValue(MapAccessor<T> key, String string) throws IOException {
         try {
             Converter<T> converter;
             if (keyValueFromXML.containsKey(key)) {
@@ -422,13 +429,13 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public Set<Key<?>> figureAttributeKeys(Figure f) {
-        Set<Key<?>> keys = figureAttributeKeys.get(f.getClass());
+    public Set<MapAccessor<?>> figureAttributeKeys(Figure f) {
+        Set<MapAccessor<?>> keys = figureAttributeKeys.get(f.getClass());
         return keys == null ? Collections.emptySet() : keys;
     }
 
     @Override
-    public <T> T getDefaultValue(Key<T> key) {
+    public <T> T getDefaultValue(MapAccessor<T> key) {
         return key.getDefaultValue();
     }
 
@@ -443,7 +450,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public List<Node> valueToNodeList(Key<?> key, Object value, Document document) throws IOException {
+    public List<Node> valueToNodeList(MapAccessor<?> key, Object value, Document document) throws IOException {
         if (key.getValueType() == String.class) {
             Text node = document.createTextNode((String) value);
             List<Node> list = new ArrayList<>();
@@ -455,7 +462,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public <T> T nodeListToValue(Key<T> key, List<Node> nodeList) throws IOException {
+    public <T> T nodeListToValue(MapAccessor<T> key, List<Node> nodeList) throws IOException {
         if (key.getValueType() == String.class) {
             StringBuilder buf = new StringBuilder();
             for (Node node : nodeList) {
@@ -472,15 +479,15 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public Set<Key<?>> figureNodeListKeys(Figure f) {
-        Set<Key<?>> keys = figureNodeListKeys.get(f.getClass());
+    public Set<MapAccessor<?>> figureNodeListKeys(Figure f) {
+        Set<MapAccessor<?>> keys = figureNodeListKeys.get(f.getClass());
         return keys == null ? Collections.emptySet() : keys;
 
     }
 
     public void checkConverters() {
-        for (HashMap<Key<?>, String> map : keyToAttr.values()) {
-            for (Key<?> k : map.keySet()) {
+        for (HashMap<MapAccessor<?>, String> map : keyToAttr.values()) {
+            for (MapAccessor<?> k : map.keySet()) {
                 String fullValueType = k.getFullValueType();
                 if (!keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
                     System.err.println(this + " WARNING can not convert " + fullValueType + " to XML for key " + k + ".");
@@ -514,35 +521,57 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
 
     /**
      * Globally removes the specified key.
+     *
      * @param key the key
      */
-    public void removeKey(Key<?> key) {
-        for (Map.Entry<Class<? extends Figure>, HashMap<String, Key<?>>> entry : attrToKey.entrySet()) {
-            for (Map.Entry<String, Key<?>> e : new ArrayList<>(entry.getValue().entrySet())) {
+    public void removeKey(MapAccessor<?> key) {
+        for (Map.Entry<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> entry : attrToKey.entrySet()) {
+            for (Map.Entry<String, MapAccessor<?>> e : new ArrayList<>(entry.getValue().entrySet())) {
                 if (e.getValue() == key) {
                     entry.getValue().remove(e.getKey());
                 }
             }
         }
-        for (Map.Entry<Class<? extends Figure>, HashMap<Key<?>, String>> entry : keyToAttr.entrySet()) {
+        for (Map.Entry<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> entry : keyToAttr.entrySet()) {
             entry.getValue().remove(key);
         }
-        for (Map.Entry<Class<? extends Figure>, HashMap<String, Key<?>>> entry : elemToKey.entrySet()) {
-            for (Map.Entry<String, Key<?>> e : new ArrayList<>(entry.getValue().entrySet())) {
+        for (Map.Entry<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> entry : elemToKey.entrySet()) {
+            for (Map.Entry<String, MapAccessor<?>> e : new ArrayList<>(entry.getValue().entrySet())) {
                 if (e.getValue() == key) {
                     entry.getValue().remove(e.getKey());
                 }
             }
         }
-        for (Map.Entry<Class<? extends Figure>, HashMap<Key<?>, String>> entry : keyToElem.entrySet()) {
+        for (Map.Entry<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> entry : keyToElem.entrySet()) {
             entry.getValue().remove(key);
         }
-        for (Map.Entry<Class<? extends Figure>, HashSet<Key<?>>> entry : figureAttributeKeys.entrySet()) {
+        for (Map.Entry<Class<? extends Figure>, HashSet<MapAccessor<?>>> entry : figureAttributeKeys.entrySet()) {
             entry.getValue().remove(key);
 
         }
-        for (Map.Entry<Class<? extends Figure>, HashSet<Key<?>>> entry : figureNodeListKeys.entrySet()) {
+        for (Map.Entry<Class<? extends Figure>, HashSet<MapAccessor<?>>> entry : figureNodeListKeys.entrySet()) {
             entry.getValue().remove(key);
+        }
+    }
+
+    /**
+     * Removes all accessors which are sub accessors of a composite map
+     * accessor.
+     */
+    protected void removeRedundantKeys() {
+        HashSet<MapAccessor<?>> redundantKeys = new HashSet<>();
+
+        for (Map.Entry<Class<? extends Figure>, HashSet<MapAccessor<?>>> entry : figureAttributeKeys.entrySet()) {
+            for (MapAccessor<?> ma : entry.getValue()) {
+                if (ma instanceof CompositeMapAccessor<?>) {
+                    CompositeMapAccessor<?> cma = (CompositeMapAccessor<?>) ma;
+                    redundantKeys.addAll(cma.getSubAccessors());
+                }
+            }
+        }
+
+        for (MapAccessor<?> ma : redundantKeys) {
+            removeKey(ma);
         }
     }
 

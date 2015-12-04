@@ -9,24 +9,24 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.scene.text.Font;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssFontConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
+import org.jhotdraw.text.FFont;
 
 /**
  * FontStyleableFigureKey.
  *
  * @author werni
  */
-public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements StyleableKey<Font> {
+public class FontStyleableFigureKey extends SimpleFigureKey<FFont> implements StyleableMapAccessor<FFont> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, Font> cssMetaData;
+    private final CssMetaData<?, FFont> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -44,8 +44,8 @@ public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements Sty
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public FontStyleableFigureKey(String name, Font defaultValue) {
-        super(name, Font.class, //
+    public FontStyleableFigureKey(String name, FFont defaultValue) {
+        super(name, FFont.class, //
                 DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),//
                 defaultValue);
         /*
@@ -56,30 +56,30 @@ public class FontStyleableFigureKey extends SimpleFigureKey<Font> implements Sty
          return spb.getStyleableProperty(this);
          });
          */
-        Function<Styleable, StyleableProperty<Font>> function = s -> {
+        Function<Styleable, StyleableProperty<FFont>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Font> converter
-                = new StyleConverterConverterWrapper<Font>(new CssFontConverter());
-        CssMetaData<Styleable, Font> md
-                = new SimpleCssMetaData<Styleable, Font>(property, function,
+        final StyleConverter<String, FFont> converter
+                = new StyleConverterConverterWrapper<FFont>(new CssFontConverter());
+        CssMetaData<Styleable, FFont> md
+                = new SimpleCssMetaData<Styleable, FFont>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?, Font> getCssMetaData() {
+    public CssMetaData<?, FFont> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private Converter<Font> converter;
+    private Converter<FFont> converter;
 
     @Override
-    public Converter<Font> getConverter() {
+    public Converter<FFont> getConverter() {
         if (converter == null) {
             converter = new CssFontConverter();
         }

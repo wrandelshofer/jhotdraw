@@ -185,5 +185,10 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     public String getAttributeValue(Styleable element, String name) {
         return getAttribute(element, name);
     }
+    @Override
+    public Set<String> getNonDecomposedAttributeNames(Styleable element) {
+        // FIXME we actually can do this!
+        return getAttributeNames(element);
+    }
 
 }

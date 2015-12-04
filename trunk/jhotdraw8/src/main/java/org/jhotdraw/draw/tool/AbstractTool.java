@@ -6,6 +6,7 @@
 package org.jhotdraw.draw.tool;
 
 import java.util.LinkedList;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
@@ -301,5 +302,9 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      */
     public void setDrawingView(DrawingView drawingView) {
         drawingViewProperty().set(drawingView);
+    }
+    
+    protected void requestFocus() {
+        Platform.runLater(() -> eventPane.requestFocus());
     }
 }

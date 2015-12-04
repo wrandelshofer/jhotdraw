@@ -63,7 +63,7 @@ public class ConnectionTool extends AbstractTool {
 
     @Override
     protected void handleMousePressed(MouseEvent event, DrawingView view) {
-        Platform.runLater(() -> view.getNode().requestFocus());
+        requestFocus();
         figure = figureFactory.get();
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D newPoint = view.viewToWorld(pointInViewCoordinates);

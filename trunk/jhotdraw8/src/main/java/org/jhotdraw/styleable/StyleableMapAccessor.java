@@ -1,4 +1,4 @@
-/* @(#)StyleableKey.java
+/* @(#)StyleableMapAccessor.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -16,7 +16,7 @@ import org.jhotdraw.text.Converter;
  * @author werni
  * @param <T> The value type.
  */
-public interface StyleableKey<T> extends MapAccessor<T> {
+public interface StyleableMapAccessor<T> extends MapAccessor<T> {
 
     final static long serialVersionUID = 1L;
     /**

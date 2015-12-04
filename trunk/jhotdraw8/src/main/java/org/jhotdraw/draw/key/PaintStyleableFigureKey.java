@@ -11,19 +11,19 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.paint.Paint;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * PaintStyleableFigureKey.
  *
  * @author werni
  */
-public class PaintStyleableFigureKey extends SimpleFigureKey<Paint> implements StyleableKey<Paint> {
+public class PaintStyleableFigureKey extends SimpleFigureKey<Paint> implements StyleableMapAccessor<Paint> {
 
     private final static long serialVersionUID=1L;
 

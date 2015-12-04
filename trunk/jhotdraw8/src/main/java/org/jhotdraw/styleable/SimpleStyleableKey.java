@@ -4,17 +4,17 @@
  */
 package org.jhotdraw.styleable;
 
-import org.jhotdraw.styleable.StyleableKey;
 import javafx.css.CssMetaData;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.text.Converter;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * SimpleStyleableKey.
  *
  * @author werni
  */
-public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<T> {
+public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableMapAccessor<T> {
 
     private final static long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param converter the converter
      */
     public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
-        this(key, clazz, "", metaData, converter, null);
+        this(key, clazz, null, metaData, converter, null);
     }
 
     /**
@@ -45,7 +45,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param defaultValue The default value.
      */
     public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
-        this(key, clazz, "", metaData, converter, defaultValue);
+        this(key, clazz, null, metaData, converter, defaultValue);
     }
 
     /**
@@ -60,7 +60,7 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableKey<
      * @param converter the converter
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<?> clazz, String typeParameters, CssMetaData<?, T> metaData,  Converter<T> converter,T defaultValue) {
+    public SimpleStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData,  Converter<T> converter,T defaultValue) {
         super(key, clazz, typeParameters, defaultValue);
         this.converter=converter;
         this.cssMetaData = metaData;

@@ -25,12 +25,10 @@ import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
 import org.jhotdraw.draw.handle.MoveHandleKit;
-import org.jhotdraw.draw.handle.PointHandle;
-import org.jhotdraw.draw.handle.RotateHandle;
+import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw.draw.locator.PointLocator;
-import org.jhotdraw.draw.shape.LineFigure;
-import static org.jhotdraw.draw.shape.LineFigure.END;
-import static org.jhotdraw.draw.shape.LineFigure.START;
+import org.jhotdraw.draw.figure.shape.LineFigure;
 
 /**
  * LineConnectionFigure.
@@ -56,11 +54,27 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     /**
      * The start position of the line.
      */
-    public static SimpleFigureKey<Point2D> START = LineFigure.START;
+    public static Point2DStyleableMapAccessor START = LineFigure.START;
     /**
      * The end position of the line.
      */
-    public static SimpleFigureKey<Point2D> END = LineFigure.END;
+    public static Point2DStyleableMapAccessor END = LineFigure.END;
+    /**
+     * The start position of the line.
+     */
+    public static DoubleStyleableFigureKey START_X = LineFigure.START_X;
+    /**
+     * The end position of the line.
+     */
+    public static DoubleStyleableFigureKey END_X = LineFigure.END_X;
+    /**
+     * The start position of the line.
+     */
+    public static DoubleStyleableFigureKey START_Y = LineFigure.START_Y;
+    /**
+     * The end position of the line.
+     */
+    public static DoubleStyleableFigureKey END_Y = LineFigure.END_Y;
     /**
      * The start connector.
      */

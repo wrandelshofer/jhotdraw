@@ -9,6 +9,7 @@ import java.util.List;
 import javafx.beans.Observable;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.event.Listener;
@@ -126,7 +127,7 @@ public interface DrawingModel extends Observable {
      * @param newValue the new value
      * @return the old value
      */
-    <T> T set(Figure figure, Key<T> key, T newValue);
+    <T> T set(Figure figure, MapAccessor<T> key, T newValue);
 
     /** Gets the specified property from the figure.
      *
@@ -135,7 +136,7 @@ public interface DrawingModel extends Observable {
      * @param key the key
      * @return the value
      */
-    default <T> T get(Figure figure, Key<T> key) {
+    default <T> T get(Figure figure, MapAccessor<T> key) {
         return figure.get(key);
     }
 

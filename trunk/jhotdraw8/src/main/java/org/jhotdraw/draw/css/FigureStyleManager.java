@@ -20,8 +20,8 @@ import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.text.Converter;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * FigureStyleManager.
@@ -59,8 +59,8 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
         Set<MapAccessor<?>> metaList = elem.getSupportedKeys();
         HashMap<String, MapAccessor<?>> metaMap = new HashMap<>();
         for (MapAccessor<?> k : metaList) {
-            if (k instanceof StyleableKey) {
-                StyleableKey<?> sk = (StyleableKey<?>) k;
+            if (k instanceof StyleableMapAccessor) {
+                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) k;
                 metaMap.put(sk.getCssName(), k);
             }
         }
@@ -110,7 +110,7 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
             if (r.getSelectorGroup().matches(selectorModel, elem)) {
                 for (Declaration d : r.getDeclarations()) {
                     @SuppressWarnings("unchecked")
-                    StyleableKey<Object> k = (StyleableKey<Object>) metaMap.get(d.getProperty());
+                    StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) metaMap.get(d.getProperty());
                     if (k != null) {
                         if (!convertedValues.containsKey(d)) {
                             @SuppressWarnings("unchecked")
@@ -139,7 +139,7 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
             try {
                 for (Declaration d : parser.parseDeclarationList(style)) {
                     @SuppressWarnings("unchecked")
-                    StyleableKey<Object> k = (StyleableKey<Object>) metaMap.get(d.getProperty());
+                    StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) metaMap.get(d.getProperty());
                     if (k != null) {
                         if (!convertedValues.containsKey(d)) {
                             @SuppressWarnings("unchecked")
@@ -174,8 +174,8 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
         Set<MapAccessor<?>> metaList = elem.getSupportedKeys();
         HashMap<String, MapAccessor<?>> metaMap = new HashMap<>();
         for (MapAccessor<?> k : metaList) {
-            if (k instanceof StyleableKey) {
-                StyleableKey<?> sk = (StyleableKey<?>) k;
+            if (k instanceof StyleableMapAccessor) {
+                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) k;
                 metaMap.put(sk.getCssName(), k);
             }
         }

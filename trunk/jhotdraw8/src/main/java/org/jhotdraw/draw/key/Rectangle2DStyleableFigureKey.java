@@ -10,19 +10,19 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Rectangle2D;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssRectangle2DConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * Rectangle2DStyleableFigureKey.
  *
  * @author werni
  */
-public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> implements StyleableKey<Rectangle2D> {
+public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> implements StyleableMapAccessor<Rectangle2D> {
 
     private final static long serialVersionUID=1L;
 

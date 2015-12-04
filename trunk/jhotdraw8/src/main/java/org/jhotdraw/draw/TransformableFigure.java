@@ -11,6 +11,7 @@ import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.transform.Rotate;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw.draw.key.Point3DStyleableMapAccessor;
 
 /**
  * Transformable figure.
@@ -44,6 +45,11 @@ public interface TransformableFigure extends Figure {
      */
     public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 1.0);
     /**
+     * Defines the scale factor by which coordinates are scaled on the axes
+     * about the center of the figure. 
+     */
+    public static Point3DStyleableMapAccessor SCALE = new Point3DStyleableMapAccessor("scale", SCALE_X,SCALE_Y,SCALE_Z);
+    /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
      */
@@ -58,6 +64,10 @@ public interface TransformableFigure extends Figure {
      * Default value: {@code 0}.
      */
     public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 0.0);
+    /**
+     * Defines the translation on the axes about the center of the figure.
+     */
+    public static Point3DStyleableMapAccessor TRAMSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X,TRANSLATE_Y,TRANSLATE_Z);
     
     /**
      * Updates a figure node with all transformation properties defined in this

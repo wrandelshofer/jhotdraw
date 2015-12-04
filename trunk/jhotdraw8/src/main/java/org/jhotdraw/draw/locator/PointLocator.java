@@ -8,6 +8,7 @@ package org.jhotdraw.draw.locator;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.BezierFigure;
 import org.jhotdraw.draw.Figure;
 
@@ -20,9 +21,9 @@ import org.jhotdraw.draw.Figure;
  */
 public class PointLocator extends AbstractLocator {
     private static final long serialVersionUID = 1L;
-    private Key<Point2D> key;
+    private MapAccessor<Point2D> key;
     
-    public PointLocator(Key<Point2D> key) {
+    public PointLocator(MapAccessor<Point2D> key) {
         this.key=key;
     }
     

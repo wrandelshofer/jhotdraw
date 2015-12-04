@@ -9,19 +9,19 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssSizeConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * DoubleStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements StyleableKey<Double> {
+public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements StyleableMapAccessor<Double> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Double> cssMetaData;

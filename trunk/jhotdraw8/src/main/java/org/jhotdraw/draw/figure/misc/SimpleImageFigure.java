@@ -2,17 +2,11 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure.misc;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.ObservableList;
-import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -20,8 +14,14 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.draw.AbstractLeafFigure;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.LockableFigure;
+import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.StyleableFigure;
+import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.key.DirtyBits;
