@@ -55,7 +55,7 @@ public class RotateHandle extends AbstractHandle {
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
-        node.resize(10, 10);
+        node.resize(11, 11); // size must be odd
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);

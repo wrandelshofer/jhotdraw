@@ -251,7 +251,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private Transform viewToWorldTransform = null;
     private Transform worldToViewTransform = null;
 
-    private final double TOLERANCE = 10;
+    /** Selection tolerance. Selectable margin around a figure. */
+    private final double TOLERANCE = 5;
+    /** Handle selection tolerance (square of radius). */ 
     private final double HANDLE_TOLERANCE = 25;
 
     /**
