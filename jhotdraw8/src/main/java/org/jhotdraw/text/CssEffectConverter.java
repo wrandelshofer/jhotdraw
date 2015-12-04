@@ -106,7 +106,7 @@ public class CssEffectConverter implements Converter<Effect> {
         }
         func = tt.currentStringValue();
         BlurType blurType = BlurType.GAUSSIAN;
-        Color color = new Color(0, 0, 0, 0.5);
+        Color color = new Color(0, 0, 0, 0.25);
         double radius = 10.0;
         double spreadOrChocke = 0.0;
         double offsetX = 5.0;
