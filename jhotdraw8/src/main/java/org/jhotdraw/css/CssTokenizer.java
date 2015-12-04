@@ -615,10 +615,11 @@ public class CssTokenizer {
         }
 
         try {
+            stringValue=buf.toString();
             if (hasFractionalsOrExponent) {
-                numericValue = Double.parseDouble(buf.toString());
+                numericValue = Double.parseDouble(stringValue);
             } else {
-                numericValue = Integer.parseInt(buf.toString());
+                numericValue = Integer.parseInt(stringValue);
             }
         } catch (NumberFormatException e) {
             throw new InternalError("Tokenizer is broken.", e);

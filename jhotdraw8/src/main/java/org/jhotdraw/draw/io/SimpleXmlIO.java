@@ -244,7 +244,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             Object value = figure.get(key);
 
             if (value instanceof URI) {
-                value = absoluteToRelative((URI)value);
+                value = internalToExternal(figure.getDrawing(),(URI)value);
             }
 
             if (!factory.isDefaultValue(key, value)) {
@@ -381,7 +381,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 }
 
                 if (value instanceof URI) {
-                    value = relativeToAbsolute((URI)value);
+                    value = externalToInternal(figure.getDrawing(),(URI)value);
                 }
 
                 figure.set(key, value);
@@ -447,7 +447,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         if (factory.getStylesheetsKey() != null && external.get(factory.getStylesheetsKey()) != null) {
             for (Object stylesheet : external.get(factory.getStylesheetsKey())) {
                 if (stylesheet instanceof URI) {
-                    stylesheet=absoluteToRelative((URI)stylesheet);
+                    stylesheet=internalToExternal(external,(URI)stylesheet);
                     
                     String stylesheetString = stylesheet.toString();
                     String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
@@ -479,7 +479,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                             String href = m.group(1);
 
                             URI uri = URI.create(href);
-                            uri = relativeToAbsolute(uri);
+                            uri = externalToInternal(external, uri);
                             stylesheets.add(uri);
                         }
                     }
@@ -489,17 +489,33 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
     }
 
-    private URI absoluteToRelative(URI uri) {
+    /**
+     * Internal URI is relative to document home. 
+     * Make it relative to the file we are writing.
+     * 
+     * @param drawing the drawing
+     * @param uri the internal uri
+     * @return the external uri
+     */
+    private URI internalToExternal(Drawing drawing, URI uri) {
+        URI drawingHome = drawing.get(Drawing.DOCUMENT_HOME);
+        if (drawingHome!=null) {
+            uri=drawingHome.resolve(uri);
+        }
         if (documentHomeDir != null) {
             uri = documentHomeDir.relativize(uri);
         }
         return uri;
     }
-    private URI relativeToAbsolute(URI uri) {
-        if (documentHomeDir != null) {
-            uri = documentHomeDir.resolve(uri);
-        }
+    /**
+     * External URI is relative to file that we are reading.
+     * Keep it that way.
+     * 
+     * @param drawing the drawing
+     * @param uri the external uri
+     * @return the internal uri
+     */
+    private URI externalToInternal(Drawing drawing, URI uri) {
         return uri;
     }
-
 }
