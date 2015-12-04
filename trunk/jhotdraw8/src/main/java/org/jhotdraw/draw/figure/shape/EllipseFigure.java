@@ -14,6 +14,7 @@ import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw.draw.AbstractLeafFigure;
+import org.jhotdraw.draw.CompositableFigure;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.HideableFigure;
 import org.jhotdraw.draw.LockableFigure;
@@ -35,7 +36,7 @@ import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
+public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Ellipse"}.
@@ -98,6 +99,7 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
         applyTransformableFigureProperties(n);
         applyStrokeableFigureProperties(n);
         applyFilleableFigureProperties(n);
+        applyCompositableFigureProperties(n);
         n.setCenterX(get(CENTER_X));
         n.setCenterY(get(CENTER_Y));
         n.setRadiusX(get(RADIUS_X));

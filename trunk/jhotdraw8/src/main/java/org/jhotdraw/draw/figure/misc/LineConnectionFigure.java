@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure.misc;
 
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.DirtyBits;
@@ -21,6 +21,15 @@ import static java.lang.Math.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.jhotdraw.draw.AbstractLeafFigure;
+import org.jhotdraw.draw.CompositableFigure;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.HideableFigure;
+import org.jhotdraw.draw.LockableFigure;
+import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.StrokeableFigure;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
@@ -36,7 +45,7 @@ import org.jhotdraw.draw.figure.shape.LineFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineConnectionFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure {
+public class LineConnectionFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@code "LineConnection"}.
@@ -162,6 +171,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         Line lineNode = (Line) node;
         applyHideableFigureProperties(lineNode);
         applyStrokeableFigureProperties(lineNode);
+        applyCompositableFigureProperties(node);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());

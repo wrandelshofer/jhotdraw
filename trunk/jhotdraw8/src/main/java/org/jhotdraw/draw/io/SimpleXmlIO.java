@@ -66,6 +66,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     private String namespaceQualifier;
     private HashMap<Figure, Element> figureToElementMap = new HashMap<>();
     private URI documentHome;
+    private URI documentHomeDir;
 
     public SimpleXmlIO(FigureFactory factory) {
         this(factory, null, null, null);
@@ -79,6 +80,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     public void setDocumentHome(URI uri) {
         documentHome = uri;
+        documentHomeDir = uri.resolve(".");
     }
 
     public URI getDocumentHome() {
@@ -87,7 +89,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     @Override
     public Drawing read(File file, Drawing drawing) throws IOException {
-        setDocumentHome(file.getParentFile().toURI());
+        setDocumentHome(file.toURI());
         return InputFormat.super.read(file, drawing);
     }
 
@@ -234,9 +236,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     private void writeElementAttributes(Element elem, Figure figure) throws IOException {
         setAttribute(elem, factory.getObjectIdAttribute(), factory.createId(figure));
         for (MapAccessor<?> k : factory.figureAttributeKeys(figure)) {
+            if (k.isTransient()) {
+                continue;
+            }
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) k;
             Object value = figure.get(key);
+
+            if (value instanceof URI) {
+                value = absoluteToRelative((URI)value);
+            }
+
             if (!factory.isDefaultValue(key, value)) {
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
                     setAttribute(elem, factory.keyToName(figure, key), factory.createId(value));
@@ -298,14 +308,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     private String getAttribute(Element elem, String unqualifiedName) {
         if (namespaceURI == null) {
             return elem.getAttribute(unqualifiedName);
-        } else {
-            if (elem.hasAttributeNS(namespaceURI, unqualifiedName)) {
-                return elem.getAttributeNS(namespaceURI, unqualifiedName);
-            } else {
-                if (elem.isDefaultNamespace(namespaceURI)) {
-                    return elem.getAttribute(unqualifiedName);
-                }
-            }
+        } else if (elem.hasAttributeNS(namespaceURI, unqualifiedName)) {
+            return elem.getAttributeNS(namespaceURI, unqualifiedName);
+        } else if (elem.isDefaultNamespace(namespaceURI)) {
+            return elem.getAttribute(unqualifiedName);
         }
         return null;
     }
@@ -328,7 +334,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             figureToElementMap.put(figure, elem);
             String id = getAttribute(elem, factory.getObjectIdAttribute());
 
-            if (id != null&&!id.isEmpty()) {
+            if (id != null && !id.isEmpty()) {
                 if (factory.getObject(id) != null) {
                     throw new IOException("Duplicate id " + id + " in element " + elem.getTagName());
                 }
@@ -338,9 +344,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             NodeList list = elem.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
                 Figure child = readNodesRecursively(list.item(i));
-                if (child instanceof Figure){
+                if (child instanceof Figure) {
                     if (!child.isSuitableParent(figure)) {
-                        throw new IOException(list.item(i).getNodeName()+" is not a suitable child for "+elem.getTagName()+".");
+                        throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + elem.getTagName() + ".");
                     }
                     figure.add(child);
                 }
@@ -373,6 +379,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 } else {
                     value = factory.stringToValue(key, attr.getValue());
                 }
+
+                if (value instanceof URI) {
+                    value = relativeToAbsolute((URI)value);
+                }
+
                 figure.set(key, value);
             }
         }
@@ -433,9 +444,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     // XXX maybe this should not be in SimpleXmlIO?
     private void writeProcessingInstructions(Document doc, Drawing external) {
         Element docElement = doc.getDocumentElement();
-        if (factory.getStylesheetsKey() != null&&external.get(factory.getStylesheetsKey())!=null) {
+        if (factory.getStylesheetsKey() != null && external.get(factory.getStylesheetsKey()) != null) {
             for (Object stylesheet : external.get(factory.getStylesheetsKey())) {
                 if (stylesheet instanceof URI) {
+                    stylesheet=absoluteToRelative((URI)stylesheet);
+                    
                     String stylesheetString = stylesheet.toString();
                     String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
                     if ("text/".equals(type)) {
@@ -464,7 +477,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                         Matcher m = hrefPattern.matcher(pi.getData());
                         if (m.matches()) {
                             String href = m.group(1);
-                            stylesheets.add(URI.create(href));
+
+                            URI uri = URI.create(href);
+                            uri = relativeToAbsolute(uri);
+                            stylesheets.add(uri);
                         }
                     }
                 }
@@ -473,5 +489,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
     }
 
-    
+    private URI absoluteToRelative(URI uri) {
+        if (documentHomeDir != null) {
+            uri = documentHomeDir.relativize(uri);
+        }
+        return uri;
+    }
+    private URI relativeToAbsolute(URI uri) {
+        if (documentHomeDir != null) {
+            uri = documentHomeDir.resolve(uri);
+        }
+        return uri;
+    }
+
 }

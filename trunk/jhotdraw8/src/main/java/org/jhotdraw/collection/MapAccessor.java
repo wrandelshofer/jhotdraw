@@ -61,10 +61,11 @@ public interface MapAccessor <T> extends Serializable {
     List<Class<?>> getValueTypeParameters();
 
     /** Returns the default value of this map accessor. */
-    public T getDefaultValue();
+    T getDefaultValue();
 
     /** Returns a string representation of the value type and its type parameters. */
-    public String getFullValueType();
-
-
+    String getFullValueType();
+    
+    /** Whether the value needs to be made persistent. */
+    boolean isTransient();
 }

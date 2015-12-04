@@ -42,6 +42,7 @@ import javafx.util.StringConverter;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.ReversedList;
 import org.jhotdraw.collection.SimpleKey;
+import org.jhotdraw.collection.TransientKey;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -77,7 +78,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     /**
      * This key is used to store the selection count in the layers.
      */
-    final static Key<Integer> SELECTION_COUNT = new SimpleKey<Integer>("selectionCount", Integer.class, 0);
+    final static Key<Integer> SELECTION_COUNT = new TransientKey<Integer>("selectionCount", Integer.class, 0);
 
     private ChangeListener<Layer> selectedLayerHandler = new ChangeListener<Layer>() {
         @Override

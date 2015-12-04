@@ -14,7 +14,7 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.Layer;
-import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.figure.misc.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleDrawingView;

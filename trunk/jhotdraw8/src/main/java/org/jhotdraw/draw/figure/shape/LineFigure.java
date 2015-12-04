@@ -13,6 +13,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Line;
 import org.jhotdraw.draw.AbstractLeafFigure;
+import org.jhotdraw.draw.CompositableFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.DrawingView;
@@ -42,7 +43,7 @@ import org.jhotdraw.draw.locator.PointLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure {
+public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Line"}.
@@ -104,6 +105,7 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
         applyHideableFigureProperties(node);
         //applyTransformableFigureProperties(lineNode);
         applyStrokeableFigureProperties(lineNode);
+        applyCompositableFigureProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());

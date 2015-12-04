@@ -1,4 +1,4 @@
-/* @(#)Rectangle2DStyleableFigureKey.java
+/* @(#)SvgPathStyleableFigureKey.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -9,24 +9,24 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.SVGPath;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.CssRectangle2DConverter;
+import org.jhotdraw.text.CssSvgPathConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
- * Rectangle2DStyleableFigureKey.
+ * SvgPathStyleableFigureKey.
  *
  * @author werni
  */
-public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> implements StyleableMapAccessor<Rectangle2D> {
+public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implements StyleableMapAccessor<SVGPath> {
 
     private final static long serialVersionUID=1L;
 
-    private final CssMetaData<?, Rectangle2D> cssMetaData;
+    private final CssMetaData<?, SVGPath> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -34,7 +34,7 @@ public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> 
      *
      * @param name The name of the key.
      */
-    public Rectangle2DStyleableFigureKey(String name) {
+    public SvgPathStyleableFigureKey(String name) {
         this(name, null);
     }
 
@@ -44,7 +44,7 @@ public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> 
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public Rectangle2DStyleableFigureKey(String name, Rectangle2D defaultValue) {
+    public SvgPathStyleableFigureKey(String name, SVGPath defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -57,42 +57,42 @@ public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> 
      * @param mask Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public Rectangle2DStyleableFigureKey(String key, DirtyMask mask, Rectangle2D defaultValue) {
-        super(key, Rectangle2D.class, mask, defaultValue);
+    public SvgPathStyleableFigureKey(String key, DirtyMask mask, SVGPath defaultValue) {
+        super(key, SVGPath.class, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createPoint2DCssMetaData(
+         cssMetaData = factory.createSVGPathCssMetaData(
          Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
          StyleablePropertyBean spb = (StyleablePropertyBean) s;
          return spb.getStyleableProperty(this);
          });*/
 
-        Function<Styleable, StyleableProperty<Rectangle2D>> function = s -> {
+        Function<Styleable, StyleableProperty<SVGPath>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Rectangle2D> converter
-                = new StyleConverterConverterWrapper<Rectangle2D>(getConverter());
-        CssMetaData<Styleable, Rectangle2D> md
-                = new SimpleCssMetaData<Styleable, Rectangle2D>(property, function,
+        final StyleConverter<String, SVGPath> converter
+                = new StyleConverterConverterWrapper<SVGPath>(new CssSvgPathConverter());
+        CssMetaData<Styleable, SVGPath> md
+                = new SimpleCssMetaData<Styleable, SVGPath>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?,Rectangle2D> getCssMetaData() {
+    public CssMetaData<?,SVGPath> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private Converter<Rectangle2D> converter;
+    private Converter<SVGPath> converter;
 
     @Override
-    public Converter<Rectangle2D> getConverter() {
+    public Converter<SVGPath> getConverter() {
         if (converter == null) {
-            converter = new CssRectangle2DConverter();
+            converter = new CssSvgPathConverter();
         }
         return converter;
     }   
