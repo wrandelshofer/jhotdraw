@@ -176,7 +176,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
-                for (String name : selectorModel.getAttributeNames(f)) {
+                for (String name : selectorModel.getNonDecomposedAttributeNames(f)) {
                     attr.put(name, selectorModel.getAttributeValue(f, name));
                 }
             } else {
@@ -195,6 +195,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 }
             }
         }
+        
+        
         StringBuilder buf = new StringBuilder();
         if (type != null) {
             buf.append(cssIdentConverter.toString(type));

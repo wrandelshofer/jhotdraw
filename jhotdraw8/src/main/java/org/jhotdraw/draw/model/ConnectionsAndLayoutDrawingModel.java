@@ -6,7 +6,9 @@ package org.jhotdraw.draw.model;
 
 import java.util.Set;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.collection.CompositeMapAccessor;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Drawing;
@@ -87,48 +89,49 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public <T> T set(Figure figure, Key<T> key, T newValue) {
+    public <T> T set(Figure figure, MapAccessor<T> key, T newValue) {
         Set<Figure> connectionChange = null;
-        if (key instanceof FigureKey) {
-            FigureKey<T> fk = (FigureKey<T>) key;
-            DirtyMask dm = fk.getDirtyMask();
-            if (dm.containsOneOf(DirtyBits.CONNECTION)) {
-                connectionChange = figure.getConnectionTargets();
-            }
-
-        }
 
         T oldValue = figure.set(key, newValue);
         if (oldValue != newValue) {
+            final DirtyMask dm;
             if (key instanceof FigureKey) {
                 FigureKey<T> fk = (FigureKey<T>) key;
-                DirtyMask dm = fk.getDirtyMask();
-                if (dm.containsOneOf(DirtyBits.NODE)) {
-                    fire(DrawingModelEvent.nodeInvalidated(this, figure));
-                }
-                if (dm.containsOneOf(DirtyBits.LAYOUT)) {
-                    fire(DrawingModelEvent.layoutInvalidated(this, figure));
-                }
-                if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
-                    fireLayoutInvalidatedConnectedFigures(figure);
-                }
-                if (dm.containsOneOf(DirtyBits.TRANSFORM)) {
-                    fire(DrawingModelEvent.transformChanged(this, figure));
-                }
-                if (dm.containsOneOf(DirtyBits.STYLE)) {
-                    fire(DrawingModelEvent.styleInvalidated(this, figure));
-                }
-                if (dm.containsOneOf(DirtyBits.CONNECTION)) {
-                    fire(DrawingModelEvent.connectionChanged(this, figure));
-                    Set<Figure> connectionsAfter = figure.getConnectionTargets();
-                    connectionChange.addAll(connectionsAfter);
-                    for (Figure f : connectionChange) {
-                        fire(DrawingModelEvent.connectionChanged(this, f));
-                        fire(DrawingModelEvent.nodeInvalidated(this, f));
-                    }
+                dm = fk.getDirtyMask();
+            } else {
+                dm = DirtyMask.EMPTY;
+            }
+
+            if (dm.containsOneOf(DirtyBits.CONNECTION)) {
+                connectionChange = figure.getConnectionTargets();
+            }
+            
+            if (dm.containsOneOf(DirtyBits.NODE)) {
+                fire(DrawingModelEvent.nodeInvalidated(this, figure));
+            }
+            if (dm.containsOneOf(DirtyBits.LAYOUT)) {
+                fire(DrawingModelEvent.layoutInvalidated(this, figure));
+            }
+            if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
+                fireLayoutInvalidatedConnectedFigures(figure);
+            }
+            if (dm.containsOneOf(DirtyBits.TRANSFORM)) {
+                fire(DrawingModelEvent.transformChanged(this, figure));
+            }
+            if (dm.containsOneOf(DirtyBits.STYLE)) {
+                fire(DrawingModelEvent.styleInvalidated(this, figure));
+            }
+            if (dm.containsOneOf(DirtyBits.CONNECTION)) {
+                fire(DrawingModelEvent.connectionChanged(this, figure));
+                Set<Figure> connectionsAfter = figure.getConnectionTargets();
+                connectionChange.addAll(connectionsAfter);
+                for (Figure f : connectionChange) {
+                    fire(DrawingModelEvent.connectionChanged(this, f));
+                    fire(DrawingModelEvent.nodeInvalidated(this, f));
                 }
             }
         }
+
         return oldValue;
     }
 

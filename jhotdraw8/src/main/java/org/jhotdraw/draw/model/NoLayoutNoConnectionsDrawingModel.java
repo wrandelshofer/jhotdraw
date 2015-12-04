@@ -6,6 +6,7 @@ package org.jhotdraw.draw.model;
 
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Drawing;
@@ -15,7 +16,7 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains no figures which perform
- layouts and no getConnectedFigures between figures.
+ * layouts and no getConnectedFigures between figures.
  *
  *
  * @author Werner Randelshofer
@@ -55,7 +56,7 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
         Drawing oldDrawing = child.getDrawing();
-        if (child.getParent()!=null) {
+        if (child.getParent() != null) {
             child.getParent().remove(child);
         }
         parent.getChildren().add(index, child);
@@ -73,11 +74,18 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public <T> T set(Figure figure, Key<T> key, T value) {
-        T oldValue = figure.set(key, value);
-        if (key instanceof FigureKey) {
-            FigureKey<T> fk = (FigureKey<T>) key;
-            DirtyMask dm = fk.getDirtyMask();
+    public <T> T set(Figure figure, MapAccessor<T> key, T newValue) {
+        T oldValue = figure.set(key, newValue);
+        if (oldValue != newValue) {
+
+            final DirtyMask dm;
+            if (key instanceof FigureKey) {
+                FigureKey<T> fk = (FigureKey<T>) key;
+                dm = fk.getDirtyMask();
+            } else {
+                dm = DirtyMask.EMPTY;
+            }
+
             if (dm.containsOneOf(DirtyBits.NODE)) {
                 fire(DrawingModelEvent.nodeInvalidated(this, figure));
             }
@@ -102,6 +110,7 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
         f.layout();
         // no event fired! fire(DrawingModelEvent.subtreeNodesInvalidated(this,f));
     }
+
     @Override
     public void disconnect(Figure figure) {
         // no event fired! 

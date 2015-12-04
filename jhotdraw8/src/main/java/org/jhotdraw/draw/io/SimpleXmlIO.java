@@ -29,6 +29,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.w3c.dom.Attr;
@@ -232,9 +233,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
 
     private void writeElementAttributes(Element elem, Figure figure) throws IOException {
         setAttribute(elem, factory.getObjectIdAttribute(), factory.createId(figure));
-        for (Key<?> k : factory.figureAttributeKeys(figure)) {
+        for (MapAccessor<?> k : factory.figureAttributeKeys(figure)) {
             @SuppressWarnings("unchecked")
-            Key<Object> key = (Key<Object>) k;
+            MapAccessor<Object> key = (MapAccessor<Object>) k;
             Object value = figure.get(key);
             if (!factory.isDefaultValue(key, value)) {
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
@@ -247,9 +248,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
     }
 
     private void writeElementNodeList(Document document, Element elem, Figure figure) throws IOException {
-        for (Key<?> k : factory.figureNodeListKeys(figure)) {
+        for (MapAccessor<?> k : factory.figureNodeListKeys(figure)) {
             @SuppressWarnings("unchecked")
-            Key<Object> key = (Key<Object>) k;
+            MapAccessor<Object> key = (MapAccessor<Object>) k;
             Object value = figure.get(key);
             if (!factory.isDefaultValue(key, value)) {
                 for (Node node : factory.valueToNodeList(key, value, document)) {
@@ -364,7 +365,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 continue;
             }
             @SuppressWarnings("unchecked")
-            Key<Object> key = (Key<Object>) factory.nameToKey(figure, attr.getLocalName());
+            MapAccessor<Object> key = (MapAccessor<Object>) factory.nameToKey(figure, attr.getLocalName());
             if (key != null && factory.figureAttributeKeys(figure).contains(key)) {
                 Object value = null;
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
@@ -381,10 +382,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
      * Reads the children of the specified element as a node list.
      */
     private void readElementNodeList(Figure figure, Element elem) throws IOException {
-        Set<Key<?>> keys = factory.figureNodeListKeys(figure);
-        for (Key<?> ky : keys) {
+        Set<MapAccessor<?>> keys = factory.figureNodeListKeys(figure);
+        for (MapAccessor<?> ky : keys) {
             @SuppressWarnings("unchecked")
-            Key<Object> key = (Key<Object>) ky;
+            MapAccessor<Object> key = (MapAccessor<Object>) ky;
             String name = factory.keyToElementName(figure, key);
             if ("".equals(name)) {
                 List<Node> nodeList = new ArrayList<>();

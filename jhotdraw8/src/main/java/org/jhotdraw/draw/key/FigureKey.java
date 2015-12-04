@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.key;
 
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.collection.SimpleKey;
 
 /**
@@ -13,6 +14,6 @@ import org.jhotdraw.collection.SimpleKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface FigureKey<T> extends Key<T> {
+public interface FigureKey<T> extends MapAccessor<T> {
     DirtyMask getDirtyMask();
 }

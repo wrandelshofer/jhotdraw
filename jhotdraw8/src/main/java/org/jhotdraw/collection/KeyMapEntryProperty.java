@@ -6,7 +6,7 @@ package org.jhotdraw.collection;
 
 import javafx.beans.binding.MapExpression;
 import org.jhotdraw.beans.MapEntryProperty;
-import org.jhotdraw.styleable.StyleableKey;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * KeyMapEntryProperty.

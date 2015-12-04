@@ -20,7 +20,7 @@ import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
-import org.jhotdraw.draw.shape.RectangleFigure;
+import org.jhotdraw.draw.figure.shape.RectangleFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
 

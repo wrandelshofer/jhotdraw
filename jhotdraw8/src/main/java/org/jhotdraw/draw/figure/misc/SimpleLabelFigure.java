@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure.misc;
 
 import java.util.List;
 import org.jhotdraw.draw.key.DirtyBits;
@@ -26,6 +26,18 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.AbstractLeafFigure;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.FillableFigure;
+import org.jhotdraw.draw.LabelFigure;
+import org.jhotdraw.draw.LockableFigure;
+import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.StrokeableFigure;
+import org.jhotdraw.draw.StyleableFigure;
+import org.jhotdraw.draw.TextableFigure;
+import org.jhotdraw.draw.TransformableFigure;
+import static org.jhotdraw.draw.Drawing.HEIGHT;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
@@ -33,8 +45,10 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
+import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.InsetsStyleableFigureKey;
+import org.jhotdraw.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw.draw.key.SVGPathStyleableFigureKey;
 
@@ -47,7 +61,11 @@ import org.jhotdraw.draw.key.SVGPathStyleableFigureKey;
 public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFigure, LabelFigure, TransformableFigure, StyleableFigure, LockableFigure, FillableFigure, StrokeableFigure {
 
     public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Point2D(0, 0));
-    public final static InsetsStyleableFigureKey PADDING = new InsetsStyleableFigureKey("padding", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Insets(4, 4, 4, 4));
+    public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
+    public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
+    public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
+    public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
+    public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP,PADDING_RIGHT,PADDING_BOTTOM,PADDING_LEFT);
     private final static SVGPath defaultShape = new SVGPath();
 
     static {

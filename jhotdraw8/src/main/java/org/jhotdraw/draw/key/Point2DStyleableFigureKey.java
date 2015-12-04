@@ -10,19 +10,19 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssPoint2DConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * Point2DStyleableFigureKey.
  *
  * @author werni
  */
-public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implements StyleableKey<Point2D> {
+public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implements StyleableMapAccessor<Point2D> {
 
     private final static long serialVersionUID=1L;
 

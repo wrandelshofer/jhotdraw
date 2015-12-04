@@ -259,4 +259,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return attr;
     }
 
+    @Override
+    public Set<String> getNonDecomposedAttributeNames(Element element) {
+        return getAttributeNames(element);
+    }
+
 }

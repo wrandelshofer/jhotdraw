@@ -17,6 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import static org.jhotdraw.draw.TransformableFigure.ROTATE;
@@ -40,8 +41,8 @@ import org.jhotdraw.draw.model.DrawingModelEvent;
  */
 public class ConnectionPointHandle extends AbstractHandle {
 
-    private final SimpleFigureKey<Point2D> pointKey;
-    private final SimpleFigureKey<Connector> connectorKey;
+    private final MapAccessor<Point2D> pointKey;
+    private final MapAccessor<Connector> connectorKey;
 
     private final Region node;
     private final String styleclassDisconnected;
@@ -53,14 +54,14 @@ public class ConnectionPointHandle extends AbstractHandle {
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
-    public ConnectionPointHandle(Figure figure, SimpleFigureKey<Point2D> pointKey,
-            SimpleFigureKey<Connector> connectorKey) {
+    public ConnectionPointHandle(Figure figure, MapAccessor<Point2D> pointKey,
+            MapAccessor<Connector> connectorKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
                 connectorKey);
     }
 
-    public ConnectionPointHandle(Figure figure, String styleclassDisconnected, String styleclassConnected, SimpleFigureKey<Point2D> pointKey,
-            SimpleFigureKey<Connector> connectorKey) {
+    public ConnectionPointHandle(Figure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<Point2D> pointKey,
+            MapAccessor<Connector> connectorKey) {
         super(figure);
         this.pointKey = pointKey;
         this.connectorKey = connectorKey;

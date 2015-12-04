@@ -20,13 +20,13 @@ import org.jhotdraw.styleable.StyleableMap;
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-    private final StyleableKey<T> key;
+    private final StyleableMapAccessor<T> key;
     private final CssMetaData<?, T> metaData;
     private final ReadOnlyMapProperty<Key<?>, Object> mapp;
     private final String name;
     private final StyleableMap<Key<?>, Object> map;
 
-    public KeyMapEntryStyleableProperty(ReadOnlyMapProperty<Key<?>, Object> mapp, StyleableKey<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(ReadOnlyMapProperty<Key<?>, Object> mapp, StyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> m = (StyleableMap<Key<?>, Object>) mapp.get();
         this.map = m;

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
-import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.w3c.dom.Document;
@@ -61,7 +61,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support the key for
      * the specified figure
      */
-    String keyToName(Figure f, Key<?> key) throws IOException;
+    String keyToName(Figure f, MapAccessor<?> key) throws IOException;
 
     /**
      * Maps an XML attribute name to a key.
@@ -73,7 +73,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support the name for
      * the specified figure
      */
-    Key<?> nameToKey(Figure f, String name) throws IOException;
+    MapAccessor<?> nameToKey(Figure f, String name) throws IOException;
 
     /**
      * Maps a key to a XML element name. The name used for persistent storage
@@ -92,7 +92,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support the key for
      * the specified figure
      */
-    String keyToElementName(Figure f, Key<?> key) throws IOException;
+    String keyToElementName(Figure f, MapAccessor<?> key) throws IOException;
 
     /**
      * Maps an XML element name to a key.
@@ -104,7 +104,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support the name for
      * the specified figure
      */
-    Key<?> elementNameToKey(Figure f, String name) throws IOException;
+    MapAccessor<?> elementNameToKey(Figure f, String name) throws IOException;
 
     /**
      * Maps a value to an XML attribute value.
@@ -117,7 +117,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    <T> String valueToString(Key<T> key, T value) throws IOException;
+    <T> String valueToString(MapAccessor<T> key, T value) throws IOException;
 
     /**
      * Maps a value to a XML node list.
@@ -133,7 +133,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    List<Node> valueToNodeList(Key<?> key, Object value, Document document) throws IOException;
+    List<Node> valueToNodeList(MapAccessor<?> key, Object value, Document document) throws IOException;
 
     /**
      * Maps a XML node list to a value.
@@ -149,7 +149,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    <T> T nodeListToValue(Key<T> key, List<Node> nodeList) throws IOException;
+    <T> T nodeListToValue(MapAccessor<T> key, List<Node> nodeList) throws IOException;
 
     /**
      * Maps an XML attribute value to a value.
@@ -162,7 +162,7 @@ public interface FigureFactory extends IdFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      * the specified key
      */
-    <T> T stringToValue(Key<T> key, String cdata) throws IOException;
+    <T> T stringToValue(MapAccessor<T> key, String cdata) throws IOException;
 
     /**
      * Returns the default for the key. The default value used for persistent
@@ -172,7 +172,7 @@ public interface FigureFactory extends IdFactory {
      * @param key The key
      * @return the default value
      */
-    <T> T getDefaultValue(Key<T> key);
+    <T> T getDefaultValue(MapAccessor<T> key);
 
     /**
      * Returns true if the specified value is the default for the given key.
@@ -182,7 +182,7 @@ public interface FigureFactory extends IdFactory {
      * @param value the value
      * @return true if the value is the default value
      */
-    default <T> boolean isDefaultValue(Key<T> key, T value) {
+    default <T> boolean isDefaultValue(MapAccessor<T> key, T value) {
         T defaultValue = key.getDefaultValue();
         return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
     }
@@ -194,7 +194,7 @@ public interface FigureFactory extends IdFactory {
      * @param f The figure
      * @return an immutable set
      */
-    Set<Key<?>> figureAttributeKeys(Figure f);
+    Set<MapAccessor<?>> figureAttributeKeys(Figure f);
 
     /**
      * Returns all keys for the specified figure which should be converted into
@@ -203,7 +203,7 @@ public interface FigureFactory extends IdFactory {
      * @param f The figure
      * @return an immutable set
      */
-    Set<Key<?>> figureNodeListKeys(Figure f);
+    Set<MapAccessor<?>> figureNodeListKeys(Figure f);
 
     /**
      * Creates an external representation of the drawing.
@@ -242,7 +242,7 @@ public interface FigureFactory extends IdFactory {
      * stylesheets shall not be supported. The default implementation returns
      * {@link org.jhotdraw.draw.Drawing#AUTHOR_STYLESHEETS}.
      */
-    default Key<List<URI>> getStylesheetsKey() {
+    default MapAccessor<List<URI>> getStylesheetsKey() {
         return Drawing.AUTHOR_STYLESHEETS;
     }
 

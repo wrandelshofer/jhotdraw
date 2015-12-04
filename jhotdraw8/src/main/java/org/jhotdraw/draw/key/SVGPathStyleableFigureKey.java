@@ -10,19 +10,19 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.shape.SVGPath;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssSvgPathConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * SVGPathStyleableFigureKey.
  *
  * @author werni
  */
-public class SVGPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implements StyleableKey<SVGPath> {
+public class SVGPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implements StyleableMapAccessor<SVGPath> {
 
     private final static long serialVersionUID=1L;
 

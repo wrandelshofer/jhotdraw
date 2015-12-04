@@ -7,6 +7,7 @@ package org.jhotdraw.draw.model;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Drawing;
@@ -16,9 +17,9 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * This drawing model assumes that the drawing contains no figures which perform
- layouts but has getConnectedFigures between figures.
+ * layouts but has getConnectedFigures between figures.
  * <p>
- Further assumes that a connection figure has no further getConnectedFigures.
+ * Further assumes that a connection figure has no further getConnectedFigures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -57,7 +58,7 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
         Drawing oldDrawing = child.getDrawing();
-        if (child.getParent()!=null) {
+        if (child.getParent() != null) {
             child.getParent().remove(child);
         }
         parent.getChildren().add(index, child);
@@ -85,25 +86,30 @@ public class ConnectionsNoLayoutDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public <T> T set(Figure figure, Key<T> key, T newValue) {
+    public <T> T set(Figure figure, MapAccessor<T> key, T newValue) {
         T oldValue = figure.set(key, newValue);
         if (oldValue != newValue) {
+            final DirtyMask dm;
             if (key instanceof FigureKey) {
                 FigureKey<T> fk = (FigureKey<T>) key;
-                DirtyMask dm = fk.getDirtyMask();
-                if (dm.containsOneOf(DirtyBits.NODE)) {
-                    fire(DrawingModelEvent.nodeInvalidated(this, figure));
-                }
-                if (dm.containsOneOf(DirtyBits.LAYOUT)) {
-                    fire(DrawingModelEvent.layoutInvalidated(this, figure));
-                }
-                if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
-                    for (Figure c : figure.getConnectedFigures()) {
-                        fire(DrawingModelEvent.layoutInvalidated(this, c));
-                    }
+                dm = fk.getDirtyMask();
+            } else {
+                dm = DirtyMask.EMPTY;
+            }
+
+            if (dm.containsOneOf(DirtyBits.NODE)) {
+                fire(DrawingModelEvent.nodeInvalidated(this, figure));
+            }
+            if (dm.containsOneOf(DirtyBits.LAYOUT)) {
+                fire(DrawingModelEvent.layoutInvalidated(this, figure));
+            }
+            if (dm.containsOneOf(DirtyBits.CONNECTION_LAYOUT)) {
+                for (Figure c : figure.getConnectedFigures()) {
+                    fire(DrawingModelEvent.layoutInvalidated(this, c));
                 }
             }
         }
+
         return oldValue;
     }
 

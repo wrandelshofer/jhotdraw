@@ -26,15 +26,15 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;
-import org.jhotdraw.draw.SimpleLabelFigure;
+import org.jhotdraw.draw.figure.misc.SimpleLabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.shape.EllipseFigure;
-import org.jhotdraw.draw.shape.LineFigure;
-import org.jhotdraw.draw.shape.TextFigure;
-import org.jhotdraw.draw.shape.RectangleFigure;
+import org.jhotdraw.draw.figure.shape.EllipseFigure;
+import org.jhotdraw.draw.figure.shape.LineFigure;
+import org.jhotdraw.draw.figure.shape.TextFigure;
+import org.jhotdraw.draw.figure.shape.RectangleFigure;
 import org.jhotdraw.text.CssEnumConverter;
 import org.jhotdraw.text.DefaultConnectorConverter;
 import org.jhotdraw.text.DefaultConverter;
@@ -118,7 +118,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         
           removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
-        
+        removeRedundantKeys();
         checkConverters();
     }
 

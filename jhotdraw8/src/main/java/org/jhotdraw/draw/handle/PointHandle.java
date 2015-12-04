@@ -16,6 +16,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import static org.jhotdraw.draw.TransformableFigure.ROTATE;
@@ -29,17 +30,17 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
  */
 public class PointHandle extends AbstractHandle {
 
-    private final SimpleFigureKey<Point2D> pointKey;
+    private final MapAccessor<Point2D> pointKey;
     private final Region node;
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE,  BorderStrokeStyle.SOLID, null, null));
 
-    public PointHandle(Figure figure, SimpleFigureKey<Point2D> pointKey) {
+    public PointHandle(Figure figure, MapAccessor<Point2D> pointKey) {
         this(figure,STYLECLASS_HANDLE_POINT,pointKey);
     }
-    public PointHandle(Figure figure, String styleclass, SimpleFigureKey<Point2D> pointKey) {
+    public PointHandle(Figure figure, String styleclass, MapAccessor<Point2D> pointKey) {
         super(figure);
         this.pointKey = pointKey;
         this.styleclass = styleclass;

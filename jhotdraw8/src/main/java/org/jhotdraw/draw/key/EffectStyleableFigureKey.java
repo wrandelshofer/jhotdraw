@@ -11,17 +11,17 @@ import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssEffectConverter;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * EffectStyleableFigureKey.
  * @author Werner Randelshofer
  */
-public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements StyleableKey<Effect> {
+public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements StyleableMapAccessor<Effect> {
 
     final static long serialVersionUID = 1L;
     private final CssEffectConverter converter=new CssEffectConverter();

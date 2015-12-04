@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import org.jhotdraw.css.CssTokenizer;
@@ -23,7 +22,7 @@ import org.jhotdraw.io.CharBufferReader;
  * CSS Reference Guide</a>.
  * </p>
  * <pre>
- * Font := [FontStyle] [FontWeight] FontSize FontFamily ;
+ * FFont := [FontStyle] [FontWeight] FontSize FontFamily ;
  * FontStyle := normal|italic|oblique;
  * FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
  * FontSize := Size;
@@ -35,17 +34,39 @@ import org.jhotdraw.io.CharBufferReader;
  *
  * @author Werner Randelshofer
  */
-public class CssFontConverter implements Converter<Font> {
+public class CssFontConverter implements Converter<FFont> {
 
     private final CssSizeConverter doubleConverter = new CssSizeConverter();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Font font) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, FFont font) throws IOException {
         double fontSize = font.getSize();
-        String fontStyle = font.getStyle().toLowerCase();
+        String fontStyle = font.getPosture().toString().toLowerCase();
+        String fontWeight = font.getWeight().toString().toLowerCase();
         String fontFamily = font.getFamily();
-        
-        out.append(fontStyle.equals("regular")?"normal":fontStyle);
+
+        switch (font.getPosture()) {
+            case ITALIC:
+                out.append("italic");
+                break;
+            case REGULAR:
+                out.append("normal");
+                break;
+            default:
+                throw new InternalError("Unknown fontPosture:" + font.getPosture());
+        }
+        out.append(' ');
+        switch (font.getWeight()) {
+            case NORMAL:
+                out.append("normal");
+                break;
+            case BOLD:
+                out.append("bold");
+                break;
+            default:
+                out.append(Integer.toString(font.getWeight().getWeight()));
+                break;
+        }
         out.append(' ');
         doubleConverter.toString(out, fontSize);
         out.append(' ');
@@ -59,7 +80,7 @@ public class CssFontConverter implements Converter<Font> {
     }
 
     @Override
-    public Font fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public FFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new StringReader(buf.toString()));
 
         FontPosture fontPosture = FontPosture.REGULAR;
@@ -86,8 +107,7 @@ public class CssFontConverter implements Converter<Font> {
         }
 
         tt.skipWhitespace();
-        
-        
+
         // parse FontWeight
         boolean fontWeightConsumed = false;
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
@@ -117,7 +137,7 @@ public class CssFontConverter implements Converter<Font> {
         } else {
             tt.pushBack();
         }
-        
+
         tt.skipWhitespace();
 
         double fontWeightOrFontSize = 0.0;
@@ -185,15 +205,16 @@ public class CssFontConverter implements Converter<Font> {
         } else {
             throw new ParseException("font family expected", buf.position() + tt.getPosition());
         }
-        
-        Font font = Font.font(fontFamily,fontWeight,fontPosture,fontSize);
-        if (font==null) {
-           font= Font.font(null,fontWeight,fontPosture,fontSize);
+
+        FFont font = FFont.font(fontFamily, fontWeight, fontPosture, fontSize);
+        if (font == null) {
+            font = FFont.font(null, fontWeight, fontPosture, fontSize);
         }
         return font;
     }
+
     @Override
-    public Font getDefaultValue() {
+    public FFont getDefaultValue() {
         return null;
     }
 }

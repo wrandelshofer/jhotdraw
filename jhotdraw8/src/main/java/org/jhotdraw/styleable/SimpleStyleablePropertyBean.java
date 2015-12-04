@@ -44,8 +44,8 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
 
     @Override
     public <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key) {
-        if (key instanceof StyleableKey) {
-            StyleableKey<T> skey = (StyleableKey<T>) key;
+        if (key instanceof StyleableMapAccessor) {
+            StyleableMapAccessor<T> skey = (StyleableMapAccessor<T>) key;
             return new KeyMapEntryStyleableProperty<T>(properties, skey, skey.getCssName(), skey.getCssMetaData());
         } else {
             return null;

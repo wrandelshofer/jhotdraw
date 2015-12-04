@@ -132,7 +132,7 @@ public class SelectionTool extends AbstractTool {
 
     @Override
     protected void handleMousePressed(MouseEvent event, DrawingView view) {
-        Platform.runLater(() -> node.requestFocus());
+        requestFocus();
         mouseDragged = false;
         Bounds b = getNode().getBoundsInParent();
         Drawing drawing = view.getDrawing();

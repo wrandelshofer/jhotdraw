@@ -21,10 +21,10 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.styleable.SimpleStyleablePropertyBean;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleableStyleManager;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.FigureKey;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * AbstractFigure.
@@ -92,8 +92,8 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
         for (MapAccessor<?> key : getSupportedKeys()) {
-            if (key instanceof StyleableKey<?>) {
-                StyleableKey<?> sk = (StyleableKey<?>) key;
+            if (key instanceof StyleableMapAccessor<?>) {
+                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
 
                 CssMetaData<? extends Styleable, ?> md = sk.getCssMetaData();
                 list.add(md);

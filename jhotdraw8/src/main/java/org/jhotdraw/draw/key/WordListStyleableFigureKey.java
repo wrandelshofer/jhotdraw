@@ -11,19 +11,19 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssSizeListConverter;
 import org.jhotdraw.text.CssWordListConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * WordListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class WordListStyleableFigureKey extends SimpleFigureKey<List<String>> implements StyleableKey<List<String>> {
+public class WordListStyleableFigureKey extends SimpleFigureKey<List<String>> implements StyleableMapAccessor<List<String>> {
 
     private final static long serialVersionUID = 1L;
 

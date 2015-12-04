@@ -11,18 +11,18 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.styleable.StyleableKey;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssSizeListConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * DoubleListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> implements StyleableKey<List<Double>> {
+public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> implements StyleableMapAccessor<List<Double>> {
 
     private final static long serialVersionUID = 1L;
 
