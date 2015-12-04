@@ -364,6 +364,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
      * The returned map only supports the {@code get},{@code put},
      * {@code remove} and {@code containsKey} methods.
      *
+     * @param origin the style origin
      * @return a map
      */
     public Map<K, V> getMap(StyleOrigin origin) {

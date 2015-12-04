@@ -100,10 +100,10 @@ import org.jhotdraw.draw.key.StringStyleableFigureKey;
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
- * {@link org.jhotdraw.styleable.StyleableKey}. The style information is cached in the
- * figure getProperties. When the position of a figure in the tree structure is
- * changed, method {@code applyCss()} must be called to update the style
- * information of the figure and its descendants.</p>
+ * {@link org.jhotdraw.styleable.StyleableMapAccessor}. The style information is cached
+ * in the figure getProperties. When the position of a figure in the tree
+ * structure is changed, method {@code applyCss()} must be called to update the
+ * style information of the figure and its descendants.</p>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -123,7 +123,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     // ----
     // key declarations
     // ----
-
 
     // ----
     // property names
@@ -184,9 +183,10 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * By convention this set is maintained by the connected figures.
      * <p>
      * The API for establishing a connection is specific for each figure. For
-     * example, to connect a {@link LineConnectionFigure} to this figure, you
-     * need to set its {@code START_FIGURE} and/or {@code END_FIGURE} property
-     * to this figure.
+     * example, to connect a
+     * {@link org.jhotdraw.draw.figure.misc.LineConnectionFigure} to this figure,
+     * you need to set its {@code START_FIGURE} and/or {@code END_FIGURE}
+     * property to this figure.
      * <p>
      * A connection can be removed by using the specific API of the figure or by
      * invoking the {@link #removeConnectionTarget(Figure)} method.
@@ -728,7 +728,6 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         removeAllConnectionTargets();
     }
 
-
     // ---
     // static methods
     // ---
@@ -859,8 +858,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Returns the transformation from local coordinates into world
-     * coordinates.
+     * Returns the transformation from local coordinates into world coordinates.
      *
      * @return the transformation
      */
@@ -917,6 +915,5 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default Styleable getStyleableParent() {
         return getParent();
     }
-
 
 }

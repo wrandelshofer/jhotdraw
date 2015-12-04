@@ -24,6 +24,8 @@ public interface ApplicationModel {
      *
      * Since this operation may involve class loading, it should be performed
      * in the background.
+     * 
+     * @return a new instance
      */
     public View instantiateView();
     // URI choosers

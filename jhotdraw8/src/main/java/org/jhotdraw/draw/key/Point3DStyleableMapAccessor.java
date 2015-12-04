@@ -37,8 +37,11 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     /**
      * Creates a new instance with the specified name.
-     *
-     * @param name The name of the key.
+     * 
+     * @param name the name of the accessor
+     * @param xKey the key for the x coordinate of the point
+     * @param yKey the key for the y coordinate of the point
+     * @param zKey the key for the u coordinate of the point
      */
     public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey) {
         super(name, Point3D.class, new MapAccessor<?>[]{xKey, yKey, zKey}, new Point3D(xKey.getDefaultValue(), yKey.getDefaultValue(), zKey.getDefaultValue()));
@@ -49,11 +52,11 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Point3D> converter
-                = new StyleConverterConverterWrapper<Point3D>(new CssPoint3DConverter());
+        final StyleConverter<String, Point3D> cnvrtr
+                = new StyleConverterConverterWrapper<>(getConverter());
         CssMetaData<Styleable, Point3D> md
-                = new SimpleCssMetaData<Styleable, Point3D>(property, function,
-                        converter, getDefaultValue(), inherits);
+                = new SimpleCssMetaData<>(property, function,
+                        cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
 
         this.xKey = xKey;

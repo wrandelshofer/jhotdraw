@@ -28,43 +28,47 @@ import org.jhotdraw.styleable.StyleableMapAccessor;
  */
 public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Rectangle2D> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, Rectangle2D> cssMetaData;
-private final MapAccessor<Double> xKey;
-private final MapAccessor<Double> yKey;
-private final MapAccessor<Double> widthKey;
-private final MapAccessor<Double> heightKey;
+    private final MapAccessor<Double> xKey;
+    private final MapAccessor<Double> yKey;
+    private final MapAccessor<Double> widthKey;
+    private final MapAccessor<Double> heightKey;
+
     /**
      * Creates a new instance with the specified name.
-     *
-     * @param name The name of the key.
+     * 
+     * @param name the name of the accessor
+     * @param xKey the key for the x coordinate of the rectangle
+     * @param yKey the key for the y coordinate of the rectangle
+     * @param widthKey the key for the width of the rectangle
+     * @param heightKey the key for the height of the rectangle
      */
     public Rectangle2DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> widthKey, MapAccessor<Double> heightKey) {
-        super(name, Rectangle2D.class, new MapAccessor<?>[]{xKey,yKey,widthKey,heightKey},new Rectangle2D(xKey.getDefaultValue(),yKey.getDefaultValue(),widthKey.getDefaultValue(),heightKey.getDefaultValue()));
-        
- 
+        super(name, Rectangle2D.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new Rectangle2D(xKey.getDefaultValue(), yKey.getDefaultValue(), widthKey.getDefaultValue(), heightKey.getDefaultValue()));
+
         Function<Styleable, StyleableProperty<Rectangle2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Rectangle2D> converter
-                = new StyleConverterConverterWrapper<Rectangle2D>(new CssRectangle2DConverter());
+        final StyleConverter<String, Rectangle2D> cnvrtr
+                = new StyleConverterConverterWrapper<>(getConverter());
         CssMetaData<Styleable, Rectangle2D> md
-                = new SimpleCssMetaData<Styleable, Rectangle2D>(property, function,
-                        converter, getDefaultValue(), inherits);
+                = new SimpleCssMetaData<>(property, function,
+                        cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
-        
-        this.xKey=xKey;
-        this.yKey=yKey;
-        this.widthKey=widthKey;
-        this.heightKey=heightKey;
+
+        this.xKey = xKey;
+        this.yKey = yKey;
+        this.widthKey = widthKey;
+        this.heightKey = heightKey;
     }
 
     @Override
-    public CssMetaData<?,Rectangle2D> getCssMetaData() {
+    public CssMetaData<?, Rectangle2D> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -77,20 +81,20 @@ private final MapAccessor<Double> heightKey;
             converter = new CssRectangle2DConverter();
         }
         return converter;
-    }   
+    }
 
     @Override
     public Rectangle2D get(Map<? super Key<?>, Object> a) {
-        return new Rectangle2D(xKey.get(a),yKey.get(a),widthKey.get(a),heightKey.get(a));
+        return new Rectangle2D(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
     @Override
     public Rectangle2D put(Map<? super Key<?>, Object> a, Rectangle2D value) {
         Rectangle2D oldValue = get(a);
-        xKey.put(a,value.getMinX());
-        yKey.put(a,value.getMinY());
-        widthKey.put(a,value.getWidth());
-        heightKey.put(a,value.getHeight());
+        xKey.put(a, value.getMinX());
+        yKey.put(a, value.getMinY());
+        widthKey.put(a, value.getWidth());
+        heightKey.put(a, value.getHeight());
         return oldValue;
     }
 

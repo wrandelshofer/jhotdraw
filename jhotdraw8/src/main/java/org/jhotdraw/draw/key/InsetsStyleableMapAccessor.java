@@ -28,43 +28,47 @@ import org.jhotdraw.styleable.StyleableMapAccessor;
  */
 public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Insets> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, Insets> cssMetaData;
-private final MapAccessor<Double> topKey;
-private final MapAccessor<Double> rightKey;
-private final MapAccessor<Double> bottomKey;
-private final MapAccessor<Double> leftKey;
+    private final MapAccessor<Double> topKey;
+    private final MapAccessor<Double> rightKey;
+    private final MapAccessor<Double> bottomKey;
+    private final MapAccessor<Double> leftKey;
+
     /**
      * Creates a new instance with the specified name.
-     *
-     * @param name The name of the key.
+     * 
+     * @param name the name of the accessor
+     * @param topKey the insets top key
+     * @param rightKey the insets right key
+     * @param bottomKey the insets bottom key
+     * @param leftKey the insets left key
      */
     public InsetsStyleableMapAccessor(String name, MapAccessor<Double> topKey, MapAccessor<Double> rightKey, MapAccessor<Double> bottomKey, MapAccessor<Double> leftKey) {
-        super(name, Insets.class, new MapAccessor<?>[]{topKey,rightKey,bottomKey,leftKey},new Insets(topKey.getDefaultValue(),rightKey.getDefaultValue(),bottomKey.getDefaultValue(),leftKey.getDefaultValue()));
-        
- 
+        super(name, Insets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new Insets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
+
         Function<Styleable, StyleableProperty<Insets>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Insets> converter
-                = new StyleConverterConverterWrapper<Insets>(new CssInsetsConverter());
+        final StyleConverter<String, Insets> cnvrtr
+                = new StyleConverterConverterWrapper<>(getConverter());
         CssMetaData<Styleable, Insets> md
-                = new SimpleCssMetaData<Styleable, Insets>(property, function,
-                        converter, getDefaultValue(), inherits);
+                = new SimpleCssMetaData<>(property, function,
+                        cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
-        
-        this.topKey=topKey;
-        this.rightKey=rightKey;
-        this.bottomKey=bottomKey;
-        this.leftKey=leftKey;
+
+        this.topKey = topKey;
+        this.rightKey = rightKey;
+        this.bottomKey = bottomKey;
+        this.leftKey = leftKey;
     }
 
     @Override
-    public CssMetaData<?,Insets> getCssMetaData() {
+    public CssMetaData<?, Insets> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -77,20 +81,20 @@ private final MapAccessor<Double> leftKey;
             converter = new CssInsetsConverter();
         }
         return converter;
-    }   
+    }
 
     @Override
     public Insets get(Map<? super Key<?>, Object> a) {
-        return new Insets(topKey.get(a),rightKey.get(a),bottomKey.get(a),leftKey.get(a));
+        return new Insets(topKey.get(a), rightKey.get(a), bottomKey.get(a), leftKey.get(a));
     }
 
     @Override
     public Insets put(Map<? super Key<?>, Object> a, Insets value) {
         Insets oldValue = get(a);
-        topKey.put(a,value.getTop());
-        rightKey.put(a,value.getRight());
-        bottomKey.put(a,value.getBottom());
-        leftKey.put(a,value.getLeft());
+        topKey.put(a, value.getTop());
+        rightKey.put(a, value.getRight());
+        bottomKey.put(a, value.getBottom());
+        leftKey.put(a, value.getLeft());
         return oldValue;
     }
 

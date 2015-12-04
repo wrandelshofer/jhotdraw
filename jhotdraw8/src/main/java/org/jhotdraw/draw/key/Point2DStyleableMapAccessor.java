@@ -19,7 +19,6 @@ import org.jhotdraw.styleable.AbstractStyleableFigureMapAccessor;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssPoint2DConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
-import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * Point2DStyleableMapAccessor.
@@ -36,8 +35,9 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     /**
      * Creates a new instance with the specified name.
-     *
-     * @param name The name of the key.
+     * @param name the name of the accessor
+     * @param xKey the key for the x coordinate of the point
+     * @param yKey the key for the y coordinate of the point
      */
     public Point2DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey) {
         super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
@@ -48,11 +48,11 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Point2D> converter
-                = new StyleConverterConverterWrapper<Point2D>(new CssPoint2DConverter());
+        final StyleConverter<String, Point2D> cnvrtr
+                = new StyleConverterConverterWrapper<>(getConverter());
         CssMetaData<Styleable, Point2D> md
-                = new SimpleCssMetaData<Styleable, Point2D>(property, function,
-                        converter, getDefaultValue(), inherits);
+                = new SimpleCssMetaData<>(property, function,
+                        cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
 
         this.xKey = xKey;

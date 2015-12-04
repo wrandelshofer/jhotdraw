@@ -52,6 +52,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
      *
      * @param name The name of the key.
      * @param clazz The type of the value.
+     * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
     public AbstractStyleableFigureMapAccessor(String name, Class<T> clazz, MapAccessor<?>[] subAccessors, T defaultValue) {
@@ -66,6 +67,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
      * @param clazz The type of the value.
      * @param typeParameters The type parameters of the class. Specify "" if no
      * type parameters are given. Otherwise specify them in arrow brackets.
+     * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
     public AbstractStyleableFigureMapAccessor(String name, Class<?> clazz, Class<?>[] typeParameters, MapAccessor<?>[] subAccessors, T defaultValue) {
