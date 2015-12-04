@@ -57,11 +57,11 @@ private URI uri;
     protected URI chooseFile() {
         if (uriChooser==null)uriChooser=createURIChooser();
         URI uri= uriChooser.showDialog(node);
-        /*Drawing drawing = getDrawingView().getDrawing();
+        Drawing drawing = getDrawingView().getDrawing();
         URI documentHome=drawing.get(Drawing.DOCUMENT_HOME);
         if (documentHome!=null) {
             uri=documentHome.relativize(uri);
-        }*/
+        }
         return uri;
     }
 }

@@ -41,8 +41,6 @@ public class CssFontConverter implements Converter<FFont> {
     @Override
     public void toString(Appendable out, IdFactory idFactory, FFont font) throws IOException {
         double fontSize = font.getSize();
-        String fontStyle = font.getPosture().toString().toLowerCase();
-        String fontWeight = font.getWeight().toString().toLowerCase();
         String fontFamily = font.getFamily();
 
         switch (font.getPosture()) {

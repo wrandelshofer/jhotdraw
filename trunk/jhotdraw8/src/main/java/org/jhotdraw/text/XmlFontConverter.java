@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import org.jhotdraw.css.CssTokenizer;
@@ -23,7 +22,7 @@ import org.jhotdraw.io.CharBufferReader;
  * CSS Reference Guide</a>.
  * </p>
  * <pre>
- * Font := [FontStyle] [FontWeight] FontSize FontFamily ;
+ * FFont := [FontStyle] [FontWeight] FontSize FontFamily ;
  * FontStyle := normal|italic|oblique;
  * FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
  * FontSize := Size;
@@ -35,17 +34,37 @@ import org.jhotdraw.io.CharBufferReader;
  *
  * @author Werner Randelshofer
  */
-public class XmlFontConverter implements Converter<Font> {
+public class XmlFontConverter implements Converter<FFont> {
 
     private final XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Font font) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, FFont font) throws IOException {
         double fontSize = font.getSize();
-        String fontStyle = font.getStyle().toLowerCase();
         String fontFamily = font.getFamily();
-        
-        out.append(fontStyle.equals("regular")?"normal":fontStyle);
+
+        switch (font.getPosture()) {
+            case ITALIC:
+                out.append("italic");
+                break;
+            case REGULAR:
+                out.append("normal");
+                break;
+            default:
+                throw new InternalError("Unknown fontPosture:" + font.getPosture());
+        }
+        out.append(' ');
+        switch (font.getWeight()) {
+            case NORMAL:
+                out.append("normal");
+                break;
+            case BOLD:
+                out.append("bold");
+                break;
+            default:
+                out.append(Integer.toString(font.getWeight().getWeight()));
+                break;
+        }
         out.append(' ');
         doubleConverter.toString(out, fontSize);
         out.append(' ');
@@ -59,7 +78,8 @@ public class XmlFontConverter implements Converter<Font> {
     }
 
     @Override
-    public Font fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public FFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        // XXX should not use Css Tokenizer in XML!!
         CssTokenizer tt = new CssTokenizer(new StringReader(buf.toString()));
 
         FontPosture fontPosture = FontPosture.REGULAR;
@@ -186,14 +206,14 @@ public class XmlFontConverter implements Converter<Font> {
             throw new ParseException("font family expected", buf.position() + tt.getPosition());
         }
         
-        Font font = Font.font(fontFamily,fontWeight,fontPosture,fontSize);
+        FFont font = FFont.font(fontFamily,fontWeight,fontPosture,fontSize);
         if (font==null) {
-           font= Font.font(null,fontWeight,fontPosture,fontSize);
+           font= FFont.font(null,fontWeight,fontPosture,fontSize);
         }
         return font;
     }
     @Override
-    public Font getDefaultValue() {
+    public FFont getDefaultValue() {
         return null;
     }
 }

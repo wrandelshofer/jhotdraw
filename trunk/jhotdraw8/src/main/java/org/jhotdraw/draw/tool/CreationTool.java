@@ -49,6 +49,7 @@ public class CreationTool extends AbstractTool {
     public CreationTool(String name, Resources rsrc, Supplier<Figure> factory) {
         this(name, rsrc, factory, SimpleLayer::new);
     }
+
     public CreationTool(String name, Resources rsrc, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc);
         this.figureFactory = figureFactory;
@@ -59,6 +60,7 @@ public class CreationTool extends AbstractTool {
     public void setFigureFactory(Supplier<Figure> factory) {
         this.figureFactory = factory;
     }
+
     public void setLayerFactory(Supplier<Layer> factory) {
         this.layerFactory = factory;
     }
@@ -70,7 +72,7 @@ public class CreationTool extends AbstractTool {
 
     @Override
     protected void handleMousePressed(MouseEvent event, DrawingView view) {
-        Platform.runLater(()->view.getNode().requestFocus());
+        Platform.runLater(() -> view.getNode().requestFocus());
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;
@@ -117,9 +119,22 @@ public class CreationTool extends AbstractTool {
             y2 = event.getY();
             Point2D c1 = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(x1, y1));
             Point2D c2 = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(x2, y2));
+            double newWidth = c2.getX() - c1.getX();
+            double newHeight = c2.getY() - c1.getY();
+            // shift keeps the aspect ratio
+            boolean keepAspect = event.isShiftDown();
+            if (keepAspect) {
+                double preferredAspectRatio = figure.getPreferredAspectRatio();
+                double newRatio = newHeight / newWidth;
+                if (newRatio > preferredAspectRatio) {
+                    newHeight = newWidth * preferredAspectRatio;
+                } else {
+                    newWidth = newHeight / preferredAspectRatio;
+                }
+            }
+
             DrawingModel dm = dv.getModel();
-            dm.reshape(figure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
-                    - c1.getY());
+            dm.reshape(figure, c1.getX(), c1.getY(), newWidth, newHeight);
         }
         event.consume();
     }
@@ -127,7 +142,7 @@ public class CreationTool extends AbstractTool {
     @Override
     protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
     }
-    
+
     protected Figure createFigure() {
         return figureFactory.get();
     }

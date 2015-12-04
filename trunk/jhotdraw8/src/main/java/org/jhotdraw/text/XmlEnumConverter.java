@@ -29,7 +29,7 @@ public class XmlEnumConverter<E extends Enum<E>> implements Converter<E> {
         if (value == null) {
             out.append("null");
         } else {
-            for (char ch : value.toString().toLowerCase().toCharArray()) {
+            for (char ch : value.toString().toLowerCase().replace('_','-').toCharArray()) {
                 if (Character.isWhitespace(ch)) {
                     break;
                 }
@@ -53,7 +53,7 @@ public class XmlEnumConverter<E extends Enum<E>> implements Converter<E> {
             return null;
         }
         try {
-            return Enum.valueOf(enumClass, out.toString().toUpperCase());
+            return Enum.valueOf(enumClass, out.toString().toUpperCase().replace('-','_'));
         } catch (IllegalArgumentException e) {
             return getDefaultValue();
         }

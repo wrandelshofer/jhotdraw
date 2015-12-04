@@ -12,6 +12,8 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeLineCap;
@@ -43,10 +45,12 @@ import org.jhotdraw.text.XmlPoint2DConverter;
 import org.jhotdraw.text.NumberConverter;
 import org.jhotdraw.text.CssObservableWordListConverter;
 import org.jhotdraw.text.CssSizeListConverter;
+import org.jhotdraw.text.FFont;
 import org.jhotdraw.text.Rectangle2DConverter;
 import org.jhotdraw.text.XmlUrlConverter;
 import org.jhotdraw.text.XmlUriConverter;
 import org.jhotdraw.text.XmlBooleanConverter;
+import org.jhotdraw.text.XmlEffectConverter;
 import org.jhotdraw.text.XmlEnumConverter;
 import org.jhotdraw.text.XmlFontConverter;
 import org.jhotdraw.text.XmlInsetsConverter;
@@ -110,8 +114,11 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Boolean.class, new XmlBooleanConverter());
         addConverterForType(TextAlignment.class, new XmlEnumConverter<TextAlignment>(TextAlignment.class));
         addConverterForType(VPos.class, new XmlEnumConverter<VPos>(VPos.class));
-        addConverterForType(Font.class, new XmlFontConverter());
+        addConverterForType(FFont.class, new XmlFontConverter());
         addConverterForType(Rectangle2D.class, new XmlRectangle2DConverter());
+        addConverterForType(BlendMode.class, new XmlEnumConverter<BlendMode>(BlendMode.class));
+        addConverterForType(Effect.class, new XmlEffectConverter());
+        
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssObservableWordListConverter());
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssSizeListConverter());

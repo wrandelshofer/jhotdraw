@@ -5,23 +5,24 @@
 package org.jhotdraw.draw;
 
 import javafx.scene.Node;
+import javafx.scene.effect.BlendMode;
 import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.EffectStyleableFigureKey;
 
 /**
  * Compositable Figure.
- * 
+ *
  * @author Werner Randelshofer
  */
 public interface CompositableFigure extends Figure {
-        /**
-     * Specifies a blend mode applied to the figure. The {@code null} value is
-     * interpreted as {@code SRC_OVER}.
+
+    /**
+     * Specifies a blend mode applied to the figure.
      * <p>
-     * Default value: {@code null}.
+     * Default value: {@code SRC_OVER}.
      */
-    public static BlendModeStyleableFigureKey BLEND_MODE = new BlendModeStyleableFigureKey("blendMode", null);
+    public static BlendModeStyleableFigureKey BLEND_MODE = new BlendModeStyleableFigureKey("blendMode", BlendMode.SRC_OVER);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
@@ -40,6 +41,7 @@ public interface CompositableFigure extends Figure {
      * Default value: {@code 1}.
      */
     public static DoubleStyleableFigureKey OPACITY = new DoubleStyleableFigureKey("opacity", 1.0);
+
     /**
      * Updates a figure node with all effect properties defined in this
      * interface.
@@ -56,6 +58,5 @@ public interface CompositableFigure extends Figure {
         node.setEffect(getStyled(EFFECT));
         node.setOpacity(getStyled(OPACITY));
     }
-
 
 }

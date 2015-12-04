@@ -238,8 +238,6 @@ public class ResizeHandleKit {
                 oldPoint = getOwner().localToDrawing(loc);
             }
             // shift keeps the aspect ratio
-            // this is not consistent with other handles:
-            // shift should apply the handle to all group reshapeable figures.
             boolean keepAspect = event.isShiftDown();
 
             resize(getOwner().worldToLocal(newPoint), getOwner(), startBounds, view.getModel(), keepAspect);
