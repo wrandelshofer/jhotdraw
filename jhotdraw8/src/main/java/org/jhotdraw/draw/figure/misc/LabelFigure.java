@@ -27,10 +27,10 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.AbstractLeafFigure;
+import org.jhotdraw.draw.CompositableFigure;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FillableFigure;
-import org.jhotdraw.draw.LabelFigure;
 import org.jhotdraw.draw.LockableFigure;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.StrokeableFigure;
@@ -50,7 +50,8 @@ import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.InsetsStyleableFigureKey;
 import org.jhotdraw.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
-import org.jhotdraw.draw.key.SVGPathStyleableFigureKey;
+import org.jhotdraw.draw.key.SvgPathStyleableFigureKey;
+import org.jhotdraw.draw.LabeledFigure;
 
 /**
  * TextFigure.
@@ -58,7 +59,7 @@ import org.jhotdraw.draw.key.SVGPathStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFigure, LabelFigure, TransformableFigure, StyleableFigure, LockableFigure, FillableFigure, StrokeableFigure {
+public class LabelFigure extends AbstractLeafFigure implements TextableFigure, LabeledFigure, TransformableFigure, StyleableFigure, LockableFigure, FillableFigure, StrokeableFigure, CompositableFigure {
 
     public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Point2D(0, 0));
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
@@ -71,7 +72,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
     static {
         defaultShape.setContent("M0,0 L10,0 L10,10 L0,10 Z");
     }
-    public final static SVGPathStyleableFigureKey SHAPE = new SVGPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), defaultShape);
+    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), defaultShape);
     /**
      * The CSS type selector for a label object is {@code "Label"}.
      */
@@ -80,15 +81,15 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
     private Text textNode;
     private transient Bounds boundsInLocal;
 
-    public SimpleLabelFigure() {
+    public LabelFigure() {
         this(0, 0, "");
     }
 
-    public SimpleLabelFigure(Point2D position, String text) {
+    public LabelFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public SimpleLabelFigure(double x, double y, String text, Object... keyValues) {
+    public LabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
@@ -150,6 +151,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
         applyTransformableFigureProperties(g);
         updateRegionNode(drawingView, r);
         updateTextNode(drawingView, t);
+        applyCompositableFigureProperties(node);
     }
 
     private void updateRegionNode(RenderContext drawingView, Region node) {
@@ -179,7 +181,7 @@ public class SimpleLabelFigure extends AbstractLeafFigure implements TextableFig
         tn.setX(origin.getX());
         tn.setY(origin.getY());
         applyTextHolderProperties(tn);
-        applyLabelProperties(tn);
+        applyLabeledFigureProperties(tn);
     }
 
     @Override

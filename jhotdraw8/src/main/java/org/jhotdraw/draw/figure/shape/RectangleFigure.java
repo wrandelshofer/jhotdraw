@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.AbstractLeafFigure;
+import org.jhotdraw.draw.CompositableFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Figure;
@@ -36,7 +37,7 @@ import org.jhotdraw.draw.key.Rectangle2DStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
+public class RectangleFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Rectangle"}.
@@ -47,9 +48,9 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("boundsY",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("boundsWidth",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("boundsHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X,Y,WIDTH,HEIGHT);
     public final static DoubleStyleableFigureKey ARC_HEIGHT = new DoubleStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X,Y,WIDTH,HEIGHT);
     public final static Point2DStyleableMapAccessor ARC = new Point2DStyleableMapAccessor("arc", ARC_WIDTH,ARC_HEIGHT);
 
     public RectangleFigure() {
@@ -96,6 +97,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
         applyTransformableFigureProperties(rectangleNode);
         applyFilleableFigureProperties(rectangleNode);
         applyStrokeableFigureProperties(rectangleNode);
+        applyCompositableFigureProperties(rectangleNode);
         rectangleNode.setX(get(X));
         rectangleNode.setY(get(Y));
         rectangleNode.setWidth(get(WIDTH));

@@ -14,6 +14,7 @@ import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.AbstractLeafFigure;
+import org.jhotdraw.draw.CompositableFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Figure;
@@ -36,7 +37,7 @@ import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, TextableFigure, HideableFigure, StyleableFigure, LockableFigure {
+public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Text"}.
@@ -99,6 +100,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
         applyTextHolderProperties(tn);
         applyStrokeableFigureProperties(tn);
         applyFilleableFigureProperties(tn);
+        applyCompositableFigureProperties(tn);
         tn.applyCss();
     }
 

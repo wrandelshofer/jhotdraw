@@ -24,13 +24,14 @@ import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GroupFigure;
-import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.figure.misc.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;
-import org.jhotdraw.draw.figure.misc.SimpleLabelFigure;
+import org.jhotdraw.draw.figure.misc.LabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.figure.misc.ImageFigure;
 import org.jhotdraw.draw.figure.shape.EllipseFigure;
 import org.jhotdraw.draw.figure.shape.LineFigure;
 import org.jhotdraw.draw.figure.shape.TextFigure;
@@ -43,8 +44,8 @@ import org.jhotdraw.text.NumberConverter;
 import org.jhotdraw.text.CssObservableWordListConverter;
 import org.jhotdraw.text.CssSizeListConverter;
 import org.jhotdraw.text.Rectangle2DConverter;
-import org.jhotdraw.text.UrlConverter;
-import org.jhotdraw.text.UriConverter;
+import org.jhotdraw.text.XmlUrlConverter;
+import org.jhotdraw.text.XmlUriConverter;
 import org.jhotdraw.text.XmlBooleanConverter;
 import org.jhotdraw.text.XmlEnumConverter;
 import org.jhotdraw.text.XmlFontConverter;
@@ -84,15 +85,17 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
             addFigureKeysAndNames("Text", TextFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(SimpleLabelFigure.class);
+            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(LabelFigure.class);
             keys.remove(TextFigure.TEXT);
-            addNodeListKey(SimpleLabelFigure.class, "", TextFigure.TEXT);
-            addFigureKeysAndNames("Label", SimpleLabelFigure.class, keys);
+            addNodeListKey(LabelFigure.class, "", TextFigure.TEXT);
+            addFigureKeysAndNames("Label", LabelFigure.class, keys);
         }
 
         addFigureKeysAndNames("Line", LineFigure.class, Figure.getDeclaredAndInheritedKeys(LineFigure.class));
         addFigureKeysAndNames("Ellipse", EllipseFigure.class, Figure.getDeclaredAndInheritedKeys(EllipseFigure.class));
         addFigureKeysAndNames("LineConnection", LineConnectionFigure.class, Figure.getDeclaredAndInheritedKeys(LineConnectionFigure.class));
+        addFigureKeysAndNames("Image", ImageFigure.class, Figure.getDeclaredAndInheritedKeys(ImageFigure.class));
+        
         addConverterForType(Rectangle2D.class, new Rectangle2DConverter());
         addConverterForType(String.class, new DefaultConverter());
         addConverterForType(Point2D.class, new XmlPoint2DConverter());
@@ -100,8 +103,8 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(SVGPath.class, new XmlSvgPathConverter());
         addConverterForType(Insets.class, new XmlInsetsConverter());
         addConverterForType(Double.class, new NumberConverter());
-        addConverterForType(URL.class, new UrlConverter());
-        addConverterForType(URI.class, new UriConverter());
+        addConverterForType(URL.class, new XmlUrlConverter());
+        addConverterForType(URI.class, new XmlUriConverter());
         addConverterForType(Connector.class, new DefaultConnectorConverter());
         addConverterForType(Paint.class, new XmlPaintConverter());
         addConverterForType(Boolean.class, new XmlBooleanConverter());

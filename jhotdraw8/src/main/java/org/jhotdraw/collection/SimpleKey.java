@@ -177,6 +177,8 @@ public class SimpleKey<T> implements Key<T> {
     public boolean isNullable() {
         return isNullable;
     }
+    
+    public boolean isTransient() {return false; }
 
     /**
      * Returns the name string.

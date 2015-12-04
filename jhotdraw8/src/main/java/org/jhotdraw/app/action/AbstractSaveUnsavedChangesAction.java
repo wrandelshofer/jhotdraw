@@ -15,6 +15,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.collection.Key;
@@ -90,6 +92,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                     new ButtonType(labels.getString("file.saveBefore.cancelOption.text"), ButtonBar.ButtonData.CANCEL_CLOSE), //
                     new ButtonType(labels.getString("file.saveBefore.dontSaveOption.text"), ButtonBar.ButtonData.NO)//
                 };
+
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                         labels.getString("file.saveBefore.doYouWantToSave.details"),
                         options);
@@ -126,7 +129,12 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                         }
                     }
                 });
-                alert.initOwner(v.getNode().getScene().getWindow());
+
+                Window w = v.getNode().getScene().getWindow();
+                if (w instanceof Stage) {
+                    ((Stage) w).toFront();
+                }
+                alert.initOwner(w);
                 alert.initModality(Modality.WINDOW_MODAL);
                 alert.show();
             } else {

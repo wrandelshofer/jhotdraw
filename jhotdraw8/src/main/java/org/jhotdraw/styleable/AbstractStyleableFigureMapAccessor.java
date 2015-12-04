@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.styleable;
 
 import java.util.Arrays;
@@ -17,9 +16,11 @@ import org.jhotdraw.draw.key.FigureKey;
 
 /**
  * AbstractStyleableFigureMapAccessor.
+ *
  * @author Werner Randelshofer
  */
 public abstract class AbstractStyleableFigureMapAccessor<T> implements StyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -42,10 +43,8 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
     private final List<Class<?>> typeParameters;
 
     private final Set<MapAccessor<?>> subAccessors;
-    
-      private final DirtyMask dirtyMask;
 
-
+    private final DirtyMask dirtyMask;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -56,7 +55,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
      * @param defaultValue The default value.
      */
     public AbstractStyleableFigureMapAccessor(String name, Class<T> clazz, MapAccessor<?>[] subAccessors, T defaultValue) {
-        this(name, clazz, null, subAccessors,defaultValue);
+        this(name, clazz, null, subAccessors, defaultValue);
     }
 
     /**
@@ -69,7 +68,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
      * type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public AbstractStyleableFigureMapAccessor(String name, Class<?> clazz, Class<?>[] typeParameters, MapAccessor<?>[] subAccessors,T defaultValue) {
+    public AbstractStyleableFigureMapAccessor(String name, Class<?> clazz, Class<?>[] typeParameters, MapAccessor<?>[] subAccessors, T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -85,14 +84,14 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
         this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
         this.defaultValue = defaultValue;
         this.subAccessors = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(subAccessors)));
-        
-        DirtyMask m=DirtyMask.EMPTY;
-        for (MapAccessor<?> sub:subAccessors) {
+
+        DirtyMask m = DirtyMask.EMPTY;
+        for (MapAccessor<?> sub : subAccessors) {
             if (sub instanceof FigureKey<?>) {
-                m = m.add(((FigureKey<?>)sub).getDirtyMask());
+                m = m.add(((FigureKey<?>) sub).getDirtyMask());
             }
         }
-        dirtyMask=m;
+        dirtyMask = m;
     }
 
     /**
@@ -108,7 +107,7 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
-        Class<T> ret= (Class<T>) clazz;
+        Class<T> ret = (Class<T>) clazz;
         return ret;
     }
 
@@ -118,17 +117,21 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
     }
 
     public String getFullValueType() {
-        StringBuilder buf=new StringBuilder();
+        StringBuilder buf = new StringBuilder();
         buf.append(clazz.getName());
-        if (!typeParameters.isEmpty()){
+        if (!typeParameters.isEmpty()) {
             buf.append('<');
-        boolean first=true;
-        for (Class<?> tp:typeParameters){
-            if (first)first=false;
-            else buf.append(',');
-            buf.append(tp.getName());
+            boolean first = true;
+            for (Class<?> tp : typeParameters) {
+                if (first) {
+                    first = false;
+                } else {
+                    buf.append(',');
+                }
+                buf.append(tp.getName());
+            }
+            buf.append('>');
         }
-            buf.append('>');}
         return buf.toString();
     }
 
@@ -147,19 +150,23 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
      */
     @Override
     public String toString() {
-        String keyClass=getClass().getName();
-        return keyClass.substring(keyClass.lastIndexOf('.')+1)+"{name:"+name+" type:"+getFullValueType()+"}";
+        String keyClass = getClass().getName();
+        return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{name:" + name + " type:" + getFullValueType() + "}";
     }
 
     @Override
     public Set<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
-    
-    
+
     @Override
     public DirtyMask getDirtyMask() {
         return dirtyMask;
+    }
+
+    @Override
+    public boolean isTransient() {
+        return false;
     }
 
 }

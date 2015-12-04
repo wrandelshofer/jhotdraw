@@ -41,11 +41,11 @@ import org.jhotdraw.draw.EditorView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FillableFigure;
 import org.jhotdraw.draw.Layer;
-import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.figure.misc.LineConnectionFigure;
 import org.jhotdraw.draw.figure.shape.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
-import org.jhotdraw.draw.figure.misc.SimpleLabelFigure;
+import org.jhotdraw.draw.figure.misc.LabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
@@ -53,6 +53,7 @@ import org.jhotdraw.draw.TextableFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
+import org.jhotdraw.draw.figure.misc.ImageFigure;
 import org.jhotdraw.draw.gui.DrawingInspector;
 import org.jhotdraw.draw.gui.GridInspector;
 import org.jhotdraw.draw.gui.Inspector;
@@ -72,6 +73,7 @@ import org.jhotdraw.draw.figure.shape.EllipseFigure;
 import org.jhotdraw.draw.figure.shape.LineFigure;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
+import org.jhotdraw.draw.tool.ImageCreationTool;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.util.Resources;
@@ -141,14 +143,15 @@ public class GrapherView extends AbstractView implements EditorView {
         Supplier<Layer> layerFactory = this::createLayer;
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("selectionTool", rsrc), 0, 0);
-        ttbar.addTool(new SelectionTool("selectionTool", HandleType.MOVE, rsrc), 0, 1);
+        ttbar.addTool(new SelectionTool("pointSelectionTool", HandleType.MOVE, rsrc), 0, 1);
         ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, RectangleFigure::new, layerFactory), 1, 0);
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new, layerFactory), 2, 0);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new, layerFactory), 1, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc,//
-                () -> new SimpleLabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null), //
+                () -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null), //
                 layerFactory), 3, 1);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new, layerFactory), 2, 1);
+        ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, ImageFigure::new, layerFactory), 4, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);

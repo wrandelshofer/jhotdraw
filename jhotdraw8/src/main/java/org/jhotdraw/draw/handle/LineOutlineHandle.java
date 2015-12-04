@@ -15,7 +15,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.figure.misc.LineConnectionFigure;
 
 /**
  * Draws the {@code wireframe} of a {@code LineFigure}, but does not

@@ -11,13 +11,13 @@ import javafx.scene.text.Text;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
 /**
- * {@code LabelFigure} is a {@code TextableFigure} which allows to change
+ * {@code LabeledFigure} is a {@code TextableFigure} which allows to change
  * the fill color of the text.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface LabelFigure extends TextableFigure, TransformableFigure {
+public interface LabeledFigure extends TextableFigure, TransformableFigure {
 
     /**
      * Defines the paint used for filling the interior of the text. Default
@@ -30,7 +30,7 @@ public interface LabelFigure extends TextableFigure, TransformableFigure {
      *
      * @param text a text node
      */
-    default void applyLabelProperties(Text text) {
+    default void applyLabeledFigureProperties(Text text) {
         text.setFill(getStyled(TEXT_FILL));
     }
     /**
@@ -38,7 +38,7 @@ public interface LabelFigure extends TextableFigure, TransformableFigure {
      *
      * @param text a text node
      */
-    default void applyLabelProperties(Labeled text) {
+    default void applyLabeledFigureProperties(Labeled text) {
         text.setTextFill(getStyled(TEXT_FILL));
     }
 }

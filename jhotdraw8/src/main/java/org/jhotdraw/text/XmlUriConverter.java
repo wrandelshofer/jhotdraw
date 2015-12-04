@@ -1,4 +1,4 @@
-/* @(#)UrlConverter.java
+/* @(#)XmlUriConverter.java
  * Copyright (c) 2014 Supercomputing Systems AG, Schweiz.
  * Alle Rechte vorbehalten. 
  */
@@ -6,6 +6,7 @@
 package org.jhotdraw.text;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.CharBuffer;
 import java.text.ParseException;
@@ -13,25 +14,25 @@ import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * UrlConverter.
+ * XmlUriConverter.
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class UrlConverter implements Converter<URL> {
+public class XmlUriConverter implements Converter<URI> {
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, URL value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, URI value) throws IOException {
         out.append(value.toString());
     }
 
     @Override
-    public URL fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        URL value = new URL(in.toString());
+    public URI fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+        URI value =  URI.create(in.toString());
         in.position(in.limit());
         return value;
     }
     @Override
-    public URL getDefaultValue() {
+    public URI getDefaultValue() {
         return null;
     }
 }

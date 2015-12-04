@@ -51,7 +51,7 @@ public interface CompositableFigure extends Figure {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyCompositableProperties(Node node) {
+    default void applyCompositableFigureProperties(Node node) {
         node.setBlendMode(getStyled(BLEND_MODE));
         node.setEffect(getStyled(EFFECT));
         node.setOpacity(getStyled(OPACITY));

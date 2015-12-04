@@ -33,7 +33,7 @@ import org.jhotdraw.gui.ClipboardIO;
 import org.jhotdraw.gui.ListViewUtil;
 import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.text.StringConverterConverterWrapper;
-import org.jhotdraw.text.UriConverter;
+import org.jhotdraw.text.XmlUriConverter;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -156,7 +156,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                 }
 
             };
-            StringConverter<URI> uriConverter = new StringConverterConverterWrapper<>(new UriConverter());
+            StringConverter<URI> uriConverter = new StringConverterConverterWrapper<>(new XmlUriConverter());
             ListViewUtil.addDragAndDropSupport(listView, (ListView<URI> param)
                     -> new TextFieldListCell<>(uriConverter), io);
         });

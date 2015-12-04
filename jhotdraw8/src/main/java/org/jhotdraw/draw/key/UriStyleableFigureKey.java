@@ -1,32 +1,32 @@
-/* @(#)SVGPathStyleableFigureKey.java
+/* @(#)URIStyleableFigureKey.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.draw.key;
 
+import java.net.URI;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.scene.shape.SVGPath;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.CssSvgPathConverter;
+import org.jhotdraw.text.CssUriConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
- * SVGPathStyleableFigureKey.
+ * URIStyleableFigureKey.
  *
  * @author werni
  */
-public class SVGPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implements StyleableMapAccessor<SVGPath> {
+public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements StyleableMapAccessor<URI> {
 
     private final static long serialVersionUID=1L;
 
-    private final CssMetaData<?, SVGPath> cssMetaData;
+    private final CssMetaData<?, URI> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -34,7 +34,7 @@ public class SVGPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
      *
      * @param name The name of the key.
      */
-    public SVGPathStyleableFigureKey(String name) {
+    public UriStyleableFigureKey(String name) {
         this(name, null);
     }
 
@@ -44,7 +44,7 @@ public class SVGPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public SVGPathStyleableFigureKey(String name, SVGPath defaultValue) {
+    public UriStyleableFigureKey(String name, URI defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -57,42 +57,42 @@ public class SVGPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
      * @param mask Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public SVGPathStyleableFigureKey(String key, DirtyMask mask, SVGPath defaultValue) {
-        super(key, SVGPath.class, mask, defaultValue);
+    public UriStyleableFigureKey(String key, DirtyMask mask, URI defaultValue) {
+        super(key, URI.class, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createSVGPathCssMetaData(
+         cssMetaData = factory.createPoint2DCssMetaData(
          Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
          StyleablePropertyBean spb = (StyleablePropertyBean) s;
          return spb.getStyleableProperty(this);
          });*/
 
-        Function<Styleable, StyleableProperty<SVGPath>> function = s -> {
+        Function<Styleable, StyleableProperty<URI>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, SVGPath> converter
-                = new StyleConverterConverterWrapper<SVGPath>(new CssSvgPathConverter());
-        CssMetaData<Styleable, SVGPath> md
-                = new SimpleCssMetaData<Styleable, SVGPath>(property, function,
-                        converter, defaultValue, inherits);
+        final StyleConverter<String, URI> cnvrtr
+                = new StyleConverterConverterWrapper<>(getConverter());
+        CssMetaData<Styleable, URI> md
+                = new SimpleCssMetaData<>(property, function,
+                        cnvrtr, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?,SVGPath> getCssMetaData() {
+    public CssMetaData<?,URI> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private Converter<SVGPath> converter;
+    private Converter<URI> converter;
 
     @Override
-    public Converter<SVGPath> getConverter() {
+    public Converter<URI> getConverter() {
         if (converter == null) {
-            converter = new CssSvgPathConverter();
+            converter = new CssUriConverter();
         }
         return converter;
     }   

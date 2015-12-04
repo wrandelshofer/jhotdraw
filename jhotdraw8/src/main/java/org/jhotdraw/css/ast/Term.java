@@ -100,7 +100,7 @@ public class Term extends AST {
 
     private String fromURI() {
         // FIXME escape string value if necessary
-       return stringValue;
+       return "url("+stringValue+")";
     }
 
     private String fromUNICODE_RANGE() {

@@ -34,7 +34,7 @@ public class CreationTool extends AbstractTool {
     /**
      * The created figure.
      */
-    private Figure figure;
+    protected Figure figure;
 
     /**
      * The rubber band.
@@ -75,7 +75,7 @@ public class CreationTool extends AbstractTool {
         y1 = event.getY();
         x2 = x1;
         y2 = y1;
-        figure = figureFactory.get();
+        figure = createFigure();
         Point2D c = view.getConstrainer().constrainPoint(figure, view.viewToDrawing(new Point2D(x1, y1)));
         figure.reshape(c.getX(), c.getY(), 1, 1);
         DrawingModel dm = view.getModel();
@@ -126,6 +126,10 @@ public class CreationTool extends AbstractTool {
 
     @Override
     protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    }
+    
+    protected Figure createFigure() {
+        return figureFactory.get();
     }
 
     /**
