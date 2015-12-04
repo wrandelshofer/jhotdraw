@@ -354,6 +354,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     /**
      * Adds a converter.
      *
+     * @param <T> the value type
      * @param valueType A value type returned by
      * {@code MapAccessor.getValueType();}.
      * @param converter the converter

@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.collection;
 
 import java.io.Serializable;
@@ -13,13 +12,14 @@ import java.util.Map;
  * A type safe accessor for maps.
  * <p>
  * Design pattern: Strategy
- * 
+ *
  * @param <T> The value type.
  * @author Werner Randelshofer
  */
-public interface MapAccessor <T> extends Serializable {
+public interface MapAccessor<T> extends Serializable {
 
     final static long serialVersionUID = 1L;
+
     /**
      * Returns the name string.
      *
@@ -27,8 +27,6 @@ public interface MapAccessor <T> extends Serializable {
      */
     String getName();
 
-
-    
     /**
      * Gets the value of the attribute denoted by this accessor from a Map.
      *
@@ -37,7 +35,6 @@ public interface MapAccessor <T> extends Serializable {
      */
     T get(Map<? super Key<?>, Object> a);
 
-    
     /**
      * Puts the value of the attribute denoted by this accessor from a Map.
      *
@@ -46,6 +43,7 @@ public interface MapAccessor <T> extends Serializable {
      * @return The old value.
      */
     T put(Map<? super Key<?>, Object> a, T value);
+
     /**
      * Removes the value of the attribute denoted by this accessor from a Map.
      *
@@ -53,19 +51,36 @@ public interface MapAccessor <T> extends Serializable {
      * @return The old value.
      */
     T remove(Map<? super Key<?>, Object> a);
-    
-    /** Returns the value type. */
+
+    /**
+     * Returns the value type.
+     * @return the value type
+     */
     Class<T> getValueType();
 
-    /** Returns the type parameters of the value type. */
+    /**
+     * Returns the type parameters of the value type.
+     * @return an unmodifiable list with the type parameters
+     */
     List<Class<?>> getValueTypeParameters();
 
-    /** Returns the default value of this map accessor. */
+    /**
+     * Returns the default value of this map accessor.
+     * @return the default value
+     */
     T getDefaultValue();
 
-    /** Returns a string representation of the value type and its type parameters. */
+    /**
+     * Returns a string representation of the value type and its type
+     * parameters.
+     *
+     * @return the class name of the value type including type parameters
+     */
     String getFullValueType();
-    
-    /** Whether the value needs to be made persistent. */
+
+    /**
+     * Whether the value needs to be made persistent.
+     * @return true if transient
+     */
     boolean isTransient();
 }

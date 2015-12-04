@@ -41,7 +41,11 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
     /**
      * Creates a new instance with the specified name.
      *
-     * @param name The name of the key.
+     * @param name the name of the accessor
+     * @param familyKey the font family key
+     * @param weightKey the font weight key
+     * @param postureKey the font posture key
+     * @param sizeKey the font size key
      */
     public FontStyleableMapAccessor(String name, MapAccessor<String> familyKey, MapAccessor<FontWeight> weightKey, MapAccessor<FontPosture> postureKey, MapAccessor<Double> sizeKey) {
         super(name, FFont.class, new MapAccessor<?>[]{familyKey, sizeKey, weightKey, postureKey}, FFont.font(familyKey.getDefaultValue(), weightKey.getDefaultValue(), postureKey.getDefaultValue(), sizeKey.getDefaultValue()));

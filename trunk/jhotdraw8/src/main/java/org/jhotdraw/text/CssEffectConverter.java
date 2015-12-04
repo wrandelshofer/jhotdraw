@@ -25,10 +25,10 @@ import org.jhotdraw.draw.io.IdFactory;
  * </p>
  * <pre>
  * Effect := (DropShadow|InnerShadow) ;
- * DropShadow := "dropshadow(" , blurType , "," , color , "," ,
- *                radius , "," ,  spread , "," ,  xOffset , "," ,  yOffset ")";
- * InnerShadow := "innershadow(" , blurType , "," , color , "," ,
- *                radius , ",", choke , "," ,  xOffset , "," ,  yOffset ")";
+ * DropShadow := "dropshadow(" , [ blurType , "," , color , "," ,
+ *                radius , "," ,  spread , "," ,  xOffset , "," ,  yOffset ] , ")";
+ * InnerShadow := "innershadow(" , [ , blurType , "," , color , "," ,
+ *                radius , ",", choke , "," ,  xOffset , "," ,  yOffset ] , ")";
  *  ...TODO...
  * </pre>
  * <p>
