@@ -62,9 +62,6 @@ public interface TextableFigure extends Figure {
      */
     public static DoubleStyleableFigureKey WRAPPING_WIDTH = new DoubleStyleableFigureKey("wrappingWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
 
-    /** The text. Default value: {@code ""}. */
-    public final static StringStyleableFigureKey TEXT = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), "");
-
     /**
      * Updates a text node with text properties except {@code TEXT}.
      *
