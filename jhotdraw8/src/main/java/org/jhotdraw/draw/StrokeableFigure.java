@@ -117,11 +117,7 @@ public interface StrokeableFigure extends Figure {
         shape.setStrokeLineCap(getStyled(STROKE_LINE_CAP));
         shape.setStrokeLineJoin(getStyled(STROKE_LINE_JOIN));
         shape.setStrokeMiterLimit(getStyled(STROKE_MITER_LIMIT));
-        
-        // FIXME - Combine color with STROKE_OPACITY
         shape.setStroke(getStyled(STROKE_COLOR));
-        
-        
         shape.setStrokeType(getStyled(STROKE_TYPE));
         shape.setStrokeWidth(getStyled(STROKE_WIDTH));
 

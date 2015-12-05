@@ -94,7 +94,6 @@ public class SelectionTool extends AbstractTool {
     private boolean mouseDragged;
     private Figure pressedFigure;
     private HandleType handleType;
-    private boolean mustSelectFirstBeforeDrag = false;
 
     // ---
     // Constructors
@@ -147,8 +146,6 @@ public class SelectionTool extends AbstractTool {
             } else {
                 node.setCursor(Cursor.DEFAULT);
 
-                boolean selectionChanged = false;
-
                 /*
              if (pressedFigure == null && tolerance != 0) {
              List<Figure> fs = view.findFiguresIntersecting(vx - tolerance, vy
@@ -185,7 +182,7 @@ public class SelectionTool extends AbstractTool {
                 if (event.isShiftDown() && !event.isMetaDown()) {
                     if (pressedFigure != null) {
                         view.getSelectedFigures().add(pressedFigure);
-                        selectionChanged = true;
+                        return;
                     }
                 } else if (!event.isShiftDown() && event.isMetaDown()) {
                     // "meta" without "shift"  toggles the selection for the pressed figure
@@ -195,21 +192,18 @@ public class SelectionTool extends AbstractTool {
                         } else {
                             view.selectedFiguresProperty().add(pressedFigure);
                         }
-                        selectionChanged = true;
+                        return;
                     }
                 } else if (!event.isShiftDown() && !event.isMetaDown()) {
                     // neither "meta" nor "shift" sets the selection to the pressed figure
                     if (pressedFigure != null && !view.selectedFiguresProperty().contains(pressedFigure)) {
                         view.selectedFiguresProperty().clear();
                         view.selectedFiguresProperty().add(pressedFigure);
-                        selectionChanged = true;
                     }
                 }
 
                 // "control" modifier enforces the select area tracker
-                if (mustSelectFirstBeforeDrag && selectionChanged) {
-                    setTracker(null);
-                } else if (view.selectedFiguresProperty().contains(pressedFigure)) {
+                if (view.selectedFiguresProperty().contains(pressedFigure)) {
                     DragTracker t = getDragTracker(pressedFigure, view);
                     setTracker(t);
                 } else {
