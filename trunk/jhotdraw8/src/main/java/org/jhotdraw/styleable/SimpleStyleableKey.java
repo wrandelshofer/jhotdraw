@@ -7,7 +7,6 @@ package org.jhotdraw.styleable;
 import javafx.css.CssMetaData;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * SimpleStyleableKey.

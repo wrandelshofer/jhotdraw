@@ -5,8 +5,10 @@
 package org.jhotdraw.draw;
 
 /**
- *
- * @author werni
+ * AttributedFigure.
+ * 
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface AttributedFigure {
     

@@ -8,9 +8,7 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.util.*;
-import org.jhotdraw.gui.*;
 import java.net.URI;
-import java.util.prefs.Preferences;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw.app.Application;

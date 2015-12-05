@@ -7,9 +7,17 @@ package org.jhotdraw.util;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.*;
-import java.text.*;
-import java.net.*;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.NoSuchElementException;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Menu;
@@ -17,6 +25,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import org.jhotdraw.app.action.Action;
+import java.util.ResourceBundle;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a

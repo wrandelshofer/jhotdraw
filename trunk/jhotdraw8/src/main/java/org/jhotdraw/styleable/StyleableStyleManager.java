@@ -17,15 +17,12 @@ import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.css.AbstractStyleManager;
-import org.jhotdraw.css.AbstractStyleManager;
-import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.styleable.StyleableSelectorModel;
 
 /**
  * StyleableStyleManager.

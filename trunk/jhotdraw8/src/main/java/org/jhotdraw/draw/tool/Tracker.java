@@ -8,9 +8,7 @@ package org.jhotdraw.draw.tool;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw.beans.PropertyBean;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.event.Listener;
 
 /**
  * Tracker.

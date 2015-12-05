@@ -10,7 +10,7 @@ package org.jhotdraw.app.action.edit;
 
 import javafx.scene.Node;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.util.*;
+import org.jhotdraw.util.Resources;
 
 
 /**

@@ -5,7 +5,6 @@
 
 package org.jhotdraw.beans;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 
 /**

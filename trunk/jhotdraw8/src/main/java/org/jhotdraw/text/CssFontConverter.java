@@ -12,7 +12,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import org.jhotdraw.css.CssTokenizer;
 import org.jhotdraw.draw.io.IdFactory;
-import org.jhotdraw.io.CharBufferReader;
 
 /**
  * CssFontConverter.

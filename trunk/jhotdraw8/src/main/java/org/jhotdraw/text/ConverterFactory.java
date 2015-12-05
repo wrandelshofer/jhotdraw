@@ -4,7 +4,6 @@
  */
 package org.jhotdraw.text;
 
-import java.text.Format;
 import java.util.function.BiFunction;
 
 /**

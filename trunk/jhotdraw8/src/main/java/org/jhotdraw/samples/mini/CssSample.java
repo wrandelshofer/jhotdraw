@@ -5,7 +5,6 @@
 package org.jhotdraw.samples.mini;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
@@ -15,7 +14,6 @@ import javafx.stage.Stage;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.figure.misc.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;

@@ -20,7 +20,6 @@ import org.jhotdraw.styleable.AbstractStyleableFigureMapAccessor;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssFontConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
-import org.jhotdraw.styleable.StyleableMapAccessor;
 import org.jhotdraw.text.FFont;
 
 /**

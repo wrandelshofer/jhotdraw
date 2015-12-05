@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**

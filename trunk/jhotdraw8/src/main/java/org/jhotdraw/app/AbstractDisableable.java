@@ -5,7 +5,6 @@
 
 package org.jhotdraw.app;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SetProperty;

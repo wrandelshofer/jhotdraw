@@ -7,10 +7,10 @@
  */
 package org.jhotdraw.app.action.edit;
 
-import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
+import org.jhotdraw.util.Resources;
 
 /**
  * Undoes the last user action.

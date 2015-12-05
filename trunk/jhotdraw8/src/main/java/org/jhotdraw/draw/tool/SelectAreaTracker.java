@@ -4,9 +4,6 @@
  */
 package org.jhotdraw.draw.tool;
 
-import javafx.scene.input.MouseEvent;
-import org.jhotdraw.draw.DrawingView;
-
 /**
  * A <em>select area tracker</em> provides the behavior for selecting figures
  * in a drawing area to the {@link SelectionTool}.

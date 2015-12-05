@@ -7,7 +7,6 @@ package org.jhotdraw.beans;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
-import javafx.beans.InvalidationListener;
 import javafx.beans.WeakListener;
 
 /**

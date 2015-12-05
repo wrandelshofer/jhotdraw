@@ -7,9 +7,7 @@
 package org.jhotdraw.draw.locator;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.draw.BezierFigure;
 import org.jhotdraw.draw.Figure;
 
 /**

@@ -7,11 +7,8 @@ package org.jhotdraw.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
-import org.jhotdraw.css.CssTokenizer;
 import org.jhotdraw.draw.io.IdFactory;
-import org.jhotdraw.io.CharBufferReader;
 
 /**
  * Converts an {@code String} to a quoted CSS {@code String}.

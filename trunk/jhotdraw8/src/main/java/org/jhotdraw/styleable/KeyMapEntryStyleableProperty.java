@@ -11,7 +11,6 @@ import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.KeyMapEntryProperty;
-import org.jhotdraw.styleable.StyleableMap;
 
 /**
  * KeyMapEntryStyleableProperty.

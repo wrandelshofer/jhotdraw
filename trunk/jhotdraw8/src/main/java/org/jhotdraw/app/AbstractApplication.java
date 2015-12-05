@@ -7,7 +7,6 @@ package org.jhotdraw.app;
 
 import java.net.URI;
 import java.util.LinkedHashSet;
-import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;

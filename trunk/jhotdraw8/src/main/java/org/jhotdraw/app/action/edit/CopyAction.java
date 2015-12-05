@@ -12,8 +12,7 @@ import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.View;
-//import org.jhotdraw.gui.datatransfer.ClipboardUtil;
-import org.jhotdraw.util.*;
+import org.jhotdraw.util.Resources;
 
 /**
  * Copies the selected region and place its contents into the system clipboard.

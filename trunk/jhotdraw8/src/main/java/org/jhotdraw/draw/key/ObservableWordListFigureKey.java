@@ -4,8 +4,6 @@
  */
 package org.jhotdraw.draw.key;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.collections.ObservableList;
 
 /**

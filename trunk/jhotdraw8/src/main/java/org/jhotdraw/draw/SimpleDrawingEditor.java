@@ -4,10 +4,8 @@
  */
 package org.jhotdraw.draw;
 
-import java.awt.Toolkit;
 import java.util.HashSet;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleObjectProperty;

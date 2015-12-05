@@ -4,7 +4,6 @@
  */
 package org.jhotdraw.styleable;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,7 +14,6 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
 import org.jhotdraw.beans.ListenerSupport;
-import org.jhotdraw.collection.Key;
 
 /**
  * {@code StyleableMap} is a map which stores separate values for each

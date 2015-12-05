@@ -4,9 +4,7 @@
  */
 package org.jhotdraw.draw.key;
 
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.collection.SimpleKey;
 
 /**
  * FigureKey.

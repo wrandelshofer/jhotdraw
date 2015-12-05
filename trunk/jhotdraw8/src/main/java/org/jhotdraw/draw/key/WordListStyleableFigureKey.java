@@ -13,7 +13,6 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.CssSizeListConverter;
 import org.jhotdraw.text.CssWordListConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 import org.jhotdraw.styleable.StyleableMapAccessor;

@@ -8,17 +8,12 @@ import java.io.File;
 import java.net.URI;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
-import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.SimpleFigureKey;
-import java.net.URL;
 import java.util.List;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.css.StyleManager;
-import org.jhotdraw.css.ast.Stylesheet;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw.styleable.StyleableStyleManager;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
 /**

@@ -5,8 +5,6 @@
  */
 package org.jhotdraw.collection;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.MapExpression;

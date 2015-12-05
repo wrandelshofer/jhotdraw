@@ -6,7 +6,6 @@ package org.jhotdraw.draw;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
-import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
 import org.jhotdraw.draw.tool.Tool;
 

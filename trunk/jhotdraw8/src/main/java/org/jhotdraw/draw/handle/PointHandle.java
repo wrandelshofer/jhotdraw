@@ -21,7 +21,6 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import static org.jhotdraw.draw.TransformableFigure.ROTATE;
 import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw.draw.key.SimpleFigureKey;
 
 /**
  * Handle for the point of a figure.

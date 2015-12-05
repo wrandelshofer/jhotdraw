@@ -11,6 +11,7 @@ import java.util.EventObject;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <E> The event type
  */
 public class Event<E> extends EventObject {
 

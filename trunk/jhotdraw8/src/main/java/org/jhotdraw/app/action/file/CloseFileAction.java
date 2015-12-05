@@ -8,12 +8,12 @@
 package org.jhotdraw.app.action.file;
 
 import javafx.event.EventHandler;
-import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
+import org.jhotdraw.util.Resources;
 
 /**
  * Closes the active view after letting the user save unsaved changes.

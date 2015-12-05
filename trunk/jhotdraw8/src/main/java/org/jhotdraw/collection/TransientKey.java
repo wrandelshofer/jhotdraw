@@ -9,6 +9,7 @@ package org.jhotdraw.collection;
  * TransientKey can be used to store temporary data in an object.
  * 
  * @author Werner Randelshofer
+ * @param <T> the value type
  */
 public class TransientKey<T> extends SimpleKey<T> {
     private static final long serialVersionUID = 1L;

@@ -9,7 +9,6 @@ package org.jhotdraw.app.action.file;
 
 import java.net.URI;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.net.URIUtil;

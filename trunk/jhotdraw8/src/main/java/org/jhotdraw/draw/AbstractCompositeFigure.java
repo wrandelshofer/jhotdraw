@@ -5,24 +5,16 @@
  */
 package org.jhotdraw.draw;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 import javafx.geometry.Point2D;
 import org.jhotdraw.draw.connector.Connector;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import org.jhotdraw.collection.IndexedSet;
 
 /**

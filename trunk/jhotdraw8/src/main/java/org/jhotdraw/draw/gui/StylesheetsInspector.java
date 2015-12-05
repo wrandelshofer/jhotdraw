@@ -26,7 +26,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.Pane;
 import javafx.util.StringConverter;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.gui.ClipboardIO;

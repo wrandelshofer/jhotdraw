@@ -19,7 +19,6 @@ import org.jhotdraw.styleable.AbstractStyleableFigureMapAccessor;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssPoint3DConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
-import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * Point3DStyleableMapAccessor.

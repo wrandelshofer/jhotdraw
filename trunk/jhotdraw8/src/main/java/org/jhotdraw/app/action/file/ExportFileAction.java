@@ -7,15 +7,11 @@
  */
 package org.jhotdraw.app.action.file;
 
-import java.net.URISyntaxException;
-import java.net.URI;
-import java.util.prefs.Preferences;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.Application;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
-import org.jhotdraw.gui.URIChooser;
-import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
 
 /**

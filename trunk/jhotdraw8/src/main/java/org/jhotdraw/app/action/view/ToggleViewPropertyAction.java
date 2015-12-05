@@ -6,7 +6,6 @@
 package org.jhotdraw.app.action.view;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;

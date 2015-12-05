@@ -10,7 +10,6 @@ package org.jhotdraw.app.action.file;
 import javafx.event.ActionEvent;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 
 /**

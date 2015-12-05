@@ -6,7 +6,6 @@
 package org.jhotdraw.text;
 
 import java.nio.CharBuffer;
-import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;

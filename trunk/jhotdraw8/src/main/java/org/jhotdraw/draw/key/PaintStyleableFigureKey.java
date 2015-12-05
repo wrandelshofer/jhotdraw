@@ -5,7 +5,6 @@
 package org.jhotdraw.draw.key;
 
 import java.util.function.Function;
-import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
