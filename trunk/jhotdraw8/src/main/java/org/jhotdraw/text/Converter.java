@@ -11,6 +11,9 @@ import org.jhotdraw.draw.io.IdFactory;
 
 /**
  * Converts a data value of type {@code T} from or to a String representation.
+ * <p>
+ * This interface is designed so that it can be adapted to the various String
+ * conversion APIs in the JDK.
  *
  * @author Werner Randelshofer
  * @version $Id$
