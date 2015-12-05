@@ -22,12 +22,12 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
     public GrapherApplication() {
         super();
-      SimpleApplicationModel model=  new SimpleApplicationModel("Grapher",()->new GrapherView(),
-                                GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
-"XML Files","*.xml");
-      
+
         Resources.setVerbose(true);
-        
+
+        SimpleApplicationModel model = new SimpleApplicationModel("Grapher", () -> new GrapherView(),
+                GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
+                "XML Files", "*.xml");
         setModel(model);
     }
 
@@ -43,7 +43,6 @@ public class GrapherApplication extends DocumentOrientedApplication {
         a.set(Action.SELECTED_KEY, Preferences.userNodeForPackage(GrapherApplication.class).getBoolean("view.propertiesPane.visible", true));
         return map;
     }
-
 
     /**
      * @param args the command line arguments
