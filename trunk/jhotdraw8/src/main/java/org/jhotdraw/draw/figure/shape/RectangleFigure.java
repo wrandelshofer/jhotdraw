@@ -95,7 +95,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(node);
         applyTransformableFigureProperties(rectangleNode);
-        applyFilleableFigureProperties(rectangleNode);
+        applyFillableFigureProperties(rectangleNode);
         applyStrokeableFigureProperties(rectangleNode);
         applyCompositableFigureProperties(rectangleNode);
         rectangleNode.setX(get(X));
