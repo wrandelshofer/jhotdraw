@@ -51,6 +51,8 @@ public class CssPaintConverter implements Converter<Paint> {
     public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
         if (value == null) {
             out.append("none");
+        } else if (Color.TRANSPARENT.equals(value)) {
+            out.append("transparent");
         } else if (value instanceof Color) {
             Color c = (Color) value;
             if (c.getOpacity() == 1.0) {

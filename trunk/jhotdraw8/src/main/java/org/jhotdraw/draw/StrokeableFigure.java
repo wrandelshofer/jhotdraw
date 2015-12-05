@@ -72,13 +72,15 @@ public interface StrokeableFigure extends Figure {
      */
     public static PaintStyleableFigureKey STROKE_COLOR = new PaintStyleableFigureKey("stroke", Color.BLACK);
     /**
-     * Defines the stroke type used for drawing outline of the figure. Default
-     * value: {@code StrokeType.CENTERED}.
+     * Defines the stroke type used for drawing outline of the figure. 
+     * <p>
+     * Default value: {@code StrokeType.CENTERED}.
      */
     public static EnumStyleableFigureKey<StrokeType> STROKE_TYPE = new EnumStyleableFigureKey<>("stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.CENTERED);
     /**
-     * Defines the width of the outline of the figure. Default value:
-     * {@code 1.0}.
+     * Defines the width of the outline of the figure. 
+     * <p>
+     * Default value: {@code 1.0}.
      * <p>
      * References:
      * <p>
@@ -86,8 +88,9 @@ public interface StrokeableFigure extends Figure {
      */
     public static DoubleStyleableFigureKey STROKE_WIDTH = new DoubleStyleableFigureKey("stroke-width", DirtyMask.of(DirtyBits.NODE), 1.0);
     /**
-     * Defines the opacity of the outline of the figure. Default value:
-     * {@code 1.0}.
+     * Defines the opacity of the outline of the figure. 
+     * <p>
+     * Default value: {@code 1.0}.
      * <p>
      * References:
      * <p>
