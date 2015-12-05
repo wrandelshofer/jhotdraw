@@ -26,6 +26,7 @@
                <styleClass>
                   <String fx:value="details" />
                   <String fx:value="flush" />
+                  <String fx:value="inspector" />
                </styleClass>
             </ScrollPane>
          </items>

@@ -104,8 +104,8 @@ public class GrapherView extends AbstractView implements EditorView {
     private VBox detailsVBox;
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
-    
-    private final BooleanProperty detailsVisible = new SimpleBooleanProperty(this,"detailsVisible",true);
+
+    private final BooleanProperty detailsVisible = new SimpleBooleanProperty(this, "detailsVisible", true);
 
     /**
      * Counter for incrementing layer names.
@@ -193,30 +193,19 @@ public class GrapherView extends AbstractView implements EditorView {
 
         };
         getApplication().execute(bg);
-
-        /*
-        Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
-        detailsScrollPane.setMinSize(0.0, 0.0);
-        detailsScrollPane.visibleProperty().addListener((o, oldValue, newValue) -> {
-            prefs.putBoolean("view.propertiesPane.visible", newValue);
-            detailsScrollPane.setPrefHeight(newValue ? ScrollPane.USE_COMPUTED_SIZE : 0.0);
-        });
-        detailsScrollPane.visibleProperty().set(prefs.getBoolean("view.propertiesPane.visible", true));
-*/
-        detailsVBox.getStyleClass().add("inspector");
     }
 
     @Override
     public void start() {
-getNode().getScene().getStylesheets().addAll(//
+        getNode().getScene().getStylesheets().addAll(//
                 GrapherApplication.class.getResource("/org/jhotdraw/draw/gui/inspector.css").toString(),//
                 GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
         );
-        
+
         Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
         PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
-    
+
     private void addInspector(Inspector inspector, String id, Priority grow, List<Node> list) {
         Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
 
@@ -240,33 +229,6 @@ getNode().getScene().getStylesheets().addAll(//
             a.setExpandedPane(t);
             VBox.setVgrow(a, grow);
         }
-    }
-
-    private void addHInspector(Inspector inspector, String id, List<Node> list) {
-        Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
-
-        Accordion a = new Accordion();
-        a.getStyleClass().setAll("inspector", "flush");
-        Node n = inspector.getNode();
-        n.setRotate(90);
-        ((Pane) n).setPrefHeight(129);
-        Group g = new Group();
-        g.getChildren().add(n);
-        TitledPane t = new TitledPane(r.getString(id + ".toolbar"), g);
-
-        a.getPanes().add(t);
-
-        g = new Group();
-        a.setRotate(-90);
-        g.getChildren().add(a);
-        list.add(g);
-        g.getProperties().put("inspector", inspector);
-
-        PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherView.class), id + ".expanded", t.expandedProperty());
-        if (t.isExpanded()) {
-            a.setExpandedPane(t);
-        }
-
     }
 
     @Override
@@ -353,5 +315,4 @@ getNode().getScene().getStylesheets().addAll(//
     public Node getPropertiesPane() {
         return detailsScrollPane;
     }
-
 }
