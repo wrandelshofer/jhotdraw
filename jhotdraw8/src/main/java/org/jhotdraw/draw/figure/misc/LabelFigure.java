@@ -10,18 +10,24 @@ import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.draw.CompositableFigure;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.LockableFigure;
+import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.TextableFigure;
+import org.jhotdraw.draw.TransformableFigure;
 
 /**
- * AbstractLabelFigure.
+ * SimpleLabelFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LabelFigure extends AbstractLabelFigure implements TextableFigure, TextHolderFigure {
+public class LabelFigure extends AbstractLabelFigure implements TextableFigure, TextHolderFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
 
     public LabelFigure() {
         this(0, 0, "");
@@ -40,6 +46,15 @@ public class LabelFigure extends AbstractLabelFigure implements TextableFigure, 
             set(key, keyValues[i + 1]);
         }
     }
+
+    @Override
+    public void updateNode(RenderContext drawingView, Node node) {
+        super.updateNode(drawingView, node);
+        applyTransformableFigureProperties(node);
+        applyCompositableFigureProperties(node);
+    }
+    
+    
 
     @Override
     protected String getText() {

@@ -28,7 +28,7 @@ import org.jhotdraw.draw.key.StringOrIdentStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface LabeledFigure extends TransformableFigure {
+public interface LabeledFigure extends Figure {
 
     /**
      * Defines the paint used for filling the interior of the text. Default
