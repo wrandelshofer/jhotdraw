@@ -46,6 +46,7 @@ import org.jhotdraw.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw.draw.LabeledFigure;
+import org.jhotdraw.draw.TextableFigure;
 
 /**
  * AbstractLabelFigure.
@@ -53,7 +54,7 @@ import org.jhotdraw.draw.LabeledFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractLabelFigure extends AbstractLeafFigure implements LabeledFigure, FillableFigure, StrokeableFigure {
+public abstract class AbstractLabelFigure extends AbstractLeafFigure implements LabeledFigure, FillableFigure, StrokeableFigure, TextableFigure {
 
     public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Point2D(0, 0));
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
@@ -169,6 +170,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         tn.setX(origin.getX());
         tn.setY(origin.getY());
         applyLabeledFigureProperties(tn);
+        applyTextableFigureProperties(tn);
     }
 
     @Override
