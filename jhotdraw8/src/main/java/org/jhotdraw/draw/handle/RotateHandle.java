@@ -41,8 +41,8 @@ public class RotateHandle extends AbstractHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
     private Point2D center;
-        protected Set<Figure> groupReshapeableFigures;
-        
+    protected Set<Figure> groupReshapeableFigures;
+
     public RotateHandle(TransformableFigure figure) {
         this(figure, STYLECLASS_HANDLE_ROTATE);
     }
@@ -60,7 +60,11 @@ public class RotateHandle extends AbstractHandle {
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
-        node.setCursor(Cursor.CROSSHAIR);
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return Cursor.CROSSHAIR;
     }
 
     @Override
@@ -86,15 +90,15 @@ public class RotateHandle extends AbstractHandle {
     public void onMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
         center = getOwner().getCenterInLocal();
-            // determine which figures can be reshaped together as a group
-            Set<Figure> selectedFigures = view.getSelectedFigures();
-            groupReshapeableFigures = new HashSet<>();
-            for (Figure f :  view.getSelectedFigures()) {
-                if (f.isGroupReshapeableWith(selectedFigures)) {
-                    groupReshapeableFigures.add(f);
-                }
+        // determine which figures can be reshaped together as a group
+        Set<Figure> selectedFigures = view.getSelectedFigures();
+        groupReshapeableFigures = new HashSet<>();
+        for (Figure f : view.getSelectedFigures()) {
+            if (f.isGroupReshapeableWith(selectedFigures)) {
+                groupReshapeableFigures.add(f);
             }
-            groupReshapeableFigures=view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
+        }
+        groupReshapeableFigures = view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
 
     }
 
@@ -126,8 +130,9 @@ public class RotateHandle extends AbstractHandle {
         if (event.isShiftDown()) {
             // shift transforms all selected figures
             for (Figure f : groupReshapeableFigures) {
-                if (f instanceof TransformableFigure)
-                model.set(f, TransformableFigure.ROTATE, newRotate);
+                if (f instanceof TransformableFigure) {
+                    model.set(f, TransformableFigure.ROTATE, newRotate);
+                }
             }
         } else {
             model.set(getOwner(), TransformableFigure.ROTATE, newRotate);
@@ -149,7 +154,7 @@ public class RotateHandle extends AbstractHandle {
     private Point2D getLocation(DrawingView view) {
         Figure owner = getOwner();
         Bounds bounds = owner.getBoundsInLocal();
-        Point2D shift=view.getViewToWorld().deltaTransform(10, 10);
+        Point2D shift = view.getViewToWorld().deltaTransform(10, 10);
         return new Point2D(bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() - shift.getY());
     }
 

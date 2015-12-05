@@ -142,7 +142,7 @@ public class SelectionTool extends AbstractTool {
         } else {
             Handle h = view.findHandle(vx, vy);
             if (h != null) {
-                node.setCursor(h.getNode().getCursor());
+                node.setCursor(h.getCursor());
                 setTracker(getHandleTracker(h));
             } else {
                 node.setCursor(Cursor.DEFAULT);
@@ -246,7 +246,7 @@ public class SelectionTool extends AbstractTool {
         double vy = event.getY();
         Handle h = view.findHandle(vx, vy);
         if (h != null) {
-            node.setCursor(h.getNode().getCursor());
+            node.setCursor(h.getCursor());
             setTracker(getHandleTracker(h));
         } else {
             node.setCursor(Cursor.DEFAULT);

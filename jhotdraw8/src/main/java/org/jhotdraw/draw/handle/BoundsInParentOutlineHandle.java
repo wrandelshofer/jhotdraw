@@ -6,6 +6,7 @@ package org.jhotdraw.draw.handle;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -74,5 +75,9 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     @Override
     public boolean isSelectable() {
         return false;
+    }
+    @Override
+    public Cursor getCursor() {
+        return null;
     }
 }

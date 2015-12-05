@@ -211,9 +211,9 @@ public class ResizeHandleKit {
             p = t.transform(p);
             node.relocate(p.getX() - 5, p.getY() - 5);
             // rotates the node:
-           // f.applyTransformableFigureProperties(node);
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+            // f.applyTransformableFigureProperties(node);
+            node.setRotate(f.getStyled(ROTATE));
+            node.setRotationAxis(f.getStyled(ROTATION_AXIS));
         }
 
         @Override
@@ -254,13 +254,13 @@ public class ResizeHandleKit {
 
         /**
          * Resizes the figure.
-         * 
+         *
          * @param newPoint new point in local coordinates
          * @param owner the figure
          * @param bounds the bounds of the figure on mouse pressed
          * @param model the drawing model
-         * @param keepAspect whether the aspect should be preserved. The
-         * bounds of the figure on mouse pressed can be used as a reference.
+         * @param keepAspect whether the aspect should be preserved. The bounds
+         * of the figure on mouse pressed can be used as a reference.
          */
         protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect);
     }
@@ -269,13 +269,17 @@ public class ResizeHandleKit {
 
         NorthEastHandle(Figure owner) {
             super(owner, RelativeLocator.northEast());
-            node.setCursor(Cursor.NE_RESIZE);
+        }
+
+        @Override
+        public Cursor getCursor() {
+            return Cursor.NE_RESIZE;
         }
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newX = max(bounds.getMinX(),newPoint.getX());
-            double newY = min(bounds.getMaxY(),newPoint.getY());
+            double newX = max(bounds.getMinX(), newPoint.getX());
+            double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = newX - bounds.getMinX();
             double newHeight = bounds.getMaxY() - newY;
             if (keepAspect) {
@@ -295,12 +299,15 @@ public class ResizeHandleKit {
 
         EastHandle(Figure owner) {
             super(owner, RelativeLocator.east());
-            node.setCursor(Cursor.E_RESIZE);
+        }
+        @Override
+        public Cursor getCursor() {
+            return Cursor.E_RESIZE;
         }
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newWidth = max(newPoint.getX(),bounds.getMinX()) - bounds.getMinX();
+            double newWidth = max(newPoint.getX(), bounds.getMinX()) - bounds.getMinX();
             double newHeight = bounds.getMaxY() - bounds.getMinY();
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
@@ -314,12 +321,16 @@ public class ResizeHandleKit {
 
         NorthHandle(Figure owner) {
             super(owner, RelativeLocator.north());
-            node.setCursor(Cursor.N_RESIZE);
         }
+        @Override
+        public Cursor getCursor() {
+            return Cursor.N_RESIZE;
+        }
+
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newY = min(bounds.getMaxY(),newPoint.getY());
+            double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
             double newHeight = bounds.getMaxY() - newY;
             if (keepAspect) {
@@ -334,13 +345,17 @@ public class ResizeHandleKit {
 
         NorthWestHandle(Figure owner) {
             super(owner, RelativeLocator.northWest());
-            node.setCursor(Cursor.NW_RESIZE);
         }
+        @Override
+        public Cursor getCursor() {
+            return Cursor.NW_RESIZE;
+        }
+
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newX = min(bounds.getMaxX(),newPoint.getX());
-            double newY = min(bounds.getMaxY(),newPoint.getY());
+            double newX = min(bounds.getMaxX(), newPoint.getX());
+            double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - newX;
             double newHeight = bounds.getMaxY() - newY;
             if (keepAspect) {
@@ -360,13 +375,17 @@ public class ResizeHandleKit {
 
         SouthEastHandle(Figure owner) {
             super(owner, RelativeLocator.southEast());
-            node.setCursor(Cursor.SE_RESIZE);
         }
+        @Override
+        public Cursor getCursor() {
+            return Cursor.SE_RESIZE;
+        }
+
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newX = max(bounds.getMinX(),newPoint.getX());
-            double newY = max(bounds.getMinY(),newPoint.getY());
+            double newX = max(bounds.getMinX(), newPoint.getX());
+            double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = newX - bounds.getMinX();
             double newHeight = newY - bounds.getMinY();
             if (keepAspect) {
@@ -385,12 +404,16 @@ public class ResizeHandleKit {
 
         SouthHandle(Figure owner) {
             super(owner, RelativeLocator.south());
-            node.setCursor(Cursor.S_RESIZE);
         }
+        @Override
+        public Cursor getCursor() {
+            return Cursor.S_RESIZE;
+        }
+
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newY = max(bounds.getMinY(),newPoint.getY());
+            double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
             double newHeight = newY - bounds.getMinY();
             if (keepAspect) {
@@ -404,14 +427,18 @@ public class ResizeHandleKit {
 
         SouthWestHandle(Figure owner) {
             super(owner, RelativeLocator.southWest());
-            node.setCursor(Cursor.SW_RESIZE);
         }
+        @Override
+        public Cursor getCursor() {
+            return Cursor.SW_RESIZE;
+        }
+
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newX = min(bounds.getMaxX(),newPoint.getX());
-            double newY = max(bounds.getMinY(),newPoint.getY());
-            double newWidth = bounds.getMaxX() - min(bounds.getMaxX(),newX);
+            double newX = min(bounds.getMaxX(), newPoint.getX());
+            double newY = max(bounds.getMinY(), newPoint.getY());
+            double newWidth = bounds.getMaxX() - min(bounds.getMaxX(), newX);
             double newHeight = newY - bounds.getMinY();
             if (keepAspect) {
                 double newRatio = newHeight / newWidth;
@@ -429,12 +456,16 @@ public class ResizeHandleKit {
 
         WestHandle(Figure owner) {
             super(owner, RelativeLocator.west());
-            node.setCursor(Cursor.W_RESIZE);
         }
+        @Override
+        public Cursor getCursor() {
+            return Cursor.W_RESIZE;
+        }
+
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-            double newX = min(bounds.getMaxX(),newPoint.getX());
+            double newX = min(bounds.getMaxX(), newPoint.getX());
             double newWidth = bounds.getMaxX() - newX;
             double newHeight = bounds.getHeight();
             if (keepAspect) {
