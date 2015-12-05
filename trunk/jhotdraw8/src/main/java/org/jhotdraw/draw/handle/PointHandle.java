@@ -53,7 +53,10 @@ public class PointHandle extends AbstractHandle {
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
-        node.setCursor(Cursor.CROSSHAIR);
+    }
+    @Override
+    public Cursor getCursor() {
+        return Cursor.CROSSHAIR;
     }
 
     @Override

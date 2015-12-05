@@ -57,16 +57,20 @@ public class MoveHandleKit {
             node.setManaged(false);
             node.setScaleShape(false);
             node.setCenterShape(true);
-            
+
             // The node size must be odd. 
             // This size is independent of the shape that represenst the handle.
             node.resize(11, 11);
-            
+
             node.getStyleClass().clear();
             node.getStyleClass().add(styleclass);
             node.setBorder(REGION_BORDER);
             node.setBackground(REGION_BACKGROUND);
-            node.setCursor(Cursor.OPEN_HAND);
+        }
+
+        @Override
+        public Cursor getCursor() {
+            return Cursor.OPEN_HAND;
         }
 
         @Override
@@ -82,31 +86,31 @@ public class MoveHandleKit {
             Point2D p = getLocation();
             //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
             p = t.transform(p);
-            
+
             // The node is centered around the location. 
             // (The value 5.5 is half of the node size, which is 11,11.
             // 0.5 is subtracted from 5.5 so that the node snaps between pixels
             // so that we get sharp lines. 
             node.relocate(p.getX() - 5, p.getY() - 5);
-            
+
             // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+            node.setRotate(f.getStyled(ROTATE));
+            node.setRotationAxis(f.getStyled(ROTATION_AXIS));
         }
 
         @Override
         public void onMousePressed(MouseEvent event, DrawingView view) {
             oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
-            
+
             // determine which figures can be reshaped together as a group
             Set<Figure> selectedFigures = view.getSelectedFigures();
             groupReshapeableFigures = new HashSet<>();
-            for (Figure f :  view.getSelectedFigures()) {
+            for (Figure f : view.getSelectedFigures()) {
                 if (f.isGroupReshapeableWith(selectedFigures)) {
                     groupReshapeableFigures.add(f);
                 }
             }
-            groupReshapeableFigures=view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
+            groupReshapeableFigures = view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
         }
 
         @Override

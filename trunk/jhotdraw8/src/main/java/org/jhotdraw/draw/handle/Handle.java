@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.handle;
 
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -144,8 +145,15 @@ public interface Handle {
     }
     
     /** Returns true if that handle is compatible with this handle.
-     * @param that tje other handle
+     * @param that the other handle
      * @return true if compatible */
     boolean isCompatible(Handle that);
 
+    /** The cursor that should be shown when the mouse hovers over a selectable
+     * handle.
+     * Non-selectable handles should return null.
+     * 
+     * @return the cursor
+     */
+    Cursor getCursor();
 }

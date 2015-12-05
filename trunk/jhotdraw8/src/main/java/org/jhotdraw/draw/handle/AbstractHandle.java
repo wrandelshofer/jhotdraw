@@ -46,4 +46,6 @@ public abstract class AbstractHandle implements Handle {
     public boolean isCompatible(Handle that) {
         return that.getClass() == this.getClass();
     }
+    
+    
 }
