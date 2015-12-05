@@ -151,7 +151,7 @@ public class GrapherView extends AbstractView implements EditorView {
                 () -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null), //
                 layerFactory), 3, 1);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new, layerFactory), 2, 1);
-        ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, ImageFigure::new, layerFactory), 4, 1);
+        ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, ImageFigure::new, layerFactory), 3, 0);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
