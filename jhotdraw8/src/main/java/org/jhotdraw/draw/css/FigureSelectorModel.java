@@ -106,7 +106,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         @SuppressWarnings("unchecked")
         Converter<Object> c = k.getConverter();
         String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
-        
+
         return requestedValue.equals(stringValue);
     }
 
