@@ -98,7 +98,7 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);
         applyStrokeableFigureProperties(n);
-        applyFilleableFigureProperties(n);
+        applyFillableFigureProperties(n);
         applyCompositableFigureProperties(n);
         n.setCenterX(get(CENTER_X));
         n.setCenterY(get(CENTER_Y));

@@ -29,7 +29,7 @@ public interface FillableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applyFilleableFigureProperties(Shape shape) {
+    default void applyFillableFigureProperties(Shape shape) {
         shape.setFill(getStyled(FILL_COLOR));
     }
 
