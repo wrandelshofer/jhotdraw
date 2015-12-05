@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.css;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -65,7 +66,8 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public Set<String> getStyleClasses(Figure element) {
-        return new HashSet<String>(element.getStyleClass());
+        Collection<String>  styleClasses = element.getStyleClass();
+        return (styleClasses==null)?Collections.emptySet():new HashSet<String>(element.getStyleClass());
     }
 
     private StyleableMapAccessor<?> findKey(Figure element, String attributeName) {
