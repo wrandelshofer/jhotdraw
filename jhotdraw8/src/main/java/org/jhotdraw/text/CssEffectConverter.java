@@ -106,11 +106,11 @@ public class CssEffectConverter implements Converter<Effect> {
         }
         func = tt.currentStringValue();
         BlurType blurType = BlurType.GAUSSIAN;
-        Color color = new Color(0, 0, 0, 0.25);
+        Color color = new Color(0, 0, 0, 0.75);
         double radius = 10.0;
         double spreadOrChocke = 0.0;
-        double offsetX = 5.0;
-        double offsetY = 5.0;
+        double offsetX = 0.0;
+        double offsetY = 4.0;
 
         tt.skipWhitespace();
         if (tt.nextToken() != ')') {
@@ -138,10 +138,10 @@ public class CssEffectConverter implements Converter<Effect> {
                 throw new ParseException("CSS Effect: " + func + "(blur-type<,>color,radius,spread,offset-x,offset-y) expected", tt.getPosition());
             }
             tt.skipWhitespace();
-            if (tt.nextToken() == CssTokenizer.TT_DASH_MATCH) {
-                color = Color.valueOf('#' + tt.currentStringValue());
+            if (tt.nextToken() == CssTokenizer.TT_HASH) {
+                color = Color.web('#' + tt.currentStringValue());
             } else if (tt.currentToken() == CssTokenizer.TT_IDENT) {
-                color = Color.valueOf(tt.currentStringValue());
+                color = Color.web(tt.currentStringValue());
             } else if (tt.currentToken() == CssTokenizer.TT_FUNCTION) {
                 StringBuilder buf = new StringBuilder();
                 buf.append(tt.currentStringValue());
