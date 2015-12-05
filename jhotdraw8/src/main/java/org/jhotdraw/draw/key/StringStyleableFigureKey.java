@@ -9,14 +9,10 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import javafx.scene.paint.Paint;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.CssPaintConverter;
-import org.jhotdraw.text.CssSizeConverter;
 import org.jhotdraw.text.CssStringConverter;
-import org.jhotdraw.text.XmlStringConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 

@@ -12,13 +12,11 @@ import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import org.jhotdraw.collection.CompositeMapAccessor;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssStringConverter;
-import org.w3c.dom.Element;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**

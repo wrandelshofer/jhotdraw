@@ -6,11 +6,8 @@ package org.jhotdraw.draw.gui;
 
 import java.util.Collections;
 import java.util.Set;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.model.DrawingModel;

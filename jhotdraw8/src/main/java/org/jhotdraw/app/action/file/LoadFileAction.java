@@ -7,14 +7,11 @@
  */
 package org.jhotdraw.app.action.file;
 
-import java.net.URI;
 import javafx.event.EventHandler;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
-import org.jhotdraw.gui.URIChooser;
-import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
 
 /**

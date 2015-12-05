@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
-import org.jhotdraw.app.action.AbstractAction;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 
 /**

@@ -11,7 +11,6 @@ import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssBooleanConverter;
-import org.jhotdraw.text.XmlBooleanConverter;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**

@@ -2,7 +2,6 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
-import org.jhotdraw.app.action.AbstractAction;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;

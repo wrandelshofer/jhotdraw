@@ -7,8 +7,6 @@ package org.jhotdraw.css;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  * The {@code CssScanner} preprocesses an input stream of UTF-16 code points for

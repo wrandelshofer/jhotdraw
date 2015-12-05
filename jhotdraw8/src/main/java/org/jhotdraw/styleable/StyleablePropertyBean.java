@@ -8,7 +8,6 @@ import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.beans.PropertyBean;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 
 /**

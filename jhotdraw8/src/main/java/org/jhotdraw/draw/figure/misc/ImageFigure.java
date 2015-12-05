@@ -4,8 +4,6 @@
  */
 package org.jhotdraw.draw.figure.misc;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
 import java.net.URI;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -26,11 +24,8 @@ import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.figure.shape.RectangleFigure;
-import org.jhotdraw.draw.key.DirtyBits;
-import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Rectangle2DStyleableMapAccessor;
-import org.jhotdraw.draw.key.SimpleFigureKey;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import org.jhotdraw.draw.key.UriStyleableFigureKey;

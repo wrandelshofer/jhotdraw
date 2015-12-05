@@ -18,13 +18,11 @@ import javafx.collections.ObservableSet;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.beans.NonnullProperty;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.handle.MoveHandleKit;
 
 /**
  * A {@code DrawingView} can display a {@code Drawing} in a JavaFX scene graph.

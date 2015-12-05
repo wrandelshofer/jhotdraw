@@ -9,7 +9,10 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 /**
- * FFont.
+ * FFont same as {@code javafx.scene.text.Font} but allows to get all
+ * properties that were used to create the font.
+ * <p>
+ * XXX move this into a package for JavaFX font related stuff
  *
  * @author Werner Randelshofer
  */

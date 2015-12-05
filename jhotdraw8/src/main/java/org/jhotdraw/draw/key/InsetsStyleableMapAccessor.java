@@ -19,7 +19,6 @@ import org.jhotdraw.styleable.AbstractStyleableFigureMapAccessor;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssInsetsConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
-import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * InsetsStyleableMapAccessor.

@@ -10,6 +10,7 @@ import java.util.*;
  * A ReversedList provides an unmodifiable view on a List in reverse order.
  *
  * @author wrandels
+ * @param <T> the list type
  */
 public class ReversedList<T> extends AbstractList<T> {
     private List<T> target;

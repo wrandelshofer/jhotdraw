@@ -7,7 +7,6 @@ package org.jhotdraw.beans;
 import javafx.beans.binding.MapExpression;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.MapChangeListener;
-import org.jhotdraw.collection.Key;
 
 /**
  * This property is bound to an entry in a map.

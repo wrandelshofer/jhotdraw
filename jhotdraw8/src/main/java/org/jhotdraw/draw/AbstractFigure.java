@@ -13,7 +13,6 @@ import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.scene.transform.Transform;
@@ -21,9 +20,6 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.styleable.SimpleStyleablePropertyBean;
-import org.jhotdraw.styleable.StyleableStyleManager;
-import org.jhotdraw.draw.key.DirtyBits;
-import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**

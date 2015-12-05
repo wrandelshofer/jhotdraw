@@ -6,7 +6,6 @@
 package org.jhotdraw.draw.model;
 
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.event.Event;

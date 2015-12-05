@@ -9,7 +9,6 @@ import com.sun.javafx.binding.StringConstant;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.value.ObservableValue;

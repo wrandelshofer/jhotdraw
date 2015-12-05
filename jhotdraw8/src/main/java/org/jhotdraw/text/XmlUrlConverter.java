@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**

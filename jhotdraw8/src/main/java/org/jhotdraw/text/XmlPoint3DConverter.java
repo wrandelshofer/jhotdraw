@@ -7,7 +7,6 @@ package org.jhotdraw.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import org.jhotdraw.draw.io.IdFactory;
 

@@ -8,7 +8,6 @@ package org.jhotdraw.draw.model;
 import java.util.List;
 import javafx.beans.Observable;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;

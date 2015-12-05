@@ -5,7 +5,6 @@
 package org.jhotdraw.draw.handle;
 
 import java.util.Collection;
-import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;

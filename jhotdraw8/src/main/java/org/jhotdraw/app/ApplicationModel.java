@@ -5,7 +5,6 @@
 package org.jhotdraw.app;
 
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 import javafx.scene.control.MenuBar;
 import org.jhotdraw.gui.URIChooser;
 

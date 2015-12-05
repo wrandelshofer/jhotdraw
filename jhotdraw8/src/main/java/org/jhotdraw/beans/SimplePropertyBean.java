@@ -4,7 +4,6 @@
  */
 package org.jhotdraw.beans;
 
-import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.FXCollections;

@@ -10,7 +10,7 @@ import javafx.geometry.Point2D;
 /**
  * BezierFigure.
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public abstract class BezierFigure implements Figure {
 

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw.concurrent;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 

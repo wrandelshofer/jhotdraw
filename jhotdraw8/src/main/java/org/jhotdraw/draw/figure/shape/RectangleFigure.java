@@ -28,7 +28,6 @@ import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
-import org.jhotdraw.draw.key.Rectangle2DStyleableFigureKey;
 import org.jhotdraw.draw.key.Rectangle2DStyleableMapAccessor;
 
 /**

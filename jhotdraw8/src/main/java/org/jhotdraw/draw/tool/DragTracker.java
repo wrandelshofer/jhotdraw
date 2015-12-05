@@ -5,7 +5,6 @@
 
 package org.jhotdraw.draw.tool;
 
-import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 

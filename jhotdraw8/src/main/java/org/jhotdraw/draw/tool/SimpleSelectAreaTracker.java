@@ -5,8 +5,6 @@
 package org.jhotdraw.draw.tool;
 
 import javafx.geometry.Bounds;
-import javafx.scene.Group;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -15,7 +13,6 @@ import org.jhotdraw.util.Resources;
 import static java.lang.Math.*;
 import java.util.List;
 import org.jhotdraw.draw.Figure;
-import static java.lang.Math.*;
 import javafx.scene.input.KeyEvent;
 
 /**

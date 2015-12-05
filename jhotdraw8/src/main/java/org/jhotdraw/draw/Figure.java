@@ -5,9 +5,7 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.handle.HandleType;
-import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
-import org.jhotdraw.draw.key.SimpleFigureKey;
 import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -20,13 +18,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
@@ -35,12 +30,9 @@ import static java.lang.Math.max;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
-import javafx.collections.FXCollections;
-import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.scene.transform.Translate;
-import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.IterableTree;
 import org.jhotdraw.collection.IndexedSet;
 import org.jhotdraw.collection.MapAccessor;
@@ -48,14 +40,6 @@ import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
-import org.jhotdraw.draw.key.BlendModeStyleableFigureKey;
-import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw.draw.key.EffectStyleableFigureKey;
-import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw.draw.key.FigureKey;
-import org.jhotdraw.draw.key.ObservableWordListFigureKey;
-import org.jhotdraw.draw.key.ObservableWordListStyleableFigureKey;
-import org.jhotdraw.draw.key.StringStyleableFigureKey;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.

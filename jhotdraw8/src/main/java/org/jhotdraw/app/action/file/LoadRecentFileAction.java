@@ -15,7 +15,6 @@ import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.net.URIUtil;
-import org.jhotdraw.util.Resources;
 
 /**
  * Lets the user write unsaved changes of the active view, and then loads

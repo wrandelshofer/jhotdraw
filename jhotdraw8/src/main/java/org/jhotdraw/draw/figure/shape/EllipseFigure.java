@@ -18,7 +18,6 @@ import org.jhotdraw.draw.CompositableFigure;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.HideableFigure;
 import org.jhotdraw.draw.LockableFigure;
-import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;

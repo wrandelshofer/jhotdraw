@@ -18,6 +18,7 @@ import org.jhotdraw.draw.Figure;
  * StyleManager.
  *
  * @author Werner Randelshofer
+ * @param <E> the element type that can be styled by this style manager
  */
 public interface StyleManager<E> {
 

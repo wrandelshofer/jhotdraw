@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import javafx.scene.paint.Paint;
 import org.jhotdraw.css.CssTokenizer;
 import org.jhotdraw.draw.io.IdFactory;
 import org.jhotdraw.io.CharBufferReader;

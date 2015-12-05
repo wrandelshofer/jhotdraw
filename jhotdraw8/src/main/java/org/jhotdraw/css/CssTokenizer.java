@@ -6,7 +6,6 @@ package org.jhotdraw.css;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.text.ParseException;
 
 /**
  * {@code CssTokenizer} processes an input stream of characters into tokens for

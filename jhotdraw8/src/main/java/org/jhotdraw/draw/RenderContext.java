@@ -4,10 +4,8 @@
  */
 package org.jhotdraw.draw;
 
-import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.scene.Node;
 import org.jhotdraw.beans.PropertyBean;
-import org.jhotdraw.collection.Key;
 
 /**
  * RenderContext.

@@ -8,9 +8,8 @@
 
 package org.jhotdraw.app.action.file;
 
-import org.jhotdraw.util.*;
-import java.awt.event.ActionEvent;
-import java.beans.*;
+import java.beans.PropertyChangeListener;
+import org.jhotdraw.util.Resources;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 

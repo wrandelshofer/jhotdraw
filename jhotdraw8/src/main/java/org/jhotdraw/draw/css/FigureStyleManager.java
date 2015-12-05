@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 import javafx.css.StyleOrigin;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.AbstractStyleManager;
 import org.jhotdraw.css.CssParser;

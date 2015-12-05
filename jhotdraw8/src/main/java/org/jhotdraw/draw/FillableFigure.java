@@ -6,8 +6,6 @@ package org.jhotdraw.draw;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
 /**

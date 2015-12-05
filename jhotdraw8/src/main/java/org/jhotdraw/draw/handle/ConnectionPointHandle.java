@@ -22,10 +22,8 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import static org.jhotdraw.draw.TransformableFigure.ROTATE;
 import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw.draw.key.SimpleFigureKey;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.model.DrawingModel;
-import org.jhotdraw.draw.model.DrawingModelEvent;
 
 /**
  * Handle for the start or end point of a connection figure.

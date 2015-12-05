@@ -8,9 +8,7 @@ package org.jhotdraw.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**

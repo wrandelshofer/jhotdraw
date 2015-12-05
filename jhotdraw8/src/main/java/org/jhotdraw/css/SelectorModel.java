@@ -6,7 +6,6 @@
 package org.jhotdraw.css;
 
 import java.util.Set;
-import org.jhotdraw.draw.Figure;
 
 /**
  * This is a model on which a {@code CssAST.SelectorGroup} can perform a match

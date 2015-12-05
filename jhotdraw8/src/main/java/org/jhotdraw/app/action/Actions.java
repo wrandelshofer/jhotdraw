@@ -5,12 +5,9 @@
 package org.jhotdraw.app.action;
 
 import javafx.beans.binding.Binding;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.Property;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.KeyCombination;

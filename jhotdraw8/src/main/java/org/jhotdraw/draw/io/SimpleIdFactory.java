@@ -4,9 +4,7 @@
  */
 package org.jhotdraw.draw.io;
 
-import java.io.IOException;
 import java.util.HashMap;
-import org.jhotdraw.draw.Figure;
 
 /**
  * SimpleIdFactory.

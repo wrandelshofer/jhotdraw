@@ -13,7 +13,7 @@ import org.jhotdraw.app.Application;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractFocusOwnerAction;
-import org.jhotdraw.util.*;
+import org.jhotdraw.util.Resources;
 
 /**
  * Pastes the contents of the system clipboard at the caret position.

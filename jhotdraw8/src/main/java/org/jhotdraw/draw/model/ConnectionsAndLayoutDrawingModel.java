@@ -6,8 +6,6 @@ package org.jhotdraw.draw.model;
 
 import java.util.Set;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.CompositeMapAccessor;
-import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
