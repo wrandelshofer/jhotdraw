@@ -91,8 +91,8 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
     public void updateNode(RenderContext drawingView, Node node) {
         Text tn = (Text) node;
         tn.setText(get(TEXT));
-        tn.setX(get(ORIGIN).getX());
-        tn.setY(get(ORIGIN).getY());
+        tn.setX(getStyled(ORIGIN).getX());
+        tn.setY(getStyled(ORIGIN).getY());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyHideableFigureProperties(node);
         applyTransformableFigureProperties(tn);

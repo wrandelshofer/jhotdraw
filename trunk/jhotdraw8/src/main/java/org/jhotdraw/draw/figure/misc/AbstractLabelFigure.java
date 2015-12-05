@@ -27,14 +27,11 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.AbstractLeafFigure;
-import org.jhotdraw.draw.CompositableFigure;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.FillableFigure;
-import org.jhotdraw.draw.LockableFigure;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.StrokeableFigure;
-import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
@@ -56,7 +53,7 @@ import org.jhotdraw.draw.LabeledFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractLabelFigure extends AbstractLeafFigure implements LabeledFigure, TransformableFigure, StyleableFigure, LockableFigure, FillableFigure, StrokeableFigure, CompositableFigure {
+public abstract class AbstractLabelFigure extends AbstractLeafFigure implements LabeledFigure, FillableFigure, StrokeableFigure {
 
     public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Point2D(0, 0));
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
@@ -79,20 +76,15 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     private transient Bounds boundsInLocal;
 
     public AbstractLabelFigure() {
-        this(0, 0, "");
+        this(0, 0);
     }
 
     public AbstractLabelFigure(Point2D position) {
         this(position.getX(), position.getY());
     }
 
-    public AbstractLabelFigure(double x, double y, Object... keyValues) {
+    public AbstractLabelFigure(double x, double y) {
         set(ORIGIN, new Point2D(x, y));
-        for (int i = 0; i < keyValues.length; i += 2) {
-            @SuppressWarnings("unchecked") // the set() method will perform the check for us
-            Key<Object> key = (Key<Object>) keyValues[i];
-            set(key, keyValues[i + 1]);
-        }
     }
 
     @Override
@@ -144,10 +136,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         Region r = (Region) g.getChildren().get(0);
         Text t = (Text) g.getChildren().get(1);
 
-        applyTransformableFigureProperties(g);
         updateRegionNode(drawingView, r);
         updateTextNode(drawingView, t);
-        applyCompositableFigureProperties(node);
     }
 
     private void updateRegionNode(RenderContext drawingView, Region node) {
