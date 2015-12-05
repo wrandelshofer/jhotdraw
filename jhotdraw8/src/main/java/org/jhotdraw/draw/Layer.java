@@ -8,7 +8,9 @@ package org.jhotdraw.draw;
 /**
  * Defines a <i>layer</i> of a {@link Drawing}.
  * <p>
- * The parent of a {@code Layer} must be a {@code Drawing}.
+ * The parent of a {@code Layer} must be a {@code Drawing}. 
+ * Method {@link #isSuitableParent(org.jhotdraw.draw.Figure)}
+ * must be implementend accordingly.
  * <p>
  * A layer does not have handles and is not selectable.
  * 
