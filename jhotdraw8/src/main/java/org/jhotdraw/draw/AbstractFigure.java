@@ -61,14 +61,6 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     }
 
     /**
-     * This implementation always returns true.
-     */
-    @Override
-    public boolean isSelectable() {
-        return true;
-    }
-    
-    /**
      * This method whether the provided figure is a suitable parent for this
      * figure.
      * <p>
