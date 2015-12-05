@@ -47,12 +47,14 @@ public interface LockableFigure extends Figure {
     }
 
     /**
-     * Whether the figure is not locked and all its parents are deletable.
+     * Whether the figure is not locked and all its parents are editable.
      *
      * @return true if this figure is not locked and all parents are deletable.
      */
     @Override
     default boolean isDeletable() {
+        return isEditable();
+        /*
         if (get(LOCKED)) {
             return false;
         }
@@ -63,15 +65,17 @@ public interface LockableFigure extends Figure {
             }
             node = node.getParent();
         }
-        return true;
+        return true;*/
     }
     /**
-     * Whether the figure is not locked and all its parents are selectable.
+     * Whether the figure is not locked and all its parents are editable.
      *
      * @return true if this figure is not locked and all parents are selectable.
      */
     @Override
     default boolean isSelectable() {
+        return isEditable();
+        /*
         if (get(LOCKED)) {
             return false;
         }
@@ -82,6 +86,6 @@ public interface LockableFigure extends Figure {
             }
             node = node.getParent();
         }
-        return true;
+        return true;*/
     }
 }

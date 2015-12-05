@@ -384,16 +384,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             throw new InternalError(ex);
         }
 
-        stackPane.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent evt) -> {
-            if (!stackPane.isFocused()) {
-                stackPane.requestFocus();
-                if (!stackPane.getScene().getWindow().isFocused()) {
-                    evt.consume();
-                }
-            }
-        });
-        stackPane.setFocusTraversable(true);
-        focused.bind(stackPane.focusedProperty());
 
         backgroundPane = new Rectangle();
         backgroundPane.setFill(new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false));
@@ -440,6 +430,16 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         // set root
         node = new SimpleDrawingViewNode();
         node.setCenter(stackPane);
+        node.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent evt) -> {
+            if (!node.isFocused()) {
+                node.requestFocus();
+                if (!node.getScene().getWindow().isFocused()) {
+                    evt.consume();
+                }
+            }
+        });
+        node.setFocusTraversable(true);
+        focused.bind(node.focusedProperty());
     }
 
     private void invalidateFigureNode(Figure f) {
@@ -1140,7 +1140,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         Drawing d = getDrawing();
         if (d != null) {
             for (Figure layer : d.getChildren()) {
-                if (layer.isSelectable()) {
+                if (layer.isEditable()) {
                     for (Figure f : layer.getChildren()) {
                         if (f.isSelectable()) {
                             figures.add(f);

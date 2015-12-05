@@ -8,6 +8,7 @@ package org.jhotdraw.draw.tool;
 import java.util.LinkedList;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.SimpleObjectProperty;
@@ -20,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import org.jhotdraw.app.AbstractDisableable;
+import org.jhotdraw.app.EditableComponent;
 import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.DrawingView;
@@ -52,7 +54,87 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             stopEditing();
         });
     }
-    protected final BorderPane eventPane = new BorderPane();
+    
+    private class EventPane extends BorderPane implements  EditableComponent {
+        private EditableComponent getEditableParent() {
+            
+            DrawingView dv=getDrawingView();
+            if (dv!=null) {
+                if (dv.getNode() instanceof EditableComponent) {
+                return (EditableComponent) dv.getNode();
+            }
+            }
+            return null;
+        }
+
+        @Override
+        public void selectAll() {
+            EditableComponent p = getEditableParent();
+            if (p!=null) {
+                p.selectAll();
+            }
+        }
+
+        @Override
+        public void clearSelection() {
+            EditableComponent p = getEditableParent();
+            if (p!=null) {
+                p.clearSelection();
+            }
+        }
+
+        @Override
+        public ReadOnlyBooleanProperty selectionEmptyProperty() {
+            EditableComponent p = getEditableParent();
+            if (p!=null) {
+             return   p.selectionEmptyProperty();
+            }
+            return null;
+        }
+
+        @Override
+        public void deleteSelection() {
+            EditableComponent p = getEditableParent();
+            if (p!=null) {
+                p.deleteSelection();
+            }
+        }
+
+        @Override
+        public void duplicateSelection() {
+            EditableComponent p = getEditableParent();
+            if (p!=null) {
+                p.duplicateSelection();
+            }
+        }
+
+        @Override
+        public void cut() {
+            EditableComponent p = getEditableParent();
+            if (p!=null) {
+                p.cut();
+            }
+        }
+
+        @Override
+        public void copy() {
+            EditableComponent p = getEditableParent();
+            if (p!=null) {
+                p.copy();
+            }
+        }
+
+        @Override
+        public void paste() {
+            EditableComponent p = getEditableParent();
+            if (p!=null) {
+                p.paste();
+            }
+        }
+        
+    }
+    
+    protected final BorderPane eventPane = new EventPane();
     protected final BorderPane drawPane = new BorderPane();
     protected final StackPane node = new StackPane();
 
