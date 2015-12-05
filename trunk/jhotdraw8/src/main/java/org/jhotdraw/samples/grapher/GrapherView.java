@@ -49,6 +49,7 @@ import org.jhotdraw.draw.figure.misc.LabelFigure;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
+import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.TextableFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
@@ -294,17 +295,6 @@ public class GrapherView extends AbstractView implements EditorView {
         drawingView.setDrawing(d);
         clearModified();
         callback.handle(new TaskCompletionEvent<Void>());
-    }
-
-    @FXML
-    public void buttonPerformed(ActionEvent event) {
-        Instant now = Instant.now();
-        for (Figure f : drawingView.getDrawing().childrenProperty()) {
-            if (f instanceof TextableFigure) {
-                TextableFigure tf = (TextableFigure) f;
-                tf.set(TextableFigure.TEXT, now.toString());
-            }
-        }
     }
 
     @Override

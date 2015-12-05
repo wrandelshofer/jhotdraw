@@ -26,6 +26,7 @@ import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
+import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
 
 /**
@@ -35,7 +36,7 @@ import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, TextableFigure, TextHolderFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Text"}.
