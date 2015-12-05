@@ -70,7 +70,7 @@ public interface TextableFigure extends Figure {
      *
      * @param text a text node
      */
-    default void applyTextHolderProperties(Text text) {
+    default void applyTextableFigureProperties(Text text) {
         text.setFont(getStyled(FONT).getFont());
         text.setLineSpacing(getStyled(LINE_SPACING));
         text.setStrikethrough(getStyled(STRIKETHROUGH));
@@ -84,7 +84,7 @@ public interface TextableFigure extends Figure {
      *
      * @param text a text node
      */
-    default void applyTextHolderProperties(Labeled text) {
+    default void applyTextableFigureProperties(Labeled text) {
         text.setFont(getStyled(FONT).getFont());
         text.setLineSpacing(getStyled(LINE_SPACING));
         //text.setStrikethrough(getStyled(STRIKETHROUGH));

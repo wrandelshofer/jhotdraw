@@ -95,7 +95,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyHideableFigureProperties(node);
         applyTransformableFigureProperties(tn);
-        applyTextHolderProperties(tn);
+        applyTextableFigureProperties(tn);
         applyStrokeableFigureProperties(tn);
         applyFillableFigureProperties(tn);
         applyCompositableFigureProperties(tn);
