@@ -94,7 +94,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public boolean attributeValueEquals(Figure element, String attributeName, String attributeValue) {
+    public boolean attributeValueEquals(Figure element, String attributeName, String requestedValue) {
         @SuppressWarnings("unchecked")
         StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (k == null) {
@@ -107,7 +107,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         Converter<Object> c = k.getConverter();
         String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
         
-        return attributeValue.equals(stringValue);
+        return requestedValue.equals(stringValue);
     }
 
     @Override
