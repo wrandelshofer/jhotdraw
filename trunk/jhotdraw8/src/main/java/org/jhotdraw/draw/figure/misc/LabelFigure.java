@@ -178,7 +178,7 @@ public class LabelFigure extends AbstractLeafFigure implements TextableFigure, L
         Point2D origin = get(ORIGIN);
         tn.setX(origin.getX());
         tn.setY(origin.getY());
-        applyTextHolderProperties(tn);
+        applyTextableFigureProperties(tn);
         applyLabeledFigureProperties(tn);
     }
 
