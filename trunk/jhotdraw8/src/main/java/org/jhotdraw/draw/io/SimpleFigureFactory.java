@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 import org.jhotdraw.collection.CompositeMapAccessor;
@@ -48,6 +49,47 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     private final Set<String> skipElements = new HashSet<>();
     private final Map<String, HashSet<Class<? extends Figure>>> skipAttributes = new HashMap<>();
     private String objectIdAttribute = "oid";
+
+    private static class FigureAccessorKey<T> {
+
+        private final Class<? extends Figure> figure;
+        private final MapAccessor<T> acc;
+
+        public FigureAccessorKey(Class<? extends Figure> figure, MapAccessor<T> acc) {
+            this.figure = figure;
+            this.acc = acc;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final FigureAccessorKey<?> other = (FigureAccessorKey<?>) obj;
+            if (!Objects.equals(this.figure, other.figure)) {
+                return false;
+            }
+            if (!Objects.equals(this.acc, other.acc)) {
+                return false;
+            }
+            return true;
+        }
+
+    }
+
+    private final Map<FigureAccessorKey<?>, Object> defaultValueMap = new HashMap<>();
 
     public SimpleFigureFactory() {
     }
@@ -245,6 +287,10 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         skipElements.add(elementName);
     }
 
+    public <T> void addDefaultValue(Class<? extends Figure> figure, MapAccessor<T> acc, T value) {
+        defaultValueMap.put(new FigureAccessorKey<T>(figure, acc), value);
+    }
+
     /**
      * Adds an attribute to the list of attributes which will be skipped when
      * reading the DOM.
@@ -381,9 +427,9 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      */
     public void addConverterForType(String fullValueType, Converter<?> converter) {
         if (valueToXML.containsKey(fullValueType)) {
-            throw new IllegalStateException("you already added "+fullValueType);
+            throw new IllegalStateException("you already added " + fullValueType);
         }
-        
+
         valueToXML.put(fullValueType, converter);
         valueFromXML.put(fullValueType, converter);
     }
@@ -436,8 +482,15 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     @Override
-    public <T> T getDefaultValue(MapAccessor<T> key) {
-        return key.getDefaultValue();
+    public <T> T getDefaultValue(Figure f, MapAccessor<T> key) {
+        FigureAccessorKey<T> k = new FigureAccessorKey<T>(f.getClass(), key);
+        if (defaultValueMap.containsKey(k)) {
+            @SuppressWarnings("unchecked")
+            T defaultValue = (T) defaultValueMap.get(k);
+            return defaultValue;
+        } else {
+            return key.getDefaultValue();
+        }
     }
 
     /**
@@ -561,7 +614,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      */
     protected void removeRedundantKeys() {
         // FIXME must remove redundant keys per figure
-        
+
         HashSet<MapAccessor<?>> redundantKeys = new HashSet<>();
 
         for (Map.Entry<Class<? extends Figure>, HashSet<MapAccessor<?>>> entry : figureAttributeKeys.entrySet()) {
@@ -576,6 +629,20 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         for (MapAccessor<?> ma : redundantKeys) {
             removeKey(ma);
         }
+    }
+
+    @Override
+    public <T> boolean isDefaultValue(Figure f, MapAccessor<T> key, T value) {
+        FigureAccessorKey<T> k = new FigureAccessorKey<T>(f.getClass(), key);
+        T defaultValue;
+        if (defaultValueMap.containsKey(k)) {
+            @SuppressWarnings("unchecked")
+            T suppress = defaultValue = (T) defaultValueMap.get(k);
+        } else {
+            defaultValue = key.getDefaultValue();
+        }
+
+        return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
     }
 
 }
