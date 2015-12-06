@@ -30,6 +30,10 @@ public class CssRegexConverter implements Converter<Regex> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Regex value) throws IOException {
+        if (value == null) {
+            out.append("none");
+            return;
+        }
         out.append('/');
         appendExpr(out, value.getFind());
         out.append('/');
@@ -51,6 +55,13 @@ public class CssRegexConverter implements Converter<Regex> {
         StringBuilder replace = new StringBuilder();
 
         tt.skipWhitespace();
+        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+            if (!"none".equals(tt.currentStringValue())) {
+                throw new ParseException("none or '/' expected", tt.getPosition());
+            }
+            return null;
+        }
+
         if (tt.nextToken() != '/') {
             throw new ParseException("first / expected", tt.getPosition());
         }
