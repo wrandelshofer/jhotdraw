@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.styleable;
+package org.jhotdraw.draw.key;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Set;
 import org.jhotdraw.collection.CompositeMapAccessor;
 import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.draw.key.DirtyMask;
-import org.jhotdraw.draw.key.FigureKey;
+import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * AbstractStyleableFigureMapAccessor.
  *
  * @author Werner Randelshofer
+ * @param <T> the value type
  */
 public abstract class AbstractStyleableFigureMapAccessor<T> implements StyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
 
