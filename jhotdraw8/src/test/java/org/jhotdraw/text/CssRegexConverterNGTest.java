@@ -20,7 +20,7 @@ public class CssRegexConverterNGTest {
      */
     @Test(dataProvider = "regexData")
     public void testRegex(String inpuRegex, String inputValue, String expectedValue) throws Exception {
-       CssRegexConverter c = new CssRegexConverter();
+       CssRegexConverter c = new CssRegexConverter(false);
        Regex rgx=c.fromString(inpuRegex);
        String actualValue=rgx.apply(inputValue);
         assertEquals(actualValue, expectedValue);
@@ -28,13 +28,13 @@ public class CssRegexConverterNGTest {
     @DataProvider
     public Object[][] regexData() {
         return new Object[][]{
-            {"///","",""},
-            {"/.*@(.*)/","a@b","b"},
-            {"/.*@(.*)/$1/","a@b","b"},
-            {"/.*@(.*)/$0/","a@b","a@b"},
-            {"/.*@(.*)/ ","a@b","b"},
-            {"/.*@(.*)/ /","a@b"," "},
-            {"/.*@(.*)//","a@b",""},
+            {"/\"\"//","",""},
+            {"/\".*@(.*)\"/","a@b","a@b"},
+            {"/\".*@(.*)\"/\"$1\"/","a@b","b"},
+            {"/\".*@(.*)\"/\"$0\"/","a@b","a@b"},
+            {"/\".*@(.*)\"/ ","a@b","a@b"},
+            {"/\".*@(.*)\"/\" \"/","a@b"," "},
+            {"/\".*@(.*)\"/\"\"/","a@b",""},
         };
                 }
 }

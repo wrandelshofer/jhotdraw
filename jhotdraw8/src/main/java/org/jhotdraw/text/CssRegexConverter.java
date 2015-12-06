@@ -17,8 +17,8 @@ import org.jhotdraw.draw.io.IdFactory;
  * Parses the following EBNF:
  * <pre>
  * Regex := '/', Find, '/', [ Replace, '/' ] ;
- * Find := RegexFindPattern;
- * Replace := RegexReplacePattern;
+ * Find := String;
+ * Replace := String;
  * </pre>
  *
  * @author Werner Randelshofer
@@ -26,6 +26,7 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class CssRegexConverter implements Converter<Regex> {
 
+    private final CssStringConverter stringConverter = new CssStringConverter();
     private final boolean nullable;
 
     public CssRegexConverter(boolean nullable) {
@@ -43,10 +44,10 @@ public class CssRegexConverter implements Converter<Regex> {
             }
         }
         out.append('/');
-        appendExpr(out, value.getFind());
+        stringConverter.toString(out, value.getFind());
         out.append('/');
         if (!"$1".equals(value.getReplace())) {
-            appendExpr(out, value.getReplace());
+            stringConverter.toString(out, value.getReplace());
             out.append('/');
         }
     }
@@ -59,8 +60,8 @@ public class CssRegexConverter implements Converter<Regex> {
     public Regex fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new StringReader(in.toString()));
 
-        StringBuilder find = new StringBuilder();
-        StringBuilder replace = new StringBuilder();
+        String find;
+        String replace;
 
         tt.skipWhitespace();
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
@@ -79,38 +80,31 @@ public class CssRegexConverter implements Converter<Regex> {
         if (tt.nextToken() != '/') {
             throw new ParseException("first / expected", tt.getPosition());
         }
-        while (tt.nextToken() != CssTokenizer.TT_EOF && tt.currentToken() != '/') {
-            switch (tt.currentToken()) {
-            case CssTokenizer.TT_AT_KEYWORD:
-                find.append('@');
-                find.append(tt.currentStringValue());
-                break;
-            case CssTokenizer.TT_HASH:
-                find.append('#');
-                find.append(tt.currentStringValue());
-                break;
-            default:
-                find.append(tt.currentStringValue());
-                break;
-            }
+        tt.skipWhitespace();
+        if (tt.nextToken() != CssTokenizer.TT_STRING) {
+            throw new ParseException("find string expected", tt.getPosition());
         }
-        if (tt.currentToken() != '/') {
+        find = tt.currentStringValue();
+        tt.skipWhitespace();
+        if (tt.nextToken() != '/') {
             throw new ParseException("second / expected", tt.getPosition());
         }
-        while (tt.nextToken() != CssTokenizer.TT_EOF && tt.currentToken() != '/') {
-            replace.append(tt.currentStringValue());
-        }
-        if (tt.currentToken() != '/') {
-            if (replace.toString().trim().length() > 0) {
+        tt.skipWhitespace();
+        if (tt.nextToken() == CssTokenizer.TT_STRING) {
+            replace = tt.currentStringValue();
+
+            tt.skipWhitespace();
+            if (tt.nextToken() != '/') {
                 throw new ParseException("third / expected", tt.getPosition());
             }
-            replace.setLength(0);
-            replace.append("$1");
+        } else {
+            replace = "$0";
+            tt.pushBack();
         }
         tt.skipWhitespace();
 
         in.position(in.limit());
-        return new Regex(find.toString(), replace.toString());
+        return new Regex(find, replace);
     }
 
     @Override
