@@ -13,64 +13,81 @@ import org.jhotdraw.draw.io.IdFactory;
 import org.jhotdraw.io.CharBufferReader;
 
 /**
- * Converts an {@code String} to a quoted CSS {@code String}.
- * <pre>
- * unicode       = '\' , ( 6 * hexd
- *                       | hexd , 5 * [hexd] , w
- *                       );
- * escape        = ( unicode
- *                 | '\' , -( newline | hexd)
- *                 ) ;
- * string        = string1 | string2 ;
- * string1       = '"' , { -( '"' ) | '\\' , newline |  escape } , '"' ;
- * string2       = "'" , { -( "'" ) | '\\' , newline |  escape } , "'" ;
- * </pre>
+ * Converts an SVG path to a CSS String.
+ * <p>
+ * The null value will be converted to the CSS identifier "none".
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class CssSvgPathConverter implements Converter<SVGPath> {
 
+    private final boolean nullable;
+
+    public CssSvgPathConverter(boolean nullable) {
+        this.nullable = nullable;
+    }
 
     @Override
     public SVGPath fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
-        if (tt.nextToken() != CssTokenizer.TT_STRING) {
-            throw new ParseException("Css String expected. "+tt.currentToken(), buf.position());
+
+        SVGPath p = null;
+        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+            if (!nullable) {
+                throw new ParseException("tring expected. " + tt.currentToken(), buf.position());
+            }
+            if (!"none".equals(tt.currentStringValue())) {
+                throw new ParseException("none or String expected. " + tt.currentToken(), buf.position());
+            }
+            p = null;
+        } else {
+            if (tt.currentToken() != CssTokenizer.TT_STRING) {
+                throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
+            }
+            p = new SVGPath();
+            p.setContent(tt.currentStringValue());
         }
-        SVGPath p=new SVGPath();
-        p.setContent(tt.currentStringValue());
+        buf.position(buf.limit());
+
         return p;
     }
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, SVGPath value) throws IOException {
+        if (value == null) {
+            if (!nullable) {
+                throw new IllegalArgumentException("value is null");
+            }
+            out.append("none");
+            return;
+        }
         out.append('"');
         for (char ch : value.getContent().toCharArray()) {
             switch (ch) {
-                case '"':
+            case '"':
+                out.append('\\');
+                out.append('"');
+                break;
+            case ' ':
+                out.append(ch);
+                break;
+            case '\n':
+                out.append('\\');
+                out.append('\n');
+                break;
+            default:
+                if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
                     out.append('\\');
-                    out.append('"');
-                    break;
-                case ' ':
-                    out.append(ch);
-                    break;
-                case '\n':
-                    out.append('\\');
-                    out.append('\n');
-                    break;
-                default:
-                    if (Character.isISOControl(ch)||Character.isWhitespace(ch)) {
-                        out.append('\\');
-                        String hex = Integer.toHexString(ch);
-                        for (int i = 0, n = 6 - hex.length(); i < n; i++) {
-                            out.append('0');
-                        }
-                        out.append(hex);
-                    } else {
-                        out.append(ch);
+                    String hex = Integer.toHexString(ch);
+                    for (int i = 0, n = 6 - hex.length(); i < n; i++) {
+                        out.append('0');
                     }
-                    break;
+                    out.append(hex);
+                } else {
+                    out.append(ch);
+                }
+                break;
             }
         }
         out.append('"');
@@ -78,7 +95,7 @@ public class CssSvgPathConverter implements Converter<SVGPath> {
 
     @Override
     public SVGPath getDefaultValue() {
-        SVGPath p= new SVGPath();
+        SVGPath p = new SVGPath();
         return p;
     }
 }
