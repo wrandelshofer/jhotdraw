@@ -24,20 +24,20 @@ public class CssTokenizerNGTest {
      */
     @Test(dataProvider = "tokenizerData")
     public void testTokenizer(String inputData, String expectedValue) throws Exception {
-        CssTokenizer s = new CssTokenizer(new StringReader(inputData),false);
+        CssTokenizer tt = new CssTokenizer(new StringReader(inputData),false);
         //
         StringBuilder buf = new StringBuilder();
-        while (s.nextToken() != CssTokenizer.TT_EOF) {
+        while (tt.nextToken() != CssTokenizer.TT_EOF) {
             if (buf.length() > 0) {
                 buf.append(' ');
             }
-            if (s.currentToken() < 0) {
-                buf.append(s.currentToken());
+            if (tt.currentToken() < 0) {
+                buf.append(tt.currentToken());
             } else {
-                buf.append((char) s.currentToken());
+                buf.append((char) tt.currentToken());
             }
             buf.append(':');
-            buf.append(s.currentStringValue());
+            buf.append(tt.currentStringValue());
         }
         String actualValue = buf.toString();
         actualValue=actualValue.replaceAll("\\n", "\\\\n");
@@ -114,4 +114,21 @@ public class CssTokenizerNGTest {
         };
     }
 
+    /**
+     * Test of nextChar method, of class CssScanner.
+     */
+    @Test(dataProvider = "regexData")
+    public void testRegex(String inputData, String expectedValue) throws Exception {
+        CssTokenizer tt = new CssTokenizer(new StringReader(inputData),false);
+        while (tt.nextToken()!=CssTokenizer.TT_EOF) {
+            int t = tt.currentToken();
+            System.out.println("tt:"+t+" "+tt.currentStringValue());
+        }
+    }
+    @DataProvider
+    public Object[][] regexData() {
+        return new Object[][]{
+            {"",""}
+        };
+                }
 }
