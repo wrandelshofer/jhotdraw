@@ -21,12 +21,13 @@ import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
  * RegexStyleableFigureKey.
+ *
  * @author Werner Randelshofer
  */
 public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements StyleableMapAccessor<Regex> {
 
     final static long serialVersionUID = 1L;
-    private final CssRegexConverter converter=new CssRegexConverter();
+    private final CssRegexConverter converter = new CssRegexConverter();
     private final CssMetaData<? extends Styleable, Regex> cssMetaData;
 
     /**
@@ -36,26 +37,41 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
      * @param name The name of the key.
      */
     public RegexStyleableFigureKey(String name) {
-        this(name,DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT), new Regex());
+        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Regex());
     }
 
-   /**
+    /**
      * Creates a new instance with the specified name and default value.
      *
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
     public RegexStyleableFigureKey(String name, Regex defaultValue) {
-        this(name,DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT), defaultValue);
+        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), defaultValue);
     }
-   /**
+
+    /**
      * Creates a new instance with the specified name and default value.
+     * The value is nullable.
      *
      * @param name The name of the key.
+     * @param mask the dirty mask
      * @param defaultValue The default value.
      */
     public RegexStyleableFigureKey(String name, DirtyMask mask, Regex defaultValue) {
-        super(name, Regex.class, mask, defaultValue);
+        this(name, true, mask, defaultValue);
+    }
+
+    /**
+     * Creates a new instance with the specified name and default value.
+     *
+     * @param name The name of the key.
+     * @param nullable whether the value is nullable
+     * @param mask the dirty mask
+     * @param defaultValue The default value.
+     */
+    public RegexStyleableFigureKey(String name, boolean nullable, DirtyMask mask, Regex defaultValue) {
+        super(name, Regex.class, nullable, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<Regex>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -76,8 +92,9 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
         return cssMetaData;
 
     }
-   @Override
+
+    @Override
     public Converter<Regex> getConverter() {
-       return converter;
+        return converter;
     }
 }
