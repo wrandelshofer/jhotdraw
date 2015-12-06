@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.text;
 
+import java.util.Objects;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -22,7 +23,7 @@ public class FFont {
     private final FontWeight weight;
     private final FontPosture posture;
     private final double size;
-    private final Font font;
+    private final transient Font font;
 
     public FFont(String family, FontWeight weight, FontPosture posture, double size) {
         this.family = family;
@@ -55,4 +56,45 @@ public class FFont {
     public static FFont font(String family, FontWeight weight, FontPosture posture, double size) {
         return new FFont(family, weight, posture, size);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.family);
+        hash = 97 * hash + Objects.hashCode(this.weight);
+        hash = 97 * hash + Objects.hashCode(this.posture);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.size) ^ (Double.doubleToLongBits(this.size) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FFont other = (FFont) obj;
+        if (Double.doubleToLongBits(this.size) != Double.doubleToLongBits(other.size)) {
+            return false;
+        }
+        if (!Objects.equals(this.family, other.family)) {
+            return false;
+        }
+        if (this.weight != other.weight) {
+            return false;
+        }
+        if (this.posture != other.posture) {
+            return false;
+        }
+        return true;
+    }
+
+   
+    
+    
 }
