@@ -59,13 +59,6 @@ public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> 
      */
     public Rectangle2DStyleableFigureKey(String key, DirtyMask mask, Rectangle2D defaultValue) {
         super(key, Rectangle2D.class, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createPoint2DCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
 
         Function<Styleable, StyleableProperty<Rectangle2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -73,11 +66,11 @@ public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> 
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Rectangle2D> converter
+        final StyleConverter<String, Rectangle2D> cnvrtr
                 = new StyleConverterConverterWrapper<Rectangle2D>(getConverter());
         CssMetaData<Styleable, Rectangle2D> md
                 = new SimpleCssMetaData<Styleable, Rectangle2D>(property, function,
-                        converter, defaultValue, inherits);
+                        cnvrtr, defaultValue, inherits);
         cssMetaData = md;
     }
 

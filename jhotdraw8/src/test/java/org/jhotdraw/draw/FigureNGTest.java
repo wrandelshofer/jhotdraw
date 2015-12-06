@@ -7,6 +7,7 @@ package org.jhotdraw.draw;
 import java.util.HashSet;
 import java.util.Set;
 import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.figure.shape.RectangleFigure;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -45,10 +46,10 @@ public class FigureNGTest {
      */
     @Test
     public void testGetDeclaredAndInheritedKeys() {
-       Set<Key<?>> figureKeys = Figure.getDeclaredAndInheritedKeys(Figure.class);
-         Set<Key<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedKeys(RectangleFigure.class);
+       Set<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedKeys(Figure.class);
+         Set<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedKeys(RectangleFigure.class);
 System.out.println("rr:"+rectangleFigureKeys);         
-         Set<Key<?>> intersection=new HashSet<>(figureKeys);
+         Set<MapAccessor<?>> intersection=new HashSet<>(figureKeys);
          intersection.retainAll(rectangleFigureKeys);
 System.out.println("ri:"+intersection);         
         assertEquals(figureKeys,intersection);
