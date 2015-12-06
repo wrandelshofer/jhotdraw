@@ -113,22 +113,4 @@ public class CssTokenizerNGTest {
         //
         };
     }
-
-    /**
-     * Test of nextChar method, of class CssScanner.
-     */
-    @Test(dataProvider = "regexData")
-    public void testRegex(String inputData, String expectedValue) throws Exception {
-        CssTokenizer tt = new CssTokenizer(new StringReader(inputData),false);
-        while (tt.nextToken()!=CssTokenizer.TT_EOF) {
-            int t = tt.currentToken();
-            System.out.println("tt:"+t+" "+tt.currentStringValue());
-        }
-    }
-    @DataProvider
-    public Object[][] regexData() {
-        return new Object[][]{
-            {"",""}
-        };
-                }
 }

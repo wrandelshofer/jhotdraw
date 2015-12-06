@@ -39,6 +39,8 @@ public class CssFontConverter implements Converter<FFont> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, FFont font) throws IOException {
+        /// FIXME use CssTokenizer
+        
         double fontSize = font.getSize();
         String fontFamily = font.getFamily();
 
