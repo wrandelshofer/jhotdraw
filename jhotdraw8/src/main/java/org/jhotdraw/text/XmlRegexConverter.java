@@ -11,4 +11,8 @@ package org.jhotdraw.text;
  */
 public class XmlRegexConverter extends CssRegexConverter {
 
+    public XmlRegexConverter(boolean nullable) {
+        super(nullable);
+    }
+
 }
