@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.text;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,4 +60,35 @@ public class Regex {
         Matcher m = pattern.matcher(str);
         return m.replaceAll(replace);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.find);
+        hash = 53 * hash + Objects.hashCode(this.replace);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Regex other = (Regex) obj;
+        if (!Objects.equals(this.find, other.find)) {
+            return false;
+        }
+        if (!Objects.equals(this.replace, other.replace)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }
