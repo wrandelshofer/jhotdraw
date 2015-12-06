@@ -60,8 +60,27 @@ public class CssIdentConverter implements Converter<String> {
         if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || 0xA0 <= ch && ch <= 0x10FFFF) {
             out.append((char) ch);
         } else {
-            out.append('\\');
-            out.append((char) ch);
+            switch (ch) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '\n':
+                String hex = "000000" + Integer.toHexString(ch);
+                out.append('\\');
+                out.append(hex.substring(hex.length() - 1));
+                break;
+            default:
+                out.append('\\');
+                out.append((char) ch);
+                break;
+            }
         }
 
         while (-1 != (ch = r.read())) {
