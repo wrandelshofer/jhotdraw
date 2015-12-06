@@ -174,8 +174,8 @@ public class GrapherView extends AbstractView implements EditorView {
             protected List<Node> call() throws Exception {
                 List<Node> list = new LinkedList<>();
                 addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS, list);
-                addInspector(new StylesheetsInspector(), "stylesheets", Priority.ALWAYS, list);
                 addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER, list);
+                addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS, list);
                 addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS, list);
                 addInspector(new DrawingInspector(), "drawing", Priority.NEVER, list);
                 addInspector(new GridInspector(), "grid", Priority.NEVER, list);
