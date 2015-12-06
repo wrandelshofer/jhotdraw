@@ -374,7 +374,6 @@ public class CssTokenizer {
                         }
                         stringValue = buf.toString();
                     } else {
-                        in.pushBack(next1);
                         if (identMacro(ch, buf)) {
                             next1 = in.nextChar();
                             if (next1 == '(') {
