@@ -560,6 +560,8 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * accessor.
      */
     protected void removeRedundantKeys() {
+        // FIXME must remove redundant keys per figure
+        
         HashSet<MapAccessor<?>> redundantKeys = new HashSet<>();
 
         for (Map.Entry<Class<? extends Figure>, HashSet<MapAccessor<?>>> entry : figureAttributeKeys.entrySet()) {
