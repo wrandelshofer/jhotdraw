@@ -380,6 +380,10 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param converter the converter
      */
     public void addConverterForType(String fullValueType, Converter<?> converter) {
+        if (valueToXML.containsKey(fullValueType)) {
+            throw new IllegalStateException("you already added "+fullValueType);
+        }
+        
         valueToXML.put(fullValueType, converter);
         valueFromXML.put(fullValueType, converter);
     }
