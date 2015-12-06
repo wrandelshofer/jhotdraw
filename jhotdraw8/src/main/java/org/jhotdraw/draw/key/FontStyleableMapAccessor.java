@@ -16,7 +16,6 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.styleable.AbstractStyleableFigureMapAccessor;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssFontConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;

@@ -1,4 +1,4 @@
-/* @(#)BoundingBoxStyleableMapAccessor.java
+/* @(#)BoundingBoxMapAccessor.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -20,15 +20,14 @@ import org.jhotdraw.text.CssBoundingBoxConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 
 /**
- * BoundingBoxStyleableMapAccessor.
+ * BoundingBoxMapAccessor.
  *
  * @author werni
  */
-public class BoundingBoxStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<BoundingBox> {
+public class BoundingBoxMapAccessor extends AbstractFigureMapAccessor<BoundingBox> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, BoundingBox> cssMetaData;
     private final MapAccessor<Double> xKey;
     private final MapAccessor<Double> yKey;
     private final MapAccessor<Double> widthKey;
@@ -43,42 +42,13 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableFigureMapA
      * @param widthKey the key for the width of the rectangle
      * @param heightKey the key for the height of the rectangle
      */
-    public BoundingBoxStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> widthKey, MapAccessor<Double> heightKey) {
+    public BoundingBoxMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> widthKey, MapAccessor<Double> heightKey) {
         super(name, BoundingBox.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new BoundingBox(xKey.getDefaultValue(), yKey.getDefaultValue(), widthKey.getDefaultValue(), heightKey.getDefaultValue()));
-
-        Function<Styleable, StyleableProperty<BoundingBox>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, BoundingBox> cnvrtr
-                = new StyleConverterConverterWrapper<>(getConverter());
-        CssMetaData<Styleable, BoundingBox> md
-                = new SimpleCssMetaData<>(property, function,
-                        cnvrtr, getDefaultValue(), inherits);
-        cssMetaData = md;
 
         this.xKey = xKey;
         this.yKey = yKey;
         this.widthKey = widthKey;
         this.heightKey = heightKey;
-    }
-
-    @Override
-    public CssMetaData<?, BoundingBox> getCssMetaData() {
-        return cssMetaData;
-
-    }
-
-    private Converter<BoundingBox> converter;
-
-    @Override
-    public Converter<BoundingBox> getConverter() {
-        if (converter == null) {
-            converter = new CssBoundingBoxConverter();
-        }
-        return converter;
     }
 
     @Override
