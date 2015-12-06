@@ -49,6 +49,8 @@ public class Regex {
 
     /**
      * Applies the regular expression to the string.
+     * @param str the string
+     * @return the replaced string
      */
     public String apply(String str) {
         if (pattern == null) {
