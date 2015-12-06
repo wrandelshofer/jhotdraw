@@ -28,11 +28,21 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class CssRegexConverter implements Converter<Regex> {
 
+    private final boolean nullable;
+
+    public CssRegexConverter(boolean nullable) {
+        this.nullable = nullable;
+    }
+
     @Override
     public void toString(Appendable out, IdFactory idFactory, Regex value) throws IOException {
         if (value == null) {
-            out.append("none");
-            return;
+            if (nullable) {
+                out.append("none");
+                return;
+            } else {
+                throw new IllegalArgumentException("value is null");
+            }
         }
         out.append('/');
         appendExpr(out, value.getFind());
@@ -56,10 +66,15 @@ public class CssRegexConverter implements Converter<Regex> {
 
         tt.skipWhitespace();
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
+            if (!nullable) {
+                throw new ParseException("'/' expected", tt.getPosition());
+            }
             if (!"none".equals(tt.currentStringValue())) {
                 throw new ParseException("none or '/' expected", tt.getPosition());
             }
             return null;
+        } else {
+            tt.pushBack();
         }
 
         if (tt.nextToken() != '/') {
