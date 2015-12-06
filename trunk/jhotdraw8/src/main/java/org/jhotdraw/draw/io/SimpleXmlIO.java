@@ -357,6 +357,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
      */
     private void readElementAttributes(Figure figure, Element elem) throws IOException {
         for (MapAccessor<?> ma:factory.figureAttributeKeys(figure)) {
+            @SuppressWarnings("unchecked")
             MapAccessor<Object> mao=(MapAccessor<Object>) ma;
             Object defaultValue = factory.getDefaultValue(figure, ma);
             figure.set(mao,defaultValue);

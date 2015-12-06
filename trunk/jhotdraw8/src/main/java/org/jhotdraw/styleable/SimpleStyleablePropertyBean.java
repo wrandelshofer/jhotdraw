@@ -27,9 +27,9 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
             new ReadOnlyMapWrapper<Key<?>, Object>(this, PROPERTIES_PROPERTY, new StyleableMap<Key<?>, Object>() {
 
                 @Override
-                protected void callObservers(MapChangeListener.Change<Key<?>, Object> change) {
+                protected void callObservers(StyleOrigin origin, MapChangeListener.Change<Key<?>, Object> change) {
                     invalidated(change.getKey());
-                    super.callObservers(change);
+                    super.callObservers(origin, change);
                 }
 
             });

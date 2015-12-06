@@ -166,9 +166,11 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
     }
 
-    protected void callObservers(MapChangeListener.Change<K, V> change) {
-        if (changeListenerSupport != null) {
-            changeListenerSupport.fire(l -> l.onChanged(change));
+    protected void callObservers(StyleOrigin origin, MapChangeListener.Change<K, V> change) {
+        if (origin == StyleOrigin.USER) {
+            if (changeListenerSupport != null) {
+                changeListenerSupport.fire(l -> l.onChanged(change));
+            }
         }
         if (invalidationListenerSupport != null) {
             invalidationListenerSupport.fire(l -> l.invalidated(this));
@@ -464,11 +466,9 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
         boolean hadValue = sv.hasValue(o);
         V ret = sv.setValue(o, value);
-        //if (o == StyleOrigin.USER) {
-            if (ret == null && value != null || ret != null && !ret.equals(value)) {
-                callObservers(new SimpleChange(key, ret, value, true, hadValue));
-            }
-        //}
+        if (ret == null && value != null || ret != null && !ret.equals(value)) {
+            callObservers(o, new SimpleChange(key, ret, value, true, hadValue));
+        }
         return ret;
     }
 
@@ -494,8 +494,8 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             hadValue = false;
             ret = null;
         }
-        if (hadValue /*&& o == StyleOrigin.USER*/) {
-            callObservers(new SimpleChange(key, ret, null, false, true));
+        if (hadValue) {
+            callObservers(o, new SimpleChange(key, ret, null, false, true));
         }
         return ret;
     }
@@ -534,9 +534,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             /*if (sv.isEmpty()) {
              i.remove();
              }*/
-            //if (o == StyleOrigin.USER) {
-                callObservers(new SimpleChange(key, val, null, false, true));
-            //}
+            callObservers(o, new SimpleChange(key, val, null, false, true));
         }
     }
 
@@ -739,7 +737,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
                         /*if (sv.isEmpty()) {
                             i.remove();
                         }*/
-                        callObservers(new SimpleChange(key, value, null, false, true));
+                        callObservers(ksetOrigin, new SimpleChange(key, value, null, false, true));
                     }
                 }
             }
@@ -935,7 +933,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
                         if (sv.isEmpty()) {
                             i.remove();
                         }
-                        callObservers(new SimpleChange(key, value, null, false, true));
+                        callObservers(ksetOrigin, new SimpleChange(key, value, null, false, true));
                     }
                 }
             }
@@ -1006,7 +1004,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         @Override
         public V setValue(V value) {
             V oldValue = backingEntry.getValue().setValue(oeOrigin, value);
-            callObservers(new SimpleChange(getKey(), oldValue, value, true, true));
+            callObservers(oeOrigin, new SimpleChange(getKey(), oldValue, value, true, true));
             return oldValue;
         }
 
