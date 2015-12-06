@@ -36,7 +36,7 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
      * @param name The name of the key.
      */
     public RegexStyleableFigureKey(String name) {
-        this(name, null);
+        this(name,DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT), new Regex());
     }
 
    /**
@@ -46,7 +46,16 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
      * @param defaultValue The default value.
      */
     public RegexStyleableFigureKey(String name, Regex defaultValue) {
-        super(name, Regex.class, DirtyMask.of(DirtyBits.NODE), defaultValue);
+        this(name,DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT), defaultValue);
+    }
+   /**
+     * Creates a new instance with the specified name and default value.
+     *
+     * @param name The name of the key.
+     * @param defaultValue The default value.
+     */
+    public RegexStyleableFigureKey(String name, DirtyMask mask, Regex defaultValue) {
+        super(name, Regex.class, mask, defaultValue);
 
         Function<Styleable, StyleableProperty<Regex>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
