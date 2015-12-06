@@ -233,6 +233,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      */
     default void stylesheetNotify() {
         applyCss();
+        layout();
     }
 
     /**

@@ -464,11 +464,11 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
         boolean hadValue = sv.hasValue(o);
         V ret = sv.setValue(o, value);
-        if (o == StyleOrigin.USER) {
+        //if (o == StyleOrigin.USER) {
             if (ret == null && value != null || ret != null && !ret.equals(value)) {
                 callObservers(new SimpleChange(key, ret, value, true, hadValue));
             }
-        }
+        //}
         return ret;
     }
 
@@ -494,7 +494,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             hadValue = false;
             ret = null;
         }
-        if (hadValue && o == StyleOrigin.USER) {
+        if (hadValue /*&& o == StyleOrigin.USER*/) {
             callObservers(new SimpleChange(key, ret, null, false, true));
         }
         return ret;
@@ -534,9 +534,9 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             /*if (sv.isEmpty()) {
              i.remove();
              }*/
-            if (o == StyleOrigin.USER) {
+            //if (o == StyleOrigin.USER) {
                 callObservers(new SimpleChange(key, val, null, false, true));
-            }
+            //}
         }
     }
 
