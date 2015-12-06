@@ -43,12 +43,9 @@ import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.InsetsStyleableMapAccessor;
-import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw.draw.LabeledFigure;
 import org.jhotdraw.draw.TextableFigure;
-import static org.jhotdraw.draw.figure.shape.LineFigure.START_X;
-import static org.jhotdraw.draw.figure.shape.LineFigure.START_Y;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 
 /**
@@ -63,17 +60,14 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
     public final static Point2DStyleableMapAccessor ORIGIN = new Point2DStyleableMapAccessor("origin", ORIGIN_X,ORIGIN_Y);
 
-    public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
-    public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
-    public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
-    public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
+    public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP,PADDING_RIGHT,PADDING_BOTTOM,PADDING_LEFT);
     private final static SVGPath defaultShape = new SVGPath();
 
-    static {
-        defaultShape.setContent("M0,0 L10,0 L10,10 L0,10 Z");
-    }
-    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), defaultShape);
+    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
     /**
      * The CSS type selector for a label object is {@code "Label"}.
      */

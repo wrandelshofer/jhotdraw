@@ -28,6 +28,8 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
 
     private final CssMetaData<?, SVGPath> cssMetaData;
 
+    private Converter<SVGPath> converter;
+
     /**
      * Creates a new instance with the specified name and with null as the
      * default value.
@@ -74,7 +76,7 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, SVGPath> converter
-                = new StyleConverterConverterWrapper<SVGPath>(new CssSvgPathConverter());
+                = new StyleConverterConverterWrapper<SVGPath>(getConverter());
         CssMetaData<Styleable, SVGPath> md
                 = new SimpleCssMetaData<Styleable, SVGPath>(property, function,
                         converter, defaultValue, inherits);
@@ -87,12 +89,10 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
 
     }
 
-    private Converter<SVGPath> converter;
-
     @Override
     public Converter<SVGPath> getConverter() {
         if (converter == null) {
-            converter = new CssSvgPathConverter();
+            converter = new CssSvgPathConverter(isNullable());
         }
         return converter;
     }   
