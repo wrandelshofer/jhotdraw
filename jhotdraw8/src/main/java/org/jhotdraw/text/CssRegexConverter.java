@@ -16,7 +16,6 @@ import org.jhotdraw.draw.io.IdFactory;
  * CssRegexConverter.
  *
  * Parses the following EBNF:
- * </p>
  * <pre>
  * Regex := '/', Find, '/', [ Replace, '/' ] ;
  * Find := RegexFindPattern;
