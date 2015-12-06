@@ -168,20 +168,22 @@ public interface FigureFactory extends IdFactory {
      * storage may be different from the default value defined in the key.
      *
      * @param <T> The type of the value
+     * @param f The figure
      * @param key The key
      * @return the default value
      */
-    <T> T getDefaultValue(MapAccessor<T> key);
+    <T> T getDefaultValue(Figure f, MapAccessor<T> key);
 
     /**
      * Returns true if the specified value is the default for the given key.
      *
      * @param <T> The type of the value
+     * @param f The figure
      * @param key The key
      * @param value the value
      * @return true if the value is the default value
      */
-    default <T> boolean isDefaultValue(MapAccessor<T> key, T value) {
+    default <T> boolean isDefaultValue(Figure f, MapAccessor<T> key, T value) {
         T defaultValue = key.getDefaultValue();
         return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
     }

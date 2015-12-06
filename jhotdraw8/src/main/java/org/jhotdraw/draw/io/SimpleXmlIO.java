@@ -243,7 +243,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                 value = internalToExternal(figure.getDrawing(),(URI)value);
             }
 
-            if (!factory.isDefaultValue(key, value)) {
+            if (!factory.isDefaultValue(figure, key, value)) {
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
                     setAttribute(elem, factory.keyToName(figure, key), factory.createId(value));
                 } else {
@@ -258,7 +258,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) k;
             Object value = figure.get(key);
-            if (!factory.isDefaultValue(key, value)) {
+            if (!factory.isDefaultValue(figure, key, value)) {
                 for (Node node : factory.valueToNodeList(key, value, document)) {
                     elem.appendChild(node);
                 }
@@ -356,6 +356,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
      * Reads the attributes of the specified element.
      */
     private void readElementAttributes(Figure figure, Element elem) throws IOException {
+        for (MapAccessor<?> ma:factory.figureAttributeKeys(figure)) {
+            MapAccessor<Object> mao=(MapAccessor<Object>) ma;
+            Object defaultValue = factory.getDefaultValue(figure, ma);
+            figure.set(mao,defaultValue);
+        }
+        
         NamedNodeMap attrs = elem.getAttributes();
         for (int i = 0, n = attrs.getLength(); i < n; i++) {
             Attr attr = (Attr) attrs.item(i);
