@@ -22,7 +22,7 @@ public class Regex {
 
     public Regex() {
         this.find = ".*";
-        this.replace = "$1";
+        this.replace = "$0";
     }
 
     public Regex(String find, String replace) {
