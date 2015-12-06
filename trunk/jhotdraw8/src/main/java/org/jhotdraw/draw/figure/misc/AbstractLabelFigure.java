@@ -47,6 +47,9 @@ import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw.draw.LabeledFigure;
 import org.jhotdraw.draw.TextableFigure;
+import static org.jhotdraw.draw.figure.shape.LineFigure.START_X;
+import static org.jhotdraw.draw.figure.shape.LineFigure.START_Y;
+import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 
 /**
  * AbstractLabelFigure.
@@ -56,7 +59,10 @@ import org.jhotdraw.draw.TextableFigure;
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure implements LabeledFigure, FillableFigure, StrokeableFigure, TextableFigure {
 
-    public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Point2D(0, 0));
+    public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static Point2DStyleableMapAccessor ORIGIN = new Point2DStyleableMapAccessor("origin", ORIGIN_X,ORIGIN_Y);
+
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
     public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
     public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 4.0);
@@ -166,9 +172,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
 
     protected void updateTextNode(RenderContext drawingView, Text tn) {
         tn.setText(getText());
-        Point2D origin = get(ORIGIN);
-        tn.setX(origin.getX());
-        tn.setY(origin.getY());
+        tn.setX(get(ORIGIN_X));
+        tn.setY(get(ORIGIN_Y));
         applyLabeledFigureProperties(tn);
         applyTextableFigureProperties(tn);
     }
