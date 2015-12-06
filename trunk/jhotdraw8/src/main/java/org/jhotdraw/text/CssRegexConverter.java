@@ -70,6 +70,7 @@ public class CssRegexConverter implements Converter<Regex> {
             if (!"none".equals(tt.currentStringValue())) {
                 throw new ParseException("none or '/' expected", tt.getPosition());
             }
+            in.position(in.limit());
             return null;
         } else {
             tt.pushBack();
