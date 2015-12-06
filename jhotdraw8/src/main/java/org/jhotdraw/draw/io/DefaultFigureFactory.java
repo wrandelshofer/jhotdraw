@@ -97,7 +97,6 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("LineConnection", LineConnectionFigure.class, Figure.getDeclaredAndInheritedKeys(LineConnectionFigure.class));
         addFigureKeysAndNames("Image", ImageFigure.class, Figure.getDeclaredAndInheritedKeys(ImageFigure.class));
         
-        addConverterForType(Rectangle2D.class, new Rectangle2DConverter());
         addConverterForType(String.class, new DefaultConverter());
         addConverterForType(Point2D.class, new XmlPoint2DConverter());
         addConverterForType(Point3D.class, new XmlPoint3DConverter());
