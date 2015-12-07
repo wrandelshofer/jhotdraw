@@ -67,7 +67,7 @@ public interface TransformableFigure extends Figure {
     /**
      * Defines the translation on the axes about the center of the figure.
      */
-    public static Point3DStyleableMapAccessor TRAMSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X,TRANSLATE_Y,TRANSLATE_Z);
+    public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X,TRANSLATE_Y,TRANSLATE_Z);
     
     /**
      * Updates a figure node with all transformation properties defined in this
