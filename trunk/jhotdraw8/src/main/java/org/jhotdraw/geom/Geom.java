@@ -15,7 +15,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 
-
 /**
  * Some geometric utilities.
  *
@@ -69,20 +68,28 @@ public class Geom {
 
         return (min(abs(x - px), abs(y - py)) <= tolerance);
     }
-    /** The bitmask that indicates that a point lies above the rectangle. */
+    /**
+     * The bitmask that indicates that a point lies above the rectangle.
+     */
     public static final int OUT_TOP = 2;
-    /** The bitmask that indicates that a point lies below the rectangle. */
+    /**
+     * The bitmask that indicates that a point lies below the rectangle.
+     */
     public static final int OUT_BOTTOM = 8;
-    /** The bitmask that indicates that a point lies to the left of the
-     * rectangle. */
+    /**
+     * The bitmask that indicates that a point lies to the left of the
+     * rectangle.
+     */
     public static final int OUT_LEFT = 1;
-    /** The bitmask that indicates that a point lies to the right of the
-     * rectangle. */
+    /**
+     * The bitmask that indicates that a point lies to the right of the
+     * rectangle.
+     */
     public static final int OUT_RIGHT = 4;
 
     /**
-     * Returns the direction OUT_TOP, OUT_BOTTOM, OUT_LEFT, OUT_RIGHT from
-     * one point to another one.
+     * Returns the direction OUT_TOP, OUT_BOTTOM, OUT_LEFT, OUT_RIGHT from one
+     * point to another one.
      *
      * @param x1 the x coordinate of point 1
      * @param y1 the y coordinate of point 1
@@ -110,14 +117,13 @@ public class Geom {
     /**
      * This method computes a binary OR of the appropriate mask values
      * indicating, for each side of Rectangle2D r1, whether or not the
-     * Rectangle2D r2 is on the same side of the edge as the rest
-     * of this Rectangle2D.
+     * Rectangle2D r2 is on the same side of the edge as the rest of this
+     * Rectangle2D.
      *
      * @param r1 rectangle 1
      * @param r2 rectangle 2
      * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT,
-     * OUT_BOTTOM,
-     * OUT_TOP.
+     * OUT_BOTTOM, OUT_TOP.
      */
     public static int outcode(Rectangle2D r1, Rectangle2D r2) {
         int outcode = 0;
@@ -138,20 +144,37 @@ public class Geom {
     }
 
     public static Point2D south(Rectangle2D r) {
-        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY()
+        return new Point2D(r.getMinX() + r.getWidth() * 0.2, r.getMinY()
                 + r.getHeight());
     }
 
+    /**
+     * Calculate the center of the given bounds
+     *
+     * @param r the bounds
+     * @return the center
+     */
     public static Point2D center(Rectangle2D r) {
-        return new Point2D(r.getMinX() + r.getWidth() / 2.0, r.getMinY()
-                + r.getHeight() / 2.0);
+        return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
+                + r.getHeight() * 0.5);
     }
 
     /**
-     * Returns a point on the edge of the shape which crosses the line
-     * from the center of the shape to the specified point.
-     * If no edge crosses of the shape crosses the line, the nearest control
-     * point of the shape is returned.
+     * Calculate the center of the given bounds
+     *
+     * @param r the bounds
+     * @return the center
+     */
+    public static Point2D center(Bounds r) {
+        return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
+                + r.getHeight() * 0.5);
+    }
+
+    /**
+     * Returns a point on the edge of the shape which crosses the line from the
+     * center of the shape to the specified point. If no edge crosses of the
+     * shape crosses the line, the nearest control point of the shape is
+     * returned.
      *
      * @param shape the shape
      * @param p the point
@@ -176,14 +199,14 @@ public class Geom {
         i.next();
         for (; !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-                case PathIterator.SEG_MOVETO:
-                    moveToX = coords[0];
-                    moveToY = coords[1];
-                    break;
-                case PathIterator.SEG_CLOSE:
-                    coords[0] = moveToX;
-                    coords[1] = moveToY;
-                    break;
+            case PathIterator.SEG_MOVETO:
+                moveToX = coords[0];
+                moveToY = coords[1];
+                break;
+            case PathIterator.SEG_CLOSE:
+                coords[0] = moveToX;
+                coords[1] = moveToY;
+                break;
             }
             Point2D chop = Geom.intersect(
                     prevX, prevY,
@@ -223,8 +246,6 @@ public class Geom {
         }
         }
         }*/
-
-
         // if none found, pick closest vertex
         if (len == Double.MAX_VALUE) {
             i = shape.getPathIterator(new AffineTransform(), 1);
@@ -311,8 +332,8 @@ public class Geom {
     }
 
     /**
-     * Caps the line defined by p1 and p2 by the number of units
-     * specified by radius.
+     * Caps the line defined by p1 and p2 by the number of units specified by
+     * radius.
      *
      * @param p1 point 1, the start point
      * @param p2 point 2, the end point
@@ -410,8 +431,8 @@ public class Geom {
     }
 
     /**
-     * Standard line intersection algorithm
-     * Return the point of intersection if it exists, else null
+     * Standard line intersection algorithm Return the point of intersection if
+     * it exists, else null
      *
      * from Doug Lea's PolygonFigure
      *
@@ -477,8 +498,8 @@ public class Geom {
     }
 
     /**
-     * Line intersection algorithm
-     * Return the point of intersection if it exists, else null.
+     * Line intersection algorithm Return the point of intersection if it
+     * exists, else null.
      *
      *
      * @param xa the x-coordinate of point a on line 1
@@ -554,9 +575,10 @@ public class Geom {
             return null;
         }
     }
+
     /**
-     * Line intersection algorithm
-     * Return the point of intersection if it exists, else null.
+     * Line intersection algorithm Return the point of intersection if it
+     * exists, else null.
      *
      *
      * @param xa the x-coordinate of point a on line 1
@@ -581,28 +603,28 @@ public class Geom {
             double xd, // line 2 point 2 x
             double yd,
             double limit) { // line 2 point 2 y
-        Point2D p = intersect(xa,ya,xb,yb,xc,yc,xd,yd,limit);
-        return new java.awt.geom.Point2D.Double(p.getX(),p.getY());
+        Point2D p = intersect(xa, ya, xb, yb, xc, yc, xd, yd, limit);
+        return new java.awt.geom.Point2D.Double(p.getX(), p.getY());
     }
 
     /**
-     * compute distance of point from line segment, or
-     * Double.MAX_VALUE if perpendicular projection is outside segment; or
-     * If pts on line are same, return distance from point
+     * compute distance of point from line segment, or Double.MAX_VALUE if
+     * perpendicular projection is outside segment; or If pts on line are same,
+     * return distance from point
      *
-     * @param xa the x-coordinate of point a on the line 
-     * @param ya the y-coordinate of point a on the line 
-     * @param xb the x-coordinate of point b on the line 
-     * @param yb the y-coordinate of point b on the line 
+     * @param xa the x-coordinate of point a on the line
+     * @param ya the y-coordinate of point a on the line
+     * @param xb the x-coordinate of point b on the line
+     * @param yb the y-coordinate of point b on the line
      * @param xc the x-coordinate of the point c
      * @param yc the y-coordinate of the point c
      * @return the distance from the line
      */
-   public static double distanceFromLine(double xa, double ya,
+    public static double distanceFromLine(double xa, double ya,
             double xb, double yb,
             double xc, double yc) {
 
-    // from Doug Lea's PolygonFigure
+        // from Doug Lea's PolygonFigure
         // source:http://vision.dai.ed.ac.uk/andrewfg/c-g-a-faq.html#q7
         //Let the point be C (XC,YC) and the line be AB (XA,YA) to (XB,YB).
         //The length of the
@@ -671,22 +693,18 @@ public class Geom {
      * Resizes the <code>Rectangle2D</code> both horizontally and vertically.
      * <p>
      * This method returns a new <code>Rectangle2D</code> so that it is
-     * <code>h</code> units larger on both the left and right side,
-     * and <code>v</code> units larger at both the top and bottom.
+     * <code>h</code> units larger on both the left and right side, and
+     * <code>v</code> units larger at both the top and bottom.
      * <p>
      * The new <code>Rectangle2D</code> has (<code>x&nbsp;-&nbsp;h</code>,
-     * <code>y&nbsp;-&nbsp;v</code>) as its top-left corner, a
-     * width of
-     * <code>width</code>&nbsp;<code>+</code>&nbsp;<code>2h</code>,
-     * and a height of
-     * <code>height</code>&nbsp;<code>+</code>&nbsp;<code>2v</code>.
+     * <code>y&nbsp;-&nbsp;v</code>) as its top-left corner, a width of
+     * <code>width</code>&nbsp;<code>+</code>&nbsp;<code>2h</code>, and a height
+     * of <code>height</code>&nbsp;<code>+</code>&nbsp;<code>2v</code>.
      * <p>
-     * If negative values are supplied for <code>h</code> and
-     * <code>v</code>, the size of the <code>Rectangle2D</code>
-     * decreases accordingly.
-     * The <code>grow</code> method does not check whether the resulting
-     * values of <code>width</code> and <code>height</code> are
-     * non-negative.
+     * If negative values are supplied for <code>h</code> and <code>v</code>,
+     * the size of the <code>Rectangle2D</code> decreases accordingly. The
+     * <code>grow</code> method does not check whether the resulting values of
+     * <code>width</code> and <code>height</code> are non-negative.
      *
      * @param r the rectangle
      * @param h the horizontal expansion
@@ -700,26 +718,23 @@ public class Geom {
                 r.getWidth() + h * 2d,
                 r.getHeight() + v * 2d);
     }
+
     /**
      * Resizes the <code>Bounds</code> both horizontally and vertically.
      * <p>
      * This method returns a new <code>Bounds</code> so that it is
-     * <code>h</code> units larger on both the left and right side,
-     * and <code>v</code> units larger at both the top and bottom.
+     * <code>h</code> units larger on both the left and right side, and
+     * <code>v</code> units larger at both the top and bottom.
      * <p>
      * The new <code>Bounds</code> has (<code>x&nbsp;-&nbsp;h</code>,
-     * <code>y&nbsp;-&nbsp;v</code>) as its top-left corner, a
-     * width of
-     * <code>width</code>&nbsp;<code>+</code>&nbsp;<code>2h</code>,
-     * and a height of
-     * <code>height</code>&nbsp;<code>+</code>&nbsp;<code>2v</code>.
+     * <code>y&nbsp;-&nbsp;v</code>) as its top-left corner, a width of
+     * <code>width</code>&nbsp;<code>+</code>&nbsp;<code>2h</code>, and a height
+     * of <code>height</code>&nbsp;<code>+</code>&nbsp;<code>2v</code>.
      * <p>
-     * If negative values are supplied for <code>h</code> and
-     * <code>v</code>, the size of the <code>Rectangle2D</code>
-     * decreases accordingly.
-     * The <code>grow</code> method does not check whether the resulting
-     * values of <code>width</code> and <code>height</code> are
-     * non-negative.
+     * If negative values are supplied for <code>h</code> and <code>v</code>,
+     * the size of the <code>Rectangle2D</code> decreases accordingly. The
+     * <code>grow</code> method does not check whether the resulting values of
+     * <code>width</code> and <code>height</code> are non-negative.
      *
      * @param r the bounds
      * @param h the horizontal expansion
@@ -733,22 +748,24 @@ public class Geom {
                 r.getWidth() + h * 2d,
                 r.getHeight() + v * 2d);
     }
+
     /**
-     * Returns true if the bounds contain the specified point within the
-     * given tolerance.
-     * 
+     * Returns true if the bounds contain the specified point within the given
+     * tolerance.
+     *
      * @param r the bounds
      * @param p the point
      * @param tolerance the tolerance
      * @return true if inside
      */
     public static boolean contains(Bounds r, Point2D p, double tolerance) {
-        return contains(r,p.getX(),p.getY(),tolerance);
+        return contains(r, p.getX(), p.getY(), tolerance);
     }
+
     /**
-     * Returns true if the bounds contain the specified point within the
-     * given tolerance.
-     * 
+     * Returns true if the bounds contain the specified point within the given
+     * tolerance.
+     *
      * @param r the bounds
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
@@ -756,18 +773,15 @@ public class Geom {
      * @return true if inside
      */
     public static boolean contains(Bounds r, double x, double y, double tolerance) {
-        return 
-                r.getMinX() - tolerance <= x && x <= r.getMaxX()+tolerance
-                &&
-                r.getMinY() - tolerance <= y && y <= r.getMaxY()+tolerance;
+        return r.getMinX() - tolerance <= x && x <= r.getMaxX() + tolerance
+                && r.getMinY() - tolerance <= y && y <= r.getMaxY() + tolerance;
     }
 
     /**
      * Returns true, if rectangle 1 contains rectangle 2.
      * <p>
      * This method is similar to Rectangle2D.contains, but also returns true,
-     * when rectangle1 contains rectangle2 and either or both of them
-     * are empty.
+     * when rectangle1 contains rectangle2 and either or both of them are empty.
      *
      * @param r1 Rectangle2D 1.
      * @param r2 Rectangle2D 2.
@@ -781,12 +795,12 @@ public class Geom {
                 && (r2.getMinY() + max(0, r2.getHeight())) <= r1.getMinY()
                 + max(0, r1.getHeight()));
     }
+
     /**
      * Returns true, if rectangle 1 contains rectangle 2.
      * <p>
      * This method is similar to Rectangle2D.contains, but also returns true,
-     * when rectangle1 contains rectangle2 and either or both of them
-     * are empty.
+     * when rectangle1 contains rectangle2 and either or both of them are empty.
      *
      * @param r1 Rectangle 1.
      * @param r2 Rectangle 2.
