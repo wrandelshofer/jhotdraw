@@ -210,7 +210,7 @@ public class PatternConverter implements Converter<Object[]> {
                 String hex = "000" + Integer.toHexString(charAt);
                 return "\\u" + hex.substring(hex.length() - 4);
             } else {
-                return String.valueOf(charAt);
+                return String.valueOf((char)charAt);
             }
         }
 
