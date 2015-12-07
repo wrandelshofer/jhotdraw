@@ -40,6 +40,8 @@ import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandleKit;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
