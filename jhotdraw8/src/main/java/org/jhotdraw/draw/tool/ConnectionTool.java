@@ -15,7 +15,7 @@ import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.util.Resources;
 import org.jhotdraw.draw.Layer;
-import org.jhotdraw.draw.figure.misc.LineConnectionFigure;
+import org.jhotdraw.draw.figure.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.util.ReversedList;
 

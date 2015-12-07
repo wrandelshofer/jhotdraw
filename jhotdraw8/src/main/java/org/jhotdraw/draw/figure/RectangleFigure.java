@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.figure.shape;
+package org.jhotdraw.draw.figure;
 
 import org.jhotdraw.draw.FillableFigure;
 import static java.lang.Math.*;

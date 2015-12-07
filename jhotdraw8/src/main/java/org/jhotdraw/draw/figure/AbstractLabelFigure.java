@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.figure.misc;
+package org.jhotdraw.draw.figure;
 
 import java.util.List;
 import org.jhotdraw.draw.key.DirtyBits;
@@ -38,7 +38,7 @@ import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleType;
-import org.jhotdraw.draw.handle.MoveHandleKit;
+import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.FigureKey;
@@ -47,6 +47,7 @@ import org.jhotdraw.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw.draw.LabeledFigure;
 import org.jhotdraw.draw.TextableFigure;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
+import org.jhotdraw.draw.locator.RelativeLocator;
 
 /**
  * AbstractLabelFigure.
@@ -56,15 +57,15 @@ import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure implements LabeledFigure, FillableFigure, StrokeableFigure, TextableFigure {
 
-    public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static Point2DStyleableMapAccessor ORIGIN = new Point2DStyleableMapAccessor("origin", ORIGIN_X,ORIGIN_Y);
+    public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static Point2DStyleableMapAccessor ORIGIN = new Point2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
 
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP,PADDING_RIGHT,PADDING_BOTTOM,PADDING_LEFT);
+    public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
     private final static SVGPath defaultShape = new SVGPath();
 
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
@@ -74,7 +75,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     public final static String TYPE_SELECTOR = "Label";
 
     private Text textNode;
-    private transient Bounds boundsInLocal;
+    protected transient Bounds boundsInLocal;
 
     public AbstractLabelFigure() {
         this(0, 0);
@@ -88,17 +89,30 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         set(ORIGIN, new Point2D(x, y));
     }
 
+    /**
+     * Returns the bounds of the node for layout calculations.
+     * These bounds include the text of the node and the padding.
+     */
+    public Bounds getLayoutBounds() {
+        if (textNode == null) {
+            textNode = new Text();
+        }
+        updateTextNode(null, textNode);
+        Bounds b = textNode.getLayoutBounds();
+        Insets i = getStyled(PADDING);
+        return new BoundingBox(b.getMinX()-i.getLeft(),b.getMinY()-i.getTop(),
+        b.getWidth()+i.getLeft()+i.getRight(),b.getHeight()+i.getTop()+i.getBottom());
+    }
+
     @Override
     public Bounds getBoundsInLocal() {
         if (boundsInLocal == null) {
-            if (textNode == null) {
-                textNode = new Text();
-            }
-            updateTextNode(null, textNode);
-
-            Bounds b = textNode.getLayoutBounds();
-            Insets i = getStyled(PADDING);
-            boundsInLocal = new BoundingBox(b.getMinX() - i.getLeft(), b.getMinY() - i.getTop(), b.getWidth() + i.getLeft() + i.getRight(), b.getHeight() + i.getTop() + i.getBottom());
+            Bounds b = getLayoutBounds();
+            boundsInLocal = new BoundingBox(
+                    b.getMinX() ,
+                    b.getMinY() ,
+                    b.getWidth() ,
+                    b.getHeight());
         }
         return boundsInLocal;
     }
@@ -161,7 +175,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
                     bss, CornerRadii.EMPTY, new BorderWidths(strokeWidth))));
         }
     }
-    
+
     protected abstract String getText();
 
     protected void updateTextNode(RenderContext drawingView, Text tn) {
@@ -206,16 +220,16 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(MoveHandleKit.northEast(this));
-            list.add(MoveHandleKit.northWest(this));
-            list.add(MoveHandleKit.southEast(this));
-            list.add(MoveHandleKit.southWest(this));
+            list.add(new MoveHandle(this, RelativeLocator.northEast()));
+            list.add(new MoveHandle(this, RelativeLocator.northWest()));
+            list.add(new MoveHandle(this, RelativeLocator.southEast()));
+            list.add(new MoveHandle(this, RelativeLocator.southWest()));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(MoveHandleKit.northEast(this));
-            list.add(MoveHandleKit.northWest(this));
-            list.add(MoveHandleKit.southEast(this));
-            list.add(MoveHandleKit.southWest(this));
+            list.add(new MoveHandle(this, RelativeLocator.northEast()));
+            list.add(new MoveHandle(this, RelativeLocator.northWest()));
+            list.add(new MoveHandle(this, RelativeLocator.southEast()));
+            list.add(new MoveHandle(this, RelativeLocator.southWest()));
             if (this instanceof TransformableFigure) {
                 list.add(new RotateHandle((TransformableFigure) this));
             }

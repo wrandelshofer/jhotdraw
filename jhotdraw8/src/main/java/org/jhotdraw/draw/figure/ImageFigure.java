@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.figure.misc;
+package org.jhotdraw.draw.figure;
 
 import java.net.URI;
 import javafx.geometry.BoundingBox;
@@ -23,7 +23,6 @@ import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.TransformableFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.figure.shape.RectangleFigure;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Rectangle2DStyleableMapAccessor;
 import static java.lang.Math.abs;

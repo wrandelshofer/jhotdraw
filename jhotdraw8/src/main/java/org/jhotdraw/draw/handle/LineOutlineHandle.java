@@ -13,7 +13,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.figure.misc.LineConnectionFigure;
+import org.jhotdraw.draw.figure.LineConnectionFigure;
 
 /**
  * Draws the {@code wireframe} of a {@code LineFigure}, but does not

@@ -2,18 +2,13 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.figure.misc;
+package org.jhotdraw.draw.figure;
 
-import java.util.List;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.css.PseudoClass;
-import javafx.css.Styleable;
+import org.jhotdraw.draw.figure.AbstractLabelFigure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.CompositableFigure;
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.LockableFigure;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.StyleableFigure;

@@ -37,11 +37,16 @@ import org.jhotdraw.collection.IterableTree;
 import org.jhotdraw.collection.IndexedSet;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.styleable.StyleablePropertyBean;
-import org.jhotdraw.draw.handle.MoveHandleKit;
+import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import org.jhotdraw.draw.locator.RelativeLocator;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -508,10 +513,10 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(MoveHandleKit.northEast(this));
-            list.add(MoveHandleKit.northWest(this));
-            list.add(MoveHandleKit.southEast(this));
-            list.add(MoveHandleKit.southWest(this));
+            list.add(new MoveHandle(this, RelativeLocator.northEast()));
+            list.add(new MoveHandle(this, RelativeLocator.northWest()));
+            list.add(new MoveHandle(this, RelativeLocator.southEast()));
+            list.add(new MoveHandle(this, RelativeLocator.southWest()));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             if (this instanceof TransformableFigure) {

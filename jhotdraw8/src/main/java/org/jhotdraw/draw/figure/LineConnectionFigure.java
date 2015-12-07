@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.figure.misc;
+package org.jhotdraw.draw.figure;
 
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.DirtyBits;
@@ -33,11 +33,10 @@ import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
-import org.jhotdraw.draw.handle.MoveHandleKit;
+import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw.draw.locator.PointLocator;
-import org.jhotdraw.draw.figure.shape.LineFigure;
 
 /**
  * LineConnectionFigure.
@@ -220,10 +219,10 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         } else if (handleType == HandleType.MOVE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             if (get(START_CONNECTOR) == null) {
-                list.add(new MoveHandleKit.MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(START)));
+                list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(START)));
             }
             if (get(END_CONNECTOR) == null) {
-                list.add(new MoveHandleKit.MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(END)));
+                list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(END)));
             }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
