@@ -15,7 +15,7 @@ import javafx.collections.FXCollections;
 import org.jhotdraw.collection.CompositeMapAccessor;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.SelectorModel;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssStringConverter;
 import org.jhotdraw.styleable.StyleableMapAccessor;

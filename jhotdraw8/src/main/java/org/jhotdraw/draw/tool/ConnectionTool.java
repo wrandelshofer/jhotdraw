@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import java.util.List;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.model.DrawingModel;

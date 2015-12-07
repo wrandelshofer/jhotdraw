@@ -5,7 +5,7 @@
 package org.jhotdraw.draw.handle;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.locator.Locator;
 
 /**

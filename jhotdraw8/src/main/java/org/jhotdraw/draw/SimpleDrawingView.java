@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.draw.model.DrawingModel;

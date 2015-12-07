@@ -5,7 +5,7 @@
 package org.jhotdraw.draw.shape;
 
 import org.jhotdraw.draw.figure.RectangleFigure;
-import org.jhotdraw.draw.FillableFigure;
+import org.jhotdraw.draw.figure.FillableFigure;
 import java.util.List;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.styleable.SimpleParsedValue;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

@@ -16,7 +16,7 @@ import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
 import org.jhotdraw.css.SelectorModel;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.w3c.dom.Element;
 
 /**

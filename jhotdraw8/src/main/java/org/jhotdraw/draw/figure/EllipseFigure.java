@@ -4,7 +4,6 @@
  */
 package org.jhotdraw.draw.figure;
 
-import org.jhotdraw.draw.FillableFigure;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -13,17 +12,9 @@ import javafx.scene.transform.Transform;
 import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
-import org.jhotdraw.draw.AbstractLeafFigure;
-import org.jhotdraw.draw.CompositableFigure;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.HideableFigure;
-import org.jhotdraw.draw.LockableFigure;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.RenderContext;
-import org.jhotdraw.draw.TransformableFigure;
-import org.jhotdraw.draw.StrokeableFigure;
-import org.jhotdraw.draw.StyleableFigure;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;

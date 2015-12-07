@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.figure.Figure;
 import java.util.HashSet;
 import java.util.Set;
 import org.jhotdraw.collection.Key;

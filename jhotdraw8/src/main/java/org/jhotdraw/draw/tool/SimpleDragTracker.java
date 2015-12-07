@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * |@code SimpleDragTracker} implements interactions with the content area of a

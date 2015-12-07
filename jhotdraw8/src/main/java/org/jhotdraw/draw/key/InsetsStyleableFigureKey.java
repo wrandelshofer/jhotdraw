@@ -11,7 +11,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Insets;
 import org.jhotdraw.styleable.StyleablePropertyBean;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssInsetsConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;

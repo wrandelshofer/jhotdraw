@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.draw.connector;
 
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * AbstractConnector.

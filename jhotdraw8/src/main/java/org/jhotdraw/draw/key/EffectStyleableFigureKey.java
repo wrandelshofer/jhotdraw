@@ -9,7 +9,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.Effect;
 import org.jhotdraw.styleable.StyleablePropertyBean;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssEffectConverter;
 import org.jhotdraw.styleable.StyleableMapAccessor;

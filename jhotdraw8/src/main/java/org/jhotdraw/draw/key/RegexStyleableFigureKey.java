@@ -12,7 +12,7 @@ import javafx.css.StyleableProperty;
 import javafx.css.StyleablePropertyFactory;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw.styleable.StyleablePropertyBean;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssRegexConverter;
 import org.jhotdraw.styleable.StyleableMapAccessor;

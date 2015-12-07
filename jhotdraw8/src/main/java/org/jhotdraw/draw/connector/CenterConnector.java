@@ -6,7 +6,7 @@ package org.jhotdraw.draw.connector;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * CenterConnector.

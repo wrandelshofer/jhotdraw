@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

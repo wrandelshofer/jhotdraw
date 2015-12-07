@@ -23,8 +23,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.StyleableFigure;
+import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.util.Resources;
 

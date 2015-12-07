@@ -8,8 +8,8 @@ package org.jhotdraw.draw.locator;
 
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
-import org.jhotdraw.draw.BezierFigure;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.BezierFigure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * A {@link Locator} which can be used to place a label on the path of

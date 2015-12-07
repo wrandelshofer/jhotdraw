@@ -18,7 +18,7 @@ import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
@@ -66,6 +66,7 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
 
         // user agent stylesheets can not override element attributes
         if (origin == null || origin == StyleOrigin.USER_AGENT) {
+            
             elem.removeAll(StyleOrigin.USER_AGENT);
             for (MyEntry e : getUserAgentStylesheets()) {
                 Stylesheet s = e.getStylesheet();

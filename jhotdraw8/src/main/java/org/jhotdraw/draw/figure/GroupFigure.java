@@ -2,13 +2,15 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure;
 
+import org.jhotdraw.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.connector.Connector;
 
 /**

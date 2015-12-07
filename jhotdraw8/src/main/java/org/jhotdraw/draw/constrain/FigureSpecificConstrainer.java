@@ -10,7 +10,7 @@ import javafx.collections.ObservableMap;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw.beans.NonnullProperty;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import java.util.Map;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;

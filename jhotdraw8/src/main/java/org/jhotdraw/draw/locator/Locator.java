@@ -6,7 +6,7 @@
 package org.jhotdraw.draw.locator;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * A <em>locator</em> encapsulates a strategy for locating a point on a

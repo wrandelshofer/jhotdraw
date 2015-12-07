@@ -3,7 +3,7 @@
  * You may only use this file in compliance with the accompanying license terms.
  */
 
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

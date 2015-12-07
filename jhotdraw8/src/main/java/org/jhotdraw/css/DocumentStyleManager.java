@@ -12,7 +12,7 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 

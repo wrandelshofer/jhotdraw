@@ -3,14 +3,14 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure;
 
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
+import static org.jhotdraw.draw.figure.Figure.CHILDREN_PROPERTY;
 import javafx.geometry.Point2D;
 import org.jhotdraw.draw.connector.Connector;
 import static java.lang.Math.max;

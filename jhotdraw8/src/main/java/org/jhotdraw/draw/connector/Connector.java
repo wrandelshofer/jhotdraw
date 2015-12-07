@@ -5,7 +5,7 @@
 package org.jhotdraw.draw.connector;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * A <em>connector</em> encapsulates a strategy for locating a connection point

@@ -20,7 +20,7 @@ import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
-import org.jhotdraw.draw.StyleableFigure;
+import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.figure.LineFigure;

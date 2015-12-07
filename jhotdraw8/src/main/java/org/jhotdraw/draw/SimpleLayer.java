@@ -5,6 +5,10 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.StyleableFigure;
+import org.jhotdraw.draw.figure.LockableFigure;
+import org.jhotdraw.draw.figure.AbstractCompositeFigure;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;

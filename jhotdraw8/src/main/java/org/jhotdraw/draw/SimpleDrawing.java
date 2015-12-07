@@ -4,6 +4,10 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.StyleableFigure;
+import org.jhotdraw.draw.figure.LockableFigure;
+import org.jhotdraw.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
