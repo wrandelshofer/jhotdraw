@@ -18,7 +18,7 @@ import org.jhotdraw.draw.io.IdFactory;
  * @version $Id$
  */
 public class XmlPoint3DConverter implements Converter<Point3D> {
-    // FIXME must use CssParser instead of PatternConverter!!
+
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new XmlConverterFactory());
 
     @Override
