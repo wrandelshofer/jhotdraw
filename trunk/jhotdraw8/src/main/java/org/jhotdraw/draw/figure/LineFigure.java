@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw.figure.shape;
+package org.jhotdraw.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -28,7 +28,7 @@ import org.jhotdraw.draw.handle.LineOutlineHandle;
 import org.jhotdraw.draw.handle.PointHandle;
 import org.jhotdraw.draw.StrokeableFigure;
 import org.jhotdraw.draw.StyleableFigure;
-import org.jhotdraw.draw.handle.MoveHandleKit;
+import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw.draw.locator.PointLocator;
@@ -122,8 +122,8 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new MoveHandleKit.MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator( START)));
-            list.add(new MoveHandleKit.MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator( END)));
+            list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator( START)));
+            list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator( END)));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_RESIZE, START));

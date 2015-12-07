@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.draw.figure.shape.RectangleFigure;
+import org.jhotdraw.draw.figure.RectangleFigure;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;

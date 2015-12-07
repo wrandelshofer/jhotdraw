@@ -1,4 +1,4 @@
-/* @(#)RotateHandle.java
+/* @(#)ConnectionFigureConnectionHandle.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -17,42 +17,47 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.TransformableFigure;
 import static org.jhotdraw.draw.TransformableFigure.ROTATE;
 import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
+import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.model.DrawingModel;
-import org.jhotdraw.geom.Geom;
 
 /**
- * A Handle to rotate a Figure.
+ * Handle for moving (translating) a figure.
  *
  * @author Werner Randelshofer
  */
-public class RotateHandle extends AbstractHandle {
+public class MoveHandle extends LocatorHandle {
 
+    private Point2D oldPoint;
     private final Region node;
-    private static final Circle REGION_SHAPE = new Circle(3);
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
-    private Point2D center;
+    private final String styleclass;
+    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     protected Set<Figure> groupReshapeableFigures;
 
-    public RotateHandle(TransformableFigure figure) {
-        this(figure, STYLECLASS_HANDLE_ROTATE);
+    public MoveHandle(Figure figure, Locator locator) {
+        this(figure, STYLECLASS_HANDLE_MOVE, locator);
     }
 
-    public RotateHandle(TransformableFigure figure, String styleclass) {
-        super(figure);
+    public MoveHandle(Figure figure, String styleclass, Locator locator) {
+        super(figure, locator);
+        this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
-        node.resize(11, 11); // size must be odd
+
+        // The node size must be odd. 
+        // This size is independent of the shape that represenst the handle.
+        node.resize(11, 11);
+
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);
@@ -61,7 +66,7 @@ public class RotateHandle extends AbstractHandle {
 
     @Override
     public Cursor getCursor() {
-        return Cursor.CROSSHAIR;
+        return Cursor.OPEN_HAND;
     }
 
     @Override
@@ -74,10 +79,16 @@ public class RotateHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
-        Point2D p = getLocation(view);
+        Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         p = t.transform(p);
+
+        // The node is centered around the location. 
+        // (The value 5.5 is half of the node size, which is 11,11.
+        // 0.5 is subtracted from 5.5 so that the node snaps between pixels
+        // so that we get sharp lines. 
         node.relocate(p.getX() - 5, p.getY() - 5);
+
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
@@ -85,7 +96,8 @@ public class RotateHandle extends AbstractHandle {
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        center = getOwner().getCenterInLocal();
+        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
+
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
         groupReshapeableFigures = new HashSet<>();
@@ -95,44 +107,38 @@ public class RotateHandle extends AbstractHandle {
             }
         }
         groupReshapeableFigures = view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
-
     }
 
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
-        // FIXME implement me!
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
-
-        //double oldRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
-        double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
-
-        double ownerAngle = getOwner().get(TransformableFigure.ROTATE);
-
-        newRotate = newRotate % 360;
-        if (newRotate < 0) {
-            newRotate += 360;
-        }
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newRotate = view.getConstrainer().constrainAngle(getOwner(), newRotate);
+            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
+            Point2D loc = getLocation();
+            oldPoint = getOwner().localToDrawing(loc);
         }
 
-        DrawingModel model = view.getModel();
+        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
+        if (!tx.isIdentity()) {
+            DrawingModel model = view.getModel();
 
-        if (event.isShiftDown()) {
-            // shift transforms all selected figures
-            for (Figure f : groupReshapeableFigures) {
-                if (f instanceof TransformableFigure) {
-                    model.set(f, TransformableFigure.ROTATE, newRotate);
+            if (event.isShiftDown()) {
+                // shift transforms all selected figures
+                for (Figure f : groupReshapeableFigures) {
+                    tx = f.getWorldToParent().createConcatenation(tx);
+                    model.reshape(f, tx);
                 }
+            } else {
+                tx = getOwner().getWorldToParent().createConcatenation(tx);
+                model.reshape(getOwner(), tx);
             }
-        } else {
-            model.set(getOwner(), TransformableFigure.ROTATE, newRotate);
         }
+        oldPoint = newPoint;
     }
 
     @Override
@@ -144,12 +150,4 @@ public class RotateHandle extends AbstractHandle {
     public boolean isSelectable() {
         return true;
     }
-
-    private Point2D getLocation(DrawingView view) {
-        Figure owner = getOwner();
-        Bounds bounds = owner.getBoundsInLocal();
-        Point2D shift = view.getViewToWorld().deltaTransform(10, 10);
-        return new Point2D(bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() - shift.getY());
-    }
-
 }

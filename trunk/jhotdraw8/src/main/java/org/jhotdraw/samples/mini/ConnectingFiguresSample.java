@@ -14,13 +14,13 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.GroupFigure;
 import org.jhotdraw.draw.Layer;
-import org.jhotdraw.draw.figure.misc.LineConnectionFigure;
+import org.jhotdraw.draw.figure.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
-import org.jhotdraw.draw.figure.shape.RectangleFigure;
+import org.jhotdraw.draw.figure.RectangleFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
 

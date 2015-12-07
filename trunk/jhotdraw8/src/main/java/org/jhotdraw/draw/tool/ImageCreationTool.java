@@ -12,7 +12,7 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.SimpleDrawingEditor;
-import org.jhotdraw.draw.figure.misc.ImageFigure;
+import org.jhotdraw.draw.figure.ImageFigure;
 import org.jhotdraw.gui.FileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.Resources;
