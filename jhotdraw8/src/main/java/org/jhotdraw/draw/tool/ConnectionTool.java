@@ -105,13 +105,14 @@ public class ConnectionTool extends AbstractTool {
     @Override
     protected void handleMouseDragged(MouseEvent event, DrawingView view) {
         if (figure != null) {
-            Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
+        Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
 
             Connector newConnector = null;
             if (!event.isMetaDown()) {
-                List<Figure> list = view.findFigures(newPoint, true);
+                List<Figure> list = view.findFigures(pointInViewCoordinates, true);
                 for (Figure ff : list) {
-                    newConnector = ff.findConnector(newPoint, figure);
+                    newConnector = ff.findConnector(ff.worldToLocal(newPoint), figure);
                     if (newConnector != null) {
                         break;
                     }
