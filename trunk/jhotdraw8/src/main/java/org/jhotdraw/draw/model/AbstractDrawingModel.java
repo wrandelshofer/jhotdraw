@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import javafx.beans.InvalidationListener;
 import org.jhotdraw.beans.ListenerSupport;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.event.Listener;
 
 /**

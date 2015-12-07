@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import javafx.css.StyleOrigin;
 import org.jhotdraw.css.ast.Stylesheet;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * StyleManager.

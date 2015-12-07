@@ -10,7 +10,7 @@ import javafx.event.ActionEvent;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.util.Resources;
 

@@ -3,12 +3,12 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure;
 
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
-import static org.jhotdraw.draw.Figure.CHILDREN_PROPERTY;
+import static org.jhotdraw.draw.figure.Figure.CHILDREN_PROPERTY;
 
 /**
  * This base class can be used to implement figures which do not support child

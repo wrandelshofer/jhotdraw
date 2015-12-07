@@ -9,7 +9,7 @@ import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.model.DrawingModel;
 
 /**

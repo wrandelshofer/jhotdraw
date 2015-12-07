@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +19,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.StyleManager;
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.styleable.SimpleStyleablePropertyBean;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
@@ -30,10 +31,10 @@ import org.jhotdraw.styleable.StyleableMapAccessor;
  */
 public abstract class AbstractFigure extends SimpleStyleablePropertyBean implements Figure {
 
-    private Transform parentToDrawing;
-    private Transform drawingToParent;
-    private Transform localToDrawing;
-    private Transform drawingToLocal;
+    private Transform parentToWorld;
+    private Transform worldToParent;
+    private Transform localToWorld;
+    private Transform worldToLocal;
     private Transform localToParent;
     private Transform parentToLocal;
 
@@ -183,6 +184,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     /**
      * Calls {@link #invalidateTransforms()}.
      */
+    @Override
     public void transformNotify() {
         invalidateTransforms();
     }
@@ -191,10 +193,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      * Clears all cached transformation matrices.
      */
     public void invalidateTransforms() {
-        parentToDrawing
-                = drawingToParent
-                = localToDrawing
-                = drawingToLocal
+        parentToWorld
+                = worldToParent
+                = localToWorld
+                = worldToLocal
                 = localToParent
                 = parentToLocal = null;
     }
@@ -206,10 +208,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      */
     @Override
     public Transform getParentToWorld() {
-        if (parentToDrawing == null) {
-            parentToDrawing = Figure.super.getParentToWorld();
+        if (parentToWorld == null) {
+            parentToWorld = Figure.super.getParentToWorld();
         }
-        return parentToDrawing;
+        return parentToWorld;
     }
 
     /**
@@ -219,10 +221,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      */
     @Override
     public Transform getLocalToWorld() {
-        if (localToDrawing == null) {
-            localToDrawing = Figure.super.getLocalToWorld();
+        if (localToWorld == null) {
+            localToWorld = Figure.super.getLocalToWorld();
         }
-        return localToDrawing;
+        return localToWorld;
     }
 
     /**
@@ -232,10 +234,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      */
     @Override
     public Transform getWorldToParent() {
-        if (drawingToParent == null) {
-            drawingToParent = Figure.super.getWorldToParent();
+        if (worldToParent == null) {
+            worldToParent = Figure.super.getWorldToParent();
         }
-        return drawingToParent;
+        return worldToParent;
     }
 
     /**
@@ -245,10 +247,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      */
     @Override
     public Transform getWorldToLocal() {
-        if (drawingToLocal == null) {
-            drawingToLocal = Figure.super.getWorldToLocal();
+        if (worldToLocal == null) {
+            worldToLocal = Figure.super.getWorldToLocal();
         }
-        return drawingToLocal;
+        return worldToLocal;
     }
 
     /**

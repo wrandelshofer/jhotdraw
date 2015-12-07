@@ -7,8 +7,8 @@
 package org.jhotdraw.draw.locator;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw.draw.BezierFigure;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.BezierFigure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * A {@link Locator} which locates a node on the bezier path of a BezierFigure.

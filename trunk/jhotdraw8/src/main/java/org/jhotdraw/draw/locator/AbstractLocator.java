@@ -5,7 +5,7 @@
 package org.jhotdraw.draw.locator;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * This abstract class can be extended to implement a {@link Locator}.

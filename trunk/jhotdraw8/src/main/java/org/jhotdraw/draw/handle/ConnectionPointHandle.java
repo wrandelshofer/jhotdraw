@@ -19,9 +19,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.TransformableFigure.ROTATE;
-import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
+import org.jhotdraw.draw.figure.Figure;
+import static org.jhotdraw.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.model.DrawingModel;
 

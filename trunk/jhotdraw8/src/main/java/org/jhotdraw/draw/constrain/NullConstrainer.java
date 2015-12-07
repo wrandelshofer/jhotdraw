@@ -9,7 +9,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * NullConstrainer does not constrain anything.

@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.GroupFigure;
+import org.jhotdraw.draw.figure.GroupFigure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.figure.LineConnectionFigure;
 import org.jhotdraw.draw.SimpleDrawing;

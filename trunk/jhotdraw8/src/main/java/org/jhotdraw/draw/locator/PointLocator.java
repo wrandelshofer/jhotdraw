@@ -8,7 +8,7 @@ package org.jhotdraw.draw.locator;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * A {@link Locator} which locates a node on a point of a Figure.

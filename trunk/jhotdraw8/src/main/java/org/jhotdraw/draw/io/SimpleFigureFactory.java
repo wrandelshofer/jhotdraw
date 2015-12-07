@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import org.jhotdraw.collection.CompositeMapAccessor;
 import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

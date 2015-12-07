@@ -6,7 +6,7 @@
 package org.jhotdraw.draw.tool;
 
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * A <em>drag tracker</em> provides the behavior for dragging selected

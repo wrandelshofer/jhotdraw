@@ -2,8 +2,10 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure;
 
+import org.jhotdraw.draw.figure.HideableFigure;
+import org.jhotdraw.draw.figure.TransformableFigure;
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.DirtyMask;
 import static java.lang.Math.*;
@@ -25,8 +27,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.BoundsInLocalOutlineHandle;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -36,14 +36,14 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.IterableTree;
 import org.jhotdraw.collection.IndexedSet;
 import org.jhotdraw.collection.MapAccessor;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Layer;
+import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import org.jhotdraw.draw.locator.RelativeLocator;

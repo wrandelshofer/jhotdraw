@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.figure.Figure;
 import javafx.scene.Node;
 import org.jhotdraw.beans.PropertyBean;
 

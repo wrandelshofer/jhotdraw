@@ -22,7 +22,7 @@ import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * StyleableStyleManager.

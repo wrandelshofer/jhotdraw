@@ -12,7 +12,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.util.Resources;
 import static java.lang.Math.*;
 import java.util.List;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import javafx.scene.input.KeyEvent;
 
 /**

@@ -2,7 +2,7 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.figure;
 
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;

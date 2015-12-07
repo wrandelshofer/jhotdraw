@@ -10,7 +10,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.connector.CenterConnector;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;

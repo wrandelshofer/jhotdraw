@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.figure.Figure;
 import java.io.File;
 import java.net.URI;
 import org.jhotdraw.draw.key.DirtyBits;

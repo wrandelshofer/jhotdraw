@@ -14,7 +14,7 @@ import javafx.geometry.BoundingBox;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.styleable.StyleablePropertyBean;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssBoundingBoxConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;

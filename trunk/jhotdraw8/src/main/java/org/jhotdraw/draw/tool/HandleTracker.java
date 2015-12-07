@@ -5,7 +5,7 @@
 package org.jhotdraw.draw.tool;
 
 import java.util.Collection;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.handle.Handle;
 
 /**

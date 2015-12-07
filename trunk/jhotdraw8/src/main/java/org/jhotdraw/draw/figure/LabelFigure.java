@@ -8,13 +8,7 @@ import org.jhotdraw.draw.figure.AbstractLabelFigure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.draw.CompositableFigure;
-import org.jhotdraw.draw.LockableFigure;
 import org.jhotdraw.draw.RenderContext;
-import org.jhotdraw.draw.StyleableFigure;
-import org.jhotdraw.draw.TextHolderFigure;
-import org.jhotdraw.draw.TextableFigure;
-import org.jhotdraw.draw.TransformableFigure;
 
 /**
  * SimpleLabelFigure.

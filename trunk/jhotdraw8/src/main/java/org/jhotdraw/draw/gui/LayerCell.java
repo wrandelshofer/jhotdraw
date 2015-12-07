@@ -19,10 +19,10 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.HideableFigure;
-import org.jhotdraw.draw.LockableFigure;
-import org.jhotdraw.draw.StyleableFigure;
+import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.HideableFigure;
+import org.jhotdraw.draw.figure.LockableFigure;
+import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.util.Resources;
 
 /**

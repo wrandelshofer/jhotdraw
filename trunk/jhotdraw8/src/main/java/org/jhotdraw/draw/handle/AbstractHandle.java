@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * AbstractHandle.

@@ -5,6 +5,8 @@
  */
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;

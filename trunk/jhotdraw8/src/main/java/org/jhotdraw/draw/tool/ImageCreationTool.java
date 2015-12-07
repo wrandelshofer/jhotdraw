@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import javafx.stage.FileChooser;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.SimpleDrawingEditor;
 import org.jhotdraw.draw.figure.ImageFigure;

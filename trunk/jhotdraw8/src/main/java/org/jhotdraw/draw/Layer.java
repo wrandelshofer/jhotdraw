@@ -5,6 +5,8 @@
 
 package org.jhotdraw.draw;
 
+import org.jhotdraw.draw.figure.HideableFigure;
+
 /**
  * Defines a <i>layer</i> of a {@link Drawing}.
  * <p>

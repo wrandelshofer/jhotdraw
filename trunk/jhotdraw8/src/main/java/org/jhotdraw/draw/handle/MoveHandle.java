@@ -20,9 +20,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
-import static org.jhotdraw.draw.TransformableFigure.ROTATE;
-import static org.jhotdraw.draw.TransformableFigure.ROTATION_AXIS;
+import org.jhotdraw.draw.figure.Figure;
+import static org.jhotdraw.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.model.DrawingModel;
 
