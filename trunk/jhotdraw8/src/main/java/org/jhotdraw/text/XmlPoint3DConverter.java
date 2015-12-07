@@ -18,22 +18,33 @@ import org.jhotdraw.draw.io.IdFactory;
  * @version $Id$
  */
 public class XmlPoint3DConverter implements Converter<Point3D> {
-
-    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number} {2,number}", new XmlConverterFactory());
+    // FIXME must use CssParser instead of PatternConverter!!
+    private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new XmlConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point3D value) throws IOException {
-        formatter.toStr(out,idFactory, value.getX(), value.getY(), value.getZ());
+        if (value.getZ() == 0.0) {
+                    formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
+            } else {
+                formatter.toStr(out, idFactory, 3, value.getX(), value.getY(), value.getZ());
+            }
     }
 
     @Override
     public Point3D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-
-        return new Point3D((double) v[0], (double) v[1], (double)v[3]);
+        switch ((int) v[0]) {
+            case 2:
+                return new Point3D((double) v[1], (double) v[2], 0.0);
+            case 3:
+                return new Point3D((double) v[1], (double) v[2], (double) v[3]);
+            default:
+                throw new ParseException("Point3D with 2 to 3 values expected.", buf.position());
+        }
     }
+
     @Override
     public Point3D getDefaultValue() {
-        return new Point3D(0,0,0);
+        return new Point3D(0, 0, 0);
     }
 }
