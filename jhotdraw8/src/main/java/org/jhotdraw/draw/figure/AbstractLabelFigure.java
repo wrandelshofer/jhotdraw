@@ -85,6 +85,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     /**
      * Returns the bounds of the node for layout calculations.
      * These bounds include the text of the node and the padding.
+     * @return the layout bounds
      */
     public Bounds getLayoutBounds() {
         if (textNode == null) {

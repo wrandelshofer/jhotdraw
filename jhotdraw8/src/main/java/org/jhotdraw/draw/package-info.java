@@ -23,7 +23,7 @@ The key interfaces for the representation of a drawing are:
 </p>
 <ul>
     <li>{@link org.jhotdraw.draw.Drawing}</li>
-    <li>{@link org.jhotdraw.draw.Figure}</li>
+    <li>{@link org.jhotdraw.draw.figure.Figure}</li>
 </ul>
 <p>
 The key interface for displaying a drawing on screen is:

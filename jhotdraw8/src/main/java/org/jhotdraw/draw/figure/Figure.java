@@ -175,7 +175,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * The API for establishing a connection is specific for each figure. For
      * example, to connect a
-     * {@link org.jhotdraw.draw.figure.misc.LineConnectionFigure} to this
+     * {@link org.jhotdraw.draw.figure.LineConnectionFigure} to this
      * figure, you need to set its {@code START_FIGURE} and/or
      * {@code END_FIGURE} property to this figure.
      * <p>
