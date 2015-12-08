@@ -91,8 +91,8 @@ import org.jhotdraw.draw.locator.RelativeLocator;
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
- * {@link org.jhotdraw.styleable.StyleableMapAccessor}. The style information is cached
- * in the figure getProperties. When the position of a figure in the tree
+ * {@link org.jhotdraw.styleable.StyleableMapAccessor}. The style information is
+ * cached in the figure getProperties. When the position of a figure in the tree
  * structure is changed, method {@code applyCss()} must be called to update the
  * style information of the figure and its descendants.</p>
  *
@@ -175,9 +175,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * The API for establishing a connection is specific for each figure. For
      * example, to connect a
-     * {@link org.jhotdraw.draw.figure.misc.LineConnectionFigure} to this figure,
-     * you need to set its {@code START_FIGURE} and/or {@code END_FIGURE}
-     * property to this figure.
+     * {@link org.jhotdraw.draw.figure.misc.LineConnectionFigure} to this
+     * figure, you need to set its {@code START_FIGURE} and/or
+     * {@code END_FIGURE} property to this figure.
      * <p>
      * A connection can be removed by using the specific API of the figure or by
      * invoking the {@link #removeConnectionTarget(Figure)} method.
@@ -798,10 +798,23 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Returns the transformation from parent coordinates into local
      * coordinates.
+     * <p>
+     * This method may use caching. This method invokes
+     * {@link #computeParentToLocal} to perform the actual computation.
      *
      * @return the transformation
      */
     default Transform getParentToLocal() {
+        return computeParentToLocal();
+    }
+
+    /**
+     * Computes the transformation from parent coordinates into local
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform computeParentToLocal() {
         Point2D center = getCenterInLocal();
 
         Transform translate = Transform.translate(-getStyled(TransformableFigure.TRANSLATE_X), -get(TransformableFigure.TRANSLATE_Y));
@@ -815,10 +828,23 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Returns the transformation from local coordinates into parent
      * coordinates.
+     * <p>
+     * This method may use caching. This method invokes
+     * {@link #computeLocalToParent} to perform the actual computation.
      *
      * @return the transformation
      */
     default Transform getLocalToParent() {
+        return computeLocalToParent();
+    }
+
+    /**
+     * Computes the transformation from local coordinates into parent
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform computeLocalToParent() {
         Point2D center = getCenterInLocal();
         Transform translate = Transform.translate(getStyled(TransformableFigure.TRANSLATE_X), get(TransformableFigure.TRANSLATE_Y));
         Transform scale = Transform.scale(getStyled(TransformableFigure.SCALE_X), get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
@@ -830,10 +856,23 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
 
     /**
      * Returns the transformation from world coordinates into local coordinates.
-     *
+     * <p>
+     * This method may use caching. This method invokes
+     * {@link #computeWorldToLocal} to perform the actual computation.
+     * 
      * @return the transformation
      */
     default Transform getWorldToLocal() {
+        return computeWorldToLocal();
+    }
+    /**
+     * Computes the transformation from world coordinates into local coordinates.
+     * <p>
+     * Uses {@link #getParentToLocal} to compute the parent to local transform.
+     * 
+     * @return the transformation
+     */
+    default Transform computeWorldToLocal() {
         Transform t = getParentToLocal();
         return getParent() == null ? t : t.createConcatenation(getParent().getWorldToLocal());
     }
@@ -841,20 +880,47 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Returns the transformation from world coordinates into parent
      * coordinates.
+     * <p>
+     * This method may use caching. This method invokes
+     * {@link #computeWorldToParent} to perform the actual computation.
      *
      * @return the transformation
      */
     default Transform getWorldToParent() {
+        return computeWorldToParent();
+    }
+
+    /**
+     * Computes the transformation from world coordinates into parent
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform computeWorldToParent() {
         Transform t = new Translate(0, 0);
         return getParent() == null ? t : t.createConcatenation(getParent().getWorldToLocal());
     }
 
     /**
      * Returns the transformation from local coordinates into world coordinates.
+     * <p>
+     * This method may use caching. This method invokes
+     * {@link #computeLocalToParent} to perform the actual computation.
      *
      * @return the transformation
      */
     default Transform getLocalToWorld() {
+        return computeLocalToWorld();
+    }
+
+    /**
+     * Computes the transformation from local coordinates into world coordinates.
+     * <p>
+     * Uses {@link #getLocalToParent} to compute the local to parent transform.
+     * 
+     * @return the transformation
+     */
+    default Transform computeLocalToWorld() {
         Transform t = getLocalToParent();
         return getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
     }
@@ -862,10 +928,23 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Returns the transformation from world coordinates into drawing
      * coordinates.
+     * <p>
+     * This method may use caching. This method invokes
+     * {@link #computeParentToWorld} to perform the actual computation.
      *
      * @return the transformation
      */
     default Transform getParentToWorld() {
+        return computeParentToWorld();
+    }
+
+    /**
+     * Computes the transformation from world coordinates into drawing
+     * coordinates.
+     *
+     * @return the transformation
+     */
+    default Transform computeParentToWorld() {
         Transform t = new Translate();
         return getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
     }
