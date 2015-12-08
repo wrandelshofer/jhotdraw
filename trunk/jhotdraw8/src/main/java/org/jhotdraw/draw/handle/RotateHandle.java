@@ -119,32 +119,41 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
         Figure o = getOwner();
-        Point2D newPoint = startTransform.transform(new Point2D(event.getX(), event.getY()));
-        double deltaRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
-        double newRotate = deltaRotate + startRotation;
+        
+        // Only perform a rotation when the figure does not have a 
+        // translation transform.
+        Transform ot = o.getTransform();
+        if (ot.getTx() == 0.0 && ot.getTy() == 0) {
+            // The approach with Geom.angle only works if the figure does not have
+            // a translation transform.
+            Point2D newPoint = startTransform.transform(new Point2D(event.getX(), event.getY()));
+            double deltaRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
+            double newRotate = deltaRotate + startRotation;
 
-        newRotate = newRotate % 360;
-        if (newRotate < 0) {
-            newRotate += 360;
-        }
-
-        if (!event.isAltDown() && !event.isControlDown()) {
-            // alt or control turns the constrainer off
-            newRotate = view.getConstrainer().constrainAngle(getOwner(), newRotate);
-        }
-        if (event.isMetaDown()) {
-            // meta snaps the location of the handle to the grid
-        }
-        DrawingModel model = view.getModel();
-        if (event.isShiftDown()) {
-            // shift transforms all selected figures
-            for (Figure f : groupReshapeableFigures) {
-                if (f instanceof TransformableFigure) {
-                    model.set(f, TransformableFigure.ROTATE, newRotate);
-                }
+            newRotate = newRotate % 360;
+            if (newRotate < 0) {
+                newRotate += 360;
             }
-        } else {
-            model.set(getOwner(), TransformableFigure.ROTATE, newRotate);
+
+            if (!event.isAltDown() && !event.isControlDown()) {
+                // alt or control turns the constrainer off
+                newRotate = view.getConstrainer().constrainAngle(getOwner(), newRotate);
+            }
+            if (event.isMetaDown()) {
+                // meta snaps the location of the handle to the grid
+            }
+
+            DrawingModel model = view.getModel();
+            if (event.isShiftDown()) {
+                // shift transforms all selected figures
+                for (Figure f : groupReshapeableFigures) {
+                    if (f instanceof TransformableFigure) {
+                        model.set(f, TransformableFigure.ROTATE, newRotate);
+                    }
+                }
+            } else {
+                model.set(getOwner(), TransformableFigure.ROTATE, newRotate);
+            }
         }
     }
 
