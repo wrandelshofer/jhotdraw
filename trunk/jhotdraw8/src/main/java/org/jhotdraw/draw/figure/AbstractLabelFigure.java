@@ -83,8 +83,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     }
 
     /**
-     * Returns the bounds of the node for layout calculations.
-     * These bounds include the text of the node and the padding.
+     * Returns the bounds of the node for layout calculations. These bounds
+     * include the text of the node and the padding.
+     *
      * @return the layout bounds
      */
     public Bounds getLayoutBounds() {
@@ -94,8 +95,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         updateTextNode(null, textNode);
         Bounds b = textNode.getLayoutBounds();
         Insets i = getStyled(PADDING);
-        return new BoundingBox(b.getMinX()-i.getLeft(),b.getMinY()-i.getTop(),
-        b.getWidth()+i.getLeft()+i.getRight(),b.getHeight()+i.getTop()+i.getBottom());
+        return new BoundingBox(
+                b.getMinX() - i.getLeft(), 
+                b.getMinY() - i.getTop(),
+                b.getWidth() + i.getLeft() + i.getRight(), 
+                b.getHeight() + i.getTop() + i.getBottom());
     }
 
     @Override
@@ -103,9 +107,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         if (boundsInLocal == null) {
             Bounds b = getLayoutBounds();
             boundsInLocal = new BoundingBox(
-                    b.getMinX() ,
-                    b.getMinY() ,
-                    b.getWidth() ,
+                    b.getMinX(),
+                    b.getMinY(),
+                    b.getWidth(),
                     b.getHeight());
         }
         return boundsInLocal;
