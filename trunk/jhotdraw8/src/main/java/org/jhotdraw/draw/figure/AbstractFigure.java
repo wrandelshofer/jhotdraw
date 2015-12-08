@@ -20,6 +20,8 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.key.DirtyBits;
+import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.styleable.SimpleStyleablePropertyBean;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
@@ -42,8 +44,8 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
 
         @Override
         protected void fireValueChangedEvent() {
-            if (get()!=null&&!isSuitableParent(get())) {
-                throw new IllegalArgumentException(get()+" is not a suitable parent for this figure.");
+            if (get() != null && !isSuitableParent(get())) {
+                throw new IllegalArgumentException(get() + " is not a suitable parent for this figure.");
             }
             super.fireValueChangedEvent();
         }
@@ -182,7 +184,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     }
 
     /**
-     * Calls {@link #invalidateTransforms()}.
+     * This implementation is empty.
      */
     @Override
     public void transformNotify() {
@@ -277,6 +279,16 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
             parentToLocal = Figure.super.getParentToLocal();
         }
         return parentToLocal;
+    }
+
+    @Override
+    protected void invalidated(Key<?> key) {
+        if (key instanceof FigureKey<?>) {
+            FigureKey<?> fk = (FigureKey<?>) key;
+            if (fk.getDirtyMask().containsOneOf(DirtyBits.TRANSFORM)) {
+                invalidateTransforms();
+            }
+        }
     }
 
 }

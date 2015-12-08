@@ -201,6 +201,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
 
     @Override
     protected void invalidated(Key<?> key) {
+        super.invalidated(key);
         if ((key instanceof FigureKey)
                 && ((FigureKey) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT)) {
             invalidateBounds();
