@@ -165,6 +165,7 @@ public class ResizeHandleKit {
 
     private abstract static class AbstractResizeHandle extends LocatorHandle {
 
+        private Point2D pickLocation;
         private Point2D oldPoint;
         protected final Region node;
         private final String styleclass;
@@ -207,8 +208,7 @@ public class ResizeHandleKit {
             Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
             Bounds b = f.getBoundsInLocal();
             Point2D p = getLocation();
-            //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-            p = t.transform(p);
+            pickLocation = p = t.transform(p);
             node.relocate(p.getX() - 5, p.getY() - 5);
             // rotates the node:
             // f.applyTransformableFigureProperties(node);
@@ -250,6 +250,11 @@ public class ResizeHandleKit {
         @Override
         public boolean isSelectable() {
             return true;
+        }
+
+        @Override
+        public Point2D getLocationInView() {
+            return pickLocation;
         }
 
         /**
@@ -300,6 +305,7 @@ public class ResizeHandleKit {
         EastHandle(Figure owner) {
             super(owner, RelativeLocator.east());
         }
+
         @Override
         public Cursor getCursor() {
             return Cursor.E_RESIZE;
@@ -322,11 +328,11 @@ public class ResizeHandleKit {
         NorthHandle(Figure owner) {
             super(owner, RelativeLocator.north());
         }
+
         @Override
         public Cursor getCursor() {
             return Cursor.N_RESIZE;
         }
-
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
@@ -346,11 +352,11 @@ public class ResizeHandleKit {
         NorthWestHandle(Figure owner) {
             super(owner, RelativeLocator.northWest());
         }
+
         @Override
         public Cursor getCursor() {
             return Cursor.NW_RESIZE;
         }
-
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
@@ -376,11 +382,11 @@ public class ResizeHandleKit {
         SouthEastHandle(Figure owner) {
             super(owner, RelativeLocator.southEast());
         }
+
         @Override
         public Cursor getCursor() {
             return Cursor.SE_RESIZE;
         }
-
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
@@ -405,11 +411,11 @@ public class ResizeHandleKit {
         SouthHandle(Figure owner) {
             super(owner, RelativeLocator.south());
         }
+
         @Override
         public Cursor getCursor() {
             return Cursor.S_RESIZE;
         }
-
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
@@ -428,11 +434,11 @@ public class ResizeHandleKit {
         SouthWestHandle(Figure owner) {
             super(owner, RelativeLocator.southWest());
         }
+
         @Override
         public Cursor getCursor() {
             return Cursor.SW_RESIZE;
         }
-
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
@@ -457,11 +463,11 @@ public class ResizeHandleKit {
         WestHandle(Figure owner) {
             super(owner, RelativeLocator.west());
         }
+
         @Override
         public Cursor getCursor() {
             return Cursor.W_RESIZE;
         }
-
 
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
