@@ -14,6 +14,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.TransformableFigure;
 
 /**
  * |@code SimpleDragTracker} implements interactions with the content area of a
@@ -54,11 +55,11 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     @Override
     public void setDraggedFigure(Figure anchor, DrawingView view) {
         this.anchorFigure = anchor;
-        
+
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
-        groupReshapeableFigures=new HashSet<>();
-        for (Figure f:selectedFigures) {
+        groupReshapeableFigures = new HashSet<>();
+        for (Figure f : selectedFigures) {
             if (f.isGroupReshapeableWith(selectedFigures)) {
                 groupReshapeableFigures.add(f);
             }
@@ -73,33 +74,46 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
 // FIXME fire undoable edit
-      //  fireToolDone();
+        //  fireToolDone();
     }
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
             newPoint = view.getConstrainer().constrainPoint(anchorFigure, newPoint);
         }
+
         if (event.isMetaDown()) {
             // meta snaps the top left corner of the anchor figure to the grid
             Bounds bounds = anchorFigure.getBoundsInLocal();
             Point2D loc = new Point2D(bounds.getMinX(), bounds.getMinY());
-            oldPoint = anchorFigure.localToDrawing(loc);
+            oldPoint = anchorFigure.localToWorld(loc);
         }
 
-        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
-        if (!tx.isIdentity()) {
-            DrawingModel dm = view.getModel();
-            if (event.isShiftDown()) {
-                // shift only reshapes the anchor figure
-                dm.reshape(anchorFigure, anchorFigure.getWorldToParent().createConcatenation(tx));
-            } else {
-                for (Figure f : groupReshapeableFigures) {
-                    dm.reshape(f, f.getWorldToParent().createConcatenation(tx));
-                }
+        DrawingModel dm = view.getModel();
+        if (event.isShiftDown()) {
+            // shift only reshapes the anchor figure
+            Figure f = anchorFigure;
+            Point2D npl = f.worldToParent(newPoint);
+            Point2D opl = f.worldToParent(oldPoint);
+            Transform tt = ((TransformableFigure)f).getInverseTransform();
+            npl=tt.transform(npl);
+            opl=tt.transform(opl);
+            Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
+
+            dm.reshape(f, tx);
+        } else {
+            for (Figure f : groupReshapeableFigures) {
+                Point2D npl = f.worldToParent(newPoint);
+                Point2D opl = f.worldToParent(oldPoint);
+            Transform tt = ((TransformableFigure)f).getInverseTransform();
+            npl=tt.transform(npl);
+            opl=tt.transform(opl);
+                Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
+                dm.reshape(f, tx);
             }
         }
         oldPoint = newPoint;

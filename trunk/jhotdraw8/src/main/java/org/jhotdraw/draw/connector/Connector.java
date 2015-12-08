@@ -41,7 +41,7 @@ public interface Connector {
      * @return A point on the target figure in drawing coordinates.
      */
     default Point2D getPositionInDrawing(Figure connection) {
-        return getTarget().localToDrawing(getPositionInLocal(connection));
+        return getTarget().localToWorld(getPositionInLocal(connection));
     }
 
     /**

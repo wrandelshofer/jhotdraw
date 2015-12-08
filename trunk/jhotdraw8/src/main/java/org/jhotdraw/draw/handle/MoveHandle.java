@@ -21,6 +21,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.TransformableFigure;
 import static org.jhotdraw.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.locator.Locator;
@@ -117,26 +118,37 @@ public class MoveHandle extends LocatorHandle {
             // alt or control turns the constrainer off
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
+
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
-            oldPoint = getOwner().localToDrawing(loc);
+            oldPoint = getOwner().localToWorld(loc);
         }
 
-        Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
-        if (!tx.isIdentity()) {
-            DrawingModel model = view.getModel();
+        //Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
+        DrawingModel model = view.getModel();
 
-            if (event.isShiftDown()) {
-                // shift transforms all selected figures
-                for (Figure f : groupReshapeableFigures) {
-                    tx = f.getWorldToParent().createConcatenation(tx);
-                    model.reshape(f, tx);
-                }
-            } else {
-                tx = getOwner().getWorldToParent().createConcatenation(tx);
-                model.reshape(getOwner(), tx);
+        if (event.isShiftDown()) {
+            // shift transforms all selected figures
+            for (Figure f : groupReshapeableFigures) {
+                Point2D npl = f.worldToParent(newPoint);
+                Point2D opl = f.worldToParent(oldPoint);
+            Transform tt = ((TransformableFigure)f).getInverseTransform();
+            npl=tt.transform(npl);
+            opl=tt.transform(opl);
+                Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
+                //tx = f.getWorldToParent().createConcatenation(tx);
+                model.reshape(f, tx);
             }
+        } else {
+            Figure f = getOwner();
+            Point2D npl = f.worldToParent(newPoint);
+            Point2D opl = f.worldToParent(oldPoint);
+            Transform tt = ((TransformableFigure)f).getInverseTransform();
+            npl=tt.transform(npl);
+            opl=tt.transform(opl);
+            Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
+            model.reshape(f, tx);
         }
         oldPoint = newPoint;
     }

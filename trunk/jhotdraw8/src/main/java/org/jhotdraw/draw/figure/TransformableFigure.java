@@ -4,12 +4,16 @@
  */
 package org.jhotdraw.draw.figure;
 
+import java.util.ArrayList;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
+import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Point3DStyleableMapAccessor;
 
@@ -69,6 +73,8 @@ public interface TransformableFigure extends Figure {
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X,TRANSLATE_Y,TRANSLATE_Z);
     
+    public static SimpleFigureKey<ArrayList<Transform>> TRANSFORMS = new SimpleFigureKey<>("tranforms",ArrayList.class,new Class<?>[]{Transform.class},DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM),new ArrayList<>());
+    
     /**
      * Updates a figure node with all transformation properties defined in this
      * interface.
@@ -82,6 +88,7 @@ public interface TransformableFigure extends Figure {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyTransformableFigureProperties(Node node) {
+        node.getTransforms().setAll(get(TRANSFORMS));
         node.setRotate(getStyled(ROTATE));
         node.setRotationAxis(getStyled(ROTATION_AXIS));
         node.setScaleX(getStyled(SCALE_X));
@@ -91,4 +98,7 @@ public interface TransformableFigure extends Figure {
         node.setTranslateY(getStyled(TRANSLATE_Y));
         node.setTranslateZ(getStyled(TRANSLATE_Z));
     }
+    
+    
+
 }

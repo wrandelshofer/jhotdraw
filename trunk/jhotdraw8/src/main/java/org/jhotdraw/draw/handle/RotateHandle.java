@@ -85,7 +85,9 @@ public class RotateHandle extends AbstractHandle {
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        center = getOwner().getCenterInLocal();
+        center = getOwner().getCenterInParent();
+        center = getOwner().getInverseTransform().transform(center);
+        
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
         groupReshapeableFigures = new HashSet<>();
@@ -101,12 +103,11 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
         // FIXME implement me!
-        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
-
+        Point2D newPoint = getOwner().worldToParent(view.viewToWorld(new Point2D(event.getX(), event.getY())));            
+        newPoint = getOwner().getInverseTransform().transform(newPoint);
+        
         //double oldRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
         double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
-
-        double ownerAngle = getOwner().get(TransformableFigure.ROTATE);
 
         newRotate = newRotate % 360;
         if (newRotate < 0) {
@@ -138,6 +139,11 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fire undoable edit
+    }
+
+    @Override
+    public TransformableFigure getOwner() {
+        return (TransformableFigure) super.getOwner(); 
     }
 
     @Override
