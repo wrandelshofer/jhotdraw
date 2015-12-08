@@ -221,16 +221,16 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      */
     private final NonnullProperty<DrawingModel> drawingModel //
             = new NonnullProperty<DrawingModel>(this, MODEL_PROPERTY, new SimpleDrawingModel()) {
-                private DrawingModel oldValue = null;
+        private DrawingModel oldValue = null;
 
-                @Override
-                protected void fireValueChangedEvent() {
-                    DrawingModel newValue = get();
-                    super.fireValueChangedEvent();
-                    handleNewDrawingModel(oldValue, newValue);
-                    oldValue = newValue;
-                }
-            };
+        @Override
+        protected void fireValueChangedEvent() {
+            DrawingModel newValue = get();
+            super.fireValueChangedEvent();
+            handleNewDrawingModel(oldValue, newValue);
+            oldValue = newValue;
+        }
+    };
 
     /**
      * The constrainer property holds the constrainer for this drawing view
@@ -250,9 +250,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private Transform viewToWorldTransform = null;
     private Transform worldToViewTransform = null;
 
-    /** Selection tolerance. Selectable margin around a figure. */
+    /**
+     * Selection tolerance. Selectable margin around a figure.
+     */
     private final double TOLERANCE = 5;
-    /** Handle selection tolerance (square of radius). */ 
+    /**
+     * Handle selection tolerance (square of radius).
+     */
     private final double HANDLE_TOLERANCE = 25;
 
     /**
@@ -384,7 +388,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
-
 
         backgroundPane = new Rectangle();
         backgroundPane.setFill(new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false));
@@ -766,6 +769,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     @Override
     public Handle findHandle(double vx, double vy) {
+        for (Map.Entry<Node, Handle> e : nodeToHandleMap.entrySet()) {
+            Point2D p = e.getValue().getLocationInView();
+            if (p != null && Geom.length2(vx, vy, p.getX(), p.getY()) <= HANDLE_TOLERANCE) {
+                return e.getValue();
+            }
+        }
+        /*
         for (Node n : handlesPane.getChildren()) {
             Point2D pl = n.parentToLocal(vx, vy);
             if (isInsideRadius(n, pl, HANDLE_TOLERANCE)) {
@@ -774,7 +784,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     return h;
                 }
             }
-        }
+        }*/
         return null;
     }
 
@@ -861,7 +871,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             boolean contains = Geom.lineContainsPoint(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), point.getX(), point.getY(), tolerance);
             return contains;
         } else if (node instanceof Group) {
-            if (Geom.contains(node.getBoundsInLocal(), point,tolerance)) {
+            if (Geom.contains(node.getBoundsInLocal(), point, tolerance)) {
                 for (Node child : ((Group) node).getChildren()) {
                     if (contains(child, child.parentToLocal(point), tolerance)) {
                         return true;
@@ -870,12 +880,14 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             }
             return false;
         } else {
-           return Geom.contains(node.getBoundsInLocal(), point,tolerance);
+            return Geom.contains(node.getBoundsInLocal(), point, tolerance);
         }
     }
+
     /**
-     * Returns true if the point is inside the radius from the center of the node.
-     * 
+     * Returns true if the point is inside the radius from the center of the
+     * node.
+     *
      * @param node The node
      * @param point The point in local coordinates
      * @param squaredRadius The square of the radius in which the node must be
@@ -883,13 +895,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      */
     private boolean isInsideRadius(Node node, Point2D point, double squaredRadius) {
         Bounds b = node.getBoundsInLocal();
-        double cx = b.getMinX()+b.getWidth()*0.5;
-        double cy = b.getMinY()+b.getHeight()*0.5;
-        double dx = point.getX()-cx;
-        double dy = point.getY()-cy;
-        return dx*dx+dy*dy<squaredRadius;
+        double cx = b.getMinX() + b.getWidth() * 0.5;
+        double cy = b.getMinY() + b.getHeight() * 0.5;
+        double dx = point.getX() - cx;
+        double dy = point.getY() - cy;
+        return dx * dx + dy * dy < squaredRadius;
     }
-
 
     @Override
     public List<Figure> findFigures(double vx, double vy, boolean decompose) {

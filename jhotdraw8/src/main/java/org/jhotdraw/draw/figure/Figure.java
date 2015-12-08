@@ -796,6 +796,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
                 + b.getMaxY()) * 0.5);
     }
+
     /**
      * Returns the center of the figure in the local coordinates of the figure.
      *
@@ -838,7 +839,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
             TransformableFigure tf = (TransformableFigure) this;
             t = tf.getInverseTransform().createConcatenation(scale).createConcatenation(rotate).createConcatenation(translate);
         } else {
-         t = scale.createConcatenation(rotate).createConcatenation(translate);
+            t = scale.createConcatenation(rotate).createConcatenation(translate);
         }
         return t;
     }
@@ -1013,30 +1014,32 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default Styleable getStyleableParent() {
         return getParent();
     }
+
     default Transform getTransform() {
-        ArrayList<Transform> list=get(TRANSFORMS);
+        ArrayList<Transform> list = get(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
-            t=new Translate(0,0);
-        }else{
-            t=list.get(0);
-            for (int i=1,n=list.size();i<n;i++) {
+            t = new Translate(0, 0);
+        } else {
+            t = list.get(0);
+            for (int i = 1, n = list.size(); i < n; i++) {
                 t.createConcatenation(list.get(i));
             }
         }
         return t;
     }
+
     default Transform getInverseTransform() {
-        ArrayList<Transform> list=get(TRANSFORMS);
+        ArrayList<Transform> list = get(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
-            t=new Translate(0,0);
-        }else{
+            t = new Translate(0, 0);
+        } else {
             try {
-            t=list.get(list.size()-1).createInverse();
-            for (int i=list.size()-2;i>=0;i--) {
-                t.createConcatenation(list.get(i).createInverse());
-            }
+                t = list.get(list.size() - 1).createInverse();
+                for (int i = list.size() - 2; i >= 0; i--) {
+                    t.createConcatenation(list.get(i).createInverse());
+                }
             } catch (NonInvertibleTransformException e) {
                 throw new InternalError(e);
             }

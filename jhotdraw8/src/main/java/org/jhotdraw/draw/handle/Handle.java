@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.handle;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
@@ -156,4 +157,10 @@ public interface Handle {
      * @return the cursor
      */
     Cursor getCursor();
+    
+    /** The pick location of the handle in view coordinates.
+     * 
+     * @return the pick location or null if the handle is not interactive
+     */
+    Point2D getLocationInView();
 }

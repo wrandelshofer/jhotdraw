@@ -33,7 +33,7 @@ import org.jhotdraw.draw.model.DrawingModel;
  * @author Werner Randelshofer
  */
 public class MoveHandle extends LocatorHandle {
-
+    private Point2D pickLocation;
     private Point2D oldPoint;
     private final Region node;
     private final String styleclass;
@@ -82,7 +82,7 @@ public class MoveHandle extends LocatorHandle {
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        p = t.transform(p);
+        pickLocation = p = t.transform(p);
 
         // The node is centered around the location. 
         // (The value 5.5 is half of the node size, which is 11,11.
@@ -161,5 +161,9 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public boolean isSelectable() {
         return true;
+    }
+        @Override
+    public Point2D getLocationInView() {
+        return pickLocation;
     }
 }

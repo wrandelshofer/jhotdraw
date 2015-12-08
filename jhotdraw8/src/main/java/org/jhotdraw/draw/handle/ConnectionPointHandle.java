@@ -47,7 +47,7 @@ public class ConnectionPointHandle extends AbstractHandle {
     private final String styleclassConnected;
 
     private static final Circle REGION_SHAPE = new Circle(3);
-
+private Point2D pickLocation ;
     private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
@@ -86,7 +86,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Point2D p = f.get(pointKey);
-        p = t.transform(p);
+        pickLocation = p = t.transform(p);
         boolean isConnected = f.get(connectorKey) != null;
         node.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         node.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
@@ -145,4 +145,10 @@ public class ConnectionPointHandle extends AbstractHandle {
     public Cursor getCursor() {
         return Cursor.CROSSHAIR;
     }
+    
+        @Override
+    public Point2D getLocationInView() {
+        return pickLocation;
+    }
+
 }

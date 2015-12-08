@@ -9,6 +9,7 @@ import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -18,6 +19,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
@@ -34,12 +36,17 @@ import org.jhotdraw.geom.Geom;
  */
 public class RotateHandle extends AbstractHandle {
 
+    private Point2D pickLocation;
+    private final Group group;
     private final Region node;
+    private final Path path;
     private static final Circle REGION_SHAPE = new Circle(3);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
-    private Point2D center;
     protected Set<Figure> groupReshapeableFigures;
+    private Transform startTransform;
+    private double startRotation;
+    private Point2D center;
 
     public RotateHandle(TransformableFigure figure) {
         this(figure, STYLECLASS_HANDLE_ROTATE);
@@ -47,6 +54,7 @@ public class RotateHandle extends AbstractHandle {
 
     public RotateHandle(TransformableFigure figure, String styleclass) {
         super(figure);
+        group = new Group();
         node = new Region();
         node.setShape(REGION_SHAPE);
         node.setManaged(false);
@@ -57,6 +65,9 @@ public class RotateHandle extends AbstractHandle {
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
+        path = new Path();
+        group.getChildren().addAll(node, path);
+        path.setStroke(Color.RED);
     }
 
     @Override
@@ -65,29 +76,34 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public Region getNode() {
-        return node;
+    public Group getNode() {
+        return group;
     }
 
     @Override
     public void updateNode(DrawingView view) {
-        Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
-        Bounds b = f.getBoundsInLocal();
+        Figure o = getOwner();
+        Transform t = view.getWorldToView().createConcatenation(o.getLocalToWorld());
+        Bounds b = o.getBoundsInLocal();
         Point2D p = getLocation(view);
-        //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        p = t.transform(p);
+
+        pickLocation = p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
+
         // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+        node.setRotate(o.getStyled(ROTATE));
+        node.setRotationAxis(o.getStyled(ROTATION_AXIS));
     }
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        center = getOwner().getCenterInParent();
-        center = getOwner().getInverseTransform().transform(center);
-        
+        Figure o = getOwner();
+        center = Geom.center(o.getBoundsInLocal());
+        startTransform = o.getWorldToLocal().createConcatenation(view.getViewToWorld());
+        Point2D newPoint = startTransform.transform(new Point2D(event.getX(), event.getY()));
+        startRotation = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
+        startRotation = startRotation + o.getStyled(ROTATE);
+
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
         groupReshapeableFigures = new HashSet<>();
@@ -102,12 +118,10 @@ public class RotateHandle extends AbstractHandle {
 
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
-        // FIXME implement me!
-        Point2D newPoint = getOwner().worldToParent(view.viewToWorld(new Point2D(event.getX(), event.getY())));            
-        newPoint = getOwner().getInverseTransform().transform(newPoint);
-        
-        //double oldRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), oldPoint.getX(), oldPoint.getY());
-        double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
+        Figure o = getOwner();
+        Point2D newPoint = startTransform.transform(new Point2D(event.getX(), event.getY()));
+        double deltaRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
+        double newRotate = deltaRotate + startRotation;
 
         newRotate = newRotate % 360;
         if (newRotate < 0) {
@@ -121,9 +135,7 @@ public class RotateHandle extends AbstractHandle {
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
         }
-
         DrawingModel model = view.getModel();
-
         if (event.isShiftDown()) {
             // shift transforms all selected figures
             for (Figure f : groupReshapeableFigures) {
@@ -143,7 +155,7 @@ public class RotateHandle extends AbstractHandle {
 
     @Override
     public TransformableFigure getOwner() {
-        return (TransformableFigure) super.getOwner(); 
+        return (TransformableFigure) super.getOwner();
     }
 
     @Override
@@ -156,6 +168,11 @@ public class RotateHandle extends AbstractHandle {
         Bounds bounds = owner.getBoundsInLocal();
         Point2D shift = view.getViewToWorld().deltaTransform(10, 10);
         return new Point2D(bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() - shift.getY());
+    }
+
+    @Override
+    public Point2D getLocationInView() {
+        return pickLocation;
     }
 
 }

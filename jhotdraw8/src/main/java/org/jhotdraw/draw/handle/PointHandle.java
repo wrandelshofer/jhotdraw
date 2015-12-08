@@ -28,7 +28,7 @@ import static org.jhotdraw.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 public class PointHandle extends AbstractHandle {
-
+    private Point2D pickLocation;
     private final MapAccessor<Point2D> pointKey;
     private final Region node;
     private final String styleclass;
@@ -69,7 +69,7 @@ public class PointHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Point2D p = f.get(pointKey);
-        p = t.transform(p);
+        pickLocation=p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));
@@ -98,5 +98,9 @@ public class PointHandle extends AbstractHandle {
     @Override
     public boolean isSelectable() {
         return true;
+    }
+        @Override
+    public Point2D getLocationInView() {
+        return pickLocation;
     }
 }

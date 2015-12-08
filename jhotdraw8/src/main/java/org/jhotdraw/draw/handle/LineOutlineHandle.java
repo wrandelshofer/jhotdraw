@@ -6,6 +6,7 @@ package org.jhotdraw.draw.handle;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -72,6 +73,10 @@ public class LineOutlineHandle extends AbstractHandle {
     }
     @Override
     public Cursor getCursor() {
+        return null;
+    }
+        @Override
+    public Point2D getLocationInView() {
         return null;
     }
 }
