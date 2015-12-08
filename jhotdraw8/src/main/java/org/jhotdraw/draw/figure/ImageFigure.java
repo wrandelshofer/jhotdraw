@@ -22,6 +22,8 @@ import org.jhotdraw.draw.key.Rectangle2DStyleableMapAccessor;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import org.jhotdraw.draw.key.UriStyleableFigureKey;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 /**
  * ImageFigure.

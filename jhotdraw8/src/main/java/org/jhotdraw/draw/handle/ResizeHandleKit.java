@@ -234,7 +234,7 @@ public class ResizeHandleKit {
             if (event.isMetaDown()) {
                 // meta snaps the location of the handle to the grid
                 Point2D loc = getLocation();
-                oldPoint = getOwner().localToDrawing(loc);
+                oldPoint = getOwner().localToWorld(loc);
             }
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();

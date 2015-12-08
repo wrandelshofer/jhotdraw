@@ -16,6 +16,8 @@ import org.jhotdraw.draw.connector.Connector;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import org.jhotdraw.collection.IndexedSet;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * This base class can be used to implement figures which support child figures.

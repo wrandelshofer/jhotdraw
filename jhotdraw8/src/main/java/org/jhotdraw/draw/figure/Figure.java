@@ -4,8 +4,6 @@
  */
 package org.jhotdraw.draw.figure;
 
-import org.jhotdraw.draw.figure.HideableFigure;
-import org.jhotdraw.draw.figure.TransformableFigure;
 import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.key.DirtyMask;
 import static java.lang.Math.*;
@@ -47,6 +45,10 @@ import org.jhotdraw.draw.handle.RotateHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import org.jhotdraw.draw.locator.RelativeLocator;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import javafx.scene.transform.NonInvertibleTransformException;
+import static org.jhotdraw.draw.figure.TransformableFigure.TRANSFORMS;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -175,9 +177,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * The API for establishing a connection is specific for each figure. For
      * example, to connect a
-     * {@link org.jhotdraw.draw.figure.LineConnectionFigure} to this
-     * figure, you need to set its {@code START_FIGURE} and/or
-     * {@code END_FIGURE} property to this figure.
+     * {@link org.jhotdraw.draw.figure.LineConnectionFigure} to this figure, you
+     * need to set its {@code START_FIGURE} and/or {@code END_FIGURE} property
+     * to this figure.
      * <p>
      * A connection can be removed by using the specific API of the figure or by
      * invoking the {@link #removeConnectionTarget(Figure)} method.
@@ -794,6 +796,16 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
                 + b.getMaxY()) * 0.5);
     }
+    /**
+     * Returns the center of the figure in the local coordinates of the figure.
+     *
+     * @return The center of the figure
+     */
+    default Point2D getCenterInParent() {
+        Bounds b = getBoundsInParent();
+        return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
+                + b.getMaxY()) * 0.5);
+    }
 
     /**
      * Returns the transformation from parent coordinates into local
@@ -821,7 +833,13 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         Transform scale = Transform.scale(1.0 / getStyled(TransformableFigure.SCALE_X), 1.0 / get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
         Transform rotate = Transform.rotate(-getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
 
-        Transform t = scale.createConcatenation(rotate).createConcatenation(translate);
+        Transform t;
+        if (this instanceof TransformableFigure) {
+            TransformableFigure tf = (TransformableFigure) this;
+            t = tf.getInverseTransform().createConcatenation(scale).createConcatenation(rotate).createConcatenation(translate);
+        } else {
+         t = scale.createConcatenation(rotate).createConcatenation(translate);
+        }
         return t;
     }
 
@@ -850,7 +868,13 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         Transform scale = Transform.scale(getStyled(TransformableFigure.SCALE_X), get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
         Transform rotate = Transform.rotate(getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
 
-        Transform t = translate.createConcatenation(rotate).createConcatenation(scale);
+        Transform t;
+        if (this instanceof TransformableFigure) {
+            TransformableFigure tf = (TransformableFigure) this;
+            t = translate.createConcatenation(rotate).createConcatenation(scale).createConcatenation(tf.getTransform());
+        } else {
+            t = translate.createConcatenation(rotate).createConcatenation(scale);
+        }
         return t;
     }
 
@@ -859,17 +883,19 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * This method may use caching. This method invokes
      * {@link #computeWorldToLocal} to perform the actual computation.
-     * 
+     *
      * @return the transformation
      */
     default Transform getWorldToLocal() {
         return computeWorldToLocal();
     }
+
     /**
-     * Computes the transformation from world coordinates into local coordinates.
+     * Computes the transformation from world coordinates into local
+     * coordinates.
      * <p>
      * Uses {@link #getParentToLocal} to compute the parent to local transform.
-     * 
+     *
      * @return the transformation
      */
     default Transform computeWorldToLocal() {
@@ -914,10 +940,11 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Computes the transformation from local coordinates into world coordinates.
+     * Computes the transformation from local coordinates into world
+     * coordinates.
      * <p>
      * Uses {@link #getLocalToParent} to compute the local to parent transform.
-     * 
+     *
      * @return the transformation
      */
     default Transform computeLocalToWorld() {
@@ -978,7 +1005,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @param p point in drawing coordinates
      * @return point in local coordinates
      */
-    default Point2D localToDrawing(Point2D p) {
+    default Point2D localToWorld(Point2D p) {
         return getLocalToWorld().transform(p);
     }
 
@@ -986,5 +1013,34 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default Styleable getStyleableParent() {
         return getParent();
     }
-
+    default Transform getTransform() {
+        ArrayList<Transform> list=get(TRANSFORMS);
+        Transform t;
+        if (list.isEmpty()) {
+            t=new Translate(0,0);
+        }else{
+            t=list.get(0);
+            for (int i=1,n=list.size();i<n;i++) {
+                t.createConcatenation(list.get(i));
+            }
+        }
+        return t;
+    }
+    default Transform getInverseTransform() {
+        ArrayList<Transform> list=get(TRANSFORMS);
+        Transform t;
+        if (list.isEmpty()) {
+            t=new Translate(0,0);
+        }else{
+            try {
+            t=list.get(list.size()-1).createInverse();
+            for (int i=list.size()-2;i>=0;i--) {
+                t.createConcatenation(list.get(i).createInverse());
+            }
+            } catch (NonInvertibleTransformException e) {
+                throw new InternalError(e);
+            }
+        }
+        return t;
+    }
 }
