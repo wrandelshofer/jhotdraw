@@ -180,10 +180,10 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
         if (startConnector != null) {
-            start = startConnector.getPositionInDrawing(this);
+            start = startConnector.getPositionInWorld(this);
         }
         if (endConnector != null) {
-            end = endConnector.getPositionInDrawing(this);
+            end = endConnector.getPositionInWorld(this);
         }
 
         // We must switch off rotations for the following computations
