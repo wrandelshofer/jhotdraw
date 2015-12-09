@@ -9,7 +9,6 @@ package org.jhotdraw.app.action.file;
 
 import javafx.event.EventHandler;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
@@ -36,7 +35,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
         labels.configureAction(this, ID);
     }
 
-    public CloseFileAction(DocumentOrientedApplication app) {
+    public CloseFileAction(Application app) {
         this(app, null);
     }
 

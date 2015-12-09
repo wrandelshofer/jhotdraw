@@ -7,6 +7,8 @@ package org.jhotdraw.draw;
 import org.jhotdraw.draw.figure.Figure;
 import javafx.scene.Node;
 import org.jhotdraw.beans.PropertyBean;
+import org.jhotdraw.collection.Key;
+import org.jhotdraw.collection.SimpleKey;
 
 /**
  * RenderContext.
@@ -15,6 +17,7 @@ import org.jhotdraw.beans.PropertyBean;
  * @version $Id$
  */
 public interface RenderContext extends PropertyBean {
+    
     // ---
     // behavior
     // ---
@@ -25,6 +28,6 @@ public interface RenderContext extends PropertyBean {
      * @param f The figure
      * @return The JavaFX node associated to the figure
      */
-    public Node getNode(Figure f);
+    Node getNode(Figure f);
 
 }
