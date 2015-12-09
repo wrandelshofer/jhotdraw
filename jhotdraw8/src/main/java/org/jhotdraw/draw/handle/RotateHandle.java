@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.TransformableFigure;
@@ -122,7 +123,7 @@ public class RotateHandle extends AbstractHandle {
         
         // Only perform a rotation when the figure does not have a 
         // translation transform.
-        Transform ot = o.getTransform();
+        Transform ot =  (o instanceof TransformableFigure) ?((TransformableFigure)o).getTransform():new Translate(0,0);
         if (ot.getTx() == 0.0 && ot.getTy() == 0) {
             // The approach with Geom.angle only works if the figure does not have
             // a translation transform.

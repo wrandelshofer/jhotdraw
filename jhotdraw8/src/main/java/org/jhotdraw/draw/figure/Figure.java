@@ -63,6 +63,12 @@ import static org.jhotdraw.draw.figure.TransformableFigure.TRANSFORMS;
  * be {@link Layer}s, and the parent of a {@code Layer} must be a
  * {@code Drawing}.</p>
  * <p>
+ * <b>Coordinate System and Transformations.</b> A figure introduces a
+ * local coordinate system which applies to its own geometry and all descendant
+ * figures in its subtree. The Figure interface provides methods which
+ * allow to transform between the local coordinate system of a figure,  
+ * the coordinate system of its parent, and the world coordinate system.</p>
+ * <p>
  * <b>Connections.</b> A figure can be connected to other figures. The
  * connection are directed. By convention, when a figure "A" is connected to an
  * other figure "B", then "A" adds itself in the {@code connectedFigures}
@@ -827,22 +833,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return the transformation
      */
-    default Transform computeParentToLocal() {
-        Point2D center = getCenterInLocal();
-
-        Transform translate = Transform.translate(-getStyled(TransformableFigure.TRANSLATE_X), -get(TransformableFigure.TRANSLATE_Y));
-        Transform scale = Transform.scale(1.0 / getStyled(TransformableFigure.SCALE_X), 1.0 / get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(-getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
-
-        Transform t;
-        if (this instanceof TransformableFigure) {
-            TransformableFigure tf = (TransformableFigure) this;
-            t = tf.getInverseTransform().createConcatenation(scale).createConcatenation(rotate).createConcatenation(translate);
-        } else {
-            t = scale.createConcatenation(rotate).createConcatenation(translate);
-        }
-        return t;
-    }
+    Transform computeParentToLocal();
 
     /**
      * Returns the transformation from local coordinates into parent
@@ -863,21 +854,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return the transformation
      */
-    default Transform computeLocalToParent() {
-        Point2D center = getCenterInLocal();
-        Transform translate = Transform.translate(getStyled(TransformableFigure.TRANSLATE_X), get(TransformableFigure.TRANSLATE_Y));
-        Transform scale = Transform.scale(getStyled(TransformableFigure.SCALE_X), get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
-
-        Transform t;
-        if (this instanceof TransformableFigure) {
-            TransformableFigure tf = (TransformableFigure) this;
-            t = translate.createConcatenation(rotate).createConcatenation(scale).createConcatenation(tf.getTransform());
-        } else {
-            t = translate.createConcatenation(rotate).createConcatenation(scale);
-        }
-        return t;
-    }
+    Transform computeLocalToParent();
 
     /**
      * Returns the transformation from world coordinates into local coordinates.
@@ -891,6 +868,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         return computeWorldToLocal();
     }
 
+    /**
+     * Computes the transformation from world coordinates into local
+     * coordinates.
+     * <p>
+     * Uses {@link #getParentToLocal} to compute the parent to local transform.
+     *
+     * @return the transformation
+     */
     /**
      * Computes the transformation from world coordinates into local
      * coordinates.
@@ -953,6 +938,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         return getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
     }
 
+
+
     /**
      * Returns the transformation from world coordinates into drawing
      * coordinates.
@@ -972,11 +959,16 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return the transformation
      */
+    /**
+     * Computes the transformation from world coordinates into drawing
+     * coordinates.
+     *
+     * @return the transformation
+     */
     default Transform computeParentToWorld() {
         Transform t = new Translate();
         return getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
     }
-
     /**
      * Transforms the specified point from world coordinates into local
      * coordinates.
@@ -1013,37 +1005,5 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     @Override
     default Styleable getStyleableParent() {
         return getParent();
-    }
-
-    default Transform getTransform() {
-        ArrayList<Transform> list = get(TRANSFORMS);
-        Transform t;
-        if (list.isEmpty()) {
-            t = new Translate(0, 0);
-        } else {
-            t = list.get(0);
-            for (int i = 1, n = list.size(); i < n; i++) {
-                t.createConcatenation(list.get(i));
-            }
-        }
-        return t;
-    }
-
-    default Transform getInverseTransform() {
-        ArrayList<Transform> list = get(TRANSFORMS);
-        Transform t;
-        if (list.isEmpty()) {
-            t = new Translate(0, 0);
-        } else {
-            try {
-                t = list.get(list.size() - 1).createInverse();
-                for (int i = list.size() - 2; i >= 0; i--) {
-                    t.createConcatenation(list.get(i).createInverse());
-                }
-            } catch (NonInvertibleTransformException e) {
-                throw new InternalError(e);
-            }
-        }
-        return t;
     }
 }

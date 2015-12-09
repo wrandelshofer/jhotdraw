@@ -32,7 +32,7 @@ import org.jhotdraw.draw.locator.PointLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Line"}.
