@@ -11,6 +11,7 @@
             <MenuItem id="file.open" mnemonicParsing="false" text="Open" />
             <MenuItem id="file.save" mnemonicParsing="false" text="Save" />
             <MenuItem id="file.saveAs" mnemonicParsing="false" text="Save as..." />
+            <MenuItem id="file.export" mnemonicParsing="false" text="%file.export.text" />
         <MenuItem id="file.close" mnemonicParsing="false" text="Close" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem id="application.exit" mnemonicParsing="false" text="Exit" />

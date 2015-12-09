@@ -40,19 +40,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.Actions;
-import org.jhotdraw.app.action.app.AboutAction;
-import org.jhotdraw.app.action.app.ExitAction;
-import org.jhotdraw.app.action.edit.ClearSelectionAction;
-import org.jhotdraw.app.action.edit.CopyAction;
-import org.jhotdraw.app.action.edit.CutAction;
-import org.jhotdraw.app.action.edit.DeleteAction;
-import org.jhotdraw.app.action.edit.PasteAction;
-import org.jhotdraw.app.action.edit.SelectAllAction;
 import org.jhotdraw.app.action.file.CloseFileAction;
-import org.jhotdraw.app.action.file.NewFileAction;
-import org.jhotdraw.app.action.file.OpenFileAction;
-import org.jhotdraw.app.action.file.SaveFileAction;
-import org.jhotdraw.app.action.file.SaveFileAsAction;
 import org.jhotdraw.binding.BindingUtil;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.Key;
@@ -100,7 +88,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
     @Override
     public void start(Stage primaryStage) throws Exception {
         isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
-        actionMap = createApplicationActionMap();
+        actionMap = model.createApplicationActionMap(this);
         if (isSystemMenuSupported) {
             Platform.setImplicitExit(false);
             ArrayList<MenuBase> menus = new ArrayList<>();
@@ -320,24 +308,6 @@ public class DocumentOrientedApplication extends AbstractApplication {
             }
         }
         return mb;
-    }
-
-    public HierarchicalMap<String, Action> createApplicationActionMap() {
-        HierarchicalMap<String, Action> map = new HierarchicalMap<>();
-        map.put(AboutAction.ID, new AboutAction(this));
-        map.put(ExitAction.ID, new ExitAction(this));
-        map.put(NewFileAction.ID, new NewFileAction(this));
-        map.put(OpenFileAction.ID, new OpenFileAction(this));
-        map.put(SaveFileAction.ID, new SaveFileAction(this));
-        map.put(SaveFileAsAction.ID, new SaveFileAsAction(this));
-        map.put(CloseFileAction.ID, new CloseFileAction(this));
-        map.put(CutAction.ID, new CutAction(this));
-        map.put(CopyAction.ID, new CopyAction(this));
-        map.put(PasteAction.ID, new PasteAction(this));
-        map.put(DeleteAction.ID, new DeleteAction(this));
-        map.put(SelectAllAction.ID, new SelectAllAction(this));
-        map.put(ClearSelectionAction.ID, new ClearSelectionAction(this));
-        return map;
     }
 
     @Override

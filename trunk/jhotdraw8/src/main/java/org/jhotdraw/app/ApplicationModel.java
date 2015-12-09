@@ -6,6 +6,8 @@ package org.jhotdraw.app;
 
 import java.util.ResourceBundle;
 import javafx.scene.control.MenuBar;
+import org.jhotdraw.app.action.Action;
+import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.gui.URIChooser;
 
 /**
@@ -36,6 +38,12 @@ public interface ApplicationModel {
     /** Creates a save chooser. 
      * @return chooser */
     public URIChooser createSaveChooser();
+    /** Creates an export chooser. 
+     * @return chooser */
+    public URIChooser createExportChooser();
+    /** Creates an import chooser. 
+     * @return chooser */
+    public URIChooser createImportChooser();
 
     // Copyright information
     /** Returns the name of the application.
@@ -65,4 +73,12 @@ public interface ApplicationModel {
     /** Gets the resource bundle for use by the application.
      * @return the resource bundle */
     ResourceBundle getResources();
+    
+    /**
+     * Creates the application map which is used to populate menu bars.
+     * 
+     * @param app The application
+     * @return the application map
+     */
+    HierarchicalMap<String, Action> createApplicationActionMap(Application app);
 }

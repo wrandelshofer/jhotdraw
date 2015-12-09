@@ -5,6 +5,7 @@
 package org.jhotdraw.samples.grapher;
 
 import java.util.prefs.Preferences;
+import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.SimpleApplicationModel;
 import org.jhotdraw.app.action.Action;
@@ -28,6 +29,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
         SimpleApplicationModel model = new SimpleApplicationModel("Grapher", () -> new GrapherView(),
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "XML Files", "*.xml");
+        model.getExportExtensionFilters().add(new FileChooser.ExtensionFilter("SVG","*.svg"));
         setModel(model);
     }
 
