@@ -50,6 +50,6 @@ public class LocatorConnector extends AbstractConnector {
 
     @Override
     public Point2D chopStart(Figure connection, double startX, double startY, double endX, double endY) {
-        return getPositionInDrawing(connection);
+        return getPositionInWorld(connection);
     }
 }

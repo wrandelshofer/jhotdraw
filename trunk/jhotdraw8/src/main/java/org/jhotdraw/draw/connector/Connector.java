@@ -35,12 +35,12 @@ public interface Connector {
 
     /**
      * Returns a point on the target figure for the specified connection figure
-     * in drawing coordinates.
+     * in world coordinates.
      *
      * @param connection a connection figure
      * @return A point on the target figure in drawing coordinates.
      */
-    default Point2D getPositionInDrawing(Figure connection) {
+    default Point2D getPositionInWorld(Figure connection) {
         return getTarget().localToWorld(getPositionInLocal(connection));
     }
 
