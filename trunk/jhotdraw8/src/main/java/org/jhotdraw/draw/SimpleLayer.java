@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.draw.figure.NonTransformableFigure;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.HandleType;
 
@@ -23,7 +24,8 @@ import org.jhotdraw.draw.handle.HandleType;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLayer extends AbstractCompositeFigure implements Layer, StyleableFigure, LockableFigure {
+public class SimpleLayer extends AbstractCompositeFigure 
+        implements Layer, StyleableFigure, LockableFigure, NonTransformableFigure {
 
     @Override
     public void reshape(Transform transform) {

@@ -20,6 +20,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw.styleable.StyleableStyleManager;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.draw.css.FigureStyleManager;
+import org.jhotdraw.draw.figure.NonTransformableFigure;
 
 /**
  * SimpleDrawing.
@@ -27,7 +28,8 @@ import org.jhotdraw.draw.css.FigureStyleManager;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleDrawing extends AbstractCompositeFigure implements Drawing, StyleableFigure, LockableFigure {
+public class SimpleDrawing extends AbstractCompositeFigure 
+        implements Drawing, StyleableFigure, LockableFigure, NonTransformableFigure {
 
     /**
      * The style manager is created lazily. 
