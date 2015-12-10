@@ -39,18 +39,16 @@ import org.jhotdraw.draw.figure.RectangleFigure;
 import org.jhotdraw.text.DefaultConnectorConverter;
 import org.jhotdraw.text.DefaultConverter;
 import org.jhotdraw.text.XmlPoint2DConverter;
-import org.jhotdraw.text.NumberConverter;
 import org.jhotdraw.text.CssObservableWordListConverter;
 import org.jhotdraw.text.CssSizeListConverter;
 import org.jhotdraw.text.FFont;
-import org.jhotdraw.text.Rectangle2DConverter;
 import org.jhotdraw.text.XmlUrlConverter;
 import org.jhotdraw.text.XmlUriConverter;
 import org.jhotdraw.text.XmlBooleanConverter;
 import org.jhotdraw.text.XmlDoubleConverter;
 import org.jhotdraw.text.XmlEffectConverter;
 import org.jhotdraw.text.XmlEnumConverter;
-import org.jhotdraw.text.XmlFontConverter;
+import org.jhotdraw.text.XmlFFontConverter;
 import org.jhotdraw.text.XmlInsetsConverter;
 import org.jhotdraw.text.XmlPaintConverter;
 import org.jhotdraw.text.XmlPoint3DConverter;
@@ -97,7 +95,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Ellipse", EllipseFigure.class, Figure.getDeclaredAndInheritedKeys(EllipseFigure.class));
         addFigureKeysAndNames("LineConnection", LineConnectionFigure.class, Figure.getDeclaredAndInheritedKeys(LineConnectionFigure.class));
         addFigureKeysAndNames("Image", ImageFigure.class, Figure.getDeclaredAndInheritedKeys(ImageFigure.class));
-        
+
         addConverterForType(String.class, new DefaultConverter());
         addConverterForType(Point2D.class, new XmlPoint2DConverter());
         addConverterForType(Point3D.class, new XmlPoint3DConverter());
@@ -111,19 +109,18 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Boolean.class, new XmlBooleanConverter());
         addConverterForType(TextAlignment.class, new XmlEnumConverter<TextAlignment>(TextAlignment.class));
         addConverterForType(VPos.class, new XmlEnumConverter<VPos>(VPos.class));
-        addConverterForType(FFont.class, new XmlFontConverter());
+        addConverterForType(FFont.class, new XmlFFontConverter());
         addConverterForType(Rectangle2D.class, new XmlRectangle2DConverter());
         addConverterForType(BlendMode.class, new XmlEnumConverter<BlendMode>(BlendMode.class));
         addConverterForType(Effect.class, new XmlEffectConverter());
-        
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssObservableWordListConverter());
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssSizeListConverter());
         addConverter(StrokeableFigure.STROKE_LINE_CAP, new XmlEnumConverter<StrokeLineCap>(StrokeLineCap.class));
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
         addConverter(StrokeableFigure.STROKE_TYPE, new XmlEnumConverter<StrokeType>(StrokeType.class));
-        
-          removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
+
+        removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
         removeRedundantKeys();
         checkConverters();

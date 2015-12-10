@@ -17,7 +17,7 @@ import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
-import org.jhotdraw.text.CssFontConverter;
+import org.jhotdraw.text.CssFFontConverter;
 import org.jhotdraw.text.StyleConverterConverterWrapper;
 import org.jhotdraw.text.FFont;
 
@@ -55,7 +55,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, FFont> converter
-                = new StyleConverterConverterWrapper<FFont>(new CssFontConverter());
+                = new StyleConverterConverterWrapper<FFont>(new CssFFontConverter());
         CssMetaData<Styleable, FFont> md
                 = new SimpleCssMetaData<Styleable, FFont>(property, function,
                         converter, getDefaultValue(), inherits);
@@ -78,7 +78,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
     @Override
     public Converter<FFont> getConverter() {
         if (converter == null) {
-            converter = new CssFontConverter();
+            converter = new CssFFontConverter();
         }
         return converter;
     }

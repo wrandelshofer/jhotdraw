@@ -44,12 +44,13 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.SimpleDrawingRenderer;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.io.OutputFormat;
+import org.jhotdraw.text.XmlFFontConverter;
+import org.jhotdraw.text.XmlFontConverter;
 import org.jhotdraw.text.XmlNumberConverter;
 import org.jhotdraw.text.XmlPaintConverter;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * SVGExportOutputFormat.
@@ -59,6 +60,7 @@ import org.w3c.dom.Node;
  */
 public class SVGExportOutputFormat implements OutputFormat {
 
+    private final XmlFontConverter font = new XmlFontConverter();
     private final XmlPaintConverter paint = new XmlPaintConverter();
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final String namespaceURI = "http://www.w3.org/2000/svg";
@@ -122,6 +124,8 @@ public class SVGExportOutputFormat implements OutputFormat {
     }
 
     private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node) throws IOException {
+        if (!node.isVisible()) return;
+        
         parent.appendChild(doc.createTextNode("\n"));
 
         Element elem = null;
@@ -470,6 +474,8 @@ public class SVGExportOutputFormat implements OutputFormat {
         elem.setAttribute("x", nb.toString(node.getX()));
         elem.setAttribute("y", nb.toString(node.getY()));
 
+        writeTextAttributes(elem, node);
+        
         return elem;
     }
 
@@ -494,5 +500,8 @@ public class SVGExportOutputFormat implements OutputFormat {
 
     private void writeStrokeAttributes(Element elem, Shape node) {
         elem.setAttribute("stroke", paint.toString(node.getStroke()));
+    }
+    private void writeTextAttributes(Element elem, Text node) {
+        elem.setAttribute("font", font.toString(node.getFont()));
     }
 }

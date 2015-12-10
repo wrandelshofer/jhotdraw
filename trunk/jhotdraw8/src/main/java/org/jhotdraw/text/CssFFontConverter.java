@@ -1,4 +1,4 @@
-/* @(#)CssFontConverter.java
+/* @(#)CssFFontConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -14,7 +14,7 @@ import org.jhotdraw.css.CssTokenizer;
 import org.jhotdraw.draw.io.IdFactory;
 
 /**
- * CssFontConverter.
+ * CssFFontConverter.
  * <p>
  * Parses the following EBNF from the
  * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
@@ -33,7 +33,7 @@ import org.jhotdraw.draw.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssFontConverter implements Converter<FFont> {
+public class CssFFontConverter implements Converter<FFont> {
 
     private final CssSizeConverter doubleConverter = new CssSizeConverter();
 
