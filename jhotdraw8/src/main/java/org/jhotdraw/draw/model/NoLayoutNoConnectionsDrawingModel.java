@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.model;
 
+import java.util.Objects;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.key.DirtyBits;
@@ -74,8 +75,7 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
     @Override
     public <T> T set(Figure figure, MapAccessor<T> key, T newValue) {
         T oldValue = figure.set(key, newValue);
-        if (oldValue != newValue) {
-
+        if (!Objects.equals(oldValue, newValue)) {
             final DirtyMask dm;
             if (key instanceof FigureKey) {
                 FigureKey<T> fk = (FigureKey<T>) key;
