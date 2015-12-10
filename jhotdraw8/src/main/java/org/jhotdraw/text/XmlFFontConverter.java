@@ -1,4 +1,4 @@
-/* @(#)XmlFontConverter.java
+/* @(#)XmlFFontConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -12,17 +12,16 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import org.jhotdraw.css.CssTokenizer;
 import org.jhotdraw.draw.io.IdFactory;
-import javafx.scene.text.Font;
 
 /**
- * XmlFontConverter.
+ * XmlFFontConverter.
  * <p>
  * Parses the following EBNF from the
  * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
  * CSS Reference Guide</a>.
  * </p>
  * <pre>
- * Font := [FontStyle] [FontWeight] FontSize FontFamily ;
+ * FFont := [FontStyle] [FontWeight] FontSize FontFamily ;
  * FontStyle := normal|italic|oblique;
  * FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
  * FontSize := Size;
@@ -34,17 +33,16 @@ import javafx.scene.text.Font;
  *
  * @author Werner Randelshofer
  */
-public class XmlFontConverter implements Converter<Font> {
+public class XmlFFontConverter implements Converter<FFont> {
 
     private final XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Font font) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, FFont font) throws IOException {
         double fontSize = font.getSize();
         String fontFamily = font.getFamily();
-        FontPosture posture = FontPosture.REGULAR;
-        FontWeight weight = FontWeight.NORMAL;
-        switch (posture) {
+
+        switch (font.getPosture()) {
             case ITALIC:
                 out.append("italic");
                 break;
@@ -52,10 +50,10 @@ public class XmlFontConverter implements Converter<Font> {
                 out.append("normal");
                 break;
             default:
-                throw new InternalError("Unknown fontPosture:" + posture);
+                throw new InternalError("Unknown fontPosture:" + font.getPosture());
         }
         out.append(' ');
-        switch (weight) {
+        switch (font.getWeight()) {
             case NORMAL:
                 out.append("normal");
                 break;
@@ -63,7 +61,7 @@ public class XmlFontConverter implements Converter<Font> {
                 out.append("bold");
                 break;
             default:
-                out.append(Integer.toString(weight.getWeight()));
+                out.append(Integer.toString(font.getWeight().getWeight()));
                 break;
         }
         out.append(' ');
@@ -79,7 +77,7 @@ public class XmlFontConverter implements Converter<Font> {
     }
 
     @Override
-    public Font fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public FFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // XXX should not use Css Tokenizer in XML!!
         CssTokenizer tt = new CssTokenizer(new StringReader(buf.toString()));
 
@@ -107,7 +105,8 @@ public class XmlFontConverter implements Converter<Font> {
         }
 
         tt.skipWhitespace();
-
+        
+        
         // parse FontWeight
         boolean fontWeightConsumed = false;
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
@@ -137,7 +136,7 @@ public class XmlFontConverter implements Converter<Font> {
         } else {
             tt.pushBack();
         }
-
+        
         tt.skipWhitespace();
 
         double fontWeightOrFontSize = 0.0;
@@ -205,16 +204,15 @@ public class XmlFontConverter implements Converter<Font> {
         } else {
             throw new ParseException("font family expected", buf.position() + tt.getPosition());
         }
-
-        Font font = Font.font(fontFamily, fontWeight, fontPosture, fontSize);
-        if (font == null) {
-            font = Font.font(null, fontWeight, fontPosture, fontSize);
+        
+        FFont font = FFont.font(fontFamily,fontWeight,fontPosture,fontSize);
+        if (font==null) {
+           font= FFont.font(null,fontWeight,fontPosture,fontSize);
         }
         return font;
     }
-
     @Override
-    public Font getDefaultValue() {
+    public FFont getDefaultValue() {
         return null;
     }
 }
