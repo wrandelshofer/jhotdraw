@@ -9,6 +9,7 @@ import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import javafx.geometry.VPos;
 import javafx.scene.control.Labeled;
+import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -32,11 +33,11 @@ public interface TextableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    public static StringOrIdentStyleableFigureKey FONT_FAMILY = new StringOrIdentStyleableFigureKey("fontFamily",DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),"Arial");
-    public static DoubleStyleableFigureKey FONT_SIZE = new DoubleStyleableFigureKey("fontSize",DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),12.0);
-    public static EnumStyleableFigureKey<FontWeight> FONT_WEIGHT = new EnumStyleableFigureKey<FontWeight>("fontWeight",FontWeight.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),FontWeight.NORMAL);
-    public static EnumStyleableFigureKey<FontPosture> FONT_STYLE = new EnumStyleableFigureKey<FontPosture>("fontStyle",FontPosture.class,DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),FontPosture.REGULAR);
-    public static FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY,FONT_WEIGHT,FONT_STYLE,FONT_SIZE);
+    public static StringOrIdentStyleableFigureKey FONT_FAMILY = new StringOrIdentStyleableFigureKey("fontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), "Arial");
+    public static DoubleStyleableFigureKey FONT_SIZE = new DoubleStyleableFigureKey("fontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 12.0);
+    public static EnumStyleableFigureKey<FontWeight> FONT_WEIGHT = new EnumStyleableFigureKey<FontWeight>("fontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    public static EnumStyleableFigureKey<FontPosture> FONT_STYLE = new EnumStyleableFigureKey<FontPosture>("fontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), FontPosture.REGULAR);
+    public static FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY, FONT_WEIGHT, FONT_STYLE, FONT_SIZE);
     /**
      * The line spacing. Default value: {@code 0.0}
      */
@@ -68,26 +69,57 @@ public interface TextableFigure extends Figure {
      * @param text a text node
      */
     default void applyTextableFigureProperties(Text text) {
-        text.setFont(getStyled(FONT).getFont());
-        text.setLineSpacing(getStyled(LINE_SPACING));
-        text.setStrikethrough(getStyled(STRIKETHROUGH));
-        text.setTextAlignment(getStyled(TEXT_ALIGNMENT));
-        text.setTextOrigin(getStyled(TEXT_ORIGIN));
-        text.setUnderline(getStyled(UNDERLINE));
-        text.setWrappingWidth(getStyled(WRAPPING_WIDTH));
+        Font font = getStyled(FONT).getFont();
+        if (!text.getFont().equals(font)) {
+            text.setFont(font);
+        }
+        double d = getStyled(LINE_SPACING);
+        if (text.getLineSpacing() != d) {
+            text.setLineSpacing(d);
+        }
+        d = getStyled(WRAPPING_WIDTH);
+        if (text.getWrappingWidth() != d) {
+            text.setWrappingWidth(d);
+        }
+        TextAlignment ta = getStyled(TEXT_ALIGNMENT);
+        if (text.getTextAlignment() != ta) {
+            text.setTextAlignment(ta);
+        }
+        boolean b = getStyled(UNDERLINE);
+        if (text.isUnderline() != b) {
+            text.setUnderline(b);
+        }
+        b = getStyled(STRIKETHROUGH);
+        if (text.isStrikethrough() != b) {
+            text.setStrikethrough(b);
+        }
+        VPos vp = getStyled(TEXT_ORIGIN);
+        if (text.getTextOrigin() != vp) {
+            text.setTextOrigin(vp);
+        }
     }
+
     /**
      * Updates a text node with text properties except {@code TEXT}.
      *
      * @param text a text node
      */
     default void applyTextableFigureProperties(Labeled text) {
-        text.setFont(getStyled(FONT).getFont());
-        text.setLineSpacing(getStyled(LINE_SPACING));
-        //text.setStrikethrough(getStyled(STRIKETHROUGH));
-        text.setTextAlignment(getStyled(TEXT_ALIGNMENT));
-        //text.setTextOrigin(getStyled(TEXT_ORIGIN));
-        text.setUnderline(getStyled(UNDERLINE));
-        //text.setWrappingWidth(getStyled(WRAPPING_WIDTH));
+        Font font = getStyled(FONT).getFont();
+        if (!text.getFont().equals(font)) {
+            text.setFont(font);
+        }
+        double d = getStyled(LINE_SPACING);
+        if (text.getLineSpacing() == d) {
+            text.setLineSpacing(d);
+        }
+        TextAlignment ta = getStyled(TEXT_ALIGNMENT);
+        if (text.getTextAlignment() == ta) {
+            text.setTextAlignment(ta);
+        }
+        boolean b = getStyled(UNDERLINE);
+        if (text.isUnderline() == b) {
+            text.setUnderline(b);
+        }
     }
 }

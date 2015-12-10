@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.figure;
 
 import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.Point2D;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
@@ -25,6 +26,7 @@ import org.jhotdraw.draw.key.Point3DStyleableMapAccessor;
  * @version $Id$
  */
 public interface TransformableFigure extends Figure {
+
     /**
      * Defines the angle of rotation around the center of the figure in degrees.
      * Default value: {@code 0}.
@@ -51,9 +53,9 @@ public interface TransformableFigure extends Figure {
     public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the axes
-     * about the center of the figure. 
+     * about the center of the figure.
      */
-    public static Point3DStyleableMapAccessor SCALE = new Point3DStyleableMapAccessor("scale", SCALE_X,SCALE_Y,SCALE_Z);
+    public static Point3DStyleableMapAccessor SCALE = new Point3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
@@ -72,10 +74,10 @@ public interface TransformableFigure extends Figure {
     /**
      * Defines the translation on the axes about the center of the figure.
      */
-    public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X,TRANSLATE_Y,TRANSLATE_Z);
-    
-    public static SimpleFigureKey<ArrayList<Transform>> TRANSFORMS = new SimpleFigureKey<>("tranforms",ArrayList.class,new Class<?>[]{Transform.class},DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM),new ArrayList<>());
-    
+    public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
+
+    public static SimpleFigureKey<ArrayList<Transform>> TRANSFORMS = new SimpleFigureKey<>("tranforms", ArrayList.class, new Class<?>[]{Transform.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), new ArrayList<>());
+
     /**
      * Updates a figure node with all transformation properties defined in this
      * interface.
@@ -89,17 +91,45 @@ public interface TransformableFigure extends Figure {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyTransformableFigureProperties(Node node) {
-        node.getTransforms().setAll(get(TRANSFORMS));
-        node.setRotate(getStyled(ROTATE));
-        node.setRotationAxis(getStyled(ROTATION_AXIS));
-        node.setScaleX(getStyled(SCALE_X));
-        node.setScaleY(getStyled(SCALE_Y));
-        node.setScaleZ(getStyled(SCALE_Z));
-        node.setTranslateX(getStyled(TRANSLATE_X));
-        node.setTranslateY(getStyled(TRANSLATE_Y));
-        node.setTranslateZ(getStyled(TRANSLATE_Z));
+        List<Transform> transforms = get(TRANSFORMS);
+        if (!node.getTransforms().equals(transforms)) {
+            node.getTransforms().setAll(transforms);
+        }
+
+        double d = getStyled(ROTATE);
+        if (node.getRotate() != d) {
+            node.setRotate(d);
+        }
+        Point3D p3 = getStyled(ROTATION_AXIS);
+        if (!node.getRotationAxis().equals(p3)) {
+            node.setRotationAxis(p3);
+        }
+        d = getStyled(SCALE_X);
+        if (node.getScaleX() != d) {
+            node.setScaleX(d);
+        }
+        d = getStyled(SCALE_Y);
+        if (node.getScaleY() != d) {
+            node.setScaleY(d);
+        }
+        d = getStyled(SCALE_Z);
+        if (node.getScaleZ() != d) {
+            node.setScaleZ(d);
+        }
+        d = getStyled(TRANSLATE_X);
+        if (node.getTranslateX() != d) {
+            node.setTranslateX(d);
+        }
+        d = getStyled(TRANSLATE_Y);
+        if (node.getTranslateY() != d) {
+            node.setTranslateY(d);
+        }
+        d = getStyled(TRANSLATE_Z);
+        if (node.getTranslateZ() != d) {
+            node.setTranslateZ(d);
+        }
     }
-    
+
     /**
      * Computes the transformation from local coordinates into parent
      * coordinates.
@@ -134,7 +164,7 @@ public interface TransformableFigure extends Figure {
         Transform t = getInverseTransform().createConcatenation(scale).createConcatenation(rotate).createConcatenation(translate);
         return t;
     }
-    
+
     default Transform getTransform() {
         ArrayList<Transform> list = get(TRANSFORMS);
         Transform t;
@@ -166,6 +196,5 @@ public interface TransformableFigure extends Figure {
         }
         return t;
     }
-
 
 }

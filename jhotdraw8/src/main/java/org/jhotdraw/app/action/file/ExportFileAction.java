@@ -54,7 +54,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      *
      * @param app the application
      * @param view the view
-     * @param saveAs whether to force a file dialog
+     * @param id the id
      */
     public ExportFileAction(Application app, View view, String id) {
         super(app, view, id, true);
