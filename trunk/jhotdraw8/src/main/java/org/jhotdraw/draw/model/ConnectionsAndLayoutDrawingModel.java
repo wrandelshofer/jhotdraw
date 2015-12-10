@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.model;
 
+import java.util.Objects;
 import java.util.Set;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.MapAccessor;
@@ -91,7 +92,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
         Set<Figure> connectionChange = null;
 
         T oldValue = figure.set(key, newValue);
-        if (oldValue != newValue) {
+        if (!Objects.equals(oldValue, newValue)) {
             final DirtyMask dm;
             if (key instanceof FigureKey) {
                 FigureKey<T> fk = (FigureKey<T>) key;
