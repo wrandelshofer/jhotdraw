@@ -4,8 +4,11 @@
  */
 package org.jhotdraw.draw.figure;
 
+import java.util.Objects;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_COLOR;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 
 /**
@@ -28,7 +31,10 @@ public interface FillableFigure extends Figure {
      * @param shape a shape node
      */
     default void applyFillableFigureProperties(Shape shape) {
-        shape.setFill(getStyled(FILL_COLOR));
+        Paint p = getStyled(FILL_COLOR);
+        if (!Objects.equals(shape.getStroke(), p)) {
+            shape.setFill(p);
+        }
     }
 
 

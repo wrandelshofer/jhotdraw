@@ -4,6 +4,8 @@
  */
 package org.jhotdraw.draw;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.draw.figure.LockableFigure;
@@ -52,6 +54,8 @@ public class SimpleDrawing extends AbstractCompositeFigure
     public void updateNode(RenderContext v, Node n) {
         Group g = (Group) n;
         //applyTransformableFigureProperties(n);
+        applyStyleableFigureProperties(v, n);
+        
         ObservableList<Node> children = ((Group) n).getChildren();
         children.clear();
         Bounds bounds = getBoundsInLocal();
@@ -61,10 +65,15 @@ public class SimpleDrawing extends AbstractCompositeFigure
         page.setWidth(bounds.getWidth());
         page.setHeight(bounds.getHeight());
         page.setFill(getStyled(BACKGROUND));
-        children.add(page);
 
+        List<Node> nodes = new ArrayList<Node>(getChildren().size());
+        nodes.add(page);
         for (Figure child : childrenProperty()) {
-            children.add(v.getNode(child));
+            nodes.add(v.getNode(child));
+        }
+        ObservableList<Node> group = ((Group) n).getChildren();
+        if (! group.equals(nodes)) {
+            group.setAll(nodes);
         }
     }
 

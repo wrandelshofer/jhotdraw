@@ -5,12 +5,14 @@
  */
 package org.jhotdraw.draw;
 
+import java.util.ArrayList;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.draw.figure.LockableFigure;
 import org.jhotdraw.draw.figure.AbstractCompositeFigure;
 import java.util.List;
 import javafx.collections.ObservableList;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
@@ -24,7 +26,7 @@ import org.jhotdraw.draw.handle.HandleType;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLayer extends AbstractCompositeFigure 
+public class SimpleLayer extends AbstractCompositeFigure
         implements Layer, StyleableFigure, LockableFigure, NonTransformableFigure {
 
     @Override
@@ -37,22 +39,32 @@ public class SimpleLayer extends AbstractCompositeFigure
     @Override
     public void updateNode(RenderContext v, Node n) {
         applyHideableFigureProperties(n);
-        ObservableList<Node> group = ((Group) n).getChildren();
-        group.clear();
+        applyStyleableFigureProperties(v, n);
+
+        List<Node> nodes = new ArrayList<Node>(getChildren().size());
         for (Figure child : childrenProperty()) {
-            group.add(v.getNode(child));
+            nodes.add(v.getNode(child));
+        }
+        ObservableList<Node> group = ((Group) n).getChildren();
+        if (!group.equals(nodes)) {
+            group.setAll(nodes);
         }
     }
 
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Group();
+        Group n = new Group();
+        n.setCacheHint(CacheHint.QUALITY);
+        n.setCache(true);
+        return n;
     }
 
-    /** This method throws an illegal argument exception if the new
-     * parent is not an instance of Drawing.
+    /**
+     * This method throws an illegal argument exception if the new parent is not
+     * an instance of Drawing.
      *
-     * @param newValue the desired parent */
+     * @param newValue the desired parent
+     */
     protected void checkNewParent(Figure newValue) {
         if (newValue != null && !(newValue instanceof Drawing)) {
             throw new IllegalArgumentException("A Layer can only be added as a child to a Drawing. Illegal parent: "
@@ -60,9 +72,11 @@ public class SimpleLayer extends AbstractCompositeFigure
         }
     }
 
-    /** Layer figures always return false for isSelectable.
+    /**
+     * Layer figures always return false for isSelectable.
      *
-     * @return false */
+     * @return false
+     */
     @Override
     public boolean isSelectable() {
         return false;
@@ -78,7 +92,7 @@ public class SimpleLayer extends AbstractCompositeFigure
      * figure.
      * <p>
      * This implementation returns true if {@code newParent} is a
-     * {@link Drawing}. 
+     * {@link Drawing}.
      *
      * @param newParent The new parent figure.
      * @return true if {@code newParent} is an acceptable parent
@@ -88,11 +102,12 @@ public class SimpleLayer extends AbstractCompositeFigure
         return (newParent instanceof Drawing);
     }
 
-    /** Layers never create handles. */
+    /**
+     * Layers never create handles.
+     */
     @Override
     public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
         // empty
     }
-    
-    
+
 }

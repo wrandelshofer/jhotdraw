@@ -17,7 +17,10 @@ import org.jhotdraw.collection.SimpleKey;
  * @version $Id$
  */
 public interface RenderContext extends PropertyBean {
-    
+    // ---
+    // keys
+    // ---
+    Key<RenderingIntent> RENDERING_INTENT = new SimpleKey<>("renderingIntent",RenderingIntent.class,RenderingIntent.EDITOR);
     // ---
     // behavior
     // ---

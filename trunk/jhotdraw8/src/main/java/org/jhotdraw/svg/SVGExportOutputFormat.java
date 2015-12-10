@@ -6,7 +6,9 @@ package org.jhotdraw.svg;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Arc;
@@ -41,6 +43,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.RenderingIntent;
 import org.jhotdraw.draw.SimpleDrawingRenderer;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.io.OutputFormat;
@@ -81,7 +85,14 @@ public class SVGExportOutputFormat implements OutputFormat {
 
     public Document toDocument(Drawing external) throws IOException {
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
+        r.set(RenderContext.RENDERING_INTENT, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = r.render(external);
+        Document doc = toDocument(drawingNode);
+        writeDrawingElementAttributes(doc.getDocumentElement(), external);
+        return doc;
+    }
+
+    public Document toDocument(javafx.scene.Node drawingNode) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             Document doc;
@@ -92,13 +103,13 @@ public class SVGExportOutputFormat implements OutputFormat {
 
             Element docElement = doc.getDocumentElement();
 
-            writeProcessingInstructions(doc, external, drawingNode);
+            writeProcessingInstructions(doc, drawingNode);
             String commentText = createFileComment();
             if (commentText != null) {
                 docElement.getParentNode().insertBefore(doc.createComment(commentText), docElement);
             }
 
-            writeDocumentElementAttributes(docElement, external, drawingNode);
+            writeDocumentElementAttributes(docElement, drawingNode);
             writeNodeRecursively(doc, docElement, drawingNode);
             docElement.appendChild(doc.createTextNode("\n"));
 
@@ -112,20 +123,21 @@ public class SVGExportOutputFormat implements OutputFormat {
         return null;
     }
 
-    private void writeDocumentElementAttributes(Element docElement, Drawing drawing, javafx.scene.Node drawingNode) throws IOException {
+    private void writeDocumentElementAttributes(Element docElement, javafx.scene.Node drawingNode) throws IOException {
         docElement.setAttribute("version", "1.2");
         docElement.setAttribute("baseProfile", "tiny");
+    }
+
+    private void writeDrawingElementAttributes(Element docElement, Drawing drawing) throws IOException {
         docElement.setAttribute("width", nb.toString(drawing.get(Drawing.WIDTH)));
         docElement.setAttribute("height", nb.toString(drawing.get(Drawing.HEIGHT)));
     }
 
-    private void writeProcessingInstructions(Document doc, Drawing drawing, javafx.scene.Node external) {
+    private void writeProcessingInstructions(Document doc, javafx.scene.Node external) {
 // empty
     }
 
     private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node) throws IOException {
-        if (!node.isVisible()) return;
-        
         parent.appendChild(doc.createTextNode("\n"));
 
         Element elem = null;
@@ -140,6 +152,8 @@ public class SVGExportOutputFormat implements OutputFormat {
         }
 
         if (elem != null && (node instanceof Parent)) {
+            writeNodeAttributes(elem, node);
+
             Parent pp = (Parent) node;
             for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
                 writeNodeRecursively(doc, elem, child);
@@ -148,6 +162,7 @@ public class SVGExportOutputFormat implements OutputFormat {
                 elem.appendChild(doc.createTextNode("\n"));
             }
         }
+
     }
 
     private Element writeShape(Document doc, Element parent, Shape node) throws IOException {
@@ -208,32 +223,32 @@ public class SVGExportOutputFormat implements OutputFormat {
 
         buf.append('M')
                 .append(nb.toString(centerX))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(centerY))
                 .append(' ');
 
         if (ArcType.ROUND == node.getType()) {
-            buf.append("l ")
+            buf.append('l')
                     .append(startX)
-                    .append(' ')
+                    .append(',')
                     .append(startY).append(' ');
         }
 
         buf.append('A')
                 .append(nb.toString(radiusX))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(radiusY))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(xAxisRot))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(largeArc))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(sweep))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(endX))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(endY))
-                .append(' ');
+                .append(',');
 
         if (ArcType.CHORD == node.getType()
                 || ArcType.ROUND == node.getType()) {
@@ -263,20 +278,20 @@ public class SVGExportOutputFormat implements OutputFormat {
         final StringBuilder buf = new StringBuilder();
         buf.append('M')
                 .append(nb.toString(node.getStartX()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getStartY()))
                 .append(' ')
                 .append('C')
                 .append(nb.toString(node.getControlX1()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getControlY1()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getControlX2()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getControlY2()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getEndX()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getEndY()));
         elem.setAttribute("content", buf.substring(0));
         return elem;
@@ -330,47 +345,47 @@ public class SVGExportOutputFormat implements OutputFormat {
                 MoveTo e = (MoveTo) pe;
                 buf.append('M')
                         .append(nb.toString(e.getX()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof LineTo) {
                 LineTo e = (LineTo) pe;
                 buf.append('L')
                         .append(nb.toString(e.getX()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof CubicCurveTo) {
                 CubicCurveTo e = (CubicCurveTo) pe;
                 buf.append('C')
                         .append(nb.toString(e.getControlX1()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getControlY1()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getControlX2()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getControlY2()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getX()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof QuadCurveTo) {
                 QuadCurveTo e = (QuadCurveTo) pe;
                 buf.append('Q')
                         .append(nb.toString(e.getControlX()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getControlY()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getX()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof ArcTo) {
                 ArcTo e = (ArcTo) pe;
                 buf.append('A')
                         .append(nb.toString(e.getX()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getY()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getRadiusX()))
-                        .append(' ')
+                        .append(',')
                         .append(nb.toString(e.getRadiusY()));
             } else if (pe instanceof HLineTo) {
                 HLineTo e = (HLineTo) pe;
@@ -389,11 +404,14 @@ public class SVGExportOutputFormat implements OutputFormat {
     private Element writePolygon(Document doc, Element parent, Polygon node) {
         Element elem = doc.createElement("polygon");
         StringBuilder buf = new StringBuilder();
-        for (Double d : node.getPoints()) {
-            if (buf.length() != 0) {
+        List<Double> ps = node.getPoints();
+        for (int i = 0, n = ps.size(); i < n; i += 2) {
+            if (i != 0) {
                 buf.append(' ');
             }
-            buf.append(nb.toString(d));
+            buf.append(nb.toString(ps.get(i)))
+                    .append(',')
+                    .append(nb.toString(ps.get(i + 1)));
         }
         elem.setAttribute("points", buf.toString());
         parent.appendChild(elem);
@@ -403,11 +421,14 @@ public class SVGExportOutputFormat implements OutputFormat {
     private Element writePolyline(Document doc, Element parent, Polyline node) {
         Element elem = doc.createElement("polyline");
         StringBuilder buf = new StringBuilder();
-        for (Double d : node.getPoints()) {
-            if (buf.length() != 0) {
+        List<Double> ps = node.getPoints();
+        for (int i = 0, n = ps.size(); i < n; i += 2) {
+            if (i != 0) {
                 buf.append(' ');
             }
-            buf.append(nb.toString(d));
+            buf.append(nb.toString(ps.get(i)))
+                    .append(',')
+                    .append(nb.toString(ps.get(i + 1)));
         }
         elem.setAttribute("points", buf.toString());
         parent.appendChild(elem);
@@ -420,16 +441,16 @@ public class SVGExportOutputFormat implements OutputFormat {
         final StringBuilder buf = new StringBuilder();
         buf.append('M')
                 .append(nb.toString(node.getStartX()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getStartY()))
                 .append(' ')
                 .append('Q')
                 .append(nb.toString(node.getControlX()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getControlY()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getEndX()))
-                .append(' ')
+                .append(',')
                 .append(nb.toString(node.getEndY()));
         elem.setAttribute("content", buf.substring(0));
         return elem;
@@ -475,14 +496,11 @@ public class SVGExportOutputFormat implements OutputFormat {
         elem.setAttribute("y", nb.toString(node.getY()));
 
         writeTextAttributes(elem, node);
-        
+
         return elem;
     }
 
     private Element writeGroup(Document doc, Element parent, Group node) {
-        if (node.getChildren().isEmpty()) {
-            return parent;
-        }
         Element elem = doc.createElement("g");
         parent.appendChild(elem);
         return elem;
@@ -501,7 +519,30 @@ public class SVGExportOutputFormat implements OutputFormat {
     private void writeStrokeAttributes(Element elem, Shape node) {
         elem.setAttribute("stroke", paint.toString(node.getStroke()));
     }
+
     private void writeTextAttributes(Element elem, Text node) {
         elem.setAttribute("font", font.toString(node.getFont()));
+    }
+
+    private void writeNodeAttributes(Element elem, Node node) {
+        String id = node.getId();
+        if (id != null && !id.isEmpty()) {
+            elem.setAttribute("id", id);
+        }
+        List<String> styleClass = node.getStyleClass();
+        if (!styleClass.isEmpty()) {
+            StringBuffer buf = new StringBuffer();
+            for (String clazz : styleClass) {
+                if (buf.length() != 0) {
+                    buf.append(' ');
+                }
+                buf.append(clazz);
+            }
+            elem.setAttribute("clazz", buf.toString());
+        }
+
+        if (!node.isVisible()) {
+            elem.setAttribute("visible", "hidden");
+        }
     }
 }
