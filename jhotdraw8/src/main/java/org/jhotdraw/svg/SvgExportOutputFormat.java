@@ -39,6 +39,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.VLineTo;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
@@ -79,7 +80,6 @@ public class SvgExportOutputFormat implements OutputFormat {
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
     private final static String XLINK_Q = "xlink";
     private final SvgTransformListConverter tx = new SvgTransformListConverter();
-    private final XmlFontConverter font = new XmlFontConverter();
     private final XmlPaintConverter paint = new XmlPaintConverter();
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final String SVG_NS = "http://www.w3.org/2000/svg";
@@ -184,6 +184,7 @@ public class SvgExportOutputFormat implements OutputFormat {
 
         writeStyleAttributes(elem, node);
         writeTransformAttributes(elem, node);
+        writeCompositingAttributes(elem, node);
 
         if (elem != null && (node instanceof Parent)) {
             Parent pp = (Parent) node;
@@ -573,7 +574,11 @@ public class SvgExportOutputFormat implements OutputFormat {
     }
 
     private void writeTextAttributes(Element elem, Text node) {
-        elem.setAttribute("font", font.toString(node.getFont()));
+        Font ft = node.getFont();
+        elem.setAttribute("font-family", ft.getFamily());
+        elem.setAttribute("font-size",nb.toString(ft.getSize()));
+        elem.setAttribute("font-style",ft.getStyle().contains("italic")?"italic":"normal");
+        elem.setAttribute("font-weight",ft.getStyle().contains("bold")?"bold":"normal");
     }
 
     private void writeTransformAttributes(Element elem, Node node) {
@@ -613,6 +618,11 @@ public class SvgExportOutputFormat implements OutputFormat {
 
         if (!node.isVisible()) {
             elem.setAttribute("visible", "hidden");
+        }
+    }
+    private void writeCompositingAttributes(Element elem, Node node) {
+        if (node.getOpacity()!=1.0) {
+            elem.setAttribute("opacity", nb.toString(node.getOpacity()) );
         }
     }
 }
