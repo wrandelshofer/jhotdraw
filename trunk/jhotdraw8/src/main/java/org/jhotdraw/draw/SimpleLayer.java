@@ -37,13 +37,13 @@ public class SimpleLayer extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(RenderContext v, Node n) {
+    public void updateNode(RenderContext ctx, Node n) {
         applyHideableFigureProperties(n);
-        applyStyleableFigureProperties(v, n);
+        applyStyleableFigureProperties(ctx, n);
 
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
         for (Figure child : childrenProperty()) {
-            nodes.add(v.getNode(child));
+            nodes.add(ctx.getNode(child));
         }
         ObservableList<Node> group = ((Group) n).getChildren();
         if (!group.equals(nodes)) {
@@ -52,7 +52,7 @@ public class SimpleLayer extends AbstractCompositeFigure
     }
 
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public Node createNode(RenderContext ctx) {
         Group n = new Group();
         n.setCacheHint(CacheHint.QUALITY);
         n.setCache(true);

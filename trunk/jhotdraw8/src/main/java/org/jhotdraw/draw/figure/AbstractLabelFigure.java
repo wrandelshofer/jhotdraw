@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.figure;
 
+import java.awt.Panel;
 import java.util.List;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
@@ -145,16 +146,16 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     }
 
     @Override
-    public void updateNode(RenderContext drawingView, Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         Region r = (Region) g.getChildren().get(0);
         Text t = (Text) g.getChildren().get(1);
 
-        updateRegionNode(drawingView, r);
-        updateTextNode(drawingView, t);
+        updateRegionNode(ctx, r);
+        updateTextNode(ctx, t);
     }
 
-    private void updateRegionNode(RenderContext drawingView, Region node) {
+    private void updateRegionNode(RenderContext ctx, Region node) {
         node.setShape(getStyled(SHAPE));
 
         Bounds b = getBoundsInLocal();
@@ -177,7 +178,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
 
     protected abstract String getText();
 
-    protected void updateTextNode(RenderContext drawingView, Text tn) {
+    protected void updateTextNode(RenderContext ctx, Text tn) {
         tn.setText(getText());
         tn.setX(get(ORIGIN_X));
         tn.setY(get(ORIGIN_Y));

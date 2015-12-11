@@ -37,10 +37,11 @@ public class LabelFigure extends AbstractLabelFigure implements TextableFigure, 
     }
 
     @Override
-    public void updateNode(RenderContext drawingView, Node node) {
-        super.updateNode(drawingView, node);
+    public void updateNode(RenderContext ctx, Node node) {
+        super.updateNode(ctx, node);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(node);
+        applyStyleableFigureProperties(ctx, node);
     }
     
     

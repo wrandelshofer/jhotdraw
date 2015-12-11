@@ -104,7 +104,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * This is the JavaFX Node which is used to represent this drawing view. in
      * a JavaFX scene graph.
      */
-    private StackPane stackPane;
+    private Pane rootPane;
 
     private class SimpleDrawingViewNode extends BorderPane implements EditableComponent {
 
@@ -384,7 +384,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         loader.setController(this);
 
         try {
-            stackPane = loader.load(SimpleDrawingView.class.getResourceAsStream("SimpleDrawingView.fxml"));
+            rootPane = loader.load(SimpleDrawingView.class.getResourceAsStream("SimpleDrawingView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -396,7 +396,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         drawingSubScene.setManaged(false);
         overlaysSubScene = new Group();
         overlaysSubScene.setManaged(false);
-        stackPane.getChildren().addAll(drawingSubScene, overlaysSubScene);
+        rootPane.getChildren().addAll(drawingSubScene, overlaysSubScene);
 
         drawingPane = new Group();
         drawingPane.setScaleX(zoomFactor.get());
@@ -433,7 +433,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         // set root
         node = new SimpleDrawingViewNode();
-        node.setCenter(stackPane);
+        node.setCenter(rootPane);
         node.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent evt) -> {
             if (!node.isFocused()) {
                 node.requestFocus();
@@ -514,8 +514,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         toolPane.resize(lw + padding * 2, lh + padding * 2);
         toolPane.layout();
 
-        stackPane.setPrefSize(lw, lh);
-        stackPane.setMaxSize(lw, lh);
+        rootPane.setPrefSize(lw, lh);
+        rootPane.setMaxSize(lw, lh);
 
         invalidateWorldViewTransforms();
         invalidateHandleNodes();

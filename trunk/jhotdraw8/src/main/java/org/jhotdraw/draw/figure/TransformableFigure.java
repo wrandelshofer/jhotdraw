@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.figure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javafx.geometry.Point2D;
 import org.jhotdraw.draw.key.DirtyBits;
@@ -18,6 +19,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Point3DStyleableMapAccessor;
+import org.jhotdraw.draw.key.TransformListStyleableFigureKey;
 
 /**
  * Transformable figure.
@@ -76,15 +78,16 @@ public interface TransformableFigure extends Figure {
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
 
-    public static SimpleFigureKey<ArrayList<Transform>> TRANSFORMS = new SimpleFigureKey<>("tranforms", ArrayList.class, new Class<?>[]{Transform.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), new ArrayList<>());
+    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), Collections.emptyList());
 
     /**
      * Updates a figure node with all transformation properties defined in this
      * interface.
      * <p>
-     * Applies the following properties: {@code ROTATE}, {@code ROTATION_AXIS},
-     * {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, {@code TRANSLATE_X},
-     * {@code TRANSLATE_Y}, {@code TRANSLATE_Z}.
+     * Applies the following properties: {@code TRANSFORMS}, translation 
+     *  {@code TRANSLATE_X}, {@code TRANSLATE_Y}, {@code TRANSLATE_Z},
+     * scale {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, and rotation
+     * {@code ROTATE}, {@code ROTATION_AXIS}.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
@@ -166,7 +169,7 @@ public interface TransformableFigure extends Figure {
     }
 
     default Transform getTransform() {
-        ArrayList<Transform> list = get(TRANSFORMS);
+        List<Transform> list = get(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = new Translate(0, 0);
@@ -180,7 +183,7 @@ public interface TransformableFigure extends Figure {
     }
 
     default Transform getInverseTransform() {
-        ArrayList<Transform> list = get(TRANSFORMS);
+        List<Transform> list = get(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = new Translate(0, 0);

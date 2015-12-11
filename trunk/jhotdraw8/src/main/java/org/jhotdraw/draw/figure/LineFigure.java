@@ -89,11 +89,12 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
     }
 
     @Override
-    public void updateNode(RenderContext drawingView, Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Line lineNode = (Line) node;
         applyHideableFigureProperties(node);
-        //applyTransformableFigureProperties(lineNode);
+        applyStyleableFigureProperties(ctx, node);
         applyStrokeableFigureProperties(lineNode);
+        applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(lineNode);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());

@@ -383,10 +383,10 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Note that by convention this method <b>may only</b> be invoked by a
      * {@code RenderContext} object.
      *
-     * @param renderer the drawing view which will use the node
+     * @param ctx the renderer which will use the node
      * @return the newly created node
      */
-    Node createNode(RenderContext renderer);
+    Node createNode(RenderContext ctx);
 
     /**
      * This method is invoked by a {@code RenderContext}, when it needs to
@@ -417,10 +417,10 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * FX node. Also, render contexts like {@code DrawingView} need to associate
      * input events on Java FX nodes to the corresponding figure.
      *
-     * @param renderer the drawing view
+     * @param ctx the drawing view
      * @param node the node which was created with {@link #createNode}
      */
-    void updateNode(RenderContext renderer, Node node);
+    void updateNode(RenderContext ctx, Node node);
 
     /**
      * Whether getChildren may be added to this figure.

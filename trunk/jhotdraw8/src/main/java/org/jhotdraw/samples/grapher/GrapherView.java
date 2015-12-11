@@ -71,7 +71,7 @@ import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.ImageCreationTool;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
-import org.jhotdraw.svg.SVGExportOutputFormat;
+import org.jhotdraw.svg.SvgExportOutputFormat;
 import org.jhotdraw.util.Resources;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
@@ -274,7 +274,7 @@ public class GrapherView extends AbstractView implements EditorView {
             @Override
             protected void construct() throws Exception {
                 if (uri.getPath().endsWith(".svg")) {
-                    SVGExportOutputFormat io = new SVGExportOutputFormat();
+                    SvgExportOutputFormat io = new SvgExportOutputFormat();
                     io.write(uri, drawingView.getDrawing());
                 } else {
                     IdFactory idFactory = new SimpleIdFactory();

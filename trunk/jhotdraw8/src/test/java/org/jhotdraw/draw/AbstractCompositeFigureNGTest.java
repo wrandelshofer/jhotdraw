@@ -182,5 +182,15 @@ public class AbstractCompositeFigureNGTest {
         public boolean isSelectable() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
+
+        @Override
+        public Transform computeParentToLocal() {
+            return Transform.translate(0, 0);
+        }
+
+        @Override
+        public Transform computeLocalToParent() {
+            return Transform.translate(0, 0);
+        }
     }    
 }

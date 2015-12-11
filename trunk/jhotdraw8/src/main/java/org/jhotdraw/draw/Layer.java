@@ -23,7 +23,7 @@ public interface Layer extends HideableFigure {
     /**
      * The CSS type selector for a layer figure is {@code "layer"}.
      */
-    public final static String TYPE_SELECTOR = "layer";
+    public final static String TYPE_SELECTOR = "Layer";
     
     /** Layer figures always return false for isSelectable. */
     @Override
