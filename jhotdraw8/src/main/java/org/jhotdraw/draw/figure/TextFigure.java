@@ -77,7 +77,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
     }
 
     @Override
-    public void updateNode(RenderContext drawingView, Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Text tn = (Text) node;
         tn.setText(get(TEXT));
         tn.setX(getStyled(ORIGIN).getX());
@@ -89,6 +89,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
         applyStrokeableFigureProperties(tn);
         applyFillableFigureProperties(tn);
         applyCompositableFigureProperties(tn);
+        applyStyleableFigureProperties(ctx, node);
         tn.applyCss();
     }
 

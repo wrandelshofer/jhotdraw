@@ -83,13 +83,14 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
     }
 
     @Override
-    public void updateNode(RenderContext drawingView, Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Ellipse n = (Ellipse) node;
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);
         applyStrokeableFigureProperties(n);
         applyFillableFigureProperties(n);
         applyCompositableFigureProperties(n);
+        applyStyleableFigureProperties(ctx, node);
         n.setCenterX(get(CENTER_X));
         n.setCenterY(get(CENTER_Y));
         n.setRadiusX(get(RADIUS_X));

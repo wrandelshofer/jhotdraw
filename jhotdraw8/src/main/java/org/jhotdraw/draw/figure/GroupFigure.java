@@ -4,6 +4,8 @@
  */
 package org.jhotdraw.draw.figure;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jhotdraw.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
@@ -35,13 +37,18 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
     }
 
     @Override
-    public void updateNode(RenderContext v, Node n) {
+    public void updateNode(RenderContext ctx, Node n) {
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);
-        ObservableList<Node> group = ((Group) n).getChildren();
-        group.clear();
+        applyStyleableFigureProperties(ctx, n);
+        
+        List<Node> nodes = new ArrayList<Node>(getChildren().size());
         for (Figure child : childrenProperty()) {
-            group.add(v.getNode(child));
+            nodes.add(ctx.getNode(child));
+        }
+        ObservableList<Node> group = ((Group) n).getChildren();
+        if (!group.equals(nodes)) {
+            group.setAll(nodes);
         }
     }
 

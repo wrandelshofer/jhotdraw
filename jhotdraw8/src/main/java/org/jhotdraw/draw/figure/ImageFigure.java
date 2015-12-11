@@ -37,9 +37,9 @@ public class ImageFigure extends AbstractLeafFigure implements TransformableFigu
      */
     public final static String TYPE_SELECTOR = "Image";
 
-    public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src",  null);
- 
-    public final static DoubleStyleableFigureKey X =  RectangleFigure.X;
+    public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
+
+    public final static DoubleStyleableFigureKey X = RectangleFigure.X;
     public final static DoubleStyleableFigureKey Y = RectangleFigure.Y;
     public final static DoubleStyleableFigureKey WIDTH = RectangleFigure.WIDTH;
     public final static DoubleStyleableFigureKey HEIGHT = RectangleFigure.HEIGHT;
@@ -86,12 +86,13 @@ public class ImageFigure extends AbstractLeafFigure implements TransformableFigu
     }
 
     @Override
-    public void updateNode(RenderContext drawingView, Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         ImageView imageView = (ImageView) node;
         validateImage();
         imageView.setImage(cachedImage);
         applyTransformableFigureProperties(imageView);
         applyCompositableFigureProperties(node);
+        applyStyleableFigureProperties(ctx, node);
         Rectangle2D r = get(BOUNDS);
         imageView.setX(r.getMinX());
         imageView.setY(r.getMinY());

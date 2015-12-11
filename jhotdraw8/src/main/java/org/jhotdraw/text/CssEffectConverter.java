@@ -19,26 +19,33 @@ import org.jhotdraw.draw.io.IdFactory;
 /**
  * CssEffectConverter.
  * <p>
- * Parses the following EBNF from the
- * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
- * CSS Reference Guide</a>.
+ * Parses the following EBNF:
  * </p>
  * <pre>
- * Effect := (DropShadow|InnerShadow) ;
- * DropShadow := "dropshadow(" , [ blurType , "," , color , "," ,
- *                radius , "," ,  spread , "," ,  xOffset , "," ,  yOffset ] , ")";
- * InnerShadow := "innershadow(" , [ , blurType , "," , color , "," ,
- *                radius , ",", choke , "," ,  xOffset , "," ,  yOffset ] , ")";
- *  ...TODO...
+ * Effect = ( DropShadow | InnerShadow ) ;
+ * DropShadow = "dropshadow(" , [
+ *                 blurType , Sep , color , Sep ,
+ *                 radius , Sep ,  spread , Sep ,  xOffset , Sep ,  yOffset
+ *              ] , ")";
+ * InnerShadow = "innershadow(" , [ 
+ *                 blurType , Sep , color , Sep ,
+ *                 radius , Sep, choke , Sep ,  xOffset , Sep ,  yOffset
+ *               ] , ")";
+ * 
+ * Sep         = ( S , { S } | { S } , "," , { S } ) ;
+ * S           = (* white space character *)
  * </pre>
  * <p>
+ * References:
+ * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
+ * CSS Reference Guide</a>.
  *
  * @author Werner Randelshofer
  */
 public class CssEffectConverter implements Converter<Effect> {
 
-    CssPaintConverter colorConverter = new CssPaintConverter();
-    CssSizeConverter sizeConverter = new CssSizeConverter();
+    private CssPaintConverter colorConverter = new CssPaintConverter();
+    private CssSizeConverter nb = new CssSizeConverter();
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Effect value) throws IOException {
@@ -49,13 +56,13 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append(',');
             colorConverter.toString(out, idFactory, fx.getColor());
             out.append(',');
-            sizeConverter.toString(out, idFactory, fx.getRadius());
+            nb.toString(out, idFactory, fx.getRadius());
             out.append(',');
-            sizeConverter.toString(out, idFactory, fx.getSpread());
+            nb.toString(out, idFactory, fx.getSpread());
             out.append(',');
-            sizeConverter.toString(out, idFactory, fx.getOffsetX());
+            nb.toString(out, idFactory, fx.getOffsetX());
             out.append(',');
-            sizeConverter.toString(out, idFactory, fx.getOffsetY());
+            nb.toString(out, idFactory, fx.getOffsetY());
             out.append(')');
         } else if (value instanceof InnerShadow) {
             InnerShadow fx = (InnerShadow) value;
@@ -64,13 +71,13 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append(',');
             colorConverter.toString(out, idFactory, fx.getColor());
             out.append(',');
-            sizeConverter.toString(out, idFactory, fx.getRadius());
+            nb.toString(out, idFactory, fx.getRadius());
             out.append(',');
-            sizeConverter.toString(out, idFactory, fx.getChoke());
+            nb.toString(out, idFactory, fx.getChoke());
             out.append(',');
-            sizeConverter.toString(out, idFactory, fx.getOffsetX());
+            nb.toString(out, idFactory, fx.getOffsetX());
             out.append(',');
-            sizeConverter.toString(out, idFactory, fx.getOffsetY());
+            nb.toString(out, idFactory, fx.getOffsetY());
             out.append(')');
         } else {
             out.append("none");
@@ -134,10 +141,11 @@ public class CssEffectConverter implements Converter<Effect> {
                     throw new ParseException("CSS Effect: " + func + "(<gaussian | one-pass-box | three-pass-box | two-pass-box>  expected", tt.getPosition());
             }
             tt.skipWhitespace();
-            if (tt.nextToken() != ',') {
-                throw new ParseException("CSS Effect: " + func + "(blur-type<,>color,radius,spread,offset-x,offset-y) expected", tt.getPosition());
+            if (tt.nextToken() == ',') {
+                tt.skipWhitespace();
+            }else{
+                tt.pushBack();
             }
-            tt.skipWhitespace();
             if (tt.nextToken() == CssTokenizer.TT_HASH) {
                 color = Color.web('#' + tt.currentStringValue());
             } else if (tt.currentToken() == CssTokenizer.TT_IDENT) {
@@ -158,38 +166,42 @@ public class CssEffectConverter implements Converter<Effect> {
                 throw new ParseException("CSS Effect: " + func + "(" + blurType.toString().toLowerCase().replace('_', '-') + ",  <color> expected", tt.getPosition());
             }
             tt.skipWhitespace();
-            if (tt.nextToken() != ',') {
-                throw new ParseException("CSS Effect: " + func + "(blur-type,color<,>radius,spread,offset-x,offset-y) expected", tt.getPosition());
+            if (tt.nextToken() == ',') {
+                tt.skipWhitespace();
+            }else{
+                tt.pushBack();
             }
-            tt.skipWhitespace();
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
                 throw new ParseException("CSS Effect: radius number expected", tt.getPosition());
             }
             radius = tt.currentNumericValue().doubleValue();
 
             tt.skipWhitespace();
-            if (tt.nextToken() != ',') {
-                throw new ParseException("CSS Effect: " + func + "(blur-type,color,radius<,>spread,offset-x,offset-y) expected", tt.getPosition());
+            if (tt.nextToken() == ',') {
+                tt.skipWhitespace();
+            }else{
+                tt.pushBack();
             }
-            tt.skipWhitespace();
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
                 throw new ParseException("CSS Effect: spread or chocke number expected", tt.getPosition());
             }
             spreadOrChocke = tt.currentNumericValue().doubleValue();
             tt.skipWhitespace();
-            if (tt.nextToken() != ',') {
-                throw new ParseException("CSS Effect: " + func + "(blur-type,color,radius,spread<,>offset-x,offset-y) expected", tt.getPosition());
+            if (tt.nextToken() == ',') {
+                tt.skipWhitespace();
+            }else{
+                tt.pushBack();
             }
-            tt.skipWhitespace();
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
                 throw new ParseException("CSS Effect: offset-x number expected", tt.getPosition());
             }
             offsetX = tt.currentNumericValue().doubleValue();
             tt.skipWhitespace();
-            if (tt.nextToken() != ',') {
-                throw new ParseException("CSS Effect: " + func + "(blur-type,color,radius,spread,offset-x<,>offset-y) expected", tt.getPosition());
+            if (tt.nextToken() == ',') {
+                tt.skipWhitespace();
+            }else{
+                tt.pushBack();
             }
-            tt.skipWhitespace();
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
                 throw new ParseException("CSS Effect: offset-y number expected", tt.getPosition());
             }

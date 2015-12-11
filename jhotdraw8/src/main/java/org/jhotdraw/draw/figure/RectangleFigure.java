@@ -81,13 +81,14 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     }
 
     @Override
-    public void updateNode(RenderContext drawingView, Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(node);
         applyTransformableFigureProperties(rectangleNode);
         applyFillableFigureProperties(rectangleNode);
         applyStrokeableFigureProperties(rectangleNode);
         applyCompositableFigureProperties(rectangleNode);
+        applyStyleableFigureProperties(ctx, node);
         rectangleNode.setX(get(X));
         rectangleNode.setY(get(Y));
         rectangleNode.setWidth(get(WIDTH));

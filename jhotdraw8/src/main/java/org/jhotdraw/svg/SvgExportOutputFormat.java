@@ -1,15 +1,21 @@
-/* @(#)SVGExportOutputFormat.java
+/* @(#)SvgExportOutputFormat.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.svg;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcTo;
@@ -34,6 +40,11 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
+import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,9 +57,9 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.RenderingIntent;
 import org.jhotdraw.draw.SimpleDrawingRenderer;
-import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.io.OutputFormat;
-import org.jhotdraw.text.XmlFFontConverter;
+import org.jhotdraw.geom.Geom;
+import org.jhotdraw.text.SvgTransformListConverter;
 import org.jhotdraw.text.XmlFontConverter;
 import org.jhotdraw.text.XmlNumberConverter;
 import org.jhotdraw.text.XmlPaintConverter;
@@ -57,17 +68,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * SVGExportOutputFormat.
+ * SvgExportOutputFormat.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class SVGExportOutputFormat implements OutputFormat {
+public class SvgExportOutputFormat implements OutputFormat {
 
+    private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
+    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+    private final static String XLINK_Q = "xlink";
+    private final SvgTransformListConverter tx = new SvgTransformListConverter();
     private final XmlFontConverter font = new XmlFontConverter();
     private final XmlPaintConverter paint = new XmlPaintConverter();
     private final XmlNumberConverter nb = new XmlNumberConverter();
-    private final String namespaceURI = "http://www.w3.org/2000/svg";
+    private final String SVG_NS = "http://www.w3.org/2000/svg";
     private final String namespaceQualifier = null;
 
     @Override
@@ -92,6 +107,18 @@ public class SVGExportOutputFormat implements OutputFormat {
         return doc;
     }
 
+    public void write(OutputStream out, javafx.scene.Node drawing) throws IOException {
+        Document doc = toDocument(drawing);
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(out);
+            t.transform(source, result);
+        } catch (TransformerException ex) {
+            throw new IOException(ex);
+        }
+    }
+
     public Document toDocument(javafx.scene.Node drawingNode) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -99,9 +126,10 @@ public class SVGExportOutputFormat implements OutputFormat {
             builderFactory.setNamespaceAware(true);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             DOMImplementation domImpl = builder.getDOMImplementation();
-            doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? "svg" : namespaceQualifier + ":" + "svg", null);
+            doc = domImpl.createDocument(SVG_NS, namespaceQualifier == null ? "svg" : namespaceQualifier + ":" + "svg", null);
 
             Element docElement = doc.getDocumentElement();
+            docElement.setAttributeNS(XMLNS_NS, "xmlns:" + XLINK_Q, XLINK_NS);
 
             writeProcessingInstructions(doc, drawingNode);
             String commentText = createFileComment();
@@ -126,6 +154,7 @@ public class SVGExportOutputFormat implements OutputFormat {
     private void writeDocumentElementAttributes(Element docElement, javafx.scene.Node drawingNode) throws IOException {
         docElement.setAttribute("version", "1.2");
         docElement.setAttribute("baseProfile", "tiny");
+
     }
 
     private void writeDrawingElementAttributes(Element docElement, Drawing drawing) throws IOException {
@@ -147,13 +176,16 @@ public class SVGExportOutputFormat implements OutputFormat {
             elem = writeGroup(doc, parent, (Group) node);
         } else if (node instanceof Region) {
             elem = writeRegion(doc, parent, (Region) node);
+        } else if (node instanceof ImageView) {
+            elem = writeImageView(doc, parent, (ImageView) node);
         } else {
             throw new UnsupportedOperationException("not yet implemented for " + node);
         }
 
-        if (elem != null && (node instanceof Parent)) {
-            writeNodeAttributes(elem, node);
+        writeStyleAttributes(elem, node);
+        writeTransformAttributes(elem, node);
 
+        if (elem != null && (node instanceof Parent)) {
             Parent pp = (Parent) node;
             for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
                 writeNodeRecursively(doc, elem, child);
@@ -512,6 +544,26 @@ public class SVGExportOutputFormat implements OutputFormat {
         return elem;
     }
 
+    private Element writeImageView(Document doc, Element parent, ImageView node) throws IOException {
+        Element elem = doc.createElement("image");
+        parent.appendChild(elem);
+
+        elem.setAttribute("x", nb.toString(node.getX()));
+        elem.setAttribute("y", nb.toString(node.getY()));
+        elem.setAttribute("width", nb.toString(node.getFitWidth()));
+        elem.setAttribute("height", nb.toString(node.getFitHeight()));
+        elem.setAttribute("preserveAspectRatio",node.isPreserveRatio()?"xMidYMid":"none");
+
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
+        bout.close();
+        byte[] imageData = bout.toByteArray();
+
+        elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href", "data:image;base64,"
+                + Base64.getEncoder().encodeToString(imageData));
+        return elem;
+    }
+
     private void writeFillAttributes(Element elem, Shape node) {
         elem.setAttribute("fill", paint.toString(node.getFill()));
     }
@@ -524,7 +576,25 @@ public class SVGExportOutputFormat implements OutputFormat {
         elem.setAttribute("font", font.toString(node.getFont()));
     }
 
-    private void writeNodeAttributes(Element elem, Node node) {
+    private void writeTransformAttributes(Element elem, Node node) {
+
+        // The transforms are applied before translateX, translateY, scaleX, 
+        // scaleY and rotate transforms.
+        List< Transform> txs = new ArrayList<Transform>(node.getTransforms());
+        txs.add(new Translate(node.getTranslateX(), node.getTranslateY()));
+        Point2D pivot = Geom.center(node.getBoundsInLocal());
+        txs.add(new Scale(node.getScaleX(), node.getScaleY(), pivot.getX(), pivot.getY()));
+        txs.add(new Rotate(node.getRotate(), pivot.getX(), pivot.getY()));
+
+        if (txs.size() > 0) {
+            String value = tx.toString(txs);
+            if (!value.isEmpty()) {
+                elem.setAttribute("transform", value);
+            }
+        }
+    }
+
+    private void writeStyleAttributes(Element elem, Node node) {
         String id = node.getId();
         if (id != null && !id.isEmpty()) {
             elem.setAttribute("id", id);
@@ -538,7 +608,7 @@ public class SVGExportOutputFormat implements OutputFormat {
                 }
                 buf.append(clazz);
             }
-            elem.setAttribute("clazz", buf.toString());
+            elem.setAttribute("class", buf.toString());
         }
 
         if (!node.isVisible()) {

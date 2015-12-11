@@ -160,11 +160,12 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     }
 
     @Override
-    public void updateNode(RenderContext drawingView, Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Line lineNode = (Line) node;
         applyHideableFigureProperties(lineNode);
         applyStrokeableFigureProperties(lineNode);
         applyCompositableFigureProperties(node);
+        applyStyleableFigureProperties(ctx, node);
         Point2D start = get(START);
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());

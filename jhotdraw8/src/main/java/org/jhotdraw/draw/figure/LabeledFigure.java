@@ -5,21 +5,10 @@
  */
 package org.jhotdraw.draw.figure;
 
-import javafx.geometry.VPos;
 import javafx.scene.control.Labeled;
 import javafx.scene.paint.Color;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import org.jhotdraw.draw.key.BooleanStyleableFigureKey;
-import org.jhotdraw.draw.key.DirtyBits;
-import org.jhotdraw.draw.key.DirtyMask;
-import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
-import org.jhotdraw.draw.key.StringOrIdentStyleableFigureKey;
 
 /**
  * {@code LabeledFigure} is a {@code TextableFigure} which allows to change
