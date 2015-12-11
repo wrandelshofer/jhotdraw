@@ -357,8 +357,8 @@ public class Geom {
      * @return the angle
      */
     public static double pointToAngle(Rectangle2D r, Point2D p) {
-        double px = p.getX() - (r.getMinX() + r.getWidth() / 2.0);
-        double py = p.getY() - (r.getMinY() + r.getHeight() / 2.0);
+        double px = p.getX() - (r.getMinX() + r.getWidth() * 0.5);
+        double py = p.getY() - (r.getMinY() + r.getHeight() * 0.5);
         return atan2(py * r.getWidth(), px * r.getHeight());
     }
 
