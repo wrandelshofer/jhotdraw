@@ -269,6 +269,6 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
 
     @Override
     public List<Transform> getDefaultValue() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 }
