@@ -36,6 +36,7 @@ import org.jhotdraw.draw.figure.EllipseFigure;
 import org.jhotdraw.draw.figure.LineFigure;
 import org.jhotdraw.draw.figure.TextFigure;
 import org.jhotdraw.draw.figure.RectangleFigure;
+import org.jhotdraw.draw.figure.TransformableFigure;
 import org.jhotdraw.text.DefaultConnectorConverter;
 import org.jhotdraw.text.DefaultConverter;
 import org.jhotdraw.text.XmlPoint2DConverter;
@@ -54,6 +55,7 @@ import org.jhotdraw.text.XmlPaintConverter;
 import org.jhotdraw.text.XmlPoint3DConverter;
 import org.jhotdraw.text.XmlRectangle2DConverter;
 import org.jhotdraw.text.XmlSvgPathConverter;
+import org.jhotdraw.text.XmlTransformListConverter;
 
 /**
  * DefaultFigureFactory.
@@ -119,6 +121,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(StrokeableFigure.STROKE_LINE_CAP, new XmlEnumConverter<StrokeLineCap>(StrokeLineCap.class));
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
         addConverter(StrokeableFigure.STROKE_TYPE, new XmlEnumConverter<StrokeType>(StrokeType.class));
+        addConverter(TransformableFigure.TRANSFORM, new XmlTransformListConverter());
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 

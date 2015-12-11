@@ -78,13 +78,13 @@ public interface TransformableFigure extends Figure {
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
 
-    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), Collections.emptyList());
+    public static TransformListStyleableFigureKey TRANSFORM = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.TRANSFORM), Collections.emptyList());
 
     /**
      * Updates a figure node with all transformation properties defined in this
      * interface.
      * <p>
-     * Applies the following properties: {@code TRANSFORMS}, translation 
+     * Applies the following properties: {@code TRANSFORM}, translation 
      *  {@code TRANSLATE_X}, {@code TRANSLATE_Y}, {@code TRANSLATE_Z},
      * scale {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, and rotation
      * {@code ROTATE}, {@code ROTATION_AXIS}.
@@ -94,7 +94,7 @@ public interface TransformableFigure extends Figure {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyTransformableFigureProperties(Node node) {
-        List<Transform> transforms = get(TRANSFORMS);
+        List<Transform> transforms = get(TRANSFORM);
         if (!node.getTransforms().equals(transforms)) {
             node.getTransforms().setAll(transforms);
         }
@@ -169,7 +169,7 @@ public interface TransformableFigure extends Figure {
     }
 
     default Transform getTransform() {
-        List<Transform> list = get(TRANSFORMS);
+        List<Transform> list = get(TRANSFORM);
         Transform t;
         if (list.isEmpty()) {
             t = new Translate(0, 0);
@@ -183,7 +183,7 @@ public interface TransformableFigure extends Figure {
     }
 
     default Transform getInverseTransform() {
-        List<Transform> list = get(TRANSFORMS);
+        List<Transform> list = get(TRANSFORM);
         Transform t;
         if (list.isEmpty()) {
             t = new Translate(0, 0);
