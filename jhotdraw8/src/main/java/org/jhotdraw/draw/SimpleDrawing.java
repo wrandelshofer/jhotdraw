@@ -56,8 +56,6 @@ public class SimpleDrawing extends AbstractCompositeFigure
         //applyTransformableFigureProperties(n);
         applyStyleableFigureProperties(v, n);
         
-        ObservableList<Node> children = ((Group) n).getChildren();
-        children.clear();
         Bounds bounds = getBoundsInLocal();
         Rectangle page = (Rectangle) g.getProperties().get("background");
         page.setX(bounds.getMinX());

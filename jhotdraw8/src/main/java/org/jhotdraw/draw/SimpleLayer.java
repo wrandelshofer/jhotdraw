@@ -54,8 +54,6 @@ public class SimpleLayer extends AbstractCompositeFigure
     @Override
     public Node createNode(RenderContext ctx) {
         Group n = new Group();
-        n.setCacheHint(CacheHint.QUALITY);
-        n.setCache(true);
         return n;
     }
 

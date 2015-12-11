@@ -52,6 +52,7 @@ import java.util.Map;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.scene.CacheHint;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
@@ -167,50 +168,50 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         public void handle(DrawingModelEvent event) {
             Figure f = event.getFigure();
             switch (event.getEventType()) {
-                case FIGURE_ADDED_TO_PARENT:
-                    handleFigureAdded(f);
-                    break;
-                case FIGURE_REMOVED_FROM_PARENT:
-                    handleFigureRemoved(f);
-                    break;
-                case FIGURE_ADDED_TO_DRAWING:
+            case FIGURE_ADDED_TO_PARENT:
+                handleFigureAdded(f);
+                break;
+            case FIGURE_REMOVED_FROM_PARENT:
+                handleFigureRemoved(f);
+                break;
+            case FIGURE_ADDED_TO_DRAWING:
+                repaint();
+                break;
+            case FIGURE_REMOVED_FROM_DRAWING:
+                repaint();
+                break;
+            case NODE_INVALIDATED:
+                handleNodeInvalidated(f);
+                break;
+            case LAYOUT_INVALIDATED:
+                if (f == getDrawing()) {
+                    invalidateConstrainerNode();
+                    invalidateWorldViewTransforms();
                     repaint();
-                    break;
-                case FIGURE_REMOVED_FROM_DRAWING:
-                    repaint();
-                    break;
-                case NODE_INVALIDATED:
-                    handleNodeInvalidated(f);
-                    break;
-                case LAYOUT_INVALIDATED:
-                    if (f == getDrawing()) {
-                        invalidateConstrainerNode();
-                        invalidateWorldViewTransforms();
-                        repaint();
-                    }
-                    break;
-                case STYLE_INVALIDATED:
-                    repaint();
-                    break;
-                case ROOT_CHANGED:
-                    handleDrawingChanged();
-                    updateLayout();
-                    repaint();
-                    break;
-                case SUBTREE_NODES_INVALIDATED:
-                    updateTreeNodes(f);
-                    repaint();
-                    break;
-                case SUBTREE_STRUCTURE_CHANGED:
-                    updateTreeStructure(f);
-                    break;
-                case CONNECTION_CHANGED:
-                case TRANSFORM_CHANGED:
-                    repaint();
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + " not supported");
+                }
+                break;
+            case STYLE_INVALIDATED:
+                repaint();
+                break;
+            case ROOT_CHANGED:
+                handleDrawingChanged();
+                updateLayout();
+                repaint();
+                break;
+            case SUBTREE_NODES_INVALIDATED:
+                updateTreeNodes(f);
+                repaint();
+                break;
+            case SUBTREE_STRUCTURE_CHANGED:
+                updateTreeStructure(f);
+                break;
+            case CONNECTION_CHANGED:
+            case TRANSFORM_CHANGED:
+                repaint();
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
             }
         }
 
@@ -399,6 +400,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         rootPane.getChildren().addAll(drawingSubScene, overlaysSubScene);
 
         drawingPane = new Group();
+        drawingPane.setCacheHint(CacheHint.QUALITY);
+        drawingPane.setCache(true);
         drawingPane.setScaleX(zoomFactor.get());
         drawingPane.setScaleY(zoomFactor.get());
         drawingSubScene.getChildren().addAll(backgroundPane, drawingPane);
