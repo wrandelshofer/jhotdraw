@@ -21,8 +21,8 @@ public class Regex {
     private transient Pattern pattern;
 
     public Regex() {
-        this.find = ".*";
-        this.replace = "$0";
+        this.find = null;
+        this.replace = null;
     }
 
     public Regex(String find, String replace) {
@@ -49,16 +49,20 @@ public class Regex {
 
     /**
      * Applies the regular expression to the string.
+     *
      * @param str the string
      * @return the replaced string
      */
     public String apply(String str) {
+        if (find == null) {
+            return replace == null ? str : replace;
+        }
         if (pattern == null) {
             pattern = Pattern.compile(find);
         }
 
         Matcher m = pattern.matcher(str);
-        return m.replaceAll(replace);
+        return replace == null ? m.replaceFirst("$0") : m.replaceAll(replace);
     }
 
     @Override
@@ -89,6 +93,5 @@ public class Regex {
         }
         return true;
     }
-    
-    
+
 }
