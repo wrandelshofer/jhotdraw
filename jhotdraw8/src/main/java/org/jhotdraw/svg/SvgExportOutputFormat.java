@@ -4,19 +4,33 @@
  */
 package org.jhotdraw.svg;
 
+import java.awt.geom.AffineTransform;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderImage;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ArcType;
@@ -38,6 +52,9 @@ import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -58,12 +75,22 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.RenderingIntent;
 import org.jhotdraw.draw.SimpleDrawingRenderer;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_COLOR;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_DASH_ARRAY;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_DASH_OFFSET;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_LINE_CAP;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_LINE_JOIN;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_MITER_LIMIT;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_TYPE;
+import static org.jhotdraw.draw.figure.StrokeableFigure.STROKE_WIDTH;
 import org.jhotdraw.draw.io.OutputFormat;
 import org.jhotdraw.geom.Geom;
+import org.jhotdraw.geom.Shapes;
 import org.jhotdraw.text.SvgTransformListConverter;
 import org.jhotdraw.text.XmlFontConverter;
 import org.jhotdraw.text.XmlNumberConverter;
 import org.jhotdraw.text.XmlPaintConverter;
+import org.jhotdraw.text.XmlSizeListConverter;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -82,6 +109,7 @@ public class SvgExportOutputFormat implements OutputFormat {
     private final SvgTransformListConverter tx = new SvgTransformListConverter();
     private final XmlPaintConverter paint = new XmlPaintConverter();
     private final XmlNumberConverter nb = new XmlNumberConverter();
+    private final XmlSizeListConverter nbList = new XmlSizeListConverter();
     private final String SVG_NS = "http://www.w3.org/2000/svg";
     private final String namespaceQualifier = null;
 
@@ -172,6 +200,8 @@ public class SvgExportOutputFormat implements OutputFormat {
         Element elem = null;
         if (node instanceof Shape) {
             elem = writeShape(doc, parent, (Shape) node);
+            writeFillAttributes(elem, (Shape) node);
+            writeStrokeAttributes(elem, (Shape) node);
         } else if (node instanceof Group) {
             elem = writeGroup(doc, parent, (Group) node);
         } else if (node instanceof Region) {
@@ -182,11 +212,15 @@ public class SvgExportOutputFormat implements OutputFormat {
             throw new UnsupportedOperationException("not yet implemented for " + node);
         }
 
-        writeStyleAttributes(elem, node);
-        writeTransformAttributes(elem, node);
-        writeCompositingAttributes(elem, node);
+        if (elem != null) {
+            writeStyleAttributes(elem, node);
+            writeTransformAttributes(elem, node);
+            writeCompositingAttributes(elem, node);
+        } else {
+            elem = parent;
+        }
 
-        if (elem != null && (node instanceof Parent)) {
+        if (node instanceof Parent) {
             Parent pp = (Parent) node;
             for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
                 writeNodeRecursively(doc, elem, child);
@@ -227,8 +261,6 @@ public class SvgExportOutputFormat implements OutputFormat {
         } else {
             throw new IOException("unknown shape type " + node);
         }
-        writeFillAttributes(elem, node);
-        writeStrokeAttributes(elem, node);
         return elem;
     }
 
@@ -251,8 +283,8 @@ public class SvgExportOutputFormat implements OutputFormat {
         double endY = centerY + radiusY * Math.sin(endAngle);
 
         int xAxisRot = 0;
-        int largeArc = (length > 180) ? 1 : 0;
-        int sweep = (length < 0) ? 1 : 0;
+        boolean largeArc = (length > 180);
+        boolean sweep = (length < 0);
 
         buf.append('M')
                 .append(nb.toString(centerX))
@@ -274,9 +306,9 @@ public class SvgExportOutputFormat implements OutputFormat {
                 .append(',')
                 .append(nb.toString(xAxisRot))
                 .append(',')
-                .append(nb.toString(largeArc))
+                .append(largeArc ? '1' : '0')
                 .append(',')
-                .append(nb.toString(sweep))
+                .append(sweep ? '1' : '0')
                 .append(',')
                 .append(nb.toString(endX))
                 .append(',')
@@ -326,7 +358,7 @@ public class SvgExportOutputFormat implements OutputFormat {
                 .append(nb.toString(node.getEndX()))
                 .append(',')
                 .append(nb.toString(node.getEndY()));
-        elem.setAttribute("content", buf.substring(0));
+        elem.setAttribute("d", buf.substring(0));
         return elem;
     }
 
@@ -413,13 +445,19 @@ public class SvgExportOutputFormat implements OutputFormat {
             } else if (pe instanceof ArcTo) {
                 ArcTo e = (ArcTo) pe;
                 buf.append('A')
-                        .append(nb.toString(e.getX()))
-                        .append(',')
-                        .append(nb.toString(e.getY()))
-                        .append(',')
                         .append(nb.toString(e.getRadiusX()))
                         .append(',')
-                        .append(nb.toString(e.getRadiusY()));
+                        .append(nb.toString(e.getRadiusY()))
+                        .append(',')
+                        .append(nb.toString(e.getXAxisRotation()))
+                        .append(',')
+                        .append(e.isLargeArcFlag() ? '1' : '0')
+                        .append(',')
+                        .append(e.isSweepFlag() ? '1' : '0')
+                        .append(',')
+                        .append(nb.toString(e.getX()))
+                        .append(',')
+                        .append(nb.toString(e.getY()));
             } else if (pe instanceof HLineTo) {
                 HLineTo e = (HLineTo) pe;
                 buf.append('H').append(nb.toString(e.getX()));
@@ -430,7 +468,7 @@ public class SvgExportOutputFormat implements OutputFormat {
                 buf.append('Z');
             }
         }
-        elem.setAttribute("content", buf.toString());
+        elem.setAttribute("d", buf.toString());
         return elem;
     }
 
@@ -485,7 +523,7 @@ public class SvgExportOutputFormat implements OutputFormat {
                 .append(nb.toString(node.getEndX()))
                 .append(',')
                 .append(nb.toString(node.getEndY()));
-        elem.setAttribute("content", buf.substring(0));
+        elem.setAttribute("d", buf.substring(0));
         return elem;
     }
 
@@ -539,9 +577,106 @@ public class SvgExportOutputFormat implements OutputFormat {
         return elem;
     }
 
-    private Element writeRegion(Document doc, Element parent, Region node) {
+    private Element writeRegion(Document doc, Element parent, Region region) throws IOException {
         Element elem = doc.createElement("g");
         parent.appendChild(elem);
+
+        double x = region.getLayoutX();
+        double y = region.getLayoutY();
+        double width = region.getWidth();
+        double height = region.getHeight();
+
+        if ((region.getBackground() != null && !region.getBackground().isEmpty())
+                || (region.getBorder() != null && !region.getBorder().isEmpty())) {
+            // compute the shape 's' of the region
+            Shape s = (region.getShape() == null) ? null : region.getShape();
+
+            if (s != null) {
+                if (region.isScaleShape()) {
+                    java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
+                    Bounds sb = s.getBoundsInLocal();
+                    Bounds rb = region.getBoundsInParent();
+
+                    Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
+                    tx = tx.createConcatenation(Transform.translate(rb.getMinX(), rb.getMinY()));
+                    tx = tx.createConcatenation(Transform.scale(rb.getWidth() / sb.getWidth(), rb.getHeight() / sb.getHeight()));
+                    s = Shapes.fxShapeFromAWT(awtShape, tx);
+                }
+            }
+            // All BackgroundFills are drawn first, followed by
+            // BackgroundImages, BorderStrokes, and finally BorderImages
+            if (region.getBackground() != null) {
+                for (BackgroundFill bgf : region.getBackground().getFills()) {
+                    Paint fill = bgf.getFill() == null ? Color.TRANSPARENT : bgf.getFill();
+                    CornerRadii radii = bgf.getRadii() == null ? CornerRadii.EMPTY : bgf.getRadii();
+                    Insets insets = bgf.getInsets() == null ? Insets.EMPTY : bgf.getInsets();
+
+                    Shape bgs = null;
+                    if (s != null) {
+                        if (region.isScaleShape()) {
+                            java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
+                            Bounds sb = s.getBoundsInLocal();
+
+                            Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
+                            tx = tx.createConcatenation(Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                            tx = tx.createConcatenation(Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                            bgs = Shapes.fxShapeFromAWT(awtShape, tx);
+                        } else {
+                            bgs = s;
+                        }
+                    } else if (radii != CornerRadii.EMPTY) {
+                        throw new UnsupportedOperationException("radii not yet implemented");
+                    } else {
+                        bgs = new Rectangle(x + insets.getLeft(), y + insets.getTop(), width - insets.getLeft() - insets.getRight(), height - insets.getTop() - insets.getBottom());
+                    }
+                    bgs.setFill(fill);
+                    Element bgsElement = writeShape(doc, elem, bgs);
+                    writeFillAttributes(bgsElement, bgs);
+                    bgsElement.setAttribute("stroke", "none");
+                    elem.appendChild(bgsElement);
+                }
+                for (BackgroundImage bgi : region.getBackground().getImages()) {
+                    throw new UnsupportedOperationException("background image not yet implemented");
+                }
+            }
+            if (region.getBorder() != null) {
+                if (region.getBorder().getImages().isEmpty() || s == null) {
+                    for (BorderStroke bs : region.getBorder().getStrokes()) {
+                        Insets insets = bs.getInsets();
+                        CornerRadii radii = bs.getRadii() == null ? CornerRadii.EMPTY : bs.getRadii();
+
+                        Shape bgs = null;
+                        if (s != null) {
+                            if (region.isScaleShape()) {
+                                java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
+                                Bounds sb = s.getBoundsInLocal();
+
+                                Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
+                                tx = tx.createConcatenation(Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                                tx = tx.createConcatenation(Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                                bgs = Shapes.fxShapeFromAWT(awtShape, tx);
+                            } else {
+                                bgs = s;
+                            }
+                        } else if (radii != CornerRadii.EMPTY) {
+                            throw new UnsupportedOperationException("radii not yet implemented");
+                        } else {
+                            bgs = new Rectangle(x + insets.getLeft(), y + insets.getTop(), width - insets.getLeft() - insets.getRight(), height - insets.getTop() - insets.getBottom());
+                        }
+
+                        Element bgsElement = writeShape(doc, elem, bgs);
+                        writeStrokeAttributes(bgsElement, bs);
+                        bgsElement.setAttribute("fill", "none");
+                        elem.appendChild(bgsElement);
+                    }
+                }
+                if (s != null) {
+                    for (BorderImage bi : region.getBorder().getImages()) {
+                        throw new UnsupportedOperationException("border image not yet implemented");
+                    }
+                }
+            }
+        }
         return elem;
     }
 
@@ -553,7 +688,7 @@ public class SvgExportOutputFormat implements OutputFormat {
         elem.setAttribute("y", nb.toString(node.getY()));
         elem.setAttribute("width", nb.toString(node.getFitWidth()));
         elem.setAttribute("height", nb.toString(node.getFitHeight()));
-        elem.setAttribute("preserveAspectRatio",node.isPreserveRatio()?"xMidYMid":"none");
+        elem.setAttribute("preserveAspectRatio", node.isPreserveRatio() ? "xMidYMid" : "none");
 
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
@@ -569,16 +704,94 @@ public class SvgExportOutputFormat implements OutputFormat {
         elem.setAttribute("fill", paint.toString(node.getFill()));
     }
 
-    private void writeStrokeAttributes(Element elem, Shape node) {
-        elem.setAttribute("stroke", paint.toString(node.getStroke()));
+    private void writeStrokeAttributes(Element elem, Shape shape) {
+        if (shape.getStroke() != null) {
+            elem.setAttribute("stroke", paint.toString(shape.getStroke()));
+        }
+        if (shape.getStrokeWidth() != 1) {
+            elem.setAttribute("stroke-width", nb.toString(shape.getStrokeWidth()));
+        }
+        if (shape.getStrokeLineCap() != StrokeLineCap.BUTT) {
+            elem.setAttribute("stroke-linecap", shape.getStrokeLineCap().toString().toLowerCase());
+        }
+        if (shape.getStrokeLineJoin() != StrokeLineJoin.MITER) {
+            elem.setAttribute("stroke-linecap", shape.getStrokeLineJoin().toString().toLowerCase());
+        }
+        if (shape.getStrokeMiterLimit() != 4) {
+            elem.setAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
+        }
+        if (!shape.getStrokeDashArray().isEmpty()) {
+            elem.setAttribute("stroke-dasharray", nbList.toString(shape.getStrokeDashArray()));
+        }
+        if (shape.getStrokeDashOffset() != 0) {
+            elem.setAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
+        }
+        if (shape.getStrokeType() != StrokeType.CENTERED) {
+            // XXX this is currentl only a proposal for SVG 2 
+            switch (shape.getStrokeType()) {
+                case INSIDE:
+                    elem.setAttribute("stroke-position", "inside");
+                    break;
+                case CENTERED:
+                    elem.setAttribute("stroke-position", "middle");
+                    break;
+                case OUTSIDE:
+                    elem.setAttribute("stroke-position", "outside");
+                    break;
+                default:
+                    throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
+            }
+        }
+    }
+
+    private void writeStrokeAttributes(Element elem, BorderStroke shape) {
+        if (shape.getTopStroke() != null) {
+            elem.setAttribute("stroke", paint.toString(shape.getTopStroke()));
+        }
+        if (shape.getWidths().getTop() != 1) {
+            elem.setAttribute("stroke-width", nb.toString(shape.getWidths().getTop()));
+        }
+        BorderStrokeStyle style = shape.getTopStyle();
+        // FIXME support top/right/bottom/left style!!
+        if (style.getLineCap() != StrokeLineCap.BUTT) {
+            elem.setAttribute("stroke-linecap", style.getLineCap().toString().toLowerCase());
+        }
+        if (style.getLineJoin() != StrokeLineJoin.MITER) {
+            elem.setAttribute("stroke-linecap", style.getLineJoin().toString().toLowerCase());
+        }
+        if (style.getMiterLimit() != 4) {
+            elem.setAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
+        }
+        if (!style.getDashArray().isEmpty()) {
+            elem.setAttribute("stroke-dasharray", nbList.toString(style.getDashArray()));
+        }
+        if (style.getDashOffset() != 0) {
+            elem.setAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
+        }
+        if (style.getType() != StrokeType.CENTERED) {
+            // XXX this is currentl only a proposal for SVG 2 
+            switch (style.getType()) {
+                case INSIDE:
+                    elem.setAttribute("stroke-position", "inside");
+                    break;
+                case CENTERED:
+                    elem.setAttribute("stroke-position", "middle");
+                    break;
+                case OUTSIDE:
+                    elem.setAttribute("stroke-position", "outside");
+                    break;
+                default:
+                    throw new InternalError("Unsupported stroke type " + style.getType());
+            }
+        }
     }
 
     private void writeTextAttributes(Element elem, Text node) {
         Font ft = node.getFont();
         elem.setAttribute("font-family", ft.getFamily());
-        elem.setAttribute("font-size",nb.toString(ft.getSize()));
-        elem.setAttribute("font-style",ft.getStyle().contains("italic")?"italic":"normal");
-        elem.setAttribute("font-weight",ft.getStyle().contains("bold")?"bold":"normal");
+        elem.setAttribute("font-size", nb.toString(ft.getSize()));
+        elem.setAttribute("font-style", ft.getStyle().contains("italic") ? "italic" : "normal");
+        elem.setAttribute("font-weight", ft.getStyle().contains("bold") ? "bold" : "normal");
     }
 
     private void writeTransformAttributes(Element elem, Node node) {
@@ -590,6 +803,11 @@ public class SvgExportOutputFormat implements OutputFormat {
         Point2D pivot = Geom.center(node.getBoundsInLocal());
         txs.add(new Scale(node.getScaleX(), node.getScaleY(), pivot.getX(), pivot.getY()));
         txs.add(new Rotate(node.getRotate(), pivot.getX(), pivot.getY()));
+
+        writeTransformAttributes(elem, txs);
+    }
+
+    private void writeTransformAttributes(Element elem, List< Transform> txs) {
 
         if (txs.size() > 0) {
             String value = tx.toString(txs);
@@ -620,9 +838,10 @@ public class SvgExportOutputFormat implements OutputFormat {
             elem.setAttribute("visible", "hidden");
         }
     }
+
     private void writeCompositingAttributes(Element elem, Node node) {
-        if (node.getOpacity()!=1.0) {
-            elem.setAttribute("opacity", nb.toString(node.getOpacity()) );
+        if (node.getOpacity() != 1.0) {
+            elem.setAttribute("opacity", nb.toString(node.getOpacity()));
         }
     }
 }

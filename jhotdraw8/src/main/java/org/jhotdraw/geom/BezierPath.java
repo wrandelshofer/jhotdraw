@@ -72,10 +72,6 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      */
     private int outer = -1;
     /**
-     * If this value is set to true, closes the bezier path.
-     */
-    private boolean isClosed;
-    /**
      * The winding rule for filling the bezier path.
      */
     private int windingRule = Path2D.Double.WIND_EVEN_ODD;
@@ -113,9 +109,15 @@ public class BezierPath extends ArrayList<BezierPath.Node>
          * tools shall keep all control points on the same line.
          */
         public boolean keepColinear = true;
-        
-        /** Whether a C0 node is a lineto or a moveTo. */
-        public boolean moveTo=false;
+
+        /**
+         * Whether a C0 node is a lineto or a moveTo.
+         */
+        public boolean moveTo = false;
+        /**
+         * Whether the path should be closed if it ends here.
+         */
+        public boolean closed = false;
 
         public Node() {
         }
@@ -261,6 +263,10 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             }
             return false;
         }
+
+        private void setClosed(boolean b) {
+            closed = b;
+        }
     }
 
     /**
@@ -395,31 +401,33 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
                 if ((previous.mask & C2_MASK) == 0) {
                     if ((current.mask & C1_MASK) == 0) {
-                        if (current.moveTo)
-                        gp.moveTo(
-                                current.x[0], current.y[0]);
-                            else
-                        gp.lineTo(
-                                current.x[0], current.y[0]);
+                        if (current.moveTo) {
+                            if (previous.closed) {
+                                gp.closePath();
+                            }
+                            gp.moveTo(
+                                    current.x[0], current.y[0]);
+                        } else {
+                            gp.lineTo(
+                                    current.x[0], current.y[0]);
+                        }
                     } else {
                         gp.quadTo(
                                 current.x[1], current.y[1],
                                 current.x[0], current.y[0]);
                     }
+                } else if ((current.mask & C1_MASK) == 0) {
+                    gp.quadTo(
+                            previous.x[2], previous.y[2],
+                            current.x[0], current.y[0]);
                 } else {
-                    if ((current.mask & C1_MASK) == 0) {
-                        gp.quadTo(
-                                previous.x[2], previous.y[2],
-                                current.x[0], current.y[0]);
-                    } else {
-                        gp.curveTo(
-                                previous.x[2], previous.y[2],
-                                current.x[1], current.y[1],
-                                current.x[0], current.y[0]);
-                    }
+                    gp.curveTo(
+                            previous.x[2], previous.y[2],
+                            current.x[1], current.y[1],
+                            current.x[0], current.y[0]);
                 }
             }
-            if (isClosed) {
+            if (isClosed()) {
                 if (size() > 1) {
                     previous = get(size() - 1);
                     current = get(0);
@@ -433,17 +441,15 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                                     current.x[1], current.y[1],
                                     current.x[0], current.y[0]);
                         }
+                    } else if ((current.mask & C1_MASK) == 0) {
+                        gp.quadTo(
+                                previous.x[2], previous.y[2],
+                                current.x[0], current.y[0]);
                     } else {
-                        if ((current.mask & C1_MASK) == 0) {
-                            gp.quadTo(
-                                    previous.x[2], previous.y[2],
-                                    current.x[0], current.y[0]);
-                        } else {
-                            gp.curveTo(
-                                    previous.x[2], previous.y[2],
-                                    current.x[1], current.y[1],
-                                    current.x[0], current.y[0]);
-                        }
+                        gp.curveTo(
+                                previous.x[2], previous.y[2],
+                                current.x[1], current.y[1],
+                                current.x[0], current.y[0]);
                     }
                 }
                 gp.closePath();
@@ -514,7 +520,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 Node node = get(0);
                 y1 = y2 = node.y[0];
                 x1 = x2 = node.x[0];
-                if (isClosed && (node.mask & C1_MASK) != 0) {
+                if (isClosed() && (node.mask & C1_MASK) != 0) {
                     y = node.y[1];
                     x = node.x[1];
                     if (x < x1) {
@@ -578,7 +584,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                         y2 = y;
                     }
                 }
-                if (isClosed && (node.mask & C2_MASK) != 0) {
+                if (isClosed() && (node.mask & C2_MASK) != 0) {
                     y = node.y[2];
                     x = node.x[2];
                     if (x < x1) {
@@ -668,15 +674,28 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         return generalPath.contains(x, y);
     }
 
-    public void setClosed(boolean newValue) {
-        if (isClosed != newValue) {
-            isClosed = newValue;
-            invalidatePath();
+    /**
+     * Closes the current sub path.
+     */
+    public void closePath() {
+        if (!isEmpty()) {
+            get(size() - 1).setClosed(true);
         }
+        invalidatePath();
+    }
+
+    public void setClosed(boolean newValue) {
+        if (!isEmpty()) {
+            get(size() - 1).setClosed(newValue);
+        }
+        invalidatePath();
     }
 
     public boolean isClosed() {
-        return isClosed;
+        if (!isEmpty()) {
+            return get(size() - 1).closed;
+        }
+        return false;
     }
 
     /**
@@ -902,7 +921,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 }
             }
         }
-        if (isClosed && size() > 1) {
+        if (isClosed() && size() > 1) {
             v1 = get(size() - 1);
             v2 = get(0);
             if (v1.mask == 0 && v2.mask == 0) {
@@ -954,7 +973,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 }
             }
         }
-        if (isClosed && size() > 1) {
+        if (isClosed() && size() > 1) {
             v1 = get(size() - 1);
             v2 = get(0);
             if (v1.mask == 0 && v2.mask == 0) {
@@ -1038,7 +1057,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         }
         Node node = new Node(x1, y1);
         node.keepColinear = false;
-        node.moveTo=true;
+        node.moveTo = true;
         add(node);
     }
 
@@ -1270,21 +1289,21 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         while (!i.isDone()) {
             int type = i.currentSegment(coords);
             switch (type) {
-            case PathIterator.SEG_CLOSE:
-                // ignore
-                break;
-            case PathIterator.SEG_CUBICTO:
-                curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
-                break;
-            case PathIterator.SEG_LINETO:
-                lineTo(coords[0], coords[1]);
-                break;
-            case PathIterator.SEG_MOVETO:
-                // ignore
-                break;
-            case PathIterator.SEG_QUADTO:
-                quadTo(coords[0], coords[1], coords[2], coords[3]);
-                break;
+                case PathIterator.SEG_CLOSE:
+                    // ignore
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
+                    break;
+                case PathIterator.SEG_LINETO:
+                    lineTo(coords[0], coords[1]);
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    // ignore
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    quadTo(coords[0], coords[1], coords[2], coords[3]);
+                    break;
             }
             i.next();
         }

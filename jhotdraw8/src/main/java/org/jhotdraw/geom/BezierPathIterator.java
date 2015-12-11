@@ -290,7 +290,7 @@ public class BezierPathIterator implements PathIterator {
             if ((previous.mask & BezierPath.C2_MASK) == 0) {
                 if ((current.mask & BezierPath.C1_MASK) == 0) {
                     numCoords = 1;
-                    type = SEG_LINETO;
+                    type = current.moveTo?SEG_MOVETO:SEG_LINETO;
                     coords[0] = current.x[0];
                     coords[1] = current.y[0];
                     
