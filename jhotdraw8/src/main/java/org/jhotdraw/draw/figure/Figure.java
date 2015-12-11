@@ -48,7 +48,11 @@ import org.jhotdraw.draw.locator.RelativeLocator;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import javafx.scene.transform.NonInvertibleTransformException;
-import static org.jhotdraw.draw.figure.TransformableFigure.TRANSFORMS;
+import static org.jhotdraw.draw.figure.TransformableFigure.TRANSFORM;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
