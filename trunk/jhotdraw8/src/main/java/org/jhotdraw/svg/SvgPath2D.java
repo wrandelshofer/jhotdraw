@@ -1,4 +1,4 @@
-/* @(#)SVGPath2D.java
+/* @(#)SvgPath2D.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -11,12 +11,12 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
 /**
- * {@code SVGPath2D} adds an {@code arcTo} method to {@code Path2D.Double}.
+ * {@code SvgPath2D} adds an {@code arcTo} method to {@code Path2D.Double}.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class SVGPath2D extends Path2D.Double {
+public class SvgPath2D extends Path2D.Double {
 
     private final static long serialVersionUID = 1L;
 

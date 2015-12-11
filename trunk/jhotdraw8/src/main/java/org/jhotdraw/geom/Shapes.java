@@ -42,6 +42,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.text.Text;
 import javafx.scene.transform.MatrixType;
+import org.jhotdraw.svg.SvgPath2D;
 
 /**
  * Shapes.
@@ -145,7 +146,7 @@ public class Shapes {
      * @param iter AWT Path Iterator
      * @return JavaFX Shape
      */
-    static javafx.scene.shape.Path fxShapeFromAWT(PathIterator iter) {
+    public static javafx.scene.shape.Path fxShapeFromAWT(PathIterator iter) {
         javafx.scene.shape.Path fxpath = new javafx.scene.shape.Path();
 
         switch (iter.getWindingRule()) {
@@ -236,7 +237,7 @@ public class Shapes {
         boolean largeArc = (length > 180);
         boolean sweep = (length < 0);
 
-        BezierPath p = new BezierPath();
+        SvgPath2D p = new SvgPath2D();
         p.moveTo(centerX, centerY);
 
         if (ArcType.ROUND == node.getType()) {
@@ -247,9 +248,9 @@ public class Shapes {
 
         if (ArcType.CHORD == node.getType()
                 || ArcType.ROUND == node.getType()) {
-            p.setClosed(true);
+            p.closePath();
         }
-        return p.toGeneralPath();
+        return p;
     }
 
     private static Shape shapeFromFXCircle(Circle node) {
@@ -280,7 +281,7 @@ public class Shapes {
     }
 
     private static Shape shapeFromFXPath(Path node) {
-        BezierPath p = new BezierPath();
+        SvgPath2D p = new SvgPath2D();
         double x = 0;
         double y = 0;
         for (PathElement pe : node.getElements()) {
@@ -321,7 +322,7 @@ public class Shapes {
                 p.closePath();
             }
         }
-        return p.toGeneralPath();
+        return p;
     }
 
     private static Shape shapeFromFXPolygon(Polygon node) {

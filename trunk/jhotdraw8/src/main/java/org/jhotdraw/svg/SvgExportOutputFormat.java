@@ -823,7 +823,7 @@ public class SvgExportOutputFormat implements OutputFormat {
         }
 
         if (!node.isVisible()) {
-            elem.setAttribute("visible", "hidden");
+            elem.setAttribute("visibility", "hidden");
         }
     }
 
