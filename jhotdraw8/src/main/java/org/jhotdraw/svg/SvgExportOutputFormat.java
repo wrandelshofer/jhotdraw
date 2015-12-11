@@ -19,6 +19,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -590,19 +591,8 @@ public class SvgExportOutputFormat implements OutputFormat {
                 || (region.getBorder() != null && !region.getBorder().isEmpty())) {
             // compute the shape 's' of the region
             Shape s = (region.getShape() == null) ? null : region.getShape();
+            Bounds sb = (s != null) ? s.getLayoutBounds() : null;
 
-            if (s != null) {
-                if (region.isScaleShape()) {
-                    java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
-                    Bounds sb = s.getBoundsInLocal();
-                    Bounds rb = region.getBoundsInParent();
-
-                    Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                    tx = tx.createConcatenation(Transform.translate(rb.getMinX(), rb.getMinY()));
-                    tx = tx.createConcatenation(Transform.scale(rb.getWidth() / sb.getWidth(), rb.getHeight() / sb.getHeight()));
-                    s = Shapes.fxShapeFromAWT(awtShape, tx);
-                }
-            }
             // All BackgroundFills are drawn first, followed by
             // BackgroundImages, BorderStrokes, and finally BorderImages
             if (region.getBackground() != null) {
@@ -614,9 +604,8 @@ public class SvgExportOutputFormat implements OutputFormat {
                     Shape bgs = null;
                     if (s != null) {
                         if (region.isScaleShape()) {
-                            java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
-                            Bounds sb = s.getBoundsInLocal();
 
+                            java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
                             Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                             tx = tx.createConcatenation(Transform.translate(x + insets.getLeft(), y + insets.getTop()));
                             tx = tx.createConcatenation(Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
@@ -649,7 +638,6 @@ public class SvgExportOutputFormat implements OutputFormat {
                         if (s != null) {
                             if (region.isScaleShape()) {
                                 java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
-                                Bounds sb = s.getBoundsInLocal();
 
                                 Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                                 tx = tx.createConcatenation(Transform.translate(x + insets.getLeft(), y + insets.getTop()));
@@ -843,5 +831,18 @@ public class SvgExportOutputFormat implements OutputFormat {
         if (node.getOpacity() != 1.0) {
             elem.setAttribute("opacity", nb.toString(node.getOpacity()));
         }
+        /*
+        if (node.getBlendMode() != null && node.getBlendMode() != BlendMode.SRC_OVER) {
+            switch (node.getBlendMode()) {
+                case MULTIPLY:
+                case SCREEN:
+                case DARKEN:
+                case LIGHTEN:
+                    elem.setAttribute("mode", node.getBlendMode().toString().toLowerCase());
+                    break;
+                default:
+                // ignore
+            }
+        }*/
     }
 }
