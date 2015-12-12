@@ -16,7 +16,7 @@ import javafx.beans.value.WritableValue;
  * Slightly adapted code from example shown at stackoverflow.com.
  * <p>
  * Reference:
- * <a href="http://stackoverflow.com/questions/27052927/custom-bidirectional-bindings-in-javafx>
+ * <a href="http://stackoverflow.com/questions/27052927/custom-bidirectional-bindings-in-javafx">
  * stackoverflow.com: Custom Bidirectional Bindings in JavaFX</a>
  *
  * @author BlackLabrador (as stated in the reference)
