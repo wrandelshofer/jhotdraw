@@ -19,7 +19,7 @@
       </Label>
       <HBox alignment="CENTER_LEFT" fillHeight="false" GridPane.columnIndex="1">
          <children>
-            <TextField fx:id="backgroundColorField" prefColumnCount="10">
+            <TextField fx:id="backgroundColorField">
                <tooltip>
                   <Tooltip text="%attribute.drawingFillColor.toolTipText" />
                </tooltip>
