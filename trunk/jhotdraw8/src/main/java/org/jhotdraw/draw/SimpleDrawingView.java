@@ -963,6 +963,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
+            if (!n.isVisible()) continue;
             Figure f1 = nodeToFigureMap.get(n);
             if (f1 != null && f1.isSelectable() && f1.isVisible()) {
                 Bounds pl = n.parentToLocal(pp);
