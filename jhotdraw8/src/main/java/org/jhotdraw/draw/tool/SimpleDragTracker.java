@@ -95,13 +95,14 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
         DrawingModel dm = view.getModel();
         if (event.isShiftDown()) {
-            // shift only reshapes the anchor figure
             Figure f = anchorFigure;
             Point2D npl = f.worldToParent(newPoint);
             Point2D opl = f.worldToParent(oldPoint);
-            Transform tt = ((TransformableFigure)f).getInverseTransform();
-            npl=tt.transform(npl);
-            opl=tt.transform(opl);
+            if (f instanceof TransformableFigure) {
+                Transform tt = ((TransformableFigure) f).getInverseTransform();
+                npl = tt.transform(npl);
+                opl = tt.transform(opl);
+            }
             Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
 
             dm.reshape(f, tx);
@@ -109,9 +110,11 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
             for (Figure f : groupReshapeableFigures) {
                 Point2D npl = f.worldToParent(newPoint);
                 Point2D opl = f.worldToParent(oldPoint);
-            Transform tt = ((TransformableFigure)f).getInverseTransform();
-            npl=tt.transform(npl);
-            opl=tt.transform(opl);
+                if (f instanceof TransformableFigure) {
+                    Transform tt = ((TransformableFigure) f).getInverseTransform();
+                    npl = tt.transform(npl);
+                    opl = tt.transform(opl);
+                }
                 Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
                 dm.reshape(f, tx);
             }
