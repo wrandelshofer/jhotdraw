@@ -318,7 +318,8 @@ public class PreferencesUtil
             prefs.putDouble(name + ".height", newValue.doubleValue());
         });
     }
-   /**
+
+    /**
      * Inits handlers which toggle the visibility of the given node in the split
      * pane and remembers user preferences.
      * <p>
@@ -326,8 +327,8 @@ public class PreferencesUtil
      * preferences values.
      *
      * @param prefs The preferences object to use.
-     * @param node The node which is added or removed to the split pane. The node
-     * is also made visible/invisible.
+     * @param node The node which is added or removed to the split pane. The
+     * node is also made visible/invisible.
      * @param visibilityProperty the boolean property which holds the visibility
      * state
      * @param splitPane splitPane to which the node is added or removed
@@ -338,9 +339,14 @@ public class PreferencesUtil
             prefs.putDouble(visibilityProperty.getName() + ".dividerPosition", newValue.doubleValue());
         };
 
-        ChangeListener<Boolean> visibilityListener =(o, oldValue, newValue) -> {
+        ChangeListener<Boolean> visibilityListener = (o, oldValue, newValue) -> {
             node.setVisible(newValue);
             ObservableList<SplitPane.Divider> dividers = splitPane.getDividers();
+            double[] oldPositions = new double[dividers.size()];
+            for (int i = 0; i < oldPositions.length; i++) {
+                oldPositions[i] = dividers.get(i).getPosition();
+            }
+
             boolean first = side == Side.LEFT || side == Side.TOP;
             if (newValue) {
                 if (first) {
@@ -358,12 +364,26 @@ public class PreferencesUtil
                 splitPane.getItems().remove(node);
             }
             prefs.putBoolean(visibilityProperty.getName(), newValue);
+            
+            // fix the positions because SplitPane does weird things with them
+            if (first) {
+                if (newValue) {
+                    for (int i = 0; i < oldPositions.length; i++) {
+                        dividers.get(i + 1).setPosition(oldPositions[i]);
+                    }
+                } else {
+                    for (int i = 1; i < oldPositions.length; i++) {
+                        dividers.get(i - 1).setPosition(oldPositions[i]);
+                    }
+                }
+            }
         };
         splitPane.getItems().remove(node);
         visibilityProperty.set(false);
         visibilityProperty.addListener(visibilityListener);
         visibilityProperty.set(prefs.getBoolean(visibilityProperty.getName(), true));
     }
+
     public static void installBooleanPropertyHandler(final Preferences prefs, final String name, BooleanProperty property) {
         boolean prefValue = prefs.getBoolean(name, true);
         property.setValue(prefValue);
