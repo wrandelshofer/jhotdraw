@@ -61,14 +61,14 @@ public interface StrokeableFigure extends Figure {
     public static EnumStyleableFigureKey<StrokeLineJoin> STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
-     * value: {@code 10.0}.
+     * value: {@code 4.0}.
      * <p>
      * References:
      * <p>
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static DoubleStyleableFigureKey STROKE_MITER_LIMIT = new DoubleStyleableFigureKey("stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), 10.0);
+    public static DoubleStyleableFigureKey STROKE_MITER_LIMIT = new DoubleStyleableFigureKey("stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), 4.0);
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
