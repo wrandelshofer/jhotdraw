@@ -66,6 +66,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.beans.SimplePropertyBean;
 import org.jhotdraw.draw.model.SimpleDrawingModel;
@@ -873,6 +874,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             Line line = (Line) node;
             boolean contains = Geom.lineContainsPoint(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), point.getX(), point.getY(), tolerance);
             return contains;
+        } else if (node instanceof Rectangle) {
+            return Geom.contains(node.getBoundsInLocal(), point, tolerance);
+        } else if (node instanceof Shape) {// no special treatment for other shapes
+            return node.contains(point);
         } else if (node instanceof Group) {
             if (Geom.contains(node.getBoundsInLocal(), point, tolerance)) {
                 for (Node child : ((Group) node).getChildren()) {
@@ -882,7 +887,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 }
             }
             return false;
-        } else {
+        } else { // foolishly assumes that all other nodes are rectangular and opaque
             return Geom.contains(node.getBoundsInLocal(), point, tolerance);
         }
     }

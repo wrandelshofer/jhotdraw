@@ -9,7 +9,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
-
+import static java.lang.Math.*;
 /**
  * {@code SvgPath2D} adds an {@code arcTo} method to {@code Path2D.Double}.
  *
@@ -107,9 +107,9 @@ public class SvgPath2D extends Path2D.Double {
         double dx2 = (x0 - x) / 2d;
         double dy2 = (y0 - y) / 2d;
         // Convert angle from degrees to radians
-        double angle = Math.toRadians(xAxisRotation);
-        double cosAngle = Math.cos(angle);
-        double sinAngle = Math.sin(angle);
+        double angle = toRadians(xAxisRotation);
+        double cosAngle = cos(angle);
+        double sinAngle = sin(angle);
 
         //
         // Step 1 : Compute (x1, y1)
@@ -117,8 +117,8 @@ public class SvgPath2D extends Path2D.Double {
         double x1 = (cosAngle * dx2 + sinAngle * dy2);
         double y1 = (-sinAngle * dx2 + cosAngle * dy2);
         // Ensure radii are large enough
-        rx = Math.abs(rx);
-        ry = Math.abs(ry);
+        rx = abs(rx);
+        ry = abs(ry);
         double Prx = rx * rx;
         double Pry = ry * ry;
         double Px1 = x1 * x1;
@@ -126,8 +126,9 @@ public class SvgPath2D extends Path2D.Double {
         // check that radii are large enough
         double radiiCheck = Px1 / Prx + Py1 / Pry;
         if (radiiCheck > 1) {
-            rx = Math.sqrt(radiiCheck) * rx;
-            ry = Math.sqrt(radiiCheck) * ry;
+            double sqrtRadiiCheck = sqrt(radiiCheck);
+            rx = sqrtRadiiCheck * rx;
+            ry = sqrtRadiiCheck * ry;
             Prx = rx * rx;
             Pry = ry * ry;
         }
@@ -138,7 +139,7 @@ public class SvgPath2D extends Path2D.Double {
         double sign = (largeArcFlag == sweepFlag) ? -1 : 1;
         double sq = ((Prx * Pry) - (Prx * Py1) - (Pry * Px1)) / ((Prx * Py1) + (Pry * Px1));
         sq = (sq < 0) ? 0 : sq;
-        double coef = (sign * Math.sqrt(sq));
+        double coef = (sign * sqrt(sq));
         double cx1 = coef * ((rx * y1) / ry);
         double cy1 = coef * -((ry * x1) / rx);
 
@@ -160,16 +161,16 @@ public class SvgPath2D extends Path2D.Double {
         double p, n;
 
         // Compute the angle start
-        n = Math.sqrt((ux * ux) + (uy * uy));
+        n = sqrt((ux * ux) + (uy * uy));
         p = ux; // (1 * ux) + (0 * uy)
         sign = (uy < 0) ? -1d : 1d;
-        double angleStart = Math.toDegrees(sign * Math.acos(p / n));
+        double angleStart = toDegrees(sign * acos(p / n));
 
         // Compute the angle extent
-        n = Math.sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
+        n = sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
         p = ux * vx + uy * vy;
         sign = (ux * vy - uy * vx < 0) ? -1d : 1d;
-        double angleExtent = Math.toDegrees(sign * Math.acos(p / n));
+        double angleExtent = toDegrees(sign * acos(p / n));
         if (!sweepFlag && angleExtent > 0) {
             angleExtent -= 360f;
         } else if (sweepFlag && angleExtent < 0) {
