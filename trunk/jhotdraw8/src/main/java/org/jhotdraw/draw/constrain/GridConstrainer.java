@@ -253,37 +253,44 @@ public class GridConstrainer extends AbstractConstrainer {
         if (drawGrid.get()) {
             Drawing drawing = drawingView.getDrawing();
             Transform t = drawingView.getDrawingToView();
-            
+
             double dw = drawing.get(Drawing.WIDTH);
             double dh = drawing.get(Drawing.HEIGHT);
-            
+
             double gx0 = x.get();
             double gy0 = y.get();
             double gxdelta = width.get();
             double gydelta = height.get();
-            
-            for (double x=gx0; x<dw; x+=gxdelta) {
-                double x1=x;
-                double y1=0;
-                double x2=x;
-                double y2=dh;
-                
-                Point2D p1=t.transform(x1,y1);
-                Point2D p2=t.transform(x2,y2);
-                    elements.add(new MoveTo(Math.round(p1.getX())+0.5, p1.getY()));
-                    elements.add(new LineTo(Math.round(p2.getX())+0.5, p2.getY()));
+
+            Point2D scaled = t.deltaTransform(gxdelta, gydelta);
+
+            if (scaled.getX() > 2 && gxdelta > 1) {
+                for (double x = gx0; x < dw; x += gxdelta) {
+                    double x1 = x;
+                    double y1 = 0;
+                    double x2 = x;
+                    double y2 = dh;
+
+                    Point2D p1 = t.transform(x1, y1);
+                    Point2D p2 = t.transform(x2, y2);
+                    elements.add(new MoveTo(Math.round(p1.getX()) + 0.5, p1.getY()));
+                    elements.add(new LineTo(Math.round(p2.getX()) + 0.5, p2.getY()));
+                }
             }
-            for (double y=gy0; y<dh; y+=gydelta) {
-                double x1=0;
-                double y1=y;
-                double x2=dw;
-                double y2=y;
-                
-                Point2D p1=t.transform(x1,y1);
-                Point2D p2=t.transform(x2,y2);
-                    elements.add(new MoveTo(p1.getX(),Math.round(p1.getY())+0.5));
-                    elements.add(new LineTo(p2.getX(),Math.round(p2.getY())+0.5));
-            }}
+            if (scaled.getY() > 2 && gydelta > 1) {
+                for (double y = gy0; y < dh; y += gydelta) {
+                    double x1 = 0;
+                    double y1 = y;
+                    double x2 = dw;
+                    double y2 = y;
+
+                    Point2D p1 = t.transform(x1, y1);
+                    Point2D p2 = t.transform(x2, y2);
+                    elements.add(new MoveTo(p1.getX(), Math.round(p1.getY()) + 0.5));
+                    elements.add(new LineTo(p2.getX(), Math.round(p2.getY()) + 0.5));
+                }
+            }
+        }
     }
 
     public DoubleProperty xProperty() {

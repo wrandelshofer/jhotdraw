@@ -360,10 +360,13 @@ public class Shapes {
     }
 
     private static Shape shapeFromFXPath(Path node) {
+        return awtShapeFromFX(node.getElements());
+    }
+    public static Shape awtShapeFromFX(List<PathElement> pathElements) {
         SvgPath2D p = new SvgPath2D();
         double x = 0;
         double y = 0;
-        for (PathElement pe : node.getElements()) {
+        for (PathElement pe : pathElements) {
             if (pe instanceof MoveTo) {
                 MoveTo e = (MoveTo) pe;
                 x = e.getX();
