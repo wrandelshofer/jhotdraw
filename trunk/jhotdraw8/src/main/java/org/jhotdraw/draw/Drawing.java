@@ -14,8 +14,10 @@ import java.util.List;
 import javafx.scene.paint.Color;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.css.StyleManager;
+import org.jhotdraw.draw.key.CColorStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.PaintStyleableFigureKey;
+import org.jhotdraw.text.CColor;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -112,7 +114,7 @@ public interface Drawing extends Figure {
      * This property is styleable with the key
      * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
-    public final static PaintStyleableFigureKey BACKGROUND = new PaintStyleableFigureKey("background", Color.WHITE);
+    public final static CColorStyleableFigureKey BACKGROUND = new CColorStyleableFigureKey("background", new CColor("white",Color.WHITE));
 
     /**
      * The CSS type selector for a drawing figure is {@code "Drawing"}.

@@ -23,6 +23,7 @@ import org.jhotdraw.styleable.StyleableStyleManager;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.draw.css.FigureStyleManager;
 import org.jhotdraw.draw.figure.NonTransformableFigure;
+import org.jhotdraw.text.CColor;
 
 /**
  * SimpleDrawing.
@@ -62,7 +63,8 @@ public class SimpleDrawing extends AbstractCompositeFigure
         page.setY(bounds.getMinY());
         page.setWidth(bounds.getWidth());
         page.setHeight(bounds.getHeight());
-        page.setFill(getStyled(BACKGROUND));
+        CColor cclr = getStyled(BACKGROUND);
+        page.setFill(cclr==null?null:cclr.getColor());
 
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
         nodes.add(page);

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +17,12 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import org.jhotdraw.binding.CustomBinding;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.model.DrawingModelEvent;
 import org.jhotdraw.gui.PlatformUtil;
+import org.jhotdraw.text.CColor;
+import org.jhotdraw.text.CssCColorConverter;
 import org.jhotdraw.text.CssPaintConverter;
 import org.jhotdraw.text.StringConverterConverterWrapper;
 import org.jhotdraw.text.XmlDoubleConverter;
@@ -45,7 +49,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
 
     private Property<Double> widthProperty;
     private Property<Double> heightProperty;
-    private Property<Paint> backgroundProperty;
+    private Property<CColor> backgroundProperty;
 
     private InvalidationListener commitHandler = o -> commitEdits();
     
@@ -103,10 +107,15 @@ public class DrawingInspector extends AbstractDrawingInspector {
             // FIXME binding to figure properties bypasses the DrawingModel!
             widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssPaintConverter()));
-            @SuppressWarnings("unchecked")
-            Property<Color> colorProperty = (Property<Color>) (Property<?>) backgroundProperty;
-            backgroundColorPicker.valueProperty().bindBidirectional(colorProperty);
+            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssCColorConverter()));
+            
+            CssPaintConverter converter = new CssPaintConverter();
+            CustomBinding.bindBidirectional(//
+                    backgroundProperty,//
+                    backgroundColorPicker.valueProperty(),//
+                    (CColor c)->c==null?null:c.getColor(), //
+                    (Color c)->new CColor(converter.toString(c),c)//
+            );
         }
     }
 
