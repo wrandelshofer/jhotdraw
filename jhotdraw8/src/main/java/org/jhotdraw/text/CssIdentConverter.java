@@ -72,9 +72,12 @@ public class CssIdentConverter implements Converter<String> {
             case '8':
             case '9':
             case '\n':
-                String hex = "000000" + Integer.toHexString(ch);
+                String hex = Integer.toHexString(ch);
                 out.append('\\');
-                out.append(hex.substring(hex.length() - 1));
+                out.append(hex);
+                if (hex.length() < 6) {
+                    out.append(' ');
+                }
                 break;
             default:
                 out.append('\\');

@@ -93,8 +93,8 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
         rectangleNode.setY(get(Y));
         rectangleNode.setWidth(get(WIDTH));
         rectangleNode.setHeight(get(HEIGHT));
-        rectangleNode.setArcWidth(get(ARC_WIDTH));
-        rectangleNode.setArcHeight(get(ARC_HEIGHT));
+        rectangleNode.setArcWidth(getStyled(ARC_WIDTH));
+        rectangleNode.setArcHeight(getStyled(ARC_HEIGHT));
     }
 
     @Override
