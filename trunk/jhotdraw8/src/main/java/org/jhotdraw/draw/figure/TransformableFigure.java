@@ -7,6 +7,7 @@ package org.jhotdraw.draw.figure;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
@@ -20,6 +21,7 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw.draw.key.TransformListStyleableFigureKey;
+import org.jhotdraw.geom.Geom;
 
 /**
  * Transformable figure.
@@ -130,6 +132,25 @@ public interface TransformableFigure extends Figure {
         d = getStyled(TRANSLATE_Z);
         if (node.getTranslateZ() != d) {
             node.setTranslateZ(d);
+        }
+    }
+    default void applyTransformableFigureProperties(Node node, Bounds b) {
+        List<Transform> transforms = new ArrayList<>(get(TRANSFORM));
+
+        Point2D pivot = Geom.center(b);
+        double d1;
+        double d2;
+        d1 = getStyled(TRANSLATE_X);
+        d2 = getStyled(TRANSLATE_Y);
+        transforms.add(Transform.translate(d1,d2));
+        d1 = getStyled(SCALE_X);
+        d2 = getStyled(SCALE_Y);
+        transforms.add(Transform.scale(d1,d2,pivot.getX(),pivot.getY()));
+         d1 = getStyled(ROTATE);
+        transforms.add(Transform.rotate(d1,pivot.getX(),pivot.getY()));
+        
+        if (!node.getTransforms().equals(transforms)) {
+            node.getTransforms().setAll(transforms);
         }
     }
 

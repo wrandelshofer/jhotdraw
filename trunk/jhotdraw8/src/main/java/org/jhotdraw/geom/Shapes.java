@@ -139,6 +139,15 @@ public class Shapes {
     public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape, AffineTransform at) {
         return fxShapeFromAWT(shape.getPathIterator(at));
     }
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @return JavaFX Shape
+     */
+    public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape) {
+        return fxShapeFromAWT(shape.getPathIterator(null));
+    }
 
     /**
      * Converts a Java Path iterator to a JavaFX shape.
@@ -191,6 +200,16 @@ public class Shapes {
      * @param at Optional transformation which is applied to the shape
      * @return SVG Path
      */
+    public static String svgPathFromAWT(Shape shape) {
+        return svgPathFromAWT(shape.getPathIterator(null));
+    }
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @param at Optional transformation which is applied to the shape
+     * @return SVG Path
+     */
     public static String svgPathFromAWT(Shape shape, AffineTransform at) {
         return svgPathFromAWT(shape.getPathIterator(at));
     }
@@ -217,7 +236,10 @@ public class Shapes {
 
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
+        boolean first=true;
         for (; !iter.isDone(); iter.next()) {
+            if (first)first=false;
+            else buf.append(' ');
             switch (iter.currentSegment(coords)) {
             case PathIterator.SEG_CLOSE:
                 buf.append('Z');
