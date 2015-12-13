@@ -13,6 +13,7 @@ import static java.lang.Math.*;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 
 /**
@@ -199,14 +200,14 @@ public class Geom {
         i.next();
         for (; !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-            case PathIterator.SEG_MOVETO:
-                moveToX = coords[0];
-                moveToY = coords[1];
-                break;
-            case PathIterator.SEG_CLOSE:
-                coords[0] = moveToX;
-                coords[1] = moveToY;
-                break;
+                case PathIterator.SEG_MOVETO:
+                    moveToX = coords[0];
+                    moveToY = coords[1];
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    coords[0] = moveToX;
+                    coords[1] = moveToY;
+                    break;
             }
             Point2D chop = Geom.intersect(
                     prevX, prevY,
@@ -525,6 +526,8 @@ public class Geom {
             double yd,
             double limit) { // line 2 point 2 y
 
+        double limit2 = limit * limit;
+
         // source: http://vision.dai.ed.ac.uk/andrewfg/c-g-a-faq.html
         // eq: for lines AB and CD
         //     (YA-YC)(XD-XC)-(XA-XC)(YD-YC)
@@ -565,10 +568,10 @@ public class Geom {
             double px = xa + (xb - xa) * r;
             double py = ya + (yb - ya) * r;
 
-            if (length(xa, ya, px, py) <= limit
-                    || length(xb, yb, px, py) <= limit
-                    || length(xc, yc, px, py) <= limit
-                    || length(xd, yd, px, py) <= limit) {
+            if (length2(xa, ya, px, py) <= limit2
+                    || length2(xb, yb, px, py) <= limit2
+                    || length2(xc, yc, px, py) <= limit2
+                    || length2(xd, yd, px, py) <= limit2) {
                 return new Point2D(px, py);
             }
 
@@ -604,7 +607,7 @@ public class Geom {
             double yd,
             double limit) { // line 2 point 2 y
         Point2D p = intersect(xa, ya, xb, yb, xc, yc, xd, yd, limit);
-        return new java.awt.geom.Point2D.Double(p.getX(), p.getY());
+        return p == null ? null : new java.awt.geom.Point2D.Double(p.getX(), p.getY());
     }
 
     /**
@@ -819,5 +822,167 @@ public class Geom {
         double y1 = Math.min(r.getMinY(), newy);
         double y2 = Math.max(r.getMaxY(), newy);
         return new Rectangle2D(x1, y1, x2 - x1, y2 - y1);
+    }
+
+    /**
+     * Homogenizes the vector (x1,y1,z1) to (x1,y1,1).
+     *
+     * <pre>
+     *   ( y1 / z1,
+     *     z1 / z1,
+     *     1  )
+     * </pre> With z1=1 and z2=1;
+     *
+     * @param p
+     * @return the normalized vector
+     */
+    public static Point3D homogenize(Point3D p) {
+        return new Point3D(//
+                p.getX() / p.getZ(),//
+                p.getY() / p.getZ(),
+                1
+        );
+    }
+
+    /**
+     * Homogenizes the vector (x1,y1,z1) to (x1,y1,1).
+     *
+     * <pre>
+     *   ( y1 / z1,
+     *     z1 / z1,
+     *     1  )
+     * </pre> With z1=1 and z2=1;
+     *
+     * @param p
+     * @return the normalized vector
+     */
+    public static Point2D homogenize2D(Point3D p) {
+        double z = p.getZ();
+        return new Point2D(//
+                p.getX() / z,//
+                p.getY() / z//
+        );
+    }
+
+    /**
+     * Computes the cross product of the homogenous vectors (x1,y1,1) x
+     * (x2,y2,1).
+     *
+     * <pre>
+     *   ( y1 * z2 - z1 * y2,
+     *     z1 * x2 - x1 * z2,
+     *     x1 * y2 - y1 * x2  )
+     * </pre> With z1=1 and z2=1;
+     *
+     * @param x1 x1
+     * @param y1 y1
+     * @param x2 x2
+     * @param y2 y2
+     * @return the cross product
+     */
+    public static Point3D hcrossProduct(Point2D p1, Point2D p2) {
+        return hcrossProduct(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+    }
+
+    /**
+     * Computes the cross product of the homogenous vectors (x1,y1,1) x
+     * (x2,y2,1).
+     *
+     * <pre>
+     *   ( y1 * z2 - z1 * y2,
+     *     z1 * x2 - x1 * z2,
+     *     x1 * y2 - y1 * x2  )
+     * </pre> With z1=1 and z2=1;
+     *
+     * @param x1 x1
+     * @param y1 y1
+     * @param x2 x2
+     * @param y2 y2
+     * @return the cross product
+     */
+    public static Point3D hcrossProduct(double x1, double y1, double x2, double y2) {
+        return new Point3D(//
+                y1 * 1 - 1 * y2,//
+                1 * x2 - x1 * 1,//
+                x1 * y2 - y1 * x2 //
+        );
+    }
+
+    /**
+     * Shifts the point perpendicular to the line by the given distance
+     *
+     * @param l1 point 1 on the line
+     * @param l2 point 2 on the line
+     * @param p the point to be shifted
+     * @param distance the shifting distance
+     * @return the shifted point
+     */
+    public static Point2D shiftPerpendicular(Point2D l1, Point2D l2, Point2D p, double distance) {
+
+        return shiftPerpendicular(l1.getX(), l1.getY(), l2.getX(), l2.getY(), p.getX(), p.getY(), distance);
+    }
+
+    /**
+     * Shifts the point perpendicular to the line by the given distance
+     *
+     * @param l1x point 1 on the line
+     * @param l1y point 1 on the line
+     * @param l2x point 2 on the line
+     * @param l2y point 2 on the line
+     * @param px the point to be shifted
+     * @param py the point to be shifted
+     * @param distance the shifting distance
+     * @return the shifted point
+     */
+    public static Point2D shiftPerpendicular(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
+        // matlab: v    = p2 - p1
+        //         cv    = cross([v 1] * [0 0 1])
+        //         m     = distance/norm(cv);
+        //         result = p+cv*m
+        double vx = l2x - l1x;
+        double vy = l2y - l1y;
+
+        double cvx = -vy;
+        double cvy = vx;
+        double m = distance / sqrt(cvx * cvy);
+
+        return new Point2D(px + cvx * m, py + cvy * m);
+    }
+
+    /**
+     * Gets a vector which is perpendicular to the given line.
+     *
+     * @param l1x point 1 on the line
+     * @param l1y point 1 on the line
+     * @param l2x point 2 on the line
+     * @param l2y point 2 on the line
+     * @param vectorLength the desired length of the vector
+     * @return the perpendicular vector of length {@code vectorLength}
+     */
+    public static Point2D perpendicularVector(double l1x, double l1y, double l2x, double l2y, double vectorLength) {
+        // matlab: v    = p2 - p1
+        //         cv    = cross([v 1] * [0 0 1])
+        //         m     = distance/norm(cv);
+        //         result = cv*m
+        double vx = l2x - l1x;
+        double vy = l2y - l1y;
+
+        double cvx = -vy;
+        double cvy = vx;
+        double norm = sqrt(cvx * cvx + cvy * cvy);
+        double m = norm == 0 ? 0 : vectorLength / norm;
+
+        return new Point2D(cvx * m, cvy * m);
+    }
+
+    public static double squaredDistance(Point2D p, double x, double y) {
+        double a = p.getX() - x;
+        double b = p.getY() - y;
+        return a * a + b * b;
+    }
+    public static double squaredDistance(double x1,double y1, double x2, double y2) {
+        double a = x1 - x2;
+        double b = x2 - y2;
+        return a * a + b * b;
     }
 }

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.draw.figure;
 
-import java.awt.Panel;
+import java.awt.BasicStroke;
 import java.util.List;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
@@ -21,10 +21,14 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
@@ -43,6 +47,8 @@ import org.jhotdraw.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.geom.GrowStroke;
+import org.jhotdraw.geom.Shapes;
 
 /**
  * AbstractLabelFigure.
@@ -61,7 +67,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
     public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
-    private final static SVGPath defaultShape = new SVGPath();
 
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
     /**
@@ -139,9 +144,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         Group g = new Group();
         g.setAutoSizeChildren(false);
         Region r = new Region();
+        r.setScaleShape(true);
         g.getChildren().add(r);
         g.getChildren().add(new Text());
-        r.setScaleShape(true);
+        g.getChildren().add(new Path());
+        g.getChildren().add(new Path());
         return g;
     }
 
@@ -150,9 +157,30 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         Group g = (Group) node;
         Region r = (Region) g.getChildren().get(0);
         Text t = (Text) g.getChildren().get(1);
-
         updateRegionNode(ctx, r);
         updateTextNode(ctx, t);
+        
+        Text t2=new Text();
+        updateTextNode(ctx,t2);
+        Path p2=(Path) Shape.subtract(t2, new Rectangle(0,0));
+        {
+        Path p = (Path)g.getChildren().get(2);
+        p.setFill(null);
+        p.setStroke(Color.BLUE);
+        GrowStroke str=new GrowStroke(3,2);
+        Path p3=(Path)Shapes.fxShapeFromAWT(str.createStrokedShape(Shapes.awtShapeFromFX(p2)));
+        p.getElements().setAll(p3.getElements());
+        }
+        {
+        Path p = (Path)g.getChildren().get(3);
+        p.setFill(null);
+        p.setStroke(Color.RED);
+        p.getStrokeDashArray().setAll(2.0);
+        p.setStrokeLineCap(StrokeLineCap.BUTT);
+        GrowStroke str=new GrowStroke(3,BasicStroke.JOIN_BEVEL,2);
+        Path p3=(Path)Shapes.fxShapeFromAWT(str.createStrokedShape(Shapes.awtShapeFromFX(p2)));
+        p.getElements().setAll(p3.getElements());
+        }
     }
 
     private void updateRegionNode(RenderContext ctx, Region node) {
