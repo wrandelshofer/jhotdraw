@@ -147,8 +147,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         r.setScaleShape(true);
         g.getChildren().add(r);
         g.getChildren().add(new Text());
+        /*
         g.getChildren().add(new Path());
-        g.getChildren().add(new Path());
+        g.getChildren().add(new Path());*/
         return g;
     }
 
@@ -159,7 +160,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         Text t = (Text) g.getChildren().get(1);
         updateRegionNode(ctx, r);
         updateTextNode(ctx, t);
-        
+        /*
         Text t2=new Text();
         updateTextNode(ctx,t2);
         Path p2=(Path) Shape.subtract(t2, new Rectangle(0,0));
@@ -180,7 +181,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         GrowStroke str=new GrowStroke(3,BasicStroke.JOIN_BEVEL,2);
         Path p3=(Path)Shapes.fxShapeFromAWT(str.createStrokedShape(Shapes.awtShapeFromFX(p2)));
         p.getElements().setAll(p3.getElements());
-        }
+        }*/
     }
 
     private void updateRegionNode(RenderContext ctx, Region node) {
