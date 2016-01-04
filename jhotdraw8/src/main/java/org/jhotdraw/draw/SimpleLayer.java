@@ -31,7 +31,7 @@ public class SimpleLayer extends AbstractCompositeFigure
 
     @Override
     public void reshape(Transform transform) {
-        for (Figure child : childrenProperty()) {
+        for (Figure child : getChildren()) {
             child.reshape(transform);
         }
     }
@@ -42,7 +42,7 @@ public class SimpleLayer extends AbstractCompositeFigure
         applyStyleableFigureProperties(ctx, n);
 
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
-        for (Figure child : childrenProperty()) {
+        for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }
         ObservableList<Node> group = ((Group) n).getChildren();

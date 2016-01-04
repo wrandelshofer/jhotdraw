@@ -11,8 +11,6 @@ import org.jhotdraw.draw.model.DrawingModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +35,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -48,6 +45,8 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.event.Listener;
 import org.jhotdraw.draw.handle.Handle;
 import static java.lang.Math.*;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -169,50 +168,50 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         public void handle(DrawingModelEvent event) {
             Figure f = event.getFigure();
             switch (event.getEventType()) {
-            case FIGURE_ADDED_TO_PARENT:
-                handleFigureAdded(f);
-                break;
-            case FIGURE_REMOVED_FROM_PARENT:
-                handleFigureRemoved(f);
-                break;
-            case FIGURE_ADDED_TO_DRAWING:
-                repaint();
-                break;
-            case FIGURE_REMOVED_FROM_DRAWING:
-                repaint();
-                break;
-            case NODE_INVALIDATED:
-                handleNodeInvalidated(f);
-                break;
-            case LAYOUT_INVALIDATED:
-                if (f == getDrawing()) {
-                    invalidateConstrainerNode();
-                    invalidateWorldViewTransforms();
+                case FIGURE_ADDED_TO_PARENT:
+                    handleFigureAdded(f);
+                    break;
+                case FIGURE_REMOVED_FROM_PARENT:
+                    handleFigureRemoved(f);
+                    break;
+                case FIGURE_ADDED_TO_DRAWING:
                     repaint();
-                }
-                break;
-            case STYLE_INVALIDATED:
-                repaint();
-                break;
-            case ROOT_CHANGED:
-                handleDrawingChanged();
-                updateLayout();
-                repaint();
-                break;
-            case SUBTREE_NODES_INVALIDATED:
-                updateTreeNodes(f);
-                repaint();
-                break;
-            case SUBTREE_STRUCTURE_CHANGED:
-                updateTreeStructure(f);
-                break;
-            case CONNECTION_CHANGED:
-            case TRANSFORM_CHANGED:
-                repaint();
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + " not supported");
+                    break;
+                case FIGURE_REMOVED_FROM_DRAWING:
+                    repaint();
+                    break;
+                case NODE_INVALIDATED:
+                    handleNodeInvalidated(f);
+                    break;
+                case LAYOUT_INVALIDATED:
+                    if (f == getDrawing()) {
+                        invalidateConstrainerNode();
+                        invalidateWorldViewTransforms();
+                        repaint();
+                    }
+                    break;
+                case STYLE_INVALIDATED:
+                    repaint();
+                    break;
+                case ROOT_CHANGED:
+                    handleDrawingChanged();
+                    updateLayout();
+                    repaint();
+                    break;
+                case SUBTREE_NODES_INVALIDATED:
+                    updateTreeNodes(f);
+                    repaint();
+                    break;
+                case SUBTREE_STRUCTURE_CHANGED:
+                    updateTreeStructure(f);
+                    break;
+                case CONNECTION_CHANGED:
+                case TRANSFORM_CHANGED:
+                    repaint();
+                    break;
+                default:
+                    throw new UnsupportedOperationException(event.getEventType()
+                            + " not supported");
             }
         }
 
@@ -345,30 +344,34 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
-    private final HashMap<Node, Handle> nodeToHandleMap = new HashMap<>();
+    private final Map<Node, Handle> nodeToHandleMap = new IdentityHashMap<>();
     /**
      * Maps each JavaFX node to a figure in the drawing.
      */
-    private final HashMap<Node, Figure> nodeToFigureMap = new HashMap<>();
+    private final Map<Node, Figure> nodeToFigureMap = new IdentityHashMap<>();
     /**
      * Maps JavaFX nodes to a figure. Note that the DrawingView may contain
      * JavaFX nodes which have no mapping. this is usually the case, when a
      * Figure is represented by multiple nodes. Then only the parent of these
      * nodes is associated with the figure.
      */
-    private final HashMap<Figure, Node> figureToNodeMap = new HashMap<>();
+    private final Map<Figure, Node> figureToNodeMap = new IdentityHashMap<>();
     /**
      * This is the set of figures which are out of sync with their JavaFX node.
+     * We do not wrap the IdentityHashMap into a Set to avoid an additional
+     * level of indirection.
      */
-    private final HashSet<Figure> dirtyFigureNodes = new HashSet<>();
+    private final Map<Figure,Boolean> dirtyFigureNodes =new IdentityHashMap<>();
     /**
      * This is the set of handles which are out of sync with their JavaFX node.
+     * We do not wrap the IdentityHashMap into a Set to avoid an additional
+     * level of indirection.
      */
-    private final HashSet<Figure> dirtyHandles = new HashSet<>();
+    private final Map<Figure,Boolean> dirtyHandles =new IdentityHashMap<>();
     /**
      * The set of all handles which were produced by selected figures.
      */
-    private final HashMap<Figure, List<Handle>> handles = new HashMap<>();
+    private final Map<Figure, List<Handle>> handles = new IdentityHashMap<>();
     /**
      * The set of all secondary handles. One handle at a time may create
      * secondary handles.
@@ -422,7 +425,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         overlaysSubScene.getChildren().add(overlaysPane);
 
         // We use a change listener instead of an invalidation listener here,
-        // because we only want to update the layout, when the new value is
+        // because we only want to update the updateLayout, when the new value is
         // different from the old value!
         drawingPane.layoutBoundsProperty().addListener((observer, oldValue, newValue) -> {
             updateLayout();
@@ -451,9 +454,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void invalidateFigureNode(Figure f) {
-        dirtyFigureNodes.add(f);
+        dirtyFigureNodes.put(f,null);
         if (handles.containsKey(f)) {
-            dirtyHandles.add(f);
+            dirtyHandles.put(f,null);
         }
     }
 
@@ -480,7 +483,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     /**
-     * Updates the layout of the drawing pane and the panes laid over it.
+     * Updates the updateLayout of the drawing pane and the panes laid over it.
      */
     private void updateLayout() {
         if (node == null) {
@@ -508,7 +511,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             backgroundPane.setWidth(dw * f);
             backgroundPane.setHeight(dh * f);
         }
-        //backgroundPane.layout();
+        //backgroundPane.updateLayout();
 
         double padding = 20;
         double lw = max(max(0, x) + w, max(0, -x) + dw * f);
@@ -556,7 +559,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             n = f.createNode(this);
             figureToNodeMap.put(f, n);
             nodeToFigureMap.put(n, f);
-            dirtyFigureNodes.add(f);
+            dirtyFigureNodes.put(f,null);
         }
         return n;
     }
@@ -579,7 +582,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         drawing.set(d);
         if (d != null) {
             drawingPane.getChildren().add(getNode(d));
-            dirtyFigureNodes.add(d);
+            dirtyFigureNodes.put(d,null);
             updateLayout();
             updateTreeNodes(d);
             repaint();
@@ -596,8 +599,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void updateTreeNodes(Figure parent) {
-        dirtyFigureNodes.add(parent);
-        dirtyHandles.add(parent);
+        dirtyFigureNodes.put(parent,null);
+        dirtyHandles.put(parent,null);
         for (Figure child : parent.getChildren()) {
             updateTreeNodes(child);
         }
@@ -656,7 +659,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void handleFigureAdded0(Figure f) {
         invalidateFigureNode(f);
-        for (Figure child : f.childrenProperty()) {
+        for (Figure child : f.getChildren()) {
             handleFigureAdded0(child);
         }
     }
@@ -667,7 +670,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void handleFigureRemoved0(Figure f) {
-        for (Figure child : f.childrenProperty()) {
+        for (Figure child : f.getChildren()) {
             handleFigureRemoved0(child);
         }
         removeNode(f);
@@ -690,8 +693,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         getModel().validate();
 
         // create copies of the lists to allow for concurrent modification
-        ArrayList<Figure> copyOfDirtyFigureNodes = new ArrayList<>(dirtyFigureNodes);
-        ArrayList<Figure> copyOfDirtyHandles = new ArrayList<>(dirtyHandles);
+        Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.keySet().toArray(new Figure[dirtyFigureNodes.size()]);
+        Figure[] copyOfDirtyHandles = dirtyHandles.keySet().toArray(new Figure[dirtyHandles.size()]);
         dirtyFigureNodes.clear();
         dirtyHandles.clear();
 
@@ -963,7 +966,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
-            if (!n.isVisible()) continue;
+            if (!n.isVisible()) {
+                continue;
+            }
             Figure f1 = nodeToFigureMap.get(n);
             if (f1 != null && f1.isSelectable() && f1.isVisible()) {
                 Bounds pl = n.parentToLocal(pp);
@@ -1042,18 +1047,18 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     @Override
     public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle master) {
         validateHandles();
-        HashSet<Figure> result = new HashSet<>();
+        Map<Figure, Figure> result = new IdentityHashMap<>();
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
             if (figures.contains(entry.getKey())) {
                 for (Handle h : entry.getValue()) {
                     if (h.isCompatible(master)) {
-                        result.add(entry.getKey());
+                        result.put(entry.getKey(), null);
                         break;
                     }
                 }
             }
         }
-        return result;
+        return result.keySet();
     }
 
     /**
@@ -1076,7 +1081,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void invalidateHandleNodes() {
-        dirtyHandles.addAll(handles.keySet());
+        for (Figure f : handles.keySet()) {
+            dirtyHandles.put(f,null);
+        }
         repaint();
     }
 
@@ -1108,7 +1115,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         createHandles(handles);
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
-            dirtyHandles.add(entry.getKey());
+            dirtyHandles.put(entry.getKey(),null);
             for (Handle handle : entry.getValue()) {
                 Node n = handle.getNode();
                 nodeToHandleMap.put(n, handle);
@@ -1123,7 +1130,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      *
      * @param handles The provided list
      */
-    protected void createHandles(HashMap<Figure, List<Handle>> handles) {
+    protected void createHandles(Map<Figure, List<Handle>> handles) {
         HandleType handleType = getHandleType();
         for (Figure figure : getSelectedFigures()) {
             List<Handle> list = handles.get(figure);

@@ -5,7 +5,7 @@
 package org.jhotdraw.styleable;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -100,9 +100,10 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     private ListenerSupport<MapChangeListener<? super K, ? super V>> changeListenerSupport;
     private ListenerSupport<InvalidationListener> invalidationListenerSupport;
     private final Map<K, StyledValue> backingMap;
+    private Map<K, V> styledMap;
 
     public StyleableMap() {
-        this.backingMap = new HashMap<>();
+        this.backingMap = new IdentityHashMap<>();
     }
 
     private class SimpleChange extends MapChangeListener.Change<K, V> {
@@ -291,69 +292,72 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
      * @return a map
      */
     public Map<K, V> getStyledMap() {
-        return new Map<K, V>() {
-            @Override
-            public int size() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+        if (styledMap == null) {
+            styledMap = new Map<K, V>() {
+                @Override
+                public int size() {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            public boolean isEmpty() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+                @Override
+                public boolean isEmpty() {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            @SuppressWarnings("unchecked")
-            public boolean containsKey(Object key) {
-                return containsStyledKey((K) key);
-            }
+                @Override
+                @SuppressWarnings("unchecked")
+                public boolean containsKey(Object key) {
+                    return containsStyledKey((K) key);
+                }
 
-            @Override
-            public boolean containsValue(Object value) {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+                @Override
+                public boolean containsValue(Object value) {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            @SuppressWarnings("unchecked")
-            public V get(Object key) {
-                return getStyled((K) key);
-            }
+                @Override
+                @SuppressWarnings("unchecked")
+                public V get(Object key) {
+                    return getStyled((K) key);
+                }
 
-            @Override
-            public V put(K key, V value) {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+                @Override
+                public V put(K key, V value) {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            public V remove(Object key) {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+                @Override
+                public V remove(Object key) {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            public void putAll(Map<? extends K, ? extends V> m) {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+                @Override
+                public void putAll(Map<? extends K, ? extends V> m) {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            public void clear() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+                @Override
+                public void clear() {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            public Set<K> keySet() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+                @Override
+                public Set<K> keySet() {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            public Collection<V> values() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
+                @Override
+                public Collection<V> values() {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
 
-            @Override
-            public Set<Entry<K, V>> entrySet() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
-        };
+                @Override
+                public Set<Entry<K, V>> entrySet() {
+                    throw new UnsupportedOperationException("Not supported.");
+                }
+            };
+        }
+        return styledMap;
     }
 
     /**
@@ -433,19 +437,19 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         };
     }
 
-    public V getStyled(K key) {
+    protected V getStyled(K key) {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
         V ret = sv == null ? null : (V) sv.getValue(sv.getOrigin());
         return ret;
     }
 
-    public V getStyled(K key, V defaultValue) {
+    /*public V getStyled(K key, V defaultValue) {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
         V ret = (sv == null) ? defaultValue : sv.getValue(sv.getOrigin(), defaultValue);
         return ret;
-    }
+    }*/
 
     public StyleOrigin getStyleOrigin(Object key) {
         StyledValue sv = backingMap.get(key);

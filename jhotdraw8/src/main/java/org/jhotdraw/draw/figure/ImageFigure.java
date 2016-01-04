@@ -24,6 +24,34 @@ import static java.lang.Math.min;
 import org.jhotdraw.draw.key.UriStyleableFigureKey;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 /**
  * ImageFigure.
@@ -124,7 +152,7 @@ public class ImageFigure extends AbstractLeafFigure implements TransformableFigu
     }
 
     @Override
-    public void layout() {
+    public void updateLayout() {
         // empty since we are not layoutable
     }
 

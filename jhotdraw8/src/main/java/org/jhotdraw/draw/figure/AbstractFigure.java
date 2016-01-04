@@ -5,23 +5,20 @@
 package org.jhotdraw.draw.figure;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlySetProperty;
-import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
-import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.key.DirtyBits;
-import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.styleable.SimpleStyleablePropertyBean;
 import org.jhotdraw.styleable.StyleableMapAccessor;
 
@@ -32,14 +29,6 @@ import org.jhotdraw.styleable.StyleableMapAccessor;
  * @version $Id$
  */
 public abstract class AbstractFigure extends SimpleStyleablePropertyBean implements Figure {
-
-    private Transform parentToWorld;
-    private Transform worldToParent;
-    private Transform localToWorld;
-    private Transform worldToLocal;
-    private Transform localToParent;
-    private Transform parentToLocal;
-
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
 
         @Override
@@ -51,10 +40,13 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         }
 
     };
-    private ReadOnlySetProperty<Figure> connectedFigures = new ReadOnlySetWrapper<>(this, CONNECTED_FIGURES_PROPERTY, FXCollections.observableSet(new HashSet<Figure>())).getReadOnlyProperty();
+    private ObservableSet<Figure> connectedFigures;
 
     @Override
-    public final ReadOnlySetProperty<Figure> connectedFiguresProperty() {
+    public final ObservableSet<Figure> getConnectedFigures() {
+        if (connectedFigures == null) {
+            connectedFigures =  FXCollections.observableSet(Collections.newSetFromMap(new IdentityHashMap<Figure,Boolean>()));
+        }
         return connectedFigures;
     }
 
@@ -69,8 +61,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
      * <p>
      * This implementation returns false if {@code newParent} is a
      * {@link Drawing}. Because only {@link org.jhotdraw.draw.Layer}s may have
-     * {@code org.jhotdraw.draw.Drawing} as
-     * a parent.
+     * {@code org.jhotdraw.draw.Drawing} as a parent.
      *
      * @param newParent The new parent figure.
      * @return true if {@code newParent} is an acceptable parent
@@ -95,14 +86,14 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     }
 
     @Override
-    public void applyCss() {
+    public void updateCss() {
         getStyleableMap().clearNonUserValues();
         Drawing d = getDrawing();
         if (d != null) {
             StyleManager<Figure> styleManager = d.getStyleManager();
             styleManager.applyStylesTo(this);
             for (Figure child : getChildren()) {
-                child.applyCss();
+                child.updateCss();// should not recurse, because style manager knows better if it is worthwile?
             }
         }
         invalidateTransforms();
@@ -185,104 +176,15 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     }
 
     /**
-     * This implementation is empty.
+     * Calls invalidateTransforms();
      */
     @Override
     public void transformNotify() {
         invalidateTransforms();
     }
 
-    /**
-     * Clears all cached transformation matrices.
-     */
-    public void invalidateTransforms() {
-        parentToWorld
-                = worldToParent
-                = localToWorld
-                = worldToLocal
-                = localToParent
-                = parentToLocal = null;
-    }
 
-    /**
-     * Warning: this method caches the transformation.
-     *
-     * @return transform
-     */
-    @Override
-    public Transform getParentToWorld() {
-        if (parentToWorld == null) {
-            parentToWorld = Figure.super.getParentToWorld();
-        }
-        return parentToWorld;
-    }
-
-    /**
-     * Warning: this method caches the transformation.
-     *
-     * @return transform
-     */
-    @Override
-    public Transform getLocalToWorld() {
-        if (localToWorld == null) {
-            localToWorld = Figure.super.getLocalToWorld();
-        }
-        return localToWorld;
-    }
-
-    /**
-     * Warning: this method caches the transformation.
-     *
-     * @return transform
-     */
-    @Override
-    public Transform getWorldToParent() {
-        if (worldToParent == null) {
-            worldToParent = Figure.super.getWorldToParent();
-        }
-        return worldToParent;
-    }
-
-    /**
-     * Warning: this method caches the transformation.
-     *
-     * @return transform
-     */
-    @Override
-    public Transform getWorldToLocal() {
-        if (worldToLocal == null) {
-            worldToLocal = Figure.super.getWorldToLocal();
-        }
-        return worldToLocal;
-    }
-
-    /**
-     * Warning: this method caches the transformation.
-     *
-     * @return transform
-     */
-    @Override
-    public Transform getLocalToParent() {
-        if (localToParent == null) {
-            localToParent = Figure.super.getLocalToParent();
-        }
-        return localToParent;
-    }
-
-    /**
-     * Warning: this method caches the transformation.
-     *
-     * @return transform
-     */
-    @Override
-    public Transform getParentToLocal() {
-        if (parentToLocal == null) {
-            parentToLocal = Figure.super.getParentToLocal();
-        }
-        return parentToLocal;
-    }
-
-    @Override
+    /*@Override
     protected void invalidated(Key<?> key) {
         if (key instanceof FigureKey<?>) {
             FigureKey<?> fk = (FigureKey<?>) key;
@@ -290,6 +192,5 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
                 invalidateTransforms();
             }
         }
-    }
-
+    }*/
 }

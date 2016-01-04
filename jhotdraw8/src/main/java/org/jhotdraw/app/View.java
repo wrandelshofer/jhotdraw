@@ -134,7 +134,7 @@ public interface View extends Disableable, PropertyBean {
 
     /**
      * Asynchronously reads data from the specified URI and appends it to the
-     * content of the view. This method should not change the current document
+     * content of the view. This method must not change the current document
      * in case of a read failure.
      * <p>
      * The application typically installs a disabler on the view during a read

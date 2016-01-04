@@ -7,6 +7,7 @@ package org.jhotdraw.beans;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -21,13 +22,11 @@ public class SimplePropertyBean implements PropertyBean {
     /**
      * Holds the properties.
      */
-    protected final ReadOnlyMapProperty<Key<?>, Object> properties//
-            = new ReadOnlyMapWrapper<Key<?>, Object>(//
-                    this, PROPERTIES_PROPERTY, //
-                    FXCollections.observableHashMap()).getReadOnlyProperty();
+    protected final ObservableMap<Key<?>, Object> properties//
+            =                    FXCollections.observableHashMap();
 
     @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 }

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import org.jhotdraw.collection.CompositeMapAccessor;
 import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.styleable.StyleableMapAccessor;
 
 /**
  * AbstractFigureMapAccessor.
@@ -19,7 +18,7 @@ import org.jhotdraw.styleable.StyleableMapAccessor;
  * @author Werner Randelshofer
  * @param <T> the value type
  */
-public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccessor<T>, FigureKey<T> {
+public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccessor<T>, FigureMapAccessor<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -89,8 +88,8 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
 
         DirtyMask m = DirtyMask.EMPTY;
         for (MapAccessor<?> sub : subAccessors) {
-            if (sub instanceof FigureKey<?>) {
-                m = m.add(((FigureKey<?>) sub).getDirtyMask());
+            if (sub instanceof FigureMapAccessor<?>) {
+                m = m.add(((FigureMapAccessor<?>) sub).getDirtyMask());
             }
         }
         dirtyMask = m;

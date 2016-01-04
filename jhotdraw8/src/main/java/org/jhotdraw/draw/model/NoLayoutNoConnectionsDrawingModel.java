@@ -11,7 +11,7 @@ import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.figure.Figure;
-import org.jhotdraw.draw.key.FigureKey;
+import org.jhotdraw.draw.key.FigureMapAccessor;
 
 /**
  * This drawing model assumes that the drawing contains no figures which perform
@@ -77,8 +77,8 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
         T oldValue = figure.set(key, newValue);
         if (!Objects.equals(oldValue, newValue)) {
             final DirtyMask dm;
-            if (key instanceof FigureKey) {
-                FigureKey<T> fk = (FigureKey<T>) key;
+            if (key instanceof FigureMapAccessor) {
+                FigureMapAccessor<T> fk = (FigureMapAccessor<T>) key;
                 dm = fk.getDirtyMask();
             } else {
                 dm = DirtyMask.EMPTY;
@@ -105,7 +105,7 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void layout(Figure f) {
-        f.layout();
+        f.updateLayout();
         // no event fired! fire(DrawingModelEvent.subtreeNodesInvalidated(this,f));
     }
 
@@ -117,7 +117,7 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void applyCss(Figure figure) {
-        figure.applyCss();
+        figure.updateCss();
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
     }
 }

@@ -35,7 +35,7 @@ public class CssSvgPathConverter implements Converter<SVGPath> {
         SVGPath p = null;
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if (!nullable) {
-                throw new ParseException("tring expected. " + tt.currentToken(), buf.position());
+                throw new ParseException("String expected. " + tt.currentToken(), buf.position());
             }
             if (!"none".equals(tt.currentStringValue())) {
                 throw new ParseException("none or String expected. " + tt.currentToken(), buf.position());

@@ -11,6 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
 import org.jhotdraw.draw.connector.Connector;
@@ -18,37 +20,41 @@ import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 
 /**
- * Renders a {@code javafx.scene.shape.Ellipse}.
+ * Renders a {@code javafx.scene.shape.Arc}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Ellipse"}.
      */
-    public final static String TYPE_SELECTOR = "Ellipse";
+    public final static String TYPE_SELECTOR = "Arc";
 
     public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
     public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey START_ANGLE = new DoubleStyleableFigureKey("startAngle",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ARC_LENGTH = new DoubleStyleableFigureKey("arcLength",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 360.0);
+    public final static EnumStyleableFigureKey<ArcType> ARC_TYPE = new EnumStyleableFigureKey<ArcType>("arcType",ArcType.class,   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), ArcType.ROUND);
     public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X,CENTER_Y);
     public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X,RADIUS_Y);
 
-    public EllipseFigure() {
+    public ArcFigure() {
         this(0, 0, 1, 1);
     }
 
-    public EllipseFigure(double x, double y, double width, double height) {
+    public ArcFigure(double x, double y, double width, double height) {
         reshape(x,y,width,height);
     }
 
-    public EllipseFigure(Rectangle2D rect) {
+    public ArcFigure(Rectangle2D rect) {
         reshape(rect.getMinX(),rect.getMinY(),rect.getWidth(),rect.getHeight());
     }
 
@@ -79,12 +85,12 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
 
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Ellipse();
+        return new Arc();
     }
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Ellipse n = (Ellipse) node;
+        Arc n = (Arc) node;
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);
         applyStrokeableFigureProperties(n);
@@ -95,6 +101,9 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
         n.setCenterY(getStyled(CENTER_Y));
         n.setRadiusX(getStyled(RADIUS_X));
         n.setRadiusY(getStyled(RADIUS_Y));
+        n.setStartAngle(getStyled(START_ANGLE));
+        n.setLength(getStyled(ARC_LENGTH));
+        n.setType(getStyled(ARC_TYPE));
         n.applyCss();
     }
 

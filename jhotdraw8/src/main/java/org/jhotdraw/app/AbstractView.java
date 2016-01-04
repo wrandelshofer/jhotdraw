@@ -6,6 +6,7 @@ package org.jhotdraw.app;
 
 import org.jhotdraw.collection.HierarchicalMap;
 import java.net.URI;
+import java.util.IdentityHashMap;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -17,8 +18,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import org.jhotdraw.app.action.Action;
-import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -35,10 +36,8 @@ public abstract class AbstractView extends AbstractDisableable implements View {
      */
     protected final BooleanProperty modified = new SimpleBooleanProperty();
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
-    protected final ReadOnlyMapProperty<Key<?>, Object> properties//
-            = new ReadOnlyMapWrapper<Key<?>, Object>(//
-                    this, PROPERTIES_PROPERTY, //
-                    FXCollections.observableHashMap()).getReadOnlyProperty();
+    protected final ObservableMap<Key<?>, Object> properties//
+            =                  FXCollections.observableMap(new IdentityHashMap<>());
     protected final StringProperty title = new SimpleStringProperty();
     private final IntegerProperty disambiguation = new SimpleIntegerProperty();
 
@@ -82,7 +81,7 @@ public abstract class AbstractView extends AbstractDisableable implements View {
     }
 
     @Override
-    public ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
+    public ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 

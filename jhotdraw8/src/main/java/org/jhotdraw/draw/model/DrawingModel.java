@@ -140,8 +140,8 @@ public interface DrawingModel extends Observable {
     }
 
     /**
-     * Attempts to change the layout bounds of the figure and fires appropriate
-     * {@code DrawingModelEvent}s.
+     * Attempts to change the updateLayout bounds of the figure and fires appropriate
+ {@code DrawingModelEvent}s.
      *
      * @param f the figure
      * @param transform the desired transformation
@@ -149,8 +149,8 @@ public interface DrawingModel extends Observable {
     void reshape(Figure f, Transform transform);
 
     /**
-     * Attempts to change the layout bounds of the figure and fires appropriate
-     * {@code DrawingModelEvent}s.
+     * Attempts to change the updateLayout bounds of the figure and fires appropriate
+ {@code DrawingModelEvent}s.
      *
      * @param f the figure
      * @param x desired x-position
@@ -161,8 +161,8 @@ public interface DrawingModel extends Observable {
     void reshape(Figure f, double x, double y, double width, double height);
 
     /**
-     * Invokes the layout method of the figure and fires appropriate
-     * {@code DrawingModelEvent}s.
+     * Invokes the updateLayout method of the figure and fires appropriate
+ {@code DrawingModelEvent}s.
      *
      * @param f the figure
      */
@@ -175,8 +175,8 @@ public interface DrawingModel extends Observable {
      */
     void disconnect(Figure f);
     /**
-     * Invokes the applyCss method of the figure and fires appropriate
-     * {@code DrawingModelEvent}s.
+     * Invokes the updateCss method of the figure and fires appropriate
+ {@code DrawingModelEvent}s.
      *
      * @param f the figure
      */

@@ -14,6 +14,7 @@ import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.SimpleFigureKey;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
+import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
@@ -29,7 +30,7 @@ import org.jhotdraw.geom.Geom;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface TransformableFigure extends Figure {
+public interface TransformableFigure extends TransformCachingFigure {
 
     /**
      * Defines the angle of rotation around the center of the figure in degrees.
@@ -86,9 +87,9 @@ public interface TransformableFigure extends Figure {
      * Updates a figure node with all transformation properties defined in this
      * interface.
      * <p>
-     * Applies the following properties: {@code TRANSFORM}, translation 
-     *  {@code TRANSLATE_X}, {@code TRANSLATE_Y}, {@code TRANSLATE_Z},
-     * scale {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, and rotation
+     * Applies the following properties: {@code TRANSFORM}, translation
+     * {@code TRANSLATE_X}, {@code TRANSLATE_Y}, {@code TRANSLATE_Z}, scale
+     * {@code SCALE_X}, {@code SCALE_Y}, {@code SCALE_Z}, and rotation
      * {@code ROTATE}, {@code ROTATION_AXIS}.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
@@ -134,6 +135,7 @@ public interface TransformableFigure extends Figure {
             node.setTranslateZ(d);
         }
     }
+
     default void applyTransformableFigureProperties(Node node, Bounds b) {
         List<Transform> transforms = new ArrayList<>(get(TRANSFORM));
 
@@ -142,50 +144,50 @@ public interface TransformableFigure extends Figure {
         double d2;
         d1 = getStyled(TRANSLATE_X);
         d2 = getStyled(TRANSLATE_Y);
-        transforms.add(Transform.translate(d1,d2));
+        transforms.add(Transform.translate(d1, d2));
         d1 = getStyled(SCALE_X);
         d2 = getStyled(SCALE_Y);
-        transforms.add(Transform.scale(d1,d2,pivot.getX(),pivot.getY()));
-         d1 = getStyled(ROTATE);
-        transforms.add(Transform.rotate(d1,pivot.getX(),pivot.getY()));
-        
+        transforms.add(Transform.scale(d1, d2, pivot.getX(), pivot.getY()));
+        d1 = getStyled(ROTATE);
+        transforms.add(Transform.rotate(d1, pivot.getX(), pivot.getY()));
+
         if (!node.getTransforms().equals(transforms)) {
             node.getTransforms().setAll(transforms);
         }
     }
 
-    /**
-     * Computes the transformation from local coordinates into parent
-     * coordinates.
-     *
-     * @return the transformation
-     */
     @Override
-    default Transform computeLocalToParent() {
-        Point2D center = getCenterInLocal();
-        Transform translate = Transform.translate(getStyled(TransformableFigure.TRANSLATE_X), get(TransformableFigure.TRANSLATE_Y));
-        Transform scale = Transform.scale(getStyled(TransformableFigure.SCALE_X), get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
+    default Transform getLocalToParent() {
+        Transform t = get(FigureImplementationDetails.LOCAL_TO_PARENT);
+        if (t == null) {
 
-        Transform t = translate.createConcatenation(rotate).createConcatenation(scale).createConcatenation(getTransform());
+            Point2D center = getCenterInLocal();
+            Affine tx = new Affine();
+            tx.appendTranslation(getStyled(TransformableFigure.TRANSLATE_X), get(TransformableFigure.TRANSLATE_Y));
+            tx.appendScale(getStyled(TransformableFigure.SCALE_X), get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
+            tx.appendRotation(getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
+            tx.append(getTransform());
+            t = tx;
+
+            set(FigureImplementationDetails.LOCAL_TO_PARENT, t);
+        }
         return t;
     }
 
-    /**
-     * Computes the transformation from parent coordinates into local
-     * coordinates.
-     *
-     * @return the transformation
-     */
     @Override
-    default Transform computeParentToLocal() {
-        Point2D center = getCenterInLocal();
+    default Transform getParentToLocal() {
+        Transform t = get(FigureImplementationDetails.PARENT_TO_LOCAL);
+        if (t == null) {
+            Point2D center = getCenterInLocal();
 
-        Transform translate = Transform.translate(-getStyled(TransformableFigure.TRANSLATE_X), -get(TransformableFigure.TRANSLATE_Y));
-        Transform scale = Transform.scale(1.0 / getStyled(TransformableFigure.SCALE_X), 1.0 / get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(-getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
+            Transform translate = Transform.translate(-getStyled(TransformableFigure.TRANSLATE_X), -get(TransformableFigure.TRANSLATE_Y));
+            Transform scale = Transform.scale(1.0 / getStyled(TransformableFigure.SCALE_X), 1.0 / get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
+            Transform rotate = Transform.rotate(-getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
 
-        Transform t = getInverseTransform().createConcatenation(scale).createConcatenation(rotate).createConcatenation(translate);
+            t = getInverseTransform().createConcatenation(scale).createConcatenation(rotate).createConcatenation(translate);
+
+            set(FigureImplementationDetails.PARENT_TO_LOCAL, t);
+        }
         return t;
     }
 
@@ -219,6 +221,12 @@ public interface TransformableFigure extends Figure {
             }
         }
         return t;
+    }
+    @Override
+    default void invalidateTransforms() {
+        TransformCachingFigure.super.invalidateTransforms();
+        set(FigureImplementationDetails.PARENT_TO_LOCAL, null);
+        set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
     }
 
 }

@@ -13,13 +13,13 @@ import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.RenderingIntent;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
-import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.draw.key.ObservableWordListFigureKey;
 import org.jhotdraw.draw.key.SimpleFigureKey;
+import org.jhotdraw.draw.key.FigureMapAccessor;
 
 /**
  * {@code StyleableFigure} supports styling of a figure using
- * {@code FigureKey}s.
+ * {@code FigureMapAccessor}s.
  *
  * @author Werner Randelshofer
  */
@@ -30,7 +30,7 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    public static FigureKey<String> STYLE_ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static FigureMapAccessor<String> STYLE_ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.

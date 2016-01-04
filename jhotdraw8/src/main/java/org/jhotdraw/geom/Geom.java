@@ -880,8 +880,8 @@ public class Geom {
      * @param y2 y2
      * @return the cross product
      */
-    public static Point3D hcrossProduct(Point2D p1, Point2D p2) {
-        return hcrossProduct(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+    public static Point3D hcross(Point2D p1, Point2D p2) {
+        return hcross(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
     /**
@@ -900,7 +900,7 @@ public class Geom {
      * @param y2 y2
      * @return the cross product
      */
-    public static Point3D hcrossProduct(double x1, double y1, double x2, double y2) {
+    public static Point3D hcross(double x1, double y1, double x2, double y2) {
         return new Point3D(//
                 y1 * 1 - 1 * y2,//
                 1 * x2 - x1 * 1,//
@@ -917,9 +917,9 @@ public class Geom {
      * @param distance the shifting distance
      * @return the shifted point
      */
-    public static Point2D shiftPerpendicular(Point2D l1, Point2D l2, Point2D p, double distance) {
+    public static Point2D shiftPerp(Point2D l1, Point2D l2, Point2D p, double distance) {
 
-        return shiftPerpendicular(l1.getX(), l1.getY(), l2.getX(), l2.getY(), p.getX(), p.getY(), distance);
+        return shiftPerp(l1.getX(), l1.getY(), l2.getX(), l2.getY(), p.getX(), p.getY(), distance);
     }
 
     /**
@@ -934,32 +934,31 @@ public class Geom {
      * @param distance the shifting distance
      * @return the shifted point
      */
-    public static Point2D shiftPerpendicular(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
+    public static Point2D shiftPerp(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
         // matlab: v    = p2 - p1
-        //         cv    = cross([v 1] * [0 0 1])
+        //         line = cross([v 1] * [0 0 1])
         //         m     = distance/norm(cv);
         //         result = p+cv*m
         double vx = l2x - l1x;
         double vy = l2y - l1y;
 
-        double cvx = -vy;
-        double cvy = vx;
-        double m = distance / sqrt(cvx * cvy);
+        double perpX = -vy;
+        double perpY = vx;
+        double m = distance / sqrt(perpX * perpY);
 
-        return new Point2D(px + cvx * m, py + cvy * m);
+        return new Point2D(px + perpX * m, py + perpY * m);
     }
 
     /**
-     * Gets a vector which is perpendicular to the given line.
+     * Gets a unit vector which is perpendicular to the given line.
      *
      * @param l1x point 1 on the line
      * @param l1y point 1 on the line
      * @param l2x point 2 on the line
      * @param l2y point 2 on the line
-     * @param vectorLength the desired length of the vector
      * @return the perpendicular vector of length {@code vectorLength}
      */
-    public static Point2D perpendicularVector(double l1x, double l1y, double l2x, double l2y, double vectorLength) {
+    public static Point2D perp(double l1x, double l1y, double l2x, double l2y) {
         // matlab: v    = p2 - p1
         //         cv    = cross([v 1] * [0 0 1])
         //         m     = distance/norm(cv);
@@ -970,10 +969,24 @@ public class Geom {
         double cvx = -vy;
         double cvy = vx;
         double norm = sqrt(cvx * cvx + cvy * cvy);
-        double m = norm == 0 ? 0 : vectorLength / norm;
+        double m = norm == 0 ? 0 : 1/norm;
 
         return new Point2D(cvx * m, cvy * m);
     }
+    /**
+     * Gets a vector which is perpendicular to the given line.
+     *
+     * @param l1x point 1 on the line
+     * @param l1y point 1 on the line
+     * @param l2x point 2 on the line
+     * @param l2y point 2 on the line
+     * @param length the desired length of the vector
+     * @return the perpendicular vector of length {@code vectorLength}
+     */
+    public static Point2D perp(double l1x, double l1y, double l2x, double l2y, double length) {
+        return perp(l1x,l1y,l2x,l2y).multiply(length);
+    }
+    
 
     public static double squaredDistance(Point2D p, double x, double y) {
         double a = p.getX() - x;
@@ -985,4 +998,26 @@ public class Geom {
         double b = x2 - y2;
         return a * a + b * b;
     }
+    
+        /** Unsigned shortest distance between two angles. 
+     * @return 0 &lt;= diff &lt;= PI.
+     */
+   public static double anglesUnsignedSpan(double angle0, double angle1) {
+        return angle0 > angle1 ? angle0-angle1:angle1-angle0;
+    }
+    /** Signed shortest distance between two angles. 
+     * @return -PI &lt;= diff &lt;= PI.
+     */
+    public static double anglesSignedSpan(double from, double to) {
+        double diff=to-from;
+        if (diff > PI) diff=diff-PI;
+else        if (diff < -PI) diff=diff+2*PI;
+        return diff;
+    }
+public static double angleSubtract(double a,double b) {
+    double diff = a - b;
+    if (diff < -2*PI)diff+=2*PI;
+    return diff;
+}
+
 }

@@ -4,9 +4,8 @@
  */
 package org.jhotdraw.styleable;
 
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw.collection.Key;
@@ -23,8 +22,8 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
      * Holds the properties.
      */
     // protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
-    protected final ReadOnlyMapProperty<Key<?>, Object> properties =//
-            new ReadOnlyMapWrapper<Key<?>, Object>(this, PROPERTIES_PROPERTY, new StyleableMap<Key<?>, Object>() {
+    protected final StyleableMap<Key<?>, Object> properties =//
+            new StyleableMap<Key<?>, Object>() {
 
                 @Override
                 protected void callObservers(StyleOrigin origin, MapChangeListener.Change<Key<?>, Object> change) {
@@ -32,13 +31,13 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
                     super.callObservers(origin, change);
                 }
 
-            });
+            };
 
     /**
-     * Returns the user getProperties.
+     * Returns the user properties.
      */
     @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 
@@ -46,7 +45,7 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     public <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key) {
         if (key instanceof StyleableMapAccessor) {
             StyleableMapAccessor<T> skey = (StyleableMapAccessor<T>) key;
-            return new KeyMapEntryStyleableProperty<T>(properties, skey, skey.getCssName(), skey.getCssMetaData());
+            return new KeyMapEntryStyleableProperty<T>(this, properties, skey, skey.getCssName(), skey.getCssMetaData());
         } else {
             return null;
         }
@@ -54,7 +53,7 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
 
     protected StyleableMap<Key<?>, Object> getStyleableMap() {
         @SuppressWarnings("unchecked")
-        StyleableMap<Key<?>, Object> map = (StyleableMap<Key<?>, Object>) properties.get();
+        StyleableMap<Key<?>, Object> map =  properties;
         return map;
     }
 
@@ -65,7 +64,7 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     public <T> T getStyled(MapAccessor<T> key) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
-        T ret = key.get(map.getStyledMap());
+        T ret = key.get(map.getStyledMap());// key may invoke get multiple times!
         return ret;
     }
 

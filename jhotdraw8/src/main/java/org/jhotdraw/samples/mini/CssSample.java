@@ -88,9 +88,9 @@ public class CssSample extends Application {
         ArrayList<URI> stylesheets=new ArrayList<>();
         stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());
         drawing.set(Drawing.USER_AGENT_STYLESHEETS,stylesheets);
-        drawing.applyCss();
+        drawing.updateCss();
         
-        drawing.layout();
+        drawing.updateLayout();
 
         DrawingView drawingView = new SimpleDrawingView();
 

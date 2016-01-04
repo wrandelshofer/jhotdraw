@@ -202,7 +202,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
             writeElementAttributes(elem, figure);
             writeElementNodeList(doc, elem, figure);
 
-            for (Figure child : figure.childrenProperty()) {
+            for (Figure child : figure.getChildren()) {
                 if (factory.figureToName(child) != null) {
                     elem.appendChild(doc.createTextNode("\n"));
                     Node childNode = writeNodeRecursively(doc, child);
@@ -212,7 +212,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
                     }
                 }
             }
-            if (!figure.childrenProperty().isEmpty()) {
+            if (!figure.getChildren().isEmpty()) {
                 elem.appendChild(doc.createTextNode("\n"));
             }
             return elem;

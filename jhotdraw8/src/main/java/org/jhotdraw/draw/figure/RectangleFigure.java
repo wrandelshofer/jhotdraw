@@ -108,7 +108,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     }
 
     @Override
-    public void layout() {
+    public void updateLayout() {
         // empty
     }
 
