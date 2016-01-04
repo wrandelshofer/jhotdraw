@@ -4,9 +4,11 @@
  */
 package org.jhotdraw.app.action;
 
+import java.util.IdentityHashMap;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import org.jhotdraw.app.AbstractDisableable;
 import org.jhotdraw.collection.Key;
@@ -21,10 +23,9 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     /**
      * Holds the properties.
      */
-    protected final ReadOnlyMapProperty<Key<?>, Object> properties//
-            = new ReadOnlyMapWrapper<Key<?>, Object>(//
-                    this, PROPERTIES_PROPERTY, //
-                    FXCollections.observableHashMap()).getReadOnlyProperty();
+    protected final ObservableMap<Key<?>, Object> properties//
+            = 
+                    FXCollections.observableMap(new IdentityHashMap<>());
 
     /**
      * Creates a new instance. Binds {@code disabled} to {@code disable}.
@@ -45,7 +46,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     }
 
     @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 

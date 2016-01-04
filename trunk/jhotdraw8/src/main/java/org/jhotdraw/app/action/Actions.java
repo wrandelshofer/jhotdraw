@@ -31,9 +31,9 @@ public class Actions {
      */
     public static void bindButton(Button control, Action action) {
         // create a strong reference to name binding:
-        Binding<String> nameBinding = Action.LABEL.valueAt(action.propertiesProperty());
+        Binding<String> nameBinding = Action.LABEL.valueAt(action.getProperties());
         control.getProperties().put("ActionsNameBinding", nameBinding);
-        control.textProperty().bind(Action.LABEL.valueAt(action.propertiesProperty()));
+        control.textProperty().bind(Action.LABEL.valueAt(action.getProperties()));
 
         control.setOnAction(action);
         control.disableProperty().bind(action.disabledProperty());
@@ -46,18 +46,18 @@ public class Actions {
      */
     public static void bindMenuItem(MenuItem control, Action action) {
         // create a strong reference to name binding:
-        Binding<String> nameBinding = Action.LABEL.valueAt(action.propertiesProperty());
+        Binding<String> nameBinding = Action.LABEL.valueAt(action.getProperties());
         control.getProperties().put("ActionsNameBinding", nameBinding);
-        control.textProperty().bind(Action.LABEL.valueAt(action.propertiesProperty()));
+        control.textProperty().bind(Action.LABEL.valueAt(action.getProperties()));
 
         if (control instanceof CheckMenuItem) {
-            Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.propertiesProperty());
+            Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.getProperties());
             // create a strong reference to name binding:
             control.getProperties().put("ActionsSelectedBinding", selectedBinding);
             // this only creates a weak reference to the name binding:
             ((CheckMenuItem) control).selectedProperty().bindBidirectional(selectedBinding);
         } else if (control instanceof RadioMenuItem) {
-            Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.propertiesProperty());
+            Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.getProperties());
             // create a strong reference to name binding:
             control.getProperties().put("ActionsSelectedBinding", selectedBinding);
             // this only creates a weak reference to the name binding:
@@ -66,7 +66,7 @@ public class Actions {
         control.setOnAction(action);
         control.disableProperty().bind(action.disabledProperty());
         
-        Binding<KeyCombination> acceleratorBinding = Action.ACCELERATOR_KEY.valueAt(action.propertiesProperty());
+        Binding<KeyCombination> acceleratorBinding = Action.ACCELERATOR_KEY.valueAt(action.getProperties());
         // create a strong reference to name binding:
         control.getProperties().put("ActionsAcceleratorBinding", acceleratorBinding);
         // this only creates a weak reference to the name binding:

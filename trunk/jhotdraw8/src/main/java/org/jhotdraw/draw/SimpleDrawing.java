@@ -68,7 +68,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
 
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
         nodes.add(page);
-        for (Figure child : childrenProperty()) {
+        for (Figure child : getChildren()) {
             nodes.add(v.getNode(child));
         }
         ObservableList<Node> group = ((Group) n).getChildren();
@@ -85,7 +85,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
 
     @Override
     public void reshape(Transform transform) {
-        for (Figure child : childrenProperty()) {
+        for (Figure child : getChildren()) {
             child.reshape(transform);
         }
     }

@@ -13,7 +13,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import static org.jhotdraw.draw.figure.TextableFigure.LINE_SPACING;
+import static org.jhotdraw.draw.figure.FontableFigure.LINE_SPACING;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.DoubleListStyleableFigureKey;

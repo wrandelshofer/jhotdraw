@@ -97,9 +97,9 @@ public class DrawingInspector extends AbstractDrawingInspector {
         heightProperty = null;
         backgroundProperty = null;
         if (newValue != null) {
-            widthProperty = Drawing.WIDTH.propertyAt(newValue.propertiesProperty());
-            heightProperty = Drawing.HEIGHT.propertyAt(newValue.propertiesProperty());
-            backgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.propertiesProperty());
+            widthProperty = Drawing.WIDTH.propertyAt(newValue.getProperties());
+            heightProperty = Drawing.HEIGHT.propertyAt(newValue.getProperties());
+            backgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.getProperties());
             widthProperty.addListener(commitHandler);
             heightProperty.addListener(commitHandler);
             backgroundProperty.addListener(commitHandler);

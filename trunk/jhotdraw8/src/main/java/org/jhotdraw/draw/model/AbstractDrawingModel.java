@@ -7,7 +7,12 @@ package org.jhotdraw.draw.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 import javafx.beans.InvalidationListener;
 import org.jhotdraw.beans.ListenerSupport;
 import org.jhotdraw.draw.Drawing;
@@ -26,19 +31,23 @@ public abstract class AbstractDrawingModel implements DrawingModel {
     private final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport<>();
     /**
      * This is the set of figures which are out of sync with their stylesheet.
+     * <p>
+     * We do not wrap the Map into a Set to avoid an additional
+     * level of indirection.
      */
-    private final HashSet<Figure> dirtyStyles = new HashSet<>();
+    private final Map<Figure, Object> dirtyStyles = new IdentityHashMap<>();
     /**
-     * This is the set of figures which are out of sync with their layout.
+     * This is the set of figures which are out of sync with their layout. 
+     * <p>The
+     * figures are ordered in the sequence that the layout needs to be
+     * performed. This list is required to handle transitive layout
+     * dependencies.
+     * <p>
+     * We do not wrap the Map into a Set to avoid an additional
+     * level of indirection.
      */
-    private final HashSet<Figure> dirtyLayouts = new HashSet<>();
-    /**
-     * This is a list of figures which are out of sync with their layout. This
-     * list contains the same figures as {@code dirtyLayouts}, but the figures
-     * are ordered in the sequence that the layout needs to be performed.
-     * This list is required to handle transitive layout dependencies.
-     */
-    private final ArrayList<Figure> dirtyLayoutList = new ArrayList<>();
+    private final Map<Figure,Object> dirtyLayouts = new LinkedHashMap<>();
+    
     private boolean isValidating = false;
     protected Drawing root;
 
@@ -79,67 +88,61 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             return;
         }
         switch (event.getEventType()) {
-        case FIGURE_ADDED_TO_PARENT:
-            invalidateStyle(event.getFigure());
-            break;
-        case FIGURE_ADDED_TO_DRAWING:
-            invokeAddNotify(event.getFigure(), event.getDrawing());
-            break;
-        case FIGURE_REMOVED_FROM_DRAWING:
-            invokeRemoveNotify(event.getFigure(), event.getDrawing());
-            if (dirtyLayouts.remove(event.getFigure())) {
-                dirtyLayoutList.remove(event.getFigure());
-            }
-            dirtyStyles.remove(event.getFigure());
-            break;
-        case CONNECTION_CHANGED:
-            invokeConnectNotify(event.getFigure());
-            break;
-        case TRANSFORM_CHANGED:
-            invokeTransformNotify(event.getFigure());
-            break;
+            case FIGURE_ADDED_TO_PARENT:
+                invalidateStyle(event.getFigure());
+                break;
+            case FIGURE_ADDED_TO_DRAWING:
+                invokeAddNotify(event.getFigure(), event.getDrawing());
+                break;
+            case FIGURE_REMOVED_FROM_DRAWING:
+                invokeRemoveNotify(event.getFigure(), event.getDrawing());
+                dirtyLayouts.remove(event.getFigure());
+                dirtyStyles.remove(event.getFigure());
+                break;
+            case CONNECTION_CHANGED:
+                invokeConnectNotify(event.getFigure());
+                break;
+            case TRANSFORM_CHANGED:
+                invokeTransformNotify(event.getFigure());
+                break;
 
-        case FIGURE_REMOVED_FROM_PARENT:
-            if (dirtyLayouts.remove(event.getFigure())) {
-                dirtyLayoutList.remove(event.getFigure());
-            }
-            dirtyStyles.remove(event.getFigure());
-            break;
-        case NODE_INVALIDATED:
-        case ROOT_CHANGED:
-        case SUBTREE_NODES_INVALIDATED:
-            // not my business
-            break;
-        case LAYOUT_INVALIDATED:
-            invalidateLayout(event.getFigure());
-            break;
-        case STYLE_INVALIDATED:
-            invalidateStyle(event.getFigure());
-            break;
-        case SUBTREE_STRUCTURE_CHANGED:
-            invalidateLayout(event.getFigure());
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + "not supported");
+            case FIGURE_REMOVED_FROM_PARENT:
+                dirtyLayouts.remove(event.getFigure());
+                dirtyStyles.remove(event.getFigure());
+                break;
+            case NODE_INVALIDATED:
+            case ROOT_CHANGED:
+            case SUBTREE_NODES_INVALIDATED:
+                // not my business
+                break;
+            case LAYOUT_INVALIDATED:
+                invalidateLayout(event.getFigure());
+                break;
+            case STYLE_INVALIDATED:
+                invalidateStyle(event.getFigure());
+                break;
+            case SUBTREE_STRUCTURE_CHANGED:
+                invalidateLayout(event.getFigure());
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + "not supported");
         }
     }
 
     protected void invalidateLayout(Figure figure) {
-        if (dirtyLayouts.add(figure)) {
-            dirtyLayoutList.add(figure);
-        }
+        dirtyLayouts.put(figure,null);
     }
 
     protected void invalidateStyle(Figure figure) {
-        dirtyStyles.add(figure);
+        dirtyStyles.put(figure,null);
     }
 
     @Override
     public void validate() {
         if (!dirtyStyles.isEmpty()) {
             isValidating = true;
-            LinkedList<Figure> fs = new LinkedList<>(dirtyStyles);
+            Figure[] fs = dirtyStyles.keySet().toArray(new Figure[dirtyStyles.size()]);
             dirtyStyles.clear();
             for (Figure f : fs) {
                 invokeStylesheetNotify(f);
@@ -148,9 +151,8 @@ public abstract class AbstractDrawingModel implements DrawingModel {
         }
         if (!dirtyLayouts.isEmpty()) {
             isValidating = true;
-            ArrayList<Figure> fs = new ArrayList<>(dirtyLayoutList);
+            Figure[] fs = dirtyLayouts.keySet().toArray(new Figure[dirtyLayouts.size()]);
             dirtyLayouts.clear();
-            dirtyLayoutList.clear();
             for (Figure f : fs) {
                 invokeLayoutNotify(f);
             }

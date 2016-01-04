@@ -249,7 +249,7 @@ public class GrapherView extends AbstractView implements EditorView {
                     FigureFactory factory = new DefaultFigureFactory(idFactory);
                     SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
                     SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
-                    drawing.applyCss();
+                    drawing.updateCss();
                     return drawing;
                 } catch (Exception e) {
                     throw e;

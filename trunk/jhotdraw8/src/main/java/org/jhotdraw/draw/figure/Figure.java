@@ -53,6 +53,62 @@ import static java.lang.Math.min;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -67,11 +123,11 @@ import static java.lang.Math.max;
  * be {@link Layer}s, and the parent of a {@code Layer} must be a
  * {@code Drawing}.</p>
  * <p>
- * <b>Coordinate System and Transformations.</b> A figure introduces a
- * local coordinate system which applies to its own geometry and all descendant
- * figures in its subtree. The Figure interface provides methods which
- * allow to transform between the local coordinate system of a figure,  
- * the coordinate system of its parent, and the world coordinate system.</p>
+ * <b>Coordinate System and Transformations.</b> A figure introduces a local
+ * coordinate system which applies to its own geometry and all descendant
+ * figures in its subtree. The Figure interface provides methods which allow to
+ * transform between the local coordinate system of a figure, the coordinate
+ * system of its parent, and the world coordinate system.</p>
  * <p>
  * <b>Connections.</b> A figure can be connected to other figures. The
  * connection are directed. By convention, when a figure "A" is connected to an
@@ -85,15 +141,17 @@ import static java.lang.Math.max;
  * <b>Handles.</b> A figure can produce {@code Handle}s which allow to
  * graphically change the state of the figure in a {@link DrawingView}.</p>
  * <p>
- * <b>Layout.</b> The state of a figure may depend on the state of other
- * figures. The dependencies can be cyclic due to getConnectedFigures. A figure
- * does not automatically update its dependent state. Method {@code layout()}
- * must be invoked to incrementally update the state of a figure and its
- * descendants based on the current state of all other figures in the tree
- * structure.</p>
+ * <b>Layout.</b> The updateLayout of a figure may depend on the updateLayout of other
+ figures, typically on its descendents. However the updateLayout of a figure may
+ also depend on the updateLayout of connected figures. These dependencies can be
+ cyclic. A figure does not automatically update the updateLayout of other figures:
+ Method {@link #updateLayout} must be invoked to incrementally update the updateLayout of
+ a figure and its descendants based on the current updateLayout of all other figures
+ in the tree structure. Method {@link #getConnectedFigures} must be used to
+ find figures which compute their updateLayout based on this figure.</p>
  * <p>
  * <b>Layout hints and node update hints.</b> Essentially each time when the
- * state of a figure is changed, method {@code layout()} needs to be invoked on
+ * state of a figure is changed, method {@code updateLayout()} needs to be invoked on
  * the root of the tree hierarchy to incrementally update the state of all
  * dependent figures and then all figures need to be rendered again. This is
  * time consuming. The interface {@link org.jhotdraw.draw.key.FigureKey}
@@ -105,7 +163,7 @@ import static java.lang.Math.max;
  * corresponding property key must implement the interface
  * {@link org.jhotdraw.styleable.StyleableMapAccessor}. The style information is
  * cached in the figure getProperties. When the position of a figure in the tree
- * structure is changed, method {@code applyCss()} must be called to update the
+ * structure is changed, method {@code updateCss()} must be called to update the
  * style information of the figure and its descendants.</p>
  *
  * @author Werner Randelshofer
@@ -131,75 +189,13 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     // property names
     // ----
     /**
-     * The name of the children property.
-     */
-    public final static String CHILDREN_PROPERTY = "children";
-    /**
      * The name of the parent property.
      */
     public final static String PARENT_PROPERTY = "parent";
-    /**
-     * The name of the connectedFigures property.
-     */
-    public final static String CONNECTED_FIGURES_PROPERTY = "connectedFigures";
 
     // ----
     // property fields
     // ----
-    /**
-     * The child figures.
-     * <p>
-     * All changes on this property causes this figure to fire an invalidation
-     * event.
-     * <p>
-     * If a child is added to this figure, the child must be removed from its
-     * former parent. This figure must set itself set as the parent of the child
-     * immediately after the figure has been added.</p>
-     * <p>
-     * If a child is removed from this figure, this figure must set parent to
-     * null immediately before the child is removed.</p>
-     * <p>
-     * Note that this method returns a {@code ReadOnlyListProperty} which holds
-     * an instance of {@link IndexedSet}. {@code ListChangeListener}s can get
-     * the associated {@code Figure} using the following code:</p>
-     * <pre>{@code
-     * (ListChangeListener.Change change) -> Figure figure =
-     *      (Figure) ((ReadOnlyProperty) change.getList()).getBean();
-     * }</pre>
-     *
-     *
-     * @return the getChildren property, with {@code getBean()} returning this
-     * figure, and {@code getName()} returning {@code CHILDREN_PROPERTY}.
-     */
-    ReadOnlyListProperty<Figure> childrenProperty();
-
-    /**
-     * The connected figures property contains all figures which are connected
-     * to this figure.
-     *
-     * <pre><code>
-     * +-----------------+                    +-------------------------+
-     * | ConnectedFigure |-----connection----&gt;| ConnectionTarget (this) |
-     * +-----------------+                    +-------------------------+
-     * </code></pre>
-     * <p>
-     * By convention this set is maintained by the connected figures.
-     * <p>
-     * The API for establishing a connection is specific for each figure. For
-     * example, to connect a
-     * {@link org.jhotdraw.draw.figure.LineConnectionFigure} to this figure, you
-     * need to set its {@code START_FIGURE} and/or {@code END_FIGURE} property
-     * to this figure.
-     * <p>
-     * A connection can be removed by using the specific API of the figure or by
-     * invoking the {@link #removeConnectionTarget(Figure)} method.
-     *
-     * @return the connectedFigures property, with {@code getBean()} returning
-     * this figure, and {@code getName()} returning
-     * {@code CONNECTED_FIGURES_PROPERTY}.
-     */
-    ReadOnlySetProperty<Figure> connectedFiguresProperty();
-
     /**
      * Removes the specified connection target.
      *
@@ -227,9 +223,11 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
      * transformation of the figure has changed.
      * <p>
-     * The default implementation of this method is empty.
+     * The default implementation of this method calls
+     * {@link #invalidateTransforms}.
      */
     default void transformNotify() {
+        invalidateTransforms();
     }
 
     /**
@@ -237,10 +235,10 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
      * figure needs to be laid out again.
      * <p>
-     * The default implementation of this method calls {@link #layout}.
+     * The default implementation of this method calls {@link #updateLayout}.
      */
     default void layoutNotify() {
-        layout();
+        updateLayout();
     }
 
     /**
@@ -248,11 +246,12 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
      * figure needs to apply its stylesheet agin.
      * <p>
-     * The default implementation of this method calls {@link #applyCss}.
+     * The default implementation of this method calls {@link #updateCss} and
+     * then {@code #updateLayout}.
      */
     default void stylesheetNotify() {
-        applyCss();
-        layout();
+        updateCss();
+        updateLayout();
     }
 
     /**
@@ -277,15 +276,30 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     // behavior methods
     // ----
     /**
-     * The bounds that should be used for layout calculations for this figure.
+     * The bounds that should be used for transformations of this figure.
      * <p>
      * The bounds are given in the untransformed local coordinate space of the
      * figure.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale. Invoke {@link #updateLayout} if you are not sure that the cache is
+     * valid.
      *
-     * @return the layout bounds
+     * @return the updateLayout bounds
      */
     public Bounds getBoundsInLocal();
 
+    /**
+     * The bounds that should be used for updateLayout calculations for this figure.
+     * <p>
+     * The bounds are given in the coordinate space of the parent figure.
+     * <p>
+     * This method may use caching and return incorrect results if the caches
+     * are stale. Invoke {@link #invalidateTransforms} and {@link #updateLayout} if
+     * you are not sure that the cache is valid.
+     *
+     * @return the updateLayout bounds
+     */
     default public Bounds getBoundsInParent() {
         Bounds b = getBoundsInLocal();
         double[] points = new double[8];
@@ -315,10 +329,10 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Attempts to change the layout bounds of the figure.
+     * Attempts to change the updateLayout bounds of the figure.
      * <p>
-     * The figure may choose to only partially change its layout bounds.
-     * <p>
+ The figure may choose to only partially change its updateLayout bounds.
+ <p>
      * Reshape typically changes property values in this figure. The way how
      * this is performed is implementation specific.
      *
@@ -327,12 +341,12 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     void reshape(Transform transform);
 
     /**
-     * Attempts to change the layout bounds of the figure.
+     * Attempts to change the updateLayout bounds of the figure.
      * <p>
      * Width and height are ignored, if the figure is not resizable.
      * <p>
-     * If the layout bounds of the figure changes, it fires an invalidation
-     * event.
+ If the updateLayout bounds of the figure changes, it fires an invalidation
+ event.
      *
      * @param x desired x-position in parent coordinates
      * @param y desired y-position in parent coordinates
@@ -340,29 +354,24 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @param height desired height in parent coordinates, may be negative
      */
     default void reshape(double x, double y, double width, double height) {
+        if (width == 0 || height == 0) {
+            return;
+        }
+
         Bounds oldBounds = getBoundsInLocal();
-        Rectangle2D newBounds = new Rectangle2D(x - min(width, 0), y
-                - min(height, 0), abs(width), abs(height));
 
-        double sx = newBounds.getWidth() / oldBounds.getWidth();
-        double sy = newBounds.getHeight() / oldBounds.getHeight();
+        double sx = width / oldBounds.getWidth();
+        double sy = height / oldBounds.getHeight();
 
-        Affine reshape = new Affine();
         Affine tx = new Affine();
-        tx.appendTranslation(-oldBounds.getMinX(), -oldBounds.getMinY());
         if (!Double.isNaN(sx) && !Double.isNaN(sy)
                 && !Double.isInfinite(sx) && !Double.isInfinite(sy)
-                && (sx != 1d || sy != 1d)
-                && !(sx < 0.0001) && !(sy < 0.0001)) {
-            reshape.append(tx);
-            tx.setToIdentity();
-            tx.appendScale(sx, sy);
-            reshape.append(tx);
-            tx.setToIdentity();
+                && (sx != 1d || sy != 1d)) {
+            tx.appendScale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY());
         }
-        tx.appendTranslation(newBounds.getMinX(), newBounds.getMinY());
-        reshape.append(tx);
-        reshape(reshape);
+        tx.appendTranslation(x - oldBounds.getMinX(), y - oldBounds.getMinY());
+
+        reshape(tx);
     }
 
     /**
@@ -404,9 +413,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <pre>
      * public void updateNode(RenderContext rc, Node n) {
      *     ObservableList&lt;Node&gt; group = ((Group) n).getChildren();
-     *     group.clear();
-     *     for (Figure child : childrenProperty()) {
-     *         group.add(rc.getNode(child));
+     * group.clear();
+     * for (Figure child : children()) {
+     * group.add(rc.getNode(child));
      * }
      * </pre>
      * <p>
@@ -427,7 +436,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     void updateNode(RenderContext ctx, Node node);
 
     /**
-     * Whether getChildren may be added to this figure.
+     * Whether children may be added to this figure.
      *
      * @return true if getChildren are allowed
      */
@@ -443,9 +452,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     public boolean isSuitableParent(Figure newParent);
 
     /**
-     * Whether the {@code layout} method of this figure does anything.
+     * Whether the {@code updateLayout} method of this figure does anything.
      *
-     * @return true if the {@code layout} method is not empty.
+     * @return true if the {@code updateLayout} method is not empty.
      */
     boolean isLayoutable();
 
@@ -467,9 +476,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Whether the figure can be reshaped as a group together with other
      * figures.
      * <p>
-     * If this figure uses one of the other figures for computing its position
-     * or its layout, then it will return false.
-     * <p>
+ If this figure uses one of the other figures for computing its position
+ or its updateLayout, then it will return false.
+ <p>
      * The default implementation always returns true.
      *
      * @param others A set of figures.
@@ -557,15 +566,39 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     Connector findConnector(Point2D pointInLocal, Figure prototype);
 
     /**
-     * Updates the layout of this figure and of its descendant figures. Does not
+     * Updates the updateLayout of this figure and of its descendant figures. Does not
      * update connection figures.
+     * <p>
+ This figure may cache its updateLayout. However, this figure does not keep
+ track when its cache becomes invalid. Use a {@link DrawingModel} to
+     * manage this cache, or invoke this method after you performed one of the
+     * following operations:
+     * <ul>
+     * <li>Changing a property of this figure or of one of its descendants with
+     * dirty bits {@link org.jhotdraw.draw.key.DirtyBits#LAYOUT}.</li>
+     * <li>Changing a property of one of the connection targets of this figure
+     * with dirty bits
+     * {@link org.jhotdraw.draw.key.DirtyBits#CONNECTION_LAYOUT}.</li>
+     * <li>Invoking {@code updateLayout} on one of the connection targets of this
+     * figure.</li>
+     * <ul>
      */
-    void layout();
+    void updateLayout();
 
     /**
-     * Applies the stylesheet on this figure and on its descendant figures.
+     * Applies the drawing stylesheet on this figure and on its descendant
+     * figures.
+     * <p>
+     * This figure may cache stylesheet values. However, this figure does not
+     * keep track when its stylesheet values becomes invalid. Use a
+     * {@link DrawingModel} to manage this cache, or invoke this method after
+     * you performed one of the following operations:
+     * <ul>
+     * <li>Changing a property of one of the ancestors this figure with dirty
+     * bits {@link org.jhotdraw.draw.key.DirtyBits#STYLE}.</li>
+     * <ul>
      */
-    void applyCss();
+    void updateCss();
 
     /**
      * Invoked by {@code DrawingModel} when the figure is added to a drawing.
@@ -619,7 +652,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @return The last child. Returns null if the figure has no getChildren.
      */
     default Figure getLastChild() {
-        return childrenProperty().isEmpty() ? null : childrenProperty().get(0);
+        return getChildren().isEmpty() ? null : getChildren().get(0);
     }
 
     /**
@@ -628,20 +661,37 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @return The first child. Returns null if the figure has no getChildren.
      */
     default Figure getFirstChild() {
-        return childrenProperty().isEmpty() //
+        return getChildren().isEmpty() //
                 ? null//
-                : childrenProperty().get(childrenProperty().getSize() - 1);
+                : getChildren().get(getChildren().size() - 1);
     }
 
     /**
-     * Returns all getChildren of the figure.
+     * The child figures.
+     * <p>
+     * All changes on this list causes this figure to fire an invalidation
+     * event.
+     * <p>
+     * If a child is added to this figure, the child must be removed from its
+     * former parent. This figure must set itself set as the parent of the child
+     * immediately after the figure has been added.</p>
+     * <p>
+     * If a child is removed from this figure, this figure must set parent to
+     * null immediately before the child is removed.</p>
+     * <p>
+     * Note that this method returns a {@code ReadOnlyListProperty} which holds
+     * an instance of {@link IndexedSet}. {@code ListChangeListener}s can get
+     * the associated {@code Figure} using the following code:</p>
+     * <pre>{@code
+     * (ListChangeListener.Change change) -> Figure figure =
+     *      (Figure) ((ReadOnlyProperty) change.getList()).getBean();
+     * }</pre>
      *
-     * @return a list of the getChildren
+     *
+     * @return the children
      */
     @Override
-    default ObservableList<Figure> getChildren() {
-        return childrenProperty().get();
-    }
+    ObservableList<Figure> getChildren();
 
     /**
      * Returns the parent figure.
@@ -690,7 +740,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
 
     /**
      * Returns all figures which are connected to this figure.
-     * <pre><code>
+     * <p>
+ Returns all figures which compute their updateLayout based on this figure.
+ <pre><code>
      * +-----------------+                    +-------------------------+
      * | ConnectedFigure |-----connection----&gt;| ConnectionTarget (this) |
      * +-----------------+                    +-------------------------+
@@ -698,13 +750,13 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      *
      * @return a list of connected figures
      */
-    default ObservableSet<Figure> getConnectedFigures() {
-        return connectedFiguresProperty().get();
-    }
+    ObservableSet<Figure> getConnectedFigures();
 
     /**
      * Returns all figures which are connection targets of this figure.
-     * <pre><code>
+     * <p>
+ Returns all figures on which the updateLayout of this figure is based.
+ <pre><code>
      * +------------------------+                    +------------------+
      * | ConnectedFigure (this) |-----connection----&gt;| ConnectionTarget |
      * +------------------------+                    +------------------+
@@ -822,160 +874,72 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Returns the transformation from parent coordinates into local
      * coordinates.
      * <p>
-     * This method may use caching. This method invokes
-     * {@link #computeParentToLocal} to perform the actual computation.
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @return the transformation
      */
-    default Transform getParentToLocal() {
-        return computeParentToLocal();
-    }
-
-    /**
-     * Computes the transformation from parent coordinates into local
-     * coordinates.
-     *
-     * @return the transformation
-     */
-    Transform computeParentToLocal();
+    Transform getParentToLocal();
 
     /**
      * Returns the transformation from local coordinates into parent
      * coordinates.
      * <p>
-     * This method may use caching. This method invokes
-     * {@link #computeLocalToParent} to perform the actual computation.
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @return the transformation
      */
-    default Transform getLocalToParent() {
-        return computeLocalToParent();
-    }
-
-    /**
-     * Computes the transformation from local coordinates into parent
-     * coordinates.
-     *
-     * @return the transformation
-     */
-    Transform computeLocalToParent();
+    Transform getLocalToParent();
 
     /**
      * Returns the transformation from world coordinates into local coordinates.
      * <p>
-     * This method may use caching. This method invokes
-     * {@link #computeWorldToLocal} to perform the actual computation.
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @return the transformation
      */
-    default Transform getWorldToLocal() {
-        return computeWorldToLocal();
-    }
-
-    /**
-     * Computes the transformation from world coordinates into local
-     * coordinates.
-     * <p>
-     * Uses {@link #getParentToLocal} to compute the parent to local transform.
-     *
-     * @return the transformation
-     */
-    /**
-     * Computes the transformation from world coordinates into local
-     * coordinates.
-     * <p>
-     * Uses {@link #getParentToLocal} to compute the parent to local transform.
-     *
-     * @return the transformation
-     */
-    default Transform computeWorldToLocal() {
-        Transform t = getParentToLocal();
-        return getParent() == null ? t : t.createConcatenation(getParent().getWorldToLocal());
-    }
+    Transform getWorldToLocal();
 
     /**
      * Returns the transformation from world coordinates into parent
      * coordinates.
      * <p>
-     * This method may use caching. This method invokes
-     * {@link #computeWorldToParent} to perform the actual computation.
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @return the transformation
      */
-    default Transform getWorldToParent() {
-        return computeWorldToParent();
-    }
-
-    /**
-     * Computes the transformation from world coordinates into parent
-     * coordinates.
-     *
-     * @return the transformation
-     */
-    default Transform computeWorldToParent() {
-        Transform t = new Translate(0, 0);
-        return getParent() == null ? t : t.createConcatenation(getParent().getWorldToLocal());
-    }
+    Transform getWorldToParent();
 
     /**
      * Returns the transformation from local coordinates into world coordinates.
      * <p>
-     * This method may use caching. This method invokes
-     * {@link #computeLocalToParent} to perform the actual computation.
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @return the transformation
      */
-    default Transform getLocalToWorld() {
-        return computeLocalToWorld();
-    }
-
-    /**
-     * Computes the transformation from local coordinates into world
-     * coordinates.
-     * <p>
-     * Uses {@link #getLocalToParent} to compute the local to parent transform.
-     *
-     * @return the transformation
-     */
-    default Transform computeLocalToWorld() {
-        Transform t = getLocalToParent();
-        return getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
-    }
-
-
+    Transform getLocalToWorld();
 
     /**
      * Returns the transformation from world coordinates into drawing
      * coordinates.
      * <p>
-     * This method may use caching. This method invokes
-     * {@link #computeParentToWorld} to perform the actual computation.
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @return the transformation
      */
-    default Transform getParentToWorld() {
-        return computeParentToWorld();
-    }
+    Transform getParentToWorld();
 
-    /**
-     * Computes the transformation from world coordinates into drawing
-     * coordinates.
-     *
-     * @return the transformation
-     */
-    /**
-     * Computes the transformation from world coordinates into drawing
-     * coordinates.
-     *
-     * @return the transformation
-     */
-    default Transform computeParentToWorld() {
-        Transform t = new Translate();
-        return getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
-    }
     /**
      * Transforms the specified point from world coordinates into local
      * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
@@ -987,6 +951,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Transforms the specified point from world coordinates into parent
      * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
@@ -998,6 +965,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Transforms the specified point from local coordinates into drawing
      * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
      *
      * @param p point in drawing coordinates
      * @return point in local coordinates
@@ -1010,4 +980,30 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     default Styleable getStyleableParent() {
         return getParent();
     }
+
+    /**
+     * Clears all cached values.
+     *
+     * The default implementation calls {@link #invalidateTransforms).
+     */
+    default void invalidate() {
+        invalidateTransforms();
+    }
+
+    /**
+     * Clears all cached transformation matrices.
+     * <p>
+     * This figure may cache transformation matrices. However, this figure does
+     * not keep track when its cache becomes invalid. Use a {@link DrawingModel}
+     * to manage this cache, or invoke this method after you performed one of
+     * the following operations:
+     * <ul>
+     * <li>Addition or removal of this figure (or of any of its ancestors) from
+     * its parent figure. (That is, performing a structural change in the
+     * ancestor line of this figure).</li>
+     * <li>Changing a property of this figure or of one of its ancestors with
+     * dirty bits {@link org.jhotdraw.draw.key.DirtyBits#TRANSFORM}</li>
+     * <ul>
+     */
+    void invalidateTransforms();
 }

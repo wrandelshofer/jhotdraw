@@ -16,7 +16,8 @@ import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.connector.Connector;
 
 /**
- * GroupFigure.
+ * A figure which groups child figures, so that they can be
+ * edited by the user as a unit.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -31,7 +32,7 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
     @Override
     public void reshape(Transform transform) {
         // FIXME needs to transform the transform into local coordinates
-        for (Figure child : childrenProperty()) {
+        for (Figure child : getChildren()) {
             child.reshape(transform);
         }
     }
@@ -43,7 +44,7 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
         applyStyleableFigureProperties(ctx, n);
         
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
-        for (Figure child : childrenProperty()) {
+        for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }
         ObservableList<Node> group = ((Group) n).getChildren();

@@ -5,10 +5,8 @@
  */
 package org.jhotdraw.draw.figure;
 
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
-import static org.jhotdraw.draw.figure.Figure.CHILDREN_PROPERTY;
+import javafx.collections.ObservableList;
 
 /**
  * This base class can be used to implement figures which do not support child
@@ -19,11 +17,9 @@ import static org.jhotdraw.draw.figure.Figure.CHILDREN_PROPERTY;
  */
 public abstract class AbstractLeafFigure extends AbstractFigure {
 
-    private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this,CHILDREN_PROPERTY,FXCollections.emptyObservableList());
-
     @Override
-    public final ReadOnlyListProperty<Figure> childrenProperty() {
-        return children;
+    public final ObservableList<Figure> getChildren() {
+        return FXCollections.emptyObservableList();
     }
 
     @Override

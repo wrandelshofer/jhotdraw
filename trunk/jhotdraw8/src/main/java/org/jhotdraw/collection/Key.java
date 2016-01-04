@@ -7,12 +7,14 @@ package org.jhotdraw.collection;
 
 import java.util.Map;
 import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.MapExpression;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableMap;
 
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
@@ -105,8 +107,9 @@ public interface Key<T> extends MapAccessor<T> {
         T oldValue = (T) a.put(this, value);
         return oldValue;
     }
+
     /**
-     * Use this method to perform a type-safe remove operation of an attribute 
+     * Use this method to perform a type-safe remove operation of an attribute
      * on a Map.
      *
      * @param a An attribute map.
@@ -178,13 +181,12 @@ public interface Key<T> extends MapAccessor<T> {
      * @param map a map
      * @return a binding for the map entry
      */
-    default Binding<T> valueAt(MapExpression<Key<?>, Object> map) {
-        ObjectBinding<Object> value = map.valueAt(this);
+    default Binding<T> valueAt(ObservableMap<Key<?>, Object> map) {
+        ObjectBinding<Object> value = Bindings.valueAt(map, this);
         @SuppressWarnings("unchecked")
         Binding<T> binding = (ObjectBinding<T>) value;
         return binding;
     }
-
 
     /**
      * Creates a new property for the map entry specified by this key.
@@ -192,8 +194,8 @@ public interface Key<T> extends MapAccessor<T> {
      * @param map a map
      * @return a property for the map entry
      */
-    default Property<T> propertyAt(final MapExpression<Key<?>, Object> map) {
-        ObjectBinding<Object> value = map.valueAt(this);
+    default Property<T> propertyAt(final ObservableMap<Key<?>, Object> map) {
+        ObjectBinding<Object> value = Bindings.valueAt(map, this);
         return new KeyMapEntryProperty<>(map, this);
     }
 

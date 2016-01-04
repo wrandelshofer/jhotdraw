@@ -10,12 +10,15 @@ import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import static org.jhotdraw.draw.figure.Figure.CHILDREN_PROPERTY;
 import javafx.geometry.Point2D;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.collection.IndexedSet;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import org.jhotdraw.collection.IndexedSet;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -26,25 +29,26 @@ import static java.lang.Math.min;
  * @version $Id$
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
+
     private class ChildList extends IndexedSet<Figure> {
 
         @Override
         public int indexOf(Object o) {
-            if ((o instanceof Figure) && ((Figure)o).getParent()==AbstractCompositeFigure.this){
-                return super.indexOf(o);
+            if ((o instanceof Figure) && ((Figure) o).getParent() == AbstractCompositeFigure.this) {
+                return super.indexOf(o);// linear search!
             }
             return -1;
         }
 
         @Override
         public boolean contains(Object o) {
-            return ((o instanceof Figure) && ((Figure)o).getParent()==AbstractCompositeFigure.this);
+            return ((o instanceof Figure) && ((Figure) o).getParent() == AbstractCompositeFigure.this);
         }
 
         @Override
         protected void onAdded(Figure e) {
-            Figure oldParent=e.getParent();
-            if (oldParent!=null&&oldParent!=AbstractCompositeFigure.this) {
+            Figure oldParent = e.getParent();
+            if (oldParent != null && oldParent != AbstractCompositeFigure.this) {
                 oldParent.remove(e);
             }
             e.parentProperty().set(AbstractCompositeFigure.this);
@@ -54,11 +58,25 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         protected void onRemoved(Figure e) {
             e.parentProperty().set(null);
         }
-        
+
+        @Override
+        protected boolean doAdd(int index, Figure element, boolean checkForDuplicates) {
+            Figure oldParent = element.getParent();
+            if (oldParent != AbstractCompositeFigure.this) {
+                return super.doAdd(index, element, false);
+            } else {
+                return super.doAdd(index, element, true);// linear search!
+            }
+        }
     }
+    /**
+     * The name of the children property.
+     */
+    public final static String CHILDREN_PROPERTY = "children";
 
     private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this, CHILDREN_PROPERTY, new ChildList()).getReadOnlyProperty();
-/*
+
+    /*
     {
         children.addListener(new ListChangeListener<Figure>() {
 
@@ -95,10 +113,9 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
             }
         });
     }*/
-
     @Override
-    public final ReadOnlyListProperty<Figure> childrenProperty() {
-        return children;
+    public ObservableList<Figure> getChildren() {
+        return children.get();
     }
 
     @Override
@@ -113,7 +130,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         double minY = Double.POSITIVE_INFINITY;
         double maxY = Double.NEGATIVE_INFINITY;
 
-        for (Figure child : childrenProperty()) {
+        for (Figure child : getChildren()) {
             Bounds b = child.getBoundsInParent();
             minX = min(minX, b.getMinX());
             maxX = max(maxX, b.getMaxX());
@@ -138,12 +155,12 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     /**
-     * First layout all getChildren and then layout self.
+     * First updateLayout all getChildren and then updateLayout self.
      */
     @Override
-    public final void layout() {
+    public final void updateLayout() {
         for (Figure child : getChildren()) {
-            child.layout();
+            child.updateLayout();
         }
         layoutImpl();
     }

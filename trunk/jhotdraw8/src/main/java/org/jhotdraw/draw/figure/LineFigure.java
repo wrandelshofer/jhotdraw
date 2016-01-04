@@ -133,7 +133,7 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
         return TYPE_SELECTOR;
     }
     @Override
-    public void layout() {
+    public void updateLayout() {
         // empty
     }
     

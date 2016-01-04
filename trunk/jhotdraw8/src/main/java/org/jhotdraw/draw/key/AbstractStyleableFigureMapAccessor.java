@@ -19,7 +19,7 @@ import org.jhotdraw.styleable.StyleableMapAccessor;
  * @author Werner Randelshofer
  * @param <T> the value type
  */
-public abstract class AbstractStyleableFigureMapAccessor<T> implements StyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
+public abstract class AbstractStyleableFigureMapAccessor<T> implements StyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureMapAccessor<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -89,8 +89,8 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
 
         DirtyMask m = DirtyMask.EMPTY;
         for (MapAccessor<?> sub : subAccessors) {
-            if (sub instanceof FigureKey<?>) {
-                m = m.add(((FigureKey<?>) sub).getDirtyMask());
+            if (sub instanceof FigureMapAccessor<?>) {
+                m = m.add(((FigureMapAccessor<?>) sub).getDirtyMask());
             }
         }
         dirtyMask = m;

@@ -19,13 +19,13 @@ import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.key.Point2DStyleableFigureKey;
 
 /**
- * {@code TextFigure} is a {@code TextableFigure} which supports stroking
+ * {@code TextFigure} is a {@code FontableFigure} which supports stroking
  * and filling of the text.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, TextableFigure, TextHolderFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, FontableFigure, TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Text"}.
@@ -104,7 +104,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
     }
     
     @Override
-    public void layout() {
+    public void updateLayout() {
         // empty
     }
     

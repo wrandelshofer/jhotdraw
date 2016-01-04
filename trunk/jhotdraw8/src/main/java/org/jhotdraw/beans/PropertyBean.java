@@ -41,31 +41,15 @@ import org.jhotdraw.collection.MapAccessor;
 public interface PropertyBean {
 
     // ---
-    // constant declarations
+    // Properties
     // ---
 
-    /**
-     * The name of the "getProperties" property.
-     */
-    public final String PROPERTIES_PROPERTY = "properties";
-
-    // ---
-    // property methods
-    // ---
     /**
      * Returns an observable map of property keys and their values.
      *
      * @return the map
      */
-    ReadOnlyMapProperty<Key<?>, Object> propertiesProperty();
-    /**
-     * Returns an observable map of property keys and their values.
-     *
-     * @return the map
-     */
-    default ObservableMap<Key<?>, Object> getProperties() {
-        return propertiesProperty().get();
-    }
+    ObservableMap<Key<?>, Object> getProperties();
 
     // ---
     // convenience methods

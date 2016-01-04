@@ -4,19 +4,18 @@
  */
 package org.jhotdraw.draw.figure;
 
-import org.jhotdraw.draw.figure.AbstractLabelFigure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.RenderContext;
 
 /**
- * SimpleLabelFigure.
+ * LabelFigure.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LabelFigure extends AbstractLabelFigure implements TextableFigure, TextHolderFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
+public class LabelFigure extends AbstractLabelFigure implements FontableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
 
     public LabelFigure() {
         this(0, 0, "");

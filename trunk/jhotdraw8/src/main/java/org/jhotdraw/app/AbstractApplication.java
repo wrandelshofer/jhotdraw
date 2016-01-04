@@ -2,10 +2,10 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.app;
 
 import java.net.URI;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
@@ -19,14 +19,16 @@ import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
-import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
+import javafx.collections.ObservableMap;
 import org.jhotdraw.collection.Key;
 
 /**
  * AbstractApplication.
+ *
  * @author Werner Randelshofer
  */
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw.app.Application {
+
     /**
      * Holds the recent URIs.
      */
@@ -42,25 +44,33 @@ public abstract class AbstractApplication extends javafx.application.Application
             = new SimpleIntegerProperty(//
                     this, MAX_NUMBER_OF_RECENT_URIS_PROPERTY, //
                     10);
-    
-    /** Holds the disablers. */
-    private final SetProperty<Object> disablers = new SimpleSetProperty<>(this,DISABLERS_PROPERTY,FXCollections.observableSet());
-    
-    /** True if disablers is not empty. */
+
+    /**
+     * Holds the disablers.
+     */
+    private final SetProperty<Object> disablers = new SimpleSetProperty<>(this, DISABLERS_PROPERTY, FXCollections.observableSet());
+
+    /**
+     * True if disablers is not empty.
+     */
     private final ReadOnlyBooleanProperty disabled;
+
     {
-       ReadOnlyBooleanWrapper w = new ReadOnlyBooleanWrapper(this,DISABLED_PROPERTY);
+        ReadOnlyBooleanWrapper w = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
         w.bind(Bindings.not(disablers.emptyProperty()));
         disabled = w.getReadOnlyProperty();
     }
-    
-    /** Properties. */
-    private ReadOnlyMapProperty<Key<?>, Object> properties;
- 
+
+    /**
+     * Properties.
+     */
+    private ObservableMap<Key<?>, Object> properties;
+
     @Override
     public ReadOnlySetProperty<URI> recentUrisProperty() {
         return recentUris;
     }
+
     @Override
     public ReadOnlyBooleanProperty disabledProperty() {
         return disabled;
@@ -70,21 +80,18 @@ public abstract class AbstractApplication extends javafx.application.Application
     public IntegerProperty maxNumberOfRecentUrisProperty() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public SetProperty<Object> disablersProperty() {
         return disablers;
     }
 
     @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
-            properties//
-                    = new ReadOnlyMapWrapper<Key<?>, Object>(//
-                            this, PROPERTIES_PROPERTY, //
-                            FXCollections.observableHashMap()).getReadOnlyProperty();
+            properties = FXCollections.observableMap(new IdentityHashMap<>());
         }
         return properties;
     }
-    
+
 }

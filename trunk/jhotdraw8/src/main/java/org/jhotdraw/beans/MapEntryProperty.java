@@ -7,6 +7,7 @@ package org.jhotdraw.beans;
 import javafx.beans.binding.MapExpression;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 
 /**
  * This property is bound to an entry in a map.
@@ -15,12 +16,12 @@ import javafx.collections.MapChangeListener;
  */
 public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T> {
 
-    protected MapExpression<K, V> map;
+    protected ObservableMap<K, V> map;
     protected K key;
     protected MapChangeListener<K, V> mapListener;
     protected Class<T> tClazz;
 
-    public MapEntryProperty(MapExpression<K, V> map, K key, Class<T> tClazz) {
+    public MapEntryProperty(ObservableMap<K, V> map, K key, Class<T> tClazz) {
         this.map = map;
         this.key = key;
         this.tClazz = tClazz;

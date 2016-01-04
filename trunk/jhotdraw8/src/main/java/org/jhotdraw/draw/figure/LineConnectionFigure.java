@@ -32,7 +32,7 @@ import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw.draw.locator.PointLocator;
 
 /**
- * LineConnectionFigure.
+ * A figure which draws a line connection between two figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -117,9 +117,9 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
             }
         };
 
-        startConnectorProperty = START_CONNECTOR.propertyAt(propertiesProperty());
+        startConnectorProperty = START_CONNECTOR.propertyAt(getProperties());
         startConnectorProperty.addListener(clStart);
-        endConnectorProperty = END_CONNECTOR.propertyAt(propertiesProperty());
+        endConnectorProperty = END_CONNECTOR.propertyAt(getProperties());
         endConnectorProperty.addListener(clEnd);
     }
 
@@ -175,7 +175,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     }
 
     @Override
-    public void layout() {
+    public void updateLayout() {
         Point2D start = get(START);
         Point2D end = get(END);
         Connector startConnector = get(START_CONNECTOR);

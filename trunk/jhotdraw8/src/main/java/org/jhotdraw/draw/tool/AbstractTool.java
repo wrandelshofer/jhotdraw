@@ -5,6 +5,7 @@
  */
 package org.jhotdraw.draw.tool;
 
+import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -14,6 +15,7 @@ import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
@@ -22,7 +24,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import org.jhotdraw.app.AbstractDisableable;
 import org.jhotdraw.app.EditableComponent;
-import static org.jhotdraw.beans.PropertyBean.PROPERTIES_PROPERTY;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.SimpleDrawingEditor;
@@ -43,7 +44,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     /**
      * The getProperties.
      */
-    private ReadOnlyMapProperty<Key<?>, Object> properties;
+    private ObservableMap<Key<?>, Object> properties;
     /**
      * The active view.
      */
@@ -217,12 +218,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // Properties
     // ---
     @Override
-    public final ReadOnlyMapProperty<Key<?>, Object> propertiesProperty() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
             properties
-                    = new ReadOnlyMapWrapper<Key<?>, Object>(//
-                            this, PROPERTIES_PROPERTY, //
-                            FXCollections.observableHashMap()).getReadOnlyProperty();
+                    = 
+                            FXCollections.observableMap(new IdentityHashMap<>());
         }
         return properties;
     }

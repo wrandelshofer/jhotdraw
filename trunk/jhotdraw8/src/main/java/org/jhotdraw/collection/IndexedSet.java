@@ -124,7 +124,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public void add(int index, E element) {
-        doAdd(index, element);
+        doAdd(index, element, true);
     }
 
     /**
@@ -155,8 +155,8 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     }
 
-    protected boolean doAdd(int index, E element) {
-        int oldIndex = list.indexOf(element); // linear search!
+    protected boolean doAdd(int index, E element, boolean checkForDuplicates) {
+        int oldIndex = checkForDuplicates ? list.indexOf(element):-1; // linear search!
         if (oldIndex == -1) {
             list.add(index, element);
             beginChange();
@@ -242,7 +242,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public boolean add(E e) {
-        return doAdd(size(), e);
+        return doAdd(size(), e, true);
     }
 
     public Iterator<E> descendingIterator(int index) {
@@ -482,12 +482,12 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public final boolean offerFirst(E e) {
-        return doAdd(0, e);
+        return doAdd(0, e, true);
     }
 
     @Override
     public final boolean offerLast(E e) {
-        return doAdd(size(), e);
+        return doAdd(size(), e, true);
     }
 
     @Override

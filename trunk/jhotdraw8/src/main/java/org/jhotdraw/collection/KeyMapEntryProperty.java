@@ -4,7 +4,7 @@
  */
 package org.jhotdraw.collection;
 
-import javafx.beans.binding.MapExpression;
+import javafx.collections.ObservableMap;
 import org.jhotdraw.beans.MapEntryProperty;
 
 /**
@@ -16,10 +16,12 @@ import org.jhotdraw.beans.MapEntryProperty;
  * @author Werner Randelshofer
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
-private final MapAccessor<V> accessor;
-    public KeyMapEntryProperty(MapExpression<Key<?>, Object> map, MapAccessor<V> key) {
-        super(map, (key instanceof Key<?>)?(Key<?>)key:null, key.getValueType());
-        this.accessor=key;
+
+    private final MapAccessor<V> accessor;
+
+    public KeyMapEntryProperty(ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
+        super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getValueType());
+        this.accessor = key;
     }
 
     @Override
@@ -28,14 +30,15 @@ private final MapAccessor<V> accessor;
         V ret = accessor.get(map);
         return ret;
     }
+
     @Override
     public void setValue(V value) {
         if (value != null && !tClazz.isAssignableFrom(value.getClass())) {
             throw new IllegalArgumentException("value is not assignable " + value);
         }
-       accessor.put(map, value);
+        accessor.put(map, value);
 
-            // Note: super must be called after "put", so that listeners
+        // Note: super must be called after "put", so that listeners
         //       can be properly informed.
         super.setValue(value);
     }
