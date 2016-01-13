@@ -154,7 +154,7 @@ import static java.lang.Math.max;
  * state of a figure is changed, method {@code updateLayout()} needs to be invoked on
  * the root of the tree hierarchy to incrementally update the state of all
  * dependent figures and then all figures need to be rendered again. This is
- * time consuming. The interface {@link org.jhotdraw.draw.key.FigureKey}
+ * time consuming. The interface {@link org.jhotdraw.draw.key.FigureMapAccessor}
  * provides hints about which figures need to be laid out and rendered again.
  * The hints are given by a {@link DirtyMask}.
  * </p>
@@ -569,10 +569,10 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Updates the updateLayout of this figure and of its descendant figures. Does not
      * update connection figures.
      * <p>
- This figure may cache its updateLayout. However, this figure does not keep
- track when its cache becomes invalid. Use a {@link DrawingModel} to
-     * manage this cache, or invoke this method after you performed one of the
-     * following operations:
+     * This figure may cache its updateLayout. However, this figure does not 
+     * keep track when its cache becomes invalid. Use a 
+     * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or
+     * invoke this method after you performed one of the following operations:
      * <ul>
      * <li>Changing a property of this figure or of one of its descendants with
      * dirty bits {@link org.jhotdraw.draw.key.DirtyBits#LAYOUT}.</li>
@@ -581,7 +581,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * {@link org.jhotdraw.draw.key.DirtyBits#CONNECTION_LAYOUT}.</li>
      * <li>Invoking {@code updateLayout} on one of the connection targets of this
      * figure.</li>
-     * <ul>
+     * </ul>
      */
     void updateLayout();
 
@@ -591,12 +591,12 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * This figure may cache stylesheet values. However, this figure does not
      * keep track when its stylesheet values becomes invalid. Use a
-     * {@link DrawingModel} to manage this cache, or invoke this method after
-     * you performed one of the following operations:
+     * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or 
+     * invoke this method after you performed one of the following operations:
      * <ul>
      * <li>Changing a property of one of the ancestors this figure with dirty
      * bits {@link org.jhotdraw.draw.key.DirtyBits#STYLE}.</li>
-     * <ul>
+     * </ul>
      */
     void updateCss();
 
@@ -984,7 +984,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Clears all cached values.
      *
-     * The default implementation calls {@link #invalidateTransforms).
+     * The default implementation calls {@link #invalidateTransforms}.
      */
     default void invalidate() {
         invalidateTransforms();
@@ -994,16 +994,16 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Clears all cached transformation matrices.
      * <p>
      * This figure may cache transformation matrices. However, this figure does
-     * not keep track when its cache becomes invalid. Use a {@link DrawingModel}
-     * to manage this cache, or invoke this method after you performed one of
-     * the following operations:
+     * not keep track when its cache becomes invalid. Use a 
+     * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or
+     * invoke this method after you performed one of the following operations:
      * <ul>
      * <li>Addition or removal of this figure (or of any of its ancestors) from
      * its parent figure. (That is, performing a structural change in the
      * ancestor line of this figure).</li>
      * <li>Changing a property of this figure or of one of its ancestors with
      * dirty bits {@link org.jhotdraw.draw.key.DirtyBits#TRANSFORM}</li>
-     * <ul>
+     * </ul>
      */
     void invalidateTransforms();
 }
