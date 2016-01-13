@@ -4,6 +4,8 @@
  */
 package org.jhotdraw.draw.figure;
 
+import javafx.scene.control.Labeled;
+import javafx.scene.text.Text;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.StringStyleableFigureKey;
@@ -19,4 +21,21 @@ public interface TextableFigure extends Figure {
     /** The text. Default value: {@code ""}. */
     public final static StringStyleableFigureKey TEXT = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), "");
 
+    /**
+     * Updates a text node with textable properties.
+     *
+     * @param text a text node
+     */
+    default void applyTextableFigureProperties(Text text) {
+        text.setText(getStyled(TEXT));
+    }
+
+    /**
+     * Updates a text node with fontable properties.
+     *
+     * @param text a text node
+     */
+    default void applyTextableFigureProperties(Labeled text) {
+        text.setText(getStyled(TEXT));
+    }
 }

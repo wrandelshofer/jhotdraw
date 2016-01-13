@@ -47,7 +47,7 @@ import org.jhotdraw.draw.locator.RelativeLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractLabelFigure extends AbstractLeafFigure implements TextFillableFigure, FillableFigure, StrokeableFigure, FontableFigure {
+public abstract class AbstractLabelFigure extends AbstractLeafFigure implements TextFillableFigure, FillableFigure, StrokeableFigure, FontableFigure, TextableFigure {
 
     public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
@@ -177,8 +177,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         tn.setText(getText());
         tn.setX(get(ORIGIN_X));
         tn.setY(get(ORIGIN_Y));
-        applyLabeledFigureProperties(tn);
+        applyTextFillableFigureProperties(tn);
         applyTextableFigureProperties(tn);
+        applyFontableFigureProperties(tn);
     }
 
     @Override
