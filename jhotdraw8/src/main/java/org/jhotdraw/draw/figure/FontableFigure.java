@@ -64,11 +64,11 @@ public interface FontableFigure extends Figure {
     public static DoubleStyleableFigureKey WRAPPING_WIDTH = new DoubleStyleableFigureKey("wrappingWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
 
     /**
-     * Updates a text node with text properties except {@code TEXT}.
+     * Updates a text node with fontable properties.
      *
      * @param text a text node
      */
-    default void applyTextableFigureProperties(Text text) {
+    default void applyFontableFigureProperties(Text text) {
         Font font = getStyled(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
@@ -100,11 +100,11 @@ public interface FontableFigure extends Figure {
     }
 
     /**
-     * Updates a text node with text properties except {@code TEXT}.
+     * Updates a text node with fontable properties.
      *
      * @param text a text node
      */
-    default void applyTextableFigureProperties(Labeled text) {
+    default void applyFontableFigureProperties(Labeled text) {
         Font font = getStyled(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);

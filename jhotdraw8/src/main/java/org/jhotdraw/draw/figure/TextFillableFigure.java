@@ -29,7 +29,7 @@ public interface TextFillableFigure extends Figure {
      *
      * @param text a text node
      */
-    default void applyLabeledFigureProperties(Text text) {
+    default void applyTextFillableFigureProperties(Text text) {
         text.setFill(getStyled(TEXT_FILL));
     }
     /**
@@ -37,7 +37,7 @@ public interface TextFillableFigure extends Figure {
      *
      * @param text a text node
      */
-    default void applyLabeledFigureProperties(Labeled text) {
+    default void applyTextFillableFigureProperties(Labeled text) {
         text.setTextFill(getStyled(TEXT_FILL));
     }
 }

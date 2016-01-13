@@ -89,6 +89,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
         applyStrokeableFigureProperties(tn);
         applyFillableFigureProperties(tn);
         applyCompositableFigureProperties(tn);
+        applyFontableFigureProperties(tn);
         applyStyleableFigureProperties(ctx, node);
         tn.applyCss();
     }
