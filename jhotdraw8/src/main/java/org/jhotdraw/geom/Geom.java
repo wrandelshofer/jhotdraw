@@ -200,14 +200,14 @@ public class Geom {
         i.next();
         for (; !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-                case PathIterator.SEG_MOVETO:
-                    moveToX = coords[0];
-                    moveToY = coords[1];
-                    break;
-                case PathIterator.SEG_CLOSE:
-                    coords[0] = moveToX;
-                    coords[1] = moveToY;
-                    break;
+            case PathIterator.SEG_MOVETO:
+                moveToX = coords[0];
+                moveToY = coords[1];
+                break;
+            case PathIterator.SEG_CLOSE:
+                coords[0] = moveToX;
+                coords[1] = moveToY;
+                break;
             }
             Point2D chop = Geom.intersect(
                     prevX, prevY,
@@ -833,7 +833,7 @@ public class Geom {
      *     1  )
      * </pre> With z1=1 and z2=1;
      *
-     * @param p
+     * @param p the vector
      * @return the normalized vector
      */
     public static Point3D homogenize(Point3D p) {
@@ -853,7 +853,7 @@ public class Geom {
      *     1  )
      * </pre> With z1=1 and z2=1;
      *
-     * @param p
+     * @param p the vector
      * @return the normalized vector
      */
     public static Point2D homogenize2D(Point3D p) {
@@ -874,10 +874,8 @@ public class Geom {
      *     x1 * y2 - y1 * x2  )
      * </pre> With z1=1 and z2=1;
      *
-     * @param x1 x1
-     * @param y1 y1
-     * @param x2 x2
-     * @param y2 y2
+     * @param p1 point 1
+     * @param p2 point 2
      * @return the cross product
      */
     public static Point3D hcross(Point2D p1, Point2D p2) {
@@ -969,10 +967,11 @@ public class Geom {
         double cvx = -vy;
         double cvy = vx;
         double norm = sqrt(cvx * cvx + cvy * cvy);
-        double m = norm == 0 ? 0 : 1/norm;
+        double m = norm == 0 ? 0 : 1 / norm;
 
         return new Point2D(cvx * m, cvy * m);
     }
+
     /**
      * Gets a vector which is perpendicular to the given line.
      *
@@ -984,40 +983,62 @@ public class Geom {
      * @return the perpendicular vector of length {@code vectorLength}
      */
     public static Point2D perp(double l1x, double l1y, double l2x, double l2y, double length) {
-        return perp(l1x,l1y,l2x,l2y).multiply(length);
+        return perp(l1x, l1y, l2x, l2y).multiply(length);
     }
-    
 
     public static double squaredDistance(Point2D p, double x, double y) {
         double a = p.getX() - x;
         double b = p.getY() - y;
         return a * a + b * b;
     }
-    public static double squaredDistance(double x1,double y1, double x2, double y2) {
+
+    public static double squaredDistance(double x1, double y1, double x2, double y2) {
         double a = x1 - x2;
         double b = x2 - y2;
         return a * a + b * b;
     }
-    
-        /** Unsigned shortest distance between two angles. 
+
+    /**
+     * Unsigned shortest distance between two angles.
+     *
+     * @param from angle 0
+     * @param to angle 1
      * @return 0 &lt;= diff &lt;= PI.
      */
-   public static double anglesUnsignedSpan(double angle0, double angle1) {
-        return angle0 > angle1 ? angle0-angle1:angle1-angle0;
+    public static double anglesUnsignedSpan(double from, double to) {
+        return from > to ? from - to : to - from;
     }
-    /** Signed shortest distance between two angles. 
+
+    /**
+     * Signed shortest distance between two angles.
+     *
+     * @param from angle 0
+     * @param to angle 1
      * @return -PI &lt;= diff &lt;= PI.
      */
     public static double anglesSignedSpan(double from, double to) {
-        double diff=to-from;
-        if (diff > PI) diff=diff-PI;
-else        if (diff < -PI) diff=diff+2*PI;
+        double diff = to - from;
+        if (diff > PI) {
+            diff = diff - PI;
+        } else if (diff < -PI) {
+            diff = diff + 2 * PI;
+        }
         return diff;
     }
-public static double angleSubtract(double a,double b) {
-    double diff = a - b;
-    if (diff < -2*PI)diff+=2*PI;
-    return diff;
-}
+
+    /**
+     * Signed difference of two angles.
+     *
+     * @param from angle 0
+     * @param to angle 1
+     * @return -PI &lt;= diff &lt;= PI.
+     */
+    public static double angleSubtract(double from, double to) {
+        double diff = from - to;
+        if (diff < -2 * PI) {
+            diff += 2 * PI;
+        }
+        return diff;
+    }
 
 }

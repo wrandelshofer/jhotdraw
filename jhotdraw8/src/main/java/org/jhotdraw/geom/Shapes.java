@@ -200,7 +200,6 @@ public class Shapes {
      * Converts a Java AWT Shape iterator to a JavaFX Shape.
      *
      * @param shape AWT Shape
-     * @param at Optional transformation which is applied to the shape
      * @return SVG Path
      */
     public static String svgStringFromAWT(Shape shape) {
@@ -498,11 +497,14 @@ public class Shapes {
     }
 
     /**
-     * Returns a value as a BezierPath array. as specified in
-     * http://www.w3.org/TR/SVGMobile12/paths.html#PathDataBNF
+     * Returns a value as a SvgPath2D.
      *
      * Also supports elliptical arc commands 'a' and 'A' as specified in
      * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
+     * 
+     * @param str the SVG path
+     * @return the SvgPath2D
+     * @throws java.io.IOException if the String is not a valid path
      */
     public static SvgPath2D awtShapeFromSvgString(String str) throws IOException {
         SvgPath2D out = new SvgPath2D();
