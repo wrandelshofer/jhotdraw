@@ -12,7 +12,7 @@ import org.jhotdraw.css.SelectorModel;
  * matches on a previous sibling of the element and if its second selector
  * matches the element.
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
     public class GeneralSiblingCombinator extends Combinator {
 

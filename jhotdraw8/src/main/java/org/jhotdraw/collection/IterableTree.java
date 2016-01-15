@@ -12,8 +12,12 @@ import java.util.List;
 /**
  * IterableTree.
  *
+ * @design.pattern IterableTree Iterator, Aggregate.
+ * The iterator pattern is used to provide a choice of iteration strategies
+ * for a tree structure.
+ * 
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  * @param <T> the type of nodes in the iterable tree
  */
 public interface IterableTree<T extends IterableTree<T>> {
@@ -102,6 +106,11 @@ public interface IterableTree<T extends IterableTree<T>> {
         }
     }
 
+    /**
+     * @design.pattern IterableTree Iterator, Iterator.
+     * 
+     * @param <T> the type of the tree nodes
+     */
     static class PreorderIterator<T extends IterableTree<T>> implements Iterator<T> {
 
         private final LinkedList<Iterator<T>> stack = new LinkedList<>();
@@ -137,7 +146,9 @@ public interface IterableTree<T extends IterableTree<T>> {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }
-
+    /**
+     * @design.pattern IterableTree Iterator, Iterator.
+     */
     static class BreadthFirstIterator<T extends IterableTree<T>> implements Iterator<T> {
 
         protected LinkedList<Iterator<T>> queue;

@@ -10,8 +10,8 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 
 /**
- * Interface for beans which support an open number of getProperties in a property
- map.
+ * Interface for beans which support an open number of getProperties in a 
+ * property map.
  * <p>
  * A property is accessed using a type safe {@link Key}.
  * </p>

@@ -15,7 +15,7 @@ import org.jhotdraw.draw.key.FigureMapAccessor;
 
 /**
  * This drawing model assumes that the drawing contains no figures which perform
- * layouts and no getConnectedFigures between figures.
+ layouts and no getDependentFigures between figures.
  *
  *
  * @author Werner Randelshofer
@@ -112,7 +112,7 @@ public class NoLayoutNoConnectionsDrawingModel extends AbstractDrawingModel {
     @Override
     public void disconnect(Figure figure) {
         // no event fired! 
-        figure.disconnect();
+        figure.disconnectDependantsAndProviders();
     }
 
     @Override

@@ -16,28 +16,30 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.draw.key.CColorStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 import org.jhotdraw.text.CColor;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
  * <p>
- * <b>Tree Structure.</b> The graphical elements are represented by
- * {@link Figure} objects. The figure objects are organized in a tree structure
- * of which the drawing object is typically the root.
- * <p>
- * <b>Nested Drawings.</b> Since {@code Drawing} implements the {@code Figure}
- * interface, a drawing may be contained in another drawing.</p>
- * <p>
- * <b>Styling.</b> A drawing can have a style sheet which may affect the state
- * of its descendant figures. Since figures cache style sheet data, method
- * {@code applyCss} must be invoked on the drawing, when its style sheet is
- * changed, and on a figure when its location in the descendant tree structure
- * changes.</p>
+ * <b>Styling.</b> A drawing can have a style sheet which affects the style
+ * of the figures.
  * <p>
  * <b>Layers.</b> By convention all children of a {@code Drawing} must be
  * {@link Layer}s.</p>
  *
+ * @design.pattern Drawing Framework, KeyAbstraction.
+ * The drawing framework supports the creation of editors for structured 
+ * drawings. The key abstractions of the framework are: 
+ * {@link Drawing}, {@link Figure}, {@link org.jhotdraw.draw.handle.Handle}, 
+ * {@link org.jhotdraw.draw.tool.Tool}, {@link DrawingView},
+ * {@link DrawingEditor}, {@link org.jhotdraw.draw.model.DrawingModel}.
+ * @design.pattern org.jhotdraw.draw.model.DrawingModel Facade, Subsystem.
+ * 
+ * @design.pattern Drawing Strategy, Context.
+ * {@link org.jhotdraw.draw.io.InputFormat} and
+ * {@link org.jhotdraw.draw.io.OutputFormat} encapsulate the algorithms for
+ * loading and saving a {@link Drawing}.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

@@ -11,18 +11,14 @@ import org.jhotdraw.draw.handle.Handle;
 /**
  * A <em>handle tracker</em> provides the behavior for manipulating a
  * {@link Handle} of a figure to the {@link SelectionTool}.
- * <hr>
- * <b>Design Patterns</b>
  *
- * <p><em>Strategy</em><br>
- * The different behavior states of the selection tool are implemented by
- * trackers.<br>
- * Context: {@link SelectionTool}; State: {@link DragTracker},
- * {@link HandleTracker}, {@link SelectAreaTracker}.
- * <hr>
- *
- * XXX Do we really need this class? Handle can process input events on its own! 
-
+ * @design.pattern SelectionTool Strategy, Strategy.
+ * 
+ * @design.pattern HandleTracker Chain of Responsibility, Handler.
+ * Mouse and keyboard events occur on a {@link org.jhotdraw.draw.DrawingView}, 
+ * and are preprocessed by {@link SelectionTool}, and then by 
+ * {@link HandleTracker}. {@code HandleTracker} invokes corresponding methods
+ * on a {@link Handle} which in turn changes an aspect of a figure.
  *
  * @author Werner Randelshofer
  * @version $Id$

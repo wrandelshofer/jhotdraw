@@ -24,7 +24,7 @@ import org.jhotdraw.app.View;
  * is invoked.
  * 
  * @author Werner Randelshofer
- * @version $Id: AbstractViewAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public abstract class AbstractViewAction extends AbstractApplicationAction {
 

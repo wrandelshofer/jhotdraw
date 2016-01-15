@@ -9,7 +9,7 @@ package org.jhotdraw.draw.handle;
  * from figures.
  * 
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class HandleType {
     /** 

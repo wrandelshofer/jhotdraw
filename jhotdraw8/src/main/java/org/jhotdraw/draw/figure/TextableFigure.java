@@ -13,6 +13,8 @@ import org.jhotdraw.draw.key.StringStyleableFigureKey;
 /**
  * A figure which holds text in an attribute.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

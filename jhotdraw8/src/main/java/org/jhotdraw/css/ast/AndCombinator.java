@@ -11,7 +11,7 @@ import org.jhotdraw.css.SelectorModel;
  * second selector match the element.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class AndCombinator extends Combinator {
 

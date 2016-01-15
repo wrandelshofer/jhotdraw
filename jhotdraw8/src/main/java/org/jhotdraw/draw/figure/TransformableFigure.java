@@ -27,10 +27,12 @@ import org.jhotdraw.geom.Geom;
 /**
  * Transformable figure.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface TransformableFigure extends TransformCachingFigure {
+public interface TransformableFigure extends TransformCacheableFigure {
 
     /**
      * Defines the angle of rotation around the center of the figure in degrees.
@@ -224,7 +226,7 @@ public interface TransformableFigure extends TransformCachingFigure {
     }
     @Override
     default void invalidateTransforms() {
-        TransformCachingFigure.super.invalidateTransforms();
+        TransformCacheableFigure.super.invalidateTransforms();
         set(FigureImplementationDetails.PARENT_TO_LOCAL, null);
         set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
     }

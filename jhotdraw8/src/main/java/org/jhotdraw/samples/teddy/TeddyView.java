@@ -27,9 +27,10 @@ import org.jhotdraw.concurrent.BackgroundTask;
 import org.jhotdraw.concurrent.TaskCompletionEvent;
 
 /**
- * FXML Controller class
+ * TeddyView.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class TeddyView extends AbstractView implements Initializable {
 

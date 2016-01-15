@@ -16,8 +16,9 @@ import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.util.Resources;
 
 /**
- *
+ * GrapherApplication.
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class GrapherApplication extends DocumentOrientedApplication {
 

@@ -11,7 +11,7 @@ import org.jhotdraw.css.SelectorModel;
  * attribute with the specified name and value.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class EqualsMatchSelector extends AbstractAttributeSelector {
 

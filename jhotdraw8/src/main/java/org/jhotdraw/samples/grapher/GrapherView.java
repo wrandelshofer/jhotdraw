@@ -76,8 +76,9 @@ import org.jhotdraw.util.Resources;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**
- *
- * @author werni
+ * GrapherView.
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class GrapherView extends AbstractView implements EditorView {
 

@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
  * StyleableSelectorModel.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class StyleableSelectorModel implements SelectorModel<Styleable> {
 

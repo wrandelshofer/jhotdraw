@@ -13,7 +13,7 @@
     <property name="jdk.version" value="8"/>
 
 
-    <property name="copyright" value="Copyright (c) 2015 by the authors and contributors of JHotDraw."/>
+    <property name="copyright" value="Copyright (c) 2016 by the authors and contributors of JHotDraw."/>
     <exec executable="svnversion" outputproperty="svn.version" />
     <property name="version" value="rev${svn.version}"/>
     
@@ -68,6 +68,7 @@
       <src path="${src.main.java}"/>
       <classpath>
         <fileset dir="${lib.compile}" />
+        <fileset file="${java.home}/../lib/tools.jar" />
       </classpath>
       <compilerarg value="-version"/>
     </javac>
@@ -84,13 +85,15 @@
     <target depends="init" name="do-javadoc">
         <mkdir dir="${build.javadoc}"/>
         <javadoc destdir="${build.javadoc}" 
-        footer="&lt;font size=-2>${copyright}/font>"
+        footer="&lt;font size=-2&gt;${copyright}&lt;/font&gt;"
         header="${ant.project.name} ${version}" 
         windowtitle="${ant.project.name} ${version}"
         maxmemory="256M"
         overview="${src.main.java}/org/jhotdraw/overview.html"
         charset="UTF-8"
         >
+            <taglet name="org.jhotdraw.javadoc.DesignPatternTaglet" path="${build.classes}"/>
+            <taglet name="org.jhotdraw.javadoc.DesignOverviewTaglet" path="${build.classes}"/>
             <packageset dir="${src.main.java}">
                 <include name="org/jhotdraw/**"/>
             </packageset>
@@ -99,6 +102,7 @@
             </sourcepath>
             <classpath>
                 <pathelement path="${lib.runtime}"/>
+                <fileset file="${java.home}/../lib/tools.jar" />
             </classpath>
         </javadoc>
     </target>
@@ -189,7 +193,7 @@
   </target>
   <target name="jar" depends="compile,do-jar" description="bundles the class files into a jar file">
   </target>
-  <target name="javadoc" depends="clean,do-javadoc" description="generates javadoc documentation">
+  <target name="javadoc" depends="clean,compile,do-javadoc" description="generates javadoc documentation">
   </target>
   <target name="dist" depends="jar,javadoc,do-dist" description="Erstellt eine Distribution für eine Stand-Alone Applikation">
   </target>

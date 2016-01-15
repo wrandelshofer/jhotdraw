@@ -15,7 +15,7 @@ import org.jhotdraw.app.Application;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id: NewWindowAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class NewWindowAction extends NewFileAction {
     private static final long serialVersionUID = 1L;

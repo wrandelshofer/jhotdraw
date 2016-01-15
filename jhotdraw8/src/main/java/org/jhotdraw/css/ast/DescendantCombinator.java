@@ -12,7 +12,7 @@ import org.jhotdraw.css.SelectorModel;
  * itself.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DescendantCombinator extends Combinator {
 

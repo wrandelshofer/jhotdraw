@@ -45,6 +45,10 @@ import org.jhotdraw.draw.handle.Handle;
  * out and that CSS styles are applied before rendering the drawing.
  * </p>
  *
+ * @design.pattern Drawing Framework, KeyAbstraction.
+ * @design.pattern DrawingModel MVC, View.
+ * @design.pattern DrawingEditor Mediator, Colleague.
+ * @design.pattern org.jhotdraw.draw.tool.HandleTracker Chain of Responsibility, Handler.
  *
  * @author Werner Randelshofer
  * @version $Id$

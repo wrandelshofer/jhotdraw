@@ -25,7 +25,7 @@ import org.jhotdraw.net.URIUtil;
  * empty view. If no empty view is available, a new view is created.
  *
  * @author  Werner Randelshofer
- * @version $Id: OpenFileAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class OpenFileAction extends AbstractApplicationAction {
 

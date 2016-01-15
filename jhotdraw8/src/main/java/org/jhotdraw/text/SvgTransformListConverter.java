@@ -45,7 +45,7 @@ import static java.lang.Math.*;
  * </a>
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SvgTransformListConverter implements Converter<List<Transform>> {
 

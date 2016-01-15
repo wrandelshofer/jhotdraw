@@ -8,6 +8,8 @@ package org.jhotdraw.draw.key;
  * {@code DirtyBits} describes how changing a property value of a {@code Figure}
  * affects dependent objects.
  *
+ * @design.pattern org.jhotdraw.draw.model.DrawingModel Strategy, Context.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

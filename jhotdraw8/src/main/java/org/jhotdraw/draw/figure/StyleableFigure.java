@@ -21,6 +21,8 @@ import org.jhotdraw.draw.key.FigureMapAccessor;
  * {@code StyleableFigure} supports styling of a figure using
  * {@code FigureMapAccessor}s.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  */
 public interface StyleableFigure extends Figure {

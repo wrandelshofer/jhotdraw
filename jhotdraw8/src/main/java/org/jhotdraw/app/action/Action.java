@@ -17,7 +17,15 @@ import org.jhotdraw.collection.SimpleKey;
 
 /**
  * Action.
+ * 
+ * @design.pattern org.jhotdraw.app.Application Framework, KeyAbstraction.
+ * 
+ * @design.pattern Action Command, Command.
+ * The command pattern is used to treat commands like objects inside of an
+ * application.
+ * 
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disableable {
    /** 
@@ -85,7 +93,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
         return get(LABEL);
     }
     /** The name of the action for use in action maps and for resource bundles.
-     * @return The id 
+     * @return The instance 
      */
     default String getName() {
         return get(NAME);

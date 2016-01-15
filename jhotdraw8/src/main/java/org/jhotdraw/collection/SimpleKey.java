@@ -28,7 +28,7 @@ import java.util.List;
  * keys have the same name.
  *
  * @author Werner Randelshofer
- * @version $Id: Key.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  * @param <T> The value type.
  */
 public class SimpleKey<T> implements Key<T> {

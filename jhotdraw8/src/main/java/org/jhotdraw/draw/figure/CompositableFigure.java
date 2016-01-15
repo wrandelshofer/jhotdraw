@@ -11,9 +11,12 @@ import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.EffectStyleableFigureKey;
 
 /**
- * Compositable Figure.
+ * Provides properties for compositing a figure.
+ * 
+ * @design.pattern Figure Mixin, Traits.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface CompositableFigure extends Figure {
 

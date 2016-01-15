@@ -9,6 +9,8 @@ import org.jhotdraw.collection.MapAccessor;
 /**
  * FigureMapAccessor.
  *
+ * @design.pattern org.jhotdraw.draw.model.DrawingModel Strategy, Context.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

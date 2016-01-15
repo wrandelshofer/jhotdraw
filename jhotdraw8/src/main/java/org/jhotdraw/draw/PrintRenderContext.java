@@ -13,7 +13,7 @@ import org.jhotdraw.draw.figure.Figure;
  * PrintRenderContext.
  * 
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface PrintRenderContext extends RenderContext {
     // ---

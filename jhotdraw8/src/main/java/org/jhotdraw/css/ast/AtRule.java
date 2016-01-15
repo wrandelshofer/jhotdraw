@@ -14,7 +14,7 @@ import java.util.List;
  * FIXME - An At Rule is actually quite more complex
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class AtRule extends AST {
 

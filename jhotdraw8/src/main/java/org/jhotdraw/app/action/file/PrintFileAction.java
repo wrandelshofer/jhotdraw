@@ -20,7 +20,7 @@ import org.jhotdraw.util.Resources;
  * interface.
  *
  * @author Werner Randelshofer
- * @version $Id: PrintFileAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class PrintFileAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;

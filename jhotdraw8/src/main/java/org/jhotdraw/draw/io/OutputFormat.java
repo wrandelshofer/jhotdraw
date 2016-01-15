@@ -14,6 +14,9 @@ import org.jhotdraw.draw.Drawing;
 
 /**
  * OutputFormat.
+ * 
+ * @design.pattern Drawing Strategy, Strategy.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

@@ -37,7 +37,7 @@ import org.jhotdraw.net.URIUtil;
  * </p>
  *
  * @author Werner Randelshofer.
- * @version $Id: OpenRecentFileAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class OpenRecentFileAction extends AbstractApplicationAction {
     private static final long serialVersionUID = 1L;

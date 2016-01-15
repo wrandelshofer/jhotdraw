@@ -12,6 +12,9 @@ import java.util.Map;
  * A type safe accessor for maps.
  * <p>
  * Design pattern: Strategy
+ * 
+ * @design.pattern MapAccessor Strategy, Strategy.
+ * Encapsulates a strategy for accessing property values of a map.
  *
  * @param <T> The value type.
  * @author Werner Randelshofer

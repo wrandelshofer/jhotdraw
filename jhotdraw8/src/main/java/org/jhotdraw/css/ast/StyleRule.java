@@ -11,7 +11,7 @@ import java.util.List;
  * A qualified rule consists of a "selector list" and a list of "declaration"s.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class StyleRule extends AST {
 

@@ -17,7 +17,7 @@ import org.jhotdraw.app.View;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id: SaveFileAsAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class SaveFileAsAction extends SaveFileAction {
 

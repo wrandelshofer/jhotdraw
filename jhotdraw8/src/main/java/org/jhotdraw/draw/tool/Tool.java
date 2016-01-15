@@ -20,6 +20,10 @@ import org.jhotdraw.event.Listener;
 /**
  * Tool.
  *
+ * @design.pattern org.jhotdraw.draw.Drawing Framework, KeyAbstraction.
+ * @design.pattern org.jhotdraw.draw.model.DrawingModel MVC, Controller.
+ * @design.pattern org.jhotdraw.draw.DrawingEditor Mediator, Colleague.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -174,7 +178,7 @@ public interface Tool extends PropertyBean, Disableable {
     /**
      * The name of the action for use in action maps and for resource bundles.
      *
-     * @return The id
+     * @return The instance
      */
     default public String getName() {
         return get(NAME);

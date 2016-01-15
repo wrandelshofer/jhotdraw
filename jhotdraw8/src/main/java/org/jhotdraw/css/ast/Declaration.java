@@ -13,7 +13,7 @@ import java.util.List;
  * A "declaration" declares a "property" with a "value".
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Declaration extends AST {
 

@@ -14,7 +14,7 @@ import org.jhotdraw.app.Application;
  * on an {@link Application}.
  *
  * @author Werner Randelshofer.
- * @version $Id: AbstractApplicationAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
 

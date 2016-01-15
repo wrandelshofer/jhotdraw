@@ -11,7 +11,7 @@ import org.jhotdraw.css.SelectorModel;
  * specified value.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IdSelector extends SimpleSelector {
 

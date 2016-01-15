@@ -15,6 +15,8 @@ import org.jhotdraw.draw.key.PaintStyleableFigureKey;
  * Interface figures which render a {@code javafx.scene.shape.Shape} and
  * can be filled.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

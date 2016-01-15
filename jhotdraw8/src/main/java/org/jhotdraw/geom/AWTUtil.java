@@ -8,7 +8,7 @@ package org.jhotdraw.geom;
 /**
  * AWTUtil.
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class AWTUtil {
 

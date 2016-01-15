@@ -20,7 +20,7 @@ import org.jhotdraw.util.*;
  * Selects all items.
  *
  * @author Werner Randelshofer.
- * @version $Id: SelectAllAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class SelectAllAction extends AbstractFocusOwnerAction {
 

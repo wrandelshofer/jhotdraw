@@ -7,6 +7,6 @@
  * Provides abstract actions for document oriented applications.
  *
  * @author Werner Randelshofer
- * @version $Id: package-info.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 package org.jhotdraw.app.action;

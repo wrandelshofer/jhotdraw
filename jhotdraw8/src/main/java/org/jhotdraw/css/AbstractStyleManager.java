@@ -19,7 +19,7 @@ import org.jhotdraw.css.ast.Stylesheet;
  * AbstractStyleManager.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public abstract class AbstractStyleManager<E> implements StyleManager<E> {
 

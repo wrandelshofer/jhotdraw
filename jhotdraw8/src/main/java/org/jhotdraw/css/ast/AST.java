@@ -8,7 +8,7 @@ package org.jhotdraw.css.ast;
  * Abstract syntax tree for cascading style sheets.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public abstract class AST {
 

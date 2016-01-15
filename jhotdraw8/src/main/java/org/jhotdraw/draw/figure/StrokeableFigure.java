@@ -25,6 +25,8 @@ import org.jhotdraw.draw.key.PaintStyleableFigureKey;
  * Interface for figures which render a {@code javafx.scene.shape.Shape} and can
  * be stroked.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

@@ -11,7 +11,7 @@ import org.jhotdraw.css.SelectorModel;
  * class" attribute.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SimplePseudoClassSelector extends PseudoClassSelector {
 

@@ -15,12 +15,13 @@ import javafx.beans.property.SetProperty;
 public interface Disableable {
     // Disabled state
 
-    /** Indicates whether or not this application is enabled. 
+    /** Indicates whether or not this object is disabled. 
      * This is true when the disabler set is not empty.
      *
      * @return the disabled property.
      */
     ReadOnlyBooleanProperty disabledProperty();
+    
     /** The set of disablers.
      * @return The disablers.
      */

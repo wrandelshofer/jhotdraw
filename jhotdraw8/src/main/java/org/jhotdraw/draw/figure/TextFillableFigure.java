@@ -13,6 +13,8 @@ import org.jhotdraw.draw.key.PaintStyleableFigureKey;
 /**
  * {@code TextFillableFigure} allows to change the fill of the text.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

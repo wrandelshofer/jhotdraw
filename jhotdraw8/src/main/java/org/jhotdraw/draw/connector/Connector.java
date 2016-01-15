@@ -11,6 +11,10 @@ import org.jhotdraw.draw.figure.Figure;
  * A <em>connector</em> encapsulates a strategy for locating a connection point
  * on a target {@code Figure}.
  *
+ * @design.pattern Connector Strategy, Strategy.
+ * {@link Connector} encapsulates a strategy for locating a connection point on
+ * a {@link Figure}.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */

@@ -19,7 +19,15 @@ import org.jhotdraw.beans.PropertyBean;
 /**
  * Application.
  *
+ * @design.pattern Application Framework, KeyAbstraction.
+ * The application framework supports the creation of document oriented
+ * applications which can support platform-specific guidelines.
+ * The application framework consists of the following key abstractions:
+ * {@link Application}, {@link ApplicationModel}, {@link View}, 
+ * {@link Action}.
+ * 
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface Application extends Disableable, PropertyBean {
 

@@ -18,7 +18,7 @@ import org.jhotdraw.util.Resources;
  * Closes the active view after letting the user save unsaved changes.
  *
  * @author  Werner Randelshofer
- * @version $Id: CloseFileAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 

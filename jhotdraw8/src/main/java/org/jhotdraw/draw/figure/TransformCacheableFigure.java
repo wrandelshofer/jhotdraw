@@ -13,10 +13,12 @@ import javafx.scene.transform.Transform;
  * This implementation is somewhat inefficient because we store the cached
  * values in a map.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
-public interface TransformCachingFigure extends Figure {
+public interface TransformCacheableFigure extends Figure {
     @Override
     default Transform getParentToWorld() {
         Transform t = get(FigureImplementationDetails.PARENT_TO_WORLD);

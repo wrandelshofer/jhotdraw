@@ -58,7 +58,10 @@ import org.jhotdraw.concurrent.TaskCompletionEvent;
  * </li>
  * </ol>
  *
+ * @design.pattern Application Framework, KeyAbstraction.
+ * 
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface View extends Disableable, PropertyBean {
 

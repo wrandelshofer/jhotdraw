@@ -5,8 +5,6 @@
 package org.jhotdraw.app.action;
 
 import java.util.IdentityHashMap;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
@@ -17,6 +15,7 @@ import org.jhotdraw.collection.Key;
  * AbstractAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public abstract class AbstractAction extends AbstractDisableable implements Action {
 

@@ -102,18 +102,18 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         // the connected figures on one of the connectors changes
         ChangeListener<Connector> clStart = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(END_CONNECTOR) != null && get(END_CONNECTOR).getTarget() != oldValue.getTarget()) {
-                oldValue.getTarget().getConnectedFigures().remove(LineConnectionFigure.this);
+                oldValue.getTarget().getDependentFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getTarget().getConnectedFigures().add(LineConnectionFigure.this);
+                newValue.getTarget().getDependentFigures().add(LineConnectionFigure.this);
             }
         };
         ChangeListener<Connector> clEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(START_CONNECTOR) != null && get(START_CONNECTOR).getTarget() != oldValue.getTarget()) {
-                oldValue.getTarget().getConnectedFigures().remove(LineConnectionFigure.this);
+                oldValue.getTarget().getDependentFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getTarget().getConnectedFigures().add(LineConnectionFigure.this);
+                newValue.getTarget().getDependentFigures().add(LineConnectionFigure.this);
             }
         };
 
@@ -263,7 +263,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
      * @return a list of connected figures
      */
     @Override
-    public Set<Figure> getConnectionTargets() {
+    public Set<Figure> getProvidingFigures() {
         HashSet<Figure> ctf = new HashSet<>();
         if (get(START_CONNECTOR) != null) {
             ctf.add(get(START_CONNECTOR).getTarget());
@@ -284,7 +284,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
 
     @Override
     public boolean isGroupReshapeableWith(Set<Figure> others) {
-        for (Figure f : getConnectionTargets()) {
+        for (Figure f : getProvidingFigures()) {
             if (others.contains(f)) {
                 return false;
             }

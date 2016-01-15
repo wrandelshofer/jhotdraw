@@ -8,7 +8,12 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 
 /**
  * EditableComponent.
+ * 
+ * @design.pattern EditableComponent Adapter, Adapter.
+ * Provides a common API for GUI components which support editing.
+ * 
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface EditableComponent {
     /** The name of the selectionEmpty property. */

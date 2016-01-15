@@ -20,7 +20,7 @@ import javafx.beans.value.WritableValue;
  * stackoverflow.com: Custom Bidirectional Bindings in JavaFX</a>
  *
  * @author BlackLabrador (as stated in the reference)
- * @version $$Id$$
+ * @version $Id$
  */
 public class CustomBinding {
 
