@@ -17,7 +17,7 @@ import org.jhotdraw.util.*;
  * in the active view.
  *
  * @author Werner Randelshofer
- * @version $Id: AbstractFindAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public abstract class AbstractFindAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;

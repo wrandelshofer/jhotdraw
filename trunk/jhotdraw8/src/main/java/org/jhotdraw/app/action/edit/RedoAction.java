@@ -18,7 +18,7 @@ import org.jhotdraw.util.Resources;
 
  *
  * @author Werner Randelshofer
- * @version $Id: RedoAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class RedoAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Regex.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Regex {
 

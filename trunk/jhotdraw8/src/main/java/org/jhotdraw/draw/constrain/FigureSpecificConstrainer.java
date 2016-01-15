@@ -25,7 +25,7 @@ import org.jhotdraw.draw.DrawingView;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class FigureSpecificConstrainer extends AbstractConstrainer implements Constrainer {
     private final Path node = new Path();

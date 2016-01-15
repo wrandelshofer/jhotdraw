@@ -13,7 +13,7 @@ import org.jhotdraw.draw.locator.Locator;
  * LocatorConnector uses a {@link Locator} to compute its position.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class LocatorConnector extends AbstractConnector {
 

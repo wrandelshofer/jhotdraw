@@ -12,6 +12,9 @@ import org.jhotdraw.draw.key.DirtyMask;
 
 /**
  * HideableFigure.
+ * 
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  */
 public interface HideableFigure extends Figure {

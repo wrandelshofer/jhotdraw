@@ -9,7 +9,7 @@ package org.jhotdraw.css.ast;
  * not directly encoded in the element.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public abstract class PseudoClassSelector extends SimpleSelector {
 

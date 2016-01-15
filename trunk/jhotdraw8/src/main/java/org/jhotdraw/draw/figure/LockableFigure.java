@@ -9,6 +9,8 @@ import org.jhotdraw.collection.BooleanKey;
 /**
  * LockableFigure.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  */
 public interface LockableFigure extends Figure {

@@ -14,7 +14,7 @@ import static java.lang.Math.*;
  * {@code SvgPath2D} adds an {@code arcTo} method to {@code Path2D.Double}.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SvgPath2D extends Path2D.Double {
 

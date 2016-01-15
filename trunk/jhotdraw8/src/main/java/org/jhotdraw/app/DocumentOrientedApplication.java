@@ -53,6 +53,7 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  * DocumentOrientedApplication.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class DocumentOrientedApplication extends AbstractApplication {
 

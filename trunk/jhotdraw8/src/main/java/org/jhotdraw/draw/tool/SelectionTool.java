@@ -36,24 +36,11 @@ import org.jhotdraw.util.Resources;
  * <p>
  * Holding down the shift key on mouse pressed, enforces the area selection
  * function.
- * <hr>
- * <b>Design Patterns</b>
- *
- * <p>
- * <em>Strategy</em><br>
+ * 
+ * @design.pattern SelectionTool Strategy, Context.
  * The different behavior states of the selection tool are implemented by
- * trackers.<br>
- * Context: {@link SelectionTool}; State: {@link DragTracker},
- * {@link HandleTracker}, {@link SelectAreaTracker}.
- *
- * <p>
- * <em>Chain of responsibility</em><br>
- * Mouse and keyboard events of the user occur on the drawing view, and are
- * preprocessed by the {@code DragTracker} of a {@code SelectionTool}. In turn
- * {@code DragTracker} invokes "track" methods on a {@code Handle} which in turn
- * changes an aspect of a figure.<br>
- * Client: {@link SelectionTool}; Handler: {@link DragTracker}, {@link Handle}.
- * <hr>
+ * trackers.
+ * @design.pattern HandleTracker Chain of Responsibility, Handler.
  *
  * @author Werner Randelshofer
  * @version $Id$

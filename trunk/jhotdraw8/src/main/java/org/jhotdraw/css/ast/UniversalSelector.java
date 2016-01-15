@@ -10,7 +10,7 @@ import org.jhotdraw.css.SelectorModel;
  * A "universal selector" matches an element if the element exists.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class UniversalSelector extends SimpleSelector {
 

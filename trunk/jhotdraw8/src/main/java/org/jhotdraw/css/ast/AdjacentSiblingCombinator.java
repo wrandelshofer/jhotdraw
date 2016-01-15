@@ -12,7 +12,7 @@ import org.jhotdraw.css.SelectorModel;
  * matches the element.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class AdjacentSiblingCombinator extends Combinator {
 

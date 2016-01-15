@@ -14,7 +14,7 @@ import org.jhotdraw.draw.io.IdFactory;
 /**
  * XmlUrlConverter.
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class XmlUrlConverter implements Converter<URL> {
 

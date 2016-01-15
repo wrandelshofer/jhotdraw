@@ -22,7 +22,7 @@ import org.jhotdraw.draw.io.IdFactory;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssRegexConverter implements Converter<Regex> {
 

@@ -11,7 +11,7 @@ import java.util.List;
  * A stylesheet consists of a list of "rulesets".
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Stylesheet extends AST {
 

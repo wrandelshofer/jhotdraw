@@ -26,7 +26,7 @@ import org.jhotdraw.util.Resources;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id: SaveFileAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class SaveFileAction extends AbstractSaveFileAction {
 

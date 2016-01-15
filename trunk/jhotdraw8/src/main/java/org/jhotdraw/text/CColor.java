@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
  * used to create the color.
  * 
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CColor {
     private final String name;

@@ -23,6 +23,10 @@ import org.jhotdraw.util.ReversedList;
 /**
  * CreationTool.
  *
+ * @design.pattern CreationTool AbstractFactory, Client.
+ * Creation tools use abstract factories (Supplier) for creating new
+ * {@link Figure}s.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

@@ -24,6 +24,8 @@ import org.jhotdraw.draw.key.StringStyleableFigureKey;
 /**
  * A figure which supports font attributes.
  *
+ * @design.pattern Figure Mixin, Traits.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

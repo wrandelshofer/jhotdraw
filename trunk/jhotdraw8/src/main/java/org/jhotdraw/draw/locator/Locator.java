@@ -12,14 +12,9 @@ import org.jhotdraw.draw.figure.Figure;
  * A <em>locator</em> encapsulates a strategy for locating a point on a
  * {@link Figure}.
  *
- * <hr>
- * <b>Design Patterns</b>
- *
- * <p>
- * <em>Strategy</em><br> {@code Locator} encapsulates a strategy for locating a
- * point on a {@code Figure}.<br>
- * Strategy: {@link Locator}; Context: {@link Figure}.
- * <hr>
+ * @design.pattern Locator Strategy, Strategy.
+ * {@link Locator} encapsulates a strategy for locating a point on a 
+ * {@link Figure}.
  *
  * @author Werner Randelshofer
  * @version $Id$

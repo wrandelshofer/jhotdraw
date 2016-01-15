@@ -13,6 +13,15 @@ import org.jhotdraw.collection.SimpleKey;
 /**
  * RenderContext.
  *
+ * @design.pattern RenderContext Builder, Client.
+ * The builder pattern is used for the creation of a JavaFX scene graph from
+ * a Figure. The creation of the scene graph is delegated to the methods 
+ * Figure.createNode and Figure.updateNode. Typically each concrete Figure
+ * class will generate a different scene graph. The same Figure object may also 
+ * create different scene graphs depending on property values of the RenderContext.
+ * For example a PageFigure will render the current page number of the
+ * PrintRenderContext.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

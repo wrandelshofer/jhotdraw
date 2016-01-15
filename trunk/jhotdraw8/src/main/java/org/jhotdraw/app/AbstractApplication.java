@@ -11,8 +11,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SetProperty;
@@ -26,6 +24,7 @@ import org.jhotdraw.collection.Key;
  * AbstractApplication.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw.app.Application {
 

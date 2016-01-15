@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
  * {@link org.jhotdraw.css.ast.SelectorGroup}'s.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DocumentSelectorModel implements SelectorModel<Element> {
 

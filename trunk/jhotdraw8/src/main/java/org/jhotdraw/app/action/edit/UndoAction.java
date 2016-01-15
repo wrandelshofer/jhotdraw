@@ -16,7 +16,7 @@ import org.jhotdraw.util.Resources;
  * Undoes the last user action.
  *
  * @author Werner Randelshofer
- * @version $Id: UndoAction.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
  */
 public class UndoAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;

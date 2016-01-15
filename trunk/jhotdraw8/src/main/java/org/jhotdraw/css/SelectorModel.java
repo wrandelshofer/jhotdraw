@@ -12,7 +12,7 @@ import java.util.Set;
  *
  * @param <T> the element type
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface SelectorModel<T> {
 

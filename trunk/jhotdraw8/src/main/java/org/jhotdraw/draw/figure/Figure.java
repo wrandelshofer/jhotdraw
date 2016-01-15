@@ -5,20 +5,14 @@
 package org.jhotdraw.draw.figure;
 
 import org.jhotdraw.draw.handle.HandleType;
-import org.jhotdraw.draw.key.DirtyMask;
-import static java.lang.Math.*;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
@@ -30,7 +24,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
-import javafx.scene.transform.Translate;
 import org.jhotdraw.collection.IterableTree;
 import org.jhotdraw.collection.IndexedSet;
 import org.jhotdraw.collection.MapAccessor;
@@ -42,129 +35,85 @@ import org.jhotdraw.styleable.StyleablePropertyBean;
 import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
 import org.jhotdraw.draw.handle.RotateHandle;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
 import org.jhotdraw.draw.locator.RelativeLocator;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import javafx.scene.transform.NonInvertibleTransformException;
-import static org.jhotdraw.draw.figure.TransformableFigure.TRANSFORM;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
  * <p>
- * <b>State.</b> The state of a figure is described by the values of its
- * property map.</p>
+ * <b>Rendering.</b> A figure can render a JavaFX scene graph (see {@link Node})
+ * with the help of a {@link RenderContext}. The contents of the scene graph
+ * depends on the class of the figure, the state of the figure, and the state of
+ * the render context.
+ * <p>
+ * <b>State.</b> The state of a figure is defined by its property values.
+ * The state consists of genuine property values and of computed property 
+ * values.<br>
+ * Genuine property values typically describe the shape and the style of a
+ * figure.<br>
+ * Computed property values typically describe the layout of the figure
+ * or cached values. Such as cached CSS properties and cached transformation
+ * matrices. Computed property values often depend on the state of other 
+ * figures.
  * <p>
  * <b>Tree Structure.</b> A figure can be composed of other figures in a tree
- * structure. The composition is implemented with the {@code getChildren} and
- * the {@code parent} getProperties. The composition can be restricted to a
- * specific parent type. By convention all getChildren of a {@code Drawing} must
- * be {@link Layer}s, and the parent of a {@code Layer} must be a
- * {@code Drawing}.</p>
+ * structure. The composition is implemented with the {@code children} property
+ * and the {@code parent} property.<br>
+ * The composition can be restricted. Typically the parent of {@code Layer} 
+ * objects is restricted to instances of {@code Drawing}, and the parent of all
+ * other figures is restricted to non-instances of {@code Drawing}.
  * <p>
- * <b>Coordinate System and Transformations.</b> A figure introduces a local
- * coordinate system which applies to its own geometry and all descendant
- * figures in its subtree. The Figure interface provides methods which allow to
- * transform between the local coordinate system of a figure, the coordinate
- * system of its parent, and the world coordinate system.</p>
+ * <b>Local Coordinate Systems.</b> A figure may introduce a local
+ * coordinate system which affects the graphical representation of itself
+ * and of its descendants.<br>
+ * The Figure interface provides methods which allow to transform between the
+ * local coordinate system of a figure, the coordinate system of its parent, and
+ * the world coordinate system.</p>
  * <p>
- * <b>Connections.</b> A figure can be connected to other figures. The
- * connection are directed. By convention, when a figure "A" is connected to an
- * other figure "B", then "A" adds itself in the {@code connectedFigures}
- * property of "B". When "A" is disconnected from "B", then "A" removes itself
- * from the {@code connectedFigures} property of "B".</p>
- * <p>
- * <b>Rendering.</b> A figure can render its graphical representation into a
- * JavaFX {@code Node} with the help of a {@link RenderContext}.</p>
+ * <b>Dependent Figures.</b> The state of a figure may depend on the state of
+ * other figures. These dependencies are made explicit
+ * by parent/child relationships and provider/dependant relationships.<br>
+ * The parent/child relationships are strictly hierarchical, the 
+ * provider/dependant relationships may include cycles.<br>
+ * The parent/child relationships are typically used for grouping figures into 
+ * {@code Layer}s, {@code Group}s and into layout hierarchies.<br>
+ * The provider/dependant relationships are typically used for the creation
+ * of line connections between figures, such as with {@link LineConnectionFigure}.
  * <p>
  * <b>Handles.</b> A figure can produce {@code Handle}s which allow to
  * graphically change the state of the figure in a {@link DrawingView}.</p>
  * <p>
- * <b>Layout.</b> The updateLayout of a figure may depend on the updateLayout of other
- figures, typically on its descendents. However the updateLayout of a figure may
- also depend on the updateLayout of connected figures. These dependencies can be
- cyclic. A figure does not automatically update the updateLayout of other figures:
- Method {@link #updateLayout} must be invoked to incrementally update the updateLayout of
- a figure and its descendants based on the current updateLayout of all other figures
- in the tree structure. Method {@link #getConnectedFigures} must be used to
- find figures which compute their updateLayout based on this figure.</p>
- * <p>
- * <b>Layout hints and node update hints.</b> Essentially each time when the
- * state of a figure is changed, method {@code updateLayout()} needs to be invoked on
- * the root of the tree hierarchy to incrementally update the state of all
- * dependent figures and then all figures need to be rendered again. This is
- * time consuming. The interface {@link org.jhotdraw.draw.key.FigureMapAccessor}
- * provides hints about which figures need to be laid out and rendered again.
- * The hints are given by a {@link DirtyMask}.
- * </p>
+ * <b>Map Accessors.</b> A figure has an open ended set of property values.
+ * The property values are accessed using {@code FigureMapAccessor}s.
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
- * {@link org.jhotdraw.styleable.StyleableMapAccessor}. The style information is
- * cached in the figure getProperties. When the position of a figure in the tree
- * structure is changed, method {@code updateCss()} must be called to update the
- * style information of the figure and its descendants.</p>
+ * {@link org.jhotdraw.styleable.StyleableMapAccessor}.</p>
+ * <p>
+ * <b>Update Strategy.</b> A figure does not automatically update its computed 
+ * property values. The update strategy is factored out into 
+ * {@link org.jhotdraw.draw.model.DrawingModel}. Drawing model uses {@link
+ * org.jhotdraw.draw.key.DirtyBits} in the {@code FigureMapAccessor} to
+ * determine which dependent figures need to be updated.
+ *
+ * @design.pattern Drawing Framework, KeyAbstraction.
+ * @design.pattern org.jhotdraw.draw.model.DrawingModel Facade, Subsystem.
+ * @design.pattern org.jhotdraw.draw.model.DrawingModel Strategy, Context. 
+ * @design.pattern RenderContext Builder, Builder.
+ * @design.pattern Handle Adapter, Adaptee.
+ * @design.pattern org.jhotdraw.draw.tool.CreationTool AbstractFactory, AbstractProduct.
+ * @design.pattern org.jhotdraw.draw.locator.Locator Strategy, Context.
+ * @design.pattern org.jhotdraw.draw.connector.Connector Strategy, Context.
+ * 
+ * @design.pattern Figure Mixin, Mixin.
+ * The Mixin pattern is used to extend the functionality of a class that 
+ * implements the {@link Figure} interface. The functionality is provided by 
+ * interfaces with default methods (traits).
+ * 
+ * @design.pattern Figure Composite, Component.
+ * {@link Figure} uses the composite pattern to provide uniform access to
+ * composite nodes and leaf nodes of a tree structure.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -290,13 +239,14 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     public Bounds getBoundsInLocal();
 
     /**
-     * The bounds that should be used for updateLayout calculations for this figure.
+     * The bounds that should be used for updateLayout calculations for this
+     * figure.
      * <p>
      * The bounds are given in the coordinate space of the parent figure.
      * <p>
      * This method may use caching and return incorrect results if the caches
-     * are stale. Invoke {@link #invalidateTransforms} and {@link #updateLayout} if
-     * you are not sure that the cache is valid.
+     * are stale. Invoke {@link #invalidateTransforms} and {@link #updateLayout}
+     * if you are not sure that the cache is valid.
      *
      * @return the updateLayout bounds
      */
@@ -331,8 +281,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     /**
      * Attempts to change the updateLayout bounds of the figure.
      * <p>
- The figure may choose to only partially change its updateLayout bounds.
- <p>
+     * The figure may choose to only partially change its updateLayout bounds.
+     * <p>
      * Reshape typically changes property values in this figure. The way how
      * this is performed is implementation specific.
      *
@@ -345,8 +295,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * Width and height are ignored, if the figure is not resizable.
      * <p>
- If the updateLayout bounds of the figure changes, it fires an invalidation
- event.
+     * If the updateLayout bounds of the figure changes, it fires an
+     * invalidation event.
      *
      * @param x desired x-position in parent coordinates
      * @param y desired y-position in parent coordinates
@@ -476,9 +426,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Whether the figure can be reshaped as a group together with other
      * figures.
      * <p>
- If this figure uses one of the other figures for computing its position
- or its updateLayout, then it will return false.
- <p>
+     * If this figure uses one of the other figures for computing its position
+     * or its updateLayout, then it will return false.
+     * <p>
      * The default implementation always returns true.
      *
      * @param others A set of figures.
@@ -566,11 +516,11 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     Connector findConnector(Point2D pointInLocal, Figure prototype);
 
     /**
-     * Updates the updateLayout of this figure and of its descendant figures. Does not
-     * update connection figures.
+     * Updates the updateLayout of this figure and of its descendant figures.
+     * Does not update connection figures.
      * <p>
-     * This figure may cache its updateLayout. However, this figure does not 
-     * keep track when its cache becomes invalid. Use a 
+     * This figure may cache its updateLayout. However, this figure does not
+     * keep track when its cache becomes invalid. Use a
      * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or
      * invoke this method after you performed one of the following operations:
      * <ul>
@@ -579,8 +529,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <li>Changing a property of one of the connection targets of this figure
      * with dirty bits
      * {@link org.jhotdraw.draw.key.DirtyBits#CONNECTION_LAYOUT}.</li>
-     * <li>Invoking {@code updateLayout} on one of the connection targets of this
-     * figure.</li>
+     * <li>Invoking {@code updateLayout} on one of the connection targets of
+     * this figure.</li>
      * </ul>
      */
     void updateLayout();
@@ -591,7 +541,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * This figure may cache stylesheet values. However, this figure does not
      * keep track when its stylesheet values becomes invalid. Use a
-     * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or 
+     * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or
      * invoke this method after you performed one of the following operations:
      * <ul>
      * <li>Changing a property of one of the ancestors this figure with dirty
@@ -739,46 +689,33 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Returns all figures which are connected to this figure.
+     * Returns all figures which depend on the state of this figure.
      * <p>
- Returns all figures which compute their updateLayout based on this figure.
- <pre><code>
-     * +-----------------+                    +-------------------------+
-     * | ConnectedFigure |-----connection----&gt;| ConnectionTarget (this) |
-     * +-----------------+                    +-------------------------+
-     * </code></pre>
+     * When the state of this figure changes, then the dependent figures need to
+     * update their state or their layout as well.
      *
-     * @return a list of connected figures
+     * @return a list of dependent figures
      */
-    ObservableSet<Figure> getConnectedFigures();
+    Set<Figure> getDependentFigures();
 
     /**
-     * Returns all figures which are connection targets of this figure.
+     * Returns all figures which provide to the state of this figure.
      * <p>
- Returns all figures on which the updateLayout of this figure is based.
- <pre><code>
-     * +------------------------+                    +------------------+
-     * | ConnectedFigure (this) |-----connection----&gt;| ConnectionTarget |
-     * +------------------------+                    +------------------+
-     * </code></pre>
+     * When the state of a providing figure changes, then the state or layout of
+     * this figure needs to be updated as well.
      *
-     * @return a list of connection target figures
+     * @return a list of providing figures
      */
-    default Set<Figure> getConnectionTargets() {
+    default Set<Figure> getProvidingFigures() {
         return Collections.emptySet();
     }
 
     /**
-     * Removes all connected figures and all connection targets.
-     * <pre><code>
-     * +-----------------+                    +------+                    +------------------+
-     * | ConnectedFigure |-----connection----&gt;| this |-----connection----&gt;| ConnectionTarget |
-     * +-----------------+                    +------+                    +------------------+
-     * </code></pre>
+     * Disconnects all dependent and providing figures from this figure.
      *
      */
-    default void disconnect() {
-        for (Figure connectedFigure : new ArrayList<Figure>(getConnectedFigures())) {
+    default void disconnectDependantsAndProviders() {
+        for (Figure connectedFigure : new ArrayList<Figure>(getDependentFigures())) {
             connectedFigure.removeConnectionTarget(this);
         }
         removeAllConnectionTargets();
@@ -994,7 +931,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Clears all cached transformation matrices.
      * <p>
      * This figure may cache transformation matrices. However, this figure does
-     * not keep track when its cache becomes invalid. Use a 
+     * not keep track when its cache becomes invalid. Use a
      * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or
      * invoke this method after you performed one of the following operations:
      * <ul>

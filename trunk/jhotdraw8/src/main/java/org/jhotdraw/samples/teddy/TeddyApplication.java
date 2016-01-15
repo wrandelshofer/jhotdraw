@@ -9,8 +9,9 @@ import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.SimpleApplicationModel;
 
 /**
- *
- * @author werni
+ * TeddyApplication.
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class TeddyApplication extends DocumentOrientedApplication {
 

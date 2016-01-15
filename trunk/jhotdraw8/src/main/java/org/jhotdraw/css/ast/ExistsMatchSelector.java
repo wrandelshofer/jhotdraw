@@ -11,7 +11,7 @@ import org.jhotdraw.css.SelectorModel;
  * with the specified name.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class ExistsMatchSelector extends AbstractAttributeSelector {
 

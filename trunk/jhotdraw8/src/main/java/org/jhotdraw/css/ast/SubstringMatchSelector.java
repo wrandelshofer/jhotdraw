@@ -12,7 +12,7 @@ import org.jhotdraw.css.SelectorModel;
  * substring.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SubstringMatchSelector extends AbstractAttributeSelector {
 

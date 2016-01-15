@@ -14,7 +14,7 @@ import org.jhotdraw.css.SelectorModel;
  * language subcode matches.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DashMatchSelector extends AbstractAttributeSelector {
 

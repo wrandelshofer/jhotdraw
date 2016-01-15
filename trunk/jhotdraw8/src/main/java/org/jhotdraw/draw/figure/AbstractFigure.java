@@ -43,7 +43,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
     private ObservableSet<Figure> connectedFigures;
 
     @Override
-    public final ObservableSet<Figure> getConnectedFigures() {
+    public final ObservableSet<Figure> getDependentFigures() {
         if (connectedFigures == null) {
             connectedFigures =  FXCollections.observableSet(Collections.newSetFromMap(new IdentityHashMap<Figure,Boolean>()));
         }

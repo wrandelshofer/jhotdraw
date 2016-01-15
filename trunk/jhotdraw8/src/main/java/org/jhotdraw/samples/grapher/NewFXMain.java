@@ -8,8 +8,9 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- *
- * @author werni
+ * NewFXMain.
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class NewFXMain extends Application {
     

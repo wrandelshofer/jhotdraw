@@ -15,8 +15,10 @@ import org.jhotdraw.gui.URIChooser;
  * actions and factory methods for creating {@link View}s, toolbars and
  * {@link URIChooser}s.
  *
+ * @design.pattern Application Framework, KeyAbstraction.
+ * 
  * @author Werner Randelshofer.
- * @version $Id: ApplicationModel.java 789 2014-03-22 13:14:07Z rawcoder $
+ * @version $Id$
  */
 public interface ApplicationModel {
 

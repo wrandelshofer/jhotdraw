@@ -22,6 +22,8 @@ import org.jhotdraw.util.ReversedList;
 /**
  * ConnectionTool.
  *
+ * @design.pattern CreationTool AbstractFactory, Client.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

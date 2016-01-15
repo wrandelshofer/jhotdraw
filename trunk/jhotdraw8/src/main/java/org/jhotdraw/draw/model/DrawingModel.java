@@ -34,6 +34,24 @@ import org.jhotdraw.event.Listener;
  * {@code Handle}s and inspectors update the drawing using the
  * {@code DrawingModel}.
  * </p>
+ * 
+ * @design.pattern DrawingModel Facade, Facade.
+ * {@code DrawingModel} acts as a facade for the internal structure of a
+ * {@code Drawing} (a Drawing is composed of a tree of {@code Figure} objects). 
+ * DrawingModel provides methods for altering the tree structure, for setting
+ * and getting property values of Figure objects, and provides a single point 
+ * for registering listeners which need to observe changes of Figures in the
+ * tree structure.
+ *
+ * @design.pattern DrawingModel Strategy, Strategy.
+ * The strategy for updating the state of dependent {@link Figure} objects is 
+ * implemented in {@link DrawingModel}. {@code DrawingModel} uses 
+ * {@link org.jhotdraw.draw.key.DirtyBits} as a hint for its strategy.
+ * 
+ * @design.pattern DrawingModel MVC, Model.
+ * The model view controller (MVC) pattern is used to decouple application code
+ * from user interface code. See {@link DrawingModel},
+ * {@link org.jhotdraw.draw.DrawingView} and {@link org.jhotdraw.draw.tool.Tool}.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -168,8 +186,8 @@ public interface DrawingModel extends Observable {
      */
     void layout(Figure f);
     /**
-     * Invokes the disconnect method of the figure and fires appropriate
-     * {@code DrawingModelEvent}s.
+     * Invokes the disconnectDependentsAndProviders method of the figure and fires appropriate
+ {@code DrawingModelEvent}s.
      *
      * @param f the figure
      */

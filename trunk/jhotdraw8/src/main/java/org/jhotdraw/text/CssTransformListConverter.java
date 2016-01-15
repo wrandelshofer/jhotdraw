@@ -57,7 +57,7 @@ import javafx.geometry.Point3D;
  * </a>
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssTransformListConverter implements Converter<List<Transform>> {
 

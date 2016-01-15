@@ -3,6 +3,6 @@
  * You may only use this file in compliance with the accompanying license terms.
  */
 /**
-Provides support for cascading style sheets (CSS) in XML DOM.
-*/
+ * Provides support for parsing and interpreting cascading style sheets (CSS 3).
+ */
 package org.jhotdraw.css;

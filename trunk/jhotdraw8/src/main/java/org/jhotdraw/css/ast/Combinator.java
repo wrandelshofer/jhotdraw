@@ -8,7 +8,7 @@ package org.jhotdraw.css.ast;
  * Abstract superclass for "combinator"s.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public abstract class Combinator extends Selector {
 

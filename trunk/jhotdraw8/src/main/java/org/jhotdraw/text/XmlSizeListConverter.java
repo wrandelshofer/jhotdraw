@@ -9,7 +9,7 @@ package org.jhotdraw.text;
  * XmlSizeListConverter.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class XmlSizeListConverter extends CssSizeListConverter {
 

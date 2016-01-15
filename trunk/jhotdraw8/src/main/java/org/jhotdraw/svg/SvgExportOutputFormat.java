@@ -100,7 +100,7 @@ import org.w3c.dom.Element;
  * SvgExportOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SvgExportOutputFormat implements OutputFormat {
 

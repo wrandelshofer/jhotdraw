@@ -8,7 +8,7 @@ package org.jhotdraw.draw.model;
 /**
  * SimpleDrawingModel.
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SimpleDrawingModel extends ConnectionsAndLayoutDrawingModel {
 

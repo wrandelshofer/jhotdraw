@@ -1,4 +1,4 @@
-/* @(#)ConnectingFiguresSample.java
+/* @(#)CssSample.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -30,7 +30,7 @@ import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
 
 /**
- * ConnectingFiguresSample.
+ * CssSample..
  *
  * @author Werner Randelshofer
  * @version $Id$

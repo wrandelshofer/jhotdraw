@@ -171,7 +171,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
     private void fireLayoutInvalidatedForFiguresConnectedWithTodo(Collection<Figure> todo, HashSet<Figure> done) {
         HashSet<Figure> todoNext = new HashSet<>();
         for (Figure figure : todo) {
-            for (Figure c : figure.getConnectedFigures()) {
+            for (Figure c : figure.getDependentFigures()) {
                 if (done.add(c)) {
                     fire(DrawingModelEvent.layoutInvalidated(this, c));
                     todoNext.add(c);

@@ -16,10 +16,10 @@ import org.jhotdraw.draw.key.FigureMapAccessor;
 
 /**
  * This drawing model assumes that the drawing contains figures which perform
- * layouts and has getConnectedFigures between figures.
+ layouts and has getDependentFigures between figures.
  * <p>
- * Assumes that a figure which has getConnectedFigures to other figures may have
- * in turn getConnectedFigures from other figures.
+ Assumes that a figure which has getDependentFigures to other figures may have
+ in turn getDependentFigures from other figures.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -57,12 +57,12 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void disconnect(Figure figure) {
-        for (Figure connectedFigure : figure.getConnectedFigures()) {
+        for (Figure connectedFigure : figure.getDependentFigures()) {
             fire(DrawingModelEvent.layoutInvalidated(this, connectedFigure));
 
         }
         fireLayoutInvalidatedConnectedFigures(figure);
-        figure.disconnect();
+        figure.disconnectDependantsAndProviders();
         fire(DrawingModelEvent.nodeInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
     }
@@ -102,7 +102,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
             }
 
             if (dm.containsOneOf(DirtyBits.CONNECTION)) {
-                connectionChange = figure.getConnectionTargets();
+                connectionChange = figure.getProvidingFigures();
             }
             
             if (dm.containsOneOf(DirtyBits.NODE)) {
@@ -122,7 +122,7 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
             }
             if (dm.containsOneOf(DirtyBits.CONNECTION)) {
                 fire(DrawingModelEvent.connectionChanged(this, figure));
-                Set<Figure> connectionsAfter = figure.getConnectionTargets();
+                Set<Figure> connectionsAfter = figure.getProvidingFigures();
                 connectionChange.addAll(connectionsAfter);
                 for (Figure f : connectionChange) {
                     fire(DrawingModelEvent.connectionChanged(this, f));

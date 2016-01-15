@@ -12,7 +12,7 @@ import org.jhotdraw.css.SelectorModel;
  * list with the specified word.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IncludeMatchSelector extends AbstractAttributeSelector {
 

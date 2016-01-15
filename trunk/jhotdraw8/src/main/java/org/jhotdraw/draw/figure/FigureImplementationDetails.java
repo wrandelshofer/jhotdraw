@@ -14,7 +14,7 @@ import org.jhotdraw.collection.SimpleKey;
  * Hides implementation details from other packages.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 class FigureImplementationDetails {
     // ---

@@ -12,6 +12,8 @@ import javafx.collections.ObservableList;
  * This base class can be used to implement figures which do not support child
  * figures.
  *
+ * @design.pattern Figure Composite, Leaf.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

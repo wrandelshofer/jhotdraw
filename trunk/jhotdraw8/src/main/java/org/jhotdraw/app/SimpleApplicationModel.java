@@ -38,6 +38,7 @@ import org.jhotdraw.util.Resources;
 /**
  * SimpleApplicationModel.
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SimpleApplicationModel implements ApplicationModel {
     private  String name;

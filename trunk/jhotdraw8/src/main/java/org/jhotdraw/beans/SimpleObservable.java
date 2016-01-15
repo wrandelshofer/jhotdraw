@@ -10,6 +10,10 @@ import javafx.beans.Observable;
 /**
  * SimpleObservable.
  *
+ * @design.pattern SimpleObservable Observer, ConcreteSubject.
+ * {@link SimpleObservable} is a concrete subject implementation of the
+ * Observer pattern.
+ * 
  * @author Werner Randelshofer
  * @version $Id$
  */

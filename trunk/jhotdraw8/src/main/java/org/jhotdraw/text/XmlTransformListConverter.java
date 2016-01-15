@@ -9,7 +9,7 @@ package org.jhotdraw.text;
  * XmlTransformListConverter.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class XmlTransformListConverter extends CssTransformListConverter {
 

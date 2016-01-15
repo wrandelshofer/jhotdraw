@@ -4,12 +4,12 @@
  * You may only use this file in compliance with the accompanying license terms.
  *
  * @author Werner Randelshofer
- * @version $Id: package-info.java 788 2014-03-22 07:56:28Z rawcoder $
+ * @version $Id$
 */
 
 /**
-Provides Actions which act on the current selection or insertion point.
-*/
+ * Provides actions which act on the current selection or insertion point.
+ */
 package org.jhotdraw.app.action.edit;
 
 

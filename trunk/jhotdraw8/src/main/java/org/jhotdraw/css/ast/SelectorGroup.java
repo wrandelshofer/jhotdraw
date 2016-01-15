@@ -14,7 +14,7 @@ import org.jhotdraw.css.SelectorModel;
  * element.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SelectorGroup extends AST {
 
