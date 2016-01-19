@@ -19,6 +19,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcTo;
@@ -172,7 +173,18 @@ public class Shapes {
                 throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
         }
 
-        List<PathElement> fxelem = fxpath.getElements();
+        fxpath.getElements().addAll(fxPathElementsFromAWT(iter));
+        
+        return fxpath;
+    }
+    /**
+     * Converts a Java Path iterator to a JavaFX shape.
+     *
+     * @param iter AWT Path Iterator
+     * @return JavaFX Shape
+     */
+    public static List<PathElement> fxPathElementsFromAWT(PathIterator iter) {
+        List<PathElement> fxelem = new ArrayList<>();
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
@@ -193,7 +205,7 @@ public class Shapes {
                     break;
             }
         }
-        return fxpath;
+        return fxelem;
     }
 
     /**
@@ -939,6 +951,12 @@ public class Shapes {
         }
 
         return out;
+    }
+    
+    public static List<PathElement> transformFXPathElements(List<PathElement> elements, javafx.scene.transform.Transform fxT) {
+        ArrayList<PathElement> result = new ArrayList<>();
+        awtShapeFromFXPathElements(elements);
+        return result;
     }
 
 }
