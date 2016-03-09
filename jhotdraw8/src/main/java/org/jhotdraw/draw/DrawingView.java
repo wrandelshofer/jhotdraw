@@ -95,9 +95,13 @@ public interface DrawingView extends RenderContext {
      */
     public final static String DRAWING_PROPERTY = "drawing";
     /**
-     * The name of the handle type property.
+     * The name of the handle type property for single selection.
      */
     public final static String HANDLE_TYPE_PROPERTY = "handleType";
+    /**
+     * The name of the handle type property for multiple selection.
+     */
+    public final static String MULTI_HANDLE_TYPE_PROPERTY = "multiHandleType";
 
     // ---
     // properties
@@ -186,11 +190,17 @@ public interface DrawingView extends RenderContext {
      */
     ObjectProperty<Handle> activeHandleProperty();
     /**
-     * The handle type.
+     * The handle type for single selection.
      *
      * @return the handle key
      */
     ObjectProperty<HandleType> handleTypeProperty();
+    /**
+     * The handle type for multiple selection.
+     *
+     * @return the handle key
+     */
+    ObjectProperty<HandleType> multiHandleTypeProperty();
 
     // ---
     // methods
@@ -374,6 +384,14 @@ public interface DrawingView extends RenderContext {
 
     default HandleType getHandleType() {
         return handleTypeProperty().get();
+    }
+
+    default void setMultiHandleType(HandleType newValue) {
+        multiHandleTypeProperty().set(newValue);
+    }
+
+    default HandleType getMultiHandleType() {
+        return multiHandleTypeProperty().get();
     }
 
     default void setActiveLayer(Layer newValue) {

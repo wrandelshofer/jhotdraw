@@ -277,13 +277,20 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
     private final ObjectProperty<HandleType> handleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
-
     {
         handleType.addListener((observable, oldValue, newValue) -> {
             invalidateHandles();
             repaint();
         });
     }
+    private final ObjectProperty<HandleType> multiHandleType = new SimpleObjectProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
+    {
+        multiHandleType.addListener((observable, oldValue, newValue) -> {
+            invalidateHandles();
+            repaint();
+        });
+    }
+    
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
 
@@ -755,6 +762,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     public ObjectProperty<HandleType> handleTypeProperty() {
         return handleType;
     }
+    @Override
+    public ObjectProperty<HandleType> multiHandleTypeProperty() {
+        return multiHandleType;
+    }
+
 
     private void updateTool(Tool oldValue, Tool newValue) {
         if (oldValue != null) {
@@ -1131,7 +1143,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * @param handles The provided list
      */
     protected void createHandles(Map<Figure, List<Handle>> handles) {
-        HandleType handleType = getHandleType();
+        HandleType handleType = getSelectedFigures().size() > 1 ? getMultiHandleType() : getHandleType();
         for (Figure figure : getSelectedFigures()) {
             List<Handle> list = handles.get(figure);
             if (list == null) {

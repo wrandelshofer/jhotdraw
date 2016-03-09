@@ -14,6 +14,7 @@ import javafx.css.Styleable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.draw.figure.NonTransformableFigure;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
@@ -101,7 +102,7 @@ public class AbstractCompositeFigureNGTest {
 
 
     /** Mock class. */
-    public class AbstractCompositeFigureImpl extends AbstractCompositeFigure {
+    public class AbstractCompositeFigureImpl extends AbstractCompositeFigure implements NonTransformableFigure {
 
         @Override
         public Bounds getBoundsInLocal() {
@@ -184,13 +185,8 @@ public class AbstractCompositeFigureNGTest {
         }
 
         @Override
-        public Transform computeParentToLocal() {
-            return Transform.translate(0, 0);
-        }
-
-        @Override
-        public Transform computeLocalToParent() {
-            return Transform.translate(0, 0);
+        public void invalidateTransforms() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }    
 }

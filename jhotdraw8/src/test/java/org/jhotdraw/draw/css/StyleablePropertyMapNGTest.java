@@ -41,7 +41,7 @@ public class StyleablePropertyMapNGTest {
         assertEquals(map.get("1"),"user");
         assertEquals(map.get(StyleOrigin.USER,"1"),"user");
         assertEquals(map.get(StyleOrigin.AUTHOR,"1"),"author");
-        assertEquals(map.getStyled("1"),"author");
+        assertEquals(map.get(StyleOrigin.AUTHOR,"1"),"author");
     }
     @Test
     public void testIterator1() {
