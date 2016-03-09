@@ -276,14 +276,14 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
     }
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
-    private final ObjectProperty<HandleType> handleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    private final NonnullProperty<HandleType> handleType = new NonnullProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
     {
         handleType.addListener((observable, oldValue, newValue) -> {
             invalidateHandles();
             repaint();
         });
     }
-    private final ObjectProperty<HandleType> multiHandleType = new SimpleObjectProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
+    private final NonnullProperty<HandleType> multiHandleType = new NonnullProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
     {
         multiHandleType.addListener((observable, oldValue, newValue) -> {
             invalidateHandles();
@@ -759,11 +759,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     @Override
-    public ObjectProperty<HandleType> handleTypeProperty() {
+    public NonnullProperty<HandleType> handleTypeProperty() {
         return handleType;
     }
     @Override
-    public ObjectProperty<HandleType> multiHandleTypeProperty() {
+    public NonnullProperty<HandleType> multiHandleTypeProperty() {
         return multiHandleType;
     }
 
