@@ -15,6 +15,7 @@ import java.util.Enumeration;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
@@ -102,6 +103,13 @@ public class Resources extends ResourceBundle implements Serializable {
      * chain.
      */
     private static HashMap<String, String[]> propertyNameModifiers = new HashMap<String, String[]>();
+    
+    /**
+     * List of decoders. The first decoder which can decode a resource value
+     * is will be used to convert the resource value to an object.
+     */
+    private static List<ResourceDecoder> decoders=new ArrayList<>();
+    
 
     static {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -320,11 +328,17 @@ public class Resources extends ResourceBundle implements Serializable {
     private Node getIconProperty(String key, String suffix, Class<?> baseClass) {
         try {
             String rsrcName = getStringRecursive(key + suffix);
-
             if ("".equals(rsrcName)||rsrcName==null) {
                 return null;
             }
 
+            for (ResourceDecoder d : decoders) {
+                if (d.canDecodeValue(key, rsrcName, Node.class)) {
+                    return d.decode(key, rsrcName, Node.class, baseClass);
+                }
+            }
+            
+            
             URL url = baseClass.getResource(rsrcName);
             if (isVerbose && url == null) {
                 System.err.println("Warning ResourceBundleUtil[" + baseName + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found.");
@@ -619,5 +633,10 @@ public class Resources extends ResourceBundle implements Serializable {
     @Override
     public Enumeration<String> getKeys() {
         return resource.getKeys();
+    }
+    
+    /** Adds a decoder. */
+    public static void addDecoder(ResourceDecoder decoder) {
+        decoders.add(decoder);
     }
 }
