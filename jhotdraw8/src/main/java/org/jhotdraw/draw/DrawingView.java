@@ -194,13 +194,13 @@ public interface DrawingView extends RenderContext {
      *
      * @return the handle key
      */
-    ObjectProperty<HandleType> handleTypeProperty();
+    NonnullProperty<HandleType> handleTypeProperty();
     /**
      * The handle type for multiple selection.
      *
      * @return the handle key
      */
-    ObjectProperty<HandleType> multiHandleTypeProperty();
+    NonnullProperty<HandleType> multiHandleTypeProperty();
 
     // ---
     // methods

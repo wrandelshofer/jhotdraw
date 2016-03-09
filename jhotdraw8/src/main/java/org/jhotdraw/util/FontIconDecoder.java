@@ -82,7 +82,9 @@ public class FontIconDecoder implements ResourceDecoder {
         
         Text txt = new Text();
         txt.setFont(font);
-        return (T) txt;
+        @SuppressWarnings("unchecked")
+        T t =  (T) txt;
+        return t;
     }
     
     private String decodeValue(String key, String propertyValue) {
