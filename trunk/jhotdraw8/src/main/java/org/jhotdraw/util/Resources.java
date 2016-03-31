@@ -635,8 +635,16 @@ public class Resources extends ResourceBundle implements Serializable {
         return resource.getKeys();
     }
     
-    /** Adds a decoder. */
+    /** Adds a decoder.
+     * @param decoder the resource decoder
+     */
     public static void addDecoder(ResourceDecoder decoder) {
         decoders.add(decoder);
+    }
+    /** Removes a decoder.
+     * @param decoder the resource decoder
+     */
+    public static void removeDecoder(ResourceDecoder decoder) {
+        decoders.remove(decoder);
     }
 }

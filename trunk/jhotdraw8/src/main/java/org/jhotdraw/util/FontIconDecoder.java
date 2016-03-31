@@ -31,10 +31,7 @@ public class FontIconDecoder implements ResourceDecoder {
     /**
      * Creates a new instance.
      * @param keyRegex the regex used on the property key
-     * @param fontResourceName The resource name of the font
-     * @param baseClass The base class for loading the font
-     * @throws IOException if the resource can not be read
-     * @throws FontFormatException if the resource can not be parsed
+     * @param font The font
      */
     public FontIconDecoder(String keyRegex, Font font) {
         this(keyRegex, "fonticon:",font);
@@ -43,10 +40,7 @@ public class FontIconDecoder implements ResourceDecoder {
      * Creates a new instance.
      * @param keyRegex the regex used on the property key
      * @param valuePrefix the prefix for the value.
-     * @param fontResourceName The resource name of the font
-     * @param baseClass The base class for loading the font
-     * @throws IOException if the resource can not be read
-     * @throws FontFormatException if the resource can not be parsed
+     * @param font The font
      */
     public FontIconDecoder(String keyRegex, String valuePrefix, Font font) {
         this.keyPattern = Pattern.compile(keyRegex);
@@ -58,9 +52,9 @@ public class FontIconDecoder implements ResourceDecoder {
      * @param keyRegex the regex used on the property key
      * @param valuePrefix the prefix for the value.
      * @param fontResourceName The resource name of the font
+     * @param fontSize The size of the font
      * @param baseClass The base class for loading the font
-     * @throws IOException if the resource can not be read
-     * @throws FontFormatException if the resource can not be parsed
+     * @throws IOException if the font resource can not be read
      */
     public FontIconDecoder(String keyRegex, String valuePrefix, String fontResourceName, float fontSize, Class<?> baseClass) throws IOException {
         keyPattern = Pattern.compile(keyRegex);
