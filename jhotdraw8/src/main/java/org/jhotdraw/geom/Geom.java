@@ -23,6 +23,12 @@ import javafx.geometry.Rectangle2D;
  */
 public class Geom {
 
+    public static BoundingBox add(Bounds a, Bounds b) {
+        double x = min(a.getMinX(), b.getMinX());
+        double y = min(a.getMinY(), b.getMinY());
+        return new BoundingBox(x, y, max(a.getMaxX(), b.getMaxX()) - x, max(a.getMaxY(), b.getMaxY()) - y);
+    }
+
     private Geom() {
     } // never instantiated
 
@@ -200,14 +206,14 @@ public class Geom {
         i.next();
         for (; !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-            case PathIterator.SEG_MOVETO:
-                moveToX = coords[0];
-                moveToY = coords[1];
-                break;
-            case PathIterator.SEG_CLOSE:
-                coords[0] = moveToX;
-                coords[1] = moveToY;
-                break;
+                case PathIterator.SEG_MOVETO:
+                    moveToX = coords[0];
+                    moveToY = coords[1];
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    coords[0] = moveToX;
+                    coords[1] = moveToY;
+                    break;
             }
             Point2D chop = Geom.intersect(
                     prevX, prevY,
