@@ -14,6 +14,12 @@ import org.jhotdraw.io.CharBufferReader;
 
 /**
  * Converts an {@code URI} to a CSS {@code URI}.
+ * <pre>
+ * URI = uriFunction | none ;
+ * none = "none" ;
+ * uriFunction = "url(" , [ uri ] , ")" ;
+ * uri =  (* css uri *) ;
+ * <pre>
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -24,7 +30,11 @@ public class CssUriConverter implements Converter<URI> {
     @Override
     public URI fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
-        if (tt.nextToken() != CssTokenizer.TT_URI) {
+        if (tt.nextToken() == CssTokenizer.TT_IDENT //
+                && "none".equals(tt.currentStringValue())) {
+            return null;
+        }
+        if (tt.currentToken()!= CssTokenizer.TT_URI) {
             throw new ParseException("Css URI expected. "+tt.currentToken(), buf.position());
         }
         return URI.create(tt.currentStringValue());
@@ -33,7 +43,9 @@ public class CssUriConverter implements Converter<URI> {
     @Override
     public void toString(Appendable out, IdFactory idFactory, URI value) throws IOException {
         out.append("url(");
-        out.append(value.toASCIIString());
+        if (value != null) {
+            out.append(value.toASCIIString());
+        }
         out.append(')');
     }
 

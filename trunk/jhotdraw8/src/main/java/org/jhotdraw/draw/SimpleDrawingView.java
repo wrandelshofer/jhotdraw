@@ -68,6 +68,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.beans.SimplePropertyBean;
+import org.jhotdraw.draw.handle.SelectionMoveHandle;
 import org.jhotdraw.draw.model.SimpleDrawingModel;
 import org.jhotdraw.geom.Geom;
 
@@ -277,6 +278,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
     private final NonnullProperty<HandleType> handleType = new NonnullProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+
     {
         handleType.addListener((observable, oldValue, newValue) -> {
             invalidateHandles();
@@ -284,13 +286,14 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         });
     }
     private final NonnullProperty<HandleType> multiHandleType = new NonnullProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
+
     {
         multiHandleType.addListener((observable, oldValue, newValue) -> {
             invalidateHandles();
             repaint();
         });
     }
-    
+
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
 
@@ -368,13 +371,13 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * We do not wrap the IdentityHashMap into a Set to avoid an additional
      * level of indirection.
      */
-    private final Map<Figure,Boolean> dirtyFigureNodes =new IdentityHashMap<>();
+    private final Map<Figure, Boolean> dirtyFigureNodes = new IdentityHashMap<>();
     /**
      * This is the set of handles which are out of sync with their JavaFX node.
      * We do not wrap the IdentityHashMap into a Set to avoid an additional
      * level of indirection.
      */
-    private final Map<Figure,Boolean> dirtyHandles =new IdentityHashMap<>();
+    private final Map<Figure, Boolean> dirtyHandles = new IdentityHashMap<>();
     /**
      * The set of all handles which were produced by selected figures.
      */
@@ -461,9 +464,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void invalidateFigureNode(Figure f) {
-        dirtyFigureNodes.put(f,null);
+        dirtyFigureNodes.put(f, null);
         if (handles.containsKey(f)) {
-            dirtyHandles.put(f,null);
+            dirtyHandles.put(f, null);
         }
     }
 
@@ -566,7 +569,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             n = f.createNode(this);
             figureToNodeMap.put(f, n);
             nodeToFigureMap.put(n, f);
-            dirtyFigureNodes.put(f,null);
+            dirtyFigureNodes.put(f, null);
         }
         return n;
     }
@@ -589,7 +592,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         drawing.set(d);
         if (d != null) {
             drawingPane.getChildren().add(getNode(d));
-            dirtyFigureNodes.put(d,null);
+            dirtyFigureNodes.put(d, null);
             updateLayout();
             updateTreeNodes(d);
             repaint();
@@ -606,8 +609,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void updateTreeNodes(Figure parent) {
-        dirtyFigureNodes.put(parent,null);
-        dirtyHandles.put(parent,null);
+        dirtyFigureNodes.put(parent, null);
+        dirtyHandles.put(parent, null);
         for (Figure child : parent.getChildren()) {
             updateTreeNodes(child);
         }
@@ -762,11 +765,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     public NonnullProperty<HandleType> handleTypeProperty() {
         return handleType;
     }
+
     @Override
     public NonnullProperty<HandleType> multiHandleTypeProperty() {
         return multiHandleType;
     }
-
 
     private void updateTool(Tool oldValue, Tool newValue) {
         if (oldValue != null) {
@@ -1094,7 +1097,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void invalidateHandleNodes() {
         for (Figure f : handles.keySet()) {
-            dirtyHandles.put(f,null);
+            dirtyHandles.put(f, null);
         }
         repaint();
     }
@@ -1127,7 +1130,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
         createHandles(handles);
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
-            dirtyHandles.put(entry.getKey(),null);
+            dirtyHandles.put(entry.getKey(), null);
             for (Handle handle : entry.getValue()) {
                 Node n = handle.getNode();
                 nodeToHandleMap.put(n, handle);
@@ -1143,15 +1146,28 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * @param handles The provided list
      */
     protected void createHandles(Map<Figure, List<Handle>> handles) {
-        HandleType handleType = getSelectedFigures().size() > 1 ? getMultiHandleType() : getHandleType();
-        for (Figure figure : getSelectedFigures()) {
+        if (getSelectedFigures().size() > 1) {
+            Figure figure = getSelectedFigures().iterator().next();
             List<Handle> list = handles.get(figure);
             if (list == null) {
                 list = new ArrayList<>();
                 handles.put(figure, list);
             }
-            figure.createHandles(handleType, this, list);
-            handles.put(figure, list);
+            list.add(SelectionMoveHandle.northEast());
+            list.add(SelectionMoveHandle.northWest());
+            list.add(SelectionMoveHandle.southEast());
+            list.add(SelectionMoveHandle.southWest());
+        } else {
+            HandleType handleType = getSelectedFigures().size() > 1 ? getMultiHandleType() : getHandleType();
+            for (Figure figure : getSelectedFigures()) {
+                List<Handle> list = handles.get(figure);
+                if (list == null) {
+                    list = new ArrayList<>();
+                    handles.put(figure, list);
+                }
+                figure.createHandles(handleType, this, list);
+                handles.put(figure, list);
+            }
         }
     }
 
