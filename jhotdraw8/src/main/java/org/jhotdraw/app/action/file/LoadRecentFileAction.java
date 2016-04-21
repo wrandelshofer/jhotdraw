@@ -8,12 +8,11 @@
 package org.jhotdraw.app.action.file;
 
 import java.net.URI;
-import javafx.event.EventHandler;
+import java.util.concurrent.CompletionStage;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.app.action.Action;
-import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.net.URIUtil;
 
 /**
@@ -168,8 +167,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
         });
     }*/
 
-    @Override
-    protected void doIt(View p, EventHandler<TaskCompletionEvent<?>> callback) {
+    @Override public CompletionStage<Void> doIt(final View view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

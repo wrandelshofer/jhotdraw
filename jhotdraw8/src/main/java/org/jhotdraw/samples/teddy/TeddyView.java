@@ -16,15 +16,15 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
-import javafx.event.EventHandler;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import org.jhotdraw.app.AbstractView;
-import org.jhotdraw.concurrent.BackgroundTask;
-import org.jhotdraw.concurrent.TaskCompletionEvent;
+import org.jhotdraw.concurrent.FXWorker;
 
 /**
  * TeddyView.
@@ -73,58 +73,39 @@ public class TeddyView extends AbstractView implements Initializable {
     }
 
     @Override
-    public void clear(EventHandler<TaskCompletionEvent<?>> handler) {
+    public CompletionStage<Void> clear() {
         textArea.setText(null);
-        clearModified();
-        handler.handle(new TaskCompletionEvent<Void>());
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
-    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent<?>> handler) {
-        BackgroundTask<String> t = new BackgroundTask<String>() {
-
-            @Override
-            protected String call() throws Exception {
-                StringBuilder builder = new StringBuilder();
-                char[] cbuf = new char[8192];
-                try (Reader in = new InputStreamReader(new FileInputStream(new File(uri)), StandardCharsets.UTF_8)) {
-                    for (int count = in.read(cbuf, 0, cbuf.length); count != -1; count = in.read(cbuf, 0, cbuf.length)) {
-                        builder.append(cbuf, 0, count);
-                    }
+    public CompletionStage<Void> read(URI uri, boolean append) {
+        return FXWorker.supply(() -> {
+            StringBuilder builder = new StringBuilder();
+            char[] cbuf = new char[8192];
+            try (Reader in = new InputStreamReader(new FileInputStream(new File(uri)), StandardCharsets.UTF_8)) {
+                for (int count = in.read(cbuf, 0, cbuf.length); count != -1; count = in.read(cbuf, 0, cbuf.length)) {
+                    builder.append(cbuf, 0, count);
                 }
-                return builder.toString();
             }
-
-            @Override
-            protected void succeeded(String value) {
-                if (append) {
-                    textArea.appendText(value);
-                } else {
-                    textArea.setText(value);
-                }
-                clearModified();
+            return builder.toString();
+        }).thenAccept(value -> {
+            if (append) {
+                textArea.appendText(value);
+            } else {
+                textArea.setText(value);
             }
-        };
-        t.addCompletionHandler(handler);
-        getApplication().execute(t);
-
+        });
     }
 
     @Override
-    public void write(URI uri, EventHandler<TaskCompletionEvent<?>> handler) {
+    public CompletionStage<Void> write(URI uri) {
         final String text = textArea.getText();
-        BackgroundTask<Void> t = new BackgroundTask<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-                try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(uri)), StandardCharsets.UTF_8)) {
-                    out.write(text);
-                }
-                return null;
+        return FXWorker.run(() -> {
+            try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(uri)), StandardCharsets.UTF_8)) {
+                out.write(text);
             }
-        };
-        t.addCompletionHandler(handler);
-        getApplication().execute(t);
+        });
     }
 
     @Override

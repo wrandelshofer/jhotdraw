@@ -42,9 +42,9 @@ public class NewFileAction extends AbstractApplicationAction {
     @Override
     protected void onActionPerformed(ActionEvent evt) {
         Application app = getApplication();
-        app.createView(newView -> {
+        app.createView().thenAccept(newView -> {
             app.add(newView);
-            newView.clear(e -> {
+            newView.clear().thenRun(() -> {
                 newView.clearModified();
             });
         });

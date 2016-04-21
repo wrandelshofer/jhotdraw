@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Menu;
@@ -31,6 +32,9 @@ import java.util.ResourceBundle;
 /**
  * This is a convenience wrapper for accessing resources stored in a
  * ResourceBundle.
+ * <p>
+ * A resources object may reference a parent resources object using the resource
+ * key "parent".
  * <p>
  * <b>Placeholders</b><br>
  * On top of the functionality provided by ResourceBundle, a property value can
@@ -75,8 +79,8 @@ public class Resources extends ResourceBundle implements Serializable {
 
     private static final HashSet<String> acceleratorKeys = new HashSet<String>(
             Arrays.asList(new String[]{
-                "shift", "control", "ctrl", "meta", "alt", "altGraph"
-            }));
+        "shift", "control", "ctrl", "meta", "alt", "altGraph"
+    }));
     /**
      * The wrapped resource bundle.
      */
@@ -84,7 +88,7 @@ public class Resources extends ResourceBundle implements Serializable {
     /**
      * The locale.
      */
-    private Locale locale;
+    private final Locale locale;
     /**
      * The base class
      */
@@ -92,7 +96,7 @@ public class Resources extends ResourceBundle implements Serializable {
     /**
      * The base name of the resource bundle.
      */
-    private String baseName;
+    private final String baseName;
     /**
      * The global verbose property.
      */
@@ -103,13 +107,17 @@ public class Resources extends ResourceBundle implements Serializable {
      * chain.
      */
     private static HashMap<String, String[]> propertyNameModifiers = new HashMap<String, String[]>();
-    
+
     /**
-     * List of decoders. The first decoder which can decode a resource value
-     * is will be used to convert the resource value to an object.
+     * The parent resource object.
      */
-    private static List<ResourceDecoder> decoders=new ArrayList<>();
-    
+    private final Resources parent;
+
+    /**
+     * List of decoders. The first decoder which can decode a resource value is
+     * will be used to convert the resource value to an object.
+     */
+    private static List<ResourceDecoder> decoders = new ArrayList<>();
 
     static {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -134,6 +142,17 @@ public class Resources extends ResourceBundle implements Serializable {
         this.locale = locale;
         this.baseName = baseName;
         this.resource = ResourceBundle.getBundle(baseName, locale);
+
+        Resources potentialParent = null;
+        try {
+            String parentBaseName = this.resource.getString("parent");
+            if (parentBaseName != null && !Objects.equals(baseName, parentBaseName)) {
+                potentialParent = new Resources(parentBaseName, locale);
+            }
+        } catch (MissingResourceException e) {
+
+        }
+        this.parent = potentialParent;
     }
 
     /**
@@ -157,8 +176,7 @@ public class Resources extends ResourceBundle implements Serializable {
      * { // System.out.println("Resources "+baseName+"
      * get("+key+"):***MISSING***"); if (isVerbose) {
      * System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" +
-     * key + "\" not found."); //e.printStackTrace(); } return key; }
-    }
+     * key + "\" not found."); //e.printStackTrace(); } return key; } }
      */
     /**
      * Recursive part of the getString method.
@@ -168,7 +186,24 @@ public class Resources extends ResourceBundle implements Serializable {
      */
     private String getStringRecursive(String key) throws MissingResourceException {
         try {
-            String value = resource.getString(key);
+            String value;
+            try {
+                value = resource.getString(key);
+            } catch (MissingResourceException e) {
+                if (parent != null) {
+                    value = parent.getStringRecursive(key);
+                } else {
+                    value = null;
+                }
+                
+                if (value==null) {
+                    if (isVerbose) {
+                        System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + "\" not found.");
+                        //e.printStackTrace();
+                    }
+                    return null;
+                }
+            }
 
             // Substitute placeholders in the value
             for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
@@ -328,7 +363,7 @@ public class Resources extends ResourceBundle implements Serializable {
     private Node getIconProperty(String key, String suffix, Class<?> baseClass) {
         try {
             String rsrcName = getStringRecursive(key + suffix);
-            if ("".equals(rsrcName)||rsrcName==null) {
+            if ("".equals(rsrcName) || rsrcName == null) {
                 return null;
             }
 
@@ -337,8 +372,7 @@ public class Resources extends ResourceBundle implements Serializable {
                     return d.decode(key, rsrcName, Node.class, baseClass);
                 }
             }
-            
-            
+
             URL url = baseClass.getResource(rsrcName);
             if (isVerbose && url == null) {
                 System.err.println("Warning ResourceBundleUtil[" + baseName + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found.");
@@ -607,23 +641,18 @@ public class Resources extends ResourceBundle implements Serializable {
         propertyNameModifiers.remove(name);
     }
 
-    /**
-     * Read object from ObjectInputStream and re-establish ResourceBundle.
-     *
-     * @param in the input stream
-     * @throws IOException if reading fails
-     * @throws ClassNotFoundException if the class can not be found
-     */
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        // our "pseudo-constructor"
-        in.defaultReadObject();
-        // re-establish the "resource" variable
-        this.resource = ResourceBundle.getBundle(baseName, locale);
-    }
-
     @Override
     protected Object handleGetObject(String key) {
-        Object obj = resource.getObject(key);
+        Object obj = null;
+        try {
+            obj = resource.getObject(key);
+        } catch (MissingResourceException e) {
+            if (parent != null) {
+                return parent.getObject(key);
+            } else {
+                throw e;
+            }
+        }
         if (obj instanceof String) {
             obj = getStringRecursive(key);
         }
@@ -634,14 +663,19 @@ public class Resources extends ResourceBundle implements Serializable {
     public Enumeration<String> getKeys() {
         return resource.getKeys();
     }
-    
-    /** Adds a decoder.
+
+    /**
+     * Adds a decoder.
+     *
      * @param decoder the resource decoder
      */
     public static void addDecoder(ResourceDecoder decoder) {
         decoders.add(decoder);
     }
-    /** Removes a decoder.
+
+    /**
+     * Removes a decoder.
+     *
      * @param decoder the resource decoder
      */
     public static void removeDecoder(ResourceDecoder decoder) {

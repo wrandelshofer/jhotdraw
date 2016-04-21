@@ -13,9 +13,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.beans.Observable;
@@ -45,7 +45,7 @@ import org.jhotdraw.binding.BindingUtil;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
-import org.jhotdraw.concurrent.BackgroundTask;
+import org.jhotdraw.concurrent.FXWorker;
 import org.jhotdraw.util.Resources;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
@@ -53,7 +53,8 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  * DocumentOrientedApplication.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: DocumentOrientedApplication.java 1120 2016-01-15 17:37:49Z
+ * rawcoder $
  */
 public class DocumentOrientedApplication extends AbstractApplication {
 
@@ -99,10 +100,15 @@ public class DocumentOrientedApplication extends AbstractApplication {
             }
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
         }
-        createView(v -> {
-                add(v);
+
+        // FIXME - We suppress here 2 exceptions!
+        createView().thenAccept(v -> {
+            add(v);
             v.addDisabler(this);
-            v.clear(e -> v.removeDisabler(this));
+            v.clear().handle((result, ex) -> {
+                v.removeDisabler(this);
+                return null;
+            });
         });
     }
 
@@ -116,22 +122,14 @@ public class DocumentOrientedApplication extends AbstractApplication {
         return activeView.getReadOnlyProperty();
     }
 
-    public void createView(Consumer<View> callback) {
-        BackgroundTask<View> t = new BackgroundTask<View>() {
-
-            @Override
-            protected View call() throws Exception {
-                return getModel().instantiateView();
-            }
-
-            @Override
-            protected void succeeded(View v) {
-                v.setApplication(DocumentOrientedApplication.this);
-                v.init();
-                callback.accept(v);
-            }
-        };
-        execute(t);
+    @Override
+    public CompletionStage<View> createView() {
+        return FXWorker.supply(() -> getModel().instantiateView())
+                .thenApply((v) -> {
+                    v.setApplication(DocumentOrientedApplication.this);
+                    v.init();
+                    return v;
+                });
     }
 
     /**
@@ -147,13 +145,12 @@ public class DocumentOrientedApplication extends AbstractApplication {
      * @param view the view
      */
     protected void handleViewAdded(View view) {
-                view.getActionMap().setParent(getActionMap());
-                view.setApplication(DocumentOrientedApplication.this);
-                view.setTitle(getLabels().getString("unnamedFile"));
-                HierarchicalMap<String, Action> map = view.getActionMap();
-                map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, view));
-        
-        
+        view.getActionMap().setParent(getActionMap());
+        view.setApplication(DocumentOrientedApplication.this);
+        view.setTitle(getLabels().getString("unnamedFile"));
+        HierarchicalMap<String, Action> map = view.getActionMap();
+        map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, view));
+
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
@@ -234,7 +231,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
             }
         }
         stage.show();
-        Platform.runLater(()->view.start());
+        Platform.runLater(() -> view.start());
     }
 
     /**
@@ -325,16 +322,16 @@ public class DocumentOrientedApplication extends AbstractApplication {
     public ApplicationModel getModel() {
         return model;
     }
+
     @Override
     public void setModel(ApplicationModel newValue) {
-        model=newValue;
+        model = newValue;
     }
 
     @Override
     public void exit() {
         System.exit(0);
     }
-
 
     private void disambiguateViews() {
         HashMap<String, ArrayList<View>> titles = new HashMap<>();

@@ -65,7 +65,9 @@ public class LayerCell extends ListCell<Figure> {
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
-        loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
+        
+        Resources rsrc=Resources.getResources("org.jhotdraw.draw.gui.Labels");
+        loader.setResources(rsrc);
 
         try (InputStream in = fxmlUrl.openStream()) {
             node = loader.load(in);
@@ -75,6 +77,9 @@ public class LayerCell extends ListCell<Figure> {
 
         visibleCheckBox.selectedProperty().addListener(o -> commitLayerVisible());
         lockedCheckBox.selectedProperty().addListener(o -> commitLayerLocked());
+        
+        visibleCheckBox.setGraphic(rsrc.getLargeIconProperty("object.visible.checkBox.selected",LayerCell.class));
+        lockedCheckBox.setGraphic(rsrc.getLargeIconProperty("object.locked.checkBox.selected",LayerCell.class));
     }
 
     @Override
