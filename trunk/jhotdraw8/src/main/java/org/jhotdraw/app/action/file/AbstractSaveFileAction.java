@@ -8,6 +8,8 @@
 package org.jhotdraw.app.action.file;
 
 import java.net.URI;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletionException;
 import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -113,16 +115,14 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
     }
 
     protected void saveViewToURI(final View v, final URI uri, final URIChooser chooser) {
-        v.write(uri, event -> {
-            switch (event.getState()) {
-                case CANCELLED:
+        v.write(uri).handle((result, exception) -> {
+            if (exception instanceof CancellationException) {
                     v.removeDisabler(this);
                     if (oldFocusOwner != null) {
                         oldFocusOwner.requestFocus();
                     }
-                    break;
-                case FAILED:
-                    Throwable value = event.getException();
+            } else if (exception != null) {
+                    Throwable value = exception;
                     String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
                     Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -133,17 +133,14 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
                     if (oldFocusOwner != null) {
                         oldFocusOwner.requestFocus();
                     }
-                    break;
-                case SUCCEEDED:
+            } else {
                     handleSucceded(v, uri);
                     v.removeDisabler(this);
                     if (oldFocusOwner != null) {
                         oldFocusOwner.requestFocus();
                     }
-                    break;
-                default:
-                    break;
             }
+            return null;
         });
     }
 

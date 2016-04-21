@@ -7,11 +7,11 @@
  */
 package org.jhotdraw.app.action.file;
 
-import javafx.event.EventHandler;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
-import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -40,10 +40,10 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
     }
 
     @Override
-    protected void doIt(View view, EventHandler<TaskCompletionEvent<?>> callback) {
+    protected CompletionStage<Void> doIt(View view) {
         if (view != null) {
             app.remove(view);
         }
-        callback.handle(new TaskCompletionEvent<Void>());
+        return CompletableFuture.completedFuture(null);
     }
 }

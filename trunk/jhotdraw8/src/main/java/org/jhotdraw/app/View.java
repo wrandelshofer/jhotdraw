@@ -6,15 +6,14 @@ package org.jhotdraw.app;
 
 import org.jhotdraw.collection.HierarchicalMap;
 import java.net.URI;
+import java.util.concurrent.CompletionStage;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.StringProperty;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.beans.PropertyBean;
-import org.jhotdraw.concurrent.TaskCompletionEvent;
 
 /**
  * View.
@@ -146,10 +145,10 @@ public interface View extends Disableable, PropertyBean {
      *
      * @param uri the URI
      * @param append whether to append to the current document or to replace it.
-     * @param callback Must be called by the view to report the completion of
-     * the operation.
+     * @return Returns a CompletionStage which is completed when the read 
+     * operation has finished.
      */
-    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent<?>> callback);
+    public CompletionStage<Void> read(URI uri, boolean append);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -159,18 +158,18 @@ public interface View extends Disableable, PropertyBean {
      * operation. The disabler is removed when the callback is invoked.
      *
      * @param uri the URI
-     * @param callback Must be called by the view to report the completion of
-     * the operation.
+     * @return Returns a CompletionStage which is completed when the write 
+     * operation has finished.
      */
-    public void write(URI uri, EventHandler<TaskCompletionEvent<?>> callback);
+    public CompletionStage<Void> write(URI uri);
 
     /**
      * Clears the view.
      *
-     * @param callback Must be called by the view to report the completion of
-     * the operation.
+     * @return Returns a CompletionStage which is completed when the clear 
+     * operation has finished.
      */
-    public void clear(EventHandler<TaskCompletionEvent<?>> callback);
+    public CompletionStage<Void> clear();
 
     /**
      * The action map of the view.

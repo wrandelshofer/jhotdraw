@@ -10,6 +10,8 @@ package org.jhotdraw.app.action.app;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletionException;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -25,11 +27,11 @@ import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
 
 /**
- * Exits the application after letting the user review and possibly save 
- * all unsaved views.
+ * Exits the application after letting the user review and possibly save all
+ * unsaved views.
  * <p>
  *
- * @author  Werner Randelshofer
+ * @author Werner Randelshofer
  * @version $Id$
  */
 public class ExitAction extends AbstractApplicationAction {
@@ -40,8 +42,11 @@ public class ExitAction extends AbstractApplicationAction {
     private Node oldFocusOwner;
     private View unsavedView;
 
-    /** Creates a new instance.
-     * @param app the application */
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     */
     public ExitAction(Application app) {
         super(app);
         Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
@@ -117,7 +122,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected URIChooser getChooser(View view) {
         URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
-        if (chsr==null) {
+        if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
             view.set(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY, chsr);
         }
@@ -136,7 +141,7 @@ public class ExitAction extends AbstractApplicationAction {
 
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
-                if (uri!=null && !app.getModel().isAllowMultipleViewsPerURI()) {
+                if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (View vi : app.views()) {
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
@@ -149,7 +154,7 @@ public class ExitAction extends AbstractApplicationAction {
                 break;
             }
 
-            if (uri==null) {
+            if (uri == null) {
                 unsavedView.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
@@ -214,7 +219,7 @@ public class ExitAction extends AbstractApplicationAction {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = chooser.showDialog(unsavedView.getNode());
-            if (uri!=null) {
+            if (uri != null) {
                 saveToFileAndReviewNext(uri, chooser);
 
             } else {
@@ -253,69 +258,59 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFile(final URI uri, final URIChooser chooser) {
         final View v = unsavedView;
-        v.write(uri, event -> {
-            switch (event.getState()) {
-                case CANCELLED:
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
-                    break;
-                case FAILED:
-                    Throwable value = event.getException();
-                    String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-                    Alert alert = new Alert(Alert.AlertType.ERROR,
-                            labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
-                            + ((message == null) ? "" : message));
-                    alert.showAndWait();
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
-                    break;
-                case SUCCEEDED:
-                    v.setURI(uri);
-                    v.clearModified();
-                    app.addRecentURI(uri);
-                    break;
-                default:
-                    break;
+        v.write(uri).handle((result, exception) -> {
+            if (exception instanceof CancellationException) {
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
+            } else if (exception != null) {
+                Throwable value = exception;
+                String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
+                Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
+                        + ((message == null) ? "" : message));
+                alert.showAndWait();
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
+            } else {
+                v.setURI(uri);
+                v.clearModified();
+                app.addRecentURI(uri);
             }
+            return null;
         });
     }
 
     protected void saveToFileAndReviewNext(final URI uri, final URIChooser chooser) {
         final View v = unsavedView;
-        v.write(uri, event -> {
-            switch (event.getState()) {
-                case CANCELLED:
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
-                    break;
-                case FAILED:
-                    Throwable value = event.getException();
-                    String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-                    Alert alert = new Alert(Alert.AlertType.ERROR,
-                            labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
-                            + ((message == null) ? "" : message));
-                    alert.showAndWait();
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
-                    break;
-                case SUCCEEDED:
-                    v.setURI(uri);
-                    v.clearModified();
-                    reviewNext();
-                    break;
-                default:
-                    break;
+        v.write(uri).handle((result, exception) -> {
+            if (exception instanceof CancellationException) {
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
+            } else if (exception != null) {
+                Throwable value = exception.getCause();
+                String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
+                Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
+                        + ((message == null) ? "" : message));
+                alert.showAndWait();
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
+            } else {
+                v.setURI(uri);
+                v.clearModified();
+                reviewNext();
             }
+            return null;
         });
     }
 

@@ -4,6 +4,9 @@
  */
 package org.jhotdraw.samples.grapher;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
@@ -13,6 +16,7 @@ import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
+import org.jhotdraw.util.FontIconDecoder;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -26,6 +30,12 @@ public class GrapherApplication extends DocumentOrientedApplication {
         super();
 
         Resources.setVerbose(true);
+        try {
+            Resources.addDecoder(new FontIconDecoder(".*", "fontawesome:", "/fontawesome-webfont.ttf", 16.0f, GrapherApplication.class));
+            Resources.addDecoder(new FontIconDecoder(".*", "materialicons:", "/MaterialIcons-Regular.ttf",16.0f, GrapherApplication.class));
+        } catch (IOException ex) {
+            Logger.getLogger(GrapherApplication.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         SimpleApplicationModel model = new SimpleApplicationModel("Grapher", () -> new GrapherView(),
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),

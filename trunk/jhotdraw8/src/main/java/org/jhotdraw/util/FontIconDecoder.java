@@ -76,6 +76,7 @@ public class FontIconDecoder implements ResourceDecoder {
         
         Text txt = new Text();
         txt.setFont(font);
+        txt.setText(decodeValue(key, propertyValue));
         @SuppressWarnings("unchecked")
         T t =  (T) txt;
         return t;

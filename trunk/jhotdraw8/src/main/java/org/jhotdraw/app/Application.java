@@ -5,6 +5,7 @@
 package org.jhotdraw.app;
 
 import java.net.URI;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import javafx.beans.property.IntegerProperty;
 import org.jhotdraw.collection.HierarchicalMap;
@@ -143,9 +144,9 @@ public interface Application extends Disableable, PropertyBean {
     /**
      * Creates a new view, initializes it, then invokes the callback.
      *
-     * @param callback A callback. Can be null.
+     * @return A callback.
      */
-    void createView(Consumer<View> callback);
+    CompletionStage<View> createView();
 
     /**
      * Adds a recent URI.

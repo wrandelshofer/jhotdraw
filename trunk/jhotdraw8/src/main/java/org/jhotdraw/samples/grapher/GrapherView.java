@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
@@ -28,8 +29,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
-import org.jhotdraw.concurrent.BackgroundTask;
-import org.jhotdraw.concurrent.TaskCompletionEvent;
+import org.jhotdraw.concurrent.FXWorker;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.DrawingEditor;
@@ -77,13 +77,14 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**
  * GrapherView.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class GrapherView extends AbstractView implements EditorView {
-
+    
     private Node node;
-
+    
     @FXML
     private ToolBar toolsToolBar;
     @FXML
@@ -92,34 +93,34 @@ public class GrapherView extends AbstractView implements EditorView {
     private ScrollPane detailsScrollPane;
     @FXML
     private SplitPane mainSplitPane;
-
+    
     private DrawingView drawingView;
-
+    
     private DrawingEditor editor;
-
+    
     @FXML
     private VBox detailsVBox;
-
+    
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
-
+    
     private final BooleanProperty detailsVisible = new SimpleBooleanProperty(this, "detailsVisible", true);
 
     /**
      * Counter for incrementing layer names.
      */
     private int counter;
-
+    
     @Override
     public void init() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
-
+        
         try {
             node = loader.load(getClass().getResourceAsStream("GrapherView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
-
+        
         drawingView = new SimpleDrawingView();
         // FIXME should use preferences!
         drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25));
@@ -128,15 +129,15 @@ public class GrapherView extends AbstractView implements EditorView {
         drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
             modified.set(true);
         });
-
+        
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
-
+        
         viewScrollPane.setContent(drawingView.getNode());
 
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
-        Resources rsrc = Resources.getResources("org.jhotdraw.draw.Labels");
+        Resources rsrc = Resources.getResources("org.jhotdraw.samples.grapher.Labels");
         Supplier<Layer> layerFactory = this::createLayer;
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("selectionTool", rsrc), 0, 0);
@@ -152,60 +153,50 @@ public class GrapherView extends AbstractView implements EditorView {
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
-
+        
         ZoomToolbar ztbar = new ZoomToolbar();
         ztbar.setDrawingView(drawingView);
         toolsToolBar.getItems().add(ztbar);
-
+        
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
         getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction(getApplication(), this,
                 detailsVisible,
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
-
-        BackgroundTask<List<Node>> bg = new BackgroundTask<List<Node>>() {
-
-            @Override
-            protected List<Node> call() throws Exception {
-                List<Node> list = new LinkedList<>();
-                addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS, list);
-                addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER, list);
-                addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS, list);
-                addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS, list);
-                addInspector(new DrawingInspector(), "drawing", Priority.NEVER, list);
-                addInspector(new GridInspector(), "grid", Priority.NEVER, list);
-
-                return list;
+        
+        FXWorker.supply(() -> {
+            List<Node> list = new LinkedList<>();
+            addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS, list);
+            addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER, list);
+            addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS, list);
+            addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS, list);
+            addInspector(new DrawingInspector(), "drawing", Priority.NEVER, list);
+            addInspector(new GridInspector(), "grid", Priority.NEVER, list);
+            return list;
+        }).thenAccept(list-> {
+            for (Node n : list) {
+                Inspector i = (Inspector) n.getProperties().get("inspector");
+                i.setDrawingView(drawingView);
             }
-
-            @Override
-            protected void succeeded(List<Node> list) {
-                for (Node n : list) {
-                    Inspector i = (Inspector) n.getProperties().get("inspector");
-                    i.setDrawingView(drawingView);
-                }
-                detailsVBox.getChildren().addAll(list);
-            }
-
-        };
-        getApplication().execute(bg);
+            detailsVBox.getChildren().addAll(list);
+        });
     }
-
+    
     @Override
     public void start() {
         getNode().getScene().getStylesheets().addAll(//
                 GrapherApplication.class.getResource("/org/jhotdraw/draw/gui/inspector.css").toString(),//
                 GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
         );
-
+        
         Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
         PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
-
+    
     private void addInspector(Inspector inspector, String id, Priority grow, List<Node> list) {
         Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
-
+        
         Accordion a = new Accordion();
         a.getStyleClass().setAll("inspector", "flush");
         Pane n = (Pane) inspector.getNode();
@@ -219,7 +210,7 @@ public class GrapherView extends AbstractView implements EditorView {
         t.expandedProperty().addListener((o, oldValue, newValue) -> {
             VBox.setVgrow(a, newValue ? grow : Priority.NEVER);
         });
-
+        
         PreferencesUtil.installBooleanPropertyHandler(//
                 Preferences.userNodeForPackage(GrapherView.class), id + ".expanded", t.expandedProperty());
         if (t.isExpanded()) {
@@ -227,81 +218,59 @@ public class GrapherView extends AbstractView implements EditorView {
             VBox.setVgrow(a, grow);
         }
     }
-
+    
     @Override
     public Node getNode() {
         return node;
     }
-
+    
     public Layer createLayer() {
         Layer layer = new SimpleLayer();
         layer.set(StyleableFigure.STYLE_ID, "layer" + (++counter));
         return layer;
     }
-
+    
     @Override
-    public void read(URI uri, boolean append, EventHandler<TaskCompletionEvent<?>> callback) {
-        BackgroundTask<SimpleDrawing> t = new BackgroundTask<SimpleDrawing>() {
-
-            @Override
-            protected SimpleDrawing call() throws Exception {
-                try {
-                    IdFactory idFactory = new SimpleIdFactory();
-                    FigureFactory factory = new DefaultFigureFactory(idFactory);
-                    SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
-                    SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
-                    drawing.updateCss();
-                    return drawing;
-                } catch (Exception e) {
-                    throw e;
-                }
-            }
-
-            @Override
-            protected void succeeded(SimpleDrawing value) {
-                drawingView.setDrawing(value);
-
-            }
-
-        };
-        t.addCompletionHandler(callback);
-        getApplication().execute(t);
+    public CompletionStage<Void> read(URI uri, boolean append) {
+        return FXWorker.supply(() -> {
+            IdFactory idFactory = new SimpleIdFactory();
+            FigureFactory factory = new DefaultFigureFactory(idFactory);
+            SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+            SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
+            drawing.updateCss();
+            return drawing;
+        }).thenAccept(drawing
+                -> drawingView.setDrawing(drawing)
+        );
     }
-
+    
     @Override
-    public void write(URI uri, EventHandler<TaskCompletionEvent<?>> callback) {
-        BackgroundTask<Void> t = new BackgroundTask<Void>() {
-
-            @Override
-            protected void construct() throws Exception {
-                if (uri.getPath().endsWith(".svg")) {
-                    SvgExportOutputFormat io = new SvgExportOutputFormat();
-                    io.write(uri, drawingView.getDrawing());
-                } else {
-                    IdFactory idFactory = new SimpleIdFactory();
-                    FigureFactory factory = new DefaultFigureFactory(idFactory);
-                    SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
-                    io.write(uri, drawingView.getDrawing());
-                }
+    public CompletionStage<Void> write(URI uri) {
+        return FXWorker.run(() -> {
+            if (uri.getPath().endsWith(".svg")) {
+                SvgExportOutputFormat io = new SvgExportOutputFormat();
+                io.write(uri, drawingView.getDrawing());
+            } else {
+                IdFactory idFactory = new SimpleIdFactory();
+                FigureFactory factory = new DefaultFigureFactory(idFactory);
+                SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+                io.write(uri, drawingView.getDrawing());
             }
-        };
-        t.addCompletionHandler(callback);
-        getApplication().execute(t);
+        });
     }
-
+    
     @Override
-    public void clear(EventHandler<TaskCompletionEvent<?>> callback) {
+    public CompletionStage<Void> clear() {
         Drawing d = new SimpleDrawing();
         drawingView.setDrawing(d);
-        clearModified();
-        callback.handle(new TaskCompletionEvent<Void>());
+        return CompletableFuture.completedFuture(null);
     }
-
+    
     @Override
     public DrawingEditor getEditor() {
         return editor;
     }
-
+    
     public Node getPropertiesPane() {
         return detailsScrollPane;
     }

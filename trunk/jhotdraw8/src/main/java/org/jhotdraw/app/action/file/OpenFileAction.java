@@ -9,6 +9,7 @@ package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.util.*;
 import java.net.URI;
+import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw.app.Application;
@@ -70,7 +71,7 @@ public class OpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView==null) {
-                app.createView(v -> doIt(v, true));
+                app.createView().thenAccept(v -> doIt(v, true));
             } else {
                 doIt(emptyView, false);
             }
@@ -113,13 +114,11 @@ public class OpenFileAction extends AbstractApplicationAction {
         v.addDisabler(this);
 
         // Open the file
-        v.read(uri, false, event -> {
-            switch (event.getState()) {
-                case CANCELLED:
+        v.read(uri, false).whenComplete((result, exception) -> {
+            if (exception instanceof CancellationException) {
                     v.removeDisabler(this);
-                    break;
-                case FAILED:
-                    Throwable value = event.getException();
+            } else if (exception != null) {
+                    Throwable value = exception;
                     String message = (value != null && value.getMessage()
                             != null) ? value.getMessage() : value.toString();
                     Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
@@ -128,15 +127,11 @@ public class OpenFileAction extends AbstractApplicationAction {
                     alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
                     alert.showAndWait();
                     v.removeDisabler(this);
-                    break;
-                case SUCCEEDED:
+            } else {
                     v.setURI(uri);
                     v.clearModified();
                     v.setTitle(URIUtil.getName(uri));
                     v.removeDisabler(this);
-                    break;
-                default:
-                    break;
             }
         });
     }

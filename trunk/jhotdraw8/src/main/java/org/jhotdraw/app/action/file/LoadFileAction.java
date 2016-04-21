@@ -7,11 +7,10 @@
  */
 package org.jhotdraw.app.action.file;
 
-import javafx.event.EventHandler;
+import java.util.concurrent.CompletionStage;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
-import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -124,8 +123,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
         });
     }*/
 
-    @Override
-    protected void doIt(View p, EventHandler<TaskCompletionEvent<?>> callback) {
+    @Override public CompletionStage<Void> doIt(final View view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

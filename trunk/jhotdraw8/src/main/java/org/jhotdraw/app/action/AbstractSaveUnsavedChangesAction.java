@@ -7,8 +7,9 @@
 package org.jhotdraw.app.action;
 
 import java.net.URI;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletionStage;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -21,7 +22,6 @@ import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
-import org.jhotdraw.concurrent.TaskCompletionEvent;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
@@ -72,7 +72,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         if (av != null) {
             handle(av);
         } else if (isMayCreateView()) {
-            app.createView(v -> {
+            app.createView().thenAccept(v -> {
                 app.add(v);
                 handle(v);
             });
@@ -111,7 +111,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                                 }
                                 break;
                             case NO:
-                                doIt(v, e -> {
+                                doIt(v).whenComplete((r, e) -> {
                                     // FIXME check success
                                     v.removeDisabler(this);
                                     if (oldFocusOwner != null) {
@@ -139,7 +139,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                 alert.show();
             } else {
 
-                doIt(v, e -> {
+                doIt(v).thenRun(() -> {
                     // FIXME check success
                     v.removeDisabler(this);
                     if (oldFocusOwner != null) {
@@ -203,40 +203,34 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
     }
 
     protected void saveViewToURI(final View v, final URI uri, final URIChooser chooser) {
-        v.write(uri, event -> {
-            switch (event.getState()) {
-                case CANCELLED:
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
-                    break;
-                case FAILED:
-                    Throwable value = event.getException();
-                    String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-                    Alert alert = new Alert(Alert.AlertType.ERROR,
-                            ((message == null) ? "" : message));
-                    alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
-                    alert.showAndWait();
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
-                    break;
-                case SUCCEEDED:
-                    v.setURI(uri);
-                    v.clearModified();
-                    v.setTitle(URIUtil.getName(uri));
-                    app.addRecentURI(uri);
-                    doIt(v, e -> {
-                    });
-                    break;
-                default:
-                    break;
+        v.write(uri).handle((result, exception) -> {
+            if (exception instanceof CancellationException) {
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
+            } else if (exception != null) {
+                Throwable value = exception;
+                String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
+                Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        ((message == null) ? "" : message));
+                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
+                alert.showAndWait();
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
+            } else {
+                v.setURI(uri);
+                v.clearModified();
+                v.setTitle(URIUtil.getName(uri));
+                app.addRecentURI(uri);
+                doIt(v);
             }
+            return null;
         });
     }
 
-    protected abstract void doIt(View p, EventHandler<TaskCompletionEvent<?>> callback);
+    protected abstract CompletionStage<Void> doIt(View p);
 }
