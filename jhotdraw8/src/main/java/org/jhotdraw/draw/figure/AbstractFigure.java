@@ -125,6 +125,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
                 buf.append(e.getValue());
             }
         }
+        if (connectedFigures != null) {
         buf.append(", connections={");
         isFirst = true;
         for (Figure f : connectedFigures) {
@@ -138,6 +139,7 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
             buf.append(className).append('@').append(f.hashCode());
         }
         buf.append("}}");
+        }
         return buf.toString();
     }
 

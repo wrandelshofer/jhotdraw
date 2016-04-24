@@ -16,10 +16,11 @@ import org.jhotdraw.app.action.Action;
 import org.jhotdraw.beans.PropertyBean;
 
 /**
- * View.
+ * A {@code View} provides a user interface for a resource which is identified
+ * by an URI.
  * <p>
- * The life of view objects is managed by an application. See the class comment
- * of {@link Application} on how to launch an application.
+ * The life-cycle of view objects is managed by an application. See the class
+ * comment of {@link Application} on how to launch an application.
  * <p>
  * The lifecycle of a view consists of the following steps:
  * <ol>

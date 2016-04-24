@@ -26,7 +26,6 @@ class FigureImplementationDetails {
     final static Key<Transform> WORLD_TO_LOCAL = new SimpleKey<>("worldToLocal", Transform.class);
     final static Key<Transform> LOCAL_TO_PARENT = new SimpleKey<>("localToParent", Transform.class);
     final static Key<Transform> PARENT_TO_LOCAL = new SimpleKey<>("parentToLocal", Transform.class);
-    
     // ---
     // other constant declarations
     // ---

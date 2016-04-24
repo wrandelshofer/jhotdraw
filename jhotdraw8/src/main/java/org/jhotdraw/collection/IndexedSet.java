@@ -27,7 +27,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     /**
      * The underlying list.
      */
-    private List<E> list = new ArrayList<>();
+    private final List<E> list;
 
     /** Creates a new instance which is backed by an array list. */
     public IndexedSet() {

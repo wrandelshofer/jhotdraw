@@ -21,6 +21,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Point3DStyleableMapAccessor;
+import org.jhotdraw.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw.draw.key.TransformListStyleableFigureKey;
 import org.jhotdraw.geom.Geom;
 
@@ -62,7 +63,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * Defines the scale factor by which coordinates are scaled on the axes
      * about the center of the figure.
      */
-    public static Point3DStyleableMapAccessor SCALE = new Point3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
+    public static Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
@@ -162,12 +163,11 @@ public interface TransformableFigure extends TransformCacheableFigure {
     default Transform getLocalToParent() {
         Transform t = get(FigureImplementationDetails.LOCAL_TO_PARENT);
         if (t == null) {
-
             Point2D center = getCenterInLocal();
             Affine tx = new Affine();
-            tx.appendTranslation(getStyled(TransformableFigure.TRANSLATE_X), get(TransformableFigure.TRANSLATE_Y));
-            tx.appendScale(getStyled(TransformableFigure.SCALE_X), get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
+            tx.appendTranslation(getStyled(TransformableFigure.TRANSLATE_X), getStyled(TransformableFigure.TRANSLATE_Y));
             tx.appendRotation(getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
+            tx.appendScale(getStyled(TransformableFigure.SCALE_X), getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
             tx.append(getTransform());
             t = tx;
 
@@ -182,12 +182,12 @@ public interface TransformableFigure extends TransformCacheableFigure {
         if (t == null) {
             Point2D center = getCenterInLocal();
 
-            Transform translate = Transform.translate(-getStyled(TransformableFigure.TRANSLATE_X), -get(TransformableFigure.TRANSLATE_Y));
-            Transform scale = Transform.scale(1.0 / getStyled(TransformableFigure.SCALE_X), 1.0 / get(TransformableFigure.SCALE_Y), center.getX(), center.getY());
+            Transform translate = Transform.translate(-getStyled(TransformableFigure.TRANSLATE_X), -getStyled(TransformableFigure.TRANSLATE_Y));
+            Transform scale = Transform.scale(1.0 / getStyled(TransformableFigure.SCALE_X), 1.0 / getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
             Transform rotate = Transform.rotate(-getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
 
-            t = getInverseTransform().createConcatenation(scale).createConcatenation(rotate).createConcatenation(translate);
-
+            t = getInverseTransform().createConcatenation(rotate).createConcatenation(scale).createConcatenation(translate);
+            
             set(FigureImplementationDetails.PARENT_TO_LOCAL, t);
         }
         return t;
@@ -201,7 +201,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         } else {
             t = list.get(0);
             for (int i = 1, n = list.size(); i < n; i++) {
-                t.createConcatenation(list.get(i));
+                t=t.createConcatenation(list.get(i));
             }
         }
         return t;
@@ -216,7 +216,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
             try {
                 t = list.get(list.size() - 1).createInverse();
                 for (int i = list.size() - 2; i >= 0; i--) {
-                    t.createConcatenation(list.get(i).createInverse());
+                    t=t.createConcatenation(list.get(i).createInverse());
                 }
             } catch (NonInvertibleTransformException e) {
                 throw new InternalError(e);
@@ -230,5 +230,5 @@ public interface TransformableFigure extends TransformCacheableFigure {
         set(FigureImplementationDetails.PARENT_TO_LOCAL, null);
         set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
     }
-
+    
 }

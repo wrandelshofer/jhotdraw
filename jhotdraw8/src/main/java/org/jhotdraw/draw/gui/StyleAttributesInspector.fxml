@@ -26,7 +26,7 @@
       </HBox>
    </bottom>
    <center>
-      <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="12" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="48.0" prefColumnCount="0" prefRowCount="24" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
    </center>
    <styleClass>
       <String fx:value="inspector" />

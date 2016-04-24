@@ -15,7 +15,9 @@ import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.GroupAction;
 import org.jhotdraw.draw.action.SendToBackAction;
+import org.jhotdraw.draw.action.UngroupAction;
 import org.jhotdraw.util.FontIconDecoder;
 import org.jhotdraw.util.Resources;
 
@@ -37,7 +39,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
             Logger.getLogger(GrapherApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        SimpleApplicationModel model = new SimpleApplicationModel("Grapher", () -> new GrapherView(),
+        SimpleApplicationModel model = new SimpleApplicationModel("Grapher", GrapherView::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "XML Files", "*.xml");
         model.getExportExtensionFilters().add(new FileChooser.ExtensionFilter("SVG","*.svg"));
@@ -47,8 +49,11 @@ public class GrapherApplication extends DocumentOrientedApplication {
     @Override
     public HierarchicalMap<String, Action> getActionMap() {
         HierarchicalMap<String, Action> map = super.getActionMap();
+        /*
         map.put(SendToBackAction.ID, new SendToBackAction(this, null));
         map.put(BringToFrontAction.ID, new BringToFrontAction(this, null));
+        map.put(GroupAction.ID, new GroupAction(this, null,null));
+        map.put(UngroupAction.ID, new UngroupAction(this, null));*/
         Action a;
         map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherView) view).getPropertiesPane(),
                 "view.toggleProperties",

@@ -68,7 +68,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.beans.SimplePropertyBean;
-import org.jhotdraw.draw.handle.SelectionMoveHandle;
+import org.jhotdraw.draw.figure.GroupFigure;
+import org.jhotdraw.draw.handle.MultipleSelectionMoveHandle;
+import org.jhotdraw.draw.handle.MultipleSelectionOutlineHandle;
 import org.jhotdraw.draw.model.SimpleDrawingModel;
 import org.jhotdraw.geom.Geom;
 
@@ -175,10 +177,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 case FIGURE_REMOVED_FROM_PARENT:
                     handleFigureRemoved(f);
                     break;
-                case FIGURE_ADDED_TO_DRAWING:
-                    repaint();
+                case SUBTREE_ADDED_TO_DRAWING:
+                    handleFigureRemovedFromDrawing(f);
                     break;
-                case FIGURE_REMOVED_FROM_DRAWING:
+                case SUBTREE_REMOVED_FROM_DRAWING:
                     repaint();
                     break;
                 case NODE_INVALIDATED:
@@ -200,15 +202,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     repaint();
                     break;
                 case SUBTREE_NODES_INVALIDATED:
-                    updateTreeNodes(f);
+                    handleSubtreeNodesInvalidated(f);
                     repaint();
                     break;
-                case SUBTREE_STRUCTURE_CHANGED:
-                    updateTreeStructure(f);
-                    break;
+                case PROPERTY_VALUE_CHANGED:
                 case CONNECTION_CHANGED:
                 case TRANSFORM_CHANGED:
-                    repaint();
                     break;
                 default:
                     throw new UnsupportedOperationException(event.getEventType()
@@ -251,6 +250,11 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
     private Transform viewToWorldTransform = null;
     private Transform worldToViewTransform = null;
+    /** If too many figures are selected, we only draw one outline handle
+     * for all selected figures instead of one outline handle for each
+     * selected figure.
+     */
+    private int tooManySelectedFigures = 20;
 
     /**
      * Selection tolerance. Selectable margin around a figure.
@@ -594,7 +598,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.put(d, null);
             updateLayout();
-            updateTreeNodes(d);
+            handleSubtreeNodesInvalidated(d);
             repaint();
 
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
@@ -608,11 +612,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
     }
 
-    private void updateTreeNodes(Figure parent) {
-        dirtyFigureNodes.put(parent, null);
-        dirtyHandles.put(parent, null);
-        for (Figure child : parent.getChildren()) {
-            updateTreeNodes(child);
+    private void handleSubtreeNodesInvalidated(Figure figures) {
+        for (Figure f : figures.preorderIterable()) {
+            dirtyFigureNodes.put(f, null);
+            dirtyHandles.put(f, null);
         }
     }
 
@@ -647,7 +650,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 removeNode(f);
             }
         }
-        updateTreeNodes(parent);
+        handleSubtreeNodesInvalidated(parent);
     }
 
     private void handleNewDrawingModel(DrawingModel oldValue, DrawingModel newValue) {
@@ -662,30 +665,27 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
     }
 
-    private void handleFigureAdded(Figure f) {
-        handleFigureAdded0(f);
+    private void handleFigureAdded(Figure figure) {
+        for (Figure f : figure.preorderIterable()) {
+            invalidateFigureNode(f);
+        }
         repaint();
     }
 
-    private void handleFigureAdded0(Figure f) {
-        invalidateFigureNode(f);
-        for (Figure child : f.getChildren()) {
-            handleFigureAdded0(child);
+    private void handleFigureRemoved(Figure figure) {
+        for (Figure f : figure.preorderIterable()) {
+            removeNode(f);
         }
-    }
-
-    private void handleFigureRemoved(Figure f) {
-        handleFigureRemoved0(f);
-        repaint();
-    }
-
-    private void handleFigureRemoved0(Figure f) {
-        for (Figure child : f.getChildren()) {
-            handleFigureRemoved0(child);
-        }
-        removeNode(f);
-        selectedFigures.remove(f);
         invalidateHandles();
+        repaint();
+    }
+
+    private void handleFigureRemovedFromDrawing(Figure figure) {
+        for (Figure f : figure.preorderIterable()) {
+            selectedFigures.remove(f);
+        }
+        invalidateHandles();
+        repaint();
     }
 
     private void handleNodeInvalidated(Figure f) {
@@ -1118,6 +1118,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     private void updateHandles() {
+        // FIXME - We create and destroy many handles here!!!
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
             for (Handle h : entry.getValue()) {
                 h.dispose();
@@ -1146,28 +1147,35 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
      * @param handles The provided list
      */
     protected void createHandles(Map<Figure, List<Handle>> handles) {
-        if (getSelectedFigures().size() > 1) {
-            Figure figure = getSelectedFigures().iterator().next();
+        Set<Figure> selection = getSelectedFigures();
+        HandleType handleType = selection.size() > 1 ? getMultiHandleType() : getHandleType();
+        if (selection.size()<tooManySelectedFigures) {
+        for (Figure figure : selection) {
             List<Handle> list = handles.get(figure);
             if (list == null) {
                 list = new ArrayList<>();
                 handles.put(figure, list);
             }
-            list.add(SelectionMoveHandle.northEast());
-            list.add(SelectionMoveHandle.northWest());
-            list.add(SelectionMoveHandle.southEast());
-            list.add(SelectionMoveHandle.southWest());
-        } else {
-            HandleType handleType = getSelectedFigures().size() > 1 ? getMultiHandleType() : getHandleType();
-            for (Figure figure : getSelectedFigures()) {
-                List<Handle> list = handles.get(figure);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    handles.put(figure, list);
-                }
-                figure.createHandles(handleType, this, list);
-                handles.put(figure, list);
+            figure.createHandles(handleType, this, list);
+            handles.put(figure, list);
+        }
+        }
+
+        if (selection.size() > 1) {
+            Figure first = selection.iterator().next();
+            List<Handle> list = handles.get(first);
+            if (list == null) {
+                list = new ArrayList<>();
+                handles.put(first, list);
             }
+            if (selection.size()>=tooManySelectedFigures) {
+                list.add(new MultipleSelectionOutlineHandle());
+            }
+            list.add(MultipleSelectionMoveHandle.northEast());
+            list.add(MultipleSelectionMoveHandle.northWest());
+            list.add(MultipleSelectionMoveHandle.southEast());
+            list.add(MultipleSelectionMoveHandle.southWest());
+            handles.put(first, list);
         }
     }
 

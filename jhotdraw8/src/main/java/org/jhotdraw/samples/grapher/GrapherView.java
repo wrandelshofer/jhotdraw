@@ -6,8 +6,12 @@ package org.jhotdraw.samples.grapher;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
@@ -46,7 +50,9 @@ import org.jhotdraw.draw.SimpleLayer;
 import org.jhotdraw.draw.figure.StrokeableFigure;
 import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
+import org.jhotdraw.draw.action.GroupAction;
 import org.jhotdraw.draw.action.SendToBackAction;
+import org.jhotdraw.draw.action.UngroupAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
 import org.jhotdraw.draw.figure.ImageFigure;
 import org.jhotdraw.draw.gui.DrawingInspector;
@@ -65,7 +71,10 @@ import org.jhotdraw.draw.io.IdFactory;
 import org.jhotdraw.draw.io.SimpleIdFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
 import org.jhotdraw.draw.figure.EllipseFigure;
+import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.GroupFigure;
 import org.jhotdraw.draw.figure.LineFigure;
+import org.jhotdraw.draw.gui.FigureHierarchyInspector;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.ImageCreationTool;
@@ -108,7 +117,7 @@ public class GrapherView extends AbstractView implements EditorView {
     /**
      * Counter for incrementing layer names.
      */
-    private int counter;
+    private Map<String,Integer> counters = new HashMap<>();
     
     @Override
     public void init() {
@@ -138,18 +147,19 @@ public class GrapherView extends AbstractView implements EditorView {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
         Resources rsrc = Resources.getResources("org.jhotdraw.samples.grapher.Labels");
-        Supplier<Layer> layerFactory = this::createLayer;
+        Supplier<Layer> layerFactory = ()->createFigure(SimpleLayer::new);
         Tool defaultTool;
-        ttbar.addTool(defaultTool = new SelectionTool("selectionTool", rsrc), 0, 0);
-        ttbar.addTool(new SelectionTool("pointSelectionTool", HandleType.MOVE, rsrc), 0, 1);
-        ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, RectangleFigure::new, layerFactory), 1, 0);
-        ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, EllipseFigure::new, layerFactory), 2, 0);
-        ttbar.addTool(new CreationTool("edit.createLine", rsrc, LineFigure::new, layerFactory), 1, 1);
+        ttbar.addTool(defaultTool = new SelectionTool("tool.selectFigure", rsrc), 0, 0);
+        ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.MOVE, rsrc), 0, 1);
+        ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, rsrc), 1, 1);
+        ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, ()->createFigure(RectangleFigure::new), layerFactory), 2, 0);
+        ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, ()->createFigure(EllipseFigure::new), layerFactory), 3, 0);
+        ttbar.addTool(new CreationTool("edit.createLine", rsrc, ()->createFigure(LineFigure::new), layerFactory), 2, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc,//
                 () -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null), //
-                layerFactory), 3, 1);
-        ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, LineConnectionFigure::new, layerFactory), 2, 1);
-        ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, ImageFigure::new, layerFactory), 3, 0);
+                layerFactory), 4, 1);
+        ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, ()->createFigure(LineConnectionFigure::new), layerFactory), 3, 1);
+        ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, ()->createFigure(ImageFigure::new), layerFactory), 4, 0);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
@@ -164,6 +174,8 @@ public class GrapherView extends AbstractView implements EditorView {
                 detailsVisible,
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
+        getActionMap().put(GroupAction.ID, new GroupAction(getApplication(), editor,()->createFigure(GroupFigure::new)));
+        getActionMap().put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
         
         FXWorker.supply(() -> {
             List<Node> list = new LinkedList<>();
@@ -171,6 +183,7 @@ public class GrapherView extends AbstractView implements EditorView {
             addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER, list);
             addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS, list);
             addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS, list);
+            addInspector(new FigureHierarchyInspector(), "figureHierarchy", Priority.ALWAYS, list);
             addInspector(new DrawingInspector(), "drawing", Priority.NEVER, list);
             addInspector(new GridInspector(), "grid", Priority.NEVER, list);
             return list;
@@ -180,7 +193,7 @@ public class GrapherView extends AbstractView implements EditorView {
                 i.setDrawingView(drawingView);
             }
             detailsVBox.getChildren().addAll(list);
-        });
+        }).exceptionally(e->{e.printStackTrace();return null;});
     }
     
     @Override
@@ -224,10 +237,25 @@ public class GrapherView extends AbstractView implements EditorView {
         return node;
     }
     
-    public Layer createLayer() {
-        Layer layer = new SimpleLayer();
-        layer.set(StyleableFigure.STYLE_ID, "layer" + (++counter));
-        return layer;
+    /** Creates a figure with a unique id. */
+    public <T extends Figure> T createFigure(Supplier<T> supplier) {
+        T created = supplier.get();
+        String prefix = created.getTypeSelector().toLowerCase();
+        Integer counter = counters.get(prefix);
+        Set<String> ids = new HashSet<>();
+        counter = counter == null ? 1 : counter+1;
+        // XXX O(n) !!!
+        for (Figure f : drawingView.getDrawing().preorderIterable()) {
+            ids.add(f.getId());
+        }
+        String id=prefix+counter;
+        while (ids.contains(id)) {
+            counter++;
+            id=prefix+counter;
+        }
+        counters.put(created.getTypeSelector(), counter);
+        created.set(StyleableFigure.STYLE_ID, id);
+        return created;
     }
     
     @Override

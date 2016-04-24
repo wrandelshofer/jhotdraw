@@ -76,7 +76,7 @@ public class CreationTool extends AbstractTool {
 
     @Override
     protected void handleMousePressed(MouseEvent event, DrawingView view) {
-        Platform.runLater(() -> view.getNode().requestFocus());
+        Platform.runLater(view.getNode()::requestFocus);
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;

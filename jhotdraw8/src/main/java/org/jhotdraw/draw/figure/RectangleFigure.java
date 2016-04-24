@@ -12,6 +12,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;

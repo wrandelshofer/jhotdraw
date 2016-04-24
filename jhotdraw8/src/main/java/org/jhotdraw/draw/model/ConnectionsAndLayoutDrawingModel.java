@@ -16,13 +16,14 @@ import org.jhotdraw.draw.key.FigureMapAccessor;
 
 /**
  * This drawing model assumes that the drawing contains figures which perform
- layouts and has getDependentFigures between figures.
+ * layouts and has getDependentFigures between figures.
  * <p>
- Assumes that a figure which has getDependentFigures to other figures may have
- in turn getDependentFigures from other figures.
+ * Assumes that a figure which has getDependentFigures to other figures may have
+ * in turn getDependentFigures from other figures.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: ConnectionsAndLayoutDrawingModel.java 1120 2016-01-15 17:37:49Z
+ * rawcoder $
  */
 public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
@@ -70,12 +71,14 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
     @Override
     public void insertChildAt(Figure child, Figure parent, int index) {
         Drawing oldDrawing = child.getDrawing();
-        if (child.getParent() != null) {
-            child.getParent().remove(child);
+        Figure oldParent = child.getParent();
+        if (oldParent != null) {
+            int oldChildIndex = oldParent.getChildren().indexOf(child);
+            oldParent.remove(child);
+            fire(DrawingModelEvent.figureRemovedFromParent(this, oldParent, child, oldChildIndex));
+            fire(DrawingModelEvent.nodeInvalidated(this, oldParent));
         }
         parent.getChildren().add(index, child);
-        fire(DrawingModelEvent.figureAddedToParent(this, parent, child, index));
-        fire(DrawingModelEvent.nodeInvalidated(this, parent));
         Drawing newDrawing = child.getDrawing();
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
@@ -85,13 +88,17 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
                 fire(DrawingModelEvent.figureAddedToDrawing(this, newDrawing, child));
             }
         }
+        fire(DrawingModelEvent.figureAddedToParent(this, parent, child, index));
+        fire(DrawingModelEvent.nodeInvalidated(this, parent));
     }
 
     @Override
     public <T> T set(Figure figure, MapAccessor<T> key, T newValue) {
         Set<Figure> connectionChange = null;
-
+        figure.getProperties().addListener(figurePropertyChangeHandler);
+        figurePropertyChangeHandler.setFigure(figure);
         T oldValue = figure.set(key, newValue);
+        figure.getProperties().removeListener(figurePropertyChangeHandler);
         if (!Objects.equals(oldValue, newValue)) {
             final DirtyMask dm;
             if (key instanceof FigureMapAccessor) {
@@ -104,7 +111,6 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
             if (dm.containsOneOf(DirtyBits.CONNECTION)) {
                 connectionChange = figure.getProvidingFigures();
             }
-            
             if (dm.containsOneOf(DirtyBits.NODE)) {
                 fire(DrawingModelEvent.nodeInvalidated(this, figure));
             }
@@ -136,7 +142,12 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void reshape(Figure figure, Transform transform) {
+        // FIXME this is not sufficient for capturing property changes
+        //       we need to listen on the entire subtree!
+        figure.getProperties().addListener(figurePropertyChangeHandler);
+        figurePropertyChangeHandler.setFigure(figure);
         figure.reshape(transform);
+        figure.getProperties().removeListener(figurePropertyChangeHandler);
         fire(DrawingModelEvent.transformChanged(this, figure));
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
@@ -145,7 +156,10 @@ public class ConnectionsAndLayoutDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void reshape(Figure figure, double x, double y, double width, double height) {
+        figure.getProperties().addListener(figurePropertyChangeHandler);
+        figurePropertyChangeHandler.setFigure(figure);
         figure.reshape(x, y, width, height);
+        figure.getProperties().removeListener(figurePropertyChangeHandler);
         fire(DrawingModelEvent.transformChanged(this, figure));
         fire(DrawingModelEvent.subtreeNodesInvalidated(this, figure));
         fire(DrawingModelEvent.layoutInvalidated(this, figure));
