@@ -8,6 +8,7 @@ package org.jhotdraw.draw.model;
 import java.util.List;
 import javafx.beans.Observable;
 import javafx.scene.transform.Transform;
+import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.figure.Figure;
@@ -158,8 +159,8 @@ public interface DrawingModel extends Observable {
     }
 
     /**
-     * Attempts to change the updateLayout bounds of the figure and fires appropriate
- {@code DrawingModelEvent}s.
+     * Attempts to change the local bounds of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param f the figure
      * @param transform the desired transformation
@@ -167,8 +168,8 @@ public interface DrawingModel extends Observable {
     void reshape(Figure f, Transform transform);
 
     /**
-     * Attempts to change the updateLayout bounds of the figure and fires appropriate
- {@code DrawingModelEvent}s.
+     * Attempts to change the local bounds of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param f the figure
      * @param x desired x-position
@@ -179,22 +180,22 @@ public interface DrawingModel extends Observable {
     void reshape(Figure f, double x, double y, double width, double height);
 
     /**
-     * Invokes the updateLayout method of the figure and fires appropriate
- {@code DrawingModelEvent}s.
+     * Invokes the layout method of the figure and fires appropriate
+     / {@code DrawingModelEvent}s.
      *
      * @param f the figure
      */
     void layout(Figure f);
     /**
-     * Invokes the disconnectDependentsAndProviders method of the figure and fires appropriate
- {@code DrawingModelEvent}s.
+     * Invokes the disconnect method of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param f the figure
      */
     void disconnect(Figure f);
     /**
-     * Invokes the updateCss method of the figure and fires appropriate
- {@code DrawingModelEvent}s.
+     * Invokes the applyCss method of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
      *
      * @param f the figure
      */
@@ -222,6 +223,14 @@ public interface DrawingModel extends Observable {
     default void fireNodeInvalidated(Figure f) {
         fire(DrawingModelEvent.nodeInvalidated(this, f));
     }
+    /**
+     * Fires "node invalidated" event for the specified figure.
+     * @param f the figure
+     */
+    default <T> void firePropertyValueChanged(Figure f, Key<T> key, T oldValue, T newValue) {
+             fire(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue));
+        }
+
     /**
      * Fires "node invalidated" event for the specified figure.
      * @param f the figure

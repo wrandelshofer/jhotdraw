@@ -29,6 +29,10 @@ public class Geom {
         return new BoundingBox(x, y, max(a.getMaxX(), b.getMaxX()) - x, max(a.getMaxY(), b.getMaxY()) - y);
     }
 
+    public static String toString(Bounds b) {
+        return b.getMinX()+","+b.getMinY()+","+b.getWidth()+","+b.getHeight();
+    }
+
     private Geom() {
     } // never instantiated
 

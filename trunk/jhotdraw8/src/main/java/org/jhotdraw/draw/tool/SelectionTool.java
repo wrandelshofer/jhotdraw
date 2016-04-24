@@ -46,7 +46,7 @@ import org.jhotdraw.util.Resources;
  * @version $Id$
  */
 public class SelectionTool extends AbstractTool {
-
+    public final static String ID = "tool.selectFigure";
     // ---
     // Property names
     // ---
@@ -86,7 +86,7 @@ public class SelectionTool extends AbstractTool {
     // Constructors
     // ---
     public SelectionTool() {
-        this("selectionTool", HandleType.RESIZE, Resources.getResources("org.jhotdraw.draw.Labels"));
+        this("tool.selectFigure", HandleType.RESIZE, Resources.getResources("org.jhotdraw.draw.Labels"));
     }
 
     public SelectionTool(String name, Resources rsrc) {

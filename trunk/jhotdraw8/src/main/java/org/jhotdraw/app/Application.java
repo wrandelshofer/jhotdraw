@@ -18,7 +18,7 @@ import org.jhotdraw.app.action.Action;
 import org.jhotdraw.beans.PropertyBean;
 
 /**
- * Application.
+ * An {@code Application} manages {@link View} objects.
  *
  * @design.pattern Application Framework, KeyAbstraction.
  * The application framework supports the creation of document oriented

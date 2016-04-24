@@ -37,7 +37,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.ReversedList;
 import org.jhotdraw.collection.TransientKey;
@@ -226,20 +225,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     public LayerCell createCell(ListView<Figure> listView) {
-        StringConverter<Figure> converter = new StringConverter<Figure>() {
-
-            @Override
-            public String toString(Figure object) {
-                return object.get(StyleableFigure.STYLE_ID);
-            }
-
-            @Override
-            public Figure fromString(String string) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
         return new LayerCell(drawingView);
-        // return new TextFieldListCell<>(converter);
     }
 
     @Override

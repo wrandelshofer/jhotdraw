@@ -231,7 +231,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
             }
         }
         stage.show();
-        Platform.runLater(() -> view.start());
+        Platform.runLater(view::start);
     }
 
     /**

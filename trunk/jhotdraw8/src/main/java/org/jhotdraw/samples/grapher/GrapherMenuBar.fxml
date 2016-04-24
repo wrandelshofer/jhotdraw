@@ -32,6 +32,8 @@
         <items>
           <MenuItem id="edit.bringToFront" mnemonicParsing="false" text="Bring to Front" />
             <MenuItem id="edit.sendToBack" mnemonicParsing="false" text="Send to Back" />
+            <MenuItem id="edit.group" mnemonicParsing="false" text="Group" />
+            <MenuItem id="edit.ungroup" mnemonicParsing="false" text="Ungroup" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="%view.text">

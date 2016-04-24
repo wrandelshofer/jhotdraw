@@ -7,6 +7,7 @@ package org.jhotdraw.draw.gui;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
@@ -23,12 +24,14 @@ import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.HideableFigure;
 import org.jhotdraw.draw.figure.LockableFigure;
 import org.jhotdraw.draw.figure.StyleableFigure;
+import org.jhotdraw.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw.util.Resources;
 
 /**
  * FXML Controller class.
  * 
  * XXX all keys must be customizable
+ * FIXME property binding in this class is a mess
  *
  * @author werni
  */
@@ -51,7 +54,7 @@ public class LayerCell extends ListCell<Figure> {
 
     private Figure item;
 
-    private TextField textField;
+    private TextField editField;
 
     public LayerCell(DrawingView drawingView) {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingView);
@@ -94,21 +97,21 @@ public class LayerCell extends ListCell<Figure> {
             isUpdating = true;
             this.item = item;
             if (isEditing()) {
-                if (textField == null) {
-                    textField = createTextField();
+                if (editField == null) {
+                    editField = createTextField();
                 }
-                if (textField != null) {
-                    textField.setText(getItemText());
+                if (editField != null) {
+                    editField.setText(getItemText());
                 }
-                setText(null);
+                setText(null);// hide the text part of the label!!
 
-                if (textField.getParent() == null) {
-                    node.getChildren().add(textField);
+                if (editField.getParent() == null) {
+                    node.getChildren().add(editField);
                 }
             } else {
                 setText(getItemText());
-                if (textField!=null&&textField.getParent() != null) {
-                    node.getChildren().remove(textField);
+                if (editField!=null&&editField.getParent() != null) {
+                    node.getChildren().remove(editField);
                 }
             }
             setGraphic(node);
@@ -156,17 +159,14 @@ public class LayerCell extends ListCell<Figure> {
         }
         super.startEdit();
         updateItem(getItem(),false);
-        textField.selectAll();
-        textField.requestFocus();
+        editField.selectAll();
+        editField.requestFocus();
     }
 
     @Override
     public void cancelEdit() {
         super.cancelEdit();
-        setText(getItemText());
-        if (textField != null) {
-            node.getChildren().remove(textField);
-        }
+        updateItem(getItem(),false);
     }
 
     private String getItemText() {
@@ -193,9 +193,9 @@ public class LayerCell extends ListCell<Figure> {
 
     @Override
     public void commitEdit(Figure newValue) {
-        if (textField != null && isEditing()) {
+        if (editField != null && isEditing()) {
             drawingView.getModel().set(
-                    item, StyleableFigure.STYLE_ID, textField.getText());
+                    item, StyleableFigure.STYLE_ID, editField.getText());
         }
         super.commitEdit(newValue);
     }

@@ -38,6 +38,8 @@ import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import org.jhotdraw.draw.handle.BoundsInParentOutlineHandle;
+import org.jhotdraw.draw.handle.TransformHandleKit;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -234,7 +236,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * stale. Invoke {@link #updateLayout} if you are not sure that the cache is
      * valid.
      *
-     * @return the updateLayout bounds
+     * @return the local bounds
      */
     public Bounds getBoundsInLocal();
 
@@ -248,7 +250,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * are stale. Invoke {@link #invalidateTransforms} and {@link #updateLayout}
      * if you are not sure that the cache is valid.
      *
-     * @return the updateLayout bounds
+     * @return the local bounds
      */
     default public Bounds getBoundsInParent() {
         Bounds b = getBoundsInLocal();
@@ -279,9 +281,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Attempts to change the updateLayout bounds of the figure.
+     * Attempts to change the local bounds of the figure.
      * <p>
-     * The figure may choose to only partially change its updateLayout bounds.
+     * The figure may choose to only partially change its local bounds.
      * <p>
      * Reshape typically changes property values in this figure. The way how
      * this is performed is implementation specific.
@@ -289,13 +291,12 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * @param transform the desired transformation in parent coordinates
      */
     void reshape(Transform transform);
-
     /**
-     * Attempts to change the updateLayout bounds of the figure.
+     * Attempts to change the local bounds of the figure.
      * <p>
      * Width and height are ignored, if the figure is not resizable.
      * <p>
-     * If the updateLayout bounds of the figure changes, it fires an
+     * If the local bounds of the figure changes, it fires an
      * invalidation event.
      *
      * @param x desired x-position in parent coordinates
@@ -484,21 +485,21 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new BoundsInParentOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             list.add(new MoveHandle(this, RelativeLocator.northEast()));
             list.add(new MoveHandle(this, RelativeLocator.northWest()));
             list.add(new MoveHandle(this, RelativeLocator.southEast()));
             list.add(new MoveHandle(this, RelativeLocator.southWest()));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
-            if (this instanceof TransformableFigure) {
-                list.add(new RotateHandle((TransformableFigure) this));
-            }
             ResizeHandleKit.addCornerResizeHandles(this, list);
             ResizeHandleKit.addEdgeResizeHandles(this, list);
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             if (this instanceof TransformableFigure) {
                 list.add(new RotateHandle((TransformableFigure) this));
+                TransformHandleKit.addCornerTransformHandles(this, list);
+                TransformHandleKit.addEdgeTransformHandles(this, list);
             }
         }
     }

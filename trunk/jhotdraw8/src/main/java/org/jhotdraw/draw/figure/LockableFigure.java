@@ -29,7 +29,7 @@ public interface LockableFigure extends Figure {
     public static BooleanKey LOCKED = new BooleanKey("locked", false);
 
     /**
-     * Whether the figure is not locked and all its parents are editable.
+     * Whether this figure is not locked and all its parents are editable.
      *
      * @return true if this figure is not locked and all parents are editable
      */

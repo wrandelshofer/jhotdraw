@@ -25,6 +25,4 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
     default Transform getParentToLocal() {
         return FigureImplementationDetails.IDENTITY_TRANSFORM;
     }
-
-
 }

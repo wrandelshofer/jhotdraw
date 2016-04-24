@@ -24,21 +24,14 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
         /**
          * The root of the model changed.
-         */
-        /**
+         *//**
          * The root of the model changed.
-         */
-        /**
+         *//**
          * The root of the model changed.
-         */
-        /**
+         *//**
          * The root of the model changed.
          */
         ROOT_CHANGED,
-        /**
-         * The structure in a subtree of the figures changed.
-         */
-        SUBTREE_STRUCTURE_CHANGED,
         /**
          * All JavaFX Nodes in a subtree of the figures have been invalidated.
          */
@@ -52,17 +45,21 @@ public class DrawingModelEvent extends Event<DrawingModel> {
          */
         FIGURE_REMOVED_FROM_PARENT,
         /**
-         * A single figure has been added to the drawing.
+         * A subtree of figures has been added to the drawing.
          */
-        FIGURE_ADDED_TO_DRAWING,
+        SUBTREE_ADDED_TO_DRAWING,
         /**
-         * A single figure has been removed from the drawing.
+         * A subtree of figures has been removed from the drawing.
          */
-        FIGURE_REMOVED_FROM_DRAWING,
+        SUBTREE_REMOVED_FROM_DRAWING,
         /**
          * The JavaFX Node of a single figure has been invalidated.
          */
         NODE_INVALIDATED,
+        /**
+         * A property value has been changed.
+         */
+        PROPERTY_VALUE_CHANGED,
         /**
          * The layout of a single figure has been invalidated.
          */
@@ -102,10 +99,6 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         this.eventType = eventType;
     }
 
-    public static DrawingModelEvent subtreeStructureChanged(DrawingModel source, Figure subtreeRoot) {
-        return new DrawingModelEvent(source, EventType.SUBTREE_STRUCTURE_CHANGED, subtreeRoot, null, null, -1, null, null, null);
-    }
-
     public static DrawingModelEvent subtreeNodesInvalidated(DrawingModel source, Figure subtreeRot) {
         return new DrawingModelEvent(source, EventType.SUBTREE_NODES_INVALIDATED, subtreeRot, null, null, -1, null, null, null);
     }
@@ -119,15 +112,18 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     }
 
     public static DrawingModelEvent figureAddedToDrawing(DrawingModel source, Drawing drawing, Figure figure) {
-        return new DrawingModelEvent(source, EventType.FIGURE_ADDED_TO_DRAWING, figure, null, drawing, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.SUBTREE_ADDED_TO_DRAWING, figure, null, drawing, -1, null, null, null);
     }
 
     public static DrawingModelEvent figureRemovedFromDrawing(DrawingModel source, Drawing drawing, Figure figure) {
-        return new DrawingModelEvent(source, EventType.FIGURE_REMOVED_FROM_DRAWING, figure, null, drawing, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.SUBTREE_REMOVED_FROM_DRAWING, figure, null, drawing, -1, null, null, null);
     }
 
-    public static <T> DrawingModelEvent nodeInvalidated(DrawingModel source, Figure figure) {
+    public static DrawingModelEvent nodeInvalidated(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.NODE_INVALIDATED, figure, null, null, -1, null, null, null);
+    }
+    public static <T> DrawingModelEvent propertyValueChanged(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
+        return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
     }
     public static <T> DrawingModelEvent connectionChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.CONNECTION_CHANGED, figure, null, null, -1, null, null, null);

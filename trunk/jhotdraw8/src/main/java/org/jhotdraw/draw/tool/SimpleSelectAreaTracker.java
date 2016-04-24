@@ -60,7 +60,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     double y;
 
     public SimpleSelectAreaTracker() {
-        this("selectAreaTool", Resources.getResources("org.jhotdraw.draw.Labels"));
+        this("tool.selectArea", Resources.getResources("org.jhotdraw.draw.Labels"));
     }
 
     public SimpleSelectAreaTracker(String name, Resources rsrc) {

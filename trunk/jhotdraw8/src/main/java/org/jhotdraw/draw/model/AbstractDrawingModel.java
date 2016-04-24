@@ -14,7 +14,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import javafx.beans.InvalidationListener;
+import javafx.collections.MapChangeListener;
 import org.jhotdraw.beans.ListenerSupport;
+import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.event.Listener;
@@ -29,6 +31,25 @@ public abstract class AbstractDrawingModel implements DrawingModel {
 
     private final ListenerSupport<Listener<DrawingModelEvent>> listeners = new ListenerSupport<>();
     private final ListenerSupport<InvalidationListener> invalidationListeners = new ListenerSupport<>();
+    
+    
+   protected class FigurePropertyChangeHandler  implements MapChangeListener<Key<?>,Object>{
+      
+        private Figure figure;
+        public void setFigure(Figure newValue) {
+            figure=newValue;
+        }
+        @Override
+        public void onChanged(MapChangeListener.Change<? extends Key<?>, ? extends Object> change) {
+            @SuppressWarnings("unchecked")
+           Key<Object> key = (Key<Object>)change.getKey();
+            firePropertyValueChanged(figure, key,change.getValueRemoved(), change.getValueAdded());
+        }
+
+    }
+    
+    /** Forwards property change events. */
+    protected final FigurePropertyChangeHandler figurePropertyChangeHandler = new FigurePropertyChangeHandler();
     /**
      * This is the set of figures which are out of sync with their stylesheet.
      * <p>
@@ -91,10 +112,10 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             case FIGURE_ADDED_TO_PARENT:
                 invalidateStyle(event.getFigure());
                 break;
-            case FIGURE_ADDED_TO_DRAWING:
+            case SUBTREE_ADDED_TO_DRAWING:
                 invokeAddNotify(event.getFigure(), event.getDrawing());
                 break;
-            case FIGURE_REMOVED_FROM_DRAWING:
+            case SUBTREE_REMOVED_FROM_DRAWING:
                 invokeRemoveNotify(event.getFigure(), event.getDrawing());
                 dirtyLayouts.remove(event.getFigure());
                 dirtyStyles.remove(event.getFigure());
@@ -105,7 +126,6 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             case TRANSFORM_CHANGED:
                 invokeTransformNotify(event.getFigure());
                 break;
-
             case FIGURE_REMOVED_FROM_PARENT:
                 dirtyLayouts.remove(event.getFigure());
                 dirtyStyles.remove(event.getFigure());
@@ -113,6 +133,7 @@ public abstract class AbstractDrawingModel implements DrawingModel {
             case NODE_INVALIDATED:
             case ROOT_CHANGED:
             case SUBTREE_NODES_INVALIDATED:
+            case PROPERTY_VALUE_CHANGED:
                 // not my business
                 break;
             case LAYOUT_INVALIDATED:
@@ -120,9 +141,6 @@ public abstract class AbstractDrawingModel implements DrawingModel {
                 break;
             case STYLE_INVALIDATED:
                 invalidateStyle(event.getFigure());
-                break;
-            case SUBTREE_STRUCTURE_CHANGED:
-                invalidateLayout(event.getFigure());
                 break;
             default:
                 throw new UnsupportedOperationException(event.getEventType()

@@ -34,6 +34,10 @@ public interface Handle {
      * Style class for handles which draw the outline of a shape.
      */
     public final static String STYLECLASS_HANDLE_SELECT_OUTLINE = "handle-select-outline";
+    /**
+     * Style class for handles which draw the outline of multiple selection.
+     */
+    public final static String STYLECLASS_HANDLE_MULTI_SELECT_OUTLINE = "handle-multi-select-outline";
 
     /**
      * Style class for handles which draw the wire frame of a shape for editing.
@@ -54,6 +58,10 @@ public interface Handle {
      */
     public final static String STYLECLASS_HANDLE_MOVE = "handle-move";
     /**
+     * Style class for handles which move multiple shapes.
+     */
+    public final static String STYLECLASS_HANDLE_MULTI_MOVE = "handle-multi-move";
+    /**
      * Style class for handles which draw a point of a shape.
      */
     public final static String STYLECLASS_HANDLE_POINT = "handle-point";
@@ -69,6 +77,10 @@ public interface Handle {
      * Style class for handles which allow to resize a shape.
      */
     public final static String STYLECLASS_HANDLE_RESIZE = "handle-resize";
+    /**
+     * Style class for handles which allow to scale and translate a shape.
+     */
+    public final static String STYLECLASS_HANDLE_SCALE_TRANSLATE = "handle-scale-translate";
     /**
      * Style class for handles which allow to rotate a shape.
      */

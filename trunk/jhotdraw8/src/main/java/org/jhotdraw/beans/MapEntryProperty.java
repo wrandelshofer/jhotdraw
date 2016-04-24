@@ -8,9 +8,10 @@ import javafx.beans.binding.MapExpression;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
+import javafx.collections.WeakMapChangeListener;
 
 /**
- * This property is bound to an entry in a map.
+ * This property is weakly bound to an entry in a map.
  *
  * @author Werner Randelshofer
  */
@@ -20,23 +21,24 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
     protected K key;
     protected MapChangeListener<K, V> mapListener;
     protected Class<T> tClazz;
+    private WeakMapChangeListener<K,V> weakListener;
 
     public MapEntryProperty(ObservableMap<K, V> map, K key, Class<T> tClazz) {
         this.map = map;
         this.key = key;
         this.tClazz = tClazz;
 
-        if (key !=null) {
-        this.mapListener = (MapChangeListener.Change<? extends K, ? extends V> change) -> {
-            if (this.key.equals(change.getKey())) {
-                if (super.get() != change.getValueAdded()) {
+        if (key != null) {
+            this.mapListener = (MapChangeListener.Change<? extends K, ? extends V> change) -> {
+                if (this.key.equals(change.getKey())) {
                     @SuppressWarnings("unchecked")
                     T valueAdded = (T) change.getValueAdded();
-                    set(valueAdded);
+                    if (super.get() != valueAdded) {
+                        set(valueAdded);
+                    }
                 }
-            }
-        };
-        map.addListener(mapListener);
+            };
+            map.addListener(weakListener=new WeakMapChangeListener<>(mapListener));
         }
     }
 
@@ -55,7 +57,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
         V temp = (V) value;
         map.put(key, temp);
 
-            // Note: super must be called after "put", so that listeners
+        // Note: super must be called after "put", so that listeners
         //       can be properly informed.
         super.setValue(value);
     }
@@ -64,7 +66,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
     public void unbind() {
         super.unbind();
         if (map != null) {
-            map.removeListener(mapListener);
+            map.removeListener(weakListener);
             mapListener = null;
             map = null;
             key = null;

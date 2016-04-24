@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw;
 
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 import org.jhotdraw.draw.figure.Figure;
@@ -85,9 +86,16 @@ public class SimpleDrawing extends AbstractCompositeFigure
 
     @Override
     public void reshape(Transform transform) {
-        for (Figure child : getChildren()) {
-            child.reshape(transform);
-        }
+        Bounds b = getBoundsInLocal();
+        b = transform.transform(b);
+        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+    }
+
+    @Override
+    public void reshape(double x, double y, double width, double height) {
+        
+        set(WIDTH, abs(width));
+        set(HEIGHT, abs(height));
     }
 
     @Override
@@ -127,4 +135,5 @@ public class SimpleDrawing extends AbstractCompositeFigure
         }
         super.stylesheetNotify();
     }
+  
 }

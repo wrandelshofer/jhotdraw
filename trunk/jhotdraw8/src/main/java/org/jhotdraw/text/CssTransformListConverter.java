@@ -57,7 +57,8 @@ import javafx.geometry.Point3D;
  * </a>
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: CssTransformListConverter.java 1120 2016-01-15 17:37:49Z
+ * rawcoder $
  */
 public class CssTransformListConverter implements Converter<List<Transform>> {
 
@@ -65,7 +66,14 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
 
     @Override
     public void toString(Appendable buf, IdFactory idFactory, List<Transform> txs) throws IOException {
-        if (txs.isEmpty()) {
+        boolean allTransformsAreIdentity = true;
+        for (Transform tx : txs) {
+            if (! tx.isIdentity()) {
+                allTransformsAreIdentity = false;
+                break;
+            }
+        }
+        if (allTransformsAreIdentity) {
             buf.append("none");
             return;
         }
@@ -95,13 +103,26 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                     Scale ts = (Scale) tx;
                     buf.append("scale(")
                             .append(nb.toString(ts.getX()));
-                    if (ts.getTy() != ts.getTx() || ts.getTz() != 1) {
+                    if (ts.getY() != ts.getX() || ts.getZ() != 1 || ts.getPivotX() != 0 || ts.getPivotY() != 0) {
                         buf.append(' ')
                                 .append(nb.toString(ts.getY()));
                     }
-                    if (ts.getTz() != 1.0) {
-                        buf.append(',')
-                                .append(nb.toString(ts.getTz()));
+                    if (ts.getZ() != 1) {
+                        buf.append(' ')
+                                .append(nb.toString(ts.getZ()));
+                        if (ts.getPivotX() != 0 || ts.getPivotY() != 0 || ts.getPivotZ() != 0) {
+                            buf.append(", ")
+                                    .append(nb.toString(ts.getPivotX()))
+                                    .append(' ')
+                                    .append(nb.toString(ts.getPivotY()))
+                                    .append(' ')
+                                    .append(nb.toString(ts.getPivotZ()));
+                        }
+                    } else if (ts.getPivotX() != 0 || ts.getPivotY() != 0) {
+                        buf.append(", ")
+                                .append(nb.toString(ts.getPivotX()))
+                                .append(' ')
+                                .append(nb.toString(ts.getPivotY()));
                     }
                     buf.append(')');
 
@@ -250,6 +271,7 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                     }
                     break;
                 }
+                case "skew": 
                 case "shear": {
                     switch (m.size()) {
                         case 2:
@@ -301,7 +323,7 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                             break;
                         case 3:
                             txs.add(new Scale(
-                                    m.get(0), m.get(1), m.get(2)//
+                                    m.get(0), m.get(0), m.get(1), m.get(2)//
                             ));
                             break;
                         case 4:

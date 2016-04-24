@@ -15,6 +15,7 @@ import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.collection.IndexedSet;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import org.jhotdraw.geom.Geom;
 
 /**
  * This base class can be used to implement figures which support child figures.
@@ -133,7 +134,6 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
             minY = min(minY, b.getMinY());
             maxY = max(maxY, b.getMaxY());
         }
-
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
@@ -167,5 +167,14 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     protected void layoutImpl() {
 
     }
-
+    
+    /**
+     * Calls invalidateTransforms();
+     */
+    @Override
+    public void transformNotify() {
+        for (Figure f: preorderIterable()) {
+            f.invalidateTransforms();
+        }
+    }
 }

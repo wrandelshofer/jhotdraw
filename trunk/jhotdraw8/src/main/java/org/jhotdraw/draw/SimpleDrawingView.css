@@ -17,6 +17,10 @@
 .handle-select-outline {
     -fx-stroke: blue;
 }
+.handle-multi-select-outline {
+    -fx-stroke: blue;
+    -fx-stroke-dash-array: 5;
+}
 
 /* Styles the move outline drawn by handles. See {@code Handle}. */
 .handle-move-outline {
@@ -33,6 +37,7 @@
 
 /* Styles move and point handles. See {@code Handle}. */
 .handle-move,
+.handle-multi-move,
 .handle-point {
     -fx-border-color: blue;
     -fx-background-color: white;
@@ -52,13 +57,14 @@
 
 /* Styles the resize handles. See {@code Handle}. */
 .handle-resize {
-    -fx-border-color: purple;
+    -fx-border-color: darkcyan;
     -fx-background-color: white;
 }
 
 /* Styles the rotate handles. See {@code Handle}. */
-.handle-resize {
-    -fx-border-color: darkcyan;
+.handle-rotate,
+.handle-scale-translate {
+    -fx-border-color: purple;
     -fx-background-color: white;
 }
 

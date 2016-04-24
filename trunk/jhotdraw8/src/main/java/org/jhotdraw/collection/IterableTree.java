@@ -5,9 +5,11 @@
 package org.jhotdraw.collection;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import org.jhotdraw.draw.figure.Figure;
 
 /**
  * IterableTree.
@@ -63,6 +65,21 @@ public interface IterableTree<T extends IterableTree<T>> {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new IterableTree.PreorderIterator<>((T) this);
         return i;
+    }
+
+    /**
+     * Returns a list in preorder sequence.
+     * <p>
+     * The list is an eager copy of the preorder sequence.
+     * 
+     * @return the list
+     */
+    default public Iterable<T> preorderList() {
+        ArrayList<T> list = new ArrayList<>();
+        for (T item:preorderIterable()) {
+            list.add(item);
+        }
+        return list;
     }
 
     /**

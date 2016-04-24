@@ -32,7 +32,7 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    public static FigureMapAccessor<String> STYLE_ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static SimpleFigureKey<String> STYLE_ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.

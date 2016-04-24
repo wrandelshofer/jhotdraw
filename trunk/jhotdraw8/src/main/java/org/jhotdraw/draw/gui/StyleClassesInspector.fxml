@@ -36,7 +36,7 @@
       </HBox>
    </bottom>
    <center>
-      <ListView fx:id="listView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefHeight="96.0" prefWidth="216.0" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
+      <ListView fx:id="listView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="48.0" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
    </center>
    <styleClass>
       <String fx:value="inspector" />

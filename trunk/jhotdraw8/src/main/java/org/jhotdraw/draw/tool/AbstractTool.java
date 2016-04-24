@@ -387,6 +387,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
     
     protected void requestFocus() {
-        Platform.runLater(() -> eventPane.requestFocus());
+        Platform.runLater(eventPane::requestFocus);
     }
 }

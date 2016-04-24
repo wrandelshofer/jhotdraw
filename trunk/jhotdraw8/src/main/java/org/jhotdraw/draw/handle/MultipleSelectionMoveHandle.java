@@ -33,7 +33,7 @@ import org.jhotdraw.geom.Geom;
  *
  * @author Werner Randelshofer
  */
-public class SelectionMoveHandle extends AbstractHandle {
+public class MultipleSelectionMoveHandle extends AbstractHandle {
     private double relativeX;
     private double relativeY;
     private Point2D pickLocation;
@@ -44,24 +44,24 @@ public class SelectionMoveHandle extends AbstractHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
-    public SelectionMoveHandle(double relativeX, double relativeY) {
-        this(relativeX, relativeY, STYLECLASS_HANDLE_MOVE);
+    public MultipleSelectionMoveHandle(double relativeX, double relativeY) {
+        this(relativeX, relativeY, STYLECLASS_HANDLE_MULTI_MOVE);
     }
     
-    public static SelectionMoveHandle northWest() {
-        return new SelectionMoveHandle(0.0,0.0);
+    public static MultipleSelectionMoveHandle northWest() {
+        return new MultipleSelectionMoveHandle(0.0,0.0);
     }
-    public static SelectionMoveHandle northEast() {
-        return new SelectionMoveHandle(1.0,0.0);
+    public static MultipleSelectionMoveHandle northEast() {
+        return new MultipleSelectionMoveHandle(1.0,0.0);
     }
-    public static SelectionMoveHandle southWest() {
-        return new SelectionMoveHandle(0.0,1.0);
+    public static MultipleSelectionMoveHandle southWest() {
+        return new MultipleSelectionMoveHandle(0.0,1.0);
     }
-    public static SelectionMoveHandle southEast() {
-        return new SelectionMoveHandle(1.0,1.0);
+    public static MultipleSelectionMoveHandle southEast() {
+        return new MultipleSelectionMoveHandle(1.0,1.0);
     }
 
-    public SelectionMoveHandle(double relativeX, double relativeY, String styleclass) {
+    public MultipleSelectionMoveHandle(double relativeX, double relativeY, String styleclass) {
         super(null);
         this.relativeX = relativeX;
         this.relativeY = relativeY;
