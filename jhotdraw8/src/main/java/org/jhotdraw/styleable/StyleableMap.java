@@ -8,12 +8,15 @@ import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
-import org.jhotdraw.beans.ListenerSupport;
 
 /**
  * {@code StyleableMap} is a map which stores separate values for each
@@ -79,7 +82,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
         private <T> T getValue(StyleOrigin styleOrigin) {
             @SuppressWarnings("unchecked")
-            T ret = (T) values[styleOrigin.ordinal()];
+            T ret = values==null||styleOrigin==null?null:(T) values[styleOrigin.ordinal()];
             return ret == NO_VALUE ? null : ret;
         }
 
@@ -97,10 +100,11 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     private ObservableKeySet keySet;
     private ObservableValues values;
 
-    private ListenerSupport<MapChangeListener<? super K, ? super V>> changeListenerSupport;
-    private ListenerSupport<InvalidationListener> invalidationListenerSupport;
+    private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
+    private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
     private final Map<K, StyledValue> backingMap;
     private Map<K, V> styledMap;
+    private BiFunction<K, StyledValue, StyledValue> computePutMethodReference = StyleableMap::computePut;
 
     public StyleableMap() {
         this.backingMap = new IdentityHashMap<>();
@@ -167,44 +171,50 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
     }
 
-    protected void callObservers(StyleOrigin origin, MapChangeListener.Change<K, V> change) {
-        if (origin == StyleOrigin.USER) {
-            if (changeListenerSupport != null) {
-                changeListenerSupport.fire(l -> l.onChanged(change));
+    protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<K, V> change) {
+        if (!willChange) {
+            if (origin == StyleOrigin.USER) {
+                if (changeListenerList != null) {
+                    for (MapChangeListener<? super K, ? super V> l : changeListenerList) {
+                        l.onChanged(change);
+                    }
+                }
             }
-        }
-        if (invalidationListenerSupport != null) {
-            invalidationListenerSupport.fire(l -> l.invalidated(this));
+            if (invalidationListenerList != null) {
+                for (InvalidationListener l : invalidationListenerList) {
+                    l.invalidated(this);
+                }
+            }
         }
     }
 
     @Override
     public void addListener(InvalidationListener listener) {
-        if (invalidationListenerSupport == null) {
-            invalidationListenerSupport = new ListenerSupport<>();
+        if (invalidationListenerList == null) {
+            invalidationListenerList = new CopyOnWriteArrayList<>();
         }
-        invalidationListenerSupport.add(listener);
+        invalidationListenerList.add(listener);
     }
 
     @Override
     public void removeListener(InvalidationListener listener) {
-        if (invalidationListenerSupport != null) {
-            invalidationListenerSupport.remove(listener);
+        if (invalidationListenerList != null) {
+            invalidationListenerList.remove(listener);
         }
     }
 
     @Override
     public void addListener(MapChangeListener<? super K, ? super V> observer) {
-        if (changeListenerSupport == null) {
-            changeListenerSupport = new ListenerSupport<>();
+        if (changeListenerList == null) {
+            changeListenerList = new CopyOnWriteArrayList<>();
         }
-        changeListenerSupport.add(observer);
+        changeListenerList.add(observer);
     }
 
     @Override
     public void removeListener(MapChangeListener<? super K, ? super V> observer) {
-        if (changeListenerSupport != null) {
-            changeListenerSupport.remove(observer);
+        if (changeListenerList != null) {
+            changeListenerList.remove(observer);
         }
     }
 
@@ -450,7 +460,6 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         V ret = (sv == null) ? defaultValue : sv.getValue(sv.getOrigin(), defaultValue);
         return ret;
     }*/
-
     public StyleOrigin getStyleOrigin(Object key) {
         StyledValue sv = backingMap.get(key);
         return sv == null ? null : sv.getOrigin();
@@ -462,18 +471,31 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     }
 
     public V put(StyleOrigin o, K key, V value) {
-        StyledValue sv = backingMap.get(key);
+        StyledValue sv = backingMap.compute(key, computePutMethodReference);
+        /*
         if (sv == null) {
             sv = new StyledValue();
             backingMap.put(key, sv);
-        }
+        }*/
 
         boolean hadValue = sv.hasValue(o);
-        V ret = sv.setValue(o, value);
-        if (ret == null && value != null || ret != null && !ret.equals(value)) {
-            callObservers(o, new SimpleChange(key, ret, value, true, hadValue));
+        V ret = sv.getValue(o);
+        if (!Objects.equals(ret,value)) {
+            SimpleChange change = new SimpleChange(key, ret, value, true, hadValue);
+            callObservers(o, true, change);
+            sv.setValue(o, value);
+            callObservers(o, false, change);
         }
         return ret;
+    }
+
+    /**
+     * Returns the old StyledValue if it exists, otherwise creates a new one.
+     *
+     * @return StyledValue associated to key
+     */
+    private static <K> StyledValue computePut(K key, StyledValue oldValue) {
+        return oldValue != null ? oldValue : new StyledValue();
     }
 
     @Override
@@ -487,19 +509,13 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         V ret = null;
         boolean hadValue;
         if (sv != null && sv.hasValue(o)) {
-            hadValue = true;
-            ret = sv.removeValue(o);
-            // We do not remove empty values because the values will be
-            // probably set right again after the map was cleared.
-            /*if (sv.isEmpty()) {
-             backingMap.remove(key);
-             }*/
+            ret = sv.getValue(o);
+            SimpleChange change = new SimpleChange(key, ret, null, false, true);
+            callObservers(o, true, change);
+            sv.removeValue(o);
+            callObservers(o, false, change);
         } else {
-            hadValue = false;
             ret = null;
-        }
-        if (hadValue) {
-            callObservers(o, new SimpleChange(key, ret, null, false, true));
         }
         return ret;
     }
@@ -532,13 +548,11 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             K key = e.getKey();
             StyledValue sv = e.getValue();
             @SuppressWarnings("unchecked")
-            V val = (V) sv.removeValue(o);
-            // We do not remove empty values because the values will be
-            // probably set right again after the map was cleared.
-            /*if (sv.isEmpty()) {
-             i.remove();
-             }*/
-            callObservers(o, new SimpleChange(key, val, null, false, true));
+            V val = sv.getValue(o);
+            SimpleChange change = new SimpleChange(key, val, null, false, true);
+            callObservers(o, true, change);
+            sv.removeValue(o);
+            callObservers(o, false, change);
         }
     }
 
@@ -735,13 +749,11 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
                     StyledValue sv = e.getValue();
                     if (sv.hasValue(ksetOrigin)) {
                         removed = true;
-                        V value = sv.removeValue(ksetOrigin);
-                        // We do not remove empty values because the values will be
-                        // probably set right again after the map was cleared.
-                        /*if (sv.isEmpty()) {
-                            i.remove();
-                        }*/
-                        callObservers(ksetOrigin, new SimpleChange(key, value, null, false, true));
+                        V value = sv.getValue(ksetOrigin);
+                        SimpleChange change = new SimpleChange(key, value, null, false, true);
+                        callObservers(ksetOrigin, true, change);
+                        sv.removeValue(ksetOrigin);
+                        callObservers(ksetOrigin, false, change);
                     }
                 }
             }
@@ -933,11 +945,14 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
                     StyledValue sv = e.getValue();
                     if (sv.hasValue(ksetOrigin)) {
                         removed = true;
-                        V value = sv.removeValue(ksetOrigin);
+                        V value = sv.getValue(ksetOrigin);
+                        SimpleChange change = new SimpleChange(key, value, null, false, true);
+                        callObservers(ksetOrigin, true, change);
+                        sv.removeValue(ksetOrigin);
                         if (sv.isEmpty()) {
                             i.remove();
                         }
-                        callObservers(ksetOrigin, new SimpleChange(key, value, null, false, true));
+                        callObservers(ksetOrigin, false, change);
                     }
                 }
             }
@@ -1007,8 +1022,11 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
         @Override
         public V setValue(V value) {
-            V oldValue = backingEntry.getValue().setValue(oeOrigin, value);
-            callObservers(oeOrigin, new SimpleChange(getKey(), oldValue, value, true, true));
+            V oldValue = backingEntry.getValue().getValue(oeOrigin);
+            SimpleChange change = new SimpleChange(getKey(), oldValue, value, true, true);
+            callObservers(oeOrigin, true, change);
+            backingEntry.getValue().setValue(oeOrigin, value);
+            callObservers(oeOrigin, false, change);
             return oldValue;
         }
 

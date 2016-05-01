@@ -36,13 +36,13 @@ public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, F
      */
     public final static String TYPE_SELECTOR = "Arc";
 
-    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
-    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
-    public final static DoubleStyleableFigureKey START_ANGLE = new DoubleStyleableFigureKey("startAngle",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey ARC_LENGTH = new DoubleStyleableFigureKey("arcLength",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 360.0);
-    public final static EnumStyleableFigureKey<ArcType> ARC_TYPE = new EnumStyleableFigureKey<ArcType>("arcType",ArcType.class,   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), ArcType.ROUND);
+    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey START_ANGLE = new DoubleStyleableFigureKey("startAngle",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ARC_LENGTH = new DoubleStyleableFigureKey("arcLength",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 360.0);
+    public final static EnumStyleableFigureKey<ArcType> ARC_TYPE = new EnumStyleableFigureKey<ArcType>("arcType",ArcType.class,   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), ArcType.ROUND);
     public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X,CENTER_Y);
     public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X,RADIUS_Y);
 
@@ -118,7 +118,7 @@ public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, F
     }
 
     @Override
-    public void updateLayout() {
+    public void layout() {
         // empty
     }
     

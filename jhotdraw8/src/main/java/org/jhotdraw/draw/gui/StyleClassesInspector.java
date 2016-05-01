@@ -26,6 +26,7 @@ import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.gui.PlatformUtil;
+import org.jhotdraw.text.CssObservableWordListConverter;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -77,11 +78,15 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
             // selection does not actually have a meaning
             listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-            addButton.addEventHandler(ActionEvent.ACTION, o -> 
-                addTag( textField.getText())
+            textField.addEventHandler(ActionEvent.ACTION,
+                    o -> addTag(textField.getText())
             );
-            removeButton.addEventHandler(ActionEvent.ACTION, o -> 
-                removeTag( textField.getText())
+
+            addButton.addEventHandler(ActionEvent.ACTION,
+                    o -> addTag(textField.getText())
+            );
+            removeButton.addEventHandler(ActionEvent.ACTION,
+                    o -> removeTag(textField.getText())
             );
         });
     }
@@ -93,7 +98,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     protected void updateList() {
         Set<Figure> newValue = getSelectedFigures();
-        Set<String> union = new TreeSet<>();
+        Set<String> union = new TreeSet<>(CssObservableWordListConverter.NFD_COMPARATOR);
         Set<String> intersection = new HashSet<>();
 
         boolean first = true;
@@ -121,50 +126,53 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         return node;
     }
 
-   public void addTag(String wordList) {
-       for (String tagName:wordList.split(" ")){
-                if (tagName != null && !tagName.trim().isEmpty()) {
-                    tagName = tagName.trim();
-                    for (Figure f : getSelectedFigures()) {
-                        @SuppressWarnings("unchecked")
-                        Collection<String> tags = f.get(tagsKey);
-                        Collection<String> newTags = listFactory.get();
-                        boolean contains = false;
-                        for (String t : tags) {
-                            if (tagName.equals(t)) {
-                                contains = true;
-                            }
+    public void addTag(String wordList) {
+        for (String tagName : wordList.split(" ")) {
+            if (tagName != null && !tagName.trim().isEmpty()) {
+                tagName = tagName.trim();
+                for (Figure f : getSelectedFigures()) {
+                    @SuppressWarnings("unchecked")
+                    Collection<String> tags = f.get(tagsKey);
+                    Collection<String> newTags = listFactory.get();
+                    boolean contains = false;
+                    for (String t : tags) {
+                        if (tagName.equals(t)) {
+                            contains = true;
+                        }
+                        newTags.add(t);
+                    }
+                    if (!contains) {
+                        newTags.add(tagName);
+                        getDrawingModel().set(f, tagsKey, newTags);
+                    }
+                }
+                updateList();
+            }
+        }
+    }
+
+    public void removeTag(String wordList) {
+        for (String tagName : wordList.split(" ")) {
+            if (tagName != null && !tagName.trim().isEmpty()) {
+                tagName = tagName.trim();
+                for (Figure f : getSelectedFigures()) {
+                    @SuppressWarnings("unchecked")
+                    Collection<String> tags = f.get(tagsKey);
+                    Collection<String> newTags = listFactory.get();
+                    boolean contains = false;
+                    for (String t : tags) {
+                        if (tagName.equals(t)) {
+                            contains = true;
+                        } else {
                             newTags.add(t);
                         }
-                        if (!contains) {
-                            newTags.add(tagName);
-                            getDrawingModel().set(f, tagsKey, newTags);
-                        }
                     }
-                    updateList();}
-   }}
-   public void removeTag(String wordList) {
-       for (String tagName:wordList.split(" ")){
-                if (tagName != null && !tagName.trim().isEmpty()) {
-                    tagName = tagName.trim();
-                    for (Figure f : getSelectedFigures()) {
-                        @SuppressWarnings("unchecked")
-                        Collection<String> tags = f.get(tagsKey);
-                        Collection<String> newTags = listFactory.get();
-                        boolean contains = false;
-                        for (String t : tags) {
-                            if (tagName.equals(t)) {
-                                contains = true;
-                            } else {
-                                newTags.add(t);
-                            }
-                        }
-                        if (contains) {
-                            getDrawingModel().set(f, tagsKey, newTags);
-                        }
+                    if (contains) {
+                        getDrawingModel().set(f, tagsKey, newTags);
                     }
-                    updateList();
                 }
+                updateList();
             }
-   }
+        }
+    }
 }

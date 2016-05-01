@@ -15,6 +15,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 
 /**
  * Some geometric utilities.
@@ -30,7 +32,7 @@ public class Geom {
     }
 
     public static String toString(Bounds b) {
-        return b.getMinX()+","+b.getMinY()+","+b.getWidth()+","+b.getHeight();
+        return b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
     private Geom() {
@@ -1049,6 +1051,12 @@ public class Geom {
             diff += 2 * PI;
         }
         return diff;
+    }
+
+    public static Transform toDeltaTransform(Transform t) {
+        Transform d = new Affine(t.getMxx(), t.getMxy(), 0.0,
+                t.getMyx(), t.getMyy(), 0.0);
+        return d;
     }
 
 }

@@ -3,7 +3,7 @@
  */
 
 .inspector * {
-    -fx-font-size: 12px;
+  -fx-font-size: 11px;
 }
 
 /* A ScrollPane which is placed flush to top right left

@@ -26,18 +26,14 @@ import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.model.DrawingModel;
 import static java.lang.Math.*;
-import javafx.geometry.BoundingBox;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.figure.TransformableFigure;
 import org.jhotdraw.geom.Geom;
 
 /**
- * /**
  * A set of utility methods to create handles which transform a Figure by using
  * its {@code transform} method, if the Figure is transformable.
+ * <p>
+ * FIXME implement me
  *
  * @author Werner Randelshofer
  */
@@ -177,6 +173,7 @@ public class TransformHandleKit {
         protected final Region node;
         private final String styleclass;
         private Bounds startBounds;
+        private Point2D center;
         private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
         private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
         private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
@@ -184,6 +181,10 @@ public class TransformHandleKit {
          * The height divided by the width.
          */
         protected double preferredAspectRatio;
+        private Double startScaleX;
+        private Double startScaleY;
+        private Double startTranslateX;
+        private Double startTranslateY;
 
         public AbstractResizeHandle(Figure owner, Locator locator) {
             this(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, locator);
@@ -225,9 +226,15 @@ public class TransformHandleKit {
 
         @Override
         public void onMousePressed(MouseEvent event, DrawingView view) {
+            Figure o = getOwner();
             oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
-            startBounds = getOwner().getBoundsInLocal();
+            startBounds = o.getBoundsInLocal();
+            startScaleX = o.get(TransformableFigure.SCALE_X);
+            startScaleY = o.get(TransformableFigure.SCALE_Y);
+            startTranslateX = o.get(TransformableFigure.TRANSLATE_X);
+            startTranslateY = o.get(TransformableFigure.TRANSLATE_Y);
             preferredAspectRatio = getOwner().getPreferredAspectRatio();
+            center = Geom.center(startBounds);
         }
 
         @Override
@@ -246,7 +253,7 @@ public class TransformHandleKit {
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();
 
-            resize(getOwner().worldToLocal(newPoint), getOwner(), startBounds, view.getModel(), keepAspect);
+         //   resize(getWorldToTransform(getOwner()).transform(newPoint), getOwner(), startBounds, view.getModel(), keepAspect);
         }
 
         @Override
@@ -290,52 +297,42 @@ public class TransformHandleKit {
                 return;
             }
 
-            Bounds oldBounds = owner.getBoundsInLocal();
-            Point2D oldCenter = Geom.center(oldBounds);
-
-            double sx = width / oldBounds.getWidth();
-            double sy = height / oldBounds.getHeight();
+            double sx = width / startBounds.getWidth();
+            double sy = height / startBounds.getHeight();
 
             if (Double.isNaN(sx) || Double.isNaN(sy)) {
                 return;
             }
+            
+            
+            
             // sx and sy scale around x and y
             //   translate2D(pivotX, pivotY);
             // scale2D(sx, sy);
             //   translate2D(-pivotX, -pivotY);
 
             // this translation is appended to the scale
-            double tx = x - oldBounds.getMinX();
-            double ty = y - oldBounds.getMinY();
+            double tx = x - startBounds.getMinX();
+            double ty = y - startBounds.getMinY();
 
-            double oldTx = owner.get(TransformableFigure.TRANSLATE_X);
-            double oldTy = owner.get(TransformableFigure.TRANSLATE_Y);
-            double oldSx = owner.get(TransformableFigure.SCALE_X);
-            double oldSy = owner.get(TransformableFigure.SCALE_Y);
+            double newTx = startTranslateX + tx - x + sx * x;
+            double newTy = startTranslateY + ty - y + sy * y;
+            double newSx = startScaleX * sx;
+            double newSy = startScaleY * sy;
 
-            double newTx = oldTx + tx - x + sx * x;
-            double newTy = oldTy + ty - y + sy * y;
-            double newSx = oldSx * sx;
-            double newSy = oldSy * sy;
-
-            //model.set(owner, TransformableFigure.TRANSLATE_X, newTx);
-            //model.set(owner, TransformableFigure.TRANSLATE_Y, newTy);
+            model.set(owner, TransformableFigure.TRANSLATE_X, newTx);
+            model.set(owner, TransformableFigure.TRANSLATE_Y, newTy);
             model.set(owner, TransformableFigure.SCALE_X, newSx);
             model.set(owner, TransformableFigure.SCALE_Y, newSy);
-            /* 
-     //   System.out.println("expected:"+x+","+y+","+width+","+height);
-        
-        Transform t = new Scale(sx,sy,x,y);
-        t = t.createConcatenation(new Translate(tx,ty));
-        Bounds newBounds = t.transform(oldBounds);
-        System.out.println(t);
-        System.out.println("t:"+(tx)+","+(ty));
-       
-        System.out.println("actual  :"+newBounds.getMinX()+","+newBounds.getMinX()+","+newBounds.getWidth()+","+
-                newBounds.getHeight());
-             */
-
         }
+
+        private Transform getParentToTransform(Figure o) {
+        Transform t=o.getWorldToParent();
+            Transform rotate = Transform.rotate(-o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
+
+            t = ((TransformableFigure)o).getInverseTransform().createConcatenation(rotate);
+        return t;
+    } 
     }
 
     private static class NorthEastHandle extends AbstractResizeHandle {

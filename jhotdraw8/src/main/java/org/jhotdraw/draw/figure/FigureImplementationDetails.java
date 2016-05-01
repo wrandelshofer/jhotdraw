@@ -2,7 +2,6 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw.draw.figure;
 
 import javafx.scene.transform.Transform;
@@ -14,9 +13,11 @@ import org.jhotdraw.collection.SimpleKey;
  * Hides implementation details from other packages.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: FigureImplementationDetails.java 1128 2016-04-24 19:33:02Z
+ * rawcoder $
  */
 class FigureImplementationDetails {
+
     // ---
     // key declarations
     // ---
@@ -29,5 +30,11 @@ class FigureImplementationDetails {
     // ---
     // other constant declarations
     // ---
-    final static Transform IDENTITY_TRANSFORM = new Translate(0,0);
+    final static Transform IDENTITY_TRANSFORM = new Translate(0, 0);
+
+    /**
+     * Whether the transformation cache is enabled.
+     */
+    final static boolean CACHE = true;
+
 }

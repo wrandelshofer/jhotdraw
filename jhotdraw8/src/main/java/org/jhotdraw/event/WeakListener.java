@@ -8,9 +8,6 @@ package org.jhotdraw.event;
 import java.lang.ref.WeakReference;
 import java.util.EventObject;
 import java.util.function.Consumer;
-import javafx.beans.NamedArg;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 /**
  * WeakListener.

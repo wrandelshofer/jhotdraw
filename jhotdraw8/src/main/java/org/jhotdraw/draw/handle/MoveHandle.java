@@ -19,6 +19,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.TransformableFigure;
@@ -26,6 +27,7 @@ import static org.jhotdraw.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.model.DrawingModel;
+import org.jhotdraw.geom.Geom;
 
 /**
  * Handle for moving (translating) a figure.
@@ -33,6 +35,7 @@ import org.jhotdraw.draw.model.DrawingModel;
  * @author Werner Randelshofer
  */
 public class MoveHandle extends LocatorHandle {
+
     private Point2D pickLocation;
     private Point2D oldPoint;
     private final Region node;
@@ -41,6 +44,8 @@ public class MoveHandle extends LocatorHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     protected Set<Figure> groupReshapeableFigures;
+    private Transform worldToLocal;
+    private Transform localToWorld;
 
     public MoveHandle(Figure figure, Locator locator) {
         this(figure, STYLECLASS_HANDLE_MOVE, locator);
@@ -77,7 +82,7 @@ public class MoveHandle extends LocatorHandle {
 
     @Override
     public void updateNode(DrawingView view) {
-        Figure f = getOwner();
+        Figure f = owner;
         Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
@@ -97,7 +102,13 @@ public class MoveHandle extends LocatorHandle {
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
+        oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
+        if (owner instanceof TransformableFigure) {
+            worldToLocal = ((TransformableFigure) owner).getInverseTransform().createConcatenation(owner.getWorldToParent());
+        } else {
+            worldToLocal = owner.getWorldToParent();
+        }
+        localToWorld = owner.getLocalToWorld();
 
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -116,15 +127,19 @@ public class MoveHandle extends LocatorHandle {
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            newPoint = view.getConstrainer().constrainPoint(owner, newPoint);
         }
 
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
-            oldPoint = getOwner().localToWorld(loc);
+            oldPoint = localToWorld.transform(loc);
         }
-
+        
+        if (oldPoint.equals(newPoint)) {
+            return;
+        }
+ 
         //Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
         DrawingModel model = view.getModel();
 
@@ -133,20 +148,23 @@ public class MoveHandle extends LocatorHandle {
             for (Figure f : groupReshapeableFigures) {
                 Point2D npl = f.worldToParent(newPoint);
                 Point2D opl = f.worldToParent(oldPoint);
-            Transform tt = ((TransformableFigure)f).getInverseTransform();
-            npl=tt.transform(npl);
-            opl=tt.transform(opl);
+                if (f instanceof TransformableFigure) {
+                    Transform tt = ((TransformableFigure) f).getInverseTransform();
+                    npl = tt.transform(npl);
+                    opl = tt.transform(opl);
+                }
                 Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
-                //tx = f.getWorldToParent().createConcatenation(tx);
                 model.reshape(f, tx);
             }
         } else {
-            Figure f = getOwner();
-            Point2D npl = f.worldToParent(newPoint);
-            Point2D opl = f.worldToParent(oldPoint);
-            Transform tt = ((TransformableFigure)f).getInverseTransform();
-            npl=tt.transform(npl);
-            opl=tt.transform(opl);
+            Figure f = owner;
+            Point2D npl = worldToLocal.transform(newPoint);
+            Point2D opl = worldToLocal.transform(oldPoint);
+            /*if (f instanceof TransformableFigure) {
+                Transform tt = ((TransformableFigure) f).getInverseTransform();
+                npl = tt.transform(npl);
+                opl = tt.transform(opl);
+            }*/
             Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
             model.reshape(f, tx);
         }
@@ -162,7 +180,8 @@ public class MoveHandle extends LocatorHandle {
     public boolean isSelectable() {
         return true;
     }
-        @Override
+
+    @Override
     public Point2D getLocationInView() {
         return pickLocation;
     }

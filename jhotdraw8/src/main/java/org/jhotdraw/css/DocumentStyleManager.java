@@ -53,6 +53,11 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
             for (StyleRule r : s.getRulesets()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
+                        // Declarations without terms are ignored
+                        if (d.getTerms().isEmpty()) {
+                            continue;
+                        }
+
                         if (!elem.hasAttribute(d.getProperty())) {
                             applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                         }
@@ -70,6 +75,11 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
             for (StyleRule r : s.getRulesets()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
+                        // Declarations without terms are ignored
+                        if (d.getTerms().isEmpty()) {
+                            continue;
+                        }
+
                         applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                     }
                 }
@@ -85,6 +95,11 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
             for (StyleRule r : s.getRulesets()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
+                        // Declarations without terms are ignored
+                        if (d.getTerms().isEmpty()) {
+                            continue;
+                        }
+
                         applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                     }
                 }
@@ -96,6 +111,11 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
         if (elem.hasAttribute("style")) {
             try {
                 for (Declaration d : parser.parseDeclarationList(elem.getAttribute("style"))) {
+                    // Declarations without terms are ignored
+                    if (d.getTerms().isEmpty()) {
+                        continue;
+                    }
+
                     applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
                 }
             } catch (IOException ex) {
@@ -122,5 +142,4 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
- 
 }

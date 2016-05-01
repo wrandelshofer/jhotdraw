@@ -105,4 +105,9 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
         leftKey.remove(a);
         return oldValue;
     }
+
+    @Override
+    public boolean isNullable() {
+        return false;
+    }
 }

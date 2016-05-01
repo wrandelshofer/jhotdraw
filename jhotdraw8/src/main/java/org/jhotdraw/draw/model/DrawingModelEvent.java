@@ -20,9 +20,261 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
     private final static long serialVersionUID = 1L;
 
+    static DrawingModelEvent rootChanged(ConnectionsAndLayoutDrawingModel aThis, Drawing root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public enum EventType {
 
         /**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
+         * The root of the model changed.
+         *//**
          * The root of the model changed.
          *//**
          * The root of the model changed.
@@ -35,7 +287,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         /**
          * All JavaFX Nodes in a subtree of the figures have been invalidated.
          */
-        SUBTREE_NODES_INVALIDATED,
+        SUBTREE_NODES_CHANGED,
         /**
          * A single figure has been added to a parent.
          */
@@ -55,7 +307,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         /**
          * The JavaFX Node of a single figure has been invalidated.
          */
-        NODE_INVALIDATED,
+        NODE_CHANGED,
         /**
          * A property value has been changed.
          */
@@ -63,15 +315,15 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         /**
          * The layout of a single figure has been invalidated.
          */
-        LAYOUT_INVALIDATED,
+        LAYOUT_CHANGED,
         /**
          * The style of a single figure has been invalidated.
          */
-        STYLE_INVALIDATED,
+        STYLE_CHANGED,
         /**
          * The connection of a figure has changed.
          */
-        CONNECTION_CHANGED,
+        DEPENDENCY_CHANGED,
         /**
          * The transform of a figure has changed.
          */
@@ -100,14 +352,14 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     }
 
     public static DrawingModelEvent subtreeNodesInvalidated(DrawingModel source, Figure subtreeRot) {
-        return new DrawingModelEvent(source, EventType.SUBTREE_NODES_INVALIDATED, subtreeRot, null, null, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.SUBTREE_NODES_CHANGED, subtreeRot, null, null, -1, null, null, null);
     }
 
-    public static DrawingModelEvent figureAddedToParent(DrawingModel source, Figure parent, Figure child, int index) {
+    public static DrawingModelEvent figureAddedToParent(DrawingModel source, Figure child, Figure parent,  int index) {
         return new DrawingModelEvent(source, EventType.FIGURE_ADDED_TO_PARENT, child, parent, null, index, null, null, null);
     }
 
-    public static DrawingModelEvent figureRemovedFromParent(DrawingModel source, Figure parent, Figure child, int index) {
+    public static DrawingModelEvent figureRemovedFromParent(DrawingModel source, Figure child, Figure parent,  int index) {
         return new DrawingModelEvent(source, EventType.FIGURE_REMOVED_FROM_PARENT, child, parent, null, index, null, null, null);
     }
 
@@ -120,24 +372,24 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     }
 
     public static DrawingModelEvent nodeInvalidated(DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.NODE_INVALIDATED, figure, null, null, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.NODE_CHANGED, figure, null, null, -1, null, null, null);
     }
     public static <T> DrawingModelEvent propertyValueChanged(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
         return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
     }
-    public static <T> DrawingModelEvent connectionChanged(DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.CONNECTION_CHANGED, figure, null, null, -1, null, null, null);
+    public static <T> DrawingModelEvent dependencyChanged(DrawingModel source, Figure figure) {
+        return new DrawingModelEvent(source, EventType.DEPENDENCY_CHANGED, figure, null, null, -1, null, null, null);
     }
     public static <T> DrawingModelEvent transformChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null);
     }
 
-    public static <T> DrawingModelEvent layoutInvalidated(DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.LAYOUT_INVALIDATED, figure, null, null, -1, null, null, null);
+    public static <T> DrawingModelEvent layoutChanged(DrawingModel source, Figure figure) {
+        return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null);
     }
 
     public static <T> DrawingModelEvent styleInvalidated(DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.STYLE_INVALIDATED, figure, null, null, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null);
     }
     public static <T> DrawingModelEvent rootChanged(DrawingModel source, Drawing figure) {
         return new DrawingModelEvent(source, EventType.ROOT_CHANGED, figure, null, null, -1, null, null, null);

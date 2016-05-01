@@ -35,13 +35,13 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
      */
     public final static String TYPE_SELECTOR = "Rectangle";
 
-    public final static DoubleStyleableFigureKey X = new DoubleStyleableFigureKey("boundsX",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("boundsY",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("boundsWidth",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("boundsHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey X = new DoubleStyleableFigureKey("boundsX",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("boundsY",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("boundsWidth",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("boundsHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X,Y,WIDTH,HEIGHT);
-    public final static DoubleStyleableFigureKey ARC_HEIGHT = new DoubleStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ARC_HEIGHT = new DoubleStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.DEPENDENT_LAYOUT), 0.0);
     public final static Point2DStyleableMapAccessor ARC = new Point2DStyleableMapAccessor("arc", ARC_WIDTH,ARC_HEIGHT);
 
     public RectangleFigure() {
@@ -109,7 +109,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     }
 
     @Override
-    public void updateLayout() {
+    public void layout() {
         // empty
     }
 

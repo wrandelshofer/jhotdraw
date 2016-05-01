@@ -12,8 +12,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.geom.Geom;
 
 /**
  * A figure which groups child figures, so that they can be edited by the user
@@ -31,9 +33,44 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
 
     @Override
     public void reshape(Transform transform) {
+        boolean hasTransformedChild = false;
         for (Figure child : getChildren()) {
-            child.reshape(transform);
+            if (child instanceof TransformableFigure) {
+                TransformableFigure tchild = (TransformableFigure) child;
+                Transform t = tchild.getInverseTransform();
+                if (!t.isIdentity()) {
+                    hasTransformedChild=true;
+                    break;
+                }
+            }
         }
+        
+        if (hasTransformedChild) {
+        // For now, we can only handle translations
+            if (!(transform instanceof Translate)) {
+               return;
+            }
+        }
+        
+        
+        for (Figure child : getChildren()) {
+            if (child instanceof TransformableFigure) {
+                TransformableFigure tchild = (TransformableFigure) child;
+                Transform t = tchild.getInverseTransform();
+                if (t.isIdentity()) {
+                    child.reshape(transform);
+                } else {
+                    Point2D tr = new Point2D(transform.getTx(), transform.getTy());
+                    tr = Geom.toDeltaTransform(t).transform(tr);
+                    t = new Translate(tr.getX(), tr.getY());
+                    child.reshape(t);
+                }
+            } else {
+                child.reshape(transform);
+            }
+        }
+        
+        
     }
 
     @Override
@@ -59,6 +96,9 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
         return g;
     }
 
+    /**
+     * Returns false.
+     */
     @Override
     public boolean isLayoutable() {
         return false;

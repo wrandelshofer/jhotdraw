@@ -5,8 +5,13 @@
  */
 package org.jhotdraw.draw.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.ObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
@@ -58,29 +63,69 @@ import org.jhotdraw.event.Listener;
  * @version $Id$
  */
 public interface DrawingModel extends Observable {
+    /** Name of the root property. */
+    String ROOT_PROPERTY="root";
+    
+    /**
+     * List of drawing model listeners.
+     *
+     * @return a list of drawing model listeners
+     */
+    CopyOnWriteArrayList<Listener<DrawingModelEvent>> getDrawingModelListeners();
+    /**
+     * List of invalidation listeners.
+     *
+     * @return a list of drawing model listeners
+     */
+    CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
+
+    /**
+     * The root of the drawing model.
+     * @return the root
+     */
+    ObjectProperty<Drawing> rootProperty();
+    
 
     /** Adds a listener for {@code DrawingModelEvent}s.
      *
      * @param l the listener */
-    void addDrawingModelListener(Listener<DrawingModelEvent> l);
+    default void addDrawingModelListener(Listener<DrawingModelEvent> l) {
+        getDrawingModelListeners().add(l);
+    }
 
     /** Removes a listener for {@code DrawingModelEvent}s.
      *
      * @param l the listener */
-    void removeDrawingModelListener(Listener<DrawingModelEvent> l);
+    default void removeDrawingModelListener(Listener<DrawingModelEvent> l) {
+        getDrawingModelListeners().remove(l);
+    }
+
+    @Override
+    default void addListener(InvalidationListener l) {
+        getInvalidationListeners().add(l);
+    }
+
+    @Override
+    default void removeListener(InvalidationListener l) {
+        getInvalidationListeners().remove(l);
+    }
 
     /** Gets the root of the tree.
      *
      * @return the drawing
      */
-    Drawing getRoot();
+    default Drawing getRoot() {
+        return rootProperty().get();
+    }
 
     /** Sets the root of the tree and fires appropriate
      * {@code DrawingModelEvent}s.
      *
      * @param root the new root
      */
-    void setRoot(Drawing root);
+    default void setRoot(Drawing root) {
+        rootProperty().set(root);
+    }
 
     /** Gets the getChildren of the specified figure.
      *
@@ -163,7 +208,7 @@ public interface DrawingModel extends Observable {
      * {@code DrawingModelEvent}s.
      *
      * @param f the figure
-     * @param transform the desired transformation
+     * @param transform the desired transformation in the local coordinate system
      */
     void reshape(Figure f, Transform transform);
 
@@ -172,10 +217,10 @@ public interface DrawingModel extends Observable {
      * {@code DrawingModelEvent}s.
      *
      * @param f the figure
-     * @param x desired x-position
-     * @param y desired y-position
-     * @param width desired width, may be negative
-     * @param height desired height, may be negative
+     * @param x desired x-position in the local coordinate system
+     * @param y desired y-position in the local coordinate system
+     * @param width desired width in the local coordinate system, may be negative
+     * @param height desired height in the local coordinat system, may be negative
      */
     void reshape(Figure f, double x, double y, double width, double height);
 
@@ -194,12 +239,12 @@ public interface DrawingModel extends Observable {
      */
     void disconnect(Figure f);
     /**
-     * Invokes the applyCss method of the figure and fires appropriate
-     * {@code DrawingModelEvent}s.
+     * Invokes the updateCss method of the figure and fires appropriate
+ {@code DrawingModelEvent}s.
      *
      * @param f the figure
      */
-    void applyCss(Figure f);
+    void updateCss(Figure f);
 
     /**
      * Fires the specified event.
@@ -243,7 +288,7 @@ public interface DrawingModel extends Observable {
      * @param f the figure
      */
     default void fireLayoutInvalidated(Figure f) {
-        fire(DrawingModelEvent.layoutInvalidated(this, f));
+        fire(DrawingModelEvent.layoutChanged(this, f));
     }
     /**
      * Fires "style invalidated" event for the specified figure.
@@ -251,5 +296,14 @@ public interface DrawingModel extends Observable {
      */
     default void fireStyleInvalidated(Figure f) {
         fire(DrawingModelEvent.styleInvalidated(this, f));
+    }
+    /**
+     * Fires "style invalidated" event for the specified figure.
+     * @param f the figure
+     */
+    default void fireDrawingModelInvalidated() {
+        for (InvalidationListener l : new ArrayList<>(getInvalidationListeners())) {
+            l.invalidated(this);
+        }
     }
 }

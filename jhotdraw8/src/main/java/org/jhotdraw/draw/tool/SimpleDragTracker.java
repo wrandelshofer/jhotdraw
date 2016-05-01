@@ -93,6 +93,10 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
             oldPoint = anchorFigure.localToWorld(loc);
         }
 
+        if (newPoint.equals(oldPoint)) {
+            return;
+        }
+
         DrawingModel dm = view.getModel();
         if (event.isShiftDown()) {
             Figure f = anchorFigure;
@@ -104,7 +108,6 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
                 opl = tt.transform(opl);
             }
             Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
-
             dm.reshape(f, tx);
         } else {
             for (Figure f : groupReshapeableFigures) {

@@ -80,6 +80,7 @@ public class SimpleLayer extends AbstractCompositeFigure
         return false;
     }
 
+    /** Returns false. */
     @Override
     public boolean isLayoutable() {
         return false;

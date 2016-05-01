@@ -74,9 +74,9 @@ public interface IterableTree<T extends IterableTree<T>> {
      * 
      * @return the list
      */
-    default public Iterable<T> preorderList() {
+    static <T> ArrayList<T> toList(Iterable<T> iterable) {
         ArrayList<T> list = new ArrayList<>();
-        for (T item:preorderIterable()) {
+        for (T item:iterable) {
             list.add(item);
         }
         return list;
@@ -91,6 +91,18 @@ public interface IterableTree<T extends IterableTree<T>> {
     default public Iterable<T> breadthFirstIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new IterableTree.BreadthFirstIterator<>((T) this);
+        return i;
+    }
+
+    /**
+     * Returns an iterable which can iterate through this figure and all its
+     * ancesters up to the root.
+     *
+     * @return the iterable
+     */
+    default Iterable<T> ancestorIterable() {
+        @SuppressWarnings("unchecked")
+        Iterable<T> i = () -> new IterableTree.AncestorIterator<>((T) this);
         return i;
     }
 
@@ -216,5 +228,36 @@ public interface IterableTree<T extends IterableTree<T>> {
             path.addFirst(node);
         }
         return path;
+    }
+    
+    /**
+     * @design.pattern IterableTree Iterator, Iterator.
+     * 
+     * @param <T> the type of the tree nodes
+     */
+    static class AncestorIterator<T extends IterableTree<T>> implements Iterator<T> {
+
+        private T node;
+
+        private AncestorIterator(T node) {
+            this.node = node;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return node != null;
+        }
+
+        @Override
+        public T next() {
+            T next = node;
+            node = node.getParent();
+            return next;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("Not supported.");
+        }
     }
 }

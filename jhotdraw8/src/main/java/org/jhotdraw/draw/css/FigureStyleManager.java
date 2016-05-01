@@ -66,7 +66,7 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
 
         // user agent stylesheets can not override element attributes
         if (origin == null || origin == StyleOrigin.USER_AGENT) {
-            
+
             elem.removeAll(StyleOrigin.USER_AGENT);
             for (MyEntry e : getUserAgentStylesheets()) {
                 Stylesheet s = e.getStylesheet();
@@ -109,6 +109,11 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
         for (StyleRule r : s.getRulesets()) {
             if (r.getSelectorGroup().matches(selectorModel, elem)) {
                 for (Declaration d : r.getDeclarations()) {
+                    // Declarations without terms are ignored
+                    if (d.getTerms().isEmpty()) {
+                        continue;
+                    }
+
                     @SuppressWarnings("unchecked")
                     StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) metaMap.get(d.getProperty());
                     if (k != null) {

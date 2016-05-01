@@ -8,10 +8,16 @@
 package org.jhotdraw.app.action.file;
 
 import java.net.URI;
+import java.util.concurrent.CancellationException;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.app.action.Action;
+import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.util.Resources;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
@@ -44,6 +50,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
     public static final String ID = "file.openRecent";
     private URI uri;
+    private boolean reuseEmptyViews = true;
 
     /** Creates a new instance.
      * @param app the application
@@ -53,115 +60,59 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         this.uri = uri;
         set(Action.LABEL, URIUtil.getName(uri));
     }
-/*
     @Override
-    public void actionPerformed(ActionEvent evt) {
+    protected void onActionPerformed(ActionEvent evt) {
         final Application app = getApplication();
-        if (app.isEnabled()) {
-        // Prevent same URI from being opened more than once
-        if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-            for (View vw : getApplication().getViews()) {
-                if (vw.getURI() != null && vw.getURI().equals(uri)) {
-                    vw.getComponent().requestFocus();
-                    return;
-                }
-            }
-        }
-
-
-            app.setEnabled(false);
+        {
             // Search for an empty view
-            View emptyView = app.getActiveView();
-            if (emptyView == null
-                     || !emptyView.isEmpty()
-                    || !emptyView.isEnabled()) {
+                      View emptyView;
+            if (reuseEmptyViews) {
+                emptyView = app.getActiveView();
+                if (emptyView==null
+                        || !emptyView.isEmpty()
+                        || emptyView.isDisabled()) {
+                    emptyView = null;
+                }
+            } else {
                 emptyView = null;
             }
 
-            final View p;
-            if (emptyView == null) {
-                p = app.createView();
-                app.add(p);
-                app.show(p);
+            if (emptyView==null) {
+                app.createView().thenAccept(v -> {app.add(v);doIt(v, true);});
             } else {
-                p = emptyView;
+                doIt(emptyView, false);
             }
-            openView(p);
         }
     }
 
-    protected void openView(final View view) {
+    public void doIt(View view, boolean disposeView) {
+            openViewFromURI(view, uri);
+    }
+
+    protected void openViewFromURI(final View v, final URI uri) {
         final Application app = getApplication();
-        app.setEnabled(true);
-
-
-        // If there is another view with the same URI we set the multiple open
-        // id of our view to max(multiple open id) + 1.
-        int multipleOpenId = 1;
-        for (View aView : app.views()) {
-            if (aView != view
-                    && aView.isEmpty()) {
-                multipleOpenId = Math.max(multipleOpenId, aView.getMultipleOpenId() + 1);
-            }
-        }
-        view.setMultipleOpenId(multipleOpenId);
-        view.setEnabled(false);
+        v.addDisabler(this);
 
         // Open the file
-        view.execute(new BackgroundTask() {
-
-            @Override
-            protected void construct() throws IOException {
-                boolean exists = true;
-                try {
-                    File f = new File(uri);
-                    exists = f.exists();
-                } catch (IllegalArgumentException e) {
-                    // The URI does not denote a file, thus we can not check whether the file exists.
-                }
-                if (exists) {
-                    view.read(uri, null);
-                } else {
-                    Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
-                    throw new IOException(labels.getFormatted("file.open.fileDoesNotExist.message", URIUtil.getName(uri)));
-                }
-            }
-
-            @Override
-            protected void done() {
-                view.setURI(uri);
-                Frame w = (Frame) SwingUtilities.getWindowAncestor(view.getComponent());
-                if (w != null) {
-                    w.setExtendedState(w.getExtendedState() & ~Frame.ICONIFIED);
-                    w.toFront();
-                }
-                app.addRecentURI(uri);
-                view.setEnabled(true);
-                view.getComponent().requestFocus();
-            }
-
-            @Override
-            protected void failed(Throwable value) {
-                value.printStackTrace();
-                String message = value.getMessage() != null ? value.getMessage() : value.toString();
-                Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
-                JSheet.showMessageSheet(view.getComponent(),
-                        "<html>" + UIManager.getString("OptionPane.css")
-                        + "<b>" + labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)) + "</b><p>"
-                        + (message == null ? "" : message),
-                        JOptionPane.ERROR_MESSAGE, new SheetListener() {
-
-                    @Override
-                    public void optionSelected(SheetEvent evt) {
-                        view.setEnabled(true);
-                    }
-                });
+        v.read(uri, false).whenComplete((result, exception) -> {
+            if (exception instanceof CancellationException) {
+                    v.removeDisabler(this);
+            } else if (exception != null) {
+                    Throwable value = exception;
+                    String message = (value != null && value.getMessage()
+                            != null) ? value.getMessage() : value.toString();
+                    Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                    Alert alert = new Alert(Alert.AlertType.ERROR,
+                            ((message == null) ? "" : message));
+                    alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
+                    alert.showAndWait();
+                    v.removeDisabler(this);
+            } else {
+                    v.setURI(uri);
+                    v.clearModified();
+                    v.setTitle(URIUtil.getName(uri));
+                    v.removeDisabler(this);
             }
         });
-    }*/
-
-    @Override
-    protected void onActionPerformed(javafx.event.ActionEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

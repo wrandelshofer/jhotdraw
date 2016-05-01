@@ -38,8 +38,13 @@ import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import java.util.concurrent.CopyOnWriteArrayList;
+import org.jhotdraw.collection.Key;
 import org.jhotdraw.draw.handle.BoundsInParentOutlineHandle;
 import org.jhotdraw.draw.handle.TransformHandleKit;
+import org.jhotdraw.event.Listener;
+
+
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -49,73 +54,73 @@ import org.jhotdraw.draw.handle.TransformHandleKit;
  * depends on the class of the figure, the state of the figure, and the state of
  * the render context.
  * <p>
- * <b>State.</b> The state of a figure is defined by its property values.
- * The state consists of genuine property values and of computed property 
+ * <b>State.</b> The state of a figure is defined by its property values. The
+ * state consists of genuine property values and of computed property
  * values.<br>
  * Genuine property values typically describe the shape and the style of a
  * figure.<br>
- * Computed property values typically describe the layout of the figure
- * or cached values. Such as cached CSS properties and cached transformation
- * matrices. Computed property values often depend on the state of other 
+ * Computed property values typically describe the layout of the figure or
+ * cached values. Such as cached CSS properties and cached transformation
+ * matrices. Computed property values often depend on the state of other
  * figures.
  * <p>
  * <b>Tree Structure.</b> A figure can be composed of other figures in a tree
  * structure. The composition is implemented with the {@code children} property
  * and the {@code parent} property.<br>
- * The composition can be restricted. Typically the parent of {@code Layer} 
+ * The composition can be restricted. Typically the parent of {@code Layer}
  * objects is restricted to instances of {@code Drawing}, and the parent of all
  * other figures is restricted to non-instances of {@code Drawing}.
  * <p>
- * <b>Local Coordinate Systems.</b> A figure may introduce a local
- * coordinate system which affects the graphical representation of itself
- * and of its descendants.<br>
+ * <b>Local Coordinate Systems.</b> A figure may introduce a local coordinate
+ * system which affects the graphical representation of itself and of its
+ * descendants.<br>
  * The Figure interface provides methods which allow to transform between the
  * local coordinate system of a figure, the coordinate system of its parent, and
  * the world coordinate system.</p>
  * <p>
  * <b>Dependent Figures.</b> The state of a figure may depend on the state of
- * other figures. These dependencies are made explicit
- * by parent/child relationships and provider/dependant relationships.<br>
- * The parent/child relationships are strictly hierarchical, the 
+ * other figures. These dependencies are made explicit by parent/child
+ * relationships and provider/dependant relationships.<br>
+ * The parent/child relationships are strictly hierarchical, the
  * provider/dependant relationships may include cycles.<br>
- * The parent/child relationships are typically used for grouping figures into 
+ * The parent/child relationships are typically used for grouping figures into
  * {@code Layer}s, {@code Group}s and into layout hierarchies.<br>
- * The provider/dependant relationships are typically used for the creation
- * of line connections between figures, such as with {@link LineConnectionFigure}.
+ * The provider/dependant relationships are typically used for the creation of
+ * line connections between figures, such as with {@link LineConnectionFigure}.
  * <p>
  * <b>Handles.</b> A figure can produce {@code Handle}s which allow to
  * graphically change the state of the figure in a {@link DrawingView}.</p>
  * <p>
- * <b>Map Accessors.</b> A figure has an open ended set of property values.
- * The property values are accessed using {@code FigureMapAccessor}s.
+ * <b>Map Accessors.</b> A figure has an open ended set of property values. The
+ * property values are accessed using {@code FigureMapAccessor}s.
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
  * {@link org.jhotdraw.styleable.StyleableMapAccessor}.</p>
  * <p>
- * <b>Update Strategy.</b> A figure does not automatically update its computed 
- * property values. The update strategy is factored out into 
+ * <b>Update Strategy.</b> A figure does not automatically update its computed
+ * property values. The update strategy is factored out into
  * {@link org.jhotdraw.draw.model.DrawingModel}. Drawing model uses {@link
  * org.jhotdraw.draw.key.DirtyBits} in the {@code FigureMapAccessor} to
  * determine which dependent figures need to be updated.
  *
  * @design.pattern Drawing Framework, KeyAbstraction.
  * @design.pattern org.jhotdraw.draw.model.DrawingModel Facade, Subsystem.
- * @design.pattern org.jhotdraw.draw.model.DrawingModel Strategy, Context. 
+ * @design.pattern org.jhotdraw.draw.model.DrawingModel Strategy, Context.
  * @design.pattern RenderContext Builder, Builder.
  * @design.pattern Handle Adapter, Adaptee.
- * @design.pattern org.jhotdraw.draw.tool.CreationTool AbstractFactory, AbstractProduct.
+ * @design.pattern org.jhotdraw.draw.tool.CreationTool AbstractFactory,
+ * AbstractProduct.
  * @design.pattern org.jhotdraw.draw.locator.Locator Strategy, Context.
  * @design.pattern org.jhotdraw.draw.connector.Connector Strategy, Context.
- * 
- * @design.pattern Figure Mixin, Mixin.
- * The Mixin pattern is used to extend the functionality of a class that 
- * implements the {@link Figure} interface. The functionality is provided by 
- * interfaces with default methods (traits).
- * 
- * @design.pattern Figure Composite, Component.
- * {@link Figure} uses the composite pattern to provide uniform access to
- * composite nodes and leaf nodes of a tree structure.
+ *
+ * @design.pattern Figure Mixin, Mixin. The Mixin pattern is used to extend the
+ * functionality of a class that implements the {@link Figure} interface. The
+ * functionality is provided by interfaces with default methods (traits).
+ *
+ * @design.pattern Figure Composite, Component. {@link Figure} uses the
+ * composite pattern to provide uniform access to composite nodes and leaf nodes
+ * of a tree structure.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -160,13 +165,13 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     void removeAllConnectionTargets();
 
     /**
-     * This method is invoked on the connection targets by
+     * This method is invoked on a figure by
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
-     * connection targets of the figure have changed.
+     * dependency of a figure has changed.
      * <p>
      * The default implementation of this method is empty.
      */
-    default void connectNotify() {
+    default void dependencyNotify() {
     }
 
     /**
@@ -177,8 +182,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * The default implementation of this method calls
      * {@link #invalidateTransforms}.
      */
-    default void transformNotify() {
-        invalidateTransforms();
+    default boolean transformNotify() {
+        return invalidateTransforms();
     }
 
     /**
@@ -186,23 +191,23 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
      * figure needs to be laid out again.
      * <p>
-     * The default implementation of this method calls {@link #updateLayout}.
+     * The default implementation of this method calls {@link #layout}.
      */
     default void layoutNotify() {
-        updateLayout();
+        layout();
     }
 
     /**
      * This method is invoked on a figure by
      * {@link org.jhotdraw.draw.model.DrawingModel} when it determines that the
-     * figure needs to apply its stylesheet agin.
+     * figure needs to apply its stylesheet again.
      * <p>
      * The default implementation of this method calls {@link #updateCss} and
-     * then {@code #updateLayout}.
+     * then {@code #layout}.
      */
     default void stylesheetNotify() {
         updateCss();
-        updateLayout();
+        layout();
     }
 
     /**
@@ -233,7 +238,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * figure.
      * <p>
      * This method may use caching and return incorrect results if the cache is
-     * stale. Invoke {@link #updateLayout} if you are not sure that the cache is
+     * stale. Invoke {@link #layout} if you are not sure that the cache is
      * valid.
      *
      * @return the local bounds
@@ -241,13 +246,13 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     public Bounds getBoundsInLocal();
 
     /**
-     * The bounds that should be used for updateLayout calculations for this
+     * The bounds that should be used for layout calculations for this
      * figure.
      * <p>
      * The bounds are given in the coordinate space of the parent figure.
      * <p>
      * This method may use caching and return incorrect results if the caches
-     * are stale. Invoke {@link #invalidateTransforms} and {@link #updateLayout}
+     * are stale. Invoke {@link #invalidateTransforms} and {@link #layout}
      * if you are not sure that the cache is valid.
      *
      * @return the local bounds
@@ -285,19 +290,21 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * The figure may choose to only partially change its local bounds.
      * <p>
-     * Reshape typically changes property values in this figure. The way how
-     * this is performed is implementation specific.
+     * This method typically changes property values in this figure with      {@link org.jhotdraw.draw.key.DirtyBits#NODE}, {@link org.jhotdraw.draw.key.DirtyBits#LAYOUT}, 
+     * {@link org.jhotdraw.draw.key.DirtyBits#TRANSFORM} and/or
+     * {@link org.jhotdraw.draw.key.DirtyBits#CONNECTION_LAYOUT} in the
+     * {@link org.jhotdraw.draw.key.FigureMapAccessor}. This method may also
+     * call {@code reshape} on child figures.
+     *
      *
      * @param transform the desired transformation in parent coordinates
      */
     void reshape(Transform transform);
+
     /**
      * Attempts to change the local bounds of the figure.
      * <p>
-     * Width and height are ignored, if the figure is not resizable.
-     * <p>
-     * If the local bounds of the figure changes, it fires an
-     * invalidation event.
+     * See {#link #reshape(Transform)} for a description of this method.
      *
      * @param x desired x-position in parent coordinates
      * @param y desired y-position in parent coordinates
@@ -380,6 +387,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * convention allows to implement a cache in the render context for the Java
      * FX node. Also, render contexts like {@code DrawingView} need to associate
      * input events on Java FX nodes to the corresponding figure.
+     * <p>
+     * This figure does not keep track of changes that require node updates.
+     * {@link org.jhotdraw.draw.model.DrawingModel} to manage node updates.
      *
      * @param ctx the drawing view
      * @param node the node which was created with {@link #createNode}
@@ -403,9 +413,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     public boolean isSuitableParent(Figure newParent);
 
     /**
-     * Whether the {@code updateLayout} method of this figure does anything.
+     * Whether the {@code layout} method of this figure does anything.
      *
-     * @return true if the {@code updateLayout} method is not empty.
+     * @return true if the {@code layout} method is not empty.
      */
     boolean isLayoutable();
 
@@ -427,9 +437,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Whether the figure can be reshaped as a group together with other
      * figures.
      * <p>
-     * If this figure uses one of the other figures for computing its position
-     * or its updateLayout, then it will return false.
-     * <p>
+ If this figure uses one of the other figures for computing its position
+ or its layout, then it will return false.
+ <p>
      * The default implementation always returns true.
      *
      * @param others A set of figures.
@@ -517,37 +527,20 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     Connector findConnector(Point2D pointInLocal, Figure prototype);
 
     /**
-     * Updates the updateLayout of this figure and of its descendant figures.
-     * Does not update connection figures.
+     * Updates the layout of this figure, based on the layout of its
+     * children and the layout of providing figures.
      * <p>
-     * This figure may cache its updateLayout. However, this figure does not
-     * keep track when its cache becomes invalid. Use a
-     * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or
-     * invoke this method after you performed one of the following operations:
-     * <ul>
-     * <li>Changing a property of this figure or of one of its descendants with
-     * dirty bits {@link org.jhotdraw.draw.key.DirtyBits#LAYOUT}.</li>
-     * <li>Changing a property of one of the connection targets of this figure
-     * with dirty bits
-     * {@link org.jhotdraw.draw.key.DirtyBits#CONNECTION_LAYOUT}.</li>
-     * <li>Invoking {@code updateLayout} on one of the connection targets of
-     * this figure.</li>
-     * </ul>
+     * This figure does not keep track of changes that require layout updates.
+     * {@link org.jhotdraw.draw.model.DrawingModel} to manage layout updates.
      */
-    void updateLayout();
+    void layout();
 
     /**
-     * Applies the drawing stylesheet on this figure and on its descendant
-     * figures.
+     * Updates the stylesheet cache of this figure depending on its property
+     * values and on the and the property values of its ancestors.
      * <p>
-     * This figure may cache stylesheet values. However, this figure does not
-     * keep track when its stylesheet values becomes invalid. Use a
-     * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or
-     * invoke this method after you performed one of the following operations:
-     * <ul>
-     * <li>Changing a property of one of the ancestors this figure with dirty
-     * bits {@link org.jhotdraw.draw.key.DirtyBits#STYLE}.</li>
-     * </ul>
+     * This figure does not keep track of changes that require CSS updates.
+     * Use a {@link org.jhotdraw.draw.model.DrawingModel} to manage CSS updates.
      */
     void updateCss();
 
@@ -690,20 +683,21 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Returns all figures which depend on the state of this figure.
+     * Returns all figures which have a layout that depends on the state of this
+     * figure.
      * <p>
-     * When the state of this figure changes, then the dependent figures need to
-     * update their state or their layout as well.
+     * When the state of this figure changes, then the layout of the dependent
+     * figures need to be updated.
      *
      * @return a list of dependent figures
      */
     Set<Figure> getDependentFigures();
 
     /**
-     * Returns all figures which provide to the state of this figure.
+     * Returns all figures which provide to the layout of this figure.
      * <p>
-     * When the state of a providing figure changes, then the state or layout of
-     * this figure needs to be updated as well.
+     * When the state of a providing figure changes, then the layout of this
+     * figure needs to be updated.
      *
      * @return a list of providing figures
      */
@@ -715,7 +709,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * Disconnects all dependent and providing figures from this figure.
      *
      */
-    default void disconnectDependantsAndProviders() {
+    default void disconnect() {
         for (Figure connectedFigure : new ArrayList<Figure>(getDependentFigures())) {
             connectedFigure.removeConnectionTarget(this);
         }
@@ -920,28 +914,83 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Clears all cached values.
-     *
-     * The default implementation calls {@link #invalidateTransforms}.
+     * Invalidates the transformation matrices of this figure.
+     * <p>
+     * This figure does not keep track of changes that cause the invalidation 
+     * of its tranformation matrices. 
+     * Use a {@link org.jhotdraw.draw.model.DrawingModel} to
+     * manage the transformation matrices of the figures in a drawing.
+     * 
+     * @return true if the transformation matrices of the child figures must
+     * be invalidated as well
      */
-    default void invalidate() {
-        invalidateTransforms();
+    boolean invalidateTransforms();
+
+    /**
+     * List of property change listeners.
+     *
+     * @return a list of property change listeners
+     */
+    CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners();
+
+    /**
+     * Adds a listener which will be notified when a property value of the
+     * figure or of one of its descendants has changed.
+     * <p>
+     * This default implementation adds the listener to the list of property
+     * change listeners.
+     *
+     * @param listener the listener to be added
+     */
+    default void addPropertyChangeListener(Listener<FigurePropertyChangeEvent> listener) {
+        getPropertyChangeListeners().add(listener);
     }
 
     /**
-     * Clears all cached transformation matrices.
+     * Removes a listener from the list of property change listeners.
      * <p>
-     * This figure may cache transformation matrices. However, this figure does
-     * not keep track when its cache becomes invalid. Use a
-     * {@link org.jhotdraw.draw.model.DrawingModel} to manage this cache, or
-     * invoke this method after you performed one of the following operations:
-     * <ul>
-     * <li>Addition or removal of this figure (or of any of its ancestors) from
-     * its parent figure. (That is, performing a structural change in the
-     * ancestor line of this figure).</li>
-     * <li>Changing a property of this figure or of one of its ancestors with
-     * dirty bits {@link org.jhotdraw.draw.key.DirtyBits#TRANSFORM}</li>
-     * </ul>
+     * This default implementation removes the listener from the list of
+     * property change listeners.
+     *
+     * @param listener the listener to be removed
      */
-    void invalidateTransforms();
+    default void removePropertyChangeListener(Listener<FigurePropertyChangeEvent> listener) {
+        getPropertyChangeListeners().remove(listener);
+    }
+
+    /**
+     * Whether this figure has property change listeners.
+     *
+     * @return true if this figure has property change listeners
+     */
+    boolean hasPropertyChangeListeners();
+
+    /**
+     * Fires a property change event. 
+     */
+    default <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
+        if (hasPropertyChangeListeners()) {
+            firePropertyChangeEvent(new FigurePropertyChangeEvent(source,type, key, oldValue, newValue));
+        } else {
+            Figure parent = getParent();
+            if (parent != null) {
+                parent.firePropertyChangeEvent(source,type, key, oldValue, newValue);
+            }
+        }
+    }
+
+    /**
+     * Fires a property change event. 
+     */
+    default void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
+        if (hasPropertyChangeListeners()) {
+            for (Listener<FigurePropertyChangeEvent> l : getPropertyChangeListeners()) {
+                l.handle(event);
+            }
+        }
+        Figure parent = getParent();
+        if (parent != null) {
+            parent.firePropertyChangeEvent(event);
+        }
+    }
 }

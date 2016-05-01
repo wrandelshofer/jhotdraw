@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * A "declaration" declares a "property" with a "value".
+ * If the value is not specified, then the declaration must be ignored.
  *
  * @author Werner Randelshofer
  * @version $Id$

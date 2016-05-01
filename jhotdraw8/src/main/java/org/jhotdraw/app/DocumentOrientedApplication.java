@@ -7,6 +7,7 @@ package org.jhotdraw.app;
 import com.sun.javafx.menu.MenuBase;
 import com.sun.javafx.scene.control.GlobalMenuAdapter;
 import com.sun.javafx.tk.Toolkit;
+import java.net.URI;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +42,7 @@ import javafx.stage.Window;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.Actions;
 import org.jhotdraw.app.action.file.CloseFileAction;
+import org.jhotdraw.app.action.file.OpenRecentFileAction;
 import org.jhotdraw.binding.BindingUtil;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.Key;
@@ -292,7 +294,16 @@ public class DocumentOrientedApplication extends AbstractApplication {
         while (!todo.isEmpty()) {
             for (MenuItem mi : todo.remove().getItems()) {
                 if (mi instanceof Menu) {
+                    if ("file.openRecentMenu".equals(mi.getId())) {
+                        for (URI uri :recentUrisProperty()) {
+                            MenuItem mii=new MenuItem();
+                            Action a = new OpenRecentFileAction(this,uri);
+                            Actions.bindMenuItem(mii,a);
+                            ((Menu)mi).getItems().add(mii);
+                        }
+                    }else{
                     todo.add((Menu) mi);
+                    }
                 } else {
                     Action a = actions.get(mi.getId());
                     if (a != null) {

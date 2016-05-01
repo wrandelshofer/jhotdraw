@@ -170,6 +170,8 @@ public class ResizeHandleKit {
         protected final Region node;
         private final String styleclass;
         private Bounds startBounds;
+        private Transform worldToLocal;
+        private Transform localToWorld;
         private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
         private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
         private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
@@ -204,7 +206,7 @@ public class ResizeHandleKit {
 
         @Override
         public void updateNode(DrawingView view) {
-            Figure f = getOwner();
+            Figure f = owner;
             Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
             Bounds b = f.getBoundsInLocal();
             Point2D p = getLocation();
@@ -218,9 +220,11 @@ public class ResizeHandleKit {
 
         @Override
         public void onMousePressed(MouseEvent event, DrawingView view) {
-            oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
-            startBounds = getOwner().getBoundsInLocal();
-            preferredAspectRatio = getOwner().getPreferredAspectRatio();
+            oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
+            startBounds = owner.getBoundsInLocal();
+            preferredAspectRatio = owner.getPreferredAspectRatio();
+            worldToLocal = owner.getWorldToLocal();
+            localToWorld = owner.getLocalToWorld();
         }
 
         @Override
@@ -229,17 +233,21 @@ public class ResizeHandleKit {
 
             if (!event.isAltDown() && !event.isControlDown()) {
                 // alt or control turns the constrainer off
-                newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+                newPoint = view.getConstrainer().constrainPoint(owner, newPoint);
             }
             if (event.isMetaDown()) {
                 // meta snaps the location of the handle to the grid
                 Point2D loc = getLocation();
-                oldPoint = getOwner().localToWorld(loc);
+                oldPoint = localToWorld.transform(loc);
             }
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();
 
-            resize(getOwner().worldToLocal(newPoint), getOwner(), startBounds, view.getModel(), keepAspect);
+            
+            Transform t = worldToLocal;
+            
+            
+            resize(t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
         }
 
         @Override

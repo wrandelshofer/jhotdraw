@@ -73,7 +73,7 @@ public class ConnectingFiguresSample extends Application {
         layer.add(edge3Null);
         layer.add(edgeNullNull);
         
-        drawing.updateLayout();
+        drawing.layout();
 
         DrawingView drawingView = new SimpleDrawingView();
 

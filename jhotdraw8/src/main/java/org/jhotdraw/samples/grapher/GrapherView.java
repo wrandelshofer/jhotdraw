@@ -74,7 +74,7 @@ import org.jhotdraw.draw.figure.EllipseFigure;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.GroupFigure;
 import org.jhotdraw.draw.figure.LineFigure;
-import org.jhotdraw.draw.gui.FigureHierarchyInspector;
+import org.jhotdraw.draw.gui.HierarchyInspector;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.ImageCreationTool;
@@ -183,7 +183,7 @@ public class GrapherView extends AbstractView implements EditorView {
             addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER, list);
             addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS, list);
             addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS, list);
-            addInspector(new FigureHierarchyInspector(), "figureHierarchy", Priority.ALWAYS, list);
+            addInspector(new HierarchyInspector(), "figureHierarchy", Priority.ALWAYS, list);
             addInspector(new DrawingInspector(), "drawing", Priority.NEVER, list);
             addInspector(new GridInspector(), "grid", Priority.NEVER, list);
             return list;

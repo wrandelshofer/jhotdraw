@@ -1,4 +1,4 @@
-/* @(#)TextFigure.java
+/* @(#)AbstractLabelFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -35,11 +35,11 @@ import org.jhotdraw.draw.handle.HandleType;
 import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.handle.RotateHandle;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw.draw.key.FigureMapAccessor;
 import org.jhotdraw.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.draw.key.FigureKey;
 
 /**
  * AbstractLabelFigure.
@@ -49,17 +49,17 @@ import org.jhotdraw.draw.locator.RelativeLocator;
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure implements TextFillableFigure, FillableFigure, StrokeableFigure, FontableFigure {
 
-    public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static Point2DStyleableMapAccessor ORIGIN = new Point2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
 
-    public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
 
-    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), null);
+    public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
     /**
      * The CSS type selector for a label object is {@code "Label"}.
      */
@@ -81,10 +81,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     }
 
     /**
-     * Returns the bounds of the node for updateLayout calculations. These bounds
+     * Returns the bounds of the node for layout calculations. These bounds
      * include the text of the node and the padding.
      *
-     * @return the updateLayout bounds
+     * @return the layout bounds
      */
     public Bounds getLayoutBounds() {
         if (textNode == null) {
@@ -192,7 +192,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     }
 
     @Override
-    public void updateLayout() {
+    public void layout() {
         // empty!
     }
 
@@ -204,8 +204,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     @Override
     protected void invalidated(Key<?> key) {
         super.invalidated(key);
-        if ((key instanceof FigureMapAccessor)
-                && ((FigureMapAccessor) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT)) {
+        if ((key instanceof FigureKey)
+                && ((FigureKey) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT)) {
             invalidateBounds();
         }
     }

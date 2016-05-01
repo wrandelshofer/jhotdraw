@@ -73,19 +73,19 @@ public class FigureTreePresentationModel {
                 case SUBTREE_REMOVED_FROM_DRAWING:
                     handleSubtreeRemovedFromDrawing(f);
                     break;
-                case NODE_INVALIDATED:
+                case NODE_CHANGED:
                     handleNodeInvalidated(f);
                     break;
-                case LAYOUT_INVALIDATED:
+                case LAYOUT_CHANGED:
                     break;
-                case STYLE_INVALIDATED:
+                case STYLE_CHANGED:
                     break;
                 case ROOT_CHANGED:
                     handleRootChanged();
                     break;
-                case SUBTREE_NODES_INVALIDATED:
+                case SUBTREE_NODES_CHANGED:
                     break;
-                case CONNECTION_CHANGED:
+                case DEPENDENCY_CHANGED:
                 case TRANSFORM_CHANGED:
                 case PROPERTY_VALUE_CHANGED:
                     break;

@@ -25,6 +25,13 @@ import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.draw.css.FigureStyleManager;
 import org.jhotdraw.draw.figure.NonTransformableFigure;
 import org.jhotdraw.text.CColor;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
 
 /**
  * SimpleDrawing.
@@ -78,6 +85,15 @@ public class SimpleDrawing extends AbstractCompositeFigure
         }
     }
 
+    /**
+     * The bounds of this drawing is determined by its {@code WIDTH} and
+     * and {@code HEIGHT}.
+     * <p>
+     * The bounds of its child figures does not affect the bounds of this
+     * drawing. 
+     * 
+     * @return bounding box (0, 0, WIDTH, HEIGHT).
+     */
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(0.0, 0.0, get(WIDTH), get(HEIGHT));
@@ -98,6 +114,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
         set(HEIGHT, abs(height));
     }
 
+    /** Returns false. */
     @Override
     public boolean isLayoutable() {
         return false;

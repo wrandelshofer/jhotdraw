@@ -21,7 +21,7 @@ import org.jhotdraw.draw.key.StringStyleableFigureKey;
 public interface TextableFigure extends Figure {
     
     /** The text. Default value: {@code ""}. */
-    public final static StringStyleableFigureKey TEXT = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), "");
+    public final static StringStyleableFigureKey TEXT = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "");
 
     /**
      * Updates a text node with textable properties.

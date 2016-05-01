@@ -46,7 +46,7 @@ public class FontStyleableFigureKey extends SimpleFigureKey<FFont> implements St
      */
     public FontStyleableFigureKey(String name, FFont defaultValue) {
         super(name, FFont.class, //
-                DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT),//
+                DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT),//
                 defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);

@@ -5,8 +5,6 @@
  */
 package org.jhotdraw.draw.figure;
 
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -15,7 +13,7 @@ import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.collection.IndexedSet;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import org.jhotdraw.geom.Geom;
+import javafx.scene.transform.Transform;
 
 /**
  * This base class can be used to implement figures which support child figures.
@@ -71,7 +69,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
      */
     public final static String CHILDREN_PROPERTY = "children";
 
-    private final ReadOnlyListProperty<Figure> children = new ReadOnlyListWrapper<>(this, CHILDREN_PROPERTY, new ChildList()).getReadOnlyProperty();
+    private final ObservableList<Figure> children = new ChildList();
 
     /*
     {
@@ -112,7 +110,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }*/
     @Override
     public ObservableList<Figure> getChildren() {
-        return children.get();
+        return children;
     }
 
     @Override
@@ -136,6 +134,25 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
+    
+    @Override
+    public Bounds getBoundsInParent() {
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+
+        Transform t = getLocalToParent();
+        
+        for (Figure child : getChildren()) {
+            Bounds b = t.transform(child.getBoundsInParent());
+            minX = min(minX, b.getMinX());
+            maxX = max(maxX, b.getMaxX());
+            minY = min(minY, b.getMinY());
+            maxY = max(maxY, b.getMaxY());
+        }
+        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    }
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
@@ -151,13 +168,14 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     /**
-     * First updateLayout all getChildren and then updateLayout self.
+     * First layout all getChildren and then layout self.
+     * FIXME Just layouts itself
      */
     @Override
-    public final void updateLayout() {
-        for (Figure child : getChildren()) {
-            child.updateLayout();
-        }
+    public final void layout() {
+        /*for (Figure child : getChildren()) {
+            child.layout();
+        }*/
         layoutImpl();
     }
 
@@ -166,15 +184,5 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
      */
     protected void layoutImpl() {
 
-    }
-    
-    /**
-     * Calls invalidateTransforms();
-     */
-    @Override
-    public void transformNotify() {
-        for (Figure f: preorderIterable()) {
-            f.invalidateTransforms();
-        }
     }
 }
