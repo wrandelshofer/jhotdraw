@@ -31,7 +31,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
      * The CSS type selector for this object is {@code "Text"}.
      */
     public final static String TYPE_SELECTOR = "Text";
-    public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT,DirtyBits.CONNECTION_LAYOUT),new Point2D(0, 0));
+    public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT,DirtyBits.LAYOUT),new Point2D(0, 0));
 
     private Text textNode;
 
@@ -105,7 +105,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
     }
     
     @Override
-    public void updateLayout() {
+    public void layout() {
         // empty
     }
     

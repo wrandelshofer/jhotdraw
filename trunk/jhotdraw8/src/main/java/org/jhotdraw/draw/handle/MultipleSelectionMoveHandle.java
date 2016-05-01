@@ -19,6 +19,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.TransformableFigure;
@@ -34,6 +35,7 @@ import org.jhotdraw.geom.Geom;
  * @author Werner Randelshofer
  */
 public class MultipleSelectionMoveHandle extends AbstractHandle {
+
     private double relativeX;
     private double relativeY;
     private Point2D pickLocation;
@@ -47,18 +49,21 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     public MultipleSelectionMoveHandle(double relativeX, double relativeY) {
         this(relativeX, relativeY, STYLECLASS_HANDLE_MULTI_MOVE);
     }
-    
+
     public static MultipleSelectionMoveHandle northWest() {
-        return new MultipleSelectionMoveHandle(0.0,0.0);
+        return new MultipleSelectionMoveHandle(0.0, 0.0);
     }
+
     public static MultipleSelectionMoveHandle northEast() {
-        return new MultipleSelectionMoveHandle(1.0,0.0);
+        return new MultipleSelectionMoveHandle(1.0, 0.0);
     }
+
     public static MultipleSelectionMoveHandle southWest() {
-        return new MultipleSelectionMoveHandle(0.0,1.0);
+        return new MultipleSelectionMoveHandle(0.0, 1.0);
     }
+
     public static MultipleSelectionMoveHandle southEast() {
-        return new MultipleSelectionMoveHandle(1.0,1.0);
+        return new MultipleSelectionMoveHandle(1.0, 1.0);
     }
 
     public MultipleSelectionMoveHandle(double relativeX, double relativeY, String styleclass) {
@@ -128,22 +133,29 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
             oldPoint = getOwner().localToWorld(loc);
         }
 
+        if (oldPoint.equals(newPoint)) {
+            return;
+        }
+        
         //Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
         DrawingModel model = view.getModel();
 
-            // shift transforms all selected figures
-            for (Figure f : view.getSelectedFigures()) {
-                Point2D npl = f.worldToParent(newPoint);
-                Point2D opl = f.worldToParent(oldPoint);
-            Transform tt = ((TransformableFigure)f).getInverseTransform();
-            npl=tt.transform(npl);
-            opl=tt.transform(opl);
-                Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
-                //tx = f.getWorldToParent().createConcatenation(tx);
-                model.reshape(f, tx);
+        // shift transforms all selected figures
+        for (Figure f : view.getSelectedFigures()) {
+            Point2D npl = f.worldToParent(newPoint);
+            Point2D opl = f.worldToParent(oldPoint);
+            if (f instanceof TransformableFigure) {
+                Transform tt = ((TransformableFigure) f).getInverseTransform();
+                npl = tt.transform(npl);
+                opl = tt.transform(opl);
             }
+            Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
+            //tx = f.getWorldToParent().createConcatenation(tx);
+            
+            model.reshape(f, tx);
+        }
 
-            oldPoint = newPoint;
+        oldPoint = newPoint;
     }
 
     @Override
@@ -155,14 +167,15 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     public boolean isSelectable() {
         return true;
     }
-        @Override
+
+    @Override
     public Point2D getLocationInView() {
         return pickLocation;
     }
 
     private Point2D getLocation(DrawingView dv) {
         Bounds b = null;
-        for (Figure f:dv.getSelectedFigures()) {
+        for (Figure f : dv.getSelectedFigures()) {
             Transform l2w = f.getLocalToWorld();
             Bounds fb = l2w.transform(f.getBoundsInLocal());
             if (b == null) {
@@ -171,6 +184,6 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
                 b = Geom.add(b, fb);
             }
         }
-        return b==null?null:dv.drawingToView(new Point2D(b.getMinX()+relativeX*b.getWidth(),b.getMinY()+relativeY*b.getHeight()));
+        return b == null ? null : dv.drawingToView(new Point2D(b.getMinX() + relativeX * b.getWidth(), b.getMinY() + relativeY * b.getHeight()));
     }
 }

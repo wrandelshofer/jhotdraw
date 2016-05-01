@@ -18,45 +18,53 @@ public enum DirtyBits {
     /**
      * Affects the state of the figure.
      * <p>
-     * A GUI element which shows the state of the figure needs to be updated.
+     * All objects which depend on the state of the figure need to be updated.
+     *//**
+     * Affects the state of the figure.
+     * <p>
+     * All objects which depend on the state of the figure need to be updated.
      */
     STATE,
     /**
      * Affects the JavaFX {@code Node} created by the figure.
      * <p>
      * All cached JavaFX {@code Node}s created by the figure need to be
-     * updated.</p>
+     * updated.
      */
     NODE,
     /**
-     * Affects the layout of connected figures.
+     * Affects the layout of the figure, the layout of its ancestors and
+     * the layout of dependent figures.
      * <p>
-     * All connected figures which perform layouts need to be laid out.</p>
-     */
-    CONNECTION_LAYOUT,
-    /**
-     * Affects the layout of this figure and its ancestors.
-     * <p>
-     * All parent figures which perform layouts need to be laid out.</p>
+     * Method {@code Figure#layoutNotify} must be called on the figure, then in ascending
+     * order on all its ancestors which perform layout, and then on all
+     * dependent figures and their ancestors.
      */
     LAYOUT,
     /**
+     * Affects the layout of dependent figures.
+     * <p>
+     * Method {@code Figure#layoutNotify} must be called on all
+     * dependent figures and their ancestors.
+     */
+    DEPENDENT_LAYOUT,
+    /**
      * Affects the style of the figure.
      * <p>
-     * The CSS needs to be applied again on the figure.
+     * Method {@code Figure#stylesheetNotify} must be called on the figure and
+     * all its descendants.
      */
     STYLE,
     /**
-     * Affects the connection of the figure.
+     * Affects the dependency of the figure.
      * <p>
-     * Method connectNotify needs to be invoked on the figure.
+     * Method {@code Figure#connectNotify} must be called on the figure.
      */
-    CONNECTION,
+    DEPENDENCY,
     /**
      * Affects the transform of the figure.
      * <p>
-     * Method transformNotify needs to be invoked on the figure and all its
-     * descendants.
+     * Method {@code Figure#transformNotify} must be called on the figure.
      */
     TRANSFORM;
 

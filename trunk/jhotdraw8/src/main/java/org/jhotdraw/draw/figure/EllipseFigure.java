@@ -33,10 +33,10 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
      */
     public final static String TYPE_SELECTOR = "Ellipse";
 
-    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX",  DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
-    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.CONNECTION_LAYOUT, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
     public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X,CENTER_Y);
     public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X,RADIUS_Y);
 
@@ -109,7 +109,7 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
     }
 
     @Override
-    public void updateLayout() {
+    public void layout() {
         // empty
     }
     

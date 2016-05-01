@@ -14,32 +14,33 @@ import java.util.List;
 import javafx.scene.paint.Color;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.css.StyleManager;
+import org.jhotdraw.draw.figure.FigurePropertyChangeEvent;
 import org.jhotdraw.draw.key.CColorStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw.event.Listener;
 import org.jhotdraw.text.CColor;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
  * <p>
- * <b>Styling.</b> A drawing can have a style sheet which affects the style
- * of the figures.
+ * <b>Styling.</b> A drawing can have a style sheet which affects the style of
+ * the figures.
  * <p>
  * <b>Layers.</b> By convention all children of a {@code Drawing} must be
  * {@link Layer}s.</p>
  *
- * @design.pattern Drawing Framework, KeyAbstraction.
- * The drawing framework supports the creation of editors for structured 
- * drawings. The key abstractions of the framework are: 
- * {@link Drawing}, {@link Figure}, {@link org.jhotdraw.draw.handle.Handle}, 
+ * @design.pattern Drawing Framework, KeyAbstraction. The drawing framework
+ * supports the creation of editors for structured drawings. The key
+ * abstractions of the framework are: null {@link Drawing}, {@link Figure}, {@link org.jhotdraw.draw.handle.Handle}, 
  * {@link org.jhotdraw.draw.tool.Tool}, {@link DrawingView},
  * {@link DrawingEditor}, {@link org.jhotdraw.draw.model.DrawingModel}.
  * @design.pattern org.jhotdraw.draw.model.DrawingModel Facade, Subsystem.
- * 
+ *
  * @design.pattern Drawing Strategy, Context.
  * {@link org.jhotdraw.draw.io.InputFormat} and
  * {@link org.jhotdraw.draw.io.OutputFormat} encapsulate the algorithms for
  * loading and saving a {@link Drawing}.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -50,7 +51,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<URI> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT),new File(System.getProperty("user.home")).toURI());
+    public final static Key<URI> DOCUMENT_HOME = new SimpleFigureKey<>("documentHome", URI.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new File(System.getProperty("user.home")).toURI());
     /**
      * Holds a list of author stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -64,7 +65,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URI>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public final static Key<List<URI>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), null);
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -76,14 +77,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URI>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public final static Key<List<URI>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), null);
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<String>> INLINE_STYLESHEETS = new SimpleFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public final static Key<List<String>> INLINE_STYLESHEETS = new SimpleFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), null);
     /**
      * Defines the canvas width.
      * <p>
@@ -109,14 +110,14 @@ public interface Drawing extends Figure {
      * Defines the canvas color.
      * <p>
      * A drawing typically renders a rectangle with the dimensions given by
-     * {@code WIDTH} and {@code HEIGHT} and fills it with the 
-     * {@code BACKGROUND} paint.
+     * {@code WIDTH} and {@code HEIGHT} and fills it with the {@code BACKGROUND}
+     * paint.
      * </p>
      * <p>
      * This property is styleable with the key
      * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
-    public final static CColorStyleableFigureKey BACKGROUND = new CColorStyleableFigureKey("background", new CColor("white",Color.WHITE));
+    public final static CColorStyleableFigureKey BACKGROUND = new CColorStyleableFigureKey("background", new CColor("white", Color.WHITE));
 
     /**
      * The CSS type selector for a drawing figure is {@code "Drawing"}.

@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw.app.Application;
+import org.jhotdraw.collection.IterableTree;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
@@ -92,7 +93,7 @@ public class GroupAction extends AbstractSelectedAction {
 
         // Note: we iterate here over all figures because we must add
         //       the selected figures from back to front to the group
-        for (Figure child : drawing.preorderList()) {
+        for (Figure child : IterableTree.toList(drawing.breadthFirstIterable())) {
             if (!figures.contains(child)) {
                 continue;
             }

@@ -72,10 +72,8 @@ public class LayersInspector extends AbstractDrawingInspector {
     private Supplier<Layer> layerFactory;
 
     private Node node;
-    /**
-     * This key is used to store the selection count in the layers.
-     */
-    final static Key<Integer> SELECTION_COUNT = new TransientKey<Integer>("selectionCount", Integer.class, 0);
+    
+    private HashMap<Layer, Integer> selectionCount=new HashMap<>();
 
     private ChangeListener<Layer> selectedLayerHandler = new ChangeListener<Layer>() {
         @Override
@@ -135,7 +133,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             }
         }
         for (int i = 0, n = children.size(); i < n; i++) {
-            children.get(i).set(SELECTION_COUNT, count[i]);
+            selectionCount.put((Layer)children.get(i),count[i]);
         }
         layers.fireUpdated(0, layers.size());
     }
@@ -225,7 +223,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     public LayerCell createCell(ListView<Figure> listView) {
-        return new LayerCell(drawingView);
+        return new LayerCell(drawingView, this);
     }
 
     @Override
@@ -268,6 +266,11 @@ public class LayersInspector extends AbstractDrawingInspector {
         };
         listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
         return dndCellFactory;
+    }
+
+    int getSelectionCount(Layer item) {
+        Integer value= selectionCount.get(item);
+        return value ==null?0:value;
     }
 
     /**

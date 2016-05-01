@@ -5,6 +5,8 @@
 package org.jhotdraw.app;
 
 import java.net.URI;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import javafx.beans.property.IntegerProperty;
@@ -154,6 +156,18 @@ public interface Application extends Disableable, PropertyBean {
      * @param uri a recent URI
      */
     default void addRecentURI(URI uri) {
-        recentUrisProperty().add(uri);
+        // ensures that the last used uri lands at the end of the LinkedHashSet.
+        Set<URI> recents = recentUrisProperty().get();
+        recents.remove(uri);
+        recents.add(uri);
+        if (recents.size()>getMaxNumberOfRecentUris()) {
+            Iterator<URI> i=recents.iterator();
+            i.next();
+            i.remove();
+        }
+    }
+
+    default int getMaxNumberOfRecentUris() {
+        return maxNumberOfRecentUrisProperty().get();
     }
 }

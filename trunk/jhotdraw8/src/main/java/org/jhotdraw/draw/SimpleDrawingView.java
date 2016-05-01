@@ -49,6 +49,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.CacheHint;
@@ -181,19 +182,22 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     handleFigureRemovedFromDrawing(f);
                     break;
                 case SUBTREE_REMOVED_FROM_DRAWING:
+                    for (Figure d:f.preorderIterable()) {
+                        selectedFigures.remove(d);
+                    }
                     repaint();
                     break;
-                case NODE_INVALIDATED:
-                    handleNodeInvalidated(f);
+                case NODE_CHANGED:
+                    handleNodeChanged(f);
                     break;
-                case LAYOUT_INVALIDATED:
+                case LAYOUT_CHANGED:
                     if (f == getDrawing()) {
                         invalidateConstrainerNode();
                         invalidateWorldViewTransforms();
                         repaint();
                     }
                     break;
-                case STYLE_INVALIDATED:
+                case STYLE_CHANGED:
                     repaint();
                     break;
                 case ROOT_CHANGED:
@@ -201,12 +205,12 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                     updateLayout();
                     repaint();
                     break;
-                case SUBTREE_NODES_INVALIDATED:
-                    handleSubtreeNodesInvalidated(f);
+                case SUBTREE_NODES_CHANGED:
+                    handleSubtreeNodesChanged(f);
                     repaint();
                     break;
                 case PROPERTY_VALUE_CHANGED:
-                case CONNECTION_CHANGED:
+                case DEPENDENCY_CHANGED:
                 case TRANSFORM_CHANGED:
                     break;
                 default:
@@ -393,6 +397,8 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     private final LinkedList<Handle> secondaryHandles = new LinkedList<>();
 
     private Runnable repainter = null;
+    
+    private InvalidationListener modelInvalidationListener = o->repaint();
 
     public SimpleDrawingView() {
         init();
@@ -439,7 +445,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         overlaysSubScene.getChildren().add(overlaysPane);
 
         // We use a change listener instead of an invalidation listener here,
-        // because we only want to update the updateLayout, when the new value is
+        // because we only want to update the layout, when the new value is
         // different from the old value!
         drawingPane.layoutBoundsProperty().addListener((observer, oldValue, newValue) -> {
             updateLayout();
@@ -497,7 +503,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     }
 
     /**
-     * Updates the updateLayout of the drawing pane and the panes laid over it.
+     * Updates the layout of the drawing pane and the panes laid over it.
      */
     private void updateLayout() {
         if (node == null) {
@@ -525,7 +531,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             backgroundPane.setWidth(dw * f);
             backgroundPane.setHeight(dh * f);
         }
-        //backgroundPane.updateLayout();
+        //backgroundPane.layout();
 
         double padding = 20;
         double lw = max(max(0, x) + w, max(0, -x) + dw * f);
@@ -590,6 +596,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
 
     private void handleDrawingChanged() {
         clearNodes();
+        clearSelection();
         drawingPane.getChildren().clear();
         activeLayer.set(null);
         Drawing d = getModel().getRoot();
@@ -598,7 +605,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.put(d, null);
             updateLayout();
-            handleSubtreeNodesInvalidated(d);
+            handleSubtreeNodesChanged(d);
             repaint();
 
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
@@ -612,7 +619,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         }
     }
 
-    private void handleSubtreeNodesInvalidated(Figure figures) {
+    private void handleSubtreeNodesChanged(Figure figures) {
         for (Figure f : figures.preorderIterable()) {
             dirtyFigureNodes.put(f, null);
             dirtyHandles.put(f, null);
@@ -650,18 +657,22 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 removeNode(f);
             }
         }
-        handleSubtreeNodesInvalidated(parent);
+        handleSubtreeNodesChanged(parent);
     }
 
     private void handleNewDrawingModel(DrawingModel oldValue, DrawingModel newValue) {
         if (oldValue != null) {
+            clearSelection();
             oldValue.removeDrawingModelListener(modelHandler);
+            oldValue.removeListener(modelInvalidationListener);
             drawing.setValue(null);
         }
         if (newValue != null) {
             newValue.addDrawingModelListener(modelHandler);
+            newValue.addListener(modelInvalidationListener);
             handleDrawingChanged();
             updateLayout();
+            repaint();
         }
     }
 
@@ -688,7 +699,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         repaint();
     }
 
-    private void handleNodeInvalidated(Figure f) {
+    private void handleNodeChanged(Figure f) {
         invalidateFigureNode(f);
         if (f == getDrawing()) {
             updateLayout();
@@ -699,15 +710,32 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
         repaint();
     }
 
+    public void dump(Node n, int depth) {
+        for (int i=0;i<depth;i++){
+            System.out.print(".");
+        }
+        System.out.print(n+" lb: "+Geom.toString(n.getLayoutBounds()));
+        Figure f = nodeToFigureMap.get(n);
+        if (f != null) {
+        System.out.println(" flb: "+Geom.toString(f.getBoundsInParent()));
+        }else{
+        System.out.println();
+        }
+        if (n instanceof Parent) {
+            Parent p=(Parent)n;
+        for (Node c:p.getChildrenUnmodifiable()) {
+            dump(c,depth+1);
+        }
+        }
+    }
+    
+    
     private void updateNodes() {
-        getModel().validate();
-
         // create copies of the lists to allow for concurrent modification
         Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.keySet().toArray(new Figure[dirtyFigureNodes.size()]);
         Figure[] copyOfDirtyHandles = dirtyHandles.keySet().toArray(new Figure[dirtyHandles.size()]);
         dirtyFigureNodes.clear();
         dirtyHandles.clear();
-
         for (Figure f : copyOfDirtyFigureNodes) {
             f.updateNode(this, getNode(f));
         }
@@ -738,9 +766,10 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
     public void repaint() {
         if (repainter == null) {
             repainter = () -> {
-                repainter = null;
+                getModel().validate();
                 updateNodes();
                 validateHandles();
+                repainter = null;
             };
             Platform.runLater(repainter);
         }
@@ -861,14 +890,14 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
             Point2D pl = n.parentToLocal(pp);
             if (contains(n, pl, TOLERANCE)) {
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable()) {
+                if (f == null || !f.isSelectable() || !figures.contains(f)) {
                     if (n instanceof Parent) {
                         f = findFigureRecursiveInSet((Parent) n, pl, figures);
                     }
                 }
-                if (f != null && f.isSelectable() && figures.contains(f)) {
+                if (f != null&&f.isSelectable() && figures.contains(f)) {
                     return f;
-                }
+                } 
             }
         }
         return null;

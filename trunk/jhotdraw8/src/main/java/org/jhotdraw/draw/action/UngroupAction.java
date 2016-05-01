@@ -69,6 +69,12 @@ public class UngroupAction extends AbstractSelectedAction {
                 new Alert(Alert.AlertType.INFORMATION, "Layers can not be ungrouped").showAndWait();
                 return;
             }
+            if (!(f instanceof GroupFigure)) {
+                // FIXME internationalize me
+                new Alert(Alert.AlertType.INFORMATION, "Only groups can be ungrouped").showAndWait();
+                return;
+            }
+            
             
             if (f != null && (!f.isEditable() || !f.isDecomposable())) {
                 // FIXME internationalize me

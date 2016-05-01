@@ -26,9 +26,10 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
             new StyleableMap<Key<?>, Object>() {
 
                 @Override
-                protected void callObservers(StyleOrigin origin, MapChangeListener.Change<Key<?>, Object> change) {
+                protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
                     invalidated(change.getKey());
-                    super.callObservers(origin, change);
+                    SimpleStyleablePropertyBean.this.callObservers(origin, willChange, change);
+                    super.callObservers(origin, willChange, change);
                 }
 
             };
@@ -100,4 +101,14 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     protected void invalidated(Key<?> key) {
     }
 
+    /**    
+     * This method is invoked just before listeners are notified. This
+     * implementation is empty.
+     * 
+     * @param orign the style origin
+     * @param change the change
+     */
+    protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
+                   
+    }
 }

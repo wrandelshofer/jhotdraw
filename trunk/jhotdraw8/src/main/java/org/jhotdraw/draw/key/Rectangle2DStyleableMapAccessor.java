@@ -105,4 +105,8 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapA
         heightKey.remove(a);
         return oldValue;
     }
+    @Override
+    public boolean isNullable() {
+        return false;
+    }
 }

@@ -15,7 +15,7 @@ import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.ObservableWordListFigureKey;
 import org.jhotdraw.draw.key.SimpleFigureKey;
-import org.jhotdraw.draw.key.FigureMapAccessor;
+import org.jhotdraw.draw.key.FigureKey;
 
 /**
  * {@code StyleableFigure} supports styling of a figure using
@@ -32,28 +32,28 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> STYLE_ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static SimpleFigureKey<String> STYLE_ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
+    public static ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<ObservableSet<PseudoClass>> PSEUDO_CLASS_STATES = new SimpleFigureKey<>("pseudoClassStates", ObservableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableSet());
+    public static SimpleFigureKey<ObservableSet<PseudoClass>> PSEUDO_CLASS_STATES = new SimpleFigureKey<>("pseudoClassStates", ObservableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableSet());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT, DirtyBits.STYLE), null);
+    public static SimpleFigureKey<String> STYLE = new SimpleFigureKey<>("style", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
 
     /**
      * Updates a figure node with all style and effect properties defined in

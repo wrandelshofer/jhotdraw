@@ -85,6 +85,10 @@ public interface Handle {
      * Style class for handles which allow to rotate a shape.
      */
     public final static String STYLECLASS_HANDLE_ROTATE = "handle-rotate";
+    /**
+     * Style class for handles which mark the pivot point of a transformation.
+     */
+    public final static String STYLECLASS_HANDLE_PIVOT = "handle-pivot";
 
     // ---
     // Behavior

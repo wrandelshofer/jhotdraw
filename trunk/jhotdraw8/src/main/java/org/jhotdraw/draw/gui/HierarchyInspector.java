@@ -1,4 +1,4 @@
-/* @(#)FigureHierarchyInspector.java
+/* @(#)HierarchyInspector.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -9,11 +9,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +34,7 @@ import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw.draw.model.FigureTreePresentationModel;
 import org.jhotdraw.draw.model.SimpleDrawingModel;
+import org.jhotdraw.text.CssWordListConverter;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -38,7 +42,7 @@ import org.jhotdraw.util.Resources;
  *
  * @author werni
  */
-public class FigureHierarchyInspector extends AbstractDrawingViewInspector {
+public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     @FXML
     private TreeTableView<Figure> treeView;
@@ -48,6 +52,8 @@ public class FigureHierarchyInspector extends AbstractDrawingViewInspector {
 
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
+    @FXML
+    private TreeTableColumn<Figure, String> classesColumn;
 
     private DrawingView drawingView;
     private Node node;
@@ -63,13 +69,14 @@ public class FigureHierarchyInspector extends AbstractDrawingViewInspector {
         isUpdatingSelection=newValue;
         if (!newValue) updateSelectionInTree();
     };
+    private CssWordListConverter wordListConverter = new CssWordListConverter();
 
-    public FigureHierarchyInspector() {
-        this(FigureHierarchyInspector.class.getResource("FigureHierarchyInspector.fxml"),
+    public HierarchyInspector() {
+        this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),
                 Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
     }
 
-    public FigureHierarchyInspector(URL fxmlUrl, ResourceBundle resources) {
+    public HierarchyInspector(URL fxmlUrl, ResourceBundle resources) {
         init(fxmlUrl, resources);
     }
 
@@ -90,6 +97,11 @@ public class FigureHierarchyInspector extends AbstractDrawingViewInspector {
         idColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<String>(model.getModel(),
                         cell.getValue().getValue(), StyleableFigure.STYLE_ID)
+        );
+        classesColumn.setCellValueFactory(
+                cell -> Bindings.createStringBinding(()->wordListConverter.toString(cell.getValue().getValue().get(StyleableFigure.STYLE_CLASS)), 
+                        new DrawingModelFigureProperty<ObservableList<String>>(model.getModel(),
+                        cell.getValue().getValue(), StyleableFigure.STYLE_CLASS))
         );
         idColumn.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
         treeView.setRoot(model.getRoot());
@@ -124,7 +136,7 @@ public class FigureHierarchyInspector extends AbstractDrawingViewInspector {
             isUpdatingSelection = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
             selectionModel.clearSelection();
-            for (Figure f:new ArrayList<>(drawingView.getSelectedFigures())) {
+            for (Figure f:drawingView.getSelectedFigures()) {
                 selectionModel.select(model.getTreeItem(f));
             }
         isUpdatingSelection = false;
@@ -136,7 +148,7 @@ public class FigureHierarchyInspector extends AbstractDrawingViewInspector {
             isUpdatingSelection = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
             Set<Figure> newSelection = new LinkedHashSet<>();
-            for (TreeItem<Figure> item:new ArrayList<>(selectionModel.getSelectedItems())) {
+            for (TreeItem<Figure> item:selectionModel.getSelectedItems()) {
                 if (item != null) {
                 newSelection.add(item.getValue());
                 }

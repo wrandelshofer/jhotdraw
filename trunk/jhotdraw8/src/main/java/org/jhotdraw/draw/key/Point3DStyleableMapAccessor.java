@@ -100,4 +100,8 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         zKey.remove(a);
         return oldValue;
     }
+    @Override
+    public boolean isNullable() {
+        return false;
+    }
 }

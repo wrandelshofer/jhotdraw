@@ -18,7 +18,7 @@ import org.jhotdraw.collection.MapAccessor;
  * @author Werner Randelshofer
  * @param <T> the value type
  */
-public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccessor<T>, FigureMapAccessor<T> {
+public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccessor<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,6 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
 
     private final Set<MapAccessor<?>> subAccessors;
 
-    private final DirtyMask dirtyMask;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -85,14 +84,6 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
         this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
         this.defaultValue = defaultValue;
         this.subAccessors = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(subAccessors)));
-
-        DirtyMask m = DirtyMask.EMPTY;
-        for (MapAccessor<?> sub : subAccessors) {
-            if (sub instanceof FigureMapAccessor<?>) {
-                m = m.add(((FigureMapAccessor<?>) sub).getDirtyMask());
-            }
-        }
-        dirtyMask = m;
     }
 
     /**
@@ -159,11 +150,6 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
     @Override
     public Set<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
-    }
-
-    @Override
-    public DirtyMask getDirtyMask() {
-        return dirtyMask;
     }
 
     @Override

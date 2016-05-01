@@ -20,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Layer;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.HideableFigure;
 import org.jhotdraw.draw.figure.LockableFigure;
@@ -55,13 +56,16 @@ public class LayerCell extends ListCell<Figure> {
     private Figure item;
 
     private TextField editField;
+    
+    private final LayersInspector inspector;
 
-    public LayerCell(DrawingView drawingView) {
-        this(LayersInspector.class.getResource("LayerCell.fxml"), drawingView);
+    public LayerCell(DrawingView drawingView, LayersInspector inspector) {
+        this(LayersInspector.class.getResource("LayerCell.fxml"), drawingView, inspector);
     }
 
-    public LayerCell(URL fxmlUrl, DrawingView drawingView) {
+    public LayerCell(URL fxmlUrl, DrawingView drawingView, LayersInspector inspector ) {
         this.drawingView = drawingView;
+        this.inspector = inspector;
         init(fxmlUrl);
     }
 
@@ -115,7 +119,7 @@ public class LayerCell extends ListCell<Figure> {
                 }
             }
             setGraphic(node);
-            Integer count = item.get(LayersInspector.SELECTION_COUNT);
+            Integer count = inspector.getSelectionCount((Layer)item);
             selectionLabel.setText(count == null ? "" : "(" + count.toString() + ")");
 
             visibleCheckBox.setSelected(item.get(HideableFigure.VISIBLE));
@@ -124,8 +128,8 @@ public class LayerCell extends ListCell<Figure> {
         }
     }
 
-    public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingView drawingView) {
-        return list -> new LayerCell(drawingView);
+    public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingView drawingView, LayersInspector inspector) {
+        return list -> new LayerCell(drawingView, inspector);
     }
 
     private void commitLayerVisible() {

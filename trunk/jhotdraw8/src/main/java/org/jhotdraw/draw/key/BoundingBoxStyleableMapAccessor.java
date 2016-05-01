@@ -105,4 +105,9 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableFigureMapA
         heightKey.remove(a);
         return oldValue;
     }
+
+    @Override
+    public boolean isNullable() {
+        return false;
+    }
 }

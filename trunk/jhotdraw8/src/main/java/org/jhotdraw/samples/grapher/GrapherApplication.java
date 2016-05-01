@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.SimpleApplicationModel;
 import org.jhotdraw.app.action.Action;
+import org.jhotdraw.app.action.file.RevertAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.draw.action.BringToFrontAction;
@@ -55,6 +56,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
         map.put(GroupAction.ID, new GroupAction(this, null,null));
         map.put(UngroupAction.ID, new UngroupAction(this, null));*/
         Action a;
+        map.put(RevertAction.ID, new RevertAction(this,null));
         map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherView) view).getPropertiesPane(),
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));

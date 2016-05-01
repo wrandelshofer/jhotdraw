@@ -5,8 +5,12 @@
 package org.jhotdraw.app;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -18,6 +22,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.collections.SetChangeListener;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -29,6 +34,14 @@ import org.jhotdraw.collection.Key;
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw.app.Application {
 
     /**
+     * Holds the max number of recent URIs.
+     */
+    private final IntegerProperty maxNumberOfRecentUris//
+            = new SimpleIntegerProperty(//
+                    this, MAX_NUMBER_OF_RECENT_URIS_PROPERTY, //
+                    10);
+
+    /**
      * Holds the recent URIs.
      */
     private final ReadOnlySetProperty<URI> recentUris//
@@ -36,13 +49,47 @@ public abstract class AbstractApplication extends javafx.application.Application
                     this, RECENT_URIS_PROPERTY, //
                     FXCollections.observableSet(new LinkedHashSet<URI>())).getReadOnlyProperty();
 
-    /**
-     * Holds the max number of recent URIs.
-     */
-    private final IntegerProperty maxNumberOfRecentUris//
-            = new SimpleIntegerProperty(//
-                    this, MAX_NUMBER_OF_RECENT_URIS_PROPERTY, //
-                    10);
+    {
+        Preferences prefs = Preferences.userNodeForPackage(AbstractApplication.class);
+        String recentUrisSerialized = prefs.get("recentUris", "");
+        for (String str : recentUrisSerialized.split("\t")) {
+            if (str.isEmpty()) {
+                continue;
+            }
+            if (recentUris.size() >= getMaxNumberOfRecentUris()) {
+                break;
+            }
+            try {
+                URI uri = new URI(str);
+                recentUris.add(uri);
+            } catch (URISyntaxException ex) {
+                ex.printStackTrace();
+            }
+        }
+        recentUris.get().addListener(new SetChangeListener<URI>() {
+            @Override
+            public void onChanged(SetChangeListener.Change<? extends URI> change) {
+                StringBuilder buf = new StringBuilder();
+                int skip = recentUris.size() - getMaxNumberOfRecentUris();
+                for (URI uri : recentUris) {
+                    if (--skip > 0) {
+                        continue;
+                    }
+                    if (buf.length() != 0) {
+                        buf.append('\t');
+                    }
+                    String str = uri.toString();
+                    if (str.indexOf("\t") != -1) {
+                        System.err.println("AbstractApplication warning can't store URI in preferences. URI=" + uri);
+                        continue;
+                    }
+                    buf.append(str);
+                }
+                prefs.put("recentUris", buf.toString());
+            }
+
+        });
+    }
 
     /**
      * Holds the disablers.
@@ -77,7 +124,7 @@ public abstract class AbstractApplication extends javafx.application.Application
 
     @Override
     public IntegerProperty maxNumberOfRecentUrisProperty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return maxNumberOfRecentUris;
     }
 
     @Override

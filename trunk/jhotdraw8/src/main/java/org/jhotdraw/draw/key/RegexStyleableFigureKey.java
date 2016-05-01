@@ -37,7 +37,7 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
      * @param name The name of the key.
      */
     public RegexStyleableFigureKey(String name) {
-        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), new Regex());
+        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new Regex());
     }
 
     /**
@@ -47,7 +47,7 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
      * @param defaultValue The default value.
      */
     public RegexStyleableFigureKey(String name, Regex defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.CONNECTION_LAYOUT), defaultValue);
+        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), defaultValue);
     }
 
     /**

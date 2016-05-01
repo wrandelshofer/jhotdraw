@@ -131,6 +131,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                     v.setURI(uri);
                     v.clearModified();
                     v.setTitle(URIUtil.getName(uri));
+                    getApplication().addRecentURI(uri);
                     v.removeDisabler(this);
             }
         });

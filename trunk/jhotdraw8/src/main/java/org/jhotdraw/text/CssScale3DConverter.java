@@ -46,7 +46,7 @@ public class CssScale3DConverter implements Converter<Point3D> {
             case 3:
                 return new Point3D((double) v[1], (double) v[2], (double) v[3]);
             default:
-                throw new ParseException("Point3D with 2 to 3 values expected.", buf.position());
+                throw new ParseException("Scale with 1 to 3 values expected.", buf.position());
         }
     }
 
