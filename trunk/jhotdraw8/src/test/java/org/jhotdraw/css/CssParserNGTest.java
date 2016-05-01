@@ -63,7 +63,7 @@ public class CssParserNGTest {
         NodeList elements = doc.getElementsByTagName("*");
         for (int i = 0, n = elements.getLength(); i < n; i++) {
             Element elem = (Element) elements.item(i);
-            for (StyleRule r : ast.getRulesets()) {
+            for (StyleRule r : ast.getStyleRules()) {
                 SelectorGroup sg = r.getSelectorGroup();
                 if (sg.matches(dsd, elem)) {
                     System.out.println("  match " + sg.toString() + " " + elem);
@@ -181,7 +181,7 @@ public class CssParserNGTest {
         NodeList elements = doc.getElementsByTagName("*");
         for (int i = 0, n = elements.getLength(); i < n; i++) {
             Element elem = (Element) elements.item(i);
-            for (StyleRule r : ast.getRulesets()) {
+            for (StyleRule r : ast.getStyleRules()) {
                 SelectorGroup sg = r.getSelectorGroup();
                 if (sg.matches(dsd, elem)) {
                     System.out.println("  match " + sg.toString() + " " + elem);

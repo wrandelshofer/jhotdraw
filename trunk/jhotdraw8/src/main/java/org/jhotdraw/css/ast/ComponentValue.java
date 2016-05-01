@@ -6,11 +6,12 @@
 package org.jhotdraw.css.ast;
 
 /**
- * ComponentValue.
+ * A ComponentValue is the abstract base class of PreservedToken, CurlyBlock,
+ * RoundBlock, SquareBlock and FunctionBlock.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class ComponentValue extends AST {
+public abstract class ComponentValue extends AST {
 
 }

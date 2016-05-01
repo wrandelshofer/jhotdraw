@@ -18,9 +18,9 @@ import org.jhotdraw.css.SelectorModel;
 public class FunctionPseudoClassSelector extends PseudoClassSelector {
 
     private final String functionIdentifier;
-    private final List<Term> terms;
+    private final List<PreservedToken> terms;
 
-    public FunctionPseudoClassSelector(String functionIdentifier,List<Term> terms) {
+    public FunctionPseudoClassSelector(String functionIdentifier,List<PreservedToken> terms) {
         this.functionIdentifier = functionIdentifier;
         this.terms=Collections.unmodifiableList(terms);
     }

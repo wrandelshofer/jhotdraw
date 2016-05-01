@@ -102,7 +102,7 @@ public class StyleableStyleManager extends AbstractStyleManager<Styleable> {
     }
 
     private void applyStylesTo(StyleOrigin origin, Stylesheet s, HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap, Styleable elem) {
-        for (StyleRule r : s.getRulesets()) {
+        for (StyleRule r : s.getStyleRules()) {
             if (r.getSelectorGroup().matches(selectorModel, elem)) {
                 for (Declaration d : r.getDeclarations()) {
                     @SuppressWarnings("unchecked")

@@ -237,7 +237,11 @@ public class GrapherView extends AbstractView implements EditorView {
         return node;
     }
     
-    /** Creates a figure with a unique id. */
+    /** Creates a figure with a unique id.
+     * @param <T> the figure type
+     * @param supplier the supplier
+     * @return the created figure
+     */
     public <T extends Figure> T createFigure(Supplier<T> supplier) {
         T created = supplier.get();
         String prefix = created.getTypeSelector().toLowerCase();

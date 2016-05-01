@@ -1,4 +1,4 @@
-/* @(#)Term.java
+/* @(#)PreservedToken.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -10,10 +10,10 @@ import org.jhotdraw.text.CssStringConverter;
 import org.jhotdraw.text.XmlNumberConverter;
 
 /**
- * Term.
+ * PreservedToken.
  * @author Werner Randelshofer
  */
-public class Term extends AST {
+public class PreservedToken extends AST {
     /** The token type. */
     private final int ttype;
     /** The string value. */
@@ -24,7 +24,7 @@ public class Term extends AST {
     
     private final static XmlNumberConverter DOUBLE_CONVERTER = new XmlNumberConverter();
 
-    public Term(int ttype, String stringValue, Number numericValue) {
+    public PreservedToken(int ttype, String stringValue, Number numericValue) {
         this.ttype = ttype;
         this.stringValue = stringValue;
         this.numericValue = numericValue;

@@ -8,28 +8,31 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A stylesheet consists of a list of "rulesets".
+ * A stylesheet is a list of rules.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class Stylesheet extends AST {
 
-    private final List<StyleRule> rulesets;
+    private final List<StyleRule> rules;
 
-    public Stylesheet(List<StyleRule> rulesets) {
-        this.rulesets = Collections.unmodifiableList(rulesets);
+    public Stylesheet(List<StyleRule> rules) {
+        this.rules = Collections.unmodifiableList(rules);
     }
 
-    public List<StyleRule> getRulesets() {
-        return rulesets;
+    /** Returns only the style rules in the stylesheet.
+     * @return the rules
+     */
+    public List<StyleRule> getStyleRules() {
+        return rules;
     }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         boolean first = true;
-        for (StyleRule r : rulesets) {
+        for (StyleRule r : rules) {
             if (first) {
                 first = false;
             } else {

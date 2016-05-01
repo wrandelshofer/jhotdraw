@@ -50,7 +50,7 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
             if (s == null) {
                 continue;
             }
-            for (StyleRule r : s.getRulesets()) {
+            for (StyleRule r : s.getStyleRules()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
                         // Declarations without terms are ignored
@@ -72,7 +72,7 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
             if (s == null) {
                 continue;
             }
-            for (StyleRule r : s.getRulesets()) {
+            for (StyleRule r : s.getStyleRules()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
                         // Declarations without terms are ignored
@@ -92,7 +92,7 @@ public class DocumentStyleManager extends AbstractStyleManager<Element> {
             if (s == null) {
                 continue;
             }
-            for (StyleRule r : s.getRulesets()) {
+            for (StyleRule r : s.getStyleRules()) {
                 if (r.getSelectorGroup().matches(selectorModel, elem)) {
                     for (Declaration d : r.getDeclarations()) {
                         // Declarations without terms are ignored

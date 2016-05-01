@@ -52,6 +52,7 @@ public class FXWorker {
      * Calls the supplier on the global thread pool. The completion stage is
      * completed on the FX Application Thread.
      * 
+     * @param <T> the value type
      * @param supplier the supplier
      * @return the completion stage
      */
@@ -62,6 +63,7 @@ public class FXWorker {
      * Calls the supplier on the executor thread. The completion stage is
      * completed on the FX Application Thread.
      * 
+     * @param <T> the value type
      * @param supplier the supplier
      * @param executor the executor, if null then ForkJoinPool#commonPool is used
      * @return the completion stage

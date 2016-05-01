@@ -270,7 +270,11 @@ public interface DrawingModel extends Observable {
     }
     /**
      * Fires "node invalidated" event for the specified figure.
+     * @param <T> the value type
      * @param f the figure
+     * @param key the property key
+     * @param oldValue the old value
+     * @param newValue the new value
      */
     default <T> void firePropertyValueChanged(Figure f, Key<T> key, T oldValue, T newValue) {
              fire(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue));
@@ -298,8 +302,7 @@ public interface DrawingModel extends Observable {
         fire(DrawingModelEvent.styleInvalidated(this, f));
     }
     /**
-     * Fires "style invalidated" event for the specified figure.
-     * @param f the figure
+     * Fires an "invalidated" event.
      */
     default void fireDrawingModelInvalidated() {
         for (InvalidationListener l : new ArrayList<>(getInvalidationListeners())) {
