@@ -106,7 +106,7 @@ public class FigureStyleManager extends AbstractStyleManager<Figure> {
     }
 
     private void applyStylesTo(StyleOrigin origin, Stylesheet s, HashMap<String, MapAccessor<?>> metaMap, Figure elem) {
-        for (StyleRule r : s.getRulesets()) {
+        for (StyleRule r : s.getStyleRules()) {
             if (r.getSelectorGroup().matches(selectorModel, elem)) {
                 for (Declaration d : r.getDeclarations()) {
                     // Declarations without terms are ignored

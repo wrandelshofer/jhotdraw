@@ -10,8 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A "declaration" declares a "property" with a "value".
- * If the value is not specified, then the declaration must be ignored.
+ * A "declaration" associates a "property" with a list of preserved tokens.
+ * If the list of preserved tokens is empty, the declaration must be ignored.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -19,29 +19,29 @@ import java.util.List;
 public class Declaration extends AST {
 
     private final String property;
-    private final List<Term> terms;
+    private final List<PreservedToken> terms;
 
-    public Declaration(String property, Term term) {
+    public Declaration(String property, PreservedToken term) {
         this.property = property;
-        this.terms = Arrays.asList(new Term[]{term});
+        this.terms = Arrays.asList(new PreservedToken[]{term});
     }
-    public Declaration(String property, List<Term> terms) {
+    public Declaration(String property, List<PreservedToken> terms) {
         this.property = property;
-        this.terms = Collections.unmodifiableList(new ArrayList<Term>(terms));
+        this.terms = Collections.unmodifiableList(new ArrayList<PreservedToken>(terms));
     }
 
     public String getProperty() {
         return property;
     }
 
-    public List<Term> getTerms() {
+    public List<PreservedToken> getTerms() {
         return terms;
     }
 
     public String getTermsAsString() {
         StringBuilder buf = new StringBuilder();
 
-        for (Term t : terms) {
+        for (PreservedToken t : terms) {
             buf.append(t.toString());
         }
         return buf.toString();

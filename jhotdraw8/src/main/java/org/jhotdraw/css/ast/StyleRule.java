@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A qualified rule consists of a "selector list" and a list of "declaration"s.
+ * A style rule associates a selector list to a list of declarations. 
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -25,7 +25,7 @@ public class StyleRule extends AST {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder("QualifiedRule: ");
+        StringBuilder buf = new StringBuilder("StyleRule: ");
         buf.append(selectorList.toString());
         buf.append("{");
         for (Declaration r : declarations) {
@@ -43,5 +43,4 @@ public class StyleRule extends AST {
     public List<Declaration> getDeclarations() {
         return declarations;
     }
-
 }

@@ -35,6 +35,7 @@ public class GroupAction extends AbstractSelectedAction {
      *
      * @param app the application
      * @param editor the drawing editor
+     * @param groupFactory the group factory
      */
     public GroupAction(Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
         super(app, editor);

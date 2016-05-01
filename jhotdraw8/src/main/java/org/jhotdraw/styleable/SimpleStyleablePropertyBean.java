@@ -105,7 +105,9 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
      * This method is invoked just before listeners are notified. This
      * implementation is empty.
      * 
-     * @param orign the style origin
+     * @param origin the style origin
+     * @param willChange true if the change is about to be performed, false
+     * if the change happened
      * @param change the change
      */
     protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {

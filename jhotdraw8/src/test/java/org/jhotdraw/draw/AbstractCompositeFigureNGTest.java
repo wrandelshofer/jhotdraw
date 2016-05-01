@@ -185,8 +185,8 @@ public class AbstractCompositeFigureNGTest {
         }
 
         @Override
-        public void invalidateTransforms() {
+        public boolean invalidateTransforms() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-    }    
+    }
 }

@@ -19,7 +19,7 @@ import org.jhotdraw.io.CharBufferReader;
  * none = "none" ;
  * uriFunction = "url(" , [ uri ] , ")" ;
  * uri =  (* css uri *) ;
- * <pre>
+ * </pre>
  *
  * @author Werner Randelshofer
  * @version $Id$

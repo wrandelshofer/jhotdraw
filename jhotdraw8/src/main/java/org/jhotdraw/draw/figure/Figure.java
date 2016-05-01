@@ -181,6 +181,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * The default implementation of this method calls
      * {@link #invalidateTransforms}.
+     * 
+     * @return true if the transforms were valid
      */
     default boolean transformNotify() {
         return invalidateTransforms();
@@ -290,10 +292,11 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * <p>
      * The figure may choose to only partially change its local bounds.
      * <p>
-     * This method typically changes property values in this figure with      {@link org.jhotdraw.draw.key.DirtyBits#NODE}, {@link org.jhotdraw.draw.key.DirtyBits#LAYOUT}, 
-     * {@link org.jhotdraw.draw.key.DirtyBits#TRANSFORM} and/or
-     * {@link org.jhotdraw.draw.key.DirtyBits#CONNECTION_LAYOUT} in the
-     * {@link org.jhotdraw.draw.key.FigureMapAccessor}. This method may also
+     * This method typically changes property values in this figure with 
+     * {@link org.jhotdraw.draw.key.DirtyBits#NODE}, 
+     * {@link org.jhotdraw.draw.key.DirtyBits#LAYOUT}, 
+     * {@link org.jhotdraw.draw.key.DirtyBits#TRANSFORM} in the
+     * {@link org.jhotdraw.draw.key.FigureKey}. This method may also
      * call {@code reshape} on child figures.
      *
      *
@@ -967,6 +970,13 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
 
     /**
      * Fires a property change event. 
+     * 
+     * @param <T> the value type
+     * @param source the event source
+     * @param type the event type
+     * @param key the property key
+     * @param oldValue the old property value
+     * @param newValue the new property value
      */
     default <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
         if (hasPropertyChangeListeners()) {
@@ -981,6 +991,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
 
     /**
      * Fires a property change event. 
+     * @param event the event
      */
     default void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
         if (hasPropertyChangeListeners()) {

@@ -72,6 +72,8 @@ public interface IterableTree<T extends IterableTree<T>> {
      * <p>
      * The list is an eager copy of the preorder sequence.
      * 
+     * @param <T> the value type
+     * @param iterable the iterable
      * @return the list
      */
     static <T> ArrayList<T> toList(Iterable<T> iterable) {

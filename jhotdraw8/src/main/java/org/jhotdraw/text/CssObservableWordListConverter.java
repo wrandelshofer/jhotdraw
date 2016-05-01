@@ -33,7 +33,7 @@ import org.jhotdraw.draw.io.IdFactory;
  * <li><a href="https://www.w3.org/TR/xmlschema-2/#token">
  * XML Schema Part 2, Built-in datatypes, Derived datatypes, Token
  * </a></li>
- * <ul>
+ * </ul>
  *
  * @author Werner Randelshofer
  */
