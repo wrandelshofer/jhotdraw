@@ -769,6 +769,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
                 getModel().validate();
                 updateNodes();
                 validateHandles();
+                //dump(getNode(getDrawing()),0);
                 repainter = null;
             };
             Platform.runLater(repainter);

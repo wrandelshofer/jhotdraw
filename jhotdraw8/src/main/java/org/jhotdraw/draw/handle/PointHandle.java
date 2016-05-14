@@ -28,17 +28,19 @@ import static org.jhotdraw.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 public class PointHandle extends AbstractHandle {
+
     private Point2D pickLocation;
     private final MapAccessor<Point2D> pointKey;
     private final Region node;
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE,  BorderStrokeStyle.SOLID, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
     public PointHandle(Figure figure, MapAccessor<Point2D> pointKey) {
-        this(figure,STYLECLASS_HANDLE_POINT,pointKey);
+        this(figure, STYLECLASS_HANDLE_POINT, pointKey);
     }
+
     public PointHandle(Figure figure, String styleclass, MapAccessor<Point2D> pointKey) {
         super(figure);
         this.pointKey = pointKey;
@@ -54,6 +56,7 @@ public class PointHandle extends AbstractHandle {
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
+
     @Override
     public Cursor getCursor() {
         return Cursor.CROSSHAIR;
@@ -69,7 +72,7 @@ public class PointHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Point2D p = f.get(pointKey);
-        pickLocation=p = t.transform(p);
+        pickLocation = p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));
@@ -88,18 +91,20 @@ public class PointHandle extends AbstractHandle {
             // alt or control switches the constrainer off
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
-        
+
         view.getModel().set(getOwner(), pointKey, getOwner().worldToLocal(newPoint));
     }
 
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
     }
+
     @Override
     public boolean isSelectable() {
         return true;
     }
-        @Override
+
+    @Override
     public Point2D getLocationInView() {
         return pickLocation;
     }

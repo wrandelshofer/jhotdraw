@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.draw.action;
 
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -74,8 +75,7 @@ public class UngroupAction extends AbstractSelectedAction {
                 new Alert(Alert.AlertType.INFORMATION, "Only groups can be ungrouped").showAndWait();
                 return;
             }
-            
-            
+
             if (f != null && (!f.isEditable() || !f.isDecomposable())) {
                 // FIXME internationalize me
                 new Alert(Alert.AlertType.INFORMATION, "Only editable and decomposable figures can be ungrouped").showAndWait();
@@ -92,9 +92,9 @@ public class UngroupAction extends AbstractSelectedAction {
         LinkedHashSet<Figure> newSelection = new LinkedHashSet<>();
 
         for (Figure f : figures) {
-                ungroup(view,f, newSelection);
+            ungroup(view, f, newSelection);
         }
-        
+
         view.getSelectedFigures().clear();
         view.getSelectedFigures().addAll(newSelection);
     }
@@ -109,22 +109,32 @@ public class UngroupAction extends AbstractSelectedAction {
         DrawingModel model = view.getModel();
 
         Transform groupTransform = group.getLocalToParent();
-        if (groupTransform.isIdentity()) {groupTransform=null;}
-        
+        if (groupTransform.isIdentity()) {
+            groupTransform = null;
+        }
+        boolean isGroupTranslateScaleRotateOnly=group.get(TransformableFigure.TRANSFORM)==null||group.get(TransformableFigure.TRANSFORM).isEmpty();
+
         int index = parent.getChildren().indexOf(group);
         newSelection.addAll(group.getChildren());
         for (Figure child : new ArrayList<Figure>(group.getChildren())) {
             model.insertChildAt(child, parent, index++);
-            
-            if (groupTransform!=null) {
-                List<Transform> transforms = child.get(TransformableFigure.TRANSFORM);
-                ArrayList<Transform> newTransforms = new ArrayList<>();
-                newTransforms.add(groupTransform);
-                if (transforms!=null) newTransforms.addAll(transforms);
-                child.set(TransformableFigure.TRANSFORM, newTransforms);
+
+            if (groupTransform != null) {
+                List<Transform> childTransforms = child.get(TransformableFigure.TRANSFORM);
+                if (!isGroupTranslateScaleRotateOnly||childTransforms != null && !childTransforms.isEmpty()) {
+                    ArrayList<Transform> newTransforms = new ArrayList<>();
+                    newTransforms.add(groupTransform);
+                    if (childTransforms != null) {
+                        newTransforms.addAll(childTransforms);
+                    }
+                    child.set(TransformableFigure.TRANSFORM, newTransforms);
+                } else {
+                    ArrayList<Transform> newTransforms = new ArrayList<>();
+                    newTransforms.add(groupTransform);
+                    child.set(TransformableFigure.TRANSFORM, newTransforms);
+                }
             }
-            
-        }
+       }
 
         model.removeFromParent(group);
     }

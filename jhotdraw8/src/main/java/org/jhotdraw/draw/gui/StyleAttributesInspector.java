@@ -148,6 +148,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
         if (drawingView == null || drawingView.getDrawing() == null) {
             textArea.setText("");
+        textArea.setPrefRowCount(5);
             return;
         }
 
@@ -228,6 +229,11 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
         textArea.setText(buf.toString());
+        int rows=1;
+        for (int i=0;i<buf.length();i++) {
+            if (buf.charAt(i)=='\n')rows++;
+        }
+        textArea.setPrefRowCount(Math.min(Math.max(5,rows),25));
     }
 
     private void apply() {

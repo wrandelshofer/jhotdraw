@@ -325,12 +325,12 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         double sy = height / oldBounds.getHeight();
 
         Affine tx = new Affine();
+        tx.appendTranslation(x - oldBounds.getMinX(), y - oldBounds.getMinY());
         if (!Double.isNaN(sx) && !Double.isNaN(sy)
                 && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                 && (sx != 1d || sy != 1d)) {
             tx.appendScale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY());
         }
-        tx.appendTranslation(x - oldBounds.getMinX(), y - oldBounds.getMinY());
 
         reshape(tx);
     }
@@ -723,9 +723,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     // static methods
     // ---
     /**
-     * Returns all supported keys of the figure.
+     * Returns all supported map accessors of the figure.
      * <p>
-     * The default implementation returns all declared and inherited keys.
+     * The default implementation returns all declared and inherited map accessors.
      *
      * @return the keys
      */

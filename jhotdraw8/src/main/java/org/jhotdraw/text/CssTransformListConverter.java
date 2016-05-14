@@ -20,6 +20,7 @@ import org.jhotdraw.css.CssTokenizer;
 import org.jhotdraw.draw.io.IdFactory;
 import static java.lang.Math.*;
 import javafx.geometry.Point3D;
+import javafx.scene.transform.Affine;
 
 /**
  * CssTransformListConverter.
@@ -254,13 +255,13 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                 case "affine": {
                     switch (m.size()) {
                         case 6:
-                            txs.add(Transform.affine(//
+                            txs.add(new Affine(//
                                     m.get(0), m.get(1), m.get(2),//
                                     m.get(3), m.get(4), m.get(5)//
                             ));
                             break;
                         case 12:
-                            txs.add(Transform.affine(//
+                            txs.add(new Affine(//
                                     m.get(0), m.get(1), m.get(2), m.get(3),//
                                     m.get(4), m.get(5), m.get(5), m.get(6),//
                                     m.get(7), m.get(8), m.get(9), m.get(10)//
