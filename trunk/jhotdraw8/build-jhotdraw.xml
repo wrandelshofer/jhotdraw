@@ -9,7 +9,7 @@
   <property name="build.sysclasspath" value="ignore"/>
 
   <target name="init" description="initializes the build targets">
-    <property name="jdk" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home"/>
+    <property name="jdk" value="${java.home}/.."/>
     <property name="jdk.version" value="8"/>
 
 
@@ -27,29 +27,30 @@
     <property name="doc" value="doc"/>
     <property name="dist" value="dist"/>
     <property name="build.javadoc" value="${build}/javadoc"/>
+    <property name="build.sysdoc" value="${build}/sysdoc"/>
     <property name="lib" value="lib"/>
     <property name="lib.runtime" value="${lib}/runtime"/>
     <property name="lib.compile" value="${lib}/compile"/>
+    <property name="lib.doc" value="${lib}/doc"/>
     <property name="lib.test" value="${lib}/test"/>
     <property name="src" value="src"/>
     <property name="doc" value="doc"/>
-    <property name="build.classes" value="${build}/classes"/>
-    <property name="build.jars" value="${build}/jars"/>
+    <property name="build.main.classes" value="${build}/main/classes"/>
+    <property name="build.doc.classes" value="${build}/doc/classes"/>
+    <property name="build.main.jars" value="${build}/jars"/>
     <property name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
 
 
     <property name="src.main.java" value="${src}/main/java"/>
+    <property name="src.doc.java" value="${src}/doc/java"/>
     <property name="src.test.java" value="${src}/test/java"/>
   </target>
 
   <target name="do-clean.compile" depends="init">
-    <delete dir="${build.classes}"/>
+    <delete dir="${build.main.classes}"/>
   </target>
   <target name="do-clean.jar" depends="init">
-    <delete dir="${build.jars}"/>
-  </target>
-  <target name="do-clean.pdflatex" depends="init">
-    <delete dir="${build.doc}"/>
+    <delete dir="${build.main.jars}"/>
   </target>
   <target name="do-clean.dist" depends="init">
     <delete dir="${dist.standalone}"/>
@@ -58,10 +59,10 @@
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
   </target>
-  <target name="do-compile" depends="init">
-    <mkdir dir="${build.classes}"/>
+  <target name="do-compile.main" depends="init">
+    <mkdir dir="${build.main.classes}"/>
     <javac executable="${jdk}/bin/javac" fork="yes"
-           source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.classes}"
+           source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.main.classes}"
            debug="true"
              >
         <compilerarg value="-Xlint"/>
@@ -72,7 +73,7 @@
       </classpath>
       <compilerarg value="-version"/>
     </javac>
-    <copy todir="${build.classes}">
+    <copy todir="${build.main.classes}">
       <fileset dir="${src.main.java}">
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
@@ -82,7 +83,31 @@
       </fileset>
     </copy>
   </target>
-    <target depends="init" name="do-javadoc">
+  <target name="do-compile.doc" depends="init">
+    <mkdir dir="${build.doc.classes}"/>
+    <javac executable="${jdk}/bin/javac" fork="yes"
+           source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.doc.classes}"
+           debug="true"
+             >
+        <compilerarg value="-Xlint"/>
+      <src path="${src.doc.java}"/>
+      <classpath>
+        <fileset dir="${lib.doc}" />
+        <fileset file="${java.home}/../lib/tools.jar" />
+      </classpath>
+      <compilerarg value="-version"/>
+    </javac>
+    <copy todir="${build.doc.classes}">
+      <fileset dir="${src.doc.java}">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+    </copy>
+  </target>
+  <target depends="init" name="do-javadoc">
         <mkdir dir="${build.javadoc}"/>
         <javadoc destdir="${build.javadoc}" 
         footer="&lt;font size=-2&gt;${copyright}&lt;/font&gt;"
@@ -92,8 +117,8 @@
         overview="${src.main.java}/org/jhotdraw/overview.html"
         charset="UTF-8"
         >
-            <taglet name="org.jhotdraw.javadoc.DesignPatternTaglet" path="${build.classes}"/>
-            <taglet name="org.jhotdraw.javadoc.DesignOverviewTaglet" path="${build.classes}"/>
+            <taglet name="org.jhotdraw.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
+            <taglet name="org.jhotdraw.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
             <packageset dir="${src.main.java}">
                 <include name="org/jhotdraw/**"/>
             </packageset>
@@ -106,6 +131,34 @@
             </classpath>
         </javadoc>
     </target>
+  <target depends="init" name="do-sysdoc">
+        <java classname="org.jhotdraw.sysdoc.SysdocMain">
+            <classpath>
+                <pathelement location="lib/doc/pegdown-1.6.0.jar"/>
+                <pathelement location="lib/doc/parboiled-core-1.1.7.jar"/>
+                <pathelement location="lib/doc/parboiled-java-1.1.7.jar"/>
+                <pathelement location="lib/doc/asm-4.0.jar"/>
+                <pathelement location="lib/doc/asm-analysis-4.0.jar"/>
+                <pathelement location="lib/doc/asm-tree-4.0.jar"/>
+                <pathelement location="${build.doc.classes}"/>
+                <pathelement location="${java.home}/../lib/tools.jar"/>
+            </classpath>           
+            <arg value="-docdir"/>
+            <arg value="${doc}/introduction"/>
+            <arg value="-docdir"/>
+            <arg value="${doc}/features"/>
+            <arg value="-docdir"/>
+            <arg value="${doc}/design"/>
+            <arg value="-docdir"/>
+            <arg value="${doc}/installation"/>
+            <arg value="-docdir"/>
+            <arg value="${doc}/guide"/>
+            <arg value="-srcdir"/>
+            <arg value="${src.main.java}"/>
+            <arg value="-destdir"/>
+            <arg value="${build.sysdoc}"/>
+        </java>
+  </target>
   <target name="do-jar" depends="init">
     <pathconvert property="manifest.class-path" pathsep=" " >
       <map from="${basedir}/${lib.runtime}/" to=""/>
@@ -115,7 +168,7 @@
       </fileset>
     </pathconvert>
 
-    <jar destfile="${build.jars}/${ant.project.name}.jar">
+    <jar destfile="${build.main.jars}/${ant.project.name}.jar">
       <!-- The attributes are structured into section has described here:
       https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#Main_Attributes
       https://docs.oracle.com/javase/8/docs/technotes/guides/deploy/manifest.html
@@ -155,7 +208,7 @@
         <attribute name="Trusted-Only" value="false"/>
         <attribute name="Trusted-Library" value="false"/>
       </manifest>
-      <fileset dir="${build.classes}">
+      <fileset dir="${build.main.classes}">
         <exclude name=".*"/>
       </fileset>
     </jar>
@@ -164,7 +217,7 @@
   <target name="do-dist" depends="init">
     <mkdir dir="${dist}"/>
     <copy todir="${dist}">
-      <fileset dir="${build.jars}">
+      <fileset dir="${build.main.jars}">
         <exclude name=".*"/>
         <include name="*.jar"/>
       </fileset>
@@ -189,13 +242,15 @@
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
   </target>
-  <target name="compile" depends="clean,do-compile" description="compiles the java sources and copies resource files">
+  <target name="compile" depends="clean,do-compile.main,do-compile.doc" description="compiles the java sources and copies resource files">
   </target>
   <target name="jar" depends="compile,do-jar" description="bundles the class files into a jar file">
   </target>
-  <target name="javadoc" depends="clean,compile,do-javadoc" description="generates javadoc documentation">
+  <target name="javadoc" depends="clean,compile,do-javadoc" description="generates api documentation">
   </target>
-  <target name="dist" depends="jar,javadoc,do-dist" description="Erstellt eine Distribution für eine Stand-Alone Applikation">
+  <target name="sysdoc" depends="clean,compile,javadoc,do-sysdoc" description="generates specification and user documentation">
+  </target>
+  <target name="dist" depends="jar,javadoc,sysdoc,do-dist" description="Erstellt eine Distribution für eine Stand-Alone Applikation">
   </target>
   <target name="all" depends="dist" description="Erstellt alles">
   </target>

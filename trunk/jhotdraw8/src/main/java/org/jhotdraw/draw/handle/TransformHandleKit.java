@@ -26,6 +26,8 @@ import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.model.DrawingModel;
 import static java.lang.Math.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import org.jhotdraw.draw.figure.TransformableFigure;
 import org.jhotdraw.geom.Geom;
 
@@ -166,7 +168,7 @@ public class TransformHandleKit {
         return new WestHandle(owner);
     }
 
-    private abstract static class AbstractResizeHandle extends LocatorHandle {
+    private abstract static class AbstractTransformHandle extends LocatorHandle {
 
         private Point2D pickLocation;
         private Point2D oldPoint;
@@ -174,7 +176,7 @@ public class TransformHandleKit {
         private final String styleclass;
         private Bounds startBounds;
         private Point2D center;
-        private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
+        private static final Shape REGION_SHAPE = new Circle(3);
         private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
         private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
         /**
@@ -186,11 +188,11 @@ public class TransformHandleKit {
         private Double startTranslateX;
         private Double startTranslateY;
 
-        public AbstractResizeHandle(Figure owner, Locator locator) {
+        public AbstractTransformHandle(Figure owner, Locator locator) {
             this(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, locator);
         }
 
-        public AbstractResizeHandle(Figure owner, String styleclass, Locator locator) {
+        public AbstractTransformHandle(Figure owner, String styleclass, Locator locator) {
             super(owner, locator);
             this.styleclass = styleclass;
             node = new Region();
@@ -335,7 +337,7 @@ public class TransformHandleKit {
     } 
     }
 
-    private static class NorthEastHandle extends AbstractResizeHandle {
+    private static class NorthEastHandle extends AbstractTransformHandle {
 
         NorthEastHandle(Figure owner) {
             super(owner, RelativeLocator.northEast());
@@ -343,7 +345,7 @@ public class TransformHandleKit {
 
         @Override
         public Cursor getCursor() {
-            return Cursor.NE_RESIZE;
+            return Cursor.CROSSHAIR;
         }
 
         @Override
@@ -365,7 +367,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class EastHandle extends AbstractResizeHandle {
+    private static class EastHandle extends AbstractTransformHandle {
 
         EastHandle(Figure owner) {
             super(owner, RelativeLocator.east());
@@ -373,7 +375,7 @@ public class TransformHandleKit {
 
         @Override
         public Cursor getCursor() {
-            return Cursor.E_RESIZE;
+            return Cursor.CROSSHAIR;
         }
 
         @Override
@@ -389,7 +391,7 @@ public class TransformHandleKit {
 
     }
 
-    private static class NorthHandle extends AbstractResizeHandle {
+    private static class NorthHandle extends AbstractTransformHandle {
 
         NorthHandle(Figure owner) {
             super(owner, RelativeLocator.north());
@@ -397,7 +399,7 @@ public class TransformHandleKit {
 
         @Override
         public Cursor getCursor() {
-            return Cursor.N_RESIZE;
+            return Cursor.CROSSHAIR;
         }
 
         @Override
@@ -413,7 +415,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class NorthWestHandle extends AbstractResizeHandle {
+    private static class NorthWestHandle extends AbstractTransformHandle {
 
         NorthWestHandle(Figure owner) {
             super(owner, RelativeLocator.northWest());
@@ -421,7 +423,7 @@ public class TransformHandleKit {
 
         @Override
         public Cursor getCursor() {
-            return Cursor.NW_RESIZE;
+            return Cursor.CROSSHAIR;
         }
 
         @Override
@@ -443,7 +445,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthEastHandle extends AbstractResizeHandle {
+    private static class SouthEastHandle extends AbstractTransformHandle {
 
         SouthEastHandle(Figure owner) {
             super(owner, RelativeLocator.southEast());
@@ -472,7 +474,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthHandle extends AbstractResizeHandle {
+    private static class SouthHandle extends AbstractTransformHandle {
 
         SouthHandle(Figure owner) {
             super(owner, RelativeLocator.south());
@@ -495,7 +497,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthWestHandle extends AbstractResizeHandle {
+    private static class SouthWestHandle extends AbstractTransformHandle {
 
         SouthWestHandle(Figure owner) {
             super(owner, RelativeLocator.southWest());
@@ -503,7 +505,7 @@ public class TransformHandleKit {
 
         @Override
         public Cursor getCursor() {
-            return Cursor.SW_RESIZE;
+            return Cursor.CROSSHAIR;
         }
 
         @Override
@@ -524,7 +526,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class WestHandle extends AbstractResizeHandle {
+    private static class WestHandle extends AbstractTransformHandle {
 
         WestHandle(Figure owner) {
             super(owner, RelativeLocator.west());
@@ -532,7 +534,7 @@ public class TransformHandleKit {
 
         @Override
         public Cursor getCursor() {
-            return Cursor.W_RESIZE;
+            return Cursor.CROSSHAIR;
         }
 
         @Override

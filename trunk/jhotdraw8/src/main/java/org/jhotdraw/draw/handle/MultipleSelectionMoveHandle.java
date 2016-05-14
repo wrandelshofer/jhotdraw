@@ -76,11 +76,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
-
-        // The node size must be odd. 
-        // This size is independent of the shape that represenst the handle.
         node.resize(11, 11);
-
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);

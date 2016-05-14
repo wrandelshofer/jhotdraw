@@ -12,12 +12,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.draw.key.DirtyBits;
-import org.jhotdraw.draw.key.DirtyMask;
+import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.key.DirtyBits;
+import org.jhotdraw.draw.key.DirtyMask;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw.draw.key.Rectangle2DStyleableMapAccessor;
@@ -63,6 +62,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
 
     @Override
     public void reshape(Transform transform) {
+System.out.println("RectangleFigure.reshape "+transform);        
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());

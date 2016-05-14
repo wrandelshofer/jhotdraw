@@ -44,8 +44,6 @@ public class MoveHandle extends LocatorHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     protected Set<Figure> groupReshapeableFigures;
-    private Transform worldToLocal;
-    private Transform localToWorld;
 
     public MoveHandle(Figure figure, Locator locator) {
         this(figure, STYLECLASS_HANDLE_MOVE, locator);
@@ -59,9 +57,6 @@ public class MoveHandle extends LocatorHandle {
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
-
-        // The node size must be odd. 
-        // This size is independent of the shape that represenst the handle.
         node.resize(11, 11);
 
         node.getStyleClass().clear();
@@ -103,12 +98,6 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
-        if (owner instanceof TransformableFigure) {
-            worldToLocal = ((TransformableFigure) owner).getInverseTransform().createConcatenation(owner.getWorldToParent());
-        } else {
-            worldToLocal = owner.getWorldToParent();
-        }
-        localToWorld = owner.getLocalToWorld();
 
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -133,13 +122,13 @@ public class MoveHandle extends LocatorHandle {
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
-            oldPoint = localToWorld.transform(loc);
+            oldPoint = owner.getLocalToWorld().transform(loc);
         }
-        
+
         if (oldPoint.equals(newPoint)) {
             return;
         }
- 
+
         //Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
         DrawingModel model = view.getModel();
 
@@ -158,13 +147,13 @@ public class MoveHandle extends LocatorHandle {
             }
         } else {
             Figure f = owner;
-            Point2D npl = worldToLocal.transform(newPoint);
-            Point2D opl = worldToLocal.transform(oldPoint);
-            /*if (f instanceof TransformableFigure) {
+            Point2D npl = owner.worldToParent(newPoint);
+            Point2D opl = owner.worldToParent(oldPoint);
+            if (f instanceof TransformableFigure) {
                 Transform tt = ((TransformableFigure) f).getInverseTransform();
                 npl = tt.transform(npl);
                 opl = tt.transform(opl);
-            }*/
+            }
             Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
             model.reshape(f, tx);
         }

@@ -5,6 +5,7 @@
 package org.jhotdraw.draw.figure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.jhotdraw.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
@@ -33,44 +34,28 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
 
     @Override
     public void reshape(Transform transform) {
-        boolean hasTransformedChild = false;
         for (Figure child : getChildren()) {
-            if (child instanceof TransformableFigure) {
-                TransformableFigure tchild = (TransformableFigure) child;
-                Transform t = tchild.getInverseTransform();
-                if (!t.isIdentity()) {
-                    hasTransformedChild=true;
-                    break;
-                }
-            }
-        }
-        
-        if (hasTransformedChild) {
-        // For now, we can only handle translations
-            if (!(transform instanceof Translate)) {
-               return;
-            }
-        }
-        
-        
-        for (Figure child : getChildren()) {
-            if (child instanceof TransformableFigure) {
-                TransformableFigure tchild = (TransformableFigure) child;
-                Transform t = tchild.getInverseTransform();
-                if (t.isIdentity()) {
-                    child.reshape(transform);
-                } else {
-                    Point2D tr = new Point2D(transform.getTx(), transform.getTy());
-                    tr = Geom.toDeltaTransform(t).transform(tr);
-                    t = new Translate(tr.getX(), tr.getY());
-                    child.reshape(t);
-                }
-            } else {
+            Transform p2c = child.getParentToLocal();
+            if (p2c.isIdentity()) {
                 child.reshape(transform);
+            } else if (child instanceof TransformableFigure) {
+                child.set(TRANSFORM, Collections.singletonList(child.getLocalToParent()));
+                child.set(ROTATE, 0.0);
+                child.set(TRANSLATE_X, 0.0);
+                child.set(TRANSLATE_Y, 0.0);
+                child.set(SCALE_X, 1.0);
+                child.set(SCALE_Y, 1.0);
+
+                if (transform instanceof Translate) {
+                    Point2D tr = new Point2D(transform.getTx(), transform.getTy());
+                    tr = Geom.toDeltaTransform(p2c).transform(tr);
+                    Transform t = new Translate(tr.getX(), tr.getY());
+                    child.reshape(t);
+                } else {
+                    child.reshape(p2c.createConcatenation(transform));
+                }
             }
         }
-        
-        
     }
 
     @Override

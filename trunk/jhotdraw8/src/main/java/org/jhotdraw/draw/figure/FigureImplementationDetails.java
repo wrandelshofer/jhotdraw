@@ -30,7 +30,7 @@ class FigureImplementationDetails {
     // ---
     // other constant declarations
     // ---
-    final static Transform IDENTITY_TRANSFORM = new Translate(0, 0);
+    final static Transform IDENTITY_TRANSFORM = new Translate();
 
     /**
      * Whether the transformation cache is enabled.

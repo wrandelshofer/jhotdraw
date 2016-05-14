@@ -38,7 +38,7 @@ public class LabelFigure extends AbstractLabelFigure implements FontableFigure, 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         super.updateNode(ctx, node);
-        applyTransformableFigureProperties(node, getBoundsInLocal());
+        applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
     }

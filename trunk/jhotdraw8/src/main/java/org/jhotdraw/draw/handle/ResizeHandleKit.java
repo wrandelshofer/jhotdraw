@@ -26,6 +26,8 @@ import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.model.DrawingModel;
 import static java.lang.Math.*;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Shape;
 
 /**
  * /**
@@ -170,9 +172,22 @@ public class ResizeHandleKit {
         protected final Region node;
         private final String styleclass;
         private Bounds startBounds;
-        private Transform worldToLocal;
-        private Transform localToWorld;
-        private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
+        protected static final Shape NORTH_SHAPE = new Rectangle(9, 5);
+        protected static final Shape EAST_SHAPE = new Rectangle(5, 9);
+        protected static final Shape WEST_SHAPE = new Rectangle(5, 9);
+        protected static final Shape SOUTH_SHAPE = new Rectangle(9, 5);
+        protected static final SVGPath NORTH_EAST_SHAPE = new SVGPath();
+        protected static final SVGPath NORTH_WEST_SHAPE = new SVGPath();
+        protected static final SVGPath SOUTH_EAST_SHAPE = new SVGPath();
+        protected static final SVGPath SOUTH_WEST_SHAPE = new SVGPath();
+
+        static {
+            NORTH_EAST_SHAPE.setContent("M -5.5,-2.5 L 2.5,-2.5 2.5,5.5 -2.5,5.5 -2.5,2.5 -5.5,2.5 Z M 5.5,-5.5");
+            NORTH_WEST_SHAPE.setContent("M -2.5,-2.5 L 5.5,-2.5 5.5,2.5 2.5,2.5 2.5,5.5 -2.5,5.5 Z M-5.5,-5.5");
+            SOUTH_EAST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,2.5 -5.5,2.5 -5.5,-2.5 -2.5,-2.5 Z M 5.5,5.5");
+            SOUTH_WEST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,-2.5 5.5,-2.5 5.5,2.5 -2.5,2.5 Z M -5.5,5.5");
+        }
+
         private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
         private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
         /**
@@ -180,15 +195,15 @@ public class ResizeHandleKit {
          */
         protected double preferredAspectRatio;
 
-        public AbstractResizeHandle(Figure owner, Locator locator) {
-            this(owner, STYLECLASS_HANDLE_RESIZE, locator);
+        public AbstractResizeHandle(Figure owner, Locator locator, Shape shape) {
+            this(owner, STYLECLASS_HANDLE_RESIZE, locator, shape);
         }
 
-        public AbstractResizeHandle(Figure owner, String styleclass, Locator locator) {
+        public AbstractResizeHandle(Figure owner, String styleclass, Locator locator, Shape shape) {
             super(owner, locator);
             this.styleclass = styleclass;
             node = new Region();
-            node.setShape(REGION_SHAPE);
+            node.setShape(shape);
             node.setManaged(false);
             node.setScaleShape(false);
             node.setCenterShape(true);
@@ -223,8 +238,6 @@ public class ResizeHandleKit {
             oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
             startBounds = owner.getBoundsInLocal();
             preferredAspectRatio = owner.getPreferredAspectRatio();
-            worldToLocal = owner.getWorldToLocal();
-            localToWorld = owner.getLocalToWorld();
         }
 
         @Override
@@ -238,15 +251,13 @@ public class ResizeHandleKit {
             if (event.isMetaDown()) {
                 // meta snaps the location of the handle to the grid
                 Point2D loc = getLocation();
-                oldPoint = localToWorld.transform(loc);
+                oldPoint = loc;
             }
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();
 
-            
-            Transform t = worldToLocal;
-            
-            
+            Transform t = owner.getWorldToLocal();
+
             resize(t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
         }
 
@@ -281,7 +292,7 @@ public class ResizeHandleKit {
     private static class NorthEastHandle extends AbstractResizeHandle {
 
         NorthEastHandle(Figure owner) {
-            super(owner, RelativeLocator.northEast());
+            super(owner, RelativeLocator.northEast(), NORTH_EAST_SHAPE);
         }
 
         @Override
@@ -311,7 +322,7 @@ public class ResizeHandleKit {
     private static class EastHandle extends AbstractResizeHandle {
 
         EastHandle(Figure owner) {
-            super(owner, RelativeLocator.east());
+            super(owner, RelativeLocator.east(), EAST_SHAPE);
         }
 
         @Override
@@ -334,7 +345,7 @@ public class ResizeHandleKit {
     private static class NorthHandle extends AbstractResizeHandle {
 
         NorthHandle(Figure owner) {
-            super(owner, RelativeLocator.north());
+            super(owner, RelativeLocator.north(), NORTH_SHAPE);
         }
 
         @Override
@@ -358,7 +369,7 @@ public class ResizeHandleKit {
     private static class NorthWestHandle extends AbstractResizeHandle {
 
         NorthWestHandle(Figure owner) {
-            super(owner, RelativeLocator.northWest());
+            super(owner, RelativeLocator.northWest(), NORTH_WEST_SHAPE);
         }
 
         @Override
@@ -388,7 +399,7 @@ public class ResizeHandleKit {
     private static class SouthEastHandle extends AbstractResizeHandle {
 
         SouthEastHandle(Figure owner) {
-            super(owner, RelativeLocator.southEast());
+            super(owner, RelativeLocator.southEast(), SOUTH_EAST_SHAPE);
         }
 
         @Override
@@ -417,7 +428,7 @@ public class ResizeHandleKit {
     private static class SouthHandle extends AbstractResizeHandle {
 
         SouthHandle(Figure owner) {
-            super(owner, RelativeLocator.south());
+            super(owner, RelativeLocator.south(), SOUTH_SHAPE);
         }
 
         @Override
@@ -440,7 +451,7 @@ public class ResizeHandleKit {
     private static class SouthWestHandle extends AbstractResizeHandle {
 
         SouthWestHandle(Figure owner) {
-            super(owner, RelativeLocator.southWest());
+            super(owner, RelativeLocator.southWest(), SOUTH_WEST_SHAPE);
         }
 
         @Override
@@ -469,7 +480,7 @@ public class ResizeHandleKit {
     private static class WestHandle extends AbstractResizeHandle {
 
         WestHandle(Figure owner) {
-            super(owner, RelativeLocator.west());
+            super(owner, RelativeLocator.west(), WEST_SHAPE);
         }
 
         @Override
