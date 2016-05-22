@@ -42,8 +42,7 @@ public class RevertAction extends AbstractViewAction {
      */
     public RevertAction(Application app, View view) {
         super(app, view);
-        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
+        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
 
     @Override

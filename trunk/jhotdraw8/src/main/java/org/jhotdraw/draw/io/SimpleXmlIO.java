@@ -55,7 +55,7 @@ import org.xml.sax.SAXException;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleXmlIO implements InputFormat, OutputFormat {
+public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMixin {
 
     private FigureFactory factory;
     private String namespaceURI;
@@ -104,33 +104,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat {
         }
     }
 
-    @Override
-    public void write(File file, Drawing drawing) throws IOException {
-        setDocumentHome(file.toURI());
-        Document doc = toDocument(drawing);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(file);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
-    }
-
-    @Override
-    public void write(OutputStream out, Drawing drawing) throws IOException {
-        Document doc = toDocument(drawing);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
-
-    }
 
     public Drawing read(Document in, Drawing drawing) throws IOException {
         return fromDocument(in);

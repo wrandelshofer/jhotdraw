@@ -7,6 +7,7 @@ package org.jhotdraw.svg;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -72,6 +73,7 @@ import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.RenderingIntent;
 import org.jhotdraw.draw.SimpleDrawingRenderer;
 import org.jhotdraw.draw.io.OutputFormat;
+import org.jhotdraw.draw.io.XmlOutputFormatMixin;
 import org.jhotdraw.geom.Geom;
 import org.jhotdraw.geom.Shapes;
 import org.jhotdraw.text.SvgTransformListConverter;
@@ -88,7 +90,7 @@ import org.w3c.dom.Element;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SvgExportOutputFormat implements OutputFormat {
+public class SvgExportOutputFormat implements OutputFormat, XmlOutputFormatMixin {
 
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
@@ -99,19 +101,6 @@ public class SvgExportOutputFormat implements OutputFormat {
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
     private final String SVG_NS = "http://www.w3.org/2000/svg";
     private final String namespaceQualifier = null;
-
-    @Override
-    public void write(OutputStream out, Drawing drawing) throws IOException {
-        Document doc = toDocument(drawing);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
-    }
 
     public Document toDocument(Drawing external) throws IOException {
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
@@ -830,5 +819,12 @@ public class SvgExportOutputFormat implements OutputFormat {
                 // ignore
             }
         }*/
+    }
+
+   
+
+    @Override
+    public void setDocumentHome(URI uri) {
+        // empty
     }
 }

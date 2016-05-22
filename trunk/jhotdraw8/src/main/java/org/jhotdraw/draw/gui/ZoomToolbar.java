@@ -52,20 +52,6 @@ public class ZoomToolbar extends BorderPane {
             }
         };
     }
-    private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<DrawingView>(this, "drawingView") {
-
-        @Override
-        protected void fireValueChangedEvent() {
-            super.fireValueChangedEvent();
-            zoomFactor.unbind();
-            DrawingView newValue=get();
-            if (newValue != null) {
-                zoomFactor.bindBidirectional(newValue.zoomFactorProperty());
-                newValue.zoomFactorProperty().set(1.0);
-            }
-        }
-    };
-
     public ZoomToolbar() {
         this(ZoomToolbar.class.getResource("ZoomToolbar.fxml"));
     }
@@ -111,8 +97,12 @@ public class ZoomToolbar extends BorderPane {
          });*/
     }
 
-    public DoubleProperty zoomFactor() {
-        return zoomFactor();
+    /**
+     * Defines the factor by which the drawing view should be zoomed.
+     * @return zoom factor
+     */
+    public DoubleProperty zoomFactorProperty() {
+        return zoomFactorProperty();
     }
 
     public void setZoomFactor(double newValue) {
@@ -121,13 +111,5 @@ public class ZoomToolbar extends BorderPane {
 
     public double getZoomFactor() {
         return zoomFactor.get();
-    }
-
-    public void setDrawingView(DrawingView newValue) {
-        drawingView().set(newValue);
-    }
-
-    private ObjectProperty<DrawingView> drawingView() {
-        return drawingView;
     }
 }

@@ -46,8 +46,7 @@ public class SelectAllAction extends AbstractFocusOwnerAction {
      */
     public SelectAllAction(Application app, Node target) {
         super(app, target);
-        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
+        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
 
     @Override

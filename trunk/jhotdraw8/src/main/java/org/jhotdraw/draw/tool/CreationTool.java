@@ -38,7 +38,7 @@ public class CreationTool extends AbstractTool {
     /**
      * The created figure.
      */
-    protected Figure figure;
+    private Figure figure;
 
     /**
      * The rubber band.

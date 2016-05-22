@@ -32,8 +32,7 @@ public class PrintFileAction extends AbstractViewAction {
      * @param view the view */
     public PrintFileAction(Application app, View view) {
         super(app, view);
-        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
+        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
 /*
     @Override

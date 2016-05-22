@@ -25,6 +25,7 @@ import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.HideableFigure;
 import org.jhotdraw.draw.figure.LockableFigure;
 import org.jhotdraw.draw.figure.StyleableFigure;
+import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw.util.Resources;
 
@@ -49,7 +50,7 @@ public class LayerCell extends ListCell<Figure> {
     @FXML
     private Label selectionLabel;
 
-    private DrawingView drawingView;
+    private DrawingModel drawingModel;
 
     private boolean isUpdating;
 
@@ -59,12 +60,12 @@ public class LayerCell extends ListCell<Figure> {
     
     private final LayersInspector inspector;
 
-    public LayerCell(DrawingView drawingView, LayersInspector inspector) {
-        this(LayersInspector.class.getResource("LayerCell.fxml"), drawingView, inspector);
+    public LayerCell(DrawingModel drawingModel, LayersInspector inspector) {
+        this(LayersInspector.class.getResource("LayerCell.fxml"), drawingModel, inspector);
     }
 
-    public LayerCell(URL fxmlUrl, DrawingView drawingView, LayersInspector inspector ) {
-        this.drawingView = drawingView;
+    public LayerCell(URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector ) {
+        this.drawingModel = drawingModel;
         this.inspector = inspector;
         init(fxmlUrl);
     }
@@ -128,19 +129,25 @@ public class LayerCell extends ListCell<Figure> {
         }
     }
 
-    public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingView drawingView, LayersInspector inspector) {
-        return list -> new LayerCell(drawingView, inspector);
+    /**
+     * Creates a {@code LayerCell} cell factory for use in {@code ListView} controls.
+     * @param drawingModel the drawing model
+     * @param inspector the layers inspector
+     * @return 
+     */
+    public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingModel drawingModel, LayersInspector inspector) {
+        return list -> new LayerCell(drawingModel, inspector);
     }
 
     private void commitLayerVisible() {
         if (!isUpdating) {
-            drawingView.getModel().set(item, HideableFigure.VISIBLE, visibleCheckBox.isSelected());
+            drawingModel.set(item, HideableFigure.VISIBLE, visibleCheckBox.isSelected());
         }
     }
 
     private void commitLayerLocked() {
         if (!isUpdating) {
-            drawingView.getModel().set(item, LockableFigure.LOCKED, lockedCheckBox.isSelected());
+            drawingModel.set(item, LockableFigure.LOCKED, lockedCheckBox.isSelected());
         }
     }
 
@@ -198,7 +205,7 @@ public class LayerCell extends ListCell<Figure> {
     @Override
     public void commitEdit(Figure newValue) {
         if (editField != null && isEditing()) {
-            drawingView.getModel().set(
+            drawingModel.set(
                     item, StyleableFigure.STYLE_ID, editField.getText());
         }
         super.commitEdit(newValue);

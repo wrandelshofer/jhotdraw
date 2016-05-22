@@ -39,8 +39,7 @@ public class OpenFileAction extends AbstractApplicationAction {
      * @param app the application */
     public OpenFileAction(Application app) {
         super(app);
-        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
+        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
 
     protected URIChooser getChooser(View view) {

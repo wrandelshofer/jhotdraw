@@ -23,13 +23,13 @@ public class RelativeLocator extends AbstractLocator {
      * The value 0 is on the left boundary of the figure, the value 1 on
      * the right boundary.
      */
-    protected double relativeX;
+    protected final double relativeX;
     /**
      * Relative y-coordinate on the bounds of the figure.
      * The value 0 is on the top boundary of the figure, the value 1 on
      * the bottom boundary.
      */
-    protected double relativeY;
+    protected final double relativeY;
     
     /** Creates a new instance. */
     public RelativeLocator() {

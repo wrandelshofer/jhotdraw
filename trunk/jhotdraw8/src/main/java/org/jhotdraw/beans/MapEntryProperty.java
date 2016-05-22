@@ -14,6 +14,9 @@ import javafx.collections.WeakMapChangeListener;
  * This property is weakly bound to an entry in a map.
  *
  * @author Werner Randelshofer
+ * @param <K> key type
+ * @param <V> map value type
+ * @param <T> entry value type
  */
 public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T> {
 

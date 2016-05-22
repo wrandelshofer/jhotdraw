@@ -169,7 +169,7 @@ public class ResizeHandleKit {
 
         private Point2D pickLocation;
         private Point2D oldPoint;
-        protected final Region node;
+        private final Region node;
         private final String styleclass;
         private Bounds startBounds;
         protected static final Shape NORTH_SHAPE = new Rectangle(9, 5);

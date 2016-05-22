@@ -39,7 +39,7 @@ import org.jhotdraw.draw.handle.Handle;
 public class SimpleHandleTracker extends AbstractTracker implements HandleTracker {
 
     private Handle handle;
-    protected Collection<Figure> compatibleFigures;
+    private Collection<Figure> compatibleFigures;
 
     @Override
     public void setHandles(Handle handle, Collection<Figure> compatibleFigures) {

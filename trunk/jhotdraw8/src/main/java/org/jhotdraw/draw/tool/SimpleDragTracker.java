@@ -44,8 +44,8 @@ import org.jhotdraw.draw.figure.TransformableFigure;
 public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
     private static final long serialVersionUID = 1L;
-    protected Set<Figure> groupReshapeableFigures;
-    protected Figure anchorFigure;
+    private Set<Figure> groupReshapeableFigures;
+    private Figure anchorFigure;
     private Point2D oldPoint;
     private Point2D anchor;
 

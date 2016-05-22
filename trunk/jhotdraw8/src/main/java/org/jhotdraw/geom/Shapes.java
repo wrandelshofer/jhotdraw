@@ -236,19 +236,7 @@ public class Shapes {
      * @return SVG Path
      */
     public static String svgStringFromAWT(PathIterator iter) {
-        javafx.scene.shape.Path fxpath = new javafx.scene.shape.Path();
         XmlNumberConverter nb=new XmlNumberConverter();
-        switch (iter.getWindingRule()) {
-            case PathIterator.WIND_EVEN_ODD:
-                fxpath.setFillRule(javafx.scene.shape.FillRule.EVEN_ODD);
-                break;
-            case PathIterator.WIND_NON_ZERO:
-                fxpath.setFillRule(javafx.scene.shape.FillRule.NON_ZERO);
-                break;
-            default:
-                throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
-        }
-
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
         boolean first = true;

@@ -59,7 +59,7 @@ public class RotateHandle extends AbstractHandle {
     private static final Background PIVOT_REGION_BACKGROUND = new Background(new BackgroundFill(Color.PURPLE, null, null));
     private static final Border PIVOT_REGION_BORDER = null;
 
-    protected Set<Figure> groupReshapeableFigures;
+    private Set<Figure> groupReshapeableFigures;
 
     public RotateHandle(TransformableFigure figure) {
         this(figure, STYLECLASS_HANDLE_ROTATE, STYLECLASS_HANDLE_TRANSFORM_OUTLINE, STYLECLASS_HANDLE_PIVOT);
