@@ -223,7 +223,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     public LayerCell createCell(ListView<Figure> listView) {
-        return new LayerCell(drawingView, this);
+        return new LayerCell(drawingView.getModel(), this);
     }
 
     @Override

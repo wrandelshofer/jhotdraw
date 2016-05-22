@@ -66,32 +66,32 @@ public class StyleablePropertyMap {
     /**
      * Holds the user getProperties.
      */
-    protected final ReadOnlyMapProperty<Key<?>, Object> user = new ReadOnlyMapWrapper<Key<?>, Object>(this, USER_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+    private final ReadOnlyMapProperty<Key<?>, Object> user = new ReadOnlyMapWrapper<Key<?>, Object>(this, USER_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
     /**
      * Holds the inline getProperties.
      */
-    protected ReadOnlyMapProperty<Key<?>, Object> inline;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, INLINE_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+    private ReadOnlyMapProperty<Key<?>, Object> inline;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, INLINE_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
     /**
      * Holds the author getProperties.
      */
-    protected ReadOnlyMapProperty<Key<?>, Object> author;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, AUTHOR_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
+    private ReadOnlyMapProperty<Key<?>, Object> author;// = new ReadOnlyMapWrapper<Key<?>, Object>(this, AUTHOR_PROPERTY, FXCollections.observableHashMap()).getReadOnlyProperty();
     /**
      * Holds the user agent getProperties.
      */
-    protected ReadOnlyMapProperty<Key<?>, Object> userAgent;// 
+    private ReadOnlyMapProperty<Key<?>, Object> userAgent;// 
     /**
      * Holds the outputReadonly getProperties.
      */
-    protected final ObservableMap<Key<?>, Object> output = FXCollections.observableHashMap();
+    private final ObservableMap<Key<?>, Object> output = FXCollections.observableHashMap();
     /**
      * Read-only wrapper for the outputReadonly getProperties.
      */
-    protected final ReadOnlyMapProperty<Key<?>, Object> outputReadonly = new ReadOnlyMapWrapper<Key<?>, Object>(this, OUTPUT_PROPERTY, FXCollections.unmodifiableObservableMap(output)).getReadOnlyProperty();
+    private final ReadOnlyMapProperty<Key<?>, Object> outputReadonly = new ReadOnlyMapWrapper<Key<?>, Object>(this, OUTPUT_PROPERTY, FXCollections.unmodifiableObservableMap(output)).getReadOnlyProperty();
 
     /**
      * Holds the styleable getProperties.
      */
-    protected final HashMap<Key<?>, StyleableProperty<?>> styleableProperties = new HashMap<>();
+    private final HashMap<Key<?>, StyleableProperty<?>> styleableProperties = new HashMap<>();
 
     private MapChangeListener<Key<?>, Object> inputHandler = new MapChangeListener<Key<?>, Object>() {
 

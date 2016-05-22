@@ -1,7 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* @(#)XmlNumberConverter.java
+ * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw.text;
 

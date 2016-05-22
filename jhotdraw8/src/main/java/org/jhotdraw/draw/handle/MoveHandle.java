@@ -43,7 +43,7 @@ public class MoveHandle extends LocatorHandle {
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
-    protected Set<Figure> groupReshapeableFigures;
+    private Set<Figure> groupReshapeableFigures;
 
     public MoveHandle(Figure figure, Locator locator) {
         this(figure, STYLECLASS_HANDLE_MOVE, locator);

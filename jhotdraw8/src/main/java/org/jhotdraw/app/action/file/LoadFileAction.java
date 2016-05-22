@@ -31,8 +31,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view */
     public LoadFileAction(Application app, View view) {
         super(app, view);
-        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
+        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
 /*
     @Override

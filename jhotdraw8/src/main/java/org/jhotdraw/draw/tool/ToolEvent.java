@@ -15,6 +15,7 @@ public class ToolEvent extends Event<Tool> {
 
     private final static long serialVersionUID = 1L;
 
+    /** Defines the event type. */
     public enum EventType {
 
         TOOL_STARTED,

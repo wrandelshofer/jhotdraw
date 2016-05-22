@@ -165,7 +165,7 @@ public class GrapherView extends AbstractView implements EditorView {
         toolsToolBar.getItems().add(ttbar);
         
         ZoomToolbar ztbar = new ZoomToolbar();
-        ztbar.setDrawingView(drawingView);
+        ztbar.zoomFactorProperty().bindBidirectional(drawingView.zoomFactorProperty());
         toolsToolBar.getItems().add(ztbar);
         
         getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));

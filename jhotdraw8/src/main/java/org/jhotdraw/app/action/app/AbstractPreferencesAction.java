@@ -28,7 +28,6 @@ public abstract class AbstractPreferencesAction extends AbstractApplicationActio
      * @param app the application */
     public AbstractPreferencesAction(Application app) {
         super(app);
-        Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
+        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
 }

@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
@@ -23,8 +22,74 @@ import javafx.css.StyleOrigin;
  * {@code StyleOrigin}.
  *
  * @author Werner Randelshofer
+ * @param <K> key type
+ * @param <V> value type
  */
 public class StyleableMap<K, V> implements ObservableMap<K, V> {
+    private static class MapAdapter<K,V> implements Map<K,V> {
+
+        @Override
+        public int size() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean isEmpty() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean containsKey(Object key) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean containsValue(Object value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public V get(Object key) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public V put(K key, V value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public V remove(Object key) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void putAll(Map<? extends K, ? extends V> m) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public Set<K> keySet() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public Collection<V> values() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public Set<Entry<K, V>> entrySet() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+        
+    }
+    
 
     private static class StyledValue {
 
@@ -33,7 +98,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
          */
         private final static Object NO_VALUE = new Object();
         private final static StyleOrigin[] ORIGINS = StyleOrigin.values();
-        public StyleOrigin origin;
+        private StyleOrigin origin;
         /**
          * Contains a slot for each of the four possible origins. The ordinal
          * number of StyleOrigin is used as an index.
@@ -152,23 +217,6 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         public V getValueRemoved() {
             return old;
         }
-
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            if (wasAdded) {
-                if (wasRemoved) {
-                    builder.append("replaced ").append(old).append("by ").append(added);
-                } else {
-                    builder.append("added ").append(added);
-                }
-            } else {
-                builder.append("removed ").append(old);
-            }
-            builder.append(" at key ").append(key);
-            return builder.toString();
-        }
-
     }
 
     protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<K, V> change) {
@@ -303,17 +351,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
      */
     public Map<K, V> getStyledMap() {
         if (styledMap == null) {
-            styledMap = new Map<K, V>() {
-                @Override
-                public int size() {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
-                @Override
-                public boolean isEmpty() {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
+            styledMap = new MapAdapter<K, V>() {
                 @Override
                 @SuppressWarnings("unchecked")
                 public boolean containsKey(Object key) {
@@ -321,49 +359,9 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
                 }
 
                 @Override
-                public boolean containsValue(Object value) {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
-                @Override
                 @SuppressWarnings("unchecked")
                 public V get(Object key) {
                     return getStyled((K) key);
-                }
-
-                @Override
-                public V put(K key, V value) {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
-                @Override
-                public V remove(Object key) {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
-                @Override
-                public void putAll(Map<? extends K, ? extends V> m) {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
-                @Override
-                public void clear() {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
-                @Override
-                public Set<K> keySet() {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
-                @Override
-                public Collection<V> values() {
-                    throw new UnsupportedOperationException("Not supported.");
-                }
-
-                @Override
-                public Set<Entry<K, V>> entrySet() {
-                    throw new UnsupportedOperationException("Not supported.");
                 }
             };
         }
@@ -382,25 +380,10 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
      * @return a map
      */
     public Map<K, V> getMap(StyleOrigin origin) {
-        return new Map<K, V>() {
-            @Override
-            public int size() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
-
-            @Override
-            public boolean isEmpty() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
-
+        return new MapAdapter<K, V>() {
             @Override
             public boolean containsKey(Object key) {
                 return StyleableMap.this.containsKey(origin, key);
-            }
-
-            @Override
-            public boolean containsValue(Object value) {
-                throw new UnsupportedOperationException("Not supported.");
             }
 
             @Override
@@ -419,32 +402,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             public V remove(Object key) {
                 return StyleableMap.this.remove(origin, (K) key);
             }
-
-            @Override
-            public void putAll(Map<? extends K, ? extends V> m) {
-                throw new UnsupportedOperationException("Not supported.");
-            }
-
-            @Override
-            public void clear() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
-
-            @Override
-            public Set<K> keySet() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
-
-            @Override
-            public Collection<V> values() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
-
-            @Override
-            public Set<Entry<K, V>> entrySet() {
-                throw new UnsupportedOperationException("Not supported.");
-            }
-        };
+       };
     }
 
     protected V getStyled(K key) {
