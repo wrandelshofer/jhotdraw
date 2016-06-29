@@ -32,6 +32,8 @@ import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -131,7 +133,14 @@ public class DocumentOrientedApplication extends AbstractApplication {
                     v.setApplication(DocumentOrientedApplication.this);
                     v.init();
                     return v;
-                });
+                }).exceptionally(e -> {
+            e.printStackTrace();
+            final Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+            Alert alert = new Alert(Alert.AlertType.ERROR,
+                    labels.getString("application.createView.error"));
+            alert.show();
+            return null;
+        });
     }
 
     /**
@@ -295,14 +304,14 @@ public class DocumentOrientedApplication extends AbstractApplication {
             for (MenuItem mi : todo.remove().getItems()) {
                 if (mi instanceof Menu) {
                     if ("file.openRecentMenu".equals(mi.getId())) {
-                        for (URI uri :recentUrisProperty()) {
-                            MenuItem mii=new MenuItem();
-                            Action a = new OpenRecentFileAction(this,uri);
-                            Actions.bindMenuItem(mii,a);
-                            ((Menu)mi).getItems().add(mii);
+                        for (URI uri : recentUrisProperty()) {
+                            MenuItem mii = new MenuItem();
+                            Action a = new OpenRecentFileAction(this, uri);
+                            Actions.bindMenuItem(mii, a);
+                            ((Menu) mi).getItems().add(mii);
                         }
-                    }else{
-                    todo.add((Menu) mi);
+                    } else {
+                        todo.add((Menu) mi);
                     }
                 } else {
                     Action a = actions.get(mi.getId());

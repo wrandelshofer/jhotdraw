@@ -22,6 +22,8 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +34,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import org.jhotdraw.css.CssParser;
 import org.jhotdraw.css.SelectorModel;
-import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.css.ast.Stylesheet;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingView;
@@ -41,6 +42,8 @@ import org.jhotdraw.draw.model.DrawingModel;
 import org.jhotdraw.gui.PlatformUtil;
 import org.jhotdraw.text.CssIdentConverter;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.css.StylesheetsManager;
+import org.jhotdraw.draw.css.FigureSelectorModel;
 
 /**
  * FXML Controller class
@@ -161,7 +164,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             newValue.add(drawing);
         }
 
-        StyleManager<Figure> styleManager = drawing.getStyleManager();
+        StylesheetsManager<Figure> styleManager = drawing.getStyleManager();
         SelectorModel<Figure> selectorModel = styleManager.getSelectorModel();
         String id = null;
         String type = null;
@@ -178,7 +181,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (String name : selectorModel.getNonDecomposedAttributeNames(f)) {
-                    attr.put(name, selectorModel.getAttributeValue(f, name));
+                    attr.put(name, selectorModel.getAttribute(f, name));
                 }
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
@@ -188,7 +191,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 for (String name : attr.keySet()) {
                     String oldAttrValue = attr.get(name);
                     if (oldAttrValue != null) {
-                        String newAttrValue = selectorModel.getAttributeValue(f, name);
+                        String newAttrValue = selectorModel.getAttribute(f, name);
                         if (!oldAttrValue.equals(newAttrValue)) {
                             attr.put(name, "/* multiple values */");
                         }
@@ -246,7 +249,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
             Drawing d = drawingView.getDrawing();
             DrawingModel m = drawingView.getModel();
-            HashMap<String, Set<Figure>> pseudoStyles = new HashMap<>();
+            ObservableMap<String, Set<Figure>> pseudoStyles = FXCollections.observableHashMap();
             HashSet<Figure> fs = new HashSet<>(drawingView.getSelectedFigures());
 
             // handling of emptyness must be consistent with code in
@@ -257,9 +260,11 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
             pseudoStyles.put("selected", fs);
 
-            StyleManager<Figure> sm = d.getStyleManager();
+            StylesheetsManager<Figure> sm = d.getStyleManager();
+            FigureSelectorModel fsm = (FigureSelectorModel) sm.getSelectorModel();
+            fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
             for (Figure f : d.breadthFirstIterable()) {
-                sm.applyStylesheetTo(StyleOrigin.USER, s, f, pseudoStyles);
+                sm.applyStylesheetTo(StyleOrigin.USER, s, f);
                 m.fireNodeInvalidated(f);
                 m.fireTransformInvalidated(f);
                 m.fireLayoutInvalidated(f);

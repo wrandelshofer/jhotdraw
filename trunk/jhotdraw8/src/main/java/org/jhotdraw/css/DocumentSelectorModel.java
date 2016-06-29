@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
+import javafx.css.StyleOrigin;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -35,6 +36,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         String value = elem.getAttribute("id");
         return value != null && value.equals(id);
     }
+
     @Override
     public String getId(Element elem) {
         return elem.getAttribute("id");
@@ -45,6 +47,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         String value = elem.getNodeName();
         return value != null && value.equals(type);
     }
+
     @Override
     public String getType(Element elem) {
         return elem.getNodeName();
@@ -64,6 +67,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         }
         return false;
     }
+
     @Override
     public Set<String> getStyleClasses(Element elem) {
         String value = elem.getAttribute("class");
@@ -227,9 +231,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.contains(substring));
     }
-    
+
     @Override
-    public String getAttributeValue(Element element, String attributeName) {
+    public String getAttribute(Element element, String attributeName) {
         return element.getAttribute(attributeName);
     }
 
@@ -262,6 +266,28 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     @Override
     public Set<String> getNonDecomposedAttributeNames(Element element) {
         return getAttributeNames(element);
+    }
+
+    @Override
+    public void setAttribute(Element element, StyleOrigin origin, String name, String value) {
+        switch (origin) {
+            case USER:
+                element.setAttribute(name, value);
+                break;
+            case USER_AGENT:
+                if (!hasAttribute(element, name)) {
+                    element.setAttribute(name, value);
+                }
+                break;
+            case AUTHOR:
+                element.setAttribute(name, value);
+                break;
+            case INLINE:
+                element.setAttribute(name, value);
+                break;
+            default:
+                throw new UnsupportedOperationException("unsupported origin:" + origin);
+        }
     }
 
 }

@@ -22,13 +22,13 @@ import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.MapAccessor;
-import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.key.DirtyBits;
 import org.jhotdraw.draw.key.FigureKey;
 import org.jhotdraw.event.Listener;
 import org.jhotdraw.styleable.SimpleStyleablePropertyBean;
 import org.jhotdraw.styleable.StyleableMapAccessor;
+import org.jhotdraw.css.StylesheetsManager;
 
 /**
  * AbstractFigure.
@@ -100,8 +100,8 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         getStyleableMap().clearNonUserValues();
         Drawing d = getDrawing();
         if (d != null) {
-            StyleManager<Figure> styleManager = d.getStyleManager();
-            styleManager.applyStylesTo(this);
+            StylesheetsManager<Figure> styleManager = d.getStyleManager();
+            styleManager.applyStylesheetsTo(this);
             for (Figure child : getChildren()) {
                 child.updateCss();// should not recurse, because style manager knows better if it is worthwile?
             }

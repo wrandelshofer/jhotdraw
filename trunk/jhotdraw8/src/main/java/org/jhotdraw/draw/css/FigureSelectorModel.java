@@ -4,17 +4,24 @@
  */
 package org.jhotdraw.draw.css;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.WeakHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
+import javafx.css.StyleOrigin;
 import org.jhotdraw.collection.CompositeMapAccessor;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.SelectorModel;
+import org.jhotdraw.css.ast.Declaration;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.text.Converter;
 import org.jhotdraw.text.CssStringConverter;
@@ -28,9 +35,13 @@ import org.jhotdraw.styleable.StyleableMapAccessor;
 public class FigureSelectorModel implements SelectorModel<Figure> {
 
     private HashSet<Class<?>> mappedFigureClasses = new HashSet<>();
-    /** Maps an attribute name to a key. */
+    /**
+     * Maps an attribute name to a key.
+     */
     private HashMap<String, StyleableMapAccessor<?>> nameToKeyMap = new HashMap<>();
-    /** Maps a key to an attribute name. */
+    /**
+     * Maps a key to an attribute name.
+     */
     private HashMap<StyleableMapAccessor<?>, String> keyToNameMap = new HashMap<>();
 
     private final MapProperty<String, Set<Figure>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
@@ -66,8 +77,8 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public Set<String> getStyleClasses(Figure element) {
-        Collection<String>  styleClasses = element.getStyleClass();
-        return (styleClasses==null)?Collections.emptySet():new HashSet<String>(element.getStyleClass());
+        Collection<String> styleClasses = element.getStyleClass();
+        return (styleClasses == null) ? Collections.emptySet() : new HashSet<String>(element.getStyleClass());
     }
 
     private StyleableMapAccessor<?> findKey(Figure element, String attributeName) {
@@ -101,11 +112,11 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             return false;
         }
         Object value = element.get(k);
-        
+
         // FIXME get rid of special treatment for CssStringConverter
         @SuppressWarnings("unchecked")
         Converter<Object> c = k.getConverter();
-        String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
+        String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getConverter().toString(value);
 
         return requestedValue.equals(stringValue);
     }
@@ -120,7 +131,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         Object value = element.get(k);
         @SuppressWarnings("unchecked")
         Converter<Object> c = k.getConverter();
-        String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
+        String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getConverter().toString(value);
         return stringValue.startsWith(substring);
     }
 
@@ -132,12 +143,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             return false;
         }
         Object value = element.get(k);
-        
+
         // FIXME get rid of special treatment for CssStringConverter
         @SuppressWarnings("unchecked")
         Converter<Object> c = k.getConverter();
-        String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
-        
+        String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getConverter().toString(value);
+
         return stringValue.endsWith(substring);
     }
 
@@ -149,12 +160,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             return false;
         }
         Object value = element.get(k);
-        
+
         // FIXME get rid of special treatment for CssStringConverter
         @SuppressWarnings("unchecked")
         Converter<Object> c = k.getConverter();
-        String stringValue = (((Converter<?>)c) instanceof CssStringConverter) ? (String)value:k.getConverter().toString(value);
-        
+        String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getConverter().toString(value);
+
         return stringValue.contains(substring);
     }
 
@@ -219,6 +230,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         return attr;
     }
+
     @Override
     public Set<String> getNonDecomposedAttributeNames(Figure element) {
         // FIXME use keyToName map
@@ -232,7 +244,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         for (MapAccessor<?> key : element.getSupportedKeys()) {
             if (key instanceof CompositeMapAccessor) {
-                attrk.removeAll( ((CompositeMapAccessor) key).getSubAccessors());
+                attrk.removeAll(((CompositeMapAccessor) key).getSubAccessors());
             }
         }
         for (StyleableMapAccessor<?> key : attrk) {
@@ -242,13 +254,38 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public String getAttributeValue(Figure element, String attributeName) {
+    public String getAttribute(Figure element, String attributeName) {
         @SuppressWarnings("unchecked")
         StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (k == null) {
             return null;
         }
         return k.getConverter().toString(element.get(k));
+    }
+
+    @Override
+    public void setAttribute(Figure elem, StyleOrigin origin, String name, String value) {
+        HashMap<String, StyleableMapAccessor<Object>> metaMap = new HashMap<>();
+        for (MapAccessor<?> k : elem.getSupportedKeys()) {
+            if (k instanceof StyleableMapAccessor) {
+                @SuppressWarnings("unchecked")
+                StyleableMapAccessor<Object> sk = (StyleableMapAccessor<Object>) k;
+                metaMap.put(sk.getCssName(), sk);
+            }
+        }
+
+        StyleableMapAccessor<Object> k = metaMap.get(name);
+        if (k != null) {
+            @SuppressWarnings("unchecked")
+            Converter<Object> converter = k.getConverter();
+            Object convertedValue;
+            try {
+                convertedValue = converter.fromString(value);
+                elem.setStyled(origin, k, convertedValue);
+            } catch (ParseException | IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
 }

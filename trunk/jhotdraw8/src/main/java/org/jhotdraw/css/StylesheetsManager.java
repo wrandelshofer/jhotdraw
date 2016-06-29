@@ -1,4 +1,4 @@
-/* @(#)StyleManager.java
+/* @(#)StylesheetsManager.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,12 +15,12 @@ import org.jhotdraw.css.ast.Stylesheet;
 import org.jhotdraw.draw.figure.Figure;
 
 /**
- * StyleManager.
+ * StylesheetsManager.
  *
  * @author Werner Randelshofer
  * @param <E> the element type that can be styled by this style manager
  */
-public interface StyleManager<E> {
+public interface StylesheetsManager<E> {
 
     /**
      * Adds a stylesheet with the specified origin.
@@ -73,25 +73,22 @@ public interface StyleManager<E> {
      */
     <T> void setStylesheets(StyleOrigin origin, URI documentHome, List<T> stylesheets);
 
-    /** Applies styles to the specified element. 
+    /** Applies all managaed stylesheets to the specified element. 
      * @param e The element
      */
-    default void applyStylesTo(E e) {
-        applyStylesTo(e, Collections.emptyMap());
-    }
-    
-    /** Applies styles to the specified element and adds the given
-     * pseudo class states to the element during evaluation.
-     * 
-     * @param e The element
-     * @param pseudoClassStates pseudo class states given to the specified elements
-     */
-    public void applyStylesTo(E e, Map<String,Set<E>> pseudoClassStates);
+    public void applyStylesheetsTo(E e);
     
     /** Returns the selector model of the style manager.
      * @return the selector model
      */
     public SelectorModel<E> getSelectorModel();
 
-    public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, Figure f, HashMap<String, Set<Figure>> pseudoStyles);
+    /**
+     * Applies the provided stylesheet.
+     * 
+     * @param styleOrigin the style origin to be used when setting attribute values
+     * @param s the stylesheet
+     * @param element the element
+     */
+    public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element);
 }

@@ -13,12 +13,12 @@ import org.jhotdraw.draw.key.SimpleFigureKey;
 import java.util.List;
 import javafx.scene.paint.Color;
 import org.jhotdraw.collection.Key;
-import org.jhotdraw.css.StyleManager;
 import org.jhotdraw.draw.figure.FigurePropertyChangeEvent;
 import org.jhotdraw.draw.key.CColorStyleableFigureKey;
 import org.jhotdraw.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw.event.Listener;
 import org.jhotdraw.text.CColor;
+import org.jhotdraw.css.StylesheetsManager;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -134,5 +134,5 @@ public interface Drawing extends Figure {
      *
      * @return the style manager
      */
-    StyleManager<Figure> getStyleManager();
+    StylesheetsManager<Figure> getStyleManager();
 }

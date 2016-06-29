@@ -49,7 +49,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
     public AbstractSaveFileAction(Application app, View view, String id, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
-        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
+        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, id);
     }
 
     protected URIChooser getChooser(View view) {

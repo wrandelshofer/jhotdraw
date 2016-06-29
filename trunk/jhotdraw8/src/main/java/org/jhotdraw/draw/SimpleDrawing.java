@@ -20,9 +20,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw.styleable.StyleableStyleManager;
-import org.jhotdraw.css.StyleManager;
-import org.jhotdraw.draw.css.FigureStyleManager;
 import org.jhotdraw.draw.figure.NonTransformableFigure;
 import org.jhotdraw.text.CColor;
 import static java.lang.Math.abs;
@@ -32,6 +29,33 @@ import static java.lang.Math.abs;
 import static java.lang.Math.abs;
 import static java.lang.Math.abs;
 import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import org.jhotdraw.css.StylesheetsManager;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import org.jhotdraw.css.SimpleStylesheetsManager;
+import org.jhotdraw.draw.css.FigureSelectorModel;
 
 /**
  * SimpleDrawing.
@@ -45,7 +69,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
     /**
      * The style manager is created lazily. 
      */
-    private StyleManager<Figure> styleManager = null;
+    private StylesheetsManager<Figure> styleManager = null;
 
     public SimpleDrawing() {
     }
@@ -121,7 +145,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public StyleManager<Figure> getStyleManager() {
+    public StylesheetsManager<Figure> getStyleManager() {
         if (styleManager == null) {
             styleManager = createStyleManager();
             styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
@@ -130,17 +154,9 @@ public class SimpleDrawing extends AbstractCompositeFigure
         }
         return styleManager;
     }
-    protected StyleManager<Figure> createStyleManager() {
-        if (true) return new FigureStyleManager();
-        
-        
-        StyleManager<?> ret= (StyleManager<Styleable>)new StyleableStyleManager();
-        
-        // We can safely cast StylebleStyleManager to StyleManager<Figure>
-        // because the Figure interface extends the Styleable interface.
-        @SuppressWarnings("unchecked")
-        StyleManager<Figure> rf=(StyleManager<Figure>)ret;
-        return rf;
+    
+    protected StylesheetsManager<Figure> createStyleManager() {
+        return new SimpleStylesheetsManager<>(new FigureSelectorModel());
     }
 
     @Override
