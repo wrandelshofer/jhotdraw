@@ -270,7 +270,7 @@ public class DesignPatternTaglet implements Taglet {
         return result.toString();
     }
 
-    public static class DesignPatternHeaderTag extends CompositeTag {
+    static class DesignPatternHeaderTag extends CompositeTag {
         /** The qualified name of the instantiating type. */
         private String instantiatingType;
         private String patternName;

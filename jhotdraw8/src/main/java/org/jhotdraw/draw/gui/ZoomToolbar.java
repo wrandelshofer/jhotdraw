@@ -102,7 +102,7 @@ public class ZoomToolbar extends BorderPane {
      * @return zoom factor
      */
     public DoubleProperty zoomFactorProperty() {
-        return zoomFactorProperty();
+        return zoomFactor;
     }
 
     public void setZoomFactor(double newValue) {

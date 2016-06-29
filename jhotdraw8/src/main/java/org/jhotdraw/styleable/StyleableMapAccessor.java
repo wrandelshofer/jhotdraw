@@ -12,7 +12,7 @@ import org.jhotdraw.text.Converter;
 /**
  * Interface for keys which support styled values from CSS.
  *
- * @author werni
+ * @author Werner Randelshofer
  * @param <T> The value type.
  */
 public interface StyleableMapAccessor<T> extends MapAccessor<T> {

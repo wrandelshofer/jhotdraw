@@ -5,6 +5,7 @@
 package org.jhotdraw.css;
 
 import java.util.Set;
+import javafx.css.StyleOrigin;
 
 /**
  * This is a model on which a {@code CssAST.SelectorGroup} can perform a match
@@ -161,9 +162,19 @@ public interface SelectorModel<T> {
      * @param element The element
      * @param name The attribute name
      * @return The attribute value. Returns null if the element does not have
-     * an attribute with this value.
+     * an attribute with this name.
      */
-    public String getAttributeValue(T element, String name);
+    String getAttribute(T element, String name);
+
+    /** Sets an attribute value.
+     * 
+     * @param element The element
+     * @param origin The style origin
+     * @param name The attribute name
+     * @param value The attribute value. Null removes the attribute from 
+     * the element.
+     */
+    void setAttribute(T element, StyleOrigin origin, String name, String value);
 
     
     /** Returns the id of the element.
@@ -171,18 +182,18 @@ public interface SelectorModel<T> {
      * @param element the element
      * @return the id or null if the element does not have an id.
      */
-    public String getId(T element);
+    String getId(T element);
     /** Returns the style type of the element.
      * 
      * @param element the element
      * @return the style type of the element.
      */
-    public String getType(T element);
+    String getType(T element);
     
     /** Returns the style classes of the element.
      * 
      * @param element the element
      * @return the style classes or an empty set.
      */
-    public Set<String> getStyleClasses(T element);
+    Set<String> getStyleClasses(T element);
 }

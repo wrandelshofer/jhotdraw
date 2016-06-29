@@ -7,14 +7,19 @@ package org.jhotdraw.styleable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.css.CssMetaData;
+import javafx.css.ParsedValue;
 import javafx.css.PseudoClass;
+import javafx.css.StyleConverter;
+import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
+import javafx.css.StyleableProperty;
 import org.jhotdraw.css.SelectorModel;
 import org.jhotdraw.draw.figure.Figure;
 import org.w3c.dom.Element;
@@ -23,7 +28,8 @@ import org.w3c.dom.Element;
  * StyleableSelectorModel.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: StyleableSelectorModel.java 1120 2016-01-15 17:37:49Z rawcoder
+ * $
  */
 public class StyleableSelectorModel implements SelectorModel<Styleable> {
 
@@ -90,7 +96,7 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         return false;
     }
 
-    private String getAttribute(Styleable element, String attributeName) {
+    public String getAttribute(Styleable element, String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!
         for (CssMetaData<? extends Styleable, ?> i : list) {
@@ -181,13 +187,39 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
-    public String getAttributeValue(Styleable element, String name) {
-        return getAttribute(element, name);
-    }
-    @Override
     public Set<String> getNonDecomposedAttributeNames(Styleable element) {
         // FIXME we actually can do this!
         return getAttributeNames(element);
+    }
+
+    @Override
+    public void setAttribute(Styleable elem, StyleOrigin origin, String name, String value) {
+        List<CssMetaData<? extends Styleable, ?>> metaList = elem.getCssMetaData();
+        HashMap<String, CssMetaData<? extends Styleable, ?>> metaMap = new HashMap<>();
+        for (CssMetaData<? extends Styleable, ?> m : metaList) {
+            metaMap.put(m.getProperty(), m);
+        }
+        @SuppressWarnings("unchecked")
+        CssMetaData<Styleable, ?> m = (CssMetaData<Styleable, ?>) metaMap.get(name);
+        if (m != null && m.isSettable(elem)) {
+            @SuppressWarnings("unchecked")
+            StyleConverter<String, Object> converter = (StyleConverter<String, Object>) m.getConverter();
+            ParsedValueImpl<String, Object> parsedValue = new ParsedValueImpl<>(value, null);
+
+            Object convertedValue = converter.convert(parsedValue, null);
+            @SuppressWarnings("unchecked")
+            StyleableProperty<Object> styleableProperty = (StyleableProperty<Object>) m.getStyleableProperty(elem);
+            styleableProperty.applyStyle(origin, convertedValue);
+        }
+
+    }
+
+    private static class ParsedValueImpl<V, T> extends ParsedValue<V, T> {
+
+        public ParsedValueImpl(V value, StyleConverter<V, T> converter) {
+            super(value, converter);
+        }
+
     }
 
 }
