@@ -16,9 +16,9 @@ import org.jhotdraw.draw.io.IdFactory;
  *
  * Parses the following EBNF:
  * <pre>
- * Regex := '/', [ Find ],  '/', [ Replace ], '/';
- * Find := String;
- * Replace := String;
+ * Regex := "none" | Find , [ Replace ] ;
+ * Find := TT_STRING;
+ * Replace := TT_STRING;
  * </pre>
  *
  * @author Werner Randelshofer
@@ -43,19 +43,18 @@ public class CssRegexConverter implements Converter<Regex> {
                 throw new IllegalArgumentException("value is null");
             }
         }
-        out.append('/');
-        if (value.getFind() != null) {
-            stringConverter.toString(out, value.getFind());
+        String find = value.getFind();
+        if (find == null) {
+            out.append("none");
+            return;
         }
-        out.append('/');
-        if (value.getReplace() != null) {
-            stringConverter.toString(out, value.getReplace());
-        }
-        out.append('/');
-    }
+        stringConverter.toString(out, find);
 
-    private void appendExpr(Appendable out, String expr) throws IOException {
-        out.append(expr.replace("/", "\\/"));
+        String replace = value.getReplace();
+        if (replace != null) {
+            out.append(' ');
+            stringConverter.toString(out, replace);
+        }
     }
 
     @Override
@@ -66,44 +65,35 @@ public class CssRegexConverter implements Converter<Regex> {
         String replace = null;
 
         tt.skipWhitespace();
-        if (tt.nextToken() == CssTokenizer.TT_IDENT) {
-            if (!nullable) {
-                throw new ParseException("'/' expected", tt.getPosition());
-            }
-            if (!"none".equals(tt.currentStringValue())) {
-                throw new ParseException("none or '/' expected", tt.getPosition());
-            }
-            in.position(in.limit());
-            return null;
-        } else {
-            tt.pushBack();
+        switch (tt.nextToken()) {
+            case CssTokenizer.TT_STRING:
+                find = tt.currentStringValue();
+                break;
+            case CssTokenizer.TT_IDENT:
+                if ("none".equals(tt.currentStringValue())) {
+                    
+                } else {
+                throw new ParseException("find string or none expected", tt.getPosition());
+                }
+                break;
+            default:
+                throw new ParseException("find string expected", tt.getPosition());
         }
 
-        if (tt.nextToken() != '/') {
-            throw new ParseException("first / expected", tt.getPosition());
-        }
         tt.skipWhitespace();
-        if (tt.nextToken() == CssTokenizer.TT_STRING) {
-            find = tt.currentStringValue();
-            tt.skipWhitespace();
-        } else {
-            tt.pushBack();
+        switch (tt.nextToken()) {
+            case CssTokenizer.TT_STRING:
+                replace = tt.currentStringValue();
+                break;
+            case CssTokenizer.TT_EOF:
+                break;
+            default:
+                throw new ParseException("replace string expected", tt.getPosition());
         }
-        if (tt.nextToken() != '/') {
-            throw new ParseException("second / expected", tt.getPosition());
-        }
+        
         tt.skipWhitespace();
-        if (tt.nextToken() == CssTokenizer.TT_STRING) {
-            replace = tt.currentStringValue();
-        } else {
-            tt.pushBack();
-        }
-        tt.skipWhitespace();
-        if (tt.nextToken() != '/') {
-            throw new ParseException("third / expected", tt.getPosition());
-        }
 
-        in.position(in.limit());
+        in.position(tt.getPosition());
         return new Regex(find, replace);
     }
 

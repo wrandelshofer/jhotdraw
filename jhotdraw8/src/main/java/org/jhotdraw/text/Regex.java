@@ -62,7 +62,12 @@ public class Regex {
         }
 
         Matcher m = pattern.matcher(str);
-        return replace == null ? m.replaceFirst("$0") : m.replaceAll(replace);
+        try {
+            return replace == null ? m.replaceFirst("$0") : m.replaceAll(replace);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return str;
+        }
     }
 
     @Override
