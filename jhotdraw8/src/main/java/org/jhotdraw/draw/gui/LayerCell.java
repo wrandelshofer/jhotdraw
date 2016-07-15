@@ -133,7 +133,7 @@ public class LayerCell extends ListCell<Figure> {
      * Creates a {@code LayerCell} cell factory for use in {@code ListView} controls.
      * @param drawingModel the drawing model
      * @param inspector the layers inspector
-     * @return 
+     * @return callback
      */
     public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingModel drawingModel, LayersInspector inspector) {
         return list -> new LayerCell(drawingModel, inspector);
