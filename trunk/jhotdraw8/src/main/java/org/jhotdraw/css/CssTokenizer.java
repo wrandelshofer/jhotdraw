@@ -79,11 +79,11 @@ import java.io.Reader;
  * digit         = ? '0' through '9' ?
  * letter        = ? 'a' through 'z' ? | ? 'A' through 'Z' ? ;
  * string        = string1 | string2 ;
- * string1       = '"' , { -( 'n' | '"' ) | '\\' , newline |  escape } , '"' ;
- * string2       = "'" , { -( 'n' | "'" ) | '\\' , newline |  escape } , "'" ;
+ * string1       = '"' , { -( newline | '"' ) | '\\' , newline |  escape } , '"' ;
+ * string2       = "'" , { -( newline | "'" ) | '\\' , newline |  escape } , "'" ;
  * badstring     = badstring1 | badstring2 ;
- * badstring1    = '"' , { -( 'n' | '"' ) | '\\' , newline |  escape } ;
- * badstring2    = "'" , { -( 'n' | "'" ) | '\\' , newline |  escape } ;
+ * badstring1    = '"' , { -( newline | '"' ) | '\\' , newline |  escape } ;
+ * badstring2    = "'" , { -( newline | "'" ) | '\\' , newline |  escape } ;
  * badcomment    = badcomment1 | badcomment2 ;
  * badcomment1   = '/' , '*' , { ? anything but '*' followed by '/' ? } , '*' ;
  * badcomment2   = '/' , '*' , { ? anything but '*' followed by '/' ? } ;
