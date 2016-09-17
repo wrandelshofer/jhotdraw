@@ -63,12 +63,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         updateSelectionInTree();
     };
     private final InvalidationListener treeSelectionHandler = change -> {
+      if (model.isUpdating()) {
+//        updateSelectionInTree();
+      } else {
         updateSelectionInView();
+      }
     };
-    private ChangeListener<Boolean>  modelUpdateHandler = (o,oldValue,newValue)->{
-        isUpdatingSelection=newValue;
-        if (!newValue) updateSelectionInTree();
-    };
+
     private CssWordListConverter wordListConverter = new CssWordListConverter();
 
     public HierarchyInspector() {
@@ -109,7 +110,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         treeView.getSelectionModel().getSelectedCells().addListener(treeSelectionHandler);
        
-        model.updatingProperty().addListener(modelUpdateHandler);
+//        model.updatingProperty().addListener(modelUpdateHandler);
     }
 
     @Override

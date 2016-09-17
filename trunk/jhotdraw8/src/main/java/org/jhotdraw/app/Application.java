@@ -36,8 +36,6 @@ public interface Application extends Disableable, PropertyBean {
 
     public static final String RECENT_URIS_PROPERTY = "recentUris";
     public static final String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
-    public static final String DISABLERS_PROPERTY = "disablers";
-    public static final String DISABLED_PROPERTY = "disabled";
 
     /**
      * The set of views contains all visible views.

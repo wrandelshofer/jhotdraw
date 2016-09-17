@@ -45,6 +45,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private Point2D locationInDrawing;
 
     public MultipleSelectionMoveHandle(double relativeX, double relativeY) {
         this(relativeX, relativeY, STYLECLASS_HANDLE_MULTI_MOVE);
@@ -95,6 +96,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
 
     @Override
     public void updateNode(DrawingView view) {
+        updateLocation(view);
         Point2D p = getLocation(view);
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         pickLocation = p;
@@ -170,6 +172,10 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     private Point2D getLocation(DrawingView dv) {
+        return locationInDrawing == null ? null : dv.drawingToView(locationInDrawing);
+    }
+    
+    private void updateLocation(DrawingView dv) {
         Bounds b = null;
         for (Figure f : dv.getSelectedFigures()) {
             Transform l2w = f.getLocalToWorld();
@@ -180,6 +186,6 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
                 b = Geom.add(b, fb);
             }
         }
-        return b == null ? null : dv.drawingToView(new Point2D(b.getMinX() + relativeX * b.getWidth(), b.getMinY() + relativeY * b.getHeight()));
+        locationInDrawing = b == null ? null : new Point2D(b.getMinX() + relativeX * b.getWidth(), b.getMinY() + relativeY * b.getHeight());
     }
 }

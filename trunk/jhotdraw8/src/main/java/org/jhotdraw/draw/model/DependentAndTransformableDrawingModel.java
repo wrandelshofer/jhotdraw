@@ -142,7 +142,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
         Drawing oldDrawing = child.getDrawing();
         Figure oldParent = child.getParent();
         if (oldParent != null) {
-            int oldChildIndex = oldParent.getChildren().indexOf(child);
+          int oldChildIndex = oldParent.getChildren().indexOf(child);
             oldParent.remove(child);
             fire(DrawingModelEvent.figureRemovedFromParent((DrawingModel) this, child, oldParent, oldChildIndex));
             fire(DrawingModelEvent.nodeInvalidated((DrawingModel) this, oldParent));

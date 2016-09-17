@@ -36,7 +36,7 @@ public class FigureTreePresentationModel {
 
     private boolean reversed = true;
     
-    private BooleanProperty updating = new SimpleBooleanProperty(false);
+    private int updating;
 
     /**
      * The drawingProperty holds the drawing that is presented by this drawing
@@ -58,20 +58,27 @@ public class FigureTreePresentationModel {
     private final Listener<DrawingModelEvent> modelHandler = new Listener<DrawingModelEvent>() {
         @Override
         public void handle(DrawingModelEvent event) {
-            updating.set(true);
+          updating++;
+          try {
+          
+            boolean structuralChange = false;
             Figure f = event.getFigure();
             switch (event.getEventType()) {
                 case FIGURE_ADDED_TO_PARENT:
                     handleFigureAdded(f, event.getParent(), event.getIndex());
+                    structuralChange = true;
                     break;
                 case FIGURE_REMOVED_FROM_PARENT:
                     handleFigureRemoved(f, event.getParent(), event.getIndex());
+                    structuralChange = true;
                     break;
                 case SUBTREE_ADDED_TO_DRAWING:
                     handleSubtreeAddedToDrawing(f, event.getParent(), event.getIndex());
+                    structuralChange = true;
                     break;
                 case SUBTREE_REMOVED_FROM_DRAWING:
                     handleSubtreeRemovedFromDrawing(f);
+                    structuralChange = true;
                     break;
                 case NODE_CHANGED:
                     handleNodeInvalidated(f);
@@ -82,6 +89,7 @@ public class FigureTreePresentationModel {
                     break;
                 case ROOT_CHANGED:
                     handleRootChanged();
+                    structuralChange = true;
                     break;
                 case SUBTREE_NODES_CHANGED:
                     break;
@@ -93,7 +101,9 @@ public class FigureTreePresentationModel {
                     throw new UnsupportedOperationException(event.getEventType()
                             + " not supported");
             }
-            updating.set(false);
+          } finally {
+            updating--;
+          }
         }
     };
 
@@ -133,11 +143,11 @@ public class FigureTreePresentationModel {
 
     private void handleFigureAdded(Figure f, Figure parentFigure, int index) {
         TreeItem<Figure> item = items.get(f);
-        TreeItem<Figure> parent = items.get(parentFigure);
+        TreeItem<Figure> newParent = items.get(parentFigure);
         if (reversed) {
-            parent.getChildren().add(parent.getChildren().size() - index, item);
+            newParent.getChildren().add(newParent.getChildren().size() - index, item);
         } else {
-            parent.getChildren().add(index, item);
+            newParent.getChildren().add(index, item);
         }
     }
 
@@ -181,7 +191,8 @@ public class FigureTreePresentationModel {
     public Figure getFigure(TreeItem<Figure> item) {
         return item.getValue();
     }
-    public ReadOnlyBooleanProperty updatingProperty() {
-        return updating;
+    
+    public boolean isUpdating() {
+      return updating > 0;
     }
 }
