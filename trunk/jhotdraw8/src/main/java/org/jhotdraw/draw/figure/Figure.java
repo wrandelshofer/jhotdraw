@@ -87,6 +87,8 @@ import org.jhotdraw.event.Listener;
  * {@code Layer}s, {@code Group}s and into layout hierarchies.<br>
  * The provider/dependant relationships are typically used for the creation of
  * line connections between figures, such as with {@link LineConnectionFigure}.
+ *  The strategy for updating the state of dependent figures is implement
+ * in {@link DrawingModel}.
  * <p>
  * <b>Handles.</b> A figure can produce {@code Handle}s which allow to
  * graphically change the state of the figure in a {@link DrawingView}.</p>
@@ -686,21 +688,30 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     }
 
     /**
-     * Returns all figures which have a layout that depends on the state of this
-     * figure.
+     * Returns all figures which derive their state from the state of this figure.
      * <p>
-     * When the state of this figure changes, then the layout of the dependent
-     * figures need to be updated.
+     * When the state of this figure changes, then the state of the dependent
+     * figures must be updated.
+     * <p>
+     * The update strategy is implemented in {@link DrawingModel}.
+     * {@code DrawingMode} observes state changes in figures and updates
+     * dependent figures. {@code DrawingModel} can coallesce multiply state changes of 
+     * figures into a smaller number of updates. {@code DrawingModel} can also
+     * detect cyclic state dependencies and prevent endless update loops.
      *
      * @return a list of dependent figures
      */
     Set<Figure> getDependentFigures();
 
     /**
-     * Returns all figures which provide to the layout of this figure.
+     * Returns all figures which provide to the state of this figure.
      * <p>
-     * When the state of a providing figure changes, then the layout of this
+     * When the state of a providing figure changes, then the state of this
      * figure needs to be updated.
+     * <p>
+     * See {@link #getDependentFigures} for a description of the update
+     * strategy.
+     * 
      *
      * @return a list of providing figures
      */

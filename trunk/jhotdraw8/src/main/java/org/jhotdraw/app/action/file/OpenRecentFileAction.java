@@ -12,12 +12,12 @@ import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
@@ -65,7 +65,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         final Application app = getApplication();
         {
             // Search for an empty view
-                      View emptyView;
+                      ProjectView emptyView;
             if (reuseEmptyViews) {
                 emptyView = app.getActiveView();
                 if (emptyView==null
@@ -85,11 +85,11 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(View view, boolean disposeView) {
+    public void doIt(ProjectView view, boolean disposeView) {
             openViewFromURI(view, uri);
     }
 
-    protected void openViewFromURI(final View v, final URI uri) {
+    protected void openViewFromURI(final ProjectView v, final URI uri) {
         final Application app = getApplication();
         v.addDisabler(this);
 
@@ -99,6 +99,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                     v.removeDisabler(this);
             } else if (exception != null) {
                     Throwable value = exception;
+                    exception.printStackTrace();
                     String message = (value != null && value.getMessage()
                             != null) ? value.getMessage() : value.toString();
                     Resources labels = Resources.getResources("org.jhotdraw.app.Labels");

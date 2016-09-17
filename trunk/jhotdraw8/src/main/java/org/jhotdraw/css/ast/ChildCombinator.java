@@ -26,11 +26,17 @@ public class ChildCombinator extends Combinator {
     }
 
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
-        T matchingElement = secondSelector.match(model, element);
-        if (matchingElement != null) {
-            return firstSelector.match(model, model.getParent(matchingElement));
+    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
+        MatchResult<T> result = secondSelector.match(model, element);
+        if (result != null) {
+            result= firstSelector.match(model, model.getParent(result.getElement()));
         }
-        return null;
+        return result ==null?null:new MatchResult<>(result.getElement(),this);
     }
+    
+  @Override
+  public int getSpecificity() {
+    return firstSelector.getSpecificity()+secondSelector.getSpecificity();
+  }
+    
 }

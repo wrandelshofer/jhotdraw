@@ -10,6 +10,7 @@ import org.jhotdraw.collection.MapAccessor;
 /**
  * FigureKey.
  *
+ * @param <T>
  * @design.pattern org.jhotdraw.draw.model.DrawingModel Strategy, Context.
  * 
  * @author Werner Randelshofer

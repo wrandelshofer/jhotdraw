@@ -9,9 +9,9 @@ package org.jhotdraw.app.action.file;
 
 import java.util.concurrent.CompletionStage;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents
@@ -29,13 +29,13 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public LoadFileAction(Application app, View view) {
+    public LoadFileAction(Application app, ProjectView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
 /*
     @Override
-    protected URIChooser getChooser(View view) {
+    protected URIChooser getChooser(ProjectView view) {
         URIChooser chsr = (URIChooser) (view.getComponent()).getClientProperty("loadChooser");
         if (chsr == null) {
             chsr = getApplication().getModel().createOpenChooser(getApplication(), view);
@@ -45,7 +45,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
     }
 
     @Override
-    public void doIt(final View view) {
+    public void doIt(final ProjectView view) {
         URIChooser fileChooser = getChooser(view);
         Window wAncestor = SwingUtilities.getWindowAncestor(view.getComponent());
         final Component oldFocusOwner = (wAncestor == null) ? null : wAncestor.getFocusOwner();
@@ -64,7 +64,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
 
                     // Prevent same URI from being opened more than once
                     if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                        for (View v : getApplication().getViews()) {
+                        for (ProjectView v : getApplication().getViews()) {
                             if (v != view && v.getURI() != null && v.getURI().equals(uri)) {
                                 v.getComponent().requestFocus();
                                 return;
@@ -83,7 +83,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
         });
     }
 
-    public void loadViewFromURI(final View view, final URI uri, final URIChooser chooser) {
+    public void loadViewFromURI(final ProjectView view, final URI uri, final URIChooser chooser) {
         view.setEnabled(false);
 
         // Open the file
@@ -122,7 +122,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
         });
     }*/
 
-    @Override public CompletionStage<Void> doIt(final View view) {
+    @Override public CompletionStage<Void> doIt(final ProjectView view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -49,15 +49,15 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
         }
 
     };
-    private ObservableSet<Figure> connectedFigures;
+    private ObservableSet<Figure> dependentFigures;
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
 
     @Override
     public final ObservableSet<Figure> getDependentFigures() {
-        if (connectedFigures == null) {
-            connectedFigures = FXCollections.observableSet(Collections.newSetFromMap(new IdentityHashMap<Figure, Boolean>()));
+        if (dependentFigures == null) {
+            dependentFigures = FXCollections.observableSet(Collections.newSetFromMap(new IdentityHashMap<Figure, Boolean>()));
         }
-        return connectedFigures;
+        return dependentFigures;
     }
 
     @Override
@@ -135,10 +135,10 @@ public abstract class AbstractFigure extends SimpleStyleablePropertyBean impleme
                 buf.append(e.getValue());
             }
         }
-        if (connectedFigures != null) {
+        if (dependentFigures != null) {
             buf.append(", connections={");
             isFirst = true;
-            for (Figure f : connectedFigures) {
+            for (Figure f : dependentFigures) {
                 if (isFirst) {
                     isFirst = false;
                 } else {

@@ -10,9 +10,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * ToggleViewPropertyAction.
@@ -21,9 +21,9 @@ import org.jhotdraw.util.Resources;
 public class ToggleViewPropertyAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;
     private BooleanProperty property;
-    private final Function<View,Node> nodeGetter;
+    private final Function<ProjectView,Node> nodeGetter;
 
-    public ToggleViewPropertyAction(Application app, View view, BooleanProperty property, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application app, ProjectView view, BooleanProperty property, String id, Resources labels) {
         super(app, view);
         labels.configureAction(this, id);
         this.property=property;
@@ -31,7 +31,7 @@ public class ToggleViewPropertyAction extends AbstractViewAction {
         property.addListener((o,oldValue,newValue)->set(SELECTED_KEY, newValue));
         set(SELECTED_KEY,property.get());
     }
-    public ToggleViewPropertyAction(Application app, View view, Function<View,Node> nodeGetter, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application app, ProjectView view, Function<ProjectView,Node> nodeGetter, String id, Resources labels) {
         super(app, view);
         labels.configureAction(this, id);
         this.property=null;

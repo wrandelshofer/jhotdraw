@@ -8,9 +8,9 @@
 package org.jhotdraw.app.action.edit;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Redoes the last user action on the active view.
@@ -43,7 +43,7 @@ public class RedoAction extends AbstractViewAction {
      * @param app the application 
      * @param view the view
     */
-    public RedoAction(Application app, View view) {
+    public RedoAction(Application app, ProjectView view) {
         super(app, view);
         labels.configureAction(this, ID);
     }
@@ -58,7 +58,7 @@ public class RedoAction extends AbstractViewAction {
     }
 
     @Override
-    protected void updateView(View oldValue, View newValue) {
+    protected void updateView(ProjectView oldValue, ProjectView newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //
@@ -73,7 +73,7 @@ public class RedoAction extends AbstractViewAction {
      * Installs listeners on the view object.
      * /
     @Override
-    protected void installViewListeners(View p) {
+    protected void installViewListeners(ProjectView p) {
         super.installViewListeners(p);
         Action redoActionInView = p.getActionMap().get(ID);
         if (redoActionInView != null && redoActionInView != this) {
@@ -85,7 +85,7 @@ public class RedoAction extends AbstractViewAction {
      * Installs listeners on the view object.
      * /
     @Override
-    protected void uninstallViewListeners(View p) {
+    protected void uninstallViewListeners(ProjectView p) {
         super.uninstallViewListeners(p);
         Action redoActionInView = p.getActionMap().get(ID);
         if (redoActionInView != null && redoActionInView != this) {

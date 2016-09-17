@@ -8,9 +8,9 @@
 package org.jhotdraw.app.action.edit;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Undoes the last user action.
@@ -39,7 +39,7 @@ public class UndoAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public UndoAction(Application app, View view) {
+    public UndoAction(Application app, ProjectView view) {
         super(app, view);
         labels.configureAction(this, ID);
     }
@@ -54,7 +54,7 @@ public class UndoAction extends AbstractViewAction {
     }
 
     @Override
-    protected void updateView(View oldValue, View newValue) {
+    protected void updateView(ProjectView oldValue, ProjectView newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //
@@ -69,7 +69,7 @@ public class UndoAction extends AbstractViewAction {
      * Installs listeners on the view object.
      * /
     @Override
-    protected void installViewListeners(View p) {
+    protected void installViewListeners(ProjectView p) {
         super.installViewListeners(p);
         Action undoActionInView = p.getActionMap().get(ID);
         if (undoActionInView != null && undoActionInView != this) {
@@ -81,7 +81,7 @@ public class UndoAction extends AbstractViewAction {
      * Installs listeners on the view object.
      * /
     @Override
-    protected void uninstallViewListeners(View p) {
+    protected void uninstallViewListeners(ProjectView p) {
         super.uninstallViewListeners(p);
         Action undoActionInView = p.getActionMap().get(ID);
         if (undoActionInView != null && undoActionInView != this) {

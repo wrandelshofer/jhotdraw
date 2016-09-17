@@ -1,11 +1,11 @@
 package org.jhotdraw.draw.action;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.EditorView;
+import org.jhotdraw.app.ProjectView;
 
 /* @(#)AbstractSelectedAction.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
@@ -65,7 +65,7 @@ public abstract class AbstractSelectedAction extends AbstractViewAction {
      */
     protected DrawingView getView() {
         if (editor == null) {
-            View v = getActiveView();
+            ProjectView v = getActiveView();
             if (v instanceof EditorView) {
                 EditorView ev = (EditorView) v;
                 return ev.getEditor() != null ? ev.getEditor().getActiveDrawingView() : null;

@@ -26,16 +26,21 @@ public class DescendantCombinator extends Combinator {
     }
 
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
-        T siblingElement = secondSelector.match(model, element);
-        T matchingElement = null;
+    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
+        MatchResult<T> result = secondSelector.match(model, element);
+        T siblingElement = result == null ? null : result.getElement();
         while (siblingElement != null) {
             siblingElement = model.getParent(siblingElement);
-            matchingElement = firstSelector.match(model, siblingElement);
-            if (matchingElement != null) {
+            result = firstSelector.match(model, siblingElement);
+            if (result != null) {
                 break;
             }
         }
-        return matchingElement;
+        return result == null ? null : new MatchResult<>(result.getElement(),this);
     }
+
+  @Override
+  public int getSpecificity() {
+    return firstSelector.getSpecificity()+secondSelector.getSpecificity();
+  }
 }

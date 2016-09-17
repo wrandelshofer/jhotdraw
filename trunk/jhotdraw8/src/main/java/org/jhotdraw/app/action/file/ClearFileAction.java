@@ -10,9 +10,9 @@ package org.jhotdraw.app.action.file;
 
 import java.util.concurrent.CompletionStage;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Clears (empties) the contents of the active view.
@@ -28,13 +28,13 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public ClearFileAction(Application app, View view) {
+    public ClearFileAction(Application app, ProjectView view) {
         super(app, view);
         Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
         labels.configureAction(this, "file.clear");
     }
     
-    @Override public CompletionStage<Void> doIt(final View view) {
+    @Override public CompletionStage<Void> doIt(final ProjectView view) {
         return view.clear();
     }
 }

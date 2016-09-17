@@ -13,12 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.pegdown.LinkRenderer;
-import org.pegdown.Printer;
-import org.pegdown.ToHtmlSerializer;
-import org.pegdown.VerbatimSerializer;
-import org.pegdown.ast.RootNode;
-import org.pegdown.plugins.ToHtmlSerializerPlugin;
 
 /**
  * Generates software documentation in Html given Markdown (Pegdown) source
@@ -60,29 +54,12 @@ public class SysdocMain {
     }
 
     private void run() throws IOException {
-        PegDownFragmentCollector docc = new PegDownFragmentCollector(docdirs);
         JavaFragmentCollector srcc = new JavaFragmentCollector(srcdirs);
         JavaFragmentCollector tstc = new JavaFragmentCollector(tstdirs);
 
-        docc.collect();
         srcc.collect();
         tstc.collect();
 
-        LinkRenderer linkRenderer = new LinkRenderer();
-        Map<String, VerbatimSerializer> verbatimSerializerMap = Collections.<String, VerbatimSerializer>emptyMap();
-        List<ToHtmlSerializerPlugin> plugins = Collections.emptyList();
-        Files.createDirectories(destdir);
-        for (Path srcd : docdirs) {
-            Path destfile = destdir.resolve(srcd.getFileName() + ".html");
-            System.out.println("writing " + destfile);
-            try (PegDownPrintWriter w = new PegDownPrintWriter(new PrintWriter(Files.newBufferedWriter(destfile)))) {
-                w.print("<!DOCTYPE html><html>\n<body>\n");
-                for (RootNode astRoot : docc.getRootNodesFor(srcd)) {
-                    new PegDownHtmlSerializer(w, linkRenderer, verbatimSerializerMap, plugins).toHtml(astRoot);
-                }
-                w.print("\n</body>\n</html>");
-            }
-        }
     }
 
     public static void main(String... args) throws IOException {

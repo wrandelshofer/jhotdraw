@@ -21,17 +21,6 @@ public abstract class Combinator extends Selector {
 
     }
 
-    /**
-     * Selects the element.
-     *
-     * @param element the element
-     * @return true if the combinator tree match the element.
-     */
-    @Override
-    public boolean select(Object element) {
-        return false;
-    }
-
     @Override
     public String toString() {
         return "Combinator{" + "simpleSelector=" + firstSelector + ", selector=" + secondSelector + '}';

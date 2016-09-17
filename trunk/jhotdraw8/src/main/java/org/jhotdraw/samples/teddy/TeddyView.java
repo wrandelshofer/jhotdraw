@@ -23,7 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
-import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.app.AbstractProjectView;
 import org.jhotdraw.concurrent.FXWorker;
 
 /**
@@ -32,7 +32,7 @@ import org.jhotdraw.concurrent.FXWorker;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyView extends AbstractView implements Initializable {
+public class TeddyView extends AbstractProjectView implements Initializable {
 
     @Override
     public void init() {

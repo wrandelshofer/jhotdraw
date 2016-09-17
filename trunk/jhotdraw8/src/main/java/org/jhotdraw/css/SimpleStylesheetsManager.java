@@ -207,24 +207,28 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     @Override
     public void applyStylesheetsTo(E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
-        // user agent stylesheets can not override element attributes
+        
+        // The stylesheet is a user-agent stylesheet
         for (Map.Entry<String, String> entry : collectApplicableDeclarations(elem, getUserAgentStylesheets(),
                 new HashMap<String, String>()).entrySet()) {
             selectorModel.setAttribute(elem, StyleOrigin.USER_AGENT, entry.getKey(), entry.getValue());
         }
 
-        // author stylesheets override user agent stylesheet and element attributes
+        // The value of a property was set by the user through a call to a set method
+        // StyleOrigin.USER
+        
+        // The stylesheet is an external file
         for (Map.Entry<String, String> entry : collectApplicableDeclarations(elem, getAuthorStylesheets(), new HashMap<String, String>()).entrySet()) {
-            selectorModel.setAttribute(elem, StyleOrigin.USER, entry.getKey(), entry.getValue());
+            selectorModel.setAttribute(elem, StyleOrigin.AUTHOR, entry.getKey(), entry.getValue());
         }
 
-        // inline stylesheets override user agent stylesheet, element attributes and author stylesheets
+        // The stylesheet is an internal file
         for (Map.Entry<String, String> entry : collectApplicableDeclarations(elem, getInlineStylesheets(),
                 collectApplicableDeclarations(elem, getAuthorStylesheets(), new HashMap<String, String>())).entrySet()) {
-            selectorModel.setAttribute(elem, StyleOrigin.USER, entry.getKey(), entry.getValue());
+            selectorModel.setAttribute(elem, StyleOrigin.INLINE, entry.getKey(), entry.getValue());
         }
 
-        // inline style attributes can override all other values
+        // 'inline style attributes' can override all other values
         HashMap<String, String> applicableDeclarations = new HashMap<>();
         if (selectorModel.hasAttribute(elem, "style")) {
             String styleValue = selectorModel.getAttribute(elem, "style");
@@ -249,7 +253,6 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     private Map<String, String> collectApplicableDeclarations(E elem, Collection<ParsedStylesheetEntry> stylesheets, Map<String, String> applicableDeclarations) {
-        SelectorModel<E> selectorModel = getSelectorModel();
         for (ParsedStylesheetEntry e : stylesheets) {
             Stylesheet s = e.getStylesheet();
             if (s == null) {

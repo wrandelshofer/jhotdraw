@@ -13,8 +13,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * {@code AbstractSelectionAction} acts on the selection of a target component.
@@ -26,7 +26,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
     private static final long serialVersionUID = 1L;
     private Node target;
-    private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<ProjectView> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode()== null) {
             disabled.set(true);

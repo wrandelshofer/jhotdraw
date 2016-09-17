@@ -27,8 +27,14 @@ public class ClassSelector extends SimpleSelector {
     }
 
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
+    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
         return (element != null && model.hasStyleClass(element, clazz)) //
-                ? element : null;
+                ? new MatchResult<T>(element,this) : null;
     }
+    
+  @Override
+  public int getSpecificity() {
+    return 10;
+  }
+    
 }

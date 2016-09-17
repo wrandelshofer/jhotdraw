@@ -10,7 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * AbstractFocusOwnerAction.
@@ -22,7 +22,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
     private static final long serialVersionUID = 1L;
     private Node target = null;
     
-    private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<ProjectView> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null||newValue.getNode()==null) {
             disabled.set(true);

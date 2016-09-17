@@ -25,9 +25,14 @@ public class AndCombinator extends Combinator {
     }
 
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
-        return (firstSelector.match(model, element) != null
-                && secondSelector.match(model, element) != null)//
-                        ? element : null;
+    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
+      MatchResult<T> firstResult = firstSelector.match(model, element);
+      MatchResult<T> secondResult = secondSelector.match(model, element);
+return (firstResult != null && secondResult!=null) ? new MatchResult<>(element, this) : null;
     }
+
+  @Override
+  public int getSpecificity() {
+    return firstSelector.getSpecificity()+secondSelector.getSpecificity();
+  }
 }

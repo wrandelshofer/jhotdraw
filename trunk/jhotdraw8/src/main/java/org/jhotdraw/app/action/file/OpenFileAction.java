@@ -13,14 +13,12 @@ import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
-//import org.jhotdraw.util.prefs.PreferencesUtil;
-
+import org.jhotdraw.app.ProjectView;
 /**
  * Presents an {@code URIChooser} and loads the selected URI into an
  * empty view. If no empty view is available, a new view is created.
@@ -42,7 +40,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
 
-    protected URIChooser getChooser(View view) {
+    protected URIChooser getChooser(ProjectView view) {
         URIChooser c = app.get(OPEN_CHOOSER_KEY);
         if (c == null) {
             c = getApplication().getModel().createOpenChooser();
@@ -57,7 +55,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         {
             app.addDisabler(this);
             // Search for an empty view
-                      View emptyView;
+                      ProjectView emptyView;
             if (reuseEmptyViews) {
                 emptyView = app.getActiveView();
                 if (emptyView==null
@@ -77,7 +75,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(View view, boolean disposeView) {
+    public void doIt(ProjectView view, boolean disposeView) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri!=null) {
@@ -85,7 +83,7 @@ public class OpenFileAction extends AbstractApplicationAction {
 
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                for (View v : getApplication().views()) {
+                for (ProjectView v : getApplication().views()) {
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
@@ -107,7 +105,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(final View v, final URI uri, final URIChooser chooser) {
+    protected void openViewFromURI(final ProjectView v, final URI uri, final URIChooser chooser) {
         final Application app = getApplication();
         app.removeDisabler(this);
         v.addDisabler(this);
@@ -118,6 +116,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                     v.removeDisabler(this);
             } else if (exception != null) {
                     Throwable value = exception;
+                    value.printStackTrace();
                     String message = (value != null && value.getMessage()
                             != null) ? value.getMessage() : value.toString();
                     Resources labels = Resources.getResources("org.jhotdraw.app.Labels");

@@ -19,16 +19,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
- * to write unsaved changes of a {@link org.jhotdraw.app.View} before a
+ * to write unsaved changes of a {@link org.jhotdraw.app.ProjectView} before a
  * destructive action is performed.
  * <p>
  * If the view has no unsaved changes, method {@code doIt} is invoked
@@ -61,14 +61,14 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
      * @param app the application
      * @param view the view
      */
-    public AbstractSaveUnsavedChangesAction(Application app, View view) {
+    public AbstractSaveUnsavedChangesAction(Application app, ProjectView view) {
         super(app, view);
     }
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
         Application app = getApplication();
-        View av = getActiveView();
+        ProjectView av = getActiveView();
         if (av != null) {
             handle(av);
         } else if (isMayCreateView()) {
@@ -79,7 +79,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         }
     }
 
-    public void handle(View v) {
+    public void handle(ProjectView v) {
         if (!v.isDisabled()) {
             final Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
@@ -156,7 +156,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    protected URIChooser getChooser(View view) {
+    protected URIChooser getChooser(ProjectView view) {
         URIChooser chsr = view.get(SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -165,7 +165,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         return chsr;
     }
 
-    protected void saveView(final View v) {
+    protected void saveView(final ProjectView v) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -179,7 +179,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                 // unless  multipe views to same URI are supported
                 if (uri != null
                         && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (View vi : app.views()) {
+                    for (ProjectView vi : app.views()) {
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -202,7 +202,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         }
     }
 
-    protected void saveViewToURI(final View v, final URI uri, final URIChooser chooser) {
+    protected void saveViewToURI(final ProjectView v, final URI uri, final URIChooser chooser) {
         v.write(uri).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -232,5 +232,5 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
         });
     }
 
-    protected abstract CompletionStage<Void> doIt(View p);
+    protected abstract CompletionStage<Void> doIt(ProjectView p);
 }
