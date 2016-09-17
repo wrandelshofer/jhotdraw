@@ -62,7 +62,6 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
 
     @Override
     public void reshape(Transform transform) {
-System.out.println("RectangleFigure.reshape "+transform);        
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());

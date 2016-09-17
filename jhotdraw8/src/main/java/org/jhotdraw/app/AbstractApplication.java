@@ -22,7 +22,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import static org.jhotdraw.app.Disableable.DISABLED_PROPERTY;
 import org.jhotdraw.collection.Key;
 
 /**
@@ -91,22 +93,31 @@ public abstract class AbstractApplication extends javafx.application.Application
         });
     }
 
-    /**
-     * Holds the disablers.
-     */
-    private final SetProperty<Object> disablers = new SimpleSetProperty<>(this, DISABLERS_PROPERTY, FXCollections.observableSet());
+  /**
+   * Holds the disablers.
+   */
+  private final ObservableSet<Object> disablers = FXCollections.observableSet();
+  /**
+   * Holds the disabled state.
+   */
+  private final ReadOnlyBooleanProperty disabled;
 
-    /**
-     * True if disablers is not empty.
-     */
-    private final ReadOnlyBooleanProperty disabled;
+  {
+    ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
+    robw.bind(Bindings.isNotEmpty(disablers));
+    disabled = robw.getReadOnlyProperty();
+  }
 
-    {
-        ReadOnlyBooleanWrapper w = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
-        w.bind(Bindings.not(disablers.emptyProperty()));
-        disabled = w.getReadOnlyProperty();
+
+    @Override
+    public ReadOnlyBooleanProperty disabledProperty() {
+        return disabled;
     }
 
+   @Override
+    public ObservableSet<Object> disablers() {
+        return disablers;
+    }
     /**
      * Properties.
      */
@@ -118,18 +129,8 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public ReadOnlyBooleanProperty disabledProperty() {
-        return disabled;
-    }
-
-    @Override
     public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
-    }
-
-    @Override
-    public SetProperty<Object> disablersProperty() {
-        return disablers;
     }
 
     @Override

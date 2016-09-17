@@ -7,11 +7,15 @@
  */
 package org.jhotdraw.app.action;
 
+import javafx.beans.binding.Bindings;
 import org.jhotdraw.app.Application;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
  * on an {@link Application}.
+ * <p>
+ * An AbstractApplicationAction is disabled when it has disablers {@link Disableable}
+ * or when its application is disabled.
  *
  * @author Werner Randelshofer.
  * @version $Id$
@@ -29,9 +33,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         }
         this.app = app;
         disabled.unbind();
-
-        disabled.bind(app.disabledProperty().or(disablers.emptyProperty().not()));
-
+        disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
     public final Application getApplication() {

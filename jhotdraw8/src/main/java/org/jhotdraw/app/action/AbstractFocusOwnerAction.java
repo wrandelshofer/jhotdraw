@@ -4,6 +4,7 @@
  */
 package org.jhotdraw.app.action;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
@@ -20,13 +21,14 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
 
     private static final long serialVersionUID = 1L;
     private Node target = null;
+    
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null||newValue.getNode()==null) {
             disabled.set(true);
         } else {
             Scene s = newValue.getNode().getScene();
-            BooleanBinding binding = disablers.emptyProperty().not().or(app.disabledProperty());
+            BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty());
             if (target!=null) {
                 binding = binding.or(s.focusOwnerProperty().isNotEqualTo(target));
             } else {

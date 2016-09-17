@@ -20,9 +20,7 @@ public class BindingUtil {
      * @param format The format string.
      * @param args The arguments.
      * @return  The string expression */
-    public static StringExpression formatted(
-            java.lang.String format,
-            java.lang.Object... args) {
+    public static StringExpression formatted(String format, Object... args) {
         return MessageStringFormatter.format(format, args);
     }
 

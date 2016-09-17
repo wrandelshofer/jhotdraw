@@ -8,6 +8,7 @@
  */
 package org.jhotdraw.app.action.edit;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -33,10 +34,10 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
             Scene s = newValue.getNode().getScene();
             if (target==null) {
             disabled.bind(
-                    s.focusOwnerProperty().isNull().or(app.disabledProperty()).or(newValue.disabledProperty()).or(disablers.emptyProperty().not()));
+                    s.focusOwnerProperty().isNull().or(app.disabledProperty()).or(newValue.disabledProperty()).or(Bindings.isNotEmpty(disablers)));
             } else {
             disabled.bind(
-                    s.focusOwnerProperty().isNotEqualTo(target).or(app.disabledProperty()).or(newValue.disabledProperty()).or(disablers.emptyProperty().not()));
+                    s.focusOwnerProperty().isNotEqualTo(target).or(app.disabledProperty()).or(newValue.disabledProperty()).or(Bindings.isNotEmpty(disablers)));
             }
         }
     };

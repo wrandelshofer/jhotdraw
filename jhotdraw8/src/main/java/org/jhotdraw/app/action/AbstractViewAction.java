@@ -8,6 +8,7 @@
 package org.jhotdraw.app.action;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -35,10 +36,11 @@ public abstract class AbstractViewAction extends AbstractApplicationAction {
     private boolean mayCreateView;
     private final ChangeListener<View> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
+            BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty());
         if (newValue == null) {
-            disabled.bind(Bindings.or(app.disabledProperty(), disablers.emptyProperty().not()));
+            disabled.bind(binding);
         } else {
-            disabled.bind(Bindings.or(app.disabledProperty(), Bindings.or(newValue.disabledProperty(), disablers.emptyProperty().not())));
+            disabled.bind(binding.or(newValue.disabledProperty()));
         }
     };
 
