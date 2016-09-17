@@ -12,7 +12,7 @@ import org.jhotdraw.gui.URIChooser;
 
 /**
  * {@code ApplicationModel} provides meta-data for an {@link Application},
- * actions and factory methods for creating {@link View}s, toolbars and
+ * actions and factory methods for creating {@link ProjectView}s, toolbars and
  * {@link URIChooser}s.
  *
  * @design.pattern Application Framework, KeyAbstraction.
@@ -30,7 +30,7 @@ public interface ApplicationModel {
      * 
      * @return a new instance
      */
-    public View instantiateView();
+    public ProjectView instantiateView();
     // URI choosers
 
     /** Creates an open chooser.

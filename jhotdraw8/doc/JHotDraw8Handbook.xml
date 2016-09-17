@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" 
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<info>
+<title>JHotDraw 8 Handbook</title>
+<author>
+    <personname>
+        <firstname>Werner</firstname>
+        <surname>Randelshofer</surname>
+    </personname>
+</author>
+<copyright><year>2016</year><holder>by the authors and contributors of JHotDraw</holder></copyright>
+</info>
+  <!-- see IEEE 830 SRS -->
+<chapter><title>Introduction</title>
+<xi:include href="introduction/Purpose.xml"/>
+<xi:include href="introduction/Definitions.xml"/>
+<xi:include href="introduction/References.xml"/>
+<xi:include href="introduction/Overview.xml"/>
+<xi:include href="introduction/MajorVersions.xml"/>
+<xi:include href="introduction/License.xml"/>
+<xi:include href="introduction/CC-BY.xml"/>
+<xi:include href="introduction/LGPL.xml"/>
+</chapter>
+</book>

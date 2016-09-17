@@ -202,10 +202,10 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         
         
         StringBuilder buf = new StringBuilder();
-        if (type != null) {
+        if (type != null&&type.length()>0) {
             buf.append(cssIdentConverter.toString(type));
         }
-        if (id != null) {
+        if (id != null&&id.length()>0) {
             buf.append('#').append(cssIdentConverter.toString(id)); 
         }
         for (String clazz : styleClasses) {

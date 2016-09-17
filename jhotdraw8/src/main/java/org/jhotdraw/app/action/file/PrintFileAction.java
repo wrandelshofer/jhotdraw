@@ -8,13 +8,13 @@
 package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Presents a printer chooser to the user and then prints the
- * {@link org.jhotdraw.app.View}.
+ * {@link org.jhotdraw.app.ProjectView}.
  * <p>
  * This action requires that the view implements the {@code PrintableView}
  * interface.
@@ -30,7 +30,7 @@ public class PrintFileAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public PrintFileAction(Application app, View view) {
+    public PrintFileAction(Application app, ProjectView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
@@ -53,12 +53,12 @@ public class PrintFileAction extends AbstractViewAction {
     public void printJava2D(PrintableView v) {
         Pageable pageable = v.createPageable();
         if (pageable == null) {
-            throw new InternalError("View does not have a method named java.awt.Pageable createPageable()");
+            throw new InternalError("ProjectView does not have a method named java.awt.Pageable createPageable()");
         }
 
         try {
             PrinterJob job = PrinterJob.getPrinterJob();
-            // FIXME - PrintRequestAttributeSet should be retrieved from View
+            // FIXME - PrintRequestAttributeSet should be retrieved from ProjectView
             PrintRequestAttributeSet attr = new HashPrintRequestAttributeSet();
             attr.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
             job.setPageable(pageable);
@@ -67,7 +67,7 @@ public class PrintFileAction extends AbstractViewAction {
                     job.print();
                 } catch (PrinterException e) {
                     String message = (e.getMessage() == null) ? e.toString() : e.getMessage();
-                    View view = getActiveView();
+                    ProjectView view = getActiveView();
                     Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
                     JSheet.showMessageSheet(view.getComponent(),
                             "<html>" + UIManager.getString("OptionPane.css") +
@@ -88,7 +88,7 @@ public class PrintFileAction extends AbstractViewAction {
     public void printJava2DAlternative(PrintableView v) {
         Pageable pageable = v.createPageable();
         if (pageable == null) {
-            throw new InternalError("View does not have a method named java.awt.Pageable createPageable()");
+            throw new InternalError("ProjectView does not have a method named java.awt.Pageable createPageable()");
         }
 
         try {
@@ -121,7 +121,7 @@ public class PrintFileAction extends AbstractViewAction {
         final Pageable pageable = v.createPageable();
         final double resolution = 300d;
         JobAttributes jobAttr = new JobAttributes();
-        // FIXME - PageAttributes should be retrieved from View
+        // FIXME - PageAttributes should be retrieved from ProjectView
         PageAttributes pageAttr = new PageAttributes();
         pageAttr.setMedia(PageAttributes.MediaType.A4);
         pageAttr.setPrinterResolution((int) resolution);

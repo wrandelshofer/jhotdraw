@@ -25,9 +25,9 @@ public class PrefixMatchSelector extends AbstractAttributeSelector {
     }
 
     @Override
-    protected <T> T match(SelectorModel<T> model, T element) {
+    protected <T> MatchResult<T> match(SelectorModel<T> model, T element) {
         return (model.attributeValueStartsWith(element, attributeName, substring))//
-                        ? element : null;
+                        ? new MatchResult<>(element,this) : null;
     }
     @Override
     public String toString() {

@@ -107,35 +107,8 @@ import java.io.Reader;
  *
  * @author Werner Randelshofer
  */
-public class CssTokenizer {
+public class CssTokenizer implements CssTokenizerInterface {
 
-    /**
-     * Token types. DELIM token are given as UTF-16 characters.
-     */
-    public final static int TT_IDENT = -2;
-    public final static int TT_AT_KEYWORD = -3;
-    public final static int TT_STRING = -4;
-    public final static int TT_BAD_STRING = -5;
-    public final static int TT_BAD_URI = -6;
-    public final static int TT_BAD_COMMENT = -7;
-    public final static int TT_HASH = -8;
-    public final static int TT_NUMBER = -9;
-    public final static int TT_PERCENTAGE = -10;
-    public final static int TT_DIMENSION = -11;
-    public final static int TT_URI = -12;
-    public final static int TT_UNICODE_RANGE = -13;
-    public final static int TT_CDO = -14;
-    public final static int TT_CDC = -15;
-    public final static int TT_S = -16;
-    public final static int TT_COMMENT = -17;
-    public final static int TT_FUNCTION = -18;
-    public final static int TT_INCLUDE_MATCH = -19;
-    public final static int TT_DASH_MATCH = -20;
-    public final static int TT_PREFIX_MATCH = -21;
-    public final static int TT_SUFFIX_MATCH = -22;
-    public final static int TT_SUBSTRING_MATCH = -23;
-    public final static int TT_COLUMN = -24;
-    public final static int TT_EOF = -1;
 
     private CssScanner in;
 
@@ -158,18 +131,22 @@ public class CssTokenizer {
         this.skipComments = skipComments;
     }
 
+  @Override
     public int currentToken() {
         return currentToken;
     }
 
+  @Override
     public String currentStringValue() {
         return stringValue;
     }
 
+  @Override
     public Number currentNumericValue() {
         return numericValue;
     }
 
+  @Override
     public int nextToken() throws IOException {
         if (pushBack) {
             pushBack = false;
@@ -483,10 +460,12 @@ public class CssTokenizer {
     /**
      * Pushes the current token back.
      */
+  @Override
     public void pushBack() {
         pushBack = true;
     }
 
+  @Override
     public int getLineNumber() {
         return lineNumber;
     }
@@ -877,6 +856,7 @@ public class CssTokenizer {
         }
     }
 
+  @Override
     public int getPosition() {
         return position;
     }
@@ -886,6 +866,7 @@ public class CssTokenizer {
      * 
      * @throws IOException on IO failure
      */
+  @Override
     public void skipWhitespace() throws IOException {
         while (nextToken() == TT_S//
                 || currentToken() == TT_CDC//

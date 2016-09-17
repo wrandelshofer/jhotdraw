@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+<title>Purpose</title>
+    
+<para>JHotDraw 8 is a framework for drawing editors written in the Java programming
+language.</para>
+
+<para>It consists of two parts which can be used independently:</para>
+
+<itemizedlist>
+    <listitem><para>the drawing editor framework</para></listitem>
+    <listitem><para>the application framework</para></listitem>
+</itemizedlist>
+
+<para>The drawing editor framework can be used to realize drawing
+editors for computer aided design and for artistic drawings. 
+Drawings can be animated and interactive. It is possible to back a drawing with
+a data model, allowing a structured drawing editor to be used as a user interface
+for the data model.</para>
+
+<para>The application framework can be used to create 
+applications which comply to platform-specific user interface guidelines. 
+Such as such as <xref linkend="bib.ahig"/> and <xref linkend="bib.whig"/>.</para>
+</section>

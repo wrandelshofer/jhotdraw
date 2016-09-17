@@ -25,13 +25,12 @@ public class SubstringMatchSelector extends AbstractAttributeSelector {
     }
 
     @Override
-    protected <T> T match(SelectorModel<T> model, T element) {
+    protected <T> MatchResult<T> match(SelectorModel<T> model, T element) {
         return (model.attributeValueContains(element, attributeName, substring))//
-                ? element : null;
+                ? new MatchResult<>(element,this) : null;
     }
     @Override
     public String toString() {
         return "[" + attributeName + "*=" + substring + ']';
     }
-
 }

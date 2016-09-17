@@ -15,10 +15,10 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -40,7 +40,7 @@ public class RevertAction extends AbstractViewAction {
      * @param app the application
      * @param view the view
      */
-    public RevertAction(Application app, View view) {
+    public RevertAction(Application app, ProjectView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
@@ -50,7 +50,7 @@ public class RevertAction extends AbstractViewAction {
         if (isDisabled()) {
             return;
         }
-        View view = getActiveView();
+        ProjectView view = getActiveView();
         URI uri = view.getURI();
         if (view.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
@@ -64,7 +64,7 @@ public class RevertAction extends AbstractViewAction {
         }
     }
 
-    private void doIt(View view, URI uri) {
+    private void doIt(ProjectView view, URI uri) {
         view.addDisabler(this);
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {
             if (throwable != null) {

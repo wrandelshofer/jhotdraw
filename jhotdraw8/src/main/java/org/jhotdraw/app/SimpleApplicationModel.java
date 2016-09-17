@@ -46,13 +46,13 @@ public class SimpleApplicationModel implements ApplicationModel {
     private final List<FileChooser.ExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<FileChooser.ExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<FileChooser.ExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private  Supplier<View> viewFactory;
+    private  Supplier<ProjectView> viewFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
         
     }
-    public SimpleApplicationModel(String name, Supplier<View> viewFactory, URL menuFxml, String fileDescription, String fileExtension) {
+    public SimpleApplicationModel(String name, Supplier<ProjectView> viewFactory, URL menuFxml, String fileDescription, String fileExtension) {
         this.name = name;
         this.menuFxml=menuFxml;
         FileChooser.ExtensionFilter fef = new FileChooser.ExtensionFilter(fileDescription,fileExtension);
@@ -61,11 +61,11 @@ public class SimpleApplicationModel implements ApplicationModel {
         this.viewFactory = viewFactory;
     }
 
-    public Supplier<View> getViewFactory() {
+    public Supplier<ProjectView> getViewFactory() {
         return viewFactory;
     }
 
-    public void setViewFactory(Supplier<View> viewFactory) {
+    public void setViewFactory(Supplier<ProjectView> viewFactory) {
         this.viewFactory = viewFactory;
     }
 
@@ -95,7 +95,7 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     
     @Override
-    public View instantiateView() {
+    public ProjectView instantiateView() {
        return viewFactory.get();
     }
 

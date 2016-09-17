@@ -32,11 +32,9 @@ public class DefaultConverter implements Converter<Object> {
 
     @Override
     public Object fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        CharBuffer out = CharBuffer.allocate(buf.remaining());
-        int count = buf.read(out);
-        out.position(0);
-        out.limit(count);
-        return out.toString();
+        String str = buf.toString();
+        buf.position(buf.limit());
+        return "null".equals(str)? null:str;
     }
 
     @Override

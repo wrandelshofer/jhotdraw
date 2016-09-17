@@ -27,8 +27,13 @@ public class TypeSelector extends SimpleSelector {
     }
 
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
+    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
         return (element != null && model.hasType(element, type)) //
-                ? element : null;
+                ? new MatchResult<>(element,this) : null;
     }
+
+  @Override
+  public int getSpecificity() {
+    return 1;
+  }
 }

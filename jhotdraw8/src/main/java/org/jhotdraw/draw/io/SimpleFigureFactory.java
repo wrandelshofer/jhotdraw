@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 import org.jhotdraw.collection.CompositeMapAccessor;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.text.Converter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -48,7 +49,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
     private final Set<String> skipElements = new HashSet<>();
     private final Map<String, HashSet<Class<? extends Figure>>> skipAttributes = new HashMap<>();
-    private String objectIdAttribute = "oid";
+    private String objectIdAttribute = "id";
 
     private static class FigureAccessorKey<T> {
 
@@ -124,18 +125,12 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             figureNodeListKeys.put(figure, hset);
         }
 
-        if (!elemToKey.containsKey(figure)) {
-            elemToKey.put(figure, new HashMap<>());
-        }
-        HashMap<String, MapAccessor<?>> strToKey = elemToKey.get(figure);
+        HashMap<String, MapAccessor<?>> strToKey = elemToKey.computeIfAbsent(figure, k->new HashMap<>());
         if (!strToKey.containsKey(name)) {
             strToKey.put(name, key);
         }
 
-        if (!keyToElem.containsKey(figure)) {
-            keyToElem.put(figure, new HashMap<>());
-        }
-        HashMap<MapAccessor<?>, String> keyToStr = keyToElem.get(figure);
+        HashMap<MapAccessor<?>, String> keyToStr = keyToElem.computeIfAbsent(figure, k->new HashMap<>());
         if (!keyToStr.containsKey(key)) {
             keyToStr.put(key, name);
         }
@@ -171,29 +166,13 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param key The key
      */
     public void addKey(Class<? extends Figure> figure, String name, MapAccessor<?> key) {
-        if (figureAttributeKeys.containsKey(figure)) {
-            figureAttributeKeys.get(figure).add(key);
-        } else {
-            HashSet<MapAccessor<?>> hset = new HashSet<>();
-            hset.add(key);
-            figureAttributeKeys.put(figure, hset);
-        }
+          figureAttributeKeys.computeIfAbsent(figure, k->new HashSet<>()).add(key);
 
-        if (!attrToKey.containsKey(figure)) {
-            attrToKey.put(figure, new HashMap<>());
-        }
-        HashMap<String, MapAccessor<?>> strToKey = attrToKey.get(figure);
-        if (!strToKey.containsKey(name)) {
-            strToKey.put(name, key);
-        }
+        HashMap<String, MapAccessor<?>> strToKey = attrToKey.computeIfAbsent(figure, k->new HashMap<>());
+            strToKey.putIfAbsent(name, key);
 
-        if (!keyToAttr.containsKey(figure)) {
-            keyToAttr.put(figure, new HashMap<>());
-        }
-        HashMap<MapAccessor<?>, String> keyToStr = keyToAttr.get(figure);
-        if (!keyToStr.containsKey(key)) {
-            keyToStr.put(key, name);
-        }
+        HashMap<MapAccessor<?>, String> keyToStr = keyToAttr.computeIfAbsent(figure, k->new HashMap<>());
+          keyToStr.putIfAbsent(key, name);
     }
 
     /**
@@ -643,6 +622,21 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
 
         return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
+    }
+    
+        @Override
+    public String createId(Object object) {
+      String id = getId(object);
+      
+        if (id == null) {
+      if (object instanceof StyleableFigure) {
+       StyleableFigure f = (StyleableFigure) object;       
+       id = f.get(StyleableFigure.STYLE_ID);
+       putId(object, id);
+    }else{
+          id = super.createId(object);
+        }}
+        return id;
     }
 
 }

@@ -12,5 +12,10 @@ package org.jhotdraw.css.ast;
  * @version $Id$
  */
 public abstract class PseudoClassSelector extends SimpleSelector {
+  @Override
+  public final int getSpecificity() {
+    return 10;
+  }
+
 
 }

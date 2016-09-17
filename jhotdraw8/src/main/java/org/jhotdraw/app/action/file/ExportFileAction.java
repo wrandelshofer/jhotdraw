@@ -11,11 +11,11 @@ import java.net.URI;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Presents a file chooser to the user and then exports the contents of the
@@ -46,7 +46,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public ExportFileAction(Application app, View view) {
+    public ExportFileAction(Application app, ProjectView view) {
         this(app, view, ID);
     }
     /**
@@ -56,15 +56,15 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param view the view
      * @param id the id
      */
-    public ExportFileAction(Application app, View view, String id) {
+    public ExportFileAction(Application app, ProjectView view, String id) {
         super(app, view, id, true);
     }
     @Override
-    protected URIChooser createChooser(View view) {
+    protected URIChooser createChooser(ProjectView view) {
         return app.getModel().createExportChooser();
     }
     @Override
-    protected void handleSucceded(View v, URI uri) {
+    protected void handleSucceded(ProjectView v, URI uri) {
         // empty
     }
 }

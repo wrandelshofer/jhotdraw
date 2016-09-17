@@ -4,12 +4,12 @@
  */
 package org.jhotdraw.draw;
 
-import org.jhotdraw.app.View;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * An application view which can return an editor.
  * @author werni
  */
-public interface EditorView extends View{
+public interface EditorView extends ProjectView{
     DrawingEditor getEditor();
 }

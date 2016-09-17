@@ -10,9 +10,9 @@ package org.jhotdraw.app.action.file;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Closes the active view after letting the user save unsaved changes.
@@ -29,7 +29,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public CloseFileAction(Application app, View view) {
+    public CloseFileAction(Application app, ProjectView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }
@@ -39,7 +39,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
     }
 
     @Override
-    protected CompletionStage<Void> doIt(View view) {
+    protected CompletionStage<Void> doIt(ProjectView view) {
         if (view != null) {
             app.remove(view);
         }

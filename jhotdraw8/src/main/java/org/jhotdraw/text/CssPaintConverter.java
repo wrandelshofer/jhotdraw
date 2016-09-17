@@ -7,6 +7,11 @@ package org.jhotdraw.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Locale;
+import java.util.Map;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw.draw.io.IdFactory;
@@ -42,71 +47,90 @@ import org.jhotdraw.draw.io.IdFactory;
  */
 public class CssPaintConverter implements Converter<Paint> {
 
-    private XmlNumberConverter doubleConverter = new XmlNumberConverter();
+  private static Map<Paint, String> colorNames = Collections.synchronizedMap(new IdentityHashMap<>());
+  private static Map<String, Paint> nameColors = Collections.synchronizedMap(new HashMap<>());
 
-    {
-        doubleConverter.setMaximumFractionDigits(3);
+  private XmlNumberConverter doubleConverter = new XmlNumberConverter();
+
+  {
+    doubleConverter.setMaximumFractionDigits(3);
+  }
+
+  public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
+    String name = colorNames.get(value);
+    if (name != null) {
+      out.append(name);
+      return;
     }
 
-    public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
-        if (value == null) {
-            out.append("none");
-        } else if (Color.TRANSPARENT.equals(value)) {
-            out.append("transparent");
-        } else if (value instanceof Color) {
-            Color c = (Color) value;
-            if (c.getOpacity() == 1.0) {
-                int rgb = ((((int) (c.getRed() * 255)) & 0xff) << 16)
-                        | ((((int) (c.getGreen() * 255)) & 0xff) << 8)
-                        | ((((int) (c.getBlue() * 255)) & 0xff) << 0);
+    if (value == null) {
+      out.append("none");
+    } else if (Color.TRANSPARENT.equals(value)) {
+      out.append("transparent");
+    } else if (value instanceof Color) {
+      Color c = (Color) value;
+      if (c.getOpacity() == 1.0) {
+        int rgb = ((((int) (c.getRed() * 255)) & 0xff) << 16)
+                | ((((int) (c.getGreen() * 255)) & 0xff) << 8)
+                | ((((int) (c.getBlue() * 255)) & 0xff) << 0);
 
-                if ((rgb & 0xf0f0f0) >>> 4 == (rgb & 0x0f0f0f)) {
-                    String hex = "000" + Integer.toHexString(((rgb & 0xf0000) >>> 8) | ((rgb & 0xf00) >>> 4) | (rgb & 0xf));
-                    out.append("#");
-                    out.append(hex.substring(hex.length() - 3));
-                } else {
-                    String hex = "000000" + Integer.toHexString(rgb);
-                    out.append("#");
-                    out.append(hex.substring(hex.length() - 6));
-                }
-            } else {
-                out.append("rgba(");
-                out.append(Integer.toString((int) (c.getRed() * 255)));
-                out.append(',');
-                out.append(Integer.toString((int) (c.getGreen() * 255)));
-                out.append(',');
-                out.append(Integer.toString((int) (c.getBlue() * 255)));
-                out.append(',');
-                out.append(doubleConverter.toString(c.getOpacity()));
-                out.append(')');
-            }
-
+        if ((rgb & 0xf0f0f0) >>> 4 == (rgb & 0x0f0f0f)) {
+          String hex = "000" + Integer.toHexString(((rgb & 0xf0000) >>> 8) | ((rgb & 0xf00) >>> 4) | (rgb & 0xf));
+          out.append("#");
+          out.append(hex.substring(hex.length() - 3));
         } else {
-            throw new UnsupportedOperationException("not yet implemented");
+          String hex = "000000" + Integer.toHexString(rgb);
+          out.append("#");
+          out.append(hex.substring(hex.length() - 6));
         }
-    }
+      } else {
+        out.append("rgba(");
+        out.append(Integer.toString((int) (c.getRed() * 255)));
+        out.append(',');
+        out.append(Integer.toString((int) (c.getGreen() * 255)));
+        out.append(',');
+        out.append(Integer.toString((int) (c.getBlue() * 255)));
+        out.append(',');
+        out.append(doubleConverter.toString(c.getOpacity()));
+        out.append(')');
+      }
 
-    @Override
-    public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        try {
-            String str = buf.toString().trim();
-            Color c;
-            if ("none".equals(str)) {
-                c = null;
-            } else {
-                c = Color.web(str);
-            }
-            buf.position(buf.limit());
-            return c;
-        } catch (IllegalArgumentException e) {
-            ParseException pe = new ParseException("not a color:" + buf, buf.position());
-            pe.initCause(e);
-            throw pe;
-        }
+    } else {
+      throw new UnsupportedOperationException("not yet implemented");
     }
+  }
 
-    @Override
-    public Paint getDefaultValue() {
-        return null;
+  @Override
+  public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    try {
+      String str = buf.toString().trim().toLowerCase(Locale.ROOT);
+
+      Paint c;
+
+      c = nameColors.get(str);
+      if (c != null) {
+        buf.position(buf.limit());
+        return c;
+      }
+
+      if ("none".equals(str)) {
+        c = null;
+      } else {
+        c = Color.web(str);
+      }
+      buf.position(buf.limit());
+      colorNames.put(c, str);
+      nameColors.put(str, c);
+      return c;
+    } catch (IllegalArgumentException e) {
+      ParseException pe = new ParseException("not a color:" + buf, buf.position());
+      pe.initCause(e);
+      throw pe;
     }
+  }
+
+  @Override
+  public Paint getDefaultValue() {
+    return null;
+  }
 }

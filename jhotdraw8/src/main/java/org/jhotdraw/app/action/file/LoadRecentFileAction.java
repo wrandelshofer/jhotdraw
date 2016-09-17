@@ -10,10 +10,10 @@ package org.jhotdraw.app.action.file;
 import java.net.URI;
 import java.util.concurrent.CompletionStage;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.net.URIUtil;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Lets the user write unsaved changes of the active view, and then loads
@@ -55,7 +55,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view 
      * @param uri the uri of the recent file
     */
-    public LoadRecentFileAction(Application app, View view, URI uri) {
+    public LoadRecentFileAction(Application app, ProjectView view, URI uri) {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);
@@ -63,12 +63,12 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
     }
 /*
     @Override
-    public void doIt(View v) {
+    public void doIt(ProjectView v) {
         final Application app = getApplication();
 
         // Prevent same URI from being opened more than once
         if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-            for (View vw : getApplication().getViews()) {
+            for (ProjectView vw : getApplication().getViews()) {
                 if (vw.getURI() != null && vw.getURI().equals(uri)) {
                     vw.getComponent().requestFocus();
                     return;
@@ -78,7 +78,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
 
         // Search for an empty view
         if (v == null) {
-            View emptyView = app.getActiveView();
+            ProjectView emptyView = app.getActiveView();
             if (emptyView == null
                     || emptyView.getURI() != null
                     || emptyView.hasUnsavedChanges()) {
@@ -92,14 +92,14 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
                 v = emptyView;
             }
         }
-        final View view = v;
+        final ProjectView view = v;
         app.setEnabled(true);
         view.setEnabled(false);
 
         // If there is another view with the same file we set the multiple open
         // id of our view to max(multiple open id) + 1.
         int multipleOpenId = 1;
-        for (View aView : app.views()) {
+        for (ProjectView aView : app.views()) {
             if (aView != view
                     && aView.getURI() != null
                     && aView.getURI().equals(uri)) {
@@ -167,7 +167,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
         });
     }*/
 
-    @Override public CompletionStage<Void> doIt(final View view) {
+    @Override public CompletionStage<Void> doIt(final ProjectView view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

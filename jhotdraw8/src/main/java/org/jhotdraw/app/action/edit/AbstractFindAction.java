@@ -26,7 +26,7 @@ public abstract class AbstractFindAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public AbstractFindAction(Application app, View view) {
+    public AbstractFindAction(Application app, ProjectView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
     }    

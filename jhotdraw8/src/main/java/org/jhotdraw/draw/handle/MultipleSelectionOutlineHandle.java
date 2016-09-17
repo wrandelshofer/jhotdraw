@@ -68,6 +68,7 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Bounds b = getBounds(view);
+if (b == null) return;
 
         points[0] = b.getMinX();
         points[1] = b.getMinY();

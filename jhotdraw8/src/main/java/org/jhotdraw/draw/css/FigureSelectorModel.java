@@ -82,8 +82,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     private StyleableMapAccessor<?> findKey(Figure element, String attributeName) {
-        if (!mappedFigureClasses.contains(element.getClass())) {
-
+        if (mappedFigureClasses.add(element.getClass())) {
             for (MapAccessor<?> k : element.getSupportedKeys()) {
                 if (k instanceof StyleableMapAccessor) {
                     StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) k;
@@ -221,14 +220,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public Set<String> getAttributeNames(Figure element) {
         // FIXME use keyToName map
-        Set<String> attr = new HashSet<>();
-        for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if (key instanceof StyleableMapAccessor) {
-                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
-                attr.add(sk.getCssName());
-            }
-        }
-        return attr;
+        return getMetaMap(element).keySet();
     }
 
     @Override
@@ -262,9 +254,8 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         return k.getConverter().toString(element.get(k));
     }
-
-    @Override
-    public void setAttribute(Figure elem, StyleOrigin origin, String name, String value) {
+    
+    private HashMap<String, StyleableMapAccessor<Object>> getMetaMap(Figure elem) {
         HashMap<String, StyleableMapAccessor<Object>> metaMap = new HashMap<>();
         for (MapAccessor<?> k : elem.getSupportedKeys()) {
             if (k instanceof StyleableMapAccessor) {
@@ -273,6 +264,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                 metaMap.put(sk.getCssName(), sk);
             }
         }
+        return metaMap;
+    }
+
+    @Override
+    public void setAttribute(Figure elem, StyleOrigin origin, String name, String value) {
+        HashMap<String, StyleableMapAccessor<Object>> metaMap = getMetaMap(elem);
 
         StyleableMapAccessor<Object> k = metaMap.get(name);
         if (k != null) {

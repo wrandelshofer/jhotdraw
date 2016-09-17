@@ -270,8 +270,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             figureToElementMap.clear();
         }
 
-        return factory.fromExternalDrawing(external);
-
+        Drawing internal= factory.fromExternalDrawing(external);
+        internal.updateCss();
+        return internal;
     }
 
     private String getAttribute(Element elem, String unqualifiedName) {
@@ -343,9 +344,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 continue;
             }
 
-            if (factory.getObjectIdAttribute().equals(attr.getLocalName())) {
+            /*if (factory.getObjectIdAttribute().equals(attr.getLocalName())) {
                 continue;
-            }
+            }*/
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) factory.nameToKey(figure, attr.getLocalName());
             if (key != null && factory.figureAttributeKeys(figure).contains(key)) {

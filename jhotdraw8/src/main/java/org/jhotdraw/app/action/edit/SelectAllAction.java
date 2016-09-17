@@ -11,11 +11,9 @@ import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.EditableComponent;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractFocusOwnerAction;
 import org.jhotdraw.util.*;
-//import org.jhotdraw.gui.EditableComponent;
-
+import org.jhotdraw.app.ProjectView;
 /**
  * Selects all items.
  *
@@ -51,7 +49,7 @@ public class SelectAllAction extends AbstractFocusOwnerAction {
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-            View v = app.getActiveView();
+            ProjectView v = app.getActiveView();
             if (v != null && !v.isDisabled()) {
                 Node n = v.getNode().getScene().getFocusOwner();
                 if (n instanceof TextInputControl) {

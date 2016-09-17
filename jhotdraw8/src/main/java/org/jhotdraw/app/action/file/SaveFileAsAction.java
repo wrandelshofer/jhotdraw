@@ -9,7 +9,7 @@ package org.jhotdraw.app.action.file;
 
 import org.jhotdraw.util.Resources;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Presents an {@code URIChooser} and then saves the active view to the
@@ -30,7 +30,7 @@ public class SaveFileAsAction extends SaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public SaveFileAsAction(Application app, View view) {
+    public SaveFileAsAction(Application app, ProjectView view) {
         super(app, view, ID, true);
     }
 

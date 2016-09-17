@@ -74,15 +74,15 @@ public class DocumentOrientedApplication extends AbstractApplication {
     });
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
-    private final ReadOnlyObjectWrapper<View> activeView = new ReadOnlyObjectWrapper<>();
-    private final SetProperty<View> views = new SimpleSetProperty<>(FXCollections.observableSet());
+    private final ReadOnlyObjectWrapper<ProjectView> activeView = new ReadOnlyObjectWrapper<>();
+    private final SetProperty<ProjectView> views = new SimpleSetProperty<>(FXCollections.observableSet());
     private ApplicationModel model;
 
     public DocumentOrientedApplication() {
     }
 
     {
-        views.addListener((SetChangeListener.Change<? extends View> change) -> {
+        views.addListener((SetChangeListener.Change<? extends ProjectView> change) -> {
             if (change.wasAdded()) {
                 handleViewAdded(change.getElementAdded());
             } else {
@@ -117,17 +117,17 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public SetProperty<View> viewsProperty() {
+    public SetProperty<ProjectView> viewsProperty() {
         return views;
     }
 
     @Override
-    public ReadOnlyObjectProperty<View> activeViewProperty() {
+    public ReadOnlyObjectProperty<ProjectView> activeViewProperty() {
         return activeView.getReadOnlyProperty();
     }
 
     @Override
-    public CompletionStage<View> createView() {
+    public CompletionStage<ProjectView> createView() {
         return FXWorker.supply(() -> getModel().instantiateView())
                 .thenApply((v) -> {
                     v.setApplication(DocumentOrientedApplication.this);
@@ -155,7 +155,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(View view) {
+    protected void handleViewAdded(ProjectView view) {
         view.getActionMap().setParent(getActionMap());
         view.setApplication(DocumentOrientedApplication.this);
         view.setTitle(getLabels().getString("unnamedFile"));
@@ -225,7 +225,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
             Outer:
             for (int retries = views.getSize(); retries > 0; retries--) {
-                for (View v : views) {
+                for (ProjectView v : views) {
                     if (v != view) {
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
@@ -259,7 +259,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(View view) {
+    protected void handleViewRemoved(ProjectView view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -354,26 +354,23 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     private void disambiguateViews() {
-        HashMap<String, ArrayList<View>> titles = new HashMap<>();
-        for (View v : views) {
+        HashMap<String, ArrayList<ProjectView>> titles = new HashMap<>();
+        for (ProjectView v : views) {
             String t = v.getTitle();
-            if (!titles.containsKey(t)) {
-                titles.put(t, new ArrayList<>());
-            }
-            titles.get(t).add(v);
+            titles.computeIfAbsent(t, k->new ArrayList<>()).add(v);
         }
-        for (ArrayList<View> list : titles.values()) {
+        for (ArrayList<ProjectView> list : titles.values()) {
             if (list.size() == 1) {
                 list.get(0).setDisambiguation(0);
             } else {
                 int max = 0;
-                for (View v : list) {
+                for (ProjectView v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
                 Collections.sort(list, (a, b) -> a.getDisambiguation()
                         - b.getDisambiguation());
                 int prev = 0;
-                for (View v : list) {
+                for (ProjectView v : list) {
                     int current = v.getDisambiguation();
                     if (current == prev) {
                         v.setDisambiguation(++max);

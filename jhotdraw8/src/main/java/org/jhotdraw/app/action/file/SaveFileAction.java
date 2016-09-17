@@ -12,13 +12,13 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.util.Resources;
+import org.jhotdraw.app.ProjectView;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -49,7 +49,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public SaveFileAction(Application app, View view) {
+    public SaveFileAction(Application app, ProjectView view) {
         this(app, view, false);
     }
 
@@ -60,7 +60,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param view the view
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application app, View view, boolean saveAs) {
+    public SaveFileAction(Application app, ProjectView view, boolean saveAs) {
         this(app, view, ID, saveAs);
     }
     /**
@@ -71,17 +71,17 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application app, View view, String id, boolean saveAs) {
+    public SaveFileAction(Application app, ProjectView view, String id, boolean saveAs) {
         super(app, view, id, saveAs);
     }
 
     @Override
-    protected URIChooser createChooser(View view) {
+    protected URIChooser createChooser(ProjectView view) {
         return app.getModel().createSaveChooser();
     }
 
     @Override
-    protected void handleSucceded(View v, URI uri) {
+    protected void handleSucceded(ProjectView v, URI uri) {
         v.setURI(uri);
         v.clearModified();
         v.setTitle(URIUtil.getName(uri));

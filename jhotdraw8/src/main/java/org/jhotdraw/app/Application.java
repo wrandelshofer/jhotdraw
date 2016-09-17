@@ -20,7 +20,7 @@ import org.jhotdraw.app.action.Action;
 import org.jhotdraw.beans.PropertyBean;
 
 /**
- * An {@code Application} manages {@link View} objects.
+ * An {@code Application} manages {@link ProjectView} objects.
  *
  * @design.pattern Application Framework, KeyAbstraction.
  * The application framework supports the creation of document oriented
@@ -42,7 +42,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the views
      */
-    public SetProperty<View> viewsProperty();
+    public SetProperty<ProjectView> viewsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -64,7 +64,7 @@ public interface Application extends Disableable, PropertyBean {
     public IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default public ObservableSet<View> views() {
+    default public ObservableSet<ProjectView> views() {
         return viewsProperty().get();
     }
 
@@ -73,7 +73,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void add(View v) {
+    default public void add(ProjectView v) {
         viewsProperty().add(v);
     }
 
@@ -82,7 +82,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void remove(View v) {
+    default public void remove(ProjectView v) {
         viewsProperty().remove(v);
     }
 
@@ -92,10 +92,10 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return The active view.
      */
-    public ReadOnlyObjectProperty<View> activeViewProperty();
+    public ReadOnlyObjectProperty<ProjectView> activeViewProperty();
 
     // Convenience method
-    default public View getActiveView() {
+    default public ProjectView getActiveView() {
         return activeViewProperty().get();
     }
 
@@ -146,7 +146,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return A callback.
      */
-    CompletionStage<View> createView();
+    CompletionStage<ProjectView> createView();
 
     /**
      * Adds a recent URI.

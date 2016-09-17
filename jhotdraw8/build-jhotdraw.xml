@@ -5,45 +5,52 @@
  * You may only use this file in compliance with the accompanying license terms.
 -->
 <project name="jhotdraw8" basedir="." default="all">
+  
   <!-- ignore system classpath to get consistent builds on different platforms -->
   <property name="build.sysclasspath" value="ignore"/>
 
-  <target name="init" description="initializes the build targets">
-    <property name="jdk" value="${java.home}/.."/>
-    <property name="jdk.version" value="8"/>
+  <property name="jdk" value="${java.home}/.."/>
+  <property name="jdk.version" value="8"/>
 
+  <property name="copyright" value="Copyright (c) 2016 by the authors and contributors of JHotDraw."/>
+  <exec executable="svnversion" outputproperty="svn.version" />
+  <property name="version" value="rev${svn.version}"/>
 
-    <property name="copyright" value="Copyright (c) 2016 by the authors and contributors of JHotDraw."/>
-    <exec executable="svnversion" outputproperty="svn.version" />
-    <property name="version" value="rev${svn.version}"/>
-    
-    <property name="manifest.application-name" value="${ant.project.name}"/>
-    <property name="manifest.implementation-version" value="${version}"/>
-    <property name="manifest.implementation-vendor" value="org.jhotdraw"/>
-    <property name="manifest.main-class" value="org.jhotdraw.samples.grapher.GrapherApplication"/>
+  <property name="manifest.application-name" value="${ant.project.name}"/>
+  <property name="manifest.implementation-version" value="${version}"/>
+  <property name="manifest.implementation-vendor" value="org.jhotdraw"/>
+  <property name="manifest.main-class" value="org.jhotdraw.samples.grapher.GrapherApplication"/>
 
-    <property name="build" value="build"/>
-    <property name="bin" value="bin"/>
-    <property name="doc" value="doc"/>
-    <property name="dist" value="dist"/>
-    <property name="build.javadoc" value="${build}/javadoc"/>
-    <property name="build.sysdoc" value="${build}/sysdoc"/>
-    <property name="lib" value="lib"/>
-    <property name="lib.runtime" value="${lib}/runtime"/>
-    <property name="lib.compile" value="${lib}/compile"/>
-    <property name="lib.doc" value="${lib}/doc"/>
-    <property name="lib.test" value="${lib}/test"/>
-    <property name="src" value="src"/>
-    <property name="doc" value="doc"/>
-    <property name="build.main.classes" value="${build}/main/classes"/>
-    <property name="build.doc.classes" value="${build}/doc/classes"/>
-    <property name="build.main.jars" value="${build}/jars"/>
-    <property name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
+  <property name="build" value="build"/>
+  <property name="bin" value="bin"/>
+  <property name="doc" value="doc"/>
+  <property name="dist" value="dist"/>
+  <property name="build.javadoc" value="${build}/javadoc"/>
+  <property name="lib" value="lib"/>
+  <property name="lib.runtime" value="${lib}/runtime"/>
+  <property name="lib.compile" value="${lib}/compile"/>
+  <property name="lib.doc" value="${lib}/doc"/>
+  <property name="build.doc" value="${build}/doc"/>
+  <property name="lib.test" value="${lib}/test"/>
+  <property name="src" value="src"/>
+  <property name="doc" location="doc"/>
+  <property name="build.main.classes" value="${build}/main/classes"/>
+  <property name="build.doc.classes" value="${build}/doc/classes"/>
+  <property name="build.doc.doc" value="${build}/doc/doc"/>
+  <property name="build.doc.tools" value="${build}/doc/tools"/>
+  <property name="lib.doc.docbook" value="${build.doc.tools}/docbook-5.0b5"/>
+  <property name="lib.doc.docbook-xsl" value="${build.doc.tools}/docbook-xsl-ns-1.79.1"/>
+  <property name="build.doc.html" value="${build}/doc/html"/>
+  <property name="build.main.jars" value="${build}/jars"/>
+  <property name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
 
+  <property name="src.main.java" value="${src}/main/java"/>
+  <property name="src.doc.java" value="${src}/doc/java"/>
+  <property name="src.test.java" value="${src}/test/java"/>
+  <property name="src.doc.xsl" value="${src}/doc/xsl"/>
 
-    <property name="src.main.java" value="${src}/main/java"/>
-    <property name="src.doc.java" value="${src}/doc/java"/>
-    <property name="src.test.java" value="${src}/test/java"/>
+  <target name="init">
+    <echo message="doc: ${basedir}/${doc}"/>
   </target>
 
   <target name="do-clean.compile" depends="init">
@@ -83,7 +90,131 @@
       </fileset>
     </copy>
   </target>
-  <target name="do-compile.doc" depends="init">
+  <target name="do-docbook.unzip-docbook" depends="init">
+      <unzip dest="${build.doc.tools}" src="${lib.doc}/docbook-5.0b5.zip"/>
+      <unzip dest="${build.doc.tools}" src="${lib.doc}/docbook-xsl-ns-1.79.1.zip"/>
+  </target>
+  <target name="do-docbook.copy" depends="init">
+    <copy  todir="${build.doc.doc}/handbook">
+      <fileset dir="${doc}"/>
+    </copy>
+    <copy  todir="${build.doc.doc}/srs">
+      <fileset dir="${doc}"/>
+    </copy>
+  </target>
+  <target name="do-docbook.asciidoctor" depends="init,do-docbook.copy">
+        <pathconvert property="asciidocfiles" pathsep=" ">
+            <map from="${basedir}${file.separator}${build.doc.doc}${file.separator}" to=""/>
+            <fileset dir="${build.doc.doc}">
+                <include name="**/*.txt"/>
+            </fileset>  
+        </pathconvert>
+        <echo message="asciidocfiles: ${asciidocfiles}"/>
+    <exec executable="/usr/local/bin/asciidoctor" dir="${build.doc.doc}">
+      <arg line="-b docbook5"/>
+      <arg line="--doctype article"/>
+      <arg line="${asciidocfiles}"/>
+    </exec>
+  </target>
+  <target name="do-docbook.crossreference" depends="init,do-docbook.asciidoctor" description="creates a cross-reference uses unix xsltproc command">
+      <exec executable="xsltproc" dir=".">
+          <arg value="--output"/><arg value="${build.doc.doc}/handbook/introduction/crossreference.xml"/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--xinclude"/>
+          <arg value="${src.doc.xsl}/crossreference.xsl"/>
+          <arg value="${doc}/JHotDraw8Handbook.xml"/>
+      </exec>
+      <exec executable="xsltproc" dir=".">
+          <arg value="--output"/><arg value="${build.doc.doc}/handbook/introduction/References.xml"/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--xinclude"/>
+          <arg value="${src.doc.xsl}/collectbiblio.xsl"/>
+          <arg value="${doc}/JHotDraw8Handbook.xml"/>
+      </exec>
+      <exec executable="xsltproc" dir=".">
+          <arg value="--output"/><arg value="${build.doc.doc}/srs/introduction/References.xml"/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--xinclude"/>
+          <arg value="${src.doc.xsl}/collectbiblio.xsl"/>
+          <!--arg value="${doc}/JHotDraw8Handbook.xml"/-->
+          <arg value="${doc}/JHotDraw8SRS.xml"/>
+      </exec>
+    </target>
+  <target name="do-docbook.validate" depends="init,do-docbook.asciidoctor,do-docbook.crossreference">
+    <!--property name="docbookfiles" value="doc/JHotDraw8Handbook.xml"/-->
+        <pathconvert property="docbookfiles" pathsep=" ">
+            <map from="${basedir}${file.separator}" to=""/>
+            <fileset dir="${build.doc.doc}/handbook">
+                <include name="*.xml"/>
+                <exclude name="catalog.xml"/>
+            </fileset>  
+            <fileset dir="${build.doc.doc}/srs">
+                <include name="*.xml"/>
+                <exclude name="catalog.xml"/>
+            </fileset>  
+        </pathconvert>
+        <echo message="${docbookfiles}"/>
+        <exec executable="xmllint" dir=".">
+            <arg value="--noout"/>
+            <arg value="--xinclude"/>
+            <arg value="--schema"/>
+            <arg value="${lib.doc.docbook}/xsd/docbook.xsd"/>
+            <!--arg value="- -relaxng"/>
+            <arg value="${lib.doc.docbook}/rng/docbook.rng"/-->
+            <!--arg value="doc/introduction/Introduction.xml"/-->
+            <arg line="${docbookfiles}"/>
+        </exec>
+    </target>
+  <target name="do-docbook.transform.xsltproc" depends="init" description="uses unix xsltproc command">
+      <exec executable="xsltproc" dir=".">
+          <arg value="--output"/><arg value="${build.doc.html}/chunked/handbook/jhotdraw8handbook.xml"/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
+          <arg value="--xinclude"/>
+          <arg value="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
+          <arg value="${build.doc.doc}/handbook/JHotDraw8Handbook.xml"/>
+      </exec>
+      <exec executable="xsltproc" dir=".">
+          <arg value="--output"/><arg value="${build.doc.html}/chunked/srs/jhotdraw8srs.xml"/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
+          <arg value="--xinclude"/>
+          <arg value="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
+          <arg value="${build.doc.doc}/srs/JHotDraw8SRS.xml"/>
+      </exec>
+      <exec executable="xsltproc" dir=".">
+          <arg value="--output"/><arg value="${build.doc.html}/book/handbook/jhotdraw8handbook.xml"/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
+          <arg value="--xinclude"/>
+          <arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
+          <arg value="${build.doc.doc}/handbook/JHotDraw8Handbook.xml"/>
+      </exec>
+      <exec executable="xsltproc" dir=".">
+          <arg value="--output"/><arg value="${build.doc.html}/book/srs/jhotdraw8srs.xml"/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
+          <arg value="--xinclude"/>
+          <arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
+          <arg value="${build.doc.doc}/srs/JHotDraw8SRS.xml"/>
+      </exec>
+  </target>
+  <target name="do-docbook.transform.built-in" depends="init" description="uses ant xslt command">
+    <xslt basedir="${doc}" destdir="${build.doc.html}/book-built-in"
+            style="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl">
+      <include name="JHotDraw8Handbook.xml"/>
+      <classpath>
+        <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <factory name="net.sf.saxon.TransformerFactoryImpl"/>      
+    </xslt>
+  </target>
+  <target name="do-docbook" depends="do-docbook.unzip-docbook,do-docbook.asciidoctor,do-docbook.validate,do-docbook.transform.xsltproc" description="generates specification and user documentation">
+  </target>
+      
+  <target name="do-docbook.compile" depends="init">
     <mkdir dir="${build.doc.classes}"/>
     <javac executable="${jdk}/bin/javac" fork="yes"
            source="${jdk.version}" target="${jdk.version}" encoding="UTF-8" destdir="${build.doc.classes}"
@@ -242,13 +373,15 @@
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
   </target>
-  <target name="compile" depends="clean,do-compile.main,do-compile.doc" description="compiles the java sources and copies resource files">
+  <target name="compile" depends="clean,do-compile.main,do-docbook.compile" description="compiles the java sources and copies resource files">
   </target>
   <target name="jar" depends="compile,do-jar" description="bundles the class files into a jar file">
   </target>
   <target name="javadoc" depends="clean,compile,do-javadoc" description="generates api documentation">
   </target>
   <target name="sysdoc" depends="clean,compile,javadoc,do-sysdoc" description="generates specification and user documentation">
+  </target>
+  <target name="docbook" depends="clean,javadoc,do-docbook" description="generates specification and user documentation">
   </target>
   <target name="dist" depends="jar,javadoc,sysdoc,do-dist" description="Erstellt eine Distribution für eine Stand-Alone Applikation">
   </target>

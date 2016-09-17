@@ -1,0 +1,27 @@
+Purpose
+-------
+    
+JHotDraw 8 is a framework for drawing editors written in the Java programming
+language.
+
+It consists of two parts which can be used independently:
+
+* the framework for structured drawing editors
+* the framework for document-oriented applications
+
+The framework for structured drawing editors can be used to realize drawing
+editors for computer aided design and for artistic drawings. 
+Drawings can be animated and interactive. It is possible to back a drawing with
+a data model, allowing a structured drawing editor to be used as a user interface
+for the data model.
+
+The framework for document-oriented applications can be used to create 
+applications which comply to platform-specific user interface guidelines. 
+Such as such as <<bib.ahig>> and <<bib.whig>>.
+
+
+[bibliography]
+- [[[bib.ahig]]]
+- [[[bib.whig]]]
+
+

@@ -31,7 +31,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.app.AbstractProjectView;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.concurrent.FXWorker;
 import org.jhotdraw.draw.Drawing;
@@ -90,7 +90,7 @@ import org.jhotdraw.util.prefs.PreferencesUtil;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherView extends AbstractView implements EditorView {
+public class GrapherView extends AbstractProjectView implements EditorView {
     
     private Node node;
     
@@ -269,7 +269,6 @@ public class GrapherView extends AbstractView implements EditorView {
             FigureFactory factory = new DefaultFigureFactory(idFactory);
             SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
             SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
-            drawing.updateCss();
             return drawing;
         }).thenAccept(drawing
                 -> drawingView.setDrawing(drawing)

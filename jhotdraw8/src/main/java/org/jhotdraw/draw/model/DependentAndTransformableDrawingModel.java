@@ -181,7 +181,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
 
     @Override
     public void layout(Figure f) {
-        f.layout();
+        f.layoutNotify();
         fire(DrawingModelEvent.layoutChanged(this, f));
     }
 
@@ -192,7 +192,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
 
     @Override
     public void updateCss(Figure f) {
-        f.updateCss();
+        f.stylesheetNotify();
     }
 
     private void transitivelyCollectDependentFigures(Collection<Figure> todo, Set<Figure> done) {
@@ -281,6 +281,16 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                 markDirty(f, DirtyBits.NODE);
             }
 
+            DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
+            for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmStyle)) {
+                    f.stylesheetNotify();
+                    markDirty(f, DirtyBits.NODE);
+                }
+            }
+
             // For all figures with dirty flag Node 
             // we must fire node invalidation
             DirtyMask dmNode = DirtyMask.of(DirtyBits.NODE);
@@ -304,7 +314,6 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                     recursivelyInvalidateTransforms(f);
                 }
             }*/
-
             dirties.clear();
 
             isValidating = false;
