@@ -65,8 +65,8 @@ public class SelectorGroup extends AST {
      * @param element the element
      * @return the match result if the element matches, returns null if the element does not match
      */
-    protected <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-        MatchResult<T> result = null;
+    protected <T> T match(SelectorModel<T> model, T element) {
+        T result = null;
         for (Selector s : selectors) {
             result = s.match(model, element);
             if (result != null) {

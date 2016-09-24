@@ -1186,13 +1186,9 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
   protected void createHandles(Map<Figure, List<Handle>> handles) {
     Set<Figure> selection = getSelectedFigures();
     HandleType handleType = /*selection.size() > 1 ? getMultiHandleType() :*/ getHandleType();
-    if (true||selection.size() < tooManySelectedFigures) {
+    if (selection.size() < tooManySelectedFigures) {
       for (Figure figure : selection) {
-        List<Handle> list = handles.get(figure);
-        if (list == null) {
-          list = new ArrayList<>();
-          handles.put(figure, list);
-        }
+        List<Handle> list = handles.computeIfAbsent(figure,k->new ArrayList<>());
         figure.createHandles(handleType, this, list);
         handles.put(figure, list);
       }

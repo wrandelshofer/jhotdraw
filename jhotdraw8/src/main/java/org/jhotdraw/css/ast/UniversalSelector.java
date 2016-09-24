@@ -20,8 +20,8 @@ public class UniversalSelector extends SimpleSelector {
     }
 
     @Override
-    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-        return new MatchResult<>(element,this);
+    public <T> T match(SelectorModel<T> model, T element) {
+        return element;
     }
 
   @Override

@@ -27,17 +27,17 @@ public class GeneralSiblingCombinator extends Combinator {
   }
 
   @Override
-  public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-   MatchResult< T> matchingElement = secondSelector.match(model, element);
-    T siblingElement = matchingElement==null?null:matchingElement.getElement();
+  public <T> T match(SelectorModel<T> model, T element) {
+   T result = secondSelector.match(model, element);
+    T siblingElement = result;
     while (siblingElement != null) {
       siblingElement = model.getPreviousSibling(siblingElement);
-      matchingElement = firstSelector.match(model, siblingElement);
-      if (matchingElement != null) {
+      result = firstSelector.match(model, siblingElement);
+      if (result != null) {
         break;
       }
     }
-    return matchingElement == null ? null : new MatchResult<>(matchingElement.getElement(),this);
+    return result ;
   }
 
   @Override

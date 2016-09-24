@@ -20,7 +20,7 @@ public class SelectNothingSelector extends SimpleSelector {
     }
 
     @Override
-    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
+    public <T> T match(SelectorModel<T> model, T element) {
         return null;
     }
 

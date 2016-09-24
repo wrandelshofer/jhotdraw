@@ -67,5 +67,5 @@ public abstract class Selector extends AST {
    * @param element the element
    * @return the matching element or null
    */
-  protected abstract <T> MatchResult<T> match(SelectorModel<T> model, T element);
+  protected abstract <T> T match(SelectorModel<T> model, T element);
 }

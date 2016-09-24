@@ -22,8 +22,8 @@ public class ExistsMatchSelector extends AbstractAttributeSelector {
     }
 
     @Override
-    protected <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-        return model.hasAttribute(element, attributeName) ? new MatchResult<>(element,this) : null;
+    protected <T> T match(SelectorModel<T> model, T element) {
+        return model.hasAttribute(element, attributeName) ? element : null;
     }
 
     @Override

@@ -15,24 +15,24 @@ import org.jhotdraw.css.SelectorModel;
  */
 public class AndCombinator extends Combinator {
 
-    public AndCombinator(SimpleSelector simpleSelector, Selector selector) {
-        super(simpleSelector, selector);
-    }
+  public AndCombinator(SimpleSelector simpleSelector, Selector selector) {
+    super(simpleSelector, selector);
+  }
 
-    @Override
-    public String toString() {
-        return "(" + firstSelector + " && " + secondSelector + ")";
-    }
+  @Override
+  public String toString() {
+    return "(" + firstSelector + " && " + secondSelector + ")";
+  }
 
-    @Override
-    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-      MatchResult<T> firstResult = firstSelector.match(model, element);
-      MatchResult<T> secondResult = secondSelector.match(model, element);
-return (firstResult != null && secondResult!=null) ? new MatchResult<>(element, this) : null;
-    }
+  @Override
+  public <T> T match(SelectorModel<T> model, T element) {
+    T firstResult = firstSelector.match(model, element);
+    T secondResult = secondSelector.match(model, element);
+    return (firstResult != null && secondResult != null) ? firstResult : null;
+  }
 
   @Override
   public int getSpecificity() {
-    return firstSelector.getSpecificity()+secondSelector.getSpecificity();
+    return firstSelector.getSpecificity() + secondSelector.getSpecificity();
   }
 }

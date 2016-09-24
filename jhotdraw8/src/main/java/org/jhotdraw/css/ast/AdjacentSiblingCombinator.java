@@ -26,12 +26,12 @@ public class AdjacentSiblingCombinator extends Combinator {
     }
 
     @Override
-    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-        MatchResult<T> result = secondSelector.match(model, element);
+    public <T> T match(SelectorModel<T> model, T element) {
+        T result = secondSelector.match(model, element);
         if (result != null) {
-            result = firstSelector.match(model, model.getPreviousSibling(result.getElement()));
+            result = firstSelector.match(model, model.getPreviousSibling(result));
         }
-        return result == null ? null : new MatchResult<T>(result.getElement(), this);
+        return result;
     }
 
   @Override

@@ -25,8 +25,8 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
     }
 
     @Override
-    protected <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-        return model.attributeValueContainsWord(element, attributeName, word) ? new MatchResult<>(element,this) : null;
+    protected <T> T match(SelectorModel<T> model, T element) {
+        return model.attributeValueContainsWord(element, attributeName, word) ? element : null;
     }
     @Override
     public String toString() {

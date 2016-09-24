@@ -27,8 +27,8 @@ public class SimplePseudoClassSelector extends PseudoClassSelector {
     }
 
     @Override
-    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
+    public <T> T match(SelectorModel<T> model, T element) {
         return (element != null && model.hasPseudoClass(element, pseudoClass)) //
-                ? new MatchResult<>(element,this) : null;
+                ? element : null;
     }
 }
