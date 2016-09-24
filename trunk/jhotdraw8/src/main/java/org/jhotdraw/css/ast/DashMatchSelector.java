@@ -27,9 +27,9 @@ public class DashMatchSelector extends AbstractAttributeSelector {
     }
 
     @Override
-    protected <T> MatchResult<T> match(SelectorModel<T> model, T element) {
+    protected <T> T match(SelectorModel<T> model, T element) {
         return (model.attributeValueEquals(element, attributeName, substring) //
                 || model.attributeValueStartsWith(element, attributeName, substring + '-'))//
-                        ? new MatchResult<>(element,this) : null;
+                        ? element : null;
     }
 }

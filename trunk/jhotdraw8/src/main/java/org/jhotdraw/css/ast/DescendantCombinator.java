@@ -26,9 +26,9 @@ public class DescendantCombinator extends Combinator {
     }
 
     @Override
-    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-        MatchResult<T> result = secondSelector.match(model, element);
-        T siblingElement = result == null ? null : result.getElement();
+    public <T> T match(SelectorModel<T> model, T element) {
+        T result = secondSelector.match(model, element);
+        T siblingElement = result == null ? null : result;
         while (siblingElement != null) {
             siblingElement = model.getParent(siblingElement);
             result = firstSelector.match(model, siblingElement);
@@ -36,7 +36,7 @@ public class DescendantCombinator extends Combinator {
                 break;
             }
         }
-        return result == null ? null : new MatchResult<>(result.getElement(),this);
+        return result;
     }
 
   @Override

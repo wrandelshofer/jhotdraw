@@ -25,9 +25,9 @@ public class SubstringMatchSelector extends AbstractAttributeSelector {
     }
 
     @Override
-    protected <T> MatchResult<T> match(SelectorModel<T> model, T element) {
+    protected <T> T match(SelectorModel<T> model, T element) {
         return (model.attributeValueContains(element, attributeName, substring))//
-                ? new MatchResult<>(element,this) : null;
+                ? element : null;
     }
     @Override
     public String toString() {

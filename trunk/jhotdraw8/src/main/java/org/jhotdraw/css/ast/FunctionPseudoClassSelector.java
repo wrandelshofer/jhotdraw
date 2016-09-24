@@ -31,9 +31,8 @@ public class FunctionPseudoClassSelector extends PseudoClassSelector {
     }
 
     @Override
-    public <T> MatchResult<T> match(SelectorModel<T> model, T element) {
-        // FIXME implement me
+    public <T> T match(SelectorModel<T> model, T element) {
         return (element != null && model.hasPseudoClass(element, functionIdentifier)) //
-                ? new MatchResult<>(element, this) : null;
+                ? element : null;
     }
 }
