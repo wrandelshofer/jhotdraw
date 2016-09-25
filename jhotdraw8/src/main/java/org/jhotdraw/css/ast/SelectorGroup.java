@@ -57,22 +57,21 @@ public class SelectorGroup extends AST {
     }
 
     /**
-     * Returns the matching element.
+     * Returns the selector which matches the specified element or null.
      *
      * @param <T> the element type
      * @param model The helper is used to access properties of the element and
      * parent or sibling elements in the document.
      * @param element the element
-     * @return the match result if the element matches, returns null if the element does not match
+     * @return the selector which matches the specified element, returns null if  no selector matches
      */
-    protected <T> T match(SelectorModel<T> model, T element) {
-        T result = null;
+    public <T> Selector match(SelectorModel<T> model, T element) {
         for (Selector s : selectors) {
-            result = s.match(model, element);
+            T result = s.match(model, element);
             if (result != null) {
-                break;
+              return s;
             }
         }
-        return result;
+        return null;
     }
 }
