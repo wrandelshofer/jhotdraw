@@ -6,10 +6,12 @@ package org.jhotdraw.css;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,9 +19,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 import javafx.css.StyleOrigin;
 import org.jhotdraw.collection.MapAccessor;
 import org.jhotdraw.css.ast.Declaration;
+import org.jhotdraw.css.ast.Selector;
 import org.jhotdraw.css.ast.StyleRule;
 import org.jhotdraw.css.ast.Stylesheet;
 import org.jhotdraw.draw.figure.Figure;
@@ -209,23 +213,21 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         SelectorModel<E> selectorModel = getSelectorModel();
         
         // The stylesheet is a user-agent stylesheet
-        for (Map.Entry<String, String> entry : collectApplicableDeclarations(elem, getUserAgentStylesheets(),
-                new HashMap<String, String>()).entrySet()) {
-            selectorModel.setAttribute(elem, StyleOrigin.USER_AGENT, entry.getKey(), entry.getValue());
+        for (Declaration d : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
+            selectorModel.setAttribute(elem, StyleOrigin.USER_AGENT, d.getProperty(),d.getTermsAsString());
         }
 
         // The value of a property was set by the user through a call to a set method
         // StyleOrigin.USER
         
         // The stylesheet is an external file
-        for (Map.Entry<String, String> entry : collectApplicableDeclarations(elem, getAuthorStylesheets(), new HashMap<String, String>()).entrySet()) {
-            selectorModel.setAttribute(elem, StyleOrigin.AUTHOR, entry.getKey(), entry.getValue());
+        for (Declaration d : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
+            selectorModel.setAttribute(elem, StyleOrigin.AUTHOR, d.getProperty(),d.getTermsAsString());
         }
 
         // The stylesheet is an internal file
-        for (Map.Entry<String, String> entry : collectApplicableDeclarations(elem, getInlineStylesheets(),
-                collectApplicableDeclarations(elem, getAuthorStylesheets(), new HashMap<String, String>())).entrySet()) {
-            selectorModel.setAttribute(elem, StyleOrigin.INLINE, entry.getKey(), entry.getValue());
+        for (Declaration d : collectApplicableDeclarations(elem, getInlineStylesheets())) {
+            selectorModel.setAttribute(elem, StyleOrigin.INLINE, d.getProperty(),d.getTermsAsString());
         }
 
         // 'inline style attributes' can override all other values
@@ -252,7 +254,15 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         applicableDeclarations.clear();
     }
 
-    private Map<String, String> collectApplicableDeclarations(E elem, Collection<ParsedStylesheetEntry> stylesheets, Map<String, String> applicableDeclarations) {
+    /**
+     * Collects all declarations in all specified stylesheets which are applicable to the specified element.
+     * 
+     * @param elem an element
+     * @param stylesheets the stylesheets
+     * @return list of applicable declarations
+     */
+    private List<Declaration> collectApplicableDeclarations(E elem, Collection<ParsedStylesheetEntry> stylesheets) {
+List<Map.Entry<Integer, Declaration>> applicableDeclarations = new LinkedList<>();
         for (ParsedStylesheetEntry e : stylesheets) {
             Stylesheet s = e.getStylesheet();
             if (s == null) {
@@ -260,20 +270,22 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             }
             collectApplicableDeclarations(elem, s, applicableDeclarations);
         }
-        return applicableDeclarations;
+        
+        return applicableDeclarations.stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
-    private Map<String, String> collectApplicableDeclarations(E elem, Stylesheet s, Map<String, String> applicableDeclarations) {
+    private  List<Map.Entry<Integer, Declaration>> collectApplicableDeclarations(E elem, Stylesheet s,  List<Map.Entry<Integer, Declaration>>  applicableDeclarations) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
-            if (r.getSelectorGroup().matches(selectorModel, elem)) {
+          Selector selector;
+            if (null!=(selector=r.getSelectorGroup().match(selectorModel, elem))) {
                 for (Declaration d : r.getDeclarations()) {
                     // Declarations without terms are ignored
                     if (d.getTerms().isEmpty()) {
                         continue;
                     }
 
-                    applicableDeclarations.put(d.getProperty(), d.getTermsAsString());
+                    applicableDeclarations.add(new AbstractMap.SimpleEntry<>(selector.getSpecificity(),d));
                 }
             }
         }
@@ -283,9 +295,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     @Override
     public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
-        for (Map.Entry<String, String> entry : collectApplicableDeclarations(elem, s,
-                new HashMap<String, String>()).entrySet()) {
-            selectorModel.setAttribute(elem, styleOrigin, entry.getKey(), entry.getValue());
+        for (Map.Entry<Integer, Declaration> entry : collectApplicableDeclarations(elem, s,
+                new LinkedList<Map.Entry<Integer, Declaration>>())) {
+          Declaration d = entry.getValue();
+            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(),d.getTermsAsString());
         }
     }
 }
