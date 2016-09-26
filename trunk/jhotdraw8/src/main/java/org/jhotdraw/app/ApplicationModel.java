@@ -11,9 +11,8 @@ import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.gui.URIChooser;
 
 /**
- * {@code ApplicationModel} provides meta-data for an {@link Application},
- * actions and factory methods for creating {@link ProjectView}s, toolbars and
- * {@link URIChooser}s.
+ * {@code ApplicationModel} provides meta-data,
+ * actions and factory methods for an {@link Application}.
  *
  * @design.pattern Application Framework, KeyAbstraction.
  * 
