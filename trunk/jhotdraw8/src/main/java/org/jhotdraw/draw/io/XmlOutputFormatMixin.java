@@ -26,7 +26,7 @@ import org.w3c.dom.Document;
 public interface XmlOutputFormatMixin extends OutputFormat {
     @Override
     default void write(File file, Drawing drawing) throws IOException {
-        setDocumentHome(file.toURI());
+        setDocumentHome(file.getParentFile()==null?new File(System.getProperty("user.home")).toURI():file.getParentFile().toURI());
         Document doc = toDocument(drawing);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();

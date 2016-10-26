@@ -21,6 +21,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
@@ -269,6 +270,7 @@ public class GrapherView extends AbstractProjectView implements EditorView {
             FigureFactory factory = new DefaultFigureFactory(idFactory);
             SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
             SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
+System.out.println("READING..."+uri);            
             return drawing;
         }).thenAccept(drawing
                 -> drawingView.setDrawing(drawing)

@@ -5,6 +5,7 @@
 package org.jhotdraw.binding;
 
 import java.util.function.Function;
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -38,31 +39,31 @@ public class CustomBinding {
   public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>,
         PROPERTY_B extends WritableValue<B> & ObservableValue<B>> void bindBidirectional(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> updateB, Function<B, A> updateA) {
     boolean[] alreadyCalled = new boolean[1];
-    addFlaggedChangeListener(propertyA, propertyB, updateB, alreadyCalled);
-    addFlaggedChangeListener(propertyB, propertyA, updateA, alreadyCalled);
+    addFlaggedChangeListener(propertyB, propertyA, updateB, alreadyCalled);
+    addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
   }
 
   /**
-   * Binds writable value B to observable value A using the conversion function updateB.
+   * Binds writable value A to observable value B using the conversion function updateA.
    *
-   * @param <A> the type of observable value A
-   * @param <B> the type of observable value B
-   * @param propertyA property A
-   * @param propertyB property B
-   * @param updateB converts a value from A to B
+   * @param <B> the type of observable value A
+   * @param <A> the type of observable value B
+   * @param propertyB property A
+   * @param propertyA property B
+   * @param updateA converts a value from B to A
    */
-  public static <A, B> void bind(ObservableValue<A> propertyA, WritableValue<B> propertyB, Function<A, B> updateB) {
+  public static <A,B> void bind(WritableValue<A> propertyA, ObservableValue<B> propertyB, Function<B, A> updateA) {
     boolean[] alreadyCalled = new boolean[1];
-    addFlaggedChangeListener(propertyA, propertyB, updateB, alreadyCalled);
+    addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
   }
 
-  private static <X, Y> void addFlaggedChangeListener(ObservableValue<X> propertyX, WritableValue<Y> propertyY, Function<X, Y> updateY,
+  private static <Y, X> void addFlaggedChangeListener( WritableValue<X> propertyX, ObservableValue<Y> propertyY,Function<Y, X> updateX,
           boolean[] alreadyCalled) {
-    propertyX.addListener((observable, oldValue, newValue) -> {
+    propertyY.addListener((observable, oldValue, newValue) -> {
       if (!alreadyCalled[0]) {
         try {
           alreadyCalled[0] = true;
-          propertyY.setValue(updateY.apply(newValue));
+          propertyX.setValue(updateX.apply(newValue));
         } finally {
           alreadyCalled[0] = false;
         }
@@ -70,4 +71,15 @@ public class CustomBinding {
     }
     );
   }
+  
+      /** Returns a string expression which uses {@code java.test.MessageFormat} to format
+     * the text.
+     * See {@link MessageStringFormatter} for special treatment of boolean values.
+     *
+     * @param format The format string.
+     * @param args The arguments.
+     * @return  The string expression */
+    public static StringExpression formatted(String format, Object... args) {
+        return MessageStringFormatter.format(format, args);
+    }
 }
