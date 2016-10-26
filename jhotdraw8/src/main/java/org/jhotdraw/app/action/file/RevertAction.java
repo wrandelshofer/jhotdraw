@@ -66,8 +66,10 @@ public class RevertAction extends AbstractViewAction {
 
     private void doIt(ProjectView view, URI uri) {
         view.addDisabler(this);
+        
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {
             if (throwable != null) {
+new Alert              (Alert.AlertType.ERROR,throwable.getLocalizedMessage()==null?throwable.toString():throwable.getLocalizedMessage()).showAndWait();
                 throwable.printStackTrace();
             }
             view.clearModified();

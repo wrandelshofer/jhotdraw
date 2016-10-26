@@ -45,7 +45,7 @@ import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.Actions;
 import org.jhotdraw.app.action.file.CloseFileAction;
 import org.jhotdraw.app.action.file.OpenRecentFileAction;
-import org.jhotdraw.binding.BindingUtil;
+import org.jhotdraw.binding.CustomBinding;
 import org.jhotdraw.collection.BooleanKey;
 import org.jhotdraw.collection.Key;
 import org.jhotdraw.collection.SimpleKey;
@@ -192,7 +192,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                 activeView.set(view);
             }
         });
-        stage.titleProperty().bind(BindingUtil.formatted(getLabels().getString("frame.title"),
+        stage.titleProperty().bind(CustomBinding.formatted(getLabels().getString("frame.title"),
                 view.titleProperty(), getModel().getName(), view.disambiguationProperty(), view.modifiedProperty()));
         view.titleProperty().addListener(this::handleTitleChanged);
         ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {

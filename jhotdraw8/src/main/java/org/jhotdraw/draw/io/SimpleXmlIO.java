@@ -62,7 +62,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     private String namespaceQualifier;
     private HashMap<Figure, Element> figureToElementMap = new HashMap<>();
     private URI documentHome;
-    private URI documentHomeDir;
 
     public SimpleXmlIO(FigureFactory factory) {
         this(factory, null, null, null);
@@ -74,9 +73,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         this.namespaceQualifier = namespaceQualifier;
     }
 
+    /** Must be a directory and not a file. */
     public void setDocumentHome(URI uri) {
         documentHome = uri;
-        documentHomeDir = uri.resolve(".");
     }
 
     public URI getDocumentHome() {
@@ -85,7 +84,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @Override
     public Drawing read(File file, Drawing drawing) throws IOException {
-        setDocumentHome(file.toURI());
+        setDocumentHome(file.getParentFile()==null?new File(System.getProperty("user.home")).toURI():file.getParentFile().toURI());
         return InputFormat.super.read(file, drawing);
     }
 
@@ -479,8 +478,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         if (drawingHome!=null) {
             uri=drawingHome.resolve(uri);
         }
-        if (documentHomeDir != null) {
-            uri = documentHomeDir.relativize(uri);
+        if (documentHome != null) {
+            uri = documentHome.relativize(uri);
         }
         return uri;
     }
