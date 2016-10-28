@@ -80,7 +80,7 @@ new Alert              (Alert.AlertType.ERROR,throwable.getLocalizedMessage()==n
         if (uri == null) {
             view.clear().handle(handler);
         } else {
-            view.read(uri, false).handle(handler);
+            view.read(uri,null, false).handle(handler);
         }
     }
 

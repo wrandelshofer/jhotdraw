@@ -7,10 +7,17 @@ package org.jhotdraw.svg;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -19,6 +26,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderImage;
@@ -72,6 +80,8 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.RenderingIntent;
 import org.jhotdraw.draw.SimpleDrawingRenderer;
+import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.input.ClipboardOutputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
 import org.jhotdraw.draw.io.XmlOutputFormatMixin;
 import org.jhotdraw.geom.Geom;
@@ -90,7 +100,9 @@ import org.w3c.dom.Element;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SvgExportOutputFormat implements OutputFormat, XmlOutputFormatMixin {
+public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
+  
+  public final static DataFormat SVG_FORMAT=new DataFormat("image/svg+xml");
 
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
@@ -103,15 +115,40 @@ public class SvgExportOutputFormat implements OutputFormat, XmlOutputFormatMixin
     private final String namespaceQualifier = null;
 
     public Document toDocument(Drawing external) throws IOException {
+        return toDocument(external, Collections.singleton(external));
+    }
+    public Document toDocument(Drawing external, Collection<Figure> selection) throws IOException {
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         r.set(RenderContext.RENDERING_INTENT, RenderingIntent.EXPORT);
-        javafx.scene.Node drawingNode = r.render(external);
+        LinkedList<Node> nodes=new LinkedList<>();
+        for (Figure f: external.preorderIterable()) {
+          if (selection.contains(f)) {
+        nodes.add(r.render(f));
+          }
+        }
+        Node drawingNode;
+        if (nodes.size()==1) {
+          drawingNode=nodes.getFirst();
+        }else{
+         drawingNode=new Group( nodes);
+        }
         Document doc = toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
         return doc;
     }
 
     public void write(OutputStream out, javafx.scene.Node drawing) throws IOException {
+        Document doc = toDocument(drawing);
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(out);
+            t.transform(source, result);
+        } catch (TransformerException ex) {
+            throw new IOException(ex);
+        }
+    }
+    public void write(Writer out, javafx.scene.Node drawing) throws IOException {
         Document doc = toDocument(drawing);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
@@ -827,4 +864,21 @@ public class SvgExportOutputFormat implements OutputFormat, XmlOutputFormatMixin
     public void setDocumentHome(URI uri) {
         // empty
     }
+
+  @Override
+  public void write(Map<DataFormat, Object>clipboard, Drawing drawing, Collection<Figure> selection) throws IOException {
+    StringWriter out = new StringWriter();
+            Document doc = toDocument(drawing,selection);
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(out);
+            t.transform(source, result);
+        } catch (TransformerException ex) {
+            throw new IOException(ex);
+        }
+        clipboard.put(SVG_FORMAT, out.toString());
+  }
+    
+    
 }

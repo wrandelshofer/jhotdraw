@@ -8,17 +8,14 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import javafx.stage.FileChooser;
 import org.jhotdraw.app.DocumentOrientedApplication;
 import org.jhotdraw.app.SimpleApplicationModel;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.file.RevertAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.collection.HierarchicalMap;
-import org.jhotdraw.draw.action.BringToFrontAction;
-import org.jhotdraw.draw.action.GroupAction;
-import org.jhotdraw.draw.action.SendToBackAction;
-import org.jhotdraw.draw.action.UngroupAction;
+import org.jhotdraw.gui.URIExtensionFilter;
+import org.jhotdraw.svg.SvgExportOutputFormat;
 import org.jhotdraw.util.FontIconDecoder;
 import org.jhotdraw.util.Resources;
 
@@ -40,10 +37,10 @@ public class GrapherApplication extends DocumentOrientedApplication {
             Logger.getLogger(GrapherApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        SimpleApplicationModel model = new SimpleApplicationModel("Grapher", GrapherView::new,
+        SimpleApplicationModel model = new SimpleApplicationModel("Grapher", GrapherProjectView::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
-                "XML Files", "*.xml");
-        model.getExportExtensionFilters().add(new FileChooser.ExtensionFilter("SVG","*.svg"));
+                "XML Files", null,"*.xml");
+        model.getExportExtensionFilters().add(new URIExtensionFilter("SVG",SvgExportOutputFormat.SVG_FORMAT,"*.svg"));
         setModel(model);
     }
 
@@ -57,7 +54,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
         map.put(UngroupAction.ID, new UngroupAction(this, null));*/
         Action a;
         map.put(RevertAction.ID, new RevertAction(this,null));
-        map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherView) view).getPropertiesPane(),
+        map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherProjectView) view).getPropertiesPane(),
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
         a.set(Action.SELECTED_KEY, Preferences.userNodeForPackage(GrapherApplication.class).getBoolean("view.propertiesPane.visible", true));

@@ -109,7 +109,7 @@ public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, F
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopEllipseConnector(this);
+        return new ChopEllipseConnector();
     }
 
     @Override

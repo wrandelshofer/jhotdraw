@@ -8,6 +8,7 @@ package org.jhotdraw.gui;
 import java.net.URI;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Window;
 
 /**
@@ -43,5 +44,13 @@ public interface URIChooser {
     default public URI showDialog(Node node) {
         Scene scene = node == null ? null : node.getScene();
         return showDialog(scene == null ? null : scene.getWindow());
+    }
+    
+    /** Gets the data format that the user selected. 
+     * 
+     * @return data format, or null if the user did not explicitly select a format
+     */
+    default DataFormat getDataFormat() {
+      return null;
     }
 }

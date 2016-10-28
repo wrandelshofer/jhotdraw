@@ -81,7 +81,7 @@ import org.jhotdraw.geom.Geom;
  *
  * @author werni
  */
-public class SimpleDrawingView extends SimplePropertyBean implements DrawingView {
+public class SimpleDrawingView extends AbstractDrawingView {
 
   private boolean constrainerNodeValid;
   private boolean recreateHandles;
@@ -401,7 +401,7 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
   private Runnable repainter = null;
 
   private InvalidationListener modelInvalidationListener = o -> repaint();
-
+  
   public SimpleDrawingView() {
     init();
   }
@@ -1266,18 +1266,6 @@ public class SimpleDrawingView extends SimplePropertyBean implements DrawingView
   }
 
   private void duplicateSelection() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  private void cut() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  private void copy() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  private void paste() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

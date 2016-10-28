@@ -632,7 +632,11 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
       if (object instanceof StyleableFigure) {
        StyleableFigure f = (StyleableFigure) object;       
        id = f.get(StyleableFigure.STYLE_ID);
+       if (getObject(id)==null) {
        putId(object, id);
+       }else{
+          id = super.createId(object,id+"_");
+       }
     }else{
           id = super.createId(object);
         }}

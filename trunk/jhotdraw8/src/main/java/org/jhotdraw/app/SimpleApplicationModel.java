@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 import java.util.function.Supplier;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
-import javafx.stage.FileChooser;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.app.action.app.AboutAction;
 import org.jhotdraw.app.action.app.ExitAction;
@@ -33,6 +33,7 @@ import org.jhotdraw.app.action.file.SaveFileAsAction;
 import org.jhotdraw.collection.HierarchicalMap;
 import org.jhotdraw.gui.FileURIChooser;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.gui.URIExtensionFilter;
 import org.jhotdraw.util.Resources;
 
 /**
@@ -42,20 +43,20 @@ import org.jhotdraw.util.Resources;
  */
 public class SimpleApplicationModel implements ApplicationModel {
     private  String name;
-    private final List<FileChooser.ExtensionFilter> openExtensionFilters = new ArrayList<>();
-    private final List<FileChooser.ExtensionFilter> saveExtensionFilters = new ArrayList<>();
-    private final List<FileChooser.ExtensionFilter> importExtensionFilters = new ArrayList<>();
-    private final List<FileChooser.ExtensionFilter> exportExtensionFilters = new ArrayList<>();
+    private final List<URIExtensionFilter> openExtensionFilters = new ArrayList<>();
+    private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
+    private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
+    private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
     private  Supplier<ProjectView> viewFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
         
     }
-    public SimpleApplicationModel(String name, Supplier<ProjectView> viewFactory, URL menuFxml, String fileDescription, String fileExtension) {
+    public SimpleApplicationModel(String name, Supplier<ProjectView> viewFactory, URL menuFxml, String fileDescription, DataFormat format, String fileExtension) {
         this.name = name;
         this.menuFxml=menuFxml;
-        FileChooser.ExtensionFilter fef = new FileChooser.ExtensionFilter(fileDescription,fileExtension);
+        URIExtensionFilter fef = new URIExtensionFilter(fileDescription,format,fileExtension);
         openExtensionFilters.add(fef);
         saveExtensionFilters.add(fef);
         this.viewFactory = viewFactory;
@@ -77,19 +78,19 @@ public class SimpleApplicationModel implements ApplicationModel {
         this.menuFxml = menuFxml;
     }
 
-    public List<FileChooser.ExtensionFilter> getOpenExtensionFilters() {
+    public List<URIExtensionFilter> getOpenExtensionFilters() {
         return openExtensionFilters;
     }
 
-    public List<FileChooser.ExtensionFilter> getSaveExtensionFilters() {
+    public List<URIExtensionFilter> getSaveExtensionFilters() {
         return saveExtensionFilters;
     }
 
-    public List<FileChooser.ExtensionFilter> getImportExtensionFilters() {
+    public List<URIExtensionFilter> getImportExtensionFilters() {
         return importExtensionFilters;
     }
 
-    public List<FileChooser.ExtensionFilter> getExportExtensionFilters() {
+    public List<URIExtensionFilter> getExportExtensionFilters() {
         return exportExtensionFilters;
     }
 
@@ -103,7 +104,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     public URIChooser createOpenChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.OPEN);
-        c.getFileChooser().getExtensionFilters().addAll(openExtensionFilters);
+        c.setExtensionFilters(openExtensionFilters);
         return c;
     }
 
@@ -111,7 +112,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     public URIChooser createSaveChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.SAVE);
-        c.getFileChooser().getExtensionFilters().addAll(saveExtensionFilters);
+        c.setExtensionFilters(saveExtensionFilters);
         return c;
     }
 
@@ -119,7 +120,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     public URIChooser createImportChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.OPEN);
-        c.getFileChooser().getExtensionFilters().addAll(importExtensionFilters);
+        c.setExtensionFilters(importExtensionFilters);
         return c;
     }
 
@@ -127,7 +128,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     public URIChooser createExportChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.SAVE);
-        c.getFileChooser().getExtensionFilters().addAll(exportExtensionFilters);
+        c.setExtensionFilters(exportExtensionFilters);
         return c;
     }
 

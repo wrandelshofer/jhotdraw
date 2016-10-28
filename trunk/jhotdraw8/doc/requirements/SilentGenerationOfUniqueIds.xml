@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.silentGenerationOfUniqueIds">
+<title>Silent Generation of Unique Ids</title>
+
+<para>Internally, in JHotDraw, a "Figure" is referenced using the opaque "reference type" functionality of the Java language,
+which guarantees that every figure can be unambiguosly referenced.</para>
+
+<para>The user may assign a textual "id" to a figure.</para>
+
+<para>While a user edits a Drawing, it is not always guaranteed that the user assigned "id" is unique.</para>
+
+<para>However a user may want to perform an action, that requires a unique id.</para>
+
+<para>Actions that require a unique id:</para>
+<orderedlist>
+<listitem><para>Saving a drawing.</para></listitem>
+<listitem><para>Loading a drawing.</para></listitem>
+<listitem><para>Pasting figures.</para></listitem>
+<listitem><para>Referencing a figure.</para></listitem>
+</orderedlist>
+
+<para>When a user performs such an action, JHotDraw will silently replace non-unique ids with unique ids.</para>
+
+<para>Replacement keeps the first non-unique id, and adds a suffix "_" followed by an integral number to
+    each subsequent non-unique ids.</para>
+</section>

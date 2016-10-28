@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw.app.AbstractProjectView;
 import org.jhotdraw.concurrent.FXWorker;
 
@@ -79,7 +80,7 @@ public class TeddyView extends AbstractProjectView implements Initializable {
     }
 
     @Override
-    public CompletionStage<Void> read(URI uri, boolean append) {
+    public CompletionStage<Void> read(URI uri, DataFormat format, boolean append) {
         return FXWorker.supply(() -> {
             StringBuilder builder = new StringBuilder();
             char[] cbuf = new char[8192];
@@ -99,7 +100,7 @@ public class TeddyView extends AbstractProjectView implements Initializable {
     }
 
     @Override
-    public CompletionStage<Void> write(URI uri) {
+    public CompletionStage<Void> write(URI uri, DataFormat format) {
         final String text = textArea.getText();
         return FXWorker.run(() -> {
             try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(uri)), StandardCharsets.UTF_8)) {

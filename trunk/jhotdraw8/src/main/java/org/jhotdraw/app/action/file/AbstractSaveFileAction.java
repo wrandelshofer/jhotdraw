@@ -9,11 +9,10 @@ package org.jhotdraw.app.action.file;
 
 import java.net.URI;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletionException;
-import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.collection.Key;
@@ -102,7 +101,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
                 break;
             }
             if (uri != null) {
-                saveViewToURI(v, uri, chsr);
+                saveViewToURI(v, uri, chsr.getDataFormat());
             }
             v.removeDisabler(this);
             if (oldFocusOwner != null) {
@@ -113,8 +112,8 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
         }
     }
 
-    protected void saveViewToURI(final ProjectView v, final URI uri, final URIChooser chooser) {
-        v.write(uri).handle((result, exception) -> {
+    protected void saveViewToURI(final ProjectView v, final URI uri, final DataFormat format) {
+        v.write(uri,format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                     v.removeDisabler(this);
                     if (oldFocusOwner != null) {
@@ -122,6 +121,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
                     }
             } else if (exception != null) {
                     Throwable value = exception;
+                    value.printStackTrace();
                     String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
                     Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
