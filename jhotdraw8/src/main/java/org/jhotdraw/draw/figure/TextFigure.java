@@ -96,7 +96,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopRectangleConnector(this);
+        return new ChopRectangleConnector();
     }
 
     @Override

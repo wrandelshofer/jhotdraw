@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.RenderContext;
+import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.handle.ConnectionPointHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.LineOutlineHandle;
@@ -48,11 +49,11 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     /**
      * Holds a strong reference to the property.
      */
-    private Property<Connector> startConnectorProperty;
+    private Property<Figure> startTargetProperty;
     /**
      * Holds a strong reference to the property.
      */
-    private Property<Connector> endConnectorProperty;
+    private Property<Figure> endTargetProperty;
     /**
      * The start position of the line.
      */
@@ -85,6 +86,14 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
      * The end connector.
      */
     public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
+    /**
+     * The start target.
+     */
+    public static SimpleFigureKey<Figure> START_TARGET = new SimpleFigureKey<>("startTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
+    /**
+     * The end target.
+     */
+    public static SimpleFigureKey<Figure> END_TARGET = new SimpleFigureKey<>("endTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
@@ -99,28 +108,28 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         set(END, new Point2D(endX, endY));
 
         // We must update the start and end point when ever one of
-        // the connected figures on one of the connectors changes
-        ChangeListener<Connector> clStart = (observable, oldValue, newValue) -> {
-            if (oldValue != null && get(END_CONNECTOR) != null && get(END_CONNECTOR).getTarget() != oldValue.getTarget()) {
-                oldValue.getTarget().getDependentFigures().remove(LineConnectionFigure.this);
+        // the connection targets changes
+        ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
+            if (oldValue != null&& get(END_TARGET)!=oldValue) {
+                oldValue.getDependentFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getTarget().getDependentFigures().add(LineConnectionFigure.this);
+                newValue.getDependentFigures().add(LineConnectionFigure.this);
             }
         };
-        ChangeListener<Connector> clEnd = (observable, oldValue, newValue) -> {
-            if (oldValue != null && get(START_CONNECTOR) != null && get(START_CONNECTOR).getTarget() != oldValue.getTarget()) {
-                oldValue.getTarget().getDependentFigures().remove(LineConnectionFigure.this);
+        ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
+            if (oldValue != null && get(START_TARGET) != oldValue) {
+                oldValue.getDependentFigures().remove(LineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getTarget().getDependentFigures().add(LineConnectionFigure.this);
+                newValue.getDependentFigures().add(LineConnectionFigure.this);
             }
         };
 
-        startConnectorProperty = START_CONNECTOR.propertyAt(getProperties());
-        startConnectorProperty.addListener(clStart);
-        endConnectorProperty = END_CONNECTOR.propertyAt(getProperties());
-        endConnectorProperty.addListener(clEnd);
+        startTargetProperty = START_TARGET.propertyAt(getProperties());
+        startTargetProperty.addListener(clStart);
+        endTargetProperty = END_TARGET.propertyAt(getProperties());
+        endTargetProperty.addListener(clEnd);
     }
 
     @Override
@@ -180,20 +189,22 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         Point2D end = get(END);
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
-        if (startConnector != null) {
-            start = startConnector.getPositionInWorld(this);
+       Figure startTarget = get(START_TARGET);
+       Figure endTarget = get(END_TARGET);
+        if (startConnector != null&&startTarget!=null) {
+            start = startConnector.getPositionInWorld(this,startTarget);
         }
-        if (endConnector != null) {
-            end = endConnector.getPositionInWorld(this);
+        if (endConnector != null&&endTarget!=null) {
+            end = endConnector.getPositionInWorld(this,endTarget);
         }
 
         // We must switch off rotations for the following computations
         // because
-        if (startConnector != null) {
-            set(START, worldToParent(startConnector.chopStart(this, start, end)));
+        if (startConnector != null&&startTarget!=null) {
+            set(START, worldToParent(startConnector.chopStart(this, startTarget,start, end)));
         }
-        if (endConnector != null) {
-            set(END, worldToParent(endConnector.chopEnd(this, start, end)));
+        if (endConnector != null&&endTarget!=null) {
+            set(END, worldToParent(endConnector.chopEnd(this, endTarget,start, end)));
         }
     }
 
@@ -221,8 +232,8 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
             }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
-            list.add(new ConnectionPointHandle(this, START, START_CONNECTOR));
-            list.add(new ConnectionPointHandle(this, END, END_CONNECTOR));
+            list.add(new ConnectionPointHandle(this, START, START_CONNECTOR, START_TARGET));
+            list.add(new ConnectionPointHandle(this, END, END_CONNECTOR, END_TARGET));
         } else {
             super.createHandles(handleType, dv, list);
         }
@@ -248,11 +259,11 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     @Override
     public void removeConnectionTarget(Figure connectedFigure) {
         if (connectedFigure != null) {
-            if (get(START_CONNECTOR) != null && connectedFigure == get(START_CONNECTOR).getTarget()) {
-                set(START_CONNECTOR, null);
+            if (get(START_TARGET) != null && connectedFigure == get(START_TARGET)) {
+                set(START_TARGET, null);
             }
-            if (get(END_CONNECTOR) != null && connectedFigure == get(END_CONNECTOR).getTarget()) {
-                set(END_CONNECTOR, null);
+            if (get(END_TARGET) != null && connectedFigure == get(END_TARGET)) {
+                set(END_TARGET, null);
             }
         }
     }
@@ -265,11 +276,11 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     @Override
     public Set<Figure> getProvidingFigures() {
         HashSet<Figure> ctf = new HashSet<>();
-        if (get(START_CONNECTOR) != null) {
-            ctf.add(get(START_CONNECTOR).getTarget());
+        if (get(START_TARGET) != null) {
+            ctf.add(get(START_TARGET));
         }
-        if (get(END_CONNECTOR) != null) {
-            ctf.add(get(END_CONNECTOR).getTarget());
+        if (get(END_TARGET) != null) {
+            ctf.add(get(END_TARGET));
         }
         return ctf;
     }
@@ -290,4 +301,12 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         return true;
     }
 
+    public void setStartConnection(Figure target, Connector connector) {
+              set(START_CONNECTOR, connector);
+              set(START_TARGET, target);
+              }
+    public void setEndConnection(Figure target, Connector connector) {
+              set(END_CONNECTOR, connector);
+              set(END_TARGET, target);
+              }
 }

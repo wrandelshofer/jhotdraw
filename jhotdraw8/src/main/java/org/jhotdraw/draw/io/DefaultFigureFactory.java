@@ -38,7 +38,7 @@ import org.jhotdraw.draw.figure.TextFigure;
 import org.jhotdraw.draw.figure.RectangleFigure;
 import org.jhotdraw.draw.figure.TransformableFigure;
 import org.jhotdraw.text.CColor;
-import org.jhotdraw.text.DefaultConnectorConverter;
+import org.jhotdraw.text.XmlConnectorConverter;
 import org.jhotdraw.text.DefaultConverter;
 import org.jhotdraw.text.XmlPoint2DConverter;
 import org.jhotdraw.text.CssObservableWordListConverter;
@@ -52,6 +52,7 @@ import org.jhotdraw.text.XmlDoubleConverter;
 import org.jhotdraw.text.XmlEffectConverter;
 import org.jhotdraw.text.XmlEnumConverter;
 import org.jhotdraw.text.XmlFFontConverter;
+import org.jhotdraw.text.XmlFigureReferenceConverter;
 import org.jhotdraw.text.XmlInsetsConverter;
 import org.jhotdraw.text.XmlPaintConverter;
 import org.jhotdraw.text.XmlPoint3DConverter;
@@ -108,7 +109,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Double.class, new XmlDoubleConverter());
         addConverterForType(URL.class, new XmlUrlConverter());
         addConverterForType(URI.class, new XmlUriConverter());
-        addConverterForType(Connector.class, new DefaultConnectorConverter());
+        addConverterForType(Connector.class, new XmlConnectorConverter());
         addConverterForType(Paint.class, new XmlPaintConverter());
         addConverterForType(CColor.class, new XmlCColorConverter());
         addConverterForType(Boolean.class, new XmlBooleanConverter());
@@ -118,6 +119,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Rectangle2D.class, new XmlRectangle2DConverter());
         addConverterForType(BlendMode.class, new XmlEnumConverter<BlendMode>(BlendMode.class));
         addConverterForType(Effect.class, new XmlEffectConverter());
+        addConverterForType(Figure.class, new XmlFigureReferenceConverter());
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssObservableWordListConverter());
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssSizeListConverter());

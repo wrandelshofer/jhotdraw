@@ -24,6 +24,8 @@ import org.jhotdraw.beans.NonnullProperty;
 import org.jhotdraw.draw.constrain.Constrainer;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.input.ClipboardInputFormat;
+import org.jhotdraw.draw.input.ClipboardOutputFormat;
 
 /**
  * A {@code DrawingView} can display a {@code Drawing} in a JavaFX scene graph.
@@ -90,6 +92,14 @@ public interface DrawingView extends RenderContext {
      * The name of the active layer property.
      */
     public final static String ACTIVE_LAYER_PROPERTY = "activeLayer";
+    /**
+     * The name of the clipboardInputFormat property.
+     */
+    public final static String CLIPBOARD_INPUT_FORMAT_PROPERTY = "clipboardInputFormat";
+    /**
+     * The name of the clibpoardOutputFormat property.
+     */
+    public final static String CLIPBOARD_OUTPUT_FORMAT_PROPERTY = "clibpoardOutputFormat";
     /**
      * The name of the drawing property.
      */
@@ -202,6 +212,19 @@ public interface DrawingView extends RenderContext {
      */
     NonnullProperty<HandleType> multiHandleTypeProperty();
 
+        /**
+     * The clipboard output format.
+     *
+     * @return the clipboard output format handle if present
+     */
+    ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty();
+
+        /**
+     * The clipboard input format.
+     *
+     * @return the clipboard output format handle if present
+     */
+    ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty();
     // ---
     // methods
     // ---
@@ -292,6 +315,31 @@ public interface DrawingView extends RenderContext {
      */
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
         
+    // Handles
+    /**
+     * Gets selected figures with the same handle.
+     *
+     * @param figures selected figures
+     * @param handle a handle
+     * @return A collection containing the figures with compatible handles.
+     */
+    public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
+    
+
+    /**
+     * Returns the world to view transformation.
+     *
+     * @return the transformation
+     */
+    Transform getWorldToView();
+
+    /**
+     * Returns the view to world transformation.
+     *
+     * @return the transformation;
+     */
+    Transform getViewToWorld();
+
     // ---
     // convenience methods
     // ---
@@ -346,6 +394,7 @@ public interface DrawingView extends RenderContext {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
+    
     default void setDrawing(Drawing newValue) {
         modelProperty().get().setRoot(newValue);
     }
@@ -413,20 +462,6 @@ public interface DrawingView extends RenderContext {
     default ObservableSet<Figure> getSelectedFigures() {
         return selectedFiguresProperty();
     }
-
-    /**
-     * Returns the world to view transformation.
-     *
-     * @return the transformation
-     */
-    Transform getWorldToView();
-
-    /**
-     * Returns the view to world transformation.
-     *
-     * @return the transformation;
-     */
-    Transform getViewToWorld();
 
     /**
      * Returns the drawing to view transformation.
@@ -543,13 +578,16 @@ public interface DrawingView extends RenderContext {
         modelProperty().set(newValue);
     }
 
-    // Handles
-    /**
-     * Gets selected figures with the same handle.
-     *
-     * @param figures selected figures
-     * @param handle a handle
-     * @return A collection containing the figures with compatible handles.
-     */
-    public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
+    default void setClipboardOutputFormat(ClipboardOutputFormat newValue) {
+      clipboardOutputFormatProperty().set(newValue);
+    }
+    default void setClipboardInputFormat(ClipboardInputFormat newValue) {
+      clipboardInputFormatProperty().set(newValue);
+    }
+    default ClipboardOutputFormat getClipboardOutputFormat() {
+      return clipboardOutputFormatProperty().get();
+    }
+    default ClipboardInputFormat getClipboardInputFormat() {
+      return clipboardInputFormatProperty().get();
+    }
 }

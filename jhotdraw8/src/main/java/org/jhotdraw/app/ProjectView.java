@@ -12,6 +12,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw.app.action.Action;
 import org.jhotdraw.beans.PropertyBean;
 
@@ -145,11 +146,12 @@ public interface ProjectView extends Disableable, PropertyBean {
      * </p>
      *
      * @param uri the URI
+     * @param format the desired data format, null means default data format should be used
      * @param append whether to append to the current document or to replace it.
      * @return Returns a CompletionStage which is completed when the read 
      * operation has finished.
      */
-    public CompletionStage<Void> read(URI uri, boolean append);
+    public CompletionStage<Void> read(URI uri, DataFormat format, boolean append);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -159,10 +161,11 @@ public interface ProjectView extends Disableable, PropertyBean {
      * operation. The disabler is removed when the callback is invoked.
      *
      * @param uri the URI
+     * @param format the desired data format, null means default data format should be used
      * @return Returns a CompletionStage which is completed when the write 
      * operation has finished.
      */
-    public CompletionStage<Void> write(URI uri);
+    public CompletionStage<Void> write(URI uri, DataFormat format);
 
     /**
      * Clears the view.

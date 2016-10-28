@@ -20,7 +20,7 @@ public class TeddyApplication extends DocumentOrientedApplication {
         setModel(new SimpleApplicationModel(
                 "Teddy", TeddyView::new,
                 DocumentOrientedApplication.class.getResource("DocumentOrientedMenu.fxml"),
-                "Text Files","*.txt"));
+                "Text Files",null,"*.txt"));
     }
 
     /**

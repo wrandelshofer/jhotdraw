@@ -25,8 +25,7 @@ public class LocatorConnector extends AbstractConnector {
      * @param target the target figure
      * @param locator the locator that should be used
      */
-    public LocatorConnector(Figure target, Locator locator) {
-        super(target);
+    public LocatorConnector(Locator locator) {
         this.locator = locator;
     }
 
@@ -43,13 +42,13 @@ public class LocatorConnector extends AbstractConnector {
     }
 
     @Override
-    public Point2D getPositionInLocal(Figure connection) {
+    public Point2D getPositionInLocal(Figure connection, Figure target) {
         final Bounds b = target.getBoundsInLocal();
         return locator.locate(target);
     }
 
     @Override
-    public Point2D chopStart(Figure connection, double startX, double startY, double endX, double endY) {
-        return getPositionInWorld(connection);
+    public Point2D chopStart(Figure connection, Figure target, double startX, double startY, double endX, double endY) {
+        return getPositionInWorld(connection, target);
     }
 }

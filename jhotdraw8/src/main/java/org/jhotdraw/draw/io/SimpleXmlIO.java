@@ -195,8 +195,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     private void setAttribute(Element elem, String unqualifiedName, String value) throws IOException {
         if (namespaceURI == null || namespaceQualifier == null) {
+          if (!elem.hasAttribute(unqualifiedName))
             elem.setAttribute(unqualifiedName, value);
         } else {
+          if (!elem.hasAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName))
             elem.setAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName, value);
         }
     }
@@ -216,10 +218,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             }
 
             if (!factory.isDefaultValue(figure, key, value)) {
+              String name=factory.keyToName(figure, key);
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    setAttribute(elem, factory.keyToName(figure, key), factory.createId(value));
+                    setAttribute(elem,name, factory.createId(value));
                 } else {
-                    setAttribute(elem, factory.keyToName(figure, key), factory.valueToString(key, value));
+                    setAttribute(elem, name, factory.valueToString(key, value));
                 }
             }
         }
@@ -305,10 +308,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
             if (id != null && !id.isEmpty()) {
                 if (factory.getObject(id) != null) {
-                    throw new IOException("Duplicate id " + id + " in element " + elem.getTagName());
-                }
-
+                    System.err.println("warning: duplicate id " + id + " in element " + elem.getTagName());
+                }else{
                 factory.putId(figure, id);
+                }
             }
             NodeList list = elem.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {

@@ -1,4 +1,4 @@
-/* @(#)GrapherView.java
+/* @(#)GrapherProjectView.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -21,7 +21,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
@@ -29,6 +28,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.input.DataFormat;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -36,48 +36,50 @@ import org.jhotdraw.app.AbstractProjectView;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.concurrent.FXWorker;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.EditorView;
-import org.jhotdraw.draw.figure.FillableFigure;
 import org.jhotdraw.draw.Layer;
-import org.jhotdraw.draw.figure.LineConnectionFigure;
-import org.jhotdraw.draw.figure.RectangleFigure;
 import org.jhotdraw.draw.SimpleDrawing;
 import org.jhotdraw.draw.SimpleDrawingEditor;
-import org.jhotdraw.draw.figure.LabelFigure;
+import org.jhotdraw.draw.SimpleDrawingView;
 import org.jhotdraw.draw.SimpleLayer;
-import org.jhotdraw.draw.figure.StrokeableFigure;
-import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.GroupAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.action.UngroupAction;
 import org.jhotdraw.draw.constrain.GridConstrainer;
+import org.jhotdraw.draw.figure.EllipseFigure;
+import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.FillableFigure;
+import org.jhotdraw.draw.figure.GroupFigure;
 import org.jhotdraw.draw.figure.ImageFigure;
+import org.jhotdraw.draw.figure.LabelFigure;
+import org.jhotdraw.draw.figure.LineConnectionFigure;
+import org.jhotdraw.draw.figure.LineFigure;
+import org.jhotdraw.draw.figure.RectangleFigure;
+import org.jhotdraw.draw.figure.StrokeableFigure;
+import org.jhotdraw.draw.figure.StyleableFigure;
 import org.jhotdraw.draw.gui.DrawingInspector;
 import org.jhotdraw.draw.gui.GridInspector;
+import org.jhotdraw.draw.gui.HierarchyInspector;
 import org.jhotdraw.draw.gui.Inspector;
 import org.jhotdraw.draw.gui.LayersInspector;
 import org.jhotdraw.draw.gui.StyleAttributesInspector;
-import org.jhotdraw.draw.gui.StylesheetsInspector;
 import org.jhotdraw.draw.gui.StyleClassesInspector;
+import org.jhotdraw.draw.gui.StylesheetsInspector;
 import org.jhotdraw.draw.gui.ToolsToolbar;
 import org.jhotdraw.draw.gui.ZoomToolbar;
 import org.jhotdraw.draw.handle.HandleType;
+import org.jhotdraw.draw.input.MultiClipboardInputFormat;
+import org.jhotdraw.draw.input.MultiClipboardOutputFormat;
 import org.jhotdraw.draw.io.DefaultFigureFactory;
 import org.jhotdraw.draw.io.FigureFactory;
 import org.jhotdraw.draw.io.IdFactory;
 import org.jhotdraw.draw.io.SimpleIdFactory;
 import org.jhotdraw.draw.io.SimpleXmlIO;
-import org.jhotdraw.draw.figure.EllipseFigure;
-import org.jhotdraw.draw.figure.Figure;
-import org.jhotdraw.draw.figure.GroupFigure;
-import org.jhotdraw.draw.figure.LineFigure;
-import org.jhotdraw.draw.gui.HierarchyInspector;
-import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
+import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ImageCreationTool;
 import org.jhotdraw.draw.tool.SelectionTool;
 import org.jhotdraw.draw.tool.Tool;
@@ -86,12 +88,12 @@ import org.jhotdraw.util.Resources;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 
 /**
- * GrapherView.
+ * GrapherProjectView.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherView extends AbstractProjectView implements EditorView {
+public class GrapherProjectView extends AbstractProjectView implements EditorView {
     
     private Node node;
     
@@ -126,7 +128,7 @@ public class GrapherView extends AbstractProjectView implements EditorView {
         loader.setController(this);
         
         try {
-            node = loader.load(getClass().getResourceAsStream("GrapherView.fxml"));
+            node = loader.load(getClass().getResourceAsStream("GrapherProjectView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -139,6 +141,10 @@ public class GrapherView extends AbstractProjectView implements EditorView {
         drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
             modified.set(true);
         });
+        
+        
+        drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(new SvgExportOutputFormat()));
+        drawingView.setClipboardInputFormat(new MultiClipboardInputFormat());
         
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
@@ -204,7 +210,7 @@ public class GrapherView extends AbstractProjectView implements EditorView {
                 GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
         );
         
-        Preferences prefs = Preferences.userNodeForPackage(GrapherView.class);
+        Preferences prefs = Preferences.userNodeForPackage(GrapherProjectView.class);
         PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
     
@@ -226,7 +232,7 @@ public class GrapherView extends AbstractProjectView implements EditorView {
         });
         
         PreferencesUtil.installBooleanPropertyHandler(//
-                Preferences.userNodeForPackage(GrapherView.class), id + ".expanded", t.expandedProperty());
+Preferences.userNodeForPackage(GrapherProjectView.class), id + ".expanded", t.expandedProperty());
         if (t.isExpanded()) {
             a.setExpandedPane(t);
             VBox.setVgrow(a, grow);
@@ -264,7 +270,7 @@ public class GrapherView extends AbstractProjectView implements EditorView {
     }
     
     @Override
-    public CompletionStage<Void> read(URI uri, boolean append) {
+    public CompletionStage<Void> read(URI uri, DataFormat format, boolean append) {
         return FXWorker.supply(() -> {
             IdFactory idFactory = new SimpleIdFactory();
             FigureFactory factory = new DefaultFigureFactory(idFactory);
@@ -278,9 +284,9 @@ System.out.println("READING..."+uri);
     }
     
     @Override
-    public CompletionStage<Void> write(URI uri) {
+    public CompletionStage<Void> write(URI uri, DataFormat format) {
         return FXWorker.run(() -> {
-            if (uri.getPath().endsWith(".svg")) {
+            if (SvgExportOutputFormat.SVG_FORMAT.equals(format)||uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.write(uri, drawingView.getDrawing());
             } else {

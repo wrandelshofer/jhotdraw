@@ -21,12 +21,8 @@ import org.jhotdraw.geom.Geom;
  */
 public class ChopRectangleConnector extends CenterConnector {
 
-    public ChopRectangleConnector(Figure target) {
-        super(target);
-    }
-
     @Override
-    public Point2D chopStart(Figure connection, double startX, double startY, double endX, double endY) {
+    public Point2D chopStart(Figure connection, Figure target,double startX, double startY, double endX, double endY) {
         // FIXME implement me properly
         Bounds bounds = target.getBoundsInLocal();
         Rectangle2D r = new Rectangle2D(bounds.getMinX(), bounds.getMinY(),

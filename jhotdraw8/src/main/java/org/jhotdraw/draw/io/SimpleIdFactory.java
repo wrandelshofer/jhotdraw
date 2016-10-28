@@ -28,15 +28,7 @@ public class SimpleIdFactory implements IdFactory {
 
     @Override
     public String createId(Object object) {
-        String id = objectToId.get(object);
-        if (id == null) {
-            do { // XXX linear search
-                id = Long.toString(nextId++);
-            } while (idToObject.containsKey(id));
-            objectToId.put(object, id);
-            idToObject.put(id, object);
-        }
-        return id;
+      return createId(object,"");
     }
 
     @Override
@@ -59,5 +51,17 @@ public class SimpleIdFactory implements IdFactory {
             objectToId.remove(oldObject);
         }
     }
+
+  String createId(Object object, String prefix) {
+        String id = objectToId.get(object);
+        if (id == null) {
+            do { // XXX linear search
+                id = prefix+Long.toString(nextId++);
+            } while (idToObject.containsKey(id));
+            objectToId.put(object, id);
+            idToObject.put(id, object);
+        }
+        return id;
+  }
 
 }

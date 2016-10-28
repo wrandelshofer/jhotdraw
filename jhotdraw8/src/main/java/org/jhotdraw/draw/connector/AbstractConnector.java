@@ -13,15 +13,4 @@ import org.jhotdraw.draw.figure.Figure;
  */
 public abstract class AbstractConnector implements Connector {
 
-    protected final Figure target;
-
-    public AbstractConnector(Figure target) {
-        this.target = target;
-    }
-
-    @Override
-    public Figure getTarget() {
-        return target;
-    }
-
 }

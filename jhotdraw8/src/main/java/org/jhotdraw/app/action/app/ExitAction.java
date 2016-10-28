@@ -11,13 +11,13 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletionException;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.action.AbstractApplicationAction;
 import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
@@ -161,7 +161,7 @@ public class ExitAction extends AbstractApplicationAction {
                 getApplication().removeDisabler(this);
             } else {
 
-                saveToFile(uri, chooser);
+                saveToFile(uri, chooser.getDataFormat());
 
             }
         } else {
@@ -219,7 +219,7 @@ public class ExitAction extends AbstractApplicationAction {
             URIChooser chooser = getChooser(v);
             URI uri = chooser.showDialog(unsavedView.getNode());
             if (uri != null) {
-                saveToFileAndReviewNext(uri, chooser);
+                saveToFileAndReviewNext(uri, chooser.getDataFormat());
 
             } else {
                 v.removeDisabler(this);
@@ -255,9 +255,9 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected void saveToFile(final URI uri, final URIChooser chooser) {
+    protected void saveToFile(final URI uri, final DataFormat format) {
         final ProjectView v = unsavedView;
-        v.write(uri).handle((result, exception) -> {
+        v.write(uri,format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -284,9 +284,9 @@ public class ExitAction extends AbstractApplicationAction {
         });
     }
 
-    protected void saveToFileAndReviewNext(final URI uri, final URIChooser chooser) {
+    protected void saveToFileAndReviewNext(final URI uri, final DataFormat format) {
         final ProjectView v = unsavedView;
-        v.write(uri).handle((result, exception) -> {
+        v.write(uri,format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
