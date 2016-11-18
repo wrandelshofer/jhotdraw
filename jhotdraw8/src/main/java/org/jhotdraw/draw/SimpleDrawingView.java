@@ -417,6 +417,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     backgroundPane = new Rectangle();
+    backgroundPane.setId("canvasPane");
     backgroundPane.setFill(new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false));
 
     drawingSubScene = new Group();
@@ -433,8 +434,9 @@ public class SimpleDrawingView extends AbstractDrawingView {
     drawingSubScene.getChildren().addAll(backgroundPane, drawingPane);
 
     toolPane = new BorderPane();
+    toolPane.setId("toolPane");
     toolPane.setBackground(Background.EMPTY);
-    toolPane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, null, null)));
+   // toolPane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, null, null)));
     toolPane.setManaged(false);
     handlesPane = new Group();
     handlesPane.setManaged(false);
@@ -458,7 +460,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     handleNewDrawingModel(null, drawingModel.get());
 
     // Set stylesheet
-    overlaysPane.getStylesheets().add("org/jhotdraw/draw/SimpleDrawingView.css");
+    rootPane.getStylesheets().add("org/jhotdraw/draw/SimpleDrawingView.css");
 
     // set root
     node = new SimpleDrawingViewNode();
