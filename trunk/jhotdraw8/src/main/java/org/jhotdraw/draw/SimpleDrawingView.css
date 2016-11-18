@@ -74,7 +74,7 @@
 
 /* Styles the canvas pane behind the drawing. This is a rectangle with a checkerboard pattern on it. */
 #canvasPane {
-  -fx-effect: dropshadow(gaussian,black,8,0,0,2);
+  -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.6),10,0,0,2);
 }
 
 /* Styles the tool pane in front of the drawing. This is a group. */
