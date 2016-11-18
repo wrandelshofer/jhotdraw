@@ -35,7 +35,7 @@ public class NewFileAction extends AbstractApplicationAction {
 
     public NewFileAction(Application app, String id) {
         super(app);
-        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
+        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override

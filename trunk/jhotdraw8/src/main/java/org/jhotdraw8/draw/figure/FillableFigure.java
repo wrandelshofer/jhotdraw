@@ -8,8 +8,9 @@ import java.util.Objects;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_COLOR;
-import org.jhotdraw8.draw.key.PaintStyleableFigureKey;
+import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.Paintable;
 
 /**
  * Interface figures which render a {@code javafx.scene.shape.Shape} and
@@ -26,14 +27,14 @@ public interface FillableFigure extends Figure {
      * Defines the paint used for filling the interior of the figure. Default
      * value: {@code Color.WHITE}.
      */
-    public static PaintStyleableFigureKey FILL_COLOR = new PaintStyleableFigureKey("fill", Color.WHITE);
+    public static PaintableStyleableFigureKey FILL_COLOR = new PaintableStyleableFigureKey("fill", new CColor(Color.WHITE));
     /**
      * Updates a shape node.
      *
      * @param shape a shape node
      */
     default void applyFillableFigureProperties(Shape shape) {
-        Paint p = getStyled(FILL_COLOR);
+        Paint p = Paintable.getPaint(getStyled(FILL_COLOR));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setFill(p);
         }

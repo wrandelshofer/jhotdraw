@@ -33,13 +33,13 @@ import org.jhotdraw8.app.ProjectView;
  * <p><em>Allow multiple views per URI</em><br>
  * When the feature is disabled, {@code OpenRecentFileAction} prevents opening
  * an URI which is opened in another view.<br>
- * See {@link org.jhotdraw.app} for a description of the feature.
+ * See {@link org.jhotdraw8.app} for a description of the feature.
  * </p>
  *
  * <p><em>Open last URI on launch</em><br>
  * {@code OpenRecentFileAction} supplies data for this feature by calling
  * {@link Application#addRecentURI} when it successfully opened a file.
- * See {@link org.jhotdraw.app} for a description of the feature.
+ * See {@link org.jhotdraw8.app} for a description of the feature.
  * </p>
  *
  * @author Werner Randelshofer.
@@ -102,7 +102,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                     exception.printStackTrace();
                     String message = (value != null && value.getMessage()
                             != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                    Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
                             ((message == null) ? "" : message));
                     alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));

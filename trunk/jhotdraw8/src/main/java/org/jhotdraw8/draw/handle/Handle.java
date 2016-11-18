@@ -15,11 +15,11 @@ import org.jhotdraw8.draw.figure.Figure;
 /**
  * Handle.
  *
- * @design.pattern org.jhotdraw.draw.Drawing Framework, KeyAbstraction.
+ * @design.pattern org.jhotdraw8.draw.Drawing Framework, KeyAbstraction.
  * @design.pattern Handle Adapter, Adapter.
  * {@link Handle} adapts the operations for manipulating a {@link Figure} with
  * the mouse to a common interface.
- * @design.pattern org.jhotdraw.draw.tool.HandleTracker Chain of Responsibility,
+ * @design.pattern org.jhotdraw8.draw.tool.HandleTracker Chain of Responsibility,
  * Handler.
  * 
  * @author Werner Randelshofer

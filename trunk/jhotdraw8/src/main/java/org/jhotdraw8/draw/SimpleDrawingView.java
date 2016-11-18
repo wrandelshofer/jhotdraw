@@ -460,7 +460,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     handleNewDrawingModel(null, drawingModel.get());
 
     // Set stylesheet
-    rootPane.getStylesheets().add("org/jhotdraw/draw/SimpleDrawingView.css");
+    rootPane.getStylesheets().add("org/jhotdraw8/draw/SimpleDrawingView.css");
 
     // set root
     node = new SimpleDrawingViewNode();

@@ -18,7 +18,7 @@ import org.jhotdraw8.collection.SimpleKey;
 /**
  * Action.
  * 
- * @design.pattern org.jhotdraw.app.Application Framework, KeyAbstraction.
+ * @design.pattern org.jhotdraw8.app.Application Framework, KeyAbstraction.
  * 
  * @design.pattern Action Command, Command.
  * The command pattern is used to treat commands like objects inside of an

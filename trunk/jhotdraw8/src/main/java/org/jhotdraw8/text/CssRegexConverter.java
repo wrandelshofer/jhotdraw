@@ -71,9 +71,8 @@ public class CssRegexConverter implements Converter<Regex> {
                 break;
             case CssTokenizer.TT_IDENT:
                 if ("none".equals(tt.currentStringValue())) {
-                    
                 } else {
-                throw new ParseException("find string or none expected", tt.getPosition());
+                    throw new ParseException("find string or none expected", tt.getPosition());
                 }
                 break;
             default:
@@ -90,7 +89,7 @@ public class CssRegexConverter implements Converter<Regex> {
             default:
                 throw new ParseException("replace string expected", tt.getPosition());
         }
-        
+
         tt.skipWhitespace();
 
         in.position(tt.getPosition());

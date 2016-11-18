@@ -1,0 +1,131 @@
+/* @(#)CssColorConverter.java
+ * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
+ */
+package org.jhotdraw8.text;
+
+import java.io.IOException;
+import java.nio.CharBuffer;
+import java.text.ParseException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Locale;
+import java.util.Map;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.Stop;
+import org.jhotdraw8.draw.io.IdFactory;
+
+/**
+ * CssColorConverter.
+ * <p>
+ * Parses the following EBNF from the
+ * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
+ * CSS Reference Guide</a>.
+ * </p>
+ * <pre>
+ * Color := (NamedColor|LookedUpColor|RgbColor|HsbColor|ColorFunction)
+ * NamedColor := Word
+ * LookedUpColor := Word
+ * RgbColor := ("#",Digit,Digit,Digit
+ *             | "#",Digit,Digit,Digit,Digit,Digit,Digit
+ *             | "rgb(", Integer, ",", Integer, ",", Integer, ")"
+ *             | "rgb(" Integer, "%", ",", Integer,"%","," Integer,"%" ")"
+ *             | "rgba(", Integer, ",", Integer, "," Integer, ",", Double )
+ *             | "rgba(", Integer "%" "," Integer, "%" "," Integer "%" "," Double )
+ *  ...TODO...
+ * </pre>
+ * <p>
+ * FIXME currently only parses the Color production
+ * </p>
+ *
+ * @author Werner Randelshofer
+ */
+public class CssColorConverter implements Converter<Color> {
+
+  private static Map<Color, String> colorNames = Collections.synchronizedMap(new IdentityHashMap<>());
+  private static Map<String, Color> nameColors = Collections.synchronizedMap(new HashMap<>());
+
+  private XmlNumberConverter doubleConverter = new XmlNumberConverter();
+
+  {
+    doubleConverter.setMaximumFractionDigits(3);
+  }
+
+  public void toString(Appendable out, IdFactory idFactory, Color value) throws IOException {
+    String name = colorNames.get(value);
+    if (name != null) {
+      out.append(name);
+      return;
+    }
+
+    if (value == null) {
+      out.append("none");
+    } else if (Color.TRANSPARENT.equals(value)) {
+      out.append("transparent");
+    } else {
+      Color c =  value;
+      if (c.getOpacity() == 1.0) {
+        int rgb = ((((int) (c.getRed() * 255)) & 0xff) << 16)
+                | ((((int) (c.getGreen() * 255)) & 0xff) << 8)
+                | ((((int) (c.getBlue() * 255)) & 0xff) << 0);
+
+        if ((rgb & 0xf0f0f0) >>> 4 == (rgb & 0x0f0f0f)) {
+          String hex = "000" + Integer.toHexString(((rgb & 0xf0000) >>> 8) | ((rgb & 0xf00) >>> 4) | (rgb & 0xf));
+          out.append("#");
+          out.append(hex.substring(hex.length() - 3));
+        } else {
+          String hex = "000000" + Integer.toHexString(rgb);
+          out.append("#");
+          out.append(hex.substring(hex.length() - 6));
+        }
+      } else {
+        out.append("rgba(");
+        out.append(Integer.toString((int) (c.getRed() * 255)));
+        out.append(',');
+        out.append(Integer.toString((int) (c.getGreen() * 255)));
+        out.append(',');
+        out.append(Integer.toString((int) (c.getBlue() * 255)));
+        out.append(',');
+        out.append(doubleConverter.toString(c.getOpacity()));
+        out.append(')');
+      }
+    }
+  }
+
+  @Override
+  public Color fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    try {
+      String str = buf.toString().trim().toLowerCase(Locale.ROOT);
+
+      Color c;
+
+      c = nameColors.get(str);
+      if (c != null) {
+        buf.position(buf.limit());
+        return c;
+      }
+
+      if ("none".equals(str)) {
+        c = null;
+      } else {
+        c = Color.web(str);
+      }
+      buf.position(buf.limit());
+      colorNames.put(c, str);
+      nameColors.put(str, c);
+      return c;
+    } catch (IllegalArgumentException e) {
+      ParseException pe = new ParseException("not a color:" + buf, buf.position());
+      pe.initCause(e);
+      throw pe;
+    }
+  }
+
+  @Override
+  public Color getDefaultValue() {
+    return null;
+  }
+}

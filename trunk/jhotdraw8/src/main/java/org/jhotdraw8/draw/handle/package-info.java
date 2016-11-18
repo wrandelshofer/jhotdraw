@@ -4,7 +4,7 @@
  */
 
 /**
-Provides {@link org.jhotdraw.draw.handle.Handle}s for direct manipulation of
+Provides {@link org.jhotdraw8.draw.handle.Handle}s for direct manipulation of
 figures on a drawing view.
 */
 package org.jhotdraw8.draw.handle;

@@ -13,20 +13,21 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import static org.jhotdraw8.draw.figure.FontableFigure.LINE_SPACING;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
-import org.jhotdraw8.draw.key.PaintStyleableFigureKey;
+import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
+import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.Paintable;
 
 /**
  * Interface for figures which render a {@code javafx.scene.shape.Shape} and can
  * be stroked.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -80,7 +81,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static PaintStyleableFigureKey STROKE_COLOR = new PaintStyleableFigureKey("stroke", Color.BLACK);
+    public static PaintableStyleableFigureKey STROKE_COLOR = new PaintableStyleableFigureKey("stroke", new CColor(Color.BLACK));
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
@@ -144,7 +145,7 @@ public interface StrokeableFigure extends Figure {
         if (shape.getStrokeMiterLimit() != d) {
             shape.setStrokeMiterLimit(d);
         }
-        Paint p = getStyled(STROKE_COLOR);
+        Paint p = Paintable.getPaint(getStyled(STROKE_COLOR));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }

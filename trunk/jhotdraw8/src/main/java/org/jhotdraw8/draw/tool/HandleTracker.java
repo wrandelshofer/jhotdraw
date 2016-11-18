@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.handle.Handle;
  * @design.pattern SelectionTool Strategy, Strategy.
  * 
  * @design.pattern HandleTracker Chain of Responsibility, Handler.
- * Mouse and keyboard events occur on a {@link org.jhotdraw.draw.DrawingView}, 
+ * Mouse and keyboard events occur on a {@link org.jhotdraw8.draw.DrawingView}, 
  * and are preprocessed by {@link SelectionTool}, and then by 
  * {@link HandleTracker}. {@code HandleTracker} invokes corresponding methods
  * on a {@link Handle} which in turn changes an aspect of a figure.

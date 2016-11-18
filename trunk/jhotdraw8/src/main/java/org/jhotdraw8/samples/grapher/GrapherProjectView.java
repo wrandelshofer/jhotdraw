@@ -153,7 +153,7 @@ public class GrapherProjectView extends AbstractProjectView implements EditorVie
 
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
-        Resources rsrc = Resources.getResources("org.jhotdraw.samples.grapher.Labels");
+        Resources rsrc = Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
         Supplier<Layer> layerFactory = ()->createFigure(SimpleLayer::new);
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("tool.selectFigure", rsrc), 0, 0);
@@ -180,7 +180,7 @@ public class GrapherProjectView extends AbstractProjectView implements EditorVie
         getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction(getApplication(), this,
                 detailsVisible,
                 "view.toggleProperties",
-                Resources.getResources("org.jhotdraw.samples.grapher.Labels")));
+                Resources.getResources("org.jhotdraw8.samples.grapher.Labels")));
         getActionMap().put(GroupAction.ID, new GroupAction(getApplication(), editor,()->createFigure(GroupFigure::new)));
         getActionMap().put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
         
@@ -206,8 +206,8 @@ public class GrapherProjectView extends AbstractProjectView implements EditorVie
     @Override
     public void start() {
         getNode().getScene().getStylesheets().addAll(//
-                GrapherApplication.class.getResource("/org/jhotdraw/draw/gui/inspector.css").toString(),//
-                GrapherApplication.class.getResource("/org/jhotdraw/samples/grapher/grapher.css").toString()//
+                GrapherApplication.class.getResource("/org/jhotdraw8/draw/gui/inspector.css").toString(),//
+                GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
         );
         
         Preferences prefs = Preferences.userNodeForPackage(GrapherProjectView.class);
@@ -215,7 +215,7 @@ public class GrapherProjectView extends AbstractProjectView implements EditorVie
     }
     
     private void addInspector(Inspector inspector, String id, Priority grow, List<Node> list) {
-        Resources r = Resources.getResources("org.jhotdraw.draw.gui.Labels");
+        Resources r = Resources.getResources("org.jhotdraw8.draw.gui.Labels");
         
         Accordion a = new Accordion();
         a.getStyleClass().setAll("inspector", "flush");

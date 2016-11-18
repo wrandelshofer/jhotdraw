@@ -38,7 +38,7 @@ public class DuplicateAction extends AbstractSelectionAction {
      */
     public DuplicateAction(Application app, Node target) {
         super(app,target);
-        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
+        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
     /*
     @Override

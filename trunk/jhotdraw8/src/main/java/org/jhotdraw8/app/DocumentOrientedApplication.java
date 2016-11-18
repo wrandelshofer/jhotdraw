@@ -135,7 +135,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                     return v;
                 }).exceptionally(e -> {
             e.printStackTrace();
-            final Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+            final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     labels.getString("application.createView.error"));
             alert.show();
@@ -287,7 +287,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      * @return the resource bundle
      */
     protected Resources getLabels() {
-        return Resources.getResources("org.jhotdraw.app.Labels");
+        return Resources.getResources("org.jhotdraw8.app.Labels");
     }
 
     /**

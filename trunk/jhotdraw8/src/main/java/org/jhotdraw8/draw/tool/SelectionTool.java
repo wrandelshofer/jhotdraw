@@ -86,7 +86,7 @@ public class SelectionTool extends AbstractTool {
     // Constructors
     // ---
     public SelectionTool() {
-        this("tool.selectFigure", HandleType.RESIZE, Resources.getResources("org.jhotdraw.draw.Labels"));
+        this("tool.selectFigure", HandleType.RESIZE, Resources.getResources("org.jhotdraw8.draw.Labels"));
     }
 
     public SelectionTool(String name, Resources rsrc) {

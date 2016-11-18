@@ -81,7 +81,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
 
     public void handle(ProjectView v) {
         if (!v.isDisabled()) {
-            final Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+            final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
             oldFocusOwner = getFocusOwner(v.getNode());
             v.addDisabler(this);
@@ -212,7 +212,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
             } else if (exception != null) {
                 Throwable value = exception;
                 String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
-                Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         ((message == null) ? "" : message));
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));

@@ -75,7 +75,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         PlatformUtil.invokeAndWait(() -> {
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
+            loader.setResources(Resources.getBundle("org.jhotdraw8.draw.gui.Labels"));
             loader.setController(this);
             try (InputStream in = fxmlUrl.openStream()) {
                 node = loader.load(in);

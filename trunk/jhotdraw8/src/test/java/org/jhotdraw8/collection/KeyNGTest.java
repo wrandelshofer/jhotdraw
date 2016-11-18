@@ -21,7 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.jhotdraw8.text.CssPaintConverter;
+import org.jhotdraw8.text.CssPaintableConverter;
 import org.jhotdraw8.text.StringConverterConverterWrapper;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -154,9 +154,9 @@ public class KeyNGTest {
         
         // test 6
         Property<String> ps2 = new SimpleStringProperty("ps2");
-        Bindings.bindBidirectional(ps2,ps,new StringConverterConverterWrapper<Paint>(new CssPaintConverter()));
+        Bindings.bindBidirectional(ps2,ps,new StringConverterConverterWrapper<Paint>(new CssPaintableConverter()));
         Property<String> ps3 = new SimpleStringProperty("ps3");
-        Bindings.bindBidirectional(ps3,ps,new StringConverterConverterWrapper<Paint>(new CssPaintConverter()));
+        Bindings.bindBidirectional(ps3,ps,new StringConverterConverterWrapper<Paint>(new CssPaintableConverter()));
         String[] newValueReceived=new String[1];
         ps3.addListener((o,oldValue,newValue)->newValueReceived[0]=newValue);
         ps2.setValue("#660033");
@@ -171,9 +171,9 @@ public class KeyNGTest {
         
         // test 6
         Property<String> ps2 = new SimpleStringProperty("ps2");
-        Bindings.bindBidirectional(ps2,ps,new StringConverterConverterWrapper<Paint>(new CssPaintConverter()));
+        Bindings.bindBidirectional(ps2,ps,new StringConverterConverterWrapper<Paint>(new CssPaintableConverter()));
         Property<String> ps3 = new SimpleStringProperty("ps3");
-        Bindings.bindBidirectional(ps3,ps,new StringConverterConverterWrapper<Paint>(new CssPaintConverter()));
+        Bindings.bindBidirectional(ps3,ps,new StringConverterConverterWrapper<Paint>(new CssPaintableConverter()));
         String[] newValueReceived=new String[1];
         ps3.addListener((o,oldValue,newValue)->newValueReceived[0]=newValue);
         ps2.setValue("#660033");

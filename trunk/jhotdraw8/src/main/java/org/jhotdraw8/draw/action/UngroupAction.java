@@ -43,7 +43,7 @@ public class UngroupAction extends AbstractSelectedAction {
     public UngroupAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
-                = Resources.getResources("org.jhotdraw.draw.Labels");
+                = Resources.getResources("org.jhotdraw8.draw.Labels");
         labels.configureAction(this, ID);
     }
 

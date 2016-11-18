@@ -22,7 +22,7 @@ public class UndoAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "edit.undo";
-    private Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+    private Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
     /*private PropertyChangeListener redoActionPropertyListener = new PropertyChangeListener() {
 
         @Override

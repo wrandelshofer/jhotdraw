@@ -107,14 +107,14 @@ import org.jhotdraw8.event.Listener;
  * determine which dependent figures need to be updated.
  *
  * @design.pattern Drawing Framework, KeyAbstraction.
- * @design.pattern org.jhotdraw.draw.model.DrawingModel Facade, Subsystem.
- * @design.pattern org.jhotdraw.draw.model.DrawingModel Strategy, Context.
+ * @design.pattern org.jhotdraw8.draw.model.DrawingModel Facade, Subsystem.
+ * @design.pattern org.jhotdraw8.draw.model.DrawingModel Strategy, Context.
  * @design.pattern RenderContext Builder, Builder.
  * @design.pattern Handle Adapter, Adaptee.
- * @design.pattern org.jhotdraw.draw.tool.CreationTool AbstractFactory,
+ * @design.pattern org.jhotdraw8.draw.tool.CreationTool AbstractFactory,
  * AbstractProduct.
- * @design.pattern org.jhotdraw.draw.locator.Locator Strategy, Context.
- * @design.pattern org.jhotdraw.draw.connector.Connector Strategy, Context.
+ * @design.pattern org.jhotdraw8.draw.locator.Locator Strategy, Context.
+ * @design.pattern org.jhotdraw8.draw.connector.Connector Strategy, Context.
  *
  * @design.pattern Figure Mixin, Mixin. The Mixin pattern is used to extend the
  * functionality of a class that implements the {@link Figure} interface. The
@@ -295,9 +295,9 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * The figure may choose to only partially change its local bounds.
      * <p>
      * This method typically changes property values in this figure with 
-     * {@link org.jhotdraw.draw.key.DirtyBits#NODE}, 
-     * {@link org.jhotdraw.draw.key.DirtyBits#LAYOUT}, 
-     * {@link org.jhotdraw.draw.key.DirtyBits#TRANSFORM} in the
+     * {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
+     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT}, 
+     * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also
      * call {@code reshape} on child figures.
      *

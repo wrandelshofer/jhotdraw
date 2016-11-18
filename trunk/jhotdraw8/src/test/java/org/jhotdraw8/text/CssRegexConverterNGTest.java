@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 public class CssRegexConverterNGTest {
 
     @Test(dataProvider = "regexOutputData")
-    public void testRegexOutput(String inputCssRegex, String inputValue, String expectedValue) throws Exception {
+    public void testFromStringApply(String inputCssRegex, String inputValue, String expectedValue) throws Exception {
         CssRegexConverter c = new CssRegexConverter(false);
         Regex rgx = c.fromString(inputCssRegex);
         String actualValue = rgx.apply(inputValue);
@@ -37,7 +37,7 @@ public class CssRegexConverterNGTest {
             {"'.*@(.*)' ''", "a@b", ""},};
     }
     @Test(dataProvider = "regexConverterData")
-    public void testRegexConverter(String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
+    public void testRegexFromStringReplace(String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
         CssRegexConverter c = new CssRegexConverter(false);
         Regex rgx = c.fromString(inputCssRegex);
         assertEquals(rgx.getFind(), expectedFind,"find");

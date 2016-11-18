@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import javafx.beans.InvalidationListener;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,14 +15,13 @@ import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.CColor;
 import org.jhotdraw8.text.CssCColorConverter;
-import org.jhotdraw8.text.CssPaintConverter;
+import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterConverterWrapper;
 import org.jhotdraw8.text.XmlDoubleConverter;
 import org.jhotdraw8.util.Resources;
@@ -68,7 +66,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
             FXMLLoader loader = new FXMLLoader();
-            loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
+            loader.setResources(Resources.getBundle("org.jhotdraw8.draw.gui.Labels"));
             loader.setController(this);
 
             try (InputStream in = fxmlUrl.openStream()) {
@@ -109,7 +107,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssCColorConverter()));
             
-            CssPaintConverter converter = new CssPaintConverter();
+            CssColorConverter converter = new CssColorConverter();
             CustomBinding.bindBidirectional(//
                     backgroundProperty,//
                     backgroundColorPicker.valueProperty(),//

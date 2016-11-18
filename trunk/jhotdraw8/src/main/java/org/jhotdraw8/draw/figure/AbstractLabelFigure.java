@@ -27,7 +27,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.RenderContext;
-import org.jhotdraw8.draw.RenderingIntent;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
@@ -41,6 +40,7 @@ import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.key.FigureKey;
+import org.jhotdraw8.text.Paintable;
 
 /**
  * AbstractLabelFigure.
@@ -157,10 +157,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         Bounds b = getBoundsInLocal();
         node.resizeRelocate(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
 
-        Paint fillColor = getStyled(FILL_COLOR);
+        Paint fillColor = Paintable.getPaint(getStyled(FILL_COLOR));
         node.setBackground(fillColor == null ? null : new Background(new BackgroundFill(fillColor, null, null)));
 
-        Paint strokeColor = getStyled(STROKE_COLOR);
+        Paint strokeColor = Paintable.getPaint(getStyled(STROKE_COLOR));
         double strokeWidth = getStyled(STROKE_WIDTH);
         if (strokeColor == null || strokeWidth == 0) {
             node.setBorder(Border.EMPTY);

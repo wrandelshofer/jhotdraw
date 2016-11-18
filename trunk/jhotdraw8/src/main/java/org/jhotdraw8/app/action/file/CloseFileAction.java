@@ -31,7 +31,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view */
     public CloseFileAction(Application app, ProjectView view) {
         super(app, view);
-        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
+        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     public CloseFileAction(Application app) {

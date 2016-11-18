@@ -50,7 +50,7 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
  * @design.pattern Drawing Framework, KeyAbstraction.
  * @design.pattern DrawingModel MVC, View.
  * @design.pattern DrawingEditor Mediator, Colleague.
- * @design.pattern org.jhotdraw.draw.tool.HandleTracker Chain of Responsibility, Handler.
+ * @design.pattern org.jhotdraw8.draw.tool.HandleTracker Chain of Responsibility, Handler.
  *
  * @author Werner Randelshofer
  * @version $Id$

@@ -42,9 +42,9 @@ import java.util.ResourceBundle;
  * and format type between <code>"${"</code> and <code>"}"</code>.
  * <p>
  * For example, if there is a {@code "imagedir"} property with the value
- * {@code "/org/jhotdraw/undo/images"}, then this could be used in an attribute
+ * {@code "/org/jhotdraw8/undo/images"}, then this could be used in an attribute
  * like this: <code>${imagedir}/editUndo.png</code>. This is resolved at
- * run-time as {@code /org/jhotdraw/undo/images/editUndo.png}.
+ * run-time as {@code /org/jhotdraw8/undo/images/editUndo.png}.
  * <p>
  * Property names in placeholders can contain modifiers. Modifiers are written
  * between @code "[$"} and {@code "]"}. Each modifier has a fallback chain.
@@ -175,7 +175,7 @@ public class Resources extends ResourceBundle implements Serializable {
      * get("+key+"):"+value); return value; } catch (MissingResourceException e)
      * { // System.out.println("Resources "+baseName+"
      * get("+key+"):***MISSING***"); if (isVerbose) {
-     * System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" +
+     * System.err.println("Warning Resources[" + baseName + "] \"" +
      * key + "\" not found."); //e.printStackTrace(); } return key; } }
      */
     /**
@@ -198,7 +198,7 @@ public class Resources extends ResourceBundle implements Serializable {
                 
                 if (value==null) {
                     if (isVerbose) {
-                        System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + "\" not found.");
+                        System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
                         //e.printStackTrace();
                     }
                     return null;
@@ -257,7 +257,7 @@ public class Resources extends ResourceBundle implements Serializable {
             return value;
         } catch (MissingResourceException e) {
             if (isVerbose) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + "\" not found.");
+                System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
                 //e.printStackTrace();
             }
             return null;
@@ -323,7 +323,7 @@ public class Resources extends ResourceBundle implements Serializable {
             return Integer.valueOf(getStringRecursive(key));
         } catch (MissingResourceException e) {
             if (isVerbose) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + "\" not found.");
+                System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
                 //e.printStackTrace();
             }
             return -1;
@@ -375,12 +375,12 @@ public class Resources extends ResourceBundle implements Serializable {
 
             URL url = baseClass.getResource(rsrcName);
             if (isVerbose && url == null) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found.");
+                System.err.println("Warning Resources[" + baseName + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found.");
             }
             return (url == null) ? null : new ImageView(url.toString());
         } catch (MissingResourceException e) {
             if (isVerbose) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "].getIconProperty \"" + key + suffix + "\" not found.");
+                System.err.println("Warning Resources[" + baseName + "].getIconProperty \"" + key + suffix + "\" not found.");
                 //e.printStackTrace();
             }
             return null;
@@ -415,7 +415,7 @@ public class Resources extends ResourceBundle implements Serializable {
             s = getStringRecursive(key + ".mnemonic");
         } catch (MissingResourceException e) {
             if (isVerbose) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + ".mnemonic\" not found.");
+                System.err.println("Warning Resources[" + baseName + "] \"" + key + ".mnemonic\" not found.");
                 //e.printStackTrace();
             }
             s = null;
@@ -438,7 +438,7 @@ public class Resources extends ResourceBundle implements Serializable {
             return value;
         } catch (MissingResourceException e) {
             if (isVerbose) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + ".toolTipText\" not found.");
+                System.err.println("Warning Resources[" + baseName + "] \"" + key + ".toolTipText\" not found.");
                 //e.printStackTrace();
             }
             return null;
@@ -459,7 +459,7 @@ public class Resources extends ResourceBundle implements Serializable {
             return value;
         } catch (MissingResourceException e) {
             if (isVerbose) {
-                System.err.println("Warning ResourceBundleUtil[" + baseName + "] \"" + key + ".text\" not found.");
+                System.err.println("Warning Resources[" + baseName + "] \"" + key + ".text\" not found.");
                 //e.printStackTrace();
             }
             return null;
