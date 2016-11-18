@@ -49,7 +49,7 @@ public class ExitAction extends AbstractApplicationAction {
      */
     public ExitAction(Application app) {
         super(app);
-        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, ID);
+        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ExitAction extends AbstractApplicationAction {
             return;
         }
 
-        final Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+        final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
         switch (unsavedViewsCount) {
             case 0: {
                 doExit();
@@ -171,7 +171,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewChanges() {
         if (!unsavedView.isDisabled()) {
-            final Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+            final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
             oldFocusOwner = unsavedView.getNode().getScene().getFocusOwner();
             unsavedView.removeDisabler(this);
             URI unsavedURI = unsavedView.getURI();
@@ -266,7 +266,7 @@ public class ExitAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 Throwable value = exception;
                 String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
                         + ((message == null) ? "" : message));
@@ -295,7 +295,7 @@ public class ExitAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 Throwable value = exception.getCause();
                 String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
                         + ((message == null) ? "" : message));

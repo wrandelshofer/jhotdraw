@@ -22,22 +22,22 @@ implementations.
 The key interfaces for the representation of a drawing are:
 </p>
 <ul>
-    <li>{@link org.jhotdraw.draw.Drawing}</li>
-    <li>{@link org.jhotdraw.draw.figure.Figure}</li>
+    <li>{@link org.jhotdraw8.draw.Drawing}</li>
+    <li>{@link org.jhotdraw8.draw.figure.Figure}</li>
 </ul>
 <p>
 The key interface for displaying a drawing on screen is:
 </p>
 <ul>
-    <li>{@link org.jhotdraw.draw.DrawingView}</li>
+    <li>{@link org.jhotdraw8.draw.DrawingView}</li>
 </ul>
 <p>
 The key interfaces for editing a drawing are:
 </p>
 <ul>
-    <li>{@link org.jhotdraw.draw.DrawingEditor}</li>
-    <li>{@link org.jhotdraw.draw.tool.Tool} (in sub-package "tool")</li>
-    <li>{@link org.jhotdraw.draw.handle.Handle} (in sub-package "handle")</li>
+    <li>{@link org.jhotdraw8.draw.DrawingEditor}</li>
+    <li>{@link org.jhotdraw8.draw.tool.Tool} (in sub-package "tool")</li>
+    <li>{@link org.jhotdraw8.draw.handle.Handle} (in sub-package "handle")</li>
 </ul>
 */
 package org.jhotdraw8.draw;

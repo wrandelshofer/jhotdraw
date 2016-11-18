@@ -52,12 +52,12 @@ import org.jhotdraw8.event.Listener;
  * @design.pattern DrawingModel Strategy, Strategy.
  * The strategy for updating the state of dependent {@link Figure} objects is 
  * implemented in {@link DrawingModel}. {@code DrawingModel} uses 
- * {@link org.jhotdraw.draw.key.DirtyBits} as a hint for its strategy.
+ * {@link org.jhotdraw8.draw.key.DirtyBits} as a hint for its strategy.
  * 
  * @design.pattern DrawingModel MVC, Model.
  * The model view controller (MVC) pattern is used to decouple application code
  * from user interface code. See {@link DrawingModel},
- * {@link org.jhotdraw.draw.DrawingView} and {@link org.jhotdraw.draw.tool.Tool}.
+ * {@link org.jhotdraw8.draw.DrawingView} and {@link org.jhotdraw8.draw.tool.Tool}.
  *
  * @author Werner Randelshofer
  * @version $Id$

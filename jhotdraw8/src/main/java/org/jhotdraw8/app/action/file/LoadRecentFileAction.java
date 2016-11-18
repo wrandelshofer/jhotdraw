@@ -32,13 +32,13 @@ import org.jhotdraw8.app.ProjectView;
  * <p><em>Open last URI on launch</em><br>
  * {@code LoadRecentFileAction} supplies data for this feature by calling
  * {@link Application#addRecentURI} when it successfully loaded a file.
- * See {@link org.jhotdraw.app} for a description of the feature.
+ * See {@link org.jhotdraw8.app} for a description of the feature.
  * </p>
  *
  * <p><em>Allow multiple views per URI</em><br>
  * When the feature is disabled, {@code LoadRecentFileAction} prevents loading an URI which
  * is opened in another view.<br>
- * See {@link org.jhotdraw.app} for a description of the feature.
+ * See {@link org.jhotdraw8.app} for a description of the feature.
  * </p>
  *
  * @author Werner Randelshofer.
@@ -123,7 +123,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
                 if (exists) {
                     view.read(uri, null);
                 } else {
-                    Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+                    Resources labels = Resources.getBundle("org.jhotdraw8.app.Labels");
                     throw new IOException(labels.getFormatted("file.read.fileDoesNotExist.message", URIUtil.getName(uri)));
                 }
             }
@@ -145,7 +145,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
             @Override
             protected void failed(Throwable error) {
                 error.printStackTrace();
-                Resources labels = Resources.getBundle("org.jhotdraw.app.Labels");
+                Resources labels = Resources.getBundle("org.jhotdraw8.app.Labels");
 
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")

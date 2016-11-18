@@ -24,7 +24,7 @@ public class CssConverterFactory implements ConverterFactory {
             case "word":
                 return new XmlWordConverter();
             case "paint":
-                return new CssPaintConverter();
+                return new CssPaintableConverter();
             case "font":
                 return new CssFFontConverter();
             default:

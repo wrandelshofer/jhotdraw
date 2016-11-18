@@ -169,7 +169,7 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     @Override
     public ResourceBundle getResources() {
-        return Resources.getResources("org.jhotdraw.app.Labels");
+        return Resources.getResources("org.jhotdraw8.app.Labels");
     }
     public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {
         HierarchicalMap<String, Action> map = new HierarchicalMap<>();

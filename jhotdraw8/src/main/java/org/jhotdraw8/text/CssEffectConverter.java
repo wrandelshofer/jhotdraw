@@ -44,7 +44,7 @@ import org.jhotdraw8.draw.io.IdFactory;
  */
 public class CssEffectConverter implements Converter<Effect> {
 
-    private CssPaintConverter colorConverter = new CssPaintConverter();
+    private CssPaintableConverter colorConverter = new CssPaintableConverter();
     private CssSizeConverter nb = new CssSizeConverter();
 
     @Override
@@ -54,7 +54,7 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append("dropshadow(");
             out.append(fx.getBlurType().toString().toLowerCase().replace('_', '-'));
             out.append(',');
-            colorConverter.toString(out, idFactory, fx.getColor());
+            colorConverter.toString(out, idFactory, new CColor(fx.getColor()));
             out.append(',');
             nb.toString(out, idFactory, fx.getRadius());
             out.append(',');
@@ -69,7 +69,7 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append("innershadow(");
             out.append(fx.getBlurType().toString().toLowerCase().replace('_', '-'));
             out.append(',');
-            colorConverter.toString(out, idFactory, fx.getColor());
+            colorConverter.toString(out, idFactory,new CColor(fx.getColor()));
             out.append(',');
             nb.toString(out, idFactory, fx.getRadius());
             out.append(',');

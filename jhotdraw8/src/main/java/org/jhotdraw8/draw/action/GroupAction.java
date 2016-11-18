@@ -40,7 +40,7 @@ public class GroupAction extends AbstractSelectedAction {
     public GroupAction(Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
         super(app, editor);
         Resources labels
-                = Resources.getResources("org.jhotdraw.draw.Labels");
+                = Resources.getResources("org.jhotdraw8.draw.Labels");
         labels.configureAction(this, ID);
         this.groupFactory = groupFactory;
         if (groupFactory == null) {

@@ -145,7 +145,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             FXMLLoader loader = new FXMLLoader();
             loader.setController(this);
-            loader.setResources(Resources.getBundle("org.jhotdraw.draw.gui.Labels"));
+            loader.setResources(Resources.getBundle("org.jhotdraw8.draw.gui.Labels"));
 
             try (InputStream in = fxmlUrl.openStream()) {
                 node = loader.load(in);

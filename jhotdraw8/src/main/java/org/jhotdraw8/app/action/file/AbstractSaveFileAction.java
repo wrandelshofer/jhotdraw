@@ -48,7 +48,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
     public AbstractSaveFileAction(Application app, ProjectView view, String id, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
-        Resources.getResources("org.jhotdraw.app.Labels").configureAction(this, id);
+        Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
     }
 
     protected URIChooser getChooser(ProjectView view) {
@@ -123,7 +123,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
                     Throwable value = exception;
                     value.printStackTrace();
                     String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getResources("org.jhotdraw.app.Labels");
+                    Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                     Alert alert = new Alert(Alert.AlertType.ERROR,
                             ((message == null) ? "" : message));
                     alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));

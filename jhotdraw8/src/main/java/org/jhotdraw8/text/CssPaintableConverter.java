@@ -9,8 +9,6 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.Locale;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -29,22 +27,22 @@ import org.jhotdraw8.draw.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssPaintConverter implements Converter<Paint> {
+public class CssPaintableConverter implements Converter<Paintable> {
 
     private CssCColorConverter colorConverter = new CssCColorConverter();
     private CssCLinearGradientConverter linearGradientConverter = new CssCLinearGradientConverter();
     private XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
-    public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, Paintable value) throws IOException {
         if (value == null) {
             out.append("none");
         } else if (Color.TRANSPARENT.equals(value)) {
             out.append("transparent");
-        } else if (value instanceof Color) {
-            CColor c = new CColor((Color) value);
+        } else if (value instanceof CColor) {
+            CColor c = (CColor) value;
             colorConverter.toString(out, idFactory, c);
-        } else if (value instanceof LinearGradient) {
-            CLinearGradient lg = new CLinearGradient((LinearGradient) value);
+        } else if (value instanceof CLinearGradient) {
+            CLinearGradient lg = (CLinearGradient) value;
             linearGradientConverter.toString(out, idFactory, lg);
         } else {
             throw new UnsupportedOperationException("not yet implemented");
@@ -52,18 +50,18 @@ public class CssPaintConverter implements Converter<Paint> {
     }
 
     @Override
-    public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Paintable fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString().trim().toLowerCase(Locale.ROOT);
 
         int pos=buf.position();
         try {
-            return Paintable.getPaint(colorConverter.fromString(buf, idFactory));
+            return colorConverter.fromString(buf, idFactory);
         } catch (ParseException e) {
             //its not a color
         }
         try {
             buf.position(pos);
-            return Paintable.getPaint(linearGradientConverter.fromString(buf, idFactory));
+            return linearGradientConverter.fromString(buf, idFactory);
         } catch (ParseException e) {
             //throw new UnsupportedOperationException("not yet implemented");
         }
@@ -72,7 +70,7 @@ public class CssPaintConverter implements Converter<Paint> {
     }
 
     @Override
-    public Paint getDefaultValue() {
+    public Paintable getDefaultValue() {
         return null;
     }
 }
