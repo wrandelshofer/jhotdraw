@@ -71,3 +71,18 @@
 .constrainer-grid {
     -fx-stroke: yellowgreen;
 }
+
+/* Styles the canvas pane behind the drawing. This is a rectangle with a checkerboard pattern on it. */
+#canvasPane {
+  -fx-effect: dropshadow(gaussian,black,8,0,0,2);
+}
+
+/* Styles the tool pane in front of the drawing. This is a group. */
+#toolPane {
+  -fx-border-color: black;
+  -fx-border-style: dashed;
+}
+
+/* Styles the background pane which fills the background of the viewport that contains the canvasPane and the toolPane.*/
+#backgroundPane {
+}

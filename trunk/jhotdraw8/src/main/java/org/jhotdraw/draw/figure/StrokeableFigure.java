@@ -86,7 +86,7 @@ public interface StrokeableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    public static EnumStyleableFigureKey<StrokeType> STROKE_TYPE = new EnumStyleableFigureKey<>("stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.CENTERED);
+    public static EnumStyleableFigureKey<StrokeType> STROKE_TYPE = new EnumStyleableFigureKey<>("stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.INSIDE);
     /**
      * Defines the width of the outline of the figure.
      * <p>
