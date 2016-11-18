@@ -11,6 +11,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw.draw.RenderContext;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
@@ -49,10 +50,11 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
 
     public RectangleFigure(double x, double y, double width, double height) {
         reshape(x, y, width, height);
+        set(STROKE_TYPE, StrokeType.CENTERED);
     }
 
     public RectangleFigure(Rectangle2D rect) {
-        reshape(rect.getMinX(),rect.getMinY(),rect.getWidth(),rect.getHeight());
+        this(rect.getMinX(),rect.getMinY(),rect.getWidth(),rect.getHeight());
     }
 
     @Override
