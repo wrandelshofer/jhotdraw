@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import static java.lang.Math.*;
+import java.util.ArrayList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -60,13 +61,6 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
-    }
-
-    @Override
-    public void reshape(Transform transform) {
-        Bounds b = getBoundsInLocal();
-        b = transform.transform(b);
-        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override

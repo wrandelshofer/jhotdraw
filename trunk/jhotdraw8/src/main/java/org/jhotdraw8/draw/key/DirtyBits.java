@@ -66,7 +66,13 @@ public enum DirtyBits {
      * <p>
      * Method {@code Figure#transformNotify} must be called on the figure.
      */
-    TRANSFORM;
+    TRANSFORM,
+    /**
+     * This is internally used by DrawingModel for marking figures which need transformNotify.
+     * <p>
+     * Method {@code Figure#transformNotify} must be called on the figure.
+     */
+    TRANSFORM_NOTIFY;
 
     private int mask;
 

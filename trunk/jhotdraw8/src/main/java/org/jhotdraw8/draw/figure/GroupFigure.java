@@ -16,6 +16,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.geom.Geom;
 
 /**
@@ -34,6 +35,10 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
 
     @Override
     public void reshape(Transform transform) {
+        Point2D oldPoint = new Point2D(0,0);
+        Point2D newPoint = getLocalToWorld().createConcatenation(transform).transform(oldPoint);
+        
+        
         for (Figure child : getChildren()) {
             Transform p2c = child.getParentToLocal();
             if (p2c.isIdentity()) {
@@ -42,11 +47,13 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
                 TransformableFigure tchild=(TransformableFigure) child;
                 
                 if (transform instanceof Translate) {
+                    MoveHandle.translateFigure(child, oldPoint, newPoint, null);
+                    /*
                     p2c = tchild.getTransform();
                     Point2D tr = new Point2D(transform.getTx(), transform.getTy());
                     tr = Geom.toDeltaTransform(p2c).transform(tr);
                     Transform t = new Translate(tr.getX(), tr.getY());
-                    tchild.reshape(t);
+                    tchild.reshape(t);*/
                 } else {
                 /* XXX might need this
                tchild.set(TRANSFORM, Collections.singletonList(child.getLocalToParent()));

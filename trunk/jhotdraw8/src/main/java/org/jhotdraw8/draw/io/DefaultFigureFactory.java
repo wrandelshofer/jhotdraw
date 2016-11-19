@@ -44,6 +44,7 @@ import org.jhotdraw8.text.XmlPoint2DConverter;
 import org.jhotdraw8.text.CssObservableWordListConverter;
 import org.jhotdraw8.text.CssSizeListConverter;
 import org.jhotdraw8.text.FFont;
+import org.jhotdraw8.text.Paintable;
 import org.jhotdraw8.text.XmlUrlConverter;
 import org.jhotdraw8.text.XmlUriConverter;
 import org.jhotdraw8.text.XmlBooleanConverter;
@@ -55,6 +56,7 @@ import org.jhotdraw8.text.XmlFFontConverter;
 import org.jhotdraw8.text.XmlFigureReferenceConverter;
 import org.jhotdraw8.text.XmlInsetsConverter;
 import org.jhotdraw8.text.XmlPaintConverter;
+import org.jhotdraw8.text.XmlPaintableConverter;
 import org.jhotdraw8.text.XmlPoint3DConverter;
 import org.jhotdraw8.text.XmlRectangle2DConverter;
 import org.jhotdraw8.text.XmlSvgPathConverter;
@@ -111,6 +113,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(URI.class, new XmlUriConverter());
         addConverterForType(Connector.class, new XmlConnectorConverter());
         addConverterForType(Paint.class, new XmlPaintConverter());
+        addConverterForType(Paintable.class, new XmlPaintableConverter());
         addConverterForType(CColor.class, new XmlCColorConverter());
         addConverterForType(Boolean.class, new XmlBooleanConverter());
         addConverterForType(TextAlignment.class, new XmlEnumConverter<TextAlignment>(TextAlignment.class));
@@ -126,7 +129,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(StrokeableFigure.STROKE_LINE_CAP, new XmlEnumConverter<StrokeLineCap>(StrokeLineCap.class));
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
         addConverter(StrokeableFigure.STROKE_TYPE, new XmlEnumConverter<StrokeType>(StrokeType.class));
-        addConverter(TransformableFigure.TRANSFORM, new XmlTransformListConverter());
+        addConverter(TransformableFigure.TRANSFORMS, new XmlTransformListConverter());
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 

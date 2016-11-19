@@ -112,7 +112,7 @@ public class UngroupAction extends AbstractSelectedAction {
         if (groupTransform.isIdentity()) {
             groupTransform = null;
         }
-        boolean isGroupTranslateScaleRotateOnly=group.get(TransformableFigure.TRANSFORM)==null||group.get(TransformableFigure.TRANSFORM).isEmpty();
+        boolean isGroupTranslateScaleRotateOnly=group.get(TransformableFigure.TRANSFORMS)==null||group.get(TransformableFigure.TRANSFORMS).isEmpty();
 
         int index = parent.getChildren().indexOf(group);
         newSelection.addAll(group.getChildren());
@@ -120,18 +120,18 @@ public class UngroupAction extends AbstractSelectedAction {
             model.insertChildAt(child, parent, index++);
 
             if (groupTransform != null) {
-                List<Transform> childTransforms = child.get(TransformableFigure.TRANSFORM);
+                List<Transform> childTransforms = child.get(TransformableFigure.TRANSFORMS);
                 if (!isGroupTranslateScaleRotateOnly||childTransforms != null && !childTransforms.isEmpty()) {
                     ArrayList<Transform> newTransforms = new ArrayList<>();
                     newTransforms.add(groupTransform);
                     if (childTransforms != null) {
                         newTransforms.addAll(childTransforms);
                     }
-                    child.set(TransformableFigure.TRANSFORM, newTransforms);
+                   model.set(child,TransformableFigure.TRANSFORMS, newTransforms);
                 } else {
                     ArrayList<Transform> newTransforms = new ArrayList<>();
                     newTransforms.add(groupTransform);
-                    child.set(TransformableFigure.TRANSFORM, newTransforms);
+                   model.set(child,TransformableFigure.TRANSFORMS, newTransforms);
                 }
             }
        }

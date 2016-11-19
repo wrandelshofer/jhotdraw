@@ -59,13 +59,7 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
         return new BoundingBox(get(CENTER_X)-rx, get(CENTER_Y)-ry, rx*2.0, ry*2.0);
     }
 
-    @Override
-    public void reshape(Transform transform) {
-        Bounds r = getBoundsInLocal();
-        Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
-        b = transform.transform(b);
-        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
-    }
+
 
     @Override
     public void reshape(double x, double y, double width, double height) {

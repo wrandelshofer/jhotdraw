@@ -246,24 +246,24 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
         }
       }
       // all figures with dirty bit "TRANSFORM"
-      // induce a dirty bit "DEPENDENT_LAYOUT" on all descendants
-      // induce a dirty bit "TRANSFORM" on all descendants
+      // induce a dirty bit "DEPENDENT_LAYOUT" and "TRANSFORM_NOTIFY"  on all descendants
       DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
+      DirtyMask dmTransformNotify = DirtyMask.of(DirtyBits.TRANSFORM_NOTIFY);
       for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
         Figure f = entry.getKey();
         DirtyMask dm = entry.getValue();
-        if (dm.intersects(dmTransform)) {
+        if (dm.intersects(dmTransform) && ! dm.intersects(dmTransformNotify)) {
           for (Figure a : f.preorderIterable()) {
-              markDirty(a, DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM);
+              markDirty(a, DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM_NOTIFY);
           }
         }
       }
-      // all figures with dirty bit "TRANSFORM"
+      // all figures with dirty bit "TRANSFORM_NOTIFY"
       // invoke transformNotify
       for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
         Figure f = entry.getKey();
         DirtyMask dm = entry.getValue();
-        if (dm.intersects(dmTransform)) {
+        if (dm.intersects(dmTransformNotify)) {
             f.transformNotify();
         }
       }

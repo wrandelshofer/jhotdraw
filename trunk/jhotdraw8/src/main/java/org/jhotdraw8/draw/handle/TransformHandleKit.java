@@ -255,7 +255,7 @@ public class TransformHandleKit {
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();
 
-         //   resize(getWorldToTransform(getOwner()).transform(newPoint), getOwner(), startBounds, view.getModel(), keepAspect);
+            resize(newPoint, getOwner(), startBounds, view.getModel(), keepAspect);
         }
 
         @Override
@@ -295,6 +295,7 @@ public class TransformHandleKit {
          * @param height new height in local coordinates
          */
         protected void transform(DrawingModel model, Figure owner, double x, double y, double width, double height) {
+            if (true)return; // FIXME implement me
             if (width == 0 || height == 0) {
                 return;
             }
@@ -306,16 +307,14 @@ public class TransformHandleKit {
                 return;
             }
             
-            
-            
             // sx and sy scale around x and y
             //   translate2D(pivotX, pivotY);
             // scale2D(sx, sy);
             //   translate2D(-pivotX, -pivotY);
 
             // this translation is appended to the scale
-            double tx = x - startBounds.getMinX();
-            double ty = y - startBounds.getMinY();
+            double tx = (x - startBounds.getMinX());
+            double ty = (y - startBounds.getMinY());
 
             double newTx = startTranslateX + tx - x + sx * x;
             double newTy = startTranslateY + ty - y + sy * y;

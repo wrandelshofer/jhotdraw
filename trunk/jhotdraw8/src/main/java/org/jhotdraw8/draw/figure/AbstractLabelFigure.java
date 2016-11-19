@@ -119,13 +119,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     }
 
     @Override
-    public void reshape(Transform transform) {
-        Point2D o = get(ORIGIN);
-        o = transform.transform(o);
-        set(ORIGIN, o);
-    }
-
-    @Override
     public void reshape(double x, double y, double width, double height) {
         set(ORIGIN, new Point2D(x, y + height));
         invalidateBounds();

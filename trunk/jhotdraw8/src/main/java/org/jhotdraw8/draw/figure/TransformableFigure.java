@@ -102,7 +102,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
 
-    public static TransformListStyleableFigureKey TRANSFORM = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), Collections.emptyList());
+    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), Collections.emptyList());
 
     /**
      * Updates a figure node with all transformation properties defined in this
@@ -117,7 +117,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyTransformableFigureProperties(Node node) {
+    default void applyTransformableFigurePropertiesFast(Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
         if (t.isIdentity()) {
@@ -134,27 +134,25 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
-    default Transform getLocalToParentOld() {
-        Transform t = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
-        if (t == null) {
-            Point2D center = getCenterInLocal();
-            Affine tx = new Affine();
-            tx.appendTranslation(getStyled(TransformableFigure.TRANSLATE_X), getStyled(TransformableFigure.TRANSLATE_Y));
-            tx.appendRotation(getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
-            tx.appendScale(getStyled(TransformableFigure.SCALE_X), getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
-            tx.append(getTransform());
-            t = tx;
-            if (CACHE) {
-                set(FigureImplementationDetails.LOCAL_TO_PARENT, t);
-            }
-        }
-        return t;
+    default void applyTransformableFigureProperties(Node node) {
+        double tx = getStyled(TRANSLATE_X);
+        double ty = getStyled(TRANSLATE_Y);
+        double r = getStyled(ROTATE);
+        double sx = getStyled(SCALE_X);
+        double sy = getStyled(SCALE_Y);
+        List<Transform> t = getStyled(TRANSFORMS);
+        node.setTranslateX(tx);
+        node.setTranslateY(ty);
+        node.setRotate(r);
+        node.setScaleX(sx);
+        node.setScaleY(sy);
+        node.getTransforms().setAll(t);
     }
 
     @Override
     default Transform getLocalToParent() {
-        Transform t2l = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
-        if (t2l == null) {
+        Transform l2p = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
+        if (l2p == null) {
             Point2D center = getCenterInLocal();
 
             double tx = getStyled(TRANSLATE_X);
@@ -162,57 +160,76 @@ public interface TransformableFigure extends TransformCacheableFigure {
             double r = getStyled(ROTATE);
             double sx = getStyled(SCALE_X);
             double sy = getStyled(SCALE_Y);
-            List<Transform> t = getStyled(TRANSFORM);
+            List<Transform> t = getStyled(TRANSFORMS);
 
             if (tx != 0.0 || ty != 0.0) {
                 Translate tt = new Translate(tx, ty);
-                t2l = t2l == null ? tt : t2l.createConcatenation(tt);
+                l2p = l2p == null ? tt : l2p.createConcatenation(tt);
             }
             if (r != 0) {
                 Rotate tr = new Rotate(r, center.getX(), center.getY());
-                t2l = t2l == null ? tr : t2l.createConcatenation(tr);
+                l2p = l2p == null ? tr : l2p.createConcatenation(tr);
             }
-            if (sx != 1.0 || sy != 1.0) {
+            if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
                 Scale ts = new Scale(sx, sy, center.getX(), center.getY());
-                t2l = t2l == null ? ts : t2l.createConcatenation(ts);
+                l2p = l2p == null ? ts : l2p.createConcatenation(ts);
             }
             if (t != null && !t.isEmpty()) {
-                t2l = t2l == null ? getTransform() : t2l.createConcatenation(getTransform());
+                l2p = l2p == null ? getTransform() : l2p.createConcatenation(getTransform());
             }
-            if (t2l == null) {
-                t2l = IDENTITY_TRANSFORM;
+            if (l2p == null) {
+                l2p = IDENTITY_TRANSFORM;
             }
             if (CACHE) {
-                set(FigureImplementationDetails.PARENT_TO_LOCAL, t2l);
+                set(FigureImplementationDetails.PARENT_TO_LOCAL, l2p);
             }
         }
-        return t2l;
+        return l2p;
     }
 
-    /*
+    default boolean hasTransforms() {
+        return !get(TRANSFORMS).isEmpty();
+    }
+
+    default boolean hasCenterTransforms() {
+        double sx = getStyled(SCALE_X);
+        double sy = getStyled(SCALE_Y);
+        double r = getStyled(ROTATE);
+        double tx = getStyled(TRANSLATE_X);
+        double ty = getStyled(TRANSLATE_Y);
+        return sx != 1 || sy != 1 || r != 0 || tx != 0 || ty != 0;
+    }
+
     @Override
-    default Transform getParentToLocal() {
-        Transform t = CACHE ? get(FigureImplementationDetails.PARENT_TO_LOCAL) : null;
-        if (t == null) {
-            Point2D center = getCenterInLocal();
-            Affine tx = new Affine();
-            tx.append(getInverseTransform());
-            tx.appendScale(1.0 / getStyled(TransformableFigure.SCALE_X), 1.0 / getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
-            tx.appendRotation(-getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
-            tx.appendTranslation(-getStyled(TransformableFigure.TRANSLATE_X), -getStyled(TransformableFigure.TRANSLATE_Y));
-            t = tx;
-            if (CACHE) {
-                set(FigureImplementationDetails.PARENT_TO_LOCAL, t);
+    default void reshape(Transform transform) {
+        if (hasCenterTransforms()) {
+            ArrayList<Transform> ts = new ArrayList<>(get(TRANSFORMS));
+            if (ts.isEmpty()) {
+                ts.add(0, transform);
+            } else {
+                int last = ts.size() - 1;
+                Transform concatenatedWithLast = ts.get(last).createConcatenation(transform);
+                if (concatenatedWithLast instanceof Affine) {
+                    ts.add(transform);
+                } else {
+                    ts.set(last, concatenatedWithLast);
+                }
             }
+            set(TRANSFORMS, ts);
+            return;
         }
-        return t;
-    }*/
+
+        Bounds b = getBoundsInLocal();
+        b = transform.transform(b);
+        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+    }
+
     default Transform getParentToLocal() {
-        Transform t2l = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
-        if (t2l == null) {
+        Transform p2l = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
+        if (p2l == null) {
             Point2D center = getCenterInLocal();
 
-            List<Transform> t = getStyled(TRANSFORM);
+            List<Transform> t = getStyled(TRANSFORMS);
             double sx = getStyled(SCALE_X);
             double sy = getStyled(SCALE_Y);
             double r = getStyled(ROTATE);
@@ -220,32 +237,32 @@ public interface TransformableFigure extends TransformCacheableFigure {
             double ty = getStyled(TRANSLATE_Y);
 
             if (t != null && !t.isEmpty()) {
-                t2l = getInverseTransform();
+                p2l = getInverseTransform();
             }
-            if (sx != 1.0 || sy != 1.0) {
+            if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
                 Scale ts = new Scale(1.0 / sx, 1.0 / sy, center.getX(), center.getY());
-                t2l = t2l == null ? ts : t2l.createConcatenation(ts);
+                p2l = p2l == null ? ts : p2l.createConcatenation(ts);
             }
             if (r != 0) {
                 Rotate tr = new Rotate(-r, center.getX(), center.getY());
-                t2l = t2l == null ? tr : t2l.createConcatenation(tr);
+                p2l = p2l == null ? tr : p2l.createConcatenation(tr);
             }
             if (tx != 0.0 || ty != 0.0) {
                 Translate tt = new Translate(-tx, -ty);
-                t2l = t2l == null ? tt : t2l.createConcatenation(tt);
+                p2l = p2l == null ? tt : p2l.createConcatenation(tt);
             }
-            if (t2l == null) {
-                t2l = IDENTITY_TRANSFORM;
+            if (p2l == null) {
+                p2l = IDENTITY_TRANSFORM;
             }
             if (CACHE) {
-                set(FigureImplementationDetails.PARENT_TO_LOCAL, t2l);
+                set(FigureImplementationDetails.PARENT_TO_LOCAL, p2l);
             }
         }
-        return t2l;
+        return p2l;
     }
 
     default Transform getTransform() {
-        List<Transform> list = getStyled(TRANSFORM);
+        List<Transform> list = getStyled(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = FigureImplementationDetails.IDENTITY_TRANSFORM;
@@ -259,7 +276,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     default Transform getInverseTransform() {
-        List<Transform> list = getStyled(TRANSFORM);
+        List<Transform> list = getStyled(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = FigureImplementationDetails.IDENTITY_TRANSFORM;
