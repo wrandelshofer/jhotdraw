@@ -39,20 +39,24 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
             if (p2c.isIdentity()) {
                 child.reshape(transform);
             } else if (child instanceof TransformableFigure) {
-                child.set(TRANSFORM, Collections.singletonList(child.getLocalToParent()));
-                child.set(ROTATE, 0.0);
-                child.set(TRANSLATE_X, 0.0);
-                child.set(TRANSLATE_Y, 0.0);
-                child.set(SCALE_X, 1.0);
-                child.set(SCALE_Y, 1.0);
-
+                TransformableFigure tchild=(TransformableFigure) child;
+                
                 if (transform instanceof Translate) {
+                    p2c = tchild.getTransform();
                     Point2D tr = new Point2D(transform.getTx(), transform.getTy());
                     tr = Geom.toDeltaTransform(p2c).transform(tr);
                     Transform t = new Translate(tr.getX(), tr.getY());
-                    child.reshape(t);
+                    tchild.reshape(t);
                 } else {
-                    child.reshape(p2c.createConcatenation(transform));
+                /* XXX might need this
+               tchild.set(TRANSFORM, Collections.singletonList(child.getLocalToParent()));
+                tchild.set(ROTATE, 0.0);
+                tchild.set(TRANSLATE_X, 0.0);
+                tchild.set(TRANSLATE_Y, 0.0);
+                tchild.set(SCALE_X, 1.0);
+                tchild.set(SCALE_Y, 1.0);
+                */
+                    tchild.reshape(p2c.createConcatenation(transform));
                 }
             }
         }
