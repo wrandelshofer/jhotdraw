@@ -318,4 +318,7 @@ public interface DrawingModel extends Observable {
             l.invalidated(this);
         }
     }
+
+    /** Invokes "transformInParent" on the specified figure. */
+    public void transformInParent(Figure child, Transform groupTransform);
 }

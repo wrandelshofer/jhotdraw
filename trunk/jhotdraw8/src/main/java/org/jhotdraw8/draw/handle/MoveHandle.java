@@ -156,13 +156,13 @@ public class MoveHandle extends LocatorHandle {
      * @param model the drawing model
      */
     public static void translateFigure(Figure f, Point2D oldPoint, Point2D newPoint, DrawingModel model) {
-        Point2D npl = f.worldToLocal(newPoint);
-        Point2D opl = f.worldToLocal(oldPoint);
+        Point2D npl = f.worldToParent(newPoint);
+        Point2D opl = f.worldToParent(oldPoint);
         Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
         if (model != null) {
-            model.reshapeInLocal(f, tx);
+            model.reshapeInParent(f, tx);
         } else {
-            f.reshapeInLocal(tx);
+            f.reshapeInParent(tx);
         }
     }
     

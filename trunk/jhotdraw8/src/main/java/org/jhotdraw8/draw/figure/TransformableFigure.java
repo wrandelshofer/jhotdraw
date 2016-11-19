@@ -25,8 +25,8 @@ import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableFigureKey;
-import org.jhotdraw8.geom.Geom;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A transformable figure supports the transformation of a figure.
@@ -151,16 +151,20 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     @Override
     default Transform getLocalToParent() {
-        Transform l2p = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
+        return getLocalToParent(true);
+    }
+
+    default Transform getLocalToParent(boolean styled) {
+        Transform l2p = CACHE&&styled ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
         if (l2p == null) {
             Point2D center = getCenterInLocal();
 
-            double tx = getStyled(TRANSLATE_X);
-            double ty = getStyled(TRANSLATE_Y);
-            double r = getStyled(ROTATE);
-            double sx = getStyled(SCALE_X);
-            double sy = getStyled(SCALE_Y);
-            List<Transform> t = getStyled(TRANSFORMS);
+            List<Transform> t = styled?getStyled(TRANSFORMS):get(TRANSFORMS);
+            double sx = styled? getStyled(SCALE_X):get(SCALE_X);
+            double sy = styled?getStyled(SCALE_Y):get(SCALE_Y);
+            double r = styled?getStyled(ROTATE):get(ROTATE);
+            double tx = styled?getStyled(TRANSLATE_X):get(TRANSLATE_X);
+            double ty = styled?getStyled(TRANSLATE_Y):get(TRANSLATE_Y);
 
             if (tx != 0.0 || ty != 0.0) {
                 Translate tt = new Translate(tx, ty);
@@ -180,7 +184,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
             if (l2p == null) {
                 l2p = IDENTITY_TRANSFORM;
             }
-            if (CACHE) {
+            if (CACHE&&styled) {
                 set(FigureImplementationDetails.PARENT_TO_LOCAL, l2p);
             }
         }
@@ -225,6 +229,16 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
     @Override
     default void reshapeInParent(Transform transform) {
+        if (hasCenterTransforms()||hasTransforms()) {
+            if (transform instanceof Translate) {
+                Translate translate=(Translate)transform;
+                set(TRANSLATE_X, get(TRANSLATE_X)+translate.getTx());
+                set(TRANSLATE_Y, get(TRANSLATE_Y)+translate.getTy());
+            }else{
+                throw new UnsupportedOperationException("reshapeInParent not supported yet with "+transform);
+            }
+            /*
+        
         if (hasCenterTransforms()) {
             ArrayList<Transform> ts = new ArrayList<>(get(TRANSFORMS));
             if (ts.isEmpty()) {
@@ -245,19 +259,69 @@ public interface TransformableFigure extends TransformCacheableFigure {
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+*/            
+        }else{
+            reshapeInLocal(getParentToLocal().createConcatenation(transform));
+            /*
+        Bounds b = getBoundsInLocal();
+        b = getParentToLocal().createConcatenation(transform).transform(b);
+        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());*/
+        }
     }
 
+    @Override
+    default void transformInParent(Transform t) {
+        if (t==null||t.isIdentity()) {
+            return;
+        }
+        if (t instanceof Translate) {
+            Translate tr = (Translate) t;
+            set(TRANSLATE_X,get(TRANSLATE_X)+tr.getTx());
+            set(TRANSLATE_Y,get(TRANSLATE_Y)+tr.getTy());
+            return;
+        } else {
+            flattenTransforms();
+            List<Transform> transforms = get(TRANSFORMS);
+            if (transforms.isEmpty()) {
+                set(TRANSFORMS, Collections.singletonList(t));
+            }else{
+                ArrayList<Transform> newTransforms=new ArrayList<>();
+                newTransforms.add(t);
+                newTransforms.addAll(transforms);
+                set(TRANSFORMS, newTransforms);
+            }
+        }
+    }
+    
+    default void flattenTransforms() {
+            Transform p2l = getLocalToParent(false);
+            set(SCALE_X,1.0);
+            set(SCALE_Y,1.0);
+            set(ROTATE,0.0);
+            set(TRANSLATE_X,0.0);
+            set(TRANSLATE_Y,0.0);
+            if (p2l.isIdentity()) {
+                set(TRANSFORMS, Collections.emptyList());
+            }else{
+                set(TRANSFORMS, Collections.singletonList(p2l));
+    //            set(TRANSFORMS, Transforms.decompose(p2l));
+            }
+    }
+    
     default Transform getParentToLocal() {
+        return getParentToLocal(true);
+    }
+    default Transform getParentToLocal(boolean styled) {
         Transform p2l = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
-            List<Transform> t = getStyled(TRANSFORMS);
-            double sx = getStyled(SCALE_X);
-            double sy = getStyled(SCALE_Y);
-            double r = getStyled(ROTATE);
-            double tx = getStyled(TRANSLATE_X);
-            double ty = getStyled(TRANSLATE_Y);
+            List<Transform> t = styled?getStyled(TRANSFORMS):get(TRANSFORMS);
+            double sx = styled? getStyled(SCALE_X):get(SCALE_X);
+            double sy = styled?getStyled(SCALE_Y):get(SCALE_Y);
+            double r = styled?getStyled(ROTATE):get(ROTATE);
+            double tx = styled?getStyled(TRANSLATE_X):get(TRANSLATE_X);
+            double ty = styled?getStyled(TRANSLATE_Y):get(TRANSLATE_Y);
 
             if (t != null && !t.isEmpty()) {
                 p2l = getInverseTransform();
