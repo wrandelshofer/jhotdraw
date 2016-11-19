@@ -19,8 +19,8 @@ import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.draw.key.Point2DStyleableFigureKey;
 
 /**
- * {@code TextFigure} is a {@code FontableFigure} which supports stroking
- * and filling of the text.
+ * {@code TextFigure} is a {@code FontableFigure} which supports stroking and
+ * filling of the text.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -31,7 +31,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
      * The CSS type selector for this object is {@code "Text"}.
      */
     public final static String TYPE_SELECTOR = "Text";
-    public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT,DirtyBits.LAYOUT),new Point2D(0, 0));
+    public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));
 
     private Text textNode;
 
@@ -89,7 +89,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
         applyStrokeableFigureProperties(tn);
         applyFillableFigureProperties(tn);
         applyCompositableFigureProperties(tn);
-        applyFontableFigureProperties(tn);
+        applyFontableFigureProperties(ctx, tn);
         applyStyleableFigureProperties(ctx, node);
         tn.applyCss();
     }
@@ -103,12 +103,12 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
-    
+
     @Override
     public void layout() {
         // empty
     }
-    
+
     @Override
     public boolean isLayoutable() {
         return false;

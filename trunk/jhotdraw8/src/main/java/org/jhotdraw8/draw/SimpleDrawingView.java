@@ -452,7 +452,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     // different from the old value!
     drawingPane.layoutBoundsProperty().addListener((observer, oldValue, newValue) -> {
       updateLayout();
-System.out.println("SimpleDrawingView.drawingPane "+newValue);
     });
 
     drawingModel.get().setRoot(new SimpleDrawing());
