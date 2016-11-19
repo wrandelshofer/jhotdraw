@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw;
 
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 import org.jhotdraw8.draw.figure.Figure;
@@ -13,7 +12,6 @@ import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
-import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
@@ -22,40 +20,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.text.CColor;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
 import org.jhotdraw8.css.StylesheetsManager;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
 import static java.lang.Math.abs;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
+import org.jhotdraw8.text.Paintable;
 
 /**
  * SimpleDrawing.
@@ -63,11 +32,11 @@ import org.jhotdraw8.draw.css.FigureSelectorModel;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleDrawing extends AbstractCompositeFigure 
+public class SimpleDrawing extends AbstractCompositeFigure
         implements Drawing, StyleableFigure, LockableFigure, NonTransformableFigure {
 
     /**
-     * The style manager is created lazily. 
+     * The style manager is created lazily.
      */
     private StylesheetsManager<Figure> styleManager = null;
 
@@ -88,7 +57,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
         Group g = (Group) n;
         //applyTransformableFigureProperties(n);
         applyStyleableFigureProperties(v, n);
-        
+
         Bounds bounds = getBoundsInLocal();
         Rectangle page = (Rectangle) g.getProperties().get("background");
         page.setX(bounds.getMinX());
@@ -96,27 +65,29 @@ public class SimpleDrawing extends AbstractCompositeFigure
         page.setWidth(bounds.getWidth());
         page.setHeight(bounds.getHeight());
         CColor cclr = getStyled(BACKGROUND);
-        page.setFill(cclr==null?null:cclr.getColor());
-        g.setClip(new Rectangle(bounds.getMinX(),bounds.getMinY(),bounds.getWidth(),bounds.getHeight())); 
+        page.setFill(Paintable.getPaint(cclr));
+        if (g.getClip() == null || !g.getClip().getBoundsInLocal().equals(bounds)) {
+            g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
+        }
 
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
         nodes.add(page);
         for (Figure child : getChildren()) {
             nodes.add(v.getNode(child));
         }
-        ObservableList<Node> group = ((Group) n).getChildren();
-        if (! group.equals(nodes)) {
+        ObservableList<Node> group = g.getChildren();
+        if (!group.equals(nodes)) {
             group.setAll(nodes);
         }
     }
 
     /**
-     * The bounds of this drawing is determined by its {@code WIDTH} and
-     * and {@code HEIGHT}.
+     * The bounds of this drawing is determined by its {@code WIDTH} and and
+     * {@code HEIGHT}.
      * <p>
      * The bounds of its child figures does not affect the bounds of this
-     * drawing. 
-     * 
+     * drawing.
+     *
      * @return bounding box (0, 0, WIDTH, HEIGHT).
      */
     @Override
@@ -134,12 +105,14 @@ public class SimpleDrawing extends AbstractCompositeFigure
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        
+
         set(WIDTH, abs(width));
         set(HEIGHT, abs(height));
     }
 
-    /** Returns false. */
+    /**
+     * Returns false.
+     */
     @Override
     public boolean isLayoutable() {
         return false;
@@ -155,7 +128,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
         }
         return styleManager;
     }
-    
+
     protected StylesheetsManager<Figure> createStyleManager() {
         return new SimpleStylesheetsManager<>(new FigureSelectorModel());
     }
@@ -169,5 +142,5 @@ public class SimpleDrawing extends AbstractCompositeFigure
         }
         super.stylesheetNotify();
     }
-  
+
 }

@@ -159,26 +159,6 @@ public class MoveHandle extends LocatorHandle {
         Point2D npl = f.worldToLocal(newPoint);
         Point2D opl = f.worldToLocal(oldPoint);
         Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
-System.out.println("MoveHandle.translate: "+tx);        
-        /*
-        if (f instanceof TransformableFigure) {
-            TransformableFigure tf=(TransformableFigure)f;
-            if (tf.hasTransforms()||tf.hasCenterTransforms()) {
-            ArrayList<Transform> ts = new ArrayList<>(tf.get(TRANSFORMS));
-            if (ts.isEmpty()) {
-                ts.add(0, tx);
-            }else{
-                ts.set(0,tx.createConcatenation(ts.get(0)));
-            }
-            tf.set(TRANSFORMS,ts);
-            return;
-            }
-            /*
-            Transform tt = ((TransformableFigure) f).getInverseTransform();
-            npl = tt.transform(npl);
-            opl = tt.transform(opl);
-            * /
-        }*/
         if (model != null) {
             model.reshape(f, tx);
         } else {

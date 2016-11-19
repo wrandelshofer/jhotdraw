@@ -428,15 +428,14 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
     drawingPane = new Group();
     drawingPane.setCacheHint(CacheHint.QUALITY);
-    drawingPane.setCache(true);
-    drawingPane.setScaleX(zoomFactor.get());
-    drawingPane.setScaleY(zoomFactor.get());
+    //drawingPane.setCache(true);
+    //drawingPane.setScaleX(zoomFactor.get());
+    //drawingPane.setScaleY(zoomFactor.get());
     drawingSubScene.getChildren().addAll(canvasPane, drawingPane);
 
     toolPane = new BorderPane();
     toolPane.setId("toolPane");
     toolPane.setBackground(Background.EMPTY);
-   // toolPane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, null, null)));
     toolPane.setManaged(false);
     handlesPane = new Group();
     handlesPane.setManaged(false);
@@ -453,7 +452,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     // different from the old value!
     drawingPane.layoutBoundsProperty().addListener((observer, oldValue, newValue) -> {
       updateLayout();
-
+System.out.println("SimpleDrawingView.drawingPane "+newValue);
     });
 
     drawingModel.get().setRoot(new SimpleDrawing());
@@ -529,8 +528,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
     double dw = d.get(Drawing.WIDTH);
     double dh = d.get(Drawing.HEIGHT);
 
-    drawingPane.setTranslateX(max(0, -x));
-    drawingPane.setTranslateY(max(0, -y));
+//    drawingPane.setTranslateX(max(0, -x));
+   // drawingPane.setTranslateY(max(0, -y));
 
     if (d != null) {
       canvasPane.setTranslateX(max(0, -x));
@@ -546,14 +545,14 @@ public class SimpleDrawingView extends AbstractDrawingView {
     //overlaysPane.setTranslateX(-padding);
     //overlaysPane.setTranslateY(-padding);
     drawingPane.setTranslateX(padding);
-    drawingPane.setTranslateY(padding);
+   drawingPane.setTranslateY(padding);
     canvasPane.setTranslateX(padding);
     canvasPane.setTranslateY(padding);
     toolPane.resize(lw + padding * 2, lh + padding * 2);
     toolPane.layout();
 
     overlaysPane.setClip(new Rectangle(0,0,lw+padding*2,lh+padding*2));
-    drawingPane.setClip(new Rectangle(0,0,lw,lh));
+   // drawingPane.setClip(new Rectangle(0,0,lw,lh));
     
     rootPane.setPrefSize(lw+padding*2, lh+padding*2);
     rootPane.setMaxSize(lw+padding*2, lh+padding*2);
