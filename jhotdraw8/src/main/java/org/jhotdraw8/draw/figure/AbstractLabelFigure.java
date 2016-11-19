@@ -22,11 +22,12 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.RenderContext;
+import org.jhotdraw8.draw.RenderingIntent;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
@@ -75,6 +76,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
 
     public AbstractLabelFigure(Point2D position) {
         this(position.getX(), position.getY());
+        set(FILL_COLOR,null);
+        set(STROKE_COLOR,null);
     }
 
     public AbstractLabelFigure(double x, double y) {
@@ -98,7 +101,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
                 b.getMinX() - i.getLeft(),
                 b.getMinY() - i.getTop(),
                 b.getWidth() + i.getLeft() + i.getRight(),
-                b.getHeight() + i.getTop() + i.getBottom());
+                 textNode.getBaselineOffset()+i.getTop()+ i.getBottom());
     }
 
     @Override
@@ -120,7 +123,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        set(ORIGIN, new Point2D(x, y + height));
+        Bounds lb = getLayoutBounds();
+        Insets i = getStyled(PADDING);
+        set(ORIGIN, new Point2D(x+i.getLeft(), y +lb.getHeight()-i.getBottom()));
         invalidateBounds();
     }
 
@@ -131,7 +136,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         Region r = new Region();
         r.setScaleShape(true);
         g.getChildren().add(r);
-        g.getChildren().add(new Text());
+        Text text=new Text();
+        g.getChildren().add(text);
         return g;
     }
 
@@ -172,7 +178,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         tn.setX(get(ORIGIN_X));
         tn.setY(get(ORIGIN_Y));
         applyTextFillableFigureProperties(tn);
-        applyFontableFigureProperties(tn);
+        applyFontableFigureProperties(ctx,tn);
     }
 
     @Override

@@ -11,21 +11,23 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Labeled;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import org.jhotdraw8.draw.RenderContext;
+import org.jhotdraw8.draw.RenderingIntent;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableFigureKey;
-import org.jhotdraw8.draw.key.StringStyleableFigureKey;
 
 /**
  * A figure which supports font attributes.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -68,9 +70,10 @@ public interface FontableFigure extends Figure {
     /**
      * Updates a text node with fontable properties.
      *
+     * @param ctx RenderContext, can be null
      * @param text a text node
      */
-    default void applyFontableFigureProperties(Text text) {
+    default void applyFontableFigureProperties(RenderContext ctx, Text text) {
         Font font = getStyled(FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
@@ -99,6 +102,13 @@ public interface FontableFigure extends Figure {
         if (text.getTextOrigin() != vp) {
             text.setTextOrigin(vp);
         }
+
+        final FontSmoothingType fst = (ctx!=null&&ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR)
+                ? FontSmoothingType.LCD : FontSmoothingType.GRAY;
+        if (text.getFontSmoothingType() != fst) {
+            text.setFontSmoothingType(fst);
+        }
+
     }
 
     /**
