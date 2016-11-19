@@ -68,7 +68,7 @@ public interface Connector {
     }
 
     /**
-     * Chops the start of the provided line in drawing coordinates.
+     * Chops the start of the provided line in world coordinates.
      *
      * @param connection a connection figure
      * @param start the start of the line
@@ -80,7 +80,7 @@ public interface Connector {
     }
 
     /**
-     * Chops the end of the provided line in drawing coordinates.
+     * Chops the end of the provided line in world coordinates.
      *
      * @param connection a connection figure
      * @param start the start of the line

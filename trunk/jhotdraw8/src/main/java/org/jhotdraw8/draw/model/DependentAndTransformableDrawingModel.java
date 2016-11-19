@@ -231,13 +231,13 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
     if (!valid) {
       isValidating = true;
 
-      // all figures with dirty bit "TRANSFORM"
-      // induce a dirty bit "NODE" and "TRANSFORM" on ancestors which implement the TransformableFigure interface.
-      DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
+      // all figures with dirty bit "TRANSFORM" or "LAYOUT"
+      // induce a dirty bit "TRANSFORM" on all ancestors which implement the TransformableFigure interface.
+      DirtyMask dmTransformLayout = DirtyMask.of(DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
       for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
         Figure f = entry.getKey();
         DirtyMask dm = entry.getValue();
-        if (dm.intersects(dmTransform)) {
+        if (dm.intersects(dmTransformLayout)) {
           for (Figure a : f.ancestorIterable()) {
             if (a instanceof TransformableFigure) {
               markDirty(a, DirtyBits.NODE, DirtyBits.TRANSFORM);
@@ -245,10 +245,32 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
           }
         }
       }
+      // all figures with dirty bit "TRANSFORM"
+      // induce a dirty bit "DEPENDENT_LAYOUT" on all descendants
+      // induce a dirty bit "TRANSFORM" on all descendants
+      DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
+      for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+        Figure f = entry.getKey();
+        DirtyMask dm = entry.getValue();
+        if (dm.intersects(dmTransform)) {
+          for (Figure a : f.preorderIterable()) {
+              markDirty(a, DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM);
+          }
+        }
+      }
+      // all figures with dirty bit "TRANSFORM"
+      // invoke transformNotify
+      for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+        Figure f = entry.getKey();
+        DirtyMask dm = entry.getValue();
+        if (dm.intersects(dmTransform)) {
+            f.transformNotify();
+        }
+      }
 
       // all figures with dirty flag "LAYOUT"
       // induce a dirty flag "DEPENDENT_LAYOUT" on dependent figures,
-      // and induce a dirty Flag "NODE" on ancestors which implement the TransformableFigure interface.
+      // and induce a dirty Flag "NODE" on ancestors which implement the TransformableFigure interface. // really??
       DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
       List<Figure> todo = new ArrayList<>();
       for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
@@ -305,10 +327,6 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
         }
       }
 
-      // XXX we do not need to invalidate all transforms every time!
-      for (Figure f : getRoot().preorderIterable()) {
-        f.transformNotify();
-      }
       /*
             for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
                 Figure f = entry.getKey();

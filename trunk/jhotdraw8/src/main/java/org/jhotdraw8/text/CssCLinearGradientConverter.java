@@ -153,7 +153,7 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
                 isLinear = true;
                 break;
             default:
-                throw new ParseException("CSS LinearGradient: \"<linear-gradient>(\"  expected", tt.getPosition());
+                throw new ParseException("CSS LinearGradient: \"<linear-gradient>(\"  expected, found: "+tt.currentStringValue(), tt.getPosition());
         }
         tt.skipWhitespace();
         boolean needComma = false;
@@ -162,12 +162,32 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
         double endX = 1.0;
         double endY = 0.0;
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "from".equals(tt.currentStringValue())) {
+        tt.skipWhitespace();
+            if (tt.nextToken()!=CssTokenizer.TT_NUMBER) {
+                                throw new ParseException("CSS LinearGradient: start-x expected, found: "+tt.currentStringValue(), tt.getPosition());
+            }
+            startX=tt.currentNumericValue().doubleValue();
+        tt.skipWhitespace();
+            if (tt.nextToken()!=CssTokenizer.TT_NUMBER) {
+                                throw new ParseException("CSS LinearGradient: start-y expected, found: "+tt.currentStringValue(), tt.getPosition());
+            }
+            startY=tt.currentNumericValue().doubleValue();
             needComma = true;
         } else {
             tt.pushBack();
         }
         tt.skipWhitespace();
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "to".equals(tt.currentStringValue())) {
+        tt.skipWhitespace();
+            if (tt.nextToken()!=CssTokenizer.TT_NUMBER) {
+                                throw new ParseException("CSS LinearGradient: start-x expected, found: "+tt.currentStringValue(), tt.getPosition());
+            }
+            startX=tt.currentNumericValue().doubleValue();
+        tt.skipWhitespace();
+            if (tt.nextToken()!=CssTokenizer.TT_NUMBER) {
+                                throw new ParseException("CSS LinearGradient: start-y expected, found: "+tt.currentStringValue(), tt.getPosition());
+            }
+            startY=tt.currentNumericValue().doubleValue();
             needComma = true;
         } else {
             tt.pushBack();
@@ -175,7 +195,7 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
         tt.skipWhitespace();
         if (needComma) {
             if (tt.nextToken() != ',') {
-                throw new ParseException("CSS LinearGradient: ','  expected", tt.getPosition());
+                throw new ParseException("CSS LinearGradient: ','  expected, found: "+tt.currentStringValue(), tt.getPosition());
             }
             needComma = false;
         }
@@ -196,8 +216,15 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
             tt.pushBack();
         }
         tt.skipWhitespace();
+        if (needComma) {
+            if (tt.nextToken() != ',') {
+                throw new ParseException("CSS LinearGradient: ','  expected, found: "+tt.currentStringValue(), tt.getPosition());
+            }
+            needComma = false;
+        }
+        tt.skipWhitespace();
         if (tt.nextToken() != ')') {
-            throw new ParseException("CSS LinearGradient: ')'  expected", tt.getPosition());
+            throw new ParseException("CSS LinearGradient: ')'  expected, found: "+tt.currentStringValue(), tt.getPosition());
         }
 
         return null;

@@ -97,6 +97,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
         page.setHeight(bounds.getHeight());
         CColor cclr = getStyled(BACKGROUND);
         page.setFill(cclr==null?null:cclr.getColor());
+        g.setClip(new Rectangle(bounds.getMinX(),bounds.getMinY(),bounds.getWidth(),bounds.getHeight())); 
 
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
         nodes.add(page);

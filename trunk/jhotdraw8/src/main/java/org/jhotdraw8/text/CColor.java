@@ -24,7 +24,7 @@ public class CColor implements Paintable {
     }
 
     public CColor(String name, Color color) {
-        this.name = name == null ? "#" + toName(color) : name;
+        this.name = name == null ? toName(color) : name;
         this.color = color;
     }
 
