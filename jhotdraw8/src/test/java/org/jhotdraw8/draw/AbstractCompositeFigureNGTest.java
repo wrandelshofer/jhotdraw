@@ -111,7 +111,7 @@ public class AbstractCompositeFigureNGTest {
         }
 
         @Override
-        public void reshape(Transform transform) {
+        public void reshapeInLocal(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet."); 
         }
 

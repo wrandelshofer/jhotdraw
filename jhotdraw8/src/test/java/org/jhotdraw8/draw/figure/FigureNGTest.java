@@ -185,20 +185,20 @@ public class FigureNGTest {
     }
 
     /**
-     * Test of reshape method, of class Figure.
+     * Test of reshapeInLocal method, of class Figure.
      */
     @Test
     public void testReshape_Transform() {
         System.out.println("reshape");
         Transform transform = null;
         Figure instance = new FigureImpl();
-        instance.reshape(transform);
+        instance.reshapeInLocal(transform);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of reshape method, of class Figure.
+     * Test of reshapeInLocal method, of class Figure.
      */
     @Test(dataProvider="dataReshape_4args")
     public void testReshape_4args(Rectangle initial, Rectangle reshape, Rectangle expected) {
@@ -213,7 +213,7 @@ public class FigureNGTest {
                 return r.getBoundsInLocal();
             }
 
-            public void reshape(Transform t) {
+            public void reshapeInLocal(Transform t) {
                 actual[0] = t;
                 Bounds b=t.transform(getBoundsInLocal());
                 r.setX(b.getMinX());
@@ -980,7 +980,7 @@ public class FigureNGTest {
             return null;
         }
 
-        public void reshape(Transform transform) {
+        public void reshapeInLocal(Transform transform) {
         }
 
         public Node createNode(RenderContext ctx) {

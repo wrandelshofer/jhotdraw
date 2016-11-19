@@ -150,7 +150,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
             Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
             //tx = f.getWorldToParent().createConcatenation(tx);
             
-            model.reshape(f, tx);
+            model.reshapeInLocal(f, tx);
         }
 
         oldPoint = newPoint;

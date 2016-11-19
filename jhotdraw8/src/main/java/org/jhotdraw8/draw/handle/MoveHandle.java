@@ -160,9 +160,9 @@ public class MoveHandle extends LocatorHandle {
         Point2D opl = f.worldToLocal(oldPoint);
         Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
         if (model != null) {
-            model.reshape(f, tx);
+            model.reshapeInLocal(f, tx);
         } else {
-            f.reshape(tx);
+            f.reshapeInLocal(tx);
         }
     }
     

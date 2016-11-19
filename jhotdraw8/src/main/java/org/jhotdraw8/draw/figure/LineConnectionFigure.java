@@ -144,7 +144,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     }
 
     @Override
-    public void reshape(Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         if (get(START_CONNECTOR) == null) {
             set(START, transform.transform(get(START)));
         }

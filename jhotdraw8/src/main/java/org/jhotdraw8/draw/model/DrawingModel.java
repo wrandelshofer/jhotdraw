@@ -210,7 +210,16 @@ public interface DrawingModel extends Observable {
      * @param f the figure
      * @param transform the desired transformation in the local coordinate system
      */
-    void reshape(Figure f, Transform transform);
+    void reshapeInLocal(Figure f, Transform transform);
+
+    /**
+     * Attempts to change the parent bounds of the figure and fires appropriate
+     * {@code DrawingModelEvent}s.
+     *
+     * @param f the figure
+     * @param transform the desired transformation in the parent coordinate system
+     */
+    void reshapeInParent(Figure f, Transform transform);
 
     /**
      * Attempts to change the local bounds of the figure and fires appropriate

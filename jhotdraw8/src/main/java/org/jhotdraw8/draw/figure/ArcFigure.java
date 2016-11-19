@@ -66,7 +66,7 @@ public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, F
     }
 
     @Override
-    public void reshape(Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         Bounds r = getBoundsInLocal();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);

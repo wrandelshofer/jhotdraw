@@ -30,9 +30,9 @@ public class SimpleLayer extends AbstractCompositeFigure
         implements Layer, StyleableFigure, LockableFigure, NonTransformableFigure {
 
     @Override
-    public void reshape(Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         for (Figure child : getChildren()) {
-            child.reshape(transform);
+            child.reshapeInLocal(transform);
         }
     }
 

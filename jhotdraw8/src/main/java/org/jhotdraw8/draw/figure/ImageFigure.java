@@ -63,7 +63,7 @@ public class ImageFigure extends AbstractLeafFigure implements TransformableFigu
     }
 
     @Override
-    public void reshape(Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         Rectangle2D r = get(BOUNDS);
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);

@@ -201,7 +201,30 @@ public interface TransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void reshape(Transform transform) {
+    default void reshapeInLocal(Transform transform) {
+        if (hasCenterTransforms()) {
+            ArrayList<Transform> ts = new ArrayList<>(get(TRANSFORMS));
+            if (ts.isEmpty()) {
+                ts.add(0, transform);
+            } else {
+                int last = ts.size() - 1;
+                Transform concatenatedWithLast = ts.get(last).createConcatenation(transform);
+                if (concatenatedWithLast instanceof Affine) {
+                    ts.add(transform);
+                } else {
+                    ts.set(last, concatenatedWithLast);
+                }
+            }
+            set(TRANSFORMS, ts);
+            return;
+        }
+
+        Bounds b = getBoundsInLocal();
+        b = transform.transform(b);
+        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+    }
+    @Override
+    default void reshapeInParent(Transform transform) {
         if (hasCenterTransforms()) {
             ArrayList<Transform> ts = new ArrayList<>(get(TRANSFORMS));
             if (ts.isEmpty()) {

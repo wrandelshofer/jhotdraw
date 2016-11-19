@@ -97,7 +97,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshape(Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
