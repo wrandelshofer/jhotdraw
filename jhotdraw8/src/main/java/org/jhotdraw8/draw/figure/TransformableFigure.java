@@ -55,28 +55,28 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * <p>
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey ROTATE = new DoubleStyleableFigureKey("rotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM), 0.0);
+    public static DoubleStyleableFigureKey ROTATE = new DoubleStyleableFigureKey("rotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), 0.0);
     /**
      * Defines the rotation axis used.
      * <p>
      * Default value: {@code Rotate.Z_AXIS}.
      */
-    public static SimpleFigureKey<Point3D> ROTATION_AXIS = new SimpleFigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM), Rotate.Z_AXIS);
+    public static SimpleFigureKey<Point3D> ROTATION_AXIS = new SimpleFigureKey<>("rotationAxis", Point3D.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey SCALE_X = new DoubleStyleableFigureKey("scaleX", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM), 1.0);
+    public static DoubleStyleableFigureKey SCALE_X = new DoubleStyleableFigureKey("scaleX", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey SCALE_Y = new DoubleStyleableFigureKey("scaleY", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM), 1.0);
+    public static DoubleStyleableFigureKey SCALE_Y = new DoubleStyleableFigureKey("scaleY", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM), 1.0);
+    public static DoubleStyleableFigureKey SCALE_Z = new DoubleStyleableFigureKey("scaleZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the axes
      * about the center of the figure.
@@ -86,23 +86,23 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey TRANSLATE_X = new DoubleStyleableFigureKey("translateX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_X = new DoubleStyleableFigureKey("translateX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), 0.0);
     /**
      * Defines the translation on the y axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey TRANSLATE_Y = new DoubleStyleableFigureKey("translateY", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_Y = new DoubleStyleableFigureKey("translateY", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), 0.0);
     /**
      * Defines the translation on the z axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM), 0.0);
+    public static DoubleStyleableFigureKey TRANSLATE_Z = new DoubleStyleableFigureKey("translateZ", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), 0.0);
     /**
      * Defines the translation on the axes about the center of the figure.
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
 
-    public static TransformListStyleableFigureKey TRANSFORM = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM), Collections.emptyList());
+    public static TransformListStyleableFigureKey TRANSFORM = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), Collections.emptyList());
 
     /**
      * Updates a figure node with all transformation properties defined in this

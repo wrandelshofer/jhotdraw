@@ -94,7 +94,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
   private Group overlaysSubScene;
 
   private BorderPane toolPane;
-  private Rectangle backgroundPane;
+  private Rectangle canvasPane;
 
   private Group handlesPane;
   private Group gridPane;
@@ -416,9 +416,9 @@ public class SimpleDrawingView extends AbstractDrawingView {
       throw new InternalError(ex);
     }
 
-    backgroundPane = new Rectangle();
-    backgroundPane.setId("canvasPane");
-    backgroundPane.setFill(new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false));
+    canvasPane = new Rectangle();
+    canvasPane.setId("canvasPane");
+    canvasPane.setFill(new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false));
 
     drawingSubScene = new Group();
     drawingSubScene.setManaged(false);
@@ -431,7 +431,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     drawingPane.setCache(true);
     drawingPane.setScaleX(zoomFactor.get());
     drawingPane.setScaleY(zoomFactor.get());
-    drawingSubScene.getChildren().addAll(backgroundPane, drawingPane);
+    drawingSubScene.getChildren().addAll(canvasPane, drawingPane);
 
     toolPane = new BorderPane();
     toolPane.setId("toolPane");
@@ -533,23 +533,30 @@ public class SimpleDrawingView extends AbstractDrawingView {
     drawingPane.setTranslateY(max(0, -y));
 
     if (d != null) {
-      backgroundPane.setTranslateX(max(0, -x));
-      backgroundPane.setTranslateY(max(0, -y));
-      backgroundPane.setWidth(dw * f);
-      backgroundPane.setHeight(dh * f);
+      canvasPane.setTranslateX(max(0, -x));
+      canvasPane.setTranslateY(max(0, -y));
+      canvasPane.setWidth(dw * f);
+      canvasPane.setHeight(dh * f);
     }
     //backgroundPane.layout();
 
     double padding = 20;
     double lw = max(max(0, x) + w, max(0, -x) + dw * f);
     double lh = max(max(0, y) + h, max(0, -y) + dh * f);
-    overlaysPane.setTranslateX(-padding);
-    overlaysPane.setTranslateY(-padding);
+    //overlaysPane.setTranslateX(-padding);
+    //overlaysPane.setTranslateY(-padding);
+    drawingPane.setTranslateX(padding);
+    drawingPane.setTranslateY(padding);
+    canvasPane.setTranslateX(padding);
+    canvasPane.setTranslateY(padding);
     toolPane.resize(lw + padding * 2, lh + padding * 2);
     toolPane.layout();
 
-    rootPane.setPrefSize(lw, lh);
-    rootPane.setMaxSize(lw, lh);
+    overlaysPane.setClip(new Rectangle(0,0,lw+padding*2,lh+padding*2));
+    drawingPane.setClip(new Rectangle(0,0,lw,lh));
+    
+    rootPane.setPrefSize(lw+padding*2, lh+padding*2);
+    rootPane.setMaxSize(lw+padding*2, lh+padding*2);
 
     invalidateWorldViewTransforms();
     invalidateHandleNodes();

@@ -4,16 +4,10 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleKey;
-import java.util.Map;
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.MapExpression;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,13 +15,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import org.jhotdraw8.text.CssPaintConverter;
 import org.jhotdraw8.text.CssPaintableConverter;
 import org.jhotdraw8.text.StringConverterConverterWrapper;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -154,9 +145,9 @@ public class KeyNGTest {
         
         // test 6
         Property<String> ps2 = new SimpleStringProperty("ps2");
-        Bindings.bindBidirectional(ps2,ps,new StringConverterConverterWrapper<Paint>(new CssPaintableConverter()));
+        Bindings.bindBidirectional(ps2,ps,new StringConverterConverterWrapper<Paint>(new CssPaintConverter()));
         Property<String> ps3 = new SimpleStringProperty("ps3");
-        Bindings.bindBidirectional(ps3,ps,new StringConverterConverterWrapper<Paint>(new CssPaintableConverter()));
+        Bindings.bindBidirectional(ps3,ps,new StringConverterConverterWrapper<Paint>(new CssPaintConverter()));
         String[] newValueReceived=new String[1];
         ps3.addListener((o,oldValue,newValue)->newValueReceived[0]=newValue);
         ps2.setValue("#660033");
@@ -171,9 +162,9 @@ public class KeyNGTest {
         
         // test 6
         Property<String> ps2 = new SimpleStringProperty("ps2");
-        Bindings.bindBidirectional(ps2,ps,new StringConverterConverterWrapper<Paint>(new CssPaintableConverter()));
+        Bindings.bindBidirectional(ps2,ps,new StringConverterConverterWrapper<Paint>(new CssPaintConverter()));
         Property<String> ps3 = new SimpleStringProperty("ps3");
-        Bindings.bindBidirectional(ps3,ps,new StringConverterConverterWrapper<Paint>(new CssPaintableConverter()));
+        Bindings.bindBidirectional(ps3,ps,new StringConverterConverterWrapper<Paint>(new CssPaintConverter()));
         String[] newValueReceived=new String[1];
         ps3.addListener((o,oldValue,newValue)->newValueReceived[0]=newValue);
         ps2.setValue("#660033");

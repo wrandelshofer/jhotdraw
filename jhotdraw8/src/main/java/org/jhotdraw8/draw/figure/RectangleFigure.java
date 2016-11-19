@@ -50,7 +50,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
 
     public RectangleFigure(double x, double y, double width, double height) {
         reshape(x, y, width, height);
-        set(STROKE_TYPE, StrokeType.CENTERED);
+        set(STROKE_TYPE, StrokeType.INSIDE);
     }
 
     public RectangleFigure(Rectangle2D rect) {

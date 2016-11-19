@@ -54,18 +54,20 @@ public class CssPaintableConverter implements Converter<Paintable> {
         String str = buf.toString().trim().toLowerCase(Locale.ROOT);
 
         int pos=buf.position();
+        ParseException pe=null;
         try {
             return colorConverter.fromString(buf, idFactory);
         } catch (ParseException e) {
-            //its not a color
+            pe=e;
         }
         try {
             buf.position(pos);
             return linearGradientConverter.fromString(buf, idFactory);
         } catch (ParseException e) {
-            //throw new UnsupportedOperationException("not yet implemented");
+            if (e.getErrorOffset()>pe.getErrorOffset()) {
+           pe=e;
+            }
         }
-        ParseException pe = new ParseException("color or gradient expected" + buf, buf.position());
         throw pe;
     }
 
