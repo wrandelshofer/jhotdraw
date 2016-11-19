@@ -41,7 +41,9 @@ import static java.lang.Math.max;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.handle.BoundsInParentOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
 import org.jhotdraw8.draw.handle.TransformHandleKit;
+import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.event.Listener;
 
 
@@ -501,6 +503,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             list.add(new BoundsInParentOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             list.add(new MoveHandle(this, RelativeLocator.northEast()));
             list.add(new MoveHandle(this, RelativeLocator.northWest()));
             list.add(new MoveHandle(this, RelativeLocator.southEast()));
@@ -511,6 +514,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
             ResizeHandleKit.addEdgeResizeHandles(this, list);
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
+            list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             if (this instanceof TransformableFigure) {
                 list.add(new RotateHandle((TransformableFigure) this));
                 TransformHandleKit.addCornerTransformHandles(this, list);

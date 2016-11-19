@@ -15,6 +15,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
+import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
 
 /**
  * |@code SimpleDragTracker} implements interactions with the content area of a
@@ -97,31 +98,17 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
             return;
         }
 
-        DrawingModel dm = view.getModel();
+        DrawingModel model = view.getModel();
         if (event.isShiftDown()) {
-            Figure f = anchorFigure;
-            Point2D npl = f.worldToParent(newPoint);
-            Point2D opl = f.worldToParent(oldPoint);
-            if (f instanceof TransformableFigure) {
-                Transform tt = ((TransformableFigure) f).getInverseTransform();
-                npl = tt.transform(npl);
-                opl = tt.transform(opl);
-            }
-            Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
-            dm.reshape(f, tx);
-        } else {
+            // shift transforms all selected figures
             for (Figure f : groupReshapeableFigures) {
-                Point2D npl = f.worldToParent(newPoint);
-                Point2D opl = f.worldToParent(oldPoint);
-                if (f instanceof TransformableFigure) {
-                    Transform tt = ((TransformableFigure) f).getInverseTransform();
-                    npl = tt.transform(npl);
-                    opl = tt.transform(opl);
-                }
-                Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
-                dm.reshape(f, tx);
+                translateFigure(f, oldPoint, newPoint, model);
             }
+        } else {
+            Figure f = anchorFigure;
+            translateFigure(f, oldPoint, newPoint, model);
         }
+
         oldPoint = newPoint;
     }
 
