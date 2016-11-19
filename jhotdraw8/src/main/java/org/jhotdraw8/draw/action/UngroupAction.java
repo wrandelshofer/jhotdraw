@@ -120,6 +120,8 @@ public class UngroupAction extends AbstractSelectedAction {
             model.insertChildAt(child, parent, index++);
 
             if (groupTransform != null) {
+                model.transformInParent(child, groupTransform);
+                /*
                 List<Transform> childTransforms = child.get(TransformableFigure.TRANSFORMS);
                 if (!isGroupTranslateScaleRotateOnly||childTransforms != null && !childTransforms.isEmpty()) {
                     ArrayList<Transform> newTransforms = new ArrayList<>();
@@ -132,7 +134,7 @@ public class UngroupAction extends AbstractSelectedAction {
                     ArrayList<Transform> newTransforms = new ArrayList<>();
                     newTransforms.add(groupTransform);
                    model.set(child,TransformableFigure.TRANSFORMS, newTransforms);
-                }
+                }*/
             }
        }
 

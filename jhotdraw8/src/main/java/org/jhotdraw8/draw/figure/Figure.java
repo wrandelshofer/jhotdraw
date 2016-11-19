@@ -326,9 +326,17 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
     void reshapeInParent(Transform transform);
 
     /**
+     * Attempts to transform the figure.
+     * <p>
+     * The figure may choose to only partially change its trasnformation.
+     *
+     * @param transform the desired transformation in parent coordinates
+     */
+    void transformInParent(Transform transform);
+    /**
      * Attempts to change the local bounds of the figure.
      * <p>
- See {#link #reshapeInLocal(Transform)} for a description of this method.
+     * See {#link #reshapeInLocal(Transform)} for a description of this method.
      *
      * @param x desired x-position in parent coordinates
      * @param y desired y-position in parent coordinates

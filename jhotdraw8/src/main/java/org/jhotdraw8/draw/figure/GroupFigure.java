@@ -32,46 +32,16 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
      * The CSS type selector for group objects is @code("group"}.
      */
     public final static String TYPE_SELECTOR = "Group";
-
+/*
     @Override
     public void reshapeInParent(Transform transform) {
         reshapeInLocal(getParentToLocal().createConcatenation(transform));
-    }
+    }*/
     @Override
     public void reshapeInLocal(Transform transform) {
-        Point2D oldPoint = new Point2D(0,0);
-        Point2D newPoint = getLocalToWorld().createConcatenation(transform).transform(oldPoint);
-        
-        
+        Transform localTransform = transform.createConcatenation(getParentToLocal());
         for (Figure child : getChildren()) {
-            child.reshapeInParent(transform);
-            /*
-            Transform p2c = child.getParentToLocal();
-            if (p2c.isIdentity()) {
-                child.reshapeInLocal(transform);
-            } else if (child instanceof TransformableFigure) {
-                TransformableFigure tchild=(TransformableFigure) child;
-                
-                if (transform instanceof Translate) {
-                    MoveHandle.translateFigure(child, oldPoint, newPoint, null);
-                    /*
-                    p2c = tchild.getTransform();
-                    Point2D tr = new Point2D(transform.getTx(), transform.getTy());
-                    tr = Geom.toDeltaTransform(p2c).transform(tr);
-                    Transform t = new Translate(tr.getX(), tr.getY());
-                    tchild.reshapeInLocal(t);* /
-                } else {
-                /* XXX might need this
-               tchild.set(TRANSFORM, Collections.singletonList(child.getLocalToParent()));
-                tchild.set(ROTATE, 0.0);
-                tchild.set(TRANSLATE_X, 0.0);
-                tchild.set(TRANSLATE_Y, 0.0);
-                tchild.set(SCALE_X, 1.0);
-                tchild.set(SCALE_Y, 1.0);
-                * /
-                    tchild.reshapeInLocal(p2c.createConcatenation(transform));
-                }
-            }*/
+            child.reshapeInParent(localTransform);
         }
     }
 
