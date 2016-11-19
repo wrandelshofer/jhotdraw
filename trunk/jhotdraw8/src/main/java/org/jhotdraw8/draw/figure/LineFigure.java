@@ -72,7 +72,7 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
     }
 
     @Override
-    public void reshape(Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         set(START, transform.transform(get(START)));
         set(END, transform.transform(get(END)));
     }

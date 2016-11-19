@@ -301,17 +301,34 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT}, 
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also
-     * call {@code reshape} on child figures.
+     * call {@code reshapeInLocal} on child figures.
+     *
+     *
+     * @param transform the desired transformation in local coordinates
+     */
+    void reshapeInLocal(Transform transform);
+
+    /**
+     * Attempts to change the parent bounds of the figure.
+     * <p>
+     * The figure may choose to only partially change its parent bounds.
+     * <p>
+     * This method typically changes property values in this figure with 
+     * {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
+     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT}, 
+     * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
+     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also
+     * call {@code reshapeInLocal} on child figures.
      *
      *
      * @param transform the desired transformation in parent coordinates
      */
-    void reshape(Transform transform);
+    void reshapeInParent(Transform transform);
 
     /**
      * Attempts to change the local bounds of the figure.
      * <p>
-     * See {#link #reshape(Transform)} for a description of this method.
+ See {#link #reshapeInLocal(Transform)} for a description of this method.
      *
      * @param x desired x-position in parent coordinates
      * @param y desired y-position in parent coordinates
@@ -336,7 +353,7 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
             tx.appendScale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY());
         }
 
-        reshape(tx);
+        reshapeInLocal(tx);
     }
 
     /**
@@ -450,8 +467,8 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * The default implementation always returns true.
      *
      * @param others A set of figures.
-     * @return true if the user may reshape this figure together with those in
-     * the set.
+     * @return true if the user may reshapeInLocal this figure together with those in
+ the set.
      */
     default boolean isGroupReshapeableWith(Set<Figure> others) {
         return true;

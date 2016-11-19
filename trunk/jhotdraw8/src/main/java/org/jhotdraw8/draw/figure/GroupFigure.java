@@ -34,15 +34,21 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
     public final static String TYPE_SELECTOR = "Group";
 
     @Override
-    public void reshape(Transform transform) {
+    public void reshapeInParent(Transform transform) {
+        reshapeInLocal(getParentToLocal().createConcatenation(transform));
+    }
+    @Override
+    public void reshapeInLocal(Transform transform) {
         Point2D oldPoint = new Point2D(0,0);
         Point2D newPoint = getLocalToWorld().createConcatenation(transform).transform(oldPoint);
         
         
         for (Figure child : getChildren()) {
+            child.reshapeInParent(transform);
+            /*
             Transform p2c = child.getParentToLocal();
             if (p2c.isIdentity()) {
-                child.reshape(transform);
+                child.reshapeInLocal(transform);
             } else if (child instanceof TransformableFigure) {
                 TransformableFigure tchild=(TransformableFigure) child;
                 
@@ -53,7 +59,7 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
                     Point2D tr = new Point2D(transform.getTx(), transform.getTy());
                     tr = Geom.toDeltaTransform(p2c).transform(tr);
                     Transform t = new Translate(tr.getX(), tr.getY());
-                    tchild.reshape(t);*/
+                    tchild.reshapeInLocal(t);* /
                 } else {
                 /* XXX might need this
                tchild.set(TRANSFORM, Collections.singletonList(child.getLocalToParent()));
@@ -62,10 +68,10 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
                 tchild.set(TRANSLATE_Y, 0.0);
                 tchild.set(SCALE_X, 1.0);
                 tchild.set(SCALE_Y, 1.0);
-                */
-                    tchild.reshape(p2c.createConcatenation(transform));
+                * /
+                    tchild.reshapeInLocal(p2c.createConcatenation(transform));
                 }
-            }
+            }*/
         }
     }
 

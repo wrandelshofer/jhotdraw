@@ -15,6 +15,10 @@ import javafx.scene.transform.Transform;
  * @version $Id$
  */
 public interface NonTransformableFigure extends TransformCacheableFigure {
+    @Override
+    default void reshapeInParent(Transform transform) {
+        reshapeInLocal(getParentToLocal().createConcatenation(transform));
+    }
 
     @Override
     default Transform getLocalToParent() {

@@ -32,7 +32,7 @@ import javafx.scene.shape.Shape;
 /**
  * /**
  * A set of utility methods to create handles which resize a Figure by using its
- * {@code reshape} method, if the Figure is transformable.
+ * {@code reshapeInLocal} method, if the Figure is transformable.
  *
  * @author Werner Randelshofer
  */
