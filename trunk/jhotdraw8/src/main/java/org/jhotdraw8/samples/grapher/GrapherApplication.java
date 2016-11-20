@@ -37,21 +37,13 @@ public class GrapherApplication extends DocumentOrientedApplication {
             Logger.getLogger(GrapherApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        SimpleApplicationModel model = new SimpleApplicationModel("Grapher", GrapherProjectView::new,
-                GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
-                "XML Files", null,"*.xml");
-        model.getExportExtensionFilters().add(new URIExtensionFilter("SVG",SvgExportOutputFormat.SVG_FORMAT,"*.svg"));
-        setModel(model);
+        setModel(new GrapherApplicationModel());
     }
 
     @Override
     public HierarchicalMap<String, Action> getActionMap() {
         HierarchicalMap<String, Action> map = super.getActionMap();
-        /*
-        map.put(SendToBackAction.ID, new SendToBackAction(this, null));
-        map.put(BringToFrontAction.ID, new BringToFrontAction(this, null));
-        map.put(GroupAction.ID, new GroupAction(this, null,null));
-        map.put(UngroupAction.ID, new UngroupAction(this, null));*/
+
         Action a;
         map.put(RevertAction.ID, new RevertAction(this,null));
         map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherProjectView) view).getPropertiesPane(),
