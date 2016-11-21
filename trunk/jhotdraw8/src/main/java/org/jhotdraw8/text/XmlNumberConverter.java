@@ -218,20 +218,29 @@ public class XmlNumberConverter implements Converter<Number> {
         if (factor != 1.0) {
             v = v * factor;
         }
-        String str;
-        BigDecimal big = new BigDecimal(v);
-        int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
-        if (!usesScientificNotation || exponent > minNegativeExponent
-                && exponent < minPositiveExponent) {
-            str = decimalFormat.format(v);
+        if (Double.isInfinite(v)) {
+            if (v < 0.0) {
+                buf.append('-');
+            }
+            buf.append("INF");
+        } else if (Double.isNaN(v)) {
+            buf.append("NaN");
         } else {
-            str = scientificFormat.format(v);
-        }
-        buf.append(str);
+            String str;
+            BigDecimal big = new BigDecimal(v);
+            int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
+            if (!usesScientificNotation || exponent > minNegativeExponent
+                    && exponent < minPositiveExponent) {
+                str = decimalFormat.format(v);
+            } else {
+                str = scientificFormat.format(v);
+            }
+            buf.append(str);
 
-        if (value != null) {
-            if (unit != null) {
-                buf.append(unit);
+            if (value != null) {
+                if (unit != null) {
+                    buf.append(unit);
+                }
             }
         }
         return;
@@ -289,6 +298,10 @@ public class XmlNumberConverter implements Converter<Number> {
                         noMorePoints = false;
                         noMoreEs = true;
                         break;
+                    case 'I':// INF
+                    case 'N': // NaN
+                        end += 3;
+                        break Outer;
                     default:
                         break Outer;
                 }
@@ -296,6 +309,19 @@ public class XmlNumberConverter implements Converter<Number> {
         }
 
         String text = str.subSequence(0, end).toString();
+
+        switch (text) {
+            case "-INF":
+                str.position(str.position() + end);
+                return Double.NEGATIVE_INFINITY;
+            case "INF":
+                str.position(str.position() + end);
+                return Double.POSITIVE_INFINITY;
+            case "NaN":
+                str.position(str.position() + end);
+                return Double.NaN;
+        }
+
         // Remove unit from text
         if (unit != null && end + unit.length() <= remaining) {
             if (str.subSequence(end, end + unit.length()).toString().startsWith(unit)) {

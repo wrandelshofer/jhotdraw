@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.text;
 
+import java.util.Objects;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -56,6 +57,31 @@ public class CColor implements Paintable {
             double o = c.getOpacity();
             return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.color);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CColor other = (CColor) obj;
+        if (!Objects.equals(this.color, other.color)) {
+            return false;
+        }
+        return true;
     }
 
 }

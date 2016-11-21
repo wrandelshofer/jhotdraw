@@ -32,6 +32,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.jhotdraw8.app.AbstractProjectView;
 import org.jhotdraw8.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw8.concurrent.FXWorker;
@@ -84,6 +85,7 @@ import org.jhotdraw8.draw.tool.ImageCreationTool;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.svg.SvgExportOutputFormat;
+import org.jhotdraw8.text.CColor;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
