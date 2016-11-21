@@ -28,8 +28,6 @@ public class LabelFigure extends AbstractLabelFigure implements FontableFigure, 
     public LabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
-        set(STROKE_COLOR, null);
-        set(FILL_COLOR, null);
         for (int i = 0; i < keyValues.length; i += 2) {
             @SuppressWarnings("unchecked") // the set() method will perform the check for us
             Key<Object> key = (Key<Object>) keyValues[i];

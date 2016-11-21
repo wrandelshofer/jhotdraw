@@ -22,8 +22,7 @@ public class SimplePropertyBean implements PropertyBean {
     /**
      * Holds the properties.
      */
-    protected final ObservableMap<Key<?>, Object> properties//
-            =                    FXCollections.observableHashMap();
+    protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {

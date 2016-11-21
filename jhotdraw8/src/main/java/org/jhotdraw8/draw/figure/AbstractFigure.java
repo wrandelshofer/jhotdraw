@@ -26,7 +26,7 @@ import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.styleable.SimpleStyleablePropertyBean;
+import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.css.StylesheetsManager;
 
@@ -36,7 +36,7 @@ import org.jhotdraw8.css.StylesheetsManager;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFigure extends SimpleStyleablePropertyBean implements Figure {
+public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure {
 
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
 

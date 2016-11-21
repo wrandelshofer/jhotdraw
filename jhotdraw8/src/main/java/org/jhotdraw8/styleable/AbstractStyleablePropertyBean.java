@@ -1,4 +1,4 @@
-/* @(#)SimpleStyleablePropertyBean.java
+/* @(#)AbstractStyleablePropertyBean.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -12,27 +12,26 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
 /**
- * SimpleStyleablePropertyBean.
+ * AbstractStyleablePropertyBean.
  *
  * @author Werner Randelshofer
  */
-public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBean {
+public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
 
     /**
      * Holds the properties.
      */
     // protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
-    protected final StyleableMap<Key<?>, Object> properties =//
-            new StyleableMap<Key<?>, Object>() {
+    protected final StyleableMap<Key<?>, Object> properties = new StyleableMap<Key<?>, Object>() {
 
-                @Override
-                protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
-                    invalidated(change.getKey());
-                    SimpleStyleablePropertyBean.this.callObservers(origin, willChange, change);
-                    super.callObservers(origin, willChange, change);
-                }
+        @Override
+        protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
+            invalidated(change.getKey());
+            AbstractStyleablePropertyBean.this.callObservers(origin, willChange, change);
+            super.callObservers(origin, willChange, change);
+        }
 
-            };
+    };
 
     /**
      * Returns the user properties.
@@ -54,7 +53,7 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
 
     protected StyleableMap<Key<?>, Object> getStyleableMap() {
         @SuppressWarnings("unchecked")
-        StyleableMap<Key<?>, Object> map =  properties;
+        StyleableMap<Key<?>, Object> map = properties;
         return map;
     }
 
@@ -101,16 +100,16 @@ public abstract class SimpleStyleablePropertyBean implements StyleablePropertyBe
     protected void invalidated(Key<?> key) {
     }
 
-    /**    
+    /**
      * This method is invoked just before listeners are notified. This
      * implementation is empty.
-     * 
+     *
      * @param origin the style origin
-     * @param willChange true if the change is about to be performed, false
-     * if the change happened
+     * @param willChange true if the change is about to be performed, false if
+     * the change happened
      * @param change the change
      */
     protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
-                   
+
     }
 }

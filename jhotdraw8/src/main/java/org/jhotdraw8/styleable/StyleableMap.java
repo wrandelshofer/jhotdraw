@@ -26,7 +26,8 @@ import javafx.css.StyleOrigin;
  * @param <V> value type
  */
 public class StyleableMap<K, V> implements ObservableMap<K, V> {
-    private static class MapAdapter<K,V> implements Map<K,V> {
+
+    private static class MapAdapter<K, V> implements Map<K, V> {
 
         @Override
         public int size() {
@@ -87,9 +88,8 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         public Set<Entry<K, V>> entrySet() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
-        
+
     }
-    
 
     private static class StyledValue {
 
@@ -98,24 +98,26 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
          */
         private final static Object NO_VALUE = new Object();
         private final static StyleOrigin[] ORIGINS = StyleOrigin.values();
-        private StyleOrigin origin;
+        private int origin = -1;
         /**
          * Contains a slot for each of the four possible origins. The ordinal
          * number of StyleOrigin is used as an index.
          */
-        private final Object[] values = {NO_VALUE, NO_VALUE, NO_VALUE, NO_VALUE};
+        private Object value0 = NO_VALUE;
+        private Object value1 = NO_VALUE;
+        private Object value2 = NO_VALUE;
+        private Object value3 = NO_VALUE;
 
         public <T> T removeValue(StyleOrigin origin) {
             if (hasValue(origin)) {
                 int i = origin.ordinal();
                 @SuppressWarnings("unchecked")
-                T oldValue = (T) values[i];
-                values[i] = NO_VALUE;
-                if (this.origin == origin) {
-                    this.origin = null;
+                T oldValue = (T) setValue(i, NO_VALUE);
+                if (this.origin == origin.ordinal()) {
+                    this.origin = -1;
                     for (int j = origin.ordinal() - 1; j >= 0; j--) {
-                        if (values[j] != NO_VALUE) {
-                            this.origin = ORIGINS[j];
+                        if (getValue(j) != NO_VALUE) {
+                            this.origin = j;
                             break;
                         }
                     }
@@ -126,39 +128,78 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             }
         }
 
+        private Object getValue(int index) {
+            switch (index) {
+                case 0:
+                    return value0;
+                case 1:
+                    return value1;
+                case 2:
+                    return value2;
+                case 3:
+                    return value3;
+                default:
+                    throw new ArrayIndexOutOfBoundsException(index);
+            }
+        }
+
+        private Object setValue(int index, Object newValue) {
+            Object oldValue;
+            switch (index) {
+                case 0:
+                    oldValue = value0;
+                    value0 = newValue;
+                    break;
+                case 1:
+                    oldValue = value1;
+                    value1 = newValue;
+                    break;
+                case 2:
+                    oldValue = value2;
+                    value2 = newValue;
+                    break;
+                case 3:
+                    oldValue = value3;
+                    value3 = newValue;
+                    break;
+                default:
+                    throw new ArrayIndexOutOfBoundsException(index);
+            }
+            return oldValue;
+        }
+
         public <T> T setValue(StyleOrigin origin, T newValue) {
             int i = origin.ordinal();
             @SuppressWarnings("unchecked")
-            T oldValue = (T) values[i];
-            values[i] = newValue;
-            if (this.origin == null || origin.ordinal() > this.origin.ordinal()) {
-                this.origin = origin;
+            T oldValue = (T) setValue(i, newValue);
+            if (this.origin == -1 || origin.ordinal() > this.origin) {
+                this.origin = origin.ordinal();
             }
             return oldValue;
         }
 
         public boolean hasValue(StyleOrigin origin) {
-            return values[origin.ordinal()] != NO_VALUE;
+            return getValue(origin.ordinal()) != NO_VALUE;
         }
 
         public boolean isEmpty() {
-            return origin == null;
+            return origin == -1;
         }
 
         private <T> T getValue(StyleOrigin styleOrigin) {
             @SuppressWarnings("unchecked")
-            T ret = values==null||styleOrigin==null?null:(T) values[styleOrigin.ordinal()];
-            return ret == NO_VALUE ? null : ret;
+            T ret = styleOrigin == null ? null : (T) getValue(styleOrigin.ordinal());
+            return ret;
         }
 
         private <T> T getValue(StyleOrigin styleOrigin, T defaultValue) {
             @SuppressWarnings("unchecked")
-            T ret = (T) values[styleOrigin == null ? 0 : styleOrigin.ordinal()];
+            T ret = (T) getValue(styleOrigin == null ? 0 : styleOrigin.ordinal());
             return ret == NO_VALUE ? defaultValue : ret;
         }
 
         private StyleOrigin getOrigin() {
-            return origin;
+            return origin == -1 ? null : ORIGINS[origin];
         }
     }
     private ObservableEntrySet entrySet;
@@ -169,7 +210,6 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
     private final Map<K, StyledValue> backingMap;
     private Map<K, V> styledMap;
-    private BiFunction<K, StyledValue, StyledValue> computePutMethodReference = StyleableMap::computePut;
 
     public StyleableMap() {
         this.backingMap = new IdentityHashMap<>();
@@ -337,8 +377,8 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     public V get(StyleOrigin o, K key) {
         StyledValue sv = backingMap.get(key);
         @SuppressWarnings("unchecked")
-        V ret = sv == null ? null : (V) sv.getValue(o);
-        return ret;
+        V val = sv == null || !sv.hasValue(o) ? null : (V) sv.getValue(o);
+        return val;
     }
 
     /**
@@ -402,7 +442,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             public V remove(Object key) {
                 return StyleableMap.this.remove(origin, (K) key);
             }
-       };
+        };
     }
 
     protected V getStyled(K key) {
@@ -429,7 +469,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     }
 
     public V put(StyleOrigin o, K key, V value) {
-        StyledValue sv = backingMap.compute(key, computePutMethodReference);
+        StyledValue sv = backingMap.compute(key, StyleableMap::computePut);
         /*
         if (sv == null) {
             sv = new StyledValue();
@@ -438,7 +478,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
         boolean hadValue = sv.hasValue(o);
         V ret = sv.getValue(o);
-        if (!Objects.equals(ret,value)) {
+        if (!Objects.equals(ret, value)) {
             SimpleChange change = new SimpleChange(key, ret, value, true, hadValue);
             callObservers(o, true, change);
             sv.setValue(o, value);
@@ -657,7 +697,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             @SuppressWarnings("unchecked")
             T[] r = a.length >= size ? a
                     : (T[]) java.lang.reflect.Array
-                    .newInstance(a.getClass().getComponentType(), size);
+                            .newInstance(a.getClass().getComponentType(), size);
             a = r;
             int i = 0;
             for (Iterator<K> it = iterator(); it.hasNext();) {
@@ -847,7 +887,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             @SuppressWarnings("unchecked")
             T[] r = a.length >= size ? a
                     : (T[]) java.lang.reflect.Array
-                    .newInstance(a.getClass().getComponentType(), size);
+                            .newInstance(a.getClass().getComponentType(), size);
             a = r;
             int i = 0;
             for (Iterator<V> it = iterator(); it.hasNext();) {

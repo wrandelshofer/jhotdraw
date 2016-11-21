@@ -11,10 +11,11 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.styleable.SimpleParsedValue;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.Paintable;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -43,11 +44,11 @@ public class RectangleFigureNGTest {
         for (CssMetaData<? extends Styleable,?> meta:list) {
             if (meta.getProperty().equals(cssProperty)) {
                 @SuppressWarnings("unchecked")
-                CssMetaData<Figure,Paint> fm=(CssMetaData<Figure,Paint>)meta;
+                CssMetaData<Figure,Paintable> fm=(CssMetaData<Figure,Paintable>)meta;
                 @SuppressWarnings("unchecked")
-                StyleConverter<Object,Paint> converter=(StyleConverter<Object,Paint>)fm.getConverter();
-                SimpleParsedValue<Object,Paint> parsedValue=new SimpleParsedValue<Object,Paint>(expectedOutputValue,converter);
-                Paint convertedCssValue=converter.convert(parsedValue, null);
+                StyleConverter<Object,Paintable> converter=(StyleConverter<Object,Paintable>)fm.getConverter();
+                SimpleParsedValue<Object,Paintable> parsedValue=new SimpleParsedValue<Object,Paintable>(expectedOutputValue,converter);
+                Paintable convertedCssValue=converter.convert(parsedValue, null);
                 fm.getStyleableProperty(instance).setValue(convertedCssValue);
             }
         }
@@ -64,7 +65,7 @@ public class RectangleFigureNGTest {
     @DataProvider
     public Object[][] cssData() {
         return new Object[][]{
-            {FillableFigure.FILL_COLOR,"-jhotdraw-fill", Color.RED,"blue",Color.BLUE},
+            {FillableFigure.FILL_COLOR,"-jhotdraw-fill", new CColor(Color.RED),"blue",new CColor(Color.BLUE)},
         };
 
     }     
