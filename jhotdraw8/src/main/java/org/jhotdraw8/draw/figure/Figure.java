@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
-import org.jhotdraw8.collection.IterableTree;
 import org.jhotdraw8.collection.IndexedSet;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.Drawing;
@@ -45,6 +44,7 @@ import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
 import org.jhotdraw8.draw.handle.TransformHandleKit;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.collection.TreeNode;
 
 
 
@@ -129,7 +129,7 @@ import org.jhotdraw8.event.Listener;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
+public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     // ----
     // various declarations
@@ -650,21 +650,11 @@ public interface Figure extends StyleablePropertyBean, IterableTree<Figure> {
      * All changes on this list causes this figure to fire an invalidation
      * event.
      * <p>
-     * If a child is added to this figure, the child must be removed from its
-     * former parent. This figure must set itself set as the parent of the child
-     * immediately after the figure has been added.</p>
+     * If a child is added to this list, then this figure removes the child from
+     * its former parent, and then sets itself as the parent of the child.</p>
      * <p>
-     * If a child is removed from this figure, this figure must set parent to
-     * null immediately before the child is removed.</p>
-     * <p>
-     * Note that this method returns a {@code ReadOnlyListProperty} which holds
-     * an instance of {@link IndexedSet}. {@code ListChangeListener}s can get
-     * the associated {@code Figure} using the following code:</p>
-     * <pre>{@code
-     * (ListChangeListener.Change change) -> Figure figure =
-     *      (Figure) ((ReadOnlyProperty) change.getList()).getBean();
-     * }</pre>
-     *
+     * If a child is removed from this list, then this figure sets the parent of
+     * the child to null.</p>
      *
      * @return the children
      */

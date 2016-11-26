@@ -1,4 +1,4 @@
-/* @(#)IterableTree.java
+/* @(#)TreeNode.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -9,23 +9,44 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import org.jhotdraw8.draw.figure.Figure;
 
 /**
- * IterableTree.
+ * Represents a node of a tree structure.
+ * <p>
+ * A node has zero or one parents, and zero or more children.
+ * <p>
+ * All nodes in the same tree structure are of the same type {@literal <T>}.
+ * <p>
+ * A node may support only a restricted set of parent types {@literal <P extends T>}.
+ * <p>
+ * A node may only support a restricted set of child types {@literal <C extends T>}.
+ * <p>
+ * The type {@literal <T>} is checked at compile time using a Java type parameter. 
+ * The types {@literal <P>} and {@literal <C>} are checked at runtime.
  *
- * @design.pattern IterableTree Iterator, Aggregate.
- * The iterator pattern is used to provide a choice of iteration strategies
- * for a tree structure.
+ * @design.pattern TreeNode Composite, Component.
+ * The composite pattern is used to model a tree structure.
+ * 
+ * @design.pattern TreeNode Iterator, Aggregate.
+ * The iterator pattern is used to provide a choice of iteration strategies over an aggregate structure.
  * 
  * @author Werner Randelshofer
  * @version $Id$
- * @param <T> the type of nodes in the iterable tree
+ * @param <T> the type of nodes in the tree structure.
  */
-public interface IterableTree<T extends IterableTree<T>> {
+public interface TreeNode<T extends TreeNode<T>> {
 
     /**
      * Returns the children of the tree node.
+     * <p>
+     * In order to keep the tree structure consistent, the following rules must be followed:
+     * <ul>
+     * <li>If a child is added to this list, then it must be removed from its former parent,
+     * and this this tree node must be set as the parent of the child.</li>
+     * <li>
+     * If a child is removed from this tree node, then the parent of the child must be set to null.</li>
+     * </ul>
+     * 
      * @return the children
      */
     List<T> getChildren();
@@ -63,7 +84,7 @@ public interface IterableTree<T extends IterableTree<T>> {
      */
     default public Iterable<T> preorderIterable() {
         @SuppressWarnings("unchecked")
-        Iterable<T> i = () -> new IterableTree.PreorderIterator<>((T) this);
+        Iterable<T> i = () -> new TreeNode.PreorderIterator<>((T) this);
         return i;
     }
 
@@ -92,7 +113,7 @@ public interface IterableTree<T extends IterableTree<T>> {
      */
     default public Iterable<T> breadthFirstIterable() {
         @SuppressWarnings("unchecked")
-        Iterable<T> i = () -> new IterableTree.BreadthFirstIterator<>((T) this);
+        Iterable<T> i = () -> new TreeNode.BreadthFirstIterator<>((T) this);
         return i;
     }
 
@@ -104,7 +125,7 @@ public interface IterableTree<T extends IterableTree<T>> {
      */
     default Iterable<T> ancestorIterable() {
         @SuppressWarnings("unchecked")
-        Iterable<T> i = () -> new IterableTree.AncestorIterator<>((T) this);
+        Iterable<T> i = () -> new TreeNode.AncestorIterator<>((T) this);
         return i;
     }
 
@@ -138,11 +159,11 @@ public interface IterableTree<T extends IterableTree<T>> {
     }
 
     /**
-     * @design.pattern IterableTree Iterator, Iterator.
+     * @design.pattern TreeNode Iterator, Iterator.
      * 
      * @param <T> the type of the tree nodes
      */
-    static class PreorderIterator<T extends IterableTree<T>> implements Iterator<T> {
+    static class PreorderIterator<T extends TreeNode<T>> implements Iterator<T> {
 
         private final LinkedList<Iterator<T>> stack = new LinkedList<>();
 
@@ -180,7 +201,7 @@ public interface IterableTree<T extends IterableTree<T>> {
     /**
      * @design.pattern IterableTree Iterator, Iterator.
      */
-    static class BreadthFirstIterator<T extends IterableTree<T>> implements Iterator<T> {
+    static class BreadthFirstIterator<T extends TreeNode<T>> implements Iterator<T> {
 
         protected LinkedList<Iterator<T>> queue;
 
@@ -233,11 +254,11 @@ public interface IterableTree<T extends IterableTree<T>> {
     }
     
     /**
-     * @design.pattern IterableTree Iterator, Iterator.
+     * @design.pattern TreeNode Iterator, Iterator.
      * 
      * @param <T> the type of the tree nodes
      */
-    static class AncestorIterator<T extends IterableTree<T>> implements Iterator<T> {
+    static class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
 
         private T node;
 

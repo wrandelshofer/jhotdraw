@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -76,10 +78,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.draw.RenderingIntent;
-import org.jhotdraw8.draw.SimpleDrawingRenderer;
+import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.io.OutputFormat;
@@ -101,8 +104,8 @@ import org.w3c.dom.Element;
  * @version $Id$
  */
 public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
-  
-  public final static DataFormat SVG_FORMAT=new DataFormat("image/svg+xml");
+
+    public final static DataFormat SVG_FORMAT = new DataFormat("image/svg+xml");
 
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
@@ -117,20 +120,19 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     public Document toDocument(Drawing external) throws IOException {
         return toDocument(external, Collections.singleton(external));
     }
+
     public Document toDocument(Drawing external, Collection<Figure> selection) throws IOException {
-        SimpleDrawingRenderer r = new SimpleDrawingRenderer();
-        r.set(RenderContext.RENDERING_INTENT, RenderingIntent.EXPORT);
-        LinkedList<Node> nodes=new LinkedList<>();
-        for (Figure f: external.preorderIterable()) {
-          if (selection.contains(f)) {
-        nodes.add(r.render(f));
-          }
-        }
-        Node drawingNode;
-        if (nodes.size()==1) {
-          drawingNode=nodes.getFirst();
-        }else{
-         drawingNode=new Group( nodes);
+        CompletableFuture<javafx.scene.Node> future = new CompletableFuture<>();
+        Platform.runLater(() -> {
+            Map<Key<?>, Object> hints = new HashMap<>();
+            RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
+            future.complete(toNode(external, selection, hints));
+        });
+        javafx.scene.Node drawingNode;
+        try {
+            drawingNode = future.get();
+        } catch (InterruptedException | ExecutionException ex) {
+            throw new IOException(ex);
         }
         Document doc = toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
@@ -148,6 +150,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
             throw new IOException(ex);
         }
     }
+
     public void write(Writer out, javafx.scene.Node drawing) throws IOException {
         Document doc = toDocument(drawing);
         try {
@@ -858,17 +861,15 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
         }*/
     }
 
-   
-
     @Override
     public void setDocumentHome(URI uri) {
         // empty
     }
 
-  @Override
-  public void write(Map<DataFormat, Object>clipboard, Drawing drawing, Collection<Figure> selection) throws IOException {
-    StringWriter out = new StringWriter();
-            Document doc = toDocument(drawing,selection);
+    @Override
+    public void write(Map<DataFormat, Object> clipboard, Drawing drawing, Collection<Figure> selection) throws IOException {
+        StringWriter out = new StringWriter();
+        Document doc = toDocument(drawing, selection);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
             DOMSource source = new DOMSource(doc);
@@ -878,7 +879,6 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
             throw new IOException(ex);
         }
         clipboard.put(SVG_FORMAT, out.toString());
-  }
-    
-    
+    }
+
 }

@@ -6,8 +6,11 @@
 <para>For some drawings, the nature of the concept can be left undefined, for example for artistic paintings.
  For other drawings, the nature of the concept is explicitly defined, for example for a UML class diagram.</para>
 
-<para>We assume that a concept is composed of elements.
- We call the visual representation of such an element a 'figure'.</para>
+<para>We assume that a concept can be decomposed into smaller sub-concepts, which can
+  in turn be decomposed into smaller sub-concepts until we reach a level of detail, where
+  decomposition is no longer worthwhile.<para>
+    
+<para>We call the visual representation of (sub-)concept  a 'figure'.</para>
 
 <orderedlist>
 <listitem><para>A drawing consists of a rectangular area: the drawing area.</para></listitem>
