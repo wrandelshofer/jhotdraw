@@ -30,6 +30,9 @@ public interface RenderContext extends PropertyBean {
     // keys
     // ---
     Key<RenderingIntent> RENDERING_INTENT = new SimpleKey<>("renderingIntent",RenderingIntent.class,RenderingIntent.EDITOR);
+    
+    /** The dots per inch of the rendering device. */
+    Key<Double> DPI = new SimpleKey<>("dpi",Double.class,72.0);
     // ---
     // behavior
     // ---
