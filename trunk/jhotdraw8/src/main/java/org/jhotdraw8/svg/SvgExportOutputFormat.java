@@ -122,18 +122,9 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     }
 
     public Document toDocument(Drawing external, Collection<Figure> selection) throws IOException {
-        CompletableFuture<javafx.scene.Node> future = new CompletableFuture<>();
-        Platform.runLater(() -> {
-            Map<Key<?>, Object> hints = new HashMap<>();
-            RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-            future.complete(toNode(external, selection, hints));
-        });
-        javafx.scene.Node drawingNode;
-        try {
-            drawingNode = future.get();
-        } catch (InterruptedException | ExecutionException ex) {
-            throw new IOException(ex);
-        }
+        Map<Key<?>, Object> hints = new HashMap<>();
+        RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
+        javafx.scene.Node drawingNode = toNode(external, selection, hints);
         Document doc = toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
         return doc;
