@@ -163,7 +163,7 @@ public class GrapherProjectView extends AbstractProjectView implements EditorVie
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc,//
-                () -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null), //
+                () -> createFigure(()->new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
                 layerFactory), 4, 1);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, () -> createFigure(LineConnectionFigure::new), layerFactory), 3, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
