@@ -40,11 +40,11 @@ public class Regex {
 
     @Override
     public String toString() {
-        return "/" + escape(find) + "/" + escape(find) + "/";
+        return "/" + escape(find) + "/" + escape(replace) + "/";
     }
 
     private String escape(String str) {
-        return find.replace("/", "\\/");
+        return str==null?"":str.replace("/", "\\/");
     }
 
     /**
