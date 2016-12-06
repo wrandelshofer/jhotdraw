@@ -136,7 +136,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
             }
         }
         if (dependentFigures != null) {
-            buf.append(", connections={");
+            buf.append(", deps={");
             isFirst = true;
             for (Figure f : dependentFigures) {
                 if (isFirst) {
@@ -148,8 +148,9 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
                 className = className.substring(className.lastIndexOf('.') + 1);
                 buf.append(className).append('@').append(f.hashCode());
             }
-            buf.append("}}");
+            buf.append('}');
         }
+        buf.append('}');
         return buf.toString();
     }
 
