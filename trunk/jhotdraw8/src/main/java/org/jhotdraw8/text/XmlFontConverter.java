@@ -13,6 +13,7 @@ import javafx.scene.text.FontWeight;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.io.IdFactory;
 import javafx.scene.text.Font;
+import org.jhotdraw8.css.CssTokenizerInterface;
 
 /**
  * XmlFontConverter.
@@ -81,7 +82,8 @@ public class XmlFontConverter implements Converter<Font> {
     @Override
     public Font fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // XXX should not use Css Tokenizer in XML!!
-        CssTokenizer tt = new CssTokenizer(new StringReader(buf.toString()));
+        CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
+        tt.setSkipWhitespace(true);
 
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
@@ -105,8 +107,6 @@ public class XmlFontConverter implements Converter<Font> {
         } else {
             tt.pushBack();
         }
-
-        tt.skipWhitespace();
 
         // parse FontWeight
         boolean fontWeightConsumed = false;
@@ -138,8 +138,6 @@ public class XmlFontConverter implements Converter<Font> {
             tt.pushBack();
         }
 
-        tt.skipWhitespace();
-
         double fontWeightOrFontSize = 0.0;
         boolean fontWeightOrFontSizeConsumed = false;
         if (!fontWeightConsumed) {
@@ -150,7 +148,6 @@ public class XmlFontConverter implements Converter<Font> {
                 tt.pushBack();
             }
         }
-        tt.skipWhitespace();
 
         // parse FontSize
         if (tt.nextToken() == CssTokenizer.TT_NUMBER) {
@@ -196,7 +193,6 @@ public class XmlFontConverter implements Converter<Font> {
         } else {
             tt.pushBack();
         }
-        tt.skipWhitespace();
 
         if (tt.nextToken() == CssTokenizer.TT_IDENT || tt.currentToken() == CssTokenizer.TT_STRING) {
             fontFamily = tt.currentStringValue();

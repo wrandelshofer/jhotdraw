@@ -19,8 +19,8 @@ import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.CColor;
-import org.jhotdraw8.text.CssCColorConverter;
+import org.jhotdraw8.text.CssColor;
+import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterConverterWrapper;
 import org.jhotdraw8.text.XmlDoubleConverter;
@@ -47,7 +47,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
 
     private Property<Double> widthProperty;
     private Property<Double> heightProperty;
-    private Property<CColor> backgroundProperty;
+    private Property<CssColor> backgroundProperty;
 
     private InvalidationListener commitHandler = o -> commitEdits();
     
@@ -105,14 +105,13 @@ public class DrawingInspector extends AbstractDrawingInspector {
             // FIXME binding to figure properties bypasses the DrawingModel!
             widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssCColorConverter()));
+            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssColorConverter()));
             
-            CssColorConverter converter = new CssColorConverter();
             CustomBinding.bindBidirectional(//
                     backgroundProperty,//
                     backgroundColorPicker.valueProperty(),//
-                    (CColor c)->c==null?null:c.getColor(), //
-                    (Color c)->new CColor(converter.toString(c),c)//
+                    (CssColor c)->c==null?null:c.getColor(), //
+                    (Color c)->new CssColor(c)//
             );
         }
     }

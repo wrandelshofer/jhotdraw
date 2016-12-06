@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.Paintable;
 
 /**
@@ -81,7 +81,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static PaintableStyleableFigureKey STROKE_COLOR = new PaintableStyleableFigureKey("stroke", new CColor(Color.BLACK));
+    public static PaintableStyleableFigureKey STROKE_COLOR = new PaintableStyleableFigureKey("stroke", new CssColor(Color.BLACK));
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>

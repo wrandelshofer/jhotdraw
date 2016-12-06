@@ -8,20 +8,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.Locale;
-import java.util.Map;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.InnerShadow;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -45,16 +36,16 @@ import org.jhotdraw8.draw.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
+public class CssLinearGradientConverter implements Converter<CssLinearGradient> {
 
     private CssColorConverter colorConverter = new CssColorConverter();
-    private XmlNumberConverter doubleConverter = new XmlNumberConverter();
+    private CssSizeConverter doubleConverter = new CssSizeConverter();
 
-    public void toString(Appendable out, IdFactory idFactory, CLinearGradient value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, CssLinearGradient value) throws IOException {
         if (value == null) {
             out.append("none");
         } else {
-            LinearGradient lg = value.getLinearGradient();
+            CssLinearGradient lg = value;
             final boolean proportional = lg.isProportional();
             final String unit = proportional ? "%" : "px";
             out.append("linear-gradient(");
@@ -112,18 +103,19 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
                     default:
                         throw new UnsupportedOperationException("not yet implemented");
                 }
-                for (Stop stop : lg.getStops()) {
+                for (CssStop stop : lg.getStops()) {
                     if (needsComma) {
                         out.append(", ");
                     }
                     colorConverter.toString(out, idFactory, stop.getColor());
+                    if (stop.getOffset()!=null){
                     out.append(' ');
                     if (proportional) {
                         doubleConverter.toString(out, idFactory, stop.getOffset() * 100.0);
                         out.append('%');
                     } else {
                         doubleConverter.toString(out, idFactory, stop.getOffset());
-                    }
+                    }}
                     needsComma = true;
                 }
             }
@@ -132,8 +124,9 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
     }
 
     @Override
-    public CLinearGradient fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizer tt = new CssTokenizer(new StringReader(in.toString()));
+    public CssLinearGradient fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+        CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
+        tt.setSkipWhitespace(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if ("none".equals(tt.currentStringValue())) {
                 in.position(in.limit());
@@ -155,19 +148,16 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
             default:
                 throw new ParseException("CSS LinearGradient: \"<linear-gradient>(\"  expected, found: "+tt.currentStringValue(), tt.getPosition());
         }
-        tt.skipWhitespace();
         boolean needComma = false;
         double startX = 0.0;
         double startY = 0.0;
         double endX = 1.0;
         double endY = 0.0;
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "from".equals(tt.currentStringValue())) {
-        tt.skipWhitespace();
             if (tt.nextToken()!=CssTokenizer.TT_NUMBER) {
-                                throw new ParseException("CSS LinearGradient: start-x expected, found: "+tt.currentStringValue(), tt.getPosition());
+                                throw new ParseException("CSS LinearGradient: start-x expected, found: "+tt.currentStringValue()+" ttype:"+tt.currentToken(), tt.getPosition());
             }
             startX=tt.currentNumericValue().doubleValue();
-        tt.skipWhitespace();
             if (tt.nextToken()!=CssTokenizer.TT_NUMBER) {
                                 throw new ParseException("CSS LinearGradient: start-y expected, found: "+tt.currentStringValue(), tt.getPosition());
             }
@@ -176,14 +166,11 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
         } else {
             tt.pushBack();
         }
-        tt.skipWhitespace();
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "to".equals(tt.currentStringValue())) {
-        tt.skipWhitespace();
             if (tt.nextToken()!=CssTokenizer.TT_NUMBER) {
                                 throw new ParseException("CSS LinearGradient: start-x expected, found: "+tt.currentStringValue(), tt.getPosition());
             }
             startX=tt.currentNumericValue().doubleValue();
-        tt.skipWhitespace();
             if (tt.nextToken()!=CssTokenizer.TT_NUMBER) {
                                 throw new ParseException("CSS LinearGradient: start-y expected, found: "+tt.currentStringValue(), tt.getPosition());
             }
@@ -192,14 +179,12 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
         } else {
             tt.pushBack();
         }
-        tt.skipWhitespace();
         if (needComma) {
             if (tt.nextToken() != ',') {
                 throw new ParseException("CSS LinearGradient: ','  expected, found: "+tt.currentStringValue(), tt.getPosition());
             }
             needComma = false;
         }
-        tt.skipWhitespace();
         CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if ("repeat".equals(tt.currentStringValue())) {
@@ -215,14 +200,12 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
         } else {
             tt.pushBack();
         }
-        tt.skipWhitespace();
         if (needComma) {
             if (tt.nextToken() != ',') {
                 throw new ParseException("CSS LinearGradient: ','  expected, found: "+tt.currentStringValue(), tt.getPosition());
             }
             needComma = false;
         }
-        tt.skipWhitespace();
         if (tt.nextToken() != ')') {
             throw new ParseException("CSS LinearGradient: ')'  expected, found: "+tt.currentStringValue(), tt.getPosition());
         }
@@ -231,7 +214,7 @@ public class CssCLinearGradientConverter implements Converter<CLinearGradient> {
     }
 
     @Override
-    public CLinearGradient getDefaultValue() {
+    public CssLinearGradient getDefaultValue() {
         return null;
     }
 }

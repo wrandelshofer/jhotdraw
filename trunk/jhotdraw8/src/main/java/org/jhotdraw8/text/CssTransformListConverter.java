@@ -18,9 +18,9 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.io.IdFactory;
-import static java.lang.Math.*;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Affine;
+import org.jhotdraw8.css.CssTokenizerInterface;
 
 /**
  * CssTransformListConverter.
@@ -213,8 +213,8 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
     @Override
     public List<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
-        CssTokenizer tt = new CssTokenizer(new StringReader(in.toString()));
-
+        CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
+tt.setSkipWhitespace(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT && tt.currentStringValue().equals("none")) {
             in.position(in.limit());
             return txs;
@@ -224,23 +224,18 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
 
         while (tt.nextToken() != CssTokenizer.TT_EOF) {
             tt.pushBack();
-            tt.skipWhitespace();
             if (tt.nextToken() != CssTokenizer.TT_FUNCTION) {
                 throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
             }
             String func = tt.currentStringValue();
             int funcPos = tt.getPosition();
-            tt.skipWhitespace();
             List<Double> m = new ArrayList<>();
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
                 throw new ParseException("coefficient nb 1 expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
             }
             m.add(tt.currentNumericValue().doubleValue());
             while (tt.nextToken() != ')' && tt.currentToken() != CssTokenizer.TT_EOF) {
-                tt.skipWhitespace();
-                if (tt.nextToken() == ',') {
-                    tt.skipWhitespace();
-                } else {
+                if (tt.nextToken() != ',') {
                     tt.pushBack();
                 }
                 if (tt.nextToken() != CssTokenizer.TT_NUMBER) {

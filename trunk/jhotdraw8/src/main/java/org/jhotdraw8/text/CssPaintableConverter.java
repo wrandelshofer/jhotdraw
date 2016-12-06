@@ -29,8 +29,8 @@ import org.jhotdraw8.draw.io.IdFactory;
  */
 public class CssPaintableConverter implements Converter<Paintable> {
 
-    private CssCColorConverter colorConverter = new CssCColorConverter();
-    private CssCLinearGradientConverter linearGradientConverter = new CssCLinearGradientConverter();
+    private CssColorConverter colorConverter = new CssColorConverter();
+    private CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
     private XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
     public void toString(Appendable out, IdFactory idFactory, Paintable value) throws IOException {
@@ -38,11 +38,11 @@ public class CssPaintableConverter implements Converter<Paintable> {
             out.append("none");
         } else if (Color.TRANSPARENT.equals(value)) {
             out.append("transparent");
-        } else if (value instanceof CColor) {
-            CColor c = (CColor) value;
+        } else if (value instanceof CssColor) {
+            CssColor c = (CssColor) value;
             colorConverter.toString(out, idFactory, c);
-        } else if (value instanceof CLinearGradient) {
-            CLinearGradient lg = (CLinearGradient) value;
+        } else if (value instanceof CssLinearGradient) {
+            CssLinearGradient lg = (CssLinearGradient) value;
             linearGradientConverter.toString(out, idFactory, lg);
         } else {
             throw new UnsupportedOperationException("not yet implemented");

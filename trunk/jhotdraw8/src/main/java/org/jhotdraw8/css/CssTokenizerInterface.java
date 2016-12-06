@@ -67,4 +67,9 @@ public interface CssTokenizerInterface {
    */
   void skipWhitespace() throws IOException;
 
+  /** Whether white spaces should be skipped.
+   *
+   * @param newValue new value
+   */
+  void setSkipWhitespace(boolean newValue);
 }

@@ -19,7 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
-import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.css.StylesheetsManager;
 import static java.lang.Math.abs;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
@@ -64,7 +64,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
         page.setY(bounds.getMinY());
         page.setWidth(bounds.getWidth());
         page.setHeight(bounds.getHeight());
-        CColor cclr = getStyled(BACKGROUND);
+        CssColor cclr = getStyled(BACKGROUND);
         page.setFill(Paintable.getPaint(cclr));
         if (g.getClip() == null || !g.getClip().getBoundsInLocal().equals(bounds)) {
             g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));

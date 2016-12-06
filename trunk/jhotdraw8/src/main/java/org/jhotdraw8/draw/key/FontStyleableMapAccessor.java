@@ -17,20 +17,20 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssFFontConverter;
+import org.jhotdraw8.text.CssFontConverter;
 import org.jhotdraw8.text.StyleConverterConverterWrapper;
-import org.jhotdraw8.text.FFont;
+import org.jhotdraw8.text.CssFont;
 
 /**
  * FontStyleableMapAccessor.
  *
  * @author werni
  */
-public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<FFont> {
+public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssFont> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, FFont> cssMetaData;
+    private final CssMetaData<?, CssFont> cssMetaData;
     private final MapAccessor<String> familyKey;
     private final MapAccessor<FontWeight> weightKey;
     private final MapAccessor<FontPosture> postureKey;
@@ -46,18 +46,18 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
      * @param sizeKey the font size key
      */
     public FontStyleableMapAccessor(String name, MapAccessor<String> familyKey, MapAccessor<FontWeight> weightKey, MapAccessor<FontPosture> postureKey, MapAccessor<Double> sizeKey) {
-        super(name, FFont.class, new MapAccessor<?>[]{familyKey, sizeKey, weightKey, postureKey}, FFont.font(familyKey.getDefaultValue(), weightKey.getDefaultValue(), postureKey.getDefaultValue(), sizeKey.getDefaultValue()));
+        super(name, CssFont.class, new MapAccessor<?>[]{familyKey, sizeKey, weightKey, postureKey}, CssFont.font(familyKey.getDefaultValue(), weightKey.getDefaultValue(), postureKey.getDefaultValue(), sizeKey.getDefaultValue()));
 
-        Function<Styleable, StyleableProperty<FFont>> function = s -> {
+        Function<Styleable, StyleableProperty<CssFont>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, FFont> converter
-                = new StyleConverterConverterWrapper<FFont>(new CssFFontConverter());
-        CssMetaData<Styleable, FFont> md
-                = new SimpleCssMetaData<Styleable, FFont>(property, function,
+        final StyleConverter<String, CssFont> converter
+                = new StyleConverterConverterWrapper<CssFont>(new CssFontConverter());
+        CssMetaData<Styleable, CssFont> md
+                = new SimpleCssMetaData<Styleable, CssFont>(property, function,
                         converter, getDefaultValue(), inherits);
         cssMetaData = md;
 
@@ -68,30 +68,30 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
     }
 
     @Override
-    public CssMetaData<?, FFont> getCssMetaData() {
+    public CssMetaData<?, CssFont> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private Converter<FFont> converter;
+    private Converter<CssFont> converter;
 
     @Override
-    public Converter<FFont> getConverter() {
+    public Converter<CssFont> getConverter() {
         if (converter == null) {
-            converter = new CssFFontConverter();
+            converter = new CssFontConverter();
         }
         return converter;
     }
 
     @Override
-    public FFont get(Map<? super Key<?>, Object> a) {
-        FFont f =  FFont.font(familyKey.get(a), weightKey.get(a), postureKey.get(a), sizeKey.get(a));
+    public CssFont get(Map<? super Key<?>, Object> a) {
+        CssFont f =  CssFont.font(familyKey.get(a), weightKey.get(a), postureKey.get(a), sizeKey.get(a));
         return f;
     }
 
     @Override
-    public FFont put(Map<? super Key<?>, Object> a, FFont value) {
-        FFont oldValue = get(a);
+    public CssFont put(Map<? super Key<?>, Object> a, CssFont value) {
+        CssFont oldValue = get(a);
         familyKey.put(a, value.getFamily());
         weightKey.put(a, value.getWeight()); 
         postureKey.put(a, value.getPosture());
@@ -100,8 +100,8 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
     }
 
     @Override
-    public FFont remove(Map<? super Key<?>, Object> a) {
-        FFont oldValue = get(a);
+    public CssFont remove(Map<? super Key<?>, Object> a) {
+        CssFont oldValue = get(a);
         familyKey.remove(a);
         weightKey.remove(a);
         postureKey.remove(a);

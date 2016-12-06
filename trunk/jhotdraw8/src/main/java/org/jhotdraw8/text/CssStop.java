@@ -1,4 +1,4 @@
-/* @(#)CStop.java
+/* @(#)CssStop.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -6,16 +6,16 @@
 package org.jhotdraw8.text;
 
 /**
- * CStop.
+ * CssStop.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class CStop {
+public class CssStop {
     final Double offset;
-    final CColor color;
+    final CssColor color;
 
-    public CStop(Double offset, CColor color) {
+    public CssStop(Double offset, CssColor color) {
         this.offset = offset;
         this.color = color;
     }
@@ -24,7 +24,7 @@ public class CStop {
         return offset;
     }
 
-    public CColor getColor() {
+    public CssColor getColor() {
         return color;
     }
     

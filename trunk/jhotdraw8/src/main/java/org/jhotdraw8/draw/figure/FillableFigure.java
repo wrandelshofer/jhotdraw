@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.Paintable;
 
 /**
@@ -27,7 +27,7 @@ public interface FillableFigure extends Figure {
      * Defines the paint used for filling the interior of the figure. Default
      * value: {@code Color.WHITE}.
      */
-    public static PaintableStyleableFigureKey FILL_COLOR = new PaintableStyleableFigureKey("fill", new CColor(Color.WHITE));
+    public static PaintableStyleableFigureKey FILL_COLOR = new PaintableStyleableFigureKey("fill", new CssColor(Color.WHITE));
     /**
      * Updates a shape node.
      *

@@ -17,7 +17,7 @@ import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
 import org.jhotdraw8.draw.key.CColorStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.css.StylesheetsManager;
 
 /**
@@ -117,7 +117,7 @@ public interface Drawing extends Figure {
      * This property is styleable with the key
      * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
-    public final static CColorStyleableFigureKey BACKGROUND = new CColorStyleableFigureKey("background", new CColor("white", Color.WHITE));
+    public final static CColorStyleableFigureKey BACKGROUND = new CColorStyleableFigureKey("background", new CssColor("white", Color.WHITE));
 
     /**
      * The CSS type selector for a drawing figure is {@code "Drawing"}.

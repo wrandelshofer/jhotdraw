@@ -1,4 +1,4 @@
-/* @(#)CssCLinearGradientConverterNGTest.java
+/* @(#)CssLinearGradientConverterNGTest.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -16,56 +16,58 @@ import org.testng.annotations.Test;
 
 /**
  *
- * @author werni
+ * @author Werner Randelshofer
  */
-public class CssCLinearGradientConverterNGTest {
+public class CssLinearGradientConverterNGTest {
     
-    public CssCLinearGradientConverterNGTest() {
+    public CssLinearGradientConverterNGTest() {
     }
 
     /**
-     * Test of toString method, of class CssCLinearGradientConverter.
+     * Test of toString method, of class CssLinearGradientConverter.
      */
     @Test(dataProvider="toStringData")
-    public void testToString(CLinearGradient value, String expected) throws Exception {
+    public void testToString(CssLinearGradient value, String expected) throws Exception {
         System.out.println("toString("+value+"):"+expected);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
-        CssCLinearGradientConverter instance = new CssCLinearGradientConverter();
+        CssLinearGradientConverter instance = new CssLinearGradientConverter();
         instance.toString(out, idFactory, value);
         String actual=out.toString();
+        System.out.println("actual: "+actual);
         assertEquals(actual,expected);
     }
 
     /**
-     * Test of fromString method, of class CssCLinearGradientConverter.
+     * Test of fromString method, of class CssLinearGradientConverter.
      */
     @Test(dataProvider="fromStringData")
-    public void testFromString(String string, CLinearGradient expected) throws Exception {
+    public void testFromString(CssLinearGradient expected, String string) throws Exception {
         System.out.println("fromString("+string+"):"+expected);
         CharBuffer in = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssCLinearGradientConverter instance = new CssCLinearGradientConverter();
-        CLinearGradient actual = instance.fromString(in, idFactory);
+        CssLinearGradientConverter instance = new CssLinearGradientConverter();
+        CssLinearGradient actual = instance.fromString(in, idFactory);
         assertEquals(actual,expected);
     }
 
     /**
-     * Test of getDefaultValue method, of class CssCLinearGradientConverter.
+     * Test of getDefaultValue method, of class CssLinearGradientConverter.
      */
     @Test
     public void testGetDefaultValue() {
         System.out.println("getDefaultValue");
-        CssCLinearGradientConverter instance = new CssCLinearGradientConverter();
-        CLinearGradient expResult = null;
-        CLinearGradient result = instance.getDefaultValue();
+        CssLinearGradientConverter instance = new CssLinearGradientConverter();
+        CssLinearGradient expResult = null;
+        CssLinearGradient result = instance.getDefaultValue();
         assertEquals(result, expResult);
     }
         @DataProvider
     public Object[][] fromStringData() {
         return new Object[][]{
-            //string,value
-            {"none",null},
+            //value,string
+            {null,"none"},
+            {new CssLinearGradient(0,1,2,3,false,CycleMethod.NO_CYCLE,new CssStop(0.0,new CssColor("red",Color.RED))),"linear-gradient(from 0px 1px to 2px 3px, red 0)"},
         };
         }
         @DataProvider
@@ -73,7 +75,7 @@ public class CssCLinearGradientConverterNGTest {
         return new Object[][]{
             //value,string
             {null,"none"},
-            {new CLinearGradient(0,1,2,3,false,CycleMethod.NO_CYCLE,new CStop(0.0,new CColor("red",Color.RED))),null},
+            {new CssLinearGradient(0,1,2,3,false,CycleMethod.NO_CYCLE,new CssStop(0.0,new CssColor("red",Color.RED))),"linear-gradient(from 0px 1px to 2px 3px, red 0)"},
         };
         }
 }

@@ -1,4 +1,4 @@
-/* @(#)CColor.java
+/* @(#)CssColor.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -9,22 +9,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 /**
- * CColor wraps a Color object but also retains the name that was used to create
- * the color.
+ * CssColor wraps a Color object but also retains the name that was used to create
+ the color.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CColor implements Paintable {
+public class CssColor implements Paintable {
 
     private final String name;
     private final Color color;
 
-    public CColor(Color color) {
+    public CssColor(Color color) {
         this(null, color);
     }
 
-    public CColor(String name, Color color) {
+    public CssColor(String name, Color color) {
         this.name = name == null ? toName(color) : name;
         this.color = color;
     }
@@ -77,11 +77,16 @@ public class CColor implements Paintable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CColor other = (CColor) obj;
+        final CssColor other = (CssColor) obj;
         if (!Objects.equals(this.color, other.color)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "CColor{" + name + '}';
     }
 
 }

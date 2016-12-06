@@ -109,7 +109,6 @@ import java.io.Reader;
  */
 public class CssTokenizer implements CssTokenizerInterface {
 
-
     private CssScanner in;
 
     private boolean pushBack;
@@ -121,6 +120,7 @@ public class CssTokenizer implements CssTokenizerInterface {
     private int lineNumber;
     private int position;
     private final boolean skipComments;
+    private boolean skipWhitespaces;
 
     public CssTokenizer(Reader reader) {
         this(reader, true);
@@ -131,23 +131,30 @@ public class CssTokenizer implements CssTokenizerInterface {
         this.skipComments = skipComments;
     }
 
-  @Override
+    @Override
     public int currentToken() {
         return currentToken;
     }
 
-  @Override
+    @Override
     public String currentStringValue() {
         return stringValue;
     }
 
-  @Override
+    @Override
     public Number currentNumericValue() {
         return numericValue;
     }
 
-  @Override
+    @Override
     public int nextToken() throws IOException {
+        if (skipWhitespaces) {
+            skipWhitespace();
+        }
+        return doNextToken();
+    }
+
+    private int doNextToken() throws IOException {
         if (pushBack) {
             pushBack = false;
             return currentToken;
@@ -460,12 +467,12 @@ public class CssTokenizer implements CssTokenizerInterface {
     /**
      * Pushes the current token back.
      */
-  @Override
+    @Override
     public void pushBack() {
         pushBack = true;
     }
 
-  @Override
+    @Override
     public int getLineNumber() {
         return lineNumber;
     }
@@ -586,13 +593,13 @@ public class CssTokenizer implements CssTokenizerInterface {
         if (!hasDecimals && !hasFractionalsOrExponent) {
             if (hasSign) {
                 in.pushBack(ch);
-                buf.setLength(buf.length()-1);
+                buf.setLength(buf.length() - 1);
             }
             return false;
         }
 
         try {
-            stringValue=buf.toString();
+            stringValue = buf.toString();
             if (hasFractionalsOrExponent) {
                 numericValue = Double.parseDouble(stringValue);
             } else {
@@ -721,7 +728,7 @@ public class CssTokenizer implements CssTokenizerInterface {
             int low = 0b110111_0000000000 | (wxy & 0b11_11111111);
             buf.append((char) high);
             buf.append((char) low);
-        }else{
+        } else {
             buf.append((char) ch);
         }
         return true;
@@ -856,23 +863,22 @@ public class CssTokenizer implements CssTokenizerInterface {
         }
     }
 
-  @Override
+    @Override
     public int getPosition() {
         return position;
     }
-    
-    /** Consumes tokens until a non-whitespace token arrives.
-     * That token is then pushed back.
-     * 
-     * @throws IOException on IO failure
-     */
-  @Override
+
+    @Override
     public void skipWhitespace() throws IOException {
-        while (nextToken() == TT_S//
-                || currentToken() == TT_CDC//
-                || currentToken() == TT_CDO) {
+        while (doNextToken() == TT_S//
+                || currentToken == TT_CDC//
+                || currentToken == TT_CDO) {
         }
         pushBack();
     }
 
+    @Override
+    public void setSkipWhitespace(boolean newValue) {
+        skipWhitespaces = newValue;
+    }
 }
