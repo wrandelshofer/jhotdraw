@@ -13,12 +13,12 @@ import java.util.Collections;
 import java.util.List;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
-import javafx.scene.transform.Shear;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.io.IdFactory;
 import static java.lang.Math.*;
+import org.jhotdraw8.css.CssTokenizerInterface;
 
 /**
  * SvgTransformListConverter.
@@ -133,16 +133,14 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
     @Override
     public List<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
-        CssTokenizer tt = new CssTokenizer(new StringReader(in.toString()));
+        CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
 
         while (tt.nextToken() != CssTokenizer.TT_EOF) {
             tt.pushBack();
-            tt.skipWhitespace();
             if (tt.nextToken() != CssTokenizer.TT_FUNCTION) {
                 throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
             }
             String func = tt.currentStringValue();
-            tt.skipWhitespace();
             switch (func) {
                 case "skewX": {
                     if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
@@ -165,10 +163,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                         throw new ParseException("tx expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
                     }
                     double tx = tt.currentNumericValue().doubleValue();
-                    tt.skipWhitespace();
-                    if (tt.nextToken() == ',') {
-                        tt.skipWhitespace();
-                    } else {
+                    if (tt.nextToken() != ',') {
                         tt.pushBack();
                     }
                     double ty;
@@ -187,10 +182,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                         throw new ParseException("sx expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
                     }
                     double sx = tt.currentNumericValue().doubleValue();
-                    tt.skipWhitespace();
-                    if (tt.nextToken() == ',') {
-                        tt.skipWhitespace();
-                    } else {
+                    if (tt.nextToken() != ',') {
                         tt.pushBack();
                     }
                     double sy;
@@ -209,20 +201,14 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                         throw new ParseException("rotate-angle expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
                     }
                     double angle = tt.currentNumericValue().doubleValue();
-                    tt.skipWhitespace();
-                    if (tt.nextToken() == ',') {
-                        tt.skipWhitespace();
-                    } else {
+                    if (tt.nextToken() != ',') {
                         tt.pushBack();
                     }
                     double cx;
                     double cy;
                     if (tt.nextToken() == CssTokenizer.TT_NUMBER) {
                         cx = tt.currentNumericValue().doubleValue();
-                        tt.skipWhitespace();
-                        if (tt.nextToken() == ',') {
-                            tt.skipWhitespace();
-                        } else {
+                        if (tt.nextToken() != ',') {
                             tt.pushBack();
                         }
                         if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
@@ -240,10 +226,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                 case "matrix": {
                     double[] m = new double[6];
                     for (int i = 0; i < m.length; i++) {
-                        tt.skipWhitespace();
-                        if (tt.nextToken() == ',') {
-                            tt.skipWhitespace();
-                        } else {
+                        if (tt.nextToken() != ',') {
                             tt.pushBack();
                         }
                         if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
@@ -257,7 +240,6 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                 default:
                     throw new ParseException("unsupported function: \"" + tt.currentStringValue() + "\"", tt.getPosition());
             }
-            tt.skipWhitespace();
             if (tt.nextToken() != ')') {
                 throw new ParseException("')' expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
             }

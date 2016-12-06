@@ -12,21 +12,21 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssCColorConverter;
+import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.StyleConverterConverterWrapper;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
-import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.CssColor;
 
 /**
  * CColorStyleableFigureKey.
  *
  * @author werni
  */
-public class CColorStyleableFigureKey extends SimpleFigureKey<CColor> implements StyleableMapAccessor<CColor> {
+public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implements StyleableMapAccessor<CssColor> {
 
     private final static long serialVersionUID=1L;
 
-    private final CssMetaData<?, CColor> cssMetaData;
+    private final CssMetaData<?, CssColor> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -44,7 +44,7 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CColor> implements
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public CColorStyleableFigureKey(String name, CColor defaultValue) {
+    public CColorStyleableFigureKey(String name, CssColor defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -57,8 +57,8 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CColor> implements
      * @param mask Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public CColorStyleableFigureKey(String key, DirtyMask mask, CColor defaultValue) {
-        super(key, CColor.class, mask, defaultValue);
+    public CColorStyleableFigureKey(String key, DirtyMask mask, CssColor defaultValue) {
+        super(key, CssColor.class, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
          cssMetaData = factory.createCColorCssMetaData(
@@ -67,32 +67,32 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CColor> implements
          return spb.getStyleableProperty(this);
          });*/
 
-        Function<Styleable, StyleableProperty<CColor>> function = s -> {
+        Function<Styleable, StyleableProperty<CssColor>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CColor> converter
-                = new StyleConverterConverterWrapper<CColor>(new CssCColorConverter());
-        CssMetaData<Styleable, CColor> md
-                = new SimpleCssMetaData<Styleable, CColor>(property, function,
+        final StyleConverter<String, CssColor> converter
+                = new StyleConverterConverterWrapper<CssColor>(new CssColorConverter());
+        CssMetaData<Styleable, CssColor> md
+                = new SimpleCssMetaData<Styleable, CssColor>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?,CColor> getCssMetaData() {
+    public CssMetaData<?,CssColor> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private Converter<CColor> converter;
+    private Converter<CssColor> converter;
 
     @Override
-    public Converter<CColor> getConverter() {
+    public Converter<CssColor> getConverter() {
         if (converter == null) {
-            converter = new CssCColorConverter();
+            converter = new CssColorConverter();
         }
         return converter;
     }   

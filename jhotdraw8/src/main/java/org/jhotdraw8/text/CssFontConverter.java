@@ -1,4 +1,4 @@
-/* @(#)CssFFontConverter.java
+/* @(#)CssFontConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -11,34 +11,35 @@ import java.text.ParseException;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
- * CssFFontConverter.
+ * CssFontConverter.
  * <p>
  * Parses the following EBNF from the
  * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
  * CSS Reference Guide</a>.
  * </p>
  * <pre>
- * FFont := [FontStyle] [FontWeight] FontSize FontFamily ;
- * FontStyle := normal|italic|oblique;
- * FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
- * FontSize := Size;
- * FontFamily := Word|Quoted;
- * </pre>
+ CssFont := [FontStyle] [FontWeight] FontSize FontFamily ;
+ FontStyle := normal|italic|oblique;
+ FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
+ FontSize := Size;
+ FontFamily := Word|Quoted;
+ </pre>
  * <p>
  * FIXME currently only parses the Color production
  * </p>
  *
  * @author Werner Randelshofer
  */
-public class CssFFontConverter implements Converter<FFont> {
+public class CssFontConverter implements Converter<CssFont> {
 
     private final CssSizeConverter doubleConverter = new CssSizeConverter();
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, FFont font) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, CssFont font) throws IOException {
         /// FIXME use CssTokenizer
         
         double fontSize = font.getSize();
@@ -79,8 +80,8 @@ public class CssFFontConverter implements Converter<FFont> {
     }
 
     @Override
-    public FFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizer tt = new CssTokenizer(new StringReader(buf.toString()));
+    public CssFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
 
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
@@ -104,8 +105,6 @@ public class CssFFontConverter implements Converter<FFont> {
         } else {
             tt.pushBack();
         }
-
-        tt.skipWhitespace();
 
         // parse FontWeight
         boolean fontWeightConsumed = false;
@@ -137,8 +136,6 @@ public class CssFFontConverter implements Converter<FFont> {
             tt.pushBack();
         }
 
-        tt.skipWhitespace();
-
         double fontWeightOrFontSize = 0.0;
         boolean fontWeightOrFontSizeConsumed = false;
         if (!fontWeightConsumed) {
@@ -149,7 +146,6 @@ public class CssFFontConverter implements Converter<FFont> {
                 tt.pushBack();
             }
         }
-        tt.skipWhitespace();
 
         // parse FontSize
         if (tt.nextToken() == CssTokenizer.TT_NUMBER) {
@@ -195,7 +191,6 @@ public class CssFFontConverter implements Converter<FFont> {
         } else {
             tt.pushBack();
         }
-        tt.skipWhitespace();
 
         if (tt.nextToken() == CssTokenizer.TT_IDENT || tt.currentToken() == CssTokenizer.TT_STRING) {
             fontFamily = tt.currentStringValue();
@@ -205,15 +200,15 @@ public class CssFFontConverter implements Converter<FFont> {
             throw new ParseException("font family expected", buf.position() + tt.getPosition());
         }
 
-        FFont font = FFont.font(fontFamily, fontWeight, fontPosture, fontSize);
+        CssFont font = CssFont.font(fontFamily, fontWeight, fontPosture, fontSize);
         if (font == null) {
-            font = FFont.font(null, fontWeight, fontPosture, fontSize);
+            font = CssFont.font(null, fontWeight, fontPosture, fontSize);
         }
         return font;
     }
 
     @Override
-    public FFont getDefaultValue() {
+    public CssFont getDefaultValue() {
         return null;
     }
 }

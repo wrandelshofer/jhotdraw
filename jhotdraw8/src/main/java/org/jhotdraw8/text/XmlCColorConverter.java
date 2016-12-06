@@ -10,6 +10,6 @@ package org.jhotdraw8.text;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class XmlCColorConverter extends CssCColorConverter {
+public class XmlCColorConverter extends CssColorConverter {
 
 }

@@ -1,10 +1,11 @@
-/* @(#)CLinearGradient.java
+/* @(#)CssLinearGradient.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 
 package org.jhotdraw8.text;
 
+import java.util.Arrays;
 import java.util.List;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -12,12 +13,12 @@ import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 
 /**
- * CLinearGradient.
+ * CssLinearGradient.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class CLinearGradient implements Paintable {
+public class CssLinearGradient implements Paintable {
     private final String name;
     private LinearGradient linearGradient;
     private final double startX;
@@ -26,10 +27,10 @@ public class CLinearGradient implements Paintable {
     private final double endY;
     private final boolean proportional;
     private final CycleMethod cycleMethod;
-    private final CStop[] cstops;
+    private final CssStop[] cstops;
 
-    public CLinearGradient(double startX, double startY, double endX, double endY, boolean proportional, CycleMethod cycleMethod
-    , CStop... stops) {
+    public CssLinearGradient(double startX, double startY, double endX, double endY, boolean proportional, CycleMethod cycleMethod
+    , CssStop... stops) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
@@ -41,10 +42,10 @@ public class CLinearGradient implements Paintable {
     }
     
 
-    public CLinearGradient(LinearGradient linearGradient) {
+    public CssLinearGradient(LinearGradient linearGradient) {
         this(null,linearGradient);
     }
-    public CLinearGradient(String name, LinearGradient linearGradient) {
+    public CssLinearGradient(String name, LinearGradient linearGradient) {
         this.name = name;
         this.linearGradient = linearGradient;
         this.startX=linearGradient.getStartX();
@@ -54,10 +55,10 @@ public class CLinearGradient implements Paintable {
         this.proportional=linearGradient.isProportional();
         this.cycleMethod=linearGradient.getCycleMethod();
         List<Stop> stopList=linearGradient.getStops();
-        cstops=new CStop[stopList.size()];
+        cstops=new CssStop[stopList.size()];
         for (int i=0;i<cstops.length;i++) {
             Stop stop=stopList.get(i);
-            cstops[i]=new CStop(stop.getOffset(),new CColor(stop.getColor()));
+            cstops[i]=new CssStop(stop.getOffset(),new CssColor(stop.getColor()));
         }
     }
 
@@ -69,7 +70,7 @@ public class CLinearGradient implements Paintable {
         if (linearGradient==null) {
             Stop[] stops=new Stop[cstops.length];
         for (int i=0;i<cstops.length;i++) {
-            CStop cstop=cstops[i];
+            CssStop cstop=cstops[i];
             double offset;
             if (cstop.getOffset()==null) {
                 int left=i, right=i;
@@ -98,7 +99,35 @@ public class CLinearGradient implements Paintable {
 
     @Override
     public Paint getPaint() {
-       return linearGradient;
+       return getLinearGradient();
+    }
+
+    Iterable<CssStop> getStops() {
+       return Arrays.asList(cstops);
+    }
+
+    public double getStartX() {
+        return startX;
+    }
+
+    public double getStartY() {
+        return startY;
+    }
+
+    public double getEndX() {
+        return endX;
+    }
+
+    public double getEndY() {
+        return endY;
+    }
+
+    public boolean isProportional() {
+        return proportional;
+    }
+
+    public CycleMethod getCycleMethod() {
+        return cycleMethod;
     }
 
 

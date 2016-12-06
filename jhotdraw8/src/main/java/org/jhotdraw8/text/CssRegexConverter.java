@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -59,12 +60,11 @@ public class CssRegexConverter implements Converter<Regex> {
 
     @Override
     public Regex fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizer tt = new CssTokenizer(new StringReader(in.toString()));
-
+        CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
+        tt.setSkipWhitespace(true);
         String find = null;
         String replace = null;
 
-        tt.skipWhitespace();
         switch (tt.nextToken()) {
             case CssTokenizer.TT_STRING:
                 find = tt.currentStringValue();
@@ -79,7 +79,6 @@ public class CssRegexConverter implements Converter<Regex> {
                 throw new ParseException("find string expected", tt.getPosition());
         }
 
-        tt.skipWhitespace();
         switch (tt.nextToken()) {
             case CssTokenizer.TT_STRING:
                 replace = tt.currentStringValue();
@@ -89,9 +88,7 @@ public class CssRegexConverter implements Converter<Regex> {
             default:
                 throw new ParseException("replace string expected", tt.getPosition());
         }
-
         tt.skipWhitespace();
-
         in.position(tt.getPosition());
         return new Regex(find, replace);
     }

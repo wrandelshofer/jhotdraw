@@ -9,7 +9,7 @@ import javafx.scene.control.Labeled;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.text.CColor;
+import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.Paintable;
 
 /**
@@ -26,7 +26,7 @@ public interface TextFillableFigure extends Figure {
      * Defines the paint used for filling the interior of the text. Default
      * value: {@code Color.BLACK}.
      */
-    public static PaintableStyleableFigureKey TEXT_FILL = new PaintableStyleableFigureKey("textFill", new CColor(Color.BLACK));
+    public static PaintableStyleableFigureKey TEXT_FILL = new PaintableStyleableFigureKey("textFill", new CssColor(Color.BLACK));
 
     /**
      * Updates a text node with label properties.

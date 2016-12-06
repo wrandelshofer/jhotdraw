@@ -1,4 +1,4 @@
-/* @(#)FFont.java
+/* @(#)CssFont.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -10,14 +10,14 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 /**
- * FFont same as {@code javafx.scene.text.Font} but allows to get all
+ * CssFont same as {@code javafx.scene.text.Font} but allows to get all
  * properties that were used to create the font.
  * <p>
  * XXX move this into a package for JavaFX font related stuff
  *
  * @author Werner Randelshofer
  */
-public class FFont {
+public class CssFont {
 
     private final String family;
     private final FontWeight weight;
@@ -25,7 +25,7 @@ public class FFont {
     private final double size;
     private final transient Font font;
 
-    public FFont(String family, FontWeight weight, FontPosture posture, double size) {
+    public CssFont(String family, FontWeight weight, FontPosture posture, double size) {
         this.family = family;
         this.weight = weight;
         this.posture = posture;
@@ -53,8 +53,8 @@ public class FFont {
         return font;
     }
 
-    public static FFont font(String family, FontWeight weight, FontPosture posture, double size) {
-        return new FFont(family, weight, posture, size);
+    public static CssFont font(String family, FontWeight weight, FontPosture posture, double size) {
+        return new CssFont(family, weight, posture, size);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class FFont {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final FFont other = (FFont) obj;
+        final CssFont other = (CssFont) obj;
         if (Double.doubleToLongBits(this.size) != Double.doubleToLongBits(other.size)) {
             return false;
         }
