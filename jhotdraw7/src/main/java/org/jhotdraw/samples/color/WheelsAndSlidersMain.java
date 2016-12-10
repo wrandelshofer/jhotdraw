@@ -97,8 +97,10 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
         // CIELAB
         ColorSpace cs;
         cs = new CIELABColorSpace();
+      // ((CIELABColorSpace) cs).setOutsideGamutHandling(CIELABColorSpace.OutsideGamutHandling.LEAVE_OUTSIDE);
         chooserPanel.add(createColorWheelChooser(cs, 1, 2, 0, JColorWheel.Type.SQUARE));
         cs = new CIELCHabColorSpace();
+     // ((CIELCHabColorSpace) cs).setClampRGBValues(false);
         chooserPanel.add(createColorWheelChooser(cs, 2, 1, 0, JColorWheel.Type.POLAR));
 
 
