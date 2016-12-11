@@ -130,7 +130,7 @@ public class HSVHarmonicColorWheelImageProducer extends PolarColorWheelImageProd
                 components[0] = angulars[index];
                 components[1] = radials[index];
                 components[2] = brights[index];
-                pixels[index] = alphas[index] | 0xffffff & ColorUtil.CStoRGB24(colorSpace, components, rgb);
+                pixels[index] = alphas[index] | 0xffffff & ColorUtil.CStoRGB24(modelColorSpace,screenColorSpace, components, rgb);
             }
         }
         newPixels();
@@ -139,7 +139,7 @@ public class HSVHarmonicColorWheelImageProducer extends PolarColorWheelImageProd
 
     @Override
     public Point getColorLocation(Color c) {
-        float[] hsb = ColorUtil.fromColor(colorSpace, c);
+        float[] hsb = ColorUtil.fromColor(modelColorSpace, c);
         return getColorLocation(hsb);
     }
 

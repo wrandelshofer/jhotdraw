@@ -25,11 +25,17 @@ public class ColorTrackImageProducer extends MemoryImageSource {
     private int[] pixels;
     private int w, h;
     private int trackBuffer;
+    protected ColorSpace screenColorSpace;
     private ColorSliderModel colorizer = new DefaultColorSliderModel(ColorSpace.getInstance(ColorSpace.CS_sRGB));
     private boolean isDirty = true;
     private int componentIndex = 0;
     private boolean isHorizontal;
-    
+        private ColorModel screenColorModel = new DirectColorModel(24,
+					      0x00ff0000,	// Red
+					      0x0000ff00,	// Green
+					      0x000000ff	// Blue
+					      );
+
     /** Creates a new instance. */
     public ColorTrackImageProducer(int w, int h, int trackBuffer, boolean isHorizontal) {
         super(w, h, null, 0, w);
@@ -40,12 +46,7 @@ public class ColorTrackImageProducer extends MemoryImageSource {
         this.trackBuffer = ((trackBuffer & 1) == 0) ? trackBuffer : trackBuffer - 1;
         //this.componentIndex = componentIndex;
         this.isHorizontal = isHorizontal;
-        newPixels(pixels, new DirectColorModel(24,
-					      0x00ff0000,	// Red
-					      0x0000ff00,	// Green
-					      0x000000ff	// Blue
-					      )
-					      , 0, w);
+        newPixels(pixels, screenColorModel	      , 0, w);
         setAnimated(true);
     }
     
@@ -109,7 +110,7 @@ public class ColorTrackImageProducer extends MemoryImageSource {
         for (int y = 0, n = h - trackBuffer - 1; y <= n; y++) {
             // Note: removed + minv - minv from formula below
             components[componentIndex] =  maxv - (y / (float) n)*(maxv-minv);
-            pixels[(y + offset) * w] = ColorUtil.CStoRGB24(cs,components,rgb);
+            pixels[(y + offset) * w] = ColorUtil.CStoRGB24(cs,screenColorSpace,components,rgb);
         }
         for (int y=0; y < offset; y++) {
             pixels[y * w] = pixels[offset * w];
@@ -132,5 +133,31 @@ public class ColorTrackImageProducer extends MemoryImageSource {
     }
     public void componentChanged(int index) {
         isDirty |= this.componentIndex != index;
+    }
+    
+    public ColorSpace getScreenColorSpace() {
+        return screenColorSpace;
+    }
+
+    public void setScreenColorSpace(ColorSpace screenColorSpace) {
+        this.screenColorSpace = screenColorSpace;
+        if (screenColorSpace==null) {
+            new DirectColorModel(24,
+					      0x00ff0000,	// Red
+					      0x0000ff00,	// Green
+					      0x000000ff	// Blue
+					      );
+        }else{
+        this.screenColorModel = new DirectColorModel(screenColorSpace, 24,
+                0x00ff0000, // Red
+                0x0000ff00, // Green
+                0x000000ff, // Blue
+                0x00000000, // Alpha
+                false,
+                DataBuffer.TYPE_INT
+        );}
+        newPixels(pixels, screenColorModel, 0, w);
+        needsGeneration();
+        generateColorTrack();
     }
 }

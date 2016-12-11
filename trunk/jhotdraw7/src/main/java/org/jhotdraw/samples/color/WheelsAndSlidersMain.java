@@ -12,9 +12,16 @@ import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.color.ICC_Profile;
-import java.text.DecimalFormat;
+import java.awt.image.ColorModel;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -25,11 +32,70 @@ import javax.swing.event.*;
  * @version $Id$
  */
 public class WheelsAndSlidersMain extends javax.swing.JPanel {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
+    private FileDialog fileDialog;
     private Color color;
     private JLabel colorLabel;
-    private LinkedList<ColorSliderModel> models;
+    private ArrayList<ColorSliderModel> models;
+    private ArrayList<JColorWheel> views;
+    private ArrayList<ColorSliderUI> sliderViews;
+
+    private void readXYZ(ICC_Profile profile, int tag, StringBuilder buf) {
+        byte[] data = profile.getData(tag);
+
+        try {
+            double[] xyz = new ICCProfileReader(data).readXYZType();
+            buf.append("X:");
+            buf.append(Float.toString((float) xyz[0]));
+            buf.append(" Y:");
+            buf.append(Float.toString((float) xyz[1]));
+            buf.append(" Z:");
+            buf.append(Float.toString((float) xyz[2]));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void loadScreenColorProfile(File file) {
+        new SwingWorker<ICC_Profile, Object>() {
+            @Override
+            public ICC_Profile doInBackground() {
+                try {
+                    return ICC_Profile.getInstance(file.getPath());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    ICC_Profile profile = get();
+                    if (profile != null) {
+                        setScreenColorSpace(new ICC_ColorSpace(profile));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }.execute();
+    }
+
+    private void setScreenColorSpace(ColorSpace cs) {
+        if (cs == null){
+        screenColorProfileLabel.setText("sRGB");
+    }else{
+        screenColorProfileLabel.setText(ColorUtil.getName(cs))                ;
+        }
+        for (JColorWheel wheel:views) {
+            wheel.setScreenColorSpace(cs);
+        }
+              for (ColorSliderUI ui:sliderViews) {
+            ui.setScreenColorSpace(cs);
+        }
+    }
 
     private class Handler implements ChangeListener {
 
@@ -66,7 +132,9 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
     public WheelsAndSlidersMain() {
         initComponents();
 
-        models = new LinkedList<ColorSliderModel>();
+        models = new ArrayList<ColorSliderModel>();
+        views = new ArrayList<>();
+        sliderViews = new ArrayList<>();
         handler = new Handler();
 
         previewLabel.setOpaque(true);
@@ -83,12 +151,11 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
         // Empty panel
         chooserPanel.add(new JPanel());
 
-        
         // HSB, HSV, HSL, ... variants
         chooserPanel.add(createColorWheelChooser(HSBColorSpace.getInstance()));
         chooserPanel.add(createColorWheelChooser(HSVColorSpace.getInstance()));
         chooserPanel.add(createColorWheelChooser(HSLColorSpace.getInstance()));
-        chooserPanel.add(createColorWheelChooser(HSLColorSpace.getInstance(), 0, 2, 1));
+        chooserPanel.add(createColorWheelChooser(HSLColorSpace.getInstance(), 0, 2, 1));        
         chooserPanel.add(createColorWheelChooser(HSVPhysiologicColorSpace.getInstance()));
         chooserPanel.add(createColorWheelChooser(HSLPhysiologicColorSpace.getInstance()));
         chooserPanel.add(createColorWheelChooser(HSLPhysiologicColorSpace.getInstance(), 0, 2, 1));
@@ -97,15 +164,14 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
         // CIELAB
         ColorSpace cs;
         cs = new CIELABColorSpace();
-      // ((CIELABColorSpace) cs).setOutsideGamutHandling(CIELABColorSpace.OutsideGamutHandling.LEAVE_OUTSIDE);
+        // ((CIELABColorSpace) cs).setOutsideGamutHandling(CIELABColorSpace.OutsideGamutHandling.LEAVE_OUTSIDE);
         chooserPanel.add(createColorWheelChooser(cs, 1, 2, 0, JColorWheel.Type.SQUARE));
         cs = new CIELCHabColorSpace();
-     // ((CIELCHabColorSpace) cs).setClampRGBValues(false);
+        // ((CIELCHabColorSpace) cs).setOutsideGamutHandling(CIELABColorSpace.OutsideGamutHandling.LEAVE_OUTSIDE);
         chooserPanel.add(createColorWheelChooser(cs, 2, 1, 0, JColorWheel.Type.POLAR));
 
-
         // CIEXYZ
-        chooserPanel.add(createColorWheelChooser(ICC_ColorSpace.getInstance(ICC_ColorSpace.CS_CIEXYZ), 1, 0, 2, JColorWheel.Type.SQUARE));
+        chooserPanel.add(createColorWheelChooser(ICC_ColorSpace.getInstance(ICC_ColorSpace.CS_CIEXYZ), 2,0, 1, JColorWheel.Type.SQUARE));
         chooserPanel.add(createColorWheelChooser(ICC_ColorSpace.getInstance(ICC_ColorSpace.CS_PYCC), 1, 2, 0, JColorWheel.Type.SQUARE));
 
     }
@@ -128,6 +194,7 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
         models.add(m);
         m.addChangeListener(handler);
         JColorWheel w = new JColorWheel();
+        views.add(w);
         w.setType(type);
         w.setAngularComponentIndex(angularIndex);
         w.setRadialComponentIndex(radialIndex);
@@ -137,6 +204,7 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
         w.setModel(m);
         JSlider s = new JSlider(JSlider.VERTICAL);
         m.configureSlider(verticalIndex, s);
+        sliderViews.add((ColorSliderUI) s.getUI());
         p.add(new JLabel("<html>" + ColorUtil.getName(sys) + "<br>α:" + angularIndex + " r:" + radialIndex + " v:" + verticalIndex), BorderLayout.NORTH);
         p.add(w, BorderLayout.CENTER);
         p.add(s, BorderLayout.EAST);
@@ -148,7 +216,7 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
             final JTextField tf = new JTextField();
             tf.setEditable(false);
             tf.setColumns(4);
-            ChangeListener cl=new ChangeListener() {
+            ChangeListener cl = new ChangeListener() {
                 NumberFormat df = NumberFormat.getNumberInstance();
 
                 @Override
@@ -182,7 +250,6 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
         }
         m.addChangeListener(handler);
 
-
         for (int i = 0; i < m.getComponentCount(); i++) {
             final int comp = i;
             JSlider s = new JSlider(JSlider.HORIZONTAL);
@@ -190,6 +257,7 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
             s.setPaintTicks(true);
             s.setOrientation(vertical ? JSlider.VERTICAL : JSlider.HORIZONTAL);
             m.configureSlider(comp, s);
+            sliderViews.add((ColorSliderUI) s.getUI());
             if (vertical) {
                 gbc.gridx = i;
                 gbc.gridy = 0;
@@ -201,7 +269,7 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
             final JTextField tf = new JTextField();
             tf.setEditable(false);
             tf.setColumns(4);
-            ChangeListener cl=new ChangeListener() {
+            ChangeListener cl = new ChangeListener() {
                 NumberFormat df = NumberFormat.getNumberInstance();
 
                 @Override
@@ -229,15 +297,15 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
             @Override
             public void run() {
                 JFrame f = new JFrame("Color Wheels, Squares and Sliders");
-                f.add(new WheelsAndSlidersMain());
+                final WheelsAndSlidersMain colorWheelsMain = new WheelsAndSlidersMain();
+                f.add(colorWheelsMain);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.pack();
                 f.setVisible(true);
 
-
+                colorWheelsMain.onResetScreenColorProfile(null);
             }
         });
-
 
     }
 
@@ -251,6 +319,10 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
 
         chooserPanel = new javax.swing.JPanel();
         previewLabel = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        screenColorProfileLabel = new javax.swing.JLabel();
+        chooseColorProfileButton = new javax.swing.JButton();
+        resetColorProfileButton = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -260,9 +332,57 @@ public class WheelsAndSlidersMain extends javax.swing.JPanel {
 
         previewLabel.setText("Selected Color");
         add(previewLabel, java.awt.BorderLayout.SOUTH);
+
+        screenColorProfileLabel.setText("Screen Color Profile:");
+        jPanel1.add(screenColorProfileLabel);
+
+        chooseColorProfileButton.setText("Choose...");
+        chooseColorProfileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onChooseScreenColorProfile(evt);
+            }
+        });
+        jPanel1.add(chooseColorProfileButton);
+
+        resetColorProfileButton.setText("Reset");
+        resetColorProfileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onResetScreenColorProfile(evt);
+            }
+        });
+        jPanel1.add(resetColorProfileButton);
+
+        add(jPanel1, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void onChooseScreenColorProfile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseScreenColorProfile
+        if (fileDialog == null) {
+            fileDialog = new FileDialog((Frame) SwingUtilities.getWindowAncestor(this), "Choose Color Profile", FileDialog.LOAD);
+            fileDialog.setFilenameFilter(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name != null && name.endsWith(".icc");
+                }
+            });
+        }
+        fileDialog.setVisible(true);
+        File file = fileDialog.getFiles()[0];
+        if (file != null) {
+            loadScreenColorProfile(file);
+        }
+    }//GEN-LAST:event_onChooseScreenColorProfile
+
+    private void onResetScreenColorProfile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onResetScreenColorProfile
+            setScreenColorSpace(null);
+
+    }//GEN-LAST:event_onResetScreenColorProfile
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton chooseColorProfileButton;
     private javax.swing.JPanel chooserPanel;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel previewLabel;
+    private javax.swing.JButton resetColorProfileButton;
+    private javax.swing.JLabel screenColorProfileLabel;
     // End of variables declaration//GEN-END:variables
 }

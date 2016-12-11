@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 import org.jhotdraw.text.ColorToolTipTextFormatter;
 
 /**
@@ -81,7 +82,11 @@ public class ColorUtil {
     }
 
     public static int CStoRGB24(ColorSpace colorSpace, float[] components, float[] rgb) {
-        CStoRGB(colorSpace, components, rgb);
+        return CStoRGB24(colorSpace, null, components, rgb);
+    }
+
+    public static int CStoRGB24(ColorSpace colorSpace, ColorSpace screenColorSpace, float[] components, float[] rgb) {
+        CStoRGB(colorSpace, screenColorSpace, components, rgb);
 
         // If the color is not displayable in RGB, we return transparent black.
         if (rgb[0] < 0f || rgb[1] < 0f || rgb[2] < 0f || rgb[0] > 1f || rgb[1] > 1f || rgb[2] > 1f) {
@@ -138,7 +143,7 @@ public class ColorUtil {
             ICC_ColorSpace icc = (ICC_ColorSpace) a;
             ICC_Profile p = icc.getProfile();
             // Get the name from the profile description tag
-            byte[] desc = p.getData(0x64657363);
+            byte[] desc = p.getData(ICC_Profile.icSigProfileDescriptionTag);
             if (desc != null) {
                 DataInputStream in = new DataInputStream(new ByteArrayInputStream(desc));
                 try {
@@ -193,14 +198,38 @@ public class ColorUtil {
     /**
      * Faster toRGB method which uses the provided output array.
      */
-    public static void CStoRGB(ColorSpace cs, float[] colorvalue, float[] rgb) {
-        if (cs.isCS_sRGB()) {
-            System.arraycopy(colorvalue,0,rgb,0,3);
-        } else if (cs instanceof NamedColorSpace) {
-            CStoRGB((NamedColorSpace) cs, colorvalue, rgb);
+    public static void CStoRGB(ColorSpace cs, ColorSpace screencs, float[] colorvalue, float[] rgb) {
+        if (screencs == null) {
+            if (cs.isCS_sRGB()) {
+                System.arraycopy(colorvalue, 0, rgb, 0, 3);
+            } else if (cs instanceof NamedColorSpace) {
+                CStoRGB((NamedColorSpace) cs, colorvalue, rgb);
+            } else {
+                float[] tmp = cs.toRGB(colorvalue);
+                System.arraycopy(tmp, 0, rgb, 0, rgb.length);
+            }
         } else {
-            float[] tmp = cs.toRGB(colorvalue);
-            System.arraycopy(tmp, 0, rgb, 0, tmp.length);
+            float[] xyz = cs.toCIEXYZ(colorvalue);
+            float[] tmpRgb = screencs.fromCIEXYZ(xyz);
+           /*
+            float[] tmpXyz = screencs.toCIEXYZ(tmpRgb);
+
+            boolean equals = true;
+            for (int i = 0; i < xyz.length; i++) {
+                if (Math.abs(xyz[i] - tmpXyz[i]) > 2e-2f) {
+                    equals = false;
+                    break;
+                }
+            }
+
+            if (!equals) {
+                for (int i = 0; i < rgb.length; i++) {
+                    rgb[i] = 0;
+                }
+            } else {
+                System.arraycopy(tmpRgb, 0, rgb, 0, rgb.length);
+            }*/
+                System.arraycopy(tmpRgb, 0, rgb, 0, rgb.length);
         }
     }
 
