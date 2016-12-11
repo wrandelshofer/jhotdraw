@@ -15,6 +15,9 @@ import java.io.IOException;
  */
 public interface CssTokenizerInterface {
 
+  /**
+   * Token types. DELIM token are given as UTF-16 characters.
+   */
   int TT_AT_KEYWORD = -3;
   int TT_BAD_COMMENT = -7;
   int TT_BAD_STRING = -5;
@@ -28,9 +31,6 @@ public interface CssTokenizerInterface {
   int TT_EOF = -1;
   int TT_FUNCTION = -18;
   int TT_HASH = -8;
-  /**
-   * Token types. DELIM token are given as UTF-16 characters.
-   */
   int TT_IDENT = -2;
   int TT_INCLUDE_MATCH = -19;
   int TT_NUMBER = -9;
@@ -47,6 +47,8 @@ public interface CssTokenizerInterface {
 
   String currentStringValue();
 
+  String currentUnitValue();
+  
   int currentToken();
 
   int getLineNumber();
@@ -71,5 +73,11 @@ public interface CssTokenizerInterface {
    *
    * @param newValue new value
    */
-  void setSkipWhitespace(boolean newValue);
+  void setSkipWhitespaces(boolean newValue);
+  
+  /** Whether comments should be skipped.
+   *
+   * @param newValue new value
+   */
+  void setSkipComments(boolean newValue);
 }

@@ -214,7 +214,7 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
     public List<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
-tt.setSkipWhitespace(true);
+tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT && tt.currentStringValue().equals("none")) {
             in.position(in.limit());
             return txs;

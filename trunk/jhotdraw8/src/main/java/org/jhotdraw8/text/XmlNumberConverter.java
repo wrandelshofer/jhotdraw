@@ -208,6 +208,7 @@ public class XmlNumberConverter implements Converter<Number> {
         return minFractionDigits;
     }
 
+
     @Override
     public void toString(Appendable buf, IdFactory idFactory, Number value) throws IOException {
         if (value == null && allowsNullValue) {

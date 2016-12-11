@@ -61,7 +61,7 @@ public class CssRegexConverter implements Converter<Regex> {
     @Override
     public Regex fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
-        tt.setSkipWhitespace(true);
+        tt.setSkipWhitespaces(true);
         String find = null;
         String replace = null;
 

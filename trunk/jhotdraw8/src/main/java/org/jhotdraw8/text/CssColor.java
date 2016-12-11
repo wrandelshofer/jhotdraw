@@ -6,16 +6,16 @@ package org.jhotdraw8.text;
 
 import java.util.Objects;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 /**
  * CssColor wraps a Color object but also retains the name that was used to create
- the color.
+ *  the color.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class CssColor implements Paintable {
+    private final static PatternConverter formatter = new PatternConverter("rgba'('{0,number},{1,number},{2,number},{3,number}')'", new CssConverterFactory());
 
     private final String name;
     private final Color color;
@@ -38,7 +38,7 @@ public class CssColor implements Paintable {
     }
 
     @Override
-    public Paint getPaint() {
+    public Color getPaint() {
         return color;
     }
 
@@ -55,7 +55,8 @@ public class CssColor implements Paintable {
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
             double o = c.getOpacity();
-            return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
+            return formatter.format(r,g,b,o);
+           // return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
         }
     }
 
@@ -86,7 +87,7 @@ public class CssColor implements Paintable {
 
     @Override
     public String toString() {
-        return "CColor{" + name + '}';
+        return "CColor{" + getName() + '}';
     }
 
 }

@@ -11,7 +11,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.draw.io.SimpleIdFactory;
 import org.jhotdraw8.io.StreamPosTokenizer;
 
 /**
@@ -136,6 +139,15 @@ public class PatternConverter implements Converter<Object[]> {
         toString(out, idFactory, value);
     }
 
+    public String format(Object... value)  {
+        StringBuilder buf = new StringBuilder();
+        try {
+            toString(buf, new SimpleIdFactory(), value);
+        } catch (IOException ex) {
+            throw new InternalError(ex);
+        }
+        return buf.toString();
+    }
     @Override
     public void toString(Appendable out, IdFactory idFactory, Object[] value) throws IOException {
         int[] indices = new int[numIndices];

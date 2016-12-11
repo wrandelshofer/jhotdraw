@@ -83,7 +83,7 @@ public class XmlFontConverter implements Converter<Font> {
     public Font fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         // XXX should not use Css Tokenizer in XML!!
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
-        tt.setSkipWhitespace(true);
+        tt.setSkipWhitespaces(true);
 
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
