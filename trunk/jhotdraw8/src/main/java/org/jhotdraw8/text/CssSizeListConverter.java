@@ -27,6 +27,10 @@ public class CssSizeListConverter implements Converter<List<Double>> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, List<Double> value) throws IOException {
+        if (value==null) {
+            out.append("none");
+            return;
+        }
         Object[] v = new Object[value.size() + 2];
         v[0] = value.size();
         v[1] = value.size();
@@ -41,6 +45,13 @@ public class CssSizeListConverter implements Converter<List<Double>> {
         ArrayList<Double> l = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.setSkipWhitespaces(true);
+        if (tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
+            tt.skipWhitespace();
+            return l;
+        }else{
+            tt.pushBack();
+        }
+        
         Loop:  while (true) {
             switch (tt.nextToken()) {
                 case CssTokenizerInterface.TT_DIMENSION: {
@@ -55,6 +66,24 @@ public class CssSizeListConverter implements Converter<List<Double>> {
                 }
                 case CssTokenizerInterface.TT_NUMBER: {
                     double value = tt.currentNumericValue().doubleValue();
+                    l.add(value);
+                    break;
+                }
+                case CssTokenizerInterface.TT_IDENT: {
+                    double value;
+                    switch (tt.currentStringValue()) {
+                        case "INF":
+                            value = Double.POSITIVE_INFINITY;
+                            break;
+                        case "-INF":
+                            value = Double.NEGATIVE_INFINITY;
+                            break;
+                        case "NaN":
+                            value = Double.NaN;
+                            break;
+                        default:
+                            throw new ParseException("number expected:"+tt.currentStringValue(),tt.getPosition());
+                    }
                     l.add(value);
                     break;
                 }
