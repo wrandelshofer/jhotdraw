@@ -48,11 +48,11 @@ public class ColorSquareImageProducer extends AbstractColorWheelImageProducer {
         angulars = new float[w * h];
         alphas = new int[w * h];
 
-        float maxR = colorSpace.getMaxValue(radialIndex);
-        float minR = colorSpace.getMinValue(radialIndex);
+        float maxR = modelColorSpace.getMaxValue(radialIndex);
+        float minR = modelColorSpace.getMinValue(radialIndex);
         float extentR = maxR - minR;
-        float maxA = colorSpace.getMaxValue(angularIndex);
-        float minA = colorSpace.getMinValue(angularIndex);
+        float maxA = modelColorSpace.getMaxValue(angularIndex);
+        float minA = modelColorSpace.getMinValue(angularIndex);
         float extentA = maxA - minA;
 
         int side = Math.min(w - 1, h - 1); // side length
@@ -94,14 +94,14 @@ public class ColorSquareImageProducer extends AbstractColorWheelImageProducer {
             generateLookupTables();
         }
 
-        float[] components = new float[colorSpace.getNumComponents()];
+        float[] components = new float[modelColorSpace.getNumComponents()];
         float[] rgb=new float[3];
         for (int index = 0; index < pixels.length; index++) {
             if (alphas[index] != 0) {
                 components[angularIndex] = angulars[index];
                 components[radialIndex] = radials[index];
                 components[verticalIndex] = verticalValue;
-                pixels[index] = (alphas[index] | 0xffffff) & ColorUtil.CStoRGB24(colorSpace,components,rgb);
+                pixels[index] = (alphas[index] | 0xffffff) & ColorUtil.CStoRGB24(modelColorSpace,screenColorSpace,components,rgb);
             }
         }
         newPixels();
@@ -110,10 +110,10 @@ public class ColorSquareImageProducer extends AbstractColorWheelImageProducer {
 
     @Override
     public Point getColorLocation(float[] components) {
-        float radial = (components[radialIndex] - colorSpace.getMinValue(radialIndex))//
-                / (colorSpace.getMaxValue(radialIndex) - colorSpace.getMinValue(radialIndex));
-        float angular = (components[angularIndex] - colorSpace.getMinValue(angularIndex))//
-                / (colorSpace.getMaxValue(angularIndex) - colorSpace.getMinValue(angularIndex));
+        float radial = (components[radialIndex] - modelColorSpace.getMinValue(radialIndex))//
+                / (modelColorSpace.getMaxValue(radialIndex) - modelColorSpace.getMinValue(radialIndex));
+        float angular = (components[angularIndex] - modelColorSpace.getMinValue(angularIndex))//
+                / (modelColorSpace.getMaxValue(angularIndex) - modelColorSpace.getMinValue(angularIndex));
         if (flipX) radial=1f-radial;
         if (flipY) angular=1f-angular;
 
@@ -142,12 +142,17 @@ public class ColorSquareImageProducer extends AbstractColorWheelImageProducer {
 
         float[] hsb = new float[3];
         hsb[angularIndex] = angular//
-                * (colorSpace.getMaxValue(angularIndex) - colorSpace.getMinValue(angularIndex))//
-                + colorSpace.getMinValue(angularIndex);
+                * (modelColorSpace.getMaxValue(angularIndex) - modelColorSpace.getMinValue(angularIndex))//
+                + modelColorSpace.getMinValue(angularIndex);
         hsb[radialIndex] = radial//
-                * (colorSpace.getMaxValue(radialIndex) - colorSpace.getMinValue(radialIndex))//
-                + colorSpace.getMinValue(radialIndex);
+                * (modelColorSpace.getMaxValue(radialIndex) - modelColorSpace.getMinValue(radialIndex))//
+                + modelColorSpace.getMinValue(radialIndex);
         hsb[verticalIndex] = verticalValue;
         return hsb;
+    }
+
+    @Override
+    protected void invalidateLookupTables() {
+        isLookupValid=false;
     }
 }

@@ -282,6 +282,10 @@ public class JColorWheel extends JPanel {
         return cc;
     }
 
+    public void setScreenColorSpace(ColorSpace newValue) {
+        colorWheelProducer.setScreenColorSpace(newValue);
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

@@ -9,6 +9,7 @@ package org.jhotdraw.color;
 
 import org.jhotdraw.util.Images;
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
@@ -436,12 +437,13 @@ public class ColorSliderUI extends BasicSliderUI {
     @Override
     protected PropertyChangeListener createPropertyChangeListener(JSlider slider) {
         return new CSUIPropertyChangeHandler();
+    }
 
-
-
-
-
-
+    public void setScreenColorSpace(ColorSpace cs) {
+        if (colorTrackImageProducer!=null) {
+        colorTrackImageProducer.setScreenColorSpace(cs);
+        }
+       slider.repaint();
     }
 
     public class CSUIPropertyChangeHandler extends BasicSliderUI.PropertyChangeHandler {

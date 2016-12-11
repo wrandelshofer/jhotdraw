@@ -119,8 +119,7 @@ public class CIELABColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float[] fromRGB(float[] rgb, float[] component) {
-        ColorUtil.RGBtoCIEXYZ(rgb, rgb);
-        return fromCIEXYZ(rgb, component);
+        return fromCIEXYZ(ColorUtil.RGBtoCIEXYZ(rgb, component), component);
     }
 
     /**
@@ -161,6 +160,10 @@ public class CIELABColorSpace extends AbstractNamedColorSpace {
         double L = colorvalue[0];
         double a = colorvalue[1];
         double b = colorvalue[2];
+        return toCIEXYZ(L,a,b,xyz);
+    }
+    
+    protected float[] toCIEXYZ(double L ,        double a,        double b, float[] xyz) {
 
         double fy = (L + 16d) / 116d;
 
