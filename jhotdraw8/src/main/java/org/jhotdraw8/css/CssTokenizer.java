@@ -592,6 +592,7 @@ public class CssTokenizer implements CssTokenizerInterface {
         if ((hasDecimals || hasFractionalsOrExponent) && (ch == 'e' || ch == 'E')) {
             hasFractionalsOrExponent = true;
             buf.append('E');
+            int expchar = ch;
             ch = in.nextChar();
 
             if (ch == '-') {
@@ -608,7 +609,8 @@ public class CssTokenizer implements CssTokenizerInterface {
             }
             if (!hasExponents) {
                 in.pushBack(ch);
-                return false;
+                ch = expchar;
+                buf.setLength(buf.length()-1);
             }
         }
 
