@@ -144,8 +144,13 @@ public class GrapherProjectView extends AbstractDocumentView implements Document
             modified.set(true);
         });
 
-        drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(new SvgExportOutputFormat()));
-        drawingView.setClipboardInputFormat(new MultiClipboardInputFormat());
+        
+        IdFactory idFactory = new SimpleIdFactory();
+                FigureFactory factory = new DefaultFigureFactory(idFactory);
+                SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+        drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
+                io, new SvgExportOutputFormat()));
+        drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(io));
 
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
@@ -310,6 +315,7 @@ public class GrapherProjectView extends AbstractDocumentView implements Document
     @Override
     public CompletionStage<Void> clear() {
         Drawing d = new SimpleDrawing();
+        d.set(StyleableFigure.STYLE_ID,"drawing1");
         drawingView.setDrawing(d);
         return CompletableFuture.completedFuture(null);
     }

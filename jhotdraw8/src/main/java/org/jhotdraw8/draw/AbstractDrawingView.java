@@ -2,11 +2,12 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.draw;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,6 +19,7 @@ import org.jhotdraw8.beans.SimplePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.draw.model.DrawingModel;
 
 /**
  * AbstractDrawingView.
@@ -26,57 +28,56 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
  * @version $$Id$$
  */
 public abstract class AbstractDrawingView extends SimplePropertyBean implements DrawingView {
-  private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this,CLIPBOARD_OUTPUT_FORMAT_PROPERTY);
-  private ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this,CLIPBOARD_INPUT_FORMAT_PROPERTY);
 
-  @Override
-  public ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty() {
-    return clipboardInputFormat;
-  }
+    private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY);
+    private ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
 
-  @Override
-  public ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty() {
-    return clipboardOutputFormat;
-  }
-  
-  public void cut() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  public void copy() {
-    ClipboardOutputFormat out = getClipboardOutputFormat();
-    if (out == null) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    } else {
-      Map<DataFormat, Object> content=new LinkedHashMap<>();
-      try { 
-        final ObservableSet<Figure> selectedFigures = getSelectedFigures();
-        
-        out.write(content, getDrawing(), selectedFigures.isEmpty()?FXCollections.singletonObservableList(getDrawing()):selectedFigures);
-         Clipboard.getSystemClipboard().setContent(content);
-         
-      } catch (IOException ex) {
-        ex.printStackTrace();
-      }
+    @Override
+    public ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty() {
+        return clipboardInputFormat;
     }
-  }
 
-  public void paste() {
-    Clipboard cb = Clipboard.getSystemClipboard();
-    
-    for (DataFormat df:cb.getContentTypes()) {
-          
-    System.out.println(df);
-    System.out.println(cb.getContent(df));
-
+    @Override
+    public ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty() {
+        return clipboardOutputFormat;
     }
-    
-    ClipboardInputFormat in = getClipboardInputFormat();
-    if (in == null) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  }
 
-  
+    public void cut() {
+        copy();
+        final List<Figure> selectedFigures = new ArrayList<>(getSelectedFigures());
+        DrawingModel m = getModel();
+        for (Figure f : selectedFigures) {
+            m.removeFromParent(f);
+        }
+    }
 
+    public void copy() {
+        ClipboardOutputFormat out = getClipboardOutputFormat();
+        if (out == null) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        } else {
+            Map<DataFormat, Object> content = new LinkedHashMap<>();
+            try {
+                final ObservableSet<Figure> selectedFigures = getSelectedFigures();
+
+                out.write(content, getDrawing(), selectedFigures.isEmpty() ? FXCollections.singletonObservableList(getDrawing()) : selectedFigures);
+                Clipboard.getSystemClipboard().setContent(content);
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void paste() {
+        Clipboard cb = Clipboard.getSystemClipboard();
+        ClipboardInputFormat in = getClipboardInputFormat();
+        if (in != null) {
+            try {
+                in.read(cb, getModel(), getDrawing(), getActiveLayer());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }

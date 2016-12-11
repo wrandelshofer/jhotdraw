@@ -64,6 +64,7 @@ public class DesignPatternTaglet implements Taglet {
 
     /**
      * Return the name of this custom tag.
+     * @return the name
      */
     @Override
     public String getName() {
@@ -159,6 +160,7 @@ public class DesignPatternTaglet implements Taglet {
      * string representation.
      *
      * @param tag the <code>Tag</code> representation of this custom tag.
+     * @return the String representation
      */
     @Override
     public String toString(Tag tag) {
@@ -171,6 +173,7 @@ public class DesignPatternTaglet implements Taglet {
      *
      * @param tags the array of <code>Tag</code>s representing of this custom
      * tag.
+     * @return the String representation
      */
     @Override
     public String toString(Tag[] tags) {

@@ -67,19 +67,22 @@ public class SimpleDrawingEditor implements DrawingEditor {
 
     private final ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this, ACTIVE_DRAWING_VIEW_PROPERTY);
     private final ObjectProperty<Tool> activeTool = new SimpleObjectProperty<Tool>(this, ACTIVE_TOOL_PROPERTY);
-   {activeTool.addListener((o,oldValue,newValue)->{
 
-        
+    {
+        activeTool.addListener((o, oldValue, newValue) -> {
+
             if (getActiveDrawingView() != null) {
                 getActiveDrawingView().setTool(newValue);
             }
-        if (oldValue!=null) {
-       oldValue.deactivate(this);
-   }
-        if (newValue!=null) {
-       newValue.activate(this);
-   }
-    });}
+            if (oldValue != null) {
+                oldValue.deactivate(this);
+            }
+            if (newValue != null) {
+                newValue.setDrawingEditor(this);
+                newValue.activate(this);
+            }
+        });
+    }
 
     {
         activeTool.addListener((o, oldValue, newValue) -> {

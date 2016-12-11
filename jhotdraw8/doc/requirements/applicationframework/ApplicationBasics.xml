@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.applicationBasics">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="intro.applicationBasics">
 <title>Application Basics</title>
 <para>An application is a computer program which is designed to perform a group of actions on a project.</para>
 
@@ -13,9 +13,9 @@
      and then the application automatically opens the previously used library (or libraries).
      The application provides actions on a library. Typically all changes are immediately made persistent in the library.
      Typical library-based applications are: a photo library, a music library.</para></listitem>
-   <listitem><para>'Document-based'. Here, a project corresponds to a file. The user can start the application,
-   and open an existing file or create a new one. The application provides actions on a working copy of the file.
-   Changes are only made persistent when the user explicitly saves them to the file.
+   <listitem><para>'Document-based'. Here, a project corresponds to a document The user can start the application,
+   and open an existing document or create a new one. The application provides actions on a working copy of the document.
+   Changes are only made persistent when the user explicitly saves them to the document.
     Typical document-based applications are: a text editor, a drawing editor.</para>
    </listitem>
  </itemizedlist>

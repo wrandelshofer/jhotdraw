@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.io;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SimpleIdFactory.
@@ -14,14 +15,13 @@ import java.util.HashMap;
  */
 public class SimpleIdFactory implements IdFactory {
 
-    private long nextId;
-
-    private HashMap<String, Object> idToObject = new HashMap<>();
-    private HashMap<Object, String> objectToId = new HashMap<>();
+    private Map<String, Long> prefixToNextId = new HashMap<>();
+    private Map<String, Object> idToObject = new HashMap<>();
+    private Map<Object, String> objectToId = new HashMap<>();
 
     @Override
     public void reset() {
-        nextId = 0;
+        prefixToNextId.clear();
         idToObject.clear();
         objectToId.clear();
     }
@@ -55,11 +55,14 @@ public class SimpleIdFactory implements IdFactory {
   String createId(Object object, String prefix) {
         String id = objectToId.get(object);
         if (id == null) {
+            long pNextId=prefixToNextId.getOrDefault(prefix, 1L);
+            
             do { // XXX linear search
-                id = prefix+Long.toString(nextId++);
+                id = prefix+Long.toString(pNextId++);
             } while (idToObject.containsKey(id));
             objectToId.put(object, id);
             idToObject.put(id, object);
+            prefixToNextId.put(prefix, pNextId);
         }
         return id;
   }

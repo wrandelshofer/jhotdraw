@@ -178,7 +178,9 @@ public class FigureTreePresentationModel {
 
     private void handleNodeInvalidated(Figure f) {
         TreeItem<Figure> node = items.get(f);
+        if (node != null) {
         node.setValue(f);
+        }
     }
 
     public TreeItem<Figure> getRoot() {

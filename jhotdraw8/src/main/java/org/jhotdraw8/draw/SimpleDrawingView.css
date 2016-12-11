@@ -86,3 +86,13 @@
 /* Styles the background pane which fills the background of the viewport that contains the canvasPane and the toolPane.*/
 #backgroundPane {
 }
+
+#toolEventPane {
+  -fx-border-color: transparent;
+  -fx-border-width: 2;
+}
+
+#toolEventPane:focused {
+  -fx-border-color: -fx-focus-color;
+}
+

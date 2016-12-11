@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.drawingBasics">
-<title>Drawing Basics</title>
+<title>Copy And Paste</title>
 <para>A 'drawing' is a graphical visualization of a concept.</para>
 
 <para>For some drawings, the nature of the concept can be left undefined, for example for artistic paintings.
@@ -8,7 +8,7 @@
 
 <para>We assume that a concept can be decomposed into smaller sub-concepts, which can
   in turn be decomposed into smaller sub-concepts until we reach a level of detail, where
-  decomposition is no longer worthwhile.<para>
+  decomposition is no longer worthwhile.</para>
     
 <para>We call the visual representation of (sub-)concept  a 'figure'.</para>
 

@@ -78,7 +78,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      */
     @Override
     public boolean isSuitableParent(Figure newParent) {
-        return newParent != null && !(newParent instanceof Drawing);
+        return true;//newParent != null && !(newParent instanceof Drawing);
     }
 
     @Override

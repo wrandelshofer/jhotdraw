@@ -6,13 +6,12 @@
 package org.jhotdraw8.draw.input;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Set;
 import javafx.scene.input.Clipboard;
-import javafx.scene.input.DataFormat;
 import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.Layer;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.model.DrawingModel;
 
 /**
  * MultiClipboardOutputFormat.
@@ -28,14 +27,17 @@ public class MultiClipboardInputFormat implements ClipboardInputFormat {
   }
 
   @Override
-  public Set<Figure> read(Clipboard clipboard, Drawing drawing, Layer layer) throws IOException {
+  public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Layer layer) throws IOException {
+      IOException firstCause=null;
     for (ClipboardInputFormat f:formats) {
     try {
-      return f.read(clipboard, drawing, layer);
+      return f.read(clipboard, model, drawing, layer);
     }catch (IOException e)  {
+        if (firstCause==null) firstCause=e;
       //try another format
     }
     }
+    if (firstCause!=null) throw firstCause;
     throw new IOException("Unsupported clipboard content");
   }
 

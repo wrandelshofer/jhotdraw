@@ -117,6 +117,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
     public SimpleDrawingViewNode() {
       setFocusTraversable(true);
+      setId("drawingView");
     }
 
     private ReadOnlyBooleanWrapper selectionEmpty = new ReadOnlyBooleanWrapper(this, EditableComponent.SELECTION_EMPTY);
@@ -463,16 +464,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     // set root
     node = new SimpleDrawingViewNode();
     node.setCenter(rootPane);
-    node.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent evt) -> {
-      if (!node.isFocused()) {
-        node.requestFocus();
-        if (!node.getScene().getWindow().isFocused()) {
-          evt.consume();
-        }
-      }
-    });
-    node.setFocusTraversable(true);
-    focused.bind(node.focusedProperty());
 
     selectedFigures.addListener((InvalidationListener) o -> recreateHandles = true);
     handleType.addListener((InvalidationListener) o -> recreateHandles = true);
@@ -817,11 +808,13 @@ public class SimpleDrawingView extends AbstractDrawingView {
       Tool t = oldValue;
       toolPane.setCenter(null);
       t.setDrawingView(null);
+      focused.unbind();
     }
     if (newValue != null) {
       Tool t = newValue;
       toolPane.setCenter(t.getNode());
       t.setDrawingView(this);
+      focused.bind(t.getNode().focusedProperty());
     }
   }
 

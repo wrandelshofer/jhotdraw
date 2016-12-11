@@ -13,10 +13,10 @@
 <copyright><year>2016</year><holder>by the authors and contributors of JHotDraw</holder></copyright>
 </info>
 <chapter><title>Introduction</title>
+<xi:include href="introduction/References.xml"/>
 <xi:include href="introduction/Purpose.xml"/>
 <xi:include href="introduction/Scope.xml"/>
 <xi:include href="introduction/Definitions.xml"/>
-<xi:include href="introduction/References.xml"/>
 <xi:include href="introduction/Overview.xml"/>
 <xi:include href="introduction/MajorVersions.xml"/>
 <xi:include href="introduction/License.xml"/>
@@ -40,10 +40,14 @@
  -->
 <chapter><title>System Features</title>
 <section><title>Application Framework</title>
-<xi:include href="requirements/ApplicationBasics.xml"/>
+<xi:include href="requirements/applicationframework/ApplicationBasics.xml"/>
 </section>
 <section><title>Drawing Editor Framework</title>
-<xi:include href="requirements/DrawingBasics.xml"/>
+<xi:include href="requirements/drawingeditorframework/DrawingBasics.xml"/>
+</section>
+<section><title>Document Editing</title>
+<xi:include href="requirements/CopyAndPaste.xml"/>
+<xi:include href="requirements/SilentGenerationOfUniqueIds.xml"/>
 
 <!--
 3.2.1 System Feature 1
