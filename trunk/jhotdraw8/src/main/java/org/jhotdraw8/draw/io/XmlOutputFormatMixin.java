@@ -29,7 +29,8 @@ import org.w3c.dom.Document;
 public interface XmlOutputFormatMixin extends OutputFormat {
     @Override
     default void write(File file, Drawing drawing) throws IOException {
-        setDocumentHome(file.getParentFile()==null?new File(System.getProperty("user.home")).toURI():file.getParentFile().toURI());
+        setExternalHome(file.getParentFile()==null?new File(System.getProperty("user.home")).toURI():file.getParentFile().toURI());
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
         Document doc = toDocument(drawing);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
@@ -75,5 +76,6 @@ public interface XmlOutputFormatMixin extends OutputFormat {
     }
     Document toDocument(Drawing drawing, Collection<Figure> selection) throws IOException;
     
-    void setDocumentHome(URI uri);
+    void setExternalHome(URI uri);
+    void setInternalHome(URI uri);
 }

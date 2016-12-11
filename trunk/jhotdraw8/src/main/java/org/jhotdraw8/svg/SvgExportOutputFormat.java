@@ -853,7 +853,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     }
 
     @Override
-    public void setDocumentHome(URI uri) {
+    public void setExternalHome(URI uri) {
         // empty
     }
 
@@ -870,6 +870,11 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
             throw new IOException(ex);
         }
         clipboard.put(SVG_FORMAT, out.toString());
+    }
+
+    @Override
+    public void setInternalHome(URI uri) {
+        // empty
     }
 
 }

@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
  * @version $$Id$$
  */
 public interface XmlInputFormatMixin {
-    void setDocumentHome(URI uri);
+    void setExternalHome(URI uri);
     boolean isNamespaceAware();
        
     default Drawing read(InputStream in, Drawing drawing) throws IOException {
