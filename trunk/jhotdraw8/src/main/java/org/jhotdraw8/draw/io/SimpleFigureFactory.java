@@ -125,12 +125,12 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             figureNodeListKeys.put(figure, hset);
         }
 
-        HashMap<String, MapAccessor<?>> strToKey = elemToKey.computeIfAbsent(figure, k->new HashMap<>());
+        HashMap<String, MapAccessor<?>> strToKey = elemToKey.computeIfAbsent(figure, k -> new HashMap<>());
         if (!strToKey.containsKey(name)) {
             strToKey.put(name, key);
         }
 
-        HashMap<MapAccessor<?>, String> keyToStr = keyToElem.computeIfAbsent(figure, k->new HashMap<>());
+        HashMap<MapAccessor<?>, String> keyToStr = keyToElem.computeIfAbsent(figure, k -> new HashMap<>());
         if (!keyToStr.containsKey(key)) {
             keyToStr.put(key, name);
         }
@@ -166,13 +166,13 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
      * @param key The key
      */
     public void addKey(Class<? extends Figure> figure, String name, MapAccessor<?> key) {
-          figureAttributeKeys.computeIfAbsent(figure, k->new HashSet<>()).add(key);
+        figureAttributeKeys.computeIfAbsent(figure, k -> new HashSet<>()).add(key);
 
-        HashMap<String, MapAccessor<?>> strToKey = attrToKey.computeIfAbsent(figure, k->new HashMap<>());
-            strToKey.putIfAbsent(name, key);
+        HashMap<String, MapAccessor<?>> strToKey = attrToKey.computeIfAbsent(figure, k -> new HashMap<>());
+        strToKey.putIfAbsent(name, key);
 
-        HashMap<MapAccessor<?>, String> keyToStr = keyToAttr.computeIfAbsent(figure, k->new HashMap<>());
-          keyToStr.putIfAbsent(key, name);
+        HashMap<MapAccessor<?>, String> keyToStr = keyToAttr.computeIfAbsent(figure, k -> new HashMap<>());
+        keyToStr.putIfAbsent(key, name);
     }
 
     /**
@@ -623,24 +623,44 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
 
         return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
     }
-    
-        @Override
+
+    @Override
     public String createId(Object object) {
-      String id = getId(object);
-      
+        String id = getId(object);
+
         if (id == null) {
-      if (object instanceof StyleableFigure) {
-       StyleableFigure f = (StyleableFigure) object;       
-       id = f.get(StyleableFigure.STYLE_ID);
-       if (getObject(id)==null) {
-       putId(object, id);
-       }else{
-          id = super.createId(object,id+"_");
-       }
-    }else{
-          id = super.createId(object);
-        }}
+            if (object instanceof StyleableFigure) {
+                StyleableFigure f = (StyleableFigure) object;
+                id = f.get(StyleableFigure.STYLE_ID);
+                if (id!=null&&getObject(id) == null) {
+                    putId(object, id);
+                } else {
+                    id = super.createId(object,  f.getTypeSelector().toLowerCase());
+                }
+            } else {
+                id = super.createId(object);
+            }
+        }
         return id;
     }
+    
+    
+    public String putId(Object object) {
+        String id = getId(object);
 
+        if (id == null) {
+            if (object instanceof StyleableFigure) {
+                StyleableFigure f = (StyleableFigure) object;
+                id = f.get(StyleableFigure.STYLE_ID);
+                if (id!=null) {
+                    putId(object, id);
+                } else {
+                    id = super.createId(object,f.getTypeSelector());
+                }
+            } else {
+                id = super.createId(object);
+            }
+        }
+        return id;
+    }
 }

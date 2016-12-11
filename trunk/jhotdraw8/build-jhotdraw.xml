@@ -103,6 +103,7 @@
     </copy>
   </target>
   <target name="do-docbook.asciidoctor" depends="init,do-docbook.copy">
+    <!--
         <pathconvert property="asciidocfiles" pathsep=" ">
             <map from="${basedir}${file.separator}${build.doc.doc}${file.separator}" to=""/>
             <fileset dir="${build.doc.doc}">
@@ -112,9 +113,10 @@
         <echo message="asciidocfiles: ${asciidocfiles}"/>
     <exec executable="/usr/local/bin/asciidoctor" dir="${build.doc.doc}">
       <arg line="-b docbook5"/>
-      <arg line="--doctype article"/>
+      <arg line="- -doctype article"/>
       <arg line="${asciidocfiles}"/>
     </exec>
+    -->
   </target>
   <target name="do-docbook.crossreference" depends="init,do-docbook.asciidoctor" description="creates a cross-reference uses unix xsltproc command">
       <exec executable="xsltproc" dir=".">
@@ -136,7 +138,6 @@
           <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
           <arg value="--xinclude"/>
           <arg value="${src.doc.xsl}/collectbiblio.xsl"/>
-          <!--arg value="${doc}/JHotDraw8Handbook.xml"/-->
           <arg value="${doc}/JHotDraw8SRS.xml"/>
       </exec>
     </target>
@@ -248,8 +249,8 @@
         overview="${src.main.java}/org/jhotdraw/overview.html"
         charset="UTF-8"
         >
-            <taglet name="org.jhotdraw.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
-            <taglet name="org.jhotdraw.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
+            <taglet name="org.jhotdraw8.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
+            <taglet name="org.jhotdraw8.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
             <packageset dir="${src.main.java}">
                 <include name="org/jhotdraw/**"/>
             </packageset>
@@ -259,6 +260,7 @@
             <classpath>
                 <pathelement path="${lib.runtime}"/>
                 <fileset file="${java.home}/../lib/tools.jar" />
+                <!--pathelement path="${build.javadoc}"/-->
             </classpath>
         </javadoc>
     </target>

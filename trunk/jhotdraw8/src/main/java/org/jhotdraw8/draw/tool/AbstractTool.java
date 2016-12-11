@@ -10,8 +10,6 @@ import java.util.LinkedList;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,6 +23,7 @@ import javafx.scene.layout.StackPane;
 import org.jhotdraw8.app.AbstractDisableable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.handle.HandleEvent;
@@ -49,21 +48,30 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * The active view.
      */
     private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
+    /**
+     * The active editor.
+     */
+    private final ObjectProperty<DrawingEditor> drawingEditor = new SimpleObjectProperty<>(this, DRAWING_EDITOR_PROPERTY);
 
     {
         drawingView.addListener((ObservableValue<? extends DrawingView> observable, DrawingView oldValue, DrawingView newValue) -> {
             stopEditing();
         });
     }
-    
-    private class EventPane extends BorderPane implements  EditableComponent {
+
+    private class EventPane extends BorderPane implements EditableComponent {
+
+        public EventPane() {
+            setId("toolEventPane");
+        }
+
         private EditableComponent getEditableParent() {
-            
-            DrawingView dv=getDrawingView();
-            if (dv!=null) {
+
+            DrawingView dv = getDrawingView();
+            if (dv != null) {
                 if (dv.getNode() instanceof EditableComponent) {
-                return (EditableComponent) dv.getNode();
-            }
+                    return (EditableComponent) dv.getNode();
+                }
             }
             return null;
         }
@@ -71,7 +79,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         @Override
         public void selectAll() {
             EditableComponent p = getEditableParent();
-            if (p!=null) {
+            if (p != null) {
                 p.selectAll();
             }
         }
@@ -79,7 +87,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         @Override
         public void clearSelection() {
             EditableComponent p = getEditableParent();
-            if (p!=null) {
+            if (p != null) {
                 p.clearSelection();
             }
         }
@@ -87,8 +95,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         @Override
         public ReadOnlyBooleanProperty selectionEmptyProperty() {
             EditableComponent p = getEditableParent();
-            if (p!=null) {
-             return   p.selectionEmptyProperty();
+            if (p != null) {
+                return p.selectionEmptyProperty();
             }
             return null;
         }
@@ -96,7 +104,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         @Override
         public void deleteSelection() {
             EditableComponent p = getEditableParent();
-            if (p!=null) {
+            if (p != null) {
                 p.deleteSelection();
             }
         }
@@ -104,7 +112,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         @Override
         public void duplicateSelection() {
             EditableComponent p = getEditableParent();
-            if (p!=null) {
+            if (p != null) {
                 p.duplicateSelection();
             }
         }
@@ -112,7 +120,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         @Override
         public void cut() {
             EditableComponent p = getEditableParent();
-            if (p!=null) {
+            if (p != null) {
                 p.cut();
             }
         }
@@ -120,7 +128,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         @Override
         public void copy() {
             EditableComponent p = getEditableParent();
-            if (p!=null) {
+            if (p != null) {
                 p.copy();
             }
         }
@@ -128,13 +136,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         @Override
         public void paste() {
             EditableComponent p = getEditableParent();
-            if (p!=null) {
+            if (p != null) {
                 p.paste();
             }
         }
-        
+
     }
-    
+
     protected final BorderPane eventPane = new EventPane();
     protected final BorderPane drawPane = new BorderPane();
     protected final StackPane node = new StackPane();
@@ -190,7 +198,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Constructors
     // ---
-
     /**
      * Creates a new instance.
      */
@@ -210,8 +217,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         if (rsrc != null) {
             applyResources(rsrc);
         }
-        
-        node.getChildren().addAll(drawPane,eventPane);
+
+        node.getChildren().addAll(drawPane, eventPane);
     }
 
     // ---
@@ -220,9 +227,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
-            properties
-                    = 
-                            FXCollections.observableMap(new IdentityHashMap<>());
+            properties = FXCollections.observableMap(new IdentityHashMap<>());
         }
         return properties;
     }
@@ -230,6 +235,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     @Override
     public ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
+    }
+
+    @Override
+    public ObjectProperty<DrawingEditor> drawingEditorProperty() {
+        return drawingEditor;
     }
 
     // ---
@@ -368,24 +378,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         fire(new ToolEvent(this, ToolEvent.EventType.TOOL_DONE));
     }
 
-    /**
-     * Gets the active drawing view.
-     */
-    @Override
-    public DrawingView getDrawingView() {
-        return drawingViewProperty().get();
-    }
-
-    /**
-     * Sets the active drawing view.
-     * <p>
-     * This method is invoked by {@link DrawingView} when the tool is set or
-     * unset on the drawing view.
-     */
-    public void setDrawingView(DrawingView drawingView) {
-        drawingViewProperty().set(drawingView);
-    }
-    
     protected void requestFocus() {
         Platform.runLater(eventPane::requestFocus);
     }

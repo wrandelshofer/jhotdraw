@@ -23,4 +23,13 @@ which guarantees that every figure can be unambiguosly referenced.</para>
 
 <para>Replacement keeps the first non-unique id, and adds a suffix "_" followed by an integral number to
     each subsequent non-unique ids.</para>
+    
+    <para>Invariants:</para>  
+<orderedlist>
+<listitem><para>Ids are not always unique.</para></listitem>
+<listitem><para>Loading a drawing.</para></listitem>
+<listitem><para>Pasting figures.</para></listitem>
+<listitem><para>Referencing a figure.</para></listitem>
+</orderedlist>
+    
 </section>

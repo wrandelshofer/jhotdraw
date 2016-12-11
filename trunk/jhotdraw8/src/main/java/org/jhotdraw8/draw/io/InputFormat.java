@@ -49,8 +49,8 @@ public interface InputFormat {
      * @throws java.io.IOException if an IO error occurs
      */
     default Drawing read(File file, Drawing drawing) throws IOException {
-        try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(file))) {
-            return read(out, drawing);
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
+            return read(in, drawing);
         }
     }
 

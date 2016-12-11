@@ -13,6 +13,7 @@ import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleKey;
 import org.jhotdraw8.collection.StringKey;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.event.Listener;
@@ -36,6 +37,10 @@ public interface Tool extends PropertyBean, Disableable {
      * The name of the drawing view property.
      */
     public final static String DRAWING_VIEW_PROPERTY = "drawingView";
+    /**
+     * The name of the drawing editor property.
+     */
+    public final static String DRAWING_EDITOR_PROPERTY = "drawingEditor";
     // ---
     // Property Keys
     // ---
@@ -105,6 +110,14 @@ public interface Tool extends PropertyBean, Disableable {
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
     ObjectProperty<DrawingView> drawingViewProperty();
+    /**
+     * The currently active drawing editor. By convention, this property is only
+     * set by {@code DrawingEditor}.
+     *
+     * @return the drawingView property, with {@code getBean()} returning this
+     * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
+     */
+    ObjectProperty<DrawingEditor> drawingEditorProperty();
 
     // ---
     // Behaviors
@@ -219,4 +232,12 @@ public interface Tool extends PropertyBean, Disableable {
      */
     public void activate(SimpleDrawingEditor editor);
 
+    
+    default DrawingEditor getDrawingEditor() {
+        return drawingEditorProperty().get();
+    }
+
+    default void setDrawingEditor(DrawingEditor newValue) {
+        drawingEditorProperty().set(newValue);
+    }
 }

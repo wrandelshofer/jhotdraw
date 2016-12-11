@@ -315,7 +315,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
       }
 
       DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
-      for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
+      for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
         Figure f = entry.getKey();
         DirtyMask dm = entry.getValue();
         if (dm.intersects(dmStyle)) {

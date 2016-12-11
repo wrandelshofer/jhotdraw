@@ -4,18 +4,13 @@
  */
 package org.jhotdraw8.draw.input;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.Layer;
 import org.jhotdraw8.draw.figure.Figure;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import javafx.scene.input.Clipboard;
+import org.jhotdraw8.draw.model.DrawingModel;
 
 /**
  * InputFormat for clipboard.
@@ -39,5 +34,5 @@ public interface ClipboardInputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    Set<Figure> read(Clipboard clipboard, Drawing drawing, Layer layer) throws IOException;
+    Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Layer layer) throws IOException;
 }
