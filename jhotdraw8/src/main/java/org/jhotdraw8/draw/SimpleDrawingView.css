@@ -89,7 +89,7 @@
 
 #toolEventPane {
   -fx-border-color: transparent;
-  -fx-border-width: 2;
+  -fx-border-width: 1.4;
 }
 
 #toolEventPane:focused {
