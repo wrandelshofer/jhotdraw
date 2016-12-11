@@ -73,7 +73,7 @@ public class CssTokenizerNGTest {
             {"/bla", "/:/ -2:bla"},
             {"/*bla*/bla", "-17:bla -2:bla"},
             {"16km", "-11:16km"},
-            {"16%", "-10:16"},
+            {"16%", "-10:16%"},
             {"16","-9:16"},
             {"'hel\nlo'", "-5:hel -16:\n -2:lo -5:"},
             {"\nlo", "-16:\n -2:lo"},

@@ -19,7 +19,7 @@ public class XmlDoubleConverter implements Converter<Double> {
     private XmlNumberConverter c;
 
     public XmlDoubleConverter() {
-        this(Double.NEGATIVE_INFINITY,Double.POSITIVE_INFINITY,1.0);
+        this(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0);
     }
 
     /**
@@ -60,17 +60,19 @@ public class XmlDoubleConverter implements Converter<Double> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Double value) throws IOException {
-        c.toString(out,idFactory,value);
+        c.toString(out, idFactory, value);
     }
 
     @Override
     public Double fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-return        c.fromString(in,idFactory);
+        Number n = c.fromString(in, idFactory);
+        return (n == null || n instanceof Double) ? (Double) n : n.doubleValue();
     }
 
     @Override
     public Double getDefaultValue() {
-        return c.getDefaultValue();
+        Number n = c.getDefaultValue();
+        return (n == null || n instanceof Double) ? (Double) n : n.doubleValue();
     }
 
 }

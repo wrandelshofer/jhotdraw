@@ -6,6 +6,8 @@ package org.jhotdraw8.css;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.CharBuffer;
+import org.jhotdraw8.io.CharBufferReader;
 
 /**
  * {@code CssTokenizer} processes an input stream of characters into tokens for
@@ -123,6 +125,9 @@ public class CssTokenizer implements CssTokenizerInterface {
     private boolean skipComments;
     private boolean skipWhitespaces;
 
+    public CssTokenizer(CharBuffer charBuffer) {
+        this(new CharBufferReader(charBuffer), true);
+    }
     public CssTokenizer(Reader reader) {
         this(reader, true);
     }

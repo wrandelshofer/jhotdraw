@@ -229,6 +229,14 @@ public class NumberConverter implements Converter<Number> {
             if (factor != 1.0) {
                 v = v * factor;
             }
+                 if (Double.isInfinite(v)) {
+            if (v < 0.0) {
+                buf.append('-');
+            }
+            buf.append("INF");
+        } else if (Double.isNaN(v)) {
+            buf.append("NaN");
+        } else {
             String str;
             BigDecimal big = new BigDecimal(v);
             int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
@@ -239,6 +247,7 @@ public class NumberConverter implements Converter<Number> {
                 str = scientificFormat.format(v);
             }
             buf.append(str);
+        }
         } else if (value instanceof Float) {
             float v = ((Float) value).floatValue();
             if (factor != 1.0) {
@@ -339,6 +348,10 @@ public class NumberConverter implements Converter<Number> {
                         noMorePoints = false;
                         noMoreEs = true;
                         break;
+                    case 'I':// INF
+                    case 'N': // NaN
+                        end += 3;
+                        break Outer;
                     default:
                         break Outer;
                 }
@@ -346,12 +359,26 @@ public class NumberConverter implements Converter<Number> {
         }
 
         String text = str.subSequence(0, end).toString();
+        switch (text) {
+            case "-INF":
+                str.position(str.position() + end);
+                return Double.NEGATIVE_INFINITY;
+            case "INF":
+                str.position(str.position() + end);
+                return Double.POSITIVE_INFINITY;
+            case "NaN":
+                str.position(str.position() + end);
+                return Double.NaN;
+        }
 
         // Remove unit from text
         if (unit != null && end+unit.length() <= str.length()) {
             if (str.subSequence(end, end + unit.length()).toString().startsWith(unit)) {
                 end += unit.length();
             }
+        }
+       if (text.isEmpty()) {
+            throw new ParseException("invalid value", str.position());
         }
 
         Class<?> valueClass = getValueClass();
