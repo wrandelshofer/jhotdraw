@@ -116,10 +116,11 @@ public class CssTokenizer implements CssTokenizerInterface {
     private int currentToken;
 
     private String stringValue;
+    private String unitValue;
     private Number numericValue;
     private int lineNumber;
     private int position;
-    private final boolean skipComments;
+    private boolean skipComments;
     private boolean skipWhitespaces;
 
     public CssTokenizer(Reader reader) {
@@ -142,16 +143,22 @@ public class CssTokenizer implements CssTokenizerInterface {
     }
 
     @Override
+    public String currentUnitValue() {
+        return unitValue;
+    }
+
+    @Override
     public Number currentNumericValue() {
         return numericValue;
     }
 
     @Override
     public int nextToken() throws IOException {
-        if (skipWhitespaces) {
-            skipWhitespace();
-        }
-        return doNextToken();
+        do {
+            doNextToken();
+        } while (skipComments && (currentToken == TT_COMMENT || currentToken == TT_BAD_COMMENT)//
+                || skipWhitespaces && (currentToken == TT_S || currentToken == TT_CDC || currentToken == TT_CDO));
+        return currentToken;
     }
 
     private int doNextToken() throws IOException {
@@ -164,10 +171,12 @@ public class CssTokenizer implements CssTokenizerInterface {
         position = (int) in.getPosition();
 
         int ch = in.nextChar();
-        stringValue = null;
+        unitValue = stringValue = null;
+        numericValue = null;
         switch (ch) {
             case -1:  // EOF
                 currentToken = TT_EOF;
+                stringValue = "<EOF>";
                 break;
             case ' ':
             case '\n':
@@ -294,12 +303,18 @@ public class CssTokenizer implements CssTokenizerInterface {
             case '8':
             case '9': {
                 StringBuilder buf = new StringBuilder();
+                StringBuilder unitBuf = new StringBuilder();
                 if (numMacro(ch, buf)) {
                     ch = in.nextChar();
                     if (ch == '%') {
                         currentToken = TT_PERCENTAGE;
-                    } else if (identMacro(ch, buf)) {
+                        buf.append('%');
+                        unitBuf.append('%');
+                        unitValue = unitBuf.toString();
+                    } else if (identMacro(ch, unitBuf)) {
                         currentToken = TT_DIMENSION;
+                        unitValue = unitBuf.toString();
+                        buf.append(unitBuf);
                     } else {
                         in.pushBack(ch);
                         currentToken = TT_NUMBER;
@@ -346,12 +361,18 @@ public class CssTokenizer implements CssTokenizerInterface {
                 } else {
                     in.pushBack(next1);
                     StringBuilder buf = new StringBuilder();
+                    StringBuilder unitBuf = new StringBuilder();
                     if (numMacro(ch, buf)) {
                         ch = in.nextChar();
                         if (ch == '%') {
                             currentToken = TT_PERCENTAGE;
-                        } else if (identMacro(ch, buf)) {
+                            buf.append('%');
+                            unitBuf.append('%');
+                            unitValue = unitBuf.toString();
+                        } else if (identMacro(ch, unitBuf)) {
                             currentToken = TT_DIMENSION;
+                            unitValue = unitBuf.toString();
+                            buf.append(unitBuf);
                         } else {
                             in.pushBack(ch);
                             currentToken = TT_NUMBER;
@@ -457,11 +478,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                 break;
             }
         }
-
-        return (skipComments//
-                && (currentToken == TT_COMMENT//
-                || currentToken == TT_BAD_COMMENT)) //
-                        ? nextToken() : currentToken;
+        return currentToken;
     }
 
     /**
@@ -878,7 +895,12 @@ public class CssTokenizer implements CssTokenizerInterface {
     }
 
     @Override
-    public void setSkipWhitespace(boolean newValue) {
+    public void setSkipWhitespaces(boolean newValue) {
         skipWhitespaces = newValue;
+    }
+
+    @Override
+    public void setSkipComments(boolean newValue) {
+        skipComments = newValue;
     }
 }

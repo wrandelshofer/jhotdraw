@@ -7,6 +7,7 @@ package org.jhotdraw8.text;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
@@ -19,7 +20,6 @@ import javafx.scene.paint.Stop;
  * @version $$Id$$
  */
 public class CssLinearGradient implements Paintable {
-    private final String name;
     private LinearGradient linearGradient;
     private final double startX;
     private final double startY;
@@ -37,16 +37,11 @@ public class CssLinearGradient implements Paintable {
         this.endY = endY;
         this.proportional = proportional;
         this.cycleMethod = cycleMethod;
-        this.name=null;
         this.cstops=stops;
     }
     
 
     public CssLinearGradient(LinearGradient linearGradient) {
-        this(null,linearGradient);
-    }
-    public CssLinearGradient(String name, LinearGradient linearGradient) {
-        this.name = name;
         this.linearGradient = linearGradient;
         this.startX=linearGradient.getStartX();
         this.startY=linearGradient.getStartY();
@@ -60,10 +55,6 @@ public class CssLinearGradient implements Paintable {
             Stop stop=stopList.get(i);
             cstops[i]=new CssStop(stop.getOffset(),new CssColor(stop.getColor()));
         }
-    }
-
-    public String getName() {
-        return name;
     }
 
     public LinearGradient getLinearGradient() {
@@ -130,5 +121,53 @@ public class CssLinearGradient implements Paintable {
         return cycleMethod;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CssLinearGradient other = (CssLinearGradient) obj;
+        if (Double.doubleToLongBits(this.startX) != Double.doubleToLongBits(other.startX)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.startY) != Double.doubleToLongBits(other.startY)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.endX) != Double.doubleToLongBits(other.endX)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.endY) != Double.doubleToLongBits(other.endY)) {
+            return false;
+        }
+        if (this.proportional != other.proportional) {
+            return false;
+        }
+        if (!Objects.equals(this.linearGradient, other.linearGradient)) {
+            return false;
+        }
+        if (this.cycleMethod != other.cycleMethod) {
+            return false;
+        }
+        if (!Arrays.deepEquals(this.cstops, other.cstops)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "CssLinearGradient{" + "startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';
+    }        
 }
