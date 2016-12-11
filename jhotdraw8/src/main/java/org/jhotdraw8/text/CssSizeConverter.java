@@ -7,6 +7,8 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -26,19 +28,32 @@ import org.jhotdraw8.draw.io.IdFactory;
  * @author Werner Randelshofer
  */
 public class CssSizeConverter implements Converter<Double> {
-
-    private final PatternConverter formatter = new PatternConverter("{0,number}{1,choice,0#{2,word}|1#}", new CssConverterFactory());
-
+private final static NumberConverter numberConverter=new NumberConverter();
     @Override
     public void toString(Appendable out, IdFactory idFactory, Double value) throws IOException {
-        formatter.toString(out, new Object[]{value,0,""});
+        numberConverter.toString(out, idFactory, value);
     }
 
     @Override
     public Double fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        // FIXME currently ignores the units!
-        Object[] v = formatter.fromString(buf);
-        return (double) v[0];
+        CssTokenizerInterface tt = new CssTokenizer(buf);
+        tt.skipWhitespace();
+        Double value=null;
+        switch (tt.nextToken()) {
+            case CssTokenizerInterface.TT_DIMENSION:
+                value=tt.currentNumericValue().doubleValue();
+                break;
+            case CssTokenizerInterface.TT_PERCENTAGE:
+                value=tt.currentNumericValue().doubleValue()/100.0;
+                break;
+            case CssTokenizerInterface.TT_NUMBER:
+                value=tt.currentNumericValue().doubleValue();
+                break;
+            default:
+                throw new ParseException("number expected",tt.getPosition());
+        }
+        tt.skipWhitespace();
+        return value;
     }
     
         @Override
