@@ -56,12 +56,12 @@ public class CssSizeListConverter implements Converter<List<Double>> {
             switch (tt.nextToken()) {
                 case CssTokenizerInterface.TT_DIMENSION: {
                     double value = tt.currentNumericValue().doubleValue();
-                    l.add(value);
+                    l.add(idFactory.convert(value, tt.currentUnitValue(), "px"));
                     break;
                 }
                 case CssTokenizerInterface.TT_PERCENTAGE: {
                     double value = tt.currentNumericValue().doubleValue() / 100.0;
-                    l.add(value);
+                    l.add(idFactory.convert(value, "%", "px"));
                     break;
                 }
                 case CssTokenizerInterface.TT_NUMBER: {
