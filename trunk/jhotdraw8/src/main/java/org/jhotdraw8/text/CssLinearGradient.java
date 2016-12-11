@@ -2,7 +2,6 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.text;
 
 import java.util.Arrays;
@@ -20,6 +19,7 @@ import javafx.scene.paint.Stop;
  * @version $$Id$$
  */
 public class CssLinearGradient implements Paintable {
+
     private LinearGradient linearGradient;
     private final double startX;
     private final double startY;
@@ -29,72 +29,71 @@ public class CssLinearGradient implements Paintable {
     private final CycleMethod cycleMethod;
     private final CssStop[] cstops;
 
-    public CssLinearGradient(double startX, double startY, double endX, double endY, boolean proportional, CycleMethod cycleMethod
-    , CssStop... stops) {
+    public CssLinearGradient(double startX, double startY, double endX, double endY, boolean proportional, CycleMethod cycleMethod,
+             CssStop... stops) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
         this.endY = endY;
         this.proportional = proportional;
         this.cycleMethod = cycleMethod;
-        this.cstops=stops;
+        this.cstops = stops;
     }
-    
 
     public CssLinearGradient(LinearGradient linearGradient) {
         this.linearGradient = linearGradient;
-        this.startX=linearGradient.getStartX();
-        this.startY=linearGradient.getStartY();
-        this.endX=linearGradient.getEndX();
-        this.endY=linearGradient.getEndY();
-        this.proportional=linearGradient.isProportional();
-        this.cycleMethod=linearGradient.getCycleMethod();
-        List<Stop> stopList=linearGradient.getStops();
-        cstops=new CssStop[stopList.size()];
-        for (int i=0;i<cstops.length;i++) {
-            Stop stop=stopList.get(i);
-            cstops[i]=new CssStop(stop.getOffset(),new CssColor(stop.getColor()));
+        this.startX = linearGradient.getStartX();
+        this.startY = linearGradient.getStartY();
+        this.endX = linearGradient.getEndX();
+        this.endY = linearGradient.getEndY();
+        this.proportional = linearGradient.isProportional();
+        this.cycleMethod = linearGradient.getCycleMethod();
+        List<Stop> stopList = linearGradient.getStops();
+        cstops = new CssStop[stopList.size()];
+        for (int i = 0; i < cstops.length; i++) {
+            Stop stop = stopList.get(i);
+            cstops[i] = new CssStop(stop.getOffset(), new CssColor(stop.getColor()));
         }
     }
 
     public LinearGradient getLinearGradient() {
-        if (linearGradient==null) {
-            Stop[] stops=new Stop[cstops.length];
-        for (int i=0;i<cstops.length;i++) {
-            CssStop cstop=cstops[i];
-            double offset;
-            if (cstop.getOffset()==null) {
-                int left=i, right=i;
-                for (;left>0&&cstops[left].getOffset()==null;left--);
-                for (;right<cstops.length-1&&cstops[right].getOffset()==null;right++);
-                double leftOffset=cstops[left].getOffset()==null?0.0:cstops[left].getOffset();
-                double rightOffset=cstops[right].getOffset()==null?1.0:cstops[right].getOffset();
-                if (i==left) {
-                    offset=leftOffset;
-                }else                if (i==right) {
-                    offset=rightOffset;
-                }else{
-                    double mix=(double)(i-left)/(right-left);
-                    offset=leftOffset*(1-mix)+rightOffset*mix;
+        if (linearGradient == null) {
+            Stop[] stops = new Stop[cstops.length];
+            for (int i = 0; i < cstops.length; i++) {
+                CssStop cstop = cstops[i];
+                double offset;
+                if (cstop.getOffset() == null) {
+                    int left = i, right = i;
+                    for (; left > 0 && cstops[left].getOffset() == null; left--);
+                    for (; right < cstops.length - 1 && cstops[right].getOffset() == null; right++);
+                    double leftOffset = cstops[left].getOffset() == null ? 0.0 : cstops[left].getOffset();
+                    double rightOffset = cstops[right].getOffset() == null ? 1.0 : cstops[right].getOffset();
+                    if (i == left) {
+                        offset = leftOffset;
+                    } else if (i == right) {
+                        offset = rightOffset;
+                    } else {
+                        double mix = (double) (i - left) / (right - left);
+                        offset = leftOffset * (1 - mix) + rightOffset * mix;
+                    }
+                } else {
+                    offset = cstop.getOffset();
                 }
-            }else{
-                offset=cstop.getOffset();
+
+                stops[i] = new Stop(offset, cstop.getColor().getColor());
             }
-            
-            stops[i]=new Stop(offset,cstop.getColor().getColor());
-        }
-            linearGradient=new LinearGradient(startX,startY,endX,endY,proportional,cycleMethod,stops);
+            linearGradient = new LinearGradient(startX, startY, endX, endY, proportional, cycleMethod, stops);
         }
         return linearGradient;
     }
 
     @Override
     public Paint getPaint() {
-       return getLinearGradient();
+        return getLinearGradient();
     }
 
     Iterable<CssStop> getStops() {
-       return Arrays.asList(cstops);
+        return Arrays.asList(cstops);
     }
 
     public double getStartX() {
@@ -169,5 +168,5 @@ public class CssLinearGradient implements Paintable {
     @Override
     public String toString() {
         return "CssLinearGradient{" + "startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';
-    }        
+    }
 }
