@@ -10,6 +10,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -36,12 +38,31 @@ public class CssSizeListConverter implements Converter<List<Double>> {
 
     @Override
     public List<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        Object[] v = formatter.fromString(buf);
-        if ((double)v[0]==0.0) return Collections.emptyList();
-        ArrayList<Double> l = new ArrayList<>((int) v[1]);
-        for (int i = 0, n = (int) v[1]; i < n; i++) {
-            l.add((Double) v[i + 2]);
+        ArrayList<Double> l = new ArrayList<>();
+        CssTokenizerInterface tt = new CssTokenizer(buf);
+        tt.setSkipWhitespaces(true);
+        Loop:  while (true) {
+            switch (tt.nextToken()) {
+                case CssTokenizerInterface.TT_DIMENSION: {
+                    double value = tt.currentNumericValue().doubleValue();
+                    l.add(value);
+                    break;
+                }
+                case CssTokenizerInterface.TT_PERCENTAGE: {
+                    double value = tt.currentNumericValue().doubleValue() / 100.0;
+                    l.add(value);
+                    break;
+                }
+                case CssTokenizerInterface.TT_NUMBER: {
+                    double value = tt.currentNumericValue().doubleValue();
+                    l.add(value);
+                    break;
+                }
+                default:
+                    break Loop;
+            }
         }
+        tt.skipWhitespace();
         return l;
     }
 
