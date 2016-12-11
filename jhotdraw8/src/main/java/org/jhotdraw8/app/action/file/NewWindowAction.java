@@ -9,6 +9,7 @@
 package org.jhotdraw8.app.action.file;
 
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentView;
 
 /**
  * Creates a new view.
@@ -23,7 +24,7 @@ public class NewWindowAction extends NewFileAction {
     
     /** Creates a new instance.
      * @param app the application */
-    public NewWindowAction(Application app) {
+    public NewWindowAction(Application<DocumentView> app) {
         super(app, ID);
     }
 }

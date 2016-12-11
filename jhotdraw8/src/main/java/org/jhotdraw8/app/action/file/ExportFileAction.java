@@ -8,14 +8,9 @@
 package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
-import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.gui.URIChooser;
-import org.jhotdraw8.net.URIUtil;
-import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
 
 /**
  * Presents a file chooser to the user and then exports the contents of the
@@ -36,7 +31,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      *
      * @param app the application
      */
-    public ExportFileAction(Application app) {
+    public ExportFileAction(Application<DocumentView> app) {
         this(app, null);
     }
 
@@ -46,7 +41,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public ExportFileAction(Application app, ProjectView view) {
+    public ExportFileAction(Application<DocumentView> app, DocumentView view) {
         this(app, view, ID);
     }
     /**
@@ -56,15 +51,15 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param view the view
      * @param id the id
      */
-    public ExportFileAction(Application app, ProjectView view, String id) {
+    public ExportFileAction(Application<DocumentView> app, DocumentView view, String id) {
         super(app, view, id, true);
     }
     @Override
-    protected URIChooser createChooser(ProjectView view) {
+    protected URIChooser createChooser(DocumentView view) {
         return app.getModel().createExportChooser();
     }
     @Override
-    protected void handleSucceded(ProjectView v, URI uri) {
+    protected void handleSucceded(DocumentView v, URI uri) {
         // empty
     }
 }

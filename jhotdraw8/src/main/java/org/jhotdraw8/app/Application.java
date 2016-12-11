@@ -20,19 +20,20 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * An {@code Application} manages {@link ProjectView} objects.
+ * An {@code Application} manages {@link ProjectView}s.
  *
+ * @param <V> the type of project views that this application manages.
  * @design.pattern Application Framework, KeyAbstraction.
  * The application framework supports the creation of document oriented
  * applications which can support platform-specific guidelines.
  * The application framework consists of the following key abstractions:
- * {@link Application}, {@link ApplicationModel}, {@link View}, 
+ * {@link Application}, {@link ApplicationModel}, {@link ProjectView}, 
  * {@link Action}.
  * 
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Application extends Disableable, PropertyBean {
+public interface Application<V extends ProjectView<V>> extends Disableable, PropertyBean {
 
     public static final String RECENT_URIS_PROPERTY = "recentUris";
     public static final String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
@@ -42,7 +43,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the views
      */
-    public SetProperty<ProjectView> viewsProperty();
+    public SetProperty<V> viewsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -64,7 +65,7 @@ public interface Application extends Disableable, PropertyBean {
     public IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default public ObservableSet<ProjectView> views() {
+    default public ObservableSet<V> views() {
         return viewsProperty().get();
     }
 
@@ -73,7 +74,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void add(ProjectView v) {
+    default public void add(V v) {
         viewsProperty().add(v);
     }
 
@@ -82,7 +83,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @param v the view
      */
-    default public void remove(ProjectView v) {
+    default public void remove(V v) {
         viewsProperty().remove(v);
     }
 
@@ -92,10 +93,10 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return The active view.
      */
-    public ReadOnlyObjectProperty<ProjectView> activeViewProperty();
+    public ReadOnlyObjectProperty<V> activeViewProperty();
 
     // Convenience method
-    default public ProjectView getActiveView() {
+    default public V getActiveView() {
         return activeViewProperty().get();
     }
 
@@ -118,14 +119,14 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the model
      */
-    public ApplicationModel getModel();
+    public ApplicationModel<V> getModel();
 
     /**
      * Sets the application model.
      *
      * @param newValue the model
      */
-    public void setModel(ApplicationModel newValue);
+    public void setModel(ApplicationModel<V> newValue);
 
     /**
      * Exits the application.
@@ -146,7 +147,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return A callback.
      */
-    CompletionStage<ProjectView> createView();
+    CompletionStage<V> createView();
 
     /**
      * Adds a recent URI.

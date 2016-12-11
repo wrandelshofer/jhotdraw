@@ -29,8 +29,10 @@ public class CustomBinding {
    * Creates a bidirectional binding for properties A and B using the conversion
    * functions updateB and updateA.
    *
-   * @param <A> the type of property A
-   * @param <B> the type of poperty B
+   * @param <A> the type of value A
+   * @param <B> the type of value B
+   * @param <PROPERTY_A> the type of property A
+   * @param <PROPERTY_B> the type of property B
    * @param propertyA property A
    * @param propertyB property B
    * @param updateB converts a value from A to B

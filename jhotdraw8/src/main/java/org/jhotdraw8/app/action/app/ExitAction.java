@@ -19,12 +19,12 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
 
 /**
  * Exits the application after letting the user review and possibly save all
@@ -34,20 +34,20 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ExitAction extends AbstractApplicationAction {
+public class ExitAction extends AbstractApplicationAction<DocumentView> {
 
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "application.exit";
     private Node oldFocusOwner;
-    private ProjectView unsavedView;
+    private DocumentView unsavedView;
 
     /**
      * Creates a new instance.
      *
      * @param app the application
      */
-    public ExitAction(Application app) {
+    public ExitAction(Application<DocumentView> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -57,9 +57,9 @@ public class ExitAction extends AbstractApplicationAction {
         app.addDisabler(this);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;
-        ProjectView documentToBeReviewed = null;
+        DocumentView documentToBeReviewed = null;
         URI unsavedURI = null;
-        for (ProjectView p : app.views()) {
+        for (DocumentView p : app.views()) {
             if (p.isDisabled()) {
                 disabledViewsCount++;
             }
@@ -119,7 +119,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected URIChooser getChooser(ProjectView view) {
+    protected URIChooser getChooser(DocumentView view) {
         URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -129,7 +129,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveChanges() {
-        ProjectView v = unsavedView;
+        DocumentView v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = null;
@@ -141,7 +141,7 @@ public class ExitAction extends AbstractApplicationAction {
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (ProjectView vi : app.views()) {
+                    for (DocumentView vi : app.views()) {
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -214,7 +214,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveChangesAndReviewNext() {
-        final ProjectView v = unsavedView;
+        final DocumentView v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = chooser.showDialog(unsavedView.getNode());
@@ -235,8 +235,8 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void reviewNext() {
         int unsavedViewsCount = 0;
-        ProjectView documentToBeReviewed = null;
-        for (ProjectView p : getApplication().views()) {
+        DocumentView documentToBeReviewed = null;
+        for (DocumentView p : getApplication().views()) {
             if (p.isModified()) {
                 if (!p.isDisabled()) {
                     documentToBeReviewed = p;
@@ -256,7 +256,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveToFile(final URI uri, final DataFormat format) {
-        final ProjectView v = unsavedView;
+        final DocumentView v = unsavedView;
         v.write(uri,format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -285,7 +285,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void saveToFileAndReviewNext(final URI uri, final DataFormat format) {
-        final ProjectView v = unsavedView;
+        final DocumentView v = unsavedView;
         v.write(uri,format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -314,7 +314,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void doExit() {
-        for (ProjectView p : new ArrayList<ProjectView>(app.views())) {
+        for (DocumentView p : new ArrayList<DocumentView>(app.views())) {
             if (!p.isDisabled() && !p.isModified()) {
                 app.remove(p);
             }

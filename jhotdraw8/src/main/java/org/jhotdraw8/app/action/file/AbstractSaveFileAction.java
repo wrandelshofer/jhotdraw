@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleKey;
@@ -30,7 +31,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractSaveFileAction extends AbstractViewAction {
+public abstract class AbstractSaveFileAction extends AbstractViewAction<DocumentView> {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
@@ -45,13 +46,13 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public AbstractSaveFileAction(Application app, ProjectView view, String id, boolean saveAs) {
+    public AbstractSaveFileAction(Application<DocumentView> app, DocumentView view, String id, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
     }
 
-    protected URIChooser getChooser(ProjectView view) {
+    protected URIChooser getChooser(DocumentView view) {
         URIChooser c = view.get(saveChooserKey);
         if (c == null) {
             c = createChooser(view);
@@ -60,14 +61,14 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
         return c;
     }
 
-    protected abstract URIChooser createChooser(ProjectView view);
+    protected abstract URIChooser createChooser(DocumentView view);
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
         if (isDisabled()) {
             return;
         }
-        final ProjectView v = getActiveView();
+        final DocumentView v = getActiveView();
         if (v == null || v.isDisabled()) {
             return;
         }
@@ -76,7 +77,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
         saveView(v);
     }
 
-    protected void saveView(final ProjectView v) {
+    protected void saveView(final DocumentView v) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -89,7 +90,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (ProjectView vi : app.views()) {
+                    for (DocumentView vi : app.views()) {
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -112,7 +113,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
         }
     }
 
-    protected void saveViewToURI(final ProjectView v, final URI uri, final DataFormat format) {
+    protected void saveViewToURI(final DocumentView v, final URI uri, final DataFormat format) {
         v.write(uri,format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                     v.removeDisabler(this);
@@ -143,5 +144,5 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
         });
     }
 
-    protected abstract void handleSucceded(ProjectView v, URI uri);
+    protected abstract void handleSucceded(DocumentView v, URI uri);
 }

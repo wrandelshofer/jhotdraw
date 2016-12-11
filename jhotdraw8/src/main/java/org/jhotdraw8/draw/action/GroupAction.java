@@ -4,13 +4,13 @@
  */
 package org.jhotdraw8.draw.action;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -25,7 +25,7 @@ import org.jhotdraw8.collection.TreeNode;
  *
  * @author Werner Randelshofer
  */
-public class GroupAction extends AbstractSelectedAction {
+public class GroupAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
 
     public static final String ID = "edit.group";
     public final Supplier<Figure> groupFactory;
@@ -37,7 +37,7 @@ public class GroupAction extends AbstractSelectedAction {
      * @param editor the drawing editor
      * @param groupFactory the group factory
      */
-    public GroupAction(Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
+    public GroupAction(Application<V> app, DrawingEditor editor, Supplier<Figure> groupFactory) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

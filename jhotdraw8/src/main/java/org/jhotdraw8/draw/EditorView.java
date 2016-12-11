@@ -10,6 +10,6 @@ import org.jhotdraw8.app.ProjectView;
  * An application view which can return an editor.
  * @author werni
  */
-public interface EditorView extends ProjectView{
+public interface EditorView  {
     DrawingEditor getEditor();
 }

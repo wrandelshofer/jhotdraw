@@ -41,19 +41,19 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleApplicationModel implements ApplicationModel {
+public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
     private  String name;
     private final List<URIExtensionFilter> openExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private  Supplier<ProjectView> viewFactory;
+    private  Supplier<DocumentView> viewFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
         
     }
-    public SimpleApplicationModel(String name, Supplier<ProjectView> viewFactory, URL menuFxml, String fileDescription, DataFormat format, String fileExtension) {
+    public SimpleApplicationModel(String name, Supplier<DocumentView> viewFactory, URL menuFxml, String fileDescription, DataFormat format, String fileExtension) {
         this.name = name;
         this.menuFxml=menuFxml;
         URIExtensionFilter fef = new URIExtensionFilter(fileDescription,format,fileExtension);
@@ -62,11 +62,11 @@ public class SimpleApplicationModel implements ApplicationModel {
         this.viewFactory = viewFactory;
     }
 
-    public Supplier<ProjectView> getViewFactory() {
+    public Supplier<DocumentView> getViewFactory() {
         return viewFactory;
     }
 
-    public void setViewFactory(Supplier<ProjectView> viewFactory) {
+    public void setViewFactory(Supplier<DocumentView> viewFactory) {
         this.viewFactory = viewFactory;
     }
 
@@ -96,7 +96,7 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     
     @Override
-    public ProjectView instantiateView() {
+    public DocumentView instantiateView() {
        return viewFactory.get();
     }
 
@@ -171,9 +171,9 @@ public class SimpleApplicationModel implements ApplicationModel {
     public ResourceBundle getResources() {
         return Resources.getResources("org.jhotdraw8.app.Labels");
     }
-    public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {
+    public HierarchicalMap<String, Action> createApplicationActionMap(Application<DocumentView> app) {
         HierarchicalMap<String, Action> map = new HierarchicalMap<>();
-        map.put(AboutAction.ID, new AboutAction(app));
+        map.put(AboutAction.ID, new AboutAction<DocumentView>(app));
         map.put(ExitAction.ID, new ExitAction(app));
         map.put(NewFileAction.ID, new NewFileAction(app));
         map.put(OpenFileAction.ID, new OpenFileAction(app));
@@ -181,12 +181,12 @@ public class SimpleApplicationModel implements ApplicationModel {
         map.put(SaveFileAsAction.ID, new SaveFileAsAction(app));
         map.put(ExportFileAction.ID, new ExportFileAction(app));
         map.put(CloseFileAction.ID, new CloseFileAction(app));
-        map.put(CutAction.ID, new CutAction(app));
-        map.put(CopyAction.ID, new CopyAction(app));
-        map.put(PasteAction.ID, new PasteAction(app));
-        map.put(DeleteAction.ID, new DeleteAction(app));
-        map.put(SelectAllAction.ID, new SelectAllAction(app));
-        map.put(ClearSelectionAction.ID, new ClearSelectionAction(app));
+        map.put(CutAction.ID, new CutAction<DocumentView>(app));
+        map.put(CopyAction.ID, new CopyAction<DocumentView>(app));
+        map.put(PasteAction.ID, new PasteAction<DocumentView>(app));
+        map.put(DeleteAction.ID, new DeleteAction<DocumentView>(app));
+        map.put(SelectAllAction.ID, new SelectAllAction<DocumentView>(app));
+        map.put(ClearSelectionAction.ID, new ClearSelectionAction<DocumentView>(app));
         return map;
     }
 
