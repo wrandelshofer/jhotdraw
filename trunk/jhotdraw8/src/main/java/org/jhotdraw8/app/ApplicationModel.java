@@ -14,12 +14,13 @@ import org.jhotdraw8.gui.URIChooser;
  * {@code ApplicationModel} provides meta-data,
  * actions and factory methods for an {@link Application}.
  *
+ * @param <V> supported project view type
  * @design.pattern Application Framework, KeyAbstraction.
  * 
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public interface ApplicationModel {
+public interface ApplicationModel<V extends ProjectView<V>> {
 
     // Views
     /** Instantiates a view. But does not initialize it.
@@ -29,7 +30,7 @@ public interface ApplicationModel {
      * 
      * @return a new instance
      */
-    public ProjectView instantiateView();
+    public V instantiateView();
     // URI choosers
 
     /** Creates an open chooser.
@@ -81,5 +82,5 @@ public interface ApplicationModel {
      * @param app The application
      * @return the application map
      */
-    HierarchicalMap<String, Action> createApplicationActionMap(Application app);
+    HierarchicalMap<String, Action> createApplicationActionMap(Application<V> app);
 }

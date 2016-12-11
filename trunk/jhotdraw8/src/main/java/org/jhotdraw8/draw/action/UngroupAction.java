@@ -4,18 +4,15 @@
  */
 package org.jhotdraw8.draw.action;
 
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.Layer;
@@ -30,7 +27,7 @@ import org.jhotdraw8.util.Resources;
  *
  * @author Werner Randelshofer
  */
-public class UngroupAction extends AbstractSelectedAction {
+public class UngroupAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
 
     public static final String ID = "edit.ungroup";
 
@@ -40,7 +37,7 @@ public class UngroupAction extends AbstractSelectedAction {
      * @param app the application
      * @param editor the drawing editor
      */
-    public UngroupAction(Application app, DrawingEditor editor) {
+    public UngroupAction(Application<V> app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

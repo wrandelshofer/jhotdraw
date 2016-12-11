@@ -21,7 +21,7 @@ import org.jhotdraw8.app.ProjectView;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSelectedAction extends AbstractViewAction {
+public abstract class AbstractSelectedAction<V extends ProjectView<V>> extends AbstractViewAction<V> {
 
     private DrawingEditor editor;
 
@@ -32,7 +32,7 @@ public abstract class AbstractSelectedAction extends AbstractViewAction {
      * @param app the application
      * @param editor the drawing editor
      */
-    public AbstractSelectedAction(Application app, DrawingEditor editor) {
+    public AbstractSelectedAction(Application<V> app, DrawingEditor editor) {
         super(app, null);
         setEditor(editor);
     }
@@ -65,7 +65,7 @@ public abstract class AbstractSelectedAction extends AbstractViewAction {
      */
     protected DrawingView getView() {
         if (editor == null) {
-            ProjectView v = getActiveView();
+            V v = getActiveView();
             if (v instanceof EditorView) {
                 EditorView ev = (EditorView) v;
                 return ev.getEditor() != null ? ev.getEditor().getActiveDrawingView() : null;

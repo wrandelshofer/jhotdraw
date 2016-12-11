@@ -8,9 +8,9 @@
 package org.jhotdraw8.app.action.file;
 
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
 
 /**
  * Presents a printer chooser to the user and then prints the
@@ -22,7 +22,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractViewAction {
+public class PrintFileAction extends AbstractViewAction<DocumentView> {
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "file.print";
@@ -30,7 +30,7 @@ public class PrintFileAction extends AbstractViewAction {
     /** Creates a new instance.
      * @param app the application
      * @param view the view */
-    public PrintFileAction(Application app, ProjectView view) {
+    public PrintFileAction(Application<DocumentView> app, DocumentView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }

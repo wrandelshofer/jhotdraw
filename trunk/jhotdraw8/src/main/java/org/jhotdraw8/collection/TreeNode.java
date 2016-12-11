@@ -199,7 +199,7 @@ public interface TreeNode<T extends TreeNode<T>> {
         }
     }
     /**
-     * @design.pattern IterableTree Iterator, Iterator.
+     * @design.pattern TreeNode Iterator, Iterator.
      */
     static class BreadthFirstIterator<T extends TreeNode<T>> implements Iterator<T> {
 

@@ -21,7 +21,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CutAction extends AbstractSelectionAction {
+public class CutAction<V extends ProjectView<V>> extends AbstractSelectionAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,7 @@ public class CutAction extends AbstractSelectionAction {
      *
      * @param app the application
      */
-    public CutAction(Application app) {
+    public CutAction(Application<V> app) {
         this(app, null);
     }
 
@@ -43,14 +43,14 @@ public class CutAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public CutAction(Application app, Node target) {
+    public CutAction(Application<V> app, Node target) {
         super(app, target);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-            ProjectView v = app.getActiveView();
+            V v = app.getActiveView();
             if (v != null && !v.isDisabled()) {
                 Node n = v.getNode().getScene().getFocusOwner();
                 if (n instanceof TextInputControl) {

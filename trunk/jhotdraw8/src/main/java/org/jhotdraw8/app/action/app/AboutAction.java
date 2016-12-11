@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationModel;
+import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
 
@@ -22,7 +23,7 @@ import org.jhotdraw8.util.Resources;
  * @author  Werner Randelshofer
  * @version $Id$
  */
-public class AboutAction extends AbstractApplicationAction {
+public class AboutAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +31,7 @@ public class AboutAction extends AbstractApplicationAction {
 
     /** Creates a new instance.
      * @param app the application */
-    public AboutAction(Application app) {
+    public AboutAction(Application<V> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -38,7 +39,7 @@ public class AboutAction extends AbstractApplicationAction {
     @Override
     protected void onActionPerformed(ActionEvent evt) {
         addDisabler(this);
-        ApplicationModel model = getApplication().getModel();
+        ApplicationModel<V> model = getApplication().getModel();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 model.getCopyright()

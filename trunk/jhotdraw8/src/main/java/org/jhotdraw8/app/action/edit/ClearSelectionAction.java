@@ -20,7 +20,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class ClearSelectionAction extends AbstractSelectionAction {
+public class ClearSelectionAction<V extends ProjectView<V>> extends AbstractSelectionAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class ClearSelectionAction extends AbstractSelectionAction {
      *
      * @param app the application
      */
-    public ClearSelectionAction(Application app) {
+    public ClearSelectionAction(Application<V> app) {
         this(app, null);
     }
 
@@ -42,14 +42,14 @@ public class ClearSelectionAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public ClearSelectionAction(Application app, Node target) {
+    public ClearSelectionAction(Application<V> app, Node target) {
         super(app, target);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-            ProjectView v = app.getActiveView();
+            V v = app.getActiveView();
             if (v != null && !v.isDisabled()) {
                 Node n = v.getNode().getScene().getFocusOwner();
                 if (n instanceof TextInputControl) {

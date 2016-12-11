@@ -22,7 +22,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DeleteAction extends AbstractFocusOwnerAction {
+public class DeleteAction<V extends ProjectView<V>> extends AbstractFocusOwnerAction<V> {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -35,14 +35,14 @@ public class DeleteAction extends AbstractFocusOwnerAction {
      *
      * @param app the app
      */
-    public DeleteAction(Application app) {
+    public DeleteAction(Application<V> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-            ProjectView v = app.getActiveView();
+            V v = app.getActiveView();
             if (v != null && !v.isDisabled()) {
                 Node n = v.getNode().getScene().getFocusOwner();
                 if (n instanceof TextInputControl) {

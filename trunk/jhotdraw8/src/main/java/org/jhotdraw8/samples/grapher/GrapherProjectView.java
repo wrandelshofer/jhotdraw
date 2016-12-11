@@ -32,7 +32,8 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.app.AbstractProjectView;
+import org.jhotdraw8.app.AbstractDocumentView;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.draw.Drawing;
@@ -94,7 +95,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherProjectView extends AbstractProjectView implements EditorView {
+public class GrapherProjectView extends AbstractDocumentView implements DocumentView, EditorView {
 
     private Node node;
 
@@ -175,14 +176,14 @@ public class GrapherProjectView extends AbstractProjectView implements EditorVie
         ztbar.zoomFactorProperty().bindBidirectional(drawingView.zoomFactorProperty());
         toolsToolBar.getItems().add(ztbar);
 
-        getActionMap().put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
-        getActionMap().put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
-        getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction(getApplication(), this,
+        getActionMap().put(SendToBackAction.ID, new SendToBackAction<DocumentView>(getApplication(), editor));
+        getActionMap().put(BringToFrontAction.ID, new BringToFrontAction<DocumentView>(getApplication(), editor));
+        getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction<DocumentView>(getApplication(), this,
                 detailsVisible,
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels")));
-        getActionMap().put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(GroupFigure::new)));
-        getActionMap().put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
+        getActionMap().put(GroupAction.ID, new GroupAction<DocumentView>(getApplication(), editor, () -> createFigure(GroupFigure::new)));
+        getActionMap().put(UngroupAction.ID, new UngroupAction<DocumentView>(getApplication(), editor));
 
         FXWorker.supply(() -> {
             List<Node> list = new LinkedList<>();

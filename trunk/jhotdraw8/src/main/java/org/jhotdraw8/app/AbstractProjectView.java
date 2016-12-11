@@ -25,16 +25,12 @@ import org.jhotdraw8.collection.Key;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <V> the project view type
  */
-public abstract class AbstractProjectView extends AbstractDisableable implements ProjectView {
+public abstract class AbstractProjectView<V extends ProjectView<V >> extends AbstractDisableable implements ProjectView<V> {
 
-    protected ObjectProperty<Application> application = new SimpleObjectProperty<>();
+    protected ObjectProperty<Application<V>> application = new SimpleObjectProperty<>();
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
-    /**
-     * Disabled is bound to disable. Subclasses can assign a different binding.
-     */
-    protected final BooleanProperty modified = new SimpleBooleanProperty();
-    protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
     protected final ObservableMap<Key<?>, Object> properties//
             =                  FXCollections.observableMap(new IdentityHashMap<>());
     protected final StringProperty title = new SimpleStringProperty();
@@ -55,27 +51,9 @@ public abstract class AbstractProjectView extends AbstractDisableable implements
         return title;
     }
 
-    @Override
-    public BooleanProperty modifiedProperty() {
-        return modified;
-    }
 
     @Override
-    public void clearModified() {
-        modified.set(false);
-    }
-
-    protected void markAsModified() {
-        modified.set(true);
-    }
-
-    @Override
-    public ObjectProperty<URI> uriProperty() {
-        return uri;
-    }
-
-    @Override
-    public ObjectProperty<Application> applicationProperty() {
+    public ObjectProperty<Application<V>> applicationProperty() {
         return application;
     }
 

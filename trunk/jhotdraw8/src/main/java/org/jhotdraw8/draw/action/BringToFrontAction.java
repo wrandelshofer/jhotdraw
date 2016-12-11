@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -19,7 +20,7 @@ import org.jhotdraw8.util.Resources;
  *
  * @author Werner Randelshofer
  */
-public class BringToFrontAction extends AbstractSelectedAction {
+public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
 
     public static final String ID = "edit.bringToFront";
 
@@ -28,7 +29,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
      * @param app the application
      * @param editor the drawing editor
      */
-    public BringToFrontAction(Application app,DrawingEditor editor) {
+    public BringToFrontAction(Application<V> app,DrawingEditor editor) {
         super(app,editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

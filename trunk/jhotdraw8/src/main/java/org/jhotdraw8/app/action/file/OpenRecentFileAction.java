@@ -12,9 +12,9 @@ import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.ProjectView;
@@ -45,7 +45,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class OpenRecentFileAction extends AbstractApplicationAction {
+public class OpenRecentFileAction extends AbstractApplicationAction<DocumentView> {
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "file.openRecent";
@@ -55,17 +55,17 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     /** Creates a new instance.
      * @param app the application
      * @param uri the uri */
-    public OpenRecentFileAction(Application app, URI uri) {
+    public OpenRecentFileAction(Application<DocumentView> app, URI uri) {
         super(app);
         this.uri = uri;
         set(Action.LABEL, URIUtil.getName(uri));
     }
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        final Application app = getApplication();
+        final Application<DocumentView> app = getApplication();
         {
             // Search for an empty view
-                      ProjectView emptyView;
+                      DocumentView emptyView;
             if (reuseEmptyViews) {
                 emptyView = app.getActiveView();
                 if (emptyView==null
@@ -85,12 +85,12 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(ProjectView view, boolean disposeView) {
+    public void doIt(DocumentView view, boolean disposeView) {
             openViewFromURI(view, uri);
     }
 
-    protected void openViewFromURI(final ProjectView v, final URI uri) {
-        final Application app = getApplication();
+    protected void openViewFromURI(final DocumentView v, final URI uri) {
+        final Application<DocumentView> app = getApplication();
         v.addDisabler(this);
 
         // Open the file

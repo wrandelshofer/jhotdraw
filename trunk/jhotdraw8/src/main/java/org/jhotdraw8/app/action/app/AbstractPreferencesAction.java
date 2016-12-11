@@ -9,6 +9,7 @@
 package org.jhotdraw8.app.action.app;
 
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
 
@@ -19,14 +20,14 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractPreferencesAction extends AbstractApplicationAction {
+public abstract class AbstractPreferencesAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "application.preferences";
 
     /** Creates a new instance.
      * @param app the application */
-    public AbstractPreferencesAction(Application app) {
+    public AbstractPreferencesAction(Application<V> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }

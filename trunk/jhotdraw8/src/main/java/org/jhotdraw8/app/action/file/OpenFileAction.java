@@ -12,6 +12,7 @@ import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleKey;
@@ -26,7 +27,7 @@ import org.jhotdraw8.util.Resources;
  * @author  Werner Randelshofer
  * @version $Id$
  */
-public class OpenFileAction extends AbstractApplicationAction {
+public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
 
     private static final long serialVersionUID = 1L;
     public final static Key<URIChooser> OPEN_CHOOSER_KEY = new SimpleKey<>("openChooser", URIChooser.class);
@@ -35,12 +36,12 @@ public class OpenFileAction extends AbstractApplicationAction {
 
     /** Creates a new instance.
      * @param app the application */
-    public OpenFileAction(Application app) {
+    public OpenFileAction(Application<DocumentView> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
-    protected URIChooser getChooser(ProjectView view) {
+    protected URIChooser getChooser(DocumentView view) {
         URIChooser c = app.get(OPEN_CHOOSER_KEY);
         if (c == null) {
             c = getApplication().getModel().createOpenChooser();
@@ -51,11 +52,11 @@ public class OpenFileAction extends AbstractApplicationAction {
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        final Application app = getApplication();
+        final Application<DocumentView> app = getApplication();
         {
             app.addDisabler(this);
             // Search for an empty view
-                      ProjectView emptyView;
+                      DocumentView emptyView;
             if (reuseEmptyViews) {
                 emptyView = app.getActiveView();
                 if (emptyView==null
@@ -75,7 +76,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(ProjectView view, boolean disposeView) {
+    public void doIt(DocumentView view, boolean disposeView) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri!=null) {
@@ -83,7 +84,7 @@ public class OpenFileAction extends AbstractApplicationAction {
 
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                for (ProjectView v : getApplication().views()) {
+                for (DocumentView v : getApplication().views()) {
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
@@ -105,8 +106,8 @@ public class OpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(final ProjectView v, final URI uri, final URIChooser chooser) {
-        final Application app = getApplication();
+    protected void openViewFromURI(final DocumentView v, final URI uri, final URIChooser chooser) {
+        final Application<DocumentView> app = getApplication();
         app.removeDisabler(this);
         v.addDisabler(this);
 

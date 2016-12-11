@@ -9,16 +9,14 @@ package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -28,7 +26,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertAction extends AbstractViewAction {
+public class RevertAction extends AbstractViewAction<DocumentView> {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,7 +38,7 @@ public class RevertAction extends AbstractViewAction {
      * @param app the application
      * @param view the view
      */
-    public RevertAction(Application app, ProjectView view) {
+    public RevertAction(Application<DocumentView> app, DocumentView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -50,7 +48,7 @@ public class RevertAction extends AbstractViewAction {
         if (isDisabled()) {
             return;
         }
-        ProjectView view = getActiveView();
+        DocumentView view = getActiveView();
         URI uri = view.getURI();
         if (view.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
@@ -64,12 +62,12 @@ public class RevertAction extends AbstractViewAction {
         }
     }
 
-    private void doIt(ProjectView view, URI uri) {
+    private void doIt(DocumentView view, URI uri) {
         view.addDisabler(this);
-        
+
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {
             if (throwable != null) {
-new Alert              (Alert.AlertType.ERROR,throwable.getLocalizedMessage()==null?throwable.toString():throwable.getLocalizedMessage()).showAndWait();
+                new Alert(Alert.AlertType.ERROR, throwable.getLocalizedMessage() == null ? throwable.toString() : throwable.getLocalizedMessage()).showAndWait();
                 throwable.printStackTrace();
             }
             view.clearModified();
@@ -80,7 +78,7 @@ new Alert              (Alert.AlertType.ERROR,throwable.getLocalizedMessage()==n
         if (uri == null) {
             view.clear().handle(handler);
         } else {
-            view.read(uri,null, false).handle(handler);
+            view.read(uri, null, false).handle(handler);
         }
     }
 

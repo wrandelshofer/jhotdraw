@@ -60,7 +60,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
  * @version $Id: DocumentOrientedApplication.java 1120 2016-01-15 17:37:49Z
  * rawcoder $
  */
-public class DocumentOrientedApplication extends AbstractApplication {
+public class DocumentOrientedApplication extends AbstractApplication<DocumentView> {
 
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
@@ -74,15 +74,15 @@ public class DocumentOrientedApplication extends AbstractApplication {
     });
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
-    private final ReadOnlyObjectWrapper<ProjectView> activeView = new ReadOnlyObjectWrapper<>();
-    private final SetProperty<ProjectView> views = new SimpleSetProperty<>(FXCollections.observableSet());
-    private ApplicationModel model;
+    private final ReadOnlyObjectWrapper<DocumentView> activeView = new ReadOnlyObjectWrapper<>();
+    private final SetProperty<DocumentView> views = new SimpleSetProperty<>(FXCollections.observableSet());
+    private ApplicationModel<DocumentView> model;
 
     public DocumentOrientedApplication() {
     }
 
     {
-        views.addListener((SetChangeListener.Change<? extends ProjectView> change) -> {
+        views.addListener((SetChangeListener.Change<? extends DocumentView> change) -> {
             if (change.wasAdded()) {
                 handleViewAdded(change.getElementAdded());
             } else {
@@ -117,17 +117,17 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public SetProperty<ProjectView> viewsProperty() {
+    public SetProperty<DocumentView> viewsProperty() {
         return views;
     }
 
     @Override
-    public ReadOnlyObjectProperty<ProjectView> activeViewProperty() {
+    public ReadOnlyObjectProperty<DocumentView> activeViewProperty() {
         return activeView.getReadOnlyProperty();
     }
 
     @Override
-    public CompletionStage<ProjectView> createView() {
+    public CompletionStage<DocumentView> createView() {
         return FXWorker.supply(() -> getModel().instantiateView())
                 .thenApply((v) -> {
                     v.setApplication(DocumentOrientedApplication.this);
@@ -155,7 +155,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(ProjectView view) {
+    protected void handleViewAdded(DocumentView view) {
         view.getActionMap().setParent(getActionMap());
         view.setApplication(DocumentOrientedApplication.this);
         view.setTitle(getLabels().getString("unnamedFile"));
@@ -225,7 +225,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
             Outer:
             for (int retries = views.getSize(); retries > 0; retries--) {
-                for (ProjectView v : views) {
+                for (DocumentView v : views) {
                     if (v != view) {
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
@@ -259,7 +259,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(ProjectView view) {
+    protected void handleViewRemoved(DocumentView view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -339,12 +339,12 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     @Override
-    public ApplicationModel getModel() {
+    public ApplicationModel<DocumentView> getModel() {
         return model;
     }
 
     @Override
-    public void setModel(ApplicationModel newValue) {
+    public void setModel(ApplicationModel<DocumentView> newValue) {
         model = newValue;
     }
 
@@ -354,23 +354,23 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     private void disambiguateViews() {
-        HashMap<String, ArrayList<ProjectView>> titles = new HashMap<>();
-        for (ProjectView v : views) {
+        HashMap<String, ArrayList<DocumentView>> titles = new HashMap<>();
+        for (DocumentView v : views) {
             String t = v.getTitle();
             titles.computeIfAbsent(t, k->new ArrayList<>()).add(v);
         }
-        for (ArrayList<ProjectView> list : titles.values()) {
+        for (ArrayList<DocumentView> list : titles.values()) {
             if (list.size() == 1) {
                 list.get(0).setDisambiguation(0);
             } else {
                 int max = 0;
-                for (ProjectView v : list) {
+                for (DocumentView v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
                 Collections.sort(list, (a, b) -> a.getDisambiguation()
                         - b.getDisambiguation());
                 int prev = 0;
-                for (ProjectView v : list) {
+                for (DocumentView v : list) {
                     int current = v.getDisambiguation();
                     if (current == prev) {
                         v.setDisambiguation(++max);

@@ -24,7 +24,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.app.AbstractProjectView;
+import org.jhotdraw8.app.AbstractDocumentView;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.concurrent.FXWorker;
 
 /**
@@ -33,7 +34,7 @@ import org.jhotdraw8.concurrent.FXWorker;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyView extends AbstractProjectView implements Initializable {
+public class TeddyView extends AbstractDocumentView implements DocumentView, Initializable {
 
     @Override
     public void init() {

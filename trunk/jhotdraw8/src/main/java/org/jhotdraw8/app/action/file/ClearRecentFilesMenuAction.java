@@ -11,6 +11,7 @@ package org.jhotdraw8.app.action.file;
 import java.beans.PropertyChangeListener;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 
 /**
@@ -26,7 +27,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
+public class ClearRecentFilesMenuAction extends AbstractApplicationAction<DocumentView> {
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.clearRecentFiles";
     
@@ -34,7 +35,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
     
     /** Creates a new instance.
      * @param app the application */
-    public ClearRecentFilesMenuAction(Application app) {
+    public ClearRecentFilesMenuAction(Application<DocumentView> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
    //     updateEnabled();

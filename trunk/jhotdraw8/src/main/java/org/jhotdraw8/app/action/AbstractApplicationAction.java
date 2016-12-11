@@ -9,25 +9,26 @@ package org.jhotdraw8.app.action;
 
 import javafx.beans.binding.Bindings;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ProjectView;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
  * on an {@link Application}.
  * <p>
- * An AbstractApplicationAction is disabled when it has disablers {@link Disableable}
+ * An AbstractApplicationAction is disabled when it has disablers {@link org.jhotdraw8.app.Disableable}
  * or when its application is disabled.
  *
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public abstract class AbstractApplicationAction extends AbstractAction {
+public abstract class AbstractApplicationAction<V extends ProjectView<V>> extends AbstractAction {
 
     private static final long serialVersionUID = 1L;
-    protected Application app;
+    protected Application<V> app;
 
     /** Creates a new instance.
      * @param app the application */
-    public AbstractApplicationAction(Application app) {
+    public AbstractApplicationAction(Application<V> app) {
         if (app == null) {
             throw new IllegalArgumentException("app is null");
         }
@@ -36,7 +37,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
-    public final Application getApplication() {
+    public final Application<V> getApplication() {
         return app;
     }
 }

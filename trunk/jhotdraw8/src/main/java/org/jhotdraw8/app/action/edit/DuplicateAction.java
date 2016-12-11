@@ -10,6 +10,7 @@ package org.jhotdraw8.app.action.edit;
 
 import javafx.scene.Node;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.util.Resources;
 
 
@@ -20,13 +21,13 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class DuplicateAction extends AbstractSelectionAction {
+public class DuplicateAction<V extends ProjectView<V>> extends AbstractSelectionAction<V> {
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.duplicate";
     
     /** Creates a new instance which acts on the currently focused component. 
      * @param app the application */
-    public DuplicateAction(Application app) {
+    public DuplicateAction(Application<V> app) {
         this(app, null);
     }
 
@@ -36,7 +37,7 @@ public class DuplicateAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public DuplicateAction(Application app, Node target) {
+    public DuplicateAction(Application<V> app, Node target) {
         super(app,target);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }

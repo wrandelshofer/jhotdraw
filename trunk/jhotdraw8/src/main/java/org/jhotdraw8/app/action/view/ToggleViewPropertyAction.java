@@ -18,12 +18,12 @@ import org.jhotdraw8.app.ProjectView;
  * ToggleViewPropertyAction.
  * @author Werner Randelshofer
  */
-public class ToggleViewPropertyAction extends AbstractViewAction {
+public class ToggleViewPropertyAction<V extends ProjectView<V>> extends AbstractViewAction<V> {
     private static final long serialVersionUID = 1L;
     private BooleanProperty property;
-    private final Function<ProjectView,Node> nodeGetter;
+    private final Function<V,Node> nodeGetter;
 
-    public ToggleViewPropertyAction(Application app, ProjectView view, BooleanProperty property, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application<V> app, V view, BooleanProperty property, String id, Resources labels) {
         super(app, view);
         labels.configureAction(this, id);
         this.property=property;
@@ -31,7 +31,7 @@ public class ToggleViewPropertyAction extends AbstractViewAction {
         property.addListener((o,oldValue,newValue)->set(SELECTED_KEY, newValue));
         set(SELECTED_KEY,property.get());
     }
-    public ToggleViewPropertyAction(Application app, ProjectView view, Function<ProjectView,Node> nodeGetter, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application<V> app, V view, Function<V,Node> nodeGetter, String id, Resources labels) {
         super(app, view);
         labels.configureAction(this, id);
         this.property=null;
