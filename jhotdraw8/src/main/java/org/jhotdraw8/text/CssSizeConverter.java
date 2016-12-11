@@ -32,12 +32,25 @@ public class CssSizeConverter implements Converter<Double> {
 
     private final static NumberConverter numberConverter = new NumberConverter();
     private final static SimpleIdFactory defaultFactory = new SimpleIdFactory();
+    private final boolean nullable;
+
+    public CssSizeConverter() {
+        this(false);
+    }
+
+    public CssSizeConverter(boolean nullable) {
+        this.nullable = nullable;
+    }
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Double value) throws IOException {
         if (value == null) {
-            out.append("none");
-            return;
+            if (nullable) {
+                out.append("none");
+                return;
+            } else {
+                value = getDefaultValue();
+            }
         }
         numberConverter.toString(out, idFactory, value);
     }
@@ -49,7 +62,7 @@ public class CssSizeConverter implements Converter<Double> {
         }
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.skipWhitespace();
-        if (tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
+        if (nullable && tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
             tt.skipWhitespace();
             return null;
         } else {
