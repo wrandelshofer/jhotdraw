@@ -65,7 +65,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     private String namespaceURI;
     private String namespaceQualifier;
     private HashMap<Figure, Element> figureToElementMap = new HashMap<>();
-    private URI documentHome;
+    private URI externalHome;
+    private URI internalHome;
 
     public SimpleXmlIO(FigureFactory factory) {
         this(factory, null, null, null);
@@ -80,17 +81,28 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     /**
      * Must be a directory and not a file.
      */
-    public void setDocumentHome(URI uri) {
-        documentHome = uri;
+    public void setExternalHome(URI uri) {
+        externalHome = uri;
     }
 
-    public URI getDocumentHome() {
-        return documentHome;
+    public URI getExternalHome() {
+        return externalHome;
+    }
+    /**
+     * Must be a directory and not a file.
+     */
+    public void setInternalHome(URI uri) {
+        internalHome = uri;
+    }
+
+    public URI getInternalHome() {
+        return internalHome;
     }
 
     @Override
     public Drawing read(File file, Drawing drawing) throws IOException {
-        setDocumentHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
+        setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
+        setInternalHome(drawing==null?getExternalHome():drawing.get(Drawing.DOCUMENT_HOME));
         return InputFormat.super.read(file, drawing);
     }
 
@@ -239,8 +251,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     public Drawing fromDocument(Document doc, Drawing oldDrawing) throws IOException {
         factory.reset();
-        if (oldDrawing!=null) {
-            for (Figure f:oldDrawing.preorderIterable()) {
+        if (oldDrawing != null) {
+            for (Figure f : oldDrawing.preorderIterable()) {
                 factory.createId(f);
             }
         }
@@ -261,7 +273,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
             }
         }
-        external.set(Drawing.DOCUMENT_HOME, getDocumentHome());
+        external.set(Drawing.DOCUMENT_HOME, getExternalHome());
         readProcessingInstructions(doc, external);
 
         try {
@@ -471,33 +483,40 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     /**
-     * Internal URI is relative to document home. Make it relative to the file
+     * Internal URI is relative to document home. Make it relative to the file.
      * we are writing.
      *
      * @param drawing the drawing
-     * @param uri the internal uri
+     * @param internal the internal uri
      * @return the external uri
      */
-    private URI internalToExternal(Drawing drawing, URI uri) {
-        URI drawingHome = drawing.get(Drawing.DOCUMENT_HOME);
-        if (drawingHome != null) {
-            uri = drawingHome.resolve(uri);
+    private URI internalToExternal(Drawing drawing, URI internal) {
+        URI external = internal;
+        if (internalHome != null) {
+            external = internalHome.resolve(external);
         }
-        if (documentHome != null) {
-            uri = documentHome.relativize(uri);
+        if (externalHome != null) {
+            external = externalHome.relativize(external);
         }
-        return uri;
+        return external;
     }
 
     /**
-     * External URI is relative to file that we are reading. Keep it that way.
+     * External URI is relative to file that we are reading. Make it relative to document home.
      *
      * @param drawing the drawing
-     * @param uri the external uri
+     * @param external the external uri
      * @return the internal uri
      */
-    private URI externalToInternal(Drawing drawing, URI uri) {
-        return uri;
+    private URI externalToInternal(Drawing drawing, URI external) {
+        URI internal=external;
+        if (externalHome != null) {
+            internal = externalHome.resolve(internal);
+        }
+        if (internalHome != null) {
+            internal = internalHome.relativize(internal);
+        }
+        return internal;
     }
 
     private DataFormat getDataFormat() {
@@ -511,34 +530,39 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @Override
     public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
+        setExternalHome(new File(System.getProperty("user.home")).toURI());
         StringWriter sw = new StringWriter();
         write(sw, drawing, selection);
-
         out.put(getDataFormat(), sw.toString());
     }
 
     @Override
     public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Layer layer) throws IOException {
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
+        setExternalHome(new File(System.getProperty("user.home")).toURI());
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
             Set<Figure> figures = new LinkedHashSet<>();
-            Drawing newDrawing = read((String)content, drawing);
+            Drawing newDrawing = read((String) content, drawing);
             factory.reset();
-            for (Figure f: drawing.preorderIterable()) {
+            for (Figure f : drawing.preorderIterable()) {
                 factory.createId(f);
             }
-            if (layer==null) {
-                layer=new SimpleLayer();
-layer.set(StyleableFigure.STYLE_ID,   factory.createId(layer));
-model.addChildTo(layer, drawing);
-            }
+            if (layer == null) {
+                   layer=(Layer)drawing.getLastChild();
+                if (layer==null) {
+                layer = new SimpleLayer();
+                layer.set(StyleableFigure.STYLE_ID, factory.createId(layer));
+                model.addChildTo(layer, drawing);
+            }}
             for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
                 newDrawing.remove(f);
-                String id=factory.createId(f);
+                String id = factory.createId(f);
                 f.set(StyleableFigure.STYLE_ID, id);
                 if (f instanceof Layer) {
                     model.addChildTo(f, drawing);
-                }else {
+                } else {
                     model.addChildTo(f, layer);
                 }
             }
@@ -550,7 +574,7 @@ model.addChildTo(layer, drawing);
 
     @Override
     public boolean isNamespaceAware() {
-      return namespaceURI!=null;
+        return namespaceURI != null;
     }
 
     @Override

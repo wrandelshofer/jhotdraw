@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import java.net.URI;
+import javafx.collections.MapChangeListener;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
