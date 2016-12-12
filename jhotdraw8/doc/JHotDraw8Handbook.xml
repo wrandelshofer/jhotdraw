@@ -19,7 +19,5 @@
 <xi:include href="introduction/Overview.xml"/>
 <xi:include href="introduction/MajorVersions.xml"/>
 <xi:include href="introduction/License.xml"/>
-<xi:include href="introduction/CC-BY.xml"/>
-<xi:include href="introduction/LGPL.xml"/>
 </chapter>
 </book>
