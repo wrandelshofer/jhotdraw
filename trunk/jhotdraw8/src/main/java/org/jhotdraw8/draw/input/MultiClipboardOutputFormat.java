@@ -31,4 +31,5 @@ public class MultiClipboardOutputFormat implements ClipboardOutputFormat {
       f.write(out, drawing, selection);
     }
   }
+
 }

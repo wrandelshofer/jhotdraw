@@ -235,7 +235,7 @@ tt.setSkipWhitespaces(true);
             }
             m.add(tt.currentNumericValue().doubleValue());
             while (tt.nextToken() != ')' && tt.currentToken() != CssTokenizer.TT_EOF) {
-                if (tt.nextToken() != ',') {
+                if (tt.currentToken() != ',') {
                     tt.pushBack();
                 }
                 if (tt.nextToken() != CssTokenizer.TT_NUMBER) {

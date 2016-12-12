@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * InputFormat.
@@ -23,32 +24,32 @@ import org.jhotdraw8.draw.Drawing;
 public interface InputFormat {
 
     /**
-     * Reads a Drawing from an URI.
+     * Reads a figure from an URI
      *
      * @param uri The uri.
-     * @param drawing If you provide a non-null value, the contents of the file
-     * is added to this drawing. Otherwise a new drawing is created.
-     * @return the drawing
+     * @param drawing If you provide a non-null value, the ids of the returned figure
+     * are coerced so that they do not clash with ids in the drawing. Also all URIs in the
+     * figure are made relative to DOCUMENT_HOME of the drawing.
+     * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    default Drawing read(URI uri, Drawing drawing) throws IOException {
+    default Figure read(URI uri, Drawing drawing) throws IOException {
         return read(new File(uri), drawing);
-    }
+      }
 
     /**
-     * Writes the drawing to the specified file.
-     * This method ensures that all figures of the drawing are visible on
-     * the image.
+     * Reads a figure from a file.
      *
      * @param file the file
-     * @param drawing If you provide a non-null value, the contents of the file
-     * is added to the drawing. Otherwise a new drawing is created.
-     * @return the drawing
+     * @param drawing If you provide a non-null value, the ids of the returned figure
+     * are coerced so that they do not clash with ids in the drawing. Also all URIs in the
+     * figure are made relative to DOCUMENT_HOME of the drawing.
+     * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    default Drawing read(File file, Drawing drawing) throws IOException {
+    default Figure read(File file, Drawing drawing) throws IOException {
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
             return read(in, drawing);
         }
@@ -65,6 +66,6 @@ public interface InputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    public Drawing read(InputStream in, Drawing drawing) throws IOException;
+    public Figure read(InputStream in, Drawing drawing) throws IOException;
 
 }

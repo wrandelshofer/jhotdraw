@@ -145,6 +145,4 @@ public class BitmapExportOutputFormat implements ClipboardOutputFormat, OutputFo
 
         return image;
     }
-    
-    
 }
