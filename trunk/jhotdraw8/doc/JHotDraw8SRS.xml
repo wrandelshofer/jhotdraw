@@ -3,7 +3,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 <info>
   <!-- see IEEE 830 SRS -->
-<title>JHotDraw 8 Software Requirements Specification</title>
+<title>JHotDraw 8: Software Requirements Specification</title>
 <author>
     <personname>
         <firstname>Werner</firstname>
@@ -17,37 +17,30 @@
 <xi:include href="introduction/Purpose.xml"/>
 <xi:include href="introduction/Scope.xml"/>
 <xi:include href="introduction/Definitions.xml"/>
-<xi:include href="introduction/Overview.xml"/>
+<!--<xi:include href="introduction/Overview.xml"/>-->
 <xi:include href="introduction/MajorVersions.xml"/>
 <xi:include href="introduction/License.xml"/>
-<xi:include href="introduction/CC-BY.xml"/>
-<xi:include href="introduction/LGPL.xml"/>
 </chapter>
-  <!--
 <chapter><title>Overall description</title>
-2.1  Product perspective
-2.2 Product functions
-2.3 User characteristics
-2.4 Constraints
-2.5 Assumptions and dependencies
+<xi:include href="overalldescription/ProductPerspective.xml"/>
+<xi:include href="overalldescription/ProductFunctions.xml"/>
+<xi:include href="overalldescription/UserCharacteristics.xml"/>
+<xi:include href="overalldescription/Constraints.xml"/>
+<xi:include href="overalldescription/AssumptionsAndDependencies.xml"/>
 </chapter>
 <chapter><title>Specific requirements</title>
-3.1External interface requirements
-3.1.1 User interfaces
-3.1.2 Hardware interfaces
-3.1.3 Software interfaces
-3.1.4 Communications interfaces
- -->
-<chapter><title>System Features</title>
+<section><title>External Interface Requirements</title>
+<xi:include href="requirements/external/UserInterfaces.xml"/>
+<xi:include href="requirements/external/HardwareInterfaces.xml"/>
+<xi:include href="requirements/external/SoftwareInterfaces.xml"/>
+<xi:include href="requirements/external/CommunicationsInterfaces.xml"/>
+</section>
 <section><title>Application Framework</title>
-<xi:include href="requirements/applicationframework/ApplicationBasics.xml"/>
+<xi:include href="requirements/app/ApplicationIntroduction.xml"/>
 </section>
 <section><title>Drawing Editor Framework</title>
-<xi:include href="requirements/drawingeditorframework/DrawingBasics.xml"/>
+<xi:include href="requirements/draw/DrawingIntroduction.xml"/>
 </section>
-<section><title>Document Editing</title>
-<xi:include href="requirements/CopyAndPaste.xml"/>
-<xi:include href="requirements/SilentGenerationOfUniqueIds.xml"/>
 
 <!--
 3.2.1 System Feature 1
@@ -58,12 +51,16 @@
 ...
 3.2.1.3. n  Functional requirement  n
  -->
-</section>
 </chapter>
   <!--
 3.3 Performance requirements
 3.4 Design constraints
 3.5 Software system attributes
+3.5.1 Reliability
+3.5.2 Availability
+3.5.3 Security
+3.5.4 Maintainability
+3.5.5 Portability
 3.6 Other requirements
 </chapter>
   -->
