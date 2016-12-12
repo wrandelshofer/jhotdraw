@@ -44,7 +44,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
         Action a;
         map.put(RevertAction.ID, new RevertAction(this,null));
-        map.put("view.toggleProperties", a = new ToggleViewPropertyAction<DocumentView>(this, null, (view) -> ((GrapherProjectView) view).getPropertiesPane(),
+        map.put("view.toggleProperties", a = new ToggleViewPropertyAction<DocumentView>(this, null, (view) -> ((GrapherDocumentView) view).getPropertiesPane(),
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels")));
         a.set(Action.SELECTED_KEY, Preferences.userNodeForPackage(GrapherApplication.class).getBoolean("view.propertiesPane.visible", true));

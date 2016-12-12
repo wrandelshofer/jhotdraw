@@ -1,4 +1,4 @@
-/* @(#)GrapherProjectView.java
+/* @(#)GrapherDocumentView.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -90,12 +90,12 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 /**
- * GrapherProjectView.
+ * GrapherDocumentView.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherProjectView extends AbstractDocumentView implements DocumentView, EditorView {
+public class GrapherDocumentView extends AbstractDocumentView implements DocumentView, EditorView {
 
     private Node node;
 
@@ -130,7 +130,7 @@ public class GrapherProjectView extends AbstractDocumentView implements Document
         loader.setController(this);
 
         try {
-            node = loader.load(getClass().getResourceAsStream("GrapherProjectView.fxml"));
+            node = loader.load(getClass().getResourceAsStream("GrapherDocumentView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
@@ -219,7 +219,7 @@ public class GrapherProjectView extends AbstractDocumentView implements Document
                 GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
         );
 
-        Preferences prefs = Preferences.userNodeForPackage(GrapherProjectView.class);
+        Preferences prefs = Preferences.userNodeForPackage(GrapherDocumentView.class);
         PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 
@@ -241,7 +241,7 @@ public class GrapherProjectView extends AbstractDocumentView implements Document
         });
 
         PreferencesUtil.installBooleanPropertyHandler(//
-                Preferences.userNodeForPackage(GrapherProjectView.class), id + ".expanded", t.expandedProperty());
+Preferences.userNodeForPackage(GrapherDocumentView.class), id + ".expanded", t.expandedProperty());
         if (t.isExpanded()) {
             a.setExpandedPane(t);
             VBox.setVgrow(a, grow);

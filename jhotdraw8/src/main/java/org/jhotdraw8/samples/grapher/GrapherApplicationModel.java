@@ -19,7 +19,7 @@ import org.jhotdraw8.svg.SvgExportOutputFormat;
 public class GrapherApplicationModel extends SimpleApplicationModel {
 
     public GrapherApplicationModel() {
-        super("Grapher", GrapherProjectView::new,
+        super("Grapher", GrapherDocumentView::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "XML Files", null,"*.xml");
         getExportExtensionFilters().add(new URIExtensionFilter("SVG",SvgExportOutputFormat.SVG_FORMAT,"*.svg"));
