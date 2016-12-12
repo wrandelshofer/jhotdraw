@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="intro.applicationBasics">
-<title>Application Basics</title>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="intro.applicationIntroduction">
+<title>Introduction/Purpose of Feature</title>
 <para>An application is a computer program which is designed to perform a group of actions on a project.</para>
 
  <para>The nature of the project depends on a specific implementation of an application.</para>
@@ -19,6 +19,8 @@
     Typical document-based applications are: a text editor, a drawing editor.</para>
    </listitem>
  </itemizedlist>
+ 
+ <para>The purpose of the JHotDraw 8 application framework, is to support the creation of "Document-based" applications with Java.</para>
 
  <para>For more information about application styles, see <xref linkend="bib.ahig"/> and <xref linkend="bib.whig"/></para>
 </section>

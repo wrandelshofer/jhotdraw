@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="intro.drawingBasics">
-<title>Drawing Basics</title>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="intro.drawingIntroduction">
+<title>Introduction/Purpose of Feature</title>
 <para>A 'drawing' is a graphical visualization of a concept.</para>
 
 <para>For some drawings, the nature of the concept can be left undefined, for example for artistic paintings.
@@ -11,4 +11,10 @@
   decomposition is no longer worthwhile.</para>
     
 <para>We call the visual representation of (sub-)concept  a 'figure'.</para>
+
+<para>A structured drawing editor allows to create and edit a drawing by composing a drawing from individual figures.
+The drawing editor retains the structure of the drawing. This means, that the user can edit figures which have already been placed on a drawing.</para>
+
+ <para>The purpose of the JHotDraw 8 drawing editor framework, is to support the creation of a structured drawing editors with Java.</para>
+
 </section>
