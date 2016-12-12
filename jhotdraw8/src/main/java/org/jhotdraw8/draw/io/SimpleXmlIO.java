@@ -26,7 +26,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.draw.Clipping;
 import org.jhotdraw8.draw.Layer;
+import org.jhotdraw8.draw.SimpleClipping;
 import org.jhotdraw8.draw.SimpleLayer;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -88,6 +90,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     public URI getExternalHome() {
         return externalHome;
     }
+
     /**
      * Must be a directory and not a file.
      */
@@ -100,21 +103,62 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     @Override
-    public Drawing read(File file, Drawing drawing) throws IOException {
+    public Figure read(File file, Drawing drawing) throws IOException {
         setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
-        setInternalHome(drawing==null?getExternalHome():drawing.get(Drawing.DOCUMENT_HOME));
+        setInternalHome(drawing == null ? getExternalHome() : drawing.get(Drawing.DOCUMENT_HOME));
         return InputFormat.super.read(file, drawing);
     }
 
-    public Drawing read(Document in, Drawing drawing) throws IOException {
+    public Figure read(Document in, Drawing drawing) throws IOException {
         return fromDocument(in, drawing);
     }
 
-    public Document toDocument(Drawing internal) throws IOException {
-        return toDocument(internal, internal.getChildren());
+    public Document toDocument(Drawing internal, Collection<Figure> selection) throws IOException {
+        if (selection.isEmpty() || selection.contains(internal)) {
+            return toDocument(internal);
+        }
+
+        try {
+            Clipping external = new SimpleClipping();
+
+            factory.reset();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            Document doc;
+            if (namespaceURI != null) {
+                builderFactory.setNamespaceAware(true);
+                DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                DOMImplementation domImpl = builder.getDOMImplementation();
+                doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? factory.figureToName(external) : namespaceQualifier + ":" + factory.figureToName(internal), null);
+            } else {
+                DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                doc = builder.newDocument();
+                Element elem = doc.createElement(factory.figureToName(external));
+                doc.appendChild(elem);
+            }
+
+            Element docElement = doc.getDocumentElement();
+
+            String commentText = factory.createFileComment();
+            if (commentText != null) {
+                docElement.getParentNode().insertBefore(doc.createComment(commentText), docElement);
+            }
+
+            for (Figure child : selection) {
+                Node childNode = writeNodeRecursively(doc, child);
+                if (childNode != null) {
+                    // => the factory decided that we should not skip the figure
+                    docElement.appendChild(doc.createTextNode("\n"));
+                    docElement.appendChild(childNode);
+                }
+            }
+            docElement.appendChild(doc.createTextNode("\n"));
+            return doc;
+        } catch (ParserConfigurationException ex) {
+            throw new IOException(ex);
+        }
     }
 
-    public Document toDocument(Drawing internal, Collection<Figure> figures) throws IOException {
+    public Document toDocument(Drawing internal) throws IOException {
         try {
             Drawing external = factory.toExternalDrawing(internal);
 
@@ -143,7 +187,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             }
 
             writeElementAttributes(docElement, external);
-            for (Figure child : figures) {
+            for (Figure child : external.getChildren()) {
                 Node childNode = writeNodeRecursively(doc, child);
                 if (childNode != null) {
                     // => the factory decided that we should not skip the figure
@@ -249,7 +293,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    public Drawing fromDocument(Document doc, Drawing oldDrawing) throws IOException {
+    public Figure fromDocument(Document doc, Drawing oldDrawing) throws IOException {
         factory.reset();
         if (oldDrawing != null) {
             for (Figure f : oldDrawing.preorderIterable()) {
@@ -258,24 +302,29 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
         figureToElementMap.clear();
         Drawing external = null;
+        Clipping clipping = null;
         NodeList list = doc.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
             Figure f = readNodesRecursively(list.item(i));
             if (f instanceof Drawing) {
                 external = (Drawing) f;
                 break;
+            } else if (f instanceof Clipping) {
+                clipping = (Clipping) f;
+                break;
             }
         }
-        if (external == null) {
+        if (external == null && clipping == null) {
             if (namespaceURI == null) {
                 throw new IOException("The document does not contain a drawing.");
             } else {
                 throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
             }
         }
-        external.set(Drawing.DOCUMENT_HOME, getExternalHome());
-        readProcessingInstructions(doc, external);
-
+        if (external != null) {
+            external.set(Drawing.DOCUMENT_HOME, getExternalHome());
+            readProcessingInstructions(doc, external);
+        }
         try {
             for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
                 readElementAttributes(entry.getKey(), entry.getValue());
@@ -285,9 +334,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             figureToElementMap.clear();
         }
 
-        Drawing internal = factory.fromExternalDrawing(external);
-        internal.updateCss();
-        return internal;
+        if (external != null) {
+            Drawing internal = factory.fromExternalDrawing(external);
+            internal.updateCss();
+            return internal;
+        } else {
+            return clipping;
+        }
     }
 
     private String getAttribute(Element elem, String unqualifiedName) {
@@ -502,14 +555,15 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     /**
-     * External URI is relative to file that we are reading. Make it relative to document home.
+     * External URI is relative to file that we are reading. Make it relative to
+     * document home.
      *
      * @param drawing the drawing
      * @param external the external uri
      * @return the internal uri
      */
     private URI externalToInternal(Drawing drawing, URI external) {
-        URI internal=external;
+        URI internal = external;
         if (externalHome != null) {
             internal = externalHome.resolve(internal);
         }
@@ -520,7 +574,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     private DataFormat getDataFormat() {
-        String mimeType = (namespaceURI == null) ? "text/xml" : "text/xml/" + namespaceURI;
+        String mimeType = "text/xml";
         DataFormat df = DataFormat.lookupMimeType(mimeType);
         if (df == null) {
             df = new DataFormat(mimeType);
@@ -544,18 +598,19 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
             Set<Figure> figures = new LinkedHashSet<>();
-            Drawing newDrawing = read((String) content, drawing);
+            Figure newDrawing = read((String) content, drawing);
             factory.reset();
             for (Figure f : drawing.preorderIterable()) {
                 factory.createId(f);
             }
             if (layer == null) {
-                   layer=(Layer)drawing.getLastChild();
-                if (layer==null) {
-                layer = new SimpleLayer();
-                layer.set(StyleableFigure.STYLE_ID, factory.createId(layer));
-                model.addChildTo(layer, drawing);
-            }}
+                layer = (Layer) drawing.getLastChild();
+                if (layer == null) {
+                    layer = new SimpleLayer();
+                    layer.set(StyleableFigure.STYLE_ID, factory.createId(layer));
+                    model.addChildTo(layer, drawing);
+                }
+            }
             for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
                 newDrawing.remove(f);
                 String id = factory.createId(f);
@@ -578,7 +633,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     @Override
-    public Drawing read(InputStream in, Drawing drawing) throws IOException {
+    public Figure read(InputStream in, Drawing drawing) throws IOException {
         return XmlInputFormatMixin.super.read(in, drawing);
     }
 }

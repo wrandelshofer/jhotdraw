@@ -22,6 +22,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.TextAlignment;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.SimpleClipping;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.GroupFigure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
@@ -72,6 +73,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
 
     public DefaultFigureFactory(IdFactory idFactory) {
         addFigureKeysAndNames("Layer", SimpleLayer.class, Figure.getDeclaredAndInheritedKeys(SimpleLayer.class));
+        addFigureKeysAndNames("Clipping", SimpleClipping.class, Figure.getDeclaredAndInheritedKeys(SimpleClipping.class));
         addFigureKeysAndNames("Rectangle", RectangleFigure.class, Figure.getDeclaredAndInheritedKeys(RectangleFigure.class));
         addFigureKeysAndNames("Group", GroupFigure.class, Figure.getDeclaredAndInheritedKeys(GroupFigure.class));
 

@@ -14,6 +14,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -28,7 +29,7 @@ public interface XmlInputFormatMixin {
     void setExternalHome(URI uri);
     boolean isNamespaceAware();
        
-    default Drawing read(InputStream in, Drawing drawing) throws IOException {
+    default Figure read(InputStream in, Drawing drawing) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             if (isNamespaceAware()) {
@@ -42,7 +43,7 @@ public interface XmlInputFormatMixin {
         }
     }
 
-    default Drawing read(Reader in, Drawing drawing) throws IOException {
+    default Figure read(Reader in, Drawing drawing) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             if (isNamespaceAware()) {
@@ -57,12 +58,12 @@ public interface XmlInputFormatMixin {
         }
     }
 
-    default Drawing read(String string, Drawing drawing) throws IOException {
+    default Figure read(String string, Drawing drawing) throws IOException {
         try (StringReader in = new StringReader(string)) {
             return read(in, drawing);
         }
     }
 
-     Drawing read(Document in, Drawing drawing) throws IOException;
+     Figure read(Document in, Drawing drawing) throws IOException;
 
 }
