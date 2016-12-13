@@ -78,4 +78,32 @@ public interface XmlOutputFormatMixin extends OutputFormat {
     
     void setExternalHome(URI uri);
     void setInternalHome(URI uri);
+    URI getExternalHome();
+    URI getInternalHome();
+    
+    
+    default URI toExternal(URI uri) {
+        if (uri==null)return null;
+        URI internal = getInternalHome();
+        URI external = getExternalHome();
+        if (internal != null) {
+            uri = internal.resolve(uri);
+        }
+        if (external != null) {
+            uri = external.relativize(uri);
+        }
+        return uri;
+    }
+    default URI toInternal(URI uri) {
+        if (uri==null)return null;
+        URI internal = getInternalHome();
+        URI external = getExternalHome();
+        if (external != null) {
+            uri = external.resolve(uri);
+        }
+        if (internal != null) {
+            uri = internal.relativize(uri);
+        }
+        return uri;
+    }
 }

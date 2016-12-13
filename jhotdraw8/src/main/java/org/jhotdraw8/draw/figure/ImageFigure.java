@@ -29,12 +29,16 @@ import org.jhotdraw8.draw.key.UriStyleableFigureKey;
  * @author Werner Randelshofer
  */
 public class ImageFigure extends AbstractLeafFigure implements TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure {
-
     /**
      * The CSS type selector for this object is {@code "Image"}.
      */
     public final static String TYPE_SELECTOR = "Image";
 
+    /**
+     * The URI of the image.
+     * <p>
+     * This property is also set on the ImageView node, so that {@link SVGExportOutputFormat} can pick it up.
+     */
     public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
 
     public final static DoubleStyleableFigureKey X = RectangleFigure.X;
@@ -97,6 +101,7 @@ public class ImageFigure extends AbstractLeafFigure implements TransformableFigu
         imageView.setFitWidth(r.getWidth());
         imageView.setFitHeight(r.getHeight());
         imageView.applyCss();
+        imageView.getProperties().put(IMAGE_URI, get(IMAGE_URI));
     }
 
     @Override

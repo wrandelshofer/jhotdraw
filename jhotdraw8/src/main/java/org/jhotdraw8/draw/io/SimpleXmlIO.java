@@ -585,7 +585,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     @Override
     public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
-        setExternalHome(new File(System.getProperty("user.home")).toURI());
+        setExternalHome(null);
         StringWriter sw = new StringWriter();
         write(sw, drawing, selection);
         out.put(getDataFormat(), sw.toString());
@@ -594,7 +594,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     @Override
     public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Layer layer) throws IOException {
         setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
-        setExternalHome(new File(System.getProperty("user.home")).toURI());
+        setExternalHome(null);
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
             Set<Figure> figures = new LinkedHashSet<>();
