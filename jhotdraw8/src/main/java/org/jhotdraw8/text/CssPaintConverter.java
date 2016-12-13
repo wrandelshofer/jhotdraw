@@ -11,6 +11,7 @@ import java.util.Locale;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
+import javafx.scene.paint.RadialGradient;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -31,9 +32,9 @@ import org.jhotdraw8.draw.io.IdFactory;
  */
 public class CssPaintConverter implements Converter<Paint> {
 
-    private CssColorConverter colorConverter = new CssColorConverter();
-    private CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
-    private XmlNumberConverter doubleConverter = new XmlNumberConverter();
+    protected static final CssColorConverter colorConverter = new CssColorConverter();
+    protected static final CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
+    protected static final CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter();
 
     public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
         if (value == null) {
@@ -46,6 +47,9 @@ public class CssPaintConverter implements Converter<Paint> {
         } else if (value instanceof LinearGradient) {
             CssLinearGradient lg = new CssLinearGradient((LinearGradient) value);
             linearGradientConverter.toString(out, idFactory, lg);
+        } else if (value instanceof RadialGradient) {
+            CssRadialGradient lg = new CssRadialGradient((RadialGradient) value);
+            radialGradientConverter.toString(out, idFactory, lg);
         } else {
             throw new UnsupportedOperationException("not yet implemented");
         }

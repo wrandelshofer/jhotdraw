@@ -5,7 +5,6 @@
 package org.jhotdraw8.text;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ import javafx.scene.paint.CycleMethod;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.CharBufferReader;
 
 /**
  * CssRadialGradientConverter.
@@ -25,9 +25,9 @@ import org.jhotdraw8.draw.io.IdFactory;
  * <pre>
  * Paint := (Color|RadialGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
  * RadialGradient := "radial-gradient(", RadialGradientParameters, ")"
- * RadialGradientParameters := [ FocusAngle "," ], [ FocusDistance "," ], [ Center "," ], Radius, 
+ * RadialGradientParameters := [ FocusAngle "," ], [ FocusDistance "," ], [ Center "," ], Radius,
  *                   [ ( "repeat" | "reflect" ),"," ] ColorStop,{"," ColorStop}) ;
- * FocusAngle = "focus-angle", Dimension"deg"; 
+ * FocusAngle = "focus-angle", Dimension"deg";
  * FocusDistance = "focus-distance", Percentage ;
  * Center = "center", Point ;
  * Radius = "radius", ( Length | Percentage ) ;
@@ -55,46 +55,51 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             final double centerX = lg.getCenterX();
             final double centerY = lg.getCenterY();
             final double radius = lg.getRadius();
-            boolean needsSpace = false;
-            boolean needsComma = false;
-                if (focusAngle != 0.0) {
-                    out.append("focus-angle ");
-                    out.append(doubleConverter.toString(focusAngle));
-                    out.append("deg");
-                    needsComma=true;
+             boolean needsComma = false;
+            if (focusAngle != 0.0) {
+                out.append("focus-angle ");
+                out.append(doubleConverter.toString(focusAngle));
+                out.append("deg");
+                needsComma = true;
+            }
+            if (focusDistance != 0.0) {
+                if (needsComma) {
+                    out.append(", ");
                 }
-                if (focusDistance != 0.0) {
-                    if (needsComma) out.append(", ");
-                    out.append("focus-angle ");
-                    out.append(doubleConverter.toString(focusDistance*100));
-                    out.append("%");
-                    needsComma=true;
+                out.append("focus-distance ");
+                out.append(doubleConverter.toString(focusDistance * 100));
+                out.append("%");
+                needsComma = true;
+            }
+            if (centerX != 0.5 || centerY != 0.5) {
+                if (needsComma) {
+                    out.append(", ");
                 }
-                if (centerX != 0.0||centerY!=0.0) {
-                    if (needsComma) out.append(", ");
-                    out.append("center ");
-                    if (proportional) {
-                    out.append(doubleConverter.toString(centerX*100));
+                out.append("center ");
+                if (proportional) {
+                    out.append(doubleConverter.toString(centerX * 100));
                     out.append("% ");
-                    out.append(doubleConverter.toString(centerY*100));
+                    out.append(doubleConverter.toString(centerY * 100));
                     out.append("%");
-                    }else{
+                } else {
                     out.append(doubleConverter.toString(centerX));
                     out.append(" ");
                     out.append(doubleConverter.toString(centerY));
-                    }
-                    needsComma=true;
                 }
-                    if (needsComma) out.append(", ");
-                    out.append("radius ");
-                    if (proportional) {
-                    out.append(doubleConverter.toString(radius*100));
-                    out.append("%");
-                    }else{
-                    out.append(doubleConverter.toString(radius));
-                    }
-                    needsComma=true;
-            
+                needsComma = true;
+            }
+            if (needsComma) {
+                out.append(", ");
+            }
+            out.append("radius ");
+            if (proportional) {
+                out.append(doubleConverter.toString(radius * 100));
+                out.append("%");
+            } else {
+                out.append(doubleConverter.toString(radius));
+            }
+            needsComma = true;
+
             {
                 switch (lg.getCycleMethod()) {
                     case NO_CYCLE:
@@ -135,7 +140,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
 
     @Override
     public CssRadialGradient fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
+        CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(in));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if ("none".equals(tt.currentStringValue())) {
@@ -149,24 +154,125 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             throw new ParseException("CSS RadialGradient: \"<radial-gradient>(\"  expected", tt.getPosition());
         }
 
-        String func;
         switch (tt.currentStringValue()) {
             case "radial-gradient":
                 break;
             default:
                 throw new ParseException("CSS RadialGradient: \"<radial-gradient>(\"  expected, found: " + tt.currentStringValue(), tt.getPosition());
         }
-        boolean needComma = false;
-        
+
+        double focusAngle = 0;
+        double focusDistance = 0;
+        double centerX = 0.5;
+        double centerY = 0.5;
+        double radius=1;
+        Boolean isProportional = null;
+        while (tt.nextToken() == CssTokenizer.TT_IDENT) {
+            if ("focus-angle".equals(tt.currentStringValue())) {
+                switch (tt.nextToken()) {
+                    case CssTokenizer.TT_DIMENSION:
+                        if (!"deg".equals(tt.currentStringValue())) {
+                            throw new ParseException("CSS RadialGradient: expected focus-angle given in degrees with unit  \"deg\", found: " + tt.currentStringValue(), tt.getPosition());
+                        }
+                        focusAngle = tt.currentNumericValue().doubleValue();
+                        break;
+                    case CssTokenizer.TT_NUMBER:
+                        focusAngle = tt.currentNumericValue().doubleValue();
+                        break;
+                    default:
+                        throw new ParseException("CSS RadialGradient: focus-angle  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                }
+
+            } else if ("focus-distance".equals(tt.currentStringValue())) {
+                switch (tt.nextToken()) {
+                    case CssTokenizer.TT_PERCENTAGE:
+                        focusDistance = tt.currentNumericValue().doubleValue() / 100;
+                        break;
+                    case CssTokenizer.TT_NUMBER:
+                        focusDistance = tt.currentNumericValue().doubleValue();
+                        break;
+                    default:
+                        throw new ParseException("CSS RadialGradient: focus-distance  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                }
+
+            } else if ("center".equals(tt.currentStringValue())) {
+                switch (tt.nextToken()) {
+                    case CssTokenizer.TT_PERCENTAGE:
+                        if (isProportional==null) {
+                            isProportional=true;
+                        }
+                        if (! isProportional)
+                        throw new ParseException("CSS RadialGradient: absolute value  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                       centerX = tt.currentNumericValue().doubleValue() / 100;
+                        break;
+                    case CssTokenizer.TT_NUMBER:
+                        if (isProportional==null) {
+                            isProportional=false;
+                        }
+                        if (isProportional)
+                        throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                        centerX = tt.currentNumericValue().doubleValue();
+                        break;
+                    default:
+                        throw new ParseException("CSS RadialGradient: center x-value  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                }
+                switch (tt.nextToken()) {
+                    case CssTokenizer.TT_PERCENTAGE:
+                        if (isProportional==null) {
+                            isProportional=true;
+                        }
+                        if (! isProportional)
+                        throw new ParseException("CSS RadialGradient: absolute value  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                       centerY = tt.currentNumericValue().doubleValue() / 100;
+                        break;
+                    case CssTokenizer.TT_NUMBER:
+                        if (isProportional==null) {
+                            isProportional=false;
+                        }
+                        if (isProportional)
+                        throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                        centerY = tt.currentNumericValue().doubleValue();
+                        break;
+                    default:
+                        throw new ParseException("CSS RadialGradient: center y-value  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                }
+            } else if ("radius".equals(tt.currentStringValue())) {
+                switch (tt.nextToken()) {
+                    case CssTokenizer.TT_PERCENTAGE:
+                        if (isProportional==null) {
+                            isProportional=true;
+                        }
+                        if (! isProportional)
+                        throw new ParseException("CSS RadialGradient: absolute value expected, found: " + tt.currentStringValue(), tt.getPosition());
+                       radius = tt.currentNumericValue().doubleValue() / 100;
+                        break;
+                    case CssTokenizer.TT_NUMBER:
+                        if (isProportional==null) {
+                            isProportional=false;
+                        }
+                        if (isProportional)
+                        throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                        radius = tt.currentNumericValue().doubleValue();
+                        break;
+                    default:
+                        throw new ParseException("CSS RadialGradient: center x-value  expected, found: " + tt.currentStringValue(), tt.getPosition());
+                }
+            } else {
+                tt.pushBack();
+                break;
+            }
+            
+            if (tt.nextToken() != ',') {
+             tt.pushBack();
+            }
+        }
         CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if ("repeat".equals(tt.currentStringValue())) {
                 cycleMethod = CycleMethod.REPEAT;
-                needComma = true;
 
             } else if ("reflect".equals(tt.currentStringValue())) {
                 cycleMethod = CycleMethod.REFLECT;
-                needComma = true;
             } else {
                 tt.pushBack();
             }
@@ -174,23 +280,25 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             tt.pushBack();
         }
 
-        if (needComma) {
             if (tt.nextToken() != ',') {
-                throw new ParseException("CSS RadialGradient: ','  expected, found: " + tt.currentStringValue(), tt.getPosition());
+             tt.pushBack();
             }
-            needComma = false;
-        }
         List<CssStop> stops = new ArrayList<>();
-        do {
+        while (tt.nextToken() != ')' && tt.currentToken() != CssTokenizer.TT_EOF) {
+            tt.pushBack();
             stops.add(parseColorStop(tt));
-        } while (tt.nextToken() == ',');
+            if (tt.nextToken() != ',') {
+                tt.pushBack();
+            }
+        } 
 
         if (tt.currentToken() != ')') {
             throw new ParseException("CSS RadialGradient: ')'  expected, found: " + tt.currentStringValue(), tt.getPosition());
         }
         tt.skipWhitespace();
-        in.position(tt.getPosition());
-        return null;//new CssRadialGradient(fromTo.focusAngle, fromTo.focusDistance, fromTo.centerX, fromTo.centerY, fromTo.isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
+        if (isProportional==null) isProportional=true;
+        
+        return new CssRadialGradient(focusAngle, focusDistance, centerX, centerY, radius,isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
     }
 
     @Override
@@ -198,128 +306,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
         return null;
     }
 
-    private static class PointToPoint {
-
-        public double focusAngle, focusDistance, centerX, centerY;
-        public boolean isProportional;
-
-        public PointToPoint(double focusAngle, double focusDistance, double centerX, double centerY, boolean isProportional) {
-            this.focusAngle = focusAngle;
-            this.focusDistance = focusDistance;
-            this.centerX = centerX;
-            this.centerY = centerY;
-            this.isProportional = isProportional;
-        }
-
-    }
-
-    private PointToPoint parsePointToPoint(CssTokenizerInterface tt) throws IOException, ParseException {
-        double focusAngle = 0.0, focusDistance = 0.0, centerX = 0.0, centerY = 1.0;
-        Boolean isProportional = null;
-        switch (tt.nextToken()) {
-            case CssTokenizer.TT_NUMBER:
-                focusAngle = tt.currentNumericValue().doubleValue();
-                isProportional = false;
-                break;
-            case CssTokenizer.TT_PERCENTAGE:
-                isProportional = true;
-                focusAngle = tt.currentNumericValue().doubleValue() / 100.0;
-                break;
-            case CssTokenizer.TT_DIMENSION:
-                isProportional = false;
-                if (!"px".equals(tt.currentUnitValue())) {
-                    throw new ParseException("CSS RadialGradient: start-x given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                }
-                focusAngle = tt.currentNumericValue().doubleValue();
-                break;
-            default:
-                throw new ParseException("CSS RadialGradient: start-x expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-        }
-        switch (tt.nextToken()) {
-            case CssTokenizer.TT_NUMBER:
-                if (isProportional) {
-                    throw new ParseException("CSS RadialGradient: start-y as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                }
-                focusDistance = tt.currentNumericValue().doubleValue();
-                break;
-            case CssTokenizer.TT_PERCENTAGE:
-                if (!isProportional) {
-                    throw new ParseException("CSS RadialGradient: start-y as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                }
-                focusDistance = tt.currentNumericValue().doubleValue() / 100.0;
-                break;
-            case CssTokenizer.TT_DIMENSION:
-                if (isProportional) {
-                    throw new ParseException("CSS RadialGradient: start-y as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                }
-                if (!"px".equals(tt.currentUnitValue())) {
-                    throw new ParseException("CSS RadialGradient: start-y given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                }
-                focusDistance = tt.currentNumericValue().doubleValue();
-                break;
-            default:
-                throw new ParseException("CSS RadialGradient: start-y expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-        }
-        if (tt.nextToken() == CssTokenizer.TT_IDENT && "to".equals(tt.currentStringValue())) {
-            switch (tt.nextToken()) {
-                case CssTokenizer.TT_NUMBER:
-                    if (isProportional) {
-                        throw new ParseException("CSS RadialGradient: end-x as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                    }
-                    centerX = tt.currentNumericValue().doubleValue();
-                    break;
-                case CssTokenizer.TT_PERCENTAGE:
-                    if (!isProportional) {
-                        throw new ParseException("CSS RadialGradient: end-x as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                    }
-                    centerX = tt.currentNumericValue().doubleValue() / 100.0;
-                    break;
-                case CssTokenizer.TT_DIMENSION:
-                    if (isProportional) {
-                        throw new ParseException("CSS RadialGradient: end-x as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                    }
-                    if (!"px".equals(tt.currentUnitValue())) {
-                        throw new ParseException("CSS RadialGradient: end-x given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                    }
-                    centerX = tt.currentNumericValue().doubleValue();
-                    break;
-                default:
-                    throw new ParseException("CSS RadialGradient: end-x expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-            }
-            switch (tt.nextToken()) {
-                case CssTokenizer.TT_NUMBER:
-                    if (isProportional) {
-                        throw new ParseException("CSS RadialGradient: end-y as proportional value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                    }
-                    centerY = tt.currentNumericValue().doubleValue();
-                    break;
-                case CssTokenizer.TT_PERCENTAGE:
-                    if (!isProportional) {
-                        throw new ParseException("CSS RadialGradient: end-y as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                    }
-                    centerY = tt.currentNumericValue().doubleValue() / 100.0;
-                    break;
-                case CssTokenizer.TT_DIMENSION:
-                    if (isProportional) {
-                        throw new ParseException("CSS RadialGradient: end-y as proportional value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                    }
-                    if (!"px".equals(tt.currentUnitValue())) {
-                        throw new ParseException("CSS RadialGradient: end-y given in pixels or percent expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-                    }
-                    centerY = tt.currentNumericValue().doubleValue();
-                    break;
-                default:
-                    throw new ParseException("CSS RadialGradient: end-y expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-            }
-        } else {
-            throw new ParseException("CSS RadialGradient: 'to' expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
-
-        }
-        return new PointToPoint(focusAngle, focusDistance, centerX, centerY, isProportional);
-    }
-
- 
-    private CssStop parseColorStop(CssTokenizerInterface tt) throws IOException, ParseException {
+       private CssStop parseColorStop(CssTokenizerInterface tt) throws IOException, ParseException {
         CssColor color = colorConverter.parseColor(tt);
         Double offset = null;
         switch (tt.nextToken()) {

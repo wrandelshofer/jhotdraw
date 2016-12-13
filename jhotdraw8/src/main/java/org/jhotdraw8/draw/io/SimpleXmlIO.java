@@ -13,6 +13,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +118,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         if (selection.isEmpty() || selection.contains(internal)) {
             return toDocument(internal);
         }
+        
+        // bring selection in z-order
+        Set<Figure> s=new HashSet<>(selection);
+        ArrayList<Figure> ordered=new ArrayList<>(selection.size());
+        for (Figure f:internal.preorderIterable()) {
+            if (s.contains(f)) {
+                ordered.add(f);
+            }
+        }
+        
+        
 
         try {
             Clipping external = new SimpleClipping();
@@ -143,7 +155,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 docElement.getParentNode().insertBefore(doc.createComment(commentText), docElement);
             }
 
-            for (Figure child : selection) {
+            for (Figure child : ordered) {
                 Node childNode = writeNodeRecursively(doc, child);
                 if (childNode != null) {
                     // => the factory decided that we should not skip the figure

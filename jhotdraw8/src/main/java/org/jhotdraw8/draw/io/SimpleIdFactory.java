@@ -52,7 +52,7 @@ public class SimpleIdFactory implements IdFactory {
         }
     }
 
-  String createId(Object object, String prefix) {
+  public String createId(Object object, String prefix) {
         String id = objectToId.get(object);
         if (id == null) {
             long pNextId=prefixToNextId.getOrDefault(prefix, 1L);

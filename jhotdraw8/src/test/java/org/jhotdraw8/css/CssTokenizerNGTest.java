@@ -38,6 +38,9 @@ public class CssTokenizerNGTest {
                 buf.append((char) tt.currentToken());
             }
             buf.append(':');
+            if (tt.currentNumericValue()!=null)
+            buf.append(tt.currentNumericValue());
+            if (tt.currentStringValue()!=null)
             buf.append(tt.currentStringValue());
         }
         String actualValue = buf.toString();

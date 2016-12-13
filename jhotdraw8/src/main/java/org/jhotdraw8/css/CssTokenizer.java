@@ -118,7 +118,6 @@ public class CssTokenizer implements CssTokenizerInterface {
     private int currentToken;
 
     private String stringValue;
-    private String unitValue;
     private Number numericValue;
     private int lineNumber;
     private int position;
@@ -148,11 +147,6 @@ public class CssTokenizer implements CssTokenizerInterface {
     }
 
     @Override
-    public String currentUnitValue() {
-        return unitValue;
-    }
-
-    @Override
     public Number currentNumericValue() {
         return numericValue;
     }
@@ -176,7 +170,7 @@ public class CssTokenizer implements CssTokenizerInterface {
         position = (int) in.getPosition();
 
         int ch = in.nextChar();
-        unitValue = stringValue = null;
+        stringValue = null;
         numericValue = null;
         switch (ch) {
             case -1:  // EOF
@@ -313,18 +307,14 @@ public class CssTokenizer implements CssTokenizerInterface {
                     ch = in.nextChar();
                     if (ch == '%') {
                         currentToken = TT_PERCENTAGE;
-                        buf.append('%');
-                        unitBuf.append('%');
-                        unitValue = unitBuf.toString();
+                        stringValue = "%";
                     } else if (identMacro(ch, unitBuf)) {
                         currentToken = TT_DIMENSION;
-                        unitValue = unitBuf.toString();
-                        buf.append(unitBuf);
+                        stringValue = unitBuf.toString();
                     } else {
                         in.pushBack(ch);
                         currentToken = TT_NUMBER;
                     }
-                    stringValue = buf.toString();
                 } else {
                     currentToken = ch;
                     stringValue = String.valueOf((char) currentToken);
@@ -371,18 +361,14 @@ public class CssTokenizer implements CssTokenizerInterface {
                         ch = in.nextChar();
                         if (ch == '%') {
                             currentToken = TT_PERCENTAGE;
-                            buf.append('%');
-                            unitBuf.append('%');
-                            unitValue = unitBuf.toString();
+                            stringValue = "%";
                         } else if (identMacro(ch, unitBuf)) {
                             currentToken = TT_DIMENSION;
-                            unitValue = unitBuf.toString();
-                            buf.append(unitBuf);
+                            stringValue = unitBuf.toString();
                         } else {
                             in.pushBack(ch);
                             currentToken = TT_NUMBER;
                         }
-                        stringValue = buf.toString();
                     } else {
                         if (identMacro(ch, buf)) {
                             next1 = in.nextChar();
@@ -577,6 +563,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                 in.pushBack(next);
                 if (hasDecimals) {
                     in.pushBack(ch);
+                    numericValue = Long.parseLong(buf.toString());
                     return true;
                 }
                 return false;
@@ -623,11 +610,10 @@ public class CssTokenizer implements CssTokenizerInterface {
         }
 
         try {
-            stringValue = buf.toString();
             if (hasFractionalsOrExponent) {
-                numericValue = Double.parseDouble(stringValue);
+                numericValue = Double.parseDouble(buf.toString());
             } else {
-                numericValue = Integer.parseInt(stringValue);
+                numericValue = Long.parseLong(buf.toString());
             }
         } catch (NumberFormatException e) {
             throw new InternalError("Tokenizer is broken.", e);

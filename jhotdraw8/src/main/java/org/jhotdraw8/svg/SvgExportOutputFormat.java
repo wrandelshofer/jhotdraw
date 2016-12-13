@@ -17,9 +17,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -37,7 +34,10 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ArcType;
@@ -86,13 +86,15 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.draw.io.IdFactory;
 import org.jhotdraw8.draw.io.OutputFormat;
+import org.jhotdraw8.draw.io.SimpleIdFactory;
 import org.jhotdraw8.draw.io.XmlOutputFormatMixin;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.text.SvgTransformListConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
-import org.jhotdraw8.text.XmlPaintConverter;
+import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.XmlSizeListConverter;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -112,13 +114,14 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
     private final static String XLINK_Q = "xlink";
     private final SvgTransformListConverter tx = new SvgTransformListConverter();
-    private final XmlPaintConverter paint = new XmlPaintConverter();
+    private final SvgPaintConverter paint = new SvgPaintConverter();
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
     private final String SVG_NS = "http://www.w3.org/2000/svg";
     private final String namespaceQualifier = null;
     private URI internalHome;
     private URI externalHome;
+    private IdFactory idFactory = new SimpleIdFactory();
 
     public Document toDocument(Drawing external) throws IOException {
         return toDocument(external, Collections.singleton(external));
@@ -175,6 +178,16 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
                 docElement.getParentNode().insertBefore(doc.createComment(commentText), docElement);
             }
 
+            idFactory.reset();
+            initIdFactoryRecursively(drawingNode);
+            Element defsElement = doc.createElement("defs");
+            writeDefsRecursively(doc, defsElement, drawingNode);
+            if (defsElement.getChildNodes().getLength() > 0) {
+                docElement.appendChild(doc.createTextNode("\n"));
+                docElement.appendChild(defsElement);
+                defsElement.appendChild(doc.createTextNode("\n"));
+                docElement.appendChild(doc.createTextNode("\n"));
+            }
             writeDocumentElementAttributes(docElement, drawingNode);
             writeNodeRecursively(doc, docElement, drawingNode);
             docElement.appendChild(doc.createTextNode("\n"));
@@ -240,6 +253,133 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
             }
         }
 
+    }
+
+    private void initIdFactoryRecursively(javafx.scene.Node node) throws IOException {
+        String id = node.getId();
+        if (id != null && idFactory.getObject(id) == null) {
+            idFactory.putId(node, id);
+        } else {
+            idFactory.createId(node, node.getTypeSelector().toLowerCase());
+        }
+
+        if (node instanceof Parent) {
+            Parent pp = (Parent) node;
+            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                initIdFactoryRecursively(child);
+            }
+        }
+    }
+
+    private void writeDefsRecursively(Document doc, Element defsNode, javafx.scene.Node node) throws IOException {
+        if (node instanceof Shape) {
+            Shape shape = (Shape) node;
+            writePaintDefs(doc, defsNode, shape.getFill());
+            writePaintDefs(doc, defsNode, shape.getStroke());
+        }
+
+        if (node instanceof Parent) {
+            Parent pp = (Parent) node;
+            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                writeDefsRecursively(doc, defsNode, child);
+            }
+        }
+    }
+
+    private void writePaintDefs(Document doc, Element defsNode, Paint paint) throws IOException {
+        if (idFactory.getId(paint) == null) {
+            if (paint instanceof LinearGradient) {
+                LinearGradient g = (LinearGradient) paint;
+                String id = idFactory.createId(paint, "linearGradient");
+                Element elem = doc.createElement("linearGradient");
+                defsNode.appendChild(doc.createTextNode("\n"));
+                elem.setAttribute("id", id);
+                if (g.isProportional()) {
+                    elem.setAttribute("x1", nb.toString(g.getStartX() * 100) + "%");
+                    elem.setAttribute("y1", nb.toString(g.getStartY() * 100) + "%");
+                    elem.setAttribute("x2", nb.toString(g.getEndX() * 100) + "%");
+                    elem.setAttribute("y2", nb.toString(g.getEndY() * 100) + "%");
+                    elem.setAttribute("gradientUnits", "objectBoundingBox");
+
+                } else {
+                    elem.setAttribute("x1", nb.toString(g.getStartX()));
+                    elem.setAttribute("y1", nb.toString(g.getStartY()));
+                    elem.setAttribute("x2", nb.toString(g.getEndX()));
+                    elem.setAttribute("y2", nb.toString(g.getEndY()));
+                    elem.setAttribute("gradientUnits", "userSpaceOnUse");
+                }
+                switch (g.getCycleMethod()) {
+                    case NO_CYCLE:
+                        elem.setAttribute("spreadMethod", "pad");
+                        break;
+                    case REFLECT:
+                        elem.setAttribute("spreadMethod", "reflect");
+                        break;
+                    case REPEAT:
+                        elem.setAttribute("spreadMethod", "repeat");
+                        break;
+                    default:
+                        throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+                }
+                for (Stop s : g.getStops()) {
+                    Element stopElem = doc.createElement("stop");
+                    stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
+                    Color c = s.getColor();
+                    stopElem.setAttribute("stop-color", this.paint.toString(c));
+                    if (!c.isOpaque()) {
+                        stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
+                    }
+                    elem.appendChild(stopElem);
+                }
+                defsNode.appendChild(elem);
+            } else if (paint instanceof RadialGradient) {
+                RadialGradient g = (RadialGradient) paint;
+                String id = idFactory.createId(paint, "radialGradient");
+                Element elem = doc.createElement("radialGradient");
+                defsNode.appendChild(doc.createTextNode("\n"));
+                elem.setAttribute("id", id);
+                if (g.isProportional()) {
+                    elem.setAttribute("cx", nb.toString(g.getCenterX() * 100) + "%");
+                    elem.setAttribute("cy", nb.toString(g.getCenterY() * 100) + "%");
+                    elem.setAttribute("r", nb.toString(g.getRadius() * 100) + "%");
+                    elem.setAttribute("fx", nb.toString((g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
+                    elem.setAttribute("fy", nb.toString((g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
+                    elem.setAttribute("gradientUnits", "objectBoundingBox");
+
+                } else {
+                    elem.setAttribute("cx", nb.toString(g.getCenterX()));
+                    elem.setAttribute("cy", nb.toString(g.getCenterY()));
+                    elem.setAttribute("r", nb.toString(g.getRadius()));
+                    elem.setAttribute("fx", nb.toString(g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
+                    elem.setAttribute("fy", nb.toString(g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
+                    elem.setAttribute("gradientUnits", "userSpaceOnUse");
+                }
+                switch (g.getCycleMethod()) {
+                    case NO_CYCLE:
+                        elem.setAttribute("spreadMethod", "pad");
+                        break;
+                    case REFLECT:
+                        elem.setAttribute("spreadMethod", "reflect");
+                        break;
+                    case REPEAT:
+                        elem.setAttribute("spreadMethod", "repeat");
+                        break;
+                    default:
+                        throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+                }
+                for (Stop s : g.getStops()) {
+                    Element stopElem = doc.createElement("stop");
+                    stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
+                    Color c = s.getColor();
+                    stopElem.setAttribute("stop-color", this.paint.toString(c));
+                    if (!c.isOpaque()) {
+                        stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
+                    }
+                    elem.appendChild(stopElem);
+                }
+                defsNode.appendChild(elem);
+            }
+        }
     }
 
     private Element writeShape(Document doc, Element parent, Shape node) throws IOException {
@@ -708,12 +848,36 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     }
 
     private void writeFillAttributes(Element elem, Shape node) {
-        elem.setAttribute("fill", paint.toString(node.getFill()));
+        Paint fill = node.getFill();
+        String id = idFactory.getId(fill);
+        if (id != null) {
+            elem.setAttribute("fill", "url(#" + id + ")");
+        } else {
+            elem.setAttribute("fill", paint.toString(fill));
+            if (fill instanceof Color) {
+                Color c = (Color) fill;
+                if (!c.isOpaque()) {
+                    elem.setAttribute("fill-opacity", nb.toString(c.getOpacity()));
+                }
+            }
+        }
     }
 
     private void writeStrokeAttributes(Element elem, Shape shape) {
-        if (shape.getStroke() != null) {
-            elem.setAttribute("stroke", paint.toString(shape.getStroke()));
+        Paint stroke = shape.getStroke();
+        if (stroke != null) {
+            String id = idFactory.getId(stroke);
+            if (id != null) {
+                elem.setAttribute("stroke", "url(#" + id + ")");
+            } else {
+                elem.setAttribute("stroke", paint.toString(stroke));
+                if (stroke instanceof Color) {
+                    Color c = (Color) stroke;
+                    if (!c.isOpaque()) {
+                        elem.setAttribute("stroke-opacity", nb.toString(c.getOpacity()));
+                    }
+                }
+            }
         }
         if (shape.getStrokeWidth() != 1) {
             elem.setAttribute("stroke-width", nb.toString(shape.getStrokeWidth()));
@@ -867,7 +1031,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
 
     @Override
     public void setExternalHome(URI uri) {
-       externalHome=uri;
+        externalHome = uri;
     }
 
     @Override
@@ -889,7 +1053,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
 
     @Override
     public void setInternalHome(URI uri) {
-       internalHome=uri;
+        internalHome = uri;
     }
 
     public URI getInternalHome() {

@@ -31,6 +31,7 @@ public class CssPaintableConverter implements Converter<Paintable> {
 
     private CssColorConverter colorConverter = new CssColorConverter();
     private CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
+    private CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter();
     private XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
     public void toString(Appendable out, IdFactory idFactory, Paintable value) throws IOException {
@@ -44,6 +45,9 @@ public class CssPaintableConverter implements Converter<Paintable> {
         } else if (value instanceof CssLinearGradient) {
             CssLinearGradient lg = (CssLinearGradient) value;
             linearGradientConverter.toString(out, idFactory, lg);
+        } else if (value instanceof CssRadialGradient) {
+            CssRadialGradient lg = (CssRadialGradient) value;
+            radialGradientConverter.toString(out, idFactory, lg);
         } else {
             throw new UnsupportedOperationException("not yet implemented");
         }
@@ -53,19 +57,27 @@ public class CssPaintableConverter implements Converter<Paintable> {
     public Paintable fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString().trim().toLowerCase(Locale.ROOT);
 
-        int pos=buf.position();
-        ParseException pe=null;
+        int pos = buf.position();
+        ParseException pe = null;
         try {
             return colorConverter.fromString(buf, idFactory);
         } catch (ParseException e) {
-            pe=e;
+            pe = e;
         }
         try {
             buf.position(pos);
             return linearGradientConverter.fromString(buf, idFactory);
         } catch (ParseException e) {
-            if (e.getErrorOffset()>pe.getErrorOffset()) {
-           pe=e;
+            if (e.getErrorOffset() > pe.getErrorOffset()) {
+                pe = e;
+            }
+        }
+        try {
+            buf.position(pos);
+            return radialGradientConverter.fromString(buf, idFactory);
+        } catch (ParseException e) {
+            if (e.getErrorOffset() > pe.getErrorOffset()) {
+                pe = e;
             }
         }
         throw pe;
