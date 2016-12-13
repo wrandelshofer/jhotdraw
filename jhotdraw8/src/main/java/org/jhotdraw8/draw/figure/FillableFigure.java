@@ -27,7 +27,7 @@ public interface FillableFigure extends Figure {
      * Defines the paint used for filling the interior of the figure. Default
      * value: {@code Color.WHITE}.
      */
-    public static PaintableStyleableFigureKey FILL_COLOR = new PaintableStyleableFigureKey("fill", new CssColor(Color.WHITE));
+    public static PaintableStyleableFigureKey FILL_COLOR = new PaintableStyleableFigureKey("fill", new CssColor("white", Color.WHITE));
     /**
      * Updates a shape node.
      *
