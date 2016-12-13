@@ -189,11 +189,11 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
                 in.position(in.limit());
                 return null;
             } else {
-                throw new ParseException("CSS LinearGradient: \"<none>\" or \"<linear-gradient>(\"  expected", tt.getPosition());
+                throw new ParseException("CSS LinearGradient: \"<none>\" or \"<linear-gradient>(\"  expected", tt.getStartPosition());
             }
         }
         if (tt.currentToken() != CssTokenizer.TT_FUNCTION || !"linear-gradient".equals(tt.currentStringValue())) {
-            throw new ParseException("CSS LinearGradient: \"<linear-gradient>(\"  expected, found: " + tt.currentStringValue(), tt.getPosition());
+            throw new ParseException("CSS LinearGradient: \"<linear-gradient>(\"  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
         }
         PointToPoint fromTo = null;
 
@@ -236,10 +236,10 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
         }
 
         if (tt.currentToken() != ')') {
-            throw new ParseException("CSS LinearGradient: ')'  expected, found: " + tt.currentStringValue(), tt.getPosition());
+            throw new ParseException("CSS LinearGradient: ')'  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
         }
         tt.skipWhitespace();
-        in.position(tt.getPosition());
+        in.position(tt.getStartPosition());
         return new CssLinearGradient(fromTo.startX, fromTo.startY, fromTo.endX, fromTo.endY, fromTo.isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
     }
 
@@ -278,91 +278,91 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
             case CssTokenizer.TT_DIMENSION:
                 isProportional = false;
                 if (!"px".equals(tt.currentStringValue())) {
-                    throw new ParseException("CSS LinearGradient: start-x given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                    throw new ParseException("CSS LinearGradient: start-x given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                 }
                 startX = tt.currentNumericValue().doubleValue();
                 break;
             default:
-                throw new ParseException("CSS LinearGradient: start-x expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                throw new ParseException("CSS LinearGradient: start-x expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
         }
         switch (tt.nextToken()) {
             case CssTokenizer.TT_NUMBER:
                 if (isProportional) {
-                    throw new ParseException("CSS LinearGradient: start-y as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                    throw new ParseException("CSS LinearGradient: start-y as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                 }
                 startY = tt.currentNumericValue().doubleValue();
                 break;
             case CssTokenizer.TT_PERCENTAGE:
                 if (!isProportional) {
-                    throw new ParseException("CSS LinearGradient: start-y as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                    throw new ParseException("CSS LinearGradient: start-y as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                 }
                 startY = tt.currentNumericValue().doubleValue() / 100.0;
                 break;
             case CssTokenizer.TT_DIMENSION:
                 if (isProportional) {
-                    throw new ParseException("CSS LinearGradient: start-y as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                    throw new ParseException("CSS LinearGradient: start-y as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                 }
                 if (!"px".equals(tt.currentStringValue())) {
-                    throw new ParseException("CSS LinearGradient: start-y given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                    throw new ParseException("CSS LinearGradient: start-y given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                 }
                 startY = tt.currentNumericValue().doubleValue();
                 break;
             default:
-                throw new ParseException("CSS LinearGradient: start-y expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                throw new ParseException("CSS LinearGradient: start-y expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
         }
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "to".equals(tt.currentStringValue())) {
             switch (tt.nextToken()) {
                 case CssTokenizer.TT_NUMBER:
                     if (isProportional) {
-                        throw new ParseException("CSS LinearGradient: end-x as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: end-x as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     endX = tt.currentNumericValue().doubleValue();
                     break;
                 case CssTokenizer.TT_PERCENTAGE:
                     if (!isProportional) {
-                        throw new ParseException("CSS LinearGradient: end-x as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: end-x as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     endX = tt.currentNumericValue().doubleValue() / 100.0;
                     break;
                 case CssTokenizer.TT_DIMENSION:
                     if (isProportional) {
-                        throw new ParseException("CSS LinearGradient: end-x as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: end-x as percentage value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     if (!"px".equals(tt.currentStringValue())) {
-                        throw new ParseException("CSS LinearGradient: end-x given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: end-x given in pixels or percentage expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     endX = tt.currentNumericValue().doubleValue();
                     break;
                 default:
-                    throw new ParseException("CSS LinearGradient: end-x expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                    throw new ParseException("CSS LinearGradient: end-x expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
             }
             switch (tt.nextToken()) {
                 case CssTokenizer.TT_NUMBER:
                     if (isProportional) {
-                        throw new ParseException("CSS LinearGradient: end-y as proportional value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: end-y as proportional value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     endY = tt.currentNumericValue().doubleValue();
                     break;
                 case CssTokenizer.TT_PERCENTAGE:
                     if (!isProportional) {
-                        throw new ParseException("CSS LinearGradient: end-y as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: end-y as absolute value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     endY = tt.currentNumericValue().doubleValue() / 100.0;
                     break;
                 case CssTokenizer.TT_DIMENSION:
                     if (isProportional) {
-                        throw new ParseException("CSS LinearGradient: end-y as proportional value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: end-y as proportional value expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     if (!"px".equals(tt.currentStringValue())) {
-                        throw new ParseException("CSS LinearGradient: end-y given in pixels or percent expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: end-y given in pixels or percent expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     endY = tt.currentNumericValue().doubleValue();
                     break;
                 default:
-                    throw new ParseException("CSS LinearGradient: end-y expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                    throw new ParseException("CSS LinearGradient: end-y expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
             }
         } else {
-            throw new ParseException("CSS LinearGradient: 'to' expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+            throw new ParseException("CSS LinearGradient: 'to' expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
 
         }
         return new PointToPoint(startX, startY, endX, endY, isProportional);
@@ -377,36 +377,36 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
             switch (tt.currentStringValue()) {
                 case "top":
                     if (v != null) {
-                        throw new ParseException("CSS LinearGradient: you already specified '" + v + "', found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: you already specified '" + v + "', found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     v = tt.currentStringValue();
                     break;
                 case "bottom":
                     if (v != null) {
-                        throw new ParseException("CSS LinearGradient: you already specified '" + v + "', found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: you already specified '" + v + "', found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     v = tt.currentStringValue();
                     break;
                 case "left":
                     if (h != null) {
-                        throw new ParseException("CSS LinearGradient: you already specified '" + h + "', found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: you already specified '" + h + "', found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     h = tt.currentStringValue();
                     break;
                 case "right":
                     if (h != null) {
-                        throw new ParseException("CSS LinearGradient: you already specified '" + h + "', found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                        throw new ParseException("CSS LinearGradient: you already specified '" + h + "', found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
                     }
                     h = tt.currentStringValue();
                     break;
                 default:
-                    throw new ParseException("CSS LinearGradient: 'top', 'bottom', 'left' or 'right' expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getPosition());
+                    throw new ParseException("CSS LinearGradient: 'top', 'bottom', 'left' or 'right' expected, found: " + tt.currentStringValue() + " ttype:" + tt.currentToken(), tt.getStartPosition());
             }
         }
         tt.pushBack();
         switch (h + " " + v) {
             case "null null":
-                throw new ParseException("CSS LinearGradient: 'top', 'bottom', 'left' or 'right' expected after 'to'.", tt.getPosition());
+                throw new ParseException("CSS LinearGradient: 'top', 'bottom', 'left' or 'right' expected after 'to'.", tt.getStartPosition());
             case "left null":
                 startX = 1.0;
                 startY = endX = endY = 0.0;

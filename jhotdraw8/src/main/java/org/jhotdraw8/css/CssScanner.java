@@ -138,7 +138,9 @@ public class CssScanner {
      * @param ch The character to be pushed back
      */
     public void pushBack(int ch) {
-        pushedChars.add(ch);
+        if (ch!=-1&&currentChar!=-1) {
+            pushedChars.add(ch);
+        }
     }
 
     /**
@@ -146,7 +148,7 @@ public class CssScanner {
      * @return the position
      */
     public long getPosition() {
-        return position;
+        return position-pushedChars.size();
     }
 
     /**

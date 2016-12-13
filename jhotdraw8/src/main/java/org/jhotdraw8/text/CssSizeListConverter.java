@@ -82,7 +82,7 @@ public class CssSizeListConverter implements Converter<List<Double>> {
                             value = Double.NaN;
                             break;
                         default:
-                            throw new ParseException("number expected:"+tt.currentStringValue(),tt.getPosition());
+                            throw new ParseException("number expected:"+tt.currentStringValue(),tt.getStartPosition());
                     }
                     l.add(value);
                     break;

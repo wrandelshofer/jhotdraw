@@ -57,13 +57,14 @@ public class CssSizeConverter implements Converter<Double> {
 
     @Override
     public Double fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        int startPosition = buf.position();
         if (idFactory == null) {
             idFactory = defaultFactory;
         }
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.skipWhitespace();
         if (nullable && tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
-            tt.skipWhitespace();
+            //tt.skipWhitespace();
             return null;
         } else {
             tt.pushBack();
@@ -93,14 +94,16 @@ public class CssSizeConverter implements Converter<Double> {
                         value = Double.NaN;
                         break;
                     default:
-                        throw new ParseException("number expected:" + tt.currentStringValue(), tt.getPosition());
+                        buf.position(startPosition + tt.getStartPosition());
+                        throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
                 }
                 break;
             }
             default:
-                throw new ParseException("number expected", tt.getPosition());
+                throw new ParseException("number expected", tt.getStartPosition());
         }
-        tt.skipWhitespace();
+        buf.position(startPosition + tt.getEndPosition());
+        //tt.skipWhitespace(); must not consume remaining whitespace because of PatternConverter!
         return value;
     }
 

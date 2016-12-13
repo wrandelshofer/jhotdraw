@@ -106,16 +106,16 @@ public class CssEffectConverter implements Converter<Effect> {
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if ("none".equals(tt.currentStringValue())) {
                 tt.skipWhitespace();
-                in.position(tt.getPosition());
+                in.position(tt.getStartPosition());
                 return null;
             } else {
-                throw new ParseException("CSS Effect: \"<none>\" or \"<dropshadow>(\" or \"<innershadow>(\"  expected", tt.getPosition());
+                throw new ParseException("CSS Effect: \"<none>\" or \"<dropshadow>(\" or \"<innershadow>(\"  expected", tt.getStartPosition());
             }
         }
         tt.pushBack();
         Effect effect = parseEffect(tt);
         tt.skipWhitespace();
-        in.position(tt.getPosition());
+        in.position(tt.getStartPosition());
         return effect;
     }
 
@@ -133,7 +133,7 @@ public class CssEffectConverter implements Converter<Effect> {
                     current = parseInnerShadow(tt);
                     break;
                 default:
-                    throw new ParseException("CSS Effect: \""+DROP_SHADOW+"(\" or \""+INNER_SHADOW+"(\"  expected", tt.getPosition());
+                    throw new ParseException("CSS Effect: \""+DROP_SHADOW+"(\" or \""+INNER_SHADOW+"(\"  expected", tt.getStartPosition());
             }
             if (first == null) {
                 first = previous = current;
@@ -141,7 +141,7 @@ public class CssEffectConverter implements Converter<Effect> {
                 try {
                     previous.getClass().getDeclaredMethod("setInput", Effect.class).invoke(previous, current);
                 } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                    ParseException pe = new ParseException("CSS Effect: can not combine effects", tt.getPosition());
+                    ParseException pe = new ParseException("CSS Effect: can not combine effects", tt.getStartPosition());
                     pe.initCause(ex);
                     throw pe;
                 }
@@ -170,7 +170,7 @@ public class CssEffectConverter implements Converter<Effect> {
 
         if (tt.nextToken() != ')') {
             if (tt.currentToken() != CssTokenizer.TT_IDENT) {
-                throw new ParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected", tt.getPosition());
+                throw new ParseException("CSS Effect: " + func + "(<blur-type>,color,radius,spread,offset-x,offset-y) expected", tt.getStartPosition());
             }
             switch (tt.currentStringValue()) {
                 case "gaussian":
@@ -186,7 +186,7 @@ public class CssEffectConverter implements Converter<Effect> {
                     blurType = BlurType.TWO_PASS_BOX;
                     break;
                 default:
-                    throw new ParseException("CSS Effect: " + func + "(<gaussian | one-pass-box | three-pass-box | two-pass-box>  expected", tt.getPosition());
+                    throw new ParseException("CSS Effect: " + func + "(<gaussian | one-pass-box | three-pass-box | two-pass-box>  expected", tt.getStartPosition());
             }
 
             if (tt.nextToken() != ',') {
@@ -209,13 +209,13 @@ public class CssEffectConverter implements Converter<Effect> {
                 }
                 color = (Color) colorConverter.fromString(buf.toString()).getPaint();
             } else {
-                throw new ParseException("CSS Effect: " + func + "(" + blurType.toString().toLowerCase().replace('_', '-') + ",  <color> expected", tt.getPosition());
+                throw new ParseException("CSS Effect: " + func + "(" + blurType.toString().toLowerCase().replace('_', '-') + ",  <color> expected", tt.getStartPosition());
             }
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                throw new ParseException("CSS Effect: radius number expected", tt.getPosition());
+                throw new ParseException("CSS Effect: radius number expected", tt.getStartPosition());
             }
             radius = tt.currentNumericValue().doubleValue();
 
@@ -230,24 +230,24 @@ public class CssEffectConverter implements Converter<Effect> {
             spreadOrChocke = tt.currentNumericValue().doubleValue()/100.0;
                     break;
                 default:
-                throw new ParseException("CSS Effect: spread or chocke number expected", tt.getPosition());
+                throw new ParseException("CSS Effect: spread or chocke number expected", tt.getStartPosition());
             }
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                throw new ParseException("CSS Effect: offset-x number expected", tt.getPosition());
+                throw new ParseException("CSS Effect: offset-x number expected", tt.getStartPosition());
             }
             offsetX = tt.currentNumericValue().doubleValue();
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                throw new ParseException("CSS Effect: offset-y number expected", tt.getPosition());
+                throw new ParseException("CSS Effect: offset-y number expected", tt.getStartPosition());
             }
             offsetY = tt.currentNumericValue().doubleValue();
             if (tt.nextToken() != ')') {
-                throw new ParseException("CSS Effect: ')'  expected", tt.getPosition());
+                throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
             }
         }
 

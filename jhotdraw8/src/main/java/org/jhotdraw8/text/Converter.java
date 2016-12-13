@@ -121,9 +121,9 @@ public interface Converter<T> {
     }
 
     /**
-     * Constructs a value from a String.
+     * Constructs a value from a CharSequence.
      * <p>
-     * The conversion only succeeds if the entire string is consumed.
+     * The conversion only succeeds if the entire CharSequence is consumed.
      * <p>
      * This method does not change the state of the converter. 
      * <p>
