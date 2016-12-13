@@ -100,13 +100,13 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
         DrawingModel model = view.getModel();
         if (event.isShiftDown()) {
-            // shift transforms all selected figures
+            // shift transforms only the anchor figure
+            Figure f = anchorFigure;
+            translateFigure(f, oldPoint, newPoint, model);
+        } else {
             for (Figure f : groupReshapeableFigures) {
                 translateFigure(f, oldPoint, newPoint, model);
             }
-        } else {
-            Figure f = anchorFigure;
-            translateFigure(f, oldPoint, newPoint, model);
         }
 
         oldPoint = newPoint;
