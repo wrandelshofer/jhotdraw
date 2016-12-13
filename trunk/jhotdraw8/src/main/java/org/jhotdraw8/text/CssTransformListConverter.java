@@ -225,13 +225,13 @@ tt.setSkipWhitespaces(true);
         while (tt.nextToken() != CssTokenizer.TT_EOF) {
             tt.pushBack();
             if (tt.nextToken() != CssTokenizer.TT_FUNCTION) {
-                throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
             String func = tt.currentStringValue();
-            int funcPos = tt.getPosition();
+            int funcPos = tt.getStartPosition();
             List<Double> m = new ArrayList<>();
             if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                throw new ParseException("coefficient nb 1 expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                throw new ParseException("coefficient nb 1 expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
             m.add(tt.currentNumericValue().doubleValue());
             while (tt.nextToken() != ')' && tt.currentToken() != CssTokenizer.TT_EOF) {
@@ -239,12 +239,12 @@ tt.setSkipWhitespaces(true);
                     tt.pushBack();
                 }
                 if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                    throw new ParseException("coefficient nb " + m.size() + " expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                    throw new ParseException("coefficient nb " + m.size() + " expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                 }
                 m.add(tt.currentNumericValue().doubleValue());
             }
             if (tt.currentToken() != ')') {
-                throw new ParseException("')' expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                throw new ParseException("')' expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
             switch (func) {
                 case "affine": {
@@ -263,7 +263,7 @@ tt.setSkipWhitespaces(true);
                             ));
                             break;
                         default:
-                            throw new ParseException("6 or 12 coefficients expected, but found " + m.size(), tt.getPosition());
+                            throw new ParseException("6 or 12 coefficients expected, but found " + m.size(), tt.getStartPosition());
                     }
                     break;
                 }
@@ -279,7 +279,7 @@ tt.setSkipWhitespaces(true);
                             ));
                             break;
                         default:
-                            throw new ParseException("2 or 4 coefficients expected, but found " + m.size(), tt.getPosition());
+                            throw new ParseException("2 or 4 coefficients expected, but found " + m.size(), tt.getStartPosition());
                     }
                     break;
                 }
@@ -301,7 +301,7 @@ tt.setSkipWhitespaces(true);
                             ));
                             break;
                         default:
-                            throw new ParseException("1, 2 or 3 coefficients expected, but found " + m.size(), tt.getPosition());
+                            throw new ParseException("1, 2 or 3 coefficients expected, but found " + m.size(), tt.getStartPosition());
                     }
                     break;
                 }
@@ -335,7 +335,7 @@ tt.setSkipWhitespaces(true);
                             ));
                             break;
                         default:
-                            throw new ParseException("1, 2, 3, 4, or 6 coefficients expected, but found " + m.size(), tt.getPosition());
+                            throw new ParseException("1, 2, 3, 4, or 6 coefficients expected, but found " + m.size(), tt.getStartPosition());
                     }
                     break;
                 }
@@ -374,7 +374,7 @@ tt.setSkipWhitespaces(true);
                             ));
                             break;
                         default:
-                            throw new ParseException("1, 3, 4, 6 or 7 coefficients expected, but found " + m.size(), tt.getPosition());
+                            throw new ParseException("1, 3, 4, 6 or 7 coefficients expected, but found " + m.size(), tt.getStartPosition());
                     }
                     break;
                 }

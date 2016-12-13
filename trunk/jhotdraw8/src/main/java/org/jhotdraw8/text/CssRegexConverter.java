@@ -72,11 +72,11 @@ public class CssRegexConverter implements Converter<Regex> {
             case CssTokenizer.TT_IDENT:
                 if ("none".equals(tt.currentStringValue())) {
                 } else {
-                    throw new ParseException("find string or none expected", tt.getPosition());
+                    throw new ParseException("find string or none expected", tt.getStartPosition());
                 }
                 break;
             default:
-                throw new ParseException("find string expected", tt.getPosition());
+                throw new ParseException("find string expected", tt.getStartPosition());
         }
 
         switch (tt.nextToken()) {
@@ -86,10 +86,10 @@ public class CssRegexConverter implements Converter<Regex> {
             case CssTokenizer.TT_EOF:
                 break;
             default:
-                throw new ParseException("replace string expected", tt.getPosition());
+                throw new ParseException("replace string expected", tt.getStartPosition());
         }
         tt.skipWhitespace();
-        in.position(tt.getPosition());
+        in.position(tt.getStartPosition());
         return new Regex(find, replace);
     }
 

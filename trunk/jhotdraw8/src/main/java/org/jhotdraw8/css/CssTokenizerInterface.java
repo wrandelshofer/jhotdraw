@@ -51,7 +51,9 @@ public interface CssTokenizerInterface {
 
   int getLineNumber();
 
-  int getPosition();
+  int getStartPosition();
+
+  int getEndPosition();
 
   int nextToken() throws IOException;
 

@@ -183,7 +183,7 @@ public class XmlFontConverter implements Converter<Font> {
                         fontWeight = FontWeight.BLACK;
                         break;
                     default:
-                        throw new ParseException("illegal font weight " + fontWeightOrFontSize, buf.position() + tt.getPosition());
+                        throw new ParseException("illegal font weight " + fontWeightOrFontSize, buf.position() + tt.getStartPosition());
                 }
             }
 
@@ -199,7 +199,7 @@ public class XmlFontConverter implements Converter<Font> {
             // consume buffer
             buf.position(buf.limit());
         } else {
-            throw new ParseException("font family expected", buf.position() + tt.getPosition());
+            throw new ParseException("font family expected", buf.position() + tt.getStartPosition());
         }
 
         Font font = Font.font(fontFamily, fontWeight, fontPosture, fontSize);

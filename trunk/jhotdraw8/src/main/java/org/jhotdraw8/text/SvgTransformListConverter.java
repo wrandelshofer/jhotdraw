@@ -138,13 +138,13 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
         while (tt.nextToken() != CssTokenizer.TT_EOF) {
             tt.pushBack();
             if (tt.nextToken() != CssTokenizer.TT_FUNCTION) {
-                throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                throw new ParseException("function expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
             String func = tt.currentStringValue();
             switch (func) {
                 case "skewX": {
                     if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                        throw new ParseException("skew-angle expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                        throw new ParseException("skew-angle expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double a = tt.currentNumericValue().doubleValue();
                     txs.add(Transform.affine(1, 0, tan(a), 1, 0, 0));
@@ -152,7 +152,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                 }
                 case "skewY": {
                     if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                        throw new ParseException("skew-angle expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                        throw new ParseException("skew-angle expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double a = tt.currentNumericValue().doubleValue();
                     txs.add(Transform.affine(1, tan(a), 0, 1, 0, 0));
@@ -160,7 +160,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                 }
                 case "translate": {
                     if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                        throw new ParseException("tx expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                        throw new ParseException("tx expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double tx = tt.currentNumericValue().doubleValue();
                     if (tt.nextToken() != ',') {
@@ -179,7 +179,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                 }
                 case "scale": {
                     if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                        throw new ParseException("sx expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                        throw new ParseException("sx expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double sx = tt.currentNumericValue().doubleValue();
                     if (tt.nextToken() != ',') {
@@ -198,7 +198,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                 }
                 case "rotate": {
                     if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                        throw new ParseException("rotate-angle expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                        throw new ParseException("rotate-angle expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                     }
                     double angle = tt.currentNumericValue().doubleValue();
                     if (tt.nextToken() != ',') {
@@ -212,7 +212,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                             tt.pushBack();
                         }
                         if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                            throw new ParseException("cy expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                            throw new ParseException("cy expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                         }
                         cy = tt.currentNumericValue().doubleValue();
                     } else {
@@ -230,7 +230,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                             tt.pushBack();
                         }
                         if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                            throw new ParseException(((char) ('a' + i)) + " expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                            throw new ParseException(((char) ('a' + i)) + " expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
                         }
                         m[i] = tt.currentNumericValue().doubleValue();
                     }
@@ -238,10 +238,10 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                     break;
                 }
                 default:
-                    throw new ParseException("unsupported function: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                    throw new ParseException("unsupported function: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
             if (tt.nextToken() != ')') {
-                throw new ParseException("')' expected: \"" + tt.currentStringValue() + "\"", tt.getPosition());
+                throw new ParseException("')' expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
         }
         

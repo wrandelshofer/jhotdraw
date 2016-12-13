@@ -120,7 +120,8 @@ public class CssTokenizer implements CssTokenizerInterface {
     private String stringValue;
     private Number numericValue;
     private int lineNumber;
-    private int position;
+    private int startPosition;
+    private int endPosition;
     private boolean skipComments;
     private boolean skipWhitespaces;
 
@@ -167,7 +168,8 @@ public class CssTokenizer implements CssTokenizerInterface {
         }
 
         lineNumber = (int) in.getLineNumber();
-        position = (int) in.getPosition();
+        startPosition = (int) in.getPosition();
+        endPosition = (int) in.getPosition();
 
         int ch = in.nextChar();
         stringValue = null;
@@ -469,6 +471,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                 break;
             }
         }
+        endPosition=(int)in.getPosition();
         return currentToken;
     }
 
@@ -874,8 +877,12 @@ public class CssTokenizer implements CssTokenizerInterface {
     }
 
     @Override
-    public int getPosition() {
-        return position;
+    public int getStartPosition() {
+        return startPosition;
+    }
+    @Override
+    public int getEndPosition() {
+        return endPosition;
     }
 
     @Override
