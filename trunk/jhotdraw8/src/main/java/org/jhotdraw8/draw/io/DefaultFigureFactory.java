@@ -56,7 +56,7 @@ import org.jhotdraw8.text.XmlEnumConverter;
 import org.jhotdraw8.text.XmlFFontConverter;
 import org.jhotdraw8.text.XmlFigureReferenceConverter;
 import org.jhotdraw8.text.XmlInsetsConverter;
-import org.jhotdraw8.text.XmlPaintConverter;
+import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.XmlPaintableConverter;
 import org.jhotdraw8.text.XmlPoint3DConverter;
 import org.jhotdraw8.text.XmlRectangle2DConverter;
@@ -114,7 +114,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(URL.class, new XmlUrlConverter());
         addConverterForType(URI.class, new XmlUriConverter());
         addConverterForType(Connector.class, new XmlConnectorConverter());
-        addConverterForType(Paint.class, new XmlPaintConverter());
+        addConverterForType(Paint.class, new SvgPaintConverter());
         addConverterForType(Paintable.class, new XmlPaintableConverter());
         addConverterForType(CssColor.class, new XmlCColorConverter());
         addConverterForType(Boolean.class, new XmlBooleanConverter());

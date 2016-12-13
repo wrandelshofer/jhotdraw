@@ -93,7 +93,11 @@ public class CssColorConverter implements Converter<CssColor> {
                 color = new CssColor('#' + tt.currentStringValue(), Color.web('#' + tt.currentStringValue()));
                 break;
             case CssTokenizerInterface.TT_IDENT:
+                try {
                 color = new CssColor(tt.currentStringValue(), Color.web(tt.currentStringValue()));
+                } catch (IllegalArgumentException e) {
+                    throw new ParseException(e.getMessage()+" value:"+tt.currentStringValue(),tt.getPosition());
+                }
                 break;
             case CssTokenizerInterface.TT_FUNCTION:
                 StringBuilder buf = new StringBuilder(tt.currentStringValue());

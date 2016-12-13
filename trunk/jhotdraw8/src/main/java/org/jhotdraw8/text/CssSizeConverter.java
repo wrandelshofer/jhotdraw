@@ -72,7 +72,7 @@ public class CssSizeConverter implements Converter<Double> {
         switch (tt.nextToken()) {
             case CssTokenizerInterface.TT_DIMENSION:
                 value = tt.currentNumericValue().doubleValue();
-                value = idFactory.convert(value, tt.currentUnitValue(), "px");
+                value = idFactory.convert(value, tt.currentStringValue(), "px");
                 break;
             case CssTokenizerInterface.TT_PERCENTAGE:
                 value = tt.currentNumericValue().doubleValue();

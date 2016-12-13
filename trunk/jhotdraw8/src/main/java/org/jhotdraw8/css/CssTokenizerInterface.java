@@ -47,8 +47,6 @@ public interface CssTokenizerInterface {
 
   String currentStringValue();
 
-  String currentUnitValue();
-  
   int currentToken();
 
   int getLineNumber();

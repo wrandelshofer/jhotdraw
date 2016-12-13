@@ -26,8 +26,19 @@ public interface IdFactory {
      * @param object the object
      * @return the id
      */
-    public String createId(Object object);
+  default String createId(Object object) {
+      return createId(object, "");
+  }
 
+    /**
+     * Creates an id for the specified object. If the object already has an id,
+     * then that id is returned.
+     *
+     * @param object the object
+     * @param prefix the desired prefix for the id
+     * @return the id
+     */
+  public String createId(Object object, String prefix);
     /**
      * Gets an id for the specified object. Returns null if the object has no
      * id.
