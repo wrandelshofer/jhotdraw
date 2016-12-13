@@ -84,6 +84,7 @@ import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.draw.RenderingIntent;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.io.OutputFormat;
 import org.jhotdraw8.draw.io.XmlOutputFormatMixin;
@@ -116,6 +117,8 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
     private final String SVG_NS = "http://www.w3.org/2000/svg";
     private final String namespaceQualifier = null;
+    private URI internalHome;
+    private URI externalHome;
 
     public Document toDocument(Drawing external) throws IOException {
         return toDocument(external, Collections.singleton(external));
@@ -684,13 +687,23 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
         elem.setAttribute("height", nb.toString(node.getFitHeight()));
         elem.setAttribute("preserveAspectRatio", node.isPreserveRatio() ? "xMidYMid" : "none");
 
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
-        bout.close();
-        byte[] imageData = bout.toByteArray();
+        URI uri = (URI) node.getProperties().get(ImageFigure.IMAGE_URI);
+        String href = null;
+        if (uri != null) {
+            href = toExternal(uri).toString();
+        } else {
+            if (node.getImage() != null) {
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
+                bout.close();
+                byte[] imageData = bout.toByteArray();
 
-        elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href", "data:image;base64,"
-                + Base64.getEncoder().encodeToString(imageData));
+                href = "data:image;base64," + Base64.getEncoder().encodeToString(imageData);
+            }
+        }
+        if (href != null) {
+            elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href", href);
+        }
         return elem;
     }
 
@@ -854,11 +867,13 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
 
     @Override
     public void setExternalHome(URI uri) {
-        // empty
+       externalHome=uri;
     }
 
     @Override
     public void write(Map<DataFormat, Object> clipboard, Drawing drawing, Collection<Figure> selection) throws IOException {
+        setExternalHome(null);
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
         StringWriter out = new StringWriter();
         Document doc = toDocument(drawing, selection);
         try {
@@ -874,7 +889,15 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
 
     @Override
     public void setInternalHome(URI uri) {
-        // empty
+       internalHome=uri;
+    }
+
+    public URI getInternalHome() {
+        return internalHome;
+    }
+
+    public URI getExternalHome() {
+        return externalHome;
     }
 
 }
