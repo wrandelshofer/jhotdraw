@@ -192,26 +192,16 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
                 throw new ParseException("CSS LinearGradient: \"<none>\" or \"<linear-gradient>(\"  expected", tt.getPosition());
             }
         }
-        if (tt.currentToken() != CssTokenizer.TT_FUNCTION) {
-            throw new ParseException("CSS LinearGradient: \"<linear-gradient>(\"  expected", tt.getPosition());
+        if (tt.currentToken() != CssTokenizer.TT_FUNCTION||! "linear-gradient".equals(tt.currentStringValue())) {
+            throw new ParseException("CSS LinearGradient: \"<linear-gradient>(\"  expected, found: " + tt.currentStringValue(), tt.getPosition());
         }
 
-        boolean isLinear = false;
-        String func;
-        switch (tt.currentStringValue()) {
-            case "linear-gradient":
-                isLinear = true;
-                break;
-            default:
-                throw new ParseException("CSS LinearGradient: \"<linear-gradient>(\"  expected, found: " + tt.currentStringValue(), tt.getPosition());
-        }
         boolean needComma = false;
         PointToPoint fromTo = null;
 
         // parse [from point to point] | [to sideOrCorner]
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "from".equals(tt.currentStringValue())) {
             fromTo = parsePointToPoint(tt);
-
             needComma = true;
         } else if (tt.currentToken() == CssTokenizer.TT_IDENT && "to".equals(tt.currentStringValue())) {
             fromTo = parseSideOrCorner(tt);

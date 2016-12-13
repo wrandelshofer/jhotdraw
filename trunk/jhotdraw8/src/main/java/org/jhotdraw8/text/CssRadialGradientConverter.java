@@ -149,36 +149,15 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             throw new ParseException("CSS RadialGradient: \"<radial-gradient>(\"  expected", tt.getPosition());
         }
 
-        boolean isRadial = false;
         String func;
         switch (tt.currentStringValue()) {
             case "radial-gradient":
-                isRadial = true;
                 break;
             default:
                 throw new ParseException("CSS RadialGradient: \"<radial-gradient>(\"  expected, found: " + tt.currentStringValue(), tt.getPosition());
         }
         boolean needComma = false;
-        PointToPoint fromTo = null;
-
-        // parse [from point to point] | [to sideOrCorner]
-        if (tt.nextToken() == CssTokenizer.TT_IDENT && "from".equals(tt.currentStringValue())) {
-            fromTo = parsePointToPoint(tt);
-
-            needComma = true;
-        } else if (tt.currentToken() == CssTokenizer.TT_IDENT && "to".equals(tt.currentStringValue())) {
-            fromTo = null;
-            needComma = true;
-        } else {
-            fromTo = new PointToPoint(0.0, 0.0, 0.0, 1.0, true);
-            tt.pushBack();
-        }
-        if (needComma) {
-            if (tt.nextToken() != ',') {
-                throw new ParseException("CSS RadialGradient: ','  expected, found: " + tt.currentStringValue(), tt.getPosition());
-            }
-            needComma = false;
-        }
+        
         CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if ("repeat".equals(tt.currentStringValue())) {
