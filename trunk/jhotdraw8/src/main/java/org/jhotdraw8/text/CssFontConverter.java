@@ -22,12 +22,12 @@ import org.jhotdraw8.draw.io.IdFactory;
  * CSS Reference Guide</a>.
  * </p>
  * <pre>
- CssFont := [FontStyle] [FontWeight] FontSize FontFamily ;
- FontStyle := normal|italic|oblique;
- FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
- FontSize := Size;
- FontFamily := Word|Quoted;
- </pre>
+ * CssFont := [FontStyle] [FontWeight] FontSize FontFamily ;
+ * FontStyle := normal|italic|oblique;
+ * FontWeight := normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900;
+ * FontSize := Size;
+ * FontFamily := Word|Quoted;
+ * </pre>
  * <p>
  * FIXME currently only parses the Color production
  * </p>
@@ -41,7 +41,7 @@ public class CssFontConverter implements Converter<CssFont> {
     @Override
     public void toString(Appendable out, IdFactory idFactory, CssFont font) throws IOException {
         /// FIXME use CssTokenizer
-        
+
         double fontSize = font.getSize();
         String fontFamily = font.getFamily();
 
@@ -82,7 +82,7 @@ public class CssFontConverter implements Converter<CssFont> {
     @Override
     public CssFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
-
+        tt.setSkipWhitespaces(true);
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
         double fontSize = 12.0;
