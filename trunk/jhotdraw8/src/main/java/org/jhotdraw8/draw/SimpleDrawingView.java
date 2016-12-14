@@ -1185,31 +1185,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
    */
   protected void createHandles(Map<Figure, List<Handle>> handles) {
     Set<Figure> selection = getSelectedFigures();
-    HandleType handleType = /*selection.size() > 1 ? getMultiHandleType() :*/ getHandleType();
-    if (selection.size() < tooManySelectedFigures) {
-      for (Figure figure : selection) {
+    HandleType handleType = getHandleType();
+    for (Figure figure : selection) {
         List<Handle> list = handles.computeIfAbsent(figure,k->new ArrayList<>());
         figure.createHandles(handleType, this, list);
         handles.put(figure, list);
       }
-    }
-
-    if (selection.size() > 1) {
-      Figure first = selection.iterator().next();
-      List<Handle> list = handles.get(first);
-      if (list == null) {
-        list = new ArrayList<>();
-        handles.put(first, list);
-      }
-      if (selection.size() >= tooManySelectedFigures) {
-        list.add(new MultipleSelectionOutlineHandle());
-      }
-      list.add(MultipleSelectionMoveHandle.northEast());
-      list.add(MultipleSelectionMoveHandle.northWest());
-      list.add(MultipleSelectionMoveHandle.southEast());
-      list.add(MultipleSelectionMoveHandle.southWest());
-      handles.put(first, list);
-    }
   }
 
   private void invalidateWorldViewTransforms() {

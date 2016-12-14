@@ -50,7 +50,7 @@ public class CssEffectConverter implements Converter<Effect> {
     private static final String DROP_SHADOW = "drop-shadow";
     private static final String INNER_SHADOW = "inner-shadow";
 
-    private CssPaintableConverter colorConverter = new CssPaintableConverter();
+    private CssColorConverter colorConverter = new CssColorConverter();
     private CssSizeConverter nb = new CssSizeConverter();
 
     @Override
@@ -197,17 +197,9 @@ public class CssEffectConverter implements Converter<Effect> {
             } else if (tt.currentToken() == CssTokenizer.TT_IDENT) {
                 color = Color.web(tt.currentStringValue());
             } else if (tt.currentToken() == CssTokenizer.TT_FUNCTION) {
-                StringBuilder buf = new StringBuilder();
-                buf.append(tt.currentStringValue());
-                buf.append('(');
-                while (tt.nextToken() != CssTokenizer.TT_EOF) {
-                    if (tt.currentToken() == ')') {
-                        buf.append(')');
-                        break;
-                    }
-                    buf.append(tt.currentStringValue());
-                }
-                color = (Color) colorConverter.fromString(buf.toString()).getPaint();
+                tt.pushBack();
+                CssColor colorOrNull =colorConverter.parseColor(tt);
+                color = (Color) colorOrNull.getColor();
             } else {
                 throw new ParseException("CSS Effect: " + func + "(" + blurType.toString().toLowerCase().replace('_', '-') + ",  <color> expected", tt.getStartPosition());
             }
