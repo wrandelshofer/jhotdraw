@@ -87,6 +87,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      */
     public final static SimpleFigureKey<List<String>> XML_EPILOG_COMMENT_KEY = new SimpleFigureKey<List<String>>("xmlTailComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
 
+    private String indent = "  ";
     private FigureFactory factory;
     private String namespaceURI;
     private String namespaceQualifier;
@@ -172,10 +173,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             }
 
             Element docElement = doc.getDocumentElement();
+            String linebreak = "\n";
             for (Figure child : ordered) {
-                writeNodeRecursively(doc, docElement, child);
+                writeNodeRecursively(doc, docElement, child, linebreak);
             }
-            docElement.appendChild(doc.createTextNode("\n"));
+            docElement.appendChild(doc.createTextNode(linebreak));
             return doc;
         } catch (ParserConfigurationException ex) {
             throw new IOException(ex);
@@ -208,14 +210,15 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 doc.insertBefore(doc.createComment(string), docElement);
             }
             writeElementAttributes(docElement, external);
+            String linebreak = "\n";
             for (Figure child : external.getChildren()) {
-                writeNodeRecursively(doc, docElement, child);
+                writeNodeRecursively(doc, docElement, child, linebreak);
             }
             for (String string : external.get(XML_BODY_COMMENT_KEY)) {
-                docElement.appendChild(doc.createTextNode("\n"));
+                docElement.appendChild(doc.createTextNode(linebreak));
                 docElement.appendChild(doc.createComment(string));
             }
-            docElement.appendChild(doc.createTextNode("\n"));
+            docElement.appendChild(doc.createTextNode(linebreak));
             for (String string : external.get(XML_EPILOG_COMMENT_KEY)) {
                 doc.appendChild(doc.createComment(string));
             }
@@ -236,7 +239,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    private void writeNodeRecursively(Document doc, Element parent, Figure figure) throws IOException {
+    private void writeNodeRecursively(Document doc, Element parent, Figure figure, String linebreak) throws IOException {
         try {
             String elementName = factory.figureToName(figure);
             if (elementName == null) {
@@ -248,25 +251,25 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             writeElementNodeList(doc, elem, figure);
 
             for (String string : figure.get(XML_HEAD_COMMENT_KEY)) {
-                parent.appendChild(doc.createTextNode("\n"));
+                parent.appendChild(doc.createTextNode(linebreak));
                 parent.appendChild(doc.createComment(string));
             }
             for (Figure child : figure.getChildren()) {
                 if (factory.figureToName(child) != null) {
-                    writeNodeRecursively(doc, elem, child);
+                    writeNodeRecursively(doc, elem, child, linebreak + indent);
                 }
             }
             boolean hasNoElementNodes = factory.figureNodeListKeys(figure).isEmpty();
             for (String string : figure.get(XML_BODY_COMMENT_KEY)) {
                 if (hasNoElementNodes) {
-                    elem.appendChild(doc.createTextNode("\n"));
+                    elem.appendChild(doc.createTextNode(linebreak));
                 }
                 elem.appendChild(doc.createComment(string));
             }
             if (hasNoElementNodes && elem.getChildNodes().getLength() != 0) {
-                elem.appendChild(doc.createTextNode("\n"));
+                elem.appendChild(doc.createTextNode(linebreak));
             }
-            parent.appendChild(doc.createTextNode("\n"));
+            parent.appendChild(doc.createTextNode(linebreak));
             parent.appendChild(elem);
         } catch (IOException e) {
             throw new IOException("Error writing figure " + figure, e);
@@ -344,9 +347,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         for (int i = 0; i < list.getLength(); i++) {
             Node node = list.item(i);
             switch (node.getNodeType()) {
-                case Node.PROCESSING_INSTRUCTION_NODE:
-                    readProcessingInstruction(doc, (ProcessingInstruction) node, external);
-                    break;
                 case Node.COMMENT_NODE:
                     comments.add(((Comment) node).getTextContent());
                     break;
@@ -357,6 +357,16 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     } else if (f instanceof Clipping) {
                         clipping = (Clipping) f;
                     }
+            }
+        }
+        if (external != null) {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                switch (node.getNodeType()) {
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        readProcessingInstruction(doc, (ProcessingInstruction) node, external);
+                        break;
+                }
             }
         }
         if (external == null && clipping == null) {
@@ -588,7 +598,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     URI uri = URI.create(href);
                     uri = externalToInternal(external, uri);
 
-                    List<URI> stylesheets = new ArrayList<>(external.get(factory.getStylesheetsKey()));
+                  List<URI> listOrNull=  external.get(factory.getStylesheetsKey());
+                    List<URI> stylesheets =listOrNull==null? new ArrayList<>():new ArrayList<>(listOrNull);
                     stylesheets.add(uri);
                     external.set(factory.getStylesheetsKey(), stylesheets);
                 }
@@ -697,4 +708,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     public Figure read(InputStream in, Drawing drawing) throws IOException {
         return XmlInputFormatMixin.super.read(in, drawing);
     }
+
+    public String getIndent() {
+        return indent;
+    }
+
+    public void setIndent(String indent) {
+        this.indent = indent;
+    }
+
 }

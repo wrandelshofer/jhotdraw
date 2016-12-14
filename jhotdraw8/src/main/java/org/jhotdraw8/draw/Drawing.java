@@ -7,6 +7,7 @@ package org.jhotdraw8.draw;
 import org.jhotdraw8.draw.figure.Figure;
 import java.io.File;
 import java.net.URI;
+import java.util.Collections;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
@@ -65,7 +66,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URI>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), null);
+    public final static Key<List<URI>> AUTHOR_STYLESHEETS = new SimpleFigureKey<>("authorStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -77,14 +78,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<URI>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), null);
+    public final static Key<List<URI>> USER_AGENT_STYLESHEETS = new SimpleFigureKey<>("userAgentStylesheets", List.class, new Class<?>[]{URI.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    public final static Key<List<String>> INLINE_STYLESHEETS = new SimpleFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), null);
+    public final static Key<List<String>> INLINE_STYLESHEETS = new SimpleFigureKey<>("inlineStylesheets", List.class, new Class<?>[]{String.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.TRANSFORM, DirtyBits.STYLE), Collections.emptyList());
     /**
      * Defines the canvas width.
      * <p>
