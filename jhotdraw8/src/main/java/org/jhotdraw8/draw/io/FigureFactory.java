@@ -23,13 +23,6 @@ import org.w3c.dom.Node;
 public interface FigureFactory extends IdFactory {
 
     /**
-     * Returns a comment which will be added to the beginning of the file.
-     *
-     * @return a comment or null
-     */
-    String createFileComment();
-
-    /**
      * Maps a figure to an XML element name.
      *
      * @param f the figure

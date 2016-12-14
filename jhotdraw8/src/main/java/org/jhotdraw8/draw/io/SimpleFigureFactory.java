@@ -472,16 +472,6 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
     }
 
-    /**
-     * This implementation returns null.
-     *
-     * @return null
-     */
-    @Override
-    public String createFileComment() {
-        return null;
-    }
-
     @Override
     public List<Node> valueToNodeList(MapAccessor<?> key, Object value, Document document) throws IOException {
         if (key.getValueType() == String.class) {
