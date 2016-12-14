@@ -43,6 +43,37 @@ public interface CssTokenizerInterface {
   int TT_UNICODE_RANGE = -13;
   int TT_URI = -12;
 
+  default String currentValue() {
+      switch (currentToken()) {
+       case TT_AT_KEYWORD : return "@"+currentStringValue();
+  case TT_BAD_COMMENT : return "bad comment";
+  case TT_BAD_STRING : return "bad string";
+  case TT_BAD_URI : return "bad uri";
+  case TT_CDC : return "<!--";
+  case TT_CDO : return "-->";
+  case TT_COLUMN : return "|";
+  case TT_COMMENT : return "/*"+currentStringValue()+"*/";
+  case TT_DASH_MATCH : return "|=";
+  case TT_DIMENSION : return currentNumericValue()+currentStringValue();
+  case TT_EOF : return "eof";
+  case TT_FUNCTION : return currentStringValue()+"(";
+  case TT_HASH : return "#"+currentStringValue();
+  case TT_IDENT : return currentStringValue();
+  case TT_INCLUDE_MATCH: return "~=";
+  case TT_NUMBER : return ""+currentNumericValue();
+  case TT_PERCENTAGE : return currentNumericValue()+"%";
+  case TT_PREFIX_MATCH :return "^=";
+  case TT_S : return " ";
+  case TT_STRING : return '"'+ currentStringValue()+'"';
+  case TT_SUBSTRING_MATCH :return "*=";
+  case TT_SUFFIX_MATCH :return "$=";
+  case TT_UNICODE_RANGE : return currentStringValue();
+  case TT_URI : return "url("+ currentStringValue()+")";
+          default:
+              return Character.toString((char)currentToken());
+      }
+  }
+  
   Number currentNumericValue();
 
   String currentStringValue();

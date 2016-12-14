@@ -527,12 +527,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new BoundsInParentOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new MoveHandle(this, RelativeLocator.northEast()));
-            list.add(new MoveHandle(this, RelativeLocator.northWest()));
-            list.add(new MoveHandle(this, RelativeLocator.southEast()));
-            list.add(new MoveHandle(this, RelativeLocator.southWest()));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             ResizeHandleKit.addCornerResizeHandles(this, list);
