@@ -122,6 +122,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     private URI internalHome;
     private URI externalHome;
     private IdFactory idFactory = new SimpleIdFactory();
+    private String indent = "  ";
 
     public Document toDocument(Drawing external) throws IOException {
         return toDocument(external, Collections.singleton(external));
@@ -178,19 +179,20 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
                 docElement.getParentNode().insertBefore(doc.createComment(commentText), docElement);
             }
 
+            String linebreak = "\n";
             idFactory.reset();
             initIdFactoryRecursively(drawingNode);
             Element defsElement = doc.createElement("defs");
             writeDefsRecursively(doc, defsElement, drawingNode);
             if (defsElement.getChildNodes().getLength() > 0) {
-                docElement.appendChild(doc.createTextNode("\n"));
+                docElement.appendChild(doc.createTextNode(linebreak));
                 docElement.appendChild(defsElement);
-                defsElement.appendChild(doc.createTextNode("\n"));
-                docElement.appendChild(doc.createTextNode("\n"));
+                defsElement.appendChild(doc.createTextNode(linebreak));
+                docElement.appendChild(doc.createTextNode(linebreak));
             }
             writeDocumentElementAttributes(docElement, drawingNode);
-            writeNodeRecursively(doc, docElement, drawingNode);
-            docElement.appendChild(doc.createTextNode("\n"));
+            writeNodeRecursively(doc, docElement, drawingNode, linebreak);
+            docElement.appendChild(doc.createTextNode(linebreak));
 
             return doc;
         } catch (ParserConfigurationException ex) {
@@ -217,8 +219,8 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
 // empty
     }
 
-    private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node) throws IOException {
-        parent.appendChild(doc.createTextNode("\n"));
+    private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node, String linebreak) throws IOException {
+        parent.appendChild(doc.createTextNode(linebreak));
 
         Element elem = null;
         if (node instanceof Shape) {
@@ -246,10 +248,10 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
         if (node instanceof Parent) {
             Parent pp = (Parent) node;
             for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                writeNodeRecursively(doc, elem, child);
+                writeNodeRecursively(doc, elem, child, linebreak + indent);
             }
             if (!pp.getChildrenUnmodifiable().isEmpty()) {
-                elem.appendChild(doc.createTextNode("\n"));
+                elem.appendChild(doc.createTextNode(linebreak));
             }
         }
 
@@ -1064,4 +1066,11 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
         return externalHome;
     }
 
+    public String getIndent() {
+        return indent;
+    }
+
+    public void setIndent(String indent) {
+        this.indent = indent;
+    }
 }
