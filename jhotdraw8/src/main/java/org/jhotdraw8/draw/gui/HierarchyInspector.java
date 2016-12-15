@@ -14,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -59,9 +60,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private Node node;
     private FigureTreePresentationModel model;
     private boolean isUpdatingSelection;
-    private final SetChangeListener<Figure> viewSelectionHandler = change -> {
-        updateSelectionInTree();
-    };
+    private boolean willUpdateSelection;
+    private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
     private final InvalidationListener treeSelectionHandler = change -> {
         if (model.isUpdating()) {
 //        updateSelectionInTree();
@@ -132,7 +132,15 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
     }
 
+    private void updateSelectionInTreeLater(SetChangeListener.Change<? extends Figure> change) {
+        if (!willUpdateSelection) {
+            willUpdateSelection = true;
+            Platform.runLater(this::updateSelectionInTree);
+        }
+    }
+
     private void updateSelectionInTree() {
+        willUpdateSelection = false;
         if (!isUpdatingSelection) {
             isUpdatingSelection = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
@@ -149,6 +157,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     break;
                 default:
                     int index = 0;
+                    int count = 0;
+                    final int size = selection.size();
                     for (TreeItem<Figure> node : (Iterable<TreeItem<Figure>>) () -> new ExpandedTreeItemIterator<>(model.getRoot())) {
                         boolean isSelected = selection.contains(node.getValue());
                         if (isSelected != selectionModel.isSelected(index)) {
@@ -157,6 +167,9 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             } else {
                                 selectionModel.clearSelection(index);
                             }
+                        }
+                        if (isSelected && ++count == size) {
+                            break;
                         }
                         index++;
                     }
