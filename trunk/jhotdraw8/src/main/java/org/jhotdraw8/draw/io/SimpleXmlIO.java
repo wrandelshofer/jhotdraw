@@ -255,8 +255,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 parent.appendChild(doc.createComment(string));
             }
             for (Figure child : figure.getChildren()) {
+                final String lbi = linebreak + indent;
                 if (factory.figureToName(child) != null) {
-                    writeNodeRecursively(doc, elem, child, linebreak + indent);
+                    writeNodeRecursively(doc, elem, child, lbi);
                 }
             }
             boolean hasNoElementNodes = factory.figureNodeListKeys(figure).isEmpty();
@@ -598,8 +599,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     URI uri = URI.create(href);
                     uri = externalToInternal(external, uri);
 
-                  List<URI> listOrNull=  external.get(factory.getStylesheetsKey());
-                    List<URI> stylesheets =listOrNull==null? new ArrayList<>():new ArrayList<>(listOrNull);
+                    List<URI> listOrNull = external.get(factory.getStylesheetsKey());
+                    List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull);
                     stylesheets.add(uri);
                     external.set(factory.getStylesheetsKey(), stylesheets);
                 }

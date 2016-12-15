@@ -246,9 +246,10 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
         }
 
         if (node instanceof Parent) {
-            Parent pp = (Parent) node;
+            final Parent pp = (Parent) node;
+            final String lbi = linebreak + indent;
             for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                writeNodeRecursively(doc, elem, child, linebreak + indent);
+                writeNodeRecursively(doc, elem, child,lbi);
             }
             if (!pp.getChildrenUnmodifiable().isEmpty()) {
                 elem.appendChild(doc.createTextNode(linebreak));
