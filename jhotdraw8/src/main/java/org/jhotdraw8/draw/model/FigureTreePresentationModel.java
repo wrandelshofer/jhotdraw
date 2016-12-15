@@ -5,9 +5,6 @@
 package org.jhotdraw8.draw.model;
 
 import java.util.HashMap;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.TreeItem;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.draw.Drawing;
@@ -19,6 +16,8 @@ import org.jhotdraw8.event.Listener;
  * {@code DrawingModel} in a {@code TreeView} or a {@code TreeTableView}.
  * <p>
  * Maps {@code DrawingModel} to a {@code TreeItem&lt;Figure&gt;} hierarchy.
+ * <p>
+ * Note: for performance reasons we do not expand the tree nodes by default.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
@@ -162,7 +161,7 @@ public class FigureTreePresentationModel {
 
     private void handleSubtreeAddedToDrawing(Figure f, Figure parentFigure, int index) {
         TreeItem<Figure> item = new TreeItem<>(f);
-        item.setExpanded(true);
+        item.setExpanded(false);
         items.put(f, item);
         int childIndex = 0;
         for (Figure child : f.getChildren()) {

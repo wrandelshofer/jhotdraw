@@ -7,7 +7,9 @@ package org.jhotdraw8.draw.gui;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -15,7 +17,6 @@ import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
@@ -24,10 +25,9 @@ import javafx.scene.Node;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTablePosition;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ExpandedTreeItemIterator;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -136,9 +136,25 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         if (!isUpdatingSelection) {
             isUpdatingSelection = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
-            selectionModel.clearSelection();
-            for (Figure f:drawingView.getSelectedFigures()) {
-                selectionModel.select(model.getTreeItem(f));
+            // Performance: collecting all indices and then setting them all at once is 
+            // much faster than invoking selectionModel.select(Object) for each item.
+            Set<Figure> selection=drawingView.getSelectedFigures();
+            switch (selection.size()) {
+                case 0:
+                selectionModel.clearSelection();break;
+                case 1:
+                    selectionModel.clearSelection();
+                    selectionModel.select(model.getTreeItem(selection.iterator().next()));break;
+                default:
+            int index=0;
+            for (TreeItem<Figure> node:(Iterable<TreeItem<Figure>>)()->new ExpandedTreeItemIterator<>(model.getRoot())  )      {
+                if (selection.contains(node.getValue())){
+                    selectionModel.select(index);
+                }else{
+                    selectionModel.clearSelection(index);
+                }
+                index++;
+            }
             }
         isUpdatingSelection = false;
         }
