@@ -23,9 +23,10 @@ import java.util.ArrayList;
  * legalInline   = -( '\r' | '\n' | '\t' | '\f' | '\000' ) ;
  * illegaInline  = '\000' ;
  * </pre>
- * <p>Any {@code illegalInline} production is replaced with U+FFFD
- * REPLACEMENT CHARACTER. Any {@code newline} production is replaced with U+000A
- * LINE FEED CHARACTER.
+ * <p>
+ * Any {@code illegalInline} production is replaced with U+FFFD REPLACEMENT
+ * CHARACTER. Any {@code newline} production is replaced with U+000A LINE FEED
+ * CHARACTER.
  * <p>
  * The scanner also keeps track of the current position and line number and
  * supports lookahead of multiple characters.
@@ -84,7 +85,7 @@ public class CssScanner {
      */
     public int nextChar() throws IOException {
         if (!pushedChars.isEmpty()) {
-            currentChar = pushedChars.remove(pushedChars.size()-1);
+            currentChar = pushedChars.remove(pushedChars.size() - 1);
             return currentChar;
         }
 
@@ -135,24 +136,27 @@ public class CssScanner {
 
     /**
      * Pushes the specified character back into the scanner.
+     *
      * @param ch The character to be pushed back
      */
     public void pushBack(int ch) {
-        if (ch!=-1&&currentChar!=-1) {
+        if (ch != -1) {
             pushedChars.add(ch);
         }
     }
 
     /**
      * Returns the position in the input stream.
+     *
      * @return the position
      */
     public long getPosition() {
-        return position-pushedChars.size();
+        return position - pushedChars.size();
     }
 
     /**
      * Returns the line number in the input stream.
+     *
      * @return the line number
      */
     public long getLineNumber() {

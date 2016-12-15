@@ -56,11 +56,11 @@ public class CssTokenizerNGTest {
     @DataProvider
     public Object[][] tokenizerData() {
         return new Object[][]{
+            {"<!-", "<:< !:! -:-"},
             {"func(", "-18:func"},
             {"x[]()", "-2:x [:[ ]:] (:( ):)"},
             {"x{a:b}", "-2:x {:{ -2:a ::: -2:b }:}"},
             {"<!--", "-14:<!--"},
-            {"<!-", "<:< !:! -:-"},
             {"<!", "<:< !:!"},
             {"<!--", "-14:<!--"},
             {"-->", "-15:-->"},
