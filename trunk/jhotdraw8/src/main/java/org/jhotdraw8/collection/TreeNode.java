@@ -5,7 +5,10 @@
 package org.jhotdraw8.collection;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -89,9 +92,7 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /**
-     * Returns a list in preorder sequence.
-     * <p>
-     * The list is an eager copy of the preorder sequence.
+     * Creates an eagerly copied list from an iterator.
      * 
      * @param <T> the value type
      * @param iterable the iterable
@@ -99,9 +100,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     static <T> ArrayList<T> toList(Iterable<T> iterable) {
         ArrayList<T> list = new ArrayList<>();
-        for (T item:iterable) {
-            list.add(item);
-        }
+        iterable.forEach(list::add);
         return list;
     }
 
@@ -165,12 +164,10 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     static class PreorderIterator<T extends TreeNode<T>> implements Iterator<T> {
 
-        private final LinkedList<Iterator<T>> stack = new LinkedList<>();
+        private final Deque<Iterator<T>> stack = new ArrayDeque<>();
 
         private PreorderIterator(T root) {
-            LinkedList<T> v = new LinkedList<>();
-            v.add(root);
-            stack.push(v.iterator());
+            stack.push(Collections.singleton(root).iterator());
         }
 
         @Override
@@ -203,13 +200,10 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     static class BreadthFirstIterator<T extends TreeNode<T>> implements Iterator<T> {
 
-        protected LinkedList<Iterator<T>> queue;
+        protected Deque<Iterator<T>> queue= new ArrayDeque<>();
 
         public BreadthFirstIterator(T root) {
-            List<T> l = new LinkedList<>();
-            l.add(root);
-            queue = new LinkedList<>();
-            queue.addLast(l.iterator());
+            queue.addLast(Collections.singleton(root).iterator());
         }
 
         @Override
