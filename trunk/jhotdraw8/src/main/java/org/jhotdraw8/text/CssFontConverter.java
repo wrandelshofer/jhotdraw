@@ -87,8 +87,8 @@ public class CssFontConverter implements Converter<CssFont> {
     public CssFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
         tt.setSkipWhitespaces(true);
-        FontPosture fontPosture = null;
-        FontWeight fontWeight = null;
+        FontPosture fontPosture = FontPosture.REGULAR;
+        FontWeight fontWeight = FontWeight.NORMAL;
         double fontSize = 12.0;
         String fontFamily = "System";
 
