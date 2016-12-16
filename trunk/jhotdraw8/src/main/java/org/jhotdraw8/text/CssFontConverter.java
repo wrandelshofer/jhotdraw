@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import org.jhotdraw8.css.CssTokenizer;
@@ -44,30 +45,33 @@ public class CssFontConverter implements Converter<CssFont> {
 
         double fontSize = font.getSize();
         String fontFamily = font.getFamily();
+        final FontPosture posture = font.getPosture();
 
-        switch (font.getPosture()) {
-            case ITALIC:
-                out.append("italic");
-                break;
-            case REGULAR:
-                out.append("normal");
-                break;
-            default:
-                throw new InternalError("Unknown fontPosture:" + font.getPosture());
+        if (posture != null) {
+            switch (font.getPosture()) {
+                case ITALIC:
+                    out.append("italic ");
+                    break;
+                case REGULAR:
+                    break;
+                default:
+                    throw new InternalError("Unknown fontPosture:" + font.getPosture());
+            }
         }
-        out.append(' ');
-        switch (font.getWeight()) {
-            case NORMAL:
-                out.append("normal");
-                break;
-            case BOLD:
-                out.append("bold");
-                break;
-            default:
-                out.append(Integer.toString(font.getWeight().getWeight()));
-                break;
+        final FontWeight weight = font.getWeight();
+        if (weight != null) {
+            switch (weight) {
+                case NORMAL:
+                    break;
+                case BOLD:
+                    out.append("bold ");
+                    break;
+                default:
+                    out.append(Integer.toString(weight.getWeight()));
+                    out.append(' ');
+                    break;
+            }
         }
-        out.append(' ');
         doubleConverter.toString(out, fontSize);
         out.append(' ');
         if (fontFamily.contains(" ") || fontFamily.contains("\'") || fontFamily.contains("\"")) {
@@ -83,8 +87,8 @@ public class CssFontConverter implements Converter<CssFont> {
     public CssFont fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(buf.toString()));
         tt.setSkipWhitespaces(true);
-        FontPosture fontPosture = FontPosture.REGULAR;
-        FontWeight fontWeight = FontWeight.NORMAL;
+        FontPosture fontPosture = null;
+        FontWeight fontWeight = null;
         double fontSize = 12.0;
         String fontFamily = "System";
 
@@ -194,12 +198,15 @@ public class CssFontConverter implements Converter<CssFont> {
 
         if (tt.nextToken() == CssTokenizer.TT_IDENT || tt.currentToken() == CssTokenizer.TT_STRING) {
             fontFamily = tt.currentStringValue();
-            // consume buffer
+            while (tt.nextToken() == CssTokenizer.TT_IDENT) {
+                fontFamily += " " + tt.currentStringValue();
+            }
             buf.position(buf.limit());
+        } else if (tt.currentToken() == CssTokenizer.TT_STRING) {
+            fontFamily = tt.currentStringValue();
         } else {
             throw new ParseException("font family expected", buf.position() + tt.getStartPosition());
         }
-
         CssFont font = CssFont.font(fontFamily, fontWeight, fontPosture, fontSize);
         if (font == null) {
             font = CssFont.font(null, fontWeight, fontPosture, fontSize);
