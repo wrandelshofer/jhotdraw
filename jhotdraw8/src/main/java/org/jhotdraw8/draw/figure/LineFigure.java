@@ -39,10 +39,10 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
      */
     public final static String TYPE_SELECTOR = "Line";
 
-    public final static DoubleStyleableFigureKey START_X = new DoubleStyleableFigureKey("startX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey START_Y = new DoubleStyleableFigureKey("startY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey END_X = new DoubleStyleableFigureKey("endX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey END_Y = new DoubleStyleableFigureKey("endY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey START_X = new DoubleStyleableFigureKey("startX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey START_Y = new DoubleStyleableFigureKey("startY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey END_X = new DoubleStyleableFigureKey("endX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey END_Y = new DoubleStyleableFigureKey("endY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
     public final static Point2DStyleableMapAccessor START = new Point2DStyleableMapAccessor("start", START_X,START_Y);
     public final static Point2DStyleableMapAccessor END = new Point2DStyleableMapAccessor("end", END_X,END_Y);
 

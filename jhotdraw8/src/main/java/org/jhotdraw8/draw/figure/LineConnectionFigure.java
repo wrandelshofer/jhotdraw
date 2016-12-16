@@ -81,19 +81,19 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     /**
      * The start connector.
      */
-    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
+    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT,DirtyBits.TRANSFORM), null);
     /**
      * The end connector.
      */
-    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
+    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT,DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM), null);
     /**
      * The start target.
      */
-    public static SimpleFigureKey<Figure> START_TARGET = new SimpleFigureKey<>("startTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
+    public static SimpleFigureKey<Figure> START_TARGET = new SimpleFigureKey<>("startTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT,DirtyBits.TRANSFORM), null);
     /**
      * The end target.
      */
-    public static SimpleFigureKey<Figure> END_TARGET = new SimpleFigureKey<>("endTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.TRANSFORM), null);
+    public static SimpleFigureKey<Figure> END_TARGET = new SimpleFigureKey<>("endTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT,DirtyBits.TRANSFORM), null);
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
@@ -269,7 +269,8 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     }
 
     /**
-     * Returns all figures which are connected by this figure.
+     * Returns all figures which are connected by this figure - they provide to the
+     * layout of this figure.
      *
      * @return a list of connected figures
      */
