@@ -36,7 +36,7 @@ public abstract class AbstractViewAction<V extends ProjectView<V>> extends Abstr
     private boolean mayCreateView;
     private final ChangeListener<V> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
-            BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty());
+            BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeViewProperty().isNull());
         if (newValue == null) {
             disabled.bind(binding);
         } else {

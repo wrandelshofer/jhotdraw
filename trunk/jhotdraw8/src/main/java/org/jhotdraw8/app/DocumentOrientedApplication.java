@@ -8,11 +8,14 @@ import com.sun.javafx.menu.MenuBase;
 import com.sun.javafx.scene.control.GlobalMenuAdapter;
 import com.sun.javafx.tk.Toolkit;
 import java.net.URI;
+import java.util.ArrayDeque;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
@@ -33,16 +36,18 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.Actions;
+import org.jhotdraw8.app.action.file.ClearRecentFilesMenuAction;
 import org.jhotdraw8.app.action.file.CloseFileAction;
 import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
@@ -77,8 +82,10 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
     private final ReadOnlyObjectWrapper<DocumentView> activeView = new ReadOnlyObjectWrapper<>();
     private final SetProperty<DocumentView> views = new SimpleSetProperty<>(FXCollections.observableSet());
     private ApplicationModel<DocumentView> model;
+    private List<Menu> systemMenus;
 
     public DocumentOrientedApplication() {
+        recentUrisProperty().get().addListener(this::updateRecentMenuItemsInAllMenuBars);
     }
 
     {
@@ -93,25 +100,38 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
+        isSystemMenuSupported = false&&Toolkit.getToolkit().getSystemMenu().isSupported();
         actionMap = model.createApplicationActionMap(this);
         if (isSystemMenuSupported) {
             Platform.setImplicitExit(false);
+            systemMenus = new ArrayList<>();
             ArrayList<MenuBase> menus = new ArrayList<>();
             MenuBar mb = createMenuBar(getActionMap());
             for (Menu m : mb.getMenus()) {
+                systemMenus.add(m);
                 menus.add(GlobalMenuAdapter.adapt(m));
             }
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
         }
 
         // FIXME - We suppress here 2 exceptions!
-        createView().thenAccept(v -> {
+        final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+        createView().whenComplete((v, ex1) -> {
+            if (ex1 != null) {
+                ex1.printStackTrace();
+                new Alert(Alert.AlertType.ERROR,
+                        labels.getString("application.createView.error")).show();
+                return;
+            }
             add(v);
             v.addDisabler(this);
-            v.clear().handle((result, ex) -> {
-                v.removeDisabler(this);
-                return null;
+            v.clear().whenComplete((result, ex) -> {
+                if (ex != null) {
+                    new Alert(Alert.AlertType.ERROR,
+                            labels.getString("application.createView.error")).show();
+                } else {
+                    v.removeDisabler(this);
+                }
             });
         });
     }
@@ -165,7 +185,7 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(view.getNode());
-        {
+        if (!isSystemMenuSupported) {
             MenuBar mb = createMenuBar(view.getActionMap());
             mb.setUseSystemMenuBar(true);
             borderPane.setTop(mb);
@@ -276,7 +296,7 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
         }
 
         // Auto close feature
-        if (views.isEmpty()/*&&view.get(QUIT_APPLICATION)*/) {
+        if (views.isEmpty() && !isSystemMenuSupported) {
             exit();
         }
     }
@@ -303,28 +323,29 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
         while (!todo.isEmpty()) {
             for (MenuItem mi : todo.remove().getItems()) {
                 if (mi instanceof Menu) {
-                    if ("file.openRecentMenu".equals(mi.getId())) {
-                        for (URI uri : recentUrisProperty()) {
-                            MenuItem mii = new MenuItem();
-                            Action a = new OpenRecentFileAction(this, uri);
-                            Actions.bindMenuItem(mii, a);
-                            ((Menu) mi).getItems().add(mii);
-                        }
-                    } else {
-                        todo.add((Menu) mi);
-                    }
+                    todo.add((Menu) mi);
                 } else {
                     Action a = actions.get(mi.getId());
                     if (a != null) {
                         Actions.bindMenuItem(mi, a);
-                    } else if (mi.getId() != null) {
+                    } else {
                         System.err.println("DocumentOrientedApplication: Warning: no action for menu item with id="
                                 + mi.getId());
-                        mi.setVisible(false);
+                        a = new AbstractViewAction(this, null) {
+                            @Override
+                            protected void onActionPerformed(ActionEvent event) {
+                                Action ava = (Action) getActiveView().getActionMap().get(mi.getId());
+                                if (ava != null) {
+                                    ava.handle(event);
+                                }
+                            }
+                        };
+                        Actions.bindMenuItem(mi, a, false);
                     }
                 }
             }
         }
+        updateRecentMenuItemsMB(mb.getMenus());
         return mb;
     }
 
@@ -357,7 +378,7 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
         HashMap<String, ArrayList<DocumentView>> titles = new HashMap<>();
         for (DocumentView v : views) {
             String t = v.getTitle();
-            titles.computeIfAbsent(t, k->new ArrayList<>()).add(v);
+            titles.computeIfAbsent(t, k -> new ArrayList<>()).add(v);
         }
         for (ArrayList<DocumentView> list : titles.values()) {
             if (list.size() == 1) {
@@ -376,6 +397,49 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
                         v.setDisambiguation(++max);
                     }
                     prev = current;
+                }
+            }
+        }
+    }
+
+    private void updateRecentMenuItemsInAllMenuBars(Observable o) {
+        if (isSystemMenuSupported) {
+            updateRecentMenuItemsMB(systemMenus);
+        } else {
+            for (DocumentView v : views()) {
+                BorderPane bp = (BorderPane) v.getNode().getScene().getRoot();
+                MenuBar mb = (MenuBar) bp.getTop();
+                if (mb != null) {
+                    updateRecentMenuItemsMB((mb.getMenus()));
+                }
+            }
+        }
+    }
+
+    private void updateRecentMenuItemsMB(List<Menu> mb) {
+
+        Deque<List<?>> todo = new ArrayDeque<>();
+        todo.add(mb);
+        while (!todo.isEmpty()) {
+            for (Object mi : todo.remove()) {
+                if (mi instanceof Menu) {
+                    Menu mmi = (Menu) mi;
+                    if ("file.openRecentMenu".equals(mmi.getId())) {
+                        mmi.getItems().clear();
+                        for (URI uri : recentUrisProperty()) {
+                            MenuItem mii = new MenuItem();
+                            Action a = new OpenRecentFileAction(this, uri);
+                            Actions.bindMenuItem(mii, a);
+                            ((Menu) mi).getItems().add(mii);
+                        }
+                        MenuItem mii = new MenuItem();
+                        Action a = new ClearRecentFilesMenuAction(this);
+                        Actions.bindMenuItem(mii, a);
+                        mmi.getItems().add(new SeparatorMenuItem());
+                        mmi.getItems().add(mii);
+                    } else {
+                        todo.add(mmi.getItems());
+                    }
                 }
             }
         }

@@ -43,7 +43,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction<Docume
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getApplication().recentUrisProperty().clear();
     }
 
     /**

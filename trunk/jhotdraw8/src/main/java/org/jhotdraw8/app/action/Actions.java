@@ -45,11 +45,21 @@ public class Actions {
      * @param action The action
      */
     public static void bindMenuItem(MenuItem control, Action action) {
+ bindMenuItem( control,  action,true);
+
+    }
+            /**
+     * Binds a menu control to an action
+     * @param control The menu control
+     * @param action The action
+     */
+    public static void bindMenuItem(MenuItem control, Action action, boolean bindLabel) {
+
         // create a strong reference to name binding:
+        if (bindLabel) {
         Binding<String> nameBinding = Action.LABEL.valueAt(action.getProperties());
         control.getProperties().put("ActionsNameBinding", nameBinding);
         control.textProperty().bind(Action.LABEL.valueAt(action.getProperties()));
-
         if (control instanceof CheckMenuItem) {
             Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.getProperties());
             // create a strong reference to name binding:
@@ -63,8 +73,6 @@ public class Actions {
             // this only creates a weak reference to the name binding:
             ((RadioMenuItem) control).selectedProperty().bindBidirectional(selectedBinding);
         }
-        control.setOnAction(action);
-        control.disableProperty().bind(action.disabledProperty());
         
         Binding<KeyCombination> acceleratorBinding = Action.ACCELERATOR_KEY.valueAt(action.getProperties());
         // create a strong reference to name binding:
@@ -72,4 +80,7 @@ public class Actions {
         // this only creates a weak reference to the name binding:
         control.acceleratorProperty().bind(acceleratorBinding);
     }
+            control.setOnAction(action);
+        control.disableProperty().bind(action.disabledProperty());
+       }
 }
