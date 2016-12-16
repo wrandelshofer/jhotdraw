@@ -28,7 +28,7 @@ public class SimpleIdFactory implements IdFactory {
 
     @Override
     public String createId(Object object) {
-      return createId(object,"");
+      return createId(object,"id");
     }
 
     @Override

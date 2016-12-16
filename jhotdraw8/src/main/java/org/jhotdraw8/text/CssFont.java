@@ -30,7 +30,10 @@ public class CssFont {
         this.weight = weight;
         this.posture = posture;
         this.size = size;
-        this.font = Font.font(family, weight, posture, size);
+        this.font = (weight == FontWeight.NORMAL || posture == FontPosture.REGULAR
+    ||            weight == null || posture == null) 
+                ? new Font(family, size) 
+                : Font.font(family, weight, posture, size);
     }
 
     public String getFamily() {
@@ -55,6 +58,10 @@ public class CssFont {
 
     public static CssFont font(String family, FontWeight weight, FontPosture posture, double size) {
         return new CssFont(family, weight, posture, size);
+    }
+
+    public static CssFont font(String family, double size) {
+        return new CssFont(family, FontWeight.NORMAL, FontPosture.REGULAR, size);
     }
 
     @Override
@@ -94,7 +101,4 @@ public class CssFont {
         return true;
     }
 
-   
-    
-    
 }
