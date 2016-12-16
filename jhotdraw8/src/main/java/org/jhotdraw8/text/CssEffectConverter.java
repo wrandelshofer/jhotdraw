@@ -199,7 +199,7 @@ public class CssEffectConverter implements Converter<Effect> {
             } else if (tt.currentToken() == CssTokenizer.TT_FUNCTION) {
                 tt.pushBack();
                 CssColor colorOrNull =colorConverter.parseColor(tt);
-                color = (Color) colorOrNull.getColor();
+                color = colorOrNull.getColor();
             } else {
                 throw new ParseException("CSS Effect: " + func + "(" + blurType.toString().toLowerCase().replace('_', '-') + ",  <color> expected", tt.getStartPosition());
             }

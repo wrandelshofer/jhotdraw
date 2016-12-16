@@ -84,7 +84,7 @@ public interface DocumentView extends ProjectView<DocumentView> {
      * Clears the view.
      *
      * @return Returns a CompletionStage which is completed when the clear 
-     * operation has finished.
+     * operation has finished. For example {@code return CompletableFuture.completedFuture(null);}
      */
     public CompletionStage<Void> clear();
 
