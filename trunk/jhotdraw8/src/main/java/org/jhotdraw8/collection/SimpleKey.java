@@ -186,6 +186,6 @@ public class SimpleKey<T> implements Key<T> {
     @Override
     public String toString() {
         String keyClass=getClass().getName();
-        return keyClass.substring(keyClass.lastIndexOf('.')+1)+"{name:"+name+" type:"+getFullValueType()+"}";
+        return keyClass.substring(keyClass.lastIndexOf('.')+1)+"{\""+name+"\"}";
     }
 }

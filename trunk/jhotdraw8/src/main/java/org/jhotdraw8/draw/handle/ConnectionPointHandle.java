@@ -125,6 +125,7 @@ public class ConnectionPointHandle extends AbstractHandle {
                 newConnector = ff.findConnector(pointInLocal, o);
                 if (newConnector != null) {
                     newConnectedFigure = ff;
+                    constrainedPoint = newConnector.getPositionInLocal(o, ff);
                     break;
                 }
             }

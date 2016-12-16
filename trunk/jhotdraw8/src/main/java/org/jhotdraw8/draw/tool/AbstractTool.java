@@ -154,6 +154,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     {
         eventPane.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
+            try {
             if (drawingView.get() != null) {
                 DrawingView dv = drawingView.get();
                 EventType<? extends MouseEvent> type = event.getEventType();
@@ -173,6 +174,9 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                     handleMouseClicked(event, dv);
                 }
                 event.consume();
+                    }
+            } catch (Throwable t) {
+                    t.printStackTrace();
             }
         });
         eventPane.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {
