@@ -141,5 +141,5 @@ public abstract class AbstractApplication<V extends ProjectView<V>> extends java
         }
         return properties;
     }
-
+    
 }
