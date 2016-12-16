@@ -46,6 +46,7 @@ public class SimpleDrawing extends AbstractCompositeFigure
     @Override
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
+        g.setManaged(false);
         Rectangle background = new Rectangle();
         background.setId("background");
         g.getProperties().put("background", background);

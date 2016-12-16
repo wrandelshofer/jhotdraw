@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw;
 
+import com.sun.javafx.scene.DirtyBits;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
@@ -52,8 +53,10 @@ import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
@@ -500,8 +503,26 @@ public class SimpleDrawingView extends AbstractDrawingView {
         if (node == null) {
             return;
         }
-        Bounds bounds = drawingPane.getLayoutBounds();
+
         double f = getZoomFactor();
+        Drawing d = getDrawing();
+        double dw = d.get(Drawing.WIDTH);
+        double dh = d.get(Drawing.HEIGHT);
+        int imgw = Math.min(16000, Math.max(1, (int) (dw)));
+        int imgh = Math.min(16000, Math.max(1, (int) (dh)));
+
+        if (drawingImageView != null) {
+            if (drawingImage == null || drawingImage.getWidth() != imgw || drawingImage.getHeight() != imgh) {
+                drawingImage = null;
+                drawingImageView.setImage(null);
+                drawingImage = new WritableImage(imgw, imgh);
+                drawingImageView.setImage(drawingImage);
+                //dirtyFigureNodes.add(d);
+                // repaint();
+            }
+        }
+
+        Bounds bounds = drawingPane.getLayoutBounds();
         double x = bounds.getMinX() * f;
         double y = bounds.getMinY() * f;
         double w = bounds.getWidth() * f;
@@ -512,11 +533,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
             return;
         }
         previousScaledBounds = scaledBounds;
-
-        Drawing d = getDrawing();
-        double dw = d.get(Drawing.WIDTH);
-        double dh = d.get(Drawing.HEIGHT);
-
 //    drawingPane.setTranslateX(max(0, -x));
         // drawingPane.setTranslateY(max(0, -y));
         if (d != null) {
@@ -595,6 +611,15 @@ public class SimpleDrawingView extends AbstractDrawingView {
         return constrainer;
     }
 
+    /**
+     * Set drawingImageView to a non-null value to force rendering into a
+     * drawingImage. This will render the drawing without adding it to the scene
+     * graph.
+     */
+    private ImageView drawingImageView = null;// new ImageView();
+    private WritableImage drawingImage = null;
+    boolean isRenderingDrawingImage;
+
     private void handleDrawingChanged() {
         clearNodes();
         clearSelection();
@@ -603,7 +628,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
         Drawing d = getModel().getRoot();
         drawing.set(d);
         if (d != null) {
-            drawingPane.getChildren().add(getNode(d));
+            if (drawingImageView != null) {
+                drawingPane.getChildren().add(drawingImageView);
+            } else {
+                drawingPane.getChildren().add(getNode(d));
+            }
             dirtyFigureNodes.add(d);
             updateLayout();
             handleSubtreeNodesChanged(d);
@@ -731,14 +760,30 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     private void updateNodes() {
-        // create copies of the lists to allow for concurrent modification
-        Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);
-        Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[dirtyHandles.size()]);
-        dirtyFigureNodes.clear();
-        dirtyHandles.clear();
-        for (Figure f : copyOfDirtyFigureNodes) {
-            f.updateNode(this, getNode(f));
+        if (!isRenderingDrawingImage) {
+            // create copies of the lists to allow for concurrent modification
+            Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);
+            dirtyFigureNodes.clear();
+            for (Figure f : copyOfDirtyFigureNodes) {
+                f.updateNode(this, getNode(f));
+            }
+            if (copyOfDirtyFigureNodes.length != 0 && drawingImageView != null) {
+                isRenderingDrawingImage = true;
+                long start = System.currentTimeMillis();
+                Node n = getNode(getDrawing());
+                SnapshotParameters params = new SnapshotParameters();
+                n.snapshot(result -> {
+                    System.out.println("rendering done in:" + (System.currentTimeMillis() - start) + "ms");
+                    isRenderingDrawingImage = false;
+                    drawingImage = result.getImage();
+                    drawingImageView.setImage(result.getImage());
+                    return null;
+                }, params, drawingImage);
+            }
         }
+
+        Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[dirtyHandles.size()]);
+        dirtyHandles.clear();
         for (Figure f : copyOfDirtyHandles) {
             List<Handle> hh = handles.get(f);
             if (hh != null) {
