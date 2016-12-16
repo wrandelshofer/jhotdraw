@@ -53,7 +53,12 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
     public SimpleApplicationModel() {
         
     }
-    public SimpleApplicationModel(String name, Supplier<DocumentView> viewFactory, URL menuFxml, String fileDescription, DataFormat format, String fileExtension) {
+    public SimpleApplicationModel(String name, 
+            Supplier<DocumentView> viewFactory, 
+            URL menuFxml, 
+            String fileDescription, 
+            DataFormat format, 
+            String fileExtension) {
         this.name = name;
         this.menuFxml=menuFxml;
         URIExtensionFilter fef = new URIExtensionFilter(fileDescription,format,fileExtension);

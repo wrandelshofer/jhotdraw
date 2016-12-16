@@ -34,20 +34,24 @@ public class FXWorker {
      * completed on the FX Application Thread.
      *
      * @param runnable the runnable
-     * @param executor the executor, if null then ForkJoinPool#commonPool is
-     * used
+     * @param executor the executor, if null then a new thread is created
      * @return the completion stage
      */
     public static CompletionStage<Void> run(CheckedRunnable runnable, Executor executor) {
         CompletableFuture<Void> f = new CompletableFuture<>();
-        (executor == null ? ForkJoinPool.commonPool() : executor).execute(() -> {
+        Runnable worker = () -> {
             try {
                 runnable.run();
                 Platform.runLater(() -> f.complete(null));
             } catch (Exception e) {
                 Platform.runLater(() -> f.completeExceptionally(e));
             }
-        });
+        };
+        if (executor == null) {
+            new Thread(worker).start();
+        }else{
+            executor.execute(worker);
+        }
         return f;
     }
 

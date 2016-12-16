@@ -61,14 +61,14 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     @FXML
     private TextArea textArea;
     private Node node;
-    
+
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter();
 
     private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
 
         @Override
         public void invalidated(Observable observable) {
-            if (node.isVisible()&&updateContentsCheckBox.isSelected()) {
+            if (node.isVisible() && updateContentsCheckBox.isSelected()) {
                 invalidateTextArea();
             }
         }
@@ -141,7 +141,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
     @Override
     protected void handleSelectionChanged(Set<Figure> newValue) {
-        if (node.isVisible()&&updateContentsCheckBox.isSelected()) {
+        if (node.isVisible() && updateContentsCheckBox.isSelected()) {
             invalidateTextArea();
         }
     }
@@ -151,7 +151,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
         if (drawingView == null || drawingView.getDrawing() == null) {
             textArea.setText("");
-        textArea.setPrefRowCount(5);
+            textArea.setPrefRowCount(5);
             return;
         }
 
@@ -199,17 +199,16 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 }
             }
         }
-        
-        
+
         StringBuilder buf = new StringBuilder();
-        if (type != null&&type.length()>0) {
+        if (type != null && type.length() > 0) {
             buf.append(cssIdentConverter.toString(type));
         }
-        if (id != null&&id.length()>0) {
-            buf.append('#').append(cssIdentConverter.toString(id)); 
+        if (id != null && id.length() > 0) {
+            buf.append('#').append(cssIdentConverter.toString(id));
         }
         for (String clazz : styleClasses) {
-            buf.append('.').append(cssIdentConverter.toString(clazz)); 
+            buf.append('.').append(cssIdentConverter.toString(clazz));
         }
         buf.append(":selected {");
         for (Map.Entry<String, String> a : attr.entrySet()) {
@@ -232,11 +231,13 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         }
 
         textArea.setText(buf.toString());
-        int rows=1;
-        for (int i=0;i<buf.length();i++) {
-            if (buf.charAt(i)=='\n')rows++;
+        int rows = 1;
+        for (int i = 0; i < buf.length(); i++) {
+            if (buf.charAt(i) == '\n') {
+                rows++;
+            }
         }
-        textArea.setPrefRowCount(Math.min(Math.max(5,rows),25));
+        textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
     }
 
     private void apply() {

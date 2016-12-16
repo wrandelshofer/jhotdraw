@@ -54,11 +54,11 @@ public class DrawingModelEvent extends Event<DrawingModel> {
          */
         PROPERTY_VALUE_CHANGED,
         /**
-         * The layout of a single figure has been invalidated.
+         * The layout of a single figure has changed.
          */
         LAYOUT_CHANGED,
         /**
-         * The style of a single figure has been invalidated.
+         * The style of a single figure has changed.
          */
         STYLE_CHANGED,
         /**

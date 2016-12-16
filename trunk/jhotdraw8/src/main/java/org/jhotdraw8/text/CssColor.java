@@ -89,5 +89,9 @@ public class CssColor implements Paintable {
     public String toString() {
         return "CColor{" + getName() + '}';
     }
+    
+    public static CssColor valueOf(String value) {
+        return new CssColor(value, Color.valueOf(value));
+    }
 
 }

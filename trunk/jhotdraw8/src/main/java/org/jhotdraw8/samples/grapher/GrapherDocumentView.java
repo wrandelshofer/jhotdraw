@@ -289,9 +289,7 @@ Preferences.userNodeForPackage(GrapherDocumentView.class), id + ".expanded", t.e
             SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
             System.out.println("READING..." + uri);
             return drawing;
-        }).thenAccept(drawing
-                -> drawingView.setDrawing(drawing)
-        );
+        }).thenAccept(drawingView::setDrawing);
     }
 
     @Override

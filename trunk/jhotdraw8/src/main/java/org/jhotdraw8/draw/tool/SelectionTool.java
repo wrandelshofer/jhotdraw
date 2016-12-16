@@ -76,6 +76,9 @@ public class SelectionTool extends AbstractTool {
      * The tracker encapsulates the current state of the SelectionTool.
      */
     private DragTracker dragTracker;
+    
+    /** Whether to update the cursor on mouse movements. */
+    private boolean updateCursor = true;
 
     private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
     private boolean mouseDragged;
@@ -128,10 +131,10 @@ public class SelectionTool extends AbstractTool {
         } else {
             Handle h = view.findHandle(vx, vy);
             if (h != null) {
-                node.setCursor(h.getCursor());
+              if (updateCursor) node.setCursor(h.getCursor());
                 setTracker(getHandleTracker(h));
             } else {
-                node.setCursor(Cursor.DEFAULT);
+              if (updateCursor) node.setCursor(Cursor.DEFAULT);
 
                 /*
              if (pressedFigure == null && tolerance != 0) {
@@ -227,10 +230,9 @@ public class SelectionTool extends AbstractTool {
         double vy = event.getY();
         Handle h = view.findHandle(vx, vy);
         if (h != null) {
-            node.setCursor(h.getCursor());
-            setTracker(getHandleTracker(h));
+           if (updateCursor)node.setCursor(h.getCursor());
         } else {
-            node.setCursor(Cursor.DEFAULT);
+       if (updateCursor)    node.setCursor(Cursor.DEFAULT);
         }
     }
 
@@ -334,7 +336,7 @@ public class SelectionTool extends AbstractTool {
         tracker = t;
         if (tracker != null) {
             drawPane.setCenter(tracker.getNode());
-            drawPane.layout();
+            //drawPane.layout();
         }
     }
 
