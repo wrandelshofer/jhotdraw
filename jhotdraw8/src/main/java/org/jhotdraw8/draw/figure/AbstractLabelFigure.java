@@ -107,12 +107,14 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     @Override
     public Bounds getBoundsInLocal() {
         if (boundsInLocal == null) {
-            Bounds b = getLayoutBounds();
+            getLayoutBounds();
+            Bounds b = textNode.getBoundsInLocal();
+            Insets i = getStyled(PADDING);
             boundsInLocal = new BoundingBox(
-                    b.getMinX(),
-                    b.getMinY(),
-                    b.getWidth(),
-                    b.getHeight());
+                b.getMinX() - i.getLeft(),
+                b.getMinY() - i.getTop(),
+                b.getWidth() + i.getLeft() + i.getRight(),
+               b.getHeight()+i.getTop()+ i.getBottom());
         }
         return boundsInLocal;
     }

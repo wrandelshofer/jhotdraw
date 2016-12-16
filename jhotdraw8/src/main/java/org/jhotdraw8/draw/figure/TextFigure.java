@@ -55,7 +55,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
         }
         updateNode(null, textNode);
 
-        Bounds b = textNode.getLayoutBounds();
+        Bounds b = textNode.getBoundsInLocal();
         return new BoundingBox(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
