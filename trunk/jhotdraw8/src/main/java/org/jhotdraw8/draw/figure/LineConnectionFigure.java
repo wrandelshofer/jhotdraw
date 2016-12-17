@@ -24,10 +24,14 @@ import java.util.Set;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
+import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
 import org.jhotdraw8.draw.handle.ConnectionPointHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.RotateHandle;
+import org.jhotdraw8.draw.handle.TransformHandleKit;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.PointLocator;
@@ -145,20 +149,20 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
 
     @Override
     public void reshapeInLocal(Transform transform) {
-        if (get(START_CONNECTOR) == null) {
+        if (get(START_TARGET) == null) {
             set(START, transform.transform(get(START)));
         }
-        if (get(END_CONNECTOR) == null) {
+        if (get(END_TARGET) == null) {
             set(END, transform.transform(get(END)));
         }
     }
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        if (get(START_CONNECTOR) == null) {
+        if (get(START_TARGET) == null) {
             set(START, new Point2D(x, y));
         }
-        if (get(END_CONNECTOR) == null) {
+        if (get(END_TARGET) == null) {
             set(END, new Point2D(x + width, y + height));
         }
     }
@@ -234,7 +238,9 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             list.add(new ConnectionPointHandle(this, START, START_CONNECTOR, START_TARGET));
             list.add(new ConnectionPointHandle(this, END, END_CONNECTOR, END_TARGET));
-        } else {
+        } else if (handleType == HandleType.TRANSFORM) {
+            list.add(new LineOutlineHandle(this,  Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
+        }else{
             super.createHandles(handleType, dv, list);
         }
     }
