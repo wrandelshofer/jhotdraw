@@ -1311,5 +1311,4 @@ double localTolerance=                    child.parentToLocal(0, 0).distance(chi
         }
         return img;
     }
-
 }

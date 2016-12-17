@@ -345,6 +345,7 @@ public class SelectionTool extends AbstractTool {
         for (DrawingView view : editor.getDrawingViews()) {
             view.setHandleType(handleType);
         }
+        requestFocus();
     }
 
     // ---
