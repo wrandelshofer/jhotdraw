@@ -163,7 +163,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         Supplier<Layer> layerFactory = () -> createFigure(SimpleLayer::new);
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("tool.selectFigure", rsrc), 0, 0);
-        ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.MOVE, rsrc), 0, 1);
+        ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, rsrc), 0, 1);
         ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, rsrc), 1, 1);
         ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0);
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);

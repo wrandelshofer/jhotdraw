@@ -102,6 +102,7 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
     public void start(Stage primaryStage) throws Exception {
         isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
         actionMap = model.createApplicationActionMap(this);
+        loadRecentUris(model.getName());
         if (isSystemMenuSupported) {
             Platform.setImplicitExit(false);
             systemMenus = new ArrayList<>();
