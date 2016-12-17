@@ -137,19 +137,31 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         g.setAutoSizeChildren(false);
         Region r = new Region();
         r.setScaleShape(true);
-        g.getChildren().add(r);
+       // g.getChildren().add(r);
         Text text=new Text();
         g.getChildren().add(text);
+        g.getProperties().put("region",r);
+        g.getProperties().put("text",text);
         return g;
     }
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
-        Region r = (Region) g.getChildren().get(0);
-        Text t = (Text) g.getChildren().get(1);
+        Region r = (Region) g.getProperties().get("region");
+        Text t = (Text) g.getProperties().get("text");
         updateRegionNode(ctx, r);
         updateTextNode(ctx, t);
+        
+        if (getStyled(FILL_COLOR)!=null||getStyled(STROKE_COLOR)!=null) {
+            if (g.getChildren().size()!=2) {
+                g.getChildren().setAll(r,t);
+            }
+        }else{
+            if (g.getChildren().size()!=1) {
+                g.getChildren().setAll(t);
+            }
+        }
     }
 
     private void updateRegionNode(RenderContext ctx, Region node) {
