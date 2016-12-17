@@ -20,6 +20,10 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
         // empty because non-transformable figures can not be transformed
     }
     @Override
+    default void transformInLocal(Transform transform) {
+        // empty because non-transformable figures can not be transformed
+    }
+    @Override
     default void reshapeInParent(Transform transform) {
         reshapeInLocal(getParentToLocal().createConcatenation(transform));
     }

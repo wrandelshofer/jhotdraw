@@ -320,5 +320,8 @@ public interface DrawingModel extends Observable {
     }
 
     /** Invokes "transformInParent" on the specified figure. */
-    public void transformInParent(Figure child, Transform groupTransform);
+    public void transformInParent(Figure child, Transform transform);
+    
+    /** Invokes "transformInLocal" on the specified figure. */
+    public void transformInLocal(Figure child, Transform transform);
 }

@@ -80,10 +80,10 @@ public class CssSample extends Application {
         layer.add(edgeNullNull);
         layer.add(line1);
         
-        vertex1.set(StyleableFigure.STYLE_ID,"vertex1");
-        vertex2.set(StyleableFigure.STYLE_ID,"vertex2");
-        vertex3.set(StyleableFigure.STYLE_ID,"vertex3");
-        vertex4.set(StyleableFigure.STYLE_ID,"vertex4");
+        vertex1.set(StyleableFigure.ID,"vertex1");
+        vertex2.set(StyleableFigure.ID,"vertex2");
+        vertex3.set(StyleableFigure.ID,"vertex3");
+        vertex4.set(StyleableFigure.ID,"vertex4");
         
         ArrayList<URI> stylesheets=new ArrayList<>();
         stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());

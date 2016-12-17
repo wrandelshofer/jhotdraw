@@ -191,7 +191,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                     }
                     ClipboardContent content = new ClipboardContent();
                     Figure f = items.get(0);
-                    String id = f.get(StyleableFigure.STYLE_ID);
+                    String id = f.get(StyleableFigure.ID);
                     content.putString(id == null ? "" : id);
                     clipboard.setContent(content);
                 }
@@ -202,7 +202,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                     if (clipboard.hasString()) {
                         list = new ArrayList<>();
                         Layer layer = layerFactory.get();
-                        layer.set(StyleableFigure.STYLE_ID, clipboard.getString());
+                        layer.set(StyleableFigure.ID, clipboard.getString());
                         list.add(layer);
                     } else {
                         list = null;

@@ -97,7 +97,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
         idColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<String>(model.getModel(),
-                        cell.getValue().getValue(), StyleableFigure.STYLE_ID)
+                        cell.getValue().getValue(), StyleableFigure.ID)
         );
         classesColumn.setCellValueFactory(
                 cell -> Bindings.createStringBinding(() -> wordListConverter.toString(cell.getValue().getValue().get(StyleableFigure.STYLE_CLASS)),

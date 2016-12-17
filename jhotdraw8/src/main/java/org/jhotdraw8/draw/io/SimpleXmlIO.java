@@ -680,14 +680,14 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 layer = (Layer) drawing.getLastChild();
                 if (layer == null) {
                     layer = new SimpleLayer();
-                    layer.set(StyleableFigure.STYLE_ID, factory.createId(layer));
+                    layer.set(StyleableFigure.ID, factory.createId(layer));
                     model.addChildTo(layer, drawing);
                 }
             }
             for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
                 newDrawing.remove(f);
                 String id = factory.createId(f);
-                f.set(StyleableFigure.STYLE_ID, id);
+                f.set(StyleableFigure.ID, id);
                 if (f instanceof Layer) {
                     model.addChildTo(f, drawing);
                 } else {

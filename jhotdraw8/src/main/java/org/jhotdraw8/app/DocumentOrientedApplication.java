@@ -100,7 +100,7 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        isSystemMenuSupported = false&&Toolkit.getToolkit().getSystemMenu().isSupported();
+        isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
         actionMap = model.createApplicationActionMap(this);
         if (isSystemMenuSupported) {
             Platform.setImplicitExit(false);
@@ -331,10 +331,10 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
                     } else {
                         System.err.println("DocumentOrientedApplication: Warning: no action for menu item with id="
                                 + mi.getId());
-                        a = new AbstractViewAction(this, null) {
+                        a = new AbstractViewAction<DocumentView>(this, null) {
                             @Override
                             protected void onActionPerformed(ActionEvent event) {
-                                Action ava = (Action) getActiveView().getActionMap().get(mi.getId());
+                                Action ava = getActiveView().getActionMap().get(mi.getId());
                                 if (ava != null) {
                                     ava.handle(event);
                                 }

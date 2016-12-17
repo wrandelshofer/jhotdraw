@@ -621,7 +621,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (id == null) {
             if (object instanceof StyleableFigure) {
                 StyleableFigure f = (StyleableFigure) object;
-                id = f.get(StyleableFigure.STYLE_ID);
+                id = f.get(StyleableFigure.ID);
                 if (id!=null&&getObject(id) == null) {
                     putId(object, id);
                 } else {
@@ -641,7 +641,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (id == null) {
             if (object instanceof StyleableFigure) {
                 StyleableFigure f = (StyleableFigure) object;
-                id = f.get(StyleableFigure.STYLE_ID);
+                id = f.get(StyleableFigure.ID);
                 if (id!=null) {
                     putId(object, id);
                 } else {

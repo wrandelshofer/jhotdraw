@@ -276,7 +276,7 @@ Preferences.userNodeForPackage(GrapherDocumentView.class), id + ".expanded", t.e
             id = prefix + counter;
         }
         counters.put(created.getTypeSelector(), counter);
-        created.set(StyleableFigure.STYLE_ID, id);
+        created.set(StyleableFigure.ID, id);
         return created;
     }
 
@@ -313,7 +313,7 @@ Preferences.userNodeForPackage(GrapherDocumentView.class), id + ".expanded", t.e
     @Override
     public CompletionStage<Void> clear() {
         Drawing d = new SimpleDrawing();
-        d.set(StyleableFigure.STYLE_ID,"drawing1");
+        d.set(StyleableFigure.ID,"drawing1");
         drawingView.setDrawing(d);
         return CompletableFuture.completedFuture(null);
     }
