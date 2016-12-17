@@ -556,6 +556,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         toolPane.layout();
 
         overlaysPane.setClip(new Rectangle(0, 0, lw + padding * 2, lh + padding * 2));
+        
         // drawingPane.setClip(new Rectangle(0,0,lw,lh));
 
         rootPane.setPrefSize(lw + padding * 2, lh + padding * 2);
