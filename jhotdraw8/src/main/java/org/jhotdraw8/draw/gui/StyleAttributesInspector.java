@@ -57,11 +57,12 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
     @FXML
     private CheckBox updateContentsCheckBox;
+    @FXML
+    private CheckBox composeAttributesCheckBox;
 
     @FXML
     private TextArea textArea;
     private Node node;
-
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter();
 
     private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
@@ -113,7 +114,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 -> prefs.putBoolean("updateContents", newValue));
 
         applyButton.setOnAction(event -> apply());
-
+composeAttributesCheckBox.setOnAction(event->updateTextArea());
         node.visibleProperty().addListener((o, oldValue, newValue) -> {
             if (newValue) {
                 invalidateTextArea();
@@ -147,6 +148,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     }
 
     protected void updateTextArea() {
+final        boolean decompose=!composeAttributesCheckBox.isSelected();
         textAreaValid = true;
 
         if (drawingView == null || drawingView.getDrawing() == null) {
@@ -180,7 +182,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
-                for (String name : selectorModel.getNonDecomposedAttributeNames(f)) {
+                for (String name : decompose?selectorModel.getDecomposedAttributeNames(f):selectorModel.getComposedAttributeNames(f)) {
                     attr.put(name, selectorModel.getAttribute(f, name));
                 }
             } else {

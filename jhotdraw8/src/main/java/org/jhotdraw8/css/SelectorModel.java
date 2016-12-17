@@ -62,7 +62,7 @@ public interface SelectorModel<T> {
     Set<String> getAttributeNames(T element);
 
     /**
-     * Returns all styleable attributes of the element.
+     * Returns all non-decomposed styleable attributes of the element.
      * <p>
      * If an attribute can be decomposed, only the composite attribute
      * is returned.
@@ -71,7 +71,18 @@ public interface SelectorModel<T> {
      * @param element An element of the document
      * @return a set of styleable attributes.
      */
-    Set<String> getNonDecomposedAttributeNames(T element);
+    Set<String> getComposedAttributeNames(T element);
+    /**
+     * Returns all decomposed styleable attributes of the element.
+     * <p>
+     * If an attribute can be composed, only the decomposed attributes
+     * are returned.
+     * 
+     *
+     * @param element An element of the document
+     * @return a set of styleable attributes.
+     */
+    Set<String> getDecomposedAttributeNames(T element);
 
     /**
      * Returns true if the element has an attribute with the specified name and

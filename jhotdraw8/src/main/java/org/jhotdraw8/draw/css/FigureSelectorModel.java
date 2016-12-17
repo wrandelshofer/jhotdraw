@@ -224,7 +224,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public Set<String> getNonDecomposedAttributeNames(Figure element) {
+    public Set<String> getComposedAttributeNames(Figure element) {
         // FIXME use keyToName map
         Set<String> attr = new HashSet<>();
         Set<StyleableMapAccessor<?>> attrk = new HashSet<>();
@@ -237,6 +237,22 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         for (MapAccessor<?> key : element.getSupportedKeys()) {
             if (key instanceof CompositeMapAccessor) {
                 attrk.removeAll(((CompositeMapAccessor) key).getSubAccessors());
+            }
+        }
+        for (StyleableMapAccessor<?> key : attrk) {
+            attr.add(key.getCssName());
+        }
+        return attr;
+    }
+    @Override
+    public Set<String> getDecomposedAttributeNames(Figure element) {
+        // FIXME use keyToName map
+        Set<String> attr = new HashSet<>();
+        Set<StyleableMapAccessor<?>> attrk = new HashSet<>();
+        for (MapAccessor<?> key : element.getSupportedKeys()) {
+            if ((key instanceof StyleableMapAccessor) && !(key instanceof CompositeMapAccessor)){
+                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
+                attrk.add(sk);
             }
         }
         for (StyleableMapAccessor<?> key : attrk) {
