@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.key.UriStyleableFigureKey;
  *
  * @author Werner Randelshofer
  */
-public class ImageFigure extends AbstractLeafFigure implements TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure {
     /**
      * The CSS type selector for this object is {@code "Image"}.
      */

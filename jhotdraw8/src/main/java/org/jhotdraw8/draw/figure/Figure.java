@@ -539,8 +539,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             list.add(new MoveHandle(this, RelativeLocator.southWest()));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
+            if (this instanceof ResizableFigure){
             ResizeHandleKit.addCornerResizeHandles(this, list);
             ResizeHandleKit.addEdgeResizeHandles(this, list);
+            }
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));

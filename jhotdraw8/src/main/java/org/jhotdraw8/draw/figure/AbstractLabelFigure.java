@@ -211,27 +211,4 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
             invalidateBounds();
         }
     }
-
-    @Override
-    public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
-        if (handleType == HandleType.SELECT) {
-            list.add(new BoundsInLocalOutlineHandle(this));
-        } else if (handleType == HandleType.MOVE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-        } else if (handleType == HandleType.RESIZE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new MoveHandle(this, RelativeLocator.northEast()));
-            list.add(new MoveHandle(this, RelativeLocator.northWest()));
-            list.add(new MoveHandle(this, RelativeLocator.southEast()));
-            list.add(new MoveHandle(this, RelativeLocator.southWest()));
-            if (this instanceof TransformableFigure) {
-                list.add(new RotateHandle((TransformableFigure) this));
-            }
-        } else if (handleType == HandleType.TRANSFORM) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
-            if (this instanceof TransformableFigure) {
-                list.add(new RotateHandle((TransformableFigure) this));
-            }
-        }
-    }
 }
