@@ -52,11 +52,11 @@ public class ResizeHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addCornerResizeHandles(Figure f, Collection<Handle> handles) {
-        handles.add(southEast(f));
-        handles.add(southWest(f));
-        handles.add(northEast(f));
-        handles.add(northWest(f));
+    static public void addCornerResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
+        handles.add(southEast(f, styleclass));
+        handles.add(southWest(f, styleclass));
+        handles.add(northEast(f, styleclass));
+        handles.add(northWest(f, styleclass));
     }
 
     /**
@@ -66,11 +66,11 @@ public class ResizeHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles) {
-        handles.add(south(f));
-        handles.add(north(f));
-        handles.add(east(f));
-        handles.add(west(f));
+    static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
+        handles.add(south(f, styleclass));
+        handles.add(north(f, styleclass));
+        handles.add(east(f, styleclass));
+        handles.add(west(f, styleclass));
     }
 
     /**
@@ -80,9 +80,9 @@ public class ResizeHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addResizeHandles(Figure f, Collection<Handle> handles) {
-        addCornerResizeHandles(f, handles);
-        addEdgeResizeHandles(f, handles);
+    static public void addResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
+        addCornerResizeHandles(f, handles, styleclass);
+        addEdgeResizeHandles(f, handles, styleclass);
     }
 
     /**
@@ -91,8 +91,8 @@ public class ResizeHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle south(Figure owner) {
-        return new SouthHandle(owner);
+    static public Handle south(Figure owner, String styleclass) {
+        return new SouthHandle(owner, styleclass);
     }
 
     /**
@@ -101,8 +101,8 @@ public class ResizeHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle southEast(Figure owner) {
-        return new SouthEastHandle(owner);
+    static public Handle southEast(Figure owner, String styleclass) {
+        return new SouthEastHandle(owner, styleclass);
     }
 
     /**
@@ -111,8 +111,8 @@ public class ResizeHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle southWest(Figure owner) {
-        return new SouthWestHandle(owner);
+    static public Handle southWest(Figure owner, String styleclass) {
+        return new SouthWestHandle(owner, styleclass);
     }
 
     /**
@@ -121,8 +121,8 @@ public class ResizeHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle north(Figure owner) {
-        return new NorthHandle(owner);
+    static public Handle north(Figure owner, String styleclass) {
+        return new NorthHandle(owner, styleclass);
     }
 
     /**
@@ -131,8 +131,8 @@ public class ResizeHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle northEast(Figure owner) {
-        return new NorthEastHandle(owner);
+    static public Handle northEast(Figure owner, String styleclass) {
+        return new NorthEastHandle(owner, styleclass);
     }
 
     /**
@@ -141,8 +141,8 @@ public class ResizeHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle northWest(Figure owner) {
-        return new NorthWestHandle(owner);
+    static public Handle northWest(Figure owner, String styleclass) {
+        return new NorthWestHandle(owner, styleclass);
     }
 
     /**
@@ -151,8 +151,8 @@ public class ResizeHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle east(Figure owner) {
-        return new EastHandle(owner);
+    static public Handle east(Figure owner, String styleclass) {
+        return new EastHandle(owner, styleclass);
     }
 
     /**
@@ -161,8 +161,8 @@ public class ResizeHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle west(Figure owner) {
-        return new WestHandle(owner);
+    static public Handle west(Figure owner, String styleclass) {
+        return new WestHandle(owner, styleclass);
     }
         protected static final Shape NORTH_SHAPE = new Rectangle(9, 5);
         protected static final Shape EAST_SHAPE = new Rectangle(5, 9);
@@ -184,8 +184,8 @@ public class ResizeHandleKit {
 
     private static class NorthEastHandle extends AbstractResizeTransformHandle {
 
-        NorthEastHandle(Figure owner) {
-            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.northEast(), NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        NorthEastHandle(Figure owner, String styleclass) {
+            super(owner, styleclass, RelativeLocator.northEast(), NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -214,8 +214,8 @@ public class ResizeHandleKit {
 
     private static class EastHandle extends AbstractResizeTransformHandle {
 
-        EastHandle(Figure owner) {
-            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.east(), EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        EastHandle(Figure owner, String styleclass) {
+            super(owner, styleclass, RelativeLocator.east(), EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -237,8 +237,8 @@ public class ResizeHandleKit {
 
     private static class NorthHandle extends AbstractResizeTransformHandle {
 
-        NorthHandle(Figure owner) {
-            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.north(), NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        NorthHandle(Figure owner, String styleclass) {
+            super(owner, styleclass, RelativeLocator.north(), NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -261,8 +261,8 @@ public class ResizeHandleKit {
 
     private static class NorthWestHandle extends AbstractResizeTransformHandle {
 
-        NorthWestHandle(Figure owner) {
-            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.northWest(), NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        NorthWestHandle(Figure owner, String styleclass) {
+            super(owner, styleclass, RelativeLocator.northWest(), NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -291,8 +291,8 @@ public class ResizeHandleKit {
 
     private static class SouthEastHandle extends AbstractResizeTransformHandle {
 
-        SouthEastHandle(Figure owner) {
-            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.southEast(), SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        SouthEastHandle(Figure owner, String styleclass) {
+            super(owner, styleclass, RelativeLocator.southEast(), SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -320,8 +320,8 @@ public class ResizeHandleKit {
 
     private static class SouthHandle extends AbstractResizeTransformHandle {
 
-        SouthHandle(Figure owner) {
-            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.south(), SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        SouthHandle(Figure owner, String styleclass) {
+            super(owner, styleclass, RelativeLocator.south(), SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -343,8 +343,8 @@ public class ResizeHandleKit {
 
     private static class SouthWestHandle extends AbstractResizeTransformHandle {
 
-        SouthWestHandle(Figure owner) {
-            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.southWest(), SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        SouthWestHandle(Figure owner, String styleclass) {
+            super(owner, styleclass, RelativeLocator.southWest(), SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -372,8 +372,8 @@ public class ResizeHandleKit {
 
     private static class WestHandle extends AbstractResizeTransformHandle {
 
-        WestHandle(Figure owner) {
-            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.west(), WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
+        WestHandle(Figure owner, String styleclass) {
+            super(owner, styleclass, RelativeLocator.west(), WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override

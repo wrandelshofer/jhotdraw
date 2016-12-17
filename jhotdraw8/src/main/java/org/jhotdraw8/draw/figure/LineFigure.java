@@ -122,7 +122,10 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_RESIZE, START));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_RESIZE, END));
-            //list.add(new RotateHandle(this, Handle.STYLECLASS_HANDLE_ROTATE));
+        } else if (handleType == HandleType.POINT) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
+            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
         }else{
             super.createHandles(handleType, dv, list);
         }

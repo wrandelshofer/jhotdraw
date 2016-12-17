@@ -34,13 +34,24 @@
 .handle-transform-outline {
     -fx-stroke: purple;
 }
+/* Styles the transform outline drawn by handles. See {@code Handle}. */
+.handle-point-outline {
+    -fx-stroke: magenta;
+}
 
 /* Styles move and point handles. See {@code Handle}. */
 .handle-move,
-.handle-multi-move,
-.handle-point {
+.handle-multi-move {
     -fx-border-color: blue;
     -fx-background-color: white;
+}
+.handle-point {
+    -fx-border-color: magenta;
+    -fx-background-color: white;
+}
+.handle-point-connected {
+    -fx-border-color: magenta;
+    -fx-background-color: magenta;
 }
 
 /* Styles disconnected connection point handles. See {@code Handle}. */

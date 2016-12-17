@@ -238,6 +238,10 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             list.add(new ConnectionPointHandle(this, START, START_CONNECTOR, START_TARGET));
             list.add(new ConnectionPointHandle(this, END, END_CONNECTOR, END_TARGET));
+        } else if (handleType == HandleType.POINT) {
+            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, START, START_CONNECTOR, START_TARGET));
+            list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, END, END_CONNECTOR, END_TARGET));
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new LineOutlineHandle(this,  Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
         }else{
