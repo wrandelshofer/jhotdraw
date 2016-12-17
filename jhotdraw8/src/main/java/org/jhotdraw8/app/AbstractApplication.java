@@ -52,9 +52,9 @@ public abstract class AbstractApplication<V extends ProjectView<V>> extends java
                     this, RECENT_URIS_PROPERTY, //
                     FXCollections.observableSet(new LinkedHashSet<URI>())).getReadOnlyProperty();
 
-    {
+   protected void loadRecentUris(String applicationId) {
         Preferences prefs = Preferences.userNodeForPackage(AbstractApplication.class);
-        String recentUrisSerialized = prefs.get("recentUris", "");
+        String recentUrisSerialized = prefs.get(applicationId+".recentUris", "");
         for (String str : recentUrisSerialized.split("\t")) {
             if (str.isEmpty()) {
                 continue;
