@@ -937,7 +937,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
                 continue;
             }
             Point2D pl = n.parentToLocal(pp);
-            if (contains(n, pl, TOLERANCE)) {
+            double localTolerance=n.parentToLocal(0,0).distance(n.parentToLocal(TOLERANCE,TOLERANCE));
+            if (contains(n, pl, localTolerance)) {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null || !f.isSelectable() || !figures.contains(f)) {
                     if (n instanceof Parent) {
@@ -977,7 +978,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
         } else if (node instanceof Group) {
             if (Geom.contains(node.getBoundsInLocal(), point, tolerance)) {
                 for (Node child : ((Group) node).getChildren()) {
-                    if (contains(child, child.parentToLocal(point), tolerance)) {
+double localTolerance=                    child.parentToLocal(0, 0).distance(child.parentToLocal(tolerance,tolerance));
+                    if (contains(child, child.parentToLocal(point), localTolerance)) {
                         return true;
                     }
                 }
