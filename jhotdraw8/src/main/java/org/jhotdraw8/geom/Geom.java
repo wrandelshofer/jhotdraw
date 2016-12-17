@@ -10,6 +10,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import static java.lang.Math.*;
+import java.util.Collection;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -17,6 +18,8 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * Some geometric utilities.
@@ -34,6 +37,16 @@ public class Geom {
     public static String toString(Bounds b) {
         return b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
+
+
+    public static Bounds union(Bounds a, Bounds b) {
+        double minx = Math.min(a.getMinX(), b.getMinX());
+        double miny = Math.min(a.getMinY(), b.getMinY());
+        double maxx = Math.max(a.getMaxX(), b.getMaxX());
+        double maxy = Math.max(a.getMaxY(), b.getMaxY());
+        return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
+    }
+
 
     private Geom() {
     } // never instantiated

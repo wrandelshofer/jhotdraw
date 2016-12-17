@@ -33,6 +33,7 @@ import org.jhotdraw8.draw.handle.ResizeHandleKit;
 import org.jhotdraw8.draw.handle.RotateHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -44,8 +45,8 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.collection.TreeNode;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.locator.RelativeLocator;
-
-
+import org.jhotdraw8.geom.Geom;
+import static org.jhotdraw8.geom.Geom.union;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -88,8 +89,8 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
  * {@code Layer}s, {@code Group}s and into layout hierarchies.<br>
  * The provider/dependant relationships are typically used for the creation of
  * line connections between figures, such as with {@link LineConnectionFigure}.
- *  The strategy for updating the state of dependent figures is implement
- * in {@link DrawingModel}.
+ * The strategy for updating the state of dependent figures is implement in
+ * {@link DrawingModel}.
  * <p>
  * <b>Handles.</b> A figure can produce {@code Handle}s which allow to
  * graphically change the state of the figure in a {@link DrawingView}.</p>
@@ -184,7 +185,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The default implementation of this method calls
      * {@link #invalidateTransforms}.
-     * 
+     *
      * @return true if the transforms were valid
      */
     default boolean transformNotify() {
@@ -251,14 +252,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     public Bounds getBoundsInLocal();
 
     /**
-     * The bounds that should be used for layout calculations for this
-     * figure.
+     * The bounds that should be used for layout calculations for this figure.
      * <p>
      * The bounds are given in the coordinate space of the parent figure.
      * <p>
      * This method may use caching and return incorrect results if the caches
-     * are stale. Invoke {@link #invalidateTransforms} and {@link #layout}
-     * if you are not sure that the cache is valid.
+     * are stale. Invoke {@link #invalidateTransforms} and {@link #layout} if
+     * you are not sure that the cache is valid.
      *
      * @return the local bounds
      */
@@ -289,6 +289,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
+
     /**
      * Attempts to transform the figure.
      * <p>
@@ -297,6 +298,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param transform the desired transformation in parent coordinates
      */
     void transformInParent(Transform transform);
+
     /**
      * Attempts to transform the figure.
      * <p>
@@ -311,12 +313,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The figure may choose to only partially change its local bounds.
      * <p>
-     * This method typically changes property values in this figure with 
-     * {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
-     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT}, 
+     * This method typically changes property values in this figure with null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
+     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
-     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also
-     * call {@code reshapeInLocal} on child figures.
+     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
+     * {@code reshapeInLocal} on child figures.
      *
      *
      * @param transform the desired transformation in local coordinates
@@ -328,12 +329,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The figure may choose to only partially change its parent bounds.
      * <p>
-     * This method typically changes property values in this figure with 
-     * {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
-     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT}, 
+     * This method typically changes property values in this figure with null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
+     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
-     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also
-     * call {@code reshapeInLocal} on child figures.
+     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
+     * {@code reshapeInLocal} on child figures.
      *
      *
      * @param transform the desired transformation in parent coordinates
@@ -360,11 +360,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         double sx = width / oldBounds.getWidth();
         double sy = height / oldBounds.getHeight();
 
-       Transform tx = new Translate(x - oldBounds.getMinX(), y - oldBounds.getMinY());
+        Transform tx = new Translate(x - oldBounds.getMinX(), y - oldBounds.getMinY());
         if (!Double.isNaN(sx) && !Double.isNaN(sy)
                 && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                 && (sx != 1d || sy != 1d)) {
-           tx= tx.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
+            tx = tx.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
         }
 
         reshapeInLocal(tx);
@@ -475,14 +475,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * Whether the figure can be reshaped as a group together with other
      * figures.
      * <p>
- If this figure uses one of the other figures for computing its position
- or its layout, then it will return false.
- <p>
+     * If this figure uses one of the other figures for computing its position
+     * or its layout, then it will return false.
+     * <p>
      * The default implementation always returns true.
      *
      * @param others A set of figures.
-     * @return true if the user may reshapeInLocal this figure together with those in
- the set.
+     * @return true if the user may reshapeInLocal this figure together with
+     * those in the set.
      */
     default boolean isGroupReshapeableWith(Set<Figure> others) {
         return true;
@@ -533,24 +533,24 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-           list.add(new MoveHandle(this, RelativeLocator.northEast()));
+            list.add(new MoveHandle(this, RelativeLocator.northEast()));
             list.add(new MoveHandle(this, RelativeLocator.northWest()));
             list.add(new MoveHandle(this, RelativeLocator.southEast()));
             list.add(new MoveHandle(this, RelativeLocator.southWest()));
         } else if (handleType == HandleType.POINT) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            ResizeHandleKit.addCornerResizeHandles(this, list,Handle.STYLECLASS_HANDLE_POINT);
+            ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
-            if (this instanceof ResizableFigure){
-            ResizeHandleKit.addCornerResizeHandles(this, list,Handle.STYLECLASS_HANDLE_RESIZE);
-            ResizeHandleKit.addEdgeResizeHandles(this, list,Handle.STYLECLASS_HANDLE_RESIZE);
+            if (this instanceof ResizableFigure) {
+                ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
+                ResizeHandleKit.addEdgeResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
             }
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             if (this instanceof TransformableFigure) {
-                TransformableFigure tf=(TransformableFigure)this;
+                TransformableFigure tf = (TransformableFigure) this;
                 list.add(new RotateHandle(tf));
                 TransformHandleKit.addCornerTransformHandles(tf, list);
                 TransformHandleKit.addEdgeTransformHandles(tf, list);
@@ -571,8 +571,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     Connector findConnector(Point2D pointInLocal, Figure prototype);
 
     /**
-     * Updates the layout of this figure, based on the layout of its
-     * children and the layout of providing figures.
+     * Updates the layout of this figure, based on the layout of its children
+     * and the layout of providing figures.
      * <p>
      * This figure does not keep track of changes that require layout updates.
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
@@ -583,8 +583,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * Updates the stylesheet cache of this figure depending on its property
      * values and on the and the property values of its ancestors.
      * <p>
-     * This figure does not keep track of changes that require CSS updates.
-     * Use a {@link org.jhotdraw8.draw.model.DrawingModel} to manage CSS updates.
+     * This figure does not keep track of changes that require CSS updates. Use
+     * a {@link org.jhotdraw8.draw.model.DrawingModel} to manage CSS updates.
      */
     void updateCss();
 
@@ -717,16 +717,18 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
-     * Returns all figures which derive their state from the state of this figure.
+     * Returns all figures which derive their state from the state of this
+     * figure.
      * <p>
      * When the state of this figure changes, then the state of the dependent
      * figures must be updated.
      * <p>
      * The update strategy is implemented in {@link DrawingModel}.
      * {@code DrawingMode} observes state changes in figures and updates
-     * dependent figures. {@code DrawingModel} can coallesce multiply state changes of 
-     * figures into a smaller number of updates. {@code DrawingModel} can also
-     * detect cyclic state dependencies and prevent endless update loops.
+     * dependent figures. {@code DrawingModel} can coallesce multiply state
+     * changes of figures into a smaller number of updates. {@code DrawingModel}
+     * can also detect cyclic state dependencies and prevent endless update
+     * loops.
      *
      * @return a list of dependent figures
      */
@@ -740,7 +742,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * See {@link #getDependentFigures} for a description of the update
      * strategy.
-     * 
+     *
      *
      * @return a list of providing figures
      */
@@ -765,7 +767,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * Returns all supported map accessors of the figure.
      * <p>
-     * The default implementation returns all declared and inherited map accessors.
+     * The default implementation returns all declared and inherited map
+     * accessors.
      *
      * @return the keys
      */
@@ -959,13 +962,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * Invalidates the transformation matrices of this figure.
      * <p>
-     * This figure does not keep track of changes that cause the invalidation 
-     * of its tranformation matrices. 
-     * Use a {@link org.jhotdraw8.draw.model.DrawingModel} to
-     * manage the transformation matrices of the figures in a drawing.
-     * 
-     * @return true if the transformation matrices of the child figures must
-     * be invalidated as well
+     * This figure does not keep track of changes that cause the invalidation of
+     * its tranformation matrices. Use a
+     * {@link org.jhotdraw8.draw.model.DrawingModel} to manage the
+     * transformation matrices of the figures in a drawing.
+     *
+     * @return true if the transformation matrices of the child figures must be
+     * invalidated as well
      */
     boolean invalidateTransforms();
 
@@ -1009,8 +1012,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     boolean hasPropertyChangeListeners();
 
     /**
-     * Fires a property change event. 
-     * 
+     * Fires a property change event.
+     *
      * @param <T> the value type
      * @param source the event source
      * @param type the event type
@@ -1020,17 +1023,18 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
         if (hasPropertyChangeListeners()) {
-            firePropertyChangeEvent(new FigurePropertyChangeEvent(source,type, key, oldValue, newValue));
+            firePropertyChangeEvent(new FigurePropertyChangeEvent(source, type, key, oldValue, newValue));
         } else {
             Figure parent = getParent();
             if (parent != null) {
-                parent.firePropertyChangeEvent(source,type, key, oldValue, newValue);
+                parent.firePropertyChangeEvent(source, type, key, oldValue, newValue);
             }
         }
     }
 
     /**
-     * Fires a property change event. 
+     * Fires a property change event.
+     *
      * @param event the event
      */
     default void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
@@ -1043,5 +1047,76 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         if (parent != null) {
             parent.firePropertyChangeEvent(event);
         }
+    }
+
+    /**
+     * Computes the union of the bounds of the provided figures in world
+     * coordinates.
+     *
+     * @param selection a set of figures
+     * @return bounds
+     */
+    public static Bounds bounds(Collection<Figure> selection) {
+        Bounds b = null;
+        for (Figure f : selection) {
+            Bounds fb = f.getLocalToWorld().transform(f.getBoundsInLocal());
+            if (b == null) {
+                b = fb;
+            } else {
+                b = Geom.union(b, fb);
+            }
+        }
+        return b;
+    }
+
+    /**
+     * Computes the union of the visual bounds of the provided figures in world
+     * coordinates.
+     *
+     * @param selection a set of figures
+     * @return bounds
+     */
+    public static Bounds visualBounds(Collection<Figure> selection) {
+        Bounds b = null;
+
+        for (Figure f : selection) {
+            Bounds fb;
+            if (f instanceof Drawing) {
+                fb = f.getLocalToWorld().transform(f.getBoundsInLocal());
+                if (b == null) {
+                    b = fb;
+                } else {
+                    b = Geom.union(b, fb);
+                }
+            } else {
+                for (Figure ff : f.preorderIterable()) {
+                    fb = ff.getBoundsInLocal();
+                    double grow = 0.0;
+                    if (ff.get(StrokeableFigure.STROKE_COLOR) != null) {
+                        switch (ff.get(StrokeableFigure.STROKE_TYPE)) {
+                            case CENTERED:
+                                grow += ff.get(StrokeableFigure.STROKE_WIDTH) * 0.5;
+                                break;
+                            case INSIDE:
+                                break;
+                            case OUTSIDE:
+                                grow += ff.get(StrokeableFigure.STROKE_WIDTH);
+                                break;
+                        }
+                    }
+                    if (ff.get(CompositableFigure.EFFECT) != null) {
+                        grow += 10.0;
+                    }
+                    fb = Geom.grow(fb, grow, grow);
+                    fb = f.getLocalToWorld().transform(fb);
+                    if (b == null) {
+                        b = fb;
+                    } else {
+                        b = Geom.union(b, fb);
+                    }
+                }
+            }
+        }
+        return b;
     }
 }
