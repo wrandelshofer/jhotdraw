@@ -12,9 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
+import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
+import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -58,9 +61,9 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getParentToWorld());
-        if (f instanceof TransformableFigure) {
+       if (f instanceof TransformableFigure) {
             TransformableFigure tf = (TransformableFigure) f;
-        t= t.createConcatenation(tf.getTransform());
+        t= t.createConcatenation(new Translate(tf.get(TRANSLATE_X),tf.get(TRANSLATE_Y)));
         }
         t = Transform.translate(0.5, 0.5).createConcatenation(t);
         Bounds b = f.getBoundsInLocal();

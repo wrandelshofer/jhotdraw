@@ -164,14 +164,6 @@ public class ResizeHandleKit {
     static public Handle west(Figure owner) {
         return new WestHandle(owner);
     }
-
-    private abstract static class AbstractResizeHandle extends LocatorHandle {
-
-        private Point2D pickLocation;
-        private Point2D oldPoint;
-        private final Region node;
-        private final String styleclass;
-        private Bounds startBounds;
         protected static final Shape NORTH_SHAPE = new Rectangle(9, 5);
         protected static final Shape EAST_SHAPE = new Rectangle(5, 9);
         protected static final Shape WEST_SHAPE = new Rectangle(5, 9);
@@ -187,112 +179,13 @@ public class ResizeHandleKit {
             SOUTH_EAST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,2.5 -5.5,2.5 -5.5,-2.5 -2.5,-2.5 Z M 5.5,5.5");
             SOUTH_WEST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,-2.5 5.5,-2.5 5.5,2.5 -2.5,2.5 Z M -5.5,5.5");
         }
-
-        private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+            private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
         private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
-        /**
-         * The height divided by the width.
-         */
-        protected double preferredAspectRatio;
 
-        public AbstractResizeHandle(Figure owner, Locator locator, Shape shape) {
-            this(owner, STYLECLASS_HANDLE_RESIZE, locator, shape);
-        }
-
-        public AbstractResizeHandle(Figure owner, String styleclass, Locator locator, Shape shape) {
-            super(owner, locator);
-            this.styleclass = styleclass;
-            node = new Region();
-            node.setShape(shape);
-            node.setManaged(false);
-            node.setScaleShape(false);
-            node.setCenterShape(true);
-            node.resize(11, 11);
-            node.getStyleClass().clear();
-            node.getStyleClass().add(styleclass);
-            node.setBorder(REGION_BORDER);
-            node.setBackground(REGION_BACKGROUND);
-        }
-
-        @Override
-        public Region getNode() {
-            return node;
-        }
-
-        @Override
-        public void updateNode(DrawingView view) {
-            Figure f = owner;
-            Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
-            Bounds b = f.getBoundsInLocal();
-            Point2D p = getLocation();
-            pickLocation = p = t.transform(p);
-            node.relocate(p.getX() - 5, p.getY() - 5);
-            // rotates the node:
-            // f.applyTransformableFigureProperties(node);
-            node.setRotate(f.getStyled(ROTATE));
-            node.setRotationAxis(f.getStyled(ROTATION_AXIS));
-        }
-
-        @Override
-        public void onMousePressed(MouseEvent event, DrawingView view) {
-            oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
-            startBounds = owner.getBoundsInLocal();
-            preferredAspectRatio = owner.getPreferredAspectRatio();
-        }
-
-        @Override
-        public void onMouseDragged(MouseEvent event, DrawingView view) {
-            Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
-
-            if (!event.isAltDown() && !event.isControlDown()) {
-                // alt or control turns the constrainer off
-                newPoint = view.getConstrainer().constrainPoint(owner, newPoint);
-            }
-            if (event.isMetaDown()) {
-                // meta snaps the location of the handle to the grid
-                Point2D loc = getLocation();
-                oldPoint = loc;
-            }
-            // shift keeps the aspect ratio
-            boolean keepAspect = event.isShiftDown();
-
-            Transform t = owner.getWorldToLocal();
-
-            resize(t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
-        }
-
-        @Override
-        public void onMouseReleased(MouseEvent event, DrawingView dv) {
-            // FIXME fire undoable edit
-        }
-
-        @Override
-        public boolean isSelectable() {
-            return true;
-        }
-
-        @Override
-        public Point2D getLocationInView() {
-            return pickLocation;
-        }
-
-        /**
-         * Resizes the figure.
-         *
-         * @param newPoint new point in local coordinates
-         * @param owner the figure
-         * @param bounds the bounds of the figure on mouse pressed
-         * @param model the drawing model
-         * @param keepAspect whether the aspect should be preserved. The bounds
-         * of the figure on mouse pressed can be used as a reference.
-         */
-        protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect);
-    }
-
-    private static class NorthEastHandle extends AbstractResizeHandle {
+    private static class NorthEastHandle extends AbstractResizeTransformHandle {
 
         NorthEastHandle(Figure owner) {
-            super(owner, RelativeLocator.northEast(), NORTH_EAST_SHAPE);
+            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.northEast(), NORTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -319,10 +212,10 @@ public class ResizeHandleKit {
         }
     }
 
-    private static class EastHandle extends AbstractResizeHandle {
+    private static class EastHandle extends AbstractResizeTransformHandle {
 
         EastHandle(Figure owner) {
-            super(owner, RelativeLocator.east(), EAST_SHAPE);
+            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.east(), EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -342,10 +235,10 @@ public class ResizeHandleKit {
         }
     }
 
-    private static class NorthHandle extends AbstractResizeHandle {
+    private static class NorthHandle extends AbstractResizeTransformHandle {
 
         NorthHandle(Figure owner) {
-            super(owner, RelativeLocator.north(), NORTH_SHAPE);
+            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.north(), NORTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -366,10 +259,10 @@ public class ResizeHandleKit {
         }
     }
 
-    private static class NorthWestHandle extends AbstractResizeHandle {
+    private static class NorthWestHandle extends AbstractResizeTransformHandle {
 
         NorthWestHandle(Figure owner) {
-            super(owner, RelativeLocator.northWest(), NORTH_WEST_SHAPE);
+            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.northWest(), NORTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -396,10 +289,10 @@ public class ResizeHandleKit {
         }
     }
 
-    private static class SouthEastHandle extends AbstractResizeHandle {
+    private static class SouthEastHandle extends AbstractResizeTransformHandle {
 
         SouthEastHandle(Figure owner) {
-            super(owner, RelativeLocator.southEast(), SOUTH_EAST_SHAPE);
+            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.southEast(), SOUTH_EAST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -425,10 +318,10 @@ public class ResizeHandleKit {
         }
     }
 
-    private static class SouthHandle extends AbstractResizeHandle {
+    private static class SouthHandle extends AbstractResizeTransformHandle {
 
         SouthHandle(Figure owner) {
-            super(owner, RelativeLocator.south(), SOUTH_SHAPE);
+            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.south(), SOUTH_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -439,7 +332,7 @@ public class ResizeHandleKit {
         @Override
         protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
             double newY = max(bounds.getMinY(), newPoint.getY());
-            double newWidth = bounds.getMaxX() - bounds.getMinX();
+            double newWidth = bounds.getWidth();
             double newHeight = newY - bounds.getMinY();
             if (keepAspect) {
                 newWidth = newHeight / preferredAspectRatio;
@@ -448,10 +341,10 @@ public class ResizeHandleKit {
         }
     }
 
-    private static class SouthWestHandle extends AbstractResizeHandle {
+    private static class SouthWestHandle extends AbstractResizeTransformHandle {
 
         SouthWestHandle(Figure owner) {
-            super(owner, RelativeLocator.southWest(), SOUTH_WEST_SHAPE);
+            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.southWest(), SOUTH_WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -477,10 +370,10 @@ public class ResizeHandleKit {
         }
     }
 
-    private static class WestHandle extends AbstractResizeHandle {
+    private static class WestHandle extends AbstractResizeTransformHandle {
 
         WestHandle(Figure owner) {
-            super(owner, RelativeLocator.west(), WEST_SHAPE);
+            super(owner, STYLECLASS_HANDLE_RESIZE, RelativeLocator.west(), WEST_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override

@@ -181,7 +181,7 @@ public class LayerCell extends ListCell<Figure> {
     }
 
     private String getItemText() {
-        return getItem() == null ? "" : getItem().get(StyleableFigure.STYLE_ID);
+        return getItem() == null ? "" : getItem().get(StyleableFigure.ID);
     }
 
     private TextField createTextField() {
@@ -205,8 +205,7 @@ public class LayerCell extends ListCell<Figure> {
     @Override
     public void commitEdit(Figure newValue) {
         if (editField != null && isEditing()) {
-            drawingModel.set(
-                    item, StyleableFigure.STYLE_ID, editField.getText());
+            drawingModel.set(item, StyleableFigure.ID, editField.getText());
         }
         super.commitEdit(newValue);
     }

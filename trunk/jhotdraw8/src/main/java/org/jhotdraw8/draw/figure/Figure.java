@@ -14,7 +14,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.Handle;
@@ -24,27 +23,27 @@ import java.util.Collections;
 import java.util.LinkedList;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
-import org.jhotdraw8.collection.IndexedSet;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.Layer;
 import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
-import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.ResizeHandleKit;
 import org.jhotdraw8.draw.handle.RotateHandle;
-import org.jhotdraw8.draw.locator.RelativeLocator;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.handle.BoundsInParentOutlineHandle;
 import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
 import org.jhotdraw8.draw.handle.TransformHandleKit;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.collection.TreeNode;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.locator.RelativeLocator;
 
 
 
@@ -290,6 +289,22 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
+    /**
+     * Attempts to transform the figure.
+     * <p>
+     * The figure may choose to only partially change its transformation.
+     *
+     * @param transform the desired transformation in parent coordinates
+     */
+    void transformInParent(Transform transform);
+    /**
+     * Attempts to transform the figure.
+     * <p>
+     * The figure may choose to only partially change its transformation.
+     *
+     * @param transform the desired transformation in local coordinates
+     */
+    void transformInLocal(Transform transform);
 
     /**
      * Attempts to change the local bounds of the figure.
@@ -326,14 +341,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     void reshapeInParent(Transform transform);
 
     /**
-     * Attempts to transform the figure.
-     * <p>
-     * The figure may choose to only partially change its trasnformation.
-     *
-     * @param transform the desired transformation in parent coordinates
-     */
-    void transformInParent(Transform transform);
-    /**
      * Attempts to change the local bounds of the figure.
      * <p>
      * See {#link #reshapeInLocal(Transform)} for a description of this method.
@@ -353,12 +360,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         double sx = width / oldBounds.getWidth();
         double sy = height / oldBounds.getHeight();
 
-        Affine tx = new Affine();
-        tx.appendTranslation(x - oldBounds.getMinX(), y - oldBounds.getMinY());
+       Transform tx = new Translate(x - oldBounds.getMinX(), y - oldBounds.getMinY());
         if (!Double.isNaN(sx) && !Double.isNaN(sy)
                 && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                 && (sx != 1d || sy != 1d)) {
-            tx.appendScale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY());
+           tx= tx.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
         }
 
         reshapeInLocal(tx);
@@ -527,6 +533,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+           list.add(new MoveHandle(this, RelativeLocator.northEast()));
+            list.add(new MoveHandle(this, RelativeLocator.northWest()));
+            list.add(new MoveHandle(this, RelativeLocator.southEast()));
+            list.add(new MoveHandle(this, RelativeLocator.southWest()));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             ResizeHandleKit.addCornerResizeHandles(this, list);
@@ -535,9 +545,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
             if (this instanceof TransformableFigure) {
-                list.add(new RotateHandle((TransformableFigure) this));
-                TransformHandleKit.addCornerTransformHandles(this, list);
-                TransformHandleKit.addEdgeTransformHandles(this, list);
+                TransformableFigure tf=(TransformableFigure)this;
+                list.add(new RotateHandle(tf));
+                TransformHandleKit.addCornerTransformHandles(tf, list);
+                TransformHandleKit.addEdgeTransformHandles(tf, list);
             }
         }
     }

@@ -28,11 +28,15 @@ import org.jhotdraw8.css.CssTokenizerInterface;
  * Parses a transform list given in the following EBNF:
  * <pre>
  * TransformList = [ Transform { S, Transform } ] ;
- * Transform     = ( Affine | Translate | Scale | Rotate | Shear ) ;
+ * Transform     = ( Affine | Matrix | Translate | Scale | Rotate | Shear ) ;
  *
  * Affine        = "affine(" , [S] ,
- *                  ( mxx ,  5 * ( C , m )
- *                  | mxx , 11 * ( C , m )
+ *                  ( mxx , C, mxy, C, tx, C, myx, C, myy, C, ty
+ *                  | mxx , C, mxy, C, mxz, C, tx, C, myx, C, myy, C, myz, C, tz, C, mzx, C, mzy, C, mzz, C, tz)
+ *                  ) , [S], ")" ;
+ * Matrix        = "matrix(" , [S] ,
+ *                  ( mxx , C, myx, C, mxy, C, myy, C, tx, C, ty
+ *                  | mxx , C, myx, C, mzx, C, mxy, C, myy, C, mzy, C, mxz, C, myz, C, mzz, C, tx, C, ty, C, tz)
  *                  ) , [S], ")" ;
  * Translate     = "translate(" , [S] , tx , [ C , ty, [ C , tz ] ] , [S], ")" ;
  * Scale         = "scale(" , [S] ,
@@ -69,7 +73,7 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
     public void toString(Appendable buf, IdFactory idFactory, List<Transform> txs) throws IOException {
         boolean allTransformsAreIdentity = true;
         for (Transform tx : txs) {
-            if (! tx.isIdentity()) {
+            if (!tx.isIdentity()) {
                 allTransformsAreIdentity = false;
                 break;
             }
@@ -166,42 +170,42 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                     }
                     buf.append(')');
                 } else if (tx.isType2D()) {
-                    buf.append("affine(")
+                    buf.append("matrix(")
                             .append(nb.toString(tx.getMxx()))
                             .append(',')
+                            .append(nb.toString(tx.getMyx()))
+                            .append(' ')
                             .append(nb.toString(tx.getMxy()))
                             .append(',')
-                            .append(nb.toString(tx.getTx()))
-                            .append(' ')
-                            .append(nb.toString(tx.getMyx()))
-                            .append(',')
                             .append(nb.toString(tx.getMyy()))
+                            .append(' ')
+                            .append(nb.toString(tx.getTx()))
                             .append(',')
                             .append(nb.toString(tx.getTy()))
                             .append(')');
                 } else {
-                    buf.append("affine(")
+                    buf.append("matrix(")
                             .append(nb.toString(tx.getMxx()))
                             .append(',')
-                            .append(nb.toString(tx.getMxy()))
+                            .append(nb.toString(tx.getMyx()))
                             .append(',')
                             .append(nb.toString(tx.getMzx()))
-                            .append(',')
-                            .append(nb.toString(tx.getTx()))
                             .append(' ')
-                            .append(nb.toString(tx.getMyx()))
+                            .append(nb.toString(tx.getMxy()))
                             .append(',')
                             .append(nb.toString(tx.getMyy()))
                             .append(',')
+                            .append(nb.toString(tx.getMzy()))
+                            .append(' ')
+                            .append(nb.toString(tx.getMxz()))
+                            .append(',')
                             .append(nb.toString(tx.getMyz()))
                             .append(',')
-                            .append(nb.toString(tx.getTy()))
-                            .append(' ')
-                            .append(nb.toString(tx.getMzx()))
-                            .append(',')
-                            .append(nb.toString(tx.getMzy()))
-                            .append(',')
                             .append(nb.toString(tx.getMzz()))
+                            .append(' ')
+                            .append(nb.toString(tx.getTx()))
+                            .append(',')
+                            .append(nb.toString(tx.getTy()))
                             .append(',')
                             .append(nb.toString(tx.getTz()))
                             .append(')');
@@ -214,7 +218,7 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
     public List<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
-tt.setSkipWhitespaces(true);
+        tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT && tt.currentStringValue().equals("none")) {
             in.position(in.limit());
             return txs;
@@ -258,8 +262,8 @@ tt.setSkipWhitespaces(true);
                         case 12:
                             txs.add(new Affine(//
                                     m.get(0), m.get(1), m.get(2), m.get(3),//
-                                    m.get(4), m.get(5), m.get(5), m.get(6),//
-                                    m.get(7), m.get(8), m.get(9), m.get(10)//
+                                    m.get(4), m.get(5), m.get(6), m.get(7),//
+                                    m.get(8), m.get(9), m.get(10), m.get(11)//
                             ));
                             break;
                         default:
@@ -267,7 +271,27 @@ tt.setSkipWhitespaces(true);
                     }
                     break;
                 }
-                case "skew": 
+                case "matrix": {
+                    switch (m.size()) {
+                        case 6:
+                            txs.add(new Affine(//
+                                    m.get(0), m.get(2), m.get(4),//
+                                    m.get(1), m.get(3), m.get(5)//
+                            ));
+                            break;
+                        case 12:
+                            txs.add(new Affine(//
+                                    m.get(0), m.get(3), m.get(6), m.get(9),//
+                                    m.get(1), m.get(4), m.get(7), m.get(10),//
+                                    m.get(2), m.get(5), m.get(8), m.get(11)//
+                            ));
+                            break;
+                        default:
+                            throw new ParseException("6 or 12 coefficients expected, but found " + m.size(), tt.getStartPosition());
+                    }
+                    break;
+                }
+                case "skew":
                 case "shear": {
                     switch (m.size()) {
                         case 2:

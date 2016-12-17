@@ -8,28 +8,29 @@ import java.util.Collection;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw8.draw.locator.Locator;
+import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import static java.lang.Math.*;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import org.jhotdraw8.geom.Geom;
+import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_X;
+import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
+import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
+import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
 
 /**
  * A set of utility methods to create handles which transform a Figure by using
@@ -40,6 +41,10 @@ import org.jhotdraw8.geom.Geom;
  * @author Werner Randelshofer
  */
 public class TransformHandleKit {
+
+    private static final Shape REGION_SHAPE = new Circle(3);
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
 
     /**
      * Prevent instance creation.
@@ -55,7 +60,7 @@ public class TransformHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addCornerTransformHandles(Figure f, Collection<Handle> handles) {
+    static public void addCornerTransformHandles(TransformableFigure f, Collection<Handle> handles) {
         handles.add(southEast(f));
         handles.add(southWest(f));
         handles.add(northEast(f));
@@ -69,7 +74,7 @@ public class TransformHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addEdgeTransformHandles(Figure f, Collection<Handle> handles) {
+    static public void addEdgeTransformHandles(TransformableFigure f, Collection<Handle> handles) {
         handles.add(south(f));
         handles.add(north(f));
         handles.add(east(f));
@@ -83,7 +88,7 @@ public class TransformHandleKit {
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addResizeHandles(Figure f, Collection<Handle> handles) {
+    static public void addResizeHandles(TransformableFigure f, Collection<Handle> handles) {
         addCornerTransformHandles(f, handles);
         addEdgeTransformHandles(f, handles);
     }
@@ -94,7 +99,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle south(Figure owner) {
+    static public Handle south(TransformableFigure owner) {
         return new SouthHandle(owner);
     }
 
@@ -104,7 +109,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle southEast(Figure owner) {
+    static public Handle southEast(TransformableFigure owner) {
         return new SouthEastHandle(owner);
     }
 
@@ -114,7 +119,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle southWest(Figure owner) {
+    static public Handle southWest(TransformableFigure owner) {
         return new SouthWestHandle(owner);
     }
 
@@ -124,7 +129,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle north(Figure owner) {
+    static public Handle north(TransformableFigure owner) {
         return new NorthHandle(owner);
     }
 
@@ -134,7 +139,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle northEast(Figure owner) {
+    static public Handle northEast(TransformableFigure owner) {
         return new NorthEastHandle(owner);
     }
 
@@ -144,7 +149,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle northWest(Figure owner) {
+    static public Handle northWest(TransformableFigure owner) {
         return new NorthWestHandle(owner);
     }
 
@@ -154,7 +159,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle east(Figure owner) {
+    static public Handle east(TransformableFigure owner) {
         return new EastHandle(owner);
     }
 
@@ -164,182 +169,43 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    static public Handle west(Figure owner) {
+    static public Handle west(TransformableFigure owner) {
         return new WestHandle(owner);
     }
 
-    private abstract static class AbstractTransformHandle extends LocatorHandle {
-
-        private Point2D pickLocation;
-        private Point2D oldPoint;
-        protected final Region node;
-        private final String styleclass;
-        private Bounds startBounds;
-        private Point2D center;
-        private static final Shape REGION_SHAPE = new Circle(3);
-        private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-        private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
-        /**
-         * The height divided by the width.
-         */
-        protected double preferredAspectRatio;
-        private Double startScaleX;
-        private Double startScaleY;
-        private Double startTranslateX;
-        private Double startTranslateY;
-
-        public AbstractTransformHandle(Figure owner, Locator locator) {
-            this(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, locator);
+    private static void transform(DrawingModel model, Figure o, double x, double y, double width, double height) {
+        if (width == 0 || height == 0) {
+            return;
         }
+        TransformableFigure owner = (TransformableFigure) o;
+        Bounds oldBounds = owner.getBoundsInLocal();
 
-        public AbstractTransformHandle(Figure owner, String styleclass, Locator locator) {
-            super(owner, locator);
-            this.styleclass = styleclass;
-            node = new Region();
-            node.setShape(REGION_SHAPE);
-            node.setManaged(false);
-            node.setScaleShape(false);
-            node.setCenterShape(true);
-            node.resize(11, 11);
-            node.getStyleClass().clear();
-            node.getStyleClass().add(styleclass);
-            node.setBorder(REGION_BORDER);
-            node.setBackground(REGION_BACKGROUND);
+        double sx = width / oldBounds.getWidth();
+        double sy = height / oldBounds.getHeight();
+        double tx = x - oldBounds.getMinX();
+        double ty = y - oldBounds.getMinY();
+        Transform transform = new Translate(tx, ty);
+        if (!Double.isNaN(sx) && !Double.isNaN(sy)
+                && !Double.isInfinite(sx) && !Double.isInfinite(sy)
+                && (sx != 1d || sy != 1d)) {
+            transform = transform.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
         }
-
-        @Override
-        public Region getNode() {
-            return node;
+        List<Transform> transforms = new ArrayList<>(owner.get(TRANSFORMS));
+        switch (transforms.size()) {
+            case 0:
+                transforms.add(0, transform);
+                break;
+            default:
+                transforms.set(0, transform.createConcatenation(transforms.get(0)));
+                break;
         }
-
-        @Override
-        public void updateNode(DrawingView view) {
-            Figure f = getOwner();
-            Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
-            Bounds b = f.getBoundsInLocal();
-            Point2D p = getLocation();
-            pickLocation = p = t.transform(p);
-            node.relocate(p.getX() - 5, p.getY() - 5);
-            // rotates the node:
-            // f.applyTransformableFigureProperties(node);
-            node.setRotate(f.getStyled(ROTATE));
-            node.setRotationAxis(f.getStyled(ROTATION_AXIS));
-        }
-
-        @Override
-        public void onMousePressed(MouseEvent event, DrawingView view) {
-            Figure o = getOwner();
-            oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
-            startBounds = o.getBoundsInLocal();
-            startScaleX = o.get(TransformableFigure.SCALE_X);
-            startScaleY = o.get(TransformableFigure.SCALE_Y);
-            startTranslateX = o.get(TransformableFigure.TRANSLATE_X);
-            startTranslateY = o.get(TransformableFigure.TRANSLATE_Y);
-            preferredAspectRatio = getOwner().getPreferredAspectRatio();
-            center = Geom.center(startBounds);
-        }
-
-        @Override
-        public void onMouseDragged(MouseEvent event, DrawingView view) {
-            Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
-
-            if (!event.isAltDown() && !event.isControlDown()) {
-                // alt or control turns the constrainer off
-                newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
-            }
-            if (event.isMetaDown()) {
-                // meta snaps the location of the handle to the grid
-                Point2D loc = getLocation();
-                oldPoint = getOwner().localToWorld(loc);
-            }
-            // shift keeps the aspect ratio
-            boolean keepAspect = event.isShiftDown();
-
-            resize(newPoint, getOwner(), startBounds, view.getModel(), keepAspect);
-        }
-
-        @Override
-        public void onMouseReleased(MouseEvent event, DrawingView dv) {
-            // FIXME fire undoable edit
-        }
-
-        @Override
-        public boolean isSelectable() {
-            return true;
-        }
-
-        @Override
-        public Point2D getLocationInView() {
-            return pickLocation;
-        }
-
-        /**
-         * Resizes the figure.
-         *
-         * @param newPoint new point in local coordinates
-         * @param owner the figure
-         * @param bounds the bounds of the figure on mouse pressed
-         * @param model the drawing model
-         * @param keepAspect whether the aspect should be preserved. The bounds
-         * of the figure on mouse pressed can be used as a reference.
-         */
-        protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect);
-
-        /**
-         *
-         * @param model
-         * @param owner
-         * @param x new x in local coordinates
-         * @param y new y in local coordinates
-         * @param width new width in local coordinates
-         * @param height new height in local coordinates
-         */
-        protected void transform(DrawingModel model, Figure owner, double x, double y, double width, double height) {
-            if (true)return; // FIXME implement me
-            if (width == 0 || height == 0) {
-                return;
-            }
-
-            double sx = width / startBounds.getWidth();
-            double sy = height / startBounds.getHeight();
-
-            if (Double.isNaN(sx) || Double.isNaN(sy)) {
-                return;
-            }
-            
-            // sx and sy scale around x and y
-            //   translate2D(pivotX, pivotY);
-            // scale2D(sx, sy);
-            //   translate2D(-pivotX, -pivotY);
-
-            // this translation is appended to the scale
-            double tx = (x - startBounds.getMinX());
-            double ty = (y - startBounds.getMinY());
-
-            double newTx = startTranslateX + tx - x + sx * x;
-            double newTy = startTranslateY + ty - y + sy * y;
-            double newSx = startScaleX * sx;
-            double newSy = startScaleY * sy;
-
-            model.set(owner, TransformableFigure.TRANSLATE_X, newTx);
-            model.set(owner, TransformableFigure.TRANSLATE_Y, newTy);
-            model.set(owner, TransformableFigure.SCALE_X, newSx);
-            model.set(owner, TransformableFigure.SCALE_Y, newSy);
-        }
-
-        private Transform getParentToTransform(Figure o) {
-        Transform t=o.getWorldToParent();
-            Transform rotate = Transform.rotate(-o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
-
-            t = ((TransformableFigure)o).getInverseTransform().createConcatenation(rotate);
-        return t;
-    } 
+        model.set(owner, TRANSFORMS, transforms);
     }
 
-    private static class NorthEastHandle extends AbstractTransformHandle {
+    private static class NorthEastHandle extends AbstractResizeTransformHandle {
 
-        NorthEastHandle(Figure owner) {
-            super(owner, RelativeLocator.northEast());
+        NorthEastHandle(TransformableFigure owner) {
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.northEast(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -364,12 +230,13 @@ public class TransformHandleKit {
 
             transform(model, owner, bounds.getMinX(), bounds.getMaxY() - newHeight, newWidth, newHeight);
         }
+
     }
 
-    private static class EastHandle extends AbstractTransformHandle {
+    private static class EastHandle extends AbstractResizeTransformHandle {
 
-        EastHandle(Figure owner) {
-            super(owner, RelativeLocator.east());
+        EastHandle(TransformableFigure owner) {
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.east(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -390,10 +257,10 @@ public class TransformHandleKit {
 
     }
 
-    private static class NorthHandle extends AbstractTransformHandle {
+    private static class NorthHandle extends AbstractResizeTransformHandle {
 
-        NorthHandle(Figure owner) {
-            super(owner, RelativeLocator.north());
+        NorthHandle(TransformableFigure owner) {
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.north(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -414,10 +281,10 @@ public class TransformHandleKit {
         }
     }
 
-    private static class NorthWestHandle extends AbstractTransformHandle {
+    private static class NorthWestHandle extends AbstractResizeTransformHandle {
 
-        NorthWestHandle(Figure owner) {
-            super(owner, RelativeLocator.northWest());
+        NorthWestHandle(TransformableFigure owner) {
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.northWest(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -444,10 +311,10 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthEastHandle extends AbstractTransformHandle {
+    private static class SouthEastHandle extends AbstractResizeTransformHandle {
 
-        SouthEastHandle(Figure owner) {
-            super(owner, RelativeLocator.southEast());
+        SouthEastHandle(TransformableFigure owner) {
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.southEast(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -473,10 +340,10 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthHandle extends AbstractTransformHandle {
+    private static class SouthHandle extends AbstractResizeTransformHandle {
 
-        SouthHandle(Figure owner) {
-            super(owner, RelativeLocator.south());
+        SouthHandle(TransformableFigure owner) {
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.south(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -496,10 +363,10 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthWestHandle extends AbstractTransformHandle {
+    private static class SouthWestHandle extends AbstractResizeTransformHandle {
 
-        SouthWestHandle(Figure owner) {
-            super(owner, RelativeLocator.southWest());
+        SouthWestHandle(TransformableFigure owner) {
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.southWest(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override
@@ -525,10 +392,10 @@ public class TransformHandleKit {
         }
     }
 
-    private static class WestHandle extends AbstractTransformHandle {
+    private static class WestHandle extends AbstractResizeTransformHandle {
 
-        WestHandle(Figure owner) {
-            super(owner, RelativeLocator.west());
+        WestHandle(TransformableFigure owner) {
+            super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.west(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
         }
 
         @Override

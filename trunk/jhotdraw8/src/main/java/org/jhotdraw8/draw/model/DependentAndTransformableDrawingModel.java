@@ -183,6 +183,11 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
     f.transformInParent(transform);
     fire(DrawingModelEvent.transformChanged(this, f));
   }
+  @Override
+  public void transformInLocal(Figure f, Transform transform) {
+    f.transformInLocal(transform);
+    fire(DrawingModelEvent.transformChanged(this, f));
+  }
 
   @Override
   public void reshape(Figure f, double x, double y, double width, double height) {

@@ -32,14 +32,13 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
      * The CSS type selector for group objects is @code("group"}.
      */
     public final static String TYPE_SELECTOR = "Group";
-/*
-    @Override
-    public void reshapeInParent(Transform transform) {
-        reshapeInLocal(getParentToLocal().createConcatenation(transform));
-    }*/
+
     @Override
     public void reshapeInLocal(Transform transform) {
-        Transform localTransform = transform.createConcatenation(getParentToLocal());
+        // XXX if one of the children is non-transformable, we should not reshape at all!
+        flattenTransforms();
+        Transform localTransform = transform;
+        //Transform localTransform = transform.createConcatenation(getParentToLocal());
         for (Figure child : getChildren()) {
             child.reshapeInParent(localTransform);
         }

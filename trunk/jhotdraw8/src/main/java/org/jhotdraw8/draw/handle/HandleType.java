@@ -29,4 +29,8 @@ public class HandleType {
      * Handle of this type should allow to transform (scale and rotate) a figure.
      */
     public final static HandleType TRANSFORM=new HandleType();
+    /** 
+     * Handle of this type should allow to edit a point of a figure.
+     */
+    public final static HandleType POINT=new HandleType();
 }

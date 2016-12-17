@@ -32,7 +32,7 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> STYLE_ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
+    public static SimpleFigureKey<String> ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
@@ -59,7 +59,7 @@ public interface StyleableFigure extends Figure {
      * Updates a figure node with all style and effect properties defined in
      * this interface.
      * <p>
-     * Applies the following properties: {@code STYLE_ID}, {@code VISIBLE}.
+     * Applies the following properties: {@code ID}, {@code VISIBLE}.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *
@@ -92,6 +92,6 @@ public interface StyleableFigure extends Figure {
 
     @Override
     default String getId() {
-        return get(STYLE_ID);
+        return get(ID);
     }
 }
