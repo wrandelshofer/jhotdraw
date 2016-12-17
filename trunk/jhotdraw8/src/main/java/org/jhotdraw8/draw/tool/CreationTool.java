@@ -18,6 +18,7 @@ import org.jhotdraw8.draw.SimpleLayer;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.Layer;
+import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -178,6 +179,13 @@ public class CreationTool extends AbstractTool {
             dv.getModel().addChildTo(layer, dv.getDrawing());
         }
         return layer;
+    }
+    /**
+     * This implementation is empty.
+     */
+    @Override
+    public void activate(SimpleDrawingEditor editor) {
+        requestFocus();
     }
 
 }
