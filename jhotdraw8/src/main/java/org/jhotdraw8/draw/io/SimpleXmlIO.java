@@ -647,7 +647,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     private DataFormat getDataFormat() {
-        String mimeType = "text/xml";
+        String mimeType = "application/xml";
         DataFormat df = DataFormat.lookupMimeType(mimeType);
         if (df == null) {
             df = new DataFormat(mimeType);
