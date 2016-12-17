@@ -20,6 +20,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.svg.BitmapExportOutputFormat;
 
 /**
  * AbstractDrawingView.
@@ -29,7 +30,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
  */
 public abstract class AbstractDrawingView extends SimplePropertyBean implements DrawingView {
 
-    private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY);
+    private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
     private ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
 
     @Override

@@ -149,7 +149,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
                 FigureFactory factory = new DefaultFigureFactory(idFactory);
                 SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
-                io, new SvgExportOutputFormat()));
+                io, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(io));
 
         editor = new SimpleDrawingEditor();

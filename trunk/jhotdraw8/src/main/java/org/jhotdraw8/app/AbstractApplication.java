@@ -88,7 +88,7 @@ public abstract class AbstractApplication<V extends ProjectView<V>> extends java
                     }
                     buf.append(str);
                 }
-                prefs.put("recentUris", buf.toString());
+                prefs.put(applicationId+".recentUris", buf.toString());
             }
 
         });

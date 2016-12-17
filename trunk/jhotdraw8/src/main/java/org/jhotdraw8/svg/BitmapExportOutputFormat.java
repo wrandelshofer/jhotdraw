@@ -16,6 +16,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -40,6 +42,7 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.io.OutputFormat;
+import org.jhotdraw8.geom.Geom;
 
 /**
  * BitmapExportOutputFormat.
@@ -55,7 +58,8 @@ public class BitmapExportOutputFormat implements ClipboardOutputFormat, OutputFo
 
     @Override
     public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WritableImage image = doRenderImage(drawing,selection);
+        out.put(DataFormat.IMAGE, image);
     }
 
     public double getDpi() {
@@ -113,12 +117,14 @@ public class BitmapExportOutputFormat implements ClipboardOutputFormat, OutputFo
     metadata.mergeTree("javax_imageio_1.0", root);
  }
     private WritableImage renderImage(Drawing drawing, Collection<Figure> selection) throws IOException {
-        CompletableFuture<WritableImage> future=new CompletableFuture<>();
-        Platform.runLater(()->future.complete(doRenderImage(drawing,selection)));
+        if (! Platform.isFxApplicationThread()) {
+            CompletableFuture<WritableImage> future=CompletableFuture.supplyAsync(()->doRenderImage(drawing,selection),Platform::runLater);            
         try {
             return future.get();
         } catch (InterruptedException|ExecutionException ex) {
             throw new IOException(ex);
+        }}else{
+            return doRenderImage(drawing,selection);            
         }
     }
     
@@ -135,10 +141,14 @@ public class BitmapExportOutputFormat implements ClipboardOutputFormat, OutputFo
         parameters.setTransform(Transform.scale(scale, scale));
         parameters.setFill(Color.TRANSPARENT);
 
-        double width=drawing.get(Drawing.WIDTH) * scale;
-        double height=drawing.get(Drawing.HEIGHT) * scale;
+        Bounds bounds=Figure.visualBounds(selection);
+        
+        double x=bounds.getMinX() * scale;
+        double y=bounds.getMinY() * scale;
+        double width=bounds.getWidth() * scale;
+        double height=bounds.getHeight() * scale;
 
-        parameters.setViewport(new Rectangle2D(0, 0,
+        parameters.setViewport(new Rectangle2D(x,y,
                 width, height));
 
         WritableImage image = node.snapshot(parameters, null);
