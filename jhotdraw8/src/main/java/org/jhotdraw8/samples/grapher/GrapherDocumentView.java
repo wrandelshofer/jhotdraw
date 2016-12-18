@@ -47,6 +47,7 @@ import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.SimpleLayer;
 import org.jhotdraw8.draw.action.BringToFrontAction;
 import org.jhotdraw8.draw.action.GroupAction;
+import org.jhotdraw8.draw.action.RemoveTransformationsAction;
 import org.jhotdraw8.draw.action.SendToBackAction;
 import org.jhotdraw8.draw.action.UngroupAction;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
@@ -181,6 +182,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         ztbar.zoomFactorProperty().bindBidirectional(drawingView.zoomFactorProperty());
         toolsToolBar.getItems().add(ztbar);
 
+        getActionMap().put(RemoveTransformationsAction.ID, new RemoveTransformationsAction<DocumentView>(getApplication(), editor));
         getActionMap().put(SendToBackAction.ID, new SendToBackAction<DocumentView>(getApplication(), editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction<DocumentView>(getApplication(), editor));
         getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction<DocumentView>(getApplication(), this,
