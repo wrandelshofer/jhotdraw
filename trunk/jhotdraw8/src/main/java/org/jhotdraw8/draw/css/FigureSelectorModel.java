@@ -86,11 +86,11 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             for (MapAccessor<?> k : element.getSupportedKeys()) {
                 if (k instanceof StyleableMapAccessor) {
                     StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) k;
-                    nameToKeyMap.put(sk.getCssName(), sk);
+                    nameToKeyMap.put(element.getClass()+"$"+sk.getCssName(), sk);
                 }
             }
         }
-        return nameToKeyMap.get(attributeName);
+        return nameToKeyMap.get(element.getClass()+"$"+attributeName);
     }
 
     @Override
@@ -244,13 +244,14 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         return attr;
     }
+
     @Override
     public Set<String> getDecomposedAttributeNames(Figure element) {
         // FIXME use keyToName map
         Set<String> attr = new HashSet<>();
         Set<StyleableMapAccessor<?>> attrk = new HashSet<>();
         for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if ((key instanceof StyleableMapAccessor) && !(key instanceof CompositeMapAccessor)){
+            if ((key instanceof StyleableMapAccessor) && !(key instanceof CompositeMapAccessor)) {
                 StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
                 attrk.add(sk);
             }
@@ -270,7 +271,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         return k.getConverter().toString(element.get(k));
     }
-    
+
+    public Converter<?> getConverter(Figure element, String attributeName) {
+        @SuppressWarnings("unchecked")
+        StyleableMapAccessor<Object> k = (StyleableMapAccessor<Object>) findKey(element, attributeName);
+        return k == null ? null : k.getConverter();
+    }
+
     private HashMap<String, StyleableMapAccessor<Object>> getMetaMap(Figure elem) {
         HashMap<String, StyleableMapAccessor<Object>> metaMap = new HashMap<>();
         for (MapAccessor<?> k : elem.getSupportedKeys()) {
