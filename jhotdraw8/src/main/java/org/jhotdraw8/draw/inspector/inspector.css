@@ -1,0 +1,35 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.inspector * {
+  -fx-font-size: 11px;
+}
+
+/* A ScrollPane which is placed flush to top right left
+ * should only have the bottom border being drawn.
+ */
+.flushTopRightLeft {
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0 0 1 0;
+}
+.flushTopRightLeft:focused {
+    -fx-background-insets: 0, 0 0 1 0;
+}
+.flushTopRightLeft .corner {
+    -fx-background-insets: 0, 0 0 1 0;
+}
+
+/* A ScrollPane which is placed flush 
+ * should have no borders drawn
+ */
+.flushTopRightLeft {
+    -fx-background-insets: 0, 0;
+    -fx-padding: 0;
+}
+.flushTopRightLeft:focused {
+    -fx-background-insets: 0, 0;
+}
+.flushTopRightLeft .corner {
+    -fx-background-insets: 0, 0;
+}

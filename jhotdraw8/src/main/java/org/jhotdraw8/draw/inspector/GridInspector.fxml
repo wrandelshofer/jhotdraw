@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane hgap="4.0" styleClass="inspector" vgap="4.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="%grid.x.shortLabelText" GridPane.rowIndex="1">
+         <tooltip>
+            <Tooltip text="%grid.x.toolTipText" />
+         </tooltip>
+      </Label>
+      <Label fx:id="widthLabel" text="%grid.width.shortLabelText" GridPane.rowIndex="2">
+         <tooltip>
+            <Tooltip text="%grid.width.toolTipText" />
+         </tooltip>
+      </Label>
+      <TextField fx:id="widthField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="heightLabel" text="%grid.angle.shortLabelText" GridPane.rowIndex="3">
+         <tooltip>
+            <Tooltip text="%grid.angle.toolTipText" />
+         </tooltip>
+      </Label>
+      <TextField fx:id="angleField" prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <TextField prefColumnCount="5" GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="xField" />
+      <Label text="%grid.y.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <tooltip>
+            <Tooltip text="%grid.y.toolTipText" />
+         </tooltip>
+      </Label>
+      <Label text="%grid.height.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="2">
+         <tooltip>
+            <Tooltip text="%grid.height.toolTipText" />
+         </tooltip>
+      </Label>
+      <TextField fx:id="yField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <TextField fx:id="heightField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+      <HBox GridPane.columnSpan="2147483647">
+         <children>
+            <CheckBox fx:id="snapToGridCheckBox" mnemonicParsing="false" text="%snapToGrid.checkBoxText" />
+            <CheckBox fx:id="drawGridCheckBox" mnemonicParsing="false" text="%showGrid.checkBoxText">
+               <HBox.margin>
+                  <Insets left="8.0" />
+               </HBox.margin>
+            </CheckBox>
+         </children>
+      </HBox>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+      <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+   </columnConstraints>
+   <padding>
+      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+   </padding>
+   <rowConstraints>
+      <RowConstraints vgrow="NEVER" />
+      <RowConstraints vgrow="NEVER" />
+      <RowConstraints vgrow="NEVER" />
+      <RowConstraints vgrow="NEVER" />
+   </rowConstraints>
+</GridPane>

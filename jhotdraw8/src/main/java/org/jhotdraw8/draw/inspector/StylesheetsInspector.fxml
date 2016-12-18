@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="inspector" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <ListView fx:id="listView" editable="true" minHeight="48.0" minWidth="48.0" prefHeight="400.0" prefWidth="216.0" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+         </BorderPane.margin>
+         <children>
+            <Button fx:id="addButton" mnemonicParsing="false" text="%addButton.text">
+               <tooltip>
+                  <Tooltip text="%addButton.toolTipText" />
+               </tooltip>
+            </Button>
+            <Button fx:id="removeButton" mnemonicParsing="false" text="%removeButton.text">
+               <tooltip>
+                  <Tooltip text="%removeButton.toolTipText" />
+               </tooltip>
+               <HBox.margin>
+                  <Insets left="4.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="refreshButton" mnemonicParsing="false" text="%refreshButton.text">
+               <HBox.margin>
+                  <Insets left="4.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
+   <styleClass>
+      <String fx:value="inspector" />
+      <String fx:value="flush" />
+   </styleClass>
+</BorderPane>
