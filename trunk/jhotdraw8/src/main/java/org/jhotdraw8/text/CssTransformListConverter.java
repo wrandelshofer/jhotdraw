@@ -71,34 +71,27 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
 
     @Override
     public void toString(Appendable buf, IdFactory idFactory, List<Transform> txs) throws IOException {
-        boolean allTransformsAreIdentity = true;
-        for (Transform tx : txs) {
-            if (!tx.isIdentity()) {
-                allTransformsAreIdentity = false;
-                break;
-            }
-        }
-        if (allTransformsAreIdentity) {
+        if (txs.isEmpty()) {
             buf.append("none");
             return;
         }
 
         boolean first = true;
         for (Transform tx : txs) {
-            if (!tx.isIdentity()) {
+            {
                 if (first) {
                     first = false;
                 } else {
-                    buf.append(' ');
+                    buf.append(',');
                 }
                 if (tx instanceof Translate) {
                     Translate tr = (Translate) tx;
                     buf.append("translate(")
                             .append(nb.toString(tr.getTx()));
-                    if (tr.getTy() != 0.0 || tr.getTz() != 0.0) {
+                 
                         buf.append(',')
                                 .append(nb.toString(tr.getTy()));
-                    }
+                   
                     if (tr.getTz() != 0.0) {
                         buf.append(',')
                                 .append(nb.toString(tr.getTz()));
@@ -109,24 +102,24 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                     buf.append("scale(")
                             .append(nb.toString(ts.getX()));
                     if (ts.getY() != ts.getX() || ts.getZ() != 1 || ts.getPivotX() != 0 || ts.getPivotY() != 0) {
-                        buf.append(' ')
+                        buf.append(',')
                                 .append(nb.toString(ts.getY()));
                     }
                     if (ts.getZ() != 1) {
-                        buf.append(' ')
+                        buf.append(',')
                                 .append(nb.toString(ts.getZ()));
                         if (ts.getPivotX() != 0 || ts.getPivotY() != 0 || ts.getPivotZ() != 0) {
                             buf.append(", ")
                                     .append(nb.toString(ts.getPivotX()))
-                                    .append(' ')
+                                    .append(',')
                                     .append(nb.toString(ts.getPivotY()))
-                                    .append(' ')
+                                    .append(',')
                                     .append(nb.toString(ts.getPivotZ()));
                         }
                     } else if (ts.getPivotX() != 0 || ts.getPivotY() != 0) {
                         buf.append(", ")
                                 .append(nb.toString(ts.getPivotX()))
-                                .append(' ')
+                                .append(',')
                                 .append(nb.toString(ts.getPivotY()));
                     }
                     buf.append(')');
@@ -137,7 +130,7 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                             .append(nb.toString(tr.getAngle()));
                     if (tr.getPivotX() != 0.0 || tr.getPivotY() != 0.0 || tr.getPivotZ() != 0.0
                             || !tr.getAxis().equals(Rotate.Z_AXIS)) {
-                        buf.append(' ')
+                        buf.append(',')
                                 .append(nb.toString(tr.getPivotX()))
                                 .append(',')
                                 .append(nb.toString(tr.getPivotY()));
@@ -148,7 +141,7 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                     }
                     if (!tr.getAxis().equals(Rotate.Z_AXIS)) {
                         Point3D a = tr.getAxis();
-                        buf.append(' ')
+                        buf.append(',')
                                 .append(nb.toString(a.getX()))
                                 .append(',')
                                 .append(nb.toString(a.getY()))
@@ -163,7 +156,7 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                             .append(',')
                             .append(nb.toString(tr.getY()));
                     if (tr.getPivotX() != 0.0 || tr.getPivotY() != 0.0) {
-                        buf.append(' ')
+                        buf.append(',')
                                 .append(nb.toString(tr.getPivotX()))
                                 .append(',')
                                 .append(nb.toString(tr.getPivotY()));
@@ -174,11 +167,11 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                             .append(nb.toString(tx.getMxx()))
                             .append(',')
                             .append(nb.toString(tx.getMyx()))
-                            .append(' ')
+                            .append(',')
                             .append(nb.toString(tx.getMxy()))
                             .append(',')
                             .append(nb.toString(tx.getMyy()))
-                            .append(' ')
+                            .append(',')
                             .append(nb.toString(tx.getTx()))
                             .append(',')
                             .append(nb.toString(tx.getTy()))
@@ -190,19 +183,19 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                             .append(nb.toString(tx.getMyx()))
                             .append(',')
                             .append(nb.toString(tx.getMzx()))
-                            .append(' ')
+                            .append(',')
                             .append(nb.toString(tx.getMxy()))
                             .append(',')
                             .append(nb.toString(tx.getMyy()))
                             .append(',')
                             .append(nb.toString(tx.getMzy()))
-                            .append(' ')
+                            .append(',')
                             .append(nb.toString(tx.getMxz()))
                             .append(',')
                             .append(nb.toString(tx.getMyz()))
                             .append(',')
                             .append(nb.toString(tx.getMzz()))
-                            .append(' ')
+                            .append(',')
                             .append(nb.toString(tx.getTx()))
                             .append(',')
                             .append(nb.toString(tx.getTy()))
@@ -234,10 +227,6 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
             String func = tt.currentStringValue();
             int funcPos = tt.getStartPosition();
             List<Double> m = new ArrayList<>();
-            if (tt.nextToken() != CssTokenizer.TT_NUMBER) {
-                throw new ParseException("coefficient nb 1 expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
-            }
-            m.add(tt.currentNumericValue().doubleValue());
             while (tt.nextToken() != ')' && tt.currentToken() != CssTokenizer.TT_EOF) {
                 if (tt.currentToken() != ',') {
                     tt.pushBack();
@@ -253,6 +242,12 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
             switch (func) {
                 case "affine": {
                     switch (m.size()) {
+                        case 0:
+                            txs.add(new Affine(//
+                                    1,0,0,//
+                                    0,1,0//
+                            ));
+                            break;
                         case 6:
                             txs.add(new Affine(//
                                     m.get(0), m.get(1), m.get(2),//
@@ -273,6 +268,12 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                 }
                 case "matrix": {
                     switch (m.size()) {
+                        case 0:
+                            txs.add(new Affine(//
+                                    1,0,0,//
+                                    0,1,0//
+                            ));
+                            break;
                         case 6:
                             txs.add(new Affine(//
                                     m.get(0), m.get(2), m.get(4),//
@@ -294,6 +295,9 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                 case "skew":
                 case "shear": {
                     switch (m.size()) {
+                        case 0:
+                            txs.add(Transform.shear(0,0));
+                            break;
                         case 2:
                             txs.add(Transform.shear(m.get(0), m.get(1)));
                             break;
@@ -309,6 +313,11 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                 }
                 case "translate": {
                     switch (m.size()) {
+                        case 0:
+                            txs.add(Transform.translate(//
+                                    0,0//
+                            ));//
+                            break;
                         case 1:
                             txs.add(Transform.translate(
                                     m.get(0), 0//
@@ -331,6 +340,11 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                 }
                 case "scale": {
                     switch (m.size()) {
+                        case 0:
+                            txs.add(Transform.scale(//
+                                    1,1//
+                            ));
+                            break;
                         case 1:
                             txs.add(Transform.scale(//
                                     m.get(0), m.get(0)//
@@ -365,6 +379,12 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                 }
                 case "rotate": {
                     switch (m.size()) {
+                        case 0:
+                            txs.add(Transform.rotate(//
+                                    0,//
+                                    0, 0//
+                            ));
+                            break;
                         case 1:
                             txs.add(Transform.rotate(//
                                     m.get(0),//
@@ -405,6 +425,8 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
                 default:
                     throw new ParseException("unsupported function: \"" + func + "\"", funcPos);
             }
+            
+            if (tt.nextToken()!=',')tt.pushBack();
         }
 
         in.position(in.limit());
@@ -415,4 +437,14 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
     public List<Transform> getDefaultValue() {
         return Collections.emptyList();
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Transform⟩: none｜（⟨Translate⟩｜ ⟨Scale⟩｜ ⟨Rotate⟩｜ ⟨Matrix⟩）｛, ⟨Transform⟩｝"
+                + "\nFormat of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)"
+                + "\nFormat of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩［,⟨pivotx⟩,⟨pivoty⟩］)"
+                + "\nFormat of ⟨Rotate⟩: rotate(⟨angle⟩［,⟨pivotx⟩,⟨pivoty⟩］)"
+                + "\nFormat of ⟨Matrix⟩: matrix(⟨xx⟩,⟨yx⟩,⟨xy⟩,⟨yy⟩,⟨tx⟩,⟨ty⟩)";
+    }
+
 }

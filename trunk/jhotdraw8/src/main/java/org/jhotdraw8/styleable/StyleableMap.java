@@ -201,6 +201,13 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         private StyleOrigin getOrigin() {
             return origin == -1 ? null : ORIGINS[origin];
         }
+
+        @Override
+        public String toString() {
+            return "StyleableMap$StyledValue{" + "origin=" + origin + ", value0=" + value0 + ", value1=" + value1 + ", value2=" + value2 + ", value3=" + value3 + '}';
+        }
+        
+        
     }
     private ObservableEntrySet entrySet;
     private ObservableKeySet keySet;

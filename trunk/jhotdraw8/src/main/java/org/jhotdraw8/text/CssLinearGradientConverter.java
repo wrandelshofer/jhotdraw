@@ -24,11 +24,11 @@ import org.jhotdraw8.draw.io.IdFactory;
  * </p>
  * <pre>
  * Paint := (Color|LinearGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
- * LinearGradient := "linear-gradient(", LinearGradientParameters, ")"
- * LinearGradientParameters := [ ("from", PointToPoint |  "to", SideOrCorner], "," ],
- *                   [ ( "repeat" | "reflect" ),"," ] ColorStop,{"," ColorStop}) ;
- * PointToPoint = (Point, "to", Point)
+ * LinearGradient := "linear-gradient(", LinearGradientParameters, [ Cycle ], ColorStop,{"," ColorStop} ")"
+ * LinearGradientParameters := [ PointToPoint | SideOrCorner] ]) ;
+ * PointToPoint = "from", Point, "to", Point
  * SideOrCorner = "to" ["left" | "right"] , ["top" | "bottom"]
+ * Cycle = ( "repeat" | "reflect" )
  * Point = (Number|Dimension|Percentage), (Number|Dimension|Percentage) ;
  * ColorStop = Color, [" ", Offset] ;
  *
@@ -38,7 +38,7 @@ import org.jhotdraw8.draw.io.IdFactory;
  */
 public class CssLinearGradientConverter implements Converter<CssLinearGradient> {
 
-    private CssColorConverter colorConverter = new CssColorConverter();
+    private CssColorConverter colorConverter = new CssColorConverter(false);
     private CssSizeConverter doubleConverter = new CssSizeConverter();
 
     public void toString(Appendable out, IdFactory idFactory, CssLinearGradient value) throws IOException {
@@ -458,5 +458,16 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
                 tt.pushBack();
         }
         return new CssStop(offset, color);
+    }
+    
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨LinearGradient⟩: linear-gradient(［⟨LinearGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"
+                + "\nFormat of ⟨LinearGradientParameters⟩: ⟨PointToPoint⟩｜⟨SideOrCorners⟩"
+                + "\nFormat of ⟨PointToPoint⟩: from ⟨x1⟩,⟨y1⟩ to ⟨x2⟩,⟨y2⟩｜from ⟨x1⟩%,⟨y1⟩% to ⟨x2⟩%,⟨y2⟩%"
+                + "\nFormat of ⟨SideOrCorners⟩: to（left｜right｜top｜bottom）｜to（left｜right）（top｜bottom）"
+                + "\nFormat of ⟨Cycle⟩: repeat｜reflect"
+                + "\nFormat of ⟨ColorStop⟩: ⟨Color⟩ ⟨percentage⟩%"
+                + "\n" + colorConverter.getHelpText();
     }
 }

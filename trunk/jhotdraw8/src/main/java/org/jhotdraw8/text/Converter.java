@@ -7,6 +7,7 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.Locale;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -151,4 +152,28 @@ public interface Converter<T> {
      * @return The default value to use when conversion from String failed.
      */
     T getDefaultValue();
+    
+    /** Returns a help text which describes the supported String format.
+     * <p>
+     * The format should be described in the following notation:
+     * <ul>
+     * <li>A production should consist of a single line starting with {@code Format of ⟨x⟩:}. Where {@code x}
+     * is the name of the production.
+     * <li>A terminal symbol should be given with its literal characters. Whitespace characters should be implied.
+     * Mandatory whitespace characters can be indicated with a bottom square bracket: {@code ⎵}.</li>
+     * <li>Nonterminal symbols should be given in mathematical angle brackets: {@code ⟨x⟩}.</li>
+     * <li>Alternatives should be separated by full-width vertical bar: {@code x｜y}.</li>
+     * <li>Groups of symbols should be surrounded by full width parantheses: {@code （x y）}.</li>
+     * <li>Zero or one occurrences of a symbol should be surrounded by full width square brackets: {@code ［x］}.</li>
+     * <li>Zero or many occurrences of a symbol should be surrounded by full width angle brackets: {@code ｛x｝}.</li>
+     * </ul>
+     * Example:
+     * <pre>
+     * Format of ⟨Color⟩: ⟨name⟩｜ #⟨hex⟩｜ rgb(⟨r⟩,⟨g⟩,⟨b⟩)｜ rgba(⟨r⟩,⟨g⟩,⟨b⟩,⟨a⟩)｜ hsb(⟨h⟩,⟨s⟩,⟨b⟩)｜ hsba(⟨h⟩,⟨s⟩,⟨b⟩,⟨a⟩)
+     * </pre>
+     * @return help text. Returns null if no help text is available.
+     */
+    default String getHelpText() {
+        return null;
+    }
 }

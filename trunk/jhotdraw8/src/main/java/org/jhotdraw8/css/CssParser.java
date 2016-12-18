@@ -504,7 +504,7 @@ public class CssParser {
             List<PreservedToken> terms = new ArrayList<>();
             while (tt.nextToken() != CssTokenizerInterface.TT_EOF
                     && tt.currentToken() != ')') {
-                terms.add(new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue()));
+                terms.add(new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(),tt.getStartPosition(),tt.getEndPosition()));
             }
             return new FunctionPseudoClassSelector(ident, terms);
         } else {
@@ -616,14 +616,16 @@ tt.getStartPosition());
 tt.getStartPosition());
         }
         String property = tt.currentStringValue();
+        int startPos=tt.getStartPosition();
         tt.nextToken();
         skipWhitespace(tt);
         if (tt.currentToken() != ':') {
             throw new ParseException("Declaration: ':' expected instead of \"" + tt.currentStringValue() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
         }
         List<PreservedToken> terms = parseTerms(tt);
+        int endPos=terms.isEmpty()?tt.getStartPosition():terms.get(terms.size()-1).getEndPos();
 
-        return new Declaration(property, terms);
+        return new Declaration(property, terms, startPos, endPos);
 
     }
 
@@ -644,7 +646,7 @@ tt.getStartPosition());
             case CssTokenizerInterface.TT_BAD_STRING:
                 throw new ParseException("Terms: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
             default:
-                terms.add(new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue()));
+                terms.add(new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(),tt.getStartPosition(),tt.getEndPosition()));
                 break;
             }
         }
@@ -666,7 +668,7 @@ tt.getStartPosition());
         case CssTokenizerInterface.TT_BAD_STRING:
             throw new ParseException("Term: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
         default:
-            return new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue());
+            return new PreservedToken(tt.currentToken(), tt.currentStringValue(), tt.currentNumericValue(),tt.getStartPosition(),tt.getEndPosition());
         }
     }
 }

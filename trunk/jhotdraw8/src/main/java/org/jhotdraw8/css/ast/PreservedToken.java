@@ -21,13 +21,17 @@ public class PreservedToken extends AST {
     /** The numeric value. */
     private final Number numericValue;
     
+    private int startPos=-1;
+            private int endPos=-1;
     
     private final static XmlNumberConverter DOUBLE_CONVERTER = new XmlNumberConverter();
 
-    public PreservedToken(int ttype, String stringValue, Number numericValue) {
+    public PreservedToken(int ttype, String stringValue, Number numericValue, int startPos, int endPos) {
         this.ttype = ttype;
         this.stringValue = stringValue;
         this.numericValue = numericValue;
+        this.startPos=startPos;
+        this.endPos=endPos;
     }
 
     @Override
@@ -138,4 +142,14 @@ public class PreservedToken extends AST {
     private String fromCOLUMN() {
        return stringValue;
     }    
+    
+    
+    public int getStartPos() {
+        return startPos;
+    }
+
+    public int getEndPos() {
+        return endPos;
+    }
+    
 }

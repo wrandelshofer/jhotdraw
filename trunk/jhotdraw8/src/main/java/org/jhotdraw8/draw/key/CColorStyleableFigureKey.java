@@ -74,7 +74,7 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implemen
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssColor> converter
-                = new StyleConverterConverterWrapper<CssColor>(new CssColorConverter());
+                = new StyleConverterConverterWrapper<CssColor>(new CssColorConverter(true));
         CssMetaData<Styleable, CssColor> md
                 = new SimpleCssMetaData<Styleable, CssColor>(property, function,
                         converter, defaultValue, inherits);
@@ -92,7 +92,7 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implemen
     @Override
     public Converter<CssColor> getConverter() {
         if (converter == null) {
-            converter = new CssColorConverter();
+            converter = new CssColorConverter(true);
         }
         return converter;
     }   

@@ -32,7 +32,7 @@ import org.jhotdraw8.draw.io.IdFactory;
  */
 public class CssPaintConverter implements Converter<Paint> {
 
-    protected static final CssColorConverter colorConverter = new CssColorConverter();
+    protected static final CssColorConverter colorConverter = new CssColorConverter(false);
     protected static final CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
     protected static final CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter();
 

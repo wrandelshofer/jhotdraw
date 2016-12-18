@@ -7,7 +7,9 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.draw.io.IdFactory;
 
@@ -29,7 +31,7 @@ import org.jhotdraw8.draw.io.IdFactory;
  */
 public class CssPaintableConverter implements Converter<Paintable> {
 
-    private CssColorConverter colorConverter = new CssColorConverter();
+    private CssColorConverter colorConverter = new CssColorConverter(false);
     private CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
     private CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter();
     private XmlNumberConverter doubleConverter = new XmlNumberConverter();
@@ -86,5 +88,23 @@ public class CssPaintableConverter implements Converter<Paintable> {
     @Override
     public Paintable getDefaultValue() {
         return null;
+    }
+    
+        @Override
+    public String getHelpText() {
+        String[] lines=( "Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
+                +"\n"+colorConverter.getHelpText()
+                +"\n"+linearGradientConverter.getHelpText()
+                +"\n"+radialGradientConverter.getHelpText()).split("\n");
+              ;
+              StringBuilder buf=new StringBuilder();
+              Set<String> duplicateLines=new HashSet<>();
+              for (String line:lines) {
+                  if (duplicateLines.add(line)) {
+                      if (buf.length()!=0)buf.append('\n');
+                      buf.append(line);
+                  }
+              }
+              return buf.toString();
     }
 }

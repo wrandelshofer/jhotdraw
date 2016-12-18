@@ -330,18 +330,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
             }
 
             // zoom towards the center of the drawing
-            {
-                Parent p = node;
-                while (p != null && !(p instanceof ScrollPane)) {
-                    p = p.getParent();
-                }
-                ScrollPane scrollPane = (ScrollPane) p;
+                /*ScrollPane scrollPane = getScrollPane();
                 if (scrollPane != null) {
                     scrollPane.setVvalue(0.5);
                     scrollPane.setHvalue(0.5);
-                }
-            }
-
+                }*/
         }
     };
 
@@ -614,12 +607,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
     /**
      * Set drawingImageView to a non-null value to force rendering into a
-     * drawingImage. This will render the drawing without adding it to the scene
+     * image. This will render the drawing without adding it to the scene
      * graph.
      */
-    private ImageView drawingImageView = null;// new ImageView();
+    private ImageView drawingImageView = null;//new ImageView();
     private WritableImage drawingImage = null;
-    boolean isRenderingDrawingImage;
+    boolean renderIntoImage=false;
 
     private void handleDrawingChanged() {
         clearNodes();
@@ -761,7 +754,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     private void updateNodes() {
-        if (!isRenderingDrawingImage) {
+        if (!renderIntoImage) {
             // create copies of the lists to allow for concurrent modification
             Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);
             dirtyFigureNodes.clear();
@@ -769,13 +762,13 @@ public class SimpleDrawingView extends AbstractDrawingView {
                 f.updateNode(this, getNode(f));
             }
             if (copyOfDirtyFigureNodes.length != 0 && drawingImageView != null) {
-                isRenderingDrawingImage = true;
+                renderIntoImage = true;
                 long start = System.currentTimeMillis();
                 Node n = getNode(getDrawing());
                 SnapshotParameters params = new SnapshotParameters();
                 n.snapshot(result -> {
                     System.out.println("rendering done in:" + (System.currentTimeMillis() - start) + "ms");
-                    isRenderingDrawingImage = false;
+                    renderIntoImage = false;
                     drawingImage = result.getImage();
                     drawingImageView.setImage(result.getImage());
                     return null;

@@ -12,4 +12,8 @@ package org.jhotdraw8.text;
  */
 public class XmlCColorConverter extends CssColorConverter {
 
+    public XmlCColorConverter(boolean optional) {
+        super(optional);
+    }
+
 }

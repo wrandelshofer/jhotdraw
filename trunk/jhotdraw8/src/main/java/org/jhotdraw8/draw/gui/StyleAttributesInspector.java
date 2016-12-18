@@ -9,10 +9,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -43,7 +48,10 @@ import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.CssIdentConverter;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.css.ast.Declaration;
+import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
+import org.jhotdraw8.text.Converter;
 
 /**
  * FXML Controller class
@@ -62,8 +70,13 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
     @FXML
     private TextArea textArea;
+    @FXML
+    private TextArea helpTextArea;
+
     private Node node;
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter();
+
+    private Map<String, String> helpTexts = new HashMap<>();
 
     private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
 
@@ -114,12 +127,15 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 -> prefs.putBoolean("updateContents", newValue));
 
         applyButton.setOnAction(event -> apply());
-composeAttributesCheckBox.setOnAction(event->updateTextArea());
+        composeAttributesCheckBox.setOnAction(event -> updateTextArea());
         node.visibleProperty().addListener((o, oldValue, newValue) -> {
             if (newValue) {
                 invalidateTextArea();
             }
         });
+
+        textArea.textProperty().addListener(this::updateLookupTable);
+        textArea.caretPositionProperty().addListener(this::updateHelpText);
     }
 
     @Override
@@ -148,7 +164,7 @@ composeAttributesCheckBox.setOnAction(event->updateTextArea());
     }
 
     protected void updateTextArea() {
-final        boolean decompose=!composeAttributesCheckBox.isSelected();
+        final boolean decompose = !composeAttributesCheckBox.isSelected();
         textAreaValid = true;
 
         if (drawingView == null || drawingView.getDrawing() == null) {
@@ -165,7 +181,7 @@ final        boolean decompose=!composeAttributesCheckBox.isSelected();
             newValue = new LinkedHashSet<Figure>();
             newValue.add(drawing);
         }
-
+collectHelpTexts(newValue);
         StylesheetsManager<Figure> styleManager = drawing.getStyleManager();
         SelectorModel<Figure> selectorModel = styleManager.getSelectorModel();
         String id = null;
@@ -182,7 +198,7 @@ final        boolean decompose=!composeAttributesCheckBox.isSelected();
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
-                for (String name : decompose?selectorModel.getDecomposedAttributeNames(f):selectorModel.getComposedAttributeNames(f)) {
+                for (String name : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
                     attr.put(name, selectorModel.getAttribute(f, name));
                 }
             } else {
@@ -272,7 +288,6 @@ final        boolean decompose=!composeAttributesCheckBox.isSelected();
                 m.fireTransformInvalidated(f);
                 m.fireLayoutInvalidated(f);
             }
-
         } catch (IOException ex) {
             ex.printStackTrace();
             return;
@@ -286,4 +301,72 @@ final        boolean decompose=!composeAttributesCheckBox.isSelected();
         }
     }
 
+    private static class HelptextLookupEntry implements Comparable<HelptextLookupEntry> {
+
+        final int position;
+        final Declaration declaration;
+
+        public HelptextLookupEntry(int position, Declaration declaration) {
+            this.position = position;
+            this.declaration = declaration;
+        }
+
+        @Override
+        public int compareTo(HelptextLookupEntry o) {
+            return this.position - o.position;
+        }
+
+    }
+    private List<HelptextLookupEntry> helptextLookupTable = new ArrayList<>();
+
+    protected void updateLookupTable(Observable o) {
+        helptextLookupTable.clear();
+        CssParser parser = new CssParser();
+        try {
+            Stylesheet s = parser.parseStylesheet(textArea.getText());
+            for (StyleRule r : s.getStyleRules()) {
+                for (Declaration d : r.getDeclarations()) {
+                    helptextLookupTable.add(new HelptextLookupEntry(d.getStartPos(), d));
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    protected void updateHelpText(Observable o, Number oldv, Number newv) {
+        int insertionPoint = Collections.binarySearch(helptextLookupTable, new HelptextLookupEntry(newv.intValue(), null));
+        if (insertionPoint < 0) {
+            insertionPoint = (-(insertionPoint) - 1) - 1;
+        }
+        Declaration d = null;
+        if (0 <= insertionPoint && insertionPoint < helptextLookupTable.size()) {
+            HelptextLookupEntry entry = helptextLookupTable.get(insertionPoint);
+            if (newv.intValue() <= entry.declaration.getEndPos()) {
+                d = entry.declaration;
+            }
+        }
+        String helpText = null;
+        if (d != null) {
+            helpText = helpTexts.get(d.getProperty());
+        }
+        if (!Objects.equals(helpText, helpTextArea.getText())) {
+            helpTextArea.setText(helpText);
+        }
+    }
+
+    protected void collectHelpTexts(Collection<Figure> figures) {
+        Drawing drawing = drawingView.getDrawing();
+        StylesheetsManager<Figure> styleManager = drawing.getStyleManager();
+        FigureSelectorModel selectorModel = (FigureSelectorModel) styleManager.getSelectorModel();
+
+        for (Figure f : figures) {
+            for (String name : selectorModel.getAttributeNames(f)) {
+                Converter<?> c = selectorModel.getConverter(f, name);
+                if (c != null && c.getHelpText() != null) {
+                    helpTexts.put(name, c.getHelpText());
+                }
+            }
+        }
+    }
 }

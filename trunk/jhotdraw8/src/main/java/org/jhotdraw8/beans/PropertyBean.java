@@ -4,7 +4,10 @@
  */
 package org.jhotdraw8.beans;
 
-import javafx.beans.property.ReadOnlyMapProperty;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
@@ -88,5 +91,23 @@ public interface PropertyBean {
         @SuppressWarnings("unchecked")
         T removedValue= (T) getProperties().remove(key);
         return removedValue;
+    }
+    
+    /** Gets all values with the specified keys from the map.
+     * @param keys the desired keys
+     * @return the map */
+    default Map<Key<?>, Object> getAll(Key<?>... keys) {
+        return getAll(Arrays.asList(keys));
+    }
+    /** Gets all values with the specified keys from the map.
+     * @param keys the desired keys
+     * @return the map */
+    default Map<Key<?>, Object> getAll(List<Key<?>> keys) {
+        Map<Key<?>, Object> map = getProperties();
+        Map<Key<?>, Object> result=new LinkedHashMap<>();
+        for (Key<?> k : keys) {
+            result.put(k, k.get(map));
+        }
+        return result;
     }
 }

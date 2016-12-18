@@ -5,22 +5,23 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefWidth="240.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
-   <bottom>
-      <HBox alignment="BASELINE_LEFT" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-         </BorderPane.margin>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="16" styleClass="flushTopRightLeft" VBox.vgrow="ALWAYS" />
+      <TextArea fx:id="helpTextArea" editable="false" prefRowCount="4" wrapText="true" VBox.vgrow="NEVER" />
+      <HBox alignment="BASELINE_LEFT">
          <children>
             <CheckBox fx:id="updateContentsCheckBox" minWidth="24.0" mnemonicParsing="false" selected="true" text="%updateContentsCheckBox.text" />
             <CheckBox fx:id="composeAttributesCheckBox" mnemonicParsing="false" selected="true" text="%composeAttributesCheckBox.text">
                <HBox.margin>
                   <Insets left="8.0" />
-               </HBox.margin></CheckBox>
+               </HBox.margin>
+            </CheckBox>
             <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
             <Button fx:id="applyButton" mnemonicParsing="false" text="%applyButton.text">
                <HBox.margin>
@@ -28,13 +29,13 @@
                </HBox.margin>
             </Button>
          </children>
+         <VBox.margin>
+            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+         </VBox.margin>
       </HBox>
-   </bottom>
-   <center>
-      <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="16" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
-   </center>
+   </children>
    <styleClass>
       <String fx:value="inspector" />
       <String fx:value="flush" />
    </styleClass>
-</BorderPane>
+</VBox>

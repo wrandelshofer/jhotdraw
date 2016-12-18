@@ -405,7 +405,9 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentVie
 
     private void updateRecentMenuItemsInAllMenuBars(Observable o) {
         if (isSystemMenuSupported) {
-            updateRecentMenuItemsMB(systemMenus);
+            if (systemMenus != null) {
+                updateRecentMenuItemsMB(systemMenus);
+            }
         } else {
             for (DocumentView v : views()) {
                 BorderPane bp = (BorderPane) v.getNode().getScene().getRoot();

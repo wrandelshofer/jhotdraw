@@ -18,9 +18,11 @@ import org.jhotdraw8.draw.io.IdFactory;
 public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
 
     private final Class<E> enumClass;
+    private final String name;
 
     public CssEnumConverter(Class<E> enumClass) {
         this.enumClass = enumClass;
+        this.name = enumClass.getName().substring(enumClass.getName().lastIndexOf('.') + 1);
     }
 
     @Override
@@ -28,7 +30,7 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         if (value == null) {
             out.append("null");
         } else {
-            for (char ch : value.toString().toLowerCase().replace('_','-').toCharArray()) {
+            for (char ch : value.toString().toLowerCase().replace('_', '-').toCharArray()) {
                 if (Character.isWhitespace(ch)) {
                     break;
                 }
@@ -52,7 +54,7 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
             return null;
         }
         try {
-            return Enum.valueOf(enumClass, out.toString().toUpperCase().replace('-','_'));
+            return Enum.valueOf(enumClass, out.toString().toUpperCase().replace('-', '_'));
         } catch (IllegalArgumentException e) {
             return getDefaultValue();
         }
@@ -76,4 +78,21 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         }
     }
 
+    @Override
+    public String getHelpText() {
+        StringBuilder buf = new StringBuilder("Format of ⟨");
+        buf.append(name).append("⟩: ");
+        boolean first = true;
+        for (Field f : enumClass.getDeclaredFields()) {
+            if (f.isEnumConstant()) {
+                if (first) {
+                    first = false;
+                } else {
+                    buf.append('｜');
+                }
+                buf.append(f.getName().toLowerCase().replace('_', '-'));
+            }
+        }
+        return buf.toString();
+    }
 }
