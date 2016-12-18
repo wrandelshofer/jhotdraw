@@ -24,12 +24,12 @@ import org.jhotdraw8.io.CharBufferReader;
  * </p>
  * <pre>
  * Paint := (Color|RadialGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
- * RadialGradient := "radial-gradient(", RadialGradientParameters, ")"
- * RadialGradientParameters := [ FocusAngle "," ], [ FocusDistance "," ], [ Center "," ], Radius,
- *                   [ ( "repeat" | "reflect" ),"," ] ColorStop,{"," ColorStop}) ;
+ * RadialGradient := "radial-gradient(", RadialGradientParameters,  Cycle, ColorStop,{"," ColorStop}")"
+ * RadialGradientParameters := [ FocusAngle "," ], [ FocusDistance "," ], [ Center "," ], Radius ;
  * FocusAngle = "focus-angle", Dimension"deg";
  * FocusDistance = "focus-distance", Percentage ;
  * Center = "center", Point ;
+ * Cycle = ( "repeat" | "reflect" )
  * Radius = "radius", ( Length | Percentage ) ;
  * ColorStop = Color, [" ", Offset] ;
  * Point = (Number|Dimension|Percentage), (Number|Dimension|Percentage) ;
@@ -40,7 +40,7 @@ import org.jhotdraw8.io.CharBufferReader;
  */
 public class CssRadialGradientConverter implements Converter<CssRadialGradient> {
 
-    private CssColorConverter colorConverter = new CssColorConverter();
+    private CssColorConverter colorConverter = new CssColorConverter(false);
     private CssSizeConverter doubleConverter = new CssSizeConverter();
 
     public void toString(Appendable out, IdFactory idFactory, CssRadialGradient value) throws IOException {
@@ -320,5 +320,19 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                 tt.pushBack();
         }
         return new CssStop(offset, color);
+    }
+    
+           @Override
+    public String getHelpText() {
+        return "Format of ⟨RadialGradient⟩: radial-gradient(［⟨RadialGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"
+             +"\nFormat of ⟨RadialGradientParameters⟩: ［⟨FocusAngle⟩］［, ⟨FocusDistance⟩］［, ⟨Center⟩］, ⟨Radius⟩"
+             +"\nFormat of ⟨FocusAngle⟩: focus-angle ⟨angle⟩deg"
+             +"\nFormat of ⟨FocusDistance⟩: focus-distance ⟨percentage⟩%"
+             +"\nFormat of ⟨Center⟩: center ⟨cx⟩,⟨cy⟩｜center ⟨cx⟩%,⟨cy⟩%"
+             +"\nFormat of ⟨Radius⟩: ⟨radius⟩｜⟨percentage⟩%"
+             +"\nFormat of ⟨Cycle⟩: repeat｜reflect"
+             +"\nFormat of ⟨ColorStop⟩: ⟨Color⟩ ⟨percentage⟩%"
+                +"\n"+colorConverter.getHelpText()
+                ;
     }
 }

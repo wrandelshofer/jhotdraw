@@ -56,4 +56,11 @@ public class CssBooleanConverter implements Converter<Boolean> {
     public Boolean getDefaultValue() {
         return false;
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Boolean⟩: true｜false";
+    }
+    
+    
 }

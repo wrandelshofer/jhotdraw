@@ -20,14 +20,20 @@ public class Declaration extends AST {
 
     private final String property;
     private final List<PreservedToken> terms;
+    private int startPos=-1;
+    private int endPos=-1;
 
     public Declaration(String property, PreservedToken term) {
-        this.property = property;
-        this.terms = Arrays.asList(new PreservedToken[]{term});
+        this(property,Arrays.asList(new PreservedToken[]{term}));
     }
     public Declaration(String property, List<PreservedToken> terms) {
+        this(property,terms,-1,-1);
+    }
+    public Declaration(String property, List<PreservedToken> terms, int startPos, int endPos) {
         this.property = property;
         this.terms = Collections.unmodifiableList(new ArrayList<PreservedToken>(terms));
+        this.startPos=startPos;
+        this.endPos=endPos;
     }
 
     public String getProperty() {
@@ -52,4 +58,14 @@ public class Declaration extends AST {
 
         return property + ":" + getTermsAsString();
     }
+
+    public int getStartPos() {
+        return startPos;
+    }
+
+    public int getEndPos() {
+        return endPos;
+    }
+    
+    
 }

@@ -105,7 +105,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
             // FIXME binding to figure properties bypasses the DrawingModel!
             widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssColorConverter()));
+            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssColorConverter(false)));
             
             CustomBinding.bindBidirectional(//
                     backgroundProperty,//

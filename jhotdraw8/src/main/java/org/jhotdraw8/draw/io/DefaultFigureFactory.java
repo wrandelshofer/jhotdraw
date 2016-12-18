@@ -116,7 +116,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Connector.class, new XmlConnectorConverter());
         addConverterForType(Paint.class, new SvgPaintConverter());
         addConverterForType(Paintable.class, new XmlPaintableConverter());
-        addConverterForType(CssColor.class, new XmlCColorConverter());
+        addConverterForType(CssColor.class, new XmlCColorConverter(true));
         addConverterForType(Boolean.class, new XmlBooleanConverter());
         addConverterForType(TextAlignment.class, new XmlEnumConverter<TextAlignment>(TextAlignment.class));
         addConverterForType(VPos.class, new XmlEnumConverter<VPos>(VPos.class));

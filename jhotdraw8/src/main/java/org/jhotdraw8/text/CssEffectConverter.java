@@ -50,7 +50,7 @@ public class CssEffectConverter implements Converter<Effect> {
     private static final String DROP_SHADOW = "drop-shadow";
     private static final String INNER_SHADOW = "inner-shadow";
 
-    private CssColorConverter colorConverter = new CssColorConverter();
+    private CssColorConverter colorConverter = new CssColorConverter(false);
     private CssSizeConverter nb = new CssSizeConverter();
 
     @Override
@@ -71,7 +71,7 @@ public class CssEffectConverter implements Converter<Effect> {
             nb.toString(out, idFactory, fx.getOffsetY());
             out.append(')');
             if (fx.getInput() != null) {
-                out.append(' ');
+                out.append(", ");
                 toString(out, idFactory, fx.getInput());
             }
         } else if (value instanceof InnerShadow) {
@@ -85,13 +85,12 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append(',');
             nb.toString(out, idFactory, fx.getChoke()*100.0);
             out.append("%,");
-            out.append(',');
             nb.toString(out, idFactory, fx.getOffsetX());
             out.append(',');
             nb.toString(out, idFactory, fx.getOffsetY());
             out.append(')');
             if (fx.getInput() != null) {
-                out.append(' ');
+                out.append(", ");
                 toString(out, idFactory, fx.getInput());
             }
         } else {
@@ -147,6 +146,8 @@ public class CssEffectConverter implements Converter<Effect> {
                 }
                 previous = current;
             }
+            
+            if (tt.nextToken()!=',') tt.pushBack();
         }
         return first;
     }
@@ -254,5 +255,12 @@ public class CssEffectConverter implements Converter<Effect> {
     public Effect getDefaultValue() {
         return null;
     }
-
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Effect⟩: none｜（⟨DropShadow⟩｜ ⟨InnerShadow⟩）｛, ⟨Effect⟩｝"
+       + "\nFormat of ⟨DropShadow⟩: drop-shadow(⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨spread⟩,⟨xoffset⟩,⟨yoffset⟩)"
+       + "\nFormat of ⟨InnerShadow⟩: inner-shadow((⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨choke⟩,⟨xoffset⟩,⟨yoffset⟩))"
+       + "\nFormat of ⟨BlurType⟩: ⟨gaussian⟩｜⟨one-pass-box⟩｜⟨two-pass-box⟩｜⟨three-pass-box⟩"
+                +"\n"+colorConverter.getHelpText();
+    }
 }

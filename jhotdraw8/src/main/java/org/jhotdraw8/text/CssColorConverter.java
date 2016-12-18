@@ -31,15 +31,17 @@ import static org.jhotdraw8.geom.Geom.clamp;
  * HSBAFunction ::= "hsba(" , number,  percentage, percentage, number ")";
  * <pre>
  * </pre>
- * <p>
- * FIXME currently only parses the Color production
- * </p>
  *
  * @author Werner Randelshofer
  */
 public class CssColorConverter implements Converter<CssColor> {
 
     private static final XmlNumberConverter numberConverter = new XmlNumberConverter();
+    private final boolean optional;
+
+    public CssColorConverter(boolean optional) {
+        this.optional = optional;
+    }
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, CssColor value) throws IOException {
@@ -54,7 +56,7 @@ public class CssColorConverter implements Converter<CssColor> {
     public CssColor fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString().trim();
         CssColor c;
-        if ("none".equals(str)) {
+        if (optional && "none".equals(str)) {
             c = null;
             buf.position(buf.limit());
         } else {
@@ -69,7 +71,7 @@ public class CssColorConverter implements Converter<CssColor> {
 
     private CssColor parseColorHexDigits(String hexdigits, int startpos) throws ParseException {
         try {
-            int v =(int)Long.parseLong(hexdigits, 16);
+            int v = (int) Long.parseLong(hexdigits, 16);
             int r, g, b, a;
             switch (hexdigits.length()) {
                 case 3:
@@ -102,7 +104,7 @@ public class CssColorConverter implements Converter<CssColor> {
                     throw new ParseException("illegal hex-digits, expected 3, 6  or 8 digits.Found:" + hexdigits, startpos);
             }
         } catch (NumberFormatException e) {
-            ParseException pe= new ParseException("illegal hex-digits. Found:" + hexdigits, startpos);
+            ParseException pe = new ParseException("illegal hex-digits. Found:" + hexdigits, startpos);
             pe.initCause(e);
             throw pe;
         }
@@ -120,11 +122,11 @@ public class CssColorConverter implements Converter<CssColor> {
         CssColor color = null;
         switch (tt.nextToken()) {
             case CssTokenizerInterface.TT_DIMENSION:
-                if (tt.currentNumericValue().intValue()==0&&(tt.currentNumericValue()instanceof Long)
-                        &&tt.currentStringValue().startsWith("x")) {
+                if (tt.currentNumericValue().intValue() == 0 && (tt.currentNumericValue() instanceof Long)
+                        && tt.currentStringValue().startsWith("x")) {
                     color = parseColorHexDigits(tt.currentStringValue().substring(1), tt.getStartPosition());
-                }else{
-                    throw new ParseException("hex color expected, found:"+"0"+tt.currentStringValue(), tt.getStartPosition());
+                } else {
+                    throw new ParseException("hex color expected, found:" + "0" + tt.currentStringValue(), tt.getStartPosition());
                 }
                 break;
             case CssTokenizerInterface.TT_HASH:
@@ -159,7 +161,11 @@ public class CssColorConverter implements Converter<CssColor> {
                                 }
                             }
                         }
-                        if (i == 3) {
+                        if (i == 0) {
+                            buf.append("0,0,0)");
+                            color = new CssColor(buf.toString(), Color.BLACK);
+                            tt.pushBack();
+                        } else if (i == 3) {
                             buf.append(')');
                             color = new CssColor(buf.toString(), new Color(clamp(values[0], 0, 1), clamp(values[1], 0, 1), clamp(values[2], 0, 1), 1.0));
                         } else {
@@ -185,7 +191,11 @@ public class CssColorConverter implements Converter<CssColor> {
                                 }
                             }
                         }
-                        if (i == 4) {
+                        if (i == 0) {
+                            buf.append("0,0,0,1.0)");
+                            color = new CssColor(buf.toString(), Color.BLACK);
+                            tt.pushBack();
+                        } else if (i == 4) {
                             buf.append(')');
                             color = new CssColor(buf.toString(), new Color(clamp(values[0], 0, 1), clamp(values[1], 0, 1), clamp(values[2], 0, 1), clamp(values[3], 0, 1)));
                         } else {
@@ -211,7 +221,11 @@ public class CssColorConverter implements Converter<CssColor> {
                                 }
                             }
                         }
-                        if (i == 3) {
+                        if (i == 0 ) {
+                            buf.append("0,0%,0%)");
+                            color = new CssColor(buf.toString(), Color.BLACK);
+                            tt.pushBack();
+                        } else if (i == 0 || i == 3) {
                             buf.append(')');
                             color = new CssColor(buf.toString(), Color.hsb(values[0], clamp(values[1], 0, 1), clamp(values[2], 0, 1)));
                         } else {
@@ -239,10 +253,13 @@ public class CssColorConverter implements Converter<CssColor> {
                                 }
                             }
                         }
-                        if (i == 4) {
+                        if (i == 0) {
+                            buf.append("0,0%,0%,1.0)");
+                            color = new CssColor(buf.toString(), Color.BLACK);
+                            tt.pushBack();
+                        } else if (i == 4) {
                             buf.append(')');
                             color = new CssColor(buf.toString(), Color.hsb(values[0], clamp(values[1], 0, 1), clamp(values[2], 0, 1), clamp(values[3], 0, 1)));
-
                         } else {
                             throw new ParseException("CssColor hsba values expected but found " + tt.currentValue(), tt.getStartPosition());
                         }
@@ -263,5 +280,10 @@ public class CssColorConverter implements Converter<CssColor> {
     @Override
     public CssColor getDefaultValue() {
         return null;
+    }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Color⟩: " + (optional ? "none｜" : "") + "⟨name⟩｜#⟨hex⟩｜rgb(⟨r⟩,⟨g⟩,⟨b⟩)｜rgba(⟨r⟩,⟨g⟩,⟨b⟩,⟨a⟩)｜hsb(⟨h⟩,⟨s⟩,⟨b⟩)｜hsba(⟨h⟩,⟨s⟩,⟨b⟩,⟨a⟩)";
     }
 }

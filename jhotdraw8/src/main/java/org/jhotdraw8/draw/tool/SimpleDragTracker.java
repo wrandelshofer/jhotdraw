@@ -10,11 +10,10 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.TransformableFigure;
 import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
 
 /**

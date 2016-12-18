@@ -1071,5 +1071,13 @@ public class Geom {
                 t.getMyx(), t.getMyy(), 0.0);
         return d;
     }
+    
+    public static Bounds intersection(Bounds a, Bounds b) {
+        double minx=Math.max(a.getMinX(),b.getMinX());
+        double miny=Math.max(a.getMinY(),b.getMinY());
+        double maxx=Math.min(a.getMaxX(),b.getMaxX());
+        double maxy=Math.min(a.getMaxY(),b.getMaxY());
+        return new BoundingBox(minx,miny,maxx-minx,maxy-miny);
+    }
 
 }
