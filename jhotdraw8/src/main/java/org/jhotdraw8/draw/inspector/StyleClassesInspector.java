@@ -65,7 +65,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
             FXMLLoader loader = new FXMLLoader();
-            loader.setResources(Resources.getBundle("org.jhotdraw8.draw.gui.Labels"));
+            loader.setResources(Labels.getBundle());
             loader.setController(this);
 
             try (InputStream in = fxmlUrl.openStream()) {

@@ -74,7 +74,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),
-                Resources.getBundle("org.jhotdraw8.draw.gui.Labels"));
+                Labels.getBundle());
     }
 
     public HierarchyInspector(URL fxmlUrl, ResourceBundle resources) {

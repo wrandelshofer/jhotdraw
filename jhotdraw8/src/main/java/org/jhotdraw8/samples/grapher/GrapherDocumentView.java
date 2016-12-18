@@ -60,6 +60,7 @@ import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
+import org.jhotdraw8.draw.figure.SliceFigure;
 import org.jhotdraw8.draw.figure.StrokeableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.inspector.DrawingInspector;
@@ -75,6 +76,7 @@ import org.jhotdraw8.draw.inspector.ZoomToolbar;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.input.MultiClipboardInputFormat;
 import org.jhotdraw8.draw.input.MultiClipboardOutputFormat;
+import org.jhotdraw8.draw.inspector.Labels;
 import org.jhotdraw8.draw.io.DefaultFigureFactory;
 import org.jhotdraw8.draw.io.FigureFactory;
 import org.jhotdraw8.draw.io.IdFactory;
@@ -85,7 +87,7 @@ import org.jhotdraw8.draw.tool.CreationTool;
 import org.jhotdraw8.draw.tool.ImageCreationTool;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.Tool;
-import org.jhotdraw8.svg.BitmapExportOutputFormat;
+import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.svg.SvgExportOutputFormat;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
@@ -172,6 +174,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         ttbar.addTool(new CreationTool("edit.createText", rsrc,//
                 () -> createFigure(()->new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
                 layerFactory), 4, 1);
+        ttbar.addTool(new CreationTool("edit.createSlice", rsrc, () -> createFigure(SliceFigure::new), layerFactory), 5, 0);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, () -> createFigure(LineConnectionFigure::new), layerFactory), 3, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
         ttbar.setDrawingEditor(editor);
@@ -217,7 +220,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
     @Override
     public void start() {
         getNode().getScene().getStylesheets().addAll(//
-                GrapherApplication.class.getResource("/org/jhotdraw8/draw/gui/inspector.css").toString(),//
+                GrapherApplication.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString(),//
                 GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
         );
 
@@ -226,7 +229,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
     }
 
     private void addInspector(Inspector inspector, String id, Priority grow, List<Node> list) {
-        Resources r = Resources.getResources("org.jhotdraw8.draw.gui.Labels");
+        Resources r = Labels.getResources();
 
         Accordion a = new Accordion();
         a.getStyleClass().setAll("inspector", "flush");
