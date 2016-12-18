@@ -140,7 +140,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
 
         drawingView = new SimpleDrawingView();
         // FIXME should use preferences!
-        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25));
+        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25,5,5));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         // 
         drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
