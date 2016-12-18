@@ -353,7 +353,8 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     }
 
     public <T> boolean containsStyledKey(K key) {
-        return backingMap.containsKey(key);
+       StyledValue sv = backingMap.get(key);
+        return sv == null ? false : sv.getOrigin()!=null;
     }
 
     @Override
