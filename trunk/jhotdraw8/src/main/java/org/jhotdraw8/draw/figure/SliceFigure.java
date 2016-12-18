@@ -37,7 +37,7 @@ public class SliceFigure extends AbstractLeafFigure implements TransformableFigu
     /**
      * The CSS type selector for this object is {@code "Rectangle"}.
      */
-    public final static String TYPE_SELECTOR = "Segment";
+    public final static String TYPE_SELECTOR = "Slice";
 
     public final static DoubleStyleableFigureKey X = new DoubleStyleableFigureKey("x",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("y",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
