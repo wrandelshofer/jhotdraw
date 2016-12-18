@@ -37,7 +37,8 @@ import org.jhotdraw8.draw.model.DrawingModel;
         private Point2D oldPoint;
         private final Region node;
         private final String styleclass;
-        private Bounds startBounds;
+        protected Bounds startBounds;
+        private Transform startWorldToLocal;
 
         /**
          * The height divided by the width.
@@ -82,6 +83,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
         public void onMousePressed(MouseEvent event, DrawingView view) {
             oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
             startBounds = owner.getBoundsInLocal();
+            startWorldToLocal=owner.getWorldToLocal();
             preferredAspectRatio = owner.getPreferredAspectRatio();
         }
 
@@ -101,7 +103,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();
 
-            Transform t = owner.getWorldToLocal();
+            Transform t = startWorldToLocal;//owner.getWorldToLocal();
 
             resize(t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
         }

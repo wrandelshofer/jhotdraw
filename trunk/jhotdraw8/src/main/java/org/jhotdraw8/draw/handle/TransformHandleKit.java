@@ -22,15 +22,19 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import static java.lang.Math.*;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
+import org.jhotdraw8.draw.locator.Locator;
+import org.jhotdraw8.geom.Geom;
 
 /**
  * A set of utility methods to create handles which transform a Figure by using
@@ -173,36 +177,54 @@ public class TransformHandleKit {
         return new WestHandle(owner);
     }
 
-    private static void transform(DrawingModel model, Figure o, double x, double y, double width, double height) {
-        if (width == 0 || height == 0) {
-            return;
-        }
-        TransformableFigure owner = (TransformableFigure) o;
-        Bounds oldBounds = owner.getBoundsInLocal();
+    private abstract static class AbstractTransformHandle extends AbstractResizeTransformHandle {
 
-        double sx = width / oldBounds.getWidth();
-        double sy = height / oldBounds.getHeight();
-        double tx = x - oldBounds.getMinX();
-        double ty = y - oldBounds.getMinY();
-        Transform transform = new Translate(tx, ty);
-        if (!Double.isNaN(sx) && !Double.isNaN(sy)
-                && !Double.isInfinite(sx) && !Double.isInfinite(sy)
-                && (sx != 1d || sy != 1d)) {
-            transform = transform.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
+        List<Transform> startTransforms;
+
+        public AbstractTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Border border) {
+            super(owner, styleclass, locator, shape, bg, border);
         }
-        List<Transform> transforms = new ArrayList<>(owner.get(TRANSFORMS));
-        switch (transforms.size()) {
-            case 0:
-                transforms.add(0, transform);
-                break;
-            default:
-                transforms.set(0, transform.createConcatenation(transforms.get(0)));
-                break;
+
+        @Override
+        public void onMousePressed(MouseEvent event, DrawingView view) {
+            super.onMousePressed(event, view); //To change body of generated methods, choose Tools | Templates.
+            startTransforms = owner.get(TRANSFORMS);
         }
-        model.set(owner, TRANSFORMS, transforms);
+
+        protected void transform(DrawingModel model, Figure o, double x, double y, double width, double height) {
+            if (width == 0 || height == 0) {
+                return;
+            }
+            TransformableFigure owner = (TransformableFigure) o;
+            Bounds oldBounds = startBounds;
+          List<Transform> oldTransforms = startTransforms;
+            
+            double sx = width / oldBounds.getWidth();
+            double sy = height / oldBounds.getHeight();
+            double tx = x - oldBounds.getMinX();
+            double ty = y - oldBounds.getMinY();
+            Transform transform = new Translate(tx, ty);
+            if (!Double.isNaN(sx) && !Double.isNaN(sy)
+                    && !Double.isInfinite(sx) && !Double.isInfinite(sy)
+                    && (sx != 1d || sy != 1d)) {
+                transform = transform.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
+            }
+            List<Transform> transforms = new ArrayList<>(oldTransforms);
+            switch (transforms.size()) {
+                case 0:
+                    transforms.add(0, transform);
+                    break;
+                default:
+//                    transforms.set(0, transform.createConcatenation(transforms.get(0)));
+                    int last=transforms.size()-1;
+                    transforms.set(last, transforms.get(last).createConcatenation(transform));
+                    break;
+            }
+            model.set(owner, TRANSFORMS, transforms);
+        }
     }
 
-    private static class NorthEastHandle extends AbstractResizeTransformHandle {
+    private static class NorthEastHandle extends AbstractTransformHandle {
 
         NorthEastHandle(TransformableFigure owner) {
             super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.northEast(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
@@ -233,7 +255,7 @@ public class TransformHandleKit {
 
     }
 
-    private static class EastHandle extends AbstractResizeTransformHandle {
+    private static class EastHandle extends AbstractTransformHandle {
 
         EastHandle(TransformableFigure owner) {
             super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.east(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
@@ -257,7 +279,7 @@ public class TransformHandleKit {
 
     }
 
-    private static class NorthHandle extends AbstractResizeTransformHandle {
+    private static class NorthHandle extends AbstractTransformHandle {
 
         NorthHandle(TransformableFigure owner) {
             super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.north(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
@@ -281,7 +303,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class NorthWestHandle extends AbstractResizeTransformHandle {
+    private static class NorthWestHandle extends AbstractTransformHandle {
 
         NorthWestHandle(TransformableFigure owner) {
             super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.northWest(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
@@ -311,7 +333,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthEastHandle extends AbstractResizeTransformHandle {
+    private static class SouthEastHandle extends AbstractTransformHandle {
 
         SouthEastHandle(TransformableFigure owner) {
             super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.southEast(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
@@ -340,7 +362,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthHandle extends AbstractResizeTransformHandle {
+    private static class SouthHandle extends AbstractTransformHandle {
 
         SouthHandle(TransformableFigure owner) {
             super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.south(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
@@ -363,7 +385,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class SouthWestHandle extends AbstractResizeTransformHandle {
+    private static class SouthWestHandle extends AbstractTransformHandle {
 
         SouthWestHandle(TransformableFigure owner) {
             super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.southWest(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
@@ -392,7 +414,7 @@ public class TransformHandleKit {
         }
     }
 
-    private static class WestHandle extends AbstractResizeTransformHandle {
+    private static class WestHandle extends AbstractTransformHandle {
 
         WestHandle(TransformableFigure owner) {
             super(owner, STYLECLASS_HANDLE_SCALE_TRANSLATE, RelativeLocator.west(), REGION_SHAPE, REGION_BACKGROUND, REGION_BORDER);
