@@ -74,7 +74,7 @@ public class LayerCell extends ListCell<Figure> {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         
-        Resources rsrc=Resources.getResources("org.jhotdraw8.draw.gui.Labels");
+        Resources rsrc=Labels.getResources();
         loader.setResources(rsrc);
 
         try (InputStream in = fxmlUrl.openStream()) {

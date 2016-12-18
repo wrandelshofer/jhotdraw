@@ -7,7 +7,7 @@ package org.jhotdraw8.samples.grapher;
 
 import org.jhotdraw8.app.SimpleApplicationModel;
 import org.jhotdraw8.gui.URIExtensionFilter;
-import org.jhotdraw8.svg.BitmapExportOutputFormat;
+import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.svg.SvgExportOutputFormat;
 
 /**

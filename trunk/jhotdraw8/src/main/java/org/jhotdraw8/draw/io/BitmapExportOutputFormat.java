@@ -2,7 +2,7 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.svg;
+package org.jhotdraw8.draw.io;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

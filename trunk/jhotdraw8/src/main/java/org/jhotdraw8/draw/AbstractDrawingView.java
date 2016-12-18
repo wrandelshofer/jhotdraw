@@ -20,7 +20,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.svg.BitmapExportOutputFormat;
+import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 
 /**
  * AbstractDrawingView.

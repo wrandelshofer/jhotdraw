@@ -37,6 +37,7 @@ import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
+import org.jhotdraw8.draw.figure.SliceFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.XmlConnectorConverter;
@@ -75,6 +76,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Layer", SimpleLayer.class, Figure.getDeclaredAndInheritedKeys(SimpleLayer.class));
         addFigureKeysAndNames("Clipping", SimpleClipping.class, Figure.getDeclaredAndInheritedKeys(SimpleClipping.class));
         addFigureKeysAndNames("Rectangle", RectangleFigure.class, Figure.getDeclaredAndInheritedKeys(RectangleFigure.class));
+        addFigureKeysAndNames("Slice", SliceFigure.class, Figure.getDeclaredAndInheritedKeys(SliceFigure.class));
         addFigureKeysAndNames("Group", GroupFigure.class, Figure.getDeclaredAndInheritedKeys(GroupFigure.class));
 
         {
