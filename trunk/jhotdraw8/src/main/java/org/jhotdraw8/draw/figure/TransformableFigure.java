@@ -4,10 +4,14 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -21,12 +25,12 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableFigureKey;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * A transformable figure supports the transformation of a figure.
@@ -451,4 +455,31 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 | null != set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
     }
 
+    default Object storeTransformations() {
+        List<Key<?>> keys=new ArrayList<>();
+        for (Field f:TransformableFigure.class.getDeclaredFields()) {
+            if (Key.class.isAssignableFrom(f.getType())) {
+                try {
+                    keys.add((Key)f.get(null));
+                } catch (IllegalArgumentException|IllegalAccessException ex) {
+                    throw new InternalError(ex);
+                }
+            }
+        }
+        List<Map<Key<?>,Object>> storage=new ArrayList<>();
+        for (Figure f:preorderIterable()) {
+            storage.add(f.getAll(keys));
+        }
+        return storage;
+    }
+    
+    default void restoreTransformations(Object o) {
+        @SuppressWarnings("unchecked")
+        List<Map<Key<?>,Object>> storage=(List)o;
+        int i=0;
+        for (Figure f:preorderIterable()) {
+          f.getProperties().putAll( storage.get(i));
+            i++;
+        }
+    }
 }
