@@ -262,7 +262,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
-    /** XXX remove me, because this is actually not so smart. */
+    /**
+     * XXX remove me, because this is actually not so smart.
+     */
     default void reshapeInParentSmart(Transform transform) {
         if (hasCenterTransforms() || hasTransforms()) {
             if (transform instanceof Translate) {
@@ -331,21 +333,22 @@ public interface TransformableFigure extends TransformCacheableFigure {
             if (transforms.isEmpty()) {
                 set(TRANSFORMS, Collections.singletonList(t));
             } else {
-                transforms.add(0,t);
+                transforms.add(0, t);
                 set(TRANSFORMS, transforms);
             }
         }
     }
+
     @Override
     default void transformInLocal(Transform t) {
         flattenTransforms();
-            List<Transform> transforms = get(TRANSFORMS);
-            if (transforms.isEmpty()) {
-                set(TRANSFORMS, Collections.singletonList(t));
-            } else {
-                transforms.add(t);
-                set(TRANSFORMS, transforms);
-            }
+        List<Transform> transforms = get(TRANSFORMS);
+        if (transforms.isEmpty()) {
+            set(TRANSFORMS, Collections.singletonList(t));
+        } else {
+            transforms.add(t);
+            set(TRANSFORMS, transforms);
+        }
     }
 
     default void flattenTransforms() {
@@ -455,31 +458,17 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 | null != set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
     }
 
-    default Object storeTransformations() {
-        List<Key<?>> keys=new ArrayList<>();
-        for (Field f:TransformableFigure.class.getDeclaredFields()) {
+    public static List<Key<?>> getDeclaredKeys() {
+        List<Key<?>> keys = new ArrayList<>();
+        for (Field f : TransformableFigure.class.getDeclaredFields()) {
             if (Key.class.isAssignableFrom(f.getType())) {
                 try {
-                    keys.add((Key)f.get(null));
-                } catch (IllegalArgumentException|IllegalAccessException ex) {
+                    keys.add((Key) f.get(null));
+                } catch (IllegalArgumentException | IllegalAccessException ex) {
                     throw new InternalError(ex);
                 }
             }
         }
-        List<Map<Key<?>,Object>> storage=new ArrayList<>();
-        for (Figure f:preorderIterable()) {
-            storage.add(f.getAll(keys));
-        }
-        return storage;
-    }
-    
-    default void restoreTransformations(Object o) {
-        @SuppressWarnings("unchecked")
-        List<Map<Key<?>,Object>> storage=(List)o;
-        int i=0;
-        for (Figure f:preorderIterable()) {
-          f.getProperties().putAll( storage.get(i));
-            i++;
-        }
+        return keys;
     }
 }

@@ -324,4 +324,11 @@ public interface DrawingModel extends Observable {
     
     /** Invokes "transformInLocal" on the specified figure. */
     public void transformInLocal(Figure child, Transform transform);
+
+    /** Removes the specified key from the figure.
+     * 
+     * @param f a figure
+     * @param remove a key
+     */
+    public void remove(Figure f, Key<?> remove);
 }

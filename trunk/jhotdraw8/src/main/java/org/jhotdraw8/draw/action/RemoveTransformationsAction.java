@@ -1,36 +1,40 @@
-/* @(#)BringToFrontAction.java
- * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+/* @(#)RemoveTransformationsAction.java
+ * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw8.draw.action;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 
 /**
- * BringToFrontAction.
+ * RemoveTransformationsAction.
  *
  * @author Werner Randelshofer
  */
-public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
+public class RemoveTransformationsAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
 
-    public static final String ID = "edit.bringToFront";
+    public static final String ID = "edit.removeTransformations";
 
     /**
      * Creates a new instance.
+     *
      * @param app the application
      * @param editor the drawing editor
      */
-    public BringToFrontAction(Application<V> app,DrawingEditor editor) {
-        super(app,editor);
+    public RemoveTransformationsAction(Application<V> app, DrawingEditor editor) {
+        super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");
         labels.configureAction(this, ID);
@@ -43,16 +47,19 @@ public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelect
             return;
         }
         final LinkedList<Figure> figures = new LinkedList<>(view.getSelectedFigures());
-        bringToFront(view, figures);
+        removeTransformations(view, figures);
 
     }
 
-    public static void bringToFront(DrawingView view, Collection<Figure> figures) {
+    public static void removeTransformations(DrawingView view, Collection<Figure> figures) {
+        List<Key<?>> keys = TransformableFigure.getDeclaredKeys();
+
         DrawingModel model = view.getModel();
-        for (Figure child : figures) { // XXX Shouldn't the figures be sorted here back to front?
-            Figure parent = child.getParent();
-            if (parent != null && parent.isEditable() && parent.isDecomposable()) {
-                model.insertChildAt(child, parent, parent.getChildren().size()-1);
+        for (Figure child : figures) {
+            if (child instanceof TransformableFigure) {
+                for (Key<?> k : keys) {
+                   model.remove(child, k);
+                }
             }
         }
     }

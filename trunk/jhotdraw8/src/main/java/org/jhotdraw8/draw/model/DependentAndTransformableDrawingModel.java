@@ -167,6 +167,11 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
     return figure.set(key, newValue);
     // event will be fired by method onPropertyChanged
   }
+  @Override
+  public void remove(Figure figure, Key<?> key) {
+     figure.remove(key);
+    // event will be fired by method onPropertyChanged
+  }
 
   @Override
   public void reshapeInLocal(Figure f, Transform transform) {

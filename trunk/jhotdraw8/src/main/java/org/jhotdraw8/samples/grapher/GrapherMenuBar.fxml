@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 
-<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
   <menus>
     <Menu id="file" mnemonicParsing="false" text="%file.text">
       <items>
@@ -36,6 +39,7 @@
             <MenuItem id="edit.sendToBack" mnemonicParsing="false" text="Send to Back" />
             <MenuItem id="edit.group" mnemonicParsing="false" text="Group" />
             <MenuItem id="edit.ungroup" mnemonicParsing="false" text="Ungroup" />
+            <MenuItem id="edit.removeTransformations" mnemonicParsing="false" text="Remove Transformations" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="%view.text">
