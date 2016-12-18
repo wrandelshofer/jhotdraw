@@ -9,9 +9,12 @@ import javafx.geometry.Rectangle2D;
 import static java.lang.Math.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -30,7 +33,9 @@ import org.jhotdraw8.draw.figure.Figure;
  */
 public class GridConstrainer extends AbstractConstrainer {
 
-    private final Path node = new Path();
+    private final Group node = new Group();
+    private final Path minorNode = new Path();
+    private final Path majorNode = new Path();
 
     /**
      * Up-Vector.
@@ -59,6 +64,26 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
+    /**
+     * The x-factor for the major grid of the grid.
+     */
+    private final IntegerProperty majorY = new SimpleIntegerProperty(this, "major-y", 5) {
+
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+    /**
+     * The x-factor for the major grid of the grid.
+     */
+    private final IntegerProperty majorX = new SimpleIntegerProperty(this, "major-x", 5) {
+
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
     /**
      * Width of a grid cell. The value 0 turns the constrainer off for the
      * horizontal axis.
@@ -117,7 +142,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Creates a grid of 10x10 pixels at origin 0,0 and 22.5 degree rotations.
      */
     public GridConstrainer() {
-        this(0, 0, 10, 10, 22.5);
+        this(0, 0, 10, 10, 22.5,5,5);
     }
 
     /**
@@ -128,7 +153,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * @param height The width of the grid. 0 turns the grid of for the y-axis.
      */
     public GridConstrainer(double width, double height) {
-        this(0, 0, width, height, 22.5);
+        this(0, 0, width, height, 22.5,5,5);
     }
 
     /**
@@ -141,13 +166,18 @@ public class GridConstrainer extends AbstractConstrainer {
      * @param angle The angular grid (in degrees). 0 turns the grid off for
      * rotations.
      */
-    public GridConstrainer(double x, double y, double width, double height, double angle) {
+    public GridConstrainer(double x, double y, double width, double height, double angle, int majorx, int majory) {
         this.x.set(x);
         this.y.set(y);
         this.width.set(width);
         this.height.set(height);
         this.angle.set(angle);
-        this.node.getStyleClass().setAll(STYLECLASS_CONSTRAINER_GRID);
+        this.minorNode.getStyleClass().setAll(STYLECLASS_CONSTRAINER_MINOR_GRID);
+        this.majorNode.getStyleClass().setAll(STYLECLASS_CONSTRAINER_MAJOR_GRID);
+        this.majorX.set(majorx);
+        this.majorY.set(majory);
+
+        node.getChildren().addAll(minorNode, majorNode);
     }
 
     @Override
@@ -248,24 +278,41 @@ public class GridConstrainer extends AbstractConstrainer {
 
     @Override
     public void updateNode(DrawingView drawingView) {
-        ObservableList<PathElement> elements = node.getElements();
-        elements.clear();
+        ObservableList<PathElement> minor = minorNode.getElements();
+        ObservableList<PathElement> major = majorNode.getElements();
+        minor.clear();
+        major.clear();
         if (drawGrid.get()) {
             Drawing drawing = drawingView.getDrawing();
             Transform t = drawingView.getDrawingToView();
 
+            double dx = 0;
+            double dy = 0;
             double dw = drawing.get(Drawing.WIDTH);
             double dh = drawing.get(Drawing.HEIGHT);
 
             double gx0 = x.get();
             double gy0 = y.get();
-            double gxdelta = width.get();
-            double gydelta = height.get();
+            double gxdelta = Math.abs(width.get());
+            double gydelta = Math.abs(height.get());
+            if (gx0 < 0) {
+                gx0 = gx0 % gxdelta + gxdelta;
+            }
+            if (gy0 < 0) {
+                gy0 = gy0 % gydelta + gydelta;
+            }
 
+            int gmx = Math.max(0, Math.abs(majorX.get()));
+            int gmy = Math.max(0, Math.abs(majorY.get()));
+
+            // render minor
             Point2D scaled = t.deltaTransform(gxdelta, gydelta);
-
-            if (scaled.getX() > 2 && gxdelta > 1) {
-                for (double x = gx0; x < dw; x += gxdelta) {
+            if (scaled.getX() > 2 && gmx != 1) {
+                for (int i = 0, n = (int) Math.ceil((dw - gx0) / gxdelta); i < n; i++) {
+                    if (gmx > 0 && i % gmx == 0) {
+                        continue;
+                    }
+                    double x = gx0 + i * gxdelta;
                     double x1 = x;
                     double y1 = 0;
                     double x2 = x;
@@ -273,12 +320,16 @@ public class GridConstrainer extends AbstractConstrainer {
 
                     Point2D p1 = t.transform(x1, y1);
                     Point2D p2 = t.transform(x2, y2);
-                    elements.add(new MoveTo(Math.round(p1.getX()) + 0.5, p1.getY()));
-                    elements.add(new LineTo(Math.round(p2.getX()) + 0.5, p2.getY()));
+                    minor.add(new MoveTo(Math.round(p1.getX()) + 0.5, p1.getY()));
+                    minor.add(new LineTo(Math.round(p2.getX()) + 0.5, p2.getY()));
                 }
             }
-            if (scaled.getY() > 2 && gydelta > 1) {
-                for (double y = gy0; y < dh; y += gydelta) {
+            if (scaled.getY() > 2 && gmy != 1) {
+                for (int i = 0, n = (int) Math.ceil((dh - gy0) / gydelta); i < n; i++) {
+                    if (gmy > 0 && i % gmy == 0) {
+                        continue;
+                    }
+                    double y = gy0 + i * gydelta;
                     double x1 = 0;
                     double y1 = y;
                     double x2 = dw;
@@ -286,8 +337,41 @@ public class GridConstrainer extends AbstractConstrainer {
 
                     Point2D p1 = t.transform(x1, y1);
                     Point2D p2 = t.transform(x2, y2);
-                    elements.add(new MoveTo(p1.getX(), Math.round(p1.getY()) + 0.5));
-                    elements.add(new LineTo(p2.getX(), Math.round(p2.getY()) + 0.5));
+                    minor.add(new MoveTo(p1.getX(), Math.round(p1.getY()) + 0.5));
+                    minor.add(new LineTo(p2.getX(), Math.round(p2.getY()) + 0.5));
+                }
+            }
+
+            // render major
+            double gmydelta = gydelta * gmy;
+            double gmxdelta = gxdelta * gmx;
+            scaled = t.deltaTransform(gmxdelta, gmydelta);
+            if (scaled.getX() > 2) {
+                for (int i = 0, n = (int) Math.ceil((dw - gx0) / (gmxdelta)); i < n; i++) {
+                    double x = gx0 + i * gmxdelta;
+                    double x1 = x;
+                    double y1 = 0;
+                    double x2 = x;
+                    double y2 = dh;
+
+                    Point2D p1 = t.transform(x1, y1);
+                    Point2D p2 = t.transform(x2, y2);
+                    major.add(new MoveTo(Math.round(p1.getX()) + 0.5, p1.getY()));
+                    major.add(new LineTo(Math.round(p2.getX()) + 0.5, p2.getY()));
+                }
+            }
+            if (scaled.getY() > 2) {
+                for (int i = 0, n = (int) Math.ceil((dh - gy0) / (gmydelta)); i < n; i++) {
+                    double y = gy0 + i * gmydelta;
+                    double x1 = 0;
+                    double y1 = y;
+                    double x2 = dw;
+                    double y2 = y;
+
+                    Point2D p1 = t.transform(x1, y1);
+                    Point2D p2 = t.transform(x2, y2);
+                    major.add(new MoveTo(p1.getX(), Math.round(p1.getY()) + 0.5));
+                    major.add(new LineTo(p2.getX(), Math.round(p2.getY()) + 0.5));
                 }
             }
         }
@@ -319,6 +403,14 @@ public class GridConstrainer extends AbstractConstrainer {
 
     public BooleanProperty snapToGridProperty() {
         return snapToGrid;
+    }
+
+    public IntegerProperty majorYProperty() {
+        return majorY;
+    }
+
+    public IntegerProperty majorXProperty() {
+        return majorX;
     }
 
 }

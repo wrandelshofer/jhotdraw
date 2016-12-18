@@ -96,6 +96,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
     private Group drawingPane;
     private Pane overlaysPane;
 
+    private final static double INVSQRT2 = 1.0 / Math.sqrt(2);
+
     /**
      * The number of nodes that are maximally updated per frame.
      */
@@ -330,7 +332,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
             }
 
             // zoom towards the center of the drawing
-                /*ScrollPane scrollPane = getScrollPane();
+            /*ScrollPane scrollPane = getScrollPane();
                 if (scrollPane != null) {
                     scrollPane.setVvalue(0.5);
                     scrollPane.setHvalue(0.5);
@@ -549,9 +551,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
         toolPane.layout();
 
         overlaysPane.setClip(new Rectangle(0, 0, lw + padding * 2, lh + padding * 2));
-        
-        // drawingPane.setClip(new Rectangle(0,0,lw,lh));
 
+        // drawingPane.setClip(new Rectangle(0,0,lw,lh));
         rootPane.setPrefSize(lw + padding * 2, lh + padding * 2);
         rootPane.setMaxSize(lw + padding * 2, lh + padding * 2);
 
@@ -606,13 +607,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     /**
-     * Set drawingImageView to a non-null value to force rendering into a
-     * image. This will render the drawing without adding it to the scene
-     * graph.
+     * Set drawingImageView to a non-null value to force rendering into a image.
+     * This will render the drawing without adding it to the scene graph.
      */
     private ImageView drawingImageView = null;//new ImageView();
     private WritableImage drawingImage = null;
-    boolean renderIntoImage=false;
+    boolean renderIntoImage = false;
 
     private void handleDrawingChanged() {
         clearNodes();
@@ -885,8 +885,9 @@ public class SimpleDrawingView extends AbstractDrawingView {
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
         Figure f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), 0.0);
+
         if (f == null) {
-            f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), TOLERANCE);
+            f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), TOLERANCE / getZoomFactor());
         }
         return f;
     }
@@ -917,12 +918,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
     @Override
     public Figure findFigure(double vx, double vy, Set<Figure> figures) {
         Drawing dr = getDrawing();
-        Figure f = findFigureRecursiveInSet((Parent) getNode(dr), viewToWorld(vx, vy), figures);
+        Figure f = findFigureRecursiveInSet((Parent) getNode(dr), viewToWorld(vx, vy), figures, TOLERANCE / getZoomFactor());
 
         return f;
     }
 
-    private Figure findFigureRecursiveInSet(Parent p, Point2D pp, Set<Figure> figures) {
+    private Figure findFigureRecursiveInSet(Parent p, Point2D pp, Set<Figure> figures, double tolerance) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -930,12 +931,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
                 continue;
             }
             Point2D pl = n.parentToLocal(pp);
-            double localTolerance=n.parentToLocal(0,0).distance(n.parentToLocal(TOLERANCE,TOLERANCE));
+            double localTolerance = n.parentToLocal(0, 0).distance(n.parentToLocal(tolerance * INVSQRT2, tolerance * INVSQRT2));
             if (contains(n, pl, localTolerance)) {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null || !f.isSelectable() || !figures.contains(f)) {
                     if (n instanceof Parent) {
-                        f = findFigureRecursiveInSet((Parent) n, pl, figures);
+                        f = findFigureRecursiveInSet((Parent) n, pl, figures, localTolerance);
                     }
                 }
                 if (f != null && f.isSelectable() && figures.contains(f)) {
@@ -971,8 +972,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         } else if (node instanceof Group) {
             if (Geom.contains(node.getBoundsInLocal(), point, tolerance)) {
                 for (Node child : ((Group) node).getChildren()) {
-double localTolerance=                    child.parentToLocal(0, 0).distance(child.parentToLocal(tolerance,tolerance));
-                    if (contains(child, child.parentToLocal(point), localTolerance)) {
+                    if (contains(child, child.parentToLocal(point), tolerance)) {
                         return true;
                     }
                 }
@@ -1011,13 +1011,14 @@ double localTolerance=                    child.parentToLocal(0, 0).distance(chi
     }
 
     private void findFiguresRecursive(Parent p, Point2D pp, List<Figure> found, boolean decompose) {
+        double tolerance = TOLERANCE / getZoomFactor();
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
             Figure f1 = nodeToFigureMap.get(n);
             if (f1 != null && f1.isSelectable()) {
                 Point2D pl = n.parentToLocal(pp);
-                if (contains(n, pl, TOLERANCE)) { // only drill down if the parent contains the point
+                if (contains(n, pl, tolerance)) { // only drill down if the parent contains the point
                     Figure f = nodeToFigureMap.get(n);
                     if (f != null && f.isSelectable()) {
                         found.add(f);
@@ -1030,7 +1031,7 @@ double localTolerance=                    child.parentToLocal(0, 0).distance(chi
                 }
             } else {
                 Point2D pl = n.parentToLocal(pp);
-                if (contains(n, pl, TOLERANCE)) { // only drill down if the parent intersects the point
+                if (contains(n, pl, tolerance)) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
                         findFiguresRecursive((Parent) n, pl, found, decompose);
                     }

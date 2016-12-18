@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.prefs.Preferences;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -19,7 +20,6 @@ import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.StringConverterConverterWrapper;
 import org.jhotdraw8.text.XmlNumberConverter;
-import org.jhotdraw8.util.Resources;
 
 /**
  * FXML Controller class
@@ -37,6 +37,10 @@ public class GridInspector extends AbstractDrawingViewInspector {
     private TextField xField;
     @FXML
     private TextField yField;
+    @FXML
+    private TextField majorXField;
+    @FXML
+    private TextField majorYField;
 
     @FXML
     private TextField angleField;
@@ -79,37 +83,70 @@ public class GridInspector extends AbstractDrawingViewInspector {
         drawGridCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("drawGrid", newValue));
     }
-
+private GridConstrainer gridConstrainer;
     @Override
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
+        Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
+        ChangeListener<Number> prefsGridX=(o,oldv,newv)->prefs.putDouble("gridX", newv.doubleValue());
+        ChangeListener<Number> prefsGridY=(o,oldv,newv)->prefs.putDouble("gridY", newv.doubleValue());
+        ChangeListener<Number> prefsGridWidth=(o,oldv,newv)->prefs.putDouble("gridWidth", newv.doubleValue());
+        ChangeListener<Number> prefsGridAngle=(o,oldv,newv)->prefs.putDouble("gridAngle", newv.doubleValue());
+        ChangeListener<Number> prefsGridHeight=(o,oldv,newv)->prefs.putDouble("gridHeight", newv.doubleValue());
+        ChangeListener<Number> prefsGridMajorX=(o,oldv,newv)->prefs.putDouble("gridMajorX", newv.intValue());
+        ChangeListener<Number> prefsGridMajorY=(o,oldv,newv)->prefs.putDouble("gridMajorY", newv.intValue());
+        
         if (oldValue != null) {
             heightField.textProperty().unbind();
             widthField.textProperty().unbind();
             xField.textProperty().unbind();
             yField.textProperty().unbind();
+            majorXField.textProperty().unbind();
+            majorYField.textProperty().unbind();
             angleField.textProperty().unbind();
             drawGridCheckBox.selectedProperty().unbind();
             snapToGridCheckBox.selectedProperty().unbind();
         }
+        if (gridConstrainer!=null) {
+            gridConstrainer.xProperty().removeListener(prefsGridX);
+            gridConstrainer.yProperty().removeListener(prefsGridY);
+            gridConstrainer.widthProperty().removeListener(prefsGridWidth);
+            gridConstrainer.heightProperty().removeListener(prefsGridHeight);
+            gridConstrainer.angleProperty().removeListener(prefsGridAngle);
+            gridConstrainer.majorXProperty().removeListener(prefsGridMajorX);
+            gridConstrainer.majorYProperty().removeListener(prefsGridMajorY);
+        }
         if (newValue != null) {
-            GridConstrainer gc;
-            if (newValue.getConstrainer() instanceof GridConstrainer) {
-                gc = (GridConstrainer) newValue.getConstrainer();
+            if (false&&(newValue.getConstrainer() instanceof GridConstrainer)) {
+                gridConstrainer = (GridConstrainer) newValue.getConstrainer();
             } else {
-                gc = new GridConstrainer(0, 0, 10, 10, 45);
-                newValue.setConstrainer(gc);
+                
+                gridConstrainer = new GridConstrainer(prefs.getDouble("gridX",0), prefs.getDouble("gridY",0), prefs.getDouble("gridWidth",10), prefs.getDouble("gridHeight",10),
+                        prefs.getDouble("gridangle",45),prefs.getInt("gridMajorX", 5),prefs.getInt("gridMajorY",5));
+                newValue.setConstrainer(gridConstrainer);
             }
             StringConverter<Number> cc
                     = new StringConverterConverterWrapper<>(new XmlNumberConverter());
-            heightField.textProperty().bindBidirectional(gc.heightProperty(), cc);
-            widthField.textProperty().bindBidirectional(gc.widthProperty(), cc);
-            xField.textProperty().bindBidirectional(gc.xProperty(), cc);
-            yField.textProperty().bindBidirectional(gc.yProperty(), cc);
-            angleField.textProperty().bindBidirectional(gc.angleProperty(), cc);
-            gc.drawGridProperty().set(drawGridCheckBox.isSelected());
-            drawGridCheckBox.selectedProperty().bindBidirectional(gc.drawGridProperty());
-            gc.snapToGridProperty().set(snapToGridCheckBox.isSelected());
-            snapToGridCheckBox.selectedProperty().bindBidirectional(gc.snapToGridProperty());
+            heightField.textProperty().bindBidirectional(gridConstrainer.heightProperty(), cc);
+            widthField.textProperty().bindBidirectional(gridConstrainer.widthProperty(), cc);
+            xField.textProperty().bindBidirectional(gridConstrainer.xProperty(), cc);
+            yField.textProperty().bindBidirectional(gridConstrainer.yProperty(), cc);
+            majorXField.textProperty().bindBidirectional(gridConstrainer.majorXProperty(), cc);
+            majorYField.textProperty().bindBidirectional(gridConstrainer.majorYProperty(), cc);
+            angleField.textProperty().bindBidirectional(gridConstrainer.angleProperty(), cc);
+            gridConstrainer.drawGridProperty().set(drawGridCheckBox.isSelected());
+            drawGridCheckBox.selectedProperty().bindBidirectional(gridConstrainer.drawGridProperty());
+            gridConstrainer.snapToGridProperty().set(snapToGridCheckBox.isSelected());
+            snapToGridCheckBox.selectedProperty().bindBidirectional(gridConstrainer.snapToGridProperty());
+            
+        if (gridConstrainer!=null) {
+            gridConstrainer.xProperty().addListener(prefsGridX);
+            gridConstrainer.yProperty().addListener(prefsGridY);
+            gridConstrainer.widthProperty().addListener(prefsGridWidth);
+            gridConstrainer.heightProperty().addListener(prefsGridHeight);
+            gridConstrainer.angleProperty().addListener(prefsGridAngle);
+            gridConstrainer.majorXProperty().addListener(prefsGridMajorX);
+            gridConstrainer.majorYProperty().addListener(prefsGridMajorY);
+        }
         }
     }
 

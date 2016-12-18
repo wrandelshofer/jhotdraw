@@ -30,7 +30,11 @@ public interface Constrainer extends Observable {
     /**
      * Style class for constrainers which draw a grid.
      */
-    public final static String STYLECLASS_CONSTRAINER_GRID = "constrainer-grid";
+    public final static String STYLECLASS_CONSTRAINER_MINOR_GRID = "constrainer-minor-grid";
+    /**
+     * Style class for constrainers which draw a grid.
+     */
+    public final static String STYLECLASS_CONSTRAINER_MAJOR_GRID = "constrainer-major-grid";
 
     // ---
     // constant declarations

@@ -74,6 +74,7 @@ public class SliceFigure extends AbstractLeafFigure implements TransformableFigu
     public Node createNode(RenderContext drawingView) {
         Rectangle node= new Rectangle();
         node.setFill(new Color(0,1.0,0,0.5)) ;
+        node.setStroke(new Color(0,0,0,0.5));
         return node;
     }
 
