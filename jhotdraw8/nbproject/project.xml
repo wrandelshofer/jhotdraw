@@ -16,8 +16,6 @@
             <name>jhotdraw8</name>
             <source-roots>
                 <root id="src.java.dir"/>
-                <root id="src.java3.dir"/>
-                <root id="src.java4.dir"/>
                 <root id="src.java2.dir"/>
             </source-roots>
             <test-roots>
