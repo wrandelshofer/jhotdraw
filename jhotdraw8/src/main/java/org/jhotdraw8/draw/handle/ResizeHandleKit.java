@@ -8,21 +8,14 @@ import java.util.Collection;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import static java.lang.Math.*;
@@ -51,6 +44,7 @@ public class ResizeHandleKit {
      *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
+     * @param styleclass the style class that should be assigned to the handles
      */
     static public void addCornerResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
         handles.add(southEast(f, styleclass));
@@ -65,6 +59,7 @@ public class ResizeHandleKit {
      *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
+     * @param styleclass the style class that should be assigned to the handles
      */
     static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
         handles.add(south(f, styleclass));
@@ -79,6 +74,7 @@ public class ResizeHandleKit {
      *
      * @param f the figure which will own the handles
      * @param handles the list to which the handles should be added
+     * @param styleclass the style class that should be assigned to the handles
      */
     static public void addResizeHandles(Figure f, Collection<Handle> handles, String styleclass) {
         addCornerResizeHandles(f, handles, styleclass);
@@ -89,6 +85,7 @@ public class ResizeHandleKit {
      * Creates a handle for the specified figure.
      *
      * @param owner the figure which will own the handle
+     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle south(Figure owner, String styleclass) {
@@ -99,6 +96,7 @@ public class ResizeHandleKit {
      * Creates a handle for the specified figure.
      *
      * @param owner the figure which will own the handle
+     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle southEast(Figure owner, String styleclass) {
@@ -109,6 +107,7 @@ public class ResizeHandleKit {
      * Creates a handle for the specified figure.
      *
      * @param owner the figure which will own the handle
+     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle southWest(Figure owner, String styleclass) {
@@ -119,6 +118,7 @@ public class ResizeHandleKit {
      * Creates a handle for the specified figure.
      *
      * @param owner the figure which will own the handle
+     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle north(Figure owner, String styleclass) {
@@ -129,6 +129,7 @@ public class ResizeHandleKit {
      * Creates a handle for the specified figure.
      *
      * @param owner the figure which will own the handle
+     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle northEast(Figure owner, String styleclass) {
@@ -139,6 +140,7 @@ public class ResizeHandleKit {
      * Creates a handle for the specified figure.
      *
      * @param owner the figure which will own the handle
+     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle northWest(Figure owner, String styleclass) {
@@ -149,6 +151,7 @@ public class ResizeHandleKit {
      * Creates a handle for the specified figure.
      *
      * @param owner the figure which will own the handle
+     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle east(Figure owner, String styleclass) {
@@ -159,6 +162,7 @@ public class ResizeHandleKit {
      * Creates a handle for the specified figure.
      *
      * @param owner the figure which will own the handle
+     * @param styleclass the style class that should be assigned to the handles
      * @return the handle
      */
     static public Handle west(Figure owner, String styleclass) {

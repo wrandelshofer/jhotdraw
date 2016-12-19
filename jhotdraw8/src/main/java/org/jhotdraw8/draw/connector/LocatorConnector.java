@@ -22,7 +22,6 @@ public class LocatorConnector extends AbstractConnector {
     /**
      * Creates a new instance
      *
-     * @param target the target figure
      * @param locator the locator that should be used
      */
     public LocatorConnector(Locator locator) {

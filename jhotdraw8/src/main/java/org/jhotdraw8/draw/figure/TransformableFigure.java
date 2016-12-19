@@ -262,37 +262,6 @@ public interface TransformableFigure extends TransformCacheableFigure {
         reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
-    /**
-     * XXX remove me, because this is actually not so smart.
-     */
-    default void reshapeInParentSmart(Transform transform) {
-        if (hasCenterTransforms() || hasTransforms()) {
-            if (transform instanceof Translate) {
-                Translate translate = (Translate) transform;
-                set(TRANSLATE_X, get(TRANSLATE_X) + translate.getTx());
-                set(TRANSLATE_Y, get(TRANSLATE_Y) + translate.getTy());
-            } else {
-                List<Transform> transforms = getLocalToParentAsList(false);
-                clearTransforms();
-                switch (transforms.size()) {
-                    case 0:
-                        set(TRANSFORMS, Collections.singletonList(transform));
-                        break;
-                    case 1:
-                        transforms.add(0, transform);
-                        set(TRANSFORMS, transforms);
-                        break;
-                    default:
-                        transforms.set(0, transform.createConcatenation(transforms.get(0)));
-                        set(TRANSFORMS, transforms);
-                        break;
-                }
-            }
-        } else {
-            reshapeInLocal(getParentToLocal().createConcatenation(transform));
-        }
-    }
-
     @Override
     default void reshapeInParent(Transform transform) {
         if (hasCenterTransforms() || hasTransforms()) {

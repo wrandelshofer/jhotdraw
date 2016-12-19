@@ -37,7 +37,7 @@ public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, 
     /**
      * The URI of the image.
      * <p>
-     * This property is also set on the ImageView node, so that {@link SVGExportOutputFormat} can pick it up.
+     * This property is also set on the ImageView node, so that {@link org.jhotdraw8.svg.SvgExportOutputFormat} can pick it up.
      */
     public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
 
