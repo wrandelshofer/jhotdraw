@@ -7,11 +7,7 @@ package org.jhotdraw8.draw.inspector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.application.Platform;
@@ -31,12 +27,14 @@ import javafx.scene.control.cell.TextFieldTreeTableCell;
 import org.jhotdraw8.collection.ExpandedTreeItemIterator;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.HideableFigure;
+import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw8.draw.model.FigureTreePresentationModel;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
+import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
 import org.jhotdraw8.text.CssWordListConverter;
-import org.jhotdraw8.util.Resources;
 
 /**
  * FXML Controller class
@@ -49,8 +47,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreeTableView<Figure> treeView;
 
     @FXML
+    private TreeTableColumn<Figure, Boolean> visibleColumn;
+    @FXML
+    private TreeTableColumn<Figure, Boolean> lockedColumn;
+    @FXML
     private TreeTableColumn<Figure, String> typeColumn;
-
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
     @FXML
@@ -99,12 +100,22 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 cell -> new DrawingModelFigureProperty<String>(model.getModel(),
                         cell.getValue().getValue(), StyleableFigure.ID)
         );
+        visibleColumn.setCellValueFactory(
+                cell -> new DrawingModelFigureProperty<Boolean>(model.getModel(),
+                        cell.getValue().getValue(), HideableFigure.VISIBLE)
+        );
+        lockedColumn.setCellValueFactory(
+                cell -> new DrawingModelFigureProperty<Boolean>(model.getModel(),
+                        cell.getValue().getValue(), LockableFigure.LOCKED)
+        );
         classesColumn.setCellValueFactory(
                 cell -> Bindings.createStringBinding(() -> wordListConverter.toString(cell.getValue().getValue().get(StyleableFigure.STYLE_CLASS)),
                         new DrawingModelFigureProperty<ObservableList<String>>(model.getModel(),
                                 cell.getValue().getValue(), StyleableFigure.STYLE_CLASS))
         );
         idColumn.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
+        visibleColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
+        lockedColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
         treeView.setRoot(model.getRoot());
         model.getRoot().setExpanded(true);
         treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

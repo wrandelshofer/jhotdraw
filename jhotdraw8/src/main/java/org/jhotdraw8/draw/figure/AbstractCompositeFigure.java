@@ -14,6 +14,7 @@ import org.jhotdraw8.collection.IndexedSet;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.Key;
 
 /**
  * This base class can be used to implement figures which support child figures.
@@ -63,13 +64,15 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
                 return super.doAdd(index, element, true);// linear search!
             }
         }
+        
+        
     }
     /**
      * The name of the children property.
      */
     public final static String CHILDREN_PROPERTY = "children";
 
-    private final ObservableList<Figure> children = new ChildList();
+    private final ChildList children = new ChildList();
 
     /*
     {
@@ -184,5 +187,22 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
      */
     protected void layoutImpl() {
 
+    }
+
+    @Override
+    public void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
+        final Figure source = event.getSource();
+        if (source!=null&&source.getParent()==this){
+               children.fireItemUpdated(children.indexOf(source));
+        }
+        super.firePropertyChangeEvent(event); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
+        if (source != null && source.getParent() == this) {
+               children.fireItemUpdated(children.indexOf(source));
+        }
+        super.firePropertyChangeEvent(source, type, key, oldValue, newValue); //To change body of generated methods, choose Tools | Templates.
     }
 }

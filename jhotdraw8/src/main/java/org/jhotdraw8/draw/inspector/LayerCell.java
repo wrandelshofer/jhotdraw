@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.inspector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
@@ -19,21 +19,19 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.Layer;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw8.util.Resources;
 
 /**
  * FXML Controller class.
- * 
- * XXX all keys must be customizable
- * FIXME property binding in this class is a mess
+ *
+ * XXX all keys must be customizable FIXME property binding in this class is a
+ * mess
  *
  * @author werni
  */
@@ -57,14 +55,14 @@ public class LayerCell extends ListCell<Figure> {
     private Figure item;
 
     private TextField editField;
-    
+
     private final LayersInspector inspector;
 
     public LayerCell(DrawingModel drawingModel, LayersInspector inspector) {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingModel, inspector);
     }
 
-    public LayerCell(URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector ) {
+    public LayerCell(URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
         this.drawingModel = drawingModel;
         this.inspector = inspector;
         init(fxmlUrl);
@@ -73,8 +71,8 @@ public class LayerCell extends ListCell<Figure> {
     private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
-        
-        Resources rsrc=Labels.getResources();
+
+        Resources rsrc = Labels.getResources();
         loader.setResources(rsrc);
 
         try (InputStream in = fxmlUrl.openStream()) {
@@ -83,11 +81,11 @@ public class LayerCell extends ListCell<Figure> {
             throw new InternalError(ex);
         }
 
-        visibleCheckBox.selectedProperty().addListener(o -> commitLayerVisible());
-        lockedCheckBox.selectedProperty().addListener(o -> commitLayerLocked());
-        
-        visibleCheckBox.setGraphic(rsrc.getLargeIconProperty("object.visible.checkBox.selected",LayerCell.class));
-        lockedCheckBox.setGraphic(rsrc.getLargeIconProperty("object.locked.checkBox.selected",LayerCell.class));
+        visibleCheckBox.selectedProperty().addListener(this::commitLayerVisible);
+        lockedCheckBox.selectedProperty().addListener(this::commitLayerLocked);
+
+        visibleCheckBox.setGraphic(rsrc.getLargeIconProperty("object.visible.checkBox.selected", LayerCell.class));
+        lockedCheckBox.setGraphic(rsrc.getLargeIconProperty("object.locked.checkBox.selected", LayerCell.class));
     }
 
     @Override
@@ -115,12 +113,12 @@ public class LayerCell extends ListCell<Figure> {
                 }
             } else {
                 setText(getItemText());
-                if (editField!=null&&editField.getParent() != null) {
+                if (editField != null && editField.getParent() != null) {
                     node.getChildren().remove(editField);
                 }
             }
             setGraphic(node);
-            Integer count = inspector.getSelectionCount((Layer)item);
+            Integer count = inspector.getSelectionCount((Layer) item);
             selectionLabel.setText(count == null ? "" : "(" + count.toString() + ")");
 
             visibleCheckBox.setSelected(item.get(HideableFigure.VISIBLE));
@@ -130,7 +128,9 @@ public class LayerCell extends ListCell<Figure> {
     }
 
     /**
-     * Creates a {@code LayerCell} cell factory for use in {@code ListView} controls.
+     * Creates a {@code LayerCell} cell factory for use in {@code ListView}
+     * controls.
+     *
      * @param drawingModel the drawing model
      * @param inspector the layers inspector
      * @return callback
@@ -139,13 +139,13 @@ public class LayerCell extends ListCell<Figure> {
         return list -> new LayerCell(drawingModel, inspector);
     }
 
-    private void commitLayerVisible() {
+    private void commitLayerVisible(Observable o) {
         if (!isUpdating) {
             drawingModel.set(item, HideableFigure.VISIBLE, visibleCheckBox.isSelected());
         }
     }
 
-    private void commitLayerLocked() {
+    private void commitLayerLocked(Observable o) {
         if (!isUpdating) {
             drawingModel.set(item, LockableFigure.LOCKED, lockedCheckBox.isSelected());
         }
@@ -157,6 +157,7 @@ public class LayerCell extends ListCell<Figure> {
 
     /**
      * Returns the {@link StringConverter} used in this cell.
+     *
      * @return the converter
      */
     public final StringConverter<Figure> getConverter() {
@@ -169,7 +170,7 @@ public class LayerCell extends ListCell<Figure> {
             return;
         }
         super.startEdit();
-        updateItem(getItem(),false);
+        updateItem(getItem(), false);
         editField.selectAll();
         editField.requestFocus();
     }
@@ -177,7 +178,7 @@ public class LayerCell extends ListCell<Figure> {
     @Override
     public void cancelEdit() {
         super.cancelEdit();
-        updateItem(getItem(),false);
+        updateItem(getItem(), false);
     }
 
     private String getItemText() {

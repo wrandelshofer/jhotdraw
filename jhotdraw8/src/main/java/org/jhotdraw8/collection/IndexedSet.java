@@ -726,5 +726,10 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.ORDERED);
     }
-
+    
+    public void fireItemUpdated(int index) {
+        beginChange();
+        nextUpdate(index);
+        endChange();
+    }
 }

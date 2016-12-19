@@ -72,8 +72,8 @@ public class LayersInspector extends AbstractDrawingInspector {
     private Supplier<Layer> layerFactory;
 
     private Node node;
-    
-    private HashMap<Layer, Integer> selectionCount=new HashMap<>();
+
+    private HashMap<Layer, Integer> selectionCount = new HashMap<>();
 
     private ChangeListener<Layer> selectedLayerHandler = new ChangeListener<Layer>() {
         @Override
@@ -133,7 +133,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             }
         }
         for (int i = 0, n = children.size(); i < n; i++) {
-            selectionCount.put((Layer)children.get(i),count[i]);
+            selectionCount.put((Layer) children.get(i), count[i]);
         }
         layers.fireUpdated(0, layers.size());
     }
@@ -269,8 +269,8 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     int getSelectionCount(Layer item) {
-        Integer value= selectionCount.get(item);
-        return value ==null?0:value;
+        Integer value = selectionCount.get(item);
+        return value == null ? 0 : value;
     }
 
     /**
@@ -365,6 +365,9 @@ public class LayersInspector extends AbstractDrawingInspector {
                 DrawingModel model = drawingView.getModel();
                 LinkedHashSet<Figure> selection = new LinkedHashSet<>(drawingView.getSelectedFigures());
                 for (Figure f : selection) {
+                    if (f instanceof Layer) {
+                        continue;
+                    }
                     if (f.getLayer() == from) {
                         // add child moves a figure, so we do not need to
                         // remove it explicitly

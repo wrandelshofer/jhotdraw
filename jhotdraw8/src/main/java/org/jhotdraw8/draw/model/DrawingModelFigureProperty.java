@@ -14,23 +14,28 @@ import org.jhotdraw8.event.WeakListener;
 
 /**
  * This property is weakly bound to a property of a figure in the DrawingModel.
+ * <p>
+ * If the key is not declared by the figure, then the value will always be null.
  *
  * @author Werner Randelshofer
  */
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
-    private DrawingModel model;
-    private Figure figure;
-    private Key<T> key;
-    private Listener<DrawingModelEvent> modelListener;
-    private WeakListener<DrawingModelEvent> weakListener;
+    private final DrawingModel model;
+    private final Figure figure;
+    private final Key<T> key;
+    private final Listener<DrawingModelEvent> modelListener;
+    private final WeakListener<DrawingModelEvent> weakListener;
+    private final boolean isDeclaredKey;
 
     public DrawingModelFigureProperty(DrawingModel model, Figure figure, Key<T> key) {
         this.model = model;
         this.key = key;
         this.figure = figure;
-
-        if (key != null) {
+        this.isDeclaredKey = Figure.getDeclaredAndInheritedKeys(figure.getClass()).contains(key);
+        
+        
+        if (key != null&&isDeclaredKey) {
             this.modelListener = (event) -> {
                 if (event.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED
                         && this.figure == event.getFigure() && this.key == event.getKey()) {
@@ -43,13 +48,16 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
             };
 
             model.addDrawingModelListener(weakListener = new WeakListener<DrawingModelEvent>(modelListener, model::removeDrawingModelListener));
+        }else{
+            modelListener=null;
+            weakListener=null;
         }
     }
 
     @Override
     public T getValue() {
         @SuppressWarnings("unchecked")
-        T temp = figure.get(key);
+        T temp = isDeclaredKey?figure.get(key):null;
         return temp;
     }
 
@@ -70,10 +78,6 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
         super.unbind();
         if (model != null) {
             model.removeDrawingModelListener(weakListener);
-            modelListener = null;
-            model = null;
-            key = null;
-            weakListener = null;
         }
     }
 }
