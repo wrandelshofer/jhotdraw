@@ -20,7 +20,6 @@ import static org.jhotdraw8.geom.Geom.clamp;
  * Parses the following EBNF:
  * </p>
  * <pre>
- * <pre>
  * CssColor ::= NamedColor | HexColor | ColorFunction  ;
  * NamedColor ::= TT_IDENT;
  * HexColor ::= ('#'|'0x') , ( hexdigit{3} | hexdigit{4} | hexdigit{6} | hexdigit{8} );
@@ -29,7 +28,6 @@ import static org.jhotdraw8.geom.Geom.clamp;
  * RGBAFunction ::= "rgba(" ,(number, number, number | percentage, percentage, percentage ),number ")";
  * HSBFunction ::= "hsb(" , number,  percentage, percentage, ")";
  * HSBAFunction ::= "hsba(" , number,  percentage, percentage, number ")";
- * <pre>
  * </pre>
  *
  * @author Werner Randelshofer
@@ -113,10 +111,10 @@ public class CssColorConverter implements Converter<CssColor> {
     /**
      * Parses a CSS color.
      *
-     * @param tt
-     * @return
-     * @throws ParseException
-     * @throws IOException
+     * @param tt the tokenizer
+     * @return the parsed color
+     * @throws ParseException if parsing fails
+     * @throws IOException if IO fails
      */
     public CssColor parseColor(CssTokenizerInterface tt) throws ParseException, IOException {
         CssColor color = null;

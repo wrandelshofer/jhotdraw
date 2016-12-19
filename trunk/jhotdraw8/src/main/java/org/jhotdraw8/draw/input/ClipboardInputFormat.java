@@ -23,11 +23,11 @@ import org.jhotdraw8.draw.model.DrawingModel;
 public interface ClipboardInputFormat {
 
     /**
-     * Reads a Drawing from the clipboard URI.
+     * Reads a Drawing from the clipboard.
      *
      * @param clipboard The clipboard.
-     * @param drawing The contents of the clipboard
-     * is added to this drawing.
+     * @param model the drawing model over which updates of the drawing must be performed.
+     * @param drawing The contents of the clipboard is added to this drawing.
      * @param layer If you provide a non-null value, the contents of the clipboard
      * is added to this layer. Otherwise the content is added into an unspecified layer.
      * @return the figures that were read from the clipboard

@@ -13,8 +13,7 @@ import javafx.scene.control.TreeItem;
 /**
  * Iterates in preorder sequence over all expanded tree items.
  *
- * @param <T> The type of the {@link #getValue() value} property within
- * TreeItem.
+ * @param <T> The type of the value property within TreeItem.
  * @author Werner Randelshofer
  * @version $$Id$$
  */
