@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.css.CssTokenizer;
 import java.io.StringReader;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;

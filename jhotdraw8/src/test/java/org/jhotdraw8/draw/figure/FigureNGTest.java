@@ -5,14 +5,11 @@
 package org.jhotdraw8.draw.figure;
 
 import java.util.HashSet;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
@@ -24,21 +21,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.Drawing;
-import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.Layer;
 import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.event.Listener;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.DataProvider;
@@ -304,6 +296,11 @@ public class FigureNGTest {
 
         @Override
         public void transformInParent(Transform transform) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void transformInLocal(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }

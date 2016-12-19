@@ -5,7 +5,6 @@
  */
 package org.jhotdraw8.draw;
 
-import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;

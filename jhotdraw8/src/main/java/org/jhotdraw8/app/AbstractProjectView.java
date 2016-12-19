@@ -5,12 +5,9 @@
 package org.jhotdraw8.app;
 
 import org.jhotdraw8.collection.HierarchicalMap;
-import java.net.URI;
 import java.util.IdentityHashMap;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

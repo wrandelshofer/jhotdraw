@@ -5,7 +5,6 @@
 package org.jhotdraw8.text;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.HashMap;

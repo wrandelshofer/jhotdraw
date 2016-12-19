@@ -11,8 +11,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jhotdraw8.draw.io.IdFactory;
 import org.jhotdraw8.draw.io.SimpleIdFactory;
 import org.jhotdraw8.io.StreamPosTokenizer;

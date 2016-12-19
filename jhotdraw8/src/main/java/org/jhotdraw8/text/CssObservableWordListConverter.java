@@ -9,7 +9,6 @@ import java.nio.CharBuffer;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import javafx.collections.FXCollections;
