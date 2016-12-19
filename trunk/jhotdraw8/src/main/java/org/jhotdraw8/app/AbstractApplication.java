@@ -8,8 +8,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
@@ -17,9 +15,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
-import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
@@ -69,28 +65,24 @@ public abstract class AbstractApplication<V extends ProjectView<V>> extends java
                 ex.printStackTrace();
             }
         }
-        recentUris.get().addListener(new SetChangeListener<URI>() {
-            @Override
-            public void onChanged(SetChangeListener.Change<? extends URI> change) {
-                StringBuilder buf = new StringBuilder();
-                int skip = recentUris.size() - getMaxNumberOfRecentUris();
-                for (URI uri : recentUris) {
-                    if (--skip > 0) {
-                        continue;
-                    }
-                    if (buf.length() != 0) {
-                        buf.append('\t');
-                    }
-                    String str = uri.toString();
-                    if (str.indexOf("\t") != -1) {
-                        System.err.println("AbstractApplication warning can't store URI in preferences. URI=" + uri);
-                        continue;
-                    }
-                    buf.append(str);
+        recentUris.get().addListener((SetChangeListener.Change<? extends URI> change) -> {
+            StringBuilder buf = new StringBuilder();
+            int skip = recentUris.size() - getMaxNumberOfRecentUris();
+            for (URI uri : recentUris) {
+                if (--skip > 0) {
+                    continue;
                 }
-                prefs.put(applicationId+".recentUris", buf.toString());
+                if (buf.length() != 0) {
+                    buf.append('\t');
+                }
+                String str = uri.toString();
+                if (str.contains("\t")) {
+                    System.err.println("AbstractApplication warning can't store URI in preferences. URI=" + uri);
+                    continue;
+                }
+                buf.append(str);
             }
-
+            prefs.put(applicationId+".recentUris", buf.toString());
         });
     }
 

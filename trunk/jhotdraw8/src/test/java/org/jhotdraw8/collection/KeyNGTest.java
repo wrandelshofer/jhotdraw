@@ -16,7 +16,6 @@ import javafx.collections.ObservableMap;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw8.text.CssPaintConverter;
-import org.jhotdraw8.text.CssPaintableConverter;
 import org.jhotdraw8.text.StringConverterConverterWrapper;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;

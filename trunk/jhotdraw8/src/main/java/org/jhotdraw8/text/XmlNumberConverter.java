@@ -4,15 +4,6 @@
  */
 package org.jhotdraw8.text;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.CharBuffer;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
-import java.util.Locale;
-import org.jhotdraw8.draw.io.IdFactory;
-
 /**
  * Converts a {@code Double} into the XML String representation.
  * <p>

@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.css.DocumentSelectorModel;
-import org.jhotdraw8.css.CssParser;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.ParseException;

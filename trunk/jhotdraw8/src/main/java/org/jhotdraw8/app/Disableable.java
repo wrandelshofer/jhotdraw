@@ -5,7 +5,6 @@
 package org.jhotdraw8.app;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
 
 /**

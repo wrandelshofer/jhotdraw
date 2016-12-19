@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.beans;
 
-import org.jhotdraw8.beans.ClampedDoubleProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import static org.testng.Assert.*;

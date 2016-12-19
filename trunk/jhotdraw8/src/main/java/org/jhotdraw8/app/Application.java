@@ -8,7 +8,6 @@ import java.net.URI;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Consumer;
 import javafx.beans.property.IntegerProperty;
 import org.jhotdraw8.collection.HierarchicalMap;
 import javafx.beans.property.ReadOnlyObjectProperty;

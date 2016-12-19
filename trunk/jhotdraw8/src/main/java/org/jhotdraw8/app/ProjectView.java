@@ -5,14 +5,10 @@
 package org.jhotdraw8.app;
 
 import org.jhotdraw8.collection.HierarchicalMap;
-import java.net.URI;
-import java.util.concurrent.CompletionStage;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 

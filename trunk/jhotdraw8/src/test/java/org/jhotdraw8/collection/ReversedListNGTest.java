@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.collection.ReversedList;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;

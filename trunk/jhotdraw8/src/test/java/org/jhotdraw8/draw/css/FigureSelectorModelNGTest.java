@@ -4,10 +4,7 @@
  */
 package org.jhotdraw8.draw.css;
 
-import java.util.Set;
-import javafx.beans.property.MapProperty;
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
@@ -16,7 +13,6 @@ import org.jhotdraw8.text.Paintable;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
-import static org.testng.Assert.fail;
 import org.testng.annotations.Test;
 
 /**

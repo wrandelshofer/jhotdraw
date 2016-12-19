@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.util;
 
-import javafx.scene.Node;
-
 /**
  * Decodes a resource value.
  *

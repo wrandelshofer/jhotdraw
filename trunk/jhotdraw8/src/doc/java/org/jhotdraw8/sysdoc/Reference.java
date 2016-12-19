@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.sysdoc;
 
-import java.nio.file.Path;
-
 /**
  * Identifies a reference in a text fragment.
  *

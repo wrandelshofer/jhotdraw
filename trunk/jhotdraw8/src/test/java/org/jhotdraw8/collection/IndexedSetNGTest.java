@@ -4,9 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.collection.IndexedSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javafx.collections.ListChangeListener;
 import static org.testng.Assert.*;
