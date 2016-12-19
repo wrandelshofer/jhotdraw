@@ -19,7 +19,7 @@
   <property name="manifest.application-name" value="${ant.project.name}"/>
   <property name="manifest.implementation-version" value="${version}"/>
   <property name="manifest.implementation-vendor" value="org.jhotdraw"/>
-  <property name="manifest.main-class" value="org.jhotdraw.samples.grapher.GrapherApplication"/>
+  <property name="manifest.main-class" value="org.jhotdraw8.samples.grapher.GrapherApplication"/>
 
   <property name="build" value="build"/>
   <property name="bin" value="bin"/>
@@ -337,7 +337,7 @@
         <attribute name="Application-Name" value="${manifest.application-name}"/>
         <attribute name="Application-Library-Allowable-Codebase" value="*"/>
         <attribute name="Caller-Allowable-Codebase" value="*"/>
-        <attribute name="Entry-Point" value="ch.systransis.arl.editor.EditorMain"/>
+        <attribute name="Entry-Point" value="${manifest.main-class}"/>
         <attribute name="Trusted-Only" value="false"/>
         <attribute name="Trusted-Library" value="false"/>
       </manifest>
