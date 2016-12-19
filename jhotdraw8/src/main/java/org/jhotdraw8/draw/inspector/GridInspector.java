@@ -92,8 +92,8 @@ private GridConstrainer gridConstrainer;
         ChangeListener<Number> prefsGridWidth=(o,oldv,newv)->prefs.putDouble("gridWidth", newv.doubleValue());
         ChangeListener<Number> prefsGridAngle=(o,oldv,newv)->prefs.putDouble("gridAngle", newv.doubleValue());
         ChangeListener<Number> prefsGridHeight=(o,oldv,newv)->prefs.putDouble("gridHeight", newv.doubleValue());
-        ChangeListener<Number> prefsGridMajorX=(o,oldv,newv)->prefs.putDouble("gridMajorX", newv.intValue());
-        ChangeListener<Number> prefsGridMajorY=(o,oldv,newv)->prefs.putDouble("gridMajorY", newv.intValue());
+        ChangeListener<Number> prefsGridMajorX=(o,oldv,newv)->prefs.putInt("gridMajorX", newv.intValue());
+        ChangeListener<Number> prefsGridMajorY=(o,oldv,newv)->prefs.putInt("gridMajorY", newv.intValue());
         
         if (oldValue != null) {
             heightField.textProperty().unbind();
