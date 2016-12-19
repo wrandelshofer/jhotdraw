@@ -12,6 +12,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.draw.RenderContext;
 import org.jhotdraw8.draw.RenderingIntent;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
@@ -74,7 +75,8 @@ public class SliceFigure extends AbstractLeafFigure implements TransformableFigu
     public Node createNode(RenderContext drawingView) {
         Rectangle node= new Rectangle();
         node.setFill(new Color(0,1.0,0,0.5)) ;
-        node.setStroke(new Color(0,0,0,0.5));
+        node.setStroke(Color.DARKRED);
+        node.setStrokeType(StrokeType.INSIDE);
         return node;
     }
 
