@@ -319,11 +319,17 @@ public interface DrawingModel extends Observable {
         }
     }
 
-    /** Invokes "transformInParent" on the specified figure. */
-    public void transformInParent(Figure child, Transform transform);
+    /** Invokes "transformInParent" on the specified figure.
+     * @param figure a figure
+     * @param transform the desired transformation
+     */
+    public void transformInParent(Figure figure, Transform transform);
     
-    /** Invokes "transformInLocal" on the specified figure. */
-    public void transformInLocal(Figure child, Transform transform);
+    /** Invokes "transformInLocal" on the specified figure.
+     * @param figure a figure
+     * @param transform the desired transformation
+     */
+    public void transformInLocal(Figure figure, Transform transform);
 
     /** Removes the specified key from the figure.
      * 
