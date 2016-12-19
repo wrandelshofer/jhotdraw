@@ -10,7 +10,6 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static java.lang.Math.*;
-import javafx.application.Platform;
 import javafx.scene.Cursor;
 import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.model.DrawingModel;

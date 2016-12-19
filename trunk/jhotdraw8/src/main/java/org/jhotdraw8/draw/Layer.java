@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.draw;
 
-import org.jhotdraw8.draw.figure.HideableFigure;
+import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * Defines a <i>layer</i> of a {@link Drawing}.
@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.figure.HideableFigure;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Layer extends HideableFigure {
+public interface Layer extends Figure {
     /**
      * The CSS type selector for a layer figure is {@code "layer"}.
      */

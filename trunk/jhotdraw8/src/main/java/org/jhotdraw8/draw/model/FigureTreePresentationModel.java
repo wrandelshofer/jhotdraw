@@ -80,7 +80,6 @@ public class FigureTreePresentationModel {
                     structuralChange = true;
                     break;
                 case NODE_CHANGED:
-                    handleNodeInvalidated(f);
                     break;
                 case LAYOUT_CHANGED:
                     break;
@@ -95,6 +94,7 @@ public class FigureTreePresentationModel {
                 case DEPENDENCY_CHANGED:
                 case TRANSFORM_CHANGED:
                 case PROPERTY_VALUE_CHANGED:
+                    handleNodeInvalidated(f);
                     break;
                 default:
                     throw new UnsupportedOperationException(event.getEventType()

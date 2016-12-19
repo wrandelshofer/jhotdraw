@@ -5,9 +5,13 @@
 package org.jhotdraw8.beans;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
@@ -109,5 +113,14 @@ public interface PropertyBean {
             result.put(k, k.get(map));
         }
         return result;
+    }
+
+    default <T> ObjectProperty<T> getProperty(Key<T> key) {
+        return new MapEntryProperty<Key<?> ,Object,T>(getProperties(),key,key.getValueType());
+    }
+    
+    @SuppressWarnings("unchecked")
+    default <T> ObservableValue<T> getObservableValue(Key<T> key) {
+        return( ObservableValue<T> )( ObservableValue<Object> ) Bindings.valueAt(getProperties(),key);
     }
 }

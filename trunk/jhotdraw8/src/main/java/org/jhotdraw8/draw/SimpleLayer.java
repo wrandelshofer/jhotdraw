@@ -12,10 +12,10 @@ import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import java.util.List;
 import javafx.collections.ObservableList;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.handle.HandleType;
  * @version $Id$
  */
 public class SimpleLayer extends AbstractCompositeFigure
-        implements Layer, StyleableFigure, LockableFigure, NonTransformableFigure {
+        implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure {
 
     @Override
     public void reshapeInLocal(Transform transform) {
