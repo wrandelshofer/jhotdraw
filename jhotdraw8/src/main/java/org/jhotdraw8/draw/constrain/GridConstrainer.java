@@ -165,6 +165,8 @@ public class GridConstrainer extends AbstractConstrainer {
      * @param height The width of the grid. 0 turns the grid of for the y-axis.
      * @param angle The angular grid (in degrees). 0 turns the grid off for
      * rotations.
+     * @param majorx the interval for major grid lines on the x-axis
+     * @param majory the interval for major grid lines on the y-axis
      */
     public GridConstrainer(double x, double y, double width, double height, double angle, int majorx, int majory) {
         this.x.set(x);
