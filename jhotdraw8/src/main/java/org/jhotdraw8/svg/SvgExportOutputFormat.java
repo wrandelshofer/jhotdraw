@@ -898,7 +898,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
             elem.setAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
         }
         if (!shape.getStrokeDashArray().isEmpty()) {
-            elem.setAttribute("stroke-dasharray", nbList.toString(shape.getStrokeDashArray()));
+            elem.setAttribute("stroke-dasharray", nbList.toStringFromCollection(shape.getStrokeDashArray()));
         }
         if (shape.getStrokeDashOffset() != 0) {
             elem.setAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
@@ -940,7 +940,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
             elem.setAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
         }
         if (!style.getDashArray().isEmpty()) {
-            elem.setAttribute("stroke-dasharray", nbList.toString(style.getDashArray()));
+            elem.setAttribute("stroke-dasharray", nbList.toStringFromCollection(style.getDashArray()));
         }
         if (style.getDashOffset() != 0) {
             elem.setAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));

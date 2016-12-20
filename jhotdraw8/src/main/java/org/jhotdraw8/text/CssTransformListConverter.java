@@ -20,6 +20,7 @@ import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.io.IdFactory;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Affine;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.css.CssTokenizerInterface;
 
 /**
@@ -65,12 +66,12 @@ import org.jhotdraw8.css.CssTokenizerInterface;
  * @version $Id: CssTransformListConverter.java 1120 2016-01-15 17:37:49Z
  * rawcoder $
  */
-public class CssTransformListConverter implements Converter<List<Transform>> {
+public class CssTransformListConverter implements Converter<ImmutableObservableList<Transform>> {
 
     private final CssSizeConverter nb = new CssSizeConverter();
 
     @Override
-    public void toString(Appendable buf, IdFactory idFactory, List<Transform> txs) throws IOException {
+    public void toString(Appendable buf, IdFactory idFactory, ImmutableObservableList<Transform> txs) throws IOException {
         if (txs.isEmpty()) {
             buf.append("none");
             return;
@@ -208,13 +209,13 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
     }
 
     @Override
-    public List<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableObservableList<Transform> fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         List<Transform> txs = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT && tt.currentStringValue().equals("none")) {
             in.position(in.limit());
-            return txs;
+            return ImmutableObservableList.emptyList();
         } else {
             tt.pushBack();
         }
@@ -430,12 +431,12 @@ public class CssTransformListConverter implements Converter<List<Transform>> {
         }
 
         in.position(in.limit());
-        return txs;
+        return new ImmutableObservableList<>(txs);
     }
 
     @Override
-    public List<Transform> getDefaultValue() {
-        return Collections.emptyList();
+    public ImmutableObservableList<Transform> getDefaultValue() {
+        return ImmutableObservableList.emptyList();
     }
 
     @Override

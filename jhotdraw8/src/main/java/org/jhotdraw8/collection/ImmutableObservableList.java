@@ -19,21 +19,38 @@ public final class ImmutableObservableList<T> extends ObservableListBase<T> impl
 
     private final Object[] array;
 
-     private final static ImmutableObservableList<Object> EMPTY=new ImmutableObservableList<Object>(new Object[0]);
+     private final static ImmutableObservableList<Object> EMPTY=new ImmutableObservableList<Object>(true,new Object[0]);
      
    public ImmutableObservableList(Collection<T> copyItems) {
         this.array = copyItems.toArray();
     }
-
-    private ImmutableObservableList(Object[] array) {
+    private ImmutableObservableList(boolean isPrivate,Object... array) {
         this.array = array;
     }
 
+    public static <T> ImmutableObservableList<T> of(T item) {
+return new ImmutableObservableList<>(true,item);
+    }
     public static <T> ImmutableObservableList<T> add(Collection<T> collection, T item) {
         Object[] a = new Object[collection.size() + 1];
         a = collection.toArray(a);
         a[a.length - 1] = item;
-        return new ImmutableObservableList<>(a);
+        return new ImmutableObservableList<>(true,a);
+    }
+    public static <T> ImmutableObservableList<T> add(Collection<T> collection,int index, T item) {
+        Object[] a = new Object[collection.size()];
+        a = collection.toArray(a);
+        Object[] b = new Object[a.length + 1];
+        System.arraycopy(a, 0, b, 0, index);
+        System.arraycopy(a, index + 1, b, index+1, b.length - index);
+        b[index]=item;
+        return new ImmutableObservableList<>(true,b);
+    }
+    public static <T> ImmutableObservableList<T> set(Collection<T> collection,int index, T item) {
+        Object[] a = new Object[collection.size()];
+        a = collection.toArray(a);
+        a[index]=item;
+        return new ImmutableObservableList<>(true,a);
     }
 
     public static <T> ImmutableObservableList<T> remove(Collection<T> collection, int index) {
@@ -42,7 +59,7 @@ public final class ImmutableObservableList<T> extends ObservableListBase<T> impl
         Object[] b = new Object[a.length - 1];
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index + 1, b, index, b.length - index);
-        return new ImmutableObservableList<>(b);
+        return new ImmutableObservableList<>(true,b);
     }
 
     public static <T> ImmutableObservableList<T> remove(Collection<T> collection, T item) {
@@ -53,6 +70,10 @@ public final class ImmutableObservableList<T> extends ObservableListBase<T> impl
     @SuppressWarnings("unchecked")
     public static <T> ImmutableObservableList<T> emptyList() {
         return (ImmutableObservableList<T>) EMPTY;
+    }
+    @SuppressWarnings("unchecked")
+    public static <T> ImmutableObservableList<T> of() {
+        return emptyList();
     }
 
     @Override

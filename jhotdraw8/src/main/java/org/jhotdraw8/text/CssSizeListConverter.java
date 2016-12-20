@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.io.IdFactory;
@@ -21,38 +22,44 @@ import org.jhotdraw8.draw.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssSizeListConverter implements Converter<List<Double>> {
+public class CssSizeListConverter implements Converter<ImmutableObservableList<Double>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,choice,0#none|1#{1,list,{2,size}|[ ]+}}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, List<Double> value) throws IOException {
-        if (value==null) {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<Double> value) throws IOException {
+        toStringFromCollection(out, idFactory, value);
+    }
+
+    public void toStringFromCollection(Appendable out, IdFactory idFactory, Collection<Double> value) throws IOException {
+        if (value == null) {
             out.append("none");
             return;
         }
         Object[] v = new Object[value.size() + 2];
         v[0] = value.size();
         v[1] = value.size();
+        Iterator<Double> iter = value.iterator();
         for (int i = 0, n = value.size(); i < n; i++) {
-            v[i + 2] = value.get(i);
+            v[i + 2] = iter.next();
         }
         formatter.toString(out, v);
     }
 
     @Override
-    public List<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableObservableList<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         ArrayList<Double> l = new ArrayList<>();
         CssTokenizerInterface tt = new CssTokenizer(buf);
         tt.setSkipWhitespaces(true);
         if (tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
             tt.skipWhitespace();
-            return l;
-        }else{
+            return new ImmutableObservableList<>(l);
+        } else {
             tt.pushBack();
         }
-        
-        Loop:  while (true) {
+
+        Loop:
+        while (true) {
             switch (tt.nextToken()) {
                 case CssTokenizerInterface.TT_DIMENSION: {
                     double value = tt.currentNumericValue().doubleValue();
@@ -82,7 +89,7 @@ public class CssSizeListConverter implements Converter<List<Double>> {
                             value = Double.NaN;
                             break;
                         default:
-                            throw new ParseException("number expected:"+tt.currentStringValue(),tt.getStartPosition());
+                            throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
                     }
                     l.add(value);
                     break;
@@ -92,11 +99,25 @@ public class CssSizeListConverter implements Converter<List<Double>> {
             }
         }
         tt.skipWhitespace();
-        return l;
+        return new ImmutableObservableList<>(l);
     }
 
     @Override
-    public List<Double> getDefaultValue() {
-        return Collections.emptyList();
+    public ImmutableObservableList<Double> getDefaultValue() {
+        return ImmutableObservableList.emptyList();
+    }
+
+    public String toStringFromCollection(Collection<Double> value) {
+        StringBuilder out = new StringBuilder();
+        try {
+            toStringFromCollection(out, value);
+        } catch (IOException ex) {
+            throw new InternalError(ex);
+        }
+        return out.toString();
+    }
+
+    public void toStringFromCollection(Appendable out, Collection<Double> value) throws IOException {
+        toStringFromCollection(out, null, value);
     }
 }

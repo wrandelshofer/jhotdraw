@@ -4,12 +4,12 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.List;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -22,11 +22,11 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  *
  * @author Werner Randelshofer
  */
-public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> implements StyleableMapAccessor<List<Double>> {
+public class DoubleListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Double>> implements StyleableMapAccessor<ImmutableObservableList<Double>> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, List<Double>> cssMetaData;
+    private final CssMetaData<?, ImmutableObservableList<Double>> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -44,7 +44,7 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> 
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleListStyleableFigureKey(String name, List<Double> defaultValue) {
+    public DoubleListStyleableFigureKey(String name, ImmutableObservableList<Double> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -55,33 +55,33 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<List<Double>> 
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public DoubleListStyleableFigureKey(String name, DirtyMask mask, List<Double> defaultValue) {
-        super(name, List.class, new Class<?>[]{Double.class}, mask, defaultValue);
+    public DoubleListStyleableFigureKey(String name, DirtyMask mask, ImmutableObservableList<Double> defaultValue) {
+        super(name, ImmutableObservableList.class, new Class<?>[]{Double.class}, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<List<Double>>> function = s -> {
+        Function<Styleable, StyleableProperty<ImmutableObservableList<Double>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, List<Double>> converter
-                = new StyleConverterConverterWrapper<List<Double>>(new CssSizeListConverter());
-        CssMetaData<Styleable, List<Double>> md
-                = new SimpleCssMetaData<Styleable, List<Double>>(property, function,
+        final StyleConverter<String, ImmutableObservableList<Double>> converter
+                = new StyleConverterConverterWrapper<ImmutableObservableList<Double>>(new CssSizeListConverter());
+        CssMetaData<Styleable, ImmutableObservableList<Double>> md
+                = new SimpleCssMetaData<Styleable, ImmutableObservableList<Double>>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?, List<Double>> getCssMetaData() {
+    public CssMetaData<?, ImmutableObservableList<Double>> getCssMetaData() {
         return cssMetaData;
     }
 
 
-    private Converter<List<Double>> converter;
+    private Converter<ImmutableObservableList<Double>> converter;
 
     @Override
-    public Converter<List<Double>> getConverter() {
+    public Converter<ImmutableObservableList<Double>> getConverter() {
         if (converter == null) {
             converter = new CssSizeListConverter();
         }
