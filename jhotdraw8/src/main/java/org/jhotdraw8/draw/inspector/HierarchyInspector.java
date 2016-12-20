@@ -14,7 +14,6 @@ import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.ObservableList;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +24,7 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import org.jhotdraw8.collection.ExpandedTreeItemIterator;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -110,7 +110,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
         classesColumn.setCellValueFactory(
                 cell -> Bindings.createStringBinding(() -> wordListConverter.toString(cell.getValue().getValue().get(StyleableFigure.STYLE_CLASS)),
-                        new DrawingModelFigureProperty<ObservableList<String>>(model.getModel(),
+                        new DrawingModelFigureProperty<ImmutableObservableList<String>>(model.getModel(),
                                 cell.getValue().getValue(), StyleableFigure.STYLE_CLASS))
         );
         idColumn.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());

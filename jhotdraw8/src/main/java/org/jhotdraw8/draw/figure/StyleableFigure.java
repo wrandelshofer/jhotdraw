@@ -4,18 +4,18 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
+import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableObservableSet;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.ObservableWordListFigureKey;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
-import org.jhotdraw8.draw.key.FigureKey;
 
 /**
  * {@code StyleableFigure} supports styling of a figure using
@@ -39,14 +39,14 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    public static ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableList());
+    public static ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableObservableList.emptyList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<ObservableSet<PseudoClass>> PSEUDO_CLASS_STATES = new SimpleFigureKey<>("pseudoClassStates", ObservableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), FXCollections.emptyObservableSet());
+    public static SimpleFigureKey<ImmutableObservableSet<PseudoClass>> PSEUDO_CLASS_STATES = new SimpleFigureKey<>("pseudoClassStates", ImmutableObservableSet.class, new Class<?>[]{PseudoClass.class}, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableObservableSet.emptySet());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.

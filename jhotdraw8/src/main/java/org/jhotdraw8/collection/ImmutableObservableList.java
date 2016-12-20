@@ -1,0 +1,100 @@
+/* @(#)ImmutableObservableList.java
+ * Copyright (c) 2016 by the authors and contributors of JHotDraw.
+ * You may only use this file in compliance with the accompanying license terms.
+ */
+package org.jhotdraw8.collection;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
+
+/**
+ * An immutable observable list.
+ *
+ * @author Werner Randelshofer
+ * @version $$Id$$
+ */
+public final class ImmutableObservableList<T> extends ObservableListBase<T> implements ObservableList<T> {
+
+    private final Object[] array;
+
+     private final static ImmutableObservableList<Object> EMPTY=new ImmutableObservableList<Object>(new Object[0]);
+     
+   public ImmutableObservableList(Collection<T> copyItems) {
+        this.array = copyItems.toArray();
+    }
+
+    private ImmutableObservableList(Object[] array) {
+        this.array = array;
+    }
+
+    public static <T> ImmutableObservableList<T> add(Collection<T> collection, T item) {
+        Object[] a = new Object[collection.size() + 1];
+        a = collection.toArray(a);
+        a[a.length - 1] = item;
+        return new ImmutableObservableList<>(a);
+    }
+
+    public static <T> ImmutableObservableList<T> remove(Collection<T> collection, int index) {
+        Object[] a = new Object[collection.size()];
+        a = collection.toArray(a);
+        Object[] b = new Object[a.length - 1];
+        System.arraycopy(a, 0, b, 0, index);
+        System.arraycopy(a, index + 1, b, index, b.length - index);
+        return new ImmutableObservableList<>(b);
+    }
+
+    public static <T> ImmutableObservableList<T> remove(Collection<T> collection, T item) {
+        ArrayList<T> a = new ArrayList<T>(collection);
+        a.remove(item);
+        return new ImmutableObservableList<>(a);
+    }
+    @SuppressWarnings("unchecked")
+    public static <T> ImmutableObservableList<T> emptyList() {
+        return (ImmutableObservableList<T>) EMPTY;
+    }
+
+    @Override
+    public T get(int index) {
+        @SuppressWarnings("unchecked")
+        T value = (T) array[index];
+        return value;
+    }
+
+    @Override
+    public int size() {
+        return array.length;
+    }
+
+    @Override @SafeVarargs 
+    public final boolean addAll(T... elements) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override @SafeVarargs
+    public final boolean setAll(T... elements) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean setAll(Collection<? extends T> col) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override @SafeVarargs
+    public final boolean removeAll(T... elements) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override @SafeVarargs
+    public final boolean retainAll(T... elements) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void remove(int from, int to) {
+        throw new UnsupportedOperationException();
+    }
+
+}
