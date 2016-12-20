@@ -30,7 +30,7 @@ import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure,ResizableFigure {
+public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure,ResizableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Line"}.
@@ -87,6 +87,7 @@ public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigu
         applyHideableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
         applyStrokeableFigureProperties(lineNode);
+        applyFillableFigureProperties(lineNode);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(lineNode);
         final ImmutableObservableList<Point2D> points = getStyled(POINTS);

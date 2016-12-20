@@ -293,6 +293,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                 break;
 
             }
+            case '+':
             case '.':
             case '0':
             case '1':

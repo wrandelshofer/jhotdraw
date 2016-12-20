@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
+import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -60,6 +62,16 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         }
     }
 
+    public E parse(CssTokenizerInterface tt) throws ParseException, IOException {
+        if (tt.nextToken()!=CssTokenizer.TT_IDENT) throw new ParseException("identifier expected",tt.getStartPosition());
+        
+        String identifier=tt.currentStringValue();
+        try {
+            return Enum.valueOf(enumClass, identifier.toUpperCase().replace('-', '_'));
+        } catch (IllegalArgumentException e) {
+            throw new ParseException("illegal identifier:"+identifier, tt.getStartPosition());
+        }
+    }
     @Override
     public E getDefaultValue() {
         try {
