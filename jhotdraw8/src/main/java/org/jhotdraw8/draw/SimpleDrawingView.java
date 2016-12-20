@@ -49,6 +49,7 @@ import org.jhotdraw8.draw.handle.Handle;
 import static java.lang.Math.*;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -65,16 +66,13 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.util.ReversedList;
 
 /**
  * FXML Controller class
@@ -268,11 +266,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
     /**
      * Selection tolerance. Selectable margin around a figure.
      */
-    private final double TOLERANCE = 5;
+    public final static double TOLERANCE = 5;
     /**
      * Handle selection tolerance (square of radius).
      */
-    private final double HANDLE_TOLERANCE = 25;
+    public final static double HANDLE_TOLERANCE = 25;
 
     /**
      * Installs a handler for changes in the selectionProperty.
@@ -360,7 +358,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
-    private final Map<Node, Handle> nodeToHandleMap = new IdentityHashMap<>();
+    private final Map<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
     /**
      * Maps each JavaFX node to a figure in the drawing.
      */
@@ -868,10 +866,15 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
     @Override
     public Handle findHandle(double vx, double vy) {
-        for (Map.Entry<Node, Handle> e : nodeToHandleMap.entrySet()) {
-            Point2D p = e.getValue().getLocationInView();
-            if (p != null && Geom.length2(vx, vy, p.getX(), p.getY()) <= HANDLE_TOLERANCE) {
-                return e.getValue();
+        for (Map.Entry<Node, Handle> e : new ReversedList<>(nodeToHandleMap.entrySet())) {
+   final Node node = e.getKey();            final Handle handle = e.getValue();
+            Point2D p = handle.getLocationInView();
+            if (p != null) {
+                if (Geom.length2(vx, vy, p.getX(), p.getY()) <= HANDLE_TOLERANCE) {
+                    return handle;
+                }
+            }else{
+                if (contains(node,new Point2D(vx,vy),TOLERANCE)) return handle;
             }
         }
         /*
@@ -969,10 +972,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
-            if (shape.getFill()==null) {
-              return  Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(),point.getY()), tolerance);
-            }else return shape.contains(point);
-          
+            if (shape.getFill() == null) {
+                return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()), tolerance);
+            } else {
+                return shape.contains(point);
+            }
+
         } else if (node instanceof Rectangle) {
             return Geom.contains(node.getBoundsInLocal(), point, tolerance);
         } else if (node instanceof Shape) {// no special treatment for other shapes
@@ -1175,6 +1180,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
         if (handlesAreValid) {
             handlesAreValid = false;
         }
+    }
+    public void recreateHandles() {
+            handlesAreValid = false;
+            recreateHandles=true;
+            repaint();
     }
 
     private void invalidateHandleNodes() {

@@ -116,6 +116,10 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     }
 
     @Override
+    public void trackMouseClicked(MouseEvent event, DrawingView view) {
+    }
+
+    @Override
     public void trackKeyPressed(KeyEvent event, DrawingView view) {
     }
 

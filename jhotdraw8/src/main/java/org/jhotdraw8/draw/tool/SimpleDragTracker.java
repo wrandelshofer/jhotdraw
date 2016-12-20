@@ -76,6 +76,9 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 // FIXME fire undoable edit
         //  fireToolDone();
     }
+    @Override
+    public void trackMouseClicked(MouseEvent event, DrawingView dv) {
+    }
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView view) {

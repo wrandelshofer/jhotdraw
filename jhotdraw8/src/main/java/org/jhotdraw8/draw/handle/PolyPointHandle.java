@@ -16,6 +16,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -27,23 +28,25 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  *
  * @author Werner Randelshofer
  */
-public class PointHandle extends AbstractHandle {
+public class PolyPointHandle extends AbstractHandle {
 
     private Point2D pickLocation;
-    private final MapAccessor<Point2D> pointKey;
+    private final MapAccessor<ImmutableObservableList<Point2D>> pointKey;
+    private final int pointIndex;
     private final Region node;
     private final String styleclass;
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
-    public PointHandle(Figure figure, MapAccessor<Point2D> pointKey) {
-        this(figure, STYLECLASS_HANDLE_POINT, pointKey);
+    public PolyPointHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> pointKey, int pointIndex) {
+        this(figure, pointKey,pointIndex, STYLECLASS_HANDLE_POINT);
     }
 
-    public PointHandle(Figure figure, String styleclass, MapAccessor<Point2D> pointKey) {
+    public PolyPointHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
+        this.pointIndex=pointIndex;
         this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
@@ -71,7 +74,8 @@ public class PointHandle extends AbstractHandle {
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
-        Point2D p = f.get(pointKey);
+        ImmutableObservableList<Point2D> list = f.get(pointKey);
+        Point2D p = list.get(pointIndex);
         pickLocation = p = t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
@@ -91,8 +95,8 @@ public class PointHandle extends AbstractHandle {
             // alt or control switches the constrainer off
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
-
-        view.getModel().set(getOwner(), pointKey, getOwner().worldToLocal(newPoint));
+        ImmutableObservableList<Point2D> list = owner.get(pointKey);
+        view.getModel().set(getOwner(), pointKey, ImmutableObservableList.set(list, pointIndex, getOwner().worldToLocal(newPoint)));
     }
 
     @Override

@@ -56,6 +56,14 @@ public interface Tracker {
      * @param evt an event
      * @param view a view
      */
+    void trackMouseClicked(MouseEvent evt, DrawingView view);
+
+    /**
+     * Handle input event forwarded from the parent Tool.
+     *
+     * @param evt an event
+     * @param view a view
+     */
     void trackMouseDragged(MouseEvent evt, DrawingView view);
 
     void trackKeyPressed(KeyEvent event, DrawingView view);

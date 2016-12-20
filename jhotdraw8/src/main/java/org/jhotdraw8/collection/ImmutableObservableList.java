@@ -29,6 +29,7 @@ public final class ImmutableObservableList<T> extends ObservableListBase<T> impl
         this.array = array;
     }
 
+    @SafeVarargs
     public static <T> ImmutableObservableList<T> of(T... items) {
         return new ImmutableObservableList<>(true, items);
     }
@@ -45,7 +46,7 @@ public final class ImmutableObservableList<T> extends ObservableListBase<T> impl
         a = collection.toArray(a);
         Object[] b = new Object[a.length + 1];
         System.arraycopy(a, 0, b, 0, index);
-        System.arraycopy(a, index + 1, b, index + 1, b.length - index);
+        System.arraycopy(a, index, b, index + 1, a.length - index);
         b[index] = item;
         return new ImmutableObservableList<>(true, b);
     }

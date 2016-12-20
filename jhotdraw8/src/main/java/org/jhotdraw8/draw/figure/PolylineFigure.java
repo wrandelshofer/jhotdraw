@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -20,11 +19,9 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.PointHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.PolyPointHandle;
+import org.jhotdraw8.draw.handle.PolylineOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
-import org.jhotdraw8.draw.locator.PointLocator;
 
 /**
  * A figure which draws a connected line segments.
@@ -32,7 +29,7 @@ import org.jhotdraw8.draw.locator.PointLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure {
+public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure,ResizableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Line"}.
@@ -109,13 +106,16 @@ public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigu
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
+            list.add(new PolylineOutlineHandle(this, null,Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-        } else if (handleType == HandleType.RESIZE) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
+            list.add(new PolylineOutlineHandle(this, null,Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+        //} else if (handleType == HandleType.RESIZE) {
+        //    list.add(new PolylineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
         } else if (handleType == HandleType.POINT) {
-            list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            list.add(new PolylineOutlineHandle(this, POINTS,Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            for (int i=0,n=get(POINTS).size();i<n;i++) {
+                list.add(new PolyPointHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_POINT));
+            }
         } else {
             super.createHandles(handleType, list);
         }
@@ -134,6 +134,17 @@ public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigu
     @Override
     public boolean isLayoutable() {
         return false;
+    }
+    
+    public static double[] toPointArray(Figure f) {
+        List<Point2D> points=f.get(POINTS);
+        double[] a = new double[points.size()*2];
+        for (int i=0,n=points.size(),j=0;i<n;i++,j+=2) {
+            Point2D p = points.get(i);
+            a[j]=p.getX();
+            a[j+1]=p.getY();
+        }
+        return a;
     }
 
 }
