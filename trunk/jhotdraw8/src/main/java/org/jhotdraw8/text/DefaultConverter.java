@@ -34,13 +34,14 @@ public class DefaultConverter implements Converter<Object> {
     public Object fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
         buf.position(buf.limit());
-        return "null".equals(str)? null:str;
+        return "null".equals(str) ? null : str;
     }
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Object value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
+
     @Override
     public String getDefaultValue() {
         return "null";

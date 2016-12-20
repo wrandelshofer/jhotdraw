@@ -14,7 +14,8 @@ import javafx.beans.property.SimpleObjectProperty;
  * AbstractDocumentView.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $$Id: AbstractDocumentView.java 1169 2016-12-11 12:51:19Z rawcoder
+ * $$
  */
 public abstract class AbstractDocumentView extends AbstractProjectView<DocumentView> implements DocumentView {
 

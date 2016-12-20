@@ -34,6 +34,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
 
     /**
      * Creates a new instance with the specified name.
+     *
      * @param name the name of the accessor
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
@@ -94,6 +95,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAcces
         yKey.remove(a);
         return oldValue;
     }
+
     @Override
     public boolean isNullable() {
         return false;

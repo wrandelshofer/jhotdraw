@@ -14,14 +14,14 @@ import javafx.scene.input.DataFormat;
 
 /**
  * OutputFormat for clipboard.
- * 
+ *
  * @design.pattern Drawing Strategy, Strategy.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface ClipboardOutputFormat {
-    
+
     /**
      * Writes a Drawing into a clipboard
      *
@@ -31,9 +31,9 @@ public interface ClipboardOutputFormat {
      * @throws java.io.IOException if an IO error occurs
      */
     default void write(Map<DataFormat, Object> out, Drawing drawing) throws IOException {
-      write(out,drawing,Collections.singleton(drawing));
+        write(out, drawing, Collections.singleton(drawing));
     }
-    
+
     /**
      * Writes a selection of figures from a Drawing into a clipboard
      *

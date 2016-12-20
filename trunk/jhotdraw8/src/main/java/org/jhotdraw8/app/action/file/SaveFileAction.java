@@ -57,6 +57,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
     public SaveFileAction(Application<DocumentView> app, DocumentView view, boolean saveAs) {
         this(app, view, ID, saveAs);
     }
+
     /**
      * Creates a new instance.
      *

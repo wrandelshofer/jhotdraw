@@ -20,7 +20,8 @@ import org.jhotdraw8.app.ProjectView;
  * {@code AbstractSelectionAction} acts on the selection of a target component.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: AbstractSelectionAction.java 1169 2016-12-11 12:51:19Z rawcoder
+ * $
  */
 public abstract class AbstractSelectionAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
 
@@ -28,36 +29,41 @@ public abstract class AbstractSelectionAction<V extends ProjectView<V>> extends 
     private Node target;
     private final ChangeListener<V> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
-        if (newValue == null || newValue.getNode()== null) {
+        if (newValue == null || newValue.getNode() == null) {
             disabled.set(true);
         } else {
             Scene s = newValue.getNode().getScene();
-            if (target==null) {
-            disabled.bind(
-                    s.focusOwnerProperty().isNull().or(app.disabledProperty()).or(newValue.disabledProperty()).or(Bindings.isNotEmpty(disablers)));
+            if (target == null) {
+                disabled.bind(
+                        s.focusOwnerProperty().isNull().or(app.disabledProperty()).or(newValue.disabledProperty()).or(Bindings.isNotEmpty(disablers)));
             } else {
-            disabled.bind(
-                    s.focusOwnerProperty().isNotEqualTo(target).or(app.disabledProperty()).or(newValue.disabledProperty()).or(Bindings.isNotEmpty(disablers)));
+                disabled.bind(
+                        s.focusOwnerProperty().isNotEqualTo(target).or(app.disabledProperty()).or(newValue.disabledProperty()).or(Bindings.isNotEmpty(disablers)));
             }
         }
     };
 
-    /** Creates a new instance.
-     * @param app the application */
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     */
     public AbstractSelectionAction(Application<V> app) {
         this(app, null);
     }
-    /** Creates a new instance.
-     * @param app the application 
-    * @param target the target node
-    */
+
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     * @param target the target node
+     */
     public AbstractSelectionAction(Application<V> app, Node target) {
         super(app);
-        this.target=target;
-            
-        
+        this.target = target;
+
         app.activeViewProperty().addListener(activeViewListener);
         activeViewListener.changed(null, null, app.getActiveView());
-        
+
     }
 }

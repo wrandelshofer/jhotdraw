@@ -8,16 +8,20 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 
 /**
  * EditableComponent.
- * 
- * @design.pattern EditableComponent Adapter, Adapter.
- * Provides a common API for GUI components which support editing.
- * 
+ *
+ * @design.pattern EditableComponent Adapter, Adapter. Provides a common API for
+ * GUI components which support editing.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface EditableComponent {
-    /** The name of the selectionEmpty property. */
-    public final static String SELECTION_EMPTY="selectionEmpty";
+
+    /**
+     * The name of the selectionEmpty property.
+     */
+    public final static String SELECTION_EMPTY = "selectionEmpty";
+
     // ---
     // selection actions
     // ---
@@ -30,40 +34,44 @@ public interface EditableComponent {
      * Clears the selection.
      */
     void clearSelection();
+
     /**
-     * Returns true if the selection is empty.
-     * This is a bound property.
+     * Returns true if the selection is empty. This is a bound property.
+     *
      * @return true if empty
      */
     ReadOnlyBooleanProperty selectionEmptyProperty();
-    
+
     // ---
     // edit actions on selection
     // ---
     /**
-     * Deletes the selected region or the component at (or after) the
-     * caret position.
+     * Deletes the selected region or the component at (or after) the caret
+     * position.
      */
     void deleteSelection();
+
     /**
      * Duplicates the selected region.
      */
     void duplicateSelection();
-    
+
     /**
      * Transfers the contents of the current selection to the clipboard,
      * removing the current selection.
      */
     void cut();
+
     /**
-     * Transfers the contents of the current selection to the clipboard,
-     * leaving the current selection.
+     * Transfers the contents of the current selection to the clipboard, leaving
+     * the current selection.
      */
     void copy();
+
     /**
-     * Transfers the contents from the clipboard replacing the
-     * current selection. If there is no selection, the contents in the
-     * clipboard is inserted at the current insertion point.
+     * Transfers the contents from the clipboard replacing the current
+     * selection. If there is no selection, the contents in the clipboard is
+     * inserted at the current insertion point.
      */
     void paste();
 }

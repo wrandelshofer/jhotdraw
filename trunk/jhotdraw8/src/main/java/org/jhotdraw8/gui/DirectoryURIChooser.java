@@ -11,11 +11,14 @@ import javafx.stage.Window;
 
 /**
  * FileURIChooser.
+ *
  * @author Werner Randelshofer
  */
 public class DirectoryURIChooser implements URIChooser {
 
-    /** The associated file chooser object. */
+    /**
+     * The associated file chooser object.
+     */
     private final DirectoryChooser chooser = new DirectoryChooser();
 
     public DirectoryChooser getDirectoryChooser() {
@@ -25,7 +28,7 @@ public class DirectoryURIChooser implements URIChooser {
     @Override
     public URI showDialog(Window parent) {
         File f = chooser.showDialog(parent);
-        
-        return f==null?null:f.toURI();
+
+        return f == null ? null : f.toURI();
     }
 }

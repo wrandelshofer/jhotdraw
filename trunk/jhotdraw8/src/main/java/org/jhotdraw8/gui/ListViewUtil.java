@@ -40,7 +40,9 @@ public class ListViewUtil {
         private EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                if (event.isConsumed()) return;
+                if (event.isConsumed()) {
+                    return;
+                }
                 EventType<DragEvent> t = event.getEventType();
                 if (t == DragEvent.DRAG_DONE) {
                     onDragDone(event);
@@ -68,7 +70,9 @@ public class ListViewUtil {
 
             @Override
             public void handle(MouseEvent event) {
-                if (event.isConsumed()) return;
+                if (event.isConsumed()) {
+                    return;
+                }
                 if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
                     @SuppressWarnings("unchecked")
                     ListCell<T> draggedCell = (ListCell<T>) event.getSource();
@@ -93,7 +97,9 @@ public class ListViewUtil {
 
             @Override
             public void handle(DragEvent event) {
-                if (event.isConsumed()) return;
+                if (event.isConsumed()) {
+                    return;
+                }
                 EventType<DragEvent> t = event.getEventType();
                 if (t == DragEvent.DRAG_DROPPED) {
                     onDragDropped(event);
@@ -110,9 +116,9 @@ public class ListViewUtil {
                 }
                 TransferMode[] mode;
                 if (reorderingOnly) {
-                    mode = (listView == gestureTargetListView) ? new TransferMode[]{TransferMode.MOVE} :  TransferMode.NONE;
+                    mode = (listView == gestureTargetListView) ? new TransferMode[]{TransferMode.MOVE} : TransferMode.NONE;
                 } else {
-                    mode = (listView == gestureTargetListView) ? new TransferMode[]{TransferMode.MOVE} :new TransferMode[]{TransferMode.COPY};
+                    mode = (listView == gestureTargetListView) ? new TransferMode[]{TransferMode.MOVE} : new TransferMode[]{TransferMode.COPY};
                 }
 
                 return mode;
@@ -123,7 +129,7 @@ public class ListViewUtil {
                 if (isAcceptable) {
                     boolean success = false;
                     TransferMode[] mode = acceptModes(event);
-                    if (mode.length==0) {
+                    if (mode.length == 0) {
                         return;
                     }
                     event.acceptTransferModes(mode);
@@ -195,10 +201,10 @@ public class ListViewUtil {
             boolean reorderingOnly) {
         DnDSupport<T> dndSupport = new DnDSupport<T>(listView, clipboardIO, reorderingOnly);
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
-                ListCell<T> cell = cellFactory.call(lv);
-                cell.addEventHandler(DragEvent.DRAG_DONE, dndSupport.cellDragHandler);
-                cell.addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
-                return cell;
+            ListCell<T> cell = cellFactory.call(lv);
+            cell.addEventHandler(DragEvent.DRAG_DONE, dndSupport.cellDragHandler);
+            cell.addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
+            return cell;
         };
         listView.setCellFactory(dndCellFactory);
         listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);

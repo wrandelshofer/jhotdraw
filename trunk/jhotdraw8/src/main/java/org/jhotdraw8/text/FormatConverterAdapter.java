@@ -16,17 +16,18 @@ import java.text.ParsePosition;
  * Allows to use a {@code Converter} with the {@code java.text.Format} API.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: FormatConverterAdapter.java 1149 2016-11-18 11:00:10Z rawcoder
+ * $
  */
 public class FormatConverterAdapter extends Format {
-    private final static long serialVersionUID = 1L;
 
+    private final static long serialVersionUID = 1L;
 
     private final Converter<Object> converter;
 
     public FormatConverterAdapter(Converter<?> converter) {
         @SuppressWarnings("unchecked")
-        Converter<Object> temp=(Converter<Object>) converter;
+        Converter<Object> temp = (Converter<Object>) converter;
         this.converter = temp;
     }
 
@@ -39,8 +40,8 @@ public class FormatConverterAdapter extends Format {
     @Override
     public Object parseObject(String source, ParsePosition pos) {
         try {
-            CharBuffer buf=CharBuffer.wrap(source);
-            Object value= converter.fromString(buf,null);
+            CharBuffer buf = CharBuffer.wrap(source);
+            Object value = converter.fromString(buf, null);
             pos.setIndex(buf.position());
             return value;
         } catch (ParseException ex) {

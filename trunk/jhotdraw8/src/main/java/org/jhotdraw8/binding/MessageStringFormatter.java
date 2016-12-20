@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.binding;
 
 import com.sun.javafx.binding.StringConstant;
@@ -22,15 +21,20 @@ import javafx.collections.ObservableList;
  * value using a choice: {@code {0,choice,0#false|1#true} }
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: MessageStringFormatter.java 1149 2016-11-18 11:00:10Z rawcoder
+ * $
  */
 public abstract class MessageStringFormatter extends StringBinding {
 
     private static Object extractValue(Object obj) {
-        Object value= obj instanceof ObservableValue ? ((ObservableValue<?>)obj).getValue() : obj;
+        Object value = obj instanceof ObservableValue ? ((ObservableValue<?>) obj).getValue() : obj;
         // since message format can not handle booleans, we convert them to 1 and 0
-        if (Boolean.TRUE.equals(value)) return 1;
-        if (Boolean.FALSE.equals(value)) return 0;
+        if (Boolean.TRUE.equals(value)) {
+            return 1;
+        }
+        if (Boolean.FALSE.equals(value)) {
+            return 0;
+        }
         return value;
     }
 
@@ -52,7 +56,7 @@ public abstract class MessageStringFormatter extends StringBinding {
         }
         return dependencies.toArray(new ObservableValue<?>[dependencies.size()]);
     }
-    
+
     public static StringExpression format(final String format, final Object... args) {
         if (format == null) {
             throw new NullPointerException("Format cannot be null.");
@@ -87,5 +91,3 @@ public abstract class MessageStringFormatter extends StringBinding {
         return formatter;
     }
 }
-
-

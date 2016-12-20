@@ -109,7 +109,7 @@ public class UngroupAction<V extends ProjectView<V>> extends AbstractSelectedAct
         if (groupTransform.isIdentity()) {
             groupTransform = null;
         }
-        boolean isGroupTranslateScaleRotateOnly=group.get(TransformableFigure.TRANSFORMS)==null||group.get(TransformableFigure.TRANSFORMS).isEmpty();
+        boolean isGroupTranslateScaleRotateOnly = group.get(TransformableFigure.TRANSFORMS) == null || group.get(TransformableFigure.TRANSFORMS).isEmpty();
 
         int index = parent.getChildren().indexOf(group);
         newSelection.addAll(group.getChildren());
@@ -133,7 +133,7 @@ public class UngroupAction<V extends ProjectView<V>> extends AbstractSelectedAct
                    model.set(child,TransformableFigure.TRANSFORMS, newTransforms);
                 }*/
             }
-       }
+        }
 
         model.removeFromParent(group);
     }

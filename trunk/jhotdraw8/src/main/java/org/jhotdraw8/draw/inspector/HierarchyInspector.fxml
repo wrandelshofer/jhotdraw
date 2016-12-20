@@ -6,19 +6,19 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <TreeTableView fx:id="treeView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="240.0" styleClass="flush" BorderPane.alignment="CENTER">
-        <columns>
-            <TreeTableColumn fx:id="visibleColumn" prefWidth="75.0" text="%object.visible.text" />
-            <TreeTableColumn fx:id="lockedColumn" prefWidth="75.0" text="%object.locked.text" />
-          <TreeTableColumn fx:id="typeColumn" maxWidth="1.7976931348623157E308" prefWidth="160.0" sortable="false" text="%object.type.text" />
-          <TreeTableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" prefWidth="120.0" sortable="false" text="%object.id.text" />
-            <TreeTableColumn fx:id="classesColumn" prefWidth="160.0" sortable="false" text="%object.styleClasses.text" />
-        </columns>
-      </TreeTableView>
-   </center>
-   <styleClass>
-      <String fx:value="inspector" />
-      <String fx:value="flush" />
-   </styleClass>
+  <center>
+    <TreeTableView fx:id="treeView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="240.0" styleClass="flush" BorderPane.alignment="CENTER">
+      <columns>
+        <TreeTableColumn fx:id="visibleColumn" prefWidth="75.0" text="%object.visible.text" />
+        <TreeTableColumn fx:id="lockedColumn" prefWidth="75.0" text="%object.locked.text" />
+        <TreeTableColumn fx:id="typeColumn" maxWidth="1.7976931348623157E308" prefWidth="160.0" sortable="false" text="%object.type.text" />
+        <TreeTableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" prefWidth="120.0" sortable="false" text="%object.id.text" />
+        <TreeTableColumn fx:id="classesColumn" prefWidth="160.0" sortable="false" text="%object.styleClasses.text" />
+      </columns>
+    </TreeTableView>
+  </center>
+  <styleClass>
+    <String fx:value="inspector" />
+    <String fx:value="flush" />
+  </styleClass>
 </BorderPane>

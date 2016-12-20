@@ -137,7 +137,7 @@ public class PatternConverter implements Converter<Object[]> {
         toString(out, idFactory, value);
     }
 
-    public String format(Object... value)  {
+    public String format(Object... value) {
         StringBuilder buf = new StringBuilder();
         try {
             toString(buf, new SimpleIdFactory(), value);
@@ -146,6 +146,7 @@ public class PatternConverter implements Converter<Object[]> {
         }
         return buf.toString();
     }
+
     @Override
     public void toString(Appendable out, IdFactory idFactory, Object[] value) throws IOException {
         int[] indices = new int[numIndices];
@@ -220,7 +221,7 @@ public class PatternConverter implements Converter<Object[]> {
                 String hex = "000" + Integer.toHexString(charAt);
                 return "\\u" + hex.substring(hex.length() - 4);
             } else {
-                return String.valueOf((char)charAt);
+                return String.valueOf((char) charAt);
             }
         }
 
@@ -943,6 +944,7 @@ public class PatternConverter implements Converter<Object[]> {
 
         parent.children.add(argument);
     }
+
     @Override
     public Object[] getDefaultValue() {
         return new Object[0];

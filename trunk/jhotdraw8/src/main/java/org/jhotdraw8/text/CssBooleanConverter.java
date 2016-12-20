@@ -51,8 +51,8 @@ public class CssBooleanConverter implements Converter<Boolean> {
             throw new ParseException("\"" + trueString + "\" or \"" + falseString + "\" expected instead of \"" + str + "\".", pos);
         }
     }
-    
-        @Override
+
+    @Override
     public Boolean getDefaultValue() {
         return false;
     }
@@ -61,6 +61,5 @@ public class CssBooleanConverter implements Converter<Boolean> {
     public String getHelpText() {
         return "Format of ⟨Boolean⟩: true｜false";
     }
-    
-    
+
 }

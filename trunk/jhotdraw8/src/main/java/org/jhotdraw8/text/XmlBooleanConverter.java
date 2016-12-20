@@ -56,8 +56,8 @@ public class XmlBooleanConverter implements Converter<Boolean> {
             throw new ParseException("\"" + trueString + "\" or \"" + falseString + "\" expected instead of \"" + str + "\".", pos);
         }
     }
-    
-        @Override
+
+    @Override
     public Boolean getDefaultValue() {
         return false;
     }

@@ -21,7 +21,9 @@ public class Stylesheet extends AST {
         this.rules = Collections.unmodifiableList(rules);
     }
 
-    /** Returns only the style rules in the stylesheet.
+    /**
+     * Returns only the style rules in the stylesheet.
+     *
      * @return the rules
      */
     public List<StyleRule> getStyleRules() {

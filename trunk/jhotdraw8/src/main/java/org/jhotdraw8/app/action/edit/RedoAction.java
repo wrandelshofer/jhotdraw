@@ -15,16 +15,18 @@ import org.jhotdraw8.app.ProjectView;
 /**
  * Redoes the last user action on the active view.
  * <p>
-
+ *
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class RedoAction<V extends ProjectView<V>> extends AbstractViewAction<V> {
+
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "edit.redo";
     private Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+
     /*
     private PropertyChangeListener redoActionPropertyListener = new PropertyChangeListener() {
 
@@ -39,15 +41,18 @@ public class RedoAction<V extends ProjectView<V>> extends AbstractViewAction<V> 
         }
     };*/
 
-    /** Creates a new instance. 
-     * @param app the application 
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
      * @param view the view
-    */
+     */
     public RedoAction(Application<V> app, V view) {
         super(app, view);
         labels.configureAction(this, ID);
     }
-/*
+
+    /*
     protected void updateEnabledState() {
         boolean isEnabled = false;
         Action realRedoAction = getRealRedoAction();
@@ -110,7 +115,7 @@ public class RedoAction<V extends ProjectView<V>> extends AbstractViewAction<V> 
     public void handle(javafx.event.ActionEvent event) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-*/
+     */
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {

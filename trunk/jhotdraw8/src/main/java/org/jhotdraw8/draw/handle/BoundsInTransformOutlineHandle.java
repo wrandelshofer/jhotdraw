@@ -61,9 +61,9 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getParentToWorld());
-       if (f instanceof TransformableFigure) {
+        if (f instanceof TransformableFigure) {
             TransformableFigure tf = (TransformableFigure) f;
-        t= t.createConcatenation(new Translate(tf.get(TRANSLATE_X),tf.get(TRANSLATE_Y)));
+            t = t.createConcatenation(new Translate(tf.get(TRANSLATE_X), tf.get(TRANSLATE_Y)));
         }
         t = Transform.translate(0.5, 0.5).createConcatenation(t);
         Bounds b = f.getBoundsInLocal();
@@ -83,7 +83,7 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
         for (int i = 0; i < points.length; i++) {
             pp.set(i, points[i]);
         }
-        
+
         node.getStrokeDashArray().setAll(2.0);
     }
 

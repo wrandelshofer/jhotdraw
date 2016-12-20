@@ -24,7 +24,7 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  */
 public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implements StyleableMapAccessor<SVGPath> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, SVGPath> cssMetaData;
 
@@ -84,7 +84,7 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
     }
 
     @Override
-    public CssMetaData<?,SVGPath> getCssMetaData() {
+    public CssMetaData<?, SVGPath> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -95,5 +95,5 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
             converter = new CssSvgPathConverter(isNullable());
         }
         return converter;
-    }   
+    }
 }

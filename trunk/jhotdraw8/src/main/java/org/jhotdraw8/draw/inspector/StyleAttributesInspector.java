@@ -181,7 +181,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             newValue = new LinkedHashSet<Figure>();
             newValue.add(drawing);
         }
-collectHelpTexts(newValue);
+        collectHelpTexts(newValue);
         StylesheetsManager<Figure> styleManager = drawing.getStyleManager();
         SelectorModel<Figure> selectorModel = styleManager.getSelectorModel();
         String id = null;

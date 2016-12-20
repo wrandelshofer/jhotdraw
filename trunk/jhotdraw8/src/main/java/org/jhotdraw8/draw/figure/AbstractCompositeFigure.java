@@ -20,9 +20,10 @@ import org.jhotdraw8.collection.Key;
  * This base class can be used to implement figures which support child figures.
  *
  * @design.pattern Figure Composite, Composite.
- * 
+ *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: AbstractCompositeFigure.java 1235 2016-12-19 23:35:25Z rawcoder
+ * $
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
 
@@ -64,8 +65,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
                 return super.doAdd(index, element, true);// linear search!
             }
         }
-        
-        
+
     }
     /**
      * The name of the children property.
@@ -137,7 +137,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
-    
+
     @Override
     public Bounds getBoundsInParent() {
         double minX = Double.POSITIVE_INFINITY;
@@ -146,7 +146,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         double maxY = Double.NEGATIVE_INFINITY;
 
         Transform t = getLocalToParent();
-        
+
         for (Figure child : getChildren()) {
             Bounds b = t.transform(child.getBoundsInParent());
             minX = min(minX, b.getMinX());
@@ -171,8 +171,8 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     /**
-     * First layout all getChildren and then layout self.
-     * FIXME Just layouts itself
+     * First layout all getChildren and then layout self. FIXME Just layouts
+     * itself
      */
     @Override
     public final void layout() {
@@ -192,8 +192,8 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     @Override
     public void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
         final Figure source = event.getSource();
-        if (source!=null&&source.getParent()==this){
-               children.fireItemUpdated(children.indexOf(source));
+        if (source != null && source.getParent() == this) {
+            children.fireItemUpdated(children.indexOf(source));
         }
         super.firePropertyChangeEvent(event); //To change body of generated methods, choose Tools | Templates.
     }
@@ -201,7 +201,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     @Override
     public <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
         if (source != null && source.getParent() == this) {
-               children.fireItemUpdated(children.indexOf(source));
+            children.fireItemUpdated(children.indexOf(source));
         }
         super.firePropertyChangeEvent(source, type, key, oldValue, newValue); //To change body of generated methods, choose Tools | Templates.
     }

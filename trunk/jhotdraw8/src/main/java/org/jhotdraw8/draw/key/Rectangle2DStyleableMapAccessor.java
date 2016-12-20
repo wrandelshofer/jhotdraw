@@ -36,7 +36,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapA
 
     /**
      * Creates a new instance with the specified name.
-     * 
+     *
      * @param name the name of the accessor
      * @param xKey the key for the x coordinate of the rectangle
      * @param yKey the key for the y coordinate of the rectangle
@@ -105,6 +105,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapA
         heightKey.remove(a);
         return oldValue;
     }
+
     @Override
     public boolean isNullable() {
         return false;

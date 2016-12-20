@@ -142,7 +142,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Creates a grid of 10x10 pixels at origin 0,0 and 22.5 degree rotations.
      */
     public GridConstrainer() {
-        this(0, 0, 10, 10, 22.5,5,5);
+        this(0, 0, 10, 10, 22.5, 5, 5);
     }
 
     /**
@@ -153,7 +153,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * @param height The width of the grid. 0 turns the grid of for the y-axis.
      */
     public GridConstrainer(double width, double height) {
-        this(0, 0, width, height, 22.5,5,5);
+        this(0, 0, width, height, 22.5, 5, 5);
     }
 
     /**

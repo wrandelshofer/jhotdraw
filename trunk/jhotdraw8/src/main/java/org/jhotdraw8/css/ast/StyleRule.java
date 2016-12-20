@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A style rule associates a selector list to a list of declarations. 
+ * A style rule associates a selector list to a list of declarations.
  *
  * @author Werner Randelshofer
  * @version $Id$

@@ -14,13 +14,15 @@ import org.jhotdraw8.draw.key.StringStyleableFigureKey;
  * A figure which holds text in an attribute.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface TextableFigure extends Figure {
-    
-    /** The text. Default value: {@code ""}. */
+
+    /**
+     * The text. Default value: {@code ""}.
+     */
     public final static StringStyleableFigureKey TEXT = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "");
 
     /**

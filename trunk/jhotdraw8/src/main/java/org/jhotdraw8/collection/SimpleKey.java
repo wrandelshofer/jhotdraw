@@ -102,8 +102,8 @@ public class SimpleKey<T> implements Key<T> {
      *
      * @param name The name of the key.
      * @param clazz The type of the value.
-     * @param typeParameters The type parameters of the class. Specify null if no
-     * type parameters are given. Otherwise specify them in arrow brackets.
+     * @param typeParameters The type parameters of the class. Specify null if
+     * no type parameters are given. Otherwise specify them in arrow brackets.
      * @param isNullable Whether the value may be set to null
      * @param defaultValue The default value.
      */
@@ -138,7 +138,7 @@ public class SimpleKey<T> implements Key<T> {
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
-        Class<T> ret= (Class<T>) clazz;
+        Class<T> ret = (Class<T>) clazz;
         return ret;
     }
 
@@ -149,17 +149,21 @@ public class SimpleKey<T> implements Key<T> {
 
     @Override
     public String getFullValueType() {
-        StringBuilder buf=new StringBuilder();
+        StringBuilder buf = new StringBuilder();
         buf.append(clazz.getName());
-        if (!typeParameters.isEmpty()){
+        if (!typeParameters.isEmpty()) {
             buf.append('<');
-        boolean first=true;
-        for (Class<?> tp:typeParameters){
-            if (first)first=false;
-            else buf.append(',');
-            buf.append(tp.getName());
+            boolean first = true;
+            for (Class<?> tp : typeParameters) {
+                if (first) {
+                    first = false;
+                } else {
+                    buf.append(',');
+                }
+                buf.append(tp.getName());
+            }
+            buf.append('>');
         }
-            buf.append('>');}
         return buf.toString();
     }
 
@@ -177,15 +181,17 @@ public class SimpleKey<T> implements Key<T> {
     public boolean isNullable() {
         return isNullable;
     }
-    
-    public boolean isTransient() {return false; }
+
+    public boolean isTransient() {
+        return false;
+    }
 
     /**
      * Returns the name string.
      */
     @Override
     public String toString() {
-        String keyClass=getClass().getName();
-        return keyClass.substring(keyClass.lastIndexOf('.')+1)+"{\""+name+"\"}";
+        String keyClass = getClass().getName();
+        return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{\"" + name + "\"}";
     }
 }

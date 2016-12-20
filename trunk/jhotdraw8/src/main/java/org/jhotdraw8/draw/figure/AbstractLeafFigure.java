@@ -13,7 +13,7 @@ import javafx.collections.ObservableList;
  * figures.
  *
  * @design.pattern Figure Composite, Leaf.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */

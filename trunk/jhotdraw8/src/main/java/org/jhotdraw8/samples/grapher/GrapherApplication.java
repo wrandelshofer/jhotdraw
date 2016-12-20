@@ -19,6 +19,7 @@ import org.jhotdraw8.util.Resources;
 
 /**
  * GrapherApplication.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -30,7 +31,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
         Resources.setVerbose(true);
         try {
             Resources.addDecoder(new FontIconDecoder(".*", "fontawesome:", "/fontawesome-webfont.ttf", 16.0f, GrapherApplication.class));
-            Resources.addDecoder(new FontIconDecoder(".*", "materialicons:", "/MaterialIcons-Regular.ttf",16.0f, GrapherApplication.class));
+            Resources.addDecoder(new FontIconDecoder(".*", "materialicons:", "/MaterialIcons-Regular.ttf", 16.0f, GrapherApplication.class));
         } catch (IOException ex) {
             Logger.getLogger(GrapherApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -43,7 +44,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
         HierarchicalMap<String, Action> map = super.getActionMap();
 
         Action a;
-        map.put(RevertAction.ID, new RevertAction(this,null));
+        map.put(RevertAction.ID, new RevertAction(this, null));
         map.put("view.toggleProperties", a = new ToggleViewPropertyAction<DocumentView>(this, null, (view) -> ((GrapherDocumentView) view).getPropertiesPane(),
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels")));

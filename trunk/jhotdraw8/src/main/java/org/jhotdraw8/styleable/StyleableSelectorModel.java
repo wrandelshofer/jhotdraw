@@ -191,12 +191,12 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
         // FIXME we actually can do this!
         return getAttributeNames(element);
     }
+
     @Override
     public Set<String> getDecomposedAttributeNames(Styleable element) {
         // FIXME we actually can do this!
         return getAttributeNames(element);
     }
-
 
     @Override
     public void setAttribute(Styleable elem, StyleOrigin origin, String name, String value) {

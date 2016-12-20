@@ -13,16 +13,17 @@ import org.jhotdraw8.css.SelectorModel;
  * class" attribute.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: FunctionPseudoClassSelector.java 1149 2016-11-18 11:00:10Z
+ * rawcoder $
  */
 public class FunctionPseudoClassSelector extends PseudoClassSelector {
 
     private final String functionIdentifier;
     private final List<PreservedToken> terms;
 
-    public FunctionPseudoClassSelector(String functionIdentifier,List<PreservedToken> terms) {
+    public FunctionPseudoClassSelector(String functionIdentifier, List<PreservedToken> terms) {
         this.functionIdentifier = functionIdentifier;
-        this.terms=Collections.unmodifiableList(terms);
+        this.terms = Collections.unmodifiableList(terms);
     }
 
     @Override

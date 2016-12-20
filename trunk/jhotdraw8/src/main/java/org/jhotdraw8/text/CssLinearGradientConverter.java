@@ -459,7 +459,7 @@ public class CssLinearGradientConverter implements Converter<CssLinearGradient> 
         }
         return new CssStop(offset, color);
     }
-    
+
     @Override
     public String getHelpText() {
         return "Format of ⟨LinearGradient⟩: linear-gradient(［⟨LinearGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"

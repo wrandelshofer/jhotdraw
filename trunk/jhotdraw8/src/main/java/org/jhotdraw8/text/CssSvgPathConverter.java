@@ -65,29 +65,29 @@ public class CssSvgPathConverter implements Converter<SVGPath> {
         out.append('"');
         for (char ch : value.getContent().toCharArray()) {
             switch (ch) {
-            case '"':
-                out.append('\\');
-                out.append('"');
-                break;
-            case ' ':
-                out.append(ch);
-                break;
-            case '\n':
-                out.append('\\');
-                out.append('\n');
-                break;
-            default:
-                if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
+                case '"':
                     out.append('\\');
-                    String hex = Integer.toHexString(ch);
-                    for (int i = 0, n = 6 - hex.length(); i < n; i++) {
-                        out.append('0');
-                    }
-                    out.append(hex);
-                } else {
+                    out.append('"');
+                    break;
+                case ' ':
                     out.append(ch);
-                }
-                break;
+                    break;
+                case '\n':
+                    out.append('\\');
+                    out.append('\n');
+                    break;
+                default:
+                    if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
+                        out.append('\\');
+                        String hex = Integer.toHexString(ch);
+                        for (int i = 0, n = 6 - hex.length(); i < n; i++) {
+                            out.append('0');
+                        }
+                        out.append(hex);
+                    } else {
+                        out.append(ch);
+                    }
+                    break;
             }
         }
         out.append('"');

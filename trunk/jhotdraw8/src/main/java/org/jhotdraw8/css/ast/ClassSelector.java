@@ -7,7 +7,7 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
- * A "class selector" matches an element if the element has a style class with 
+ * A "class selector" matches an element if the element has a style class with
  * the specified value.
  *
  * @author Werner Randelshofer
@@ -31,10 +31,10 @@ public class ClassSelector extends SimpleSelector {
         return (element != null && model.hasStyleClass(element, clazz)) //
                 ? element : null;
     }
-    
-  @Override
-  public int getSpecificity() {
-    return 10;
-  }
-    
+
+    @Override
+    public int getSpecificity() {
+        return 10;
+    }
+
 }

@@ -26,14 +26,15 @@ import org.jhotdraw8.io.CharBufferReader;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: CssStringOrIdentConverter.java 1149 2016-11-18 11:00:10Z
+ * rawcoder $
  */
 public class CssStringOrIdentConverter implements Converter<String> {
 
     @Override
     public String fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
-        if (tt.nextToken() != CssTokenizer.TT_STRING && tt.currentToken()!= CssTokenizer.TT_IDENT) {
+        if (tt.nextToken() != CssTokenizer.TT_STRING && tt.currentToken() != CssTokenizer.TT_IDENT) {
             throw new ParseException("Css String or Ident expected. " + tt.currentToken(), buf.position());
         }
         return tt.currentStringValue();

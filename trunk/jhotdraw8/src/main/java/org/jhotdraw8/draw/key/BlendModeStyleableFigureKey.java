@@ -16,11 +16,13 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
 
 /**
  * BlendModeStyleableFigureKey.
+ *
  * @author Werner Randelshofer
  */
 public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> implements StyleableMapAccessor<BlendMode> {
+
     final static long serialVersionUID = 1L;
-    
+
     private final CssMetaData<? extends Styleable, BlendMode> cssMetaData;
 
     /**
@@ -34,10 +36,9 @@ public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> impl
     }
 
     /**
-     * Creates a new instance with the specified name and default
-     * value.
+     * Creates a new instance with the specified name and default value.
      *
-     * @param name The name of the key. 
+     * @param name The name of the key.
      * @param defaultValue The default value.
      */
     public BlendModeStyleableFigureKey(String name, BlendMode defaultValue) {
@@ -52,7 +53,7 @@ public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> impl
     }
 
     @Override
-    public CssMetaData<? extends Styleable,BlendMode> getCssMetaData() {
+    public CssMetaData<? extends Styleable, BlendMode> getCssMetaData() {
         return cssMetaData;
 
     }

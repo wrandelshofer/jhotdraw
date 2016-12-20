@@ -13,11 +13,13 @@ import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * NullConstrainer does not constrain anything.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class NullConstrainer extends AbstractConstrainer {
-    private final Path node=new Path();
+
+    private final Path node = new Path();
 
     @Override
     public Point2D translatePoint(Figure f, Point2D p, Point2D dir) {
@@ -26,13 +28,14 @@ public class NullConstrainer extends AbstractConstrainer {
 
     @Override
     public Rectangle2D translateRectangle(Figure f, Rectangle2D r, Point2D dir) {
-        return new Rectangle2D(r.getMinX()+dir.getX(),r.getMinY()+dir.getY(),r.getWidth(),r.getHeight());
+        return new Rectangle2D(r.getMinX() + dir.getX(), r.getMinY() + dir.getY(), r.getWidth(), r.getHeight());
     }
 
     @Override
     public double translateAngle(Figure f, double angle, double dir) {
-        return angle+dir;
+        return angle + dir;
     }
+
     @Override
     public Node getNode() {
         return node;

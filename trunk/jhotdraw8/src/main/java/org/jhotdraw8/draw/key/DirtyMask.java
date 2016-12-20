@@ -53,8 +53,9 @@ public class DirtyMask {
     }
 
     public boolean intersects(DirtyBits... bits) {
-        return intersects (of(bits));
+        return intersects(of(bits));
     }
+
     public boolean intersects(DirtyMask that) {
         return (this.bitmask & that.bitmask) != 0;
     }

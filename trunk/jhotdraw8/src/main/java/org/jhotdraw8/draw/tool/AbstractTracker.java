@@ -10,9 +10,11 @@ import org.jhotdraw8.app.AbstractDisableable;
 
 /**
  * AbstractAction.
+ *
  * @author Werner Randelshofer
  */
 public abstract class AbstractTracker extends AbstractDisableable implements Tracker {
+
     // ---
     // Fields
     // ---
@@ -21,7 +23,8 @@ public abstract class AbstractTracker extends AbstractDisableable implements Tra
     // ---
     // Constructors
     // ---
-    /** Creates a new instance.
+    /**
+     * Creates a new instance.
      */
     public AbstractTracker() {
 
@@ -30,11 +33,9 @@ public abstract class AbstractTracker extends AbstractDisableable implements Tra
     // ---
     // Properties
     // ---
-
     // ---
     // Behaviors
     // ---
-
     @Override
     public Node getNode() {
         return node;

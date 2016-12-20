@@ -23,10 +23,9 @@ import org.jhotdraw8.util.ReversedList;
 /**
  * CreationTool.
  *
- * @design.pattern CreationTool AbstractFactory, Client.
- * Creation tools use abstract factories (Supplier) for creating new
- * {@link Figure}s.
- * 
+ * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
+ * abstract factories (Supplier) for creating new {@link Figure}s.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -179,6 +178,7 @@ public class CreationTool extends AbstractTool {
         }
         return layer;
     }
+
     /**
      * This implementation is empty.
      */

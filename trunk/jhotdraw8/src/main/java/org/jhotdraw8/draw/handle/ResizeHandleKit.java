@@ -168,23 +168,23 @@ public class ResizeHandleKit {
     static public Handle west(Figure owner, String styleclass) {
         return new WestHandle(owner, styleclass);
     }
-        protected static final Shape NORTH_SHAPE = new Rectangle(9, 5);
-        protected static final Shape EAST_SHAPE = new Rectangle(5, 9);
-        protected static final Shape WEST_SHAPE = new Rectangle(5, 9);
-        protected static final Shape SOUTH_SHAPE = new Rectangle(9, 5);
-        protected static final SVGPath NORTH_EAST_SHAPE = new SVGPath();
-        protected static final SVGPath NORTH_WEST_SHAPE = new SVGPath();
-        protected static final SVGPath SOUTH_EAST_SHAPE = new SVGPath();
-        protected static final SVGPath SOUTH_WEST_SHAPE = new SVGPath();
+    protected static final Shape NORTH_SHAPE = new Rectangle(9, 5);
+    protected static final Shape EAST_SHAPE = new Rectangle(5, 9);
+    protected static final Shape WEST_SHAPE = new Rectangle(5, 9);
+    protected static final Shape SOUTH_SHAPE = new Rectangle(9, 5);
+    protected static final SVGPath NORTH_EAST_SHAPE = new SVGPath();
+    protected static final SVGPath NORTH_WEST_SHAPE = new SVGPath();
+    protected static final SVGPath SOUTH_EAST_SHAPE = new SVGPath();
+    protected static final SVGPath SOUTH_WEST_SHAPE = new SVGPath();
 
-        static {
-            NORTH_EAST_SHAPE.setContent("M -5.5,-2.5 L 2.5,-2.5 2.5,5.5 -2.5,5.5 -2.5,2.5 -5.5,2.5 Z M 5.5,-5.5");
-            NORTH_WEST_SHAPE.setContent("M -2.5,-2.5 L 5.5,-2.5 5.5,2.5 2.5,2.5 2.5,5.5 -2.5,5.5 Z M-5.5,-5.5");
-            SOUTH_EAST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,2.5 -5.5,2.5 -5.5,-2.5 -2.5,-2.5 Z M 5.5,5.5");
-            SOUTH_WEST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,-2.5 5.5,-2.5 5.5,2.5 -2.5,2.5 Z M -5.5,5.5");
-        }
-            private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-        private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
+    static {
+        NORTH_EAST_SHAPE.setContent("M -5.5,-2.5 L 2.5,-2.5 2.5,5.5 -2.5,5.5 -2.5,2.5 -5.5,2.5 Z M 5.5,-5.5");
+        NORTH_WEST_SHAPE.setContent("M -2.5,-2.5 L 5.5,-2.5 5.5,2.5 2.5,2.5 2.5,5.5 -2.5,5.5 Z M-5.5,-5.5");
+        SOUTH_EAST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,2.5 -5.5,2.5 -5.5,-2.5 -2.5,-2.5 Z M 5.5,5.5");
+        SOUTH_WEST_SHAPE.setContent("M -2.5,-5 L 2.5,-5 2.5,-2.5 5.5,-2.5 5.5,2.5 -2.5,2.5 Z M -5.5,5.5");
+    }
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.PINK, BorderStrokeStyle.SOLID, null, null));
 
     private static class NorthEastHandle extends AbstractResizeTransformHandle {
 

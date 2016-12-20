@@ -30,12 +30,12 @@ public class ReversedList<E> extends TransformationList<E, E> {
         beginChange();
         while (c.next()) {
             if (c.wasPermutated()) {
-                int from=c.getFrom();
+                int from = c.getFrom();
                 int[] perm = new int[c.getTo() - from];
                 for (int i = from; i < c.getTo(); i++) {
                     perm[i - from] = size - c.getPermutation(i);
                 }
-                nextPermutation(size -1 - c.getTo(), size -1 - c.getFrom(), perm);
+                nextPermutation(size - 1 - c.getTo(), size - 1 - c.getFrom(), perm);
             } else if (c.wasUpdated()) {
                 //update item
                 for (int i = c.getFrom(); i < c.getTo(); i++) {
@@ -49,11 +49,11 @@ public class ReversedList<E> extends TransformationList<E, E> {
                     }
                     size = size - c.getRemovedSize();
                     // c.getTo() is not always correctly filled in by the underlying list!
-                    nextRemove(size - c.getFrom()-c.getRemovedSize()+1, reversed);
+                    nextRemove(size - c.getFrom() - c.getRemovedSize() + 1, reversed);
                 }
                 if (c.wasAdded()) {
                     size = size + c.getAddedSize();
-                    nextAdd(size-c.getTo(), size-c.getFrom());
+                    nextAdd(size - c.getTo(), size - c.getFrom());
 
                 }
             }
@@ -71,10 +71,11 @@ public class ReversedList<E> extends TransformationList<E, E> {
     public E get(int index) {
         return getSource().get(getSourceIndex(index));
     }
+
     @Override
     public E set(int index, E e) {
         @SuppressWarnings("unchecked")
-        List<E> tmp=((List<E>)getSource());
+        List<E> tmp = ((List<E>) getSource());
         return tmp.set(getSourceIndex(index), e);
     }
 
@@ -82,11 +83,11 @@ public class ReversedList<E> extends TransformationList<E, E> {
     public E remove(int index) {
         return getSource().remove(getSourceIndex(index));
     }
+
     @Override
     public boolean remove(Object o) {
         return getSource().remove(o);
     }
-
 
     @Override
     public int size() {
@@ -97,16 +98,18 @@ public class ReversedList<E> extends TransformationList<E, E> {
     public void add(int index, E element) {
         @SuppressWarnings("unchecked")
         ObservableList<E> src = (ObservableList<E>) getSource();
-        src.add(size-index, element);
+        src.add(size - index, element);
     }
+
     /**
      * Notifies all listeners of a change
+     *
      * @param from start of range
      * @param to end of range + 1
      */
     public void fireUpdated(int from, int to) {
         beginChange();
-        for (int i=from;i<to;i++) {
+        for (int i = from; i < to; i++) {
             nextUpdate(i);
         }
         endChange();

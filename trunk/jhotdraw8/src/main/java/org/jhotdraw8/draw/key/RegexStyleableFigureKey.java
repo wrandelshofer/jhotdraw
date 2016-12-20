@@ -27,7 +27,7 @@ import org.jhotdraw8.text.StyleConverterConverterWrapper;
 public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements StyleableMapAccessor<Regex> {
 
     final static long serialVersionUID = 1L;
-    private final CssRegexConverter converter ;
+    private final CssRegexConverter converter;
     private final CssMetaData<? extends Styleable, Regex> cssMetaData;
 
     /**
@@ -51,8 +51,8 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
     }
 
     /**
-     * Creates a new instance with the specified name and default value.
-     * The value is nullable.
+     * Creates a new instance with the specified name and default value. The
+     * value is nullable.
      *
      * @param name The name of the key.
      * @param mask the dirty mask
@@ -85,7 +85,7 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
                 = new SimpleCssMetaData<Styleable, Regex>(property, function,
                         cnvrtr, defaultValue, inherits);
         cssMetaData = md;
-        converter= new CssRegexConverter(isNullable());
+        converter = new CssRegexConverter(isNullable());
     }
 
     @Override

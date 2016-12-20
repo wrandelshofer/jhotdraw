@@ -8,6 +8,7 @@ import org.jhotdraw8.event.Event;
 
 /**
  * ToolEvent.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -15,7 +16,9 @@ public class ToolEvent extends Event<Tool> {
 
     private final static long serialVersionUID = 1L;
 
-    /** Defines the event type. */
+    /**
+     * Defines the event type.
+     */
     public enum EventType {
 
         TOOL_STARTED,

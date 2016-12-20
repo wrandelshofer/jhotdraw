@@ -2,7 +2,6 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.draw.io;
 
 import java.io.IOException;
@@ -26,9 +25,11 @@ import org.xml.sax.SAXException;
  * @version $$Id$$
  */
 public interface XmlInputFormatMixin {
+
     void setExternalHome(URI uri);
+
     boolean isNamespaceAware();
-       
+
     default Figure read(InputStream in, Drawing drawing) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -64,6 +65,6 @@ public interface XmlInputFormatMixin {
         }
     }
 
-     Figure read(Document in, Drawing drawing) throws IOException;
+    Figure read(Document in, Drawing drawing) throws IOException;
 
 }

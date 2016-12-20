@@ -12,7 +12,8 @@ import org.jhotdraw8.css.SelectorModel;
  * matches the element.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: AdjacentSiblingCombinator.java 1149 2016-11-18 11:00:10Z
+ * rawcoder $
  */
 public class AdjacentSiblingCombinator extends Combinator {
 
@@ -34,8 +35,8 @@ public class AdjacentSiblingCombinator extends Combinator {
         return result;
     }
 
-  @Override
-  public int getSpecificity() {
-    return firstSelector.getSpecificity()+secondSelector.getSpecificity();
-  }
+    @Override
+    public int getSpecificity() {
+        return firstSelector.getSpecificity() + secondSelector.getSpecificity();
+    }
 }

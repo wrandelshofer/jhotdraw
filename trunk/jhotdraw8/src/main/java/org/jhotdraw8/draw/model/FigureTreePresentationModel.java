@@ -20,7 +20,8 @@ import org.jhotdraw8.event.Listener;
  * Note: for performance reasons we do not expand the tree nodes by default.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $$Id: FigureTreePresentationModel.java 1237 2016-12-20 08:57:59Z
+ * rawcoder $$
  */
 public class FigureTreePresentationModel {
 
@@ -34,7 +35,7 @@ public class FigureTreePresentationModel {
     private final HashMap<Figure, TreeItem<Figure>> items = new HashMap<>();
 
     private boolean reversed = true;
-    
+
     private int updating;
 
     /**
@@ -57,52 +58,52 @@ public class FigureTreePresentationModel {
     private final Listener<DrawingModelEvent> modelHandler = new Listener<DrawingModelEvent>() {
         @Override
         public void handle(DrawingModelEvent event) {
-          updating++;
-          try {
-          
-            boolean structuralChange = false;
-            Figure f = event.getFigure();
-            switch (event.getEventType()) {
-                case FIGURE_ADDED_TO_PARENT:
-                    handleFigureAdded(f, event.getParent(), event.getIndex());
-                    structuralChange = true;
-                    break;
-                case FIGURE_REMOVED_FROM_PARENT:
-                    handleFigureRemoved(f, event.getParent(), event.getIndex());
-                    structuralChange = true;
-                    break;
-                case SUBTREE_ADDED_TO_DRAWING:
-                    handleSubtreeAddedToDrawing(f, event.getParent(), event.getIndex());
-                    structuralChange = true;
-                    break;
-                case SUBTREE_REMOVED_FROM_DRAWING:
-                    handleSubtreeRemovedFromDrawing(f);
-                    structuralChange = true;
-                    break;
-                case NODE_CHANGED:
-                    break;
-                case LAYOUT_CHANGED:
-                    break;
-                case STYLE_CHANGED:
-                    break;
-                case ROOT_CHANGED:
-                    handleRootChanged();
-                    structuralChange = true;
-                    break;
-                case SUBTREE_NODES_CHANGED:
-                    break;
-                case DEPENDENCY_CHANGED:
-                case TRANSFORM_CHANGED:
-                case PROPERTY_VALUE_CHANGED:
-                    handleNodeInvalidated(f);
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + " not supported");
+            updating++;
+            try {
+
+                boolean structuralChange = false;
+                Figure f = event.getFigure();
+                switch (event.getEventType()) {
+                    case FIGURE_ADDED_TO_PARENT:
+                        handleFigureAdded(f, event.getParent(), event.getIndex());
+                        structuralChange = true;
+                        break;
+                    case FIGURE_REMOVED_FROM_PARENT:
+                        handleFigureRemoved(f, event.getParent(), event.getIndex());
+                        structuralChange = true;
+                        break;
+                    case SUBTREE_ADDED_TO_DRAWING:
+                        handleSubtreeAddedToDrawing(f, event.getParent(), event.getIndex());
+                        structuralChange = true;
+                        break;
+                    case SUBTREE_REMOVED_FROM_DRAWING:
+                        handleSubtreeRemovedFromDrawing(f);
+                        structuralChange = true;
+                        break;
+                    case NODE_CHANGED:
+                        break;
+                    case LAYOUT_CHANGED:
+                        break;
+                    case STYLE_CHANGED:
+                        break;
+                    case ROOT_CHANGED:
+                        handleRootChanged();
+                        structuralChange = true;
+                        break;
+                    case SUBTREE_NODES_CHANGED:
+                        break;
+                    case DEPENDENCY_CHANGED:
+                    case TRANSFORM_CHANGED:
+                    case PROPERTY_VALUE_CHANGED:
+                        handleNodeInvalidated(f);
+                        break;
+                    default:
+                        throw new UnsupportedOperationException(event.getEventType()
+                                + " not supported");
+                }
+            } finally {
+                updating--;
             }
-          } finally {
-            updating--;
-          }
         }
     };
 
@@ -178,7 +179,7 @@ public class FigureTreePresentationModel {
     private void handleNodeInvalidated(Figure f) {
         TreeItem<Figure> node = items.get(f);
         if (node != null) {
-        node.setValue(f);
+            node.setValue(f);
         }
     }
 
@@ -189,11 +190,12 @@ public class FigureTreePresentationModel {
     public TreeItem<Figure> getTreeItem(Figure f) {
         return items.get(f);
     }
+
     public Figure getFigure(TreeItem<Figure> item) {
         return item.getValue();
     }
-    
+
     public boolean isUpdating() {
-      return updating > 0;
+        return updating > 0;
     }
 }

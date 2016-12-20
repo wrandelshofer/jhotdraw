@@ -27,13 +27,13 @@ import org.jhotdraw8.text.Paintable;
  * {@code TextStrokeableFigure} allows to change the stroke of the text.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface TextStrokeableFigure extends Figure {
 
-     /**
+    /**
      * Defines the distance in user coordinates for the dashing pattern. Default
      * value: {@code 0}.
      * <p>

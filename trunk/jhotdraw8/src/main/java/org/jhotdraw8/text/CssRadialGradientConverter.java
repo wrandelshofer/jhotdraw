@@ -55,7 +55,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             final double centerX = lg.getCenterX();
             final double centerY = lg.getCenterY();
             final double radius = lg.getRadius();
-             boolean needsComma = false;
+            boolean needsComma = false;
             if (focusAngle != 0.0) {
                 out.append("focus-angle ");
                 out.append(doubleConverter.toString(focusAngle));
@@ -165,7 +165,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
         double focusDistance = 0;
         double centerX = 0.5;
         double centerY = 0.5;
-        double radius=1;
+        double radius = 1;
         Boolean isProportional = null;
         while (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if ("focus-angle".equals(tt.currentStringValue())) {
@@ -198,19 +198,21 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             } else if ("center".equals(tt.currentStringValue())) {
                 switch (tt.nextToken()) {
                     case CssTokenizer.TT_PERCENTAGE:
-                        if (isProportional==null) {
-                            isProportional=true;
+                        if (isProportional == null) {
+                            isProportional = true;
                         }
-                        if (! isProportional)
-                        throw new ParseException("CSS RadialGradient: absolute value  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
-                       centerX = tt.currentNumericValue().doubleValue() / 100;
+                        if (!isProportional) {
+                            throw new ParseException("CSS RadialGradient: absolute value  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        }
+                        centerX = tt.currentNumericValue().doubleValue() / 100;
                         break;
                     case CssTokenizer.TT_NUMBER:
-                        if (isProportional==null) {
-                            isProportional=false;
+                        if (isProportional == null) {
+                            isProportional = false;
                         }
-                        if (isProportional)
-                        throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        if (isProportional) {
+                            throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        }
                         centerX = tt.currentNumericValue().doubleValue();
                         break;
                     default:
@@ -218,19 +220,21 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                 }
                 switch (tt.nextToken()) {
                     case CssTokenizer.TT_PERCENTAGE:
-                        if (isProportional==null) {
-                            isProportional=true;
+                        if (isProportional == null) {
+                            isProportional = true;
                         }
-                        if (! isProportional)
-                        throw new ParseException("CSS RadialGradient: absolute value  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
-                       centerY = tt.currentNumericValue().doubleValue() / 100;
+                        if (!isProportional) {
+                            throw new ParseException("CSS RadialGradient: absolute value  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        }
+                        centerY = tt.currentNumericValue().doubleValue() / 100;
                         break;
                     case CssTokenizer.TT_NUMBER:
-                        if (isProportional==null) {
-                            isProportional=false;
+                        if (isProportional == null) {
+                            isProportional = false;
                         }
-                        if (isProportional)
-                        throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        if (isProportional) {
+                            throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        }
                         centerY = tt.currentNumericValue().doubleValue();
                         break;
                     default:
@@ -239,19 +243,21 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             } else if ("radius".equals(tt.currentStringValue())) {
                 switch (tt.nextToken()) {
                     case CssTokenizer.TT_PERCENTAGE:
-                        if (isProportional==null) {
-                            isProportional=true;
+                        if (isProportional == null) {
+                            isProportional = true;
                         }
-                        if (! isProportional)
-                        throw new ParseException("CSS RadialGradient: absolute value expected, found: " + tt.currentStringValue(), tt.getStartPosition());
-                       radius = tt.currentNumericValue().doubleValue() / 100;
+                        if (!isProportional) {
+                            throw new ParseException("CSS RadialGradient: absolute value expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        }
+                        radius = tt.currentNumericValue().doubleValue() / 100;
                         break;
                     case CssTokenizer.TT_NUMBER:
-                        if (isProportional==null) {
-                            isProportional=false;
+                        if (isProportional == null) {
+                            isProportional = false;
                         }
-                        if (isProportional)
-                        throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        if (isProportional) {
+                            throw new ParseException("CSS RadialGradient: percentage  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
+                        }
                         radius = tt.currentNumericValue().doubleValue();
                         break;
                     default:
@@ -261,9 +267,9 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
                 tt.pushBack();
                 break;
             }
-            
+
             if (tt.nextToken() != ',') {
-             tt.pushBack();
+                tt.pushBack();
             }
         }
         CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
@@ -280,9 +286,9 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             tt.pushBack();
         }
 
-            if (tt.nextToken() != ',') {
-             tt.pushBack();
-            }
+        if (tt.nextToken() != ',') {
+            tt.pushBack();
+        }
         List<CssStop> stops = new ArrayList<>();
         while (tt.nextToken() != ')' && tt.currentToken() != CssTokenizer.TT_EOF) {
             tt.pushBack();
@@ -290,15 +296,17 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
             if (tt.nextToken() != ',') {
                 tt.pushBack();
             }
-        } 
+        }
 
         if (tt.currentToken() != ')') {
             throw new ParseException("CSS RadialGradient: ')'  expected, found: " + tt.currentStringValue(), tt.getStartPosition());
         }
         tt.skipWhitespace();
-        if (isProportional==null) isProportional=true;
-        
-        return new CssRadialGradient(focusAngle, focusDistance, centerX, centerY, radius,isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
+        if (isProportional == null) {
+            isProportional = true;
+        }
+
+        return new CssRadialGradient(focusAngle, focusDistance, centerX, centerY, radius, isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
     }
 
     @Override
@@ -306,7 +314,7 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
         return null;
     }
 
-       private CssStop parseColorStop(CssTokenizerInterface tt) throws IOException, ParseException {
+    private CssStop parseColorStop(CssTokenizerInterface tt) throws IOException, ParseException {
         CssColor color = colorConverter.parseColor(tt);
         Double offset = null;
         switch (tt.nextToken()) {
@@ -321,18 +329,17 @@ public class CssRadialGradientConverter implements Converter<CssRadialGradient> 
         }
         return new CssStop(offset, color);
     }
-    
-           @Override
+
+    @Override
     public String getHelpText() {
         return "Format of ⟨RadialGradient⟩: radial-gradient(［⟨RadialGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"
-             +"\nFormat of ⟨RadialGradientParameters⟩: ［⟨FocusAngle⟩］［, ⟨FocusDistance⟩］［, ⟨Center⟩］, ⟨Radius⟩"
-             +"\nFormat of ⟨FocusAngle⟩: focus-angle ⟨angle⟩deg"
-             +"\nFormat of ⟨FocusDistance⟩: focus-distance ⟨percentage⟩%"
-             +"\nFormat of ⟨Center⟩: center ⟨cx⟩,⟨cy⟩｜center ⟨cx⟩%,⟨cy⟩%"
-             +"\nFormat of ⟨Radius⟩: ⟨radius⟩｜⟨percentage⟩%"
-             +"\nFormat of ⟨Cycle⟩: repeat｜reflect"
-             +"\nFormat of ⟨ColorStop⟩: ⟨Color⟩ ⟨percentage⟩%"
-                +"\n"+colorConverter.getHelpText()
-                ;
+                + "\nFormat of ⟨RadialGradientParameters⟩: ［⟨FocusAngle⟩］［, ⟨FocusDistance⟩］［, ⟨Center⟩］, ⟨Radius⟩"
+                + "\nFormat of ⟨FocusAngle⟩: focus-angle ⟨angle⟩deg"
+                + "\nFormat of ⟨FocusDistance⟩: focus-distance ⟨percentage⟩%"
+                + "\nFormat of ⟨Center⟩: center ⟨cx⟩,⟨cy⟩｜center ⟨cx⟩%,⟨cy⟩%"
+                + "\nFormat of ⟨Radius⟩: ⟨radius⟩｜⟨percentage⟩%"
+                + "\nFormat of ⟨Cycle⟩: repeat｜reflect"
+                + "\nFormat of ⟨ColorStop⟩: ⟨Color⟩ ⟨percentage⟩%"
+                + "\n" + colorConverter.getHelpText();
     }
 }

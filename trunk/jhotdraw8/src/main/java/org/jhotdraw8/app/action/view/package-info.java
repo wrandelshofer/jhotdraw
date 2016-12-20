@@ -5,8 +5,7 @@
  *
  * @author Werner Randelshofer
  * @version $Id$
-*/
-
+ */
 /**
  * Provides actions for views.
  */

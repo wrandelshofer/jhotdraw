@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * A "At rule" consists of an "At keyword", a "selector list" and a list of
  * "declaration"s.
- * 
+ *
  * FIXME - An At Rule is actually quite more complex
  *
  * @author Werner Randelshofer
@@ -24,9 +24,9 @@ public class AtRule extends AST {
 
     public AtRule(String atKeyword,
             SelectorGroup selectorGroup, List<Declaration> declarations) {
-        this.atKeyword=atKeyword;
+        this.atKeyword = atKeyword;
         this.selectorList = selectorGroup;
-        this.declarations = declarations==null?Collections.emptyList(): Collections.unmodifiableList(declarations);
+        this.declarations = declarations == null ? Collections.emptyList() : Collections.unmodifiableList(declarations);
     }
 
     @Override

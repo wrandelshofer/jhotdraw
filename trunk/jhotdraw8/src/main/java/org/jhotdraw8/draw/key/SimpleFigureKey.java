@@ -13,6 +13,7 @@ import org.jhotdraw8.collection.SimpleKey;
  * @version $Id$
  */
 public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
+
     final static long serialVersionUID = 1L;
 
     private final DirtyMask dirtyMask;
@@ -56,6 +57,7 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
     public SimpleFigureKey(String name, Class<?> clazz, Class<?>[] typeParameters, DirtyMask dirtyMask, T defaultValue) {
         this(name, clazz, typeParameters, true, dirtyMask, defaultValue);
     }
+
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
@@ -69,7 +71,6 @@ public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
     public SimpleFigureKey(String name, Class<?> clazz, boolean isNullable, DirtyMask dirtyMask, T defaultValue) {
         this(name, clazz, null, isNullable, dirtyMask, defaultValue);
     }
-
 
     /**
      * Creates a new instance with the specified name, type token class, default

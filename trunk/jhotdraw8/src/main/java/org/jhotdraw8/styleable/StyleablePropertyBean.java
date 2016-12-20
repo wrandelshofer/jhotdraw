@@ -48,6 +48,7 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @return The styled value.
      */
     public <T> T getStyled(MapAccessor<T> key);
+
     /**
      * Sets a styled value.
      *

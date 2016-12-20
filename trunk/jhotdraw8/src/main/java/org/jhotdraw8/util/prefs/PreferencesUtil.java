@@ -364,7 +364,7 @@ public class PreferencesUtil
                 splitPane.getItems().remove(node);
             }
             prefs.putBoolean(visibilityProperty.getName(), newValue);
-            
+
             // fix the positions because SplitPane does weird things with them
             if (first) {
                 if (newValue) {

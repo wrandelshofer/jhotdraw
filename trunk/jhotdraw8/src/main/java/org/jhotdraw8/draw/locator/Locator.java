@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Point2D;
@@ -12,9 +11,8 @@ import org.jhotdraw8.draw.figure.Figure;
  * A <em>locator</em> encapsulates a strategy for locating a point on a
  * {@link Figure}.
  *
- * @design.pattern Locator Strategy, Strategy.
- * {@link Locator} encapsulates a strategy for locating a point on a 
- * {@link Figure}.
+ * @design.pattern Locator Strategy, Strategy. {@link Locator} encapsulates a
+ * strategy for locating a point on a {@link Figure}.
  *
  * @author Werner Randelshofer
  * @version $Id$

@@ -26,9 +26,9 @@ public interface IdFactory {
      * @param object the object
      * @return the id
      */
-  default String createId(Object object) {
-      return createId(object, "");
-  }
+    default String createId(Object object) {
+        return createId(object, "");
+    }
 
     /**
      * Creates an id for the specified object. If the object already has an id,
@@ -38,7 +38,8 @@ public interface IdFactory {
      * @param prefix the desired prefix for the id
      * @return the id
      */
-  public String createId(Object object, String prefix);
+    public String createId(Object object, String prefix);
+
     /**
      * Gets an id for the specified object. Returns null if the object has no
      * id.
@@ -120,19 +121,19 @@ public interface IdFactory {
                     factor = 1.0;
                     break;
                 case "cm":
-                    factor = 2.54/ getDpi();
+                    factor = 2.54 / getDpi();
                     break;
                 case "mm":
-                    factor = 25.4/getDpi();
+                    factor = 25.4 / getDpi();
                     break;
                 case "in":
-                    factor = 1.0/ getDpi();
+                    factor = 1.0 / getDpi();
                     break;
                 case "pt":
-                    factor = 72/ getDpi() ;
+                    factor = 72 / getDpi();
                     break;
                 case "pc":
-                    factor = 72*12.0 / getDpi();
+                    factor = 72 * 12.0 / getDpi();
                     break;
                 case "em":
                     factor = 1.0 / getFontSize();

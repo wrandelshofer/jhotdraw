@@ -61,28 +61,28 @@ public class CssIdentConverter implements Converter<String> {
             out.append((char) ch);
         } else {
             switch (ch) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case '\n':
-                String hex = Integer.toHexString(ch);
-                out.append('\\');
-                out.append(hex);
-                if (hex.length() < 6) {
-                    out.append(' ');
-                }
-                break;
-            default:
-                out.append('\\');
-                out.append((char) ch);
-                break;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                case '\n':
+                    String hex = Integer.toHexString(ch);
+                    out.append('\\');
+                    out.append(hex);
+                    if (hex.length() < 6) {
+                        out.append(' ');
+                    }
+                    break;
+                default:
+                    out.append('\\');
+                    out.append((char) ch);
+                    break;
             }
         }
 

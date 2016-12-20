@@ -50,7 +50,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
     private Property<CssColor> backgroundProperty;
 
     private InvalidationListener commitHandler = o -> commitEdits();
-    
+
     private Node node;
 
     public DrawingInspector() {
@@ -70,7 +70,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
             loader.setController(this);
 
             try (InputStream in = fxmlUrl.openStream()) {
-                node=loader.load(in);
+                node = loader.load(in);
             } catch (IOException ex) {
                 throw new InternalError(ex);
             }
@@ -106,12 +106,12 @@ public class DrawingInspector extends AbstractDrawingInspector {
             widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
             backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssColorConverter(false)));
-            
+
             CustomBinding.bindBidirectional(//
                     backgroundProperty,//
                     backgroundColorPicker.valueProperty(),//
-                    (CssColor c)->c==null?null:c.getColor(), //
-                    (Color c)->new CssColor(c)//
+                    (CssColor c) -> c == null ? null : c.getColor(), //
+                    (Color c) -> new CssColor(c)//
             );
         }
     }

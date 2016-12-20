@@ -128,6 +128,7 @@ public class CssTokenizer implements CssTokenizerInterface {
     public CssTokenizer(CharBuffer charBuffer) {
         this(new CharBufferReader(charBuffer), true);
     }
+
     public CssTokenizer(Reader reader) {
         this(reader, true);
     }
@@ -471,7 +472,7 @@ public class CssTokenizer implements CssTokenizerInterface {
                 break;
             }
         }
-        endPosition=(int)in.getPosition();
+        endPosition = (int) in.getPosition();
         return currentToken;
     }
 
@@ -600,7 +601,7 @@ public class CssTokenizer implements CssTokenizerInterface {
             if (!hasExponents) {
                 in.pushBack(ch);
                 ch = expchar;
-                buf.setLength(buf.length()-1);
+                buf.setLength(buf.length() - 1);
             }
         }
 
@@ -880,6 +881,7 @@ public class CssTokenizer implements CssTokenizerInterface {
     public int getStartPosition() {
         return startPosition;
     }
+
     @Override
     public int getEndPosition() {
         return endPosition;

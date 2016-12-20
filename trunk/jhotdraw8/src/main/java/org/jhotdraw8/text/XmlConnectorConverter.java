@@ -39,7 +39,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
         choiceToConnectorMap.put(0.0, CenterConnector::new);
         choiceToConnectorMap.put(1.0, ChopRectangleConnector::new);
         choiceToConnectorMap.put(2.0, ChopEllipseConnector::new);
-        for (Map.Entry<Double,  Supplier<Connector>> entry : choiceToConnectorMap.entrySet()) {
+        for (Map.Entry<Double, Supplier<Connector>> entry : choiceToConnectorMap.entrySet()) {
             connectorToChoiceMap.put(entry.getValue().get().getClass(), entry.getKey());
         }
     }
@@ -60,10 +60,13 @@ public class XmlConnectorConverter implements Converter<Connector> {
 
         double choice = (Double) v[0];
         Supplier<Connector> clazz = choiceToConnectorMap.get(choice);
-        if (clazz==null) throw new ParseException("no connector found for "+buf,0);
-            Connector connector = clazz.get();
-            return connector;
+        if (clazz == null) {
+            throw new ParseException("no connector found for " + buf, 0);
+        }
+        Connector connector = clazz.get();
+        return connector;
     }
+
     @Override
     public Connector getDefaultValue() {
         return null;

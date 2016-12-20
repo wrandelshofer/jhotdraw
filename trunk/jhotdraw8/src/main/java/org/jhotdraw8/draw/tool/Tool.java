@@ -24,7 +24,7 @@ import org.jhotdraw8.event.Listener;
  * @design.pattern org.jhotdraw8.draw.Drawing Framework, KeyAbstraction.
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel MVC, Controller.
  * @design.pattern org.jhotdraw8.draw.DrawingEditor Mediator, Colleague.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -110,6 +110,7 @@ public interface Tool extends PropertyBean, Disableable {
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
     ObjectProperty<DrawingView> drawingViewProperty();
+
     /**
      * The currently active drawing editor. By convention, this property is only
      * set by {@code DrawingEditor}.
@@ -221,6 +222,7 @@ public interface Tool extends PropertyBean, Disableable {
     /**
      * Deactivates the tool. This method is called whenever the user switches to
      * another tool.
+     *
      * @param editor the editor
      */
     public void deactivate(SimpleDrawingEditor editor);
@@ -228,11 +230,11 @@ public interface Tool extends PropertyBean, Disableable {
     /**
      * Activates the tool for the given editor. This method is called whenever
      * the user switches to this tool.
+     *
      * @param editor the editor
      */
     public void activate(SimpleDrawingEditor editor);
 
-    
     default DrawingEditor getDrawingEditor() {
         return drawingEditorProperty().get();
     }

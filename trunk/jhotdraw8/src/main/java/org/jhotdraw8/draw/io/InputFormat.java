@@ -17,7 +17,7 @@ import org.jhotdraw8.draw.figure.Figure;
  * InputFormat.
  *
  * @design.pattern Drawing Strategy, Strategy.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -27,24 +27,26 @@ public interface InputFormat {
      * Reads a figure from an URI
      *
      * @param uri The uri.
-     * @param drawing If you provide a non-null value, the ids of the returned figure
-     * are coerced so that they do not clash with ids in the drawing. Also all URIs in the
-     * figure are made relative to DOCUMENT_HOME of the drawing.
+     * @param drawing If you provide a non-null value, the ids of the returned
+     * figure are coerced so that they do not clash with ids in the drawing.
+     * Also all URIs in the figure are made relative to DOCUMENT_HOME of the
+     * drawing.
      * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs
      */
     default Figure read(URI uri, Drawing drawing) throws IOException {
         return read(new File(uri), drawing);
-      }
+    }
 
     /**
      * Reads a figure from a file.
      *
      * @param file the file
-     * @param drawing If you provide a non-null value, the ids of the returned figure
-     * are coerced so that they do not clash with ids in the drawing. Also all URIs in the
-     * figure are made relative to DOCUMENT_HOME of the drawing.
+     * @param drawing If you provide a non-null value, the ids of the returned
+     * figure are coerced so that they do not clash with ids in the drawing.
+     * Also all URIs in the figure are made relative to DOCUMENT_HOME of the
+     * drawing.
      * @return the figure
      *
      * @throws java.io.IOException if an IO error occurs

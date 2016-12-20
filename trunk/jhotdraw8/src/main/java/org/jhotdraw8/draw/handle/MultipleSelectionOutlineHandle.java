@@ -17,11 +17,12 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
 
 /**
- * Draws the {@code boundsInLocal} of all selected figurs, but does not provide any
- * interactions.
+ * Draws the {@code boundsInLocal} of all selected figurs, but does not provide
+ * any interactions.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: MultipleSelectionOutlineHandle.java 1149 2016-11-18 11:00:10Z
+ * rawcoder $
  */
 public class MultipleSelectionOutlineHandle extends AbstractHandle {
 
@@ -32,6 +33,7 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
     public MultipleSelectionOutlineHandle() {
         this(STYLECLASS_HANDLE_MULTI_SELECT_OUTLINE);
     }
+
     public MultipleSelectionOutlineHandle(String styleclass) {
         super(null);
 
@@ -51,9 +53,10 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
     public Node getNode() {
         return node;
     }
+
     private Bounds getBounds(DrawingView dv) {
         Bounds b = null;
-        for (Figure f:dv.getSelectedFigures()) {
+        for (Figure f : dv.getSelectedFigures()) {
             Transform l2w = f.getLocalToWorld();
             Bounds fb = l2w.transform(f.getBoundsInLocal());
             if (b == null) {
@@ -62,13 +65,15 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
                 b = Geom.add(b, fb);
             }
         }
-        return b==null?null:dv.getWorldToView().transform(b);
+        return b == null ? null : dv.getWorldToView().transform(b);
     }
 
     @Override
     public void updateNode(DrawingView view) {
         Bounds b = getBounds(view);
-if (b == null) return;
+        if (b == null) {
+            return;
+        }
 
         points[0] = b.getMinX();
         points[1] = b.getMinY();
@@ -80,7 +85,7 @@ if (b == null) return;
         points[7] = b.getMaxY();
         ObservableList<Double> pp = node.getPoints();
         for (int i = 0; i < points.length; i++) {
-            pp.set(i, Math.round(points[i]+0.5)-0.5);
+            pp.set(i, Math.round(points[i] + 0.5) - 0.5);
         }
     }
 
@@ -88,10 +93,12 @@ if (b == null) return;
     public boolean isSelectable() {
         return false;
     }
+
     @Override
     public Cursor getCursor() {
         return null;
     }
+
     @Override
     public Point2D getLocationInView() {
         return null;

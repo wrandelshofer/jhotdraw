@@ -22,10 +22,10 @@ import org.jhotdraw8.collection.KeyMapEntryProperty;
  * properties which can by styled from CSS.
  * <p>
  * {@code StyleablePropertyMap} consists internally of four input maps and one
- * output map. 
+ * output map.
  * <p>
- * Performance of this class is not very good, because of the output map
- * that needs to be updated.
+ * Performance of this class is not very good, because of the output map that
+ * needs to be updated.
  * <ul>
  * <li>An input map is provided for each {@link StyleOrigin}.</li>
  * <li>The output map contains the styled value. The style origins have the
@@ -105,7 +105,6 @@ public class StyleablePropertyMap {
     // ---
     // constructors
     // ---
-
     public StyleablePropertyMap() {
         this(null);
     }
@@ -409,5 +408,5 @@ public class StyleablePropertyMap {
         }
 
     }
-    
+
 }

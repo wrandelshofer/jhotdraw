@@ -9,7 +9,7 @@ package org.jhotdraw8.draw.key;
  * affects dependent objects.
  *
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel Strategy, Context.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -19,7 +19,8 @@ public enum DirtyBits {
      * Affects the state of the figure.
      * <p>
      * All objects which depend on the state of the figure need to be updated.
-     *//**
+     */
+    /**
      * Affects the state of the figure.
      * <p>
      * All objects which depend on the state of the figure need to be updated.
@@ -28,24 +29,23 @@ public enum DirtyBits {
     /**
      * Affects the JavaFX {@code Node} created by the figure.
      * <p>
-     * All cached JavaFX {@code Node}s created by the figure need to be
-     * updated.
+     * All cached JavaFX {@code Node}s created by the figure need to be updated.
      */
     NODE,
     /**
-     * Affects the layout of the figure, the layout of its ancestors and
-     * the layout of dependent figures.
+     * Affects the layout of the figure, the layout of its ancestors and the
+     * layout of dependent figures.
      * <p>
-     * Method {@code Figure#layoutNotify} must be called on the figure, then in ascending
-     * order on all its ancestors which perform layout, and then on all
-     * dependent figures and their ancestors.
+     * Method {@code Figure#layoutNotify} must be called on the figure, then in
+     * ascending order on all its ancestors which perform layout, and then on
+     * all dependent figures and their ancestors.
      */
     LAYOUT,
     /**
      * Affects the layout of dependent figures.
      * <p>
-     * Method {@code Figure#layoutNotify} must be called on all
-     * dependent figures and their ancestors.
+     * Method {@code Figure#layoutNotify} must be called on all dependent
+     * figures and their ancestors.
      */
     DEPENDENT_LAYOUT,
     /**
@@ -68,7 +68,8 @@ public enum DirtyBits {
      */
     TRANSFORM,
     /**
-     * This is internally used by DrawingModel for marking figures which need transformNotify.
+     * This is internally used by DrawingModel for marking figures which need
+     * transformNotify.
      * <p>
      * Method {@code Figure#transformNotify} must be called on the figure.
      */

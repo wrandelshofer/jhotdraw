@@ -23,8 +23,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      * Holds the properties.
      */
     protected final ObservableMap<Key<?>, Object> properties//
-            = 
-                    FXCollections.observableMap(new IdentityHashMap<>());
+            = FXCollections.observableMap(new IdentityHashMap<>());
 
     /**
      * Creates a new instance. Binds {@code disabled} to {@code disable}.
@@ -51,7 +50,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
 
     /**
      * Invokes {@link #onActionPerformed} if the action is not disabled and the
-     * event is not consumed. Consumes the event after invoking {@code 
+     * event is not consumed. Consumes the event after invoking {@code
      * onActionPerformed}.
      *
      * @param event the action event

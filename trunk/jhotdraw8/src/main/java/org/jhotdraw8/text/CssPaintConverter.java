@@ -59,7 +59,7 @@ public class CssPaintConverter implements Converter<Paint> {
     public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString().trim().toLowerCase(Locale.ROOT);
 
-        int pos=buf.position();
+        int pos = buf.position();
         try {
             return Paintable.getPaint(colorConverter.fromString(buf, idFactory));
         } catch (ParseException e) {

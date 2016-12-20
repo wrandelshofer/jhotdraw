@@ -55,13 +55,14 @@ public class SimpleHandleTracker extends AbstractTracker implements HandleTracke
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
         handle.onMouseReleased(event, dv);
-       // fireToolDone();
+        // fireToolDone();
     }
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView dv) {
         handle.onMouseDragged(event, dv);
     }
+
     @Override
     public void trackKeyPressed(KeyEvent event, DrawingView view) {
     }

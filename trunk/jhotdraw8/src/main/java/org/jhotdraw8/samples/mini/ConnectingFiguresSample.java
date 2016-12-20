@@ -28,7 +28,8 @@ import org.jhotdraw8.draw.tool.Tool;
  * ConnectingFiguresSample.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: ConnectingFiguresSample.java 1237 2016-12-20 08:57:59Z rawcoder
+ * $
  */
 public class ConnectingFiguresSample extends Application {
 
@@ -45,12 +46,12 @@ public class ConnectingFiguresSample extends Application {
         LineConnectionFigure edge3Null = new LineConnectionFigure();
         LineConnectionFigure edgeNullNull = new LineConnectionFigure();
 
-        edge12.setStartConnection(vertex1,new ChopRectangleConnector());
-        edge12.setEndConnection(vertex2,new ChopRectangleConnector());
+        edge12.setStartConnection(vertex1, new ChopRectangleConnector());
+        edge12.setEndConnection(vertex2, new ChopRectangleConnector());
 
-        edge23.setStartConnection(vertex2,new ChopRectangleConnector());
-        edge23.setEndConnection(vertex3,new ChopRectangleConnector());
-        edge3Null.setStartConnection(vertex3,new ChopRectangleConnector());
+        edge23.setStartConnection(vertex2, new ChopRectangleConnector());
+        edge23.setEndConnection(vertex3, new ChopRectangleConnector());
+        edge3Null.setStartConnection(vertex3, new ChopRectangleConnector());
         edge3Null.set(LineConnectionFigure.END, new Point2D(145, 15));
         edgeNullNull.set(LineConnectionFigure.START, new Point2D(65, 90));
         edgeNullNull.set(LineConnectionFigure.END, new Point2D(145, 95));
@@ -72,7 +73,7 @@ public class ConnectingFiguresSample extends Application {
         layer.add(edge23);
         layer.add(edge3Null);
         layer.add(edgeNullNull);
-        
+
         drawing.layout();
 
         DrawingView drawingView = new SimpleDrawingView();

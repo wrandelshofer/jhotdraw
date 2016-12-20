@@ -103,7 +103,7 @@ public interface FontableFigure extends Figure {
             text.setTextOrigin(vp);
         }
 
-        final FontSmoothingType fst = (ctx!=null&&ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR)
+        final FontSmoothingType fst = (ctx != null && ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR)
                 ? FontSmoothingType.LCD : FontSmoothingType.GRAY;
         if (text.getFontSmoothingType() != fst) {
             text.setFontSmoothingType(fst);

@@ -309,7 +309,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The figure may choose to only partially change its local bounds.
      * <p>
-     * This method typically changes property values in this figure with null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
+     * This method typically changes property values in this figure with null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -325,7 +325,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The figure may choose to only partially change its parent bounds.
      * <p>
-     * This method typically changes property values in this figure with null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
+     * This method typically changes property values in this figure with null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -517,7 +517,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
-     * Creates handles of the specified level and adds them to the provided list.
+     * Creates handles of the specified level and adds them to the provided
+     * list.
      *
      * @param handleType The desired handle type
      * @param list The handles.

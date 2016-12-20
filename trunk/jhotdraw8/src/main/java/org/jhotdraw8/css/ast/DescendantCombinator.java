@@ -7,8 +7,8 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
- * A "descendant combinator" matches an element if its first selector matches on an
- * ancestor of the element and if its second selector matches on the element
+ * A "descendant combinator" matches an element if its first selector matches on
+ * an ancestor of the element and if its second selector matches on the element
  * itself.
  *
  * @author Werner Randelshofer
@@ -22,7 +22,7 @@ public class DescendantCombinator extends Combinator {
 
     @Override
     public String toString() {
-        return firstSelector + ".isAncestorOf(" + secondSelector+")";
+        return firstSelector + ".isAncestorOf(" + secondSelector + ")";
     }
 
     @Override
@@ -39,8 +39,8 @@ public class DescendantCombinator extends Combinator {
         return result;
     }
 
-  @Override
-  public int getSpecificity() {
-    return firstSelector.getSpecificity()+secondSelector.getSpecificity();
-  }
+    @Override
+    public int getSpecificity() {
+        return firstSelector.getSpecificity() + secondSelector.getSpecificity();
+    }
 }

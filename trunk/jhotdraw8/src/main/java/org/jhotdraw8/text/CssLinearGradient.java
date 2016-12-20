@@ -30,7 +30,7 @@ public class CssLinearGradient implements Paintable {
     private final CssStop[] cstops;
 
     public CssLinearGradient(double startX, double startY, double endX, double endY, boolean proportional, CycleMethod cycleMethod,
-             CssStop... stops) {
+            CssStop... stops) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;

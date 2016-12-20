@@ -27,8 +27,9 @@ public class SuffixMatchSelector extends AbstractAttributeSelector {
     @Override
     protected <T> T match(SelectorModel<T> model, T element) {
         return (model.attributeValueEndsWith(element, attributeName, substring))//
-                        ? element : null;
+                ? element : null;
     }
+
     @Override
     public String toString() {
         return "[" + attributeName + "&=" + substring + ']';

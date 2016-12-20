@@ -85,7 +85,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
 
     @Override
     public CssFont get(Map<? super Key<?>, Object> a) {
-        CssFont f =  CssFont.font(familyKey.get(a), weightKey.get(a), postureKey.get(a), sizeKey.get(a));
+        CssFont f = CssFont.font(familyKey.get(a), weightKey.get(a), postureKey.get(a), sizeKey.get(a));
         return f;
     }
 
@@ -93,7 +93,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor
     public CssFont put(Map<? super Key<?>, Object> a, CssFont value) {
         CssFont oldValue = get(a);
         familyKey.put(a, value.getFamily());
-        weightKey.put(a, value.getWeight()); 
+        weightKey.put(a, value.getWeight());
         postureKey.put(a, value.getPosture());
         sizeKey.put(a, value.getSize());
         return oldValue;

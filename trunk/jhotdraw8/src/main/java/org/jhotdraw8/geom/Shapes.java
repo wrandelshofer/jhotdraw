@@ -174,9 +174,10 @@ public class Shapes {
         }
 
         fxpath.getElements().addAll(fxPathElementsFromAWT(iter));
-        
+
         return fxpath;
     }
+
     /**
      * Converts a Java Path iterator to a JavaFX shape.
      *
@@ -236,7 +237,7 @@ public class Shapes {
      * @return SVG Path
      */
     public static String svgStringFromAWT(PathIterator iter) {
-        XmlNumberConverter nb=new XmlNumberConverter();
+        XmlNumberConverter nb = new XmlNumberConverter();
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
         boolean first = true;
@@ -501,7 +502,7 @@ public class Shapes {
      *
      * Also supports elliptical arc commands 'a' and 'A' as specified in
      * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
-     * 
+     *
      * @param str the SVG path
      * @return the SvgPath2D
      * @throws java.io.IOException if the String is not a valid path
@@ -940,7 +941,7 @@ public class Shapes {
 
         return out;
     }
-    
+
     public static List<PathElement> transformFXPathElements(List<PathElement> elements, javafx.scene.transform.Transform fxT) {
         ArrayList<PathElement> result = new ArrayList<>();
         awtShapeFromFXPathElements(elements);

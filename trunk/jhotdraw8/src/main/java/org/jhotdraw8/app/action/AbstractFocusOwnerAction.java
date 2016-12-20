@@ -14,46 +14,53 @@ import org.jhotdraw8.app.ProjectView;
 
 /**
  * AbstractFocusOwnerAction.
+ *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: AbstractFocusOwnerAction.java 1169 2016-12-11 12:51:19Z
+ * rawcoder $
  */
 public abstract class AbstractFocusOwnerAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
 
     private static final long serialVersionUID = 1L;
     private Node target = null;
-    
+
     private final ChangeListener<V> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
-        if (newValue == null||newValue.getNode()==null) {
+        if (newValue == null || newValue.getNode() == null) {
             disabled.set(true);
         } else {
             Scene s = newValue.getNode().getScene();
             BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty());
-            if (target!=null) {
+            if (target != null) {
                 binding = binding.or(s.focusOwnerProperty().isNotEqualTo(target));
             } else {
-               binding = binding.or( s.focusOwnerProperty().isNull());
+                binding = binding.or(s.focusOwnerProperty().isNull());
             }
             disabled.bind(binding);
         }
     };
 
-    /** Creates a new instance.
-     * @param app the application */
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     */
     public AbstractFocusOwnerAction(Application<V> app) {
-        this(app,null);
+        this(app, null);
     }
-    /** Creates a new instance.
-     * @param app the application 
-    * @param target the target node
-    */
+
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     * @param target the target node
+     */
     public AbstractFocusOwnerAction(Application<V> app, Node target) {
-       super(app);
-        this.target=target;
-            
-        
+        super(app);
+        this.target = target;
+
         app.activeViewProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null,app==null?null: app.getActiveView());
-        
+        activeViewListener.changed(null, null, app == null ? null : app.getActiveView());
+
     }
 }

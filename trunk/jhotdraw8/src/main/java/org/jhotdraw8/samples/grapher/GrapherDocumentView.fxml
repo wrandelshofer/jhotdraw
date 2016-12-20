@@ -9,31 +9,31 @@
 <?import javafx.scene.text.*?>
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <ToolBar fx:id="toolsToolBar" prefHeight="40.0" prefWidth="200.0" styleClass="tools" VBox.vgrow="NEVER" />
-      <SplitPane fx:id="mainSplitPane" dividerPositions="0.5" VBox.vgrow="ALWAYS">
-         <items>
-            <ScrollPane fx:id="viewScrollPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
-               <styleClass>
-                  <String fx:value="view" />
-                  <String fx:value="flush" />
-               </styleClass>
-            </ScrollPane>
-            <ScrollPane fx:id="detailsScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" SplitPane.resizableWithParent="false">
-               <content>
-                  <VBox fx:id="detailsVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-               </content>
-               <styleClass>
-                  <String fx:value="details" />
-                  <String fx:value="flush" />
-                  <String fx:value="inspector" />
-               </styleClass>
-            </ScrollPane>
-         </items>
-         <styleClass>
-            <String fx:value="main" />
+  <children>
+    <ToolBar fx:id="toolsToolBar" prefHeight="40.0" prefWidth="200.0" styleClass="tools" VBox.vgrow="NEVER" />
+    <SplitPane fx:id="mainSplitPane" dividerPositions="0.5" VBox.vgrow="ALWAYS">
+      <items>
+        <ScrollPane fx:id="viewScrollPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+          <styleClass>
+            <String fx:value="view" />
             <String fx:value="flush" />
-         </styleClass>
-      </SplitPane>
-   </children>
+          </styleClass>
+        </ScrollPane>
+        <ScrollPane fx:id="detailsScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" SplitPane.resizableWithParent="false">
+          <content>
+            <VBox fx:id="detailsVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+          </content>
+          <styleClass>
+            <String fx:value="details" />
+            <String fx:value="flush" />
+            <String fx:value="inspector" />
+          </styleClass>
+        </ScrollPane>
+      </items>
+      <styleClass>
+        <String fx:value="main" />
+        <String fx:value="flush" />
+      </styleClass>
+    </SplitPane>
+  </children>
 </VBox>

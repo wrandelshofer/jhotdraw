@@ -45,7 +45,8 @@ import org.jhotdraw8.css.CssTokenizerInterface;
  * </a>
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: SvgTransformListConverter.java 1189 2016-12-13 22:48:43Z
+ * rawcoder $
  */
 public class SvgTransformListConverter implements Converter<List<Transform>> {
 
@@ -244,7 +245,7 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                 throw new ParseException("')' expected: \"" + tt.currentStringValue() + "\"", tt.getStartPosition());
             }
         }
-        
+
         in.position(in.limit());
         return txs;
     }

@@ -59,9 +59,9 @@ public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableMapA
      * @param converter the converter
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData,  Converter<T> converter,T defaultValue) {
+    public SimpleStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
         super(key, clazz, typeParameters, defaultValue);
-        this.converter=converter;
+        this.converter = converter;
         this.cssMetaData = metaData;
     }
 

@@ -24,7 +24,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
     protected K key;
     protected MapChangeListener<K, V> mapListener;
     protected Class<T> tClazz;
-    private WeakMapChangeListener<K,V> weakListener;
+    private WeakMapChangeListener<K, V> weakListener;
 
     public MapEntryProperty(ObservableMap<K, V> map, K key, Class<T> tClazz) {
         this.map = map;
@@ -41,7 +41,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
                     }
                 }
             };
-            map.addListener(weakListener=new WeakMapChangeListener<>(mapListener));
+            map.addListener(weakListener = new WeakMapChangeListener<>(mapListener));
         }
     }
 

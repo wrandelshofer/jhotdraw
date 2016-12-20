@@ -29,14 +29,14 @@ public class ChildCombinator extends Combinator {
     public <T> T match(SelectorModel<T> model, T element) {
         T result = secondSelector.match(model, element);
         if (result != null) {
-            result= firstSelector.match(model, model.getParent(result));
+            result = firstSelector.match(model, model.getParent(result));
         }
         return result;
     }
-    
-  @Override
-  public int getSpecificity() {
-    return firstSelector.getSpecificity()+secondSelector.getSpecificity();
-  }
-    
+
+    @Override
+    public int getSpecificity() {
+        return firstSelector.getSpecificity() + secondSelector.getSpecificity();
+    }
+
 }

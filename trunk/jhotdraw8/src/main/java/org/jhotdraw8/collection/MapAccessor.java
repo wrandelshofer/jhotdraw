@@ -12,9 +12,9 @@ import java.util.Map;
  * A type safe accessor for maps.
  * <p>
  * Design pattern: Strategy
- * 
- * @design.pattern MapAccessor Strategy, Strategy.
- * Encapsulates a strategy for accessing property values of a map.
+ *
+ * @design.pattern MapAccessor Strategy, Strategy. Encapsulates a strategy for
+ * accessing property values of a map.
  *
  * @param <T> The value type.
  * @author Werner Randelshofer
@@ -57,18 +57,21 @@ public interface MapAccessor<T> extends Serializable {
 
     /**
      * Returns the value type.
+     *
      * @return the value type
      */
     Class<T> getValueType();
 
     /**
      * Returns the type parameters of the value type.
+     *
      * @return an unmodifiable list with the type parameters
      */
     List<Class<?>> getValueTypeParameters();
 
     /**
      * Returns the default value of this map accessor.
+     *
      * @return the default value
      */
     T getDefaultValue();
@@ -83,6 +86,7 @@ public interface MapAccessor<T> extends Serializable {
 
     /**
      * Whether the value needs to be made persistent.
+     *
      * @return true if transient
      */
     boolean isTransient();

@@ -622,10 +622,10 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             if (object instanceof StyleableFigure) {
                 StyleableFigure f = (StyleableFigure) object;
                 id = f.get(StyleableFigure.ID);
-                if (id!=null&&getObject(id) == null) {
+                if (id != null && getObject(id) == null) {
                     putId(object, id);
                 } else {
-                    id = super.createId(object,  f.getTypeSelector().toLowerCase());
+                    id = super.createId(object, f.getTypeSelector().toLowerCase());
                 }
             } else {
                 id = super.createId(object);
@@ -633,8 +633,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
         return id;
     }
-    
-    
+
     public String putId(Object object) {
         String id = getId(object);
 
@@ -642,10 +641,10 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
             if (object instanceof StyleableFigure) {
                 StyleableFigure f = (StyleableFigure) object;
                 id = f.get(StyleableFigure.ID);
-                if (id!=null) {
+                if (id != null) {
                     putId(object, id);
                 } else {
-                    id = super.createId(object,f.getTypeSelector());
+                    id = super.createId(object, f.getTypeSelector());
                 }
             } else {
                 id = super.createId(object);

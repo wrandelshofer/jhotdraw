@@ -21,15 +21,15 @@ public class XmlFigureReferenceConverter implements Converter<Figure> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Figure value) throws IOException {
-      out.append(idFactory.getId(value));
+        out.append(idFactory.getId(value));
     }
 
     @Override
     public Figure fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-      String str = buf.toString();
-      return (Figure) idFactory.getObject(str);
+        String str = buf.toString();
+        return (Figure) idFactory.getObject(str);
     }
-    
+
     @Override
     public Figure getDefaultValue() {
         return null;

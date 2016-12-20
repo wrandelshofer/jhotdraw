@@ -206,8 +206,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
         public String toString() {
             return "StyleableMap$StyledValue{" + "origin=" + origin + ", value0=" + value0 + ", value1=" + value1 + ", value2=" + value2 + ", value3=" + value3 + '}';
         }
-        
-        
+
     }
     private ObservableEntrySet entrySet;
     private ObservableKeySet keySet;
@@ -353,8 +352,8 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
     }
 
     public <T> boolean containsStyledKey(K key) {
-       StyledValue sv = backingMap.get(key);
-        return sv == null ? false : sv.getOrigin()!=null;
+        StyledValue sv = backingMap.get(key);
+        return sv == null ? false : sv.getOrigin() != null;
     }
 
     @Override

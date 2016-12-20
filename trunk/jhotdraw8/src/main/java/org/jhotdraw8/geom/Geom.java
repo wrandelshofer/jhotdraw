@@ -38,7 +38,6 @@ public class Geom {
         return b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
-
     public static Bounds union(Bounds a, Bounds b) {
         double minx = Math.min(a.getMinX(), b.getMinX());
         double miny = Math.min(a.getMinY(), b.getMinY());
@@ -46,7 +45,6 @@ public class Geom {
         double maxy = Math.max(a.getMaxY(), b.getMaxY());
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
-
 
     private Geom() {
     } // never instantiated
@@ -1071,13 +1069,13 @@ public class Geom {
                 t.getMyx(), t.getMyy(), 0.0);
         return d;
     }
-    
+
     public static Bounds intersection(Bounds a, Bounds b) {
-        double minx=Math.max(a.getMinX(),b.getMinX());
-        double miny=Math.max(a.getMinY(),b.getMinY());
-        double maxx=Math.min(a.getMaxX(),b.getMaxX());
-        double maxy=Math.min(a.getMaxY(),b.getMaxY());
-        return new BoundingBox(minx,miny,maxx-minx,maxy-miny);
+        double minx = Math.max(a.getMinX(), b.getMinX());
+        double miny = Math.max(a.getMinY(), b.getMinY());
+        double maxx = Math.min(a.getMaxX(), b.getMaxX());
+        double maxy = Math.min(a.getMaxY(), b.getMaxY());
+        return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
 }

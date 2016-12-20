@@ -155,28 +155,28 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     {
         eventPane.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
             try {
-            if (drawingView.get() != null) {
-                DrawingView dv = drawingView.get();
-                EventType<? extends MouseEvent> type = event.getEventType();
-                if (type == MouseEvent.MOUSE_MOVED) {
-                    handleMouseMoved(event, dv);
-                } else if (type == MouseEvent.MOUSE_DRAGGED) {
-                    handleMouseDragged(event, dv);
-                } else if (type == MouseEvent.MOUSE_EXITED) {
-                    handleMouseExited(event, dv);
-                } else if (type == MouseEvent.MOUSE_ENTERED) {
-                    handleMouseEntered(event, dv);
-                } else if (type == MouseEvent.MOUSE_RELEASED) {
-                    handleMouseReleased(event, dv);
-                } else if (type == MouseEvent.MOUSE_PRESSED) {
-                    handleMousePressed(event, dv);
-                } else if (type == MouseEvent.MOUSE_CLICKED) {
-                    handleMouseClicked(event, dv);
-                }
-                event.consume();
+                if (drawingView.get() != null) {
+                    DrawingView dv = drawingView.get();
+                    EventType<? extends MouseEvent> type = event.getEventType();
+                    if (type == MouseEvent.MOUSE_MOVED) {
+                        handleMouseMoved(event, dv);
+                    } else if (type == MouseEvent.MOUSE_DRAGGED) {
+                        handleMouseDragged(event, dv);
+                    } else if (type == MouseEvent.MOUSE_EXITED) {
+                        handleMouseExited(event, dv);
+                    } else if (type == MouseEvent.MOUSE_ENTERED) {
+                        handleMouseEntered(event, dv);
+                    } else if (type == MouseEvent.MOUSE_RELEASED) {
+                        handleMouseReleased(event, dv);
+                    } else if (type == MouseEvent.MOUSE_PRESSED) {
+                        handleMousePressed(event, dv);
+                    } else if (type == MouseEvent.MOUSE_CLICKED) {
+                        handleMouseClicked(event, dv);
                     }
+                    event.consume();
+                }
             } catch (Throwable t) {
-                    t.printStackTrace();
+                t.printStackTrace();
             }
         });
         eventPane.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {

@@ -16,11 +16,11 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.URIUtil;
 
 /**
- * Lets the user write unsaved changes of the active view, and then loads
- the specified URI into the active view.
+ * Lets the user write unsaved changes of the active view, and then loads the
+ * specified URI into the active view.
  * <p>
- * If there is no active view, this action creates a new view and thus
- * acts the same like {@link OpenRecentFileAction}.
+ * If there is no active view, this action creates a new view and thus acts the
+ * same like {@link OpenRecentFileAction}.
  * <p>
  * This action is called when the user selects an item in the Recent Files
  * submenu of the File menu. The action and the menu item is automatically
@@ -29,15 +29,17 @@ import org.jhotdraw8.net.URIUtil;
  * <hr>
  * <b>Features</b>
  *
- * <p><em>Open last URI on launch</em><br>
- * {@code LoadRecentFileAction} supplies data for this feature by calling
- * {@link Application#addRecentURI} when it successfully loaded a file.
- * See {@link org.jhotdraw8.app} for a description of the feature.
+ * <p>
+ * <em>Open last URI on launch</em><br> {@code LoadRecentFileAction} supplies
+ * data for this feature by calling {@link Application#addRecentURI} when it
+ * successfully loaded a file. See {@link org.jhotdraw8.app} for a description
+ * of the feature.
  * </p>
  *
- * <p><em>Allow multiple views per URI</em><br>
- * When the feature is disabled, {@code LoadRecentFileAction} prevents loading an URI which
- * is opened in another view.<br>
+ * <p>
+ * <em>Allow multiple views per URI</em><br>
+ * When the feature is disabled, {@code LoadRecentFileAction} prevents loading
+ * an URI which is opened in another view.<br>
  * See {@link org.jhotdraw8.app} for a description of the feature.
  * </p>
  *
@@ -45,23 +47,27 @@ import org.jhotdraw8.net.URIUtil;
  * @version $Id$
  */
 public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
+
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "file.loadRecent";
     private URI uri;
 
-    /** Creates a new instance. 
+    /**
+     * Creates a new instance.
+     *
      * @param app the application
-     * @param view the view 
+     * @param view the view
      * @param uri the uri of the recent file
-    */
+     */
     public LoadRecentFileAction(Application<DocumentView> app, DocumentView view, URI uri) {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);
         set(Action.LABEL, URIUtil.getName(uri));
     }
-/*
+
+    /*
     @Override
     public void doIt(ProjectView v) {
         final Application app = getApplication();
@@ -167,7 +173,8 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
         });
     }*/
 
-    @Override public CompletionStage<Void> doIt(final DocumentView view) {
+    @Override
+    public CompletionStage<Void> doIt(final DocumentView view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

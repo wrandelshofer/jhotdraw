@@ -8,13 +8,14 @@ import java.util.Objects;
 import javafx.scene.paint.Color;
 
 /**
- * CssColor wraps a Color object but also retains the name that was used to create
- *  the color.
+ * CssColor wraps a Color object but also retains the name that was used to
+ * create the color.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class CssColor implements Paintable {
+
     private final static PatternConverter formatter = new PatternConverter("rgba'('{0,number},{1,number},{2,number},{3,number}')'", new CssConverterFactory());
 
     private final String name;
@@ -48,15 +49,15 @@ public class CssColor implements Paintable {
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
             return String.format("#%02x%02x%02x", r, g, b);
-        }else if (c.equals(Color.TRANSPARENT)) {
+        } else if (c.equals(Color.TRANSPARENT)) {
             return "transparent";
         } else {
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
             double o = c.getOpacity();
-            return formatter.format(r,g,b,o);
-           // return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
+            return formatter.format(r, g, b, o);
+            // return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
         }
     }
 
@@ -89,7 +90,7 @@ public class CssColor implements Paintable {
     public String toString() {
         return "CColor{" + getName() + '}';
     }
-    
+
     public static CssColor valueOf(String value) {
         return new CssColor(value, Color.valueOf(value));
     }

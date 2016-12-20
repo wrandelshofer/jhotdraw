@@ -36,16 +36,16 @@ import org.jhotdraw8.util.Resources;
  * <p>
  * Holding down the shift key on mouse pressed, enforces the area selection
  * function.
- * 
- * @design.pattern SelectionTool Strategy, Context.
- * The different behavior states of the selection tool are implemented by
- * trackers.
+ *
+ * @design.pattern SelectionTool Strategy, Context. The different behavior
+ * states of the selection tool are implemented by trackers.
  * @design.pattern HandleTracker Chain of Responsibility, Handler.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class SelectionTool extends AbstractTool {
+
     public final static String ID = "tool.selectFigure";
     // ---
     // Property names
@@ -76,8 +76,10 @@ public class SelectionTool extends AbstractTool {
      * The tracker encapsulates the current state of the SelectionTool.
      */
     private DragTracker dragTracker;
-    
-    /** Whether to update the cursor on mouse movements. */
+
+    /**
+     * Whether to update the cursor on mouse movements.
+     */
     private boolean updateCursor = true;
 
     private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
@@ -131,10 +133,14 @@ public class SelectionTool extends AbstractTool {
         } else {
             Handle h = view.findHandle(vx, vy);
             if (h != null) {
-              if (updateCursor) node.setCursor(h.getCursor());
+                if (updateCursor) {
+                    node.setCursor(h.getCursor());
+                }
                 setTracker(getHandleTracker(h));
             } else {
-              if (updateCursor) node.setCursor(Cursor.DEFAULT);
+                if (updateCursor) {
+                    node.setCursor(Cursor.DEFAULT);
+                }
 
                 /*
              if (pressedFigure == null && tolerance != 0) {
@@ -230,9 +236,13 @@ public class SelectionTool extends AbstractTool {
         double vy = event.getY();
         Handle h = view.findHandle(vx, vy);
         if (h != null) {
-           if (updateCursor)node.setCursor(h.getCursor());
+            if (updateCursor) {
+                node.setCursor(h.getCursor());
+            }
         } else {
-       if (updateCursor)    node.setCursor(Cursor.DEFAULT);
+            if (updateCursor) {
+                node.setCursor(Cursor.DEFAULT);
+            }
         }
     }
 

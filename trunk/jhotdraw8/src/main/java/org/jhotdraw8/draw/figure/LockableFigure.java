@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.BooleanKey;
  * LockableFigure.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  */
 public interface LockableFigure extends Figure {
@@ -69,6 +69,7 @@ public interface LockableFigure extends Figure {
         }
         return true;*/
     }
+
     /**
      * Whether the figure is not locked and all its parents are editable.
      *

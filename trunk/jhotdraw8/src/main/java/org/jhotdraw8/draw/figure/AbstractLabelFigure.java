@@ -66,8 +66,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
 
     public AbstractLabelFigure(Point2D position) {
         this(position.getX(), position.getY());
-        set(FILL_COLOR,null);
-        set(STROKE_COLOR,null);
+        set(FILL_COLOR, null);
+        set(STROKE_COLOR, null);
     }
 
     public AbstractLabelFigure(double x, double y) {
@@ -91,7 +91,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
                 b.getMinX() - i.getLeft(),
                 b.getMinY() - i.getTop(),
                 b.getWidth() + i.getLeft() + i.getRight(),
-                 textNode.getBaselineOffset()+i.getTop()+ i.getBottom());
+                textNode.getBaselineOffset() + i.getTop() + i.getBottom());
     }
 
     @Override
@@ -101,10 +101,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
             Bounds b = textNode.getBoundsInLocal();
             Insets i = getStyled(PADDING);
             boundsInLocal = new BoundingBox(
-                b.getMinX() - i.getLeft(),
-                b.getMinY() - i.getTop(),
-                b.getWidth() + i.getLeft() + i.getRight(),
-               b.getHeight()+i.getTop()+ i.getBottom());
+                    b.getMinX() - i.getLeft(),
+                    b.getMinY() - i.getTop(),
+                    b.getWidth() + i.getLeft() + i.getRight(),
+                    b.getHeight() + i.getTop() + i.getBottom());
         }
         return boundsInLocal;
     }
@@ -117,7 +117,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     public void reshape(double x, double y, double width, double height) {
         Bounds lb = getLayoutBounds();
         Insets i = getStyled(PADDING);
-        set(ORIGIN, new Point2D(x+i.getLeft(), y +lb.getHeight()-i.getBottom()));
+        set(ORIGIN, new Point2D(x + i.getLeft(), y + lb.getHeight() - i.getBottom()));
         invalidateBounds();
     }
 
@@ -127,11 +127,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         g.setAutoSizeChildren(false);
         Region r = new Region();
         r.setScaleShape(true);
-       // g.getChildren().add(r);
-        Text text=new Text();
+        // g.getChildren().add(r);
+        Text text = new Text();
         g.getChildren().add(text);
-        g.getProperties().put("region",r);
-        g.getProperties().put("text",text);
+        g.getProperties().put("region", r);
+        g.getProperties().put("text", text);
         return g;
     }
 
@@ -142,13 +142,13 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         Text t = (Text) g.getProperties().get("text");
         updateRegionNode(ctx, r);
         updateTextNode(ctx, t);
-        
-        if (getStyled(FILL_COLOR)!=null||getStyled(STROKE_COLOR)!=null) {
-            if (g.getChildren().size()!=2) {
-                g.getChildren().setAll(r,t);
+
+        if (getStyled(FILL_COLOR) != null || getStyled(STROKE_COLOR) != null) {
+            if (g.getChildren().size() != 2) {
+                g.getChildren().setAll(r, t);
             }
-        }else{
-            if (g.getChildren().size()!=1) {
+        } else {
+            if (g.getChildren().size() != 1) {
                 g.getChildren().setAll(t);
             }
         }
@@ -182,7 +182,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         tn.setX(get(ORIGIN_X));
         tn.setY(get(ORIGIN_Y));
         applyTextFillableFigureProperties(tn);
-        applyFontableFigureProperties(ctx,tn);
+        applyFontableFigureProperties(ctx, tn);
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import static java.lang.Math.*;
+
 /**
  * {@code SvgPath2D} adds an {@code arcTo} method to {@code Path2D.Double}.
  *
@@ -199,21 +200,21 @@ public class SvgPath2D extends Path2D.Double {
         while (!i.isDone()) {
             int type = i.currentSegment(coords);
             switch (type) {
-            case PathIterator.SEG_CLOSE:
-                // ignore
-                break;
-            case PathIterator.SEG_CUBICTO:
-                curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
-                break;
-            case PathIterator.SEG_LINETO:
-                lineTo(coords[0], coords[1]);
-                break;
-            case PathIterator.SEG_MOVETO:
-                // ignore
-                break;
-            case PathIterator.SEG_QUADTO:
-                quadTo(coords[0], coords[1], coords[2], coords[3]);
-                break;
+                case PathIterator.SEG_CLOSE:
+                    // ignore
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
+                    break;
+                case PathIterator.SEG_LINETO:
+                    lineTo(coords[0], coords[1]);
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    // ignore
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    quadTo(coords[0], coords[1], coords[2], coords[3]);
+                    break;
             }
             i.next();
         }

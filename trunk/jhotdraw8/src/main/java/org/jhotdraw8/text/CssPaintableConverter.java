@@ -89,22 +89,24 @@ public class CssPaintableConverter implements Converter<Paintable> {
     public Paintable getDefaultValue() {
         return null;
     }
-    
-        @Override
+
+    @Override
     public String getHelpText() {
-        String[] lines=( "Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
-                +"\n"+colorConverter.getHelpText()
-                +"\n"+linearGradientConverter.getHelpText()
-                +"\n"+radialGradientConverter.getHelpText()).split("\n");
-              ;
-              StringBuilder buf=new StringBuilder();
-              Set<String> duplicateLines=new HashSet<>();
-              for (String line:lines) {
-                  if (duplicateLines.add(line)) {
-                      if (buf.length()!=0)buf.append('\n');
-                      buf.append(line);
-                  }
-              }
-              return buf.toString();
+        String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
+                + "\n" + colorConverter.getHelpText()
+                + "\n" + linearGradientConverter.getHelpText()
+                + "\n" + radialGradientConverter.getHelpText()).split("\n");
+        ;
+        StringBuilder buf = new StringBuilder();
+        Set<String> duplicateLines = new HashSet<>();
+        for (String line : lines) {
+            if (duplicateLines.add(line)) {
+                if (buf.length() != 0) {
+                    buf.append('\n');
+                }
+                buf.append(line);
+            }
+        }
+        return buf.toString();
     }
 }

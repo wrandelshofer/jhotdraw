@@ -22,13 +22,12 @@ import org.jhotdraw8.beans.PropertyBean;
  * An {@code Application} manages {@link ProjectView}s.
  *
  * @param <V> the type of project views that this application manages.
- * @design.pattern Application Framework, KeyAbstraction.
- * The application framework supports the creation of document oriented
- * applications which can support platform-specific guidelines.
- * The application framework consists of the following key abstractions:
- * {@link Application}, {@link ApplicationModel}, {@link ProjectView}, 
+ * @design.pattern Application Framework, KeyAbstraction. The application
+ * framework supports the creation of document oriented applications which can
+ * support platform-specific guidelines. The application framework consists of
+ * the following key abstractions:  {@link Application}, {@link ApplicationModel}, {@link ProjectView}, 
  * {@link Action}.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -56,8 +55,8 @@ public interface Application<V extends ProjectView<V>> extends Disableable, Prop
 
     /**
      * The maximal number of recent URIs. Specifies how many items of
-     * {@link #recentUrisProperty} are used and persisted in user preferences. This
-     * number is also persisted.
+     * {@link #recentUrisProperty} are used and persisted in user preferences.
+     * This number is also persisted.
      *
      * @return the number of recent Uris
      */
@@ -158,8 +157,8 @@ public interface Application<V extends ProjectView<V>> extends Disableable, Prop
         Set<URI> recents = recentUrisProperty().get();
         recents.remove(uri);
         recents.add(uri);
-        if (recents.size()>getMaxNumberOfRecentUris()) {
-            Iterator<URI> i=recents.iterator();
+        if (recents.size() > getMaxNumberOfRecentUris()) {
+            Iterator<URI> i = recents.iterator();
             i.next();
             i.remove();
         }

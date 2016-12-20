@@ -15,7 +15,8 @@ import javafx.scene.control.TreeItem;
  *
  * @param <T> The type of the value property within TreeItem.
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $$Id: ExpandedTreeItemIterator.java 1231 2016-12-19 16:38:28Z
+ * rawcoder $$
  */
 public class ExpandedTreeItemIterator<T> implements Iterator<TreeItem<T>> {
 

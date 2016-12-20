@@ -20,8 +20,8 @@ import org.jhotdraw8.draw.io.IdFactory;
  * FIXME should be a converter factory and not a converter.
  * </p>
  * <p>
- * Supports clamping into a {@code [min,max]} range (inclusive), a scale
- * factor and a unit label.
+ * Supports clamping into a {@code [min,max]} range (inclusive), a scale factor
+ * and a unit label.
  * </p>
  * <p>
  * Also allows to specify the minimum and maximum of integer digits, fraction
@@ -199,8 +199,8 @@ public class NumberConverter implements Converter<Number> {
     }
 
     /**
-     * Specifies how many "0" are appended to double and float
-     * values. By default this is 0.
+     * Specifies how many "0" are appended to double and float values. By
+     * default this is 0.
      *
      * @param newValue the value
      */
@@ -229,25 +229,25 @@ public class NumberConverter implements Converter<Number> {
             if (factor != 1.0) {
                 v = v * factor;
             }
-                 if (Double.isInfinite(v)) {
-            if (v < 0.0) {
-                buf.append('-');
-            }
-            buf.append("INF");
-        } else if (Double.isNaN(v)) {
-            buf.append("NaN");
-        } else {
-            String str;
-            BigDecimal big = new BigDecimal(v);
-            int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
-            if (!usesScientificNotation || exponent > minNegativeExponent
-                    && exponent < minPositiveExponent) {
-                str = decimalFormat.format(v);
+            if (Double.isInfinite(v)) {
+                if (v < 0.0) {
+                    buf.append('-');
+                }
+                buf.append("INF");
+            } else if (Double.isNaN(v)) {
+                buf.append("NaN");
             } else {
-                str = scientificFormat.format(v);
+                String str;
+                BigDecimal big = new BigDecimal(v);
+                int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
+                if (!usesScientificNotation || exponent > minNegativeExponent
+                        && exponent < minPositiveExponent) {
+                    str = decimalFormat.format(v);
+                } else {
+                    str = scientificFormat.format(v);
+                }
+                buf.append(str);
             }
-            buf.append(str);
-        }
         } else if (value instanceof Float) {
             float v = ((Float) value).floatValue();
             if (factor != 1.0) {
@@ -372,12 +372,12 @@ public class NumberConverter implements Converter<Number> {
         }
 
         // Remove unit from text
-        if (unit != null && end+unit.length() <= str.length()) {
+        if (unit != null && end + unit.length() <= str.length()) {
             if (str.subSequence(end, end + unit.length()).toString().startsWith(unit)) {
                 end += unit.length();
             }
         }
-       if (text.isEmpty()) {
+        if (text.isEmpty()) {
             throw new ParseException("invalid value", str.position());
         }
 
@@ -422,25 +422,25 @@ public class NumberConverter implements Converter<Number> {
                     }
                     value = v;
                 } else {
-                    throw new ParseException("parse error (1)",str.position());
+                    throw new ParseException("parse error (1)", str.position());
                 }
             } catch (NumberFormatException e) {
-                    ParseException pe= new ParseException("illegal number format",str.position());
-                    pe.initCause(e);
-                    throw pe;
+                ParseException pe = new ParseException("illegal number format", str.position());
+                pe.initCause(e);
+                throw pe;
             }
         } else {
-                    throw new ParseException("illegal value class:"+valueClass,str.position());
+            throw new ParseException("illegal value class:" + valueClass, str.position());
         }
 
         try {
             if (!isValidValue(value, true)) {
-                    throw new ParseException("invalid value",str.position());
+                throw new ParseException("invalid value", str.position());
             }
         } catch (ClassCastException cce) {
-                    ParseException pe=new ParseException("invalid value",str.position());
-                    pe.initCause(cce);
-                    throw pe;
+            ParseException pe = new ParseException("invalid value", str.position());
+            pe.initCause(cce);
+            throw pe;
         }
         // consume the text that we just parsed
         str.position(str.position() + end);
@@ -450,9 +450,8 @@ public class NumberConverter implements Converter<Number> {
     /**
      * Returns true if <code>value</code> is between the min/max.
      *
-     * @param wantsCCE If false, and a ClassCastException is thrown in
-     * comparing the values, the exception is consumed and
-     * false is returned.
+     * @param wantsCCE If false, and a ClassCastException is thrown in comparing
+     * the values, the exception is consumed and false is returned.
      */
     @SuppressWarnings("unchecked")
     boolean isValidValue(Object value, boolean wantsCCE) {
@@ -480,16 +479,20 @@ public class NumberConverter implements Converter<Number> {
         return true;
     }
 
-    /** If non-null the unit string is appended to the value.
+    /**
+     * If non-null the unit string is appended to the value.
      *
-     * @param value the unit string */
+     * @param value the unit string
+     */
     public void setUnit(String value) {
         unit = value;
     }
 
-    /** If non-null the unit string is appended to the value.
+    /**
+     * If non-null the unit string is appended to the value.
      *
-     * @return the unit string */
+     * @return the unit string
+     */
     public String getUnit() {
         return unit;
     }
@@ -614,7 +617,8 @@ public class NumberConverter implements Converter<Number> {
         this.usesScientificNotation = newValue;
     }
 
-    /** Gets the value class.
+    /**
+     * Gets the value class.
      *
      * @return the value class
      */
@@ -622,13 +626,15 @@ public class NumberConverter implements Converter<Number> {
         return valueClass;
     }
 
-    /** Sets the value class.
+    /**
+     * Sets the value class.
      *
      * @param valueClass the value class
      */
     public void setValueClass(Class<? extends Number> valueClass) {
         this.valueClass = valueClass;
     }
+
     @Override
     public Number getDefaultValue() {
         return 0.0;

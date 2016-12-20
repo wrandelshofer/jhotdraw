@@ -43,7 +43,6 @@ public abstract class AbstractFigureMapAccessor<T> implements CompositeMapAccess
 
     private final Set<MapAccessor<?>> subAccessors;
 
-
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.

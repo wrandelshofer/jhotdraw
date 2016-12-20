@@ -219,7 +219,7 @@ public class CssColorConverter implements Converter<CssColor> {
                                 }
                             }
                         }
-                        if (i == 0 ) {
+                        if (i == 0) {
                             buf.append("0,0%,0%)");
                             color = new CssColor(buf.toString(), Color.BLACK);
                             tt.pushBack();

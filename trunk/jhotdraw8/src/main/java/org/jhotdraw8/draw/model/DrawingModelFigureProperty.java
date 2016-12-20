@@ -33,9 +33,8 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
         this.key = key;
         this.figure = figure;
         this.isDeclaredKey = Figure.getDeclaredAndInheritedKeys(figure.getClass()).contains(key);
-        
-        
-        if (key != null&&isDeclaredKey) {
+
+        if (key != null && isDeclaredKey) {
             this.modelListener = (event) -> {
                 if (event.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED
                         && this.figure == event.getFigure() && this.key == event.getKey()) {
@@ -48,16 +47,16 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
             };
 
             model.addDrawingModelListener(weakListener = new WeakListener<DrawingModelEvent>(modelListener, model::removeDrawingModelListener));
-        }else{
-            modelListener=null;
-            weakListener=null;
+        } else {
+            modelListener = null;
+            weakListener = null;
         }
     }
 
     @Override
     public T getValue() {
         @SuppressWarnings("unchecked")
-        T temp = isDeclaredKey?figure.get(key):null;
+        T temp = isDeclaredKey ? figure.get(key) : null;
         return temp;
     }
 

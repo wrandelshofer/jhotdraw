@@ -96,11 +96,11 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return new DrawingModelEvent(source, EventType.SUBTREE_NODES_CHANGED, subtreeRot, null, null, -1, null, null, null);
     }
 
-    public static DrawingModelEvent figureAddedToParent(DrawingModel source, Figure child, Figure parent,  int index) {
+    public static DrawingModelEvent figureAddedToParent(DrawingModel source, Figure child, Figure parent, int index) {
         return new DrawingModelEvent(source, EventType.FIGURE_ADDED_TO_PARENT, child, parent, null, index, null, null, null);
     }
 
-    public static DrawingModelEvent figureRemovedFromParent(DrawingModel source, Figure child, Figure parent,  int index) {
+    public static DrawingModelEvent figureRemovedFromParent(DrawingModel source, Figure child, Figure parent, int index) {
         return new DrawingModelEvent(source, EventType.FIGURE_REMOVED_FROM_PARENT, child, parent, null, index, null, null, null);
     }
 
@@ -115,12 +115,15 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     public static DrawingModelEvent nodeInvalidated(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.NODE_CHANGED, figure, null, null, -1, null, null, null);
     }
+
     public static <T> DrawingModelEvent propertyValueChanged(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
         return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
     }
+
     public static <T> DrawingModelEvent dependencyChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.DEPENDENCY_CHANGED, figure, null, null, -1, null, null, null);
     }
+
     public static <T> DrawingModelEvent transformChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null);
     }
@@ -132,6 +135,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     public static <T> DrawingModelEvent styleInvalidated(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null);
     }
+
     public static <T> DrawingModelEvent rootChanged(DrawingModel source, Drawing figure) {
         return new DrawingModelEvent(source, EventType.ROOT_CHANGED, figure, null, null, -1, null, null, null);
     }

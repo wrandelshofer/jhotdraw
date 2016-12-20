@@ -18,13 +18,13 @@ import org.jhotdraw8.text.Converter;
 public interface StyleableMapAccessor<T> extends MapAccessor<T> {
 
     final static long serialVersionUID = 1L;
+
     /**
      * Returns the name string.
      *
      * @return name string.
      */
     String getName();
-
 
     /**
      * Gets the CssMetaData.
@@ -35,6 +35,7 @@ public interface StyleableMapAccessor<T> extends MapAccessor<T> {
 
     /**
      * FIXME this is horribly inefficient since we have already parsed the CSS.
+     *
      * @return the converter
      */
     Converter<T> getConverter();

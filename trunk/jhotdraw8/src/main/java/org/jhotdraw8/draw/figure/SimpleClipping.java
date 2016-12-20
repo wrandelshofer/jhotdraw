@@ -27,6 +27,7 @@ public class SimpleClipping extends AbstractCompositeFigure
 
     public SimpleClipping() {
     }
+
     public SimpleClipping(Collection<Figure> children) {
         getChildren().addAll(children);
     }
@@ -68,7 +69,9 @@ public class SimpleClipping extends AbstractCompositeFigure
         return false;
     }
 
-    /** Returns false. */
+    /**
+     * Returns false.
+     */
     @Override
     public boolean isLayoutable() {
         return false;
@@ -86,7 +89,7 @@ public class SimpleClipping extends AbstractCompositeFigure
      */
     @Override
     public boolean isSuitableParent(Figure newParent) {
-        return newParent== null;
+        return newParent == null;
     }
 
     /**

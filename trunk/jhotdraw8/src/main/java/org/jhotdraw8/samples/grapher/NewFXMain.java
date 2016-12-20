@@ -9,11 +9,12 @@ import javafx.stage.Stage;
 
 /**
  * NewFXMain.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class NewFXMain extends Application {
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         new GrapherApplication().start(primaryStage);
@@ -23,7 +24,7 @@ public class NewFXMain extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       GrapherApplication.main(args);
+        GrapherApplication.main(args);
     }
-    
+
 }

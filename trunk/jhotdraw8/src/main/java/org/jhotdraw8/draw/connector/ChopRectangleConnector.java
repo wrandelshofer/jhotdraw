@@ -17,12 +17,13 @@ import org.jhotdraw8.geom.Geom;
  * ChopRectangleConnector.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: ChopRectangleConnector.java 1149 2016-11-18 11:00:10Z rawcoder
+ * $
  */
 public class ChopRectangleConnector extends CenterConnector {
 
     @Override
-    public Point2D chopStart(Figure connection, Figure target,double startX, double startY, double endX, double endY) {
+    public Point2D chopStart(Figure connection, Figure target, double startX, double startY, double endX, double endY) {
         // FIXME implement me properly
         Bounds bounds = target.getBoundsInLocal();
         Rectangle2D r = new Rectangle2D(bounds.getMinX(), bounds.getMinY(),

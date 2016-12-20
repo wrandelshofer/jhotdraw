@@ -28,8 +28,9 @@ public class LocatorConnector extends AbstractConnector {
         this.locator = locator;
     }
 
-    /** Returns the locator used to compute the position of the connector.
-     * 
+    /**
+     * Returns the locator used to compute the position of the connector.
+     *
      * @return the locator
      */
     public Locator getLocator() {

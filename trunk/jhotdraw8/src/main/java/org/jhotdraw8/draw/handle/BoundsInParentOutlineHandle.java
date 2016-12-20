@@ -20,7 +20,8 @@ import org.jhotdraw8.draw.figure.Figure;
  * interactions.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: BoundsInParentOutlineHandle.java 1149 2016-11-18 11:00:10Z
+ * rawcoder $
  */
 public class BoundsInParentOutlineHandle extends AbstractHandle {
 
@@ -29,8 +30,9 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     private String styleclass;
 
     public BoundsInParentOutlineHandle(Figure figure) {
-        this(figure,STYLECLASS_HANDLE_SELECT_OUTLINE);
+        this(figure, STYLECLASS_HANDLE_SELECT_OUTLINE);
     }
+
     public BoundsInParentOutlineHandle(Figure figure, String styleclass) {
         super(figure);
 
@@ -77,10 +79,12 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     public boolean isSelectable() {
         return false;
     }
+
     @Override
     public Cursor getCursor() {
         return null;
     }
+
     @Override
     public Point2D getLocationInView() {
         return null;

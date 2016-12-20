@@ -16,12 +16,13 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
 
 /**
  * EffectStyleableFigureKey.
+ *
  * @author Werner Randelshofer
  */
 public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements StyleableMapAccessor<Effect> {
 
     final static long serialVersionUID = 1L;
-    private final CssEffectConverter converter=new CssEffectConverter();
+    private final CssEffectConverter converter = new CssEffectConverter();
     private final CssMetaData<? extends Styleable, Effect> cssMetaData;
 
     /**
@@ -34,7 +35,7 @@ public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements
         this(name, null);
     }
 
-   /**
+    /**
      * Creates a new instance with the specified name and default value.
      *
      * @param name The name of the key.
@@ -56,8 +57,9 @@ public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements
         return cssMetaData;
 
     }
-   @Override
+
+    @Override
     public Converter<Effect> getConverter() {
-       return converter;
+        return converter;
     }
 }

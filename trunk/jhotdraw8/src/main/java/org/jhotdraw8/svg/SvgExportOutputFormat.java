@@ -123,7 +123,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     private URI externalHome;
     private IdFactory idFactory = new SimpleIdFactory();
     private String indent = "  ";
-    private boolean skipInvisibleNodes=true;
+    private boolean skipInvisibleNodes = true;
 
     public Document toDocument(Drawing external) throws IOException {
         return toDocument(external, Collections.singleton(external));
@@ -221,7 +221,9 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     }
 
     private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node, String linebreak) throws IOException {
-        if (skipInvisibleNodes&&!node.isVisible()) return;
+        if (skipInvisibleNodes && !node.isVisible()) {
+            return;
+        }
         parent.appendChild(doc.createTextNode(linebreak));
 
         Element elem = null;
@@ -251,7 +253,7 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
             final Parent pp = (Parent) node;
             final String lbi = linebreak + indent;
             for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                writeNodeRecursively(doc, elem, child,lbi);
+                writeNodeRecursively(doc, elem, child, lbi);
             }
             if (!pp.getChildrenUnmodifiable().isEmpty()) {
                 elem.appendChild(doc.createTextNode(linebreak));
@@ -277,7 +279,9 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     }
 
     private void writeDefsRecursively(Document doc, Element defsNode, javafx.scene.Node node) throws IOException {
-        if (skipInvisibleNodes&&!node.isVisible()) return;
+        if (skipInvisibleNodes && !node.isVisible()) {
+            return;
+        }
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
             writePaintDefs(doc, defsNode, shape.getFill());

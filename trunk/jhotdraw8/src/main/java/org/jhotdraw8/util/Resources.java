@@ -173,8 +173,8 @@ public class Resources extends ResourceBundle implements Serializable {
      * get("+key+"):"+value); return value; } catch (MissingResourceException e)
      * { // System.out.println("Resources "+baseName+"
      * get("+key+"):***MISSING***"); if (isVerbose) {
-     * System.err.println("Warning Resources[" + baseName + "] \"" +
-     * key + "\" not found."); //e.printStackTrace(); } return key; } }
+     * System.err.println("Warning Resources[" + baseName + "] \"" + key + "\"
+     * not found."); //e.printStackTrace(); } return key; } }
      */
     /**
      * Recursive part of the getString method.
@@ -193,8 +193,8 @@ public class Resources extends ResourceBundle implements Serializable {
                 } else {
                     value = null;
                 }
-                
-                if (value==null) {
+
+                if (value == null) {
                     if (isVerbose) {
                         System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
                         //e.printStackTrace();

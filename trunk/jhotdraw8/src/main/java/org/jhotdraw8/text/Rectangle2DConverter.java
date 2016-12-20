@@ -34,8 +34,9 @@ public class Rectangle2DConverter implements Converter<Rectangle2D> {
         }
         return new Rectangle2D((double) v[0], (double) v[1], (double) v[2], (double) v[3]);
     }
+
     @Override
     public Rectangle2D getDefaultValue() {
-        return new Rectangle2D(0,0,0,0);
+        return new Rectangle2D(0, 0, 0, 0);
     }
 }

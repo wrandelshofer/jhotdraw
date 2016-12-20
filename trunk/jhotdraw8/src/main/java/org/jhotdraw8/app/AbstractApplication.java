@@ -48,9 +48,9 @@ public abstract class AbstractApplication<V extends ProjectView<V>> extends java
                     this, RECENT_URIS_PROPERTY, //
                     FXCollections.observableSet(new LinkedHashSet<URI>())).getReadOnlyProperty();
 
-   protected void loadRecentUris(String applicationId) {
+    protected void loadRecentUris(String applicationId) {
         Preferences prefs = Preferences.userNodeForPackage(AbstractApplication.class);
-        String recentUrisSerialized = prefs.get(applicationId+".recentUris", "");
+        String recentUrisSerialized = prefs.get(applicationId + ".recentUris", "");
         for (String str : recentUrisSerialized.split("\t")) {
             if (str.isEmpty()) {
                 continue;
@@ -82,32 +82,31 @@ public abstract class AbstractApplication<V extends ProjectView<V>> extends java
                 }
                 buf.append(str);
             }
-            prefs.put(applicationId+".recentUris", buf.toString());
+            prefs.put(applicationId + ".recentUris", buf.toString());
         });
     }
 
-  /**
-   * Holds the disablers.
-   */
-  private final ObservableSet<Object> disablers = FXCollections.observableSet();
-  /**
-   * Holds the disabled state.
-   */
-  private final ReadOnlyBooleanProperty disabled;
+    /**
+     * Holds the disablers.
+     */
+    private final ObservableSet<Object> disablers = FXCollections.observableSet();
+    /**
+     * Holds the disabled state.
+     */
+    private final ReadOnlyBooleanProperty disabled;
 
-  {
-    ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
-    robw.bind(Bindings.isNotEmpty(disablers));
-    disabled = robw.getReadOnlyProperty();
-  }
-
+    {
+        ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
+        robw.bind(Bindings.isNotEmpty(disablers));
+        disabled = robw.getReadOnlyProperty();
+    }
 
     @Override
     public ReadOnlyBooleanProperty disabledProperty() {
         return disabled;
     }
 
-   @Override
+    @Override
     public ObservableSet<Object> disablers() {
         return disablers;
     }
@@ -133,5 +132,5 @@ public abstract class AbstractApplication<V extends ProjectView<V>> extends java
         }
         return properties;
     }
-    
+
 }

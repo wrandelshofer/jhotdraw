@@ -15,23 +15,26 @@ import javafx.stage.Window;
 
 /**
  * FileURIChooser.
+ *
  * @author Werner Randelshofer
  */
 public class FileURIChooser implements URIChooser {
 
-    /** The associated file chooser object. */
+    /**
+     * The associated file chooser object.
+     */
     private final FileChooser chooser = new FileChooser();
 
-    private final ObservableList<URIExtensionFilter> filters=FXCollections.observableArrayList();
+    private final ObservableList<URIExtensionFilter> filters = FXCollections.observableArrayList();
 
-  private void updateFilters() {
-    ObservableList<FileChooser.ExtensionFilter> cfilters=chooser.getExtensionFilters();
-    cfilters.clear();
-    for (URIExtensionFilter f:filters) {
-      cfilters.add(f.getFileChooserExtensionFilter());
+    private void updateFilters() {
+        ObservableList<FileChooser.ExtensionFilter> cfilters = chooser.getExtensionFilters();
+        cfilters.clear();
+        for (URIExtensionFilter f : filters) {
+            cfilters.add(f.getFileChooserExtensionFilter());
+        }
     }
-  }
-    
+
     public enum Mode {
 
         OPEN, SAVE
@@ -61,7 +64,7 @@ public class FileURIChooser implements URIChooser {
 
     @Override
     public URI showDialog(Window parent) {
-      updateFilters();
+        updateFilters();
         File f = null;
         switch (mode) {
             case OPEN:
@@ -73,18 +76,18 @@ public class FileURIChooser implements URIChooser {
         }
         return f == null ? null : f.toURI();
     }
-    
+
     public void setExtensionFilters(List<URIExtensionFilter> filters) {
-      this.filters.setAll(filters);
+        this.filters.setAll(filters);
     }
 
-  @Override
-  public DataFormat getDataFormat() {
-    for (URIExtensionFilter f:filters) {
-      if (f.getFileChooserExtensionFilter()==chooser.getSelectedExtensionFilter()) {
-        return f.getDataFormat();
-      }
+    @Override
+    public DataFormat getDataFormat() {
+        for (URIExtensionFilter f : filters) {
+            if (f.getFileChooserExtensionFilter() == chooser.getSelectedExtensionFilter()) {
+                return f.getDataFormat();
+            }
+        }
+        return null;
     }
-return null;
-  }
 }

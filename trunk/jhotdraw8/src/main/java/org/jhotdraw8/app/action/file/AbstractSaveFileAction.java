@@ -29,7 +29,8 @@ import org.jhotdraw8.app.ProjectView;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: AbstractSaveFileAction.java 1169 2016-12-11 12:51:19Z rawcoder
+ * $
  */
 public abstract class AbstractSaveFileAction extends AbstractViewAction<DocumentView> {
 
@@ -114,31 +115,31 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
     }
 
     protected void saveViewToURI(final DocumentView v, final URI uri, final DataFormat format) {
-        v.write(uri,format).handle((result, exception) -> {
+        v.write(uri, format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
             } else if (exception != null) {
-                    Throwable value = exception;
-                    value.printStackTrace();
-                    String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-                    Alert alert = new Alert(Alert.AlertType.ERROR,
-                            ((message == null) ? "" : message));
-                    alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
-                    alert.showAndWait();
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
+                Throwable value = exception;
+                value.printStackTrace();
+                String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
+                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        ((message == null) ? "" : message));
+                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
+                alert.showAndWait();
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
             } else {
-                    handleSucceded(v, uri);
-                    v.removeDisabler(this);
-                    if (oldFocusOwner != null) {
-                        oldFocusOwner.requestFocus();
-                    }
+                handleSucceded(v, uri);
+                v.removeDisabler(this);
+                if (oldFocusOwner != null) {
+                    oldFocusOwner.requestFocus();
+                }
             }
             return null;
         });

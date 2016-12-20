@@ -24,12 +24,12 @@ import org.jhotdraw8.collection.Key;
  * @version $Id$
  * @param <V> the project view type
  */
-public abstract class AbstractProjectView<V extends ProjectView<V >> extends AbstractDisableable implements ProjectView<V> {
+public abstract class AbstractProjectView<V extends ProjectView<V>> extends AbstractDisableable implements ProjectView<V> {
 
     protected ObjectProperty<Application<V>> application = new SimpleObjectProperty<>();
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
     protected final ObservableMap<Key<?>, Object> properties//
-            =                  FXCollections.observableMap(new IdentityHashMap<>());
+            = FXCollections.observableMap(new IdentityHashMap<>());
     protected final StringProperty title = new SimpleStringProperty();
     private final IntegerProperty disambiguation = new SimpleIntegerProperty();
 
@@ -47,7 +47,6 @@ public abstract class AbstractProjectView<V extends ProjectView<V >> extends Abs
     public StringProperty titleProperty() {
         return title;
     }
-
 
     @Override
     public ObjectProperty<Application<V>> applicationProperty() {

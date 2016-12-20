@@ -26,7 +26,6 @@ import org.jhotdraw8.io.CharBufferReader;
  */
 public class CssUriConverter implements Converter<URI> {
 
-
     @Override
     public URI fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
@@ -34,8 +33,8 @@ public class CssUriConverter implements Converter<URI> {
                 && "none".equals(tt.currentStringValue())) {
             return null;
         }
-        if (tt.currentToken()!= CssTokenizer.TT_URI) {
-            throw new ParseException("Css URI expected. "+tt.currentToken(), buf.position());
+        if (tt.currentToken() != CssTokenizer.TT_URI) {
+            throw new ParseException("Css URI expected. " + tt.currentToken(), buf.position());
         }
         return URI.create(tt.currentStringValue());
     }

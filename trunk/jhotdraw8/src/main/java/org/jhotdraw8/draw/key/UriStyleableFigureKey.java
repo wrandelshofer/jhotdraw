@@ -24,7 +24,7 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  */
 public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements StyleableMapAccessor<URI> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, URI> cssMetaData;
 
@@ -82,7 +82,7 @@ public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements Style
     }
 
     @Override
-    public CssMetaData<?,URI> getCssMetaData() {
+    public CssMetaData<?, URI> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -95,5 +95,5 @@ public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements Style
             converter = new CssUriConverter();
         }
         return converter;
-    }   
+    }
 }

@@ -25,62 +25,64 @@ import javafx.beans.value.WritableValue;
  */
 public class CustomBinding {
 
-  /**
-   * Creates a bidirectional binding for properties A and B using the conversion
-   * functions updateB and updateA.
-   *
-   * @param <A> the type of value A
-   * @param <B> the type of value B
-   * @param <PROPERTY_A> the type of property A
-   * @param <PROPERTY_B> the type of property B
-   * @param propertyA property A
-   * @param propertyB property B
-   * @param updateB converts a value from A to B
-   * @param updateA converts a value from B to A
-   */
-  public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>,
-        PROPERTY_B extends WritableValue<B> & ObservableValue<B>> void bindBidirectional(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> updateB, Function<B, A> updateA) {
-    boolean[] alreadyCalled = new boolean[1];
-    addFlaggedChangeListener(propertyB, propertyA, updateB, alreadyCalled);
-    addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
-  }
-
-  /**
-   * Binds writable value A to observable value B using the conversion function updateA.
-   *
-   * @param <B> the type of observable value A
-   * @param <A> the type of observable value B
-   * @param propertyB property A
-   * @param propertyA property B
-   * @param updateA converts a value from B to A
-   */
-  public static <A,B> void bind(WritableValue<A> propertyA, ObservableValue<B> propertyB, Function<B, A> updateA) {
-    boolean[] alreadyCalled = new boolean[1];
-    addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
-  }
-
-  private static <Y, X> void addFlaggedChangeListener( WritableValue<X> propertyX, ObservableValue<Y> propertyY,Function<Y, X> updateX,
-          boolean[] alreadyCalled) {
-    propertyY.addListener((observable, oldValue, newValue) -> {
-      if (!alreadyCalled[0]) {
-        try {
-          alreadyCalled[0] = true;
-          propertyX.setValue(updateX.apply(newValue));
-        } finally {
-          alreadyCalled[0] = false;
-        }
-      }
+    /**
+     * Creates a bidirectional binding for properties A and B using the
+     * conversion functions updateB and updateA.
+     *
+     * @param <A> the type of value A
+     * @param <B> the type of value B
+     * @param <PROPERTY_A> the type of property A
+     * @param <PROPERTY_B> the type of property B
+     * @param propertyA property A
+     * @param propertyB property B
+     * @param updateB converts a value from A to B
+     * @param updateA converts a value from B to A
+     */
+    public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>> void bindBidirectional(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> updateB, Function<B, A> updateA) {
+        boolean[] alreadyCalled = new boolean[1];
+        addFlaggedChangeListener(propertyB, propertyA, updateB, alreadyCalled);
+        addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
     }
-    );
-  }
-  
-      /** Returns a string expression which uses {@code java.test.MessageFormat} to format
-     * the text.
-     * See {@link MessageStringFormatter} for special treatment of boolean values.
+
+    /**
+     * Binds writable value A to observable value B using the conversion
+     * function updateA.
+     *
+     * @param <B> the type of observable value A
+     * @param <A> the type of observable value B
+     * @param propertyB property A
+     * @param propertyA property B
+     * @param updateA converts a value from B to A
+     */
+    public static <A, B> void bind(WritableValue<A> propertyA, ObservableValue<B> propertyB, Function<B, A> updateA) {
+        boolean[] alreadyCalled = new boolean[1];
+        addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
+    }
+
+    private static <Y, X> void addFlaggedChangeListener(WritableValue<X> propertyX, ObservableValue<Y> propertyY, Function<Y, X> updateX,
+            boolean[] alreadyCalled) {
+        propertyY.addListener((observable, oldValue, newValue) -> {
+            if (!alreadyCalled[0]) {
+                try {
+                    alreadyCalled[0] = true;
+                    propertyX.setValue(updateX.apply(newValue));
+                } finally {
+                    alreadyCalled[0] = false;
+                }
+            }
+        }
+        );
+    }
+
+    /**
+     * Returns a string expression which uses {@code java.test.MessageFormat} to
+     * format the text. See {@link MessageStringFormatter} for special treatment
+     * of boolean values.
      *
      * @param format The format string.
      * @param args The arguments.
-     * @return  The string expression */
+     * @return The string expression
+     */
     public static StringExpression formatted(String format, Object... args) {
         return MessageStringFormatter.format(format, args);
     }

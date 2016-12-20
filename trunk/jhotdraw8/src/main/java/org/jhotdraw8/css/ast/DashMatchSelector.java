@@ -9,9 +9,9 @@ import org.jhotdraw8.css.SelectorModel;
 /**
  * A "dash match selector" {@code |=} matches an element if the element has an
  * attribute with the specified name and its value is either exactly the
- * specified substring or its value begins with the specified substring immediately
- * followed by a dash '-' character. This is primarily intended to allow
- * language subcode matches.
+ * specified substring or its value begins with the specified substring
+ * immediately followed by a dash '-' character. This is primarily intended to
+ * allow language subcode matches.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -30,6 +30,6 @@ public class DashMatchSelector extends AbstractAttributeSelector {
     protected <T> T match(SelectorModel<T> model, T element) {
         return (model.attributeValueEquals(element, attributeName, substring) //
                 || model.attributeValueStartsWith(element, attributeName, substring + '-'))//
-                        ? element : null;
+                ? element : null;
     }
 }

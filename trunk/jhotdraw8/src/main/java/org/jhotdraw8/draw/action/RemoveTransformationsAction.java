@@ -58,7 +58,7 @@ public class RemoveTransformationsAction<V extends ProjectView<V>> extends Abstr
         for (Figure child : figures) {
             if (child instanceof TransformableFigure) {
                 for (Key<?> k : keys) {
-                   model.remove(child, k);
+                    model.remove(child, k);
                 }
             }
         }

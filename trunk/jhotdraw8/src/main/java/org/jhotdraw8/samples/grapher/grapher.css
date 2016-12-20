@@ -20,15 +20,15 @@
 }
 
 .main {
-    
+
 }
 
 .master {
-    -fx-background-color: #fff;
+  -fx-background-color: #fff;
 }
 
 .view > * {
-    -fx-background-color: #888;
+  -fx-background-color: #888;
 }
 
 .details {
@@ -39,24 +39,24 @@
 
 
 .main > .split-pane-divider {  
-    -fx-padding: 0 1px 0 1px;  
+  -fx-padding: 0 1px 0 1px;  
 } 
 
 /* A control which is placed flush to all sides
  * does not need a border.
  */
 .flush {
-    -fx-background-insets: 0, 0;
-    -fx-padding: 0;
-    -fx-border-width: 0;
+  -fx-background-insets: 0, 0;
+  -fx-padding: 0;
+  -fx-border-width: 0;
 }
 .flush:focused {
-    -fx-background-insets: 0, 0;
+  -fx-background-insets: 0, 0;
 }
 .flush .corner {
-    -fx-background-insets: 0, 0;
+  -fx-background-insets: 0, 0;
 }
 
 .flush > .scroll-bar {
-    -fx-background-insets: 0;
+  -fx-background-insets: 0;
 }

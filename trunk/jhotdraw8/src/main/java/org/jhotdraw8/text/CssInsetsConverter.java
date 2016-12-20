@@ -25,6 +25,7 @@ import org.jhotdraw8.draw.io.IdFactory;
  * @version $Id$
  */
 public class CssInsetsConverter implements Converter<Insets> {
+
     // FIXME must use CssParser instead of PatternConverter!!
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 

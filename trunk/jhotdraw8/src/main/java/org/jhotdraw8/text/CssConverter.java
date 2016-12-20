@@ -10,9 +10,9 @@ package org.jhotdraw8.text;
  * @author Werner Randelshofer
  * @version $Id$
  * @param <T> The type of the data value
- * 
+ *
  * @author Werner Randelshofer
  */
 public interface CssConverter<T> {
-    
+
 }

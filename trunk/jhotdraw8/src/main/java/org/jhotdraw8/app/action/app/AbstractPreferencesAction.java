@@ -16,17 +16,22 @@ import org.jhotdraw8.util.Resources;
 /**
  * Displays a preferences dialog for the application.
  * <p>
-
+ *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: AbstractPreferencesAction.java 1169 2016-12-11 12:51:19Z
+ * rawcoder $
  */
 public abstract class AbstractPreferencesAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
+
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "application.preferences";
 
-    /** Creates a new instance.
-     * @param app the application */
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     */
     public AbstractPreferencesAction(Application<V> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);

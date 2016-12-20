@@ -16,7 +16,8 @@ import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
- * WordListConverter converts an ImmutableObservableList of Strings into a String.
+ * WordListConverter converts an ImmutableObservableList of Strings into a
+ * String.
  * <p>
  * The word list is actually a "set of space separated tokens", as specified in
  * HTML 5 and in XML Schema Part 2.
@@ -42,7 +43,7 @@ public class CssObservableWordListConverter implements Converter<ImmutableObserv
 
     public final static Comparator<String> NFD_COMPARATOR
             = (o1, o2) -> Normalizer.normalize(o1, Normalizer.Form.NFD).compareTo(
-            Normalizer.normalize(o2, Normalizer.Form.NFD));
+                    Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {

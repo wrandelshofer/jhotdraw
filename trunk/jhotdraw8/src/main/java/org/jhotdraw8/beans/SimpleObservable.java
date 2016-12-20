@@ -25,7 +25,7 @@ public class SimpleObservable implements Observable {
     public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         return invalidationListeners;
     }
-    
+
     @Override
     public void addListener(InvalidationListener listener) {
         invalidationListeners.add(listener);

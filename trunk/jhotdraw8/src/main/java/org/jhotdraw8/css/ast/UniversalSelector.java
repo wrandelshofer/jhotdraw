@@ -24,8 +24,8 @@ public class UniversalSelector extends SimpleSelector {
         return element;
     }
 
-  @Override
-  public int getSpecificity() {
-    return 0;
-  }
+    @Override
+    public int getSpecificity() {
+        return 0;
+    }
 }

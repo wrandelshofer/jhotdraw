@@ -37,7 +37,7 @@ import org.jhotdraw8.geom.Geom;
  * @author Werner Randelshofer
  */
 public class MoveHandle extends LocatorHandle {
-    
+
     private Point2D pickLocation;
     private Point2D oldPoint;
     private final Region node;
@@ -46,11 +46,11 @@ public class MoveHandle extends LocatorHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
-    
+
     public MoveHandle(Figure figure, Locator locator) {
         this(figure, STYLECLASS_HANDLE_MOVE, locator);
     }
-    
+
     public MoveHandle(Figure figure, String styleclass, Locator locator) {
         super(figure, locator);
         this.styleclass = styleclass;
@@ -60,23 +60,23 @@ public class MoveHandle extends LocatorHandle {
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(11, 11);
-        
+
         node.getStyleClass().clear();
         node.getStyleClass().add(styleclass);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
-    
+
     @Override
     public Cursor getCursor() {
         return Cursor.OPEN_HAND;
     }
-    
+
     @Override
     public Region getNode() {
         return node;
     }
-    
+
     @Override
     public void updateNode(DrawingView view) {
         Figure f = owner;
@@ -96,7 +96,7 @@ public class MoveHandle extends LocatorHandle {
         node.setRotate(f.getStyled(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }
-    
+
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
@@ -111,29 +111,29 @@ public class MoveHandle extends LocatorHandle {
         }
         groupReshapeableFigures = view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
     }
-    
+
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
-        
+
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
             newPoint = view.getConstrainer().constrainPoint(owner, newPoint);
         }
-        
+
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
             oldPoint = owner.getLocalToWorld().transform(loc);
         }
-        
+
         if (oldPoint.equals(newPoint)) {
             return;
         }
 
         //Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
         DrawingModel model = view.getModel();
-        
+
         if (event.isShiftDown()) {
             // shift transforms all selected figures
             for (Figure f : groupReshapeableFigures) {
@@ -165,17 +165,17 @@ public class MoveHandle extends LocatorHandle {
             f.reshapeInParent(tx);
         }
     }
-    
+
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fire undoable edit
     }
-    
+
     @Override
     public boolean isSelectable() {
         return true;
     }
-    
+
     @Override
     public Point2D getLocationInView() {
         return pickLocation;

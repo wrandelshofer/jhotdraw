@@ -16,7 +16,7 @@ import org.jhotdraw8.text.Paintable;
  * {@code TextFillableFigure} allows to change the fill of the text.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -36,6 +36,7 @@ public interface TextFillableFigure extends Figure {
     default void applyTextFillableFigureProperties(Text text) {
         text.setFill(Paintable.getPaint(getStyled(TEXT_FILL)));
     }
+
     /**
      * Updates a text node with label properties.
      *

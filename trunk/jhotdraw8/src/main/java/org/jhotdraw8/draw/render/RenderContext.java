@@ -14,26 +14,29 @@ import org.jhotdraw8.collection.SimpleKey;
 /**
  * RenderContext.
  *
- * @design.pattern RenderContext Builder, Client.
- * The builder pattern is used for the creation of a JavaFX scene graph from
- * a Figure. The creation of the scene graph is delegated to the methods 
- * Figure.createNode and Figure.updateNode. Typically each concrete Figure
- * class will generate a different scene graph. The same Figure object may also 
- * create different scene graphs depending on property values of the RenderContext.
- * For example a PageFigure will render the current page number of the
- * PrintRenderContext.
- * 
+ * @design.pattern RenderContext Builder, Client. The builder pattern is used
+ * for the creation of a JavaFX scene graph from a Figure. The creation of the
+ * scene graph is delegated to the methods Figure.createNode and
+ * Figure.updateNode. Typically each concrete Figure class will generate a
+ * different scene graph. The same Figure object may also create different scene
+ * graphs depending on property values of the RenderContext. For example a
+ * PageFigure will render the current page number of the PrintRenderContext.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public interface RenderContext extends PropertyBean {
+
     // ---
     // keys
     // ---
-    Key<RenderingIntent> RENDERING_INTENT = new SimpleKey<>("renderingIntent",RenderingIntent.class,RenderingIntent.EDITOR);
-    
-    /** The dots per inch of the rendering device. */
-    Key<Double> DPI = new SimpleKey<>("dpi",Double.class,72.0);
+    Key<RenderingIntent> RENDERING_INTENT = new SimpleKey<>("renderingIntent", RenderingIntent.class, RenderingIntent.EDITOR);
+
+    /**
+     * The dots per inch of the rendering device.
+     */
+    Key<Double> DPI = new SimpleKey<>("dpi", Double.class, 72.0);
+
     // ---
     // behavior
     // ---

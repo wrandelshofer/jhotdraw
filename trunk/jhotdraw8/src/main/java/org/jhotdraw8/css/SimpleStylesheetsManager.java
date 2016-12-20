@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Werner Randelshofer
  * @version $Id: SimpleStylesheetsManager.java 1120 2016-01-15 17:37:49Z
- rawcoder $
+ * rawcoder $
  * @param <E> the element type that can be styled by this style manager
  */
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
@@ -47,10 +47,11 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     public SimpleStylesheetsManager(SelectorModel<E> selectorModel) {
         this.selectorModel = selectorModel;
     }
-    
+
     public void getSelectorModel(SelectorModel<E> newValue) {
         selectorModel = newValue;
     }
+
     @Override
     public SelectorModel<E> getSelectorModel() {
         return selectorModel;
@@ -211,23 +212,22 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     @Override
     public void applyStylesheetsTo(E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
-        
+
         // The stylesheet is a user-agent stylesheet
         for (Declaration d : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
-            selectorModel.setAttribute(elem, StyleOrigin.USER_AGENT, d.getProperty(),d.getTermsAsString());
+            selectorModel.setAttribute(elem, StyleOrigin.USER_AGENT, d.getProperty(), d.getTermsAsString());
         }
 
         // The value of a property was set by the user through a call to a set method
         // StyleOrigin.USER
-        
         // The stylesheet is an external file
         for (Declaration d : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
-            selectorModel.setAttribute(elem, StyleOrigin.AUTHOR, d.getProperty(),d.getTermsAsString());
+            selectorModel.setAttribute(elem, StyleOrigin.AUTHOR, d.getProperty(), d.getTermsAsString());
         }
 
         // The stylesheet is an internal file
         for (Declaration d : collectApplicableDeclarations(elem, getInlineStylesheets())) {
-            selectorModel.setAttribute(elem, StyleOrigin.INLINE, d.getProperty(),d.getTermsAsString());
+            selectorModel.setAttribute(elem, StyleOrigin.INLINE, d.getProperty(), d.getTermsAsString());
         }
 
         // 'inline style attributes' can override all other values
@@ -255,14 +255,15 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     /**
-     * Collects all declarations in all specified stylesheets which are applicable to the specified element.
-     * 
+     * Collects all declarations in all specified stylesheets which are
+     * applicable to the specified element.
+     *
      * @param elem an element
      * @param stylesheets the stylesheets
      * @return list of applicable declarations
      */
     private List<Declaration> collectApplicableDeclarations(E elem, Collection<ParsedStylesheetEntry> stylesheets) {
-List<Map.Entry<Integer, Declaration>> applicableDeclarations = new LinkedList<>();
+        List<Map.Entry<Integer, Declaration>> applicableDeclarations = new LinkedList<>();
         for (ParsedStylesheetEntry e : stylesheets) {
             Stylesheet s = e.getStylesheet();
             if (s == null) {
@@ -270,22 +271,22 @@ List<Map.Entry<Integer, Declaration>> applicableDeclarations = new LinkedList<>(
             }
             collectApplicableDeclarations(elem, s, applicableDeclarations);
         }
-        
+
         return applicableDeclarations.stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
-    private  List<Map.Entry<Integer, Declaration>> collectApplicableDeclarations(E elem, Stylesheet s,  List<Map.Entry<Integer, Declaration>>  applicableDeclarations) {
+    private List<Map.Entry<Integer, Declaration>> collectApplicableDeclarations(E elem, Stylesheet s, List<Map.Entry<Integer, Declaration>> applicableDeclarations) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
-          Selector selector;
-            if (null!=(selector=r.getSelectorGroup().match(selectorModel, elem))) {
+            Selector selector;
+            if (null != (selector = r.getSelectorGroup().match(selectorModel, elem))) {
                 for (Declaration d : r.getDeclarations()) {
                     // Declarations without terms are ignored
                     if (d.getTerms().isEmpty()) {
                         continue;
                     }
 
-                    applicableDeclarations.add(new AbstractMap.SimpleEntry<>(selector.getSpecificity(),d));
+                    applicableDeclarations.add(new AbstractMap.SimpleEntry<>(selector.getSpecificity(), d));
                 }
             }
         }
@@ -297,8 +298,8 @@ List<Map.Entry<Integer, Declaration>> applicableDeclarations = new LinkedList<>(
         SelectorModel<E> selectorModel = getSelectorModel();
         for (Map.Entry<Integer, Declaration> entry : collectApplicableDeclarations(elem, s,
                 new LinkedList<Map.Entry<Integer, Declaration>>())) {
-          Declaration d = entry.getValue();
-            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(),d.getTermsAsString());
+            Declaration d = entry.getValue();
+            selectorModel.setAttribute(elem, styleOrigin, d.getProperty(), d.getTermsAsString());
         }
     }
 }

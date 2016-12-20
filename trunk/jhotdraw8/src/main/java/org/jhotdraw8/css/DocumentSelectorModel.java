@@ -267,11 +267,11 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     public Set<String> getComposedAttributeNames(Element element) {
         return getAttributeNames(element);
     }
+
     @Override
     public Set<String> getDecomposedAttributeNames(Element element) {
         return getAttributeNames(element);
     }
-
 
     @Override
     public void setAttribute(Element element, StyleOrigin origin, String name, String value) {

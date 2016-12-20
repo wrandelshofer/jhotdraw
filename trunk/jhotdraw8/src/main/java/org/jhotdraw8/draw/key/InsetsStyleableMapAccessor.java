@@ -36,7 +36,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
 
     /**
      * Creates a new instance with the specified name.
-     * 
+     *
      * @param name the name of the accessor
      * @param topKey the insets top key
      * @param rightKey the insets right key

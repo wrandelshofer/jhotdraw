@@ -8,7 +8,7 @@ import org.jhotdraw8.css.SelectorModel;
 
 /**
  * A "prefix match selector" {@code ^=} matches an element if the element has an
- * attribute with the specified name and its value starts with the specified 
+ * attribute with the specified name and its value starts with the specified
  * substring.
  *
  * @author Werner Randelshofer
@@ -27,8 +27,9 @@ public class PrefixMatchSelector extends AbstractAttributeSelector {
     @Override
     protected <T> T match(SelectorModel<T> model, T element) {
         return (model.attributeValueStartsWith(element, attributeName, substring))//
-                        ? element : null;
+                ? element : null;
     }
+
     @Override
     public String toString() {
         return "[" + attributeName + "^=" + substring + ']';

@@ -21,13 +21,13 @@ import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.UriStyleableFigureKey;
 
-
 /**
  * ImageFigure.
  *
  * @author Werner Randelshofer
  */
 public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+
     /**
      * The CSS type selector for this object is {@code "Image"}.
      */
@@ -36,7 +36,8 @@ public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, 
     /**
      * The URI of the image.
      * <p>
-     * This property is also set on the ImageView node, so that {@link org.jhotdraw8.svg.SvgExportOutputFormat} can pick it up.
+     * This property is also set on the ImageView node, so that
+     * {@link org.jhotdraw8.svg.SvgExportOutputFormat} can pick it up.
      */
     public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
 
