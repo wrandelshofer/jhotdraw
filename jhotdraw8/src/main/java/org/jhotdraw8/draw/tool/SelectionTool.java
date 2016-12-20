@@ -165,6 +165,10 @@ public class SelectionTool extends AbstractTool {
                             break;
                         }
                     }
+                     // find in entire drawing
+                    if (pressedFigure == null) {
+                        pressedFigure = view.findFigure(vx, vy);
+                    }
                 } else {
                     // find in selection
                     pressedFigure = view.findFigure(vx, vy, view.getSelectedFigures());
