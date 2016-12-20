@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.beans;
 
+import org.jhotdraw8.collection.MapEntryProperty;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

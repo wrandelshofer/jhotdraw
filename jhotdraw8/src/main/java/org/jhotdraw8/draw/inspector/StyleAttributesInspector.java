@@ -40,7 +40,7 @@ import javafx.scene.control.TextArea;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.ast.Stylesheet;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;

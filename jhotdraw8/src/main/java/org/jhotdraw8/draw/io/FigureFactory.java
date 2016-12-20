@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

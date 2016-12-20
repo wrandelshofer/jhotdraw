@@ -3,20 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jhotdraw8.draw;
+package org.jhotdraw8.draw.figure;
 
 import java.util.ArrayList;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
+import java.util.Collection;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.figure.HideableFigure;
-import org.jhotdraw8.draw.figure.NonTransformableFigure;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 
@@ -26,8 +22,14 @@ import org.jhotdraw8.draw.handle.HandleType;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleLayer extends AbstractCompositeFigure
-        implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure {
+public class SimpleClipping extends AbstractCompositeFigure
+        implements Clipping, StyleableFigure, LockedFigure, NonTransformableFigure {
+
+    public SimpleClipping() {
+    }
+    public SimpleClipping(Collection<Figure> children) {
+        getChildren().addAll(children);
+    }
 
     @Override
     public void reshapeInLocal(Transform transform) {
@@ -38,7 +40,6 @@ public class SimpleLayer extends AbstractCompositeFigure
 
     @Override
     public void updateNode(RenderContext ctx, Node n) {
-        applyHideableFigureProperties(n);
         applyStyleableFigureProperties(ctx, n);
 
         List<Node> nodes = new ArrayList<Node>(getChildren().size());
@@ -55,19 +56,6 @@ public class SimpleLayer extends AbstractCompositeFigure
     public Node createNode(RenderContext ctx) {
         Group n = new Group();
         return n;
-    }
-
-    /**
-     * This method throws an illegal argument exception if the new parent is not
-     * an instance of Drawing.
-     *
-     * @param newValue the desired parent
-     */
-    protected void checkNewParent(Figure newValue) {
-        if (newValue != null && !(newValue instanceof Drawing)) {
-            throw new IllegalArgumentException("A Layer can only be added as a child to a Drawing. Illegal parent: "
-                    + newValue);
-        }
     }
 
     /**
@@ -98,14 +86,14 @@ public class SimpleLayer extends AbstractCompositeFigure
      */
     @Override
     public boolean isSuitableParent(Figure newParent) {
-        return (newParent instanceof Drawing);
+        return newParent== null;
     }
 
     /**
      * Layers never create handles.
      */
     @Override
-    public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         // empty
     }
 

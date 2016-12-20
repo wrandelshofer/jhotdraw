@@ -4,6 +4,9 @@
  */
 package org.jhotdraw8.draw;
 
+import org.jhotdraw8.draw.figure.SimpleDrawing;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.Drawing;
 import com.sun.javafx.scene.DirtyBits;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -1230,7 +1233,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         HandleType handleType = getHandleType();
         for (Figure figure : selection) {
             List<Handle> list = handles.computeIfAbsent(figure, k -> new ArrayList<>());
-            figure.createHandles(handleType, this, list);
+            figure.createHandles(handleType, list);
             handles.put(figure, list);
         }
     }

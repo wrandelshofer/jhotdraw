@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.RenderContext;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
@@ -223,7 +223,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     }
 
     @Override
-    public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
@@ -245,7 +245,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new LineOutlineHandle(this,  Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
         }else{
-            super.createHandles(handleType, dv, list);
+            super.createHandles(handleType, list);
         }
     }
 

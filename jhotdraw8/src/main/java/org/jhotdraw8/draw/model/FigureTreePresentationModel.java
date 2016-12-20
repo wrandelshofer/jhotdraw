@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.model;
 import java.util.HashMap;
 import javafx.scene.control.TreeItem;
 import org.jhotdraw8.beans.NonnullProperty;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
 

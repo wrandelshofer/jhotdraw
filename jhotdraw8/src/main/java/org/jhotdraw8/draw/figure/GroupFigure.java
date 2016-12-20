@@ -14,7 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.draw.RenderContext;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.geom.Geom;

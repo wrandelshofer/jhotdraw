@@ -14,10 +14,9 @@ import javafx.geometry.Bounds;
 import javafx.scene.shape.Line;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.RenderContext;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.PointHandle;
@@ -111,7 +110,7 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
     }
 
     @Override
-    public void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
@@ -127,7 +126,7 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
         }else{
-            super.createHandles(handleType, dv, list);
+            super.createHandles(handleType, list);
         }
     }
 

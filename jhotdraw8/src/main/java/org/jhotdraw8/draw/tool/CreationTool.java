@@ -11,12 +11,12 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static java.lang.Math.*;
 import javafx.scene.Cursor;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.SimpleLayer;
+import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.draw.Layer;
+import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.util.ReversedList;
 

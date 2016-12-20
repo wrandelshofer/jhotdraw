@@ -79,9 +79,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.Drawing;
-import org.jhotdraw8.draw.RenderContext;
-import org.jhotdraw8.draw.RenderingIntent;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.RenderingIntent;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;
@@ -101,7 +101,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * SvgExportOutputFormat.
+ * Exports a JavaFX scene graph to SVG.
  *
  * @author Werner Randelshofer
  * @version $Id$

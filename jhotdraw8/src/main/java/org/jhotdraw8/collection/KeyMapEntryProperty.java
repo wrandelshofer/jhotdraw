@@ -5,7 +5,6 @@
 package org.jhotdraw8.collection;
 
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.beans.MapEntryProperty;
 
 /**
  * KeyMapEntryProperty.
