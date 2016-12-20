@@ -74,7 +74,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 throw new InternalError(ex);
             }
         });
-        
+
         Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
         snapToGridCheckBox.setSelected(prefs.getBoolean("snapToGrid", true));
         snapToGridCheckBox.selectedProperty().addListener((o, oldValue, newValue)
@@ -83,18 +83,19 @@ public class GridInspector extends AbstractDrawingViewInspector {
         drawGridCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("drawGrid", newValue));
     }
-private GridConstrainer gridConstrainer;
+    private GridConstrainer gridConstrainer;
+
     @Override
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
-        ChangeListener<Number> prefsGridX=(o,oldv,newv)->prefs.putDouble("gridX", newv.doubleValue());
-        ChangeListener<Number> prefsGridY=(o,oldv,newv)->prefs.putDouble("gridY", newv.doubleValue());
-        ChangeListener<Number> prefsGridWidth=(o,oldv,newv)->prefs.putDouble("gridWidth", newv.doubleValue());
-        ChangeListener<Number> prefsGridAngle=(o,oldv,newv)->prefs.putDouble("gridAngle", newv.doubleValue());
-        ChangeListener<Number> prefsGridHeight=(o,oldv,newv)->prefs.putDouble("gridHeight", newv.doubleValue());
-        ChangeListener<Number> prefsGridMajorX=(o,oldv,newv)->prefs.putInt("gridMajorX", newv.intValue());
-        ChangeListener<Number> prefsGridMajorY=(o,oldv,newv)->prefs.putInt("gridMajorY", newv.intValue());
-        
+        ChangeListener<Number> prefsGridX = (o, oldv, newv) -> prefs.putDouble("gridX", newv.doubleValue());
+        ChangeListener<Number> prefsGridY = (o, oldv, newv) -> prefs.putDouble("gridY", newv.doubleValue());
+        ChangeListener<Number> prefsGridWidth = (o, oldv, newv) -> prefs.putDouble("gridWidth", newv.doubleValue());
+        ChangeListener<Number> prefsGridAngle = (o, oldv, newv) -> prefs.putDouble("gridAngle", newv.doubleValue());
+        ChangeListener<Number> prefsGridHeight = (o, oldv, newv) -> prefs.putDouble("gridHeight", newv.doubleValue());
+        ChangeListener<Number> prefsGridMajorX = (o, oldv, newv) -> prefs.putInt("gridMajorX", newv.intValue());
+        ChangeListener<Number> prefsGridMajorY = (o, oldv, newv) -> prefs.putInt("gridMajorY", newv.intValue());
+
         if (oldValue != null) {
             heightField.textProperty().unbind();
             widthField.textProperty().unbind();
@@ -106,7 +107,7 @@ private GridConstrainer gridConstrainer;
             drawGridCheckBox.selectedProperty().unbind();
             snapToGridCheckBox.selectedProperty().unbind();
         }
-        if (gridConstrainer!=null) {
+        if (gridConstrainer != null) {
             gridConstrainer.xProperty().removeListener(prefsGridX);
             gridConstrainer.yProperty().removeListener(prefsGridY);
             gridConstrainer.widthProperty().removeListener(prefsGridWidth);
@@ -116,12 +117,12 @@ private GridConstrainer gridConstrainer;
             gridConstrainer.majorYProperty().removeListener(prefsGridMajorY);
         }
         if (newValue != null) {
-            if (false&&(newValue.getConstrainer() instanceof GridConstrainer)) {
+            if (false && (newValue.getConstrainer() instanceof GridConstrainer)) {
                 gridConstrainer = (GridConstrainer) newValue.getConstrainer();
             } else {
-                
-                gridConstrainer = new GridConstrainer(prefs.getDouble("gridX",0), prefs.getDouble("gridY",0), prefs.getDouble("gridWidth",10), prefs.getDouble("gridHeight",10),
-                        prefs.getDouble("gridangle",45),prefs.getInt("gridMajorX", 5),prefs.getInt("gridMajorY",5));
+
+                gridConstrainer = new GridConstrainer(prefs.getDouble("gridX", 0), prefs.getDouble("gridY", 0), prefs.getDouble("gridWidth", 10), prefs.getDouble("gridHeight", 10),
+                        prefs.getDouble("gridangle", 45), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
                 newValue.setConstrainer(gridConstrainer);
             }
             StringConverter<Number> cc
@@ -137,16 +138,16 @@ private GridConstrainer gridConstrainer;
             drawGridCheckBox.selectedProperty().bindBidirectional(gridConstrainer.drawGridProperty());
             gridConstrainer.snapToGridProperty().set(snapToGridCheckBox.isSelected());
             snapToGridCheckBox.selectedProperty().bindBidirectional(gridConstrainer.snapToGridProperty());
-            
-        if (gridConstrainer!=null) {
-            gridConstrainer.xProperty().addListener(prefsGridX);
-            gridConstrainer.yProperty().addListener(prefsGridY);
-            gridConstrainer.widthProperty().addListener(prefsGridWidth);
-            gridConstrainer.heightProperty().addListener(prefsGridHeight);
-            gridConstrainer.angleProperty().addListener(prefsGridAngle);
-            gridConstrainer.majorXProperty().addListener(prefsGridMajorX);
-            gridConstrainer.majorYProperty().addListener(prefsGridMajorY);
-        }
+
+            if (gridConstrainer != null) {
+                gridConstrainer.xProperty().addListener(prefsGridX);
+                gridConstrainer.yProperty().addListener(prefsGridY);
+                gridConstrainer.widthProperty().addListener(prefsGridWidth);
+                gridConstrainer.heightProperty().addListener(prefsGridHeight);
+                gridConstrainer.angleProperty().addListener(prefsGridAngle);
+                gridConstrainer.majorXProperty().addListener(prefsGridMajorX);
+                gridConstrainer.majorYProperty().addListener(prefsGridMajorY);
+            }
         }
     }
 

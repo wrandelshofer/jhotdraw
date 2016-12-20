@@ -14,16 +14,18 @@ import org.jhotdraw8.draw.figure.Figure;
  * @version $Id$
  */
 public abstract class AbstractLocator implements Locator {
+
     private static final long serialVersionUID = 1L;
-    
-    /** Creates a new instance. */
+
+    /**
+     * Creates a new instance.
+     */
     public AbstractLocator() {
     }
-    
+
     @Override
     public Point2D locate(Figure owner, Figure dependent) {
         return locate(owner);
     }
-    
-    
+
 }

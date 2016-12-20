@@ -140,17 +140,16 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
 
         drawingView = new SimpleDrawingView();
         // FIXME should use preferences!
-        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25,5,5));
+        drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25, 5, 5));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         // 
         drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
             modified.set(true);
         });
 
-        
         IdFactory idFactory = new SimpleIdFactory();
-                FigureFactory factory = new DefaultFigureFactory(idFactory);
-                SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+        FigureFactory factory = new DefaultFigureFactory(idFactory);
+        SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
                 io, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(io));
@@ -172,7 +171,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc,//
-                () -> createFigure(()->new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
+                () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
                 layerFactory), 4, 1);
         ttbar.addTool(new CreationTool("edit.createSlice", rsrc, () -> createFigure(SliceFigure::new), layerFactory), 5, 0);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, () -> createFigure(LineConnectionFigure::new), layerFactory), 3, 1);
@@ -246,7 +245,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         });
 
         PreferencesUtil.installBooleanPropertyHandler(//
-Preferences.userNodeForPackage(GrapherDocumentView.class), id + ".expanded", t.expandedProperty());
+                Preferences.userNodeForPackage(GrapherDocumentView.class), id + ".expanded", t.expandedProperty());
         if (t.isExpanded()) {
             a.setExpandedPane(t);
             VBox.setVgrow(a, grow);
@@ -318,7 +317,7 @@ Preferences.userNodeForPackage(GrapherDocumentView.class), id + ".expanded", t.e
     @Override
     public CompletionStage<Void> clear() {
         Drawing d = new SimpleDrawing();
-        d.set(StyleableFigure.ID,"drawing1");
+        d.set(StyleableFigure.ID, "drawing1");
         drawingView.setDrawing(d);
         return CompletableFuture.completedFuture(null);
     }

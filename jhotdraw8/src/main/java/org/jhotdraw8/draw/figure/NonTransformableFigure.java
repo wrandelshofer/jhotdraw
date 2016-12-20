@@ -10,19 +10,23 @@ import javafx.scene.transform.Transform;
  * Provides default implementations for figures which can not be transformed.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: NonTransformableFigure.java 1206 2016-12-17 12:42:21Z rawcoder
+ * $
  */
 public interface NonTransformableFigure extends TransformCacheableFigure {
+
     @Override
     default void transformInParent(Transform transform) {
         // empty because non-transformable figures can not be transformed
     }
+
     @Override
     default void transformInLocal(Transform transform) {
         // empty because non-transformable figures can not be transformed
     }
+
     @Override
     default void reshapeInParent(Transform transform) {
         reshapeInLocal(getParentToLocal().createConcatenation(transform));

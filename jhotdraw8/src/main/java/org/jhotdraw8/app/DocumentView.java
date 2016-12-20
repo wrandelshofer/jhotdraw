@@ -2,7 +2,6 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.app;
 
 import java.net.URI;
@@ -15,12 +14,14 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 
 /**
- * A {@code DocumentVIew} is a specialization of {@link ProjectView} for document oriented applications.
+ * A {@code DocumentVIew} is a specialization of {@link ProjectView} for
+ * document oriented applications.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
 public interface DocumentView extends ProjectView<DocumentView> {
+
     /**
      * The modified property is set to true by the view.
      *
@@ -49,17 +50,18 @@ public interface DocumentView extends ProjectView<DocumentView> {
 
     /**
      * Asynchronously reads data from the specified URI and appends it to the
-     * content of the view. This method must not change the current document
-     * in case of a read failure.
+     * content of the view. This method must not change the current document in
+     * case of a read failure.
      * <p>
      * The application typically installs a disabler on the view during a read
      * operation. The disabler is removed when the callback is invoked.
      * </p>
      *
      * @param uri the URI
-     * @param format the desired data format, null means default data format should be used
+     * @param format the desired data format, null means default data format
+     * should be used
      * @param append whether to append to the current document or to replace it.
-     * @return Returns a CompletionStage which is completed when the read 
+     * @return Returns a CompletionStage which is completed when the read
      * operation has finished.
      */
     public CompletionStage<Void> read(URI uri, DataFormat format, boolean append);
@@ -72,8 +74,9 @@ public interface DocumentView extends ProjectView<DocumentView> {
      * operation. The disabler is removed when the callback is invoked.
      *
      * @param uri the URI
-     * @param format the desired data format, null means default data format should be used
-     * @return Returns a CompletionStage which is completed when the write 
+     * @param format the desired data format, null means default data format
+     * should be used
+     * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
     public CompletionStage<Void> write(URI uri, DataFormat format);
@@ -81,8 +84,9 @@ public interface DocumentView extends ProjectView<DocumentView> {
     /**
      * Clears the view.
      *
-     * @return Returns a CompletionStage which is completed when the clear 
-     * operation has finished. For example {@code return CompletableFuture.completedFuture(null);}
+     * @return Returns a CompletionStage which is completed when the clear
+     * operation has finished. For example
+     * {@code return CompletableFuture.completedFuture(null);}
      */
     public CompletionStage<Void> clear();
 
@@ -102,8 +106,8 @@ public interface DocumentView extends ProjectView<DocumentView> {
     default public void setDisambiguation(int newValue) {
         disambiguationProperty().set(newValue);
     }
-    
-   default public boolean isEmpty() {
+
+    default public boolean isEmpty() {
         return !isModified() && getURI() == null;
     }
 }

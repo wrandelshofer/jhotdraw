@@ -23,29 +23,33 @@ import javafx.collections.ObservableSet;
  */
 public class AbstractDisableable implements Disableable {
 
-  /**
-   * Holds the disablers.
-   * <p>
-   * This field is protected, so that it can be accessed by subclasses.
-   */
-  protected final ObservableSet<Object> disablers = FXCollections.observableSet();
-  /**
-   * Holds the disabled state.
-   * <p>
-   * This field is protected, so that it can be bound to or-combinations of disablers.
-   */
-  protected final ReadOnlyBooleanWrapper disabled =new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);;
-  {
+    /**
+     * Holds the disablers.
+     * <p>
+     * This field is protected, so that it can be accessed by subclasses.
+     */
+    protected final ObservableSet<Object> disablers = FXCollections.observableSet();
+    /**
+     * Holds the disabled state.
+     * <p>
+     * This field is protected, so that it can be bound to or-combinations of
+     * disablers.
+     */
+    protected final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
+
+    ;
+
+    {
    disabled.bind(Bindings.isNotEmpty(disablers));
   }
 
   @Override
-  public ReadOnlyBooleanProperty disabledProperty() {
-    return disabled.getReadOnlyProperty();
-  }
+    public ReadOnlyBooleanProperty disabledProperty() {
+        return disabled.getReadOnlyProperty();
+    }
 
-  @Override
-  public ObservableSet<Object> disablers() {
-    return disablers;
-  }
+    @Override
+    public ObservableSet<Object> disablers() {
+        return disablers;
+    }
 }

@@ -20,7 +20,7 @@ import org.jhotdraw8.util.Resources;
  * Displays a dialog showing information about the application.
  * <p>
  *
- * @author  Werner Randelshofer
+ * @author Werner Randelshofer
  * @version $Id$
  */
 public class AboutAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
@@ -29,8 +29,11 @@ public class AboutAction<V extends ProjectView<V>> extends AbstractApplicationAc
 
     public static final String ID = "application.about";
 
-    /** Creates a new instance.
-     * @param app the application */
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     */
     public AboutAction(Application<V> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);

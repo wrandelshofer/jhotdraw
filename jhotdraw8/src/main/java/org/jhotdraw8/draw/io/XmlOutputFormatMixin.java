@@ -2,7 +2,6 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.draw.io;
 
 import java.io.File;
@@ -24,12 +23,14 @@ import org.w3c.dom.Document;
  * XmlOutputFormatMixin.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $$Id: XmlOutputFormatMixin.java 1237 2016-12-20 08:57:59Z rawcoder
+ * $$
  */
 public interface XmlOutputFormatMixin extends OutputFormat {
+
     @Override
     default void write(File file, Drawing drawing) throws IOException {
-        setExternalHome(file.getParentFile()==null?new File(System.getProperty("user.home")).toURI():file.getParentFile().toURI());
+        setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
         setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
         Document doc = toDocument(drawing);
         try {
@@ -48,7 +49,7 @@ public interface XmlOutputFormatMixin extends OutputFormat {
     }
 
     default void write(OutputStream out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        Document doc = toDocument(drawing,selection);
+        Document doc = toDocument(drawing, selection);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
             DOMSource source = new DOMSource(doc);
@@ -58,9 +59,9 @@ public interface XmlOutputFormatMixin extends OutputFormat {
             throw new IOException(ex);
         }
     }
-    
+
     default void write(Writer out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        Document doc = toDocument(drawing,selection);
+        Document doc = toDocument(drawing, selection);
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
             DOMSource source = new DOMSource(doc);
@@ -74,16 +75,21 @@ public interface XmlOutputFormatMixin extends OutputFormat {
     default Document toDocument(Drawing drawing) throws IOException {
         return toDocument(drawing, drawing.getChildren());
     }
+
     Document toDocument(Drawing drawing, Collection<Figure> selection) throws IOException;
-    
+
     void setExternalHome(URI uri);
+
     void setInternalHome(URI uri);
+
     URI getExternalHome();
+
     URI getInternalHome();
-    
-    
+
     default URI toExternal(URI uri) {
-        if (uri==null)return null;
+        if (uri == null) {
+            return null;
+        }
         URI internal = getInternalHome();
         URI external = getExternalHome();
         if (internal != null) {
@@ -94,8 +100,11 @@ public interface XmlOutputFormatMixin extends OutputFormat {
         }
         return uri;
     }
+
     default URI toInternal(URI uri) {
-        if (uri==null)return null;
+        if (uri == null) {
+            return null;
+        }
         URI internal = getInternalHome();
         URI external = getExternalHome();
         if (external != null) {

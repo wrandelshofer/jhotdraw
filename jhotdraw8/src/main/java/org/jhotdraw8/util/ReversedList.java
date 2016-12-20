@@ -2,10 +2,10 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.util;
 
 import java.util.*;
+
 /**
  * A ReversedList provides an unmodifiable view on a List in reverse order.
  *
@@ -13,9 +13,12 @@ import java.util.*;
  * @param <T> the list type
  */
 public class ReversedList<T> extends AbstractList<T> {
+
     private List<T> target;
-    
-    /** Creates a new instance of ReversedList.
+
+    /**
+     * Creates a new instance of ReversedList.
+     *
      * @param target the target list
      */
     public ReversedList(List<T> target) {
@@ -31,5 +34,5 @@ public class ReversedList<T> extends AbstractList<T> {
     public int size() {
         return target.size();
     }
-    
+
 }

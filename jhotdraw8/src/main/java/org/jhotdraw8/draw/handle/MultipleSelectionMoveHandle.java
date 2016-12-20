@@ -134,7 +134,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         if (oldPoint.equals(newPoint)) {
             return;
         }
-        
+
         //Transform tx = Transform.translate(newPoint.getX() - oldPoint.getX(), newPoint.getY() - oldPoint.getY());
         DrawingModel model = view.getModel();
 
@@ -149,7 +149,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
             }
             Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
             //tx = f.getWorldToParent().createConcatenation(tx);
-            
+
             model.reshapeInLocal(f, tx);
         }
 
@@ -174,7 +174,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     private Point2D getLocation(DrawingView dv) {
         return locationInDrawing == null ? null : dv.drawingToView(locationInDrawing);
     }
-    
+
     private void updateLocation(DrawingView dv) {
         Bounds b = null;
         for (Figure f : dv.getSelectedFigures()) {

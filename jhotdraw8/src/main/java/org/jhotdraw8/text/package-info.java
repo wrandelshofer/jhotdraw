@@ -7,11 +7,11 @@
  * @version $Id$
  */
 /**
- * Provides text converters which (hopefully) can be used with all extensible 
+ * Provides text converters which (hopefully) can be used with all extensible
  * text converter APIs that Java SE 8 provides.
  * <p>
- * Text converters are used for converting an Object to a String and back.
- * For example in text input fields and in text based file formats, such as XML.
+ * Text converters are used for converting an Object to a String and back. For
+ * example in text input fields and in text based file formats, such as XML.
  * </p>
  * <p>
  * This package provides wrappers for the following Java SE 8 APIs:

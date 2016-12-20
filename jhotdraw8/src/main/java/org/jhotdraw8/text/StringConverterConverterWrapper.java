@@ -10,11 +10,12 @@ import java.text.ParseException;
 import javafx.util.StringConverter;
 
 /**
- * Allows to use a {@code Converter} with the {@code javafx.util.StringConverter}
- * API.
+ * Allows to use a {@code Converter} with the
+ * {@code javafx.util.StringConverter} API.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: StringConverterConverterWrapper.java 1149 2016-11-18 11:00:10Z
+ * rawcoder $
  * @param <T> the value type
  */
 public class StringConverterConverterWrapper<T> extends StringConverter<T> {
@@ -34,7 +35,7 @@ public class StringConverterConverterWrapper<T> extends StringConverter<T> {
     public T fromString(String string) {
         try {
             return converter.fromString(string);
-        } catch (ParseException|IOException ex) {
+        } catch (ParseException | IOException ex) {
             return converter.getDefaultValue();
         }
     }

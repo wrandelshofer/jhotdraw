@@ -15,19 +15,23 @@ import org.jhotdraw8.app.ProjectView;
  * This abstract class can be extended to implement an {@code Action} that acts
  * on an {@link Application}.
  * <p>
- * An AbstractApplicationAction is disabled when it has disablers {@link org.jhotdraw8.app.Disableable}
- * or when its application is disabled.
+ * An AbstractApplicationAction is disabled when it has disablers
+ * {@link org.jhotdraw8.app.Disableable} or when its application is disabled.
  *
  * @author Werner Randelshofer.
- * @version $Id$
+ * @version $Id: AbstractApplicationAction.java 1169 2016-12-11 12:51:19Z
+ * rawcoder $
  */
 public abstract class AbstractApplicationAction<V extends ProjectView<V>> extends AbstractAction {
 
     private static final long serialVersionUID = 1L;
     protected Application<V> app;
 
-    /** Creates a new instance.
-     * @param app the application */
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     */
     public AbstractApplicationAction(Application<V> app) {
         if (app == null) {
             throw new IllegalArgumentException("app is null");

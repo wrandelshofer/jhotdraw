@@ -23,18 +23,23 @@ import org.jhotdraw8.util.Resources;
  * @version $Id$
  */
 public class PrintFileAction extends AbstractViewAction<DocumentView> {
+
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "file.print";
 
-    /** Creates a new instance.
+    /**
+     * Creates a new instance.
+     *
      * @param app the application
-     * @param view the view */
+     * @param view the view
+     */
     public PrintFileAction(Application<DocumentView> app, DocumentView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
-/*
+
+    /*
     @Override
     public void actionPerformed(ActionEvent evt) {
         PrintableView view = (PrintableView)getActiveView();

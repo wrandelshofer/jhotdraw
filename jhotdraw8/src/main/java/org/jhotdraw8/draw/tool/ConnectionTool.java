@@ -23,7 +23,7 @@ import org.jhotdraw8.util.ReversedList;
  * ConnectionTool.
  *
  * @design.pattern CreationTool AbstractFactory, Client.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -45,6 +45,7 @@ public class ConnectionTool extends AbstractTool {
     public ConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> figureFactory) {
         this(name, rsrc, figureFactory, SimpleLayer::new);
     }
+
     public ConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> figureFactory,
             Supplier<Layer> layerFactory) {
         super(name, rsrc);
@@ -108,8 +109,8 @@ public class ConnectionTool extends AbstractTool {
     @Override
     protected void handleMouseDragged(MouseEvent event, DrawingView view) {
         if (figure != null) {
-        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-        Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
+            Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
+            Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
 
             Connector newConnector = null;
             Figure newConnectionTarget = null;
@@ -118,7 +119,7 @@ public class ConnectionTool extends AbstractTool {
                 for (Figure ff : list) {
                     newConnector = ff.findConnector(ff.worldToLocal(newPoint), figure);
                     if (newConnector != null) {
-                      newConnectionTarget=ff;
+                        newConnectionTarget = ff;
                         break;
                     }
                 }

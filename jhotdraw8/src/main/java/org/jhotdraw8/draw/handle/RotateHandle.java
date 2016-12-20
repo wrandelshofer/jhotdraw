@@ -49,6 +49,7 @@ public class RotateHandle extends AbstractHandle {
 
     private static final Circle PICK_NODE_SHAPE = new Circle(3);
     private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
+
     static {
         PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
     }

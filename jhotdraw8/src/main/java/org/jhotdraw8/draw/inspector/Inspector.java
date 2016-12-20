@@ -12,6 +12,8 @@ import org.jhotdraw8.draw.DrawingView;
  * @author werni
  */
 public interface Inspector {
+
     public void setDrawingView(DrawingView view);
+
     public Node getNode();
 }

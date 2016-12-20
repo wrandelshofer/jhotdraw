@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.key.EffectStyleableFigureKey;
 
 /**
  * Provides properties for compositing a figure.
- * 
+ *
  * @design.pattern Figure Mixin, Traits.
  *
  * @author Werner Randelshofer

@@ -24,7 +24,7 @@ import org.jhotdraw8.text.Paintable;
  */
 public class PaintableStyleableFigureKey extends SimpleFigureKey<Paintable> implements StyleableMapAccessor<Paintable> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, Paintable> cssMetaData;
 
@@ -82,7 +82,7 @@ public class PaintableStyleableFigureKey extends SimpleFigureKey<Paintable> impl
     }
 
     @Override
-    public CssMetaData<?,Paintable> getCssMetaData() {
+    public CssMetaData<?, Paintable> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -95,5 +95,5 @@ public class PaintableStyleableFigureKey extends SimpleFigureKey<Paintable> impl
             converter = new CssPaintableConverter();
         }
         return converter;
-    }   
+    }
 }

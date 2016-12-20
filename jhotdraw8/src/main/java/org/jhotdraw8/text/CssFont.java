@@ -31,9 +31,9 @@ public class CssFont {
         this.posture = posture;
         this.size = size;
         this.font = (weight == FontWeight.NORMAL || posture == FontPosture.REGULAR
-    ||            weight == null || posture == null) 
-                ? new Font(family, size) 
-                : Font.font(family, weight, posture, size);
+                || weight == null || posture == null)
+                        ? new Font(family, size)
+                        : Font.font(family, weight, posture, size);
     }
 
     public String getFamily() {

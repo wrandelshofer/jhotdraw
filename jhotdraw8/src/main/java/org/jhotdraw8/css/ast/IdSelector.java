@@ -7,7 +7,7 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
- * An "id selector" matches an element if the element has an id with the 
+ * An "id selector" matches an element if the element has an id with the
  * specified value.
  *
  * @author Werner Randelshofer
@@ -31,10 +31,10 @@ public class IdSelector extends SimpleSelector {
         return (element != null && model.hasId(element, id)) //
                 ? element : null;
     }
-    
-  @Override
-  public int getSpecificity() {
-    return 100;
-  }
-    
+
+    @Override
+    public int getSpecificity() {
+        return 100;
+    }
+
 }

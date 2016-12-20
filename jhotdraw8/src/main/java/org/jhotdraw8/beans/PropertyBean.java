@@ -18,7 +18,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
 /**
- * Interface for beans which support an open number of getProperties in a 
+ * Interface for beans which support an open number of getProperties in a
  * property map.
  * <p>
  * A property is accessed using a type safe {@link Key}.
@@ -51,7 +51,6 @@ public interface PropertyBean {
     // ---
     // Properties
     // ---
-
     /**
      * Returns an observable map of property keys and their values.
      *
@@ -94,22 +93,29 @@ public interface PropertyBean {
      */
     default <T> T remove(Key<T> key) {
         @SuppressWarnings("unchecked")
-        T removedValue= (T) getProperties().remove(key);
+        T removedValue = (T) getProperties().remove(key);
         return removedValue;
     }
-    
-    /** Gets all values with the specified keys from the map.
+
+    /**
+     * Gets all values with the specified keys from the map.
+     *
      * @param keys the desired keys
-     * @return the map */
+     * @return the map
+     */
     default Map<Key<?>, Object> getAll(Key<?>... keys) {
         return getAll(Arrays.asList(keys));
     }
-    /** Gets all values with the specified keys from the map.
+
+    /**
+     * Gets all values with the specified keys from the map.
+     *
      * @param keys the desired keys
-     * @return the map */
+     * @return the map
+     */
     default Map<Key<?>, Object> getAll(List<Key<?>> keys) {
         Map<Key<?>, Object> map = getProperties();
-        Map<Key<?>, Object> result=new LinkedHashMap<>();
+        Map<Key<?>, Object> result = new LinkedHashMap<>();
         for (Key<?> k : keys) {
             result.put(k, k.get(map));
         }
@@ -117,11 +123,11 @@ public interface PropertyBean {
     }
 
     default <T> ObjectProperty<T> getProperty(Key<T> key) {
-        return new MapEntryProperty<Key<?> ,Object,T>(getProperties(),key,key.getValueType());
+        return new MapEntryProperty<Key<?>, Object, T>(getProperties(), key, key.getValueType());
     }
-    
+
     @SuppressWarnings("unchecked")
     default <T> ObservableValue<T> getObservableValue(Key<T> key) {
-        return( ObservableValue<T> )( ObservableValue<Object> ) Bindings.valueAt(getProperties(),key);
+        return (ObservableValue<T>) (ObservableValue<Object>) Bindings.valueAt(getProperties(), key);
     }
 }

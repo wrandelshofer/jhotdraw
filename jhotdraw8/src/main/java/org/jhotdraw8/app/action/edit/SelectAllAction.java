@@ -14,6 +14,7 @@ import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractFocusOwnerAction;
 import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.util.Resources;
+
 /**
  * Selects all items.
  *
@@ -49,16 +50,16 @@ public class SelectAllAction<V extends ProjectView<V>> extends AbstractFocusOwne
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-            V v = app.getActiveView();
-            if (v != null && !v.isDisabled()) {
-                Node n = v.getNode().getScene().getFocusOwner();
-                if (n instanceof TextInputControl) {
-                    TextInputControl tic = (TextInputControl) n;
-                    tic.selectAll();
-                } else if (n instanceof EditableComponent) {
-                    EditableComponent tic = (EditableComponent) n;
-                    tic.selectAll();
-                }
+        V v = app.getActiveView();
+        if (v != null && !v.isDisabled()) {
+            Node n = v.getNode().getScene().getFocusOwner();
+            if (n instanceof TextInputControl) {
+                TextInputControl tic = (TextInputControl) n;
+                tic.selectAll();
+            } else if (n instanceof EditableComponent) {
+                EditableComponent tic = (EditableComponent) n;
+                tic.selectAll();
             }
+        }
     }
 }

@@ -15,7 +15,8 @@ import org.jhotdraw8.draw.io.IdFactory;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: CssBoundingBoxConverter.java 1149 2016-11-18 11:00:10Z rawcoder
+ * $
  */
 public class CssBoundingBoxConverter implements Converter<BoundingBox> {
 
@@ -23,17 +24,18 @@ public class CssBoundingBoxConverter implements Converter<BoundingBox> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, BoundingBox value) throws IOException {
-        formatter.toStr(out,idFactory, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
+        formatter.toStr(out, idFactory, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
     }
 
     @Override
     public BoundingBox fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
-        return new BoundingBox((double) v[0], (double) v[1],(double) v[2], (double) v[3]);
+        return new BoundingBox((double) v[0], (double) v[1], (double) v[2], (double) v[3]);
     }
+
     @Override
     public BoundingBox getDefaultValue() {
-        return new BoundingBox(0,0,1,1);
+        return new BoundingBox(0, 0, 1, 1);
     }
 }

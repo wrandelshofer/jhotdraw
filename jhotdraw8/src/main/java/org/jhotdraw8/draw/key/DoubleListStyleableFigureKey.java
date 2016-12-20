@@ -77,7 +77,6 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<ImmutableObser
         return cssMetaData;
     }
 
-
     private Converter<ImmutableObservableList<Double>> converter;
 
     @Override
@@ -87,6 +86,5 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<ImmutableObser
         }
         return converter;
     }
-    
-    
+
 }

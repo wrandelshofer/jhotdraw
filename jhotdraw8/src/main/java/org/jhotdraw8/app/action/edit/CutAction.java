@@ -50,16 +50,16 @@ public class CutAction<V extends ProjectView<V>> extends AbstractSelectionAction
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-            V v = app.getActiveView();
-            if (v != null && !v.isDisabled()) {
-                Node n = v.getNode().getScene().getFocusOwner();
-                if (n instanceof TextInputControl) {
-                    TextInputControl tic = (TextInputControl) n;
-                    tic.cut();
-                } else if (n instanceof EditableComponent) {
-                    EditableComponent tic = (EditableComponent) n;
-                    tic.cut();
-                }
+        V v = app.getActiveView();
+        if (v != null && !v.isDisabled()) {
+            Node n = v.getNode().getScene().getFocusOwner();
+            if (n instanceof TextInputControl) {
+                TextInputControl tic = (TextInputControl) n;
+                tic.cut();
+            } else if (n instanceof EditableComponent) {
+                EditableComponent tic = (EditableComponent) n;
+                tic.cut();
             }
+        }
     }
 }

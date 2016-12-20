@@ -24,10 +24,10 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point3D value) throws IOException {
         if (value.getZ() == 0.0) {
-                    formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
-            } else {
-                formatter.toStr(out, idFactory, 3, value.getX(), value.getY(), value.getZ());
-            }
+            formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
+        } else {
+            formatter.toStr(out, idFactory, 3, value.getX(), value.getY(), value.getZ());
+        }
     }
 
     @Override

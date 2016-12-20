@@ -19,10 +19,12 @@ import org.jhotdraw8.app.ProjectView;
  * @version $Id$
  */
 public class UndoAction<V extends ProjectView<V>> extends AbstractViewAction<V> {
+
     private static final long serialVersionUID = 1L;
 
     public static final String ID = "edit.undo";
     private Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+
     /*private PropertyChangeListener redoActionPropertyListener = new PropertyChangeListener() {
 
         @Override
@@ -36,14 +38,18 @@ public class UndoAction<V extends ProjectView<V>> extends AbstractViewAction<V> 
         }
     };*/
 
-    /** Creates a new instance.
+    /**
+     * Creates a new instance.
+     *
      * @param app the application
-     * @param view the view */
+     * @param view the view
+     */
     public UndoAction(Application<V> app, V view) {
         super(app, view);
         labels.configureAction(this, ID);
     }
-/*
+
+    /*
     protected void updateEnabledState() {
         boolean isEnabled = false;
         Action realAction = getRealUndoAction();

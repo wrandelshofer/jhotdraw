@@ -7,8 +7,8 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
- * An "exists match" matches an element if the element has an attribute
- * with the specified name.
+ * An "exists match" matches an element if the element has an attribute with the
+ * specified name.
  *
  * @author Werner Randelshofer
  * @version $Id$

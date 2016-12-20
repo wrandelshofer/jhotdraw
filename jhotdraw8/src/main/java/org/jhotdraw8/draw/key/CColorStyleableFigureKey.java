@@ -24,7 +24,7 @@ import org.jhotdraw8.text.CssColor;
  */
 public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implements StyleableMapAccessor<CssColor> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, CssColor> cssMetaData;
 
@@ -82,7 +82,7 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implemen
     }
 
     @Override
-    public CssMetaData<?,CssColor> getCssMetaData() {
+    public CssMetaData<?, CssColor> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -95,5 +95,5 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implemen
             converter = new CssColorConverter(true);
         }
         return converter;
-    }   
+    }
 }

@@ -89,10 +89,10 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
                     Translate tr = (Translate) tx;
                     buf.append("translate(")
                             .append(nb.toString(tr.getTx()));
-                 
-                        buf.append(',')
-                                .append(nb.toString(tr.getTy()));
-                   
+
+                    buf.append(',')
+                            .append(nb.toString(tr.getTy()));
+
                     if (tr.getTz() != 0.0) {
                         buf.append(',')
                                 .append(nb.toString(tr.getTz()));
@@ -245,8 +245,8 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
                     switch (m.size()) {
                         case 0:
                             txs.add(new Affine(//
-                                    1,0,0,//
-                                    0,1,0//
+                                    1, 0, 0,//
+                                    0, 1, 0//
                             ));
                             break;
                         case 6:
@@ -271,8 +271,8 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
                     switch (m.size()) {
                         case 0:
                             txs.add(new Affine(//
-                                    1,0,0,//
-                                    0,1,0//
+                                    1, 0, 0,//
+                                    0, 1, 0//
                             ));
                             break;
                         case 6:
@@ -297,7 +297,7 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
                 case "shear": {
                     switch (m.size()) {
                         case 0:
-                            txs.add(Transform.shear(0,0));
+                            txs.add(Transform.shear(0, 0));
                             break;
                         case 2:
                             txs.add(Transform.shear(m.get(0), m.get(1)));
@@ -316,7 +316,7 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
                     switch (m.size()) {
                         case 0:
                             txs.add(Transform.translate(//
-                                    0,0//
+                                    0, 0//
                             ));//
                             break;
                         case 1:
@@ -343,7 +343,7 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
                     switch (m.size()) {
                         case 0:
                             txs.add(Transform.scale(//
-                                    1,1//
+                                    1, 1//
                             ));
                             break;
                         case 1:
@@ -426,8 +426,10 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
                 default:
                     throw new ParseException("unsupported function: \"" + func + "\"", funcPos);
             }
-            
-            if (tt.nextToken()!=',')tt.pushBack();
+
+            if (tt.nextToken() != ',') {
+                tt.pushBack();
+            }
         }
 
         in.position(in.limit());

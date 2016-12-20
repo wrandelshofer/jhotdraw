@@ -134,7 +134,7 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
     }
 
     @Override
-        @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public boolean retainAll(E... elements) {
         @SuppressWarnings("unchecked")
         ObservableList<E> src = (ObservableList<E>) getSource();
@@ -191,7 +191,7 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
         @Override
         public List<E> getRemoved() {
             @SuppressWarnings("unchecked")
-            List<E> temp= (List<E>) change.getRemoved();
+            List<E> temp = (List<E>) change.getRemoved();
             return temp;
         }
 

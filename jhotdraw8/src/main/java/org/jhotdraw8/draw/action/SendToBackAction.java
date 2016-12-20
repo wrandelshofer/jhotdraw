@@ -26,11 +26,12 @@ public class SendToBackAction<V extends ProjectView<V>> extends AbstractSelected
 
     /**
      * Creates a new instance.
+     *
      * @param app the application
      * @param editor the drawing editor
      */
-    public SendToBackAction(Application<V> app,DrawingEditor editor) {
-        super(app,editor);
+    public SendToBackAction(Application<V> app, DrawingEditor editor) {
+        super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");
         labels.configureAction(this, ID);

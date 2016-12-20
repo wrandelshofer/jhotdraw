@@ -7,11 +7,12 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.css.SelectorModel;
 
 /**
- * A "simple class selector" matches an element based on the value of its "pseudo
- * class" attribute.
+ * A "simple class selector" matches an element based on the value of its
+ * "pseudo class" attribute.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: SimplePseudoClassSelector.java 1149 2016-11-18 11:00:10Z
+ * rawcoder $
  */
 public class SimplePseudoClassSelector extends PseudoClassSelector {
 

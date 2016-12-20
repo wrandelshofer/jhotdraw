@@ -23,10 +23,10 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
-        Object[] v = new Object[value.size()+1];
-        v[0]=value.size();
-        for (int i=0,n=value.size();i<n;i++) {
-            v[i+1]=value.get(i);
+        Object[] v = new Object[value.size() + 1];
+        v[0] = value.size();
+        for (int i = 0, n = value.size(); i < n; i++) {
+            v[i + 1] = value.get(i);
         }
         formatter.toString(out, v);
     }
@@ -34,12 +34,13 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
     @Override
     public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ArrayList<String> l = new ArrayList<>((int)v[0]);
-        for (int i=0,n=(int)v[0];i<n;i++) {
-            l.add((String)v[i+1]);
+        ArrayList<String> l = new ArrayList<>((int) v[0]);
+        for (int i = 0, n = (int) v[0]; i < n; i++) {
+            l.add((String) v[i + 1]);
         }
         return new ImmutableObservableList<>(l);
     }
+
     @Override
     public ImmutableObservableList<String> getDefaultValue() {
         return ImmutableObservableList.emptyList();

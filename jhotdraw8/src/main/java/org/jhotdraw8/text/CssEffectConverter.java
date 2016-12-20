@@ -47,6 +47,7 @@ import org.jhotdraw8.draw.io.IdFactory;
  * @author Werner Randelshofer
  */
 public class CssEffectConverter implements Converter<Effect> {
+
     private static final String DROP_SHADOW = "drop-shadow";
     private static final String INNER_SHADOW = "inner-shadow";
 
@@ -64,7 +65,7 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append(',');
             nb.toString(out, idFactory, fx.getRadius());
             out.append(',');
-            nb.toString(out, idFactory, fx.getSpread()*100.0);
+            nb.toString(out, idFactory, fx.getSpread() * 100.0);
             out.append("%,");
             nb.toString(out, idFactory, fx.getOffsetX());
             out.append(',');
@@ -83,7 +84,7 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append(',');
             nb.toString(out, idFactory, fx.getRadius());
             out.append(',');
-            nb.toString(out, idFactory, fx.getChoke()*100.0);
+            nb.toString(out, idFactory, fx.getChoke() * 100.0);
             out.append("%,");
             nb.toString(out, idFactory, fx.getOffsetX());
             out.append(',');
@@ -132,7 +133,7 @@ public class CssEffectConverter implements Converter<Effect> {
                     current = parseInnerShadow(tt);
                     break;
                 default:
-                    throw new ParseException("CSS Effect: \""+DROP_SHADOW+"(\" or \""+INNER_SHADOW+"(\"  expected", tt.getStartPosition());
+                    throw new ParseException("CSS Effect: \"" + DROP_SHADOW + "(\" or \"" + INNER_SHADOW + "(\"  expected", tt.getStartPosition());
             }
             if (first == null) {
                 first = previous = current;
@@ -146,8 +147,10 @@ public class CssEffectConverter implements Converter<Effect> {
                 }
                 previous = current;
             }
-            
-            if (tt.nextToken()!=',') tt.pushBack();
+
+            if (tt.nextToken() != ',') {
+                tt.pushBack();
+            }
         }
         return first;
     }
@@ -161,7 +164,7 @@ public class CssEffectConverter implements Converter<Effect> {
     }
 
     private Effect parseDropShadowOrInnerShadow(CssTokenizerInterface tt, boolean isDropShadow) throws ParseException, IOException {
-        String func = isDropShadow ?DROP_SHADOW : INNER_SHADOW;
+        String func = isDropShadow ? DROP_SHADOW : INNER_SHADOW;
         BlurType blurType = BlurType.GAUSSIAN;
         Color color = new Color(0, 0, 0, 0.75);
         double radius = 10.0;
@@ -199,7 +202,7 @@ public class CssEffectConverter implements Converter<Effect> {
                 color = Color.web(tt.currentStringValue());
             } else if (tt.currentToken() == CssTokenizer.TT_FUNCTION) {
                 tt.pushBack();
-                CssColor colorOrNull =colorConverter.parseColor(tt);
+                CssColor colorOrNull = colorConverter.parseColor(tt);
                 color = colorOrNull.getColor();
             } else {
                 throw new ParseException("CSS Effect: " + func + "(" + blurType.toString().toLowerCase().replace('_', '-') + ",  <color> expected", tt.getStartPosition());
@@ -217,13 +220,13 @@ public class CssEffectConverter implements Converter<Effect> {
             }
             switch (tt.nextToken()) {
                 case CssTokenizer.TT_NUMBER:
-            spreadOrChocke = tt.currentNumericValue().doubleValue();
+                    spreadOrChocke = tt.currentNumericValue().doubleValue();
                     break;
                 case CssTokenizer.TT_PERCENTAGE:
-            spreadOrChocke = tt.currentNumericValue().doubleValue()/100.0;
+                    spreadOrChocke = tt.currentNumericValue().doubleValue() / 100.0;
                     break;
                 default:
-                throw new ParseException("CSS Effect: spread or chocke number expected", tt.getStartPosition());
+                    throw new ParseException("CSS Effect: spread or chocke number expected", tt.getStartPosition());
             }
             if (tt.nextToken() != ',') {
                 tt.pushBack();
@@ -255,12 +258,13 @@ public class CssEffectConverter implements Converter<Effect> {
     public Effect getDefaultValue() {
         return null;
     }
+
     @Override
     public String getHelpText() {
         return "Format of ⟨Effect⟩: none｜（⟨DropShadow⟩｜ ⟨InnerShadow⟩）｛, ⟨Effect⟩｝"
-       + "\nFormat of ⟨DropShadow⟩: drop-shadow(⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨spread⟩,⟨xoffset⟩,⟨yoffset⟩)"
-       + "\nFormat of ⟨InnerShadow⟩: inner-shadow((⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨choke⟩,⟨xoffset⟩,⟨yoffset⟩))"
-       + "\nFormat of ⟨BlurType⟩: ⟨gaussian⟩｜⟨one-pass-box⟩｜⟨two-pass-box⟩｜⟨three-pass-box⟩"
-                +"\n"+colorConverter.getHelpText();
+                + "\nFormat of ⟨DropShadow⟩: drop-shadow(⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨spread⟩,⟨xoffset⟩,⟨yoffset⟩)"
+                + "\nFormat of ⟨InnerShadow⟩: inner-shadow((⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨choke⟩,⟨xoffset⟩,⟨yoffset⟩))"
+                + "\nFormat of ⟨BlurType⟩: ⟨gaussian⟩｜⟨one-pass-box⟩｜⟨two-pass-box⟩｜⟨three-pass-box⟩"
+                + "\n" + colorConverter.getHelpText();
     }
 }

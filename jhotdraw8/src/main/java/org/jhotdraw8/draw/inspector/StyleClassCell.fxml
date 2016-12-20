@@ -9,10 +9,10 @@
 <?import javafx.scene.layout.*?>
 
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <padding>
-      <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-   </padding>
-   <children>
-      <Button fx:id="removeButton" mnemonicParsing="false" styleClass="tagRemoveButton" text="%tagRemoveButton.text" />
-   </children>
+  <padding>
+    <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+  </padding>
+  <children>
+    <Button fx:id="removeButton" mnemonicParsing="false" styleClass="tagRemoveButton" text="%tagRemoveButton.text" />
+  </children>
 </HBox>

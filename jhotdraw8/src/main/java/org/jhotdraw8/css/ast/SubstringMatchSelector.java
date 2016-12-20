@@ -12,7 +12,8 @@ import org.jhotdraw8.css.SelectorModel;
  * substring.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: SubstringMatchSelector.java 1149 2016-11-18 11:00:10Z rawcoder
+ * $
  */
 public class SubstringMatchSelector extends AbstractAttributeSelector {
 
@@ -29,6 +30,7 @@ public class SubstringMatchSelector extends AbstractAttributeSelector {
         return (model.attributeValueContains(element, attributeName, substring))//
                 ? element : null;
     }
+
     @Override
     public String toString() {
         return "[" + attributeName + "*=" + substring + ']';

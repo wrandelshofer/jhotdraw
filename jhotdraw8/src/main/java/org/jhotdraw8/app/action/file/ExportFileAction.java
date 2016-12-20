@@ -44,6 +44,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     public ExportFileAction(Application<DocumentView> app, DocumentView view) {
         this(app, view, ID);
     }
+
     /**
      * Creates a new instance.
      *
@@ -54,10 +55,12 @@ public class ExportFileAction extends AbstractSaveFileAction {
     public ExportFileAction(Application<DocumentView> app, DocumentView view, String id) {
         super(app, view, id, true);
     }
+
     @Override
     protected URIChooser createChooser(DocumentView view) {
         return app.getModel().createExportChooser();
     }
+
     @Override
     protected void handleSucceded(DocumentView v, URI uri) {
         // empty

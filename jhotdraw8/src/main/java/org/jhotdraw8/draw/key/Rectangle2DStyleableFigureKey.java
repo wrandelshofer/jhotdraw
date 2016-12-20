@@ -24,7 +24,7 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  */
 public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> implements StyleableMapAccessor<Rectangle2D> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, Rectangle2D> cssMetaData;
 
@@ -75,7 +75,7 @@ public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> 
     }
 
     @Override
-    public CssMetaData<?,Rectangle2D> getCssMetaData() {
+    public CssMetaData<?, Rectangle2D> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -88,5 +88,5 @@ public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> 
             converter = new CssRectangle2DConverter();
         }
         return converter;
-    }   
+    }
 }

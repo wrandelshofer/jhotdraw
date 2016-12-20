@@ -27,8 +27,8 @@ public class StringOrIdentStyleableFigureKey extends SimpleFigureKey<String> imp
     private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
-     * Creates a new instance with the specified name and with an empty String as the
-     * default value.
+     * Creates a new instance with the specified name and with an empty String
+     * as the default value.
      *
      * @param name The name of the key.
      */
@@ -91,5 +91,5 @@ public class StringOrIdentStyleableFigureKey extends SimpleFigureKey<String> imp
             converter = new CssStringOrIdentConverter();
         }
         return converter;
-    }     
+    }
 }

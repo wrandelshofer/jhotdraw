@@ -5,7 +5,6 @@
  * You may not use, copy or modify this file, except in compliance with the 
  * accompanying license terms.
  */
-
 package org.jhotdraw8.app.action.file;
 
 import java.util.concurrent.CompletionStage;
@@ -22,19 +21,24 @@ import org.jhotdraw8.util.Resources;
  * @version $Id$
  */
 public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
+
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.clear";
-    
-    /** Creates a new instance.
+
+    /**
+     * Creates a new instance.
+     *
      * @param app the application
-     * @param view the view */
+     * @param view the view
+     */
     public ClearFileAction(Application<DocumentView> app, DocumentView view) {
         super(app, view);
         Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
         labels.configureAction(this, "file.clear");
     }
-    
-    @Override public CompletionStage<Void> doIt(final DocumentView view) {
+
+    @Override
+    public CompletionStage<Void> doIt(final DocumentView view) {
         return view.clear();
     }
 }

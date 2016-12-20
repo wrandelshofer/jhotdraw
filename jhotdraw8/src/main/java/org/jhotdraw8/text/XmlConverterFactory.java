@@ -12,6 +12,7 @@ package org.jhotdraw8.text;
  * <li>number</li>
  * <li>word</li>
  * </ul>
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -19,7 +20,7 @@ public class XmlConverterFactory implements ConverterFactory {
 
     @Override
     public Converter<?> apply(String type, String style) {
-        if (type==null) {
+        if (type == null) {
             return new DefaultConverter();
         }
         switch (type) {
@@ -28,7 +29,7 @@ public class XmlConverterFactory implements ConverterFactory {
             case "word":
                 return new XmlWordConverter();
             default:
-                throw new IllegalArgumentException("illegal type:"+type);
+                throw new IllegalArgumentException("illegal type:" + type);
         }
     }
 

@@ -5,8 +5,7 @@
  *
  * @author Werner Randelshofer
  * @version $Id$
-*/
-
+ */
 /**
  * Provides utility classes for concurrency.
  */

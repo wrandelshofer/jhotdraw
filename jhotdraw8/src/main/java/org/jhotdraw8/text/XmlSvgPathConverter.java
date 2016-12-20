@@ -29,26 +29,25 @@ import org.jhotdraw8.draw.io.IdFactory;
  */
 public class XmlSvgPathConverter implements Converter<SVGPath> {
 
-
     @Override
     public SVGPath fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-         CharBuffer out = CharBuffer.allocate(buf.remaining());
+        CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = buf.read(out);
         out.position(0);
         out.limit(count);
-        SVGPath p=new SVGPath();
+        SVGPath p = new SVGPath();
         p.setContent(out.toString());
         return p;
     }
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, SVGPath value) throws IOException {
-        out.append( value.getContent());
+        out.append(value.getContent());
     }
 
     @Override
     public SVGPath getDefaultValue() {
-        SVGPath p= new SVGPath();
+        SVGPath p = new SVGPath();
         return p;
     }
 }

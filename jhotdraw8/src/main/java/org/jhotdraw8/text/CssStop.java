@@ -2,7 +2,6 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.text;
 
 import java.util.Objects;
@@ -14,6 +13,7 @@ import java.util.Objects;
  * @version $$Id$$
  */
 public class CssStop {
+
     final Double offset;
     final CssColor color;
 
@@ -61,5 +61,5 @@ public class CssStop {
     public String toString() {
         return "CssStop{" + "offset=" + offset + ", " + color + '}';
     }
-    
+
 }

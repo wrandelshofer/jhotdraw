@@ -29,22 +29,28 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
      */
     private final List<E> list;
 
-    /** Creates a new instance which is backed by an array list. */
+    /**
+     * Creates a new instance which is backed by an array list.
+     */
     public IndexedSet() {
         this(new ArrayList<>(), null);
     }
 
-    /** Creates a new instance and adds all elements of the specified collection to it.
+    /**
+     * Creates a new instance and adds all elements of the specified collection
+     * to it.
+     *
      * @param col A collection.
      */
     public IndexedSet(Collection<? extends E> col) {
         this(new ArrayList<>(), col);
     }
 
-    /** Creates a new instance with the specified backing list, clears the
+    /**
+     * Creates a new instance with the specified backing list, clears the
      * backing list and the adds all elements of the specified collection to it.
-     * 
-     * 
+     *
+     *
      * @param backingList the backing list
      * @param col A collection.
      */
@@ -156,7 +162,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     protected boolean doAdd(int index, E element, boolean checkForDuplicates) {
-        int oldIndex = checkForDuplicates ? list.indexOf(element):-1; // linear search!
+        int oldIndex = checkForDuplicates ? list.indexOf(element) : -1; // linear search!
         if (oldIndex == -1) {
             list.add(index, element);
             beginChange();
@@ -726,7 +732,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.ORDERED);
     }
-    
+
     public void fireItemUpdated(int index) {
         beginChange();
         nextUpdate(index);

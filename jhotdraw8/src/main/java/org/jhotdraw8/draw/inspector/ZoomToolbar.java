@@ -52,9 +52,11 @@ public class ZoomToolbar extends BorderPane {
             }
         };
     }
+
     public ZoomToolbar() {
         this(ZoomToolbar.class.getResource("ZoomToolbar.fxml"));
     }
+
     public ZoomToolbar(URL fxmlUrl) {
         init(fxmlUrl);
     }
@@ -63,7 +65,7 @@ public class ZoomToolbar extends BorderPane {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
-        try(InputStream in=fxmlUrl.openStream()) {
+        try (InputStream in = fxmlUrl.openStream()) {
             setCenter(loader.load(in));
         } catch (IOException ex) {
             throw new InternalError(ex);
@@ -99,6 +101,7 @@ public class ZoomToolbar extends BorderPane {
 
     /**
      * Defines the factor by which the drawing view should be zoomed.
+     *
      * @return zoom factor
      */
     public DoubleProperty zoomFactorProperty() {

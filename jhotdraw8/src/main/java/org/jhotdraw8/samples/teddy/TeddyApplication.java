@@ -10,6 +10,7 @@ import org.jhotdraw8.app.SimpleApplicationModel;
 
 /**
  * TeddyApplication.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -20,7 +21,7 @@ public class TeddyApplication extends DocumentOrientedApplication {
         setModel(new SimpleApplicationModel(
                 "Teddy", TeddyView::new,
                 DocumentOrientedApplication.class.getResource("DocumentOrientedMenu.fxml"),
-                "Text Files",null,"*.txt"));
+                "Text Files", null, "*.txt"));
     }
 
     /**
@@ -29,5 +30,5 @@ public class TeddyApplication extends DocumentOrientedApplication {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

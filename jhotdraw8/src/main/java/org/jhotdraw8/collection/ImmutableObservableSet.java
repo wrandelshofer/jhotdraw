@@ -16,24 +16,27 @@ import javafx.collections.SetChangeListener;
  * ImmutableObservableSet.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $$Id: ImmutableObservableSet.java 1238 2016-12-20 10:38:27Z rawcoder
+ * $$
  */
 public final class ImmutableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
     private final LinkedHashSet<E> backingSet;
-    
-    private final static ImmutableObservableSet<Object> EMPTY=new ImmutableObservableSet<Object>(new LinkedHashSet<Object>());
+
+    private final static ImmutableObservableSet<Object> EMPTY = new ImmutableObservableSet<Object>(new LinkedHashSet<Object>());
 
     public ImmutableObservableSet(Collection<E> copyMe) {
         this.backingSet = new LinkedHashSet<>(copyMe);
     }
+
     private ImmutableObservableSet(LinkedHashSet<E> backingSet, boolean privateConstructor) {
         this.backingSet = backingSet;
     }
+
     public static <T> ImmutableObservableSet<T> add(Collection<T> collection, T item) {
         LinkedHashSet<T> a = new LinkedHashSet<T>(collection);
         a.remove(item);
-        return new ImmutableObservableSet<T>(a,true);
+        return new ImmutableObservableSet<T>(a, true);
     }
 
     public static <T> ImmutableObservableSet<T> remove(Collection<T> collection, T item) {
@@ -41,12 +44,12 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
         a.remove(item);
         return new ImmutableObservableSet<T>(a, true);
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     public static <T> ImmutableObservableSet<T> emptySet() {
         return (ImmutableObservableSet<T>) EMPTY;
     }
+
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {

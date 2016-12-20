@@ -16,12 +16,11 @@ import org.jhotdraw8.draw.figure.Figure;
  * Handle.
  *
  * @design.pattern org.jhotdraw8.draw.Drawing Framework, KeyAbstraction.
- * @design.pattern Handle Adapter, Adapter.
- * {@link Handle} adapts the operations for manipulating a {@link Figure} with
- * the mouse to a common interface.
- * @design.pattern org.jhotdraw8.draw.tool.HandleTracker Chain of Responsibility,
- * Handler.
- * 
+ * @design.pattern Handle Adapter, Adapter. {@link Handle} adapts the operations
+ * for manipulating a {@link Figure} with the mouse to a common interface.
+ * @design.pattern org.jhotdraw8.draw.tool.HandleTracker Chain of
+ * Responsibility, Handler.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -124,7 +123,9 @@ public interface Handle {
      */
     Node getNode();
 
-    /** Updates the node. 
+    /**
+     * Updates the node.
+     *
      * @param drawingView the drawing view
      */
     void updateNode(DrawingView drawingView);
@@ -175,22 +176,26 @@ public interface Handle {
 
     default void onKeyTyped(KeyEvent event, DrawingView dv) {
     }
-    
-    /** Returns true if that handle is compatible with this handle.
+
+    /**
+     * Returns true if that handle is compatible with this handle.
+     *
      * @param that the other handle
-     * @return true if compatible */
+     * @return true if compatible
+     */
     boolean isCompatible(Handle that);
 
-    /** The cursor that should be shown when the mouse hovers over a selectable
-     * handle.
-     * Non-selectable handles should return null.
-     * 
+    /**
+     * The cursor that should be shown when the mouse hovers over a selectable
+     * handle. Non-selectable handles should return null.
+     *
      * @return the cursor
      */
     Cursor getCursor();
-    
-    /** The pick location of the handle in view coordinates.
-     * 
+
+    /**
+     * The pick location of the handle in view coordinates.
+     *
      * @return the pick location or null if the handle is not interactive
      */
     Point2D getLocationInView();

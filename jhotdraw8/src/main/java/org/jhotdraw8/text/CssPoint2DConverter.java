@@ -23,7 +23,7 @@ public class CssPoint2DConverter implements Converter<Point2D> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point2D value) throws IOException {
-        formatter.toStr(out,idFactory, value.getX(), value.getY());
+        formatter.toStr(out, idFactory, value.getX(), value.getY());
     }
 
     @Override
@@ -32,8 +32,9 @@ public class CssPoint2DConverter implements Converter<Point2D> {
 
         return new Point2D((double) v[0], (double) v[1]);
     }
+
     @Override
     public Point2D getDefaultValue() {
-        return new Point2D(0,0);
+        return new Point2D(0, 0);
     }
 }

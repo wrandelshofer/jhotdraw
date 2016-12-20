@@ -11,11 +11,12 @@ import java.awt.geom.*;
 import java.util.*;
 
 /**
- * Provides algorithms for fitting BezierFit curves to a set of digitized points.
+ * Provides algorithms for fitting BezierFit curves to a set of digitized
+ * points.
  * <p>
  * Source:<br>
- * Phoenix: An Interactive Curve Design System Based on the Automatic Fitting
- * of Hand-Sketched Curves.<br>
+ * Phoenix: An Interactive Curve Design System Based on the Automatic Fitting of
+ * Hand-Sketched Curves.<br>
  * © Copyright by Philip J. Schneider 1988.<br>
  * A thesis submitted in partial fulfillment of the requirements for the degree
  * of Master of Science, University of Washington.
@@ -27,7 +28,9 @@ import java.util.*;
  */
 public class BezierFit {
 
-    /** Prevent instance creation. */
+    /**
+     * Prevent instance creation.
+     */
     private BezierFit() {
     }
 
@@ -51,11 +54,11 @@ public class BezierFit {
      * Fits a bezier path to the specified list of digitized points.
      * <p>
      * This is a convenience method for calling {@link #fitBezierPath}
-     * 
+     *
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
-     * digitized points. 
-     * @return  the bezier path
+     * digitized points.
+     * @return the bezier path
      */
     public static BezierPath fitBezierPath(Point2D.Double[] digitizedPoints, double error) {
         return fitBezierPath(Arrays.asList(digitizedPoints), error);
@@ -63,17 +66,17 @@ public class BezierFit {
 
     /**
      * Fits a bezier path to the specified list of digitized points.
-     * 
+     *
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
-     * digitized points. 
-     * @return  the bezier path
+     * digitized points.
+     * @return the bezier path
      */
     public static BezierPath fitBezierPath(java.util.List<Point2D.Double> digitizedPoints, double error) {
         // Split into segments at corners
         ArrayList<ArrayList<Point2D.Double>> segments;
         segments = splitAtCorners(digitizedPoints, 77 / 180d * Math.PI, error * error);
-        
+
         // Clean up the data in the segments
         for (int i = 0, n = segments.size(); i < n; i++) {
             ArrayList<Point2D.Double> seg = segments.get(i);
@@ -83,10 +86,8 @@ public class BezierFit {
             segments.set(i, seg);
         }
 
-
         // Create fitted bezier path
         BezierPath fittedPath = new BezierPath();
-
 
         // Quickly deal with empty dataset
         boolean isEmpty = false;
@@ -134,11 +135,11 @@ public class BezierFit {
      * Fits a bezier path to the specified list of digitized points.
      * <p>
      * This is a convenience method for calling {@link #fitBezierPath}.
-     * 
+     *
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
-     * digitized points. 
-     * @return  the bezier path
+     * digitized points.
+     * @return the bezier path
      */
     public static BezierPath fitBezierPath(BezierPath digitizedPoints, double error) {
         ArrayList<Point2D.Double> d = new ArrayList<Point2D.Double>(digitizedPoints.size());
@@ -149,22 +150,23 @@ public class BezierFit {
     }
 
     /**
-     * Removes points which are closer together than the specified minimal 
+     * Removes points which are closer together than the specified minimal
      * distance.
      * <p>
-     * The minimal distance should be chosen dependent on the size and resolution of the
-     * display device, and on the sampling rate. A good value for mouse input
-     * on a display with 100% Zoom factor is 2.
+     * The minimal distance should be chosen dependent on the size and
+     * resolution of the display device, and on the sampling rate. A good value
+     * for mouse input on a display with 100% Zoom factor is 2.
      * <p>
      * The purpose of this method, is to remove points, which add no additional
-     * information about the shape of the curve from the list of digitized points.
+     * information about the shape of the curve from the list of digitized
+     * points.
      * <p>
-     * The cleaned up set of digitized points gives better results, when used
-     * as input for method {@link #splitAtCorners}.
-     * 
+     * The cleaned up set of digitized points gives better results, when used as
+     * input for method {@link #splitAtCorners}.
+     *
      * @param digitizedPoints Digitized points
      * @param minDistance minimal distance between two points. If minDistance is
-     * 0, this method only removes sequences of coincident points. 
+     * 0, this method only removes sequences of coincident points.
      * @return Digitized points with a minimal distance.
      */
     public static ArrayList<Point2D.Double> removeClosePoints(java.util.List<Point2D.Double> digitizedPoints, double minDistance) {
@@ -194,13 +196,13 @@ public class BezierFit {
     /**
      * Removes sequences of coincident points.
      * <p>
-     * The purpose of this method, is to clean up a list of digitized points
-     * for later processing using method {@link #splitAtCorners}.
+     * The purpose of this method, is to clean up a list of digitized points for
+     * later processing using method {@link #splitAtCorners}.
      * <p>
      * Use this method only, if you know that the digitized points contain no
      * quantization errors - which is never the case, unless you want to debug
      * the curve fitting algorithm of this class.
-     * 
+     *
      * @param digitizedPoints Digitized points
      * @return Digitized points without subsequent duplicates.
      */
@@ -222,16 +224,16 @@ public class BezierFit {
     /**
      * Splits the digitized points into multiple segments at each corner point.
      * <p>
-     * Corner points are both contained as the last point of a segment and
-     * the first point of a subsequent segment.
-     * 
-     * @param digitizedPoints Digitized points 
-     * @param maxAngle maximal angle in radians between the current point and its
-     * predecessor and successor up to which the point does not break the
+     * Corner points are both contained as the last point of a segment and the
+     * first point of a subsequent segment.
+     *
+     * @param digitizedPoints Digitized points
+     * @param maxAngle maximal angle in radians between the current point and
+     * its predecessor and successor up to which the point does not break the
      * digitized list into segments. Recommended value 44° = 44 * 180d / Math.PI
      * @param minDistance the minimal distance
-     * @return Segments of digitized points, each segment having less than maximal
-     * angle between points.
+     * @return Segments of digitized points, each segment having less than
+     * maximal angle between points.
      */
     public static ArrayList<ArrayList<Point2D.Double>> splitAtCorners(java.util.List<Point2D.Double> digitizedPoints, double maxAngle, double minDistance) {
         ArrayList<Integer> cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
@@ -252,7 +254,7 @@ public class BezierFit {
 
     /**
      * Finds corners in the provided point list, and returns their indices.
-     * 
+     *
      * @param digitizedPoints List of digitized points.
      * @param minAngle Minimal angle for corner points
      * @param minDistance Minimal distance between a point and adjacent points
@@ -313,16 +315,16 @@ public class BezierFit {
     }
 
     /**
-     * Reduces noise from the digitized points, by applying an approximation
-     * of a gaussian filter to the data.
+     * Reduces noise from the digitized points, by applying an approximation of
+     * a gaussian filter to the data.
      * <p>
      * The filter does the following for each point P, with weight 0.5:
      * <p>
-     * x[i] = 0.5*x[i] + 0.25*x[i-1] + 0.25*x[i+1];
-     * y[i] = 0.5*y[i] + 0.25*y[i-1] + 0.25*y[i+1];
-     * 
-     * 
-     * 
+     * x[i] = 0.5*x[i] + 0.25*x[i-1] + 0.25*x[i+1]; y[i] = 0.5*y[i] +
+     * 0.25*y[i-1] + 0.25*y[i+1];
+     *
+     *
+     *
      * @param digitizedPoints Digitized points
      * @param weight Weight of the current point
      * @return Digitized points with reduced noise.
@@ -349,11 +351,11 @@ public class BezierFit {
     }
 
     /**
-     * Fit one or multiple subsequent cubic bezier curves to a (sub)set of 
+     * Fit one or multiple subsequent cubic bezier curves to a (sub)set of
      * digitized points. The digitized points represent a smooth curve without
      * corners.
      *
-     * @param d  Array of digitized points. Must not contain subsequent 
+     * @param d Array of digitized points. Must not contain subsequent
      * coincident points.
      * @param first Indice of first point in d.
      * @param last Indice of last point in d.
@@ -366,16 +368,24 @@ public class BezierFit {
             Point2D.Double tHat1, Point2D.Double tHat2,
             double errorSquared, BezierPath bezierPath) {
 
-        Point2D.Double[] bezCurve; /*Control points of fitted BezierFit curve*/
-        double[] u;		/*  Parameter values for point  */
-        double maxError;	/*  Maximum fitting errorSquared	 */
-        int[] splitPoint = new int[1]; /*  Point to split point set at.
+        Point2D.Double[] bezCurve;
+        /*Control points of fitted BezierFit curve*/
+        double[] u;
+        /*  Parameter values for point  */
+        double maxError;
+        /*  Maximum fitting errorSquared	 */
+        int[] splitPoint = new int[1];
+        /*  Point to split point set at.
         This is an array of size one, because we need it as an input/output parameter.
          */
-        int nPts;		/*  Number of points in subset  */
-        double iterationError; /* Error below which you try iterating  */
-        int maxIterations = 4; /*  Max times to try iterating  */
-        Point2D.Double tHatCenter; /* Unit tangent vector at splitPoint */
+        int nPts;
+        /*  Number of points in subset  */
+        double iterationError;
+        /* Error below which you try iterating  */
+        int maxIterations = 4;
+        /*  Max times to try iterating  */
+        Point2D.Double tHatCenter;
+        /* Unit tangent vector at splitPoint */
         int i;
 
         // clone unit tangent vectors, so that we can alter their coordinates
@@ -419,9 +429,10 @@ public class BezierFit {
 
 
         /*  If errorSquared not too large, try some reparameterization  */
-        /*  and iteration */
+ /*  and iteration */
         if (maxError < iterationError) {
-            double[] uPrime;	/*  Improved parameter values */
+            double[] uPrime;
+            /*  Improved parameter values */
             for (i = 0; i < maxIterations; i++) {
                 uPrime = reparameterize(d, first, last, u, bezCurve);
                 bezCurve = generateBezier(d, first, last, uPrime, tHat1, tHat2);
@@ -440,28 +451,28 @@ public class BezierFit {
             fitCubic(d, first, splitPoint[0], tHat1, tHatCenter, errorSquared, bezierPath);
         } else {
             bezierPath.lineTo(d.get(splitPoint[0]).x, d.get(splitPoint[0]).y);
-         //   System.err.println("Can't split any further " + first + ".." + splitPoint[0]);
+            //   System.err.println("Can't split any further " + first + ".." + splitPoint[0]);
         }
         v2Negate(tHatCenter);
         if (splitPoint[0] < last) {
             fitCubic(d, splitPoint[0], last, tHatCenter, tHat2, errorSquared, bezierPath);
         } else {
             bezierPath.lineTo(d.get(last).x, d.get(last).y);
-          //  System.err.println("Can't split any further " + splitPoint[0] + ".." + last);
+            //  System.err.println("Can't split any further " + splitPoint[0] + ".." + last);
         }
     }
 
     /**
      * Adds the curve to the bezier path.
-     * 
+     *
      * @param bezCurve
      * @param bezierPath
      */
     private static void addCurveTo(Point2D.Double[] bezCurve, BezierPath bezierPath, double errorSquared, boolean connectsCorners) {
         BezierPath.Node lastNode = bezierPath.get(bezierPath.size() - 1);
         double error = Math.sqrt(errorSquared);
-        if (connectsCorners && Geom.lineContainsPoint(lastNode.x[0], lastNode.y[0], bezCurve[3].x, bezCurve[3].y, bezCurve[1].x, bezCurve[1].y, error) &&
-                Geom.lineContainsPoint(lastNode.x[0], lastNode.y[0], bezCurve[3].x, bezCurve[3].y, bezCurve[2].x, bezCurve[2].y, error)) {
+        if (connectsCorners && Geom.lineContainsPoint(lastNode.x[0], lastNode.y[0], bezCurve[3].x, bezCurve[3].y, bezCurve[1].x, bezCurve[1].y, error)
+                && Geom.lineContainsPoint(lastNode.x[0], lastNode.y[0], bezCurve[3].x, bezCurve[3].y, bezCurve[2].x, bezCurve[2].y, error)) {
             bezierPath.lineTo(
                     bezCurve[3].x, bezCurve[3].y);
 
@@ -518,8 +529,8 @@ public class BezierFit {
     }
 
     /**
-     * Assign parameter values to digitized points
-     * using relative distances between points.
+     * Assign parameter values to digitized points using relative distances
+     * between points.
      *
      * @param d Digitized points.
      * @param first Indice of first point of region in d.
@@ -527,14 +538,15 @@ public class BezierFit {
      */
     private static double[] chordLengthParameterize(ArrayList<Point2D.Double> d, int first, int last) {
         int i;
-        double[] u;	/*  Parameterization		*/
+        double[] u;
+        /*  Parameterization		*/
 
         u = new double[last - first + 1];
 
         u[0] = 0.0;
         for (i = first + 1; i <= last; i++) {
-            u[i - first] = u[i - first - 1] +
-                    v2DistanceBetween2Points(d.get(i), d.get(i - 1));
+            u[i - first] = u[i - first - 1]
+                    + v2DistanceBetween2Points(d.get(i), d.get(i - 1));
         }
 
         for (i = first + 1; i <= last; i++) {
@@ -545,10 +557,10 @@ public class BezierFit {
     }
 
     /**
-     * Given set of points and their parameterization, try to find
-     * a better parameterization.
+     * Given set of points and their parameterization, try to find a better
+     * parameterization.
      *
-     * @param d  Array of digitized points.
+     * @param d Array of digitized points.
      * @param first Indice of first point of region in d.
      * @param last Indice of last point of region in d.
      * @param u Current parameter values.
@@ -557,7 +569,8 @@ public class BezierFit {
     private static double[] reparameterize(ArrayList<Point2D.Double> d, int first, int last, double[] u, Point2D.Double[] bezCurve) {
         int nPts = last - first + 1;
         int i;
-        double[] uPrime; /*  New parameter values	*/
+        double[] uPrime;
+        /*  New parameter values	*/
 
         uPrime = new double[nPts];
         for (i = first; i <= last; i++) {
@@ -569,15 +582,18 @@ public class BezierFit {
     /**
      * Use Newton-Raphson iteration to find better root.
      *
-     * @param Q  Current fitted bezier curve.
-     * @param P  Digitized point.
-     * @param u  Parameter value vor P.
+     * @param Q Current fitted bezier curve.
+     * @param P Digitized point.
+     * @param u Parameter value vor P.
      */
     private static double newtonRaphsonRootFind(Point2D.Double[] Q, Point2D.Double P, double u) {
         double numerator, denominator;
-        Point2D.Double[] Q1 = new Point2D.Double[3], Q2 = new Point2D.Double[2];	/*  Q' and Q''			*/
-        Point2D.Double Q_u, Q1_u, Q2_u; /*u evaluated at Q, Q', & Q''	*/
-        double uPrime;		/*  Improved u	*/
+        Point2D.Double[] Q1 = new Point2D.Double[3], Q2 = new Point2D.Double[2];
+        /*  Q' and Q''			*/
+        Point2D.Double Q_u, Q1_u, Q2_u;
+        /*u evaluated at Q, Q', & Q''	*/
+        double uPrime;
+        /*  Improved u	*/
         int i;
 
         /* Compute Q(u)	*/
@@ -603,8 +619,8 @@ public class BezierFit {
 
         /* Compute f(u)/f'(u) */
         numerator = (Q_u.x - P.x) * (Q1_u.x) + (Q_u.y - P.y) * (Q1_u.y);
-        denominator = (Q1_u.x) * (Q1_u.x) + (Q1_u.y) * (Q1_u.y) +
-                (Q_u.x - P.x) * (Q2_u.x) + (Q_u.y - P.y) * (Q2_u.y);
+        denominator = (Q1_u.x) * (Q1_u.x) + (Q1_u.y) * (Q1_u.y)
+                + (Q_u.x - P.x) * (Q2_u.x) + (Q_u.y - P.y) * (Q2_u.y);
 
         /* u = u - f(u)/f'(u) */
         uPrime = u - (numerator / denominator);
@@ -612,23 +628,27 @@ public class BezierFit {
     }
 
     /**
-     * Find the maximum squared distance of digitized points
-     * to fitted curve.
+     * Find the maximum squared distance of digitized points to fitted curve.
      *
      * @param d Digitized points.
      * @param first Indice of first point of region in d.
      * @param last Indice of last point of region in d.
      * @param bezCurve Fitted BezierFit curve
-     * @param u Parameterization of points*
+     * @param u Parameterization of points
+     *
      * @param splitPoint Point of maximum error (input/output parameter, must be
      * an array of 1)
      */
     private static double computeMaxError(ArrayList<Point2D.Double> d, int first, int last, Point2D.Double[] bezCurve, double[] u, int[] splitPoint) {
         int i;
-        double maxDist;		/*  Maximum error */
-        double dist;		/*  Current error */
-        Point2D.Double P; /*  Point on curve */
-        Point2D.Double v; /*  Vector from point to curve */
+        double maxDist;
+        /*  Maximum error */
+        double dist;
+        /*  Current error */
+        Point2D.Double P;
+        /*  Point on curve */
+        Point2D.Double v;
+        /*  Vector from point to curve */
 
         splitPoint[0] = (last - first + 1) / 2;
         maxDist = 0.0;
@@ -647,7 +667,7 @@ public class BezierFit {
     /**
      * Use least-squares method to find BezierFit control points for region.
      *
-     * @param d  Array of digitized points.
+     * @param d Array of digitized points.
      * @param first Indice of first point in d.
      * @param last Indice of last point in d.
      * @param uPrime Parameter values for region .
@@ -677,16 +697,18 @@ public class BezierFit {
     /**
      * Evaluate a BezierFit curve at a particular parameter value.
      *
-     * @param degree  The degree of the bezier curve.
-     * @param V  Array of control points.
-     * @param t  Parametric value to find point for.
+     * @param degree The degree of the bezier curve.
+     * @param V Array of control points.
+     * @param t Parametric value to find point for.
      */
     private static Point2D.Double bezierII(int degree, Point2D.Double[] V, double t) {
         int i, j;
-        Point2D.Double q; /* Point on curve at parameter t	*/
-        Point2D.Double[] vTemp; /* Local copy of control points		*/
+        Point2D.Double q;
+        /* Point on curve at parameter t	*/
+        Point2D.Double[] vTemp;
+        /* Local copy of control points		*/
 
-        /* Copy array	*/
+ /* Copy array	*/
         vTemp = new Point2D.Double[degree + 1];
         for (i = 0; i <= degree; i++) {
             vTemp[i] = (Point2D.Double) V[i].clone();
@@ -820,7 +842,7 @@ public class BezierFit {
 
     /**
      * Subtract Vector a from Vector b.
-     * 
+     *
      * @param a Vector a - the value is not changed by this method
      * @param b Vector b - the value is not changed by this method
      * @return Vector a subtracted by Vector v.
@@ -833,8 +855,7 @@ public class BezierFit {
     }
 
     /**
-     *  B0, B1, B2, B3 :
-	BezierFit multipliers
+     * B0, B1, B2, B3 : BezierFit multipliers
      */
     private static double b0(double u) {
         double tmp = 1.0 - u;

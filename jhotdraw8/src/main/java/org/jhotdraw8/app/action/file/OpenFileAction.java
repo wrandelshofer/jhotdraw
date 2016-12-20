@@ -20,11 +20,12 @@ import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.util.Resources;
+
 /**
- * Presents an {@code URIChooser} and loads the selected URI into an
- * empty view. If no empty view is available, a new view is created.
+ * Presents an {@code URIChooser} and loads the selected URI into an empty view.
+ * If no empty view is available, a new view is created.
  *
- * @author  Werner Randelshofer
+ * @author Werner Randelshofer
  * @version $Id$
  */
 public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
@@ -34,8 +35,11 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
     public static final String ID = "file.open";
     private boolean reuseEmptyViews = true;
 
-    /** Creates a new instance.
-     * @param app the application */
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     */
     public OpenFileAction(Application<DocumentView> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
@@ -56,10 +60,10 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
         {
             app.addDisabler(this);
             // Search for an empty view
-                      DocumentView emptyView;
+            DocumentView emptyView;
             if (reuseEmptyViews) {
                 emptyView = app.getActiveView();
-                if (emptyView==null
+                if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
                     emptyView = null;
@@ -68,7 +72,7 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
                 emptyView = null;
             }
 
-            if (emptyView==null) {
+            if (emptyView == null) {
                 app.createView().thenAccept(v -> doIt(v, true));
             } else {
                 doIt(emptyView, false);
@@ -79,7 +83,7 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
     public void doIt(DocumentView view, boolean disposeView) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
-        if (uri!=null) {
+        if (uri != null) {
             app.add(view);
 
             // Prevent same URI from being opened more than once
@@ -112,26 +116,26 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
         v.addDisabler(this);
 
         // Open the file
-        v.read(uri, chooser==null?null:chooser.getDataFormat(),false).whenComplete((result, exception) -> {
+        v.read(uri, chooser == null ? null : chooser.getDataFormat(), false).whenComplete((result, exception) -> {
             if (exception instanceof CancellationException) {
-                    v.removeDisabler(this);
+                v.removeDisabler(this);
             } else if (exception != null) {
-                    Throwable value = exception;
-                    value.printStackTrace();
-                    String message = (value != null && value.getMessage()
-                            != null) ? value.getMessage() : value.toString();
-                    Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-                    Alert alert = new Alert(Alert.AlertType.ERROR,
-                            ((message == null) ? "" : message));
-                    alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
-                    alert.showAndWait();
-                    v.removeDisabler(this);
+                Throwable value = exception;
+                value.printStackTrace();
+                String message = (value != null && value.getMessage()
+                        != null) ? value.getMessage() : value.toString();
+                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                Alert alert = new Alert(Alert.AlertType.ERROR,
+                        ((message == null) ? "" : message));
+                alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
+                alert.showAndWait();
+                v.removeDisabler(this);
             } else {
-                    v.setURI(uri);
-                    v.clearModified();
-                    v.setTitle(URIUtil.getName(uri));
-                    getApplication().addRecentURI(uri);
-                    v.removeDisabler(this);
+                v.setURI(uri);
+                v.clearModified();
+                v.setTitle(URIUtil.getName(uri));
+                getApplication().addRecentURI(uri);
+                v.removeDisabler(this);
             }
         });
     }

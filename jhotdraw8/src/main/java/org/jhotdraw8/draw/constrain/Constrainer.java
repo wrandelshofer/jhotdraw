@@ -27,6 +27,7 @@ import org.jhotdraw8.draw.figure.Figure;
  * @version $Id$
  */
 public interface Constrainer extends Observable {
+
     /**
      * Style class for constrainers which draw a grid.
      */
@@ -39,7 +40,6 @@ public interface Constrainer extends Observable {
     // ---
     // constant declarations
     // ---
-
     /**
      * A direction vector with distance of zero.
      */
@@ -133,12 +133,14 @@ public interface Constrainer extends Observable {
 
     /**
      * Returns a node that renders the grid in view coordinates.
+     *
      * @return the node
      */
     public Node getNode();
 
     /**
      * Updates the node.
+     *
      * @param drawingView the drawing view
      */
     public void updateNode(DrawingView drawingView);

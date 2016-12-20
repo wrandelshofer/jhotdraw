@@ -8,24 +8,24 @@
  */
 
 * {
-    stroke-width: 2;
+  stroke-width: 2;
 }
 
 #vertex1 {
-    fill-color: red;
+  fill-color: red;
 }
 
 #vertex2 {
-    fill-color: green;
+  fill-color: green;
 }
 
 #vertex3 {
-    stroke-width: 0.0;
-    fill-color: blue;
-    font: 24.0 "Andale Mono";
-    rotate: 20;
+  stroke-width: 0.0;
+  fill-color: blue;
+  font: 24.0 "Andale Mono";
+  rotate: 20;
 }
 
 #vertex4 {
-    fill-color: yellow;
+  fill-color: yellow;
 }

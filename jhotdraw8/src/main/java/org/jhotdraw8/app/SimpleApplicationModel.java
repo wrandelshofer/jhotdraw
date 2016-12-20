@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.app;
 
 import java.io.IOException;
@@ -38,30 +37,34 @@ import org.jhotdraw8.util.Resources;
 
 /**
  * SimpleApplicationModel.
+ *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: SimpleApplicationModel.java 1199 2016-12-16 13:14:53Z rawcoder
+ * $
  */
 public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
-    private  String name;
+
+    private String name;
     private final List<URIExtensionFilter> openExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private  Supplier<DocumentView> viewFactory;
+    private Supplier<DocumentView> viewFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
-        
+
     }
-    public SimpleApplicationModel(String name, 
-            Supplier<DocumentView> viewFactory, 
-            URL menuFxml, 
-            String fileDescription, 
-            DataFormat format, 
+
+    public SimpleApplicationModel(String name,
+            Supplier<DocumentView> viewFactory,
+            URL menuFxml,
+            String fileDescription,
+            DataFormat format,
             String fileExtension) {
         this.name = name;
-        this.menuFxml=menuFxml;
-        URIExtensionFilter fef = new URIExtensionFilter(fileDescription,format,fileExtension);
+        this.menuFxml = menuFxml;
+        URIExtensionFilter fef = new URIExtensionFilter(fileDescription, format, fileExtension);
         openExtensionFilters.add(fef);
         saveExtensionFilters.add(fef);
         this.viewFactory = viewFactory;
@@ -99,13 +102,12 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
         return exportExtensionFilters;
     }
 
-    
     @Override
     public DocumentView instantiateView() {
-       return viewFactory.get();
+        return viewFactory.get();
     }
 
- @Override
+    @Override
     public URIChooser createOpenChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.OPEN);
@@ -121,7 +123,7 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
         return c;
     }
 
- @Override
+    @Override
     public URIChooser createImportChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.OPEN);
@@ -141,10 +143,10 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
     public String getName() {
         return name;
     }
-    public void setName(String newValue) {
-         name=newValue;
-    }
 
+    public void setName(String newValue) {
+        name = newValue;
+    }
 
     @Override
     public String getVersion() {
@@ -165,7 +167,7 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
     public MenuBar createMenuBar() {
         FXMLLoader loader = new FXMLLoader();
         loader.setResources(getResources());
-        try (InputStream in = menuFxml.openStream()){
+        try (InputStream in = menuFxml.openStream()) {
             return loader.load(in);
         } catch (IOException ex) {
             throw new InternalError(ex);
@@ -176,6 +178,7 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
     public ResourceBundle getResources() {
         return Resources.getResources("org.jhotdraw8.app.Labels");
     }
+
     public HierarchicalMap<String, Action> createApplicationActionMap(Application<DocumentView> app) {
         HierarchicalMap<String, Action> map = new HierarchicalMap<>();
         map.put(AboutAction.ID, new AboutAction<DocumentView>(app));
@@ -194,6 +197,5 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentView> {
         map.put(ClearSelectionAction.ID, new ClearSelectionAction<DocumentView>(app));
         return map;
     }
-
 
 }

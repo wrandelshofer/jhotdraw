@@ -5,14 +5,12 @@
  * You may not use, copy or modify this file, except in compliance with the 
  * accompanying license terms.
  */
-
 package org.jhotdraw8.app.action.edit;
 
 import javafx.scene.Node;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.util.Resources;
-
 
 /**
  * Duplicates the selected region.
@@ -22,25 +20,31 @@ import org.jhotdraw8.util.Resources;
  * @version $Id$
  */
 public class DuplicateAction<V extends ProjectView<V>> extends AbstractSelectionAction<V> {
+
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.duplicate";
-    
-    /** Creates a new instance which acts on the currently focused component. 
-     * @param app the application */
+
+    /**
+     * Creates a new instance which acts on the currently focused component.
+     *
+     * @param app the application
+     */
     public DuplicateAction(Application<V> app) {
         this(app, null);
     }
 
-    /** Creates a new instance which acts on the specified component.
+    /**
+     * Creates a new instance which acts on the specified component.
      *
-     * @param app the application 
+     * @param app the application
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
     public DuplicateAction(Application<V> app, Node target) {
-        super(app,target);
+        super(app, target);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
+
     /*
     @Override
     public void actionPerformed(ActionEvent evt) {

@@ -17,8 +17,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 
 /**
- * Draws the {@code wireframe} of a {@code LineFigure}, but does not
- * provide any interactions.
+ * Draws the {@code wireframe} of a {@code LineFigure}, but does not provide any
+ * interactions.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -32,14 +32,16 @@ public class LineOutlineHandle extends AbstractHandle {
     public LineOutlineHandle(Figure figure) {
         this(figure, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
+
     public LineOutlineHandle(Figure figure, String styleclass) {
         super(figure);
 
         points = new double[4];
         node = new Polyline(points);
-        this.styleclass=styleclass;
+        this.styleclass = styleclass;
         initNode(node);
     }
+
     protected void initNode(Polyline r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
@@ -67,15 +69,18 @@ public class LineOutlineHandle extends AbstractHandle {
             pp.set(i, points[i]);
         }
     }
+
     @Override
     public boolean isSelectable() {
         return false;
     }
+
     @Override
     public Cursor getCursor() {
         return null;
     }
-        @Override
+
+    @Override
     public Point2D getLocationInView() {
         return null;
     }

@@ -26,11 +26,12 @@ public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelect
 
     /**
      * Creates a new instance.
+     *
      * @param app the application
      * @param editor the drawing editor
      */
-    public BringToFrontAction(Application<V> app,DrawingEditor editor) {
-        super(app,editor);
+    public BringToFrontAction(Application<V> app, DrawingEditor editor) {
+        super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");
         labels.configureAction(this, ID);
@@ -52,7 +53,7 @@ public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelect
         for (Figure child : figures) { // XXX Shouldn't the figures be sorted here back to front?
             Figure parent = child.getParent();
             if (parent != null && parent.isEditable() && parent.isDecomposable()) {
-                model.insertChildAt(child, parent, parent.getChildren().size()-1);
+                model.insertChildAt(child, parent, parent.getChildren().size() - 1);
             }
         }
     }

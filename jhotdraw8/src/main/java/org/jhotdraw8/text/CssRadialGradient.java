@@ -31,7 +31,7 @@ public class CssRadialGradient implements Paintable {
     private final CssStop[] cstops;
 
     public CssRadialGradient(double focusAngle, double focusDistance, double centerX, double centerY, double radius, boolean proportional, CycleMethod cycleMethod,
-             CssStop... stops) {
+            CssStop... stops) {
         this.focusAngle = focusAngle;
         this.focusDistance = focusDistance;
         this.centerX = centerX;
@@ -48,7 +48,7 @@ public class CssRadialGradient implements Paintable {
         this.centerY = radialGradient.getCenterY();
         this.radius = radialGradient.getRadius();
         this.focusAngle = radialGradient.getFocusAngle();
-        this.focusDistance=radialGradient.getFocusDistance();
+        this.focusDistance = radialGradient.getFocusDistance();
         this.proportional = radialGradient.isProportional();
         this.cycleMethod = radialGradient.getCycleMethod();
         List<Stop> stopList = radialGradient.getStops();
@@ -174,6 +174,6 @@ public class CssRadialGradient implements Paintable {
 
     @Override
     public String toString() {
-        return "CssRadialGradient{"  + "focusAngle=" + focusAngle + ", focusDistance=" + focusDistance+ "centerX=" + centerX + ", centerY=" + centerY + ", radius=" + radius + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';
+        return "CssRadialGradient{" + "focusAngle=" + focusAngle + ", focusDistance=" + focusDistance + "centerX=" + centerX + ", centerY=" + centerY + ", radius=" + radius + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';
     }
 }

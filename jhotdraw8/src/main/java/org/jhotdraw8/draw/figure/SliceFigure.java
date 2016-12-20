@@ -25,26 +25,27 @@ import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringStyleableFigureKey;
 
 /**
- * This is a special figure which is used to segment a drawing into tiles, when exporting it using the 
- * {@link BitmapExportOutputFormat}.
+ * This is a special figure which is used to segment a drawing into tiles, when
+ * exporting it using the {@link BitmapExportOutputFormat}.
  * <p>
- * This figure renders only with rendering intent {@link RenderingIntent#EDITOR}.
+ * This figure renders only with rendering intent
+ * {@link RenderingIntent#EDITOR}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SliceFigure extends AbstractLeafFigure implements TransformableFigure, ResizableFigure, HideableFigure,LockableFigure, StyleableFigure {
+public class SliceFigure extends AbstractLeafFigure implements TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
 
     /**
      * The CSS type selector for this object is {@code "Rectangle"}.
      */
     public final static String TYPE_SELECTOR = "Slice";
 
-    public final static DoubleStyleableFigureKey X = new DoubleStyleableFigureKey("x",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("y",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("width",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey X = new DoubleStyleableFigureKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey Y = new DoubleStyleableFigureKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X,Y,WIDTH,HEIGHT);
+    public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
 
     public SliceFigure() {
         this(0, 0, 1, 1);
@@ -55,7 +56,7 @@ public class SliceFigure extends AbstractLeafFigure implements TransformableFigu
     }
 
     public SliceFigure(Rectangle2D rect) {
-        this(rect.getMinX(),rect.getMinY(),rect.getWidth(),rect.getHeight());
+        this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
     @Override
@@ -73,8 +74,8 @@ public class SliceFigure extends AbstractLeafFigure implements TransformableFigu
 
     @Override
     public Node createNode(RenderContext drawingView) {
-        Rectangle node= new Rectangle();
-        node.setFill(new Color(0,1.0,0,0.5)) ;
+        Rectangle node = new Rectangle();
+        node.setFill(new Color(0, 1.0, 0, 0.5));
         node.setStroke(Color.DARKRED);
         node.setStrokeType(StrokeType.INSIDE);
         return node;
@@ -84,7 +85,9 @@ public class SliceFigure extends AbstractLeafFigure implements TransformableFigu
     public void updateNode(RenderContext ctx, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(node);
-        if (ctx.get(RenderContext.RENDERING_INTENT)!=RenderingIntent.EDITOR)rectangleNode.setVisible(false);
+        if (ctx.get(RenderContext.RENDERING_INTENT) != RenderingIntent.EDITOR) {
+            rectangleNode.setVisible(false);
+        }
         applyTransformableFigureProperties(rectangleNode);
         rectangleNode.setX(get(X));
         rectangleNode.setY(get(Y));

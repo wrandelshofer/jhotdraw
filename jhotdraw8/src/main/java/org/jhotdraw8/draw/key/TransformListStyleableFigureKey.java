@@ -78,7 +78,6 @@ public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableOb
         return cssMetaData;
     }
 
-
     private Converter<ImmutableObservableList<Transform>> converter;
 
     @Override
@@ -88,6 +87,5 @@ public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableOb
         }
         return converter;
     }
-    
-    
+
 }

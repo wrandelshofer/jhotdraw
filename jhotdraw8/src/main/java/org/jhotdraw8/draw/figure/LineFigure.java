@@ -38,12 +38,12 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
      */
     public final static String TYPE_SELECTOR = "Line";
 
-    public final static DoubleStyleableFigureKey START_X = new DoubleStyleableFigureKey("startX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey START_Y = new DoubleStyleableFigureKey("startY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey END_X = new DoubleStyleableFigureKey("endX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey END_Y = new DoubleStyleableFigureKey("endY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
-    public final static Point2DStyleableMapAccessor START = new Point2DStyleableMapAccessor("start", START_X,START_Y);
-    public final static Point2DStyleableMapAccessor END = new Point2DStyleableMapAccessor("end", END_X,END_Y);
+    public final static DoubleStyleableFigureKey START_X = new DoubleStyleableFigureKey("startX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey START_Y = new DoubleStyleableFigureKey("startY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey END_X = new DoubleStyleableFigureKey("endX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey END_Y = new DoubleStyleableFigureKey("endY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static Point2DStyleableMapAccessor START = new Point2DStyleableMapAccessor("start", START_X, START_Y);
+    public final static Point2DStyleableMapAccessor END = new Point2DStyleableMapAccessor("end", END_X, END_Y);
 
     public LineFigure() {
         this(0, 0, 1, 1);
@@ -115,8 +115,8 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator( START)));
-            list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator( END)));
+            list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(START)));
+            list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(END)));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_RESIZE, START));
@@ -125,7 +125,7 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, START));
             list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_POINT, END));
-        }else{
+        } else {
             super.createHandles(handleType, list);
         }
     }
@@ -134,11 +134,12 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
+
     @Override
     public void layout() {
         // empty
     }
-    
+
     @Override
     public boolean isLayoutable() {
         return false;

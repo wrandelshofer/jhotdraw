@@ -101,5 +101,5 @@ public class ObservableWordListStyleableFigureKey extends SimpleFigureKey<Immuta
             converter = new CssObservableWordListConverter();
         }
         return converter;
-    }    
+    }
 }

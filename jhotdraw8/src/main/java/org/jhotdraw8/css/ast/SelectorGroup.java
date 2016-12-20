@@ -21,8 +21,9 @@ public class SelectorGroup extends AST {
     private final List<Selector> selectors;
 
     public SelectorGroup(Selector selector) {
-        this.selectors=Arrays.asList(new Selector[]{selector});
+        this.selectors = Arrays.asList(new Selector[]{selector});
     }
+
     public SelectorGroup(List<Selector> selectors) {
         this.selectors = Collections.unmodifiableList(selectors);
     }
@@ -63,13 +64,14 @@ public class SelectorGroup extends AST {
      * @param model The helper is used to access properties of the element and
      * parent or sibling elements in the document.
      * @param element the element
-     * @return the selector which matches the specified element, returns null if  no selector matches
+     * @return the selector which matches the specified element, returns null if
+     * no selector matches
      */
     public <T> Selector match(SelectorModel<T> model, T element) {
         for (Selector s : selectors) {
             T result = s.match(model, element);
             if (result != null) {
-              return s;
+                return s;
             }
         }
         return null;

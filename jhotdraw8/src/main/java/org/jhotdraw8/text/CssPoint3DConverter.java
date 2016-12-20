@@ -18,16 +18,17 @@ import org.jhotdraw8.draw.io.IdFactory;
  * @version $Id$
  */
 public class CssPoint3DConverter implements Converter<Point3D> {
+
     // FIXME must use CssParser instead of PatternConverter!!
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point3D value) throws IOException {
         if (value.getZ() == 0.0) {
-                    formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
-            } else {
-                formatter.toStr(out, idFactory, 3, value.getX(), value.getY(), value.getZ());
-            }
+            formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
+        } else {
+            formatter.toStr(out, idFactory, 3, value.getX(), value.getY(), value.getZ());
+        }
     }
 
     @Override

@@ -17,7 +17,6 @@ public abstract class AbstractHandle implements Handle {
     // ---
     // Fields
     // ---
-
     protected final Figure owner;
 
     // ---
@@ -46,6 +45,5 @@ public abstract class AbstractHandle implements Handle {
     public boolean isCompatible(Handle that) {
         return that.getClass() == this.getClass();
     }
-    
-    
+
 }

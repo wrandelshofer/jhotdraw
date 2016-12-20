@@ -15,15 +15,19 @@ import java.util.Locale;
  * @version $Id$
  */
 public class LocaleUtil {
+
     private static Locale defaultLocale;
-    
-    /** Creates a new instance. */
+
+    /**
+     * Creates a new instance.
+     */
     public LocaleUtil() {
     }
-    
+
     public static void setDefault(Locale newValue) {
         defaultLocale = newValue;
     }
+
     public static Locale getDefault() {
         return (defaultLocale == null) ? Locale.getDefault() : defaultLocale;
     }

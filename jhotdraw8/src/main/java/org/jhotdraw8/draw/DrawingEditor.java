@@ -17,10 +17,9 @@ import org.jhotdraw8.draw.tool.Tool;
  * on the {@code Tool} if it becomes the active tool or loses this status.
  *
  * @design.pattern Drawing Framework, KeyAbstraction.
- * @design.pattern DrawingEditor Mediator, Mediator.
- * The DrawingEditor allows to use the same {@code Tool} with multiple
- * {@code DrawingView}s.
- * 
+ * @design.pattern DrawingEditor Mediator, Mediator. The DrawingEditor allows to
+ * use the same {@code Tool} with multiple {@code DrawingView}s.
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -107,6 +106,7 @@ public interface DrawingEditor {
     default DrawingView getActiveDrawingView() {
         return activeDrawingViewProperty().get();
     }
+
     /**
      * Gets the drawing views.
      *

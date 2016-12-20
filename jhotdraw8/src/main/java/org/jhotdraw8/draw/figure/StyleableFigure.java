@@ -22,7 +22,7 @@ import org.jhotdraw8.draw.key.SimpleFigureKey;
  * {@code FigureMapAccessor}s.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  */
 public interface StyleableFigure extends Figure {

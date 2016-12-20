@@ -32,7 +32,7 @@ import org.jhotdraw8.css.StylesheetsManager;
  *
  * @design.pattern Drawing Framework, KeyAbstraction. The drawing framework
  * supports the creation of editors for structured drawings. The key
- * abstractions of the framework are: null {@link Drawing}, {@link Figure}, {@link org.jhotdraw8.draw.handle.Handle}, 
+ * abstractions of the framework are: null {@link Drawing}, {@link Figure}, {@link org.jhotdraw8.draw.handle.Handle},
  * {@link org.jhotdraw8.draw.tool.Tool}, {@link DrawingView},
  * {@link DrawingEditor}, {@link org.jhotdraw8.draw.model.DrawingModel}.
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel Facade, Subsystem.

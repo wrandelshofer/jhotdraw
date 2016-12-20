@@ -242,16 +242,16 @@ public interface TransformableFigure extends TransformCacheableFigure {
     @Override
     default void reshapeInLocal(Transform transform) {
         if (hasCenterTransforms()) {
-           List<Transform> ts = get(TRANSFORMS);
+            List<Transform> ts = get(TRANSFORMS);
             if (ts.isEmpty()) {
-            set(TRANSFORMS, ImmutableObservableList.of(transform));
+                set(TRANSFORMS, ImmutableObservableList.of(transform));
             } else {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = ts.get(last).createConcatenation(transform);
                 if (concatenatedWithLast instanceof Affine) {
-            set(TRANSFORMS,  ImmutableObservableList.add(ts,transform));
+                    set(TRANSFORMS, ImmutableObservableList.add(ts, transform));
                 } else {
-            set(TRANSFORMS,  ImmutableObservableList.set(ts,last,concatenatedWithLast));
+                    set(TRANSFORMS, ImmutableObservableList.set(ts, last, concatenatedWithLast));
                 }
             }
             return;
@@ -275,7 +275,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 if (transforms.isEmpty()) {
                     set(TRANSFORMS, ImmutableObservableList.of(transform));
                 } else {
-                    set(TRANSFORMS, ImmutableObservableList.add(transforms,0,transform));
+                    set(TRANSFORMS, ImmutableObservableList.add(transforms, 0, transform));
                 }
             }
         } else {
@@ -299,7 +299,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
             if (transforms.isEmpty()) {
                 set(TRANSFORMS, ImmutableObservableList.of(t));
             } else {
-                set(TRANSFORMS,  ImmutableObservableList.add(transforms,0,t));
+                set(TRANSFORMS, ImmutableObservableList.add(transforms, 0, t));
             }
         }
     }
@@ -311,7 +311,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         if (transforms.isEmpty()) {
             set(TRANSFORMS, ImmutableObservableList.of(t));
         } else {
-            set(TRANSFORMS, ImmutableObservableList.add(transforms,t));
+            set(TRANSFORMS, ImmutableObservableList.add(transforms, t));
         }
     }
 

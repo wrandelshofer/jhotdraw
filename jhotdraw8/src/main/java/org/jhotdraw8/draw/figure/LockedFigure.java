@@ -10,12 +10,11 @@ import org.jhotdraw8.collection.BooleanKey;
  * Interface for figures which are always locked.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  */
 public interface LockedFigure extends Figure {
 
- 
     /**
      * Whether this figure is not locked and all its parents are editable.
      *
@@ -23,7 +22,7 @@ public interface LockedFigure extends Figure {
      */
     @Override
     default boolean isEditable() {
-            return false;
+        return false;
     }
 
     /**
@@ -35,6 +34,7 @@ public interface LockedFigure extends Figure {
     default boolean isDeletable() {
         return false;
     }
+
     /**
      * Whether the figure is not locked and all its parents are editable.
      *

@@ -22,7 +22,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?,T> cssMetaData;
+    private final CssMetaData<?, T> cssMetaData;
 
     /**
      * Creates a new instance with the specified name, enum class, mask and with
@@ -37,7 +37,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
     }
 
     /**
-     * Creates a new instance with the specified name, enum class, mask and 
+     * Creates a new instance with the specified name, enum class, mask and
      * default value.
      *
      * @param name The name of the key.
@@ -57,7 +57,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
     }
 
     @Override
-    public CssMetaData<?,T> getCssMetaData() {
+    public CssMetaData<?, T> getCssMetaData() {
         return cssMetaData;
 
     }

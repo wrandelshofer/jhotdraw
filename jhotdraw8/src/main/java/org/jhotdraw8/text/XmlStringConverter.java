@@ -43,6 +43,7 @@ public class XmlStringConverter implements Converter<String> {
     public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
+
     @Override
     public String getDefaultValue() {
         return "null";

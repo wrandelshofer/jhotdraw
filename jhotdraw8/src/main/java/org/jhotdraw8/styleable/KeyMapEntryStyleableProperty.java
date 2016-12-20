@@ -29,9 +29,10 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
     private final Object bean;
 
     public KeyMapEntryStyleableProperty(ReadOnlyMapProperty<Key<?>, Object> mapp, StyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
-        this(mapp.getBean(), mapp,  key,  name,  metaData);
+        this(mapp.getBean(), mapp, key, name, metaData);
     }
-    public KeyMapEntryStyleableProperty(Object bean,ObservableMap<Key<?>, Object> mapp, StyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+
+    public KeyMapEntryStyleableProperty(Object bean, ObservableMap<Key<?>, Object> mapp, StyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> m = (StyleableMap<Key<?>, Object>) mapp;
         this.map = m;
@@ -39,7 +40,7 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
         this.metaData = metaData;
         this.mapp = mapp;
         this.name = name;
-        this.bean=bean;
+        this.bean = bean;
         bindBidirectional(new KeyMapEntryProperty<T>(mapp, key));
     }
 
@@ -72,7 +73,7 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
     @Override
     public StyleOrigin getStyleOrigin() {
         //ARGH!!! this does not work!!
-       return map.getStyleOrigin(key);
+        return map.getStyleOrigin(key);
     }
 
 }

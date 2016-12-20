@@ -26,7 +26,7 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Double> cssMetaData;
 
-    private final CssSizeConverter converter=new CssSizeConverter();
+    private final CssSizeConverter converter = new CssSizeConverter();
 
     /**
      * Creates a new instance with the specified name and with null as the

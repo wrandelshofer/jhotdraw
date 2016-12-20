@@ -13,17 +13,17 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * A {@code ProjectView} provides a user interface for a project which is identified
- * by an URI.
+ * A {@code ProjectView} provides a user interface for a project which is
+ * identified by an URI.
  * <p>
- * The life-cycle of project view objects is managed by an application. See the class
- * comment of {@link Application} on how to launch an application.
+ * The life-cycle of project view objects is managed by an application. See the
+ * class comment of {@link Application} on how to launch an application.
  * <p>
  * The lifecycle of a project view consists of the following steps:
  * <ol>
  * <li><b>Creation</b><br>
- * The application instantiates the project view object by calling {@code newInstance()}
- * on the class of the view.
+ * The application instantiates the project view object by calling
+ * {@code newInstance()} on the class of the view.
  * </li>
  * <li><b>Initialisation</b><br>
  * The application calls the following methods:
@@ -31,33 +31,34 @@ import org.jhotdraw8.beans.PropertyBean;
  * calls {@code clear()} or {@code read()}.
  * </li>
  * <li><b>Start</b><br>
- * The application adds the component of the project view to a container (for example a
- * JFrame) and then calls {@code start()}.
+ * The application adds the component of the project view to a container (for
+ * example a JFrame) and then calls {@code start()}.
  * </li>
  * <li><b>Activation</b><br>
- * When a view becomes the active project view of the application, application calls
- * {@code activate()}.
+ * When a view becomes the active project view of the application, application
+ * calls {@code activate()}.
  * </li>
  * <li><b>Deactivation</b><br>
- * When a view is not anymore the active project view of the application, application
- * calls {@code deactivate()}. At a later time, the project view may become activated
- * again.
+ * When a view is not anymore the active project view of the application,
+ * application calls {@code deactivate()}. At a later time, the project view may
+ * become activated again.
  * </li>
  * <li><b>Stop</b><br>
  * The application calls {@code stop()} on the project view and then removes the
- * component from its container. At a later time, the project view may be started again.
+ * component from its container. At a later time, the project view may be
+ * started again.
  * </li>
  * <li><b>Dispose</b><br>
  * When the view is no longer needed, application calls {@code dispose()} on the
  * view, followed by
- * {@code setApplication(null);}, {@code getActionMap().setParent(null)} and then
- * removes all references to it, so that it can be garbage collected.
+ * {@code setApplication(null);}, {@code getActionMap().setParent(null)} and
+ * then removes all references to it, so that it can be garbage collected.
  * </li>
  * </ol>
  *
  * @param <V> the project view type
  * @design.pattern Application Framework, KeyAbstraction.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -68,6 +69,7 @@ public interface ProjectView<V extends ProjectView<V>> extends Disableable, Prop
      * used.
      */
     public void init();
+
     /**
      * Starts the view.
      */
@@ -92,7 +94,7 @@ public interface ProjectView<V extends ProjectView<V>> extends Disableable, Prop
      * Disposes of the view.
      */
     public void dispose();
-    
+
     /**
      * Returns the scene node which renders the view.
      *
@@ -116,7 +118,6 @@ public interface ProjectView<V extends ProjectView<V>> extends Disableable, Prop
         titleProperty().set(newValue);
     }
 
-
     /**
      * The application property is maintained by the application.
      *
@@ -131,7 +132,6 @@ public interface ProjectView<V extends ProjectView<V>> extends Disableable, Prop
     default public void setApplication(Application<V> newValue) {
         applicationProperty().set(newValue);
     }
-
 
     /**
      * The action map of the view.
@@ -149,6 +149,5 @@ public interface ProjectView<V extends ProjectView<V>> extends Disableable, Prop
     default public void setDisambiguation(int newValue) {
         disambiguationProperty().set(newValue);
     }
-
 
 }

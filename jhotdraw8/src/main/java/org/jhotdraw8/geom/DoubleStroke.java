@@ -11,10 +11,9 @@ import java.awt.*;
 import java.awt.geom.*;
 
 /**
- * Draws a double stroke (an outline of an outline).
- * The inner width of a DoubleStroke defines the distance between the two
- * outlines being drawn. The outline width of a DoubleStroke defines the
- * thickness of the outline.
+ * Draws a double stroke (an outline of an outline). The inner width of a
+ * DoubleStroke defines the distance between the two outlines being drawn. The
+ * outline width of a DoubleStroke defines the thickness of the outline.
  *
  * @author Werner Randelshofer
  * @version $Id$

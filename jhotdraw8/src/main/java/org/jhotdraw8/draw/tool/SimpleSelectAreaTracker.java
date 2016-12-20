@@ -40,7 +40,8 @@ import javafx.scene.input.KeyEvent;
  * @see SelectionTool
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: SimpleSelectAreaTracker.java 1151 2016-11-18 14:49:32Z rawcoder
+ * $
  */
 public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAreaTracker {
 
@@ -96,7 +97,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
 
         double w = x - event.getX();
         double h = y - event.getY();
-        List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h),false);
+        List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false);
         if (!event.isShiftDown()) {
             dv.selectedFiguresProperty().clear();
         }
@@ -113,6 +114,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
         rubberband.setWidth(round(abs(w)));
         rubberband.setHeight(round(abs(h)));
     }
+
     @Override
     public void trackKeyPressed(KeyEvent event, DrawingView view) {
     }

@@ -24,7 +24,7 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  */
 public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements StyleableMapAccessor<Insets> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, Insets> cssMetaData;
 
@@ -82,7 +82,7 @@ public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements
     }
 
     @Override
-    public CssMetaData<?,Insets> getCssMetaData() {
+    public CssMetaData<?, Insets> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -95,5 +95,5 @@ public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements
             converter = new CssInsetsConverter();
         }
         return converter;
-    }   
+    }
 }

@@ -2,7 +2,6 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.event;
 
 import java.lang.ref.WeakReference;
@@ -35,6 +34,7 @@ public final class WeakListener<E extends EventObject> implements Listener<E>, j
     public boolean wasGarbageCollected() {
         return (ref.get() == null);
     }
+
     @Override
     public void handle(E event) {
         Listener<E> listener = ref.get();

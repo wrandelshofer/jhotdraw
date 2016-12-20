@@ -22,9 +22,9 @@ import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * OutputFormat.
- * 
+ *
  * @design.pattern Drawing Strategy, Strategy.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -43,9 +43,9 @@ public interface OutputFormat {
     }
 
     /**
-     * Writes the drawing to the specified file.
-     * This method ensures that all figures of the drawing are visible on
-     * the image.
+     * Writes the drawing to the specified file. This method ensures that all
+     * figures of the drawing are visible on the image.
+     *
      * @param file the file
      * @param drawing the drawing
      *
@@ -65,5 +65,5 @@ public interface OutputFormat {
      *
      * @throws java.io.IOException if an IO error occurs
      */
-    void write(OutputStream out, Drawing drawing) throws IOException;    
+    void write(OutputStream out, Drawing drawing) throws IOException;
 }

@@ -25,6 +25,7 @@ public interface Page extends Figure {
 
     /**
      * Returns the number of 'internal' pages defined by this page.
+     *
      * @return number of internal pages
      */
     int getNumberOfInternalPages();
@@ -36,7 +37,7 @@ public interface Page extends Figure {
      * @return a new node
      */
     Node createPageNode(int internalPageNumber);
-    
+
     /**
      * Returns the clip for the page content.
      *
@@ -44,20 +45,23 @@ public interface Page extends Figure {
      * @return the clipping region
      */
     Shape getPageClip(int internalPageNumber);
-    
+
     /**
-     * Returns a transform which will position the drawing contents
-     * inside the clip on the page.
+     * Returns a transform which will position the drawing contents inside the
+     * clip on the page.
      *
      * @param internalPageNumber the internal page number
      * @return the transform
      */
     Transform getPageTransform(int internalPageNumber);
-    
-    /** Returns the page format.
-     * @return  the page format */
+
+    /**
+     * Returns the page format.
+     *
+     * @return the page format
+     */
     PageFormat getPageFormat();
-    
+
     /**
      * Creates a paper for the specified page.
      *
@@ -65,5 +69,5 @@ public interface Page extends Figure {
      * @return the internal page number
      */
     Paper createPaper(int internalPageNumber);
-    
+
 }

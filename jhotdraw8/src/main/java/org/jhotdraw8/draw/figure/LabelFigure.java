@@ -42,8 +42,6 @@ public class LabelFigure extends AbstractLabelFigure implements FontableFigure, 
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
     }
-    
-    
 
     @Override
     protected String getText() {

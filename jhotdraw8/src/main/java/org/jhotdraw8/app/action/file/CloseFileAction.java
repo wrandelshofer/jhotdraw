@@ -18,7 +18,7 @@ import org.jhotdraw8.app.ProjectView;
 /**
  * Closes the active view after letting the user save unsaved changes.
  *
- * @author  Werner Randelshofer
+ * @author Werner Randelshofer
  * @version $Id$
  */
 public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
@@ -27,9 +27,12 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 
     public static final String ID = "file.close";
 
-    /** Creates a new instance.
+    /**
+     * Creates a new instance.
+     *
      * @param app the application
-     * @param view the view */
+     * @param view the view
+     */
     public CloseFileAction(Application<DocumentView> app, DocumentView view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);

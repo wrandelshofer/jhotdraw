@@ -51,21 +51,20 @@ public class CssSample extends Application {
         LineConnectionFigure edge3Null = new LineConnectionFigure();
         LineConnectionFigure edgeNullNull = new LineConnectionFigure();
 
-        edge12.setStartConnection(vertex1,new ChopRectangleConnector());
-        edge12.setEndConnection(vertex2,new ChopRectangleConnector());
+        edge12.setStartConnection(vertex1, new ChopRectangleConnector());
+        edge12.setEndConnection(vertex2, new ChopRectangleConnector());
 
-        edge23.setStartConnection(vertex2,new ChopRectangleConnector());
-        edge23.setEndConnection(vertex3,new ChopRectangleConnector());
-        edge3Null.setStartConnection(vertex3,new ChopRectangleConnector());
+        edge23.setStartConnection(vertex2, new ChopRectangleConnector());
+        edge23.setEndConnection(vertex3, new ChopRectangleConnector());
+        edge3Null.setStartConnection(vertex3, new ChopRectangleConnector());
         edge3Null.set(LineConnectionFigure.END, new Point2D(145, 15));
         edgeNullNull.set(LineConnectionFigure.START, new Point2D(65, 90));
         edgeNullNull.set(LineConnectionFigure.END, new Point2D(145, 95));
 
-
         LineFigure line1 = new LineFigure();
-        line1.set(LineFigure.START, new Point2D(50,150));
-        line1.set(LineFigure.END, new Point2D(100,150));
-        
+        line1.set(LineFigure.START, new Point2D(50, 150));
+        line1.set(LineFigure.END, new Point2D(100, 150));
+
         Layer layer = new SimpleLayer();
         drawing.add(layer);
 
@@ -79,23 +78,23 @@ public class CssSample extends Application {
         layer.add(edge3Null);
         layer.add(edgeNullNull);
         layer.add(line1);
-        
-        vertex1.set(StyleableFigure.ID,"vertex1");
-        vertex2.set(StyleableFigure.ID,"vertex2");
-        vertex3.set(StyleableFigure.ID,"vertex3");
-        vertex4.set(StyleableFigure.ID,"vertex4");
-        
-        ArrayList<URI> stylesheets=new ArrayList<>();
+
+        vertex1.set(StyleableFigure.ID, "vertex1");
+        vertex2.set(StyleableFigure.ID, "vertex2");
+        vertex3.set(StyleableFigure.ID, "vertex3");
+        vertex4.set(StyleableFigure.ID, "vertex4");
+
+        ArrayList<URI> stylesheets = new ArrayList<>();
         stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());
-        drawing.set(Drawing.USER_AGENT_STYLESHEETS,stylesheets);
+        drawing.set(Drawing.USER_AGENT_STYLESHEETS, stylesheets);
         drawing.updateCss();
-        
+
         drawing.layout();
 
         DrawingView drawingView = new SimpleDrawingView();
 
         drawingView.setDrawing(drawing);
-        drawingView.setConstrainer(new GridConstrainer(10,10));
+        drawingView.setConstrainer(new GridConstrainer(10, 10));
         //drawingView.setHandleType(HandleType.RESHAPE);
 
         DrawingEditor drawingEditor = new SimpleDrawingEditor();

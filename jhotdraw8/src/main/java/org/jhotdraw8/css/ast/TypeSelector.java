@@ -32,8 +32,8 @@ public class TypeSelector extends SimpleSelector {
                 ? element : null;
     }
 
-  @Override
-  public int getSpecificity() {
-    return 1;
-  }
+    @Override
+    public int getSpecificity() {
+        return 1;
+    }
 }

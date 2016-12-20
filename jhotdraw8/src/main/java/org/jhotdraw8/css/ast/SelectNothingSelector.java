@@ -24,8 +24,8 @@ public class SelectNothingSelector extends SimpleSelector {
         return null;
     }
 
-  @Override
-  public int getSpecificity() {
-    return 0;
-  }
+    @Override
+    public int getSpecificity() {
+        return 0;
+    }
 }

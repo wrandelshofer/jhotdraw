@@ -33,42 +33,40 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
      */
     public final static String TYPE_SELECTOR = "Ellipse";
 
-    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX",  DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
-    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY",   DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
-    public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X,CENTER_Y);
-    public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X,RADIUS_Y);
+    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
+    public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 
     public EllipseFigure() {
         this(0, 0, 1, 1);
     }
 
     public EllipseFigure(double x, double y, double width, double height) {
-        reshape(x,y,width,height);
+        reshape(x, y, width, height);
     }
 
     public EllipseFigure(Rectangle2D rect) {
-        reshape(rect.getMinX(),rect.getMinY(),rect.getWidth(),rect.getHeight());
+        reshape(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
     @Override
     public Bounds getBoundsInLocal() {
-        double rx=get(RADIUS_X);
-        double ry=get(RADIUS_Y);
-        return new BoundingBox(get(CENTER_X)-rx, get(CENTER_Y)-ry, rx*2.0, ry*2.0);
+        double rx = get(RADIUS_X);
+        double ry = get(RADIUS_Y);
+        return new BoundingBox(get(CENTER_X) - rx, get(CENTER_Y) - ry, rx * 2.0, ry * 2.0);
     }
-
-
 
     @Override
     public void reshape(double x, double y, double width, double height) {
-        double rx=max(0.0,width)/2.0;
-        double ry=max(0.0,height)/2.0;
-        set(CENTER_X,x+rx);
-        set(CENTER_Y,y+ry);
-        set(RADIUS_X,rx);
-        set(RADIUS_Y,ry);
+        double rx = max(0.0, width) / 2.0;
+        double ry = max(0.0, height) / 2.0;
+        set(CENTER_X, x + rx);
+        set(CENTER_Y, y + ry);
+        set(RADIUS_X, rx);
+        set(RADIUS_Y, ry);
     }
 
     @Override
@@ -106,7 +104,7 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
     public void layout() {
         // empty
     }
-    
+
     @Override
     public boolean isLayoutable() {
         return false;

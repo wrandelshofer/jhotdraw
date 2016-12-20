@@ -2,7 +2,6 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
@@ -12,16 +11,18 @@ import org.jhotdraw8.draw.key.DirtyMask;
 
 /**
  * HideableFigure.
- * 
+ *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  */
 public interface HideableFigure extends Figure {
+
     /**
      * Defines the visibility of the figure. Default value: {@code true}.
      */
     public static BooleanStyleableFigureKey VISIBLE = new BooleanStyleableFigureKey("visible", DirtyMask.of(DirtyBits.NODE), true);
+
     /**
      * Updates a figure node with all style and effect properties defined in
      * this interface.

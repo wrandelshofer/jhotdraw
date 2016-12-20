@@ -86,11 +86,11 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             for (MapAccessor<?> k : element.getSupportedKeys()) {
                 if (k instanceof StyleableMapAccessor) {
                     StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) k;
-                    nameToKeyMap.put(element.getClass()+"$"+sk.getCssName(), sk);
+                    nameToKeyMap.put(element.getClass() + "$" + sk.getCssName(), sk);
                 }
             }
         }
-        return nameToKeyMap.get(element.getClass()+"$"+attributeName);
+        return nameToKeyMap.get(element.getClass() + "$" + attributeName);
     }
 
     @Override

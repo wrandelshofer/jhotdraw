@@ -30,12 +30,11 @@ import org.jhotdraw8.io.CharBufferReader;
  */
 public class CssStringConverter implements Converter<String> {
 
-
     @Override
     public String fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
         if (tt.nextToken() != CssTokenizer.TT_STRING) {
-            throw new ParseException("Css String expected. "+tt.currentToken(), buf.position());
+            throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
         }
         return tt.currentStringValue();
     }
@@ -57,7 +56,7 @@ public class CssStringConverter implements Converter<String> {
                     out.append('\n');
                     break;
                 default:
-                    if (Character.isISOControl(ch)||Character.isWhitespace(ch)) {
+                    if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
                         out.append('\\');
                         String hex = Integer.toHexString(ch);
                         for (int i = 0, n = 6 - hex.length(); i < n; i++) {

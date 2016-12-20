@@ -13,7 +13,8 @@ import org.jhotdraw8.app.ProjectView;
  */
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
- * on behalf of the selected figures of a {@link org.jhotdraw8.draw.DrawingView}.
+ * on behalf of the selected figures of a
+ * {@link org.jhotdraw8.draw.DrawingView}.
  * <p>
  * By default the disabled state of this action reflects the disabled state of
  * the active {@code DrawingView}. If no drawing view is active, this action is

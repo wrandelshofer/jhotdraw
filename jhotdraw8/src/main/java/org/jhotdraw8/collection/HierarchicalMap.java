@@ -15,8 +15,9 @@ import java.util.HashMap;
  * @param <V> the type of mapped values
  */
 public class HierarchicalMap<K, V> extends HashMap<K, V> {
-    private final static long serialVersionUID=1L;
-    
+
+    private final static long serialVersionUID = 1L;
+
     private HierarchicalMap<K, V> parent = null;
 
     public void setParent(HierarchicalMap<K, V> newValue) {
@@ -38,7 +39,7 @@ public class HierarchicalMap<K, V> extends HashMap<K, V> {
         if (containsKey(key)) {
             return super.get(key);
         } else {
-            return (parent!=null) ? parent.get(key) : null;
+            return (parent != null) ? parent.get(key) : null;
         }
     }
 }

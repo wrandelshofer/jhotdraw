@@ -64,20 +64,21 @@ public interface SelectorModel<T> {
     /**
      * Returns all non-decomposed styleable attributes of the element.
      * <p>
-     * If an attribute can be decomposed, only the composite attribute
-     * is returned.
-     * 
+     * If an attribute can be decomposed, only the composite attribute is
+     * returned.
+     *
      *
      * @param element An element of the document
      * @return a set of styleable attributes.
      */
     Set<String> getComposedAttributeNames(T element);
+
     /**
      * Returns all decomposed styleable attributes of the element.
      * <p>
-     * If an attribute can be composed, only the decomposed attributes
-     * are returned.
-     * 
+     * If an attribute can be composed, only the decomposed attributes are
+     * returned.
+     *
      *
      * @param element An element of the document
      * @return a set of styleable attributes.
@@ -119,6 +120,7 @@ public interface SelectorModel<T> {
      * the value ends with the specified substring.
      */
     boolean attributeValueEndsWith(T element, String attributeName, String substring);
+
     /**
      * Returns true if the element has an attribute with the specified name and
      * the value contains the specified substring.
@@ -130,6 +132,7 @@ public interface SelectorModel<T> {
      * the value contains the specified substring.
      */
     boolean attributeValueContains(T element, String attributeName, String substring);
+
     /**
      * Returns true if the element has an attribute with the specified name and
      * the value is a list of words which contains the specified word.
@@ -168,41 +171,46 @@ public interface SelectorModel<T> {
      */
     T getPreviousSibling(T element);
 
-    /** Returns the attribute value with the given name.
-     * 
+    /**
+     * Returns the attribute value with the given name.
+     *
      * @param element The element
      * @param name The attribute name
-     * @return The attribute value. Returns null if the element does not have
-     * an attribute with this name.
+     * @return The attribute value. Returns null if the element does not have an
+     * attribute with this name.
      */
     String getAttribute(T element, String name);
 
-    /** Sets an attribute value.
-     * 
+    /**
+     * Sets an attribute value.
+     *
      * @param element The element
      * @param origin The style origin
      * @param name The attribute name
-     * @param value The attribute value. Null removes the attribute from 
-     * the element.
+     * @param value The attribute value. Null removes the attribute from the
+     * element.
      */
     void setAttribute(T element, StyleOrigin origin, String name, String value);
 
-    
-    /** Returns the id of the element.
-     * 
+    /**
+     * Returns the id of the element.
+     *
      * @param element the element
      * @return the id or null if the element does not have an id.
      */
     String getId(T element);
-    /** Returns the style type of the element.
-     * 
+
+    /**
+     * Returns the style type of the element.
+     *
      * @param element the element
      * @return the style type of the element.
      */
     String getType(T element);
-    
-    /** Returns the style classes of the element.
-     * 
+
+    /**
+     * Returns the style classes of the element.
+     *
      * @param element the element
      * @return the style classes or an empty set.
      */

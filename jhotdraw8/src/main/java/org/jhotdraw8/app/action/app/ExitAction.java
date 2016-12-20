@@ -257,7 +257,7 @@ public class ExitAction extends AbstractApplicationAction<DocumentView> {
 
     protected void saveToFile(final URI uri, final DataFormat format) {
         final DocumentView v = unsavedView;
-        v.write(uri,format).handle((result, exception) -> {
+        v.write(uri, format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -286,7 +286,7 @@ public class ExitAction extends AbstractApplicationAction<DocumentView> {
 
     protected void saveToFileAndReviewNext(final URI uri, final DataFormat format) {
         final DocumentView v = unsavedView;
-        v.write(uri,format).handle((result, exception) -> {
+        v.write(uri, format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {

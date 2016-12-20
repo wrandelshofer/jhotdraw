@@ -15,12 +15,12 @@ import java.awt.geom.*;
  * This only works with closed convex paths having edges in clockwise direction.
  * <p>
  * Note: Although this is a Stroke object, it does not actually create a stroked
- * shape, but one that can be used for filling. 
+ * shape, but one that can be used for filling.
  * <p>
- * This class replaces all curves of the input shape by straight lines (flattening).
- * This gives high quality results but may yield a shape with a large number
- * of segments. 
- * 
+ * This class replaces all curves of the input shape by straight lines
+ * (flattening). This gives high quality results but may yield a shape with a
+ * large number of segments.
+ *
  * @author Werner Randelshofer.
  * @version $Id$
  */
@@ -81,7 +81,6 @@ public class FlattenedOffsetStroke extends DoubleStroke {
         if (bp.size() > 1) {
             traceStroke(bp, left, right);
         }
-
 
         if (Geom.containsAWT(left.getBounds2D(), right.getBounds2D())) {
             return (grow > 0) ? left : right;

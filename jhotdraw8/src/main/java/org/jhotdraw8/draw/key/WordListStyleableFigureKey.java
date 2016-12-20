@@ -91,7 +91,6 @@ public class WordListStyleableFigureKey extends SimpleFigureKey<ImmutableObserva
         return cssMetaData;
     }
 
-
     private Converter<ImmutableObservableList<String>> converter;
 
     @Override
@@ -100,6 +99,6 @@ public class WordListStyleableFigureKey extends SimpleFigureKey<ImmutableObserva
             converter = new CssWordListConverter();
         }
         return converter;
-    }    
-    
+    }
+
 }

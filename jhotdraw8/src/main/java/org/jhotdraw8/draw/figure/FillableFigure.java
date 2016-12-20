@@ -13,11 +13,11 @@ import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.Paintable;
 
 /**
- * Interface figures which render a {@code javafx.scene.shape.Shape} and
- * can be filled.
+ * Interface figures which render a {@code javafx.scene.shape.Shape} and can be
+ * filled.
  *
  * @design.pattern Figure Mixin, Traits.
- * 
+ *
  * @author Werner Randelshofer
  * @version $Id$
  */
@@ -28,6 +28,7 @@ public interface FillableFigure extends Figure {
      * value: {@code Color.WHITE}.
      */
     public static PaintableStyleableFigureKey FILL_COLOR = new PaintableStyleableFigureKey("fill", new CssColor("white", Color.WHITE));
+
     /**
      * Updates a shape node.
      *
@@ -39,7 +40,5 @@ public interface FillableFigure extends Figure {
             shape.setFill(p);
         }
     }
-
-
 
 }

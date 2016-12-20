@@ -41,9 +41,9 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
  * <li>Tools. Displays the handles used for editing figures.</li>
  * </ul>
  * <p>
- * {@code DrawingView} uses a {@code DrawingModel} to listen for changes on
- * a {@code Drawing}. Once a drawing is showing in a drawing view, all changes
- * to the drawing must be performed on the drawing model.</p>
+ * {@code DrawingView} uses a {@code DrawingModel} to listen for changes on a
+ * {@code Drawing}. Once a drawing is showing in a drawing view, all changes to
+ * the drawing must be performed on the drawing model.</p>
  * <p>
  * {@code DrawingView} invokes {@code validate()} on its {@code DrawingModel}
  * each time before it renders the drawing to ensure that the figures are laid
@@ -53,7 +53,8 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
  * @design.pattern Drawing Framework, KeyAbstraction.
  * @design.pattern DrawingModel MVC, View.
  * @design.pattern DrawingEditor Mediator, Colleague.
- * @design.pattern org.jhotdraw8.draw.tool.HandleTracker Chain of Responsibility, Handler.
+ * @design.pattern org.jhotdraw8.draw.tool.HandleTracker Chain of
+ * Responsibility, Handler.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -189,8 +190,8 @@ public interface DrawingView extends RenderContext {
     /**
      * The selected figures.
      * <p>
-     * Note: The selection is represent by a {@code LinkedHasSet} because
-     * the sequence of the selection is important.
+     * Note: The selection is represent by a {@code LinkedHasSet} because the
+     * sequence of the selection is important.
      *
      * @return a list of the selected figures
      */
@@ -202,12 +203,14 @@ public interface DrawingView extends RenderContext {
      * @return the active handle if present
      */
     ObjectProperty<Handle> activeHandleProperty();
+
     /**
      * The handle type for single selection.
      *
      * @return the handle key
      */
     NonnullProperty<HandleType> handleTypeProperty();
+
     /**
      * The handle type for multiple selection.
      *
@@ -215,19 +218,20 @@ public interface DrawingView extends RenderContext {
      */
     NonnullProperty<HandleType> multiHandleTypeProperty();
 
-        /**
+    /**
      * The clipboard output format.
      *
      * @return the clipboard output format handle if present
      */
     ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty();
 
-        /**
+    /**
      * The clipboard input format.
      *
      * @return the clipboard output format handle if present
      */
     ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty();
+
     // ---
     // methods
     // ---
@@ -317,7 +321,7 @@ public interface DrawingView extends RenderContext {
      * @return A list of figures from front to back
      */
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
-        
+
     // Handles
     /**
      * Gets selected figures with the same handle.
@@ -327,7 +331,6 @@ public interface DrawingView extends RenderContext {
      * @return A collection containing the figures with compatible handles.
      */
     public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
-    
 
     /**
      * Returns the world to view transformation.
@@ -397,7 +400,6 @@ public interface DrawingView extends RenderContext {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
-    
     default void setDrawing(Drawing newValue) {
         modelProperty().get().setRoot(newValue);
     }
@@ -483,6 +485,7 @@ public interface DrawingView extends RenderContext {
     default Transform getViewToDrawing() {
         return getViewToWorld().createConcatenation(getDrawing().getParentToLocal());
     }
+
     /**
      * Converts view coordinates into drawing coordinates.
      *
@@ -502,6 +505,7 @@ public interface DrawingView extends RenderContext {
     default Point2D drawingToView(Point2D drawing) {
         return getDrawingToView().transform(drawing);
     }
+
     /**
      * Converts view coordinates into world coordinates.
      *
@@ -521,6 +525,7 @@ public interface DrawingView extends RenderContext {
     default Point2D worldToView(Point2D world) {
         return getWorldToView().transform(world);
     }
+
     /**
      * Converts view coordinates into drawing coordinates.
      *
@@ -542,6 +547,7 @@ public interface DrawingView extends RenderContext {
     default Point2D drawingToView(double dx, double dy) {
         return getDrawingToView().transform(dx, dy);
     }
+
     /**
      * Converts view coordinates into world coordinates.
      *
@@ -572,6 +578,7 @@ public interface DrawingView extends RenderContext {
     default DrawingModel getModel() {
         return modelProperty().get();
     }
+
     /**
      * Sets a new underlying drawing model.
      *
@@ -582,15 +589,18 @@ public interface DrawingView extends RenderContext {
     }
 
     default void setClipboardOutputFormat(ClipboardOutputFormat newValue) {
-      clipboardOutputFormatProperty().set(newValue);
+        clipboardOutputFormatProperty().set(newValue);
     }
+
     default void setClipboardInputFormat(ClipboardInputFormat newValue) {
-      clipboardInputFormatProperty().set(newValue);
+        clipboardInputFormatProperty().set(newValue);
     }
+
     default ClipboardOutputFormat getClipboardOutputFormat() {
-      return clipboardOutputFormatProperty().get();
+        return clipboardOutputFormatProperty().get();
     }
+
     default ClipboardInputFormat getClipboardInputFormat() {
-      return clipboardInputFormatProperty().get();
+        return clipboardInputFormatProperty().get();
     }
 }

@@ -24,7 +24,7 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  */
 public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implements StyleableMapAccessor<Point2D> {
 
-    private final static long serialVersionUID=1L;
+    private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, Point2D> cssMetaData;
 
@@ -82,7 +82,7 @@ public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implemen
     }
 
     @Override
-    public CssMetaData<?,Point2D> getCssMetaData() {
+    public CssMetaData<?, Point2D> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -95,5 +95,5 @@ public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implemen
             converter = new CssPoint2DConverter();
         }
         return converter;
-    }   
+    }
 }

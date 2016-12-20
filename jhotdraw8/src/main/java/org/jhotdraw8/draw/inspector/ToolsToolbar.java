@@ -38,30 +38,30 @@ public class ToolsToolbar extends GridPane {
             }
         });
     }
-    private ChangeListener<Tool> activeToolHandler = (o,oldValue,newValue)->{
-        
-        for (Toggle button:group.getToggles()) {
-            if (button.getUserData()==newValue) {
+    private ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
+
+        for (Toggle button : group.getToggles()) {
+            if (button.getUserData() == newValue) {
                 button.setSelected(true);
                 break;
             }
         }
     };
 
-
     {
         editor.addListener(new ChangeListener<DrawingEditor>() {
 
             @Override
             public void changed(ObservableValue<? extends DrawingEditor> observable, DrawingEditor oldValue, DrawingEditor newValue) {
-                if (oldValue!=null) {
+                if (oldValue != null) {
                     oldValue.activeToolProperty().removeListener(activeToolHandler);
                 }
-                if (newValue!=null) {
+                if (newValue != null) {
                     newValue.activeToolProperty().addListener(activeToolHandler);
-                if (group.getSelectedToggle() != null) {
-                    newValue.setActiveTool((Tool) group.getSelectedToggle().getUserData());
-                }}
+                    if (group.getSelectedToggle() != null) {
+                        newValue.setActiveTool((Tool) group.getSelectedToggle().getUserData());
+                    }
+                }
             }
         });
     }
@@ -69,7 +69,7 @@ public class ToolsToolbar extends GridPane {
     public ToolsToolbar(DrawingEditor editor) {
         setDrawingEditor(editor);
     }
-    
+
     public void addTool(Tool tool, int gridx, int gridy) {
         ToggleButton button = new ToggleButton();
         if (tool.get(Tool.LARGE_ICON_KEY) != null) {

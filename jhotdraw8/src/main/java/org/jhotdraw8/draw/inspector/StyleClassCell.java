@@ -19,28 +19,28 @@ import org.jhotdraw8.util.Resources;
 
 /**
  * FXML Controller class.
- * 
+ *
  * XXX all keys must be customizable
  *
  * @author werni
  */
 public class StyleClassCell extends ListCell<StyleClassItem> {
+
     private HBox node;
     private StyleClassItem item;
     private boolean isUpdating;
-    
-     @FXML
+
+    @FXML
     private Button removeButton;
     private final StyleClassesInspector inspector;
 
-
     public StyleClassCell(StyleClassesInspector inspector) {
-        this(LayersInspector.class.getResource("StyleClassCell.fxml"),inspector);
+        this(LayersInspector.class.getResource("StyleClassCell.fxml"), inspector);
     }
 
-    public StyleClassCell(URL fxmlUrl,StyleClassesInspector inspector) {
+    public StyleClassCell(URL fxmlUrl, StyleClassesInspector inspector) {
         init(fxmlUrl);
-        this.inspector=inspector;
+        this.inspector = inspector;
     }
 
     private void init(URL fxmlUrl) {
@@ -50,15 +50,16 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
 
         try (InputStream in = fxmlUrl.openStream()) {
             node = loader.load(in);
-            
-removeButton.addEventHandler(ActionEvent.ACTION, o -> {
+
+            removeButton.addEventHandler(ActionEvent.ACTION, o -> {
                 inspector.removeTag(item.getText());
-            });            
-            
+            });
+
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
     }
+
     @Override
     protected void updateItem(StyleClassItem item, boolean empty) {
         super.updateItem(item, empty);
@@ -70,12 +71,13 @@ removeButton.addEventHandler(ActionEvent.ACTION, o -> {
         } else {
             isUpdating = true;
             this.item = item;
-                setText(item.isInAllElements()?item.getText():"("+item.getText()+")");
+            setText(item.isInAllElements() ? item.getText() : "(" + item.getText() + ")");
             setGraphic(node);
         }
     }
+
     public static Callback<ListView<StyleClassItem>, ListCell<StyleClassItem>> forListView(StyleClassesInspector inspector) {
         return list -> new StyleClassCell(inspector);
     }
-    
+
 }

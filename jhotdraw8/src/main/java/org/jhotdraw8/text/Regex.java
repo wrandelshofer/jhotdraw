@@ -44,7 +44,7 @@ public class Regex {
     }
 
     private String escape(String str) {
-        return str==null?"":str.replace("/", "\\/");
+        return str == null ? "" : str.replace("/", "\\/");
     }
 
     /**
