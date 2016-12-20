@@ -139,7 +139,7 @@ public interface Converter<T> {
     default T fromString(CharSequence in) throws ParseException, IOException {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
-        if (buf.remaining() != 0) {
+        if (buf.remaining() != 0 && !buf.toString().trim().isEmpty()) {
             throw new ParseException(buf.remaining() + " remaining character(s) not consumed." + " remaining:" + buf.toString(), buf.position());
         }
         return value;
