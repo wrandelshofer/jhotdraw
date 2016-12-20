@@ -9,19 +9,22 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefColumnCount="0" prefRowCount="16" styleClass="flushTopRightLeft" VBox.vgrow="ALWAYS" />
     <TextArea fx:id="helpTextArea" editable="false" prefRowCount="4" wrapText="true" VBox.vgrow="NEVER" />
     <HBox alignment="BASELINE_LEFT">
       <children>
-        <CheckBox fx:id="updateContentsCheckBox" minWidth="24.0" mnemonicParsing="false" selected="true" text="%updateContentsCheckBox.text" />
-        <CheckBox fx:id="composeAttributesCheckBox" mnemonicParsing="false" selected="true" text="%composeAttributesCheckBox.text">
+        <CheckBox fx:id="updateContentsCheckBox" minWidth="24.0" mnemonicParsing="false" selected="true" text="%updateContents.checkBox.text" />
+        <CheckBox fx:id="composeAttributesCheckBox" mnemonicParsing="false" selected="true" text="%composeAttributes.checkBox.text">
           <HBox.margin>
             <Insets left="8.0" />
           </HBox.margin>
         </CheckBox>
+            <CheckBox fx:id="showHelpTextCheckBox" mnemonicParsing="false" text="%showHelpText.checkBox.text">
+               <HBox.margin>
+                  <Insets left="8.0" />
+               </HBox.margin></CheckBox>
         <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
         <Button fx:id="applyButton" mnemonicParsing="false" text="%applyButton.text">
           <HBox.margin>
