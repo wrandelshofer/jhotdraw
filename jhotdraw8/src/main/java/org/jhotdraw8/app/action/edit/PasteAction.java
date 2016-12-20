@@ -51,12 +51,17 @@ public class PasteAction<V extends ProjectView<V>> extends AbstractFocusOwnerAct
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
+        if (event.isConsumed()) {
+            return;
+        }
+        event.consume();
         V v = app.getActiveView();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
                 TextInputControl tic = (TextInputControl) n;
-                tic.paste();
+                //XXX TextInputControl already performs this action, even if we consumed the event!
+                //tic.paste();
             } else if (n instanceof EditableComponent) {
                 EditableComponent tic = (EditableComponent) n;
                 tic.paste();

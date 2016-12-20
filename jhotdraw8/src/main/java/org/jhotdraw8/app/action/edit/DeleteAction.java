@@ -42,6 +42,7 @@ public class DeleteAction<V extends ProjectView<V>> extends AbstractFocusOwnerAc
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
+        event.consume();
         V v = app.getActiveView();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
