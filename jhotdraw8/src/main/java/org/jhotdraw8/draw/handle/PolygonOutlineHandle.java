@@ -12,44 +12,45 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.PolylineFigure;
+import org.jhotdraw8.draw.figure.PolygonFigure;
+import static org.jhotdraw8.draw.handle.Handle.STYLECLASS_HANDLE_MOVE_OUTLINE;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 import org.jhotdraw8.geom.Geom;
 
 /**
- * Draws the {@code wireframe} of a {@code PolylineFigure}.
+ * Draws the {@code wireframe} of a {@code PolygonFigure}.
  * <p>
  * The user can insert a new point by double clicking the line.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PolylineOutlineHandle extends AbstractHandle {
+public class PolygonOutlineHandle extends AbstractHandle {
 
-    private Polyline node;
+    private Polygon node;
     private String styleclass;
     private final MapAccessor<ImmutableObservableList<Point2D>> key;
 
-    public PolylineOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key) {
+    public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key) {
         this(figure, key, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
 
-    public PolylineOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key, String styleclass) {
+    public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key, String styleclass) {
         super(figure);
         this.key = key;
-        node = new Polyline();
+        node = new Polygon();
         this.styleclass = styleclass;
         initNode(node);
     }
 
-    protected void initNode(Polyline r) {
+    protected void initNode(Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
         r.getStyleClass().add(styleclass);
@@ -65,7 +66,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
-        double[] points = PolylineFigure.toPointArray(f);
+        double[] points = PolygonFigure.toPointArray(f);
         t.transform2DPoints(points, 0, points, 0, points.length / 2);
         ObservableList<Double> pp = node.getPoints();
         pp.clear();
@@ -97,9 +98,9 @@ public class PolylineOutlineHandle extends AbstractHandle {
             double tolerance = SimpleDrawingView.TOLERANCE;
             List<Double> points = node.getPoints();
             int insertAt = -1;
-            for (int i = 2, n = points.size(); i < n; i += 2) {
-                double x1 = points.get(i - 2);
-                double y1 = points.get(i - 1);
+            for (int i = 0, n = points.size(); i < n; i += 2) {
+                double x1 = points.get((n+i - 2)%n);
+                double y1 = points.get((n+i - 1)%n);
                 double x2 = points.get(i);
                 double y2 = points.get(i + 1);
                 if (Geom.lineContainsPoint(x1, y1, x2, y2, px, py, tolerance)) {

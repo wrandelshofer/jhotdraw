@@ -59,6 +59,7 @@ import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
+import org.jhotdraw8.draw.figure.PolygonFigure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
 import org.jhotdraw8.draw.figure.SliceFigure;
@@ -174,11 +175,12 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, () -> createFigure(LineConnectionFigure::new), layerFactory), 3, 1);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", rsrc,PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
+        ttbar.addTool(new PolyCreationTool("edit.createPolygon", rsrc,PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
-                layerFactory), 5, 1);
-        ttbar.addTool(new CreationTool("edit.createSlice", rsrc, () -> createFigure(SliceFigure::new), layerFactory), 5, 0);
+                layerFactory), 6, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
+        ttbar.addTool(new CreationTool("edit.createSlice", rsrc, () -> createFigure(SliceFigure::new), layerFactory), 5, 0);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);

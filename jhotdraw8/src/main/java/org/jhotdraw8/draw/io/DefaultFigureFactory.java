@@ -35,6 +35,7 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
+import org.jhotdraw8.draw.figure.PolygonFigure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
@@ -81,6 +82,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Slice", SliceFigure.class, Figure.getDeclaredAndInheritedKeys(SliceFigure.class));
         addFigureKeysAndNames("Group", GroupFigure.class, Figure.getDeclaredAndInheritedKeys(GroupFigure.class));
         addFigureKeysAndNames("Polyline", PolylineFigure.class, Figure.getDeclaredAndInheritedKeys(PolylineFigure.class));
+        addFigureKeysAndNames("Polygon", PolygonFigure.class, Figure.getDeclaredAndInheritedKeys(PolygonFigure.class));
 
         {
             Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class);
