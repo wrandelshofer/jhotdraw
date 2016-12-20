@@ -89,6 +89,7 @@ import org.jhotdraw8.draw.tool.ImageCreationTool;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
+import org.jhotdraw8.draw.tool.PolyCreationTool;
 import org.jhotdraw8.svg.SvgExportOutputFormat;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
@@ -172,7 +173,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, () -> createFigure(LineConnectionFigure::new), layerFactory), 3, 1);
         ttbar.addTool(new CreationTool("edit.createLine", rsrc, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
-        ttbar.addTool(new CreationTool("edit.createPolyline", rsrc, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
+        ttbar.addTool(new PolyCreationTool("edit.createPolyline", rsrc,PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
         ttbar.addTool(new CreationTool("edit.createText", rsrc,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
                 layerFactory), 5, 1);

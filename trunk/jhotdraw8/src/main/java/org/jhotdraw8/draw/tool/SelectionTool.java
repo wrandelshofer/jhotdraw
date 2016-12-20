@@ -227,7 +227,14 @@ public class SelectionTool extends AbstractTool {
         if (tracker != null) {
             tracker.trackMouseReleased(event, dv);
         }
-        setTracker(null);
+//        setTracker(null);
+    }
+    @Override
+    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+        if (tracker != null) {
+            tracker.trackMouseClicked(event, dv);
+        }
+//        setTracker(null);
     }
 
     @Override

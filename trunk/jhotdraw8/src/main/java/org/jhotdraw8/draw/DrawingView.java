@@ -603,4 +603,6 @@ public interface DrawingView extends RenderContext {
     default ClipboardInputFormat getClipboardInputFormat() {
         return clipboardInputFormatProperty().get();
     }
+
+    public void recreateHandles();
 }

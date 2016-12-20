@@ -99,11 +99,11 @@ public class ConnectionPointHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(MouseEvent event, DrawingView view) {
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
     }
 
     @Override
-    public void onMouseDragged(MouseEvent event, DrawingView view) {
+    public void handleMouseDragged(MouseEvent event, DrawingView view) {
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
 
@@ -138,7 +138,7 @@ public class ConnectionPointHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
+    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
     }
 
     @Override

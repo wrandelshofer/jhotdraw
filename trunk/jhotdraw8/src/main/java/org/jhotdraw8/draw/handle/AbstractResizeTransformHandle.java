@@ -80,7 +80,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     }
 
     @Override
-    public void onMousePressed(MouseEvent event, DrawingView view) {
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
         startBounds = owner.getBoundsInLocal();
         startWorldToLocal = owner.getWorldToLocal();
@@ -88,7 +88,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     }
 
     @Override
-    public void onMouseDragged(MouseEvent event, DrawingView view) {
+    public void handleMouseDragged(MouseEvent event, DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -109,7 +109,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     }
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
+    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fire undoable edit
     }
 

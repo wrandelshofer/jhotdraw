@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.io.IdFactory;
  */
 public class CssPoint2DListConverter implements Converter<ImmutableObservableList<Point2D>> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,choice,0#none|1#{1,list,{2,size}|[ ]+}}", new CssConverterFactory());
+    private CssSizeConverter doubleConverter = new CssSizeConverter();
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<Point2D> value) throws IOException {
@@ -33,20 +33,21 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
     }
 
     public void toStringFromCollection(Appendable out, IdFactory idFactory, Collection<Point2D> value) throws IOException {
-        if (value == null||value.isEmpty()) {
+        if (value == null || value.isEmpty()) {
             out.append("none");
             return;
         }
-        Object[] v = new Object[2*value.size() + 2];
-        v[0] = value.size()*2;
-        v[1] = value.size()*2;
-        Iterator<Point2D> iter = value.iterator();
-        for (int i = 0, n = 2*value.size(); i < n; i+=2) {
-            Point2D p = iter.next();
-            v[i + 2] = p.getX();
-            v[i + 3] = p.getY();
+        boolean first = true;
+        for (Point2D p : value) {
+            if (first) {
+                first = false;
+            } else {
+                out.append(", ");
+            }
+            out.append(doubleConverter.toString(p.getX()));
+            out.append(' ');
+            out.append(doubleConverter.toString(p.getY()));
         }
-        formatter.toString(out, v);
     }
 
     @Override
@@ -62,11 +63,17 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
         }
 
         Loop:
-        while (tt.nextToken()!=CssTokenizer.TT_EOF) {
+        while (tt.nextToken() != CssTokenizer.TT_EOF) {
             tt.pushBack();
-            double x=readCoordinate(tt, idFactory);
-            double y=readCoordinate(tt, idFactory);
-            l.add(new Point2D(x,y));
+            double x = readCoordinate(tt, idFactory);
+            if (tt.nextToken() != ',') {
+                tt.pushBack();
+            }
+            double y = readCoordinate(tt, idFactory);
+            l.add(new Point2D(x, y));
+            if (tt.nextToken() != ',') {
+                tt.pushBack();
+            }
         }
         tt.skipWhitespace();
         return new ImmutableObservableList<>(l);
@@ -77,17 +84,17 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
         switch (tt.nextToken()) {
             case CssTokenizerInterface.TT_DIMENSION: {
                 double value = tt.currentNumericValue().doubleValue();
-                x=idFactory.convert(value, tt.currentStringValue(), "px");
+                x = idFactory.convert(value, tt.currentStringValue(), "px");
                 break;
             }
             case CssTokenizerInterface.TT_PERCENTAGE: {
                 double value = tt.currentNumericValue().doubleValue() / 100.0;
-                x=idFactory.convert(value, "%", "px");
+                x = idFactory.convert(value, "%", "px");
                 break;
             }
             case CssTokenizerInterface.TT_NUMBER: {
                 double value = tt.currentNumericValue().doubleValue();
-                x=value;
+                x = value;
                 break;
             }
             case CssTokenizerInterface.TT_IDENT: {
@@ -105,13 +112,13 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
                     default:
                         throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
                 }
-                x=value;
+                x = value;
                 break;
             }
             default:
-                        throw new ParseException("coordinate expected:" + tt.currentStringValue(), tt.getStartPosition());
+                throw new ParseException("coordinate expected:" + tt.currentStringValue(), tt.getStartPosition());
         }
-return x;
+        return x;
     }
 
     @Override
