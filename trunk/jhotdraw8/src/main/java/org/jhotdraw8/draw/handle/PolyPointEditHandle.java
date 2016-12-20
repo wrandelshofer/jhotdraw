@@ -98,6 +98,7 @@ public class PolyPointEditHandle extends AbstractHandle {
             // alt or control switches the constrainer off
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
+        
         ImmutableObservableList<Point2D> list = owner.get(pointKey);
         view.getModel().set(getOwner(), pointKey, ImmutableObservableList.set(list, pointIndex, getOwner().worldToLocal(newPoint)));
     }
