@@ -67,6 +67,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private CheckBox updateContentsCheckBox;
     @FXML
     private CheckBox composeAttributesCheckBox;
+    @FXML
+    private CheckBox showHelpTextCheckBox;
 
     @FXML
     private TextArea textArea;
@@ -125,6 +127,12 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         updateContentsCheckBox.setSelected(prefs.getBoolean("updateContents", true));
         updateContentsCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("updateContents", newValue));
+        composeAttributesCheckBox.setSelected(prefs.getBoolean("composeAttributes", true));
+        composeAttributesCheckBox.selectedProperty().addListener((o, oldValue, newValue)
+                -> prefs.putBoolean("composeAttributes", newValue));
+        showHelpTextCheckBox.setSelected(prefs.getBoolean("showHelpText", true));
+        showHelpTextCheckBox.selectedProperty().addListener((o, oldValue, newValue)
+                -> prefs.putBoolean("showHelpText", newValue));
 
         applyButton.setOnAction(event -> apply());
         composeAttributesCheckBox.setOnAction(event -> updateTextArea());
@@ -133,6 +141,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 invalidateTextArea();
             }
         });
+        helpTextArea.visibleProperty().bind(showHelpTextCheckBox.selectedProperty());
+        helpTextArea.managedProperty().bind(showHelpTextCheckBox.selectedProperty());
 
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::updateHelpText);
