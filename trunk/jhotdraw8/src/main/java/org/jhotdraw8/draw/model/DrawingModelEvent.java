@@ -6,7 +6,7 @@
 package org.jhotdraw8.draw.model;
 
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Event;
 

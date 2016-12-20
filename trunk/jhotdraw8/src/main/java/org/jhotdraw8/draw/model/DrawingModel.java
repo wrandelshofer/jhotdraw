@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
 

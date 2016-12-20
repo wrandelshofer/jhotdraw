@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.input;
 
 import java.io.IOException;
-import org.jhotdraw8.draw.Drawing;
-import org.jhotdraw8.draw.Layer;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.Set;
 import javafx.scene.input.Clipboard;

@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.model.DrawingModel;
 

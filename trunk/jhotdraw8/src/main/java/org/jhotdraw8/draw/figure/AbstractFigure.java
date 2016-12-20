@@ -22,7 +22,6 @@ import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.draw.Drawing;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.event.Listener;

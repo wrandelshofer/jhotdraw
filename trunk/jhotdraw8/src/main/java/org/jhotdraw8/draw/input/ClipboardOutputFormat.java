@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.input;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.Map;
 import javafx.scene.input.DataFormat;

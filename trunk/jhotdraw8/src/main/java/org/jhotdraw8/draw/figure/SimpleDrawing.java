@@ -2,8 +2,9 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.draw;
+package org.jhotdraw8.draw.figure;
 
+import org.jhotdraw8.draw.figure.Drawing;
 import java.util.ArrayList;
 import java.util.List;
 import org.jhotdraw8.draw.figure.Figure;
@@ -25,6 +26,7 @@ import static java.lang.Math.abs;
 import javafx.collections.MapChangeListener;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.text.Paintable;
 

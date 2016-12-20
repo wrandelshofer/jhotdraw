@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.RenderContext;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * LabelFigure.

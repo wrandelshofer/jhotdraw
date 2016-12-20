@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw;
 
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.figure.Drawing;
 import java.util.Collection;
 import org.jhotdraw8.draw.figure.Figure;
 import java.util.HashMap;

@@ -3,7 +3,7 @@
  * You may only use this file in compliance with the accompanying license terms.
  */
 
-package org.jhotdraw8.draw;
+package org.jhotdraw8.draw.figure;
 
 import java.net.URI;
 import org.jhotdraw8.collection.Key;

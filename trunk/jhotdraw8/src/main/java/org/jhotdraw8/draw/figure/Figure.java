@@ -24,10 +24,7 @@ import java.util.LinkedList;
 import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.draw.Drawing;
-import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.Layer;
-import org.jhotdraw8.draw.RenderContext;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.handle.ResizeHandleKit;
 import org.jhotdraw8.draw.handle.RotateHandle;
@@ -46,7 +43,6 @@ import org.jhotdraw8.collection.TreeNode;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Geom;
-import static org.jhotdraw8.geom.Geom.union;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -93,7 +89,7 @@ import static org.jhotdraw8.geom.Geom.union;
  * {@link DrawingModel}.
  * <p>
  * <b>Handles.</b> A figure can produce {@code Handle}s which allow to
- * graphically change the state of the figure in a {@link DrawingView}.</p>
+ * graphically change the state of the figure in a drawing view.</p>
  * <p>
  * <b>Map Accessors.</b> A figure has an open ended set of property values. The
  * property values are accessed using {@code FigureMapAccessor}s.
@@ -423,7 +419,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * figures from the render context by invoking {@code rc.getNode(child)}
      * rather than creating new nodes using {@code child.createNode(rc)}. This
      * convention allows to implement a cache in the render context for the Java
-     * FX node. Also, render contexts like {@code DrawingView} need to associate
+     * FX node. Also, render contexts like a drawing view need to associate
      * input events on Java FX nodes to the corresponding figure.
      * <p>
      * This figure does not keep track of changes that require node updates.
@@ -521,14 +517,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
-     * Creates handles of the specified level and for the specified drawing view
-     * and adds them to the provided list.
+     * Creates handles of the specified level and adds them to the provided list.
      *
      * @param handleType The desired handle type
-     * @param dv The drawing view which will display the handles
      * @param list The handles.
      */
-    default void createHandles(HandleType handleType, DrawingView dv, List<Handle> list) {
+    default void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {

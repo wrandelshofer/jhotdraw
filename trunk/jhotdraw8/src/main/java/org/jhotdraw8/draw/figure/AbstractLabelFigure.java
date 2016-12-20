@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.util.List;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import javafx.geometry.BoundingBox;
@@ -22,24 +21,15 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.RenderContext;
-import org.jhotdraw8.draw.RenderingIntent;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.RotateHandle;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
-import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.text.Paintable;
 

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**

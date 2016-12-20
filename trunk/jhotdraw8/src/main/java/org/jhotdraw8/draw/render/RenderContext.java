@@ -2,8 +2,9 @@
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.draw;
+package org.jhotdraw8.draw.render;
 
+import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.figure.Figure;
 import javafx.scene.Node;
 import org.jhotdraw8.beans.PropertyBean;

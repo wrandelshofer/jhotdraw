@@ -16,7 +16,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.binding.CustomBinding;
-import org.jhotdraw8.draw.Drawing;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.CssColor;

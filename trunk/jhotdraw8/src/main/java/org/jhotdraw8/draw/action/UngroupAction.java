@@ -15,7 +15,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.Layer;
+import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.GroupFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
