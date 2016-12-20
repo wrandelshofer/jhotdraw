@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.io.IdFactory;
 
