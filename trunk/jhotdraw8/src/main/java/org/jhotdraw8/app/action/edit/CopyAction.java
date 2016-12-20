@@ -50,12 +50,15 @@ public class CopyAction<V extends ProjectView<V>> extends AbstractSelectionActio
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
+if (event.isConsumed()) return;        
+        event.consume();
         V v = app.getActiveView();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
                 TextInputControl tic = (TextInputControl) n;
-                tic.copy();
+                // XXX TextInputControl does copy on its own, even if we consume the event
+              //  tic.copy();
             } else if (n instanceof EditableComponent) {
                 EditableComponent tic = (EditableComponent) n;
                 tic.copy();
