@@ -122,7 +122,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
             } else {
 
                 gridConstrainer = new GridConstrainer(prefs.getDouble("gridX", 0), prefs.getDouble("gridY", 0), prefs.getDouble("gridWidth", 10), prefs.getDouble("gridHeight", 10),
-                        prefs.getDouble("gridangle", 45), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
+                        prefs.getDouble("gridAngle", 11.25), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
                 newValue.setConstrainer(gridConstrainer);
             }
             StringConverter<Number> cc

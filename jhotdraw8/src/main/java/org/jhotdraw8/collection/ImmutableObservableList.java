@@ -25,13 +25,12 @@ public final class ImmutableObservableList<T> extends ObservableListBase<T> impl
     public ImmutableObservableList(Collection<T> copyItems) {
         this.array = copyItems.toArray();
     }
-
     private ImmutableObservableList(boolean isPrivate, Object... array) {
         this.array = array;
     }
 
-    public static <T> ImmutableObservableList<T> of(T item) {
-        return new ImmutableObservableList<>(true, item);
+    public static <T> ImmutableObservableList<T> of(T... items) {
+        return new ImmutableObservableList<>(true, items);
     }
 
     public static <T> ImmutableObservableList<T> add(Collection<T> collection, T item) {
