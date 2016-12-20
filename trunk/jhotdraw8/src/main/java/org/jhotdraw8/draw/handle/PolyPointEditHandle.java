@@ -109,7 +109,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     @Override
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
-            if (pointIndex != 0 && pointIndex != owner.get(pointKey).size() - 1) {
+            if (owner.get(pointKey).size() > 2) {
                 dv.getModel().set(owner, pointKey, ImmutableObservableList.remove(owner.get(pointKey), pointIndex));
                 dv.recreateHandles();
             }
