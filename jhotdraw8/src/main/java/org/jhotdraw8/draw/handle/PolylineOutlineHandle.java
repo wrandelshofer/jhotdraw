@@ -80,7 +80,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
 
     @Override
     public Cursor getCursor() {
-        return key==null?null:Cursor.CROSSHAIR;
+        return key == null ? null : Cursor.DEFAULT;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
             }
             if (insertAt != -1) {
                 Point2D pInDrawing = dv.viewToWorld(new Point2D(px, py));
-//pInDrawing=                dv.getConstrainer().constrainPoint(owner, pInDrawing); DO NOT CONSTRAIN!
+                pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
                 Point2D pInLocal = owner.worldToLocal(pInDrawing);
                 dv.getModel().set(owner, key, ImmutableObservableList.add(owner.get(key), insertAt, pInLocal));
                 dv.recreateHandles();

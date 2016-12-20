@@ -19,7 +19,8 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.PolyPointHandle;
+import org.jhotdraw8.draw.handle.PolyPointEditHandle;
+import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
 import org.jhotdraw8.draw.handle.PolylineOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 
@@ -109,12 +110,13 @@ public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigu
             list.add(new PolylineOutlineHandle(this, null,Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
             list.add(new PolylineOutlineHandle(this, null,Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-        //} else if (handleType == HandleType.RESIZE) {
-        //    list.add(new PolylineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
+            for (int i=0,n=get(POINTS).size();i<n;i++) {
+                list.add(new PolyPointMoveHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_MOVE));
+            }
         } else if (handleType == HandleType.POINT) {
             list.add(new PolylineOutlineHandle(this, POINTS,Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
             for (int i=0,n=get(POINTS).size();i<n;i++) {
-                list.add(new PolyPointHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_POINT));
+                list.add(new PolyPointEditHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_POINT));
             }
         } else {
             super.createHandles(handleType, list);

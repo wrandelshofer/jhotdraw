@@ -780,13 +780,15 @@ public class SimpleDrawingView extends AbstractDrawingView {
             }
         }
 
-        Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[dirtyHandles.size()]);
-        dirtyHandles.clear();
-        for (Figure f : copyOfDirtyHandles) {
-            List<Handle> hh = handles.get(f);
-            if (hh != null) {
-                for (Handle h : hh) {
-                    h.updateNode(this);
+        if (!recreateHandles) {
+            Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[dirtyHandles.size()]);
+            dirtyHandles.clear();
+            for (Figure f : copyOfDirtyHandles) {
+                List<Handle> hh = handles.get(f);
+                if (hh != null) {
+                    for (Handle h : hh) {
+                        h.updateNode(this);
+                    }
                 }
             }
         }
@@ -866,15 +868,21 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
     @Override
     public Handle findHandle(double vx, double vy) {
+        if (recreateHandles) {
+            return null;
+        }
         for (Map.Entry<Node, Handle> e : new ReversedList<>(nodeToHandleMap.entrySet())) {
-   final Node node = e.getKey();            final Handle handle = e.getValue();
+            final Node node = e.getKey();
+            final Handle handle = e.getValue();
             Point2D p = handle.getLocationInView();
             if (p != null) {
                 if (Geom.length2(vx, vy, p.getX(), p.getY()) <= HANDLE_TOLERANCE) {
                     return handle;
                 }
-            }else{
-                if (contains(node,new Point2D(vx,vy),TOLERANCE)) return handle;
+            } else {
+                if (contains(node, new Point2D(vx, vy), TOLERANCE)) {
+                    return handle;
+                }
             }
         }
         /*
@@ -1181,10 +1189,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
             handlesAreValid = false;
         }
     }
+
     public void recreateHandles() {
-            handlesAreValid = false;
-            recreateHandles=true;
-            repaint();
+        handlesAreValid = false;
+        recreateHandles = true;
+        repaint();
     }
 
     private void invalidateHandleNodes() {

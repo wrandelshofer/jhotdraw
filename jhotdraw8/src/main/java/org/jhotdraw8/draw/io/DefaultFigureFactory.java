@@ -35,6 +35,7 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
+import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
 import org.jhotdraw8.draw.figure.SliceFigure;
@@ -46,6 +47,7 @@ import org.jhotdraw8.text.XmlPoint2DConverter;
 import org.jhotdraw8.text.CssObservableWordListConverter;
 import org.jhotdraw8.text.CssSizeListConverter;
 import org.jhotdraw8.text.CssFont;
+import org.jhotdraw8.text.CssPoint2DListConverter;
 import org.jhotdraw8.text.Paintable;
 import org.jhotdraw8.text.XmlUrlConverter;
 import org.jhotdraw8.text.XmlUriConverter;
@@ -78,6 +80,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Rectangle", RectangleFigure.class, Figure.getDeclaredAndInheritedKeys(RectangleFigure.class));
         addFigureKeysAndNames("Slice", SliceFigure.class, Figure.getDeclaredAndInheritedKeys(SliceFigure.class));
         addFigureKeysAndNames("Group", GroupFigure.class, Figure.getDeclaredAndInheritedKeys(GroupFigure.class));
+        addFigureKeysAndNames("Polyline", PolylineFigure.class, Figure.getDeclaredAndInheritedKeys(PolylineFigure.class));
 
         {
             Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class);
@@ -134,6 +137,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
         addConverter(StrokeableFigure.STROKE_TYPE, new XmlEnumConverter<StrokeType>(StrokeType.class));
         addConverter(TransformableFigure.TRANSFORMS, new XmlTransformListConverter());
+        addConverter(PolylineFigure.POINTS, new CssPoint2DListConverter());
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 

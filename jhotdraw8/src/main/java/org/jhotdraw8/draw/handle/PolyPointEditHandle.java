@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.handle;
 
+import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
@@ -19,16 +20,18 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+import org.jhotdraw8.geom.Geom;
 
 /**
  * Handle for the point of a figure.
  *
  * @author Werner Randelshofer
  */
-public class PolyPointHandle extends AbstractHandle {
+public class PolyPointEditHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private final MapAccessor<ImmutableObservableList<Point2D>> pointKey;
@@ -39,14 +42,14 @@ public class PolyPointHandle extends AbstractHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
 
-    public PolyPointHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> pointKey, int pointIndex) {
-        this(figure, pointKey,pointIndex, STYLECLASS_HANDLE_POINT);
+    public PolyPointEditHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> pointKey, int pointIndex) {
+        this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_POINT);
     }
 
-    public PolyPointHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> pointKey, int pointIndex, String styleclass) {
+    public PolyPointEditHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> pointKey, int pointIndex, String styleclass) {
         super(figure);
         this.pointKey = pointKey;
-        this.pointIndex=pointIndex;
+        this.pointIndex = pointIndex;
         this.styleclass = styleclass;
         node = new Region();
         node.setShape(REGION_SHAPE);
@@ -101,6 +104,16 @@ public class PolyPointHandle extends AbstractHandle {
 
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    }
+
+    @Override
+    public void handleMouseClicked(MouseEvent event, DrawingView dv) {
+        if (pointKey != null && event.getClickCount() == 2) {
+            if (pointIndex != 0 && pointIndex != owner.get(pointKey).size() - 1) {
+                dv.getModel().set(owner, pointKey, ImmutableObservableList.remove(owner.get(pointKey), pointIndex));
+                dv.recreateHandles();
+            }
+        }
     }
 
     @Override
