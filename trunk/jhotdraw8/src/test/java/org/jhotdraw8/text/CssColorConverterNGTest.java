@@ -32,7 +32,7 @@ public class CssColorConverterNGTest {
         System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssColorConverter instance = new CssColorConverter();
+        CssColorConverter instance = new CssColorConverter(true);
         CssColor actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
