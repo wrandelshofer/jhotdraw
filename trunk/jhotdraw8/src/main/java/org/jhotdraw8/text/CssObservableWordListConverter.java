@@ -12,11 +12,11 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
- * WordListConverter converts an ObservableList of Strings into a String.
+ * WordListConverter converts an ImmutableObservableList of Strings into a String.
  * <p>
  * The word list is actually a "set of space separated tokens", as specified in
  * HTML 5 and in XML Schema Part 2.
@@ -36,7 +36,7 @@ import org.jhotdraw8.draw.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssObservableWordListConverter implements Converter<ObservableList<String>> {
+public class CssObservableWordListConverter implements Converter<ImmutableObservableList<String>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ \n\r\t]+}", new CssConverterFactory());
 
@@ -45,7 +45,7 @@ public class CssObservableWordListConverter implements Converter<ObservableList<
             Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ObservableList<String> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];
@@ -59,20 +59,19 @@ public class CssObservableWordListConverter implements Converter<ObservableList<
     }
 
     @Override
-    public ObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
         for (int i = 0, n = (int) v[0]; i < n; i++) {
             tokens.add((String) v[i + 1]);
         }
-        ObservableList<String> l = FXCollections.observableArrayList();
-        l.addAll(tokens);
+        ImmutableObservableList<String> l = new ImmutableObservableList<>(tokens);
         return l;
     }
 
     @Override
-    public ObservableList<String> getDefaultValue() {
-        return FXCollections.emptyObservableList();
+    public ImmutableObservableList<String> getDefaultValue() {
+        return ImmutableObservableList.emptyList();
     }
 
 }

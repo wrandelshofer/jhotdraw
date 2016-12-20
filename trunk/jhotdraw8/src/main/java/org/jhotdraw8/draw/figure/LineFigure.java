@@ -26,7 +26,7 @@ import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.PointLocator;
 
 /**
- * Renders a {@code javafx.scene.shape.Line}.
+ * A figure which draws a straight line from a start point to an end point.
  *
  * @author Werner Randelshofer
  * @version $Id$

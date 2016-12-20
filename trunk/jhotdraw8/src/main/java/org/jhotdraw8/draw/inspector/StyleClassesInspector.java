@@ -22,12 +22,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.CssObservableWordListConverter;
-import org.jhotdraw8.util.Resources;
 
 /**
  * FXML Controller class
@@ -143,7 +143,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getDrawingModel().set(f, tagsKey, newTags);
+                        getDrawingModel().set(f, tagsKey, new ImmutableObservableList<>(newTags));
                     }
                 }
                 updateList();
@@ -168,7 +168,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getDrawingModel().set(f, tagsKey, newTags);
+                        getDrawingModel().set(f, tagsKey, new ImmutableObservableList<>(newTags));
                     }
                 }
                 updateList();
