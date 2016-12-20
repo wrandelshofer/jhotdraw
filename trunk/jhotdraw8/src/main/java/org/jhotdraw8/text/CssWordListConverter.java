@@ -9,7 +9,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.io.IdFactory;
 
 /**
@@ -17,12 +17,12 @@ import org.jhotdraw8.draw.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssWordListConverter implements Converter<List<String>> {
+public class CssWordListConverter implements Converter<ImmutableObservableList<String>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, List<String> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
         Object[] v = new Object[value.size()+1];
         v[0]=value.size();
         for (int i=0,n=value.size();i<n;i++) {
@@ -32,16 +32,16 @@ public class CssWordListConverter implements Converter<List<String>> {
     }
 
     @Override
-    public List<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         ArrayList<String> l = new ArrayList<>((int)v[0]);
         for (int i=0,n=(int)v[0];i<n;i++) {
             l.add((String)v[i+1]);
         }
-        return l;
+        return new ImmutableObservableList<>(l);
     }
     @Override
-    public List<String> getDefaultValue() {
-        return Collections.emptyList();
+    public ImmutableObservableList<String> getDefaultValue() {
+        return ImmutableObservableList.emptyList();
     }
 }

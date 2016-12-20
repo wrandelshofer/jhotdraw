@@ -25,6 +25,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
@@ -106,7 +107,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
 
-    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), Collections.emptyList());
+    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.DEPENDENT_LAYOUT), ImmutableObservableList.emptyList());
 
     /**
      * Updates a figure node with all transformation properties defined in this
@@ -241,19 +242,18 @@ public interface TransformableFigure extends TransformCacheableFigure {
     @Override
     default void reshapeInLocal(Transform transform) {
         if (hasCenterTransforms()) {
-            ArrayList<Transform> ts = new ArrayList<>(get(TRANSFORMS));
+           List<Transform> ts = get(TRANSFORMS);
             if (ts.isEmpty()) {
-                ts.add(0, transform);
+            set(TRANSFORMS, ImmutableObservableList.of(transform));
             } else {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = ts.get(last).createConcatenation(transform);
                 if (concatenatedWithLast instanceof Affine) {
-                    ts.add(transform);
+            set(TRANSFORMS,  ImmutableObservableList.add(ts,transform));
                 } else {
-                    ts.set(last, concatenatedWithLast);
+            set(TRANSFORMS,  ImmutableObservableList.set(ts,last,concatenatedWithLast));
                 }
             }
-            set(TRANSFORMS, ts);
             return;
         }
 
@@ -273,12 +273,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 flattenTransforms();
                 List<Transform> transforms = get(TRANSFORMS);
                 if (transforms.isEmpty()) {
-                    set(TRANSFORMS, Collections.singletonList(transform));
+                    set(TRANSFORMS, ImmutableObservableList.of(transform));
                 } else {
-                    ArrayList<Transform> newTransforms = new ArrayList<>();
-                    newTransforms.add(transform);
-                    newTransforms.addAll(transforms);
-                    set(TRANSFORMS, newTransforms);
+                    set(TRANSFORMS, ImmutableObservableList.add(transforms,0,transform));
                 }
             }
         } else {
@@ -300,10 +297,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
             flattenTransforms();
             List<Transform> transforms = new ArrayList<>(get(TRANSFORMS));
             if (transforms.isEmpty()) {
-                set(TRANSFORMS, Collections.singletonList(t));
+                set(TRANSFORMS, ImmutableObservableList.of(t));
             } else {
-                transforms.add(0, t);
-                set(TRANSFORMS, transforms);
+                set(TRANSFORMS,  ImmutableObservableList.add(transforms,0,t));
             }
         }
     }
@@ -313,10 +309,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
         flattenTransforms();
         List<Transform> transforms = get(TRANSFORMS);
         if (transforms.isEmpty()) {
-            set(TRANSFORMS, Collections.singletonList(t));
+            set(TRANSFORMS, ImmutableObservableList.of(t));
         } else {
-            transforms.add(t);
-            set(TRANSFORMS, transforms);
+            set(TRANSFORMS, ImmutableObservableList.add(transforms,t));
         }
     }
 
@@ -328,9 +323,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
         set(TRANSLATE_X, 0.0);
         set(TRANSLATE_Y, 0.0);
         if (p2l.isIdentity()) {
-            set(TRANSFORMS, Collections.emptyList());
+            set(TRANSFORMS, ImmutableObservableList.emptyList());
         } else {
-            set(TRANSFORMS, Collections.singletonList(p2l));
+            set(TRANSFORMS, ImmutableObservableList.of(p2l));
         }
     }
 
@@ -340,7 +335,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         set(ROTATE, 0.0);
         set(TRANSLATE_X, 0.0);
         set(TRANSLATE_Y, 0.0);
-        set(TRANSFORMS, Collections.emptyList());
+        set(TRANSFORMS, ImmutableObservableList.of());
     }
 
     default Transform getParentToLocal() {

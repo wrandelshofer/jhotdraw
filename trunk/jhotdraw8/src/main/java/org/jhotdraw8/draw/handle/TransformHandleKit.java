@@ -27,6 +27,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_X;
@@ -197,8 +198,8 @@ public class TransformHandleKit {
             }
             TransformableFigure owner = (TransformableFigure) o;
             Bounds oldBounds = startBounds;
-          List<Transform> oldTransforms = startTransforms;
-            
+            List<Transform> oldTransforms = startTransforms;
+
             double sx = width / oldBounds.getWidth();
             double sy = height / oldBounds.getHeight();
             double tx = x - oldBounds.getMinX();
@@ -209,18 +210,15 @@ public class TransformHandleKit {
                     && (sx != 1d || sy != 1d)) {
                 transform = transform.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
             }
-            List<Transform> transforms = new ArrayList<>(oldTransforms);
-            switch (transforms.size()) {
+            switch (oldTransforms.size()) {
                 case 0:
-                    transforms.add(0, transform);
+                    model.set(owner, TRANSFORMS, ImmutableObservableList.of(transform));
                     break;
                 default:
-//                    transforms.set(0, transform.createConcatenation(transforms.get(0)));
-                    int last=transforms.size()-1;
-                    transforms.set(last, transforms.get(last).createConcatenation(transform));
+                    int last = oldTransforms.size() - 1;
+                    model.set(owner, TRANSFORMS, ImmutableObservableList.set(oldTransforms, last, oldTransforms.get(last).createConcatenation(transform)));
                     break;
             }
-            model.set(owner, TRANSFORMS, transforms);
         }
     }
 

@@ -5,17 +5,15 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import javafx.scene.control.Labeled;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.text.Text;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
@@ -123,7 +121,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static DoubleListStyleableFigureKey TEXT_STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("text-stroke-dasharray", DirtyMask.of(DirtyBits.NODE), Collections.emptyList());
+    public static DoubleListStyleableFigureKey TEXT_STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("text-stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableObservableList.emptyList());
 
     /**
      * Updates a shape node.

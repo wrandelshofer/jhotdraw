@@ -4,12 +4,12 @@
  */
 package org.jhotdraw8.draw.key;
 
-import java.util.List;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -22,11 +22,11 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  *
  * @author Werner Randelshofer
  */
-public class WordListStyleableFigureKey extends SimpleFigureKey<List<String>> implements StyleableMapAccessor<List<String>> {
+public class WordListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<String>> implements StyleableMapAccessor<ImmutableObservableList<String>> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, List<String>> cssMetaData;
+    private final CssMetaData<?, ImmutableObservableList<String>> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -44,7 +44,7 @@ public class WordListStyleableFigureKey extends SimpleFigureKey<List<String>> im
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public WordListStyleableFigureKey(String name, List<String> defaultValue) {
+    public WordListStyleableFigureKey(String name, ImmutableObservableList<String> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -55,47 +55,47 @@ public class WordListStyleableFigureKey extends SimpleFigureKey<List<String>> im
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public WordListStyleableFigureKey(String name, DirtyMask mask, List<String> defaultValue) {
-        super(name, List.class, new Class<?>[]{String.class}, mask, defaultValue);
+    public WordListStyleableFigureKey(String name, DirtyMask mask, ImmutableObservableList<String> defaultValue) {
+        super(name, ImmutableObservableList.class, new Class<?>[]{String.class}, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
 
-         Function<Styleable, StyleableProperty<List<String>>> function = s -> {
+         Function<Styleable, StyleableProperty<ImmutableObservableList<String>>> function = s -> {
          StyleablePropertyBean spb = (StyleablePropertyBean) s;
          return spb.getStyleableProperty(this);
          };
          boolean inherits = false;
          String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-         final StyleConverter<ParsedValue[], List<String>> converter
+         final StyleConverter<ParsedValue[], ImmutableObservableList<String>> converter
          = DoubleListStyleConverter.getInstance();
-         CssMetaData<Styleable, List<String>> md
-         = new SimpleCssMetaData<Styleable, List<String>>(property, function,
+         CssMetaData<Styleable, ImmutableObservableList<String>> md
+         = new SimpleCssMetaData<Styleable, ImmutableObservableList<String>>(property, function,
          converter, defaultValue, inherits);
          cssMetaData = md;*/
-        Function<Styleable, StyleableProperty<List<String>>> function = s -> {
+        Function<Styleable, StyleableProperty<ImmutableObservableList<String>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, List<String>> converter
-                = new StyleConverterConverterWrapper<List<String>>(new CssWordListConverter());
-        CssMetaData<Styleable, List<String>> md
-                = new SimpleCssMetaData<Styleable, List<String>>(property, function,
+        final StyleConverter<String, ImmutableObservableList<String>> converter
+                = new StyleConverterConverterWrapper<ImmutableObservableList<String>>(new CssWordListConverter());
+        CssMetaData<Styleable, ImmutableObservableList<String>> md
+                = new SimpleCssMetaData<Styleable, ImmutableObservableList<String>>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?, List<String>> getCssMetaData() {
+    public CssMetaData<?, ImmutableObservableList<String>> getCssMetaData() {
         return cssMetaData;
     }
 
 
-    private Converter<List<String>> converter;
+    private Converter<ImmutableObservableList<String>> converter;
 
     @Override
-    public Converter<List<String>> getConverter() {
+    public Converter<ImmutableObservableList<String>> getConverter() {
         if (converter == null) {
             converter = new CssWordListConverter();
         }
