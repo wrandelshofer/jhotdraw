@@ -443,10 +443,11 @@ public class CssTransformListConverter implements Converter<ImmutableObservableL
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨Transform⟩: none｜（⟨Translate⟩｜ ⟨Scale⟩｜ ⟨Rotate⟩｜ ⟨Matrix⟩）｛, ⟨Transform⟩｝"
+        return "Format of ⟨Transform⟩: none｜（⟨Translate⟩｜ ⟨Scale⟩｜ ⟨Rotate⟩｜ ⟨Shear⟩｜ ⟨Matrix⟩）｛, ⟨Transform⟩｝"
                 + "\nFormat of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)"
                 + "\nFormat of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩［,⟨pivotx⟩,⟨pivoty⟩］)"
                 + "\nFormat of ⟨Rotate⟩: rotate(⟨angle⟩［,⟨pivotx⟩,⟨pivoty⟩］)"
+                + "\nFormat of ⟨Shear⟩: shear(⟨shx⟩,⟨shy⟩［,⟨pivotx⟩,⟨pivoty⟩］)"
                 + "\nFormat of ⟨Matrix⟩: matrix(⟨xx⟩,⟨yx⟩,⟨xy⟩,⟨yy⟩,⟨tx⟩,⟨ty⟩)";
     }
 
