@@ -623,7 +623,8 @@ public class CssEffectConverter implements Converter<Effect> {
                 + "\nFormat of ⟨ColorAdjust⟩: color-adjust(hue ±⟨h⟩%, saturation ±⟨s⟩%, brightness ±⟨b⟩%, contrast ±⟨c⟩%)"
                 + "\nFormat of ⟨DropShadow⟩: drop-shadow(⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨spread⟩,⟨xoffset⟩,⟨yoffset⟩)"
                 + "\nFormat of ⟨GaussianBlur⟩: gaussian-blur(⟨radius⟩)"
-                + "\nFormat of ⟨InnerShadow⟩: inner-shadow((⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨choke⟩,⟨xoffset⟩,⟨yoffset⟩))"
+                + "\nFormat of ⟨InnerShadow⟩: inner-shadow(⟨BlurType⟩,⟨Color⟩,⟨radius⟩,⟨choke⟩,⟨xoffset⟩,⟨yoffset⟩)"
+                + "\nFormat of ⟨Shadow⟩: shadow(⟨BlurType⟩,⟨Color⟩,⟨radius⟩)"
                 + "\n" + blendModeConverter.getHelpText()
                 + "\n" + blurTypeConverter.getHelpText()
                 + "\n" + colorConverter.getHelpText();
