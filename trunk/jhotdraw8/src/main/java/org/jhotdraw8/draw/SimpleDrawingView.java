@@ -7,7 +7,6 @@ package org.jhotdraw8.draw;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Drawing;
-import com.sun.javafx.scene.DirtyBits;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
@@ -67,11 +66,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Shapes;
 
 /**
  * FXML Controller class
@@ -964,10 +967,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
         if (tolerance == 0) {
             return node.contains(point);
         }
-        if (node instanceof Line) {
-            Line line = (Line) node;
-            boolean contains = Geom.lineContainsPoint(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), point.getX(), point.getY(), tolerance);
-            return contains;
+        if (node instanceof Shape) {
+            Shape shape = (Shape) node;
+            if (shape.getFill()==null) {
+              return  Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(),point.getY()), tolerance);
+            }else return shape.contains(point);
+          
         } else if (node instanceof Rectangle) {
             return Geom.contains(node.getBoundsInLocal(), point, tolerance);
         } else if (node instanceof Shape) {// no special treatment for other shapes
