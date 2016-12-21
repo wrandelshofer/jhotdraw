@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.key.Point2DStyleableFigureKey;
 public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, FontableFigure, TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
-     * The CSS type selector for this object is {@code "Text"}.
+     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Text";
     public final static Point2DStyleableFigureKey ORIGIN = new Point2DStyleableFigureKey("origin", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT), new Point2D(0, 0));

@@ -32,7 +32,7 @@ import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 public class RectangleFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
-     * The CSS type selector for this object is {@code "Rectangle"}.
+     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Rectangle";
 

@@ -9,7 +9,7 @@ import org.jhotdraw8.draw.figure.Figure;
 /**
  * Defines a <i>layer</i> of a {@link Drawing}.
  * <p>
- * The parent of a {@code Layer} must be a {@code Drawing}. Method
+ * The parent of a {@code Layer} must be a {@code Drawing} or a {@code Clipping} . Method
  * {@link #isSuitableParent(org.jhotdraw8.draw.figure.Figure)} must be
  * implementend accordingly.
  * <p>
@@ -36,5 +36,15 @@ public interface Layer extends Figure {
     @Override
     default String getTypeSelector() {
         return TYPE_SELECTOR;
+    }
+    
+        @Override
+    default boolean isAllowsChildren() {
+        return true;
+    }
+    
+   @Override
+    default boolean isSuitableParent(Figure newParent) {
+        return newParent == null || (newParent instanceof Drawing) || (newParent instanceof Clipping);
     }
 }

@@ -29,7 +29,7 @@ import org.jhotdraw8.draw.key.UriStyleableFigureKey;
 public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
-     * The CSS type selector for this object is {@code "Image"}.
+     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Image";
 

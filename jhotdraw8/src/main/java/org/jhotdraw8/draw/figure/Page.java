@@ -17,6 +17,8 @@ import org.jhotdraw8.draw.figure.Figure;
  * <p>
  * The layout may be used for multiple pages, for example for continuous form
  * paper.
+ * <p>
+ * The parent of a page must be a {@link Layer}. A page may have children.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -70,4 +72,14 @@ public interface Page extends Figure {
      */
     Paper createPaper(int internalPageNumber);
 
+    @Override
+    default boolean isSuitableParent(Figure newParent) {
+        return newParent == null || (newParent instanceof Layer) || (newParent instanceof Clipping);
+    }
+    
+            @Override
+    default boolean isAllowsChildren() {
+        return true;
+    }
+    
 }

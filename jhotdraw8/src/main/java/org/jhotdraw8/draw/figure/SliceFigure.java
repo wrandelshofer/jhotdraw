@@ -22,7 +22,6 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.StringStyleableFigureKey;
 
 /**
  * This is a special figure which is used to segment a drawing into tiles, when
@@ -34,10 +33,10 @@ import org.jhotdraw8.draw.key.StringStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SliceFigure extends AbstractLeafFigure implements TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
+public class SliceFigure extends AbstractLeafFigure implements Slice,TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
 
     /**
-     * The CSS type selector for this object is {@code "Rectangle"}.
+     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Slice";
 
@@ -114,4 +113,11 @@ public class SliceFigure extends AbstractLeafFigure implements TransformableFigu
     public boolean isLayoutable() {
         return false;
     }
+
+    @Override
+    public boolean isSuitableParent(Figure newParent) {
+        return Slice.super.isSuitableParent(newParent);
+    }
+    
+    
 }

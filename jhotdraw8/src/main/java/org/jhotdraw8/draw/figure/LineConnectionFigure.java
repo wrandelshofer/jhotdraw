@@ -46,7 +46,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         NonTransformableFigure {
 
     /**
-     * The CSS type selector for this object is {@code "LineConnection"}.
+     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "LineConnection";
 
