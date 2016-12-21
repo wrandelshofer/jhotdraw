@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * WordConverter.

@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.application.Platform;
@@ -23,11 +22,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlySetProperty;
-import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
@@ -56,6 +52,7 @@ import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.ObservableSet;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -72,6 +69,7 @@ import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -120,12 +118,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
             setId("drawingView");
         }
 
-        private ReadOnlyBooleanWrapper selectionEmpty = new ReadOnlyBooleanWrapper(this, EditableComponent.SELECTION_EMPTY);
-
-        {
-            selectionEmpty.bind(selectedFigures.emptyProperty());
-        }
-
         @Override
         public void selectAll() {
             SimpleDrawingView.this.selectAll();
@@ -138,7 +130,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
         @Override
         public ReadOnlyBooleanProperty selectionEmptyProperty() {
-            return selectionEmpty;
+            return SimpleDrawingView.this.selectedFiguresProperty().emptyProperty();
         }
 
         @Override
@@ -186,7 +178,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
                     break;
                 case SUBTREE_REMOVED_FROM_DRAWING:
                     for (Figure d : f.preorderIterable()) {
-                        selectedFigures.remove(d);
+                        getSelectedFigures().remove(d);
                     }
                     repaint();
                     break;
@@ -250,11 +242,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
     private boolean handlesAreValid;
 
-    /**
-     * The selectedFiguresProperty holds the list of selected figures in the
-     * sequence they were selected by the user.
-     */
-    private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
     private Transform viewToWorldTransform = null;
     private Transform worldToViewTransform = null;
     /**
@@ -271,39 +258,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
      * Handle selection tolerance (square of radius).
      */
     public final static double HANDLE_TOLERANCE = 25;
-
-    /**
-     * Installs a handler for changes in the selectionProperty.
-     */
-    {
-        selectedFigures.addListener((Observable o) -> {
-            invalidateHandles();
-            repaint();
-        });
-    }
-
-    private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
-
-    {
-        tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
-    }
-    private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
-    private final NonnullProperty<HandleType> handleType = new NonnullProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
-
-    {
-        handleType.addListener((observable, oldValue, newValue) -> {
-            invalidateHandles();
-            repaint();
-        });
-    }
-    private final NonnullProperty<HandleType> multiHandleType = new NonnullProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
-
-    {
-        multiHandleType.addListener((observable, oldValue, newValue) -> {
-            invalidateHandles();
-            repaint();
-        });
-    }
 
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
@@ -460,9 +414,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
         // set root
         node = new SimpleDrawingViewNode();
         node.setCenter(rootPane);
-
-        selectedFigures.addListener((InvalidationListener) o -> recreateHandles = true);
-        handleType.addListener((InvalidationListener) o -> recreateHandles = true);
     }
 
     private void invalidateFigureNode(Figure f) {
@@ -478,7 +429,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
             // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(drawingPane.getTranslateX() - overlaysPane.getTranslateX(), drawingPane.getTranslateY() - overlaysPane.getTranslateX());
             double zoom = zoomFactor.get();
-            worldToViewTransform = (zoom == 1.0) ? tr : tr.createConcatenation(new Scale(zoom, zoom));
+            worldToViewTransform = (zoom == 1.0) ? tr : Transforms.concat(tr,new Scale(zoom, zoom));
         }
         return worldToViewTransform;
     }
@@ -489,7 +440,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
             // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(-drawingPane.getTranslateX() + overlaysPane.getTranslateX(), -drawingPane.getTranslateY() + overlaysPane.getTranslateX());
             double zoom = zoomFactor.get();
-            viewToWorldTransform = (zoom == 1.0) ? tr : new Scale(1.0 / zoom, 1.0 / zoom).createConcatenation(tr);
+            viewToWorldTransform = (zoom == 1.0) ? tr : Transforms.concat(new Scale(1.0 / zoom, 1.0 / zoom),tr);
         }
         return viewToWorldTransform;
     }
@@ -720,11 +671,10 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     private void handleFigureRemovedFromDrawing(Figure figure) {
+        final ObservableSet<Figure> selectedFigures = getSelectedFigures();
         for (Figure f : figure.preorderIterable()) {
             selectedFigures.remove(f);
         }
-        invalidateHandles();
-        repaint();
     }
 
     private void handleNodeChanged(Figure f) {
@@ -827,26 +777,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public ObjectProperty<Tool> toolProperty() {
-        return tool;
-    }
-
-    @Override
-    public ObjectProperty<Handle> activeHandleProperty() {
-        return activeHandle;
-    }
-
-    @Override
-    public NonnullProperty<HandleType> handleTypeProperty() {
-        return handleType;
-    }
-
-    @Override
-    public NonnullProperty<HandleType> multiHandleTypeProperty() {
-        return multiHandleType;
-    }
-
-    private void updateTool(Tool oldValue, Tool newValue) {
+    protected void updateTool(Tool oldValue, Tool newValue) {
         if (oldValue != null) {
             Tool t = oldValue;
             toolPane.setCenter(null);
@@ -874,6 +805,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         for (Map.Entry<Node, Handle> e : new ReversedList<>(nodeToHandleMap.entrySet())) {
             final Node node = e.getKey();
             final Handle handle = e.getValue();
+            if (!handle.isSelectable())continue;
             Point2D p = handle.getLocationInView();
             if (p != null) {
                 if (Geom.length2(vx, vy, p.getX(), p.getY()) <= HANDLE_TOLERANCE) {
@@ -1135,11 +1067,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public ReadOnlySetProperty<Figure> selectedFiguresProperty() {
-        return selectedFigures;
-    }
-
-    @Override
     public ObjectProperty<Layer> activeLayerProperty() {
         return activeLayer;
     }
@@ -1254,6 +1181,18 @@ public class SimpleDrawingView extends AbstractDrawingView {
      */
     protected void createHandles(Map<Figure, List<Handle>> handles) {
         Set<Figure> selection = getSelectedFigures();
+        if (selection.size()>1) {
+            if (getAnchorHandleType() != null) {
+                Figure anchor = selection.iterator().next();
+                List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
+                anchor.createHandles(getAnchorHandleType(), list);
+            }
+            if (getLeadHandleType() != null) {
+                Figure anchor = selection.iterator().next();
+                List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
+                anchor.createHandles(getAnchorHandleType(), list);
+            }
+        }
         HandleType handleType = getHandleType();
         for (Figure figure : selection) {
             List<Handle> list = handles.computeIfAbsent(figure, k -> new ArrayList<>());

@@ -9,7 +9,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import org.jhotdraw8.collection.ImmutableObservableList;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * CssWordListConverter.

@@ -17,7 +17,7 @@ import javafx.scene.transform.Shear;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Affine;
 import org.jhotdraw8.collection.ImmutableObservableList;

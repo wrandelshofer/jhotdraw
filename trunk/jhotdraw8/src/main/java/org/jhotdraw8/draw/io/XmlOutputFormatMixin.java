@@ -13,6 +13,7 @@ import java.util.Collection;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -33,6 +34,10 @@ public interface XmlOutputFormatMixin extends OutputFormat {
         setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
         setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
         Document doc = toDocument(drawing);
+        write(file, doc);
+    }
+
+    default void write(File file, Document doc) throws TransformerFactoryConfigurationError, IOException {
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
             DOMSource source = new DOMSource(doc);
@@ -50,6 +55,9 @@ public interface XmlOutputFormatMixin extends OutputFormat {
 
     default void write(OutputStream out, Drawing drawing, Collection<Figure> selection) throws IOException {
         Document doc = toDocument(drawing, selection);
+        write(out,doc);
+    }
+    default void write(OutputStream out, Document doc) throws IOException {
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
             DOMSource source = new DOMSource(doc);

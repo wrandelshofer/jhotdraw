@@ -51,11 +51,11 @@ public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, F
     }
 
     public ArcFigure(double x, double y, double width, double height) {
-        reshape(x, y, width, height);
+        reshapeInLocal(x, y, width, height);
     }
 
     public ArcFigure(Rectangle2D rect) {
-        reshape(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
+        reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
     @Override
@@ -70,11 +70,11 @@ public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, F
         Bounds r = getBoundsInLocal();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
-        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+        reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override
-    public void reshape(double x, double y, double width, double height) {
+    public void reshapeInLocal(double x, double y, double width, double height) {
         double rx = max(0.0, width) / 2.0;
         double ry = max(0.0, height) / 2.0;
         set(CENTER_X, x + rx);

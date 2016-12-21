@@ -8,21 +8,17 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import static org.jhotdraw8.draw.handle.Handle.STYLECLASS_HANDLE_RESIZE;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * AbstractResizeTransformHandle.
@@ -68,10 +64,10 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = owner;
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
-        pickLocation = p = t.transform(p);
+        pickLocation = p = t==null?p:t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
         // f.applyTransformableFigureProperties(node);
@@ -105,7 +101,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
         Transform t = startWorldToLocal;//owner.getWorldToLocal();
 
-        resize(t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
+        resize(t==null?newPoint:t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
     }
 
     @Override

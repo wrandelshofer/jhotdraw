@@ -51,7 +51,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice,Transformab
     }
 
     public SliceFigure(double x, double y, double width, double height) {
-        reshape(x, y, width, height);
+        reshapeInLocal(x, y, width, height);
     }
 
     public SliceFigure(Rectangle2D rect) {
@@ -64,7 +64,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice,Transformab
     }
 
     @Override
-    public void reshape(double x, double y, double width, double height) {
+    public void reshapeInLocal(double x, double y, double width, double height) {
         set(X, x + min(width, 0));
         set(Y, y + min(height, 0));
         set(WIDTH, abs(width));

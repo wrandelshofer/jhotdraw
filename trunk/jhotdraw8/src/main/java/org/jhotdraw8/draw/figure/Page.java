@@ -6,11 +6,10 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
-import javafx.geometry.Rectangle2D;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * Defines a page layout for printing.
@@ -47,6 +46,13 @@ public interface Page extends Figure {
      * @return the clipping region
      */
     Shape getPageClip(int internalPageNumber);
+    /**
+     * Returns the bounds for the page content.
+     *
+     * @param internalPageNumber the internal page number
+     * @return the clipping region
+     */
+    Bounds getPageBounds(int internalPageNumber);
 
     /**
      * Returns a transform which will position the drawing contents inside the

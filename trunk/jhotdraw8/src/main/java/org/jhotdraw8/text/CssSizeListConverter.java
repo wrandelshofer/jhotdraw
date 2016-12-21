@@ -13,7 +13,7 @@ import java.util.Iterator;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * CssSizeListConverter.

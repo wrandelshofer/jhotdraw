@@ -24,6 +24,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Handle for the start or end point of a connection figure.
@@ -86,9 +87,9 @@ public class ConnectionPointHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
+        Transform t =Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
         Point2D p = f.get(pointKey);
-        pickLocation = p = t.transform(p);
+        pickLocation = p = t==null?p:t.transform(p);
         boolean isConnected = f.get(connectorKey) != null && f.get(targetKey) != null;
         node.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         node.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);

@@ -9,8 +9,8 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
-import org.jhotdraw8.draw.io.IdFactory;
-import org.jhotdraw8.draw.io.SimpleIdFactory;
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.SimpleIdFactory;
 
 /**
  * CssSizeConverter.

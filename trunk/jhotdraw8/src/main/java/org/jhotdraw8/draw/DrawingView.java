@@ -29,6 +29,7 @@ import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A {@code DrawingView} can display a {@code Drawing} in a JavaFX scene graph.
@@ -210,6 +211,19 @@ public interface DrawingView extends RenderContext {
      * @return the handle key
      */
     NonnullProperty<HandleType> handleTypeProperty();
+    /**
+     * The handle type used for marking the anchor of a selection.
+     *
+     * @return the handle key
+     */
+    ObjectProperty<HandleType> anchorHandleTypeProperty();
+    /**
+     * The handle type used for marking the lead of a selection.
+     *
+     * @return the handle key
+     */
+    ObjectProperty<HandleType> leadHandleTypeProperty();
+
 
     /**
      * The handle type for multiple selection.
@@ -439,6 +453,20 @@ public interface DrawingView extends RenderContext {
     default HandleType getHandleType() {
         return handleTypeProperty().get();
     }
+    default void setAnchorHandleType(HandleType newValue) {
+        anchorHandleTypeProperty().set(newValue);
+    }
+
+    default HandleType getAnchorHandleType() {
+        return anchorHandleTypeProperty().get();
+    }
+    default void setLeadHandleType(HandleType newValue) {
+        leadHandleTypeProperty().set(newValue);
+    }
+
+    default HandleType getLeadHandleType() {
+        return leadHandleTypeProperty().get();
+    }
 
     default void setMultiHandleType(HandleType newValue) {
         multiHandleTypeProperty().set(newValue);
@@ -474,16 +502,16 @@ public interface DrawingView extends RenderContext {
      * @return the transformation
      */
     default Transform getDrawingToView() {
-        return getDrawing().getLocalToParent().createConcatenation(getWorldToView());
+        return Transforms.concat(getDrawing().getLocalToParent(),getWorldToView());
     }
 
     /**
      * Returns the view to drawing transformation.
      *
-     * @return the transformation;
+     * @return the transformation, null if identity
      */
     default Transform getViewToDrawing() {
-        return getViewToWorld().createConcatenation(getDrawing().getParentToLocal());
+        return Transforms.concat(getViewToWorld(),getDrawing().getParentToLocal());
     }
 
     /**

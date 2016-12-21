@@ -26,6 +26,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Handle for moving (translating) a figure.
@@ -87,11 +88,11 @@ public class PolyPointMoveHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = owner;
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p = t.transform(p);
+        pickLocation = p =t==null?p: t.transform(p);
 
         // The node is centered around the location. 
         // (The value 5.5 is half of the node size, which is 11,11.

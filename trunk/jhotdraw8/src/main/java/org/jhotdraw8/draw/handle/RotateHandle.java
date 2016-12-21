@@ -30,6 +30,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A Handle to rotate a TransformableFigure around the center of its bounds in
@@ -109,14 +110,14 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         TransformableFigure o = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(getRotateToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(), getRotateToWorld());
         Bounds b = o.getBoundsInLocal();
         Point2D centerInLocal = Geom.center(b);
         double scaleY = o.getStyled(SCALE_Y);
 
         Point2D p = new Point2D(centerInLocal.getX(), centerInLocal.getY() - b.getHeight() * 0.5 * scaleY);
 
-        p = t.transform(p);
+        p = t == null ? p : t.transform(p);
 
         // rotates the node:
         pickNode.setRotate(o.getStyled(ROTATE));
@@ -146,7 +147,7 @@ public class RotateHandle extends AbstractHandle {
         Transform rotate = Transform.rotate(-o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
 
         // t = ((TransformableFigure)o).getInverseTransform().createConcatenation(rotate).createConcatenation(scale).createConcatenation(translate);
-        t = t.createConcatenation(translate);
+        t = Transforms.concat(t, translate);
 
         return t;
     }
@@ -161,7 +162,7 @@ public class RotateHandle extends AbstractHandle {
         Transform rotate = Transform.rotate(o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
 
         // t = ((TransformableFigure)o).getInverseTransform().createConcatenation(rotate).createConcatenation(scale).createConcatenation(translate);
-        t = t.createConcatenation(translate.createConcatenation(rotate));//.createConcatenation(translate).createConcatenation(t);
+        t = Transforms.concat(t,Transforms.concat(translate,rotate));//.createConcatenation(translate).createConcatenation(t);
 
         return t;
     }
@@ -184,8 +185,8 @@ public class RotateHandle extends AbstractHandle {
     public void handleMouseDragged(MouseEvent event, DrawingView view) {
         TransformableFigure o = getOwner();
         Point2D center = Geom.center(o.getBoundsInLocal());
-        Transform t = getWorldToRotate().createConcatenation(view.getViewToWorld());
-        Point2D newPoint = t.transform(new Point2D(event.getX(), event.getY()));
+        Transform t = Transforms.concat(getWorldToRotate(),view.getViewToWorld());
+        Point2D newPoint =  (t==null)?new Point2D(event.getX(), event.getY()): t.transform(new Point2D(event.getX(), event.getY()));
         double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
 
         newRotate = newRotate % 360;

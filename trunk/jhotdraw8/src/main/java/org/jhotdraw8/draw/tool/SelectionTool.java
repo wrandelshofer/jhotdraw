@@ -86,6 +86,8 @@ public class SelectionTool extends AbstractTool {
     private boolean mouseDragged;
     private Figure pressedFigure;
     private HandleType handleType;
+    private HandleType leadHandleType;
+    private HandleType anchorHandleType;
 
     // ---
     // Constructors
@@ -101,6 +103,12 @@ public class SelectionTool extends AbstractTool {
     public SelectionTool(String name, HandleType handleType, Resources rsrc) {
         super(name, rsrc);
         this.handleType = handleType;
+    }
+    public SelectionTool(String name, HandleType handleType, HandleType anchorHandleType, HandleType leadHandleType, Resources rsrc) {
+        super(name, rsrc);
+        this.handleType = handleType;
+        this.anchorHandleType = anchorHandleType;
+        this.leadHandleType = leadHandleType;
     }
 
     // ---
@@ -365,6 +373,8 @@ public class SelectionTool extends AbstractTool {
     public void activate(SimpleDrawingEditor editor) {
         for (DrawingView view : editor.getDrawingViews()) {
             view.setHandleType(handleType);
+            view.setAnchorHandleType(anchorHandleType);
+            view.setLeadHandleType(leadHandleType);
         }
         requestFocus();
     }

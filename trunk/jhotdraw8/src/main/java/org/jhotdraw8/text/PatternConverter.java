@@ -11,8 +11,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.jhotdraw8.draw.io.IdFactory;
-import org.jhotdraw8.draw.io.SimpleIdFactory;
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.StreamPosTokenizer;
 
 /**

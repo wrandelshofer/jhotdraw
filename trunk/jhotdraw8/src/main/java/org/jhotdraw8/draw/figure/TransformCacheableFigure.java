@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * TransformCachingFigure.
@@ -27,10 +28,10 @@ public interface TransformCacheableFigure extends Figure {
         if (t == null) {
             t = getParent() == null ? IDENTITY_TRANSFORM : getParent().getLocalToWorld();
             if (CACHE) {
-                set(PARENT_TO_WORLD, t);
+                set(PARENT_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
             }
         }
-        return t;
+        return t == IDENTITY_TRANSFORM ? null : t;
     }
 
     @Override
@@ -38,23 +39,23 @@ public interface TransformCacheableFigure extends Figure {
         Transform t = CACHE ? get(LOCAL_TO_WORLD) : null;
         if (t == null) {
             t = getLocalToParent();
-            t = getParent() == null ? t : getParent().getLocalToWorld().createConcatenation(t);
+            t = getParent() == null ? t : Transforms.concat(getParent().getLocalToWorld(), t);
             if (CACHE) {
-                set(LOCAL_TO_WORLD, t);
+                set(LOCAL_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
             }
         }
-        return t;
+        return t == IDENTITY_TRANSFORM ? null : t;
     }
 
     @Override
     default Transform getWorldToLocal() {
         Transform t = get(WORLD_TO_LOCAL);
-        if (true || t == null) {
+        if (t == null) {
             t = getParentToLocal();
-            t = getParent() == null ? t : t.createConcatenation(getParent().getWorldToLocal());
-            set(WORLD_TO_LOCAL, t);
+            t = getParent() == null ? t : Transforms.concat(t, getParent().getWorldToLocal());
+            set(WORLD_TO_LOCAL, t == null ? IDENTITY_TRANSFORM : t);
         }
-        return t;
+        return t == IDENTITY_TRANSFORM ? null : t;
     }
 
     @Override
@@ -63,10 +64,10 @@ public interface TransformCacheableFigure extends Figure {
         if (t == null) {
             t = getParent() == null ? IDENTITY_TRANSFORM : getParent().getWorldToLocal();
             if (CACHE) {
-                set(WORLD_TO_PARENT, t);
+                set(WORLD_TO_PARENT, t == null ? IDENTITY_TRANSFORM : t);
             }
         }
-        return t;
+        return t == IDENTITY_TRANSFORM ? null : t;
     }
 
     @Override

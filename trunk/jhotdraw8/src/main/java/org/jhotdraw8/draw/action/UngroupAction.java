@@ -15,9 +15,8 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.GroupFigure;
+import org.jhotdraw8.draw.figure.Group;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
@@ -62,12 +61,7 @@ public class UngroupAction<V extends ProjectView<V>> extends AbstractSelectedAct
         }
 
         for (Figure f : figures) {
-            if (f instanceof Layer) {
-                // FIXME internationalize me
-                new Alert(Alert.AlertType.INFORMATION, "Layers can not be ungrouped").showAndWait();
-                return;
-            }
-            if (!(f instanceof GroupFigure)) {
+            if (!(f instanceof Group)) {
                 // FIXME internationalize me
                 new Alert(Alert.AlertType.INFORMATION, "Only groups can be ungrouped").showAndWait();
                 return;

@@ -10,15 +10,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import javafx.application.Platform;
@@ -47,8 +43,10 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.SliceFigure;
+import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * BitmapExportOutputFormat.
@@ -57,54 +55,11 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
  * @version $$Id: BitmapExportOutputFormat.java 1237 2016-12-20 08:57:59Z
  * rawcoder $$
  */
-public class BitmapExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
+public class BitmapExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
 
     public final static DataFormat PNG_FORMAT = new DataFormat("image/png");
-    private double dpi = 72.0;
+
     private final static double INCH_2_MM = 25.4;
-    private boolean exportSlices = true;
-    private Class<? extends Figure> sliceClass = SliceFigure.class;
-
-    @Override
-    public void write(File file, Drawing drawing) throws IOException {
-        OutputFormat.super.write(file, drawing); //To change body of generated methods, choose Tools | Templates.
-        if (exportSlices) {
-            List<Figure> slices = new ArrayList<>();
-            for (Figure f : drawing.preorderIterable()) {
-                if (sliceClass.isAssignableFrom(f.getClass())) {
-                    slices.add(f);
-                }
-            }
-            writeSlices(file.getParentFile(), drawing, slices);
-        }
-    }
-
-    public void writeSlices(File dir, Drawing drawing, List<Figure> slices) throws IOException {
-        Map<Key<?>, Object> hints = new HashMap<>();
-        RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-        RenderContext.DPI.put(hints, dpi);
-        Node node = toNode(drawing, Collections.singleton(drawing), hints);
-
-        Set<String> usedNames = new HashSet<String>();
-        for (Figure slice : slices) {
-            if (slice.getId() != null) {
-                usedNames.add(slice.getId());
-            }
-        }
-        IdFactory idFactory = new SimpleIdFactory();
-        for (Figure slice : slices) {
-            if (slice.getId() != null) {
-                idFactory.putId(slice, slice.getId());
-            }
-        }
-        for (Figure slice : slices) {
-            WritableImage image = renderSlice(slice, node);
-            File filename = new File(dir, idFactory.createId(slice, "Slice") + ".png");
-            try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filename))) {
-                writeImage(out, image);
-            }
-        }
-    }
 
     @Override
     public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
@@ -189,9 +144,22 @@ public class BitmapExportOutputFormat implements ClipboardOutputFormat, OutputFo
         }
     }
 
-    private WritableImage renderSlice(Figure slice, Node node) throws IOException {
-        Bounds bounds = slice.getBoundsInLocal();
+    protected void writeSlice(File file, Slice slice, Node node) throws IOException {
+        WritableImage image = renderSlice(slice,slice.getBoundsInLocal(), node);
+        try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+            writeImage(out, image);
+        }
+    }
 
+    @Override
+    protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+        WritableImage image = renderSlice(page,page.getPageBounds(internalPageNumber), node);
+        try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+            writeImage(out, image);
+        }
+    }
+
+    private WritableImage renderSlice(Figure slice, Bounds bounds, Node node) throws IOException {
         if (!Platform.isFxApplicationThread()) {
             CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(slice, node, bounds), Platform::runLater);
             try {
@@ -207,7 +175,7 @@ public class BitmapExportOutputFormat implements ClipboardOutputFormat, OutputFo
     private WritableImage doRenderImage(Figure slice, Node node, Bounds bounds) {
         SnapshotParameters parameters = new SnapshotParameters();
         double scale = dpi / RenderContext.DPI.getDefaultValue();
-        parameters.setTransform(Transform.scale(scale, scale).createConcatenation(slice.getLocalToWorld()));
+        parameters.setTransform(Transforms.concat(Transform.scale(scale, scale),slice.getWorldToLocal()));
         parameters.setFill(Color.TRANSPARENT);
         double x = bounds.getMinX() * scale;
         double y = bounds.getMinY() * scale;
@@ -219,5 +187,10 @@ public class BitmapExportOutputFormat implements ClipboardOutputFormat, OutputFo
         WritableImage image = node.snapshot(parameters, null);
 
         return image;
+    }
+
+    @Override
+    protected String getExtension() {
+        return "png";
     }
 }

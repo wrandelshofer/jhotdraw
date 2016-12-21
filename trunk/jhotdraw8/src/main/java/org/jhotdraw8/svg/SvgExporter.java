@@ -1,4 +1,4 @@
-/* @(#)SvgExportOutputFormat.java
+/* @(#)SvgExporter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -7,16 +7,12 @@ package org.jhotdraw8.svg;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -78,20 +74,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.render.RenderingIntent;
-import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.ImageFigure;
-import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.draw.io.IdFactory;
-import org.jhotdraw8.draw.io.OutputFormat;
-import org.jhotdraw8.draw.io.SimpleIdFactory;
-import org.jhotdraw8.draw.io.XmlOutputFormatMixin;
+
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.draw.key.UriStyleableFigureKey;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.text.SvgTransformListConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
 import org.jhotdraw8.text.SvgPaintConverter;
@@ -106,7 +95,7 @@ import org.w3c.dom.Element;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
+public class SvgExporter  {
 
     public final static DataFormat SVG_FORMAT = new DataFormat("image/svg+xml");
 
@@ -119,23 +108,21 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
     private final String SVG_NS = "http://www.w3.org/2000/svg";
     private final String namespaceQualifier = null;
-    private URI internalHome;
-    private URI externalHome;
     private IdFactory idFactory = new SimpleIdFactory();
     private String indent = "  ";
     private boolean skipInvisibleNodes = true;
+    private final Object skipKey;
 
-    public Document toDocument(Drawing external) throws IOException {
-        return toDocument(external, Collections.singleton(external));
-    }
+    private final Object imageUriKey;
 
-    public Document toDocument(Drawing external, Collection<Figure> selection) throws IOException {
-        Map<Key<?>, Object> hints = new HashMap<>();
-        RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-        javafx.scene.Node drawingNode = toNode(external, selection, hints);
-        Document doc = toDocument(drawingNode);
-        writeDrawingElementAttributes(doc.getDocumentElement(), external);
-        return doc;
+    /**
+     * 
+     * @param imageUriKey this property is used to retrieve an URL from an ImageView
+     * @param skipKey this property is used to retrieve a Boolean from a Node. If the Boolean is true, then the node is skipped.
+     */
+    public SvgExporter(Object imageUriKey, Object skipKey) {
+        this.imageUriKey = imageUriKey;
+        this.skipKey = skipKey;
     }
 
     public void write(OutputStream out, javafx.scene.Node drawing) throws IOException {
@@ -211,17 +198,15 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
 
     }
 
-    private void writeDrawingElementAttributes(Element docElement, Drawing drawing) throws IOException {
-        docElement.setAttribute("width", nb.toString(drawing.get(Drawing.WIDTH)));
-        docElement.setAttribute("height", nb.toString(drawing.get(Drawing.HEIGHT)));
-    }
-
     private void writeProcessingInstructions(Document doc, javafx.scene.Node external) {
 // empty
     }
 
     private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node, String linebreak) throws IOException {
         if (skipInvisibleNodes && !node.isVisible()) {
+            return;
+        }
+        if (skipKey!=null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
             return;
         }
         parent.appendChild(doc.createTextNode(linebreak));
@@ -766,8 +751,8 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
 
                             java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
                             Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                            tx = tx.createConcatenation(Transform.translate(x + insets.getLeft(), y + insets.getTop()));
-                            tx = tx.createConcatenation(Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                            tx = Transforms.concat(tx,Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                            tx = Transforms.concat(tx,Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
                             bgs = Shapes.fxShapeFromAWT(awtShape, tx);
                         } else {
                             bgs = s;
@@ -799,8 +784,8 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
                                 java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
 
                                 Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                                tx = tx.createConcatenation(Transform.translate(x + insets.getLeft(), y + insets.getTop()));
-                                tx = tx.createConcatenation(Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                                tx =Transforms.concat( tx,Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                                tx =Transforms.concat( tx,Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
                                 bgs = Shapes.fxShapeFromAWT(awtShape, tx);
                             } else {
                                 bgs = s;
@@ -837,10 +822,10 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
         elem.setAttribute("height", nb.toString(node.getFitHeight()));
         elem.setAttribute("preserveAspectRatio", node.isPreserveRatio() ? "xMidYMid" : "none");
 
-        URI uri = (URI) node.getProperties().get(ImageFigure.IMAGE_URI);
+        URI uri = (URI) node.getProperties().get(imageUriKey);
         String href = null;
         if (uri != null) {
-            href = toExternal(uri).toString();
+            href = uri.toString();
         } else {
             if (node.getImage() != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -1037,41 +1022,6 @@ public class SvgExportOutputFormat implements ClipboardOutputFormat, OutputForma
                 // ignore
             }
         }*/
-    }
-
-    @Override
-    public void setExternalHome(URI uri) {
-        externalHome = uri;
-    }
-
-    @Override
-    public void write(Map<DataFormat, Object> clipboard, Drawing drawing, Collection<Figure> selection) throws IOException {
-        setExternalHome(null);
-        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
-        StringWriter out = new StringWriter();
-        Document doc = toDocument(drawing, selection);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
-        clipboard.put(SVG_FORMAT, out.toString());
-    }
-
-    @Override
-    public void setInternalHome(URI uri) {
-        internalHome = uri;
-    }
-
-    public URI getInternalHome() {
-        return internalHome;
-    }
-
-    public URI getExternalHome() {
-        return externalHome;
     }
 
     public String getIndent() {

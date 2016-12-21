@@ -50,7 +50,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     }
 
     public RectangleFigure(double x, double y, double width, double height) {
-        reshape(x, y, width, height);
+        reshapeInLocal(x, y, width, height);
         set(STROKE_TYPE, StrokeType.INSIDE);
     }
 
@@ -64,7 +64,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     }
 
     @Override
-    public void reshape(double x, double y, double width, double height) {
+    public void reshapeInLocal(double x, double y, double width, double height) {
         set(X, x + min(width, 0));
         set(Y, y + min(height, 0));
         set(WIDTH, abs(width));

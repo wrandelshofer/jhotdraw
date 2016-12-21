@@ -81,7 +81,7 @@ public class CreationTool extends AbstractTool {
         y2 = y1;
         figure = createFigure();
         Point2D c = view.getConstrainer().constrainPoint(figure, view.viewToDrawing(new Point2D(x1, y1)));
-        figure.reshape(c.getX(), c.getY(), 1, 1);
+        figure.reshapeInLocal(c.getX(), c.getY(), 1, 1);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getRoot();
 

@@ -5,8 +5,8 @@
 package org.jhotdraw8.text;
 
 import java.nio.CharBuffer;
-import org.jhotdraw8.draw.io.IdFactory;
-import org.jhotdraw8.draw.io.SimpleIdFactory;
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.SimpleIdFactory;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
