@@ -59,7 +59,7 @@ public class SimpleLayer extends AbstractCompositeFigure
      * @param newValue the desired parent
      */
     protected void checkNewParent(Figure newValue) {
-        if (newValue != null && !(newValue instanceof Drawing)) {
+        if (newValue != null && !(newValue instanceof Drawing)&& !(newValue instanceof Clipping)) {
             throw new IllegalArgumentException("A Layer can only be added as a child to a Drawing. Illegal parent: "
                     + newValue);
         }

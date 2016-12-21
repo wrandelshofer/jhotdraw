@@ -29,7 +29,7 @@ import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
-     * The CSS type selector for this object is {@code "Ellipse"}.
+     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Ellipse";
 

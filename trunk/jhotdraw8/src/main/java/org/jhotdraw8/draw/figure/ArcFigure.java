@@ -32,7 +32,7 @@ import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     /**
-     * The CSS type selector for this object is {@code "Ellipse"}.
+     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Arc";
 
