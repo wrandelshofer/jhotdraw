@@ -15,6 +15,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Draws the {@code wireframe} of a {@code LineFigure}, but does not provide any
@@ -56,14 +57,14 @@ public class LineOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
         points[0] = f.get(LineConnectionFigure.START).getX();
         points[1] = f.get(LineConnectionFigure.START).getY();
         points[2] = f.get(LineConnectionFigure.END).getX();
         points[3] = f.get(LineConnectionFigure.END).getY();
 
-        t.transform2DPoints(points, 0, points, 0, 2);
+        if (t!=null)t.transform2DPoints(points, 0, points, 0, 2);
         ObservableList<Double> pp = node.getPoints();
         for (int i = 0; i < points.length; i++) {
             pp.set(i, points[i]);

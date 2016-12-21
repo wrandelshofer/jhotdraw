@@ -158,7 +158,7 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
     }
 
     @Override
-    public void reshape(double x, double y, double width, double height) {
+    public void reshapeInLocal(double x, double y, double width, double height) {
         if (get(START_TARGET) == null) {
             set(START, new Point2D(x, y));
         }

@@ -67,7 +67,7 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
     }
 
     @Override
-    public void reshape(double x, double y, double width, double height) {
+    public void reshapeInLocal(double x, double y, double width, double height) {
         set(ORIGIN, new Point2D(x, y));
     }
 

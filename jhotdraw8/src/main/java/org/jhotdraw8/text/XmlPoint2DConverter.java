@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice

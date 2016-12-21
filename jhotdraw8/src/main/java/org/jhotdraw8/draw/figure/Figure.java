@@ -40,9 +40,11 @@ import org.jhotdraw8.draw.handle.TransformHandleKit;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.collection.TreeNode;
+import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -346,7 +348,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param width desired width in parent coordinates, may be negative
      * @param height desired height in parent coordinates, may be negative
      */
-    default void reshape(double x, double y, double width, double height) {
+    default void reshapeInLocal(double x, double y, double width, double height) {
         if (width == 0 || height == 0) {
             return;
         }
@@ -360,10 +362,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         if (!Double.isNaN(sx) && !Double.isNaN(sy)
                 && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                 && (sx != 1d || sy != 1d)) {
-            tx = tx.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
+            tx = Transforms.concat(tx,new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
         }
 
-        reshapeInLocal(tx);
+        Figure.this.reshapeInLocal(tx);
     }
 
     /**
@@ -526,6 +528,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     default void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new BoundsInLocalOutlineHandle(this));
+        }else  if (handleType == HandleType.ANCHOR) {
+            list.add(new AnchorOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             list.add(new MoveHandle(this, RelativeLocator.northEast()));
@@ -572,7 +576,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * This figure does not keep track of changes that require layout updates.
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
      */
-    void layout();
+    default void layout() {
+        
+    }
 
     /**
      * Updates the stylesheet cache of this figure depending on its property
@@ -918,7 +924,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return point in local coordinates
      */
     default Point2D worldToLocal(Point2D pointInWorld) {
-        return getWorldToLocal().transform(pointInWorld);
+        final Transform wtl = getWorldToLocal();
+        return wtl==null?pointInWorld:wtl.transform(pointInWorld);
     }
 
     /**
@@ -932,7 +939,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return point in local coordinates
      */
     default Point2D worldToParent(Point2D pointInWorld) {
-        return getWorldToParent().transform(pointInWorld);
+        final Transform wtp = getWorldToParent();
+        return wtp==null?pointInWorld: wtp.transform(pointInWorld);
     }
 
     /**
@@ -946,7 +954,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return point in local coordinates
      */
     default Point2D localToWorld(Point2D p) {
-        return getLocalToWorld().transform(p);
+        final Transform ltw = getLocalToWorld();
+        return ltw==null?p:ltw.transform(p);
     }
 
     @Override
@@ -1077,7 +1086,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         for (Figure f : selection) {
             Bounds fb;
             if (f instanceof Drawing) {
-                fb = f.getLocalToWorld().transform(f.getBoundsInLocal());
+                fb = (f.getLocalToWorld()==null)?f.getBoundsInLocal():f.getLocalToWorld().transform(f.getBoundsInLocal());
                 if (b == null) {
                     b = fb;
                 } else {

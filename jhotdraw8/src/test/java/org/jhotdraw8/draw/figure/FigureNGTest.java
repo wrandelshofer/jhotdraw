@@ -84,7 +84,7 @@ public class FigureNGTest {
                 r.setHeight(b.getHeight());
             }
         };
-        instance.reshape(reshape.getX(), reshape.getY(), reshape.getWidth(), reshape.getHeight());
+        instance.reshapeInLocal(reshape.getX(), reshape.getY(), reshape.getWidth(), reshape.getHeight());
         System.out.println(actual[0]);
         System.out.println(instance.getBoundsInLocal());
         assertEquals(expected.getBoundsInLocal(),instance.getBoundsInLocal());

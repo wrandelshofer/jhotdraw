@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * CssPaintableConverter.

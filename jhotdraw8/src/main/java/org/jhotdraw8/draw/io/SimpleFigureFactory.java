@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.io;
 
+import org.jhotdraw8.io.SimpleIdFactory;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;

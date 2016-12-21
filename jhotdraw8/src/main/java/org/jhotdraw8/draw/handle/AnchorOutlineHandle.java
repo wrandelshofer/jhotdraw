@@ -1,4 +1,4 @@
-/* @(#)BoundsInParentOutlineHandle.java
+/* @(#)BoundsInLocalOutlineHandle.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -14,6 +14,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -21,20 +22,22 @@ import org.jhotdraw8.geom.Transforms;
  * interactions.
  *
  * @author Werner Randelshofer
- * @version $Id: BoundsInParentOutlineHandle.java 1149 2016-11-18 11:00:10Z
+ * @version $Id: BoundsInLocalOutlineHandle.java 1120 2016-01-15 17:37:49Z
  * rawcoder $
  */
-public class BoundsInParentOutlineHandle extends AbstractHandle {
+public class AnchorOutlineHandle extends AbstractHandle {
 
     private Polygon node;
     private double[] points;
     private String styleclass;
+    private final double growInView=8.0;
+    private final static double invsqrt2=1/Math.sqrt(2);
 
-    public BoundsInParentOutlineHandle(Figure figure) {
-        this(figure, STYLECLASS_HANDLE_SELECT_OUTLINE);
+    public AnchorOutlineHandle(Figure figure) {
+        this(figure, STYLECLASS_HANDLE_ANCHOR_OUTLINE);
     }
 
-    public BoundsInParentOutlineHandle(Figure figure, String styleclass) {
+    public AnchorOutlineHandle(Figure figure, String styleclass) {
         super(figure);
 
         points = new double[8];
@@ -46,7 +49,7 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     protected void initNode(Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().add(styleclass);
+        r.getStyleClass().setAll(styleclass);
     }
 
     @Override
@@ -57,9 +60,14 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getParentToWorld());
-
-        Bounds b = f.getBoundsInParent();
+        Transform t =Transforms.concat( view.getWorldToView(),f.getLocalToWorld());
+        Transform tinv =Transforms.concat( f.getWorldToLocal(),view.getViewToWorld());
+        t = Transforms.concat(Transform.translate(0.5, 0.5),t);
+        Bounds b = f.getBoundsInLocal();
+        // FIXME we should perform the grow in view coordinates on the transformed shape
+        //            instead of growing in local
+        double growInLocal = tinv.deltaTransform(new Point2D(growInView*invsqrt2,growInView*invsqrt2)).magnitude();
+        b = Geom.grow(b, growInLocal, growInLocal);
         points[0] = b.getMinX();
         points[1] = b.getMinY();
         points[2] = b.getMaxX();
@@ -68,7 +76,7 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
         points[5] = b.getMaxY();
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
-        if (t != null) {
+        if (t!=null&&t.isType2D()) {
             t.transform2DPoints(points, 0, points, 0, 4);
         }
 
@@ -92,4 +100,5 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     public Point2D getLocationInView() {
         return null;
     }
+
 }

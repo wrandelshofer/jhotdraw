@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
@@ -20,11 +19,10 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Handle for the point of a figure.
@@ -76,10 +74,10 @@ public class PolyPointEditHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
+        Transform t =Transforms.concat( view.getWorldToView(),f.getLocalToWorld());
         ImmutableObservableList<Point2D> list = f.get(pointKey);
         Point2D p = list.get(pointIndex);
-        pickLocation = p = t.transform(p);
+        pickLocation = p = t==null?p:t.transform(p);
         node.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));

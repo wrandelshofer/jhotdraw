@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import javafx.collections.FXCollections;
 import org.jhotdraw8.collection.ImmutableObservableList;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * WordListConverter converts an ImmutableObservableList of Strings into a

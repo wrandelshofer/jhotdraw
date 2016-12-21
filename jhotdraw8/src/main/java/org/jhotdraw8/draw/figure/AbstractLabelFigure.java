@@ -114,7 +114,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     }
 
     @Override
-    public void reshape(double x, double y, double width, double height) {
+    public void reshapeInLocal(double x, double y, double width, double height) {
         Bounds lb = getLayoutBounds();
         Insets i = getStyled(PADDING);
         set(ORIGIN, new Point2D(x + i.getLeft(), y + lb.getHeight() - i.getBottom()));

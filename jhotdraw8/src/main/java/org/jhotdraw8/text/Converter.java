@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.Locale;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * Converts a data value of type {@code T} from or to a String representation.

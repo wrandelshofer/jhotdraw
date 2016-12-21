@@ -20,8 +20,8 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
-import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Draws the {@code wireframe} of a {@code PolylineFigure}.
@@ -63,10 +63,12 @@ public class PolylineOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
         double[] points = PolylineFigure.toPointArray(f);
-        t.transform2DPoints(points, 0, points, 0, points.length / 2);
+        if (t != null) {
+            t.transform2DPoints(points, 0, points, 0, points.length / 2);
+        }
         ObservableList<Double> pp = node.getPoints();
         pp.clear();
         for (int i = 0; i < points.length; i++) {
@@ -91,7 +93,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
 
     @Override
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
-        if (key!=null && event.getClickCount() == 2) {
+        if (key != null && event.getClickCount() == 2) {
             double px = event.getX();
             double py = event.getY();
             double tolerance = SimpleDrawingView.TOLERANCE;

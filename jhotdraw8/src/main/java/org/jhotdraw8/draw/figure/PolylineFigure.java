@@ -45,10 +45,12 @@ public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigu
 
     public PolylineFigure(double startX, double startY, double endX, double endY) {
         set(POINTS,  ImmutableObservableList.of(new Point2D(startX, startY),new Point2D(endX, endY)));
+        set(FILL_COLOR,null);
     }
 
     public PolylineFigure(Point2D... points) {
         set(POINTS,  ImmutableObservableList.of(points));
+        set(FILL_COLOR,null);
     }
 
     @Override

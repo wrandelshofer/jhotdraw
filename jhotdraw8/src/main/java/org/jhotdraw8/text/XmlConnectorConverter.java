@@ -14,7 +14,7 @@ import org.jhotdraw8.draw.connector.CenterConnector;
 import org.jhotdraw8.draw.connector.ChopEllipseConnector;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * XmlConnectorConverter.

@@ -170,25 +170,6 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return null;
     }
 
-    /**
-     * First layout all getChildren and then layout self. FIXME Just layouts
-     * itself
-     */
-    @Override
-    public final void layout() {
-        /*for (Figure child : getChildren()) {
-            child.layout();
-        }*/
-        layoutImpl();
-    }
-
-    /**
-     * Layout self.
-     */
-    protected void layoutImpl() {
-
-    }
-
     @Override
     public void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
         final Figure source = event.getSource();

@@ -200,7 +200,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
 
     @Override
     public void reshape(Figure f, double x, double y, double width, double height) {
-        f.reshape(x, y, width, height);
+        f.reshapeInLocal(x, y, width, height);
         fire(DrawingModelEvent.layoutChanged(this, f));
     }
 

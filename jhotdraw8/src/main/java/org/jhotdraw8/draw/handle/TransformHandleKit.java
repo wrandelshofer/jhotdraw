@@ -20,7 +20,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import static java.lang.Math.*;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
@@ -30,12 +29,8 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_X;
-import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
-import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
-import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A set of utility methods to create handles which transform a Figure by using
@@ -208,7 +203,7 @@ public class TransformHandleKit {
             if (!Double.isNaN(sx) && !Double.isNaN(sy)
                     && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                     && (sx != 1d || sy != 1d)) {
-                transform = transform.createConcatenation(new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
+                transform =Transforms.concat( transform,new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
             }
             switch (oldTransforms.size()) {
                 case 0:
@@ -216,7 +211,7 @@ public class TransformHandleKit {
                     break;
                 default:
                     int last = oldTransforms.size() - 1;
-                    model.set(owner, TRANSFORMS, ImmutableObservableList.set(oldTransforms, last, oldTransforms.get(last).createConcatenation(transform)));
+                    model.set(owner, TRANSFORMS, ImmutableObservableList.set(oldTransforms, last, Transforms.concat(oldTransforms.get(last),transform)));
                     break;
             }
         }

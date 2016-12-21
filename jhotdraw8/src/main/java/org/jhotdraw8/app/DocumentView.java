@@ -9,6 +9,7 @@ import java.util.concurrent.CompletionStage;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -89,6 +90,15 @@ public interface DocumentView extends ProjectView<DocumentView> {
      * {@code return CompletableFuture.completedFuture(null);}
      */
     public CompletionStage<Void> clear();
+
+    /**
+     * Prints the current document.
+     *
+     * @return Returns a CompletionStage which is completed when the print
+     * operation has finished. For example
+     * {@code return CompletableFuture.completedFuture(null);}
+     */
+    public CompletionStage<Void> print(PrinterJob job);
 
     /**
      * The action map of the view.

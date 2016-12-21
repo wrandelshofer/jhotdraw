@@ -9,7 +9,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.shape.SVGPath;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.CharBufferReader;
 
 /**

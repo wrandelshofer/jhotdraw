@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.geometry.Bounds;
@@ -20,16 +19,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.TransformableFigure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Handle for moving (translating) a figure.
@@ -80,11 +76,11 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = owner;
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p = t.transform(p);
+        pickLocation = p = t==null?p:t.transform(p);
 
         // The node is centered around the location. 
         // (The value 5.5 is half of the node size, which is 11,11.

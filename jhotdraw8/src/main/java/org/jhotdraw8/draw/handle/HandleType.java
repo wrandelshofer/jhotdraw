@@ -13,10 +13,20 @@ package org.jhotdraw8.draw.handle;
 public class HandleType {
 
     /**
-     * Handle of this type should highlight a figure, but should not provide
+     * A Handle of this type should highlight a figure, but should not provide
      * user interaction.
      */
     public final static HandleType SELECT = new HandleType();
+    /**
+     * A Handle of this type should highlight a figure, but should not provide
+     * user interaction.
+     */
+    public final static HandleType LEAD = new HandleType();
+    /**
+     * A Handle of this type should highlight a figure, but should not provide
+     * user interaction.
+     */
+    public final static HandleType ANCHOR = new HandleType();
     /**
      * Handles of this type should allow to move (translate) a figure.
      */

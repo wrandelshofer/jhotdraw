@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.io;
 
+import org.jhotdraw8.io.IdFactory;
 import java.net.URI;
 import java.net.URL;
 import java.util.Set;
@@ -35,6 +36,7 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
+import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.PolygonFigure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.TextFigure;
@@ -83,6 +85,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Group", GroupFigure.class, Figure.getDeclaredAndInheritedKeys(GroupFigure.class));
         addFigureKeysAndNames("Polyline", PolylineFigure.class, Figure.getDeclaredAndInheritedKeys(PolylineFigure.class));
         addFigureKeysAndNames("Polygon", PolygonFigure.class, Figure.getDeclaredAndInheritedKeys(PolygonFigure.class));
+        addFigureKeysAndNames("Page", PageFigure.class, Figure.getDeclaredAndInheritedKeys(PageFigure.class));
 
         {
             Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class);

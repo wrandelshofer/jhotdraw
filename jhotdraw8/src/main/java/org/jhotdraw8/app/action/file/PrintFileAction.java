@@ -7,6 +7,9 @@
  */
 package org.jhotdraw8.app.action.file;
 
+import javafx.print.PrinterJob;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractViewAction;
@@ -207,9 +210,26 @@ public class PrintFileAction extends AbstractViewAction<DocumentView> {
     @Override public boolean isEnabled() {
         return super.isEnabled() && (getActiveView() instanceof PrintableView);
     }*/
-
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (isDisabled()) {
+            return;
+        }
+
+        DocumentView view = getActiveView();
+
+        if (view != null) {
+            
+            PrinterJob job = PrinterJob.createPrinterJob();
+            if (job != null&&  job.showPrintDialog(view.getNode().getScene().getWindow())) {
+                boolean success = job.printPage(view.getNode());
+                if (success) {
+                    job.endJob();
+                }
+            }else{
+                Alert alert=new Alert(AlertType.INFORMATION,"Sorry, no printer found");
+                alert.show();
+            }
+        }
     }
 }

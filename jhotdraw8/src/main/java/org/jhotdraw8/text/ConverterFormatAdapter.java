@@ -9,7 +9,7 @@ import java.nio.CharBuffer;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * Allows to use a {@code java.text.Format} with the {@code Converter} API.

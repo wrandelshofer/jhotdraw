@@ -82,4 +82,8 @@ public class Transforms {
 
         return list;
     }
+    
+        public static Transform concat(Transform a, Transform b) {
+       return (a==null) ? b : (b==null?a:a.createConcatenation(b));
+    }
 }

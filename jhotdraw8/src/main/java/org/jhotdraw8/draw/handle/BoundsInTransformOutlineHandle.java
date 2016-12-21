@@ -18,6 +18,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -60,12 +61,12 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getParentToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(),f.getParentToWorld());
         if (f instanceof TransformableFigure) {
             TransformableFigure tf = (TransformableFigure) f;
-            t = t.createConcatenation(new Translate(tf.get(TRANSLATE_X), tf.get(TRANSLATE_Y)));
+            t = Transforms.concat(t,new Translate(tf.get(TRANSLATE_X), tf.get(TRANSLATE_Y)));
         }
-        t = Transform.translate(0.5, 0.5).createConcatenation(t);
+        t = Transforms.concat(Transform.translate(0.5, 0.5),t);
         Bounds b = f.getBoundsInLocal();
         points[0] = b.getMinX();
         points[1] = b.getMinY();
@@ -75,7 +76,7 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
         points[5] = b.getMaxY();
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
-        if (t.isType2D()) {
+        if (t!=null&&t.isType2D()) {
             t.transform2DPoints(points, 0, points, 0, 4);
         }
 

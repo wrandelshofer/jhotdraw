@@ -11,7 +11,7 @@ import java.text.ParseException;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 import static org.jhotdraw8.geom.Geom.clamp;
 
 /**

@@ -21,6 +21,7 @@ import java.util.concurrent.CompletionStage;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
@@ -113,6 +114,11 @@ public class TeddyView extends AbstractDocumentView implements DocumentView, Ini
     @Override
     public void clearModified() {
         modified.set(false);
+    }
+
+    @Override
+    public CompletionStage<Void> print(PrinterJob job) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

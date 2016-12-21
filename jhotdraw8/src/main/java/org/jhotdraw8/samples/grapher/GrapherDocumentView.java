@@ -22,6 +22,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
@@ -44,10 +45,13 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.SimpleDrawingView;
+import org.jhotdraw8.draw.action.AddToGroupAction;
 import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.action.BringToFrontAction;
 import org.jhotdraw8.draw.action.GroupAction;
+import org.jhotdraw8.draw.action.RemoveFromGroupAction;
 import org.jhotdraw8.draw.action.RemoveTransformationsAction;
+import org.jhotdraw8.draw.action.SelectChildrenAction;
 import org.jhotdraw8.draw.action.SendToBackAction;
 import org.jhotdraw8.draw.action.UngroupAction;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
@@ -59,6 +63,7 @@ import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
+import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.PolygonFigure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
@@ -81,8 +86,8 @@ import org.jhotdraw8.draw.input.MultiClipboardOutputFormat;
 import org.jhotdraw8.draw.inspector.Labels;
 import org.jhotdraw8.draw.io.DefaultFigureFactory;
 import org.jhotdraw8.draw.io.FigureFactory;
-import org.jhotdraw8.draw.io.IdFactory;
-import org.jhotdraw8.draw.io.SimpleIdFactory;
+import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.draw.io.SimpleXmlIO;
 import org.jhotdraw8.draw.tool.ConnectionTool;
 import org.jhotdraw8.draw.tool.CreationTool;
@@ -90,8 +95,9 @@ import org.jhotdraw8.draw.tool.ImageCreationTool;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
+import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.draw.tool.PolyCreationTool;
-import org.jhotdraw8.svg.SvgExportOutputFormat;
+import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
@@ -167,7 +173,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         Resources rsrc = Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
         Supplier<Layer> layerFactory = () -> createFigure(SimpleLayer::new);
         Tool defaultTool;
-        ttbar.addTool(defaultTool = new SelectionTool("tool.selectFigure", rsrc), 0, 0);
+        ttbar.addTool(defaultTool = new SelectionTool("tool.selectFigure", HandleType.RESIZE, HandleType.ANCHOR,null, rsrc), 0, 0);
         ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, rsrc), 0, 1);
         ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, rsrc), 1, 1);
         ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0);
@@ -181,6 +187,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
                 layerFactory), 6, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
         ttbar.addTool(new CreationTool("edit.createSlice", rsrc, () -> createFigure(SliceFigure::new), layerFactory), 5, 0);
+        ttbar.addTool(new CreationTool("edit.createPage", rsrc, () -> createFigure(PageFigure::new), layerFactory), 6, 0);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
@@ -190,6 +197,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
         toolsToolBar.getItems().add(ztbar);
 
         getActionMap().put(RemoveTransformationsAction.ID, new RemoveTransformationsAction<DocumentView>(getApplication(), editor));
+        getActionMap().put(SelectChildrenAction.ID, new SelectChildrenAction<DocumentView>(getApplication(), editor));
         getActionMap().put(SendToBackAction.ID, new SendToBackAction<DocumentView>(getApplication(), editor));
         getActionMap().put(BringToFrontAction.ID, new BringToFrontAction<DocumentView>(getApplication(), editor));
         getActionMap().put("view.toggleProperties", new ToggleViewPropertyAction<DocumentView>(getApplication(), this,
@@ -198,6 +206,8 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels")));
         getActionMap().put(GroupAction.ID, new GroupAction<DocumentView>(getApplication(), editor, () -> createFigure(GroupFigure::new)));
         getActionMap().put(UngroupAction.ID, new UngroupAction<DocumentView>(getApplication(), editor));
+        getActionMap().put(AddToGroupAction.ID, new AddToGroupAction<DocumentView>(getApplication(), editor));
+        getActionMap().put(RemoveFromGroupAction.ID, new RemoveFromGroupAction<DocumentView>(getApplication(), editor));
 
         FXWorker.supply(() -> {
             List<Node> list = new LinkedList<>();
@@ -304,7 +314,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
     @Override
     public CompletionStage<Void> write(URI uri, DataFormat format) {
         return FXWorker.run(() -> {
-            if (SvgExportOutputFormat.SVG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
+            if (SvgExporter.SVG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.write(uri, drawingView.getDrawing());
             } else if (BitmapExportOutputFormat.PNG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
@@ -334,5 +344,10 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
 
     public Node getPropertiesPane() {
         return detailsScrollPane;
+    }
+
+    @Override
+    public CompletionStage<Void> print(PrinterJob job) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -26,7 +25,7 @@ import org.jhotdraw8.geom.Geom;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GroupFigure extends AbstractCompositeFigure implements TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
+public class GroupFigure extends AbstractCompositeFigure implements Group, ResizableFigure,  TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
 
     /**
      * The CSS type selector for group objects is @code("group"}.
@@ -35,7 +34,7 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
 
     @Override
     public void reshapeInLocal(Transform transform) {
-        // XXX if one of the children is non-transformable, we should not reshape at all!
+        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = transform;
         //Transform localTransform = transform.createConcatenation(getParentToLocal());
@@ -54,7 +53,7 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
         for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }
-        ObservableList<Node> group = ((Group) n).getChildren();
+        ObservableList<Node> group = (( javafx.scene.Group) n).getChildren();
         if (!group.equals(nodes)) {
             group.setAll(nodes);
         }
@@ -62,7 +61,7 @@ public class GroupFigure extends AbstractCompositeFigure implements Transformabl
 
     @Override
     public Node createNode(RenderContext drawingView) {
-        Group g = new Group();
+         javafx.scene.Group g = new  javafx.scene.Group();
         g.setAutoSizeChildren(false);
         return g;
     }

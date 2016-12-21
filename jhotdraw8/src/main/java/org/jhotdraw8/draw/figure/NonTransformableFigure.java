@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Provides default implementations for figures which can not be transformed.
@@ -29,7 +30,7 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
 
     @Override
     default void reshapeInParent(Transform transform) {
-        reshapeInLocal(getParentToLocal().createConcatenation(transform));
+        reshapeInLocal(Transforms.concat(getParentToLocal(),transform));
     }
 
     @Override

@@ -14,6 +14,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -56,8 +57,8 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
-        t = Transform.translate(0.5, 0.5).createConcatenation(t);
+        Transform t =Transforms.concat( view.getWorldToView(),f.getLocalToWorld());
+        t =Transforms.concat( Transform.translate(0.5, 0.5),t);
         Bounds b = f.getBoundsInLocal();
         points[0] = b.getMinX();
         points[1] = b.getMinY();
@@ -67,7 +68,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
         points[5] = b.getMaxY();
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
-        if (t.isType2D()) {
+        if (t!=null&&t.isType2D()) {
             t.transform2DPoints(points, 0, points, 0, 4);
         }
 

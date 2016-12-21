@@ -21,8 +21,8 @@ import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PolygonFigure;
 import static org.jhotdraw8.draw.handle.Handle.STYLECLASS_HANDLE_MOVE_OUTLINE;
-import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * Draws the {@code wireframe} of a {@code PolygonFigure}.
@@ -64,10 +64,12 @@ public class PolygonOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = view.getWorldToView().createConcatenation(f.getLocalToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
         double[] points = PolygonFigure.toPointArray(f);
-        t.transform2DPoints(points, 0, points, 0, points.length / 2);
+        if (t != null) {
+            t.transform2DPoints(points, 0, points, 0, points.length / 2);
+        }
         ObservableList<Double> pp = node.getPoints();
         pp.clear();
         for (int i = 0; i < points.length; i++) {
@@ -92,15 +94,15 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
     @Override
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
-        if (key!=null && event.getClickCount() == 2) {
+        if (key != null && event.getClickCount() == 2) {
             double px = event.getX();
             double py = event.getY();
             double tolerance = SimpleDrawingView.TOLERANCE;
             List<Double> points = node.getPoints();
             int insertAt = -1;
             for (int i = 0, n = points.size(); i < n; i += 2) {
-                double x1 = points.get((n+i - 2)%n);
-                double y1 = points.get((n+i - 1)%n);
+                double x1 = points.get((n + i - 2) % n);
+                double y1 = points.get((n + i - 1) % n);
                 double x2 = points.get(i);
                 double y2 = points.get(i + 1);
                 if (Geom.lineContainsPoint(x1, y1, x2, y2, px, py, tolerance)) {

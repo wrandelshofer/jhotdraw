@@ -72,11 +72,11 @@ public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, 
         Rectangle2D r = get(BOUNDS);
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
-        reshape(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+        reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override
-    public void reshape(double x, double y, double width, double height) {
+    public void reshapeInLocal(double x, double y, double width, double height) {
         set(BOUNDS, new Rectangle2D(x + Math.min(width, 0), y + Math.min(height, 0), Math.abs(width), Math.abs(height)));
     }
 

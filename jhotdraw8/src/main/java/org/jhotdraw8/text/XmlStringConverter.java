@@ -7,7 +7,7 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * Converts an {@code Object} to a {@code String} but can not a {@code String}

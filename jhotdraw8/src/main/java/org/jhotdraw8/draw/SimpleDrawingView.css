@@ -17,6 +17,10 @@
 .handle-select-outline {
   -fx-stroke: blue;
 }
+/* Styles the anchor selection outline drawn by handles. See {@code Handle}. */
+.handle-anchor-outline {
+  -fx-stroke: gray;
+}
 .handle-multi-select-outline {
   -fx-stroke: blue;
   -fx-stroke-dash-array: 5;

@@ -34,6 +34,14 @@ public interface Handle {
      */
     public final static String STYLECLASS_HANDLE_SELECT_OUTLINE = "handle-select-outline";
     /**
+     * Style class for handles which draw the outline of a shape.
+     */
+    public final static String STYLECLASS_HANDLE_LEAD_OUTLINE = "handle-lead-outline";
+    /**
+     * Style class for handles which draw the outline of a shape.
+     */
+    public final static String STYLECLASS_HANDLE_ANCHOR_OUTLINE = "handle-anchor-outline";
+    /**
      * Style class for handles which draw the outline of multiple selection.
      */
     public final static String STYLECLASS_HANDLE_MULTI_SELECT_OUTLINE = "handle-multi-select-outline";

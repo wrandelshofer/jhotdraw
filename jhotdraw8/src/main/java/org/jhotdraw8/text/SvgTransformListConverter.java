@@ -16,7 +16,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 import static java.lang.Math.*;
 import org.jhotdraw8.css.CssTokenizerInterface;
 

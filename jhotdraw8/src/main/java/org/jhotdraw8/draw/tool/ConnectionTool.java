@@ -69,7 +69,7 @@ public class ConnectionTool extends AbstractTool {
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
         Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, newPoint);
-        figure.reshape(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
+        figure.reshapeInLocal(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getRoot();
 

@@ -17,13 +17,13 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 
 /**
- * BringToFrontAction.
+ * SelectChildrenAction.
  *
  * @author Werner Randelshofer
  */
-public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
+public class SelectChildrenAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
 
-    public static final String ID = "edit.bringToFront";
+    public static final String ID = "edit.selectChildren";
 
     /**
      * Creates a new instance.
@@ -31,7 +31,7 @@ public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelect
      * @param app the application
      * @param editor the drawing editor
      */
-    public BringToFrontAction(Application<V> app, DrawingEditor editor) {
+    public SelectChildrenAction(Application<V> app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");
@@ -45,17 +45,18 @@ public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelect
             return;
         }
         final List<Figure> figures = new ArrayList<>(view.getSelectedFigures());
-        bringToFront(view, figures);
+        selectChildren(view, figures);
 
     }
 
-    public static void bringToFront(DrawingView view, Collection<Figure> figures) {
-        DrawingModel model = view.getModel();
-        for (Figure child : figures) { // XXX Shouldn't the figures be sorted here back to front?
-            Figure parent = child.getParent();
-            if (parent != null && parent.isEditable() && parent.isDecomposable()) {
-                model.insertChildAt(child, parent, parent.getChildren().size() - 1);
+    public static void selectChildren(DrawingView view, Collection<Figure> figures) {
+        List<Figure> selectedChildren=new ArrayList<>();
+        for (Figure f : figures) { 
+            for (Figure child:f.getChildren()) {
+                selectedChildren.add(child);
             }
         }
+        view.getSelectedFigures().clear();
+        view.getSelectedFigures().addAll(selectedChildren);
     }
 }

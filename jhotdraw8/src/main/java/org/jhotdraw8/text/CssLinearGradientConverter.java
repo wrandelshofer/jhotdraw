@@ -13,7 +13,7 @@ import java.util.List;
 import javafx.scene.paint.CycleMethod;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * CssLinearGradientConverter.

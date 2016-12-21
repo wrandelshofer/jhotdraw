@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.shape.SVGPath;
-import org.jhotdraw8.draw.io.IdFactory;
+import org.jhotdraw8.io.IdFactory;
 
 /**
  * Converts an {@code String} to a quoted CSS {@code String}.

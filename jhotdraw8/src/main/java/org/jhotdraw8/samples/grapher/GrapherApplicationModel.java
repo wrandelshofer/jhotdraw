@@ -4,10 +4,15 @@
  */
 package org.jhotdraw8.samples.grapher;
 
+import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.SimpleApplicationModel;
+import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.app.action.file.PrintFileAction;
+import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
-import org.jhotdraw8.svg.SvgExportOutputFormat;
+import org.jhotdraw8.svg.SvgExporter;
 
 /**
  * GrapherApplicationModel.
@@ -22,8 +27,15 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
         super("Grapher", GrapherDocumentView::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "XML Files", null, "*.xml");
-        getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExportOutputFormat.SVG_FORMAT, "*.svg"));
+        getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
         getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_FORMAT, "*.png"));
+    }
+
+    @Override
+    public HierarchicalMap<String, Action> createApplicationActionMap(Application<DocumentView> app) {
+HierarchicalMap<String, Action> map= super.createApplicationActionMap(app); 
+        map.put(PrintFileAction.ID, new PrintFileAction(app,null));
+return map;
     }
 
 }
