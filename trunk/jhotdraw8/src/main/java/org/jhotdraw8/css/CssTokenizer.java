@@ -551,6 +551,7 @@ public class CssTokenizer implements CssTokenizerInterface {
             ch = in.nextChar();
         } else if (ch == '+') {
             hasSign = true;
+            buf.append('+');
             ch = in.nextChar();
         }
 

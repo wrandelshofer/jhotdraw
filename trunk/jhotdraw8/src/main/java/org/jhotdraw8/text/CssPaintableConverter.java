@@ -57,7 +57,7 @@ public class CssPaintableConverter implements Converter<Paintable> {
 
     @Override
     public Paintable fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        String str = buf.toString().trim().toLowerCase(Locale.ROOT);
+        String str = buf.toString();
 
         int pos = buf.position();
         ParseException pe = null;

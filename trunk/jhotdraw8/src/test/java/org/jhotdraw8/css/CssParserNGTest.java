@@ -224,6 +224,9 @@ public class CssParserNGTest {
     @DataProvider
     public Object[][] cssSyntaxExamples() {
         return new Object[][]{
+            {true, ":nth-child(3n + 1) {}", //
+                "<xml/>",//
+                "<xml/>"}, //
             // example 1
             {true, "p > a {\n  color: blue;\n  text-decoration: underline;\n}", //
                 "<xml><p/><a/><p><a/></p><a><p/></a></xml>", //
@@ -284,9 +287,6 @@ public class CssParserNGTest {
                 "<xml/>",//
                 "<xml/>"}, //
             // example 9
-            {true, ":nth-child(3n + 1) {}", //
-                "<xml/>",//
-                "<xml/>"}, //
             {true, ":nth-child(+3n - 2) {}", //
                 "<xml/>",//
                 "<xml/>"}, //

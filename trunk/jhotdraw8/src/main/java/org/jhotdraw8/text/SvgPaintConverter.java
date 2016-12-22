@@ -21,23 +21,11 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class SvgPaintConverter extends CssPaintConverter {
 
-    public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
-        if (value == null) {
-            out.append("none");
-        } else if (Color.TRANSPARENT.equals(value)) {
-            out.append("none");
-        } else if (value instanceof Color) {
-            Color crgba = (Color) value;
-            CssColor c = new CssColor(new Color(crgba.getRed(), crgba.getGreen(), crgba.getBlue(), 1.0));
-            colorConverter.toString(out, idFactory, c);
-        } else if (value instanceof LinearGradient) {
-            CssLinearGradient lg = new CssLinearGradient((LinearGradient) value);
-            linearGradientConverter.toString(out, idFactory, lg);
-        } else if (value instanceof RadialGradient) {
-            CssRadialGradient lg = new CssRadialGradient((RadialGradient) value);
-            radialGradientConverter.toString(out, idFactory, lg);
-        } else {
-            throw new UnsupportedOperationException("not yet implemented");
-        }
+  public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
+    if ((value instanceof Color) && !value.isOpaque()) {
+      Color c = (Color) value;
+      value = new Color(c.getRed(), c.getGreen(), c.getBlue(), 1.0);
     }
+    super.toString(out, idFactory, value);
+  }
 }

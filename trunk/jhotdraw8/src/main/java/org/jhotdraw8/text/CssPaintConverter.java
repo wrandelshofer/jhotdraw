@@ -32,51 +32,32 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class CssPaintConverter implements Converter<Paint> {
 
-    protected static final CssColorConverter colorConverter = new CssColorConverter(false);
-    protected static final CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter();
-    protected static final CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter();
+  protected static final CssPaintableConverter paintableConverter = new CssPaintableConverter();
 
-    public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
-        if (value == null) {
-            out.append("none");
-        } else if (Color.TRANSPARENT.equals(value)) {
-            out.append("transparent");
-        } else if (value instanceof Color) {
-            CssColor c = new CssColor((Color) value);
-            colorConverter.toString(out, idFactory, c);
-        } else if (value instanceof LinearGradient) {
-            CssLinearGradient lg = new CssLinearGradient((LinearGradient) value);
-            linearGradientConverter.toString(out, idFactory, lg);
-        } else if (value instanceof RadialGradient) {
-            CssRadialGradient lg = new CssRadialGradient((RadialGradient) value);
-            radialGradientConverter.toString(out, idFactory, lg);
-        } else {
-            throw new UnsupportedOperationException("not yet implemented");
-        }
+  @Override
+  public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    Paintable p = paintableConverter.fromString(buf, idFactory);
+    return p == null ? null : p.getPaint();
+  }
+
+  @Override
+  public Paint getDefaultValue() {
+    return null;
+  }
+
+  public void toString(Appendable out, IdFactory idFactory, Paint value) throws IOException {
+    Paintable p;
+    if (value == null) {
+      p = null;
+    } else if (value instanceof Color) {
+      p = new CssColor((Color) value);
+    } else if (value instanceof LinearGradient) {
+      p = new CssLinearGradient((LinearGradient) value);
+    } else if (value instanceof RadialGradient) {
+      p = new CssRadialGradient((RadialGradient) value);
+    } else {
+      throw new UnsupportedOperationException("unsupported value:" + value);
     }
-
-    @Override
-    public Paint fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        String str = buf.toString().trim().toLowerCase(Locale.ROOT);
-
-        int pos = buf.position();
-        try {
-            return Paintable.getPaint(colorConverter.fromString(buf, idFactory));
-        } catch (ParseException e) {
-            //its not a color
-        }
-        try {
-            buf.position(pos);
-            return Paintable.getPaint(linearGradientConverter.fromString(buf, idFactory));
-        } catch (ParseException e) {
-            //throw new UnsupportedOperationException("not yet implemented");
-        }
-        ParseException pe = new ParseException("color or gradient expected" + buf, buf.position());
-        throw pe;
-    }
-
-    @Override
-    public Paint getDefaultValue() {
-        return null;
-    }
+    paintableConverter.toString(out, idFactory, p);
+  }
 }

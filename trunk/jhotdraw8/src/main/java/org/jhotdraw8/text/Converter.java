@@ -22,19 +22,6 @@ import org.jhotdraw8.io.IdFactory;
  */
 public interface Converter<T> {
 
-    /**
-     * Converts a value to a string and appends it to the provided
-     * {@code Appendable}.
-     * <p>
-     * This method does not change the state of the converter.
-     *
-     * @param out The appendable
-     * @param idFactory The factory for creating object ids. Nullable for some
-     * converters.
-     * @param value The value. Nullable.
-     * @throws java.io.IOException thrown by Appendable
-     */
-    void toString(Appendable out, IdFactory idFactory, T value) throws IOException;
 
     /**
      * Constructs a value from a string.
@@ -59,22 +46,6 @@ public interface Converter<T> {
      */
     T fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException;
 
-    // ----
-    // convenience methods
-    // ----
-    /**
-     * Converts a value to a string and appends it to the provided
-     * {@code Appendable}.
-     * <p>
-     * This method does not change the state of the converter.
-     *
-     * @param out The appendable
-     * @param value The value. Nullable.
-     * @throws java.io.IOException thrown by Appendable
-     */
-    default void toString(Appendable out, T value) throws IOException {
-        toString(out, null, value);
-    }
 
     /**
      * Constructs a value from a string.
@@ -99,26 +70,6 @@ public interface Converter<T> {
         return fromString(in, null);
     }
 
-    /**
-     * Converts a value to a String.
-     * <p>
-     * This method does not change the state of the converter.
-     * <p>
-     * Note: this is a convenience method. Implementing classes rarely need to
-     * overwrite this method.
-     *
-     * @param value The value. Nullable.
-     * @return The String.
-     */
-    default String toString(T value) {
-        StringBuilder out = new StringBuilder();
-        try {
-            toString(out, value);
-        } catch (IOException ex) {
-            throw new InternalError(ex);
-        }
-        return out.toString();
-    }
 
     /**
      * Constructs a value from a CharSequence.
@@ -183,5 +134,54 @@ public interface Converter<T> {
      */
     default String getHelpText() {
         return null;
+    }
+    /**
+     * Converts a value to a string and appends it to the provided
+     * {@code Appendable}.
+     * <p>
+     * This method does not change the state of the converter.
+     *
+     * @param out The appendable
+     * @param idFactory The factory for creating object ids. Nullable for some
+     * converters.
+     * @param value The value. Nullable.
+     * @throws java.io.IOException thrown by Appendable
+     */
+    void toString(Appendable out, IdFactory idFactory, T value) throws IOException;
+    // ----
+    // convenience methods
+    // ----
+    /**
+     * Converts a value to a string and appends it to the provided
+     * {@code Appendable}.
+     * <p>
+     * This method does not change the state of the converter.
+     *
+     * @param out The appendable
+     * @param value The value. Nullable.
+     * @throws java.io.IOException thrown by Appendable
+     */
+    default void toString(Appendable out, T value) throws IOException {
+      toString(out, null, value);
+    }
+    /**
+     * Converts a value to a String.
+     * <p>
+     * This method does not change the state of the converter.
+     * <p>
+     * Note: this is a convenience method. Implementing classes rarely need to
+     * overwrite this method.
+     *
+     * @param value The value. Nullable.
+     * @return The String.
+     */
+    default String toString(T value) {
+      StringBuilder out = new StringBuilder();
+      try {
+        toString(out, value);
+      } catch (IOException ex) {
+        throw new InternalError(ex);
+      }
+      return out.toString();
     }
 }

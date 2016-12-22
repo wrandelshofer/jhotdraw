@@ -25,7 +25,7 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class CssPoint2DListConverter implements Converter<ImmutableObservableList<Point2D>> {
 
-    private CssSizeConverter doubleConverter = new CssSizeConverter();
+    private CssDoubleConverter doubleConverter = new CssDoubleConverter();
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<Point2D> value) throws IOException {

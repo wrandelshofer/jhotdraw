@@ -39,7 +39,7 @@ import org.jhotdraw8.io.IdFactory;
 public class CssLinearGradientConverter implements Converter<CssLinearGradient> {
 
     private CssColorConverter colorConverter = new CssColorConverter(false);
-    private CssSizeConverter doubleConverter = new CssSizeConverter();
+    private CssDoubleConverter doubleConverter = new CssDoubleConverter();
 
     public void toString(Appendable out, IdFactory idFactory, CssLinearGradient value) throws IOException {
         if (value == null) {

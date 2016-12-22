@@ -48,7 +48,7 @@ import org.jhotdraw8.text.XmlConnectorConverter;
 import org.jhotdraw8.text.DefaultConverter;
 import org.jhotdraw8.text.XmlPoint2DConverter;
 import org.jhotdraw8.text.CssObservableWordListConverter;
-import org.jhotdraw8.text.CssSizeListConverter;
+import org.jhotdraw8.text.CssDoubleListConverter;
 import org.jhotdraw8.text.CssFont;
 import org.jhotdraw8.text.CssPoint2DListConverter;
 import org.jhotdraw8.text.Paintable;
@@ -137,7 +137,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Figure.class, new XmlFigureReferenceConverter());
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssObservableWordListConverter());
-        addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssSizeListConverter());
+        addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssDoubleListConverter());
         addConverter(StrokeableFigure.STROKE_LINE_CAP, new XmlEnumConverter<StrokeLineCap>(StrokeLineCap.class));
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
         addConverter(StrokeableFigure.STROKE_TYPE, new XmlEnumConverter<StrokeType>(StrokeType.class));

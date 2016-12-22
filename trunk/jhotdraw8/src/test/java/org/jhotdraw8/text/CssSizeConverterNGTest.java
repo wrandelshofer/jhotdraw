@@ -24,14 +24,14 @@ public class CssSizeConverterNGTest {
     }
 
     /**
-     * Test of toString method, of class CssSizeConverter.
+     * Test of toString method, of class CssDoubleConverter.
      */
     @Test(dataProvider = "toStringData")
     public void testToString(Double value, String expected) throws Exception {
         System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
-        CssSizeConverter instance = new CssSizeConverter(true);
+        CssDoubleConverter instance = new CssDoubleConverter(true);
         instance.toString(out, idFactory, value);
         String actual = out.toString();
         System.out.println("  expected: " + expected);
@@ -40,14 +40,14 @@ public class CssSizeConverterNGTest {
     }
 
     /**
-     * Test of fromString method, of class CssSizeConverter.
+     * Test of fromString method, of class CssDoubleConverter.
      */
     @Test(dataProvider = "fromStringData")
     public void testFromString(Double expected, String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
-        CssSizeConverter instance = new CssSizeConverter(true);
+        CssDoubleConverter instance = new CssDoubleConverter(true);
         Double actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
@@ -58,12 +58,12 @@ public class CssSizeConverterNGTest {
     }
 
     /**
-     * Test of getDefaultValue method, of class CssSizeConverter.
+     * Test of getDefaultValue method, of class CssDoubleConverter.
      */
     @Test
     public void testGetDefaultValue() {
         System.out.println("getDefaultValue");
-        CssSizeConverter instance = new CssSizeConverter();
+        CssDoubleConverter instance = new CssDoubleConverter();
         Double expected = 0.0;
         Double actual = instance.getDefaultValue();
         assertEquals(actual, expected);

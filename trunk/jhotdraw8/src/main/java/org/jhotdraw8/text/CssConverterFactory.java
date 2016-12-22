@@ -19,7 +19,7 @@ public class CssConverterFactory implements ConverterFactory {
         }
         switch (type) {
             case "number":
-                return new XmlNumberConverter();
+                return new CssDoubleConverter();
             case "size":
                 return new CssSizeConverter();
             case "word":
