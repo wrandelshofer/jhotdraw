@@ -93,7 +93,7 @@ public class CssEffectConverter implements Converter<Effect> {
     private CssEnumConverter<BlurType> blurTypeConverter = new CssEnumConverter<>(BlurType.class);
     private CssEnumConverter<BlendMode> blendModeConverter = new CssEnumConverter<>(BlendMode.class);
     private CssColorConverter colorConverter = new CssColorConverter(false);
-    private CssSizeConverter nb = new CssSizeConverter();
+    private CssDoubleConverter nb = new CssDoubleConverter();
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Effect value) throws IOException {

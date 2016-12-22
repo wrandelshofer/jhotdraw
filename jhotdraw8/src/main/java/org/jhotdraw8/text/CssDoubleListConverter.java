@@ -1,4 +1,4 @@
-/* @(#)CssSizeListConverter.java
+/* @(#)CssDoubleListConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -16,35 +16,16 @@ import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * CssSizeListConverter.
+ * CssDoubleListConverter.
  * <p>
  * Parses a list of sizes.
  *
  * @author Werner Randelshofer
  */
-public class CssSizeListConverter implements Converter<ImmutableObservableList<Double>> {
+public class CssDoubleListConverter implements Converter<ImmutableObservableList<Double>> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,choice,0#none|1#{1,list,{2,size}|[ ]+}}", new CssConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,choice,0#none|1#{1,list,{2,number}|[ ]+}}", new CssConverterFactory());
 
-    @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<Double> value) throws IOException {
-        toStringFromCollection(out, idFactory, value);
-    }
-
-    public void toStringFromCollection(Appendable out, IdFactory idFactory, Collection<Double> value) throws IOException {
-        if (value == null) {
-            out.append("none");
-            return;
-        }
-        Object[] v = new Object[value.size() + 2];
-        v[0] = value.size();
-        v[1] = value.size();
-        Iterator<Double> iter = value.iterator();
-        for (int i = 0, n = value.size(); i < n; i++) {
-            v[i + 2] = iter.next();
-        }
-        formatter.toString(out, v);
-    }
 
     @Override
     public ImmutableObservableList<Double> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
@@ -105,6 +86,24 @@ public class CssSizeListConverter implements Converter<ImmutableObservableList<D
     @Override
     public ImmutableObservableList<Double> getDefaultValue() {
         return ImmutableObservableList.emptyList();
+    }
+    @Override
+    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<Double> value) throws IOException {
+      toStringFromCollection(out, idFactory, value);
+    }
+    public void toStringFromCollection(Appendable out, IdFactory idFactory, Collection<Double> value) throws IOException {
+      if (value == null) {
+        out.append("none");
+        return;
+      }
+      Object[] v = new Object[value.size() + 2];
+      v[0] = value.size();
+      v[1] = value.size();
+      Iterator<Double> iter = value.iterator();
+      for (int i = 0, n = value.size(); i < n; i++) {
+        v[i + 2] = iter.next();
+      }
+      formatter.toString(out, v);
     }
 
     public String toStringFromCollection(Collection<Double> value) {

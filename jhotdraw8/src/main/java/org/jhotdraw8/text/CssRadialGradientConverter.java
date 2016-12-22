@@ -41,7 +41,7 @@ import org.jhotdraw8.io.CharBufferReader;
 public class CssRadialGradientConverter implements Converter<CssRadialGradient> {
 
     private CssColorConverter colorConverter = new CssColorConverter(false);
-    private CssSizeConverter doubleConverter = new CssSizeConverter();
+    private CssDoubleConverter doubleConverter = new CssDoubleConverter();
 
     public void toString(Appendable out, IdFactory idFactory, CssRadialGradient value) throws IOException {
         if (value == null) {

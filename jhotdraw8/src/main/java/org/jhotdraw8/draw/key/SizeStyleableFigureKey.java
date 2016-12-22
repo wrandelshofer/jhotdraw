@@ -1,4 +1,4 @@
-/* @(#)DoubleStyleableFigureKey.java
+/* @(#)SizeStyleableFigureKey.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -12,21 +12,22 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssDoubleConverter;
 import org.jhotdraw8.text.StyleConverterConverterWrapper;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.text.CssSizeConverter;
 
 /**
- * DoubleStyleableFigureKey.
+ * SizeStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements StyleableMapAccessor<Double> {
+public class SizeStyleableFigureKey extends SimpleFigureKey<CssSize> implements StyleableMapAccessor<CssSize> {
 
     final static long serialVersionUID = 1L;
-    private final CssMetaData<? extends Styleable, Double> cssMetaData;
 
-    private final CssDoubleConverter converter = new CssDoubleConverter();
+    private final CssSizeConverter converter = new CssSizeConverter();
+    private final CssMetaData<? extends Styleable, CssSize> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -34,7 +35,7 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
      *
      * @param name The name of the key.
      */
-    public DoubleStyleableFigureKey(String name) {
+    public SizeStyleableFigureKey(String name) {
         this(name, null);
     }
 
@@ -44,7 +45,7 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleStyleableFigureKey(String name, Double defaultValue) {
+    public SizeStyleableFigureKey(String name, CssSize defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -55,38 +56,31 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public DoubleStyleableFigureKey(String name, DirtyMask mask, Double defaultValue) {
-        super(name, Double.class, mask, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createSizeCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });*/
+    public SizeStyleableFigureKey(String name, DirtyMask mask, CssSize defaultValue) {
+        super(name, CssSize.class, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<Double>> function = s -> {
+        Function<Styleable, StyleableProperty<CssSize>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Double> converter
-                = new StyleConverterConverterWrapper<Double>(new CssDoubleConverter());
-        CssMetaData<Styleable, Double> md
-                = new SimpleCssMetaData<Styleable, Double>(property, function,
+        final StyleConverter<String, CssSize> converter
+                = new StyleConverterConverterWrapper<CssSize>(new CssSizeConverter());
+        CssMetaData<Styleable, CssSize> md
+                = new SimpleCssMetaData<Styleable, CssSize>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
-    @Override
-    public CssMetaData<? extends Styleable, Double> getCssMetaData() {
-        return cssMetaData;
-
-    }
 
     @Override
-    public Converter<Double> getConverter() {
+    public Converter<CssSize> getConverter() {
         return converter;
+    }
+    @Override
+    public CssMetaData<? extends Styleable, CssSize> getCssMetaData() {
+      return cssMetaData;
+      
     }
 }

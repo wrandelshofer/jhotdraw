@@ -20,7 +20,7 @@ import org.jhotdraw8.io.IdFactory;
 public class CssScale3DConverter implements Converter<Point3D> {
 
     // FIXME must use CssParser instead of PatternConverter!!
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point3D value) throws IOException {

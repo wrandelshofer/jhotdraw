@@ -1,45 +1,43 @@
-/* @(#)CssColorConverterNGTest.java
+/* @(#)CssPaintConverterNGTest.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
+
 package org.jhotdraw8.text;
 
 import java.nio.CharBuffer;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import org.jhotdraw8.css.CssTokenizerInterface;
+import javafx.scene.paint.Paint;
 import org.jhotdraw8.io.IdFactory;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * CssColorConverterNGTest.
+ * CssPaintConverterNGTest.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class CssColorConverterNGTest {
+public class CssPaintConverterNGTest {
 
-    public CssColorConverterNGTest() {
+    public CssPaintConverterNGTest() {
     }
 
     /**
-     * Test of fromString method, of class CssColorConverter.
+     * Test of fromString method, of class CssPaintConverter.
      */
     @Test(dataProvider = "fromStringData")
-    public void testFromString(CssColor expected, String string) throws Exception {
+    public void testFromString(Paintable expected, String string) throws Exception {
         System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssColorConverter instance = new CssColorConverter(true);
-        CssColor actual = instance.fromString(buf, idFactory);
+        CssPaintConverter instance = new CssPaintConverter();
+        Paint actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
-        assertEquals(actual, expected);
-        if (actual != null) {
-            assertEquals(actual.getName(), expected.getName());
-        }
+        assertEquals(actual, expected==null?null:expected.getPaint());
+
     }
 
     @DataProvider
@@ -61,4 +59,5 @@ public class CssColorConverterNGTest {
             {new CssColor("hsba(10,20%,30%,0.8)", Color.hsb(10, 0.20, 0.30, 0.8)), "hsba(10,20%,30%,0.8)"},};
 
     }
+
 }

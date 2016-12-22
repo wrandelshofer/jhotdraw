@@ -37,7 +37,7 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class CssFontConverter implements Converter<CssFont> {
 
-    private final CssSizeConverter doubleConverter = new CssSizeConverter();
+    private final CssDoubleConverter doubleConverter = new CssDoubleConverter();
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, CssFont font) throws IOException {

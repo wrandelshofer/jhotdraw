@@ -1,4 +1,4 @@
-/* @(#)CssSizeListConverterNGTest.java
+/* @(#)CssDoubleListConverterNGTest.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -9,33 +9,33 @@ import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import javafx.scene.paint.Color;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.io.IdFactory;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * CssSizeListConverterNGTest.
+ * CssDoubleListConverterNGTest.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class CssSizeListConverterNGTest {
+public class CssDoubleListConverterNGTest {
 
-    public CssSizeListConverterNGTest() {
+    public CssDoubleListConverterNGTest() {
     }
 
     /**
-     * Test of toString method, of class CssSizeListConverter.
+     * Test of toString method, of class CssDoubleListConverter.
      */
     @Test(dataProvider = "toStringData")
     public void testToString( List<Double> value, String expected ) throws Exception {
         System.out.println("toString "+value);
         StringBuilder out =new StringBuilder();
         IdFactory idFactory = null;
-        CssSizeListConverter instance = new CssSizeListConverter();
-        instance.toString(out, idFactory, value);
+        CssDoubleListConverter instance = new CssDoubleListConverter();
+        instance.toString(out, idFactory, value==null?null:new ImmutableObservableList(value));
         String actual = out.toString();
          System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
@@ -43,14 +43,14 @@ public class CssSizeListConverterNGTest {
     }
 
     /**
-     * Test of fromString method, of class CssSizeListConverter.
+     * Test of fromString method, of class CssDoubleListConverter.
      */
     @Test(dataProvider = "fromStringData")
     public void testFromString(List<Double> expected, String string) throws Exception {
         System.out.println("fromString "+string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssSizeListConverter instance = new CssSizeListConverter();
+        CssDoubleListConverter instance = new CssDoubleListConverter();
         List<Double> actual = instance.fromString(buf, idFactory);
          System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
@@ -58,12 +58,12 @@ public class CssSizeListConverterNGTest {
     }
 
     /**
-     * Test of getDefaultValue method, of class CssSizeListConverter.
+     * Test of getDefaultValue method, of class CssDoubleListConverter.
      */
     @Test
     public void testGetDefaultValue() {
         System.out.println("getDefaultValue");
-        CssSizeListConverter instance = new CssSizeListConverter();
+        CssDoubleListConverter instance = new CssDoubleListConverter();
         List<Double> expected = Collections.emptyList();
         List<Double> actual = instance.getDefaultValue();
         assertEquals(actual, expected);

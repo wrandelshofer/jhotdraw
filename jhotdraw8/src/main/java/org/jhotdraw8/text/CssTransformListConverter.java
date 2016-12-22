@@ -68,7 +68,7 @@ import org.jhotdraw8.css.CssTokenizerInterface;
  */
 public class CssTransformListConverter implements Converter<ImmutableObservableList<Transform>> {
 
-    private final CssSizeConverter nb = new CssSizeConverter();
+    private final CssDoubleConverter nb = new CssDoubleConverter();
 
     @Override
     public void toString(Appendable buf, IdFactory idFactory, ImmutableObservableList<Transform> txs) throws IOException {

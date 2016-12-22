@@ -13,7 +13,7 @@ import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssSizeListConverter;
+import org.jhotdraw8.text.CssDoubleListConverter;
 import org.jhotdraw8.text.StyleConverterConverterWrapper;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 
@@ -65,7 +65,7 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<ImmutableObser
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, ImmutableObservableList<Double>> converter
-                = new StyleConverterConverterWrapper<ImmutableObservableList<Double>>(new CssSizeListConverter());
+                = new StyleConverterConverterWrapper<ImmutableObservableList<Double>>(new CssDoubleListConverter());
         CssMetaData<Styleable, ImmutableObservableList<Double>> md
                 = new SimpleCssMetaData<Styleable, ImmutableObservableList<Double>>(property, function,
                         converter, defaultValue, inherits);
@@ -82,7 +82,7 @@ public class DoubleListStyleableFigureKey extends SimpleFigureKey<ImmutableObser
     @Override
     public Converter<ImmutableObservableList<Double>> getConverter() {
         if (converter == null) {
-            converter = new CssSizeListConverter();
+            converter = new CssDoubleListConverter();
         }
         return converter;
     }
