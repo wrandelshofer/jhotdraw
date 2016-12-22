@@ -139,9 +139,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     protected void writeSlice(File file, Slice slice, Node node) throws IOException {
         SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
         markNodesOutsideBoundsWithSkip(node, slice.getBoundsInLocal());
-        // FIXME transform node!
+        node.getTransforms().setAll(slice.getWorldToLocal());
         Document doc = exporter.toDocument(node);
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
+        node.getTransforms().clear();
         write(file, doc);
     }
 
@@ -149,8 +150,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
         markNodesOutsideBoundsWithSkip(node, page.getPageBounds(internalPageNumber));
+        node.getTransforms().setAll(page.getWorldToLocal());
         Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
+        node.getTransforms().clear();
         write(file, doc);
     }
 
@@ -159,37 +162,21 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         Transform tx=slice.getWorldToLocal();
         docElement.setAttribute("width", nb.toString(b.getWidth()));
         docElement.setAttribute("height", nb.toString(b.getHeight()));
-
-        if (tx != null && !tx.isIdentity()) {
-            docElement.setAttribute("transform",
-                    txc.toString(ImmutableObservableList.of(new Translate(-b.getMinX(), -b.getMinY()), tx)));
-            docElement.setAttribute("viewBox", nb.
-                    toString(0) + " " + nb.toString(0)
-                    + " " + nb.toString(b.getWidth()) + " " + nb.toString(b.getHeight()));
-        } else {
             docElement.setAttribute("viewBox", nb.
                     toString(b.getMinX()) + " " + nb.toString(b.getMinY())
                     + " " + nb.toString(b.getWidth()) + " " + nb.toString(b.getHeight()));
-        }    }
+      }
 
     private void writePageElementAttributes(Element docElement, Page page, int internalPageNumber) throws IOException {
   Bounds b=page.getBoundsInLocal();
   Bounds pb=page.getPageBounds(internalPageNumber);
         Transform tx=page.getWorldToLocal();
-        docElement.setAttribute("width", nb.toString(b.getWidth()));
-        docElement.setAttribute("height", nb.toString(b.getHeight()));
-
-        if (tx != null && !tx.isIdentity()) {
-            docElement.setAttribute("transform",
-                    txc.toString(ImmutableObservableList.of(new Translate(b.getMinX()-pb.getMinX(), b.getMinY()-pb.getMinY()), tx)));
+        docElement.setAttribute("width", nb.toString(pb.getWidth()));
+        docElement.setAttribute("height", nb.toString(pb.getHeight()));
             docElement.setAttribute("viewBox", nb.
                     toString(pb.getMinX()) + " " + nb.toString(pb.getMinY())
                     + " " + nb.toString(pb.getWidth()) + " " + nb.toString(pb.getHeight()));
-        } else {
-            docElement.setAttribute("viewBox", nb.
-                    toString(pb.getMinX()) + " " + nb.toString(pb.getMinY())
-                    + " " + nb.toString(pb.getWidth()) + " " + nb.toString(pb.getHeight()));
-        }    }
+           }
 
     @Override
     protected String getExtension() {
