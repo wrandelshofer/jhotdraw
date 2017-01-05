@@ -25,7 +25,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractViewAction<DocumentProject> {
+public class PrintFileAction extends AbstractViewAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public class PrintFileAction extends AbstractViewAction<DocumentProject> {
      * @param app the application
      * @param view the view
      */
-    public PrintFileAction(Application<DocumentProject> app, DocumentProject view) {
+    public PrintFileAction(Application app, DocumentProject view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -216,7 +216,7 @@ public class PrintFileAction extends AbstractViewAction<DocumentProject> {
             return;
         }
 
-        DocumentProject view = getActiveView();
+        DocumentProject view = (DocumentProject)getActiveView();
 
         if (view != null) {
             

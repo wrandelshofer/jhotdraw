@@ -25,6 +25,7 @@ import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.Project;
 
 /**
  * Exits the application after letting the user review and possibly save all
@@ -34,7 +35,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ExitAction extends AbstractApplicationAction<DocumentProject> {
+public class ExitAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,7 +48,7 @@ public class ExitAction extends AbstractApplicationAction<DocumentProject> {
      *
      * @param app the application
      */
-    public ExitAction(Application<DocumentProject> app) {
+    public ExitAction(Application app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -59,7 +60,8 @@ public class ExitAction extends AbstractApplicationAction<DocumentProject> {
         int disabledViewsCount = 0;
         DocumentProject documentToBeReviewed = null;
         URI unsavedURI = null;
-        for (DocumentProject p : app.projects()) {
+        for (Project pr : app.projects()) {
+            DocumentProject p =(DocumentProject)pr;
             if (p.isDisabled()) {
                 disabledViewsCount++;
             }
@@ -141,7 +143,8 @@ public class ExitAction extends AbstractApplicationAction<DocumentProject> {
                 // Prevent save to URI that is open in another view!
                 // unless  multipe projects to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (DocumentProject vi : app.projects()) {
+                    for (Project p : app.projects()) {
+                        DocumentProject vi = (DocumentProject)p;
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -236,7 +239,8 @@ public class ExitAction extends AbstractApplicationAction<DocumentProject> {
     protected void reviewNext() {
         int unsavedViewsCount = 0;
         DocumentProject documentToBeReviewed = null;
-        for (DocumentProject p : getApplication().projects()) {
+        for (Project pr : getApplication().projects()) {
+            DocumentProject p=(DocumentProject)pr;
             if (p.isModified()) {
                 if (!p.isDisabled()) {
                     documentToBeReviewed = p;
@@ -314,7 +318,8 @@ public class ExitAction extends AbstractApplicationAction<DocumentProject> {
     }
 
     protected void doExit() {
-        for (DocumentProject p : new ArrayList<DocumentProject>(app.projects())) {
+        for (Project pr : new ArrayList<Project>(app.projects())) {
+            DocumentProject p=(DocumentProject)pr;
             if (!p.isDisabled() && !p.isModified()) {
                 app.remove(p);
             }

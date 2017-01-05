@@ -60,7 +60,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view
      * @param uri the uri of the recent file
      */
-    public LoadRecentFileAction(Application<DocumentProject> app, DocumentProject view, URI uri) {
+    public LoadRecentFileAction(Application app, DocumentProject view, URI uri) {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);

@@ -21,7 +21,7 @@ import org.jhotdraw8.app.Project;
  * @version $Id: AbstractPreferencesAction.java 1169 2016-12-11 12:51:19Z
  * rawcoder $
  */
-public abstract class AbstractPreferencesAction<V extends Project<V>> extends AbstractApplicationAction<V> {
+public abstract class AbstractPreferencesAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,7 @@ public abstract class AbstractPreferencesAction<V extends Project<V>> extends Ab
      *
      * @param app the application
      */
-    public AbstractPreferencesAction(Application<V> app) {
+    public AbstractPreferencesAction(Application app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }

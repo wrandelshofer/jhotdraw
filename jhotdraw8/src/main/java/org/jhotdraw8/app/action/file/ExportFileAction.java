@@ -31,7 +31,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      *
      * @param app the application
      */
-    public ExportFileAction(Application<DocumentProject> app) {
+    public ExportFileAction(Application app) {
         this(app, null);
     }
 
@@ -41,7 +41,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public ExportFileAction(Application<DocumentProject> app, DocumentProject view) {
+    public ExportFileAction(Application app, DocumentProject view) {
         this(app, view, ID);
     }
 
@@ -52,7 +52,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param view the view
      * @param id the id
      */
-    public ExportFileAction(Application<DocumentProject> app, DocumentProject view, String id) {
+    public ExportFileAction(Application app, DocumentProject view, String id) {
         super(app, view, id, true);
     }
 

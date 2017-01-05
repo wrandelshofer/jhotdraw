@@ -27,7 +27,7 @@ public class NewWindowAction extends NewFileAction {
      *
      * @param app the application
      */
-    public NewWindowAction(Application<DocumentProject> app) {
+    public NewWindowAction(Application app) {
         super(app, ID);
     }
 }

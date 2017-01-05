@@ -24,7 +24,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class RemoveFromGroupAction<V extends Project<V>> extends AbstractSelectedAction<V> {
+public class RemoveFromGroupAction<V extends Project> extends AbstractSelectedAction {
 
     public static final String ID = "edit.removeFromGroup";
 
@@ -34,7 +34,7 @@ public class RemoveFromGroupAction<V extends Project<V>> extends AbstractSelecte
      * @param app the application
      * @param editor the drawing editor
      */
-    public RemoveFromGroupAction(Application<V> app, DrawingEditor editor) {
+    public RemoveFromGroupAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

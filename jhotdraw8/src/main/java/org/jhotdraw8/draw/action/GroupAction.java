@@ -25,7 +25,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class GroupAction <V extends Project<V>> extends AbstractSelectedAction<V> {
+public class GroupAction <V extends Project> extends AbstractSelectedAction {
 
     public static final String ID = "edit.group";
     public final Supplier<Figure> groupFactory;
@@ -37,7 +37,7 @@ public class GroupAction <V extends Project<V>> extends AbstractSelectedAction<V
      * @param editor the drawing editor
      * @param groupFactory the group factory
      */
-    public GroupAction(Application<V> app, DrawingEditor editor, Supplier<Figure> groupFactory) {
+    public GroupAction(Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

@@ -19,7 +19,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFindAction<V extends Project<V>> extends AbstractViewAction<V> {
+public abstract class AbstractFindAction extends AbstractViewAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.find";
@@ -30,7 +30,7 @@ public abstract class AbstractFindAction<V extends Project<V>> extends AbstractV
      * @param app the application
      * @param view the view
      */
-    public AbstractFindAction(Application<V> app, V view) {
+    public AbstractFindAction(Application app, Project view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }

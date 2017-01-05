@@ -21,17 +21,16 @@ import org.jhotdraw8.beans.PropertyBean;
 /**
  * An {@code Application} manages {@link Project}s.
  *
- * @param <P> the type of project projects that this application manages.
  * @design.pattern Application Framework, KeyAbstraction. The application
  * framework supports the creation of document oriented applications which can
  * support platform-specific guidelines. The application framework consists of
- * the following key abstractions:  {@link Application}, {@link ApplicationModel}, {@link ProjectView}, 
+ * the following key abstractions:  {@link Application}, {@link ApplicationModel}, {@link Project}, 
  * {@link Action}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Application<P extends Project<P>> extends Disableable, PropertyBean {
+public interface Application extends Disableable, PropertyBean {
 
     public static final String RECENT_URIS_PROPERTY = "recentUris";
     public static final String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
@@ -41,7 +40,7 @@ public interface Application<P extends Project<P>> extends Disableable, Property
      *
      * @return the projects
      */
-    public SetProperty<P> projectsProperty();
+    public SetProperty<Project> projectsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -63,7 +62,7 @@ public interface Application<P extends Project<P>> extends Disableable, Property
     public IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default public ObservableSet<P> projects() {
+    default public ObservableSet<Project> projects() {
         return projectsProperty().get();
     }
 
@@ -72,7 +71,7 @@ public interface Application<P extends Project<P>> extends Disableable, Property
      *
      * @param v the view
      */
-    default public void add(P v) {
+    default public void add(Project v) {
         projectsProperty().add(v);
     }
 
@@ -81,7 +80,7 @@ public interface Application<P extends Project<P>> extends Disableable, Property
      *
      * @param v the view
      */
-    default public void remove(P v) {
+    default public void remove(Project v) {
         projectsProperty().remove(v);
     }
 
@@ -91,10 +90,10 @@ public interface Application<P extends Project<P>> extends Disableable, Property
      *
      * @return The active view.
      */
-    public ReadOnlyObjectProperty<P> activeProjectProperty();
+    public ReadOnlyObjectProperty<Project> activeProjectProperty();
 
     // Convenience method
-    default public P getActiveProject() {
+    default public Project getActiveProject() {
         return activeProjectProperty().get();
     }
 
@@ -117,14 +116,14 @@ public interface Application<P extends Project<P>> extends Disableable, Property
      *
      * @return the model
      */
-    public ApplicationModel<P> getModel();
+    public ApplicationModel getModel();
 
     /**
      * Sets the application model.
      *
      * @param newValue the model
      */
-    public void setModel(ApplicationModel<P> newValue);
+    public void setModel(ApplicationModel newValue);
 
     /**
      * Exits the application.
@@ -145,7 +144,7 @@ public interface Application<P extends Project<P>> extends Disableable, Property
      *
      * @return A callback.
      */
-    CompletionStage<P> createProject();
+    CompletionStage<Project> createProject();
 
     /**
      * Adds a recent URI.

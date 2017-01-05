@@ -26,16 +26,16 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractViewAction<V extends Project<V>> extends AbstractApplicationAction<V> {
+public abstract class AbstractViewAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
 
-    private final V view;
+    private final Project view;
     /**
      * Set this to true if the action may create a new view if none exists.
      */
     private boolean mayCreateView;
-    private final ChangeListener<V> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<Project> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeProjectProperty().isNull());
         if (newValue == null) {
@@ -53,7 +53,7 @@ public abstract class AbstractViewAction<V extends Project<V>> extends AbstractA
      * @param view The view. If view is null then the action acts on the active
      * view of the application. Otherwise it will act on the specified view.
      */
-    public AbstractViewAction(Application<V> app, V view) {
+    public AbstractViewAction(Application app, Project view) {
         super(app);
         this.view = view;
         if (view != null) {
@@ -63,7 +63,7 @@ public abstract class AbstractViewAction<V extends Project<V>> extends AbstractA
         }
     }
 
-    public V getActiveView() {
+    public Project getActiveView() {
         return (view != null) ? view : app.getActiveProject();
     }
 

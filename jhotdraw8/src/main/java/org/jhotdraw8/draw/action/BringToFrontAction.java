@@ -21,7 +21,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class BringToFrontAction<V extends Project<V>> extends AbstractSelectedAction<V> {
+public class BringToFrontAction extends AbstractSelectedAction {
 
     public static final String ID = "edit.bringToFront";
 
@@ -31,7 +31,7 @@ public class BringToFrontAction<V extends Project<V>> extends AbstractSelectedAc
      * @param app the application
      * @param editor the drawing editor
      */
-    public BringToFrontAction(Application<V> app, DrawingEditor editor) {
+    public BringToFrontAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

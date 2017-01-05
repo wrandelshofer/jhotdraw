@@ -33,7 +33,7 @@ public class LoadFileAction extends AbstractSaveUnsavedChangesAction {
      * @param app the application
      * @param view the view
      */
-    public LoadFileAction(Application<DocumentProject> app, DocumentProject view) {
+    public LoadFileAction(Application app, DocumentProject view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }

@@ -23,7 +23,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class AboutAction<V extends Project<V>> extends AbstractApplicationAction<V> {
+public class AboutAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ public class AboutAction<V extends Project<V>> extends AbstractApplicationAction
      *
      * @param app the application
      */
-    public AboutAction(Application<V> app) {
+    public AboutAction(Application app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -42,7 +42,7 @@ public class AboutAction<V extends Project<V>> extends AbstractApplicationAction
     @Override
     protected void onActionPerformed(ActionEvent evt) {
         addDisabler(this);
-        ApplicationModel<V> model = getApplication().getModel();
+        ApplicationModel model = getApplication().getModel();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 model.getCopyright()

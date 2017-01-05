@@ -32,7 +32,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @version $Id: AbstractSaveFileAction.java 1169 2016-12-11 12:51:19Z rawcoder
  * $
  */
-public abstract class AbstractSaveFileAction extends AbstractViewAction<DocumentProject> {
+public abstract class AbstractSaveFileAction extends AbstractViewAction {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
@@ -47,7 +47,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public AbstractSaveFileAction(Application<DocumentProject> app, DocumentProject view, String id, boolean saveAs) {
+    public AbstractSaveFileAction(Application app, DocumentProject view, String id, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
@@ -69,7 +69,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
         if (isDisabled()) {
             return;
         }
-        final DocumentProject v = getActiveView();
+        final DocumentProject v = (DocumentProject)getActiveView();
         if (v == null || v.isDisabled()) {
             return;
         }
@@ -91,7 +91,8 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
                 // Prevent save to URI that is open in another view!
                 // unless  multipe projects to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (DocumentProject vi : app.projects()) {
+                    for (Project pi : app.projects()) {
+                        DocumentProject vi=(DocumentProject)pi;
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");

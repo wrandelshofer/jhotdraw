@@ -20,7 +20,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class NewFileAction extends AbstractApplicationAction<DocumentProject> {
+public class NewFileAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.new";
@@ -30,19 +30,20 @@ public class NewFileAction extends AbstractApplicationAction<DocumentProject> {
      *
      * @param app the application
      */
-    public NewFileAction(Application<DocumentProject> app) {
+    public NewFileAction(Application app) {
         this(app, ID);
     }
 
-    public NewFileAction(Application<DocumentProject> app, String id) {
+    public NewFileAction(Application app, String id) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        Application<DocumentProject> app = getApplication();
-        app.createProject().thenAccept(newView -> {
+        Application app = getApplication();
+        app.createProject().thenAccept(newProject-> {
+            DocumentProject newView= (DocumentProject) newProject;
             app.add(newView);
             newView.clear().thenRun(() -> {
                 newView.clearModified();

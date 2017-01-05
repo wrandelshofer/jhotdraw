@@ -30,7 +30,7 @@ import org.jhotdraw8.collection.Key;
  * @version $Id$
  * @param <V> the type of project projects that this application manages
  */
-public abstract class AbstractApplication<V extends Project<V>> extends javafx.application.Application implements org.jhotdraw8.app.Application<V> {
+public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw8.app.Application {
 
     /**
      * Holds the max number of recent URIs.

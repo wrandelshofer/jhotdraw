@@ -24,9 +24,9 @@ import org.jhotdraw8.collection.Key;
  * @version $Id$
  * @param <V> the project view type
  */
-public abstract class AbstractProject<V extends Project<V>> extends AbstractDisableable implements Project<V> {
+public abstract class AbstractProject extends AbstractDisableable implements Project {
 
-    protected ObjectProperty<Application<V>> application = new SimpleObjectProperty<>();
+    protected ObjectProperty<Application> application = new SimpleObjectProperty<>();
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
     protected final ObservableMap<Key<?>, Object> properties//
             = FXCollections.observableMap(new IdentityHashMap<>());
@@ -53,7 +53,7 @@ public abstract class AbstractProject<V extends Project<V>> extends AbstractDisa
     }
 
     @Override
-    public ObjectProperty<Application<V>> applicationProperty() {
+    public ObjectProperty<Application> applicationProperty() {
         return application;
     }
 

@@ -210,21 +210,21 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
   @Override
   protected void initActionMap(HierarchicalMap<String, Action> map) {
 
-    ToggleBooleanAction<?> a = new ToggleBooleanAction<>(getApplication(), this, VIEWTOGGLE_PROPERTIES,
+    ToggleBooleanAction a = new ToggleBooleanAction(getApplication(), this, VIEWTOGGLE_PROPERTIES,
             Resources.getResources("org.jhotdraw8.samples.grapher.Labels"));
     map.put(a.getName(), a);
-    map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction<>(getApplication(), editor));
-    map.put(SelectChildrenAction.ID, new SelectChildrenAction<>(getApplication(), editor));
-    map.put(SendToBackAction.ID, new SendToBackAction<>(getApplication(), editor));
-    map.put(BringToFrontAction.ID, new BringToFrontAction<>(getApplication(), editor));
-    map.put("view.toggleProperties", new ToggleBooleanAction<>(
+    map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
+    map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
+    map.put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
+    map.put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
+    map.put("view.toggleProperties", new ToggleBooleanAction(
             getApplication(), this,
             "view.toggleProperties",
             Resources.getResources("org.jhotdraw8.samples.grapher.Labels"), detailsVisible));
-    map.put(GroupAction.ID, new GroupAction<>(getApplication(), editor, () -> createFigure(GroupFigure::new)));
-    map.put(UngroupAction.ID, new UngroupAction<>(getApplication(), editor));
-    map.put(AddToGroupAction.ID, new AddToGroupAction<>(getApplication(), editor));
-    map.put(RemoveFromGroupAction.ID, new RemoveFromGroupAction<>(getApplication(), editor));
+    map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(GroupFigure::new)));
+    map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
+    map.put(AddToGroupAction.ID, new AddToGroupAction(getApplication(), editor));
+    map.put(RemoveFromGroupAction.ID, new RemoveFromGroupAction(getApplication(), editor));
 
   }
 

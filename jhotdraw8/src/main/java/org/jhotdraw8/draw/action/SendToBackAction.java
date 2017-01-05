@@ -20,7 +20,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class SendToBackAction<V extends Project<V>> extends AbstractSelectedAction<V> {
+public class SendToBackAction extends AbstractSelectedAction {
 
     public static final String ID = "edit.sendToBack";
 
@@ -30,7 +30,7 @@ public class SendToBackAction<V extends Project<V>> extends AbstractSelectedActi
      * @param app the application
      * @param editor the drawing editor
      */
-    public SendToBackAction(Application<V> app, DrawingEditor editor) {
+    public SendToBackAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

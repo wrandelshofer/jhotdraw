@@ -18,13 +18,13 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class ToggleViewPropertyAction<V extends Project<V>> extends AbstractViewAction<V> {
+public class ToggleViewPropertyAction extends AbstractViewAction {
 
     private static final long serialVersionUID = 1L;
     private BooleanProperty property;
-    private final Function<V, Node> nodeGetter;
+    private final Function<Project, Node> nodeGetter;
 
-    public ToggleViewPropertyAction(Application<V> app, V view, BooleanProperty property, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application app, Project view, BooleanProperty property, String id, Resources labels) {
         super(app, view);
         labels.configureAction(this, id);
         this.property = property;
@@ -33,7 +33,7 @@ public class ToggleViewPropertyAction<V extends Project<V>> extends AbstractView
         set(SELECTED_KEY, property.get());
     }
 
-    public ToggleViewPropertyAction(Application<V> app, V view, Function<V, Node> nodeGetter, String id, Resources labels) {
+    public ToggleViewPropertyAction(Application app, Project view, Function<Project, Node> nodeGetter, String id, Resources labels) {
         super(app, view);
         labels.configureAction(this, id);
         this.property = null;
