@@ -11,9 +11,9 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Presents a printer chooser to the user and then prints the
@@ -25,7 +25,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractViewAction<DocumentView> {
+public class PrintFileAction extends AbstractViewAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public class PrintFileAction extends AbstractViewAction<DocumentView> {
      * @param app the application
      * @param view the view
      */
-    public PrintFileAction(Application<DocumentView> app, DocumentView view) {
+    public PrintFileAction(Application<DocumentProject> app, DocumentProject view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -216,7 +216,7 @@ public class PrintFileAction extends AbstractViewAction<DocumentView> {
             return;
         }
 
-        DocumentView view = getActiveView();
+        DocumentProject view = getActiveView();
 
         if (view != null) {
             

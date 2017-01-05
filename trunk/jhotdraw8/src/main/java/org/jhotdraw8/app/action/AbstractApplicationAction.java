@@ -9,7 +9,7 @@ package org.jhotdraw8.app.action;
 
 import javafx.beans.binding.Bindings;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
@@ -22,7 +22,7 @@ import org.jhotdraw8.app.ProjectView;
  * @version $Id: AbstractApplicationAction.java 1169 2016-12-11 12:51:19Z
  * rawcoder $
  */
-public abstract class AbstractApplicationAction<V extends ProjectView<V>> extends AbstractAction {
+public abstract class AbstractApplicationAction<V extends Project<V>> extends AbstractAction {
 
     private static final long serialVersionUID = 1L;
     protected Application<V> app;

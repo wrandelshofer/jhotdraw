@@ -8,9 +8,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
 
 /**
  * This action toggles the state of its boolean property.
@@ -18,7 +18,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class ToggleBooleanAction<V extends ProjectView<V>> extends AbstractViewAction<V> {
+public class ToggleBooleanAction<V extends Project<V>> extends AbstractViewAction<V> {
 
   public final static String VALUE_PROPERTY = "value";
   private final BooleanProperty value;

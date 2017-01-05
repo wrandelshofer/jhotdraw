@@ -10,8 +10,8 @@ package org.jhotdraw8.app.action.file;
 import java.beans.PropertyChangeListener;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Clears (empties) the Recent Files sub-menu in the File menu.
@@ -26,7 +26,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  * @version $Id: ClearRecentFilesMenuAction.java 1205 2016-12-16 23:21:54Z
  * rawcoder $
  */
-public class ClearRecentFilesMenuAction extends AbstractApplicationAction<DocumentView> {
+public class ClearRecentFilesMenuAction extends AbstractApplicationAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.clearRecentFiles";
@@ -38,7 +38,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction<Docume
      *
      * @param app the application
      */
-    public ClearRecentFilesMenuAction(Application<DocumentView> app) {
+    public ClearRecentFilesMenuAction(Application<DocumentProject> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
         //     updateEnabled();

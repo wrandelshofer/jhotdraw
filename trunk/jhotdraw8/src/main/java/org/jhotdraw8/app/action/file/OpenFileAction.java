@@ -12,14 +12,14 @@ import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Presents an {@code URIChooser} and loads the selected URI into an empty view.
@@ -28,7 +28,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
+public class OpenFileAction extends AbstractApplicationAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
     public final static Key<URIChooser> OPEN_CHOOSER_KEY = new SimpleKey<>("openChooser", URIChooser.class);
@@ -40,12 +40,12 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
      *
      * @param app the application
      */
-    public OpenFileAction(Application<DocumentView> app) {
+    public OpenFileAction(Application<DocumentProject> app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
-    protected URIChooser getChooser(DocumentView view) {
+    protected URIChooser getChooser(DocumentProject view) {
         URIChooser c = app.get(OPEN_CHOOSER_KEY);
         if (c == null) {
             c = getApplication().getModel().createOpenChooser();
@@ -56,13 +56,13 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        final Application<DocumentView> app = getApplication();
+        final Application<DocumentProject> app = getApplication();
         {
             app.addDisabler(this);
             // Search for an empty view
-            DocumentView emptyView;
+            DocumentProject emptyView;
             if (reuseEmptyViews) {
-                emptyView = app.getActiveView();
+                emptyView = app.getActiveProject();
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -73,14 +73,14 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
             }
 
             if (emptyView == null) {
-                app.createView().thenAccept(v -> doIt(v, true));
+                app.createProject().thenAccept(v -> doIt(v, true));
             } else {
                 doIt(emptyView, false);
             }
         }
     }
 
-    public void doIt(DocumentView view, boolean disposeView) {
+    public void doIt(DocumentProject view, boolean disposeView) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
@@ -88,7 +88,7 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
 
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                for (DocumentView v : getApplication().views()) {
+                for (DocumentProject v : getApplication().projects()) {
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
@@ -110,8 +110,8 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentView> {
         }
     }
 
-    protected void openViewFromURI(final DocumentView v, final URI uri, final URIChooser chooser) {
-        final Application<DocumentView> app = getApplication();
+    protected void openViewFromURI(final DocumentProject v, final URI uri, final URIChooser chooser) {
+        final Application<DocumentProject> app = getApplication();
         app.removeDisabler(this);
         v.addDisabler(this);
 

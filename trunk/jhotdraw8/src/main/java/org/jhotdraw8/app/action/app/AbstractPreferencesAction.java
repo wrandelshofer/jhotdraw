@@ -9,9 +9,9 @@
 package org.jhotdraw8.app.action.app;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
 
 /**
  * Displays a preferences dialog for the application.
@@ -21,7 +21,7 @@ import org.jhotdraw8.util.Resources;
  * @version $Id: AbstractPreferencesAction.java 1169 2016-12-11 12:51:19Z
  * rawcoder $
  */
-public abstract class AbstractPreferencesAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
+public abstract class AbstractPreferencesAction<V extends Project<V>> extends AbstractApplicationAction<V> {
 
     private static final long serialVersionUID = 1L;
 

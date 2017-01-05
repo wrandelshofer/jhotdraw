@@ -11,14 +11,14 @@ import javafx.scene.Node;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /**
  * ToggleViewPropertyAction.
  *
  * @author Werner Randelshofer
  */
-public class ToggleViewPropertyAction<V extends ProjectView<V>> extends AbstractViewAction<V> {
+public class ToggleViewPropertyAction<V extends Project<V>> extends AbstractViewAction<V> {
 
     private static final long serialVersionUID = 1L;
     private BooleanProperty property;

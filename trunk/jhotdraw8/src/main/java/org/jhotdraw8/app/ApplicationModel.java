@@ -20,7 +20,7 @@ import org.jhotdraw8.gui.URIChooser;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public interface ApplicationModel<V extends ProjectView<V>> {
+public interface ApplicationModel<V extends Project<V>> {
 
     // Views
     /**

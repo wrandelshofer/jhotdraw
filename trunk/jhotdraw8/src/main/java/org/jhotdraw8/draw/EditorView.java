@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw;
 
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /**
  * An application view which can return an editor.

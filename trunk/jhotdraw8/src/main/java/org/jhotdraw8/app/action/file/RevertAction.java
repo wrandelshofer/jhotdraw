@@ -14,9 +14,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -26,7 +26,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertAction extends AbstractViewAction<DocumentView> {
+public class RevertAction extends AbstractViewAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class RevertAction extends AbstractViewAction<DocumentView> {
      * @param app the application
      * @param view the view
      */
-    public RevertAction(Application<DocumentView> app, DocumentView view) {
+    public RevertAction(Application<DocumentProject> app, DocumentProject view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -48,7 +48,7 @@ public class RevertAction extends AbstractViewAction<DocumentView> {
         if (isDisabled()) {
             return;
         }
-        DocumentView view = getActiveView();
+        DocumentProject view = getActiveView();
         URI uri = view.getURI();
         if (view.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
@@ -62,7 +62,7 @@ public class RevertAction extends AbstractViewAction<DocumentView> {
         }
     }
 
-    private void doIt(DocumentView view, URI uri) {
+    private void doIt(DocumentProject view, URI uri) {
         view.addDisabler(this);
 
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {

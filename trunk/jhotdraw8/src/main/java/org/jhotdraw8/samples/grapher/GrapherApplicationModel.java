@@ -5,7 +5,6 @@
 package org.jhotdraw8.samples.grapher;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.SimpleApplicationModel;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.PrintFileAction;
@@ -13,6 +12,7 @@ import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.svg.SvgExporter;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * GrapherApplicationModel.
@@ -24,7 +24,7 @@ import org.jhotdraw8.svg.SvgExporter;
 public class GrapherApplicationModel extends SimpleApplicationModel {
 
     public GrapherApplicationModel() {
-        super("Grapher", GrapherDocumentView::new,
+        super("Grapher", GrapherProject::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "XML Files", null, "*.xml");
         getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
@@ -32,7 +32,7 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
     }
 
     @Override
-    public HierarchicalMap<String, Action> createApplicationActionMap(Application<DocumentView> app) {
+    public HierarchicalMap<String, Action> createApplicationActionMap(Application<DocumentProject> app) {
 HierarchicalMap<String, Action> map= super.createApplicationActionMap(app); 
         map.put(PrintFileAction.ID, new PrintFileAction(app,null));
 return map;

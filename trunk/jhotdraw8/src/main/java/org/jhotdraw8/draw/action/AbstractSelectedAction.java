@@ -5,7 +5,7 @@ import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /* @(#)AbstractSelectedAction.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
@@ -22,7 +22,7 @@ import org.jhotdraw8.app.ProjectView;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSelectedAction<V extends ProjectView<V>> extends AbstractViewAction<V> {
+public abstract class AbstractSelectedAction<V extends Project<V>> extends AbstractViewAction<V> {
 
     private DrawingEditor editor;
 

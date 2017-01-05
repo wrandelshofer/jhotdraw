@@ -12,7 +12,7 @@ import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /**
  * Copies the selected region and place its contents into the system clipboard.
@@ -21,7 +21,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CopyAction<V extends ProjectView<V>> extends AbstractSelectionAction<V> {
+public class CopyAction<V extends Project<V>> extends AbstractSelectionAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,7 +52,7 @@ public class CopyAction<V extends ProjectView<V>> extends AbstractSelectionActio
     protected void onActionPerformed(javafx.event.ActionEvent event) {
 if (event.isConsumed()) return;        
         event.consume();
-        V v = app.getActiveView();
+        V v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {

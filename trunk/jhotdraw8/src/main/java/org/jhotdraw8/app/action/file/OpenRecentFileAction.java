@@ -12,12 +12,12 @@ import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
@@ -31,7 +31,7 @@ import org.jhotdraw8.app.ProjectView;
  * <b>Features</b>
  *
  * <p>
- * <em>Allow multiple views per URI</em><br>
+ * <em>Allow multiple projects per URI</em><br>
  * When the feature is disabled, {@code OpenRecentFileAction} prevents opening
  * an URI which is opened in another view.<br>
  * See {@link org.jhotdraw8.app} for a description of the feature.
@@ -47,7 +47,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class OpenRecentFileAction extends AbstractApplicationAction<DocumentView> {
+public class OpenRecentFileAction extends AbstractApplicationAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,7 +61,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction<DocumentView
      * @param app the application
      * @param uri the uri
      */
-    public OpenRecentFileAction(Application<DocumentView> app, URI uri) {
+    public OpenRecentFileAction(Application<DocumentProject> app, URI uri) {
         super(app);
         this.uri = uri;
         set(Action.LABEL, URIUtil.getName(uri));
@@ -69,12 +69,12 @@ public class OpenRecentFileAction extends AbstractApplicationAction<DocumentView
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        final Application<DocumentView> app = getApplication();
+        final Application<DocumentProject> app = getApplication();
         {
             // Search for an empty view
-            DocumentView emptyView;
+            DocumentProject emptyView;
             if (reuseEmptyViews) {
-                emptyView = app.getActiveView();
+                emptyView = app.getActiveProject();
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -85,7 +85,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction<DocumentView
             }
 
             if (emptyView == null) {
-                app.createView().thenAccept(v -> {
+                app.createProject().thenAccept(v -> {
                     app.add(v);
                     doIt(v, true);
                 });
@@ -95,12 +95,12 @@ public class OpenRecentFileAction extends AbstractApplicationAction<DocumentView
         }
     }
 
-    public void doIt(DocumentView view, boolean disposeView) {
+    public void doIt(DocumentProject view, boolean disposeView) {
         openViewFromURI(view, uri);
     }
 
-    protected void openViewFromURI(final DocumentView v, final URI uri) {
-        final Application<DocumentView> app = getApplication();
+    protected void openViewFromURI(final DocumentProject v, final URI uri) {
+        final Application<DocumentProject> app = getApplication();
         v.addDisabler(this);
 
         // Open the file

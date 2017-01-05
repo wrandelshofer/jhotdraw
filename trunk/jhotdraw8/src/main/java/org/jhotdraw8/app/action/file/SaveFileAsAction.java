@@ -8,7 +8,7 @@
 package org.jhotdraw8.app.action.file;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Presents an {@code URIChooser} and then saves the active view to the
@@ -29,11 +29,11 @@ public class SaveFileAsAction extends SaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public SaveFileAsAction(Application<DocumentView> app, DocumentView view) {
+    public SaveFileAsAction(Application<DocumentProject> app, DocumentProject view) {
         super(app, view, ID, true);
     }
 
-    public SaveFileAsAction(Application<DocumentView> app) {
+    public SaveFileAsAction(Application<DocumentProject> app) {
         this(app, null);
     }
 }

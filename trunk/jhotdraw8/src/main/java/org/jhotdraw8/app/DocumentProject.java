@@ -1,4 +1,4 @@
-/* @(#)DocumentView.java
+/* @(#)DocumentProject.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,13 +15,13 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 
 /**
- * A {@code DocumentVIew} is a specialization of {@link ProjectView} for
+ * A {@code DocumentVIew} is a specialization of {@link Project} for
  * document oriented applications.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public interface DocumentView extends ProjectView<DocumentView> {
+public interface DocumentProject extends Project<DocumentProject> {
 
     /**
      * The modified property is set to true by the view.

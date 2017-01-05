@@ -11,22 +11,22 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
- * on behalf of a {@link ProjectView}.
+ * on behalf of a {@link Project}.
  * <p>
- * If the current ProjectView object is disabled or is null, the
- * AbstractViewAction is disabled as well.
- * <p>
+ If the current Project object is disabled or is null, the
+ AbstractViewAction is disabled as well.
+ <p>
  * A property name can be specified. When the specified property changes or when
  * the current view changes, method updateView is invoked.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractViewAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
+public abstract class AbstractViewAction<V extends Project<V>> extends AbstractApplicationAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public abstract class AbstractViewAction<V extends ProjectView<V>> extends Abstr
     private boolean mayCreateView;
     private final ChangeListener<V> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
-        BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeViewProperty().isNull());
+        BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeProjectProperty().isNull());
         if (newValue == null) {
             disabled.bind(binding);
         } else {
@@ -59,12 +59,12 @@ public abstract class AbstractViewAction<V extends ProjectView<V>> extends Abstr
         if (view != null) {
             activeViewListener.changed(null, null, view);
         } else {
-            app.activeViewProperty().addListener(activeViewListener);
+            app.activeProjectProperty().addListener(activeViewListener);
         }
     }
 
     public V getActiveView() {
-        return (view != null) ? view : app.getActiveView();
+        return (view != null) ? view : app.getActiveProject();
     }
 
     /**

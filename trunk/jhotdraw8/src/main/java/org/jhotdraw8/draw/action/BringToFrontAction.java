@@ -9,19 +9,19 @@ import java.util.Collection;
 import java.util.List;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
 
 /**
  * BringToFrontAction.
  *
  * @author Werner Randelshofer
  */
-public class BringToFrontAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
+public class BringToFrontAction<V extends Project<V>> extends AbstractSelectedAction<V> {
 
     public static final String ID = "edit.bringToFront";
 

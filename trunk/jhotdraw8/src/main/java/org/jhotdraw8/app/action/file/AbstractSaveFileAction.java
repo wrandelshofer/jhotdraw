@@ -14,14 +14,14 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -32,7 +32,7 @@ import org.jhotdraw8.app.ProjectView;
  * @version $Id: AbstractSaveFileAction.java 1169 2016-12-11 12:51:19Z rawcoder
  * $
  */
-public abstract class AbstractSaveFileAction extends AbstractViewAction<DocumentView> {
+public abstract class AbstractSaveFileAction extends AbstractViewAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
@@ -47,13 +47,13 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public AbstractSaveFileAction(Application<DocumentView> app, DocumentView view, String id, boolean saveAs) {
+    public AbstractSaveFileAction(Application<DocumentProject> app, DocumentProject view, String id, boolean saveAs) {
         super(app, view);
         this.saveAs = saveAs;
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
     }
 
-    protected URIChooser getChooser(DocumentView view) {
+    protected URIChooser getChooser(DocumentProject view) {
         URIChooser c = view.get(saveChooserKey);
         if (c == null) {
             c = createChooser(view);
@@ -62,14 +62,14 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
         return c;
     }
 
-    protected abstract URIChooser createChooser(DocumentView view);
+    protected abstract URIChooser createChooser(DocumentProject view);
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
         if (isDisabled()) {
             return;
         }
-        final DocumentView v = getActiveView();
+        final DocumentProject v = getActiveView();
         if (v == null || v.isDisabled()) {
             return;
         }
@@ -78,7 +78,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
         saveView(v);
     }
 
-    protected void saveView(final DocumentView v) {
+    protected void saveView(final DocumentProject v) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -89,9 +89,9 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
                 uri = chsr.showDialog(v.getNode());
 
                 // Prevent save to URI that is open in another view!
-                // unless  multipe views to same URI are supported
+                // unless  multipe projects to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (DocumentView vi : app.views()) {
+                    for (DocumentProject vi : app.projects()) {
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -114,7 +114,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
         }
     }
 
-    protected void saveViewToURI(final DocumentView v, final URI uri, final DataFormat format) {
+    protected void saveViewToURI(final DocumentProject v, final URI uri, final DataFormat format) {
         v.write(uri, format).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -145,5 +145,5 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction<Document
         });
     }
 
-    protected abstract void handleSucceded(DocumentView v, URI uri);
+    protected abstract void handleSucceded(DocumentProject v, URI uri);
 }

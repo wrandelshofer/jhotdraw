@@ -1,4 +1,4 @@
-/* @(#)GrapherDocumentView.java
+/* @(#)GrapherProject.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -33,8 +33,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.app.AbstractDocumentView;
-import org.jhotdraw8.app.DocumentView;
+import org.jhotdraw8.app.AbstractDocumentProject;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -102,14 +101,15 @@ import org.jhotdraw8.draw.tool.PolyCreationTool;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
- * GrapherDocumentView.
+ * GrapherProject.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GrapherDocumentView extends AbstractDocumentView implements DocumentView, EditorView {
+public class GrapherProject extends AbstractDocumentProject implements DocumentProject, EditorView {
 
   private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
   private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
@@ -151,8 +151,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
       VBox.setVgrow(a, newValue ? grow : Priority.NEVER);
     });
 
-    PreferencesUtil.installBooleanPropertyHandler(//
-            Preferences.userNodeForPackage(GrapherDocumentView.class), id + ".expanded", t.expandedProperty());
+    PreferencesUtil.installBooleanPropertyHandler(Preferences.userNodeForPackage(GrapherProject.class), id + ".expanded", t.expandedProperty());
     if (t.isExpanded()) {
       a.setExpandedPane(t);
       VBox.setVgrow(a, grow);
@@ -235,7 +234,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
     loader.setController(this);
 
     try {
-      node = loader.load(getClass().getResourceAsStream("GrapherDocumentView.fxml"));
+      node = loader.load(getClass().getResourceAsStream("GrapherProject.fxml"));
     } catch (IOException ex) {
       throw new InternalError(ex);
     }
@@ -335,7 +334,7 @@ public class GrapherDocumentView extends AbstractDocumentView implements Documen
             GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
     );
 
-    Preferences prefs = Preferences.userNodeForPackage(GrapherDocumentView.class);
+    Preferences prefs = Preferences.userNodeForPackage(GrapherProject.class);
     PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
   }
 
