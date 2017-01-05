@@ -27,6 +27,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.AbstractDocumentView;
 import org.jhotdraw8.app.DocumentView;
+import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.concurrent.FXWorker;
 
 /**
@@ -37,88 +39,91 @@ import org.jhotdraw8.concurrent.FXWorker;
  */
 public class TeddyView extends AbstractDocumentView implements DocumentView, Initializable {
 
-    @Override
-    public void init() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setController(this);
+  @FXML
+  private URL location;
 
-        try {
-            node = loader.load(getClass().getResourceAsStream("TeddyView.fxml"));
-        } catch (IOException ex) {
-            throw new InternalError(ex);
+  private Node node;
+  @FXML
+  private ResourceBundle resources;
+  @FXML
+  private TextArea textArea;
+
+  @Override
+  public CompletionStage<Void> clear() {
+    textArea.setText(null);
+    return CompletableFuture.completedFuture(null);
+  }
+
+  @Override
+  public void clearModified() {
+    modified.set(false);
+  }
+
+  @Override
+  public Node getNode() {
+    return node;
+  }
+
+  @Override
+  protected void initActionMap(HierarchicalMap<String, Action> map) {
+    // empty
+  }
+
+  @Override
+  public void initView() {
+    FXMLLoader loader = new FXMLLoader();
+    loader.setController(this);
+
+    try {
+      node = loader.load(getClass().getResourceAsStream("TeddyView.fxml"));
+    } catch (IOException ex) {
+      throw new InternalError(ex);
+    }
+  }
+
+  /**
+   * Initializes the controller class.
+   */
+  @FXML
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+
+    textArea.textProperty().addListener((observable -> modified.set(true)));
+  }
+
+  @Override
+  public CompletionStage<Void> print(PrinterJob job) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public CompletionStage<Void> read(URI uri, DataFormat format, boolean append) {
+    return FXWorker.supply(() -> {
+      StringBuilder builder = new StringBuilder();
+      char[] cbuf = new char[8192];
+      try (Reader in = new InputStreamReader(new FileInputStream(new File(uri)), StandardCharsets.UTF_8)) {
+        for (int count = in.read(cbuf, 0, cbuf.length); count != -1; count = in.read(cbuf, 0, cbuf.length)) {
+          builder.append(cbuf, 0, count);
         }
-    }
+      }
+      return builder.toString();
+    }).thenAccept(value -> {
+      if (append) {
+        textArea.appendText(value);
+      } else {
+        textArea.setText(value);
+      }
+    });
+  }
 
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
-    private TextArea textArea;
-
-    private Node node;
-
-    /**
-     * Initializes the controller class.
-     */
-    @FXML
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-        textArea.textProperty().addListener((observable -> modified.set(true)));
-    }
-
-    @Override
-    public Node getNode() {
-        return node;
-    }
-
-    @Override
-    public CompletionStage<Void> clear() {
-        textArea.setText(null);
-        return CompletableFuture.completedFuture(null);
-    }
-
-    @Override
-    public CompletionStage<Void> read(URI uri, DataFormat format, boolean append) {
-        return FXWorker.supply(() -> {
-            StringBuilder builder = new StringBuilder();
-            char[] cbuf = new char[8192];
-            try (Reader in = new InputStreamReader(new FileInputStream(new File(uri)), StandardCharsets.UTF_8)) {
-                for (int count = in.read(cbuf, 0, cbuf.length); count != -1; count = in.read(cbuf, 0, cbuf.length)) {
-                    builder.append(cbuf, 0, count);
-                }
-            }
-            return builder.toString();
-        }).thenAccept(value -> {
-            if (append) {
-                textArea.appendText(value);
-            } else {
-                textArea.setText(value);
-            }
-        });
-    }
-
-    @Override
-    public CompletionStage<Void> write(URI uri, DataFormat format) {
-        final String text = textArea.getText();
-        return FXWorker.run(() -> {
-            try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(uri)), StandardCharsets.UTF_8)) {
-                out.write(text);
-            }
-        });
-    }
-
-    @Override
-    public void clearModified() {
-        modified.set(false);
-    }
-
-    @Override
-    public CompletionStage<Void> print(PrinterJob job) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  @Override
+  public CompletionStage<Void> write(URI uri, DataFormat format) {
+    final String text = textArea.getText();
+    return FXWorker.run(() -> {
+      try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(uri)), StandardCharsets.UTF_8)) {
+        out.write(text);
+      }
+    });
+  }
 
 }

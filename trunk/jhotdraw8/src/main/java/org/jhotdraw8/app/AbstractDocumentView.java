@@ -41,4 +41,5 @@ public abstract class AbstractDocumentView extends AbstractProjectView<DocumentV
         return uri;
     }
 
+
 }

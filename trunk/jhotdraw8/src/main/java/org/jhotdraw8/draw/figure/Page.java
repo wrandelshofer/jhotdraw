@@ -4,12 +4,16 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
+import java.lang.reflect.Field;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Bounds;
+import javafx.print.Paper;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.io.DefaultUnitConverter;
+import org.jhotdraw8.text.CssSize2D;
 
 /**
  * Defines a page layout for printing.
@@ -24,68 +28,87 @@ import javafx.scene.transform.Transform;
  */
 public interface Page extends Figure {
 
-    /**
-     * Returns the number of 'internal' pages defined by this page.
-     *
-     * @return number of internal pages
-     */
-    int getNumberOfInternalPages();
+  /**
+   * Returns a node which will be placed on the paper.
+   *
+   * @param internalPageNumber the internal page number
+   * @return a new node
+   */
+  Node createPageNode(int internalPageNumber);
 
-    /**
-     * Returns a node which will be placed on the paper.
-     *
-     * @param internalPageNumber the internal page number
-     * @return a new node
-     */
-    Node createPageNode(int internalPageNumber);
-
-    /**
-     * Returns the clip for the page content.
-     *
-     * @param internalPageNumber the internal page number
-     * @return the clipping region
-     */
-    Shape getPageClip(int internalPageNumber);
-    /**
-     * Returns the bounds for the page content.
-     *
-     * @param internalPageNumber the internal page number
-     * @return the clipping region
-     */
-    Bounds getPageBounds(int internalPageNumber);
-
-    /**
-     * Returns a transform which will position the drawing contents inside the
-     * clip on the page.
-     *
-     * @param internalPageNumber the internal page number
-     * @return the transform
-     */
-    Transform getPageTransform(int internalPageNumber);
-
-    /**
-     * Returns the page format.
-     *
-     * @return the page format
-     */
-    PageFormat getPageFormat();
-
-    /**
-     * Creates a paper for the specified page.
-     *
-     * @param internalPageNumber the internal page number
-     * @return the internal page number
-     */
-    Paper createPaper(int internalPageNumber);
-
-    @Override
-    default boolean isSuitableParent(Figure newParent) {
-        return newParent == null || (newParent instanceof Layer) || (newParent instanceof Clipping);
+  /**
+   * Creates a paper for the specified page.
+   *
+   * @param internalPageNumber the internal page number
+   * @return the internal page number
+   */
+  default Paper createPaper(int internalPageNumber) {
+    CssSize2D size = getPaperSize();
+    double w = DefaultUnitConverter.getInstance().convert(size.getX(), "pt");
+    double h = DefaultUnitConverter.getInstance().convert(size.getY(), "pt");
+    for (Field f : Paper.class.getDeclaredFields()) {
+      if (f.isAccessible() && f.getType() == Paper.class) {
+        try {
+          Paper p = (Paper) f.get(null);
+          if ((Math.abs(p.getWidth() - w) < 1 && Math.abs(p.getHeight() - h) < 1)
+                  || (Math.abs(p.getHeight() - w) < 1 && Math.abs(p.getWidth() - h) < 1)) {
+            return p;
+          }
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
+          // continue
+        }
+      }
     }
-    
-            @Override
-    default boolean isAllowsChildren() {
-        return true;
-    }
-    
+    return Paper.A4;
+  }
+
+  /**
+   * Returns the number of sub-pages defined by this page.
+   *
+   * @return number of internal pages
+   */
+  int getNumberOfSubPages();
+
+  /**
+   * Returns the bounds for the page content.
+   *
+   * @param internalPageNumber the internal page number
+   * @return the clipping region
+   */
+  Bounds getPageBounds(int internalPageNumber);
+
+  /**
+   * Returns the clip for the page content.
+   *
+   * @param internalPageNumber the internal page number
+   * @return the clipping region
+   */
+  Shape getPageClip(int internalPageNumber);
+
+  /**
+   * Returns a transform which will position the drawing contents inside the
+   * clip on the page.
+   *
+   * @param internalPageNumber the internal page number
+   * @return the transform
+   */
+  Transform getPageTransform(int internalPageNumber);
+
+  /**
+   * Returns the paper size.
+   *
+   * @return the page size
+   */
+  CssSize2D getPaperSize();
+
+  @Override
+  default boolean isAllowsChildren() {
+    return true;
+  }
+
+  @Override
+  default boolean isSuitableParent(Figure newParent) {
+    return newParent == null || (newParent instanceof Layer) || (newParent instanceof Clipping);
+  }
+
 }

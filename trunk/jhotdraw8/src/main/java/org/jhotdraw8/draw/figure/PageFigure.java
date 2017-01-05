@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
@@ -40,6 +39,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.text.CssSize2D;
 
 /**
  * Defines a page layout for printing.
@@ -100,7 +100,7 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
 
     Rectangle contentBoundsNode = new Rectangle();
     contentBoundsNode.setFill(Color.TRANSPARENT);
-    contentBoundsNode.setStroke(Color.BLUE);
+    contentBoundsNode.setStroke(Color.MEDIUMBLUE);
     contentBoundsNode.setStrokeType(StrokeType.INSIDE);
 
     Path pageBoundsNode = new Path();
@@ -119,10 +119,6 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
-  @Override
-  public Paper createPaper(int internalPageNumber) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 
   @Override
   public Bounds getBoundsInLocal() {
@@ -130,7 +126,7 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
   }
 
   @Override
-  public int getNumberOfInternalPages() {
+  public int getNumberOfSubPages() {
     int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
     int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
     return numPagesX * numPagesY;
@@ -162,8 +158,8 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
   }
 
   @Override
-  public PageFormat getPageFormat() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public CssSize2D getPaperSize() {
+    return getStyled(PAPER_SIZE);
   }
 
   @Override

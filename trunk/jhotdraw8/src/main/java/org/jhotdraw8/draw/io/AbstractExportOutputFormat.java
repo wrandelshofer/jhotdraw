@@ -118,12 +118,12 @@ public abstract class AbstractExportOutputFormat implements OutputFormat {
             if (page.getId() != null) {
                 idFactory.putId(page, page.getId());
             }
-            pageCount += page.getNumberOfInternalPages();
+            pageCount += page.getNumberOfSubPages();
         }
         int pageNumber = 0;
 
         for (Page page : pages) {
-            for (int internalPageNumber = 0, n = page.getNumberOfInternalPages(); internalPageNumber < n; internalPageNumber++) {
+            for (int internalPageNumber = 0, n = page.getNumberOfSubPages(); internalPageNumber < n; internalPageNumber++) {
                 File filename = new File(dir, idFactory.createId(page, "Page") +"_"+(pageNumber+1)+ "." + getExtension());
                 writePage(filename, page, node, pageCount, pageNumber, internalPageNumber);
 
