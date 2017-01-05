@@ -23,7 +23,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class RemoveTransformationsAction<V extends Project<V>> extends AbstractSelectedAction<V> {
+public class RemoveTransformationsAction extends AbstractSelectedAction {
 
     public static final String ID = "edit.removeTransformations";
 
@@ -33,7 +33,7 @@ public class RemoveTransformationsAction<V extends Project<V>> extends AbstractS
      * @param app the application
      * @param editor the drawing editor
      */
-    public RemoveTransformationsAction(Application<V> app, DrawingEditor editor) {
+    public RemoveTransformationsAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

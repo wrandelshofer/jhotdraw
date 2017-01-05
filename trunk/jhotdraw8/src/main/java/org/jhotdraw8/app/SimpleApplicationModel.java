@@ -42,7 +42,7 @@ import org.jhotdraw8.util.Resources;
  * @version $Id: SimpleApplicationModel.java 1199 2016-12-16 13:14:53Z rawcoder
  * $
  */
-public class SimpleApplicationModel implements ApplicationModel<DocumentProject> {
+public class SimpleApplicationModel implements ApplicationModel {
 
     private String name;
     private final List<URIExtensionFilter> openExtensionFilters = new ArrayList<>();
@@ -103,7 +103,7 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentProject>
     }
 
     @Override
-    public DocumentProject instantiateView() {
+    public DocumentProject createProject() {
         return viewFactory.get();
     }
 
@@ -179,9 +179,9 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentProject>
         return Resources.getResources("org.jhotdraw8.app.Labels");
     }
 
-    public HierarchicalMap<String, Action> createApplicationActionMap(Application<DocumentProject> app) {
+    public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {
         HierarchicalMap<String, Action> map = new HierarchicalMap<>();
-        map.put(AboutAction.ID, new AboutAction<DocumentProject>(app));
+        map.put(AboutAction.ID, new AboutAction(app));
         map.put(ExitAction.ID, new ExitAction(app));
         map.put(NewFileAction.ID, new NewFileAction(app));
         map.put(OpenFileAction.ID, new OpenFileAction(app));
@@ -189,12 +189,12 @@ public class SimpleApplicationModel implements ApplicationModel<DocumentProject>
         map.put(SaveFileAsAction.ID, new SaveFileAsAction(app));
         map.put(ExportFileAction.ID, new ExportFileAction(app));
         map.put(CloseFileAction.ID, new CloseFileAction(app));
-        map.put(CutAction.ID, new CutAction<DocumentProject>(app));
-        map.put(CopyAction.ID, new CopyAction<DocumentProject>(app));
-        map.put(PasteAction.ID, new PasteAction<DocumentProject>(app));
-        map.put(DeleteAction.ID, new DeleteAction<DocumentProject>(app));
-        map.put(SelectAllAction.ID, new SelectAllAction<DocumentProject>(app));
-        map.put(ClearSelectionAction.ID, new ClearSelectionAction<DocumentProject>(app));
+        map.put(CutAction.ID, new CutAction(app));
+        map.put(CopyAction.ID, new CopyAction(app));
+        map.put(PasteAction.ID, new PasteAction(app));
+        map.put(DeleteAction.ID, new DeleteAction(app));
+        map.put(SelectAllAction.ID, new SelectAllAction(app));
+        map.put(ClearSelectionAction.ID, new ClearSelectionAction(app));
         return map;
     }
 

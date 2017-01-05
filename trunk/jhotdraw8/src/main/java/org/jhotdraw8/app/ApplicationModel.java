@@ -20,18 +20,18 @@ import org.jhotdraw8.gui.URIChooser;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public interface ApplicationModel<V extends Project<V>> {
+public interface ApplicationModel {
 
-    // Views
+    // Projects
     /**
-     * Instantiates a view. But does not initialize it.
+     * Instantiates a project. But does not initialize it.
      *
      * Since this operation may involve class loading, it should be performed in
      * the background.
      *
      * @return a new instance
      */
-    public V instantiateView();
+    public Project createProject();
     // URI choosers
 
     /**
@@ -114,5 +114,5 @@ public interface ApplicationModel<V extends Project<V>> {
      * @param app The application
      * @return the application map
      */
-    HierarchicalMap<String, Action> createApplicationActionMap(Application<V> app);
+    HierarchicalMap<String, Action> createApplicationActionMap(Application app);
 }

@@ -18,8 +18,8 @@ import org.jhotdraw8.collection.SimpleKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
 import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.Project;
 
 /**
  * Presents an {@code URIChooser} and loads the selected URI into an empty view.
@@ -28,7 +28,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class OpenFileAction extends AbstractApplicationAction<DocumentProject> {
+public class OpenFileAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     public final static Key<URIChooser> OPEN_CHOOSER_KEY = new SimpleKey<>("openChooser", URIChooser.class);
@@ -40,7 +40,7 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentProject> {
      *
      * @param app the application
      */
-    public OpenFileAction(Application<DocumentProject> app) {
+    public OpenFileAction(Application app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -56,13 +56,13 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentProject> {
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        final Application<DocumentProject> app = getApplication();
+        final Application app = getApplication();
         {
             app.addDisabler(this);
             // Search for an empty view
             DocumentProject emptyView;
             if (reuseEmptyViews) {
-                emptyView = app.getActiveProject();
+                emptyView = (DocumentProject)app.getActiveProject();
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -73,7 +73,7 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentProject> {
             }
 
             if (emptyView == null) {
-                app.createProject().thenAccept(v -> doIt(v, true));
+                app.createProject().thenAccept(v -> doIt((DocumentProject)v, true));
             } else {
                 doIt(emptyView, false);
             }
@@ -88,7 +88,8 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentProject> {
 
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                for (DocumentProject v : getApplication().projects()) {
+                for (Project vp : getApplication().projects()) {
+                    DocumentProject v=(DocumentProject)vp;
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
@@ -111,7 +112,7 @@ public class OpenFileAction extends AbstractApplicationAction<DocumentProject> {
     }
 
     protected void openViewFromURI(final DocumentProject v, final URI uri, final URIChooser chooser) {
-        final Application<DocumentProject> app = getApplication();
+        final Application app = getApplication();
         app.removeDisabler(this);
         v.addDisabler(this);
 

@@ -44,7 +44,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @version $Id: AbstractSaveUnsavedChangesAction.java 788 2014-03-22 07:56:28Z
  * rawcoder $
  */
-public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewAction<DocumentProject> {
+public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewAction {
 
     /**
      *
@@ -62,20 +62,20 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
      * @param app the application
      * @param view the view
      */
-    public AbstractSaveUnsavedChangesAction(Application<DocumentProject> app, DocumentProject view) {
+    public AbstractSaveUnsavedChangesAction(Application app, DocumentProject view) {
         super(app, view);
     }
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        Application<DocumentProject> app = getApplication();
-        DocumentProject av = getActiveView();
+        Application app = getApplication();
+        DocumentProject av =(DocumentProject) getActiveView();
         if (av != null) {
             handle(av);
         } else if (isMayCreateView()) {
             app.createProject().thenAccept(v -> {
                 app.add(v);
-                handle(v);
+                handle((DocumentProject)v);
             });
         }
     }
@@ -180,7 +180,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
                 // unless  multipe projects to same URI are supported
                 if (uri != null
                         && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (DocumentProject vi : app.projects()) {
+                    for (Project vi : app.projects()) {
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");

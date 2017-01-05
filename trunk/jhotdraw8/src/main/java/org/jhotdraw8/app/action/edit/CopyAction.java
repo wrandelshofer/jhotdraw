@@ -21,7 +21,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CopyAction<V extends Project<V>> extends AbstractSelectionAction<V> {
+public class CopyAction extends AbstractSelectionAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,7 @@ public class CopyAction<V extends Project<V>> extends AbstractSelectionAction<V>
      *
      * @param app the application
      */
-    public CopyAction(Application<V> app) {
+    public CopyAction(Application app) {
         this(app, null);
     }
 
@@ -43,7 +43,7 @@ public class CopyAction<V extends Project<V>> extends AbstractSelectionAction<V>
      * @param target The target of the action. Specify empty for the currently
      * focused component.
      */
-    public CopyAction(Application<V> app, Node target) {
+    public CopyAction(Application app, Node target) {
         super(app, target);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -52,7 +52,7 @@ public class CopyAction<V extends Project<V>> extends AbstractSelectionAction<V>
     protected void onActionPerformed(javafx.event.ActionEvent event) {
 if (event.isConsumed()) return;        
         event.consume();
-        V v = app.getActiveProject();
+        Project v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {

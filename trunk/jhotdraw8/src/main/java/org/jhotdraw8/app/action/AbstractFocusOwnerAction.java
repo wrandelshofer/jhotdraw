@@ -19,12 +19,12 @@ import org.jhotdraw8.app.Project;
  * @version $Id: AbstractFocusOwnerAction.java 1169 2016-12-11 12:51:19Z
  * rawcoder $
  */
-public abstract class AbstractFocusOwnerAction<V extends Project<V>> extends AbstractApplicationAction<V> {
+public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     private Node target = null;
 
-    private final ChangeListener<V> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<Project> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode() == null) {
             disabled.set(true);
@@ -45,7 +45,7 @@ public abstract class AbstractFocusOwnerAction<V extends Project<V>> extends Abs
      *
      * @param app the application
      */
-    public AbstractFocusOwnerAction(Application<V> app) {
+    public AbstractFocusOwnerAction(Application app) {
         this(app, null);
     }
 
@@ -55,7 +55,7 @@ public abstract class AbstractFocusOwnerAction<V extends Project<V>> extends Abs
      * @param app the application
      * @param target the target node
      */
-    public AbstractFocusOwnerAction(Application<V> app, Node target) {
+    public AbstractFocusOwnerAction(Application app, Node target) {
         super(app);
         this.target = target;
 

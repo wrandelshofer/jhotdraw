@@ -21,7 +21,7 @@ import org.jhotdraw8.collection.HierarchicalMap;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public interface DocumentProject extends Project<DocumentProject> {
+public interface DocumentProject extends Project {
 
     /**
      * The modified property is set to true by the view.

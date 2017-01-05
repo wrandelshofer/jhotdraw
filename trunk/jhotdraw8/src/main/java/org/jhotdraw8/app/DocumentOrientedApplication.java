@@ -65,7 +65,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
  * @version $Id: DocumentOrientedApplication.java 1120 2016-01-15 17:37:49Z
  * rawcoder $
  */
-public class DocumentOrientedApplication extends AbstractApplication<DocumentProject> {
+public class DocumentOrientedApplication extends AbstractApplication {
 
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
@@ -79,9 +79,9 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
     });
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
-    private final ReadOnlyObjectWrapper<DocumentProject> activeView = new ReadOnlyObjectWrapper<>();
-    private final SetProperty<DocumentProject> views = new SimpleSetProperty<>(FXCollections.observableSet());
-    private ApplicationModel<DocumentProject> model;
+    private final ReadOnlyObjectWrapper<Project> activeView = new ReadOnlyObjectWrapper<>();
+    private final SetProperty<Project> views = new SimpleSetProperty<>(FXCollections.observableSet());
+    private ApplicationModel model;
     private List<Menu> systemMenus;
 
     public DocumentOrientedApplication() {
@@ -89,11 +89,11 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
     }
 
     {
-        views.addListener((SetChangeListener.Change<? extends DocumentProject> change) -> {
+        views.addListener((SetChangeListener.Change<? extends Project> change) -> {
             if (change.wasAdded()) {
-                handleViewAdded(change.getElementAdded());
+                handleViewAdded((DocumentProject)change.getElementAdded());
             } else {
-                handleViewRemoved(change.getElementRemoved());
+                handleViewRemoved((DocumentProject)change.getElementRemoved());
             }
         });
     }
@@ -117,7 +117,8 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
 
         // FIXME - We suppress here 2 exceptions!
         final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-        createProject().whenComplete((v, ex1) -> {
+        createProject().whenComplete((pv, ex1) -> {
+            DocumentProject v=(DocumentProject)pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 new Alert(Alert.AlertType.ERROR,
@@ -138,18 +139,18 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
     }
 
     @Override
-    public SetProperty<DocumentProject> projectsProperty() {
+    public SetProperty<Project> projectsProperty() {
         return views;
     }
 
     @Override
-    public ReadOnlyObjectProperty<DocumentProject> activeProjectProperty() {
+    public ReadOnlyObjectProperty<Project> activeProjectProperty() {
         return activeView.getReadOnlyProperty();
     }
 
     @Override
-    public CompletionStage<DocumentProject> createProject() {
-        return FXWorker.supply(() -> getModel().instantiateView())
+    public CompletionStage<Project> createProject() {
+        return FXWorker.supply(() -> getModel().createProject())
                 .thenApply((v) -> {
                     v.setApplication(DocumentOrientedApplication.this);
                     v.init();
@@ -246,7 +247,7 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
 
             Outer:
             for (int retries = views.getSize(); retries > 0; retries--) {
-                for (DocumentProject v : views) {
+                for (Project v : views) {
                     if (v != view) {
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
@@ -332,7 +333,7 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
                     } else {
                         System.err.println("DocumentOrientedApplication: Warning: no action for menu item with id="
                                 + mi.getId());
-                        a = new AbstractViewAction<DocumentProject>(this, null) {
+                        a = new AbstractViewAction(this, null) {
                             @Override
                             protected void onActionPerformed(ActionEvent event) {
                                 Action ava = getActiveView().getActionMap().get(mi.getId());
@@ -361,12 +362,12 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
     }
 
     @Override
-    public ApplicationModel<DocumentProject> getModel() {
+    public ApplicationModel getModel() {
         return model;
     }
 
     @Override
-    public void setModel(ApplicationModel<DocumentProject> newValue) {
+    public void setModel(ApplicationModel newValue) {
         model = newValue;
     }
 
@@ -376,23 +377,23 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
     }
 
     private void disambiguateProjects() {
-        HashMap<String, ArrayList<DocumentProject>> titles = new HashMap<>();
-        for (DocumentProject v : views) {
+        HashMap<String, ArrayList<Project>> titles = new HashMap<>();
+        for (Project v : views) {
             String t = v.getTitle();
             titles.computeIfAbsent(t, k -> new ArrayList<>()).add(v);
         }
-        for (ArrayList<DocumentProject> list : titles.values()) {
+        for (ArrayList<Project> list : titles.values()) {
             if (list.size() == 1) {
                 list.get(0).setDisambiguation(0);
             } else {
                 int max = 0;
-                for (DocumentProject v : list) {
+                for (Project v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
                 Collections.sort(list, (a, b) -> a.getDisambiguation()
                         - b.getDisambiguation());
                 int prev = 0;
-                for (DocumentProject v : list) {
+                for (Project v : list) {
                     int current = v.getDisambiguation();
                     if (current == prev) {
                         v.setDisambiguation(++max);
@@ -409,7 +410,7 @@ public class DocumentOrientedApplication extends AbstractApplication<DocumentPro
                 updateRecentMenuItemsMB(systemMenus);
             }
         } else {
-            for (DocumentProject v : projects()) {
+            for (Project v : projects()) {
                 BorderPane bp = (BorderPane) v.getNode().getScene().getRoot();
                 MenuBar mb = (MenuBar) bp.getTop();
                 if (mb != null) {

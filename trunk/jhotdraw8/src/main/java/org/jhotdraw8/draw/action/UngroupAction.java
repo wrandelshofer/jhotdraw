@@ -26,7 +26,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class UngroupAction<V extends Project<V>> extends AbstractSelectedAction<V> {
+public class UngroupAction<V extends Project> extends AbstractSelectedAction {
 
     public static final String ID = "edit.ungroup";
 
@@ -36,7 +36,7 @@ public class UngroupAction<V extends Project<V>> extends AbstractSelectedAction<
      * @param app the application
      * @param editor the drawing editor
      */
-    public UngroupAction(Application<V> app, DrawingEditor editor) {
+    public UngroupAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

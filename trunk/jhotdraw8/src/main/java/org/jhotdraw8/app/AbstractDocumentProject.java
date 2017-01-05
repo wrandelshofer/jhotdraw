@@ -17,7 +17,7 @@ import javafx.beans.property.SimpleObjectProperty;
  * @version $$Id: AbstractDocumentProject.java 1169 2016-12-11 12:51:19Z rawcoder
  $$
  */
-public abstract class AbstractDocumentProject extends AbstractProject<DocumentProject> implements DocumentProject {
+public abstract class AbstractDocumentProject extends AbstractProject implements DocumentProject {
 
     protected final BooleanProperty modified = new SimpleBooleanProperty();
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();

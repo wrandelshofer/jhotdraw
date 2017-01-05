@@ -22,7 +22,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PasteAction<V extends Project<V>> extends AbstractFocusOwnerAction<V> {
+public class PasteAction extends AbstractFocusOwnerAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,7 +33,7 @@ public class PasteAction<V extends Project<V>> extends AbstractFocusOwnerAction<
      *
      * @param app the application
      */
-    public PasteAction(Application<V> app) {
+    public PasteAction(Application app) {
         this(app, null);
     }
 
@@ -44,7 +44,7 @@ public class PasteAction<V extends Project<V>> extends AbstractFocusOwnerAction<
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public PasteAction(Application<V> app, Node target) {
+    public PasteAction(Application app, Node target) {
         super(app, target);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -55,7 +55,7 @@ public class PasteAction<V extends Project<V>> extends AbstractFocusOwnerAction<
             return;
         }
         event.consume();
-        V v = app.getActiveProject();
+        Project v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {

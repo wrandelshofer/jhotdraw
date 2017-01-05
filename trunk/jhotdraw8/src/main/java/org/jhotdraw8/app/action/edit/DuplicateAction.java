@@ -19,7 +19,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class DuplicateAction<V extends Project<V>> extends AbstractSelectionAction<V> {
+public class DuplicateAction extends AbstractSelectionAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.duplicate";
@@ -29,7 +29,7 @@ public class DuplicateAction<V extends Project<V>> extends AbstractSelectionActi
      *
      * @param app the application
      */
-    public DuplicateAction(Application<V> app) {
+    public DuplicateAction(Application app) {
         this(app, null);
     }
 
@@ -40,7 +40,7 @@ public class DuplicateAction<V extends Project<V>> extends AbstractSelectionActi
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public DuplicateAction(Application<V> app, Node target) {
+    public DuplicateAction(Application app, Node target) {
         super(app, target);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }

@@ -26,7 +26,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertAction extends AbstractViewAction<DocumentProject> {
+public class RevertAction extends AbstractViewAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class RevertAction extends AbstractViewAction<DocumentProject> {
      * @param app the application
      * @param view the view
      */
-    public RevertAction(Application<DocumentProject> app, DocumentProject view) {
+    public RevertAction(Application app, DocumentProject view) {
         super(app, view);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
@@ -48,7 +48,7 @@ public class RevertAction extends AbstractViewAction<DocumentProject> {
         if (isDisabled()) {
             return;
         }
-        DocumentProject view = getActiveView();
+        DocumentProject view = (DocumentProject)getActiveView();
         URI uri = view.getURI();
         if (view.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,

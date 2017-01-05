@@ -26,7 +26,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @version $Id: ClearRecentFilesMenuAction.java 1205 2016-12-16 23:21:54Z
  * rawcoder $
  */
-public class ClearRecentFilesMenuAction extends AbstractApplicationAction<DocumentProject> {
+public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.clearRecentFiles";
@@ -38,7 +38,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction<Docume
      *
      * @param app the application
      */
-    public ClearRecentFilesMenuAction(Application<DocumentProject> app) {
+    public ClearRecentFilesMenuAction(Application app) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
         //     updateEnabled();

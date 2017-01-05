@@ -33,7 +33,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      *
      * @param app the application
      */
-    public SaveFileAction(Application<DocumentProject> app) {
+    public SaveFileAction(Application app) {
         this(app, null, false);
     }
 
@@ -43,7 +43,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public SaveFileAction(Application<DocumentProject> app, DocumentProject view) {
+    public SaveFileAction(Application app, DocumentProject view) {
         this(app, view, false);
     }
 
@@ -54,7 +54,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param view the view
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application<DocumentProject> app, DocumentProject view, boolean saveAs) {
+    public SaveFileAction(Application app, DocumentProject view, boolean saveAs) {
         this(app, view, ID, saveAs);
     }
 
@@ -66,7 +66,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application<DocumentProject> app, DocumentProject view, String id, boolean saveAs) {
+    public SaveFileAction(Application app, DocumentProject view, String id, boolean saveAs) {
         super(app, view, id, saveAs);
     }
 

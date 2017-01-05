@@ -20,7 +20,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RedoAction<V extends Project<V>> extends AbstractViewAction<V> {
+public class RedoAction extends AbstractViewAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,7 +47,7 @@ public class RedoAction<V extends Project<V>> extends AbstractViewAction<V> {
      * @param app the application
      * @param view the view
      */
-    public RedoAction(Application<V> app, V view) {
+    public RedoAction(Application app, Project view) {
         super(app, view);
         labels.configureAction(this, ID);
     }

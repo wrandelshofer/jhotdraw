@@ -31,7 +31,7 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
      * @param app the application
      * @param view the view
      */
-    public ClearFileAction(Application<DocumentProject> app, DocumentProject view) {
+    public ClearFileAction(Application app, DocumentProject view) {
         super(app, view);
         Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
         labels.configureAction(this, "file.clear");

@@ -22,17 +22,17 @@ import org.jhotdraw8.app.Project;
  * @version $Id: AbstractApplicationAction.java 1169 2016-12-11 12:51:19Z
  * rawcoder $
  */
-public abstract class AbstractApplicationAction<V extends Project<V>> extends AbstractAction {
+public abstract class AbstractApplicationAction extends AbstractAction {
 
     private static final long serialVersionUID = 1L;
-    protected Application<V> app;
+    protected Application app;
 
     /**
      * Creates a new instance.
      *
      * @param app the application
      */
-    public AbstractApplicationAction(Application<V> app) {
+    public AbstractApplicationAction(Application app) {
         if (app == null) {
             throw new IllegalArgumentException("app is null");
         }
@@ -41,7 +41,7 @@ public abstract class AbstractApplicationAction<V extends Project<V>> extends Ab
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
-    public final Application<V> getApplication() {
+    public final Application getApplication() {
         return app;
     }
 }

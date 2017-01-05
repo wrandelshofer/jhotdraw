@@ -23,7 +23,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class AddToGroupAction<V extends Project<V>> extends AbstractSelectedAction<V> {
+public class AddToGroupAction extends AbstractSelectedAction {
 
     public static final String ID = "edit.addToGroup";
 
@@ -33,7 +33,7 @@ public class AddToGroupAction<V extends Project<V>> extends AbstractSelectedActi
      * @param app the application
      * @param editor the drawing editor
      */
-    public AddToGroupAction(Application<V> app, DrawingEditor editor) {
+    public AddToGroupAction(Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");

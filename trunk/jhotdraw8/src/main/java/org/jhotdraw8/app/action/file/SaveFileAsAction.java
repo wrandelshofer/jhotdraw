@@ -29,11 +29,11 @@ public class SaveFileAsAction extends SaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public SaveFileAsAction(Application<DocumentProject> app, DocumentProject view) {
+    public SaveFileAsAction(Application app, DocumentProject view) {
         super(app, view, ID, true);
     }
 
-    public SaveFileAsAction(Application<DocumentProject> app) {
+    public SaveFileAsAction(Application app) {
         this(app, null);
     }
 }

@@ -23,11 +23,11 @@ import org.jhotdraw8.app.Project;
  * @version $Id: AbstractSelectionAction.java 1169 2016-12-11 12:51:19Z rawcoder
  * $
  */
-public abstract class AbstractSelectionAction<V extends Project<V>> extends AbstractApplicationAction<V> {
+public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
     private Node target;
-    private final ChangeListener<V> activeViewListener = (observable, oldValue, newValue) -> {
+    private final ChangeListener<Project> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode() == null) {
             disabled.set(true);
@@ -48,7 +48,7 @@ public abstract class AbstractSelectionAction<V extends Project<V>> extends Abst
      *
      * @param app the application
      */
-    public AbstractSelectionAction(Application<V> app) {
+    public AbstractSelectionAction(Application app) {
         this(app, null);
     }
 
@@ -58,7 +58,7 @@ public abstract class AbstractSelectionAction<V extends Project<V>> extends Abst
      * @param app the application
      * @param target the target node
      */
-    public AbstractSelectionAction(Application<V> app, Node target) {
+    public AbstractSelectionAction(Application app, Node target) {
         super(app);
         this.target = target;
 

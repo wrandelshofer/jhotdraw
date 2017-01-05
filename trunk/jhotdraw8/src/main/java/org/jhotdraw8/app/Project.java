@@ -16,14 +16,13 @@ import org.jhotdraw8.beans.PropertyBean;
  * A {@code Project} provides a user interface for a project which is
  * identified by an URI.
  * <p>
- * The life-cycle of project view objects is managed by an application. See the
+ * The life-cycle of a project object is managed by an application. See the
  * class comment of {@link Application} on how to launch an application.
  * <p>
- * The lifecycle of a project view consists of the following steps:
+ * The lifecycle of a project consists of the following steps:
  * <ol>
  * <li><b>Creation</b><br>
- * The application instantiates the project view object by calling
- * {@code newInstance()} on the class of the view.
+ * The application model instantiates a new project.
  * </li>
  * <li><b>Initialisation</b><br>
  * The application calls the following methods:
@@ -31,38 +30,38 @@ import org.jhotdraw8.beans.PropertyBean;
  * calls {@code clear()} or {@code read()}.
  * </li>
  * <li><b>Start</b><br>
- * The application adds the component of the project view to a container (for
+ * The application adds the component of the project to a container (for
  * example a JFrame) and then calls {@code start()}.
  * </li>
  * <li><b>Activation</b><br>
- * When a view becomes the active project view of the application, application
+ * When a project becomes the active project of the application, application
  * calls {@code activate()}.
  * </li>
  * <li><b>Deactivation</b><br>
- * When a view is not anymore the active project view of the application,
+ * When a project is not anymore the active project view of the application,
  * application calls {@code deactivate()}. At a later time, the project view may
  * become activated again.
  * </li>
  * <li><b>Stop</b><br>
- * The application calls {@code stop()} on the project view and then removes the
- * component from its container. At a later time, the project view may be
+ * The application calls {@code stop()} on the project  and then removes the
+ * component from its container. At a later time, the project may be
  * started again.
  * </li>
  * <li><b>Dispose</b><br>
- * When the view is no longer needed, application calls {@code dispose()} on the
- * view, followed by
+ * When the project is no longer needed, application calls {@code dispose()} on the
+ * project, followed by
  * {@code setApplication(null);}, {@code getActionMap().setParent(null)} and
  * then removes all references to it, so that it can be garbage collected.
  * </li>
  * </ol>
  *
- * @param <V> the project view type
+ * @param <V> the project type
  * @design.pattern Application Framework, KeyAbstraction.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Project<V extends Project<V>> extends Disableable, PropertyBean {
+public interface Project extends Disableable, PropertyBean {
 
     /**
      * Initializes the view. This method must be called before the view can be
@@ -123,13 +122,13 @@ public interface Project<V extends Project<V>> extends Disableable, PropertyBean
      *
      * @return the property
      */
-    public ObjectProperty<Application<V>> applicationProperty();
+    public ObjectProperty<Application> applicationProperty();
 
-    default public Application<V> getApplication() {
+    default public Application getApplication() {
         return applicationProperty().get();
     }
 
-    default public void setApplication(Application<V> newValue) {
+    default public void setApplication(Application newValue) {
         applicationProperty().set(newValue);
     }
 

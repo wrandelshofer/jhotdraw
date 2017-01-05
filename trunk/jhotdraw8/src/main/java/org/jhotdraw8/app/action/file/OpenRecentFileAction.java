@@ -47,7 +47,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class OpenRecentFileAction extends AbstractApplicationAction<DocumentProject> {
+public class OpenRecentFileAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,7 +61,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction<DocumentProj
      * @param app the application
      * @param uri the uri
      */
-    public OpenRecentFileAction(Application<DocumentProject> app, URI uri) {
+    public OpenRecentFileAction(Application app, URI uri) {
         super(app);
         this.uri = uri;
         set(Action.LABEL, URIUtil.getName(uri));
@@ -69,12 +69,12 @@ public class OpenRecentFileAction extends AbstractApplicationAction<DocumentProj
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        final Application<DocumentProject> app = getApplication();
+        final Application app = getApplication();
         {
             // Search for an empty view
             DocumentProject emptyView;
             if (reuseEmptyViews) {
-                emptyView = app.getActiveProject();
+                emptyView =(DocumentProject) app.getActiveProject();
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -87,7 +87,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction<DocumentProj
             if (emptyView == null) {
                 app.createProject().thenAccept(v -> {
                     app.add(v);
-                    doIt(v, true);
+                    doIt((DocumentProject)v, true);
                 });
             } else {
                 doIt(emptyView, false);
@@ -100,7 +100,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction<DocumentProj
     }
 
     protected void openViewFromURI(final DocumentProject v, final URI uri) {
-        final Application<DocumentProject> app = getApplication();
+        final Application app = getApplication();
         v.addDisabler(this);
 
         // Open the file
