@@ -10,7 +10,7 @@ package org.jhotdraw8.app.action.edit;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractViewAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /**
  * Redoes the last user action on the active view.
@@ -20,7 +20,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RedoAction<V extends ProjectView<V>> extends AbstractViewAction<V> {
+public class RedoAction<V extends Project<V>> extends AbstractViewAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,7 +63,7 @@ public class RedoAction<V extends ProjectView<V>> extends AbstractViewAction<V> 
     }
 
     @Override
-    protected void updateView(ProjectView oldValue, ProjectView newValue) {
+    protected void updateView(Project oldValue, Project newValue) {
         super.updateView(oldValue, newValue);
         if (newValue != null && //
                 newValue.getActionMap().get(ID) != null && //
@@ -78,7 +78,7 @@ public class RedoAction<V extends ProjectView<V>> extends AbstractViewAction<V> 
      * Installs listeners on the view object.
      * /
     @Override
-    protected void installViewListeners(ProjectView p) {
+    protected void installViewListeners(Project p) {
         super.installViewListeners(p);
         Action redoActionInView = p.getActionMap().get(ID);
         if (redoActionInView != null && redoActionInView != this) {
@@ -90,7 +90,7 @@ public class RedoAction<V extends ProjectView<V>> extends AbstractViewAction<V> 
      * Installs listeners on the view object.
      * /
     @Override
-    protected void uninstallViewListeners(ProjectView p) {
+    protected void uninstallViewListeners(Project p) {
         super.uninstallViewListeners(p);
         Action redoActionInView = p.getActionMap().get(ID);
         if (redoActionInView != null && redoActionInView != this) {

@@ -19,9 +19,9 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * An {@code Application} manages {@link ProjectView}s.
+ * An {@code Application} manages {@link Project}s.
  *
- * @param <V> the type of project views that this application manages.
+ * @param <P> the type of project projects that this application manages.
  * @design.pattern Application Framework, KeyAbstraction. The application
  * framework supports the creation of document oriented applications which can
  * support platform-specific guidelines. The application framework consists of
@@ -31,17 +31,17 @@ import org.jhotdraw8.beans.PropertyBean;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Application<V extends ProjectView<V>> extends Disableable, PropertyBean {
+public interface Application<P extends Project<P>> extends Disableable, PropertyBean {
 
     public static final String RECENT_URIS_PROPERTY = "recentUris";
     public static final String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
 
     /**
-     * The set of views contains all visible views.
+     * The set of projects contains all open projects..
      *
-     * @return the views
+     * @return the projects
      */
-    public SetProperty<V> viewsProperty();
+    public SetProperty<P> projectsProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -63,39 +63,39 @@ public interface Application<V extends ProjectView<V>> extends Disableable, Prop
     public IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default public ObservableSet<V> views() {
-        return viewsProperty().get();
+    default public ObservableSet<P> projects() {
+        return projectsProperty().get();
     }
 
     /**
-     * Adds the view to the set of views and shows it.
+     * Adds the project to the set of projects and shows it.
      *
      * @param v the view
      */
-    default public void add(V v) {
-        viewsProperty().add(v);
+    default public void add(P v) {
+        projectsProperty().add(v);
     }
 
     /**
-     * Removes the view from the set of views and hides it.
+     * Removes the project from the set of visible projects and hides it.
      *
      * @param v the view
      */
-    default public void remove(V v) {
-        viewsProperty().remove(v);
+    default public void remove(P v) {
+        projectsProperty().remove(v);
     }
 
     /**
-     * Provides the currently active view. This is the last view which was focus
-     * owner. Returns null, if the application has no views.
+     * Provides the currently active project. This is the last project which was focus
+     * owner. Returns null, if the application has no projects.
      *
      * @return The active view.
      */
-    public ReadOnlyObjectProperty<V> activeViewProperty();
+    public ReadOnlyObjectProperty<P> activeProjectProperty();
 
     // Convenience method
-    default public V getActiveView() {
-        return activeViewProperty().get();
+    default public P getActiveProject() {
+        return activeProjectProperty().get();
     }
 
     /**
@@ -117,14 +117,14 @@ public interface Application<V extends ProjectView<V>> extends Disableable, Prop
      *
      * @return the model
      */
-    public ApplicationModel<V> getModel();
+    public ApplicationModel<P> getModel();
 
     /**
      * Sets the application model.
      *
      * @param newValue the model
      */
-    public void setModel(ApplicationModel<V> newValue);
+    public void setModel(ApplicationModel<P> newValue);
 
     /**
      * Exits the application.
@@ -145,7 +145,7 @@ public interface Application<V extends ProjectView<V>> extends Disableable, Prop
      *
      * @return A callback.
      */
-    CompletionStage<V> createView();
+    CompletionStage<P> createProject();
 
     /**
      * Adds a recent URI.

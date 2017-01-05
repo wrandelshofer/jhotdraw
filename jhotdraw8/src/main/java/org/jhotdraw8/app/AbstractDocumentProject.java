@@ -1,4 +1,4 @@
-/* @(#)AbstractDocumentView.java
+/* @(#)AbstractDocumentProject.java
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -11,13 +11,13 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 /**
- * AbstractDocumentView.
+ * AbstractDocumentProject.
  *
  * @author Werner Randelshofer
- * @version $$Id: AbstractDocumentView.java 1169 2016-12-11 12:51:19Z rawcoder
- * $$
+ * @version $$Id: AbstractDocumentProject.java 1169 2016-12-11 12:51:19Z rawcoder
+ $$
  */
-public abstract class AbstractDocumentView extends AbstractProjectView<DocumentView> implements DocumentView {
+public abstract class AbstractDocumentProject extends AbstractProject<DocumentProject> implements DocumentProject {
 
     protected final BooleanProperty modified = new SimpleBooleanProperty();
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();

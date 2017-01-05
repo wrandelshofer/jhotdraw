@@ -1,4 +1,4 @@
-/* @(#)AbstractProjectView.java
+/* @(#)AbstractProject.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -18,13 +18,13 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.Key;
 
 /**
- * AbstractProjectView.
+ * AbstractProject.
  *
  * @author Werner Randelshofer
  * @version $Id$
  * @param <V> the project view type
  */
-public abstract class AbstractProjectView<V extends ProjectView<V>> extends AbstractDisableable implements ProjectView<V> {
+public abstract class AbstractProject<V extends Project<V>> extends AbstractDisableable implements Project<V> {
 
     protected ObjectProperty<Application<V>> application = new SimpleObjectProperty<>();
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();

@@ -9,8 +9,8 @@ package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.gui.URIChooser;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Presents a file chooser to the user and then exports the contents of the
@@ -31,7 +31,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      *
      * @param app the application
      */
-    public ExportFileAction(Application<DocumentView> app) {
+    public ExportFileAction(Application<DocumentProject> app) {
         this(app, null);
     }
 
@@ -41,7 +41,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public ExportFileAction(Application<DocumentView> app, DocumentView view) {
+    public ExportFileAction(Application<DocumentProject> app, DocumentProject view) {
         this(app, view, ID);
     }
 
@@ -52,17 +52,17 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param view the view
      * @param id the id
      */
-    public ExportFileAction(Application<DocumentView> app, DocumentView view, String id) {
+    public ExportFileAction(Application<DocumentProject> app, DocumentProject view, String id) {
         super(app, view, id, true);
     }
 
     @Override
-    protected URIChooser createChooser(DocumentView view) {
+    protected URIChooser createChooser(DocumentProject view) {
         return app.getModel().createExportChooser();
     }
 
     @Override
-    protected void handleSucceded(DocumentView v, URI uri) {
+    protected void handleSucceded(DocumentProject v, URI uri) {
         // empty
     }
 }

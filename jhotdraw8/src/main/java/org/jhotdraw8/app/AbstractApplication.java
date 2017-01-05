@@ -28,9 +28,9 @@ import org.jhotdraw8.collection.Key;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <V> the type of project views that this application manages
+ * @param <V> the type of project projects that this application manages
  */
-public abstract class AbstractApplication<V extends ProjectView<V>> extends javafx.application.Application implements org.jhotdraw8.app.Application<V> {
+public abstract class AbstractApplication<V extends Project<V>> extends javafx.application.Application implements org.jhotdraw8.app.Application<V> {
 
     /**
      * Holds the max number of recent URIs.

@@ -9,8 +9,8 @@ package org.jhotdraw8.app.action.edit;
 
 import javafx.scene.Node;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
 
 /**
  * Duplicates the selected region.
@@ -19,7 +19,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class DuplicateAction<V extends ProjectView<V>> extends AbstractSelectionAction<V> {
+public class DuplicateAction<V extends Project<V>> extends AbstractSelectionAction<V> {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.duplicate";

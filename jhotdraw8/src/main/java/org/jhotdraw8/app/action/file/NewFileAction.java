@@ -9,9 +9,9 @@ package org.jhotdraw8.app.action.file;
 
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Creates a new view.
@@ -20,7 +20,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class NewFileAction extends AbstractApplicationAction<DocumentView> {
+public class NewFileAction extends AbstractApplicationAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.new";
@@ -30,19 +30,19 @@ public class NewFileAction extends AbstractApplicationAction<DocumentView> {
      *
      * @param app the application
      */
-    public NewFileAction(Application<DocumentView> app) {
+    public NewFileAction(Application<DocumentProject> app) {
         this(app, ID);
     }
 
-    public NewFileAction(Application<DocumentView> app, String id) {
+    public NewFileAction(Application<DocumentProject> app, String id) {
         super(app);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
     protected void onActionPerformed(ActionEvent evt) {
-        Application<DocumentView> app = getApplication();
-        app.createView().thenAccept(newView -> {
+        Application<DocumentProject> app = getApplication();
+        app.createProject().thenAccept(newView -> {
             app.add(newView);
             newView.clear().thenRun(() -> {
                 newView.clearModified();

@@ -12,8 +12,8 @@ import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractFocusOwnerAction;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
 
 /**
  * Selects all items.
@@ -21,7 +21,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class SelectAllAction<V extends ProjectView<V>> extends AbstractFocusOwnerAction<V> {
+public class SelectAllAction<V extends Project<V>> extends AbstractFocusOwnerAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,7 +50,7 @@ public class SelectAllAction<V extends ProjectView<V>> extends AbstractFocusOwne
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-        V v = app.getActiveView();
+        V v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {

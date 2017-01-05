@@ -25,11 +25,11 @@ import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.app.AbstractDocumentView;
-import org.jhotdraw8.app.DocumentView;
+import org.jhotdraw8.app.AbstractDocumentProject;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.concurrent.FXWorker;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * TeddyView.
@@ -37,7 +37,7 @@ import org.jhotdraw8.concurrent.FXWorker;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyView extends AbstractDocumentView implements DocumentView, Initializable {
+public class TeddyView extends AbstractDocumentProject implements DocumentProject, Initializable {
 
   @FXML
   private URL location;

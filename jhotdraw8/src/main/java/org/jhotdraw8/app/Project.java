@@ -1,4 +1,4 @@
-/* @(#)ProjectView.java
+/* @(#)Project.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -13,7 +13,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * A {@code ProjectView} provides a user interface for a project which is
+ * A {@code Project} provides a user interface for a project which is
  * identified by an URI.
  * <p>
  * The life-cycle of project view objects is managed by an application. See the
@@ -62,7 +62,7 @@ import org.jhotdraw8.beans.PropertyBean;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface ProjectView<V extends ProjectView<V>> extends Disableable, PropertyBean {
+public interface Project<V extends Project<V>> extends Disableable, PropertyBean {
 
     /**
      * Initializes the view. This method must be called before the view can be

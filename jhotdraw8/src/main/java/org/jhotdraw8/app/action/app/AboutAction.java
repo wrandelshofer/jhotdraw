@@ -12,9 +12,9 @@ import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationModel;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
 
 /**
  * Displays a dialog showing information about the application.
@@ -23,7 +23,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class AboutAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
+public class AboutAction<V extends Project<V>> extends AbstractApplicationAction<V> {
 
     private static final long serialVersionUID = 1L;
 

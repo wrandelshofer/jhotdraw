@@ -10,10 +10,10 @@ package org.jhotdraw8.app.action.file;
 import java.net.URI;
 import java.util.concurrent.CompletionStage;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.URIUtil;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Lets the user write unsaved changes of the active view, and then loads the
@@ -60,7 +60,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view
      * @param uri the uri of the recent file
      */
-    public LoadRecentFileAction(Application<DocumentView> app, DocumentView view, URI uri) {
+    public LoadRecentFileAction(Application<DocumentProject> app, DocumentProject view, URI uri) {
         super(app, view);
         this.uri = uri;
         setMayCreateView(true);
@@ -174,7 +174,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
     }*/
 
     @Override
-    public CompletionStage<Void> doIt(final DocumentView view) {
+    public CompletionStage<Void> doIt(final DocumentProject view) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

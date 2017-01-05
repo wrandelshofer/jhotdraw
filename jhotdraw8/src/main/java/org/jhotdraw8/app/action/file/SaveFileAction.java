@@ -9,10 +9,10 @@ package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -33,7 +33,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      *
      * @param app the application
      */
-    public SaveFileAction(Application<DocumentView> app) {
+    public SaveFileAction(Application<DocumentProject> app) {
         this(app, null, false);
     }
 
@@ -43,7 +43,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param app the application
      * @param view the view
      */
-    public SaveFileAction(Application<DocumentView> app, DocumentView view) {
+    public SaveFileAction(Application<DocumentProject> app, DocumentProject view) {
         this(app, view, false);
     }
 
@@ -54,7 +54,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param view the view
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application<DocumentView> app, DocumentView view, boolean saveAs) {
+    public SaveFileAction(Application<DocumentProject> app, DocumentProject view, boolean saveAs) {
         this(app, view, ID, saveAs);
     }
 
@@ -66,17 +66,17 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param id the id
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application<DocumentView> app, DocumentView view, String id, boolean saveAs) {
+    public SaveFileAction(Application<DocumentProject> app, DocumentProject view, String id, boolean saveAs) {
         super(app, view, id, saveAs);
     }
 
     @Override
-    protected URIChooser createChooser(DocumentView view) {
+    protected URIChooser createChooser(DocumentProject view) {
         return app.getModel().createSaveChooser();
     }
 
     @Override
-    protected void handleSucceded(DocumentView v, URI uri) {
+    protected void handleSucceded(DocumentProject v, URI uri) {
         v.setURI(uri);
         v.clearModified();
         v.setTitle(URIUtil.getName(uri));

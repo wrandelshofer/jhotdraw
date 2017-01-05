@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -17,13 +16,14 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
 
 /**
  * RemoveTransformationsAction.
  *
  * @author Werner Randelshofer
  */
-public class RemoveTransformationsAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
+public class RemoveTransformationsAction<V extends Project<V>> extends AbstractSelectedAction<V> {
 
     public static final String ID = "edit.removeTransformations";
 

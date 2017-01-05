@@ -9,13 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import org.jhotdraw8.app.DocumentOrientedApplication;
-import org.jhotdraw8.app.DocumentView;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.RevertAction;
 import org.jhotdraw8.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.util.FontIconDecoder;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.DocumentProject;
 
 /**
  * GrapherApplication.
@@ -45,7 +45,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
 
         Action a;
         map.put(RevertAction.ID, new RevertAction(this, null));
-        map.put("view.toggleProperties", a = new ToggleViewPropertyAction<DocumentView>(this, null, (view) -> ((GrapherDocumentView) view).getPropertiesPane(),
+        map.put("view.toggleProperties", a = new ToggleViewPropertyAction<DocumentProject>(this, null, (view) -> ((GrapherProject) view).getPropertiesPane(),
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels")));
         a.set(Action.SELECTED_KEY, Preferences.userNodeForPackage(GrapherApplication.class).getBoolean("view.propertiesPane.visible", true));

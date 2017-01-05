@@ -11,8 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.app.ProjectView;
 import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.app.Project;
 
 /**
  * Clears (de-selects) the selected region.
@@ -20,7 +20,7 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class ClearSelectionAction<V extends ProjectView<V>> extends AbstractSelectionAction<V> {
+public class ClearSelectionAction<V extends Project<V>> extends AbstractSelectionAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +49,7 @@ public class ClearSelectionAction<V extends ProjectView<V>> extends AbstractSele
 
     @Override
     protected void onActionPerformed(javafx.event.ActionEvent event) {
-        V v = app.getActiveView();
+        V v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {

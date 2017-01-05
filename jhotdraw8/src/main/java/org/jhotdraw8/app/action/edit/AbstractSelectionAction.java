@@ -14,7 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /**
  * {@code AbstractSelectionAction} acts on the selection of a target component.
@@ -23,7 +23,7 @@ import org.jhotdraw8.app.ProjectView;
  * @version $Id: AbstractSelectionAction.java 1169 2016-12-11 12:51:19Z rawcoder
  * $
  */
-public abstract class AbstractSelectionAction<V extends ProjectView<V>> extends AbstractApplicationAction<V> {
+public abstract class AbstractSelectionAction<V extends Project<V>> extends AbstractApplicationAction<V> {
 
     private static final long serialVersionUID = 1L;
     private Node target;
@@ -62,8 +62,8 @@ public abstract class AbstractSelectionAction<V extends ProjectView<V>> extends 
         super(app);
         this.target = target;
 
-        app.activeViewProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null, app.getActiveView());
+        app.activeProjectProperty().addListener(activeViewListener);
+        activeViewListener.changed(null, null, app.getActiveProject());
 
     }
 }

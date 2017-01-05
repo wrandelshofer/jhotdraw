@@ -13,7 +13,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractFocusOwnerAction;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.ProjectView;
+import org.jhotdraw8.app.Project;
 
 /**
  * Pastes the contents of the system clipboard at the caret position.
@@ -22,7 +22,7 @@ import org.jhotdraw8.app.ProjectView;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PasteAction<V extends ProjectView<V>> extends AbstractFocusOwnerAction<V> {
+public class PasteAction<V extends Project<V>> extends AbstractFocusOwnerAction<V> {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,7 +55,7 @@ public class PasteAction<V extends ProjectView<V>> extends AbstractFocusOwnerAct
             return;
         }
         event.consume();
-        V v = app.getActiveView();
+        V v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             if (n instanceof TextInputControl) {
