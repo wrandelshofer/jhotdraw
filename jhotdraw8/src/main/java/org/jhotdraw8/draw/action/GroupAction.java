@@ -25,7 +25,7 @@ import org.jhotdraw8.collection.TreeNode;
  *
  * @author Werner Randelshofer
  */
-public class GroupAction<V extends ProjectView<V>> extends AbstractSelectedAction<V> {
+public class GroupAction <V extends ProjectView<V>> extends AbstractSelectedAction<V> {
 
     public static final String ID = "edit.group";
     public final Supplier<Figure> groupFactory;

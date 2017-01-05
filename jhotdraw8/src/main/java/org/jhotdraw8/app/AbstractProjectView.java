@@ -43,6 +43,10 @@ public abstract class AbstractProjectView<V extends ProjectView<V>> extends Abst
         return disambiguation;
     }
 
+    protected abstract void initActionMap(HierarchicalMap<String, Action> actionMap);
+
+    protected abstract void initView() ;
+
     @Override
     public StringProperty titleProperty() {
         return title;
@@ -77,5 +81,8 @@ public abstract class AbstractProjectView<V extends ProjectView<V>> extends Abst
     @Override
     public void start() {
     }
-
+    public void init() {
+        initView();
+        initActionMap(actionMap);
+    }
 }
