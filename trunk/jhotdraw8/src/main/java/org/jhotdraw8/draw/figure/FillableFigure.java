@@ -36,7 +36,7 @@ public interface FillableFigure extends Figure {
      */
     default void applyFillableFigureProperties(Shape shape) {
         Paint p = Paintable.getPaint(getStyled(FILL_COLOR));
-        if (!Objects.equals(shape.getStroke(), p)) {
+        if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);
         }
     }
