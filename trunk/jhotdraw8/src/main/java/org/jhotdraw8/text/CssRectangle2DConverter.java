@@ -31,7 +31,11 @@ public class CssRectangle2DConverter implements Converter<Rectangle2D> {
     public Rectangle2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
-        return new Rectangle2D((double) v[0], (double) v[1], (double) v[2], (double) v[3]);
+        return new Rectangle2D(((Number) v[0]).doubleValue(),
+                ((Number) v[1]).doubleValue(),
+                ((Number) v[2]).doubleValue(),
+                ((Number) v[3]).doubleValue()
+        );
     }
 
     @Override

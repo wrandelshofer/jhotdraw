@@ -30,7 +30,7 @@ public class CssPoint2DConverter implements Converter<Point2D> {
     public Point2D fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
-        return new Point2D((double) v[0], (double) v[1]);
+        return new Point2D(((Number) v[0]).doubleValue(), ((Number) v[1]).doubleValue());
     }
 
     @Override
