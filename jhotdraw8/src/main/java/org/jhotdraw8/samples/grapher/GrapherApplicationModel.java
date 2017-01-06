@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.samples.grapher;
 
+import java.util.ResourceBundle;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.SimpleApplicationModel;
 import org.jhotdraw8.app.action.Action;
@@ -13,6 +14,7 @@ import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.util.Resources;
 
 /**
  * GrapherApplicationModel.
@@ -37,5 +39,8 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
         map.put(PrintFileAction.ID, new PrintFileAction(app, null));
         return map;
     }
-
+    @Override
+    public ResourceBundle getResources() {
+        return Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
+    }
 }
