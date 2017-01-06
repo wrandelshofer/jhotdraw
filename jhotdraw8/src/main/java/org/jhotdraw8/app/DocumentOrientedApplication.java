@@ -140,7 +140,6 @@ public class DocumentOrientedApplication extends AbstractApplication {
                     if (a != null) {
                         Actions.bindMenuItem(mi, a);
                     } else {
-                        System.err.println("Warning DocumentOrientedApplication no action for menu item with id:" + mi.getId());
                         a = new ScreenMenuBarProxyAction(this, mi.getId());
                         systemMenuActiveProjectActions.add(a);
                         Actions.bindMenuItem(mi, a, false);
