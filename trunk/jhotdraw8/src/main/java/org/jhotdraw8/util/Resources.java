@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
  * ResourceBundle.
  * <p>
  * A resources object may reference a parent resources object using the resource
- * key "parent".
+ * key "$parent".
  * <p>
  * <b>Placeholders</b><br>
  * On top of the functionality provided by ResourceBundle, a property value can
@@ -107,7 +107,7 @@ public class Resources extends ResourceBundle implements Serializable {
     private static HashMap<String, String[]> propertyNameModifiers = new HashMap<String, String[]>();
 
     /**
-     * The parent resource object.
+     * The parent resources object.
      */
     private final Resources parent;
 
@@ -131,7 +131,7 @@ public class Resources extends ResourceBundle implements Serializable {
     }
 
     /**
-     * Creates a new ResouceBundleUtil which wraps the provided resource bundle.
+     * Creates a new Resources object which wraps the provided resource bundle.
      *
      * @param baseName the base name
      * @param locale the locale
@@ -143,7 +143,7 @@ public class Resources extends ResourceBundle implements Serializable {
 
         Resources potentialParent = null;
         try {
-            String parentBaseName = this.resource.getString("parent");
+            String parentBaseName = this.resource.getString("$parent");
             if (parentBaseName != null && !Objects.equals(baseName, parentBaseName)) {
                 potentialParent = new Resources(parentBaseName, locale);
             }
@@ -162,104 +162,59 @@ public class Resources extends ResourceBundle implements Serializable {
         return resource;
     }
 
-    /**
-     * Get a String from the ResourceBundle.
-     * <br>Convenience method to save casting.
-     *
-     * @param key The key of the property.
-     * @return The value of the property. Returns the key if the property is
-     * missing. / public String getString(String key) { try { String value =
-     * getStringRecursive(key); // System.out.println("Resources "+baseName+"
-     * get("+key+"):"+value); return value; } catch (MissingResourceException e)
-     * { // System.out.println("Resources "+baseName+"
-     * get("+key+"):***MISSING***"); if (isVerbose) {
-     * System.err.println("Warning Resources[" + baseName + "] \"" + key + "\"
-     * not found."); //e.printStackTrace(); } return key; } }
-     */
-    /**
-     * Recursive part of the getString method.
-     *
-     * @param key
-     * @throws java.util.MissingResourceException
-     */
-    private String getStringRecursive(String key) throws MissingResourceException {
-        try {
-            String value;
-            try {
-                value = resource.getString(key);
-            } catch (MissingResourceException e) {
-                if (parent != null) {
-                    value = parent.getStringRecursive(key);
-                } else {
-                    value = null;
-                }
+    private String substitutePlaceholders(String key, String value) throws MissingResourceException {
 
-                if (value == null) {
-                    if (isVerbose) {
-                        System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
-                        //e.printStackTrace();
-                    }
-                    return null;
-                }
+        // Substitute placeholders in the value
+        for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
+            int p2 = value.indexOf('}', p1 + 2);
+            if (p2 == -1) {
+                break;
             }
 
-            // Substitute placeholders in the value
-            for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
-                int p2 = value.indexOf('}', p1 + 2);
-                if (p2 == -1) {
+            String placeholderKey = value.substring(p1 + 2, p2);
+            String placeholderFormat;
+            int p3 = placeholderKey.indexOf(',');
+            if (p3 != -1) {
+                placeholderFormat = placeholderKey.substring(p3 + 1);
+                placeholderKey = placeholderKey.substring(0, p3);
+            } else {
+                placeholderFormat = "string";
+            }
+            ArrayList<String> fallbackKeys = new ArrayList<String>();
+            generateFallbackKeys(placeholderKey, fallbackKeys);
+
+            String placeholderValue = null;
+            for (String fk : fallbackKeys) {
+                try {
+                    placeholderValue = getString(fk);
                     break;
+                } catch (MissingResourceException e) {
                 }
-
-                String placeholderKey = value.substring(p1 + 2, p2);
-                String placeholderFormat;
-                int p3 = placeholderKey.indexOf(',');
-                if (p3 != -1) {
-                    placeholderFormat = placeholderKey.substring(p3 + 1);
-                    placeholderKey = placeholderKey.substring(0, p3);
-                } else {
-                    placeholderFormat = "string";
-                }
-                ArrayList<String> fallbackKeys = new ArrayList<String>();
-                generateFallbackKeys(placeholderKey, fallbackKeys);
-
-                String placeholderValue = null;
-                for (String fk : fallbackKeys) {
-                    try {
-                        placeholderValue = getStringRecursive(fk);
-                        break;
-                    } catch (MissingResourceException e) {
-                    }
-                }
-                if (placeholderValue == null) {
-                    throw new MissingResourceException("Placeholder value for fallback keys \"" + fallbackKeys + "\" in key \"" + key + "\" not found in " + baseName, baseName, key);
-                }
-
-                // Do post-processing depending on placeholder format 
-                if ("accelerator".equals(placeholderFormat)) {
-                    // Localize the keywords shift, control, ctrl, meta, alt, altGraph
-                    StringBuilder b = new StringBuilder();
-                    for (String s : placeholderValue.split(" ")) {
-                        if (acceleratorKeys.contains(s)) {
-                            b.append(getString("accelerator." + s));
-                        } else {
-                            b.append(s);
-                        }
-                    }
-                    placeholderValue = b.toString();
-                }
-
-                // Insert placeholder value into value
-                value = value.substring(0, p1) + placeholderValue + value.substring(p2 + 1);
+            }
+            if (placeholderValue == null) {
+                throw new MissingResourceException("Placeholder value for fallback keys \"" + fallbackKeys + "\" in key \"" + key + "\" not found in " + baseName, baseName, key);
             }
 
-            return value;
-        } catch (MissingResourceException e) {
-            if (isVerbose) {
-                System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
-                //e.printStackTrace();
+            // Do post-processing depending on placeholder format 
+            if ("accelerator".equals(placeholderFormat)) {
+                // Localize the keywords shift, control, ctrl, meta, alt, altGraph
+                StringBuilder b = new StringBuilder();
+                for (String s : placeholderValue.split(" ")) {
+                    if (acceleratorKeys.contains(s)) {
+                        b.append(getString("accelerator." + s));
+                    } else {
+                        b.append(s);
+                    }
+                }
+                placeholderValue = b.toString();
             }
-            return null;
+
+            // Insert placeholder value into value
+            value = value.substring(0, p1) + placeholderValue + value.substring(p2 + 1);
         }
+
+        return value;
+
     }
 
     /**
@@ -318,7 +273,7 @@ public class Resources extends ResourceBundle implements Serializable {
      */
     public Integer getInteger(String key) {
         try {
-            return Integer.valueOf(getStringRecursive(key));
+            return Integer.valueOf(getString(key));
         } catch (MissingResourceException e) {
             if (isVerbose) {
                 System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
@@ -360,7 +315,7 @@ public class Resources extends ResourceBundle implements Serializable {
 
     private Node getIconProperty(String key, String suffix, Class<?> baseClass) {
         try {
-            String rsrcName = getStringRecursive(key + suffix);
+            String rsrcName = getString(key + suffix);
             if ("".equals(rsrcName) || rsrcName == null) {
                 return null;
             }
@@ -394,7 +349,7 @@ public class Resources extends ResourceBundle implements Serializable {
      * property is missing.
      */
     public char getMnemonic(String key) {
-        String s = getStringRecursive(key);
+        String s = getString(key);
         return (s == null || s.length() == 0) ? '\0' : s.charAt(0);
     }
 
@@ -410,7 +365,7 @@ public class Resources extends ResourceBundle implements Serializable {
     public KeyCombination getMnemonicProperty(String key) {
         String s;
         try {
-            s = getStringRecursive(key + ".mnemonic");
+            s = getString(key + ".mnemonic");
         } catch (MissingResourceException e) {
             if (isVerbose) {
                 System.err.println("Warning Resources[" + baseName + "] \"" + key + ".mnemonic\" not found.");
@@ -432,7 +387,7 @@ public class Resources extends ResourceBundle implements Serializable {
      */
     public String getToolTipTextProperty(String key) {
         try {
-            String value = getStringRecursive(key + ".toolTipText");
+            String value = getString(key + ".toolTipText");
             return value;
         } catch (MissingResourceException e) {
             if (isVerbose) {
@@ -453,7 +408,7 @@ public class Resources extends ResourceBundle implements Serializable {
      */
     public String getTextProperty(String key) {
         try {
-            String value = getStringRecursive(key + ".text");
+            String value = getString(key + ".text");
             return value;
         } catch (MissingResourceException e) {
             if (isVerbose) {
@@ -491,7 +446,7 @@ public class Resources extends ResourceBundle implements Serializable {
      */
     public KeyCombination getKeyCombination(String key) {
         KeyCombination ks = null;
-        String s = getStringRecursive(key);
+        String s = getString(key);
         try {
             ks = (s == null || s.isEmpty()) ? (KeyCombination) null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
         } catch (NoSuchElementException | StringIndexOutOfBoundsException e) {
@@ -609,7 +564,7 @@ public class Resources extends ResourceBundle implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + "[" + baseName + ", " + resource + "]";
+        return "Resources" + "[" + baseName + "]";
     }
 
     public static void setVerbose(boolean newValue) {
@@ -641,18 +596,26 @@ public class Resources extends ResourceBundle implements Serializable {
 
     @Override
     protected Object handleGetObject(String key) {
+        Object obj = handleGetObjectRecursively(key);
+
+        if (obj instanceof String) {
+            obj = substitutePlaceholders(key, (String) obj);
+        }
+        return obj;
+    }
+
+    protected Object handleGetObjectRecursively(String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
         } catch (MissingResourceException e) {
             if (parent != null) {
-                return parent.getObject(key);
+                return parent.handleGetObjectRecursively(key);
             } else {
-                throw e;
+                obj = "";
+                System.err.println("Can't find resource for bundle " + baseName + ", key " + key);
+                //throw e;
             }
-        }
-        if (obj instanceof String) {
-            obj = getStringRecursive(key);
         }
         return obj;
     }
@@ -678,5 +641,18 @@ public class Resources extends ResourceBundle implements Serializable {
      */
     public static void removeDecoder(ResourceDecoder decoder) {
         decoders.remove(decoder);
+    }
+
+    public boolean containsKey(String key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        if (resource.containsKey(key)) {
+            return true;
+        }
+        if (parent != null) {
+            return parent.containsKey(key);
+        }
+        return false;
     }
 }

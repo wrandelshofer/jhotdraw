@@ -50,7 +50,7 @@
     </Menu>
     <Menu mnemonicParsing="false" text="%view.text">
       <items>
-        <CheckMenuItem id="view.toggleProperties" mnemonicParsing="false" text="Property Panels" />
+        <CheckMenuItem id="view.toggleProperties" mnemonicParsing="false" text="%view.toggleProperties.text" />
       </items>
     </Menu>
     <Menu id="help" mnemonicParsing="false" text="%help.text.mac">
