@@ -29,7 +29,6 @@ import org.jhotdraw8.io.SimpleIdFactory;
  */
 public class CssSizeConverter implements Converter<CssSize> {
 
-  private final static SimpleIdFactory defaultFactory = new SimpleIdFactory();
   private final static NumberConverter numberConverter = new NumberConverter();
   private final boolean nullable;
 
