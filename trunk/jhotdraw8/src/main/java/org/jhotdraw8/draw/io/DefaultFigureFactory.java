@@ -55,6 +55,8 @@ import org.jhotdraw8.text.CssSize;
 import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSize2DConverter;
 import org.jhotdraw8.text.CssSizeConverter;
+import org.jhotdraw8.text.CssSizeInsets;
+import org.jhotdraw8.text.CssSizeInsetsConverter;
 import org.jhotdraw8.text.Paintable;
 import org.jhotdraw8.text.XmlUrlConverter;
 import org.jhotdraw8.text.XmlUriConverter;
@@ -140,6 +142,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Effect.class, new XmlEffectConverter());
         addConverterForType(Figure.class, new XmlFigureReferenceConverter());
         addConverterForType(CssSize.class, new CssSizeConverter());
+        addConverterForType(CssSizeInsets.class, new CssSizeInsetsConverter());
         addConverterForType(CssSize2D.class, new CssSize2DConverter());
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssObservableWordListConverter());
