@@ -151,20 +151,211 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     public final static String PARENT_PROPERTY = "parent";
 
-    // ----
-    // property fields
-    // ----
     /**
-     * Removes the specified connection target.
+     * Computes the union of the bounds of the provided figures in world
+     * coordinates.
      *
-     * @param targetFigure a Figure which is a connection target.
+     * @param selection a set of figures
+     * @return bounds
      */
-    void removeConnectionTarget(Figure targetFigure);
+    public static Bounds bounds(Collection<Figure> selection) {
+        Bounds b = null;
+        for (Figure f : selection) {
+            Bounds fb = f.getLocalToWorld().transform(f.getBoundsInLocal());
+            if (b == null) {
+                b = fb;
+            } else {
+                b = Geom.union(b, fb);
+            }
+        }
+        return b;
+    }
 
     /**
-     * Requests to remove all connection targets.
+     * Returns all keys declared in this class and inherited from parent
+     * classes.
+     *
+     * @param clazz A figure class.
+     * @return the keys
      */
-    void removeAllConnectionTargets();
+    public static Set<MapAccessor<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {
+        try {
+            Set<MapAccessor<?>> keys = new HashSet<>();
+            LinkedList<Class<?>> todo = new LinkedList<>();
+            Set<Class<?>> done = new HashSet<>();
+            todo.add(clazz);
+            while (!todo.isEmpty()) {
+                Class<?> c = todo.removeFirst();
+                for (Field f : c.getDeclaredFields()) {
+                    if (MapAccessor.class.isAssignableFrom(f.getType())) {
+                        MapAccessor<?> k = (MapAccessor<?>) f.get(null);
+                        keys.add(k);
+                    }
+                }
+                if (c.getSuperclass() != null) {
+                    todo.add(c.getSuperclass());
+                }
+                for (Class<?> i : c.getInterfaces()) {
+                    if (done.add(i)) {
+                        todo.add(i);
+                    }
+                }
+
+            }
+            return keys;
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
+            throw new InternalError("class can not read its own keys");
+        }
+    }
+
+    /**
+     * Computes the union of the visual bounds of the provided figures in world
+     * coordinates.
+     *
+     * @param selection a set of figures
+     * @return bounds
+     */
+    public static Bounds visualBounds(Collection<Figure> selection) {
+        Bounds b = null;
+
+        for (Figure f : selection) {
+            Bounds fb;
+            if (f instanceof Drawing) {
+                fb = (f.getLocalToWorld() == null) ? f.getBoundsInLocal() : f.getLocalToWorld().transform(f.getBoundsInLocal());
+                if (b == null) {
+                    b = fb;
+                } else {
+                    b = Geom.union(b, fb);
+                }
+            } else {
+                for (Figure ff : f.preorderIterable()) {
+                    fb = ff.getBoundsInLocal();
+                    double grow = 0.0;
+                    if (ff.get(StrokeableFigure.STROKE_COLOR) != null) {
+                        switch (ff.get(StrokeableFigure.STROKE_TYPE)) {
+                            case CENTERED:
+                                grow += ff.get(StrokeableFigure.STROKE_WIDTH) * 0.5;
+                                break;
+                            case INSIDE:
+                                break;
+                            case OUTSIDE:
+                                grow += ff.get(StrokeableFigure.STROKE_WIDTH);
+                                break;
+                        }
+                    }
+                    if (ff.get(CompositableFigure.EFFECT) != null) {
+                        grow += 10.0;
+                    }
+                    fb = Geom.grow(fb, grow, grow);
+                    fb = f.localToWorld(fb);
+                    if (b == null) {
+                        b = fb;
+                    } else {
+                        b = Geom.union(b, fb);
+                    }
+                }
+            }
+        }
+        return b;
+    }
+
+    // ----
+    // convenience methods
+    // ----
+    /**
+     * Adds a new child to the figure.
+     *
+     * @param newChild the new child
+     */
+    default void add(Figure newChild) {
+        getChildren().add(newChild);
+    }
+
+    /**
+     * Invoked by {@code DrawingModel} when the figure is added to a drawing.
+     *
+     * @param drawing the drawing to which this figure has been added
+     */
+    void addNotify(Drawing drawing);
+
+    /**
+     * Adds a listener which will be notified when a property value of the
+     * figure or of one of its descendants has changed.
+     * <p>
+     * This default implementation adds the listener to the list of property
+     * change listeners.
+     *
+     * @param listener the listener to be added
+     */
+    default void addPropertyChangeListener(Listener<FigurePropertyChangeEvent> listener) {
+        getPropertyChangeListeners().add(listener);
+    }
+
+    /**
+     * Creates handles of the specified level and adds them to the provided
+     * list.
+     *
+     * @param handleType The desired handle type
+     * @param list The handles.
+     */
+    default void createHandles(HandleType handleType, List<Handle> list) {
+        if (handleType == HandleType.SELECT) {
+            list.add(new BoundsInLocalOutlineHandle(this));
+        } else if (handleType == HandleType.ANCHOR) {
+            list.add(new AnchorOutlineHandle(this));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new MoveHandle(this, RelativeLocator.northEast()));
+            list.add(new MoveHandle(this, RelativeLocator.northWest()));
+            list.add(new MoveHandle(this, RelativeLocator.southEast()));
+            list.add(new MoveHandle(this, RelativeLocator.southWest()));
+        } else if (handleType == HandleType.POINT) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
+        } else if (handleType == HandleType.RESIZE) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
+            if (this instanceof ResizableFigure) {
+                ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
+                ResizeHandleKit.addEdgeResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
+            }
+        } else if (handleType == HandleType.TRANSFORM) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
+            list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
+            if (this instanceof TransformableFigure) {
+                TransformableFigure tf = (TransformableFigure) this;
+                list.add(new RotateHandle(tf));
+                TransformHandleKit.addCornerTransformHandles(tf, list);
+                TransformHandleKit.addEdgeTransformHandles(tf, list);
+            }
+        }
+    }
+
+    /**
+     * This method is invoked by a {@code RenderContext}, when it needs a node
+     * to create a JavaFX scene graph for a figure.
+     * <p>
+     * A typical implementation should look like this:
+     * <pre>{@code
+     * public Node createNode(RenderContext v) {
+     * return new ...desired subclass of Node...();
+     * }
+     * }</pre>
+     * <p>
+     * A figure may be rendered with multiple {@code RenderContext}s
+     * simultaneously. Each {@code RenderContext} uses this method to
+     * instantiate a JavaFX node for the figure and associate it to the figure.
+     * <p>
+     * This method must create a new instance because returning an already
+     * existing instance may cause undesired side effects on other
+     * {@code RenderContext}s.
+     * <p>
+     * Note that by convention this method <b>may only</b> be invoked by a
+     * {@code RenderContext} object.
+     *
+     * @param ctx the renderer which will use the node
+     * @return the newly created node
+     */
+    Node createNode(RenderContext ctx);
 
     /**
      * This method is invoked on a figure by
@@ -177,60 +368,65 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
-     * This method is invoked on a figure and all its descendants by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
-     * transformation of the figure has changed.
-     * <p>
-     * The default implementation of this method calls
-     * {@link #invalidateTransforms}.
+     * Disconnects all dependent and providing figures from this figure.
      *
-     * @return true if the transforms were valid
      */
-    default boolean transformNotify() {
-        return invalidateTransforms();
+    default void disconnect() {
+        for (Figure connectedFigure : new ArrayList<Figure>(getDependentFigures())) {
+            connectedFigure.removeConnectionTarget(this);
+        }
+        removeAllConnectionTargets();
     }
 
     /**
-     * This method is invoked on a figure by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
-     * figure needs to be laid out again.
-     * <p>
-     * The default implementation of this method calls {@link #layout}.
-     */
-    default void layoutNotify() {
-        layout();
-    }
-
-    /**
-     * This method is invoked on a figure by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
-     * figure needs to apply its stylesheet again.
-     * <p>
-     * The default implementation of this method calls {@link #updateCss} and
-     * then {@code #layout}.
-     */
-    default void stylesheetNotify() {
-        updateCss();
-        layout();
-    }
-
-    /**
-     * The parent figure.
-     * <p>
-     * If this figure has not been added as a child to another figure, then this
-     * variable will be null.
-     * </p>
-     * By convention the parent is set exclusively by a composite figure on its
-     * child figures. The composite figure sets parent to itself on a child
-     * immediately after the child figure has been added to the composite
-     * figure. The composite figure sets parent to {@code null} on a child
-     * immediately after the child figure has been removed from the composite
-     * figure.
+     * Gets a connector for this figure at the given location.
      *
-     * @return the parent property, with {@code getBean()} returning this
-     * figure, and {@code getName()} returning {@code PARENT_PROPERTY}.
+     * @param pointInLocal the location of the connector in local coordinates.
+     * @param prototype The prototype used to create a connection or null if
+     * unknown. This allows for specific connectors for different connection
+     * figures.
+     * @return Returns the connector. Returns null if there is no connector at
+     * the given location.
      */
-    ObjectProperty<Figure> parentProperty();
+    Connector findConnector(Point2D pointInLocal, Figure prototype);
+
+    /**
+     * Fires a property change event.
+     *
+     * @param <T> the value type
+     * @param source the event source
+     * @param type the event type
+     * @param key the property key
+     * @param oldValue the old property value
+     * @param newValue the new property value
+     */
+    default <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
+        if (hasPropertyChangeListeners()) {
+            firePropertyChangeEvent(new FigurePropertyChangeEvent(source, type, key, oldValue, newValue));
+        } else {
+            Figure parent = getParent();
+            if (parent != null) {
+                parent.firePropertyChangeEvent(source, type, key, oldValue, newValue);
+            }
+        }
+    }
+
+    /**
+     * Fires a property change event.
+     *
+     * @param event the event
+     */
+    default void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
+        if (hasPropertyChangeListeners()) {
+            for (Listener<FigurePropertyChangeEvent> l : getPropertyChangeListeners()) {
+                l.handle(event);
+            }
+        }
+        Figure parent = getParent();
+        if (parent != null) {
+            parent.firePropertyChangeEvent(event);
+        }
+    }
 
     // ----
     // behavior methods
@@ -289,29 +485,494 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
-     * Attempts to transform the figure.
-     * <p>
-     * The figure may choose to only partially change its transformation.
+     * Returns the center of the figure in the local coordinates of the figure.
      *
-     * @param transform the desired transformation in parent coordinates
+     * @return The center of the figure
      */
-    void transformInParent(Transform transform);
+    default Point2D getCenterInLocal() {
+        Bounds b = getBoundsInLocal();
+        return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
+                + b.getMaxY()) * 0.5);
+    }
 
     /**
-     * Attempts to transform the figure.
-     * <p>
-     * The figure may choose to only partially change its transformation.
+     * Returns the center of the figure in the local coordinates of the figure.
      *
-     * @param transform the desired transformation in local coordinates
+     * @return The center of the figure
      */
-    void transformInLocal(Transform transform);
+    default Point2D getCenterInParent() {
+        Bounds b = getBoundsInParent();
+        return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
+                + b.getMaxY()) * 0.5);
+    }
+
+    /**
+     * Gets the child with the specified index from the figure.
+     *
+     * @param index the index
+     * @return the child
+     */
+    default Figure getChild(int index) {
+        return getChildren().get(index);
+    }
+
+    /**
+     * The child figures.
+     * <p>
+     * All changes on this list causes this figure to fire an invalidation
+     * event.
+     * <p>
+     * If a child is added to this list, then this figure removes the child from
+     * its former parent, and then sets itself as the parent of the child.</p>
+     * <p>
+     * If a child is removed from this list, then this figure sets the parent of
+     * the child to null.</p>
+     *
+     * @return the children
+     */
+    @Override
+    ObservableList<Figure> getChildren();
+
+    /**
+     * Returns all figures which derive their state from the state of this
+     * figure.
+     * <p>
+     * When the state of this figure changes, then the state of the dependent
+     * figures must be updated.
+     * <p>
+     * The update strategy is implemented in {@link DrawingModel}.
+     * {@code DrawingMode} observes state changes in figures and updates
+     * dependent figures. {@code DrawingModel} can coallesce multiply state
+     * changes of figures into a smaller number of updates. {@code DrawingModel}
+     * can also detect cyclic state dependencies and prevent endless update
+     * loops.
+     *
+     * @return a list of dependent figures
+     */
+    Set<Figure> getDependentFigures();
+
+    /**
+     * Returns the ancestor Drawing.
+     *
+     * @return the drawing or null if no ancestor is a drawing. Returns this, if
+     * this figure is a drawing.
+     */
+    default Drawing getDrawing() {
+        return getAncestor(Drawing.class);
+    }
+
+    /**
+     * Gets the first child.
+     *
+     * @return The first child. Returns null if the figure has no getChildren.
+     */
+    default Figure getFirstChild() {
+        return getChildren().isEmpty() //
+                ? null//
+                : getChildren().get(getChildren().size() - 1);
+    }
+
+    /**
+     * Gets the last child.
+     *
+     * @return The last child. Returns null if the figure has no getChildren.
+     */
+    default Figure getLastChild() {
+        return getChildren().isEmpty() ? null : getChildren().get(0);
+    }
+
+    /**
+     * Returns the ancestor Layer.
+     *
+     * @return the drawing or null if no ancestor is a layer. Returns this, if
+     * this figure is a layer.
+     */
+    default Layer getLayer() {
+        return getAncestor(Layer.class);
+    }
+
+    /**
+     * Returns the transformation from local coordinates into parent
+     * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @return the transformation
+     */
+    Transform getLocalToParent();
+
+    /**
+     * Returns the transformation from local coordinates into world coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @return the transformation
+     */
+    Transform getLocalToWorld();
+
+    /**
+     * Returns the parent figure.
+     * <p>
+     * Note that there is no convenience method named {@code setParent}.
+     *
+     * @return parent figure or null, if the figure has no parent.
+     */
+    @Override
+    default Figure getParent() {
+        return parentProperty().get();
+    }
+
+    /**
+     * Returns the transformation from parent coordinates into local
+     * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @return the transformation
+     */
+    Transform getParentToLocal();
+
+    /**
+     * Returns the transformation from world coordinates into drawing
+     * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @return the transformation
+     */
+    Transform getParentToWorld();
+
+    /**
+     * Returns the preferred aspect ratio of the figure. The aspect ratio is
+     * defined as the height divided by the width of the figure. If a figure
+     * does not have a preference it should return its current aspect ratio.
+     *
+     * @return the preferred aspect ratio of the figure.
+     */
+    default double getPreferredAspectRatio() {
+        Bounds bounds = getBoundsInLocal();
+        return (bounds.getHeight() == 0 || bounds.getWidth() == 0) ? 1 : bounds.getHeight() / bounds.getWidth();
+    }
+
+    /**
+     * List of property change listeners.
+     *
+     * @return a list of property change listeners
+     */
+    CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners();
+
+    /**
+     * Returns all figures which provide to the state of this figure.
+     * <p>
+     * When the state of a providing figure changes, then the state of this
+     * figure needs to be updated.
+     * <p>
+     * See {@link #getDependentFigures} for a description of the update
+     * strategy.
+     *
+     *
+     * @return a list of providing figures
+     */
+    default Set<Figure> getProvidingFigures() {
+        return Collections.emptySet();
+    }
+
+    /**
+     * Returns the root.
+     *
+     * @return the root
+     */
+    default Figure getRoot() {
+        Figure parent = this;
+        while (parent.getParent() != null) {
+            parent = parent.getParent();
+        }
+        return parent;
+    }
+
+    @Override
+    default Styleable getStyleableParent() {
+        return getParent();
+    }
+
+    // ---
+    // static methods
+    // ---
+    /**
+     * Returns all supported map accessors of the figure.
+     * <p>
+     * The default implementation returns all declared and inherited map
+     * accessors.
+     *
+     * @return the keys
+     */
+    default Set<MapAccessor<?>> getSupportedKeys() {
+        return Figure.getDeclaredAndInheritedKeys(this.getClass());
+    }
+
+    /**
+     * Returns the transformation from world coordinates into local coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @return the transformation
+     */
+    Transform getWorldToLocal();
+
+    /**
+     * Returns the transformation from world coordinates into parent
+     * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @return the transformation
+     */
+    Transform getWorldToParent();
+
+    /**
+     * Whether this figure has property change listeners.
+     *
+     * @return true if this figure has property change listeners
+     */
+    boolean hasPropertyChangeListeners();
+
+    /**
+     * Invalidates the transformation matrices of this figure.
+     * <p>
+     * This figure does not keep track of changes that cause the invalidation of
+     * its tranformation matrices. Use a
+     * {@link org.jhotdraw8.draw.model.DrawingModel} to manage the
+     * transformation matrices of the figures in a drawing.
+     *
+     * @return true if the transformation matrices of the child figures must be
+     * invalidated as well
+     */
+    boolean invalidateTransforms();
+
+    /**
+     * Whether children may be added to this figure.
+     *
+     * @return true if getChildren are allowed
+     */
+    boolean isAllowsChildren();
+
+    /**
+     * Whether the figure is decomposable.
+     *
+     * @return true if the figure is decomposable
+     */
+    default boolean isDecomposable() {
+        return true;
+    }
+
+    /**
+     * Whether the figure is deletable by the user.
+     *
+     * @return true if the user may delete the figure
+     */
+    boolean isDeletable();
+
+    /**
+     * Whether the figure is editable by the user.
+     *
+     * @return true if the user may edit the figure.
+     */
+    boolean isEditable();
+
+    /**
+     * Whether the figure can be reshaped as a group together with other
+     * figures.
+     * <p>
+     * If this figure uses one of the other figures for computing its position
+     * or its layout, then it will return false.
+     * <p>
+     * The default implementation always returns true.
+     *
+     * @param others A set of figures.
+     * @return true if the user may reshapeInLocal this figure together with
+     * those in the set.
+     */
+    default boolean isGroupReshapeableWith(Set<Figure> others) {
+        return true;
+    }
+
+    /**
+     * Whether the {@code layout} method of this figure does anything.
+     *
+     * @return true if the {@code layout} method is not empty.
+     */
+    boolean isLayoutable();
+
+    /**
+     * Whether the figure is selectable by the user.
+     *
+     * @return true if the user may select the figure
+     */
+    boolean isSelectable();
+
+    /**
+     * This method whether the provided figure is a suitable parent for this
+     * figure.
+     *
+     * @param newParent The new parent figure.
+     * @return true if {@code newParent} is an acceptable parent
+     */
+    public boolean isSuitableParent(Figure newParent);
+
+    /**
+     * Returns true if the specified key is supported by this figure.
+     * <p>
+     * The default implementation returns all declared and inherited map
+     * accessors.
+     *
+     * @return the keys
+     */
+    default boolean isSupportedKey(MapAccessor<?> key) {
+        return getSupportedKeys().contains(key);
+    }
+
+    /**
+     * Whether the figure and all its ancestors are visible.
+     *
+     * @return true if the user can see the figure
+     */
+    default boolean isVisible() {
+        Figure node = this;
+        while (node != null) {
+            if (!node.get(HideableFigure.VISIBLE)) {
+                return false;
+            }
+            node = node.getParent();
+        }
+        return true;
+    }
+
+    /**
+     * Updates the layout of this figure, based on the layout of its children
+     * and the layout of providing figures.
+     * <p>
+     * This figure does not keep track of changes that require layout updates.
+     * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
+     */
+    default void layout() {
+
+    }
+
+    /**
+     * This method is invoked on a figure by
+     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
+     * figure needs to be laid out again.
+     * <p>
+     * The default implementation of this method calls {@link #layout}.
+     */
+    default void layoutNotify() {
+        layout();
+    }
+
+    /**
+     * Transforms the specified point from local coordinates into world
+     * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @param p point in local coordinates
+     * @return point in world coordinates
+     */
+    default Point2D localToWorld(Point2D p) {
+        final Transform ltw = getLocalToWorld();
+        return ltw == null ? p : ltw.transform(p);
+    }
+    /**
+     * Transforms the specified bounds from local coordinates into world
+     * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @param p bounds in local coordinates
+     * @return bounds in world coordinates
+     */
+    default Bounds localToWorld(Bounds p) {
+        final Transform ltw = getLocalToWorld();
+        return ltw == null ? p : ltw.transform(p);
+    }
+
+    /**
+     * The parent figure.
+     * <p>
+     * If this figure has not been added as a child to another figure, then this
+     * variable will be null.
+     * </p>
+     * By convention the parent is set exclusively by a composite figure on its
+     * child figures. The composite figure sets parent to itself on a child
+     * immediately after the child figure has been added to the composite
+     * figure. The composite figure sets parent to {@code null} on a child
+     * immediately after the child figure has been removed from the composite
+     * figure.
+     *
+     * @return the parent property, with {@code getBean()} returning this
+     * figure, and {@code getName()} returning {@code PARENT_PROPERTY}.
+     */
+    ObjectProperty<Figure> parentProperty();
+
+    /**
+     * Removes a child from the figure.
+     *
+     * @param child a child of the figure
+     */
+    default void remove(Figure child) {
+        getChildren().remove(child);
+    }
+
+    /**
+     * Requests to remove all connection targets.
+     */
+    void removeAllConnectionTargets();
+
+    // ----
+    // property fields
+    // ----
+    /**
+     * Removes the specified connection target.
+     *
+     * @param targetFigure a Figure which is a connection target.
+     */
+    void removeConnectionTarget(Figure targetFigure);
+
+    /**
+     * Invoked by {@code DrawingModel} when the figure is removed from a
+     * drawing.
+     *
+     * @param drawing the drawing from which this figure has been removed
+     */
+    void removeNotify(Drawing drawing);
+
+    /**
+     * Removes a listener from the list of property change listeners.
+     * <p>
+     * This default implementation removes the listener from the list of
+     * property change listeners.
+     *
+     * @param listener the listener to be removed
+     */
+    default void removePropertyChangeListener(Listener<FigurePropertyChangeEvent> listener) {
+        getPropertyChangeListeners().remove(listener);
+    }
 
     /**
      * Attempts to change the local bounds of the figure.
      * <p>
      * The figure may choose to only partially change its local bounds.
      * <p>
-     * This method typically changes property values in this figure with null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
+     * This method typically changes property values in this figure with null
+     * null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -321,22 +982,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param transform the desired transformation in local coordinates
      */
     void reshapeInLocal(Transform transform);
-
-    /**
-     * Attempts to change the parent bounds of the figure.
-     * <p>
-     * The figure may choose to only partially change its parent bounds.
-     * <p>
-     * This method typically changes property values in this figure with null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE}, 
-     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
-     * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
-     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
-     * {@code reshapeInLocal} on child figures.
-     *
-     *
-     * @param transform the desired transformation in parent coordinates
-     */
-    void reshapeInParent(Transform transform);
 
     /**
      * Attempts to change the local bounds of the figure.
@@ -362,38 +1007,82 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         if (!Double.isNaN(sx) && !Double.isNaN(sy)
                 && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                 && (sx != 1d || sy != 1d)) {
-            tx = Transforms.concat(tx,new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
+            tx = Transforms.concat(tx, new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
         }
 
         Figure.this.reshapeInLocal(tx);
     }
 
     /**
-     * This method is invoked by a {@code RenderContext}, when it needs a node
-     * to create a JavaFX scene graph for a figure.
+     * Attempts to change the parent bounds of the figure.
      * <p>
-     * A typical implementation should look like this:
-     * <pre>{@code
-     * public Node createNode(RenderContext v) {
-     * return new ...desired subclass of Node...();
-     * }
-     * }</pre>
+     * The figure may choose to only partially change its parent bounds.
      * <p>
-     * A figure may be rendered with multiple {@code RenderContext}s
-     * simultaneously. Each {@code RenderContext} uses this method to
-     * instantiate a JavaFX node for the figure and associate it to the figure.
-     * <p>
-     * This method must create a new instance because returning an already
-     * existing instance may cause undesired side effects on other
-     * {@code RenderContext}s.
-     * <p>
-     * Note that by convention this method <b>may only</b> be invoked by a
-     * {@code RenderContext} object.
+     * This method typically changes property values in this figure with null
+     * null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
+     * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
+     * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
+     * {@code reshapeInLocal} on child figures.
      *
-     * @param ctx the renderer which will use the node
-     * @return the newly created node
+     *
+     * @param transform the desired transformation in parent coordinates
      */
-    Node createNode(RenderContext ctx);
+    void reshapeInParent(Transform transform);
+
+    /**
+     * This method is invoked on a figure by
+     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
+     * figure needs to apply its stylesheet again.
+     * <p>
+     * The default implementation of this method calls {@link #updateCss} and
+     * then {@code #layout}.
+     */
+    default void stylesheetNotify() {
+        updateCss();
+        layout();
+    }
+
+    /**
+     * Attempts to transform the figure.
+     * <p>
+     * The figure may choose to only partially change its transformation.
+     *
+     * @param transform the desired transformation in local coordinates
+     */
+    void transformInLocal(Transform transform);
+
+    /**
+     * Attempts to transform the figure.
+     * <p>
+     * The figure may choose to only partially change its transformation.
+     *
+     * @param transform the desired transformation in parent coordinates
+     */
+    void transformInParent(Transform transform);
+
+    /**
+     * This method is invoked on a figure and all its descendants by
+     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
+     * transformation of the figure has changed.
+     * <p>
+     * The default implementation of this method calls
+     * {@link #invalidateTransforms}.
+     *
+     * @return true if the transforms were valid
+     */
+    default boolean transformNotify() {
+        return invalidateTransforms();
+    }
+
+    /**
+     * Updates the stylesheet cache of this figure depending on its property
+     * values and on the and the property values of its ancestors.
+     * <p>
+     * This figure does not keep track of changes that require CSS updates. Use
+     * a {@link org.jhotdraw8.draw.model.DrawingModel} to manage CSS updates.
+     */
+    void updateCss();
 
     /**
      * This method is invoked by a {@code RenderContext}, when it needs to
@@ -433,497 +1122,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     void updateNode(RenderContext ctx, Node node);
 
     /**
-     * Whether children may be added to this figure.
-     *
-     * @return true if getChildren are allowed
-     */
-    boolean isAllowsChildren();
-
-    /**
-     * This method whether the provided figure is a suitable parent for this
-     * figure.
-     *
-     * @param newParent The new parent figure.
-     * @return true if {@code newParent} is an acceptable parent
-     */
-    public boolean isSuitableParent(Figure newParent);
-
-    /**
-     * Whether the {@code layout} method of this figure does anything.
-     *
-     * @return true if the {@code layout} method is not empty.
-     */
-    boolean isLayoutable();
-
-    /**
-     * Whether the figure is selectable by the user.
-     *
-     * @return true if the user may select the figure
-     */
-    boolean isSelectable();
-
-    /**
-     * Whether the figure is deletable by the user.
-     *
-     * @return true if the user may delete the figure
-     */
-    boolean isDeletable();
-
-    /**
-     * Whether the figure can be reshaped as a group together with other
-     * figures.
-     * <p>
-     * If this figure uses one of the other figures for computing its position
-     * or its layout, then it will return false.
-     * <p>
-     * The default implementation always returns true.
-     *
-     * @param others A set of figures.
-     * @return true if the user may reshapeInLocal this figure together with
-     * those in the set.
-     */
-    default boolean isGroupReshapeableWith(Set<Figure> others) {
-        return true;
-    }
-
-    /**
-     * Whether the figure is editable by the user.
-     *
-     * @return true if the user may edit the figure.
-     */
-    boolean isEditable();
-
-    /**
-     * Whether the figure and all its ancestors are visible.
-     *
-     * @return true if the user can see the figure
-     */
-    default boolean isVisible() {
-        Figure node = this;
-        while (node != null) {
-            if (!node.get(HideableFigure.VISIBLE)) {
-                return false;
-            }
-            node = node.getParent();
-        }
-        return true;
-    }
-
-    /**
-     * Whether the figure is decomposable.
-     *
-     * @return true if the figure is decomposable
-     */
-    default boolean isDecomposable() {
-        return true;
-    }
-
-    /**
-     * Creates handles of the specified level and adds them to the provided
-     * list.
-     *
-     * @param handleType The desired handle type
-     * @param list The handles.
-     */
-    default void createHandles(HandleType handleType, List<Handle> list) {
-        if (handleType == HandleType.SELECT) {
-            list.add(new BoundsInLocalOutlineHandle(this));
-        }else  if (handleType == HandleType.ANCHOR) {
-            list.add(new AnchorOutlineHandle(this));
-        } else if (handleType == HandleType.MOVE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new MoveHandle(this, RelativeLocator.northEast()));
-            list.add(new MoveHandle(this, RelativeLocator.northWest()));
-            list.add(new MoveHandle(this, RelativeLocator.southEast()));
-            list.add(new MoveHandle(this, RelativeLocator.southWest()));
-        } else if (handleType == HandleType.POINT) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
-        } else if (handleType == HandleType.RESIZE) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
-            if (this instanceof ResizableFigure) {
-                ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
-                ResizeHandleKit.addEdgeResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
-            }
-        } else if (handleType == HandleType.TRANSFORM) {
-            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
-            list.add(new BoundsInTransformOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
-            if (this instanceof TransformableFigure) {
-                TransformableFigure tf = (TransformableFigure) this;
-                list.add(new RotateHandle(tf));
-                TransformHandleKit.addCornerTransformHandles(tf, list);
-                TransformHandleKit.addEdgeTransformHandles(tf, list);
-            }
-        }
-    }
-
-    /**
-     * Gets a connector for this figure at the given location.
-     *
-     * @param pointInLocal the location of the connector in local coordinates.
-     * @param prototype The prototype used to create a connection or null if
-     * unknown. This allows for specific connectors for different connection
-     * figures.
-     * @return Returns the connector. Returns null if there is no connector at
-     * the given location.
-     */
-    Connector findConnector(Point2D pointInLocal, Figure prototype);
-
-    /**
-     * Updates the layout of this figure, based on the layout of its children
-     * and the layout of providing figures.
-     * <p>
-     * This figure does not keep track of changes that require layout updates.
-     * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
-     */
-    default void layout() {
-        
-    }
-
-    /**
-     * Updates the stylesheet cache of this figure depending on its property
-     * values and on the and the property values of its ancestors.
-     * <p>
-     * This figure does not keep track of changes that require CSS updates. Use
-     * a {@link org.jhotdraw8.draw.model.DrawingModel} to manage CSS updates.
-     */
-    void updateCss();
-
-    /**
-     * Invoked by {@code DrawingModel} when the figure is added to a drawing.
-     *
-     * @param drawing the drawing to which this figure has been added
-     */
-    void addNotify(Drawing drawing);
-
-    /**
-     * Invoked by {@code DrawingModel} when the figure is removed from a
-     * drawing.
-     *
-     * @param drawing the drawing from which this figure has been removed
-     */
-    void removeNotify(Drawing drawing);
-
-    // ----
-    // convenience methods
-    // ----
-    /**
-     * Adds a new child to the figure.
-     *
-     * @param newChild the new child
-     */
-    default void add(Figure newChild) {
-        getChildren().add(newChild);
-    }
-
-    /**
-     * Removes a child from the figure.
-     *
-     * @param child a child of the figure
-     */
-    default void remove(Figure child) {
-        getChildren().remove(child);
-    }
-
-    /**
-     * Gets the child with the specified index from the figure.
-     *
-     * @param index the index
-     * @return the child
-     */
-    default Figure getChild(int index) {
-        return getChildren().get(index);
-    }
-
-    /**
-     * Gets the last child.
-     *
-     * @return The last child. Returns null if the figure has no getChildren.
-     */
-    default Figure getLastChild() {
-        return getChildren().isEmpty() ? null : getChildren().get(0);
-    }
-
-    /**
-     * Gets the first child.
-     *
-     * @return The first child. Returns null if the figure has no getChildren.
-     */
-    default Figure getFirstChild() {
-        return getChildren().isEmpty() //
-                ? null//
-                : getChildren().get(getChildren().size() - 1);
-    }
-
-    /**
-     * The child figures.
-     * <p>
-     * All changes on this list causes this figure to fire an invalidation
-     * event.
-     * <p>
-     * If a child is added to this list, then this figure removes the child from
-     * its former parent, and then sets itself as the parent of the child.</p>
-     * <p>
-     * If a child is removed from this list, then this figure sets the parent of
-     * the child to null.</p>
-     *
-     * @return the children
-     */
-    @Override
-    ObservableList<Figure> getChildren();
-
-    /**
-     * Returns the parent figure.
-     * <p>
-     * Note that there is no convenience method named {@code setParent}.
-     *
-     * @return parent figure or null, if the figure has no parent.
-     */
-    @Override
-    default Figure getParent() {
-        return parentProperty().get();
-    }
-
-    /**
-     * Returns the root.
-     *
-     * @return the root
-     */
-    default Figure getRoot() {
-        Figure parent = this;
-        while (parent.getParent() != null) {
-            parent = parent.getParent();
-        }
-        return parent;
-    }
-
-    /**
-     * Returns the ancestor Drawing.
-     *
-     * @return the drawing or null if no ancestor is a drawing. Returns this, if
-     * this figure is a drawing.
-     */
-    default Drawing getDrawing() {
-        return getAncestor(Drawing.class);
-    }
-
-    /**
-     * Returns the ancestor Layer.
-     *
-     * @return the drawing or null if no ancestor is a layer. Returns this, if
-     * this figure is a layer.
-     */
-    default Layer getLayer() {
-        return getAncestor(Layer.class);
-    }
-
-    /**
-     * Returns all figures which derive their state from the state of this
-     * figure.
-     * <p>
-     * When the state of this figure changes, then the state of the dependent
-     * figures must be updated.
-     * <p>
-     * The update strategy is implemented in {@link DrawingModel}.
-     * {@code DrawingMode} observes state changes in figures and updates
-     * dependent figures. {@code DrawingModel} can coallesce multiply state
-     * changes of figures into a smaller number of updates. {@code DrawingModel}
-     * can also detect cyclic state dependencies and prevent endless update
-     * loops.
-     *
-     * @return a list of dependent figures
-     */
-    Set<Figure> getDependentFigures();
-
-    /**
-     * Returns all figures which provide to the state of this figure.
-     * <p>
-     * When the state of a providing figure changes, then the state of this
-     * figure needs to be updated.
-     * <p>
-     * See {@link #getDependentFigures} for a description of the update
-     * strategy.
-     *
-     *
-     * @return a list of providing figures
-     */
-    default Set<Figure> getProvidingFigures() {
-        return Collections.emptySet();
-    }
-
-    /**
-     * Disconnects all dependent and providing figures from this figure.
-     *
-     */
-    default void disconnect() {
-        for (Figure connectedFigure : new ArrayList<Figure>(getDependentFigures())) {
-            connectedFigure.removeConnectionTarget(this);
-        }
-        removeAllConnectionTargets();
-    }
-
-    // ---
-    // static methods
-    // ---
-    /**
-     * Returns all supported map accessors of the figure.
-     * <p>
-     * The default implementation returns all declared and inherited map
-     * accessors.
-     *
-     * @return the keys
-     */
-    default Set<MapAccessor<?>> getSupportedKeys() {
-        return Figure.getDeclaredAndInheritedKeys(this.getClass());
-    }
-    /**
-     * Returns true if the specified key is supported by this figure.
-     * <p>
-     * The default implementation returns all declared and inherited map
-     * accessors.
-     *
-     * @return the keys
-     */
-    default boolean isSupportedKey(MapAccessor<?> key) {
-        return getSupportedKeys().contains(key);
-    }
-
-    /**
-     * Returns all keys declared in this class and inherited from parent
-     * classes.
-     *
-     * @param clazz A figure class.
-     * @return the keys
-     */
-    public static Set<MapAccessor<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {
-        try {
-            Set<MapAccessor<?>> keys = new HashSet<>();
-            LinkedList<Class<?>> todo = new LinkedList<>();
-            Set<Class<?>> done = new HashSet<>();
-            todo.add(clazz);
-            while (!todo.isEmpty()) {
-                Class<?> c = todo.removeFirst();
-                for (Field f : c.getDeclaredFields()) {
-                    if (MapAccessor.class.isAssignableFrom(f.getType())) {
-                        MapAccessor<?> k = (MapAccessor<?>) f.get(null);
-                        keys.add(k);
-                    }
-                }
-                if (c.getSuperclass() != null) {
-                    todo.add(c.getSuperclass());
-                }
-                for (Class<?> i : c.getInterfaces()) {
-                    if (done.add(i)) {
-                        todo.add(i);
-                    }
-                }
-
-            }
-            return keys;
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys");
-        }
-    }
-
-    /**
-     * Returns the preferred aspect ratio of the figure. The aspect ratio is
-     * defined as the height divided by the width of the figure. If a figure
-     * does not have a preference it should return its current aspect ratio.
-     *
-     * @return the preferred aspect ratio of the figure.
-     */
-    default double getPreferredAspectRatio() {
-        Bounds bounds = getBoundsInLocal();
-        return (bounds.getHeight() == 0 || bounds.getWidth() == 0) ? 1 : bounds.getHeight() / bounds.getWidth();
-    }
-
-    /**
-     * Returns the center of the figure in the local coordinates of the figure.
-     *
-     * @return The center of the figure
-     */
-    default Point2D getCenterInLocal() {
-        Bounds b = getBoundsInLocal();
-        return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
-                + b.getMaxY()) * 0.5);
-    }
-
-    /**
-     * Returns the center of the figure in the local coordinates of the figure.
-     *
-     * @return The center of the figure
-     */
-    default Point2D getCenterInParent() {
-        Bounds b = getBoundsInParent();
-        return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
-                + b.getMaxY()) * 0.5);
-    }
-
-    /**
-     * Returns the transformation from parent coordinates into local
-     * coordinates.
-     * <p>
-     * This method may use caching and return incorrect results if the cache is
-     * stale.
-     *
-     * @return the transformation
-     */
-    Transform getParentToLocal();
-
-    /**
-     * Returns the transformation from local coordinates into parent
-     * coordinates.
-     * <p>
-     * This method may use caching and return incorrect results if the cache is
-     * stale.
-     *
-     * @return the transformation
-     */
-    Transform getLocalToParent();
-
-    /**
-     * Returns the transformation from world coordinates into local coordinates.
-     * <p>
-     * This method may use caching and return incorrect results if the cache is
-     * stale.
-     *
-     * @return the transformation
-     */
-    Transform getWorldToLocal();
-
-    /**
-     * Returns the transformation from world coordinates into parent
-     * coordinates.
-     * <p>
-     * This method may use caching and return incorrect results if the cache is
-     * stale.
-     *
-     * @return the transformation
-     */
-    Transform getWorldToParent();
-
-    /**
-     * Returns the transformation from local coordinates into world coordinates.
-     * <p>
-     * This method may use caching and return incorrect results if the cache is
-     * stale.
-     *
-     * @return the transformation
-     */
-    Transform getLocalToWorld();
-
-    /**
-     * Returns the transformation from world coordinates into drawing
-     * coordinates.
-     * <p>
-     * This method may use caching and return incorrect results if the cache is
-     * stale.
-     *
-     * @return the transformation
-     */
-    Transform getParentToWorld();
-
-    /**
      * Transforms the specified point from world coordinates into local
      * coordinates.
      * <p>
@@ -935,7 +1133,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default Point2D worldToLocal(Point2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
-        return wtl==null?pointInWorld:wtl.transform(pointInWorld);
+        return wtl == null ? pointInWorld : wtl.transform(pointInWorld);
     }
 
     /**
@@ -950,187 +1148,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default Point2D worldToParent(Point2D pointInWorld) {
         final Transform wtp = getWorldToParent();
-        return wtp==null?pointInWorld: wtp.transform(pointInWorld);
-    }
-
-    /**
-     * Transforms the specified point from local coordinates into drawing
-     * coordinates.
-     * <p>
-     * This method may use caching and return incorrect results if the cache is
-     * stale.
-     *
-     * @param p point in drawing coordinates
-     * @return point in local coordinates
-     */
-    default Point2D localToWorld(Point2D p) {
-        final Transform ltw = getLocalToWorld();
-        return ltw==null?p:ltw.transform(p);
-    }
-
-    @Override
-    default Styleable getStyleableParent() {
-        return getParent();
-    }
-
-    /**
-     * Invalidates the transformation matrices of this figure.
-     * <p>
-     * This figure does not keep track of changes that cause the invalidation of
-     * its tranformation matrices. Use a
-     * {@link org.jhotdraw8.draw.model.DrawingModel} to manage the
-     * transformation matrices of the figures in a drawing.
-     *
-     * @return true if the transformation matrices of the child figures must be
-     * invalidated as well
-     */
-    boolean invalidateTransforms();
-
-    /**
-     * List of property change listeners.
-     *
-     * @return a list of property change listeners
-     */
-    CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners();
-
-    /**
-     * Adds a listener which will be notified when a property value of the
-     * figure or of one of its descendants has changed.
-     * <p>
-     * This default implementation adds the listener to the list of property
-     * change listeners.
-     *
-     * @param listener the listener to be added
-     */
-    default void addPropertyChangeListener(Listener<FigurePropertyChangeEvent> listener) {
-        getPropertyChangeListeners().add(listener);
-    }
-
-    /**
-     * Removes a listener from the list of property change listeners.
-     * <p>
-     * This default implementation removes the listener from the list of
-     * property change listeners.
-     *
-     * @param listener the listener to be removed
-     */
-    default void removePropertyChangeListener(Listener<FigurePropertyChangeEvent> listener) {
-        getPropertyChangeListeners().remove(listener);
-    }
-
-    /**
-     * Whether this figure has property change listeners.
-     *
-     * @return true if this figure has property change listeners
-     */
-    boolean hasPropertyChangeListeners();
-
-    /**
-     * Fires a property change event.
-     *
-     * @param <T> the value type
-     * @param source the event source
-     * @param type the event type
-     * @param key the property key
-     * @param oldValue the old property value
-     * @param newValue the new property value
-     */
-    default <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
-        if (hasPropertyChangeListeners()) {
-            firePropertyChangeEvent(new FigurePropertyChangeEvent(source, type, key, oldValue, newValue));
-        } else {
-            Figure parent = getParent();
-            if (parent != null) {
-                parent.firePropertyChangeEvent(source, type, key, oldValue, newValue);
-            }
-        }
-    }
-
-    /**
-     * Fires a property change event.
-     *
-     * @param event the event
-     */
-    default void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
-        if (hasPropertyChangeListeners()) {
-            for (Listener<FigurePropertyChangeEvent> l : getPropertyChangeListeners()) {
-                l.handle(event);
-            }
-        }
-        Figure parent = getParent();
-        if (parent != null) {
-            parent.firePropertyChangeEvent(event);
-        }
-    }
-
-    /**
-     * Computes the union of the bounds of the provided figures in world
-     * coordinates.
-     *
-     * @param selection a set of figures
-     * @return bounds
-     */
-    public static Bounds bounds(Collection<Figure> selection) {
-        Bounds b = null;
-        for (Figure f : selection) {
-            Bounds fb = f.getLocalToWorld().transform(f.getBoundsInLocal());
-            if (b == null) {
-                b = fb;
-            } else {
-                b = Geom.union(b, fb);
-            }
-        }
-        return b;
-    }
-
-    /**
-     * Computes the union of the visual bounds of the provided figures in world
-     * coordinates.
-     *
-     * @param selection a set of figures
-     * @return bounds
-     */
-    public static Bounds visualBounds(Collection<Figure> selection) {
-        Bounds b = null;
-
-        for (Figure f : selection) {
-            Bounds fb;
-            if (f instanceof Drawing) {
-                fb = (f.getLocalToWorld()==null)?f.getBoundsInLocal():f.getLocalToWorld().transform(f.getBoundsInLocal());
-                if (b == null) {
-                    b = fb;
-                } else {
-                    b = Geom.union(b, fb);
-                }
-            } else {
-                for (Figure ff : f.preorderIterable()) {
-                    fb = ff.getBoundsInLocal();
-                    double grow = 0.0;
-                    if (ff.get(StrokeableFigure.STROKE_COLOR) != null) {
-                        switch (ff.get(StrokeableFigure.STROKE_TYPE)) {
-                            case CENTERED:
-                                grow += ff.get(StrokeableFigure.STROKE_WIDTH) * 0.5;
-                                break;
-                            case INSIDE:
-                                break;
-                            case OUTSIDE:
-                                grow += ff.get(StrokeableFigure.STROKE_WIDTH);
-                                break;
-                        }
-                    }
-                    if (ff.get(CompositableFigure.EFFECT) != null) {
-                        grow += 10.0;
-                    }
-                    fb = Geom.grow(fb, grow, grow);
-                    fb = f.getLocalToWorld().transform(fb);
-                    if (b == null) {
-                        b = fb;
-                    } else {
-                        b = Geom.union(b, fb);
-                    }
-                }
-            }
-        }
-        return b;
+        return wtp == null ? pointInWorld : wtp.transform(pointInWorld);
     }
 }
