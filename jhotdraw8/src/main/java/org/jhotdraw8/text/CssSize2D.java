@@ -2,10 +2,10 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.text;
 
 import java.util.Objects;
+import javafx.geometry.Point2D;
 
 /**
  * CssSize2D.
@@ -14,50 +14,54 @@ import java.util.Objects;
  * @version $$Id$$
  */
 public class CssSize2D {
-private final CssSize x;
-private final CssSize y;
 
-  public CssSize2D(CssSize x, CssSize y) {
-    this.x = x;
-    this.y = y;
-  }
+    private final CssSize x;
+    private final CssSize y;
 
-  public CssSize getX() {
-    return x;
-  }
+    public CssSize2D(CssSize x, CssSize y) {
+        this.x = x;
+        this.y = y;
+    }
 
-  public CssSize getY() {
-    return y;
-  }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CssSize2D other = (CssSize2D) obj;
+        if (!Objects.equals(this.x, other.x)) {
+            return false;
+        }
+        if (!Objects.equals(this.y, other.y)) {
+            return false;
+        }
+        return true;
+    }
 
-  @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 11 * hash + Objects.hashCode(this.x);
-    hash = 11 * hash + Objects.hashCode(this.y);
-    return hash;
-  }
+    public Point2D getDefaultConvertedValue() {
+        return new Point2D(x.getDefaultConvertedValue(), y.getDefaultConvertedValue());
+    }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    public CssSize getX() {
+        return x;
     }
-    if (obj == null) {
-      return false;
+
+    public CssSize getY() {
+        return y;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 11 * hash + Objects.hashCode(this.x);
+        hash = 11 * hash + Objects.hashCode(this.y);
+        return hash;
     }
-    final CssSize2D other = (CssSize2D) obj;
-    if (!Objects.equals(this.x, other.x)) {
-      return false;
-    }
-    if (!Objects.equals(this.y, other.y)) {
-      return false;
-    }
-    return true;
-  }
-  
-  
+
 }

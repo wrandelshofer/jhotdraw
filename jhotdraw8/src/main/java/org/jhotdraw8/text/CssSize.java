@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.text;
 
+import java.util.Objects;
 import org.jhotdraw8.io.DefaultUnitConverter;
 
 /**
@@ -14,52 +15,59 @@ import org.jhotdraw8.io.DefaultUnitConverter;
  */
 public class CssSize {
 
-  private final String units;
-  private final double value;
+    public final static CssSize ZERO = new CssSize(0, null);
+    private final String units;
+    private final double value;
 
-  public CssSize(double value, String units) {
-    this.value = value;
-    this.units = units;
-  }
-
-  public double getDefaultConvertedValue() {
-    return DefaultUnitConverter.getInstance().convert(this, null);
-  }
-
-  public String getUnits() {
-    return units;
-  }
-
-  public double getValue() {
-    return value;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    final double v = getDefaultConvertedValue();
-    hash = 17 * hash + (int) (Double.doubleToLongBits(v) ^ (Double.doubleToLongBits(this.value) >>> 32));
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    public CssSize(double value, String units) {
+        this.value = value;
+        this.units = units;
     }
-    if (obj == null) {
-      return false;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CssSize other = (CssSize) obj;
+        if (Double.doubleToLongBits(this.value) != Double.doubleToLongBits(other.value)) {
+            return false;
+        }
+        if (!Objects.equals(this.units, other.units)) {
+            return false;
+        }
+        return true;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
+
+    public double getDefaultConvertedValue() {
+        return DefaultUnitConverter.getInstance().convert(this, null);
     }
-    final CssSize other = (CssSize) obj;
-    double otherValue=DefaultUnitConverter.getInstance().convert(other,this.units);
-    if (Math.abs(otherValue-this.value)>1e-4) {
-      return false;
+
+    public String getUnits() {
+        return units;
     }
-    return true;
-  }
-  
-  
+
+    public double getValue() {
+        return value;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.units);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.value) ^ (Double.doubleToLongBits(this.value) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "CssSize{" + value + units + '}';
+    }
+
 }
