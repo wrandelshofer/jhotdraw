@@ -18,7 +18,7 @@ import javafx.util.StringConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.StringConverterConverterWrapper;
+import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.text.XmlNumberConverter;
 
 /**
@@ -126,7 +126,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 newValue.setConstrainer(gridConstrainer);
             }
             StringConverter<Number> cc
-                    = new StringConverterConverterWrapper<>(new XmlNumberConverter());
+                    = new StringConverterAdapter<>(new XmlNumberConverter());
             heightField.textProperty().bindBidirectional(gridConstrainer.heightProperty(), cc);
             widthField.textProperty().bindBidirectional(gridConstrainer.widthProperty(), cc);
             xField.textProperty().bindBidirectional(gridConstrainer.xProperty(), cc);

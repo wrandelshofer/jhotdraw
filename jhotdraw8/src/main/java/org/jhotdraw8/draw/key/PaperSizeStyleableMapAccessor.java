@@ -18,7 +18,7 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssPaperSizeConverter;
 import org.jhotdraw8.text.CssSize;
 import org.jhotdraw8.text.CssSize2D;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
  * CssSize2DStyleableMapAccessor.
@@ -51,7 +51,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableFigureMapAcc
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssSize2D> cnvrtr
-                = new StyleConverterConverterWrapper<>(getConverter());
+                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, CssSize2D> md
                 = new SimpleCssMetaData<>(property, function,
                         cnvrtr, getDefaultValue(), inherits);

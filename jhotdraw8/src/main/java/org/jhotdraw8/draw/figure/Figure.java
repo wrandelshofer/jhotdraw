@@ -776,6 +776,17 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     default Set<MapAccessor<?>> getSupportedKeys() {
         return Figure.getDeclaredAndInheritedKeys(this.getClass());
     }
+    /**
+     * Returns true if the specified key is supported by this figure.
+     * <p>
+     * The default implementation returns all declared and inherited map
+     * accessors.
+     *
+     * @return the keys
+     */
+    default boolean isSupportedKey(MapAccessor<?> key) {
+        return getSupportedKeys().contains(key);
+    }
 
     /**
      * Returns all keys declared in this class and inherited from parent
@@ -786,9 +797,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     public static Set<MapAccessor<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {
         try {
-            HashSet<MapAccessor<?>> keys = new HashSet<>();
+            Set<MapAccessor<?>> keys = new HashSet<>();
             LinkedList<Class<?>> todo = new LinkedList<>();
-            HashSet<Class<?>> done = new HashSet<>();
+            Set<Class<?>> done = new HashSet<>();
             todo.add(clazz);
             while (!todo.isEmpty()) {
                 Class<?> c = todo.removeFirst();
@@ -811,7 +822,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             return keys;
         } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys");
-
         }
     }
 

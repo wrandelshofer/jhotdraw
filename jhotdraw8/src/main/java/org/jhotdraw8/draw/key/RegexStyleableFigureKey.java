@@ -17,7 +17,7 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssRegexConverter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.text.Regex;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
  * RegexStyleableFigureKey.
@@ -80,7 +80,7 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements S
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Regex> cnvrtr
-                = new StyleConverterConverterWrapper<Regex>(getConverter());
+                = new StyleConverterAdapter<Regex>(getConverter());
         CssMetaData<Styleable, Regex> md
                 = new SimpleCssMetaData<Styleable, Regex>(property, function,
                         cnvrtr, defaultValue, inherits);

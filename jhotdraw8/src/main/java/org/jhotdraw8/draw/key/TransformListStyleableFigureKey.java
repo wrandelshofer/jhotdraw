@@ -12,7 +12,7 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
@@ -66,7 +66,7 @@ public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableOb
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, ImmutableObservableList<Transform>> converter
-                = new StyleConverterConverterWrapper<ImmutableObservableList<Transform>>(new CssTransformListConverter());
+                = new StyleConverterAdapter<ImmutableObservableList<Transform>>(new CssTransformListConverter());
         CssMetaData<Styleable, ImmutableObservableList<Transform>> md
                 = new SimpleCssMetaData<Styleable, ImmutableObservableList<Transform>>(property, function,
                         converter, defaultValue, inherits);

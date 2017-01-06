@@ -17,7 +17,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssRectangle2DConverter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
  * Rectangle2DStyleableMapAccessor.
@@ -53,7 +53,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapA
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Rectangle2D> cnvrtr
-                = new StyleConverterConverterWrapper<>(getConverter());
+                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, Rectangle2D> md
                 = new SimpleCssMetaData<>(property, function,
                         cnvrtr, getDefaultValue(), inherits);

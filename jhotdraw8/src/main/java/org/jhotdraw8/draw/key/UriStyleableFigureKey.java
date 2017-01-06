@@ -14,7 +14,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssUriConverter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 
 /**
@@ -74,7 +74,7 @@ public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements Style
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, URI> cnvrtr
-                = new StyleConverterConverterWrapper<>(getConverter());
+                = new StyleConverterAdapter<>(getConverter());
         CssMetaData<Styleable, URI> md
                 = new SimpleCssMetaData<>(property, function,
                         cnvrtr, defaultValue, inherits);

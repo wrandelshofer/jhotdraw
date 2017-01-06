@@ -13,7 +13,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssPaintableConverter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.text.Paintable;
 
@@ -74,7 +74,7 @@ public class PaintableStyleableFigureKey extends SimpleFigureKey<Paintable> impl
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Paintable> converter
-                = new StyleConverterConverterWrapper<Paintable>(new CssPaintableConverter());
+                = new StyleConverterAdapter<Paintable>(new CssPaintableConverter());
         CssMetaData<Styleable, Paintable> md
                 = new SimpleCssMetaData<Styleable, Paintable>(property, function,
                         converter, defaultValue, inherits);

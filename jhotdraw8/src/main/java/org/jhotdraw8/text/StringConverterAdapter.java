@@ -1,5 +1,5 @@
 /*
- * @(#)StringConverterConverterWrapper.java
+ * @(#)StringConverterAdapter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -14,15 +14,15 @@ import javafx.util.StringConverter;
  * {@code javafx.util.StringConverter} API.
  *
  * @author Werner Randelshofer
- * @version $Id: StringConverterConverterWrapper.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id: StringConverterAdapter.java 1149 2016-11-18 11:00:10Z
+ rawcoder $
  * @param <T> the value type
  */
-public class StringConverterConverterWrapper<T> extends StringConverter<T> {
+public class StringConverterAdapter<T> extends StringConverter<T> {
 
     private final Converter<T> converter;
 
-    public StringConverterConverterWrapper(Converter<T> converter) {
+    public StringConverterAdapter(Converter<T> converter) {
         this.converter = converter;
     }
 

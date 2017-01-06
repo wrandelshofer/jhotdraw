@@ -13,7 +13,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssColorConverter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.text.CssColor;
 
@@ -74,7 +74,7 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implemen
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssColor> converter
-                = new StyleConverterConverterWrapper<CssColor>(new CssColorConverter(true));
+                = new StyleConverterAdapter<CssColor>(new CssColorConverter(true));
         CssMetaData<Styleable, CssColor> md
                 = new SimpleCssMetaData<Styleable, CssColor>(property, function,
                         converter, defaultValue, inherits);

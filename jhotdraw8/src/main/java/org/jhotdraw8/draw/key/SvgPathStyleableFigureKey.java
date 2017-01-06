@@ -14,7 +14,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssSvgPathConverter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 
 /**
@@ -76,7 +76,7 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, SVGPath> converter
-                = new StyleConverterConverterWrapper<SVGPath>(getConverter());
+                = new StyleConverterAdapter<SVGPath>(getConverter());
         CssMetaData<Styleable, SVGPath> md
                 = new SimpleCssMetaData<Styleable, SVGPath>(property, function,
                         converter, defaultValue, inherits);

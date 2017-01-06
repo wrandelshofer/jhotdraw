@@ -22,7 +22,7 @@ import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.CssColorConverter;
-import org.jhotdraw8.text.StringConverterConverterWrapper;
+import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.text.XmlDoubleConverter;
 import org.jhotdraw8.util.Resources;
 
@@ -103,9 +103,9 @@ public class DrawingInspector extends AbstractDrawingInspector {
             backgroundProperty.addListener(commitHandler);
 
             // FIXME binding to figure properties bypasses the DrawingModel!
-            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterConverterWrapper<>(new XmlDoubleConverter()));
-            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterConverterWrapper<>(new CssColorConverter(false)));
+            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterAdapter<>(new XmlDoubleConverter()));
+            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterAdapter<>(new XmlDoubleConverter()));
+            backgroundColorField.textProperty().bindBidirectional(backgroundProperty, new StringConverterAdapter<>(new CssColorConverter(false)));
 
             CustomBinding.bindBidirectional(//
                     backgroundProperty,//
