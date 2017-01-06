@@ -22,14 +22,14 @@ public class PropertyBeanNGTest {
     }
 
     /**
-     * Test of getObservableValue method, of class PropertyBean.
+     * Test of valueAt method, of class PropertyBean.
      */
     @Test
     public void testGetObservableValue() {
         System.out.println("getObservableValue");
         Key<String> key = new SimpleKey<String>("key", String.class);
         PropertyBean bean = new SimplePropertyBean();
-        ObservableValue<String> ov = bean.getObservableValue(key);
+        ObservableValue<String> ov = bean.valueAt(key);
         String[] newValue = new String[1];
         ov.addListener((o, oldv, newv) -> {
             newValue[0] = newv;

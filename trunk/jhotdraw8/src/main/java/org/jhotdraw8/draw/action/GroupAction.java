@@ -25,7 +25,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class GroupAction <V extends Project> extends AbstractSelectedAction {
+public class GroupAction extends AbstractSelectedAction {
 
     public static final String ID = "edit.group";
     public final Supplier<Figure> groupFactory;
@@ -49,7 +49,7 @@ public class GroupAction <V extends Project> extends AbstractSelectedAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent e) {
+    protected void handleActionPerformed(ActionEvent e, Project project) {
         final DrawingView view = getView();
         if (view == null) {
             return;

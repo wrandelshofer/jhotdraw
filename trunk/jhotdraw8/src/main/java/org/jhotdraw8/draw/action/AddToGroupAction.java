@@ -41,7 +41,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent e) {
+    protected void handleActionPerformed(ActionEvent e, Project project) {
         final DrawingView view = getView();
         if (view == null) {
             return;

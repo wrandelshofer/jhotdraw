@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.app.action;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -32,33 +33,33 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * The key used for storing the action in an action map, and for accessing
      * resources in resource bundles.
      */
-    public static final StringKey NAME = new StringKey("name");
+    StringKey ID = new StringKey("id");
     /**
      * The key used for storing the {@code String} name for the action, used for
      * a menu or button.
      */
-    public static final StringKey LABEL = new StringKey("label");
+    StringKey LABEL = new StringKey("label");
     /**
      * The key used for storing a short {@code String} description for the
      * action, used for tooltip text.
      */
-    public static final StringKey SHORT_DESCRIPTION = new StringKey("ShortDescription");
+    StringKey SHORT_DESCRIPTION = new StringKey("ShortDescription");
     /**
      * The key used for storing a longer {@code String} description for the
      * action, could be used for context-sensitive help.
      */
-    public static final StringKey LONG_DESCRIPTION = new StringKey("LongDescription");
+    StringKey LONG_DESCRIPTION = new StringKey("LongDescription");
     /**
      * The key used for storing a small icon, such as {@code ImageView}. This is
      * typically used with menus.
      */
-    public static final Key<Node> SMALL_ICON = new SimpleKey<>("SmallIcon", Node.class);
+    Key<Node> SMALL_ICON = new SimpleKey<>("SmallIcon", Node.class);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
      * accelerator for the action.
      */
-    public static final Key<KeyCombination> ACCELERATOR_KEY = new SimpleKey<>("AcceleratorKey", KeyCombination.class);
+    Key<KeyCombination> ACCELERATOR_KEY = new SimpleKey<>("AcceleratorKey", KeyCombination.class);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
@@ -66,22 +67,18 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @since 1.3
      */
-    public static final Key<KeyCombination> MNEMONIC_KEY = new SimpleKey<>("MnemonicKey", KeyCombination.class);
-
-    /**
-     * The key used for storing a {@code Boolean} that corresponds to the
-     * selected state. This is typically used only for components that have a
-     * meaningful selection state. For example,
-     * {@code RadioButton</code> and <code>CheckBox} make use of this but
-     * instances of {@code Menu} don't.
-     */
-    public static final BooleanKey SELECTED_KEY = new BooleanKey("SwingSelectedKey");
+    Key<KeyCombination> MNEMONIC_KEY = new SimpleKey<>("MnemonicKey", KeyCombination.class);
 
     /**
      * The key used for large icon, such as {@code ImageView}. This is typically
      * used by buttons.
      */
-    public static final Key<Node> LARGE_ICON_KEY = new SimpleKey<>("SwingLargeIconKey", Node.class);
+    Key<Node> LARGE_ICON_KEY = new SimpleKey<>("SwingLargeIconKey", Node.class);
+
+    /**
+     * The selected property.
+     */
+    String SELECTED_PROPERTY = "selected";
 
     /**
      * The localized name of the action for use in controls.
@@ -97,7 +94,22 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @return The instance
      */
-    default String getName() {
-        return get(NAME);
+    default String getId() {
+        return get(ID);
+    }
+
+    /**
+     * The {@code Boolean} that corresponds to the selected state. This is
+     * typically used only for actions that have a meaningful selection state.
+     * @return the property
+     */
+    BooleanProperty selectedProperty();
+
+    default void setSelected(boolean newValue) {
+        selectedProperty().set(newValue);
+    }
+
+    default boolean isSelected() {
+        return selectedProperty().get();
     }
 }

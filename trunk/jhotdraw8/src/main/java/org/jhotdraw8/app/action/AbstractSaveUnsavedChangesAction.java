@@ -44,7 +44,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @version $Id: AbstractSaveUnsavedChangesAction.java 788 2014-03-22 07:56:28Z
  * rawcoder $
  */
-public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewAction {
+public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAction<DocumentProject> {
 
     /**
      *
@@ -63,24 +63,23 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewActio
      * @param view the view
      */
     public AbstractSaveUnsavedChangesAction(Application app, DocumentProject view) {
-        super(app, view);
+        super(app, view,DocumentProject.class);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent evt) {
+    protected final void handleActionPerformed(ActionEvent evt, DocumentProject av) {
         Application app = getApplication();
-        DocumentProject av =(DocumentProject) getActiveView();
-        if (av != null) {
-            handle(av);
-        } else if (isMayCreateView()) {
+        if (av instanceof DocumentProject) {
+            handleActionOnProjectPerformed(av);
+        } else if (isMayCreateProject()) {
             app.createProject().thenAccept(v -> {
                 app.add(v);
-                handle((DocumentProject)v);
+                handleActionOnProjectPerformed((DocumentProject)v);//FIXME class cast exception
             });
         }
     }
 
-    public void handle(DocumentProject v) {
+    public void handleActionOnProjectPerformed(DocumentProject v) {
         if (!v.isDisabled()) {
             final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
             /* Window wAncestor = v.getNode().getScene().getWindow(); */

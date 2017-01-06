@@ -48,7 +48,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
         map.put("view.toggleProperties", a = new ToggleViewPropertyAction(this, null, (view) -> ((GrapherProject) view).getPropertiesPane(),
                 "view.toggleProperties",
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels")));
-        a.set(Action.SELECTED_KEY, Preferences.userNodeForPackage(GrapherApplication.class).getBoolean("view.propertiesPane.visible", true));
+        a.setSelected( Preferences.userNodeForPackage(getClass()).getBoolean("view.propertiesPane.visible", true));
         return map;
     }
 

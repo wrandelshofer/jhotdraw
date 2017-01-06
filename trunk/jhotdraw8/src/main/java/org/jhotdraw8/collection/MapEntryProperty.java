@@ -20,8 +20,8 @@ import javafx.collections.WeakMapChangeListener;
  */
 public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T> {
 
-    protected ObservableMap<K, V> map;
     protected K key;
+    protected ObservableMap<K, V> map;
     protected MapChangeListener<K, V> mapListener;
     protected Class<T> tClazz;
     private WeakMapChangeListener<K, V> weakListener;
@@ -34,10 +34,16 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
         if (key != null) {
             this.mapListener = (MapChangeListener.Change<? extends K, ? extends V> change) -> {
                 if (this.key.equals(change.getKey())) {
-                    @SuppressWarnings("unchecked")
-                    T valueAdded = (T) change.getValueAdded();
-                    if (super.get() != valueAdded) {
-                        set(valueAdded);
+                    if (change.wasAdded()) {// was added, or removed and then added
+                        @SuppressWarnings("unchecked")
+                        T valueAdded = (T) change.getValueAdded();
+                        if (super.get() != valueAdded) {
+                            set(valueAdded);
+                        }
+                    }
+                } else if (change.wasRemoved()) {// was removed but not added
+                    if (super.get() != null) {
+                        set(null);
                     }
                 }
             };

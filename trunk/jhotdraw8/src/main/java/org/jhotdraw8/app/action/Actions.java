@@ -70,13 +70,13 @@ public class Actions {
             control.getProperties().put("ActionsNameBinding", nameBinding);
             control.textProperty().bind(Action.LABEL.valueAt(action.getProperties()));
             if (control instanceof CheckMenuItem) {
-                Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.getProperties());
+                Property<Boolean> selectedBinding = action.selectedProperty();
                 // create a strong reference to name binding:
                 control.getProperties().put("ActionsSelectedBinding", selectedBinding);
                 // this only creates a weak reference to the name binding:
                 ((CheckMenuItem) control).selectedProperty().bindBidirectional(selectedBinding);
             } else if (control instanceof RadioMenuItem) {
-                Property<Boolean> selectedBinding = Action.SELECTED_KEY.propertyAt(action.getProperties());
+                Property<Boolean> selectedBinding = action.selectedProperty();
                 // create a strong reference to name binding:
                 control.getProperties().put("ActionsSelectedBinding", selectedBinding);
                 // this only creates a weak reference to the name binding:

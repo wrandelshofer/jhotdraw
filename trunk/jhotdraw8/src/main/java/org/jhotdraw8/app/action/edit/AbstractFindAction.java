@@ -8,7 +8,7 @@
 package org.jhotdraw8.app.action.edit;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
 
@@ -19,7 +19,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFindAction extends AbstractViewAction {
+public abstract class AbstractFindAction<P extends Project> extends AbstractProjectAction<P> {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.find";
@@ -28,10 +28,10 @@ public abstract class AbstractFindAction extends AbstractViewAction {
      * Creates a new instance.
      *
      * @param app the application
-     * @param view the view
+     * @param p the project
      */
-    public AbstractFindAction(Application app, Project view) {
-        super(app, view);
+    public AbstractFindAction(Application app, P p, Class<P> pClass) {
+        super(app, p,pClass);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 }

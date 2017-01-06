@@ -1,7 +1,7 @@
 package org.jhotdraw8.draw.action;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorView;
@@ -22,7 +22,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSelectedAction extends AbstractViewAction {
+public abstract class AbstractSelectedAction extends AbstractProjectAction<Project> {
 
     private DrawingEditor editor;
 
@@ -34,7 +34,7 @@ public abstract class AbstractSelectedAction extends AbstractViewAction {
      * @param editor the drawing editor
      */
     public AbstractSelectedAction(Application app, DrawingEditor editor) {
-        super(app, null);
+        super(app, null,null);
         setEditor(editor);
     }
 
@@ -66,7 +66,7 @@ public abstract class AbstractSelectedAction extends AbstractViewAction {
      */
     protected DrawingView getView() {
         if (editor == null) {
-            Project v = getActiveView();
+            Project v = getActiveProject();
             if (v instanceof EditorView) {
                 EditorView ev = (EditorView) v;
                 return ev.getEditor() != null ? ev.getEditor().getActiveDrawingView() : null;

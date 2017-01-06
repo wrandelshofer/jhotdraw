@@ -7,6 +7,7 @@
  */
 package org.jhotdraw8.app.action.edit;
 
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.util.Resources;
@@ -64,7 +65,7 @@ public class DuplicateAction extends AbstractSelectionAction {
     }*/
 
     @Override
-    protected void onActionPerformed(javafx.event.ActionEvent event) {
+    protected void handleActionPerformed(ActionEvent event, Application app) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

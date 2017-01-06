@@ -33,12 +33,25 @@ import org.jhotdraw8.collection.Key;
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw8.app.Application {
 
     /**
+     * Holds the disabled state.
+     */
+    private final ReadOnlyBooleanProperty disabled;
+    /**
+     * Holds the disablers.
+     */
+    private final ObservableSet<Object> disablers = FXCollections.observableSet();
+
+    /**
      * Holds the max number of recent URIs.
      */
     private final IntegerProperty maxNumberOfRecentUris//
             = new SimpleIntegerProperty(//
                     this, MAX_NUMBER_OF_RECENT_URIS_PROPERTY, //
                     10);
+    /**
+     * Properties.
+     */
+    private ObservableMap<Key<?>, Object> properties;
 
     /**
      * Holds the recent URIs.
@@ -47,6 +60,30 @@ public abstract class AbstractApplication extends javafx.application.Application
             = new ReadOnlySetWrapper<URI>(//
                     this, RECENT_URIS_PROPERTY, //
                     FXCollections.observableSet(new LinkedHashSet<URI>())).getReadOnlyProperty();
+
+    {
+        ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
+        robw.bind(Bindings.isNotEmpty(disablers));
+        disabled = robw.getReadOnlyProperty();
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty disabledProperty() {
+        return disabled;
+    }
+
+    @Override
+    public ObservableSet<Object> disablers() {
+        return disablers;
+    }
+
+    @Override
+    public final ObservableMap<Key<?>, Object> getProperties() {
+        if (properties == null) {
+            properties = FXCollections.observableMap(new IdentityHashMap<>());
+        }
+        return properties;
+    }
 
     protected void loadRecentUris(String applicationId) {
         Preferences prefs = Preferences.userNodeForPackage(AbstractApplication.class);
@@ -86,51 +123,14 @@ public abstract class AbstractApplication extends javafx.application.Application
         });
     }
 
-    /**
-     * Holds the disablers.
-     */
-    private final ObservableSet<Object> disablers = FXCollections.observableSet();
-    /**
-     * Holds the disabled state.
-     */
-    private final ReadOnlyBooleanProperty disabled;
-
-    {
-        ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
-        robw.bind(Bindings.isNotEmpty(disablers));
-        disabled = robw.getReadOnlyProperty();
-    }
-
-    @Override
-    public ReadOnlyBooleanProperty disabledProperty() {
-        return disabled;
-    }
-
-    @Override
-    public ObservableSet<Object> disablers() {
-        return disablers;
-    }
-    /**
-     * Properties.
-     */
-    private ObservableMap<Key<?>, Object> properties;
-
-    @Override
-    public ReadOnlySetProperty<URI> recentUrisProperty() {
-        return recentUris;
-    }
-
     @Override
     public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
     }
 
     @Override
-    public final ObservableMap<Key<?>, Object> getProperties() {
-        if (properties == null) {
-            properties = FXCollections.observableMap(new IdentityHashMap<>());
-        }
-        return properties;
+    public ReadOnlySetProperty<URI> recentUrisProperty() {
+        return recentUris;
     }
 
 }

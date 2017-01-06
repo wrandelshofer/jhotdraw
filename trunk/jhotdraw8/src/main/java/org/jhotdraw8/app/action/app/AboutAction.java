@@ -40,7 +40,7 @@ public class AboutAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent evt) {
+    protected void handleActionPerformed(ActionEvent event, Application app) {
         addDisabler(this);
         ApplicationModel model = getApplication().getModel();
 

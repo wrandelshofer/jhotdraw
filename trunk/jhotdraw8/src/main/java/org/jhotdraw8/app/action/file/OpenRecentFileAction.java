@@ -68,13 +68,12 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent evt) {
-        final Application app = getApplication();
+    protected void handleActionPerformed(ActionEvent evt, Application app) {
         {
             // Search for an empty view
             DocumentProject emptyView;
             if (reuseEmptyViews) {
-                emptyView =(DocumentProject) app.getActiveProject();
+                emptyView =(DocumentProject)app.getActiveProject();//FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {

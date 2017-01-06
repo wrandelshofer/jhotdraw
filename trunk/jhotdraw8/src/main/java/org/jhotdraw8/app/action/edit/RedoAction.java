@@ -7,8 +7,9 @@
  */
 package org.jhotdraw8.app.action.edit;
 
+import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
 
@@ -20,7 +21,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RedoAction extends AbstractViewAction {
+public class RedoAction extends AbstractProjectAction<Project> {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +49,7 @@ public class RedoAction extends AbstractViewAction {
      * @param view the view
      */
     public RedoAction(Application app, Project view) {
-        super(app, view);
+        super(app, view,null);
         labels.configureAction(this, ID);
     }
 
@@ -108,7 +109,7 @@ public class RedoAction extends AbstractViewAction {
 
     @Nullable
     private Action getRealRedoAction() {
-        return (getActiveView() == null) ? null : getActiveView().getActionMap().get(ID);
+        return (getActiveProject() == null) ? null : getActiveProject().getActionMap().get(ID);
     }
 
     @Override
@@ -118,7 +119,7 @@ public class RedoAction extends AbstractViewAction {
      */
 
     @Override
-    protected void onActionPerformed(javafx.event.ActionEvent event) {
+    protected void handleActionPerformed(ActionEvent event, Project project) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

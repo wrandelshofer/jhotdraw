@@ -13,8 +13,8 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * A {@code Project} provides a user interface for a project which is
- * identified by an URI.
+ * A {@code Project} provides a user interface for a project which is identified
+ * by an URI.
  * <p>
  * The life-cycle of a project object is managed by an application. See the
  * class comment of {@link Application} on how to launch an application.
@@ -30,8 +30,8 @@ import org.jhotdraw8.beans.PropertyBean;
  * calls {@code clear()} or {@code read()}.
  * </li>
  * <li><b>Start</b><br>
- * The application adds the component of the project to a container (for
- * example a JFrame) and then calls {@code start()}.
+ * The application adds the component of the project to a container (for example
+ * a Stage) and then calls {@code start()}.
  * </li>
  * <li><b>Activation</b><br>
  * When a project becomes the active project of the application, application
@@ -43,13 +43,13 @@ import org.jhotdraw8.beans.PropertyBean;
  * become activated again.
  * </li>
  * <li><b>Stop</b><br>
- * The application calls {@code stop()} on the project  and then removes the
- * component from its container. At a later time, the project may be
- * started again.
+ * The application calls {@code stop()} on the project and then removes the
+ * component from its container. At a later time, the project may be started
+ * again.
  * </li>
  * <li><b>Dispose</b><br>
- * When the project is no longer needed, application calls {@code dispose()} on the
- * project, followed by
+ * When the project is no longer needed, application calls {@code dispose()} on
+ * the project, followed by
  * {@code setApplication(null);}, {@code getActionMap().setParent(null)} and
  * then removes all references to it, so that it can be garbage collected.
  * </li>
@@ -64,30 +64,23 @@ import org.jhotdraw8.beans.PropertyBean;
 public interface Project extends Disableable, PropertyBean {
 
     /**
-     * Initializes the view. This method must be called before the view can be
-     * used.
-     */
-    public void init();
-
-    /**
-     * Starts the view.
-     */
-    public void start();
-
-    /**
      * Activates the view.
      */
     public void activate();
+
+    /**
+     * The application property is maintained by the application.
+     *
+     * @return the property
+     */
+    public ObjectProperty<Application> applicationProperty();
 
     /**
      * Deactivates the view.
      */
     public void deactivate();
 
-    /**
-     * Stops the view.
-     */
-    public void stop();
+    public IntegerProperty disambiguationProperty();
 
     /**
      * Disposes of the view.
@@ -95,18 +88,34 @@ public interface Project extends Disableable, PropertyBean {
     public void dispose();
 
     /**
+     * The action map of the view.
+     *
+     * @return the action map
+     */
+    public HierarchicalMap<String, Action> getActionMap();
+
+    default public Application getApplication() {
+        return applicationProperty().get();
+    }
+
+    default public void setApplication(Application newValue) {
+        applicationProperty().set(newValue);
+    }
+
+    default public int getDisambiguation() {
+        return disambiguationProperty().get();
+    }
+
+    default public void setDisambiguation(int newValue) {
+        disambiguationProperty().set(newValue);
+    }
+
+    /**
      * Returns the scene node which renders the view.
      *
      * @return The node.
      */
     public Node getNode();
-
-    /**
-     * Provides a title for the view
-     *
-     * @return The title property.
-     */
-    public StringProperty titleProperty();
 
     // convenience method
     default public String getTitle() {
@@ -118,35 +127,26 @@ public interface Project extends Disableable, PropertyBean {
     }
 
     /**
-     * The application property is maintained by the application.
-     *
-     * @return the property
+     * Initializes the view. This method must be called before the view can be
+     * used.
      */
-    public ObjectProperty<Application> applicationProperty();
-
-    default public Application getApplication() {
-        return applicationProperty().get();
-    }
-
-    default public void setApplication(Application newValue) {
-        applicationProperty().set(newValue);
-    }
+    public void init();
 
     /**
-     * The action map of the view.
-     *
-     * @return the action map
+     * Starts the view.
      */
-    public HierarchicalMap<String, Action> getActionMap();
+    public void start();
 
-    public IntegerProperty disambiguationProperty();
+    /**
+     * Stops the view.
+     */
+    public void stop();
 
-    default public int getDisambiguation() {
-        return disambiguationProperty().get();
-    }
-
-    default public void setDisambiguation(int newValue) {
-        disambiguationProperty().set(newValue);
-    }
+    /**
+     * Provides a title for the view
+     *
+     * @return The title property.
+     */
+    public StringProperty titleProperty();
 
 }

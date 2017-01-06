@@ -24,7 +24,7 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  */
-public class RemoveFromGroupAction<V extends Project> extends AbstractSelectedAction {
+public class RemoveFromGroupAction extends AbstractSelectedAction {
 
     public static final String ID = "edit.removeFromGroup";
 
@@ -42,7 +42,7 @@ public class RemoveFromGroupAction<V extends Project> extends AbstractSelectedAc
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent e) {
+    protected void handleActionPerformed(ActionEvent e, Project project) {
         final DrawingView view = getView();
         if (view == null) {
             return;

@@ -195,7 +195,6 @@ public interface Key<T> extends MapAccessor<T> {
      * @return a property for the map entry
      */
     default Property<T> propertyAt(final ObservableMap<Key<?>, Object> map) {
-        ObjectBinding<Object> value = Bindings.valueAt(map, this);
         return new KeyMapEntryProperty<>(map, this);
     }
 

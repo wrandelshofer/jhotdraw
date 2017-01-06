@@ -7,11 +7,12 @@
  */
 package org.jhotdraw8.app.action.file;
 
+import javafx.event.ActionEvent;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentProject;
 
@@ -25,7 +26,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PrintFileAction extends AbstractViewAction {
+public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,14 +39,14 @@ public class PrintFileAction extends AbstractViewAction {
      * @param view the view
      */
     public PrintFileAction(Application app, DocumentProject view) {
-        super(app, view);
+        super(app, view,DocumentProject.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     /*
     @Override
     public void actionPerformed(ActionEvent evt) {
-        PrintableView view = (PrintableView)getActiveView();
+        PrintableView view = (PrintableView)getActiveProject();
         view.setEnabled(false);
         if ("true".equals(System.getProperty("apple.awt.graphics.UseQuartz", "false"))) {
             printQuartz(view);
@@ -75,7 +76,7 @@ public class PrintFileAction extends AbstractViewAction {
                     job.print();
                 } catch (PrinterException e) {
                     String message = (e.getMessage() == null) ? e.toString() : e.getMessage();
-                    ProjectView view = getActiveView();
+                    ProjectView view = getActiveProject();
                     Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                     JSheet.showMessageSheet(view.getComponent(),
                             "<html>" + UIManager.getString("OptionPane.css") +
@@ -109,7 +110,7 @@ public class PrintFileAction extends AbstractViewAction {
                     job.print();
                 } catch (PrinterException e) {
                     Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-                    JSheet.showMessageSheet(getActiveView().getComponent(),
+                    JSheet.showMessageSheet(getActiveProject().getComponent(),
                             labels.getFormatted("couldntPrint", e));
                 }
             } else {
@@ -139,7 +140,7 @@ public class PrintFileAction extends AbstractViewAction {
                 jobAttr,
                 pageAttr);
 
-        getActiveView().setEnabled(false);
+        getActiveProject().setEnabled(false);
         new BackgroundTask() {
 
             @Override
@@ -195,7 +196,7 @@ public class PrintFileAction extends AbstractViewAction {
             }
             @Override
             protected void finished() {
-                getActiveView().setEnabled(true);
+                getActiveProject().setEnabled(true);
             }
         }.start();
     }
@@ -208,21 +209,19 @@ public class PrintFileAction extends AbstractViewAction {
      * @see Action#isEnabled
      * /
     @Override public boolean isEnabled() {
-        return super.isEnabled() && (getActiveView() instanceof PrintableView);
+        return super.isEnabled() && (getActiveProject() instanceof PrintableView);
     }*/
     @Override
-    protected void onActionPerformed(javafx.event.ActionEvent event) {
+    protected void handleActionPerformed(ActionEvent event, DocumentProject project) {
         if (isDisabled()) {
             return;
         }
 
-        DocumentProject view = (DocumentProject)getActiveView();
-
-        if (view != null) {
+        if (project != null) {
             
             PrinterJob job = PrinterJob.createPrinterJob();
-            if (job != null&&  job.showPrintDialog(view.getNode().getScene().getWindow())) {
-                boolean success = job.printPage(view.getNode());
+            if (job != null&&  job.showPrintDialog(project.getNode().getScene().getWindow())) {
+                boolean success = job.printPage(project.getNode());
                 if (success) {
                     job.endJob();
                 }

@@ -40,8 +40,7 @@ public class NewFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent evt) {
-        Application app = getApplication();
+    protected void handleActionPerformed(ActionEvent evt, Application app) {
         app.createProject().thenAccept(newProject-> {
             DocumentProject newView= (DocumentProject) newProject;
             app.add(newView);

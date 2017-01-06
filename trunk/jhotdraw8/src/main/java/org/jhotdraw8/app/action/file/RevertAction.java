@@ -14,9 +14,10 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.Project;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -26,7 +27,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertAction extends AbstractViewAction {
+public class RevertAction extends AbstractProjectAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,29 +37,28 @@ public class RevertAction extends AbstractViewAction {
      * Creates a new instance.
      *
      * @param app the application
-     * @param view the view
+     * @param project the view
      */
-    public RevertAction(Application app, DocumentProject view) {
-        super(app, view);
+    public RevertAction(Application app, DocumentProject project) {
+        super(app, project,DocumentProject.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event) {
+    protected void handleActionPerformed(ActionEvent event, DocumentProject project) {
         if (isDisabled()) {
             return;
         }
-        DocumentProject view = (DocumentProject)getActiveView();
-        URI uri = view.getURI();
-        if (view.isModified()) {
+        URI uri = project.getURI();
+        if (project.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
                     "Do you want to revert?\nYou will lose your changes when you revert.", ButtonType.YES, ButtonType.CANCEL);
             Optional<ButtonType> answer = alert.showAndWait();
             if (answer.isPresent() && answer.get() == ButtonType.YES) {
-                doIt(view, uri);
+                doIt(project, uri);
             }
         } else {
-            doIt(view, uri);
+            doIt(project, uri);
         }
     }
 
