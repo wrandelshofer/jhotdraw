@@ -44,9 +44,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.Actions;
+import org.jhotdraw8.app.action.ScreenMenuBarProxyAction;
 import org.jhotdraw8.app.action.file.ClearRecentFilesMenuAction;
 import org.jhotdraw8.app.action.file.CloseFileAction;
 import org.jhotdraw8.app.action.file.OpenRecentFileAction;
@@ -79,16 +79,6 @@ public class DocumentOrientedApplication extends AbstractApplication {
     protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
 
     private final ReadOnlyObjectWrapper<Project> activeProject = new ReadOnlyObjectWrapper<>();
-     {
-        activeProject.addListener((o,oldv,newv)-> {
-            if (oldv!=null) {
-                handleProjectDeactivate((DocumentProject)oldv);
-            }
-            if (newv!=null) {
-                handleProjectActivate((DocumentProject)newv);
-            }
-        });
-    }
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
         Thread t = new Thread(r);
         t.setUncaughtExceptionHandler((Thread t1, Throwable e) -> {
@@ -98,10 +88,20 @@ public class DocumentOrientedApplication extends AbstractApplication {
     });
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
-    private List<Menu> systemMenus;
-      private  ArrayList<Action> systemMenuActiveProjectActions=new ArrayList<>();
-
     private final SetProperty<Project> projects = new SimpleSetProperty<>(FXCollections.observableSet());
+    private ArrayList<Action> systemMenuActiveProjectActions = new ArrayList<>();
+    private List<Menu> systemMenus;
+
+    {
+        activeProject.addListener((o, oldv, newv) -> {
+            if (oldv != null) {
+                handleProjectDeactivate((DocumentProject) oldv);
+            }
+            if (newv != null) {
+                handleProjectActivate((DocumentProject) newv);
+            }
+        });
+    }
 
     {
         projects.addListener((SetChangeListener.Change<? extends Project> change) -> {
@@ -140,16 +140,8 @@ public class DocumentOrientedApplication extends AbstractApplication {
                     if (a != null) {
                         Actions.bindMenuItem(mi, a);
                     } else {
-                        System.err.println("Warning DocumentOrientedApplication no action for menu item with id:"+mi.getId());
-                        a = new AbstractProjectAction<Project>(this, null,null) {
-                            @Override
-                            protected void handleActionPerformed(ActionEvent event, Project p) {
-                                Action ava = getActiveProject().getActionMap().get(mi.getId());
-                                if (ava != null) {
-                                    ava.handle(event);
-                                }
-                            }
-                        };
+                        System.err.println("Warning DocumentOrientedApplication no action for menu item with id:" + mi.getId());
+                        a = new ScreenMenuBarProxyAction(this, mi.getId());
                         systemMenuActiveProjectActions.add(a);
                         Actions.bindMenuItem(mi, a, false);
                     }
@@ -157,7 +149,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
             }
         }
         updateRecentMenuItemsMB(mb.getMenus());
-        
+
         return mb;
     }
 
@@ -238,12 +230,12 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     /**
-     * Called immediately after a project has been removed from the projects set.
+     * Called immediately when a project needs to be activated.
      *
-     * @param obs the observable
+     * @param project the project
      */
-    protected void handleTitleChanged(Observable obs) {
-        disambiguateProjects();
+    protected void handleProjectActivate(DocumentProject project) {
+        project.activate();
     }
 
     /**
@@ -349,7 +341,17 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     /**
-     * Called immediately after a project has been removed from the projects property.
+     * Called immediately when a project needs to be deactivated.
+     *
+     * @param project the project
+     */
+    protected void handleProjectDeactivate(DocumentProject project) {
+        project.deactivate();
+    }
+
+    /**
+     * Called immediately after a project has been removed from the projects
+     * property.
      *
      * @param project the project
      */
@@ -374,22 +376,15 @@ public class DocumentOrientedApplication extends AbstractApplication {
             exit();
         }
     }
-    
-        /**
-     * Called immediately when a project needs to be activated.
+
+    /**
+     * Called immediately after a project has been removed from the projects
+     * set.
      *
-     * @param project the project
+     * @param obs the observable
      */
-    protected void handleProjectActivate(DocumentProject project) {
-        project.activate();
-    }
-        /**
-     * Called immediately when a project needs to be deactivated.
-     *
-     * @param project the project
-     */
-    protected void handleProjectDeactivate(DocumentProject project) {
-        project.deactivate();
+    protected void handleTitleChanged(Observable obs) {
+        disambiguateProjects();
     }
 
     @Override
