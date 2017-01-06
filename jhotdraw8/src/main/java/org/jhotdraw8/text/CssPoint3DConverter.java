@@ -36,11 +36,11 @@ public class CssPoint3DConverter implements Converter<Point3D> {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:
-                return new Point3D((double) v[1], 0.0, 0.0);
+                return new Point3D(((Number) v[1]).doubleValue(), 0.0, 0.0);
             case 2:
-                return new Point3D((double) v[1], (double) v[2], 0.0);
+                return new Point3D(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), 0.0);
             case 3:
-                return new Point3D((double) v[1], (double) v[2], (double) v[3]);
+                return new Point3D(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[3]).doubleValue());
             default:
                 throw new ParseException("Point3D with 1, 2 or 3 values expected.", buf.position());
         }

@@ -51,13 +51,13 @@ public class CssInsetsConverter implements Converter<Insets> {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:
-                return new Insets((double) v[1], (double) v[1], (double) v[1], (double) v[1]);
+                return new Insets(((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue());
             case 2:
-                return new Insets((double) v[1], (double) v[2], (double) v[1], (double) v[2]);
+                return new Insets(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue());
             case 3:
-                return new Insets((double) v[1], (double) v[2], (double) v[3], (double) v[2]);
+                return new Insets(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[3]).doubleValue(), ((Number) v[2]).doubleValue());
             case 4:
-                return new Insets((double) v[1], (double) v[2], (double) v[3], (double) v[4]);
+                return new Insets(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[3]).doubleValue(), ((Number) v[4]).doubleValue());
             default:
                 throw new ParseException("Insets with 1 to 4 dimension values expected.", buf.position());
         }

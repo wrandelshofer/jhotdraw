@@ -40,11 +40,11 @@ public class CssScale3DConverter implements Converter<Point3D> {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:
-                return new Point3D((double) v[1], (double) v[1], 1.0);
+                return new Point3D(((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue(), 1.0);
             case 2:
-                return new Point3D((double) v[1], (double) v[2], 1.0);
+                return new Point3D(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), 1.0);
             case 3:
-                return new Point3D((double) v[1], (double) v[2], (double) v[3]);
+                return new Point3D(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[3]).doubleValue());
             default:
                 throw new ParseException("Scale with 1 to 3 values expected.", buf.position());
         }

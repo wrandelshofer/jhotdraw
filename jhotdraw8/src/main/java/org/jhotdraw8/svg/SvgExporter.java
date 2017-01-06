@@ -20,6 +20,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BackgroundFill;
@@ -95,58 +96,82 @@ import org.w3c.dom.Element;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SvgExporter  {
+public class SvgExporter {
 
     public final static DataFormat SVG_FORMAT = new DataFormat("image/svg+xml");
 
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
-    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
     private final static String XLINK_Q = "xlink";
-    private final SvgTransformListConverter tx = new SvgTransformListConverter();
-    private final SvgPaintConverter paint = new SvgPaintConverter();
+    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+    private final String SVG_NS = "http://www.w3.org/2000/svg";
+    private IdFactory idFactory = new SimpleIdFactory();
+    private final Object imageUriKey;
+    private String indent = "  ";
+    private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
-    private final String SVG_NS = "http://www.w3.org/2000/svg";
-    private final String namespaceQualifier = null;
-    private IdFactory idFactory = new SimpleIdFactory();
-    private String indent = "  ";
+    private final SvgPaintConverter paint = new SvgPaintConverter();
     private boolean skipInvisibleNodes = true;
     private final Object skipKey;
-
-    private final Object imageUriKey;
+    private final SvgTransformListConverter tx = new SvgTransformListConverter();
 
     /**
-     * 
-     * @param imageUriKey this property is used to retrieve an URL from an ImageView
-     * @param skipKey this property is used to retrieve a Boolean from a Node. If the Boolean is true, then the node is skipped.
+     *
+     * @param imageUriKey this property is used to retrieve an URL from an
+     * ImageView
+     * @param skipKey this property is used to retrieve a Boolean from a Node.
+     * If the Boolean is true, then the node is skipped.
      */
     public SvgExporter(Object imageUriKey, Object skipKey) {
         this.imageUriKey = imageUriKey;
         this.skipKey = skipKey;
     }
 
-    public void write(OutputStream out, javafx.scene.Node drawing) throws IOException {
-        Document doc = toDocument(drawing);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
+    private String createFileComment() {
+        return null;
+    }
+
+    public String getIndent() {
+        return indent;
+    }
+
+    public void setIndent(String indent) {
+        this.indent = indent;
+    }
+
+    private void initIdFactoryRecursively(javafx.scene.Node node) throws IOException {
+        String id = node.getId();
+        if (id != null && idFactory.getObject(id) == null) {
+            idFactory.putId(node, id);
+        } else {
+            idFactory.createId(node, node.getTypeSelector().toLowerCase());
+        }
+
+        if (node instanceof Parent) {
+            Parent pp = (Parent) node;
+            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                initIdFactoryRecursively(child);
+            }
         }
     }
 
-    public void write(Writer out, javafx.scene.Node drawing) throws IOException {
-        Document doc = toDocument(drawing);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
+    private boolean isSkipNode(Node node) {
+        if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
+            return true;
         }
+        if (skipInvisibleNodes) {
+            if (!node.isVisible()) {
+                return true;
+            }
+            if (node instanceof Shape) {
+                Shape s = (Shape) node;
+                if ((s.getFill() == null||Objects.equals(s.getFill(),Color.TRANSPARENT)) 
+                        && (s.getStroke() == null||Objects.equals(s.getStroke(),Color.TRANSPARENT))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public Document toDocument(javafx.scene.Node drawingNode) throws IOException {
@@ -188,83 +213,149 @@ public class SvgExporter  {
         }
     }
 
-    private String createFileComment() {
-        return null;
+    public void write(OutputStream out, javafx.scene.Node drawing) throws IOException {
+        Document doc = toDocument(drawing);
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(out);
+            t.transform(source, result);
+        } catch (TransformerException ex) {
+            throw new IOException(ex);
+        }
     }
 
-    private void writeDocumentElementAttributes(Element docElement, javafx.scene.Node drawingNode) throws IOException {
-        docElement.setAttribute("version", "1.2");
-        docElement.setAttribute("baseProfile", "tiny");
-
+    public void write(Writer out, javafx.scene.Node drawing) throws IOException {
+        Document doc = toDocument(drawing);
+        try {
+            Transformer t = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(out);
+            t.transform(source, result);
+        } catch (TransformerException ex) {
+            throw new IOException(ex);
+        }
     }
 
-    private void writeProcessingInstructions(Document doc, javafx.scene.Node external) {
-// empty
+    private Element writeArc(Document doc, Element parent, Arc node) {
+        Element elem = doc.createElement("arc");
+        parent.appendChild(elem);
+        StringBuilder buf = new StringBuilder();
+        double centerX = node.getCenterX();
+        double centerY = node.getCenterY();
+        double radiusX = node.getRadiusX();
+        double radiusY = node.getRadiusY();
+        double startAngle = Math.toRadians(-node.getStartAngle());
+        double endAngle = Math.toRadians(-node.getStartAngle() - node.getLength());
+        double length = node.getLength();
+
+        double startX = radiusX * Math.cos(startAngle);
+        double startY = radiusY * Math.sin(startAngle);
+
+        double endX = centerX + radiusX * Math.cos(endAngle);
+        double endY = centerY + radiusY * Math.sin(endAngle);
+
+        int xAxisRot = 0;
+        boolean largeArc = (length > 180);
+        boolean sweep = (length < 0);
+
+        buf.append('M')
+                .append(nb.toString(centerX))
+                .append(',')
+                .append(nb.toString(centerY))
+                .append(' ');
+
+        if (ArcType.ROUND == node.getType()) {
+            buf.append('l')
+                    .append(startX)
+                    .append(',')
+                    .append(startY).append(' ');
+        }
+
+        buf.append('A')
+                .append(nb.toString(radiusX))
+                .append(',')
+                .append(nb.toString(radiusY))
+                .append(',')
+                .append(nb.toString(xAxisRot))
+                .append(',')
+                .append(largeArc ? '1' : '0')
+                .append(',')
+                .append(sweep ? '1' : '0')
+                .append(',')
+                .append(nb.toString(endX))
+                .append(',')
+                .append(nb.toString(endY))
+                .append(',');
+
+        if (ArcType.CHORD == node.getType()
+                || ArcType.ROUND == node.getType()) {
+            buf.append('Z');
+        }
+        return elem;
     }
 
-    private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node, String linebreak) throws IOException {
-        if (skipInvisibleNodes && !node.isVisible()) {
-            return;
+    private Element writeCircle(Document doc, Element parent, Circle node) {
+        Element elem = doc.createElement("circle");
+        if (node.getCenterX() != 0.0) {
+            elem.setAttribute("cx", nb.toString(node.getCenterX()));
         }
-        if (skipKey!=null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
-            return;
+        if (node.getCenterY() != 0.0) {
+            elem.setAttribute("cy", nb.toString(node.getCenterY()));
         }
-        parent.appendChild(doc.createTextNode(linebreak));
-
-        Element elem = null;
-        if (node instanceof Shape) {
-            elem = writeShape(doc, parent, (Shape) node);
-            writeFillAttributes(elem, (Shape) node);
-            writeStrokeAttributes(elem, (Shape) node);
-        } else if (node instanceof Group) {
-            elem = writeGroup(doc, parent, (Group) node);
-        } else if (node instanceof Region) {
-            elem = writeRegion(doc, parent, (Region) node);
-        } else if (node instanceof ImageView) {
-            elem = writeImageView(doc, parent, (ImageView) node);
-        } else {
-            throw new UnsupportedOperationException("not yet implemented for " + node);
+        if (node.getRadius() != 0.0) {
+            elem.setAttribute("r", nb.toString(node.getRadius()));
         }
-
-        if (elem != null) {
-            writeStyleAttributes(elem, node);
-            writeTransformAttributes(elem, node);
-            writeCompositingAttributes(elem, node);
-        } else {
-            elem = parent;
-        }
-
-        if (node instanceof Parent) {
-            final Parent pp = (Parent) node;
-            final String lbi = linebreak + indent;
-            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                writeNodeRecursively(doc, elem, child, lbi);
-            }
-            if (!pp.getChildrenUnmodifiable().isEmpty()) {
-                elem.appendChild(doc.createTextNode(linebreak));
-            }
-        }
-
+        parent.appendChild(elem);
+        return elem;
     }
 
-    private void initIdFactoryRecursively(javafx.scene.Node node) throws IOException {
-        String id = node.getId();
-        if (id != null && idFactory.getObject(id) == null) {
-            idFactory.putId(node, id);
-        } else {
-            idFactory.createId(node, node.getTypeSelector().toLowerCase());
+    private void writeCompositingAttributes(Element elem, Node node) {
+        if (node.getOpacity() != 1.0) {
+            elem.setAttribute("opacity", nb.toString(node.getOpacity()));
         }
+        /*
+        if (node.getBlendMode() != null && node.getBlendMode() != BlendMode.SRC_OVER) {
+        switch (node.getBlendMode()) {
+        case MULTIPLY:
+        case SCREEN:
+        case DARKEN:
+        case LIGHTEN:
+        elem.setAttribute("mode", node.getBlendMode().toString().toLowerCase());
+        break;
+        default:
+        // ignore
+        }
+        }*/
+    }
 
-        if (node instanceof Parent) {
-            Parent pp = (Parent) node;
-            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                initIdFactoryRecursively(child);
-            }
-        }
+    private Element writeCubicCurve(Document doc, Element parent, CubicCurve node) {
+        Element elem = doc.createElement("path");
+        parent.appendChild(elem);
+        final StringBuilder buf = new StringBuilder();
+        buf.append('M')
+                .append(nb.toString(node.getStartX()))
+                .append(',')
+                .append(nb.toString(node.getStartY()))
+                .append(' ')
+                .append('C')
+                .append(nb.toString(node.getControlX1()))
+                .append(',')
+                .append(nb.toString(node.getControlY1()))
+                .append(',')
+                .append(nb.toString(node.getControlX2()))
+                .append(',')
+                .append(nb.toString(node.getControlY2()))
+                .append(',')
+                .append(nb.toString(node.getEndX()))
+                .append(',')
+                .append(nb.toString(node.getEndY()));
+        elem.setAttribute("d", buf.substring(0));
+        return elem;
     }
 
     private void writeDefsRecursively(Document doc, Element defsNode, javafx.scene.Node node) throws IOException {
-        if (skipInvisibleNodes && !node.isVisible()) {
+        if (isSkipNode(node)) {
             return;
         }
         if (node instanceof Shape) {
@@ -279,6 +370,154 @@ public class SvgExporter  {
                 writeDefsRecursively(doc, defsNode, child);
             }
         }
+    }
+
+    private void writeDocumentElementAttributes(Element docElement, javafx.scene.Node drawingNode) throws IOException {
+        docElement.setAttribute("version", "1.2");
+        docElement.setAttribute("baseProfile", "tiny");
+
+    }
+
+    private Element writeEllipse(Document doc, Element parent, Ellipse node) {
+        Element elem = doc.createElement("ellipse");
+        if (node.getCenterX() != 0.0) {
+            elem.setAttribute("cx", nb.toString(node.getCenterX()));
+        }
+        if (node.getCenterY() != 0.0) {
+            elem.setAttribute("cy", nb.toString(node.getCenterY()));
+        }
+        if (node.getRadiusX() != 0.0) {
+            elem.setAttribute("rx", nb.toString(node.getRadiusX()));
+        }
+        if (node.getRadiusY() != 0.0) {
+            elem.setAttribute("ry", nb.toString(node.getRadiusY()));
+        }
+        parent.appendChild(elem);
+        return elem;
+    }
+
+    private void writeFillAttributes(Element elem, Shape node) {
+        Paint fill = node.getFill();
+        String id = idFactory.getId(fill);
+        if (id != null) {
+            elem.setAttribute("fill", "url(#" + id + ")");
+        } else {
+            elem.setAttribute("fill", paint.toString(fill));
+            if (fill instanceof Color) {
+                Color c = (Color) fill;
+                if (!c.isOpaque()) {
+                    elem.setAttribute("fill-opacity", nb.toString(c.getOpacity()));
+                }
+            }
+        }
+    }
+
+    private Element writeGroup(Document doc, Element parent, Group node) {
+        Element elem = doc.createElement("g");
+        parent.appendChild(elem);
+        return elem;
+    }
+
+    private Element writeImageView(Document doc, Element parent, ImageView node) throws IOException {
+        Element elem = doc.createElement("image");
+        parent.appendChild(elem);
+
+        elem.setAttribute("x", nb.toString(node.getX()));
+        elem.setAttribute("y", nb.toString(node.getY()));
+        elem.setAttribute("width", nb.toString(node.getFitWidth()));
+        elem.setAttribute("height", nb.toString(node.getFitHeight()));
+        elem.setAttribute("preserveAspectRatio", node.isPreserveRatio() ? "xMidYMid" : "none");
+
+        URI uri = (URI) node.getProperties().get(imageUriKey);
+        String href = null;
+        if (uri != null) {
+            href = uri.toString();
+        } else {
+            if (node.getImage() != null) {
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
+                bout.close();
+                byte[] imageData = bout.toByteArray();
+
+                href = "data:image;base64," + Base64.getEncoder().encodeToString(imageData);
+            }
+        }
+        if (href != null) {
+            elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href", href);
+        }
+        return elem;
+    }
+
+    private Element writeLine(Document doc, Element parent, Line node) {
+        Element elem = doc.createElement("line");
+        if (node.getStartX() != 0.0) {
+            elem.setAttribute("x1", nb.toString(node.getStartX()));
+        }
+        if (node.getStartY() != 0.0) {
+            elem.setAttribute("y1", nb.toString(node.getStartY()));
+        }
+        if (node.getEndX() != 0.0) {
+            elem.setAttribute("x2", nb.toString(node.getEndX()));
+        }
+        if (node.getEndY() != 0.0) {
+            elem.setAttribute("y2", nb.toString(node.getEndY()));
+        }
+        parent.appendChild(elem);
+        return elem;
+    }
+
+    private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node, String linebreak) throws IOException {
+        if (isSkipNode(node)) {
+            return;
+        }
+        Element elem = null;
+        if (node instanceof Shape) {
+            parent.appendChild(doc.createTextNode(linebreak));
+            elem = writeShape(doc, parent, (Shape) node);
+            writeFillAttributes(elem, (Shape) node);
+            writeStrokeAttributes(elem, (Shape) node);
+        } else if (node instanceof Group) {
+            // a group can be omitted if it does not perform a transformation and does not apply an effect
+            boolean omitGroup = false;
+            if (skipInvisibleNodes) {
+                Group g = (Group) node;
+                if ((g.getBlendMode() == null || g.getBlendMode() == BlendMode.SRC_OVER)
+                        && g.getLocalToParentTransform().isIdentity()
+                        && g.getEffect() == null) {
+                    omitGroup = true;
+                }
+            }
+            if (!omitGroup) {
+                elem = writeGroup(doc, parent, (Group) node);
+            }
+        } else if (node instanceof Region) {
+            parent.appendChild(doc.createTextNode(linebreak));
+            elem = writeRegion(doc, parent, (Region) node);
+        } else if (node instanceof ImageView) {
+            parent.appendChild(doc.createTextNode(linebreak));
+            elem = writeImageView(doc, parent, (ImageView) node);
+        } else {
+            throw new UnsupportedOperationException("not yet implemented for " + node);
+        }
+
+        if (elem != null) {
+            writeStyleAttributes(elem, node);
+            writeTransformAttributes(elem, node);
+            writeCompositingAttributes(elem, node);
+        }
+
+        if (node instanceof Parent) {
+            final Parent pp = (Parent) node;
+            final String lbi = linebreak + indent;
+            final Element parentElement = elem==null?parent:elem;
+            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                writeNodeRecursively(doc, parentElement, child, lbi);
+            }
+            if (elem!=null&&!pp.getChildrenUnmodifiable().isEmpty()) {
+                elem.appendChild(doc.createTextNode(linebreak));
+            }
+        }
+
     }
 
     private void writePaintDefs(Document doc, Element defsNode, Paint paint) throws IOException {
@@ -375,172 +614,6 @@ public class SvgExporter  {
                 defsNode.appendChild(elem);
             }
         }
-    }
-
-    private Element writeShape(Document doc, Element parent, Shape node) throws IOException {
-        Element elem = null;
-        if (node instanceof Arc) {
-            elem = writeArc(doc, parent, (Arc) node);
-        } else if (node instanceof Circle) {
-            elem = writeCircle(doc, parent, (Circle) node);
-        } else if (node instanceof CubicCurve) {
-            elem = writeCubicCurve(doc, parent, (CubicCurve) node);
-        } else if (node instanceof Ellipse) {
-            elem = writeEllipse(doc, parent, (Ellipse) node);
-        } else if (node instanceof Line) {
-            elem = writeLine(doc, parent, (Line) node);
-        } else if (node instanceof Path) {
-            elem = writePath(doc, parent, (Path) node);
-        } else if (node instanceof Polygon) {
-            elem = writePolygon(doc, parent, (Polygon) node);
-        } else if (node instanceof Polyline) {
-            elem = writePolyline(doc, parent, (Polyline) node);
-        } else if (node instanceof QuadCurve) {
-            elem = writeQuadCurve(doc, parent, (QuadCurve) node);
-        } else if (node instanceof Rectangle) {
-            elem = writeRectangle(doc, parent, (Rectangle) node);
-        } else if (node instanceof SVGPath) {
-            elem = writeSVGPath(doc, parent, (SVGPath) node);
-        } else if (node instanceof Text) {
-            elem = writeText(doc, parent, (Text) node);
-        } else {
-            throw new IOException("unknown shape type " + node);
-        }
-        return elem;
-    }
-
-    private Element writeArc(Document doc, Element parent, Arc node) {
-        Element elem = doc.createElement("arc");
-        parent.appendChild(elem);
-        StringBuilder buf = new StringBuilder();
-        double centerX = node.getCenterX();
-        double centerY = node.getCenterY();
-        double radiusX = node.getRadiusX();
-        double radiusY = node.getRadiusY();
-        double startAngle = Math.toRadians(-node.getStartAngle());
-        double endAngle = Math.toRadians(-node.getStartAngle() - node.getLength());
-        double length = node.getLength();
-
-        double startX = radiusX * Math.cos(startAngle);
-        double startY = radiusY * Math.sin(startAngle);
-
-        double endX = centerX + radiusX * Math.cos(endAngle);
-        double endY = centerY + radiusY * Math.sin(endAngle);
-
-        int xAxisRot = 0;
-        boolean largeArc = (length > 180);
-        boolean sweep = (length < 0);
-
-        buf.append('M')
-                .append(nb.toString(centerX))
-                .append(',')
-                .append(nb.toString(centerY))
-                .append(' ');
-
-        if (ArcType.ROUND == node.getType()) {
-            buf.append('l')
-                    .append(startX)
-                    .append(',')
-                    .append(startY).append(' ');
-        }
-
-        buf.append('A')
-                .append(nb.toString(radiusX))
-                .append(',')
-                .append(nb.toString(radiusY))
-                .append(',')
-                .append(nb.toString(xAxisRot))
-                .append(',')
-                .append(largeArc ? '1' : '0')
-                .append(',')
-                .append(sweep ? '1' : '0')
-                .append(',')
-                .append(nb.toString(endX))
-                .append(',')
-                .append(nb.toString(endY))
-                .append(',');
-
-        if (ArcType.CHORD == node.getType()
-                || ArcType.ROUND == node.getType()) {
-            buf.append('Z');
-        }
-        return elem;
-    }
-
-    private Element writeCircle(Document doc, Element parent, Circle node) {
-        Element elem = doc.createElement("circle");
-        if (node.getCenterX() != 0.0) {
-            elem.setAttribute("cx", nb.toString(node.getCenterX()));
-        }
-        if (node.getCenterY() != 0.0) {
-            elem.setAttribute("cy", nb.toString(node.getCenterY()));
-        }
-        if (node.getRadius() != 0.0) {
-            elem.setAttribute("r", nb.toString(node.getRadius()));
-        }
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    private Element writeCubicCurve(Document doc, Element parent, CubicCurve node) {
-        Element elem = doc.createElement("path");
-        parent.appendChild(elem);
-        final StringBuilder buf = new StringBuilder();
-        buf.append('M')
-                .append(nb.toString(node.getStartX()))
-                .append(',')
-                .append(nb.toString(node.getStartY()))
-                .append(' ')
-                .append('C')
-                .append(nb.toString(node.getControlX1()))
-                .append(',')
-                .append(nb.toString(node.getControlY1()))
-                .append(',')
-                .append(nb.toString(node.getControlX2()))
-                .append(',')
-                .append(nb.toString(node.getControlY2()))
-                .append(',')
-                .append(nb.toString(node.getEndX()))
-                .append(',')
-                .append(nb.toString(node.getEndY()));
-        elem.setAttribute("d", buf.substring(0));
-        return elem;
-    }
-
-    private Element writeEllipse(Document doc, Element parent, Ellipse node) {
-        Element elem = doc.createElement("ellipse");
-        if (node.getCenterX() != 0.0) {
-            elem.setAttribute("cx", nb.toString(node.getCenterX()));
-        }
-        if (node.getCenterY() != 0.0) {
-            elem.setAttribute("cy", nb.toString(node.getCenterY()));
-        }
-        if (node.getRadiusX() != 0.0) {
-            elem.setAttribute("rx", nb.toString(node.getRadiusX()));
-        }
-        if (node.getRadiusY() != 0.0) {
-            elem.setAttribute("ry", nb.toString(node.getRadiusY()));
-        }
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    private Element writeLine(Document doc, Element parent, Line node) {
-        Element elem = doc.createElement("line");
-        if (node.getStartX() != 0.0) {
-            elem.setAttribute("x1", nb.toString(node.getStartX()));
-        }
-        if (node.getStartY() != 0.0) {
-            elem.setAttribute("y1", nb.toString(node.getStartY()));
-        }
-        if (node.getEndX() != 0.0) {
-            elem.setAttribute("x2", nb.toString(node.getEndX()));
-        }
-        if (node.getEndY() != 0.0) {
-            elem.setAttribute("y2", nb.toString(node.getEndY()));
-        }
-        parent.appendChild(elem);
-        return elem;
     }
 
     private Element writePath(Document doc, Element parent, Path node) {
@@ -651,6 +724,10 @@ public class SvgExporter  {
         return elem;
     }
 
+    private void writeProcessingInstructions(Document doc, javafx.scene.Node external) {
+// empty
+    }
+
     private Element writeQuadCurve(Document doc, Element parent, QuadCurve node) {
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
@@ -696,32 +773,6 @@ public class SvgExporter  {
         return elem;
     }
 
-    private Element writeSVGPath(Document doc, Element parent, SVGPath node) {
-        Element elem = doc.createElement("path");
-        elem.setAttribute("d", node.getContent());
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    private Element writeText(Document doc, Element parent, Text node) {
-        Element elem = doc.createElement("text");
-        parent.appendChild(elem);
-        elem.appendChild(doc.createTextNode(node.getText()));
-
-        elem.setAttribute("x", nb.toString(node.getX()));
-        elem.setAttribute("y", nb.toString(node.getY()));
-
-        writeTextAttributes(elem, node);
-
-        return elem;
-    }
-
-    private Element writeGroup(Document doc, Element parent, Group node) {
-        Element elem = doc.createElement("g");
-        parent.appendChild(elem);
-        return elem;
-    }
-
     private Element writeRegion(Document doc, Element parent, Region region) throws IOException {
         Element elem = doc.createElement("g");
         parent.appendChild(elem);
@@ -751,8 +802,8 @@ public class SvgExporter  {
 
                             java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
                             Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                            tx = Transforms.concat(tx,Transform.translate(x + insets.getLeft(), y + insets.getTop()));
-                            tx = Transforms.concat(tx,Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                            tx = Transforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                            tx = Transforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
                             bgs = Shapes.fxShapeFromAWT(awtShape, tx);
                         } else {
                             bgs = s;
@@ -784,8 +835,8 @@ public class SvgExporter  {
                                 java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
 
                                 Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                                tx =Transforms.concat( tx,Transform.translate(x + insets.getLeft(), y + insets.getTop()));
-                                tx =Transforms.concat( tx,Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                                tx = Transforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                                tx = Transforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
                                 bgs = Shapes.fxShapeFromAWT(awtShape, tx);
                             } else {
                                 bgs = s;
@@ -812,50 +863,43 @@ public class SvgExporter  {
         return elem;
     }
 
-    private Element writeImageView(Document doc, Element parent, ImageView node) throws IOException {
-        Element elem = doc.createElement("image");
+    private Element writeSVGPath(Document doc, Element parent, SVGPath node) {
+        Element elem = doc.createElement("path");
+        elem.setAttribute("d", node.getContent());
         parent.appendChild(elem);
-
-        elem.setAttribute("x", nb.toString(node.getX()));
-        elem.setAttribute("y", nb.toString(node.getY()));
-        elem.setAttribute("width", nb.toString(node.getFitWidth()));
-        elem.setAttribute("height", nb.toString(node.getFitHeight()));
-        elem.setAttribute("preserveAspectRatio", node.isPreserveRatio() ? "xMidYMid" : "none");
-
-        URI uri = (URI) node.getProperties().get(imageUriKey);
-        String href = null;
-        if (uri != null) {
-            href = uri.toString();
-        } else {
-            if (node.getImage() != null) {
-                ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
-                bout.close();
-                byte[] imageData = bout.toByteArray();
-
-                href = "data:image;base64," + Base64.getEncoder().encodeToString(imageData);
-            }
-        }
-        if (href != null) {
-            elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href", href);
-        }
         return elem;
     }
 
-    private void writeFillAttributes(Element elem, Shape node) {
-        Paint fill = node.getFill();
-        String id = idFactory.getId(fill);
-        if (id != null) {
-            elem.setAttribute("fill", "url(#" + id + ")");
+    private Element writeShape(Document doc, Element parent, Shape node) throws IOException {
+        Element elem = null;
+        if (node instanceof Arc) {
+            elem = writeArc(doc, parent, (Arc) node);
+        } else if (node instanceof Circle) {
+            elem = writeCircle(doc, parent, (Circle) node);
+        } else if (node instanceof CubicCurve) {
+            elem = writeCubicCurve(doc, parent, (CubicCurve) node);
+        } else if (node instanceof Ellipse) {
+            elem = writeEllipse(doc, parent, (Ellipse) node);
+        } else if (node instanceof Line) {
+            elem = writeLine(doc, parent, (Line) node);
+        } else if (node instanceof Path) {
+            elem = writePath(doc, parent, (Path) node);
+        } else if (node instanceof Polygon) {
+            elem = writePolygon(doc, parent, (Polygon) node);
+        } else if (node instanceof Polyline) {
+            elem = writePolyline(doc, parent, (Polyline) node);
+        } else if (node instanceof QuadCurve) {
+            elem = writeQuadCurve(doc, parent, (QuadCurve) node);
+        } else if (node instanceof Rectangle) {
+            elem = writeRectangle(doc, parent, (Rectangle) node);
+        } else if (node instanceof SVGPath) {
+            elem = writeSVGPath(doc, parent, (SVGPath) node);
+        } else if (node instanceof Text) {
+            elem = writeText(doc, parent, (Text) node);
         } else {
-            elem.setAttribute("fill", paint.toString(fill));
-            if (fill instanceof Color) {
-                Color c = (Color) fill;
-                if (!c.isOpaque()) {
-                    elem.setAttribute("fill-opacity", nb.toString(c.getOpacity()));
-                }
-            }
+            throw new IOException("unknown shape type " + node);
         }
+        return elem;
     }
 
     private void writeStrokeAttributes(Element elem, Shape shape) {
@@ -952,6 +996,41 @@ public class SvgExporter  {
         }
     }
 
+    private void writeStyleAttributes(Element elem, Node node) {
+        String id = node.getId();
+        if (id != null && !id.isEmpty()) {
+            elem.setAttribute("id", id);
+        }
+        List<String> styleClass = node.getStyleClass();
+        if (!styleClass.isEmpty()) {
+            StringBuffer buf = new StringBuffer();
+            for (String clazz : styleClass) {
+                if (buf.length() != 0) {
+                    buf.append(' ');
+                }
+                buf.append(clazz);
+            }
+            elem.setAttribute("class", buf.toString());
+        }
+
+        if (!node.isVisible()) {
+            elem.setAttribute("visibility", "hidden");
+        }
+    }
+
+    private Element writeText(Document doc, Element parent, Text node) {
+        Element elem = doc.createElement("text");
+        parent.appendChild(elem);
+        elem.appendChild(doc.createTextNode(node.getText()));
+
+        elem.setAttribute("x", nb.toString(node.getX()));
+        elem.setAttribute("y", nb.toString(node.getY()));
+
+        writeTextAttributes(elem, node);
+
+        return elem;
+    }
+
     private void writeTextAttributes(Element elem, Text node) {
         Font ft = node.getFont();
         elem.setAttribute("font-family", ft.getFamily());
@@ -983,52 +1062,4 @@ public class SvgExporter  {
         }
     }
 
-    private void writeStyleAttributes(Element elem, Node node) {
-        String id = node.getId();
-        if (id != null && !id.isEmpty()) {
-            elem.setAttribute("id", id);
-        }
-        List<String> styleClass = node.getStyleClass();
-        if (!styleClass.isEmpty()) {
-            StringBuffer buf = new StringBuffer();
-            for (String clazz : styleClass) {
-                if (buf.length() != 0) {
-                    buf.append(' ');
-                }
-                buf.append(clazz);
-            }
-            elem.setAttribute("class", buf.toString());
-        }
-
-        if (!node.isVisible()) {
-            elem.setAttribute("visibility", "hidden");
-        }
-    }
-
-    private void writeCompositingAttributes(Element elem, Node node) {
-        if (node.getOpacity() != 1.0) {
-            elem.setAttribute("opacity", nb.toString(node.getOpacity()));
-        }
-        /*
-        if (node.getBlendMode() != null && node.getBlendMode() != BlendMode.SRC_OVER) {
-            switch (node.getBlendMode()) {
-                case MULTIPLY:
-                case SCREEN:
-                case DARKEN:
-                case LIGHTEN:
-                    elem.setAttribute("mode", node.getBlendMode().toString().toLowerCase());
-                    break;
-                default:
-                // ignore
-            }
-        }*/
-    }
-
-    public String getIndent() {
-        return indent;
-    }
-
-    public void setIndent(String indent) {
-        this.indent = indent;
-    }
 }

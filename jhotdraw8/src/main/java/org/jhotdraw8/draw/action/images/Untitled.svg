@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns:xlink="http://www.w3.org/1999/xlink" baseProfile="tiny" height="88" version="1.2" width="88" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient gradientUnits="objectBoundingBox" id="linearGradient1" spreadMethod="pad" x1="0%" x2="0%" y1="0%" y2="100%"><stop offset="0%" stop-color="#d3d3d3"/><stop offset="100%" stop-color="#ffffff"/></linearGradient>
+</defs>
+
+    <ellipse class="Ellipse" cx="55" cy="11" fill="#ffffff" id="ellipse2" rx="6.5" ry="6.5" stroke="#000000" stroke-width="2"/>
+    <rect class="Rectangle" fill="#90ee90" height="12" id="rectangle4" opacity="0.5" stroke-position="inside" width="12" x="5" y="5"/>
+    <line class="Line" fill="none" id="line1" stroke="#8b0000" x1="2" x2="20" y1="5.5" y2="5.5"/>
+    <line class="Line" fill="none" id="line2" stroke="#8b0000" x1="2" x2="19.5" y1="16.5" y2="16.5"/>
+    <line class="Line" fill="none" id="line3" stroke="#8b0000" x1="5.5" x2="5.5" y1="2" y2="20.5"/>
+    <line class="Line" fill="none" id="line4" stroke="#8b0000" x1="16.5" x2="16.5" y1="2" y2="20"/>
+    <rect class="Rectangle" fill="url(#linearGradient1)" height="14" id="rectangle2" stroke-position="inside" stroke-width="2" width="14" x="70" y="4"/>
+    <rect class="Rectangle" fill="#ffffff" height="14" id="rectangle1" stroke="#000000" stroke-position="inside" stroke-width="2" width="14" x="26" y="4"/>
+    <ellipse class="Ellipse" cx="79.75" cy="8.25" fill="#ffffff" id="ellipse1" rx="1.75" ry="1.75" stroke="#000000" stroke-position="inside"/>
+    <line class="Line" fill="none" id="line5" stroke="#000000" stroke-linecap="square" stroke-width="2" x1="5" x2="17" y1="27" y2="39"/>
+    <line class="Line" fill="none" id="line6" stroke="#000000" stroke-linecap="square" stroke-width="2" x1="27" x2="39" y1="27" y2="39"/>
+    <rect class="Rectangle" fill="#ffffff" height="4" id="rectangle3" stroke="#808080" stroke-position="inside" width="4" x="25" y="25"/>
+    <rect class="Rectangle" fill="#ffffff" height="4" id="rectangle5" stroke="#808080" stroke-position="inside" width="4" x="37" y="37"/>
+    <polyline class="Polyline" fill="none" id="polyline1" points="54,25 48,28 53,38 60,39 62,29 57,31" stroke="#000000" stroke-linecap="square" stroke-width="2"/>
+    <polygon class="Polygon" fill="#ffffff" id="polygon1" points="76,25 70,28 75,38 82,39 84,29 78,31" stroke="#000000" stroke-linecap="square" stroke-width="2"/>
+    <polyline class="Polyline" fill="#ffffff" id="polyline2" points="71,16 72,11 74,9 77,13 80,12 83,16" stroke="#000000"/>
+    <rect class="Rectangle" fill="none" height="14" id="rectangle6" stroke="#000000" stroke-position="inside" stroke-width="2" width="14" x="70" y="4"/>
+    <polygon class="Polygon" fill="#ffffff" id="polygon2" points="5,47 13,47 17,51.266666666666666 17,63 5,63" stroke="#008b8b" stroke-position="inside" stroke-width="2"/>
+    <polyline class="Polyline" fill="#ffffff" id="polyline3" points="12.5,48 12.5,52 16.5,52" stroke="#008b8b"/>
+      <text fill="#000000" font-family="Futura" font-size="19" font-style="normal" font-weight="normal" stroke-linecap="square" stroke-miterlimit="10" x="25" y="63">A</text>
+    <line class="Line" fill="none" id="line7" stroke="#000000" x1="40.5" x2="40.5" y1="48" y2="63"/>
+</svg>
