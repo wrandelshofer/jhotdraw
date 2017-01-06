@@ -5,6 +5,8 @@
 package org.jhotdraw8.app.action;
 
 import java.util.IdentityHashMap;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
@@ -25,6 +27,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     protected final ObservableMap<Key<?>, Object> properties//
             = FXCollections.observableMap(new IdentityHashMap<>());
 
+    private final BooleanProperty selected=new SimpleBooleanProperty(this, SELECTED_PROPERTY);
     /**
      * Creates a new instance. Binds {@code disabled} to {@code disable}.
      */
@@ -39,7 +42,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      * @param id the id of the action
      */
     public AbstractAction(String id) {
-        set(Action.NAME, id);
+        set(Action.ID, id);
 
     }
 
@@ -49,16 +52,16 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     }
 
     /**
-     * Invokes {@link #onActionPerformed} if the action is not disabled and the
+     * Invokes {@link #handleActionPerformed} if the action is not disabled and the
      * event is not consumed. Consumes the event after invoking {@code
-     * onActionPerformed}.
+ handleActionPerformed}.
      *
      * @param event the action event
      */
     @Override
     public final void handle(ActionEvent event) {
         if (!isDisabled() && !event.isConsumed()) {
-            onActionPerformed(event);
+            handleActionPerformed(event);
             event.consume();
         }
     }
@@ -69,5 +72,10 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      *
      * @param event the action event
      */
-    protected abstract void onActionPerformed(ActionEvent event);
+    protected abstract void handleActionPerformed(ActionEvent event);
+
+    @Override
+    public BooleanProperty selectedProperty() {
+        return selected;
+    }
 }

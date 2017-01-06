@@ -8,6 +8,7 @@
 package org.jhotdraw8.app.action;
 
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.Project;
 
@@ -44,4 +45,17 @@ public abstract class AbstractApplicationAction extends AbstractAction {
     public final Application getApplication() {
         return app;
     }
+    
+@Override
+    protected final void handleActionPerformed(ActionEvent event) {
+        handleActionPerformed(event, app);
+    }
+    
+        /**
+     * This method is invoked when the action is not disabled and the event is
+     * not consumed.
+     *
+     * @param event the action event
+     */
+    protected abstract void handleActionPerformed(ActionEvent event, Application app);
 }

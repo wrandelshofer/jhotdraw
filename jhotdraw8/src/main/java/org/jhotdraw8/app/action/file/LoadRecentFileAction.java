@@ -16,10 +16,10 @@ import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.app.DocumentProject;
 
 /**
- * Lets the user write unsaved changes of the active view, and then loads the
- * specified URI into the active view.
+ * Lets the user write unsaved changes of the active project, and then loads the
+ * specified URI into the active project.
  * <p>
- * If there is no active view, this action creates a new view and thus acts the
+ * If there is no active project, this action creates a new project and thus acts the
  * same like {@link OpenRecentFileAction}.
  * <p>
  * This action is called when the user selects an item in the Recent Files
@@ -39,7 +39,7 @@ import org.jhotdraw8.app.DocumentProject;
  * <p>
  * <em>Allow multiple views per URI</em><br>
  * When the feature is disabled, {@code LoadRecentFileAction} prevents loading
- * an URI which is opened in another view.<br>
+ * an URI which is opened in another project.<br>
  * See {@link org.jhotdraw8.app} for a description of the feature.
  * </p>
  *
@@ -63,7 +63,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
     public LoadRecentFileAction(Application app, DocumentProject view, URI uri) {
         super(app, view);
         this.uri = uri;
-        setMayCreateView(true);
+        setMayCreateProject(true);
         set(Action.LABEL, URIUtil.getName(uri));
     }
 

@@ -212,7 +212,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
 
     ToggleBooleanAction a = new ToggleBooleanAction(getApplication(), this, VIEWTOGGLE_PROPERTIES,
             Resources.getResources("org.jhotdraw8.samples.grapher.Labels"));
-    map.put(a.getName(), a);
+    map.put(a.getId(), a);
     map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
     map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
     map.put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));

@@ -122,12 +122,12 @@ public interface PropertyBean {
         return result;
     }
 
-    default <T> ObjectProperty<T> getProperty(Key<T> key) {
+    default <T> ObjectProperty<T> propertyAt(Key<T> key) {
         return new MapEntryProperty<Key<?>, Object, T>(getProperties(), key, key.getValueType());
     }
 
     @SuppressWarnings("unchecked")
-    default <T> ObservableValue<T> getObservableValue(Key<T> key) {
+    default <T> ObservableValue<T> valueAt(Key<T> key) {
         return (ObservableValue<T>) (ObservableValue<Object>) Bindings.valueAt(getProperties(), key);
     }
 }

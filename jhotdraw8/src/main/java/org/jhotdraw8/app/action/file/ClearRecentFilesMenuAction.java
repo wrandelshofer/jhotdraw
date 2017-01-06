@@ -8,10 +8,10 @@
 package org.jhotdraw8.app.action.file;
 
 import java.beans.PropertyChangeListener;
+import javafx.event.ActionEvent;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
-import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Clears (empties) the Recent Files sub-menu in the File menu.
@@ -45,8 +45,8 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(javafx.event.ActionEvent event) {
-        getApplication().recentUrisProperty().clear();
+    protected void handleActionPerformed(ActionEvent event, Application app) {
+        app.recentUrisProperty().clear();
     }
 
     /**

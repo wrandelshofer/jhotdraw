@@ -7,6 +7,7 @@
  */
 package org.jhotdraw8.app.action.edit;
 
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
@@ -49,8 +50,10 @@ public class CopyAction extends AbstractSelectionAction {
     }
 
     @Override
-    protected void onActionPerformed(javafx.event.ActionEvent event) {
-if (event.isConsumed()) return;        
+    protected void handleActionPerformed(ActionEvent event, Application app) {
+        if (event.isConsumed()) {
+            return;
+        }
         event.consume();
         Project v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
@@ -58,7 +61,7 @@ if (event.isConsumed()) return;
             if (n instanceof TextInputControl) {
                 TextInputControl tic = (TextInputControl) n;
                 // XXX TextInputControl does copy on its own, even if we consume the event
-              //  tic.copy();
+                //  tic.copy();
             } else if (n instanceof EditableComponent) {
                 EditableComponent tic = (EditableComponent) n;
                 tic.copy();

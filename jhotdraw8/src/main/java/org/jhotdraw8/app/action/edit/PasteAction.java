@@ -7,6 +7,7 @@
  */
 package org.jhotdraw8.app.action.edit;
 
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
@@ -50,7 +51,7 @@ public class PasteAction extends AbstractFocusOwnerAction {
     }
 
     @Override
-    protected void onActionPerformed(javafx.event.ActionEvent event) {
+    protected void handleActionPerformed(ActionEvent event, Application app) {
         if (event.isConsumed()) {
             return;
         }

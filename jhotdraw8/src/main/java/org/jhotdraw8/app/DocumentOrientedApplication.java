@@ -44,7 +44,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.Actions;
 import org.jhotdraw8.app.action.file.ClearRecentFilesMenuAction;
@@ -69,7 +69,26 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
-    private boolean isSystemMenuSupported;
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+    protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
+
+    private final ReadOnlyObjectWrapper<Project> activeProject = new ReadOnlyObjectWrapper<>();
+     {
+        activeProject.addListener((o,oldv,newv)-> {
+            if (oldv!=null) {
+                handleProjectDeactivate((DocumentProject)oldv);
+            }
+            if (newv!=null) {
+                handleProjectActivate((DocumentProject)newv);
+            }
+        });
+    }
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
         Thread t = new Thread(r);
         t.setUncaughtExceptionHandler((Thread t1, Throwable e) -> {
@@ -77,25 +96,305 @@ public class DocumentOrientedApplication extends AbstractApplication {
         });
         return t;
     });
-    protected HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
-
-    private final ReadOnlyObjectWrapper<Project> activeView = new ReadOnlyObjectWrapper<>();
-    private final SetProperty<Project> views = new SimpleSetProperty<>(FXCollections.observableSet());
+    private boolean isSystemMenuSupported;
     private ApplicationModel model;
     private List<Menu> systemMenus;
+      private  ArrayList<Action> systemMenuActiveProjectActions=new ArrayList<>();
+
+    private final SetProperty<Project> projects = new SimpleSetProperty<>(FXCollections.observableSet());
+
+    {
+        projects.addListener((SetChangeListener.Change<? extends Project> change) -> {
+            if (change.wasAdded()) {
+                handleProjectAdded((DocumentProject) change.getElementAdded());
+            } else {
+                handleProjectRemoved((DocumentProject) change.getElementRemoved());
+            }
+        });
+    }
 
     public DocumentOrientedApplication() {
         recentUrisProperty().get().addListener(this::updateRecentMenuItemsInAllMenuBars);
     }
 
-    {
-        views.addListener((SetChangeListener.Change<? extends Project> change) -> {
-            if (change.wasAdded()) {
-                handleViewAdded((DocumentProject)change.getElementAdded());
+    @Override
+    public ReadOnlyObjectProperty<Project> activeProjectProperty() {
+        return activeProject.getReadOnlyProperty();
+    }
+
+    /**
+     * Creates a menu bar.
+     *
+     * @param actions the action map
+     * @return the menu bar
+     */
+    protected MenuBar createMenuBar(HierarchicalMap<String, Action> actions) {
+        MenuBar mb = model.createMenuBar();
+        Deque<Menu> todo = new LinkedList<>(mb.getMenus());
+        while (!todo.isEmpty()) {
+            for (MenuItem mi : todo.remove().getItems()) {
+                if (mi instanceof Menu) {
+                    todo.add((Menu) mi);
+                } else {
+                    Action a = actions.get(mi.getId());
+                    if (a != null) {
+                        Actions.bindMenuItem(mi, a);
+                    } else {
+                        System.err.println("Warning DocumentOrientedApplication no action for menu item with id:"+mi.getId());
+                        a = new AbstractProjectAction<Project>(this, null,null) {
+                            @Override
+                            protected void handleActionPerformed(ActionEvent event, Project p) {
+                                Action ava = getActiveProject().getActionMap().get(mi.getId());
+                                if (ava != null) {
+                                    ava.handle(event);
+                                }
+                            }
+                        };
+                        systemMenuActiveProjectActions.add(a);
+                        Actions.bindMenuItem(mi, a, false);
+                    }
+                }
+            }
+        }
+        updateRecentMenuItemsMB(mb.getMenus());
+        
+        return mb;
+    }
+
+    @Override
+    public CompletionStage<Project> createProject() {
+        return FXWorker.supply(() -> getModel().createProject())
+                .thenApply((v) -> {
+                    return v;
+                }).exceptionally(e -> {
+            e.printStackTrace();
+            final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+            Alert alert = new Alert(Alert.AlertType.ERROR,
+                    labels.getString("application.createView.error"));
+            alert.show();
+            return null;
+        });
+    }
+
+    private void disambiguateProjects() {
+        HashMap<String, ArrayList<Project>> titles = new HashMap<>();
+        for (Project v : projects) {
+            String t = v.getTitle();
+            titles.computeIfAbsent(t, k -> new ArrayList<>()).add(v);
+        }
+        for (ArrayList<Project> list : titles.values()) {
+            if (list.size() == 1) {
+                list.get(0).setDisambiguation(0);
             } else {
-                handleViewRemoved((DocumentProject)change.getElementRemoved());
+                int max = 0;
+                for (Project v : list) {
+                    max = Math.max(max, v.getDisambiguation());
+                }
+                Collections.sort(list, (a, b) -> a.getDisambiguation() - b.getDisambiguation());
+                int prev = 0;
+                for (Project v : list) {
+                    int current = v.getDisambiguation();
+                    if (current == prev) {
+                        v.setDisambiguation(++max);
+                    }
+                    prev = current;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void execute(Runnable r) {
+        executor.execute(r);
+    }
+
+    @Override
+    public void exit() {
+        System.exit(0);
+    }
+
+    @Override
+    public HierarchicalMap<String, Action> getActionMap() {
+        return actionMap;
+    }
+
+    /**
+     * Gets the resource bundle.
+     *
+     * @return the resource bundle
+     */
+    protected Resources getLabels() {
+        return Resources.getResources("org.jhotdraw8.app.Labels");
+    }
+
+    @Override
+    public ApplicationModel getModel() {
+        return model;
+    }
+
+    @Override
+    public void setModel(ApplicationModel newValue) {
+        model = newValue;
+    }
+
+    /**
+     * Called immediately after a project has been removed from the projects set.
+     *
+     * @param obs the observable
+     */
+    protected void handleTitleChanged(Observable obs) {
+        disambiguateProjects();
+    }
+
+    /**
+     * Called immediately after a project has been added to the projects
+     * property.
+     *
+     * @param project the project
+     */
+    protected void handleProjectAdded(DocumentProject project) {
+        if (project.getApplication() != this) {
+            project.setApplication(this);
+            project.init();
+
+        }
+
+        project.getActionMap().setParent(getActionMap());
+        project.setApplication(DocumentOrientedApplication.this);
+        project.setTitle(getLabels().getString("unnamedFile"));
+        HierarchicalMap<String, Action> map = project.getActionMap();
+        map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, project));
+
+        Stage stage = new Stage();
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(project.getNode());
+        if (!isSystemMenuSupported) {
+            MenuBar mb = createMenuBar(project.getActionMap());
+            mb.setUseSystemMenuBar(true);
+            borderPane.setTop(mb);
+        }
+        Scene scene = new Scene(borderPane);
+
+        PreferencesUtil.installStagePrefsHandler(Preferences.userNodeForPackage(getClass()), "stage", stage);
+
+        stage.setScene(scene);
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+
+            for (StackTraceElement element : new Throwable().getStackTrace()) {
+                if (element.getMethodName().contains("Quit")) {
+                    project.set(QUIT_APPLICATION, true);
+                    break;
+                }
+            }
+
+            project.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
+        });
+        stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
+            if (newValue) {
+                activeProject.set(project);
             }
         });
+        stage.titleProperty().bind(CustomBinding.formatted(getLabels().getString("frame.title"),
+                project.titleProperty(), getModel().getName(), project.disambiguationProperty(), project.modifiedProperty()));
+        project.titleProperty().addListener(this::handleTitleChanged);
+        ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (newValue == true) {
+                activeProject.set(project);
+            }
+        };
+        project.set(FOCUS_LISTENER_KEY, focusListener);
+        stage.focusedProperty().addListener(focusListener);
+        disambiguateProjects();
+
+        Screen screen = Screen.getPrimary();
+        if (screen != null) {
+            Rectangle2D bounds = screen.getVisualBounds();
+            Random r = new Random();
+            if (activeProject.get() != null) {
+                Window w = activeProject.get().getNode().getScene().getWindow();
+                //stage.setWidth(w.getWidth());
+                //stage.setHeight(w.getHeight());
+                stage.setX(Math.min(w.getX() + 22, bounds.getMaxX()
+                        - stage.getWidth()));
+                stage.setY(Math.min(w.getY() + 22, bounds.getMaxY()
+                        - stage.getHeight()));
+            } else {
+                //stage.setWidth(bounds.getWidth() / 4);
+                //stage.setHeight(bounds.getHeight() / 3);
+                stage.setX(bounds.getMinX());
+                stage.setY(bounds.getMinY());
+            }
+
+            Outer:
+            for (int retries = projects.getSize(); retries > 0; retries--) {
+                for (Project v : projects) {
+                    if (v != project) {
+                        Window w = v.getNode().getScene().getWindow();
+                        if (Math.abs(w.getX() - stage.getX()) < 10
+                                || Math.abs(w.getY() - stage.getY()) < 10) {
+                            stage.setX(Math.min(w.getX() + 20, bounds.getMaxX()
+                                    - stage.getWidth()));
+                            stage.setY(Math.min(w.getY() + 20, bounds.getMaxY()
+                                    - stage.getHeight()));
+                            continue Outer;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        stage.show();
+        Platform.runLater(project::start);
+    }
+
+    /**
+     * Called immediately after a project has been removed from the projects property.
+     *
+     * @param project the project
+     */
+    protected void handleProjectRemoved(DocumentProject project) {
+        Stage stage = (Stage) project.getNode().getScene().getWindow();
+        project.stop();
+        ChangeListener<Boolean> focusListener = project.get(FOCUS_LISTENER_KEY);
+        if (focusListener != null) {
+            stage.focusedProperty().removeListener(focusListener);
+        }
+        stage.close();
+        project.dispose();
+        project.setApplication(null);
+        project.getActionMap().setParent(null);
+
+        if (activeProject.get() == project) {
+            activeProject.set(null);
+        }
+
+        // Auto close feature
+        if (projects.isEmpty() && !isSystemMenuSupported) {
+            exit();
+        }
+    }
+    
+        /**
+     * Called immediately when a project needs to be activated.
+     *
+     * @param project the project
+     */
+    protected void handleProjectActivate(DocumentProject project) {
+        project.activate();
+    }
+        /**
+     * Called immediately when a project needs to be deactivated.
+     *
+     * @param project the project
+     */
+    protected void handleProjectDeactivate(DocumentProject project) {
+        project.deactivate();
+    }
+
+    @Override
+    public SetProperty<Project> projectsProperty() {
+        return projects;
     }
 
     @Override
@@ -118,7 +417,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
         // FIXME - We suppress here 2 exceptions!
         final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
         createProject().whenComplete((pv, ex1) -> {
-            DocumentProject v=(DocumentProject)pv;
+            DocumentProject v = (DocumentProject) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 new Alert(Alert.AlertType.ERROR,
@@ -136,272 +435,6 @@ public class DocumentOrientedApplication extends AbstractApplication {
                 }
             });
         });
-    }
-
-    @Override
-    public SetProperty<Project> projectsProperty() {
-        return views;
-    }
-
-    @Override
-    public ReadOnlyObjectProperty<Project> activeProjectProperty() {
-        return activeView.getReadOnlyProperty();
-    }
-
-    @Override
-    public CompletionStage<Project> createProject() {
-        return FXWorker.supply(() -> getModel().createProject())
-                .thenApply((v) -> {
-                    v.setApplication(DocumentOrientedApplication.this);
-                    v.init();
-                    return v;
-                }).exceptionally(e -> {
-            e.printStackTrace();
-            final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-            Alert alert = new Alert(Alert.AlertType.ERROR,
-                    labels.getString("application.createView.error"));
-            alert.show();
-            return null;
-        });
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    /**
-     * Called immediately after a view has been added to the projects set.
-     *
-     * @param view the view
-     */
-    protected void handleViewAdded(DocumentProject view) {
-        view.getActionMap().setParent(getActionMap());
-        view.setApplication(DocumentOrientedApplication.this);
-        view.setTitle(getLabels().getString("unnamedFile"));
-        HierarchicalMap<String, Action> map = view.getActionMap();
-        map.put(CloseFileAction.ID, new CloseFileAction(DocumentOrientedApplication.this, view));
-
-        Stage stage = new Stage();
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(view.getNode());
-        if (!isSystemMenuSupported) {
-            MenuBar mb = createMenuBar(view.getActionMap());
-            mb.setUseSystemMenuBar(true);
-            borderPane.setTop(mb);
-        }
-        Scene scene = new Scene(borderPane);
-
-        PreferencesUtil.installStagePrefsHandler(Preferences.userNodeForPackage(DocumentOrientedApplication.class), "stage", stage);
-
-        stage.setScene(scene);
-        stage.setOnCloseRequest(event -> {
-            event.consume();
-
-            for (StackTraceElement element : new Throwable().getStackTrace()) {
-                if (element.getMethodName().contains("Quit")) {
-                    view.set(QUIT_APPLICATION, true);
-                    break;
-                }
-            }
-
-            view.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
-        });
-        stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
-            if (newValue) {
-                activeView.set(view);
-            }
-        });
-        stage.titleProperty().bind(CustomBinding.formatted(getLabels().getString("frame.title"),
-                view.titleProperty(), getModel().getName(), view.disambiguationProperty(), view.modifiedProperty()));
-        view.titleProperty().addListener(this::handleTitleChanged);
-        ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (newValue == true) {
-                activeView.set(view);
-            }
-        };
-        view.set(FOCUS_LISTENER_KEY, focusListener);
-        stage.focusedProperty().addListener(focusListener);
-        disambiguateProjects();
-
-        Screen screen = Screen.getPrimary();
-        if (screen != null) {
-            Rectangle2D bounds = screen.getVisualBounds();
-            Random r = new Random();
-            if (activeView.get() != null) {
-                Window w = activeView.get().getNode().getScene().getWindow();
-                //stage.setWidth(w.getWidth());
-                //stage.setHeight(w.getHeight());
-                stage.setX(Math.min(w.getX() + 22, bounds.getMaxX()
-                        - stage.getWidth()));
-                stage.setY(Math.min(w.getY() + 22, bounds.getMaxY()
-                        - stage.getHeight()));
-            } else {
-                //stage.setWidth(bounds.getWidth() / 4);
-                //stage.setHeight(bounds.getHeight() / 3);
-                stage.setX(bounds.getMinX());
-                stage.setY(bounds.getMinY());
-            }
-
-            Outer:
-            for (int retries = views.getSize(); retries > 0; retries--) {
-                for (Project v : views) {
-                    if (v != view) {
-                        Window w = v.getNode().getScene().getWindow();
-                        if (Math.abs(w.getX() - stage.getX()) < 10
-                                || Math.abs(w.getY() - stage.getY()) < 10) {
-                            stage.setX(Math.min(w.getX() + 20, bounds.getMaxX()
-                                    - stage.getWidth()));
-                            stage.setY(Math.min(w.getY() + 20, bounds.getMaxY()
-                                    - stage.getHeight()));
-                            continue Outer;
-                        }
-                    }
-                }
-                break;
-            }
-        }
-        stage.show();
-        Platform.runLater(view::start);
-    }
-
-    /**
-     * Called immediately after a view has been removed from the projects set.
-     *
-     * @param obs the observable
-     */
-    protected void handleTitleChanged(Observable obs) {
-        disambiguateProjects();
-    }
-
-    /**
-     * Called immediately after a view has been removed from the projects set.
-     *
-     * @param view the view
-     */
-    protected void handleViewRemoved(DocumentProject view) {
-        Stage stage = (Stage) view.getNode().getScene().getWindow();
-        view.stop();
-        ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
-        if (focusListener != null) {
-            stage.focusedProperty().removeListener(focusListener);
-        }
-        stage.close();
-        view.dispose();
-        view.setApplication(null);
-        view.getActionMap().setParent(null);
-
-        if (activeView.get() == view) {
-            activeView.set(null);
-        }
-
-        // Auto close feature
-        if (views.isEmpty() && !isSystemMenuSupported) {
-            exit();
-        }
-    }
-
-    /**
-     * Gets the resource bundle.
-     *
-     * @return the resource bundle
-     */
-    protected Resources getLabels() {
-        return Resources.getResources("org.jhotdraw8.app.Labels");
-    }
-
-    /**
-     * Creates a menu bar.
-     *
-     * @param actions the action map
-     * @return the menu bar
-     */
-    protected MenuBar createMenuBar(HierarchicalMap<String, Action> actions) {
-        MenuBar mb = model.createMenuBar();
-
-        LinkedList<Menu> todo = new LinkedList<>(mb.getMenus());
-        while (!todo.isEmpty()) {
-            for (MenuItem mi : todo.remove().getItems()) {
-                if (mi instanceof Menu) {
-                    todo.add((Menu) mi);
-                } else {
-                    Action a = actions.get(mi.getId());
-                    if (a != null) {
-                        Actions.bindMenuItem(mi, a);
-                    } else {
-                        System.err.println("DocumentOrientedApplication: Warning: no action for menu item with id="
-                                + mi.getId());
-                        a = new AbstractViewAction(this, null) {
-                            @Override
-                            protected void onActionPerformed(ActionEvent event) {
-                                Action ava = getActiveView().getActionMap().get(mi.getId());
-                                if (ava != null) {
-                                    ava.handle(event);
-                                }
-                            }
-                        };
-                        Actions.bindMenuItem(mi, a, false);
-                    }
-                }
-            }
-        }
-        updateRecentMenuItemsMB(mb.getMenus());
-        return mb;
-    }
-
-    @Override
-    public HierarchicalMap<String, Action> getActionMap() {
-        return actionMap;
-    }
-
-    @Override
-    public void execute(Runnable r) {
-        executor.execute(r);
-    }
-
-    @Override
-    public ApplicationModel getModel() {
-        return model;
-    }
-
-    @Override
-    public void setModel(ApplicationModel newValue) {
-        model = newValue;
-    }
-
-    @Override
-    public void exit() {
-        System.exit(0);
-    }
-
-    private void disambiguateProjects() {
-        HashMap<String, ArrayList<Project>> titles = new HashMap<>();
-        for (Project v : views) {
-            String t = v.getTitle();
-            titles.computeIfAbsent(t, k -> new ArrayList<>()).add(v);
-        }
-        for (ArrayList<Project> list : titles.values()) {
-            if (list.size() == 1) {
-                list.get(0).setDisambiguation(0);
-            } else {
-                int max = 0;
-                for (Project v : list) {
-                    max = Math.max(max, v.getDisambiguation());
-                }
-                Collections.sort(list, (a, b) -> a.getDisambiguation()
-                        - b.getDisambiguation());
-                int prev = 0;
-                for (Project v : list) {
-                    int current = v.getDisambiguation();
-                    if (current == prev) {
-                        v.setDisambiguation(++max);
-                    }
-                    prev = current;
-                }
-            }
-        }
     }
 
     private void updateRecentMenuItemsInAllMenuBars(Observable o) {

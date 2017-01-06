@@ -14,7 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleKey;
 import org.jhotdraw8.gui.URIChooser;
@@ -32,7 +32,7 @@ import org.jhotdraw8.app.DocumentProject;
  * @version $Id: AbstractSaveFileAction.java 1169 2016-12-11 12:51:19Z rawcoder
  * $
  */
-public abstract class AbstractSaveFileAction extends AbstractViewAction {
+public abstract class AbstractSaveFileAction extends AbstractProjectAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
@@ -48,7 +48,7 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
      * @param saveAs whether to force a file dialog
      */
     public AbstractSaveFileAction(Application app, DocumentProject view, String id, boolean saveAs) {
-        super(app, view);
+        super(app, view,DocumentProject.class);
         this.saveAs = saveAs;
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
     }
@@ -65,12 +65,8 @@ public abstract class AbstractSaveFileAction extends AbstractViewAction {
     protected abstract URIChooser createChooser(DocumentProject view);
 
     @Override
-    protected void onActionPerformed(ActionEvent evt) {
-        if (isDisabled()) {
-            return;
-        }
-        final DocumentProject v = (DocumentProject)getActiveView();
-        if (v == null || v.isDisabled()) {
+    protected void handleActionPerformed(ActionEvent evt, DocumentProject v) {
+        if (v == null) {
             return;
         }
         oldFocusOwner = v.getNode().getScene().getFocusOwner();

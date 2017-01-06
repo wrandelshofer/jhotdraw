@@ -8,7 +8,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractViewAction;
+import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
 
@@ -18,7 +18,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class ToggleBooleanAction extends AbstractViewAction {
+public class ToggleBooleanAction extends AbstractProjectAction<Project> {
 
   public final static String VALUE_PROPERTY = "value";
   private final BooleanProperty value;
@@ -28,16 +28,16 @@ public class ToggleBooleanAction extends AbstractViewAction {
     
   }
   public ToggleBooleanAction(Application app, Project view, String id, Resources labels, BooleanProperty value) {
-    super(app, view);
+    super(app, view,null);
     if (labels != null && id != null) {
       labels.configureAction(this, id);
     }
     this.value = value == null ? new SimpleBooleanProperty(this, VALUE_PROPERTY) : value;
-this.    value.bindBidirectional(getProperty(SELECTED_KEY));
+this.    value.bindBidirectional(selectedProperty());
   }
 
   @Override
-  protected void onActionPerformed(ActionEvent event) {
+  protected void handleActionPerformed(ActionEvent event, Project project) {
     setValue(!getValue());
   }
 

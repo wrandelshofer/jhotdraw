@@ -25,8 +25,6 @@ import org.jhotdraw8.io.SimpleIdFactory;
  * Unit := ("px"|"mm"|"cm"|in"|"pt"|"pc"]"em"|"ex") ;
  * </pre>
  *
- * // FIXME should return a Size object and not just a Double.
- *
  * @author Werner Randelshofer
  */
 public class CssSizeConverter implements Converter<CssSize> {

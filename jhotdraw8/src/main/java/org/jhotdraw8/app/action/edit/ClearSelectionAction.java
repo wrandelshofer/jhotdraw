@@ -7,6 +7,7 @@
  */
 package org.jhotdraw8.app.action.edit;
 
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
@@ -48,7 +49,7 @@ public class ClearSelectionAction extends AbstractSelectionAction {
     }
 
     @Override
-    protected void onActionPerformed(javafx.event.ActionEvent event) {
+    protected void handleActionPerformed(ActionEvent event, Application app) {
         Project v = app.getActiveProject();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
