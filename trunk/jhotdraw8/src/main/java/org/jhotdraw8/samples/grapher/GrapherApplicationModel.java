@@ -33,9 +33,9 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
 
     @Override
     public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {
-HierarchicalMap<String, Action> map= super.createApplicationActionMap(app); 
-        map.put(PrintFileAction.ID, new PrintFileAction(app,null));
-return map;
+        HierarchicalMap<String, Action> map = super.createApplicationActionMap(app);
+        map.put(PrintFileAction.ID, new PrintFileAction(app, null));
+        return map;
     }
 
 }

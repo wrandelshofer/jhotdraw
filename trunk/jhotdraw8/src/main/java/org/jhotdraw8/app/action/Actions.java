@@ -21,13 +21,6 @@ import javafx.scene.input.KeyCombination;
 public class Actions {
 
     /**
-     * Prevent instance creation.
-     */
-    private Actions() {
-
-    }
-
-    /**
      * Binds a button to an action
      *
      * @param control The menu control
@@ -69,19 +62,6 @@ public class Actions {
             Binding<String> nameBinding = Action.LABEL.valueAt(action.getProperties());
             control.getProperties().put("ActionsNameBinding", nameBinding);
             control.textProperty().bind(Action.LABEL.valueAt(action.getProperties()));
-            if (control instanceof CheckMenuItem) {
-                Property<Boolean> selectedBinding = action.selectedProperty();
-                // create a strong reference to name binding:
-                control.getProperties().put("ActionsSelectedBinding", selectedBinding);
-                // this only creates a weak reference to the name binding:
-                ((CheckMenuItem) control).selectedProperty().bindBidirectional(selectedBinding);
-            } else if (control instanceof RadioMenuItem) {
-                Property<Boolean> selectedBinding = action.selectedProperty();
-                // create a strong reference to name binding:
-                control.getProperties().put("ActionsSelectedBinding", selectedBinding);
-                // this only creates a weak reference to the name binding:
-                ((RadioMenuItem) control).selectedProperty().bindBidirectional(selectedBinding);
-            }
 
             Binding<KeyCombination> acceleratorBinding = Action.ACCELERATOR_KEY.valueAt(action.getProperties());
             // create a strong reference to name binding:
@@ -91,5 +71,23 @@ public class Actions {
         }
         control.setOnAction(action);
         control.disableProperty().bind(action.disabledProperty());
+        if (control instanceof CheckMenuItem) {
+            CheckMenuItem cmi = (CheckMenuItem) control;
+            Property<Boolean> selectedBinding = action.selectedProperty();
+            selectedBinding.addListener((o, oldv, newv) -> cmi.setSelected(newv));
+            cmi.setSelected(action.isSelected());
+        } else if (control instanceof RadioMenuItem) {
+            Property<Boolean> selectedBinding = action.selectedProperty();
+            RadioMenuItem cmi = (RadioMenuItem) control;
+            selectedBinding.addListener((o, oldv, newv) -> cmi.setSelected(newv));
+            cmi.setSelected(action.isSelected());
+        }
+    }
+
+    /**
+     * Prevent instance creation.
+     */
+    private Actions() {
+
     }
 }

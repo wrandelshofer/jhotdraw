@@ -102,6 +102,7 @@ import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.action.view.ToggleViewPropertyAction;
 
 /**
  * GrapherProject.
@@ -209,17 +210,13 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
 
   @Override
   protected void initActionMap(HierarchicalMap<String, Action> map) {
-
-    ToggleBooleanAction a = new ToggleBooleanAction(getApplication(), this, VIEWTOGGLE_PROPERTIES,
-            Resources.getResources("org.jhotdraw8.samples.grapher.Labels"));
-    map.put(a.getId(), a);
     map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
     map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
     map.put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
     map.put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
-    map.put("view.toggleProperties", new ToggleBooleanAction(
+    map.put(VIEWTOGGLE_PROPERTIES, new ToggleBooleanAction(
             getApplication(), this,
-            "view.toggleProperties",
+            VIEWTOGGLE_PROPERTIES,
             Resources.getResources("org.jhotdraw8.samples.grapher.Labels"), detailsVisible));
     map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(GroupFigure::new)));
     map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));

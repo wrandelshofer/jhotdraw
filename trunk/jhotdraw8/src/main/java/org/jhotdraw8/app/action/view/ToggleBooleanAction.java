@@ -19,38 +19,18 @@ import org.jhotdraw8.app.Project;
  * @version $$Id$$
  */
 public class ToggleBooleanAction extends AbstractProjectAction<Project> {
-
-  public final static String VALUE_PROPERTY = "value";
-  private final BooleanProperty value;
-
-  public ToggleBooleanAction(Application app, Project view, String id, Resources labels) {
-    this(app,view,id,labels,null);
-    
-  }
+    private BooleanProperty value;
   public ToggleBooleanAction(Application app, Project view, String id, Resources labels, BooleanProperty value) {
     super(app, view,null);
     if (labels != null && id != null) {
       labels.configureAction(this, id);
     }
-    this.value = value == null ? new SimpleBooleanProperty(this, VALUE_PROPERTY) : value;
-this.    value.bindBidirectional(selectedProperty());
+    this.value=value;
+selectedProperty().bind(value);
   }
 
   @Override
   protected void handleActionPerformed(ActionEvent event, Project project) {
-    setValue(!getValue());
+    value.set(!value.get());
   }
-
-  public BooleanProperty valueProperty() {
-    return value;
-  }
-
-  public boolean getValue() {
-    return value.get();
-  }
-
-  public void setValue(boolean newValue) {
-    value.set(newValue);
-  }
-
 }
