@@ -32,12 +32,12 @@ import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.app.DocumentProject;
 
 /**
- * TeddyView.
+ * TeddyProject.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TeddyView extends AbstractDocumentProject implements DocumentProject, Initializable {
+public class TeddyProject extends AbstractDocumentProject implements DocumentProject, Initializable {
 
   @FXML
   private URL location;
@@ -75,7 +75,7 @@ public class TeddyView extends AbstractDocumentProject implements DocumentProjec
     loader.setController(this);
 
     try {
-      node = loader.load(getClass().getResourceAsStream("TeddyView.fxml"));
+      node = loader.load(getClass().getResourceAsStream("TeddyProject.fxml"));
     } catch (IOException ex) {
       throw new InternalError(ex);
     }
