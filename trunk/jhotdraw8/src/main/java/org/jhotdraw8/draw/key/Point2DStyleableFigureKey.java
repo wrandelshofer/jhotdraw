@@ -14,7 +14,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssPoint2DConverter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 
 /**
@@ -74,7 +74,7 @@ public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implemen
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Point2D> converter
-                = new StyleConverterConverterWrapper<Point2D>(new CssPoint2DConverter());
+                = new StyleConverterAdapter<Point2D>(new CssPoint2DConverter());
         CssMetaData<Styleable, Point2D> md
                 = new SimpleCssMetaData<Styleable, Point2D>(property, function,
                         converter, defaultValue, inherits);

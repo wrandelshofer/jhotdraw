@@ -15,7 +15,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSize2DConverter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
  * Size2DStyleableFigureKey.
@@ -68,7 +68,7 @@ public class Size2DStyleableFigureKey extends SimpleFigureKey<CssSize2D> impleme
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssSize2D> converter
-                = new StyleConverterConverterWrapper<CssSize2D>(new CssSize2DConverter());
+                = new StyleConverterAdapter<CssSize2D>(new CssSize2DConverter());
         CssMetaData<Styleable, CssSize2D> md
                 = new SimpleCssMetaData<Styleable, CssSize2D>(property, function,
                         converter, defaultValue, inherits);

@@ -20,9 +20,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
+import javafx.util.Callback;
+import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.collection.ExpandedTreeItemIterator;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.DrawingView;
@@ -35,6 +39,7 @@ import org.jhotdraw8.draw.model.FigureTreePresentationModel;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
 import org.jhotdraw8.text.CssWordListConverter;
+import org.jhotdraw8.text.StringConverterAdapter;
 
 /**
  * FXML Controller class
@@ -55,7 +60,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
     @FXML
-    private TreeTableColumn<Figure, String> classesColumn;
+    private TreeTableColumn<Figure, ImmutableObservableList<String>> classesColumn;
 
     private DrawingView drawingView;
     private Node node;
@@ -109,11 +114,87 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue().getValue(), LockableFigure.LOCKED)
         );
         classesColumn.setCellValueFactory(
-                cell -> Bindings.createStringBinding(() -> wordListConverter.toString(cell.getValue().getValue().get(StyleableFigure.STYLE_CLASS)),
-                        new DrawingModelFigureProperty<ImmutableObservableList<String>>(model.getModel(),
-                                cell.getValue().getValue(), StyleableFigure.STYLE_CLASS))
+                cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>(model.getModel(),
+                        cell.getValue().getValue(), StyleableFigure.STYLE_CLASS)
         );
-        idColumn.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
+
+        // This cell factory ensures that only styleable figures support editing of ids.
+        // And it ensures, that the users sees the computed id, and not the one that he entered. 
+        idColumn.setCellFactory(
+                new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
+
+            @Override
+            public TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
+                return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
+
+                    @Override
+                    public void updateItem(String t, boolean empty) {
+                        super.updateItem(t, empty);
+                        TreeTableRow<Figure> row = getTreeTableRow();
+                        boolean isEditable = false;
+                        if (row != null) {
+                            Figure item =  row.getItem();
+                            //Test for disable condition
+                            if (item != null && item.isSupportedKey(StyleableFigure.ID)) {
+                                isEditable = true;
+                            }
+
+                            // show the computed  id! 
+                            if (item != null) {
+                                setText(item.getId());
+                            }
+                        }
+                        if (isEditable) {
+                            setEditable(true);
+                            this.setStyle(null);
+                        } else {
+                            setEditable(false);
+                            this.setStyle("-fx-text-fill: grey");
+                        }
+
+                    }
+
+                };
+            }
+
+        });
+        // This cell factory ensures that only styleable figures support editing of style classes.
+        // And it ensures, that the users sees the computed classes, and not the onesthat he entered. 
+        classesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableList<String>>, TreeTableCell<Figure, ImmutableObservableList<String>>>() {
+
+            @Override
+            public TreeTableCell<Figure, ImmutableObservableList<String>> call(TreeTableColumn<Figure, ImmutableObservableList<String>> paramTableColumn) {
+                return new TextFieldTreeTableCell<Figure, ImmutableObservableList<String>>(new StringConverterAdapter<>(wordListConverter)) {
+
+                    @Override
+                    public void updateItem(ImmutableObservableList<String> t, boolean empty) {
+                        super.updateItem(t, empty);
+                        TreeTableRow<Figure> row = getTreeTableRow();
+                        boolean isEditable = false;
+                        if (row != null) {
+                            Figure item = row.getItem();
+                            //Test for disable condition
+                            if (item != null && item.isSupportedKey(StyleableFigure.STYLE_CLASS)) {
+                                isEditable = true;
+                            }
+                            // show the computed  classes! 
+                            if (item != null) {
+                                setText(wordListConverter.toString(item.getStyleClass()));
+                            }
+                        }
+                        if (isEditable) {
+                            setEditable(true);
+                            this.setStyle(null);
+                        } else {
+                            setEditable(false);
+                            this.setStyle("-fx-text-fill: grey");
+                        }
+                    }
+                };
+            }
+
+        });
+
         visibleColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
         lockedColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
         treeView.setRoot(model.getRoot());

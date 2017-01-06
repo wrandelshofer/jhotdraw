@@ -1,4 +1,4 @@
-/* @(#)StyleConverterConverterWrapper.java
+/* @(#)StyleConverterAdapter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,14 +15,14 @@ import javafx.scene.text.Font;
  * API.
  *
  * @author Werner Randelshofer
- * @version $Id: StyleConverterConverterWrapper.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id: StyleConverterAdapter.java 1149 2016-11-18 11:00:10Z
+ rawcoder $
  */
-public class StyleConverterConverterWrapper<T> extends StyleConverter<String, T> {
+public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
 
     private Converter<T> converter;
 
-    public StyleConverterConverterWrapper(Converter<T> converter) {
+    public StyleConverterAdapter(Converter<T> converter) {
         this.converter = converter;
     }
 

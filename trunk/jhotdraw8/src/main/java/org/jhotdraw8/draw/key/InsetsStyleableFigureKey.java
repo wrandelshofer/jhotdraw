@@ -14,7 +14,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssInsetsConverter;
-import org.jhotdraw8.text.StyleConverterConverterWrapper;
+import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 
 /**
@@ -74,7 +74,7 @@ public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Insets> converter
-                = new StyleConverterConverterWrapper<Insets>(new CssInsetsConverter());
+                = new StyleConverterAdapter<Insets>(new CssInsetsConverter());
         CssMetaData<Styleable, Insets> md
                 = new SimpleCssMetaData<Styleable, Insets>(property, function,
                         converter, defaultValue, inherits);

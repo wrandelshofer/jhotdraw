@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
+import javafx.util.StringConverter;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.io.IdFactory;
 
@@ -16,19 +18,9 @@ import org.jhotdraw8.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssWordListConverter implements Converter<ImmutableObservableList<String>> {
+public class CssWordListConverter implements Converter<ImmutableObservableList<String>>  {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ ]+}", new CssConverterFactory());
-
-    @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
-        Object[] v = new Object[value.size() + 1];
-        v[0] = value.size();
-        for (int i = 0, n = value.size(); i < n; i++) {
-            v[i + 1] = value.get(i);
-        }
-        formatter.toString(out, v);
-    }
 
     @Override
     public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
@@ -44,4 +36,38 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
     public ImmutableObservableList<String> getDefaultValue() {
         return ImmutableObservableList.emptyList();
     }
+
+    @Override
+    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
+        Object[] v = new Object[value.size() + 1];
+        v[0] = value.size();
+        for (int i = 0, n = value.size(); i < n; i++) {
+            v[i + 1] = value.get(i);
+        }
+        formatter.toString(out, v);
+    }
+
+    public String toString(List<String> value) {
+        StringBuilder out = new StringBuilder();
+        try {
+            toString(out, value);
+        } catch (IOException ex) {
+            throw new InternalError(ex);
+        }
+        return out.toString();
+    }
+
+    public void toString(Appendable out, List<String> value) throws IOException {
+        toString(out, null, value);
+    }
+
+    public void toString(Appendable out, IdFactory idFactory, List<String> value) throws IOException {
+        Object[] v = new Object[value.size() + 1];
+        v[0] = value.size();
+        for (int i = 0, n = value.size(); i < n; i++) {
+            v[i + 1] = value.get(i);
+        }
+        formatter.toString(out, v);
+    }
+
 }

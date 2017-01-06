@@ -31,7 +31,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.StringConverterConverterWrapper;
+import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.text.XmlUriConverter;
 import org.jhotdraw8.util.Resources;
 
@@ -155,7 +155,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                 }
 
             };
-            StringConverter<URI> uriConverter = new StringConverterConverterWrapper<>(new XmlUriConverter());
+            StringConverter<URI> uriConverter = new StringConverterAdapter<>(new XmlUriConverter());
             ListViewUtil.addDragAndDropSupport(listView, (ListView<URI> param)
                     -> new TextFieldListCell<>(uriConverter), io);
         });
