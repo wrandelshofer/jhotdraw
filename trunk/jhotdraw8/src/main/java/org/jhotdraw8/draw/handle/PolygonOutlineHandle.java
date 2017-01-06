@@ -79,7 +79,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean isSelectable() {
-        return false;
+        return true;
     }
 
     @Override
