@@ -73,28 +73,15 @@ import java.util.ResourceBundle;
  */
 public class Resources extends ResourceBundle implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     private static final HashSet<String> acceleratorKeys = new HashSet<String>(
             Arrays.asList(new String[]{
         "shift", "control", "ctrl", "meta", "alt", "altGraph"
     }));
     /**
-     * The wrapped resource bundle.
+     * List of decoders. The first decoder which can decode a resource value is
+     * will be used to convert the resource value to an object.
      */
-    private transient ResourceBundle resource;
-    /**
-     * The locale.
-     */
-    private final Locale locale;
-    /**
-     * The base class
-     */
-    private Class<?> baseClass = getClass();
-    /**
-     * The base name of the resource bundle.
-     */
-    private final String baseName;
+    private static List<ResourceDecoder> decoders = new ArrayList<>();
     /**
      * The global verbose property.
      */
@@ -105,17 +92,7 @@ public class Resources extends ResourceBundle implements Serializable {
      * chain.
      */
     private static HashMap<String, String[]> propertyNameModifiers = new HashMap<String, String[]>();
-
-    /**
-     * The parent resources object.
-     */
-    private final Resources parent;
-
-    /**
-     * List of decoders. The first decoder which can decode a resource value is
-     * will be used to convert the resource value to an object.
-     */
-    private static List<ResourceDecoder> decoders = new ArrayList<>();
+    private static final long serialVersionUID = 1L;
 
     static {
         String osName = System.getProperty("os.name").toLowerCase();
@@ -129,6 +106,99 @@ public class Resources extends ResourceBundle implements Serializable {
         }
         propertyNameModifiers.put("os", new String[]{os, "default"});
     }
+
+    /**
+     * Adds a decoder.
+     *
+     * @param decoder the resource decoder
+     */
+    public static void addDecoder(ResourceDecoder decoder) {
+        decoders.add(decoder);
+    }
+
+    /**
+     * Get the appropriate ResourceBundle subclass.
+     *
+     * @param baseName the base name
+     * @return the resource bundle
+     * @see java.util.ResourceBundle
+     */
+    public static Resources getResources(String baseName)
+            throws MissingResourceException {
+        return getResources(baseName, LocaleUtil.getDefault());
+    }
+
+    /**
+     * Get the appropriate ResourceBundle subclass.
+     *
+     * @param baseName the base name
+     * @param locale the locale
+     * @return the resource bundle
+     * @see java.util.ResourceBundle
+     */
+    public static Resources getResources(String baseName, Locale locale)
+            throws MissingResourceException {
+        Resources r;
+        r = new Resources(baseName, locale);
+        return r;
+    }
+
+    public static boolean isVerbose() {
+        return isVerbose;
+    }
+
+    public static void setVerbose(boolean newValue) {
+        isVerbose = newValue;
+    }
+
+    /**
+     * Puts a property name modifier along with a fallback chain.
+     *
+     * @param name The name of the modifier.
+     * @param fallbackChain The fallback chain of the modifier.
+     */
+    public static void putPropertyNameModifier(String name, String... fallbackChain) {
+        propertyNameModifiers.put(name, fallbackChain);
+    }
+
+    /**
+     * Removes a decoder.
+     *
+     * @param decoder the resource decoder
+     */
+    public static void removeDecoder(ResourceDecoder decoder) {
+        decoders.remove(decoder);
+    }
+
+    /**
+     * Removes a property name modifier.
+     *
+     * @param name The name of the modifier.
+     */
+    public static void removePropertyNameModifier(String name) {
+        propertyNameModifiers.remove(name);
+    }
+    /**
+     * The base class
+     */
+    private Class<?> baseClass = getClass();
+    /**
+     * The base name of the resource bundle.
+     */
+    private final String baseName;
+    /**
+     * The locale.
+     */
+    private final Locale locale;
+
+    /**
+     * The parent resources object.
+     */
+    private final Resources parent;
+    /**
+     * The wrapped resource bundle.
+     */
+    private transient ResourceBundle resource;
 
     /**
      * Creates a new Resources object which wraps the provided resource bundle.
@@ -153,68 +223,87 @@ public class Resources extends ResourceBundle implements Serializable {
         this.parent = potentialParent;
     }
 
-    /**
-     * Returns the wrapped resource bundle.
-     *
-     * @return The wrapped resource bundle.
-     */
-    public ResourceBundle getWrappedBundle() {
-        return resource;
+    public void configureAction(Action action, String argument) {
+        configureAction(action, argument, getBaseClass());
     }
 
-    private String substitutePlaceholders(String key, String value) throws MissingResourceException {
-
-        // Substitute placeholders in the value
-        for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
-            int p2 = value.indexOf('}', p1 + 2);
-            if (p2 == -1) {
-                break;
-            }
-
-            String placeholderKey = value.substring(p1 + 2, p2);
-            String placeholderFormat;
-            int p3 = placeholderKey.indexOf(',');
-            if (p3 != -1) {
-                placeholderFormat = placeholderKey.substring(p3 + 1);
-                placeholderKey = placeholderKey.substring(0, p3);
-            } else {
-                placeholderFormat = "string";
-            }
-            ArrayList<String> fallbackKeys = new ArrayList<String>();
-            generateFallbackKeys(placeholderKey, fallbackKeys);
-
-            String placeholderValue = null;
-            for (String fk : fallbackKeys) {
-                try {
-                    placeholderValue = getString(fk);
-                    break;
-                } catch (MissingResourceException e) {
-                }
-            }
-            if (placeholderValue == null) {
-                throw new MissingResourceException("Placeholder value for fallback keys \"" + fallbackKeys + "\" in key \"" + key + "\" not found in " + baseName, baseName, key);
-            }
-
-            // Do post-processing depending on placeholder format 
-            if ("accelerator".equals(placeholderFormat)) {
-                // Localize the keywords shift, control, ctrl, meta, alt, altGraph
-                StringBuilder b = new StringBuilder();
-                for (String s : placeholderValue.split(" ")) {
-                    if (acceleratorKeys.contains(s)) {
-                        b.append(getString("accelerator." + s));
-                    } else {
-                        b.append(s);
-                    }
-                }
-                placeholderValue = b.toString();
-            }
-
-            // Insert placeholder value into value
-            value = value.substring(0, p1) + placeholderValue + value.substring(p2 + 1);
+    public void configureAction(Action action, String argument, Class<?> baseClass) {
+        action.set(Action.LABEL, getTextProperty(argument));
+        String shortDescription = getToolTipTextProperty(argument);
+        if (shortDescription != null && shortDescription.length() > 0) {
+            action.set(Action.SHORT_DESCRIPTION, shortDescription);
         }
+        action.set(Action.ACCELERATOR_KEY, getAcceleratorProperty(argument));
+        action.set(Action.MNEMONIC_KEY, getMnemonicProperty(argument));
+        action.set(Action.SMALL_ICON, getSmallIconProperty(argument, baseClass));
+        action.set(Action.LARGE_ICON_KEY, getLargeIconProperty(argument, baseClass));
+    }
 
-        return value;
+    public void configureButton(ButtonBase button, String argument) {
+        configureButton(button, argument, getBaseClass());
+    }
 
+    public void configureButton(ButtonBase button, String argument, Class<?> baseClass) {
+        button.setText(getTextProperty(argument));
+        //button.setACCELERATOR_KEY, getAcceleratorProperty(argument));
+        //action.putValue(Action.MNEMONIC_KEY, new Integer(getMnemonicProperty(argument)));
+        button.setGraphic(getLargeIconProperty(argument, baseClass));
+        button.setTooltip(new Tooltip(getToolTipTextProperty(argument)));
+    }
+
+    /**
+     * Configures a menu item with a text, an accelerator, a mnemonic and a menu
+     * icon.
+     *
+     * @param menu the menu
+     * @param argument the argument
+     */
+    public void configureMenu(Menu menu, String argument) {
+        menu.setText(getTextProperty(argument));
+        menu.setText(getTextProperty(argument));
+        menu.setAccelerator(getAcceleratorProperty(argument));
+        menu.setGraphic(getSmallIconProperty(argument, baseClass));
+    }
+
+    public void configureToolBarButton(ButtonBase button, String argument) {
+        configureToolBarButton(button, argument, getBaseClass());
+    }
+
+    public void configureToolBarButton(ButtonBase button, String argument, Class<?> baseClass) {
+        Node icon = getLargeIconProperty(argument, baseClass);
+        if (icon != null) {
+            button.setGraphic(getLargeIconProperty(argument, baseClass));
+            button.setText(null);
+        } else {
+            button.setGraphic(null);
+            button.setText(getTextProperty(argument));
+        }
+        button.setTooltip(new Tooltip(getToolTipTextProperty(argument)));
+    }
+
+    public boolean containsKey(String key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        if (resource.containsKey(key)) {
+            return true;
+        }
+        if (parent != null) {
+            return parent.containsKey(key);
+        }
+        return false;
+    }
+
+    /**
+     * Returns a formatted string using java.util.Formatter().
+     *
+     * @param key the key
+     * @param arguments the arguments
+     * @return formatted String
+     */
+    public String format(String key, Object... arguments) {
+        //return String.format(resource.getLocale(), getString(key), arguments);
+        return new Formatter(resource.getLocale()).format(getString(key), arguments).toString();
     }
 
     /**
@@ -242,6 +331,28 @@ public class Resources extends ResourceBundle implements Serializable {
     }
 
     /**
+     * Gets a KeyStroke for a JavaBeans "accelerator" property from the
+     * ResourceBundle.
+     * <BR>Convenience method.
+     *
+     * @param key The key of the property. This method adds ".accelerator" to
+     * the key.
+     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
+     * null if the property is missing.
+     */
+    public KeyCombination getAcceleratorProperty(String key) {
+        return getKeyCombination(key + ".accelerator");
+    }
+
+    public Class<?> getBaseClass() {
+        return baseClass;
+    }
+
+    public void setBaseClass(Class<?> baseClass) {
+        this.baseClass = baseClass;
+    }
+
+    /**
      * Returns a formatted string using javax.text.MessageFormat.
      *
      * @param key the key
@@ -250,67 +361,6 @@ public class Resources extends ResourceBundle implements Serializable {
      */
     public String getFormatted(String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
-    }
-
-    /**
-     * Returns a formatted string using java.util.Formatter().
-     *
-     * @param key the key
-     * @param arguments the arguments
-     * @return formatted String
-     */
-    public String format(String key, Object... arguments) {
-        //return String.format(resource.getLocale(), getString(key), arguments);
-        return new Formatter(resource.getLocale()).format(getString(key), arguments).toString();
-    }
-
-    /**
-     * Get an Integer from the ResourceBundle.
-     * <br>Convenience method to save casting.
-     *
-     * @param key The key of the property.
-     * @return The value of the property. Returns -1 if the property is missing.
-     */
-    public Integer getInteger(String key) {
-        try {
-            return Integer.valueOf(getString(key));
-        } catch (MissingResourceException e) {
-            if (isVerbose) {
-                System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
-                //e.printStackTrace();
-            }
-            return -1;
-        }
-    }
-
-    /**
-     * Get a small image icon from the ResourceBundle for use on a
-     * {@code JMenuItem}.
-     * <br>Convenience method .
-     *
-     * @param key The key of the property. This method appends ".smallIcon" to
-     * the key.
-     * @param baseClass the base class used to retrieve the image resource
-     * @return The value of the property. Returns null if the property is
-     * missing.
-     */
-    public Node getSmallIconProperty(String key, Class<?> baseClass) {
-        return getIconProperty(key, ".smallIcon", baseClass);
-    }
-
-    /**
-     * Get a large image icon from the ResourceBundle for use on a
-     * {@code JButton}.
-     * <br>Convenience method .
-     *
-     * @param key The key of the property. This method appends ".largeIcon" to
-     * the key.
-     * @param baseClass the base class used to retrieve the image resource
-     * @return The value of the property. Returns null if the property is
-     * missing.
-     */
-    public Node getLargeIconProperty(String key, Class<?> baseClass) {
-        return getIconProperty(key, ".largeIcon", baseClass);
     }
 
     private Node getIconProperty(String key, String suffix, Class<?> baseClass) {
@@ -338,6 +388,64 @@ public class Resources extends ResourceBundle implements Serializable {
             }
             return null;
         }
+    }
+
+    /**
+     * Get an Integer from the ResourceBundle.
+     * <br>Convenience method to save casting.
+     *
+     * @param key The key of the property.
+     * @return The value of the property. Returns -1 if the property is missing.
+     */
+    public Integer getInteger(String key) {
+        try {
+            return Integer.valueOf(getString(key));
+        } catch (MissingResourceException e) {
+            if (isVerbose) {
+                System.err.println("Warning Resources[" + baseName + "] \"" + key + "\" not found.");
+                //e.printStackTrace();
+            }
+            return -1;
+        }
+    }
+
+    /**
+     * Get a KeyStroke from the ResourceBundle.
+     * <BR>Convenience method.
+     *
+     * @param key The key of the property.
+     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
+     * null if the property is missing.
+     */
+    public KeyCombination getKeyCombination(String key) {
+        KeyCombination ks = null;
+        String s = getString(key);
+        try {
+            ks = (s == null || s.isEmpty()) ? (KeyCombination) null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
+        } catch (NoSuchElementException | StringIndexOutOfBoundsException e) {
+            throw new InternalError(key + "=" + s, e);
+        }
+        return ks;
+    }
+
+    @Override
+    public Enumeration<String> getKeys() {
+        return resource.getKeys();
+    }
+
+    /**
+     * Get a large image icon from the ResourceBundle for use on a
+     * {@code JButton}.
+     * <br>Convenience method .
+     *
+     * @param key The key of the property. This method appends ".largeIcon" to
+     * the key.
+     * @param baseClass the base class used to retrieve the image resource
+     * @return The value of the property. Returns null if the property is
+     * missing.
+     */
+    public Node getLargeIconProperty(String key, Class<?> baseClass) {
+        return getIconProperty(key, ".largeIcon", baseClass);
     }
 
     /**
@@ -377,25 +485,18 @@ public class Resources extends ResourceBundle implements Serializable {
     }
 
     /**
-     * Get a String for a JavaBeans "toolTipText" property from the
-     * ResourceBundle.
-     * <br>Convenience method.
+     * Get a small image icon from the ResourceBundle for use on a
+     * {@code JMenuItem}.
+     * <br>Convenience method .
      *
-     * @param key The key of the property. This method appends ".toolTipText" to
+     * @param key The key of the property. This method appends ".smallIcon" to
      * the key.
-     * @return The ToolTip. Returns null if no tooltip is defined.
+     * @param baseClass the base class used to retrieve the image resource
+     * @return The value of the property. Returns null if the property is
+     * missing.
      */
-    public String getToolTipTextProperty(String key) {
-        try {
-            String value = getString(key + ".toolTipText");
-            return value;
-        } catch (MissingResourceException e) {
-            if (isVerbose) {
-                System.err.println("Warning Resources[" + baseName + "] \"" + key + ".toolTipText\" not found.");
-                //e.printStackTrace();
-            }
-            return null;
-        }
+    public Node getSmallIconProperty(String key, Class<?> baseClass) {
+        return getIconProperty(key, ".smallIcon", baseClass);
     }
 
     /**
@@ -420,6 +521,123 @@ public class Resources extends ResourceBundle implements Serializable {
     }
 
     /**
+     * Get a String for a JavaBeans "toolTipText" property from the
+     * ResourceBundle.
+     * <br>Convenience method.
+     *
+     * @param key The key of the property. This method appends ".toolTipText" to
+     * the key.
+     * @return The ToolTip. Returns null if no tooltip is defined.
+     */
+    public String getToolTipTextProperty(String key) {
+        try {
+            String value = getString(key + ".toolTipText");
+            return value;
+        } catch (MissingResourceException e) {
+            if (isVerbose) {
+                System.err.println("Warning Resources[" + baseName + "] \"" + key + ".toolTipText\" not found.");
+                //e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Returns the wrapped resource bundle.
+     *
+     * @return The wrapped resource bundle.
+     */
+    public ResourceBundle getWrappedBundle() {
+        return resource;
+    }
+
+    @Override
+    protected Object handleGetObject(String key) {
+        Object obj = handleGetObjectRecursively(key);
+        if (obj == null) {
+            obj = "";
+            System.err.println("Can't find resource for bundle " + baseName + ", key " + key);
+        }
+
+        if (obj instanceof String) {
+            obj = substitutePlaceholders(key, (String) obj);
+        }
+        return obj;
+    }
+
+    protected Object handleGetObjectRecursively(String key) {
+        Object obj = null;
+        try {
+            obj = resource.getObject(key);
+        } catch (MissingResourceException e) {
+            if (parent != null) {
+                return parent.handleGetObjectRecursively(key);
+            }
+        }
+        return obj;
+    }
+
+    private String substitutePlaceholders(String key, String value) throws MissingResourceException {
+
+        // Substitute placeholders in the value
+        for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
+            int p2 = value.indexOf('}', p1 + 2);
+            if (p2 == -1) {
+                break;
+            }
+
+            String placeholderKey = value.substring(p1 + 2, p2);
+            String placeholderFormat;
+            int p3 = placeholderKey.indexOf(',');
+            if (p3 != -1) {
+                placeholderFormat = placeholderKey.substring(p3 + 1);
+                placeholderKey = placeholderKey.substring(0, p3);
+            } else {
+                placeholderFormat = "string";
+            }
+            ArrayList<String> fallbackKeys = new ArrayList<String>();
+            generateFallbackKeys(placeholderKey, fallbackKeys);
+
+            String placeholderValue = null;
+            for (String fk : fallbackKeys) {
+                try {
+                    placeholderValue = getString(fk);
+                    break;
+                } catch (MissingResourceException e) {
+                }
+            }
+            if (placeholderValue == null) {
+                throw new MissingResourceException("Placeholder value for fallback keys \"" + fallbackKeys + "\" in key \"" + key + "\" not found in " + baseName, baseName, key);
+            }
+
+            // Do post-processing depending on placeholder format
+            if ("accelerator".equals(placeholderFormat)) {
+                // Localize the keywords shift, control, ctrl, meta, alt, altGraph
+                StringBuilder b = new StringBuilder();
+                for (String s : placeholderValue.split(" ")) {
+                    if (acceleratorKeys.contains(s)) {
+                        b.append(getString("accelerator." + s));
+                    } else {
+                        b.append(s);
+                    }
+                }
+                placeholderValue = b.toString();
+            }
+
+            // Insert placeholder value into value
+            value = value.substring(0, p1) + placeholderValue + value.substring(p2 + 1);
+        }
+
+        return value;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Resources" + "[" + baseName + "]";
+    }
+
+    /**
      * Translate a String defining a {@code javax.swing.KeyStroke} into a String
      * for {@code javafx.input.KeyCombination}.
      *
@@ -436,223 +654,4 @@ public class Resources extends ResourceBundle implements Serializable {
         return s;
     }
 
-    /**
-     * Get a KeyStroke from the ResourceBundle.
-     * <BR>Convenience method.
-     *
-     * @param key The key of the property.
-     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
-     * null if the property is missing.
-     */
-    public KeyCombination getKeyCombination(String key) {
-        KeyCombination ks = null;
-        String s = getString(key);
-        try {
-            ks = (s == null || s.isEmpty()) ? (KeyCombination) null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
-        } catch (NoSuchElementException | StringIndexOutOfBoundsException e) {
-            throw new InternalError(key + "=" + s, e);
-        }
-        return ks;
-    }
-
-    /**
-     * Gets a KeyStroke for a JavaBeans "accelerator" property from the
-     * ResourceBundle.
-     * <BR>Convenience method.
-     *
-     * @param key The key of the property. This method adds ".accelerator" to
-     * the key.
-     * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
-     * null if the property is missing.
-     */
-    public KeyCombination getAcceleratorProperty(String key) {
-        return getKeyCombination(key + ".accelerator");
-    }
-
-    /**
-     * Get the appropriate ResourceBundle subclass.
-     *
-     * @param baseName the base name
-     * @return the resource bundle
-     * @see java.util.ResourceBundle
-     */
-    public static Resources getResources(String baseName)
-            throws MissingResourceException {
-        return getResources(baseName, LocaleUtil.getDefault());
-    }
-
-    public void setBaseClass(Class<?> baseClass) {
-        this.baseClass = baseClass;
-    }
-
-    public Class<?> getBaseClass() {
-        return baseClass;
-    }
-
-    public void configureAction(Action action, String argument) {
-        configureAction(action, argument, getBaseClass());
-    }
-
-    public void configureAction(Action action, String argument, Class<?> baseClass) {
-        action.set(Action.LABEL, getTextProperty(argument));
-        String shortDescription = getToolTipTextProperty(argument);
-        if (shortDescription != null && shortDescription.length() > 0) {
-            action.set(Action.SHORT_DESCRIPTION, shortDescription);
-        }
-        action.set(Action.ACCELERATOR_KEY, getAcceleratorProperty(argument));
-        action.set(Action.MNEMONIC_KEY, getMnemonicProperty(argument));
-        action.set(Action.SMALL_ICON, getSmallIconProperty(argument, baseClass));
-        action.set(Action.LARGE_ICON_KEY, getLargeIconProperty(argument, baseClass));
-    }
-
-    public void configureButton(ButtonBase button, String argument) {
-        configureButton(button, argument, getBaseClass());
-    }
-
-    public void configureButton(ButtonBase button, String argument, Class<?> baseClass) {
-        button.setText(getTextProperty(argument));
-        //button.setACCELERATOR_KEY, getAcceleratorProperty(argument));
-        //action.putValue(Action.MNEMONIC_KEY, new Integer(getMnemonicProperty(argument)));
-        button.setGraphic(getLargeIconProperty(argument, baseClass));
-        button.setTooltip(new Tooltip(getToolTipTextProperty(argument)));
-    }
-
-    public void configureToolBarButton(ButtonBase button, String argument) {
-        configureToolBarButton(button, argument, getBaseClass());
-    }
-
-    public void configureToolBarButton(ButtonBase button, String argument, Class<?> baseClass) {
-        Node icon = getLargeIconProperty(argument, baseClass);
-        if (icon != null) {
-            button.setGraphic(getLargeIconProperty(argument, baseClass));
-            button.setText(null);
-        } else {
-            button.setGraphic(null);
-            button.setText(getTextProperty(argument));
-        }
-        button.setTooltip(new Tooltip(getToolTipTextProperty(argument)));
-    }
-
-    /**
-     * Configures a menu item with a text, an accelerator, a mnemonic and a menu
-     * icon.
-     *
-     * @param menu the menu
-     * @param argument the argument
-     */
-    public void configureMenu(Menu menu, String argument) {
-        menu.setText(getTextProperty(argument));
-        menu.setText(getTextProperty(argument));
-        menu.setAccelerator(getAcceleratorProperty(argument));
-        menu.setGraphic(getSmallIconProperty(argument, baseClass));
-    }
-
-    /**
-     * Get the appropriate ResourceBundle subclass.
-     *
-     * @param baseName the base name
-     * @param locale the locale
-     * @return the resource bundle
-     * @see java.util.ResourceBundle
-     */
-    public static Resources getResources(String baseName, Locale locale)
-            throws MissingResourceException {
-        Resources r;
-        r = new Resources(baseName, locale);
-        return r;
-    }
-
-    @Override
-    public String toString() {
-        return "Resources" + "[" + baseName + "]";
-    }
-
-    public static void setVerbose(boolean newValue) {
-        isVerbose = newValue;
-    }
-
-    public static boolean isVerbose() {
-        return isVerbose;
-    }
-
-    /**
-     * Puts a property name modifier along with a fallback chain.
-     *
-     * @param name The name of the modifier.
-     * @param fallbackChain The fallback chain of the modifier.
-     */
-    public static void putPropertyNameModifier(String name, String... fallbackChain) {
-        propertyNameModifiers.put(name, fallbackChain);
-    }
-
-    /**
-     * Removes a property name modifier.
-     *
-     * @param name The name of the modifier.
-     */
-    public static void removePropertyNameModifier(String name) {
-        propertyNameModifiers.remove(name);
-    }
-
-    @Override
-    protected Object handleGetObject(String key) {
-        Object obj = handleGetObjectRecursively(key);
-
-        if (obj instanceof String) {
-            obj = substitutePlaceholders(key, (String) obj);
-        }
-        return obj;
-    }
-
-    protected Object handleGetObjectRecursively(String key) {
-        Object obj = null;
-        try {
-            obj = resource.getObject(key);
-        } catch (MissingResourceException e) {
-            if (parent != null) {
-                return parent.handleGetObjectRecursively(key);
-            } else {
-                obj = "";
-                System.err.println("Can't find resource for bundle " + baseName + ", key " + key);
-                //throw e;
-            }
-        }
-        return obj;
-    }
-
-    @Override
-    public Enumeration<String> getKeys() {
-        return resource.getKeys();
-    }
-
-    /**
-     * Adds a decoder.
-     *
-     * @param decoder the resource decoder
-     */
-    public static void addDecoder(ResourceDecoder decoder) {
-        decoders.add(decoder);
-    }
-
-    /**
-     * Removes a decoder.
-     *
-     * @param decoder the resource decoder
-     */
-    public static void removeDecoder(ResourceDecoder decoder) {
-        decoders.remove(decoder);
-    }
-
-    public boolean containsKey(String key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
-        if (resource.containsKey(key)) {
-            return true;
-        }
-        if (parent != null) {
-            return parent.containsKey(key);
-        }
-        return false;
-    }
 }
