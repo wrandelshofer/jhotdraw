@@ -77,10 +77,15 @@ import org.jhotdraw8.util.ReversedList;
  *
  * @author werni
  */
-public class SimpleDrawingView extends AbstractDrawingView {
+public class SimpleDrawingView extends AbstractDrawingView implements EditableComponent {
 
     private boolean constrainerNodeValid;
     private boolean recreateHandles;
+
+    @Override
+    public ReadOnlyBooleanProperty selectionEmptyProperty() {
+        return selectedFiguresProperty().emptyProperty();
+    }
 
     private static class FixedSizedGroup extends Group {
 
@@ -1221,7 +1226,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
     /**
      * Selects all enabled and selectable figures in all enabled layers.
      */
-    private void selectAll() {
+    @Override
+    public void selectAll() {
         ArrayList<Figure> figures = new ArrayList<>();
         Drawing d = getDrawing();
         if (d != null) {
@@ -1239,11 +1245,13 @@ public class SimpleDrawingView extends AbstractDrawingView {
         getSelectedFigures().addAll(figures);
     }
 
-    private void clearSelection() {
+@Override
+    public void clearSelection() {
         getSelectedFigures().clear();
     }
 
-    private void deleteSelection() {
+@Override
+    public void deleteSelection() {
         ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
         DrawingModel model = getModel();
         for (Figure f : figures) {
@@ -1253,8 +1261,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
             }
         }
     }
-
-    private void duplicateSelection() {
+@Override
+    public void duplicateSelection() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

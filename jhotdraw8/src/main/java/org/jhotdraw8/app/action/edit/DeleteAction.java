@@ -23,7 +23,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DeleteAction extends AbstractFocusOwnerAction {
+public class DeleteAction extends AbstractSelectionAction {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -42,19 +42,8 @@ public class DeleteAction extends AbstractFocusOwnerAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Application app) {
-        event.consume();
-        Project v = app.getActiveProject();
-        if (v != null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic = (TextInputControl) n;
-                tic.deleteNextChar();
-            }
-            if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.deleteSelection();
-            }
-        }
+    protected void handleActionPerformed(ActionEvent event, EditableComponent c) {
+        c.deleteSelection();
     }
+
 }

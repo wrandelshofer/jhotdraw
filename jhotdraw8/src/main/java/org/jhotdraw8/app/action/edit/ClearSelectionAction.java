@@ -49,17 +49,7 @@ public class ClearSelectionAction extends AbstractSelectionAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Application app) {
-        Project v = app.getActiveProject();
-        if (v != null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic = (TextInputControl) n;
-                tic.deselect();
-            } else if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.clearSelection();
-            }
-        }
+    protected void handleActionPerformed(ActionEvent event, EditableComponent c) {
+        c.clearSelection();
     }
 }

@@ -17,6 +17,12 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
  */
 public interface EditableComponent {
 
+    /** Since subclassing of a JavaFX component is not convenient, when the component is
+     * defined in a FXML file, an editable component can be provided for a JavaFX node by
+     * setting the property EDITABLE_COMPONENT.
+     */
+    public final static String EDITABLE_COMPONENT="editableComponent";
+    
     /**
      * The name of the selectionEmpty property.
      */

@@ -22,7 +22,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer.
  * @version $Id$
  */
-public class SelectAllAction extends AbstractFocusOwnerAction {
+public class SelectAllAction extends AbstractSelectionAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,17 +50,8 @@ public class SelectAllAction extends AbstractFocusOwnerAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Application app) {
-        Project v = app.getActiveProject();
-        if (v != null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic = (TextInputControl) n;
-                tic.selectAll();
-            } else if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.selectAll();
-            }
-        }
+    protected void handleActionPerformed(ActionEvent event, EditableComponent c) {
+        c.selectAll();
     }
+
 }
