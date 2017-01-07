@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LabelFigure extends AbstractLabelFigure implements FontableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
+public class LabelFigure extends AbstractLabelFigure implements HideableFigure, FontableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
 
     public LabelFigure() {
         this(0, 0, "");
@@ -41,6 +41,7 @@ public class LabelFigure extends AbstractLabelFigure implements FontableFigure, 
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
+        applyHideableFigureProperties(node);                
     }
 
     @Override
