@@ -303,6 +303,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.ANCHOR) {
             list.add(new AnchorOutlineHandle(this));
+        } else if (handleType == HandleType.LEAD) {
+            list.add(new AnchorOutlineHandle(this, Handle.STYLECLASS_HANDLE_LEAD_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             list.add(new MoveHandle(this, RelativeLocator.northEast()));

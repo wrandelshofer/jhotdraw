@@ -144,9 +144,9 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
     public Bounds getPageBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
         Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
-        CssSize2D szOverlap = getStyled(PAGE_OVERLAP);
-        double overlapX = szOverlap.getX().getDefaultConvertedValue();
-        double overlapY = szOverlap.getY().getDefaultConvertedValue();
+        CssSize2D overlap = getStyled(PAGE_OVERLAP);
+        double overlapX = overlap.getX().getDefaultConvertedValue();
+        double overlapY = overlap.getY().getDefaultConvertedValue();
         int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
 
         double pageX = get(X) - insets.getLeft() * contentAreaFactor;

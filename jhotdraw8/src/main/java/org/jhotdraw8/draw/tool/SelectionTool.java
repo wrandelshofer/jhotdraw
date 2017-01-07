@@ -202,8 +202,14 @@ public class SelectionTool extends AbstractTool {
                         }
                         return;
                     }
+                } else if (event.isShiftDown() && event.isMetaDown()) {
+                    //  "meta" and "shift" selects the pressed figure and deselects all other figures
+                    if (pressedFigure != null) {
+                        view.selectedFiguresProperty().clear();
+                        view.selectedFiguresProperty().add(pressedFigure);
+                    }
                 } else if (!event.isShiftDown() && !event.isMetaDown()) {
-                    // neither "meta" nor "shift" sets the selection to the pressed figure
+                    // neither "meta" nor "shift" sets the selection to the pressed figure, unless it is already selected
                     if (pressedFigure != null && !view.selectedFiguresProperty().contains(pressedFigure)) {
                         view.selectedFiguresProperty().clear();
                         view.selectedFiguresProperty().add(pressedFigure);

@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.figure;
 
 import static java.lang.Math.*;
-import java.util.ArrayList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -13,7 +12,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
