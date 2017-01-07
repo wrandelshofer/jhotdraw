@@ -22,7 +22,7 @@ import org.jhotdraw8.event.WeakListener;
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
     private final DrawingModel model;
-    private final Figure figure;
+    protected final Figure figure;
     private final Key<T> key;
     private final Listener<DrawingModelEvent> modelListener;
     private final WeakListener<DrawingModelEvent> weakListener;

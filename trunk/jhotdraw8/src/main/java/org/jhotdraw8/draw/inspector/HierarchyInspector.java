@@ -107,7 +107,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
         idColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<String>(model.getModel(),
-                        cell.getValue().getValue(), StyleableFigure.ID)
+                        cell.getValue().getValue(), StyleableFigure.ID) {
+            @Override
+            public String getValue() {
+                return  figure.getId();
+            }
+                            
+                        }
         );
         visibleColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<Boolean>(model.getModel(),
@@ -119,7 +125,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
         classesColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>(model.getModel(),
-                        cell.getValue().getValue(), StyleableFigure.STYLE_CLASS)
+                        cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
+            @Override @SuppressWarnings("unchecked")
+            public ImmutableObservableList<String> getValue() {
+                return new ImmutableObservableList(figure.getStyleClass());
+            }
+                            
+                        }
         );
 
         // This cell factory ensures that only styleable figures support editing of ids.
@@ -130,6 +142,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             @Override
             public TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
                 return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
+                    @Override
+                    public void cancelEdit() {
+                        super.cancelEdit(); 
+                        updateItem(getItem(),false);
+                    }
 
                     @Override
                     public void updateItem(String t, boolean empty) {
@@ -169,6 +186,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             @Override
             public TreeTableCell<Figure, ImmutableObservableList<String>> call(TreeTableColumn<Figure, ImmutableObservableList<String>> paramTableColumn) {
                 return new TextFieldTreeTableCell<Figure, ImmutableObservableList<String>>(new StringConverterAdapter<>(wordListConverter)) {
+                  @Override
+                    public void cancelEdit() {
+                        super.cancelEdit(); 
+                        updateItem(getItem(),false);
+                    }
 
                     @Override
                     public void updateItem(ImmutableObservableList<String> t, boolean empty) {
@@ -196,8 +218,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
                 };
             }
-
         });
+
 
         visibleColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
         lockedColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
