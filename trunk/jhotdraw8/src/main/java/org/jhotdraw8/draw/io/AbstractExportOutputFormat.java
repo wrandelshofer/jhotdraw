@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,17 +30,39 @@ import org.jhotdraw8.io.SimpleIdFactory;
  * AbstractExportOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $$Id: AbstractExportOutputFormat.java 1258 2017-01-05 18:38:14Z
+ * rawcoder $$
  */
-public abstract class AbstractExportOutputFormat implements OutputFormat {
+public abstract class AbstractExportOutputFormat implements OutputFormat, ExportOutputFormat {
 
-    private boolean exportSlices = true;
-    private boolean exportPages = true;
-    protected double dpi = 72.0;
+    protected double drawingDpi = 72.0;
+    protected double pagesDpi = 72.0;
+    protected double slicesDpi = 72.0;
+    private boolean exportDrawing = true;
+    private boolean exportPages = false;
+    private boolean exportSlices = false;
+    private boolean exportSlices2x = false;
+    private boolean exportSlices3x = false;
+
+    protected abstract String getExtension();
+
+    @Override
+    public void setOptions(Map<? super Key<?>, Object> options) {
+exportDrawing=        EXPORT_DRAWING_KEY.get(options);
+exportPages=        EXPORT_PAGES_KEY.get(options);
+exportSlices=        EXPORT_SLICES_KEY.get(options);
+exportSlices2x=        EXPORT_SLICES_RESOLUTION_2X_KEY.get(options);
+exportSlices3x=        EXPORT_SLICES_RESOLUTION_3X_KEY.get(options);
+drawingDpi = EXPORT_DRAWING_DPI_KEY.get(options);
+pagesDpi = EXPORT_PAGES_DPI_KEY.get(options);
+slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
+    }
 
     @Override
     public void write(File file, Drawing drawing) throws IOException {
+        if (exportDrawing) {
         OutputFormat.super.write(file, drawing); //To change body of generated methods, choose Tools | Templates.
+        }
         if (exportSlices) {
             writeSlices(file.getParentFile(), drawing);
         }
@@ -48,19 +71,17 @@ public abstract class AbstractExportOutputFormat implements OutputFormat {
         }
     }
 
-    private void writeSlices(File dir, Drawing drawing) throws IOException {
-        List<Slice> slices = new ArrayList<>();
-        for (Figure f : drawing.preorderIterable()) {
-            if (f instanceof Slice) {
-                slices.add((Slice) f);
-            }
-        }
-        Map<Key<?>, Object> hints = new HashMap<>();
-        RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-        RenderContext.DPI.put(hints, dpi);
-
-        writeSlices(dir, drawing, slices, hints);
-    }
+    /**
+     *
+     * @param file
+     * @param page
+     * @param node
+     * @param pageCount
+     * @param pageNumber
+     * @param internalPageNumber
+     * @throws IOException
+     */
+    protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
     private void writePages(File dir, Drawing drawing) throws IOException {
         List<Page> pages = new ArrayList<>();
@@ -71,35 +92,9 @@ public abstract class AbstractExportOutputFormat implements OutputFormat {
         }
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-        RenderContext.DPI.put(hints, dpi);
+        RenderContext.DPI.put(hints, pagesDpi);
 
         writePages(dir, drawing, pages, hints);
-    }
-
-    protected abstract String getExtension();
-
-    /**
-     *
-     * @param dir
-     * @param drawing
-     * @param slices
-     * @param hints
-     * @throws java.io.IOException
-     */
-    protected void writeSlices(File dir, Drawing drawing, List<Slice> slices, Map<Key<?>, Object> hints) throws IOException {
-        Node node = toNode(drawing, Collections.singleton(drawing), hints);
-
-        IdFactory idFactory = new SimpleIdFactory();
-        for (Figure slice : slices) {
-            if (slice.getId() != null) {
-                idFactory.putId(slice, slice.getId());
-            }
-        }
-        for (Slice slice : slices) {
-            File filename = new File(dir, idFactory.createId(slice, "Slice") + "." + getExtension());
-            writeSlice(filename, slice, node);
-
-        }
     }
 
     /**
@@ -124,7 +119,7 @@ public abstract class AbstractExportOutputFormat implements OutputFormat {
 
         for (Page page : pages) {
             for (int internalPageNumber = 0, n = page.getNumberOfSubPages(); internalPageNumber < n; internalPageNumber++) {
-                File filename = new File(dir, idFactory.createId(page, "Page") +"_"+(pageNumber+1)+ "." + getExtension());
+                File filename = new File(dir, idFactory.createId(page, "Page") + "_" + (pageNumber + 1) + "." + getExtension());
                 writePage(filename, page, node, pageCount, pageNumber, internalPageNumber);
 
                 pageNumber++;
@@ -132,17 +127,48 @@ public abstract class AbstractExportOutputFormat implements OutputFormat {
         }
     }
 
-    protected abstract void writeSlice(File file, Slice slice, Node node) throws IOException;
+    protected abstract void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
+
+    private void writeSlices(File dir, Drawing drawing) throws IOException {
+        List<Slice> slices = new ArrayList<>();
+        for (Figure f : drawing.preorderIterable()) {
+            if (f instanceof Slice) {
+                slices.add((Slice) f);
+            }
+        }
+        writeSlices(dir, drawing, slices, "", slicesDpi);
+        if (exportSlices2x) {
+        writeSlices(dir, drawing, slices, "@2x", 2*slicesDpi);
+        }
+        if (exportSlices3x) {
+        writeSlices(dir, drawing, slices, "@3x", 3*slicesDpi);
+        }
+    }
 
     /**
      *
-     * @param file
-     * @param page
-     * @param node
-     * @param pageCount
-     * @param pageNumber
-     * @param internalPageNumber
-     * @throws IOException
+     * @param dir
+     * @param drawing
+     * @param slices
+     * @param hints
+     * @throws java.io.IOException
      */
-    protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
+    private void writeSlices(File dir, Drawing drawing, List<Slice> slices, String suffix, double dpi) throws IOException {
+        Map<Key<?>, Object> hints = new HashMap<>();
+        RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
+        RenderContext.DPI.put(hints, dpi);
+
+        Node node = toNode(drawing, Collections.singleton(drawing), hints);
+
+        IdFactory idFactory = new SimpleIdFactory();
+        for (Figure slice : slices) {
+            if (slice.getId() != null) {
+                idFactory.putId(slice, slice.getId());
+            }
+        }
+        for (Slice slice : slices) {
+            File filename = new File(dir, idFactory.createId(slice, "Slice") +suffix+ "." + getExtension());
+            writeSlice(filename, slice, node, dpi);
+        }
+    }
 }

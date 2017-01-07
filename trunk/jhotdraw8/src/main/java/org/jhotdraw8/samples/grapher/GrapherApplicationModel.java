@@ -14,6 +14,8 @@ import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.action.file.ExportFileAction;
+import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
 import org.jhotdraw8.util.Resources;
 
 /**
@@ -37,6 +39,7 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
     public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {
         HierarchicalMap<String, Action> map = super.createApplicationActionMap(app);
         map.put(PrintFileAction.ID, new PrintFileAction(app, null));
+        map.put(ExportFileAction.ID, new ExportFileAction(app, DrawingExportOptionsPane::createDialog));
         return map;
     }
     @Override

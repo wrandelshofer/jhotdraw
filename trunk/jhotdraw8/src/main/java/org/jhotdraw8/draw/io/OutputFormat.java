@@ -10,15 +10,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.Collection;
-import java.util.LinkedList;
-import javafx.scene.Group;
-import javafx.scene.Node;
+import java.util.Map;
+import javafx.scene.input.DataFormat;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.draw.SimpleDrawingRenderer;
-import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * OutputFormat.
@@ -66,4 +61,8 @@ public interface OutputFormat {
      * @throws java.io.IOException if an IO error occurs
      */
     void write(OutputStream out, Drawing drawing) throws IOException;
+    
+    /** Sets output format options.
+     * @param options the options */
+    void setOptions(Map<? super Key<?>, Object> options);
 }
