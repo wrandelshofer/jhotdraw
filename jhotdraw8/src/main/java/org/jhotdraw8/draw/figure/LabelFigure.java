@@ -44,7 +44,7 @@ public class LabelFigure extends AbstractLabelFigure implements FontableFigure, 
     }
 
     @Override
-    protected String getText() {
+    protected String getText(RenderContext ctx) {
         return get(TEXT);
     }
 }

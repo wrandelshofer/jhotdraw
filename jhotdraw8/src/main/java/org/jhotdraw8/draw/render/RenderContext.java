@@ -4,12 +4,12 @@
  */
 package org.jhotdraw8.draw.render;
 
-import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.figure.Figure;
 import javafx.scene.Node;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.draw.figure.Page;
 
 /**
  * RenderContext.
@@ -37,6 +37,10 @@ public interface RenderContext extends PropertyBean {
      */
     Key<Double> DPI = new SimpleKey<>("dpi", Double.class, 72.0);
 
+    Key<Page> RENDER_PAGE = new SimpleKey<>("renderPage", Page.class, null);
+    Key<Integer> RENDER_PAGE_NUMBER = new SimpleKey<>("renderPageNumber", Integer.class, 0);
+    Key<Integer> RENDER_NUMBER_OF_PAGES = new SimpleKey<>("renderNumberOfPages", Integer.class, 1);
+    Key<Integer> RENDER_PAGE_INTERNAL_NUMBER = new SimpleKey<>("renderPageInternalNumber", Integer.class, 0);
     // ---
     // behavior
     // ---

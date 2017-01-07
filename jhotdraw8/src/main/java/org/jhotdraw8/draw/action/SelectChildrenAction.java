@@ -15,6 +15,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
+import org.jhotdraw8.app.action.Action;
 
 /**
  * SelectChildrenAction.
@@ -33,8 +34,8 @@ public class SelectChildrenAction extends AbstractSelectedAction {
      */
     public SelectChildrenAction(Application app, DrawingEditor editor) {
         super(app, editor);
-        Resources labels
-                = Resources.getResources("org.jhotdraw8.draw.Labels");
+        Resources labels= Resources.getResources("org.jhotdraw8.draw.Labels");
+        set(Action.ID_KEY,ID);
         labels.configureAction(this, ID);
     }
 

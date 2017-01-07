@@ -18,12 +18,11 @@ import org.jhotdraw8.app.Application;
 public class ScreenMenuBarProxyAction extends AbstractAction {
 
     private final Application app;
-    private final String id;
     private Action currentAction;
 
     public ScreenMenuBarProxyAction(Application app, String id) {
         this.app = app;
-        this.id = id;
+        set(ID_KEY,id);
         disabled.unbind();
         disabled.set(true);
         selectedProperty().set(false);
@@ -41,6 +40,9 @@ public class ScreenMenuBarProxyAction extends AbstractAction {
             if (currentAction != null) {
                 disabled.bind(Bindings.isNotEmpty(disablers).or(currentAction.disabledProperty()));
                 selectedProperty().bind(currentAction.selectedProperty());
+                set(LABEL,currentAction.get(LABEL));
+                set(MNEMONIC_KEY,currentAction.get(MNEMONIC_KEY));
+                set(ACCELERATOR_KEY,currentAction.get(ACCELERATOR_KEY));
             }
         });
     }

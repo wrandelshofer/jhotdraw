@@ -4,8 +4,10 @@
  */
 package org.jhotdraw8.draw.io;
 
+import java.io.BufferedOutputStream;
 import org.jhotdraw8.svg.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -15,17 +17,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.DataFormat;
 import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -34,11 +36,13 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.text.CssSizeConverter;
 import org.jhotdraw8.text.CssTransformListConverter;
 import org.jhotdraw8.text.SvgTransformListConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
@@ -72,6 +76,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
     private final SvgPaintConverter paint = new SvgPaintConverter();
     private boolean skipInvisibleNodes = true;
+    private final CssSizeConverter sznb = new CssSizeConverter();
     private final SvgTransformListConverter tx = new SvgTransformListConverter();
     private final CssTransformListConverter txc = new CssTransformListConverter();
 
@@ -159,9 +164,26 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     @Override
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
+
+        
         SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
         markNodesOutsideBoundsWithSkip(node, page.getPageBounds(internalPageNumber));
-        node.getTransforms().setAll(page.getWorldToLocal());
+        Document doc = exporter.toDocument(node);
+        writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
+        node.getTransforms().clear();
+        write(file, doc);
+    }
+    protected void writePageOLD(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
+        markNodesOutsideBoundsWithSkip(node, page.getPageBounds(internalPageNumber));
+        
+        Transform worldToLocal = page.getWorldToLocal();
+        if (worldToLocal == null) {
+            node.getTransforms().clear();
+        } else {
+            node.getTransforms().setAll(worldToLocal);
+        }
         Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
@@ -172,15 +194,15 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         Bounds b = page.getBoundsInLocal();
         Bounds pb = page.getPageBounds(internalPageNumber);
         Transform tx = page.getWorldToLocal();
-        docElement.setAttribute("width", nb.toString(pb.getWidth()));
-        docElement.setAttribute("height", nb.toString(pb.getHeight()));
+        docElement.setAttribute("width", sznb.toString(page.get(PageFigure.PAPER_WIDTH)));
+        docElement.setAttribute("height", sznb.toString(page.get(PageFigure.PAPER_HEIGHT)));
         docElement.setAttribute("viewBox", nb.
                 toString(pb.getMinX()) + " " + nb.toString(pb.getMinY())
                 + " " + nb.toString(pb.getWidth()) + " " + nb.toString(pb.getHeight()));
     }
 
     @Override
-    protected void writeSlice(File file, Slice slice, Node node,double dpi) throws IOException {
+    protected void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
         SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
         markNodesOutsideBoundsWithSkip(node, slice.getBoundsInLocal());
         final Transform worldToLocal = slice.getWorldToLocal();

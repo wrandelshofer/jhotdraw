@@ -37,6 +37,7 @@ import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.figure.PageFigure;
+import org.jhotdraw8.draw.figure.PageLabelFigure;
 import org.jhotdraw8.draw.figure.PolygonFigure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.TextFigure;
@@ -111,9 +112,15 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         }
         {
             Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(LabelFigure.class);
-            keys.remove(TextFigure.TEXT);
-            addNodeListKey(LabelFigure.class, "", TextFigure.TEXT);
+            keys.remove(LabelFigure.TEXT);
+            addNodeListKey(LabelFigure.class, "", LabelFigure.TEXT);
             addFigureKeysAndNames("Label", LabelFigure.class, keys);
+        }
+        {
+            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(PageLabelFigure.class);
+            keys.remove(PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
+            addNodeListKey(PageLabelFigure.class, "", PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
+            addFigureKeysAndNames("PageLabel", PageLabelFigure.class, keys);
         }
 
         addFigureKeysAndNames("Line", LineFigure.class, Figure.getDeclaredAndInheritedKeys(LineFigure.class));

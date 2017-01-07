@@ -78,7 +78,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
-import org.jhotdraw8.draw.key.UriStyleableFigureKey;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
@@ -86,6 +85,7 @@ import org.jhotdraw8.text.SvgTransformListConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
 import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.XmlSizeListConverter;
+import org.jhotdraw8.util.ReversedList;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1055,7 +1055,7 @@ public class SvgExporter {
     private void writeTransformAttributes(Element elem, List< Transform> txs) {
 
         if (txs.size() > 0) {
-            String value = tx.toString(txs);
+            String value = tx.toString(new ReversedList<>(txs));
             if (!value.isEmpty()) {
                 elem.setAttribute("transform", value);
             }

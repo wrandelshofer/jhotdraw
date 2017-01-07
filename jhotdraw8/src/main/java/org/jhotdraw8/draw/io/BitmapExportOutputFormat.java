@@ -21,11 +21,13 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.DataFormat;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -44,9 +46,11 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.text.CssSize;
 
 /**
  * BitmapExportOutputFormat.
@@ -64,7 +68,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        WritableImage image = renderImage(drawing, selection,drawingDpi);
+        WritableImage image = renderImage(drawing, selection, drawingDpi);
         out.put(DataFormat.IMAGE, image);
     }
 
@@ -80,7 +84,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
                 continue;
             }
 
-            setDPI(metadata,dpi);
+            setDPI(metadata, dpi);
 
             ImageOutputStream output = new MemoryCacheImageOutputStream(out);
 
@@ -93,9 +97,9 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     public void write(OutputStream out, Drawing drawing) throws IOException {
-        WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing),drawingDpi);
+        WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), drawingDpi);
         //ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
-        writeImage(out, writableImage,drawingDpi);
+        writeImage(out, writableImage, drawingDpi);
 
     }
 
@@ -126,19 +130,19 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         Bounds bounds = Figure.visualBounds(selection);
 
         if (!Platform.isFxApplicationThread()) {
-            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(drawing, node, bounds,drawingDpi), Platform::runLater);
+            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(drawing, node, bounds, drawingDpi), Platform::runLater);
             try {
                 return future.get();
             } catch (InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
-            return doRenderImage(drawing, node, bounds,drawingDpi);
+            return doRenderImage(drawing, node, bounds, drawingDpi);
         }
     }
 
     protected void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
-        WritableImage image = renderSlice(slice,slice.getBoundsInLocal(), node,dpi);
+        WritableImage image = renderSlice(slice, slice.getBoundsInLocal(), node, dpi);
         try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
             writeImage(out, image, dpi);
         }
@@ -146,29 +150,33 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        WritableImage image = renderSlice(page,page.getPageBounds(internalPageNumber), node,pagesDpi);
+        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
+        double paperWidth = pw.getDefaultConvertedValue();
+        final Bounds pageBounds = page.getPageBounds(internalPageNumber);
+        double factor = paperWidth / pageBounds.getWidth();
+        WritableImage image = renderSlice(page, pageBounds, node, pagesDpi * factor);
         try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
-            writeImage(out, image,pagesDpi);
+            writeImage(out, image, pagesDpi);
         }
     }
 
     private WritableImage renderSlice(Figure slice, Bounds bounds, Node node, double dpi) throws IOException {
         if (!Platform.isFxApplicationThread()) {
-            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(slice, node, bounds,dpi), Platform::runLater);
+            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(slice, node, bounds, dpi), Platform::runLater);
             try {
                 return future.get();
             } catch (InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
-            return doRenderImage(slice, node, bounds,dpi);
+            return doRenderImage(slice, node, bounds, dpi);
         }
     }
 
-    private WritableImage doRenderImage(Figure slice, Node node, Bounds bounds,double dpi) {
+    private WritableImage doRenderImage(Figure slice, Node node, Bounds bounds, double dpi) {
         SnapshotParameters parameters = new SnapshotParameters();
         double scale = dpi / RenderContext.DPI.getDefaultValue();
-        parameters.setTransform(Transforms.concat(Transform.scale(scale, scale),slice.getWorldToLocal()));
+        parameters.setTransform(Transforms.concat(Transform.scale(scale, scale), slice.getWorldToLocal()));
         parameters.setFill(Color.TRANSPARENT);
         double x = bounds.getMinX() * scale;
         double y = bounds.getMinY() * scale;

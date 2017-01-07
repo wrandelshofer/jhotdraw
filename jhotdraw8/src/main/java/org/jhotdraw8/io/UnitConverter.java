@@ -21,7 +21,7 @@ public interface UnitConverter {
      * @return dpi
      */
     default double getDpi() {
-        return 90;
+        return 72;
     }
     default double getFactor(String unit) {
       double factor = 1.0;

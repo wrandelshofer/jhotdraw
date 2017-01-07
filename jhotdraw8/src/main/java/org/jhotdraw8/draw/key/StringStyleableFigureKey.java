@@ -43,7 +43,7 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
      * @param defaultValue The default value.
      */
     public StringStyleableFigureKey(String name, String defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
+        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
 
     /**
@@ -54,6 +54,17 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
      * @param defaultValue The default value.
      */
     public StringStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
+        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
+    }
+
+    /**
+     * Creates a new instance with the specified name, mask and default value.
+     *
+     * @param name The name of the key.
+     * @param mask The dirty mask.
+     * @param defaultValue The default value.
+     */
+    public StringStyleableFigureKey(String name, DirtyMask mask, String defaultValue, String helpText) {
         super(name, String.class, false, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
@@ -62,15 +73,14 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
          StyleablePropertyBean spb = (StyleablePropertyBean) s;
          return spb.getStyleableProperty(this);
          });*/
-
+        converter = new CssStringConverter(helpText);
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, String> converter
-                = new StyleConverterAdapter<String>(new CssStringConverter());
+        final StyleConverter<String, String> converter  = new StyleConverterAdapter<String>(this.converter);
         CssMetaData<Styleable, String> md
                 = new SimpleCssMetaData<Styleable, String>(property, function,
                         converter, defaultValue, inherits);
@@ -83,13 +93,11 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
 
     }
 
-    private Converter<String> converter;
+    private final CssStringConverter converter;
 
     @Override
     public Converter<String> getConverter() {
-        if (converter == null) {
-            converter = new CssStringConverter();
-        }
+
         return converter;
     }
 }
