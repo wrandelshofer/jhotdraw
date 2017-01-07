@@ -186,9 +186,10 @@ public class SelectionTool extends AbstractTool {
                     }
                 }
 
-                // "shift" without "meta" adds the pressed figure to the selection
+                // "shift" without "meta" adds the pressed figure to the selection and makes it the lead of the selection
                 if (event.isShiftDown() && !event.isMetaDown()) {
                     if (pressedFigure != null) {
+                        view.getSelectedFigures().remove(pressedFigure);
                         view.getSelectedFigures().add(pressedFigure);
                         return;
                     }
