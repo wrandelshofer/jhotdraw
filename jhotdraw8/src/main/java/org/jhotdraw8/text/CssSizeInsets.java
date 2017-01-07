@@ -86,7 +86,7 @@ private final CssSize left;
 
     
     public Insets getDefaultConvertedValue() {
-        return new Insets(top.getDefaultConvertedValue(),right.getDefaultConvertedValue(),
-        bottom.getDefaultConvertedValue(),left.getDefaultConvertedValue());
+        return new Insets(top.getConvertedValue(),right.getConvertedValue(),
+        bottom.getConvertedValue(),left.getConvertedValue());
     }
 }
