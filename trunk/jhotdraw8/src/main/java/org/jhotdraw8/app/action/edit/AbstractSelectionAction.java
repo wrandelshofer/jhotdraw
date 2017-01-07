@@ -9,10 +9,14 @@
 package org.jhotdraw8.app.action.edit;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.Project;
 
@@ -64,6 +68,87 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
         app.activeProjectProperty().addListener(activeViewListener);
         activeViewListener.changed(null, null, app.getActiveProject());
+
+    }
+
+    public EditableComponent getEditableComponent() {
+        Project v = app.getActiveProject();
+        if (v != null && !v.isDisabled()) {
+            Node n = v.getNode().getScene().getFocusOwner();
+            while (n!=null){
+            if (n instanceof TextInputControl) {
+                TextInputControl tic = (TextInputControl) n;
+                return new TextInputControlAdapter(tic);
+            } else if (n instanceof EditableComponent) {
+                EditableComponent tic = (EditableComponent) n;
+                return tic;
+            } else if (n.getProperties().get(EditableComponent.EDITABLE_COMPONENT) instanceof EditableComponent) {
+                EditableComponent tic = (EditableComponent) n.getProperties().get(EditableComponent.EDITABLE_COMPONENT);
+                return tic;
+            }
+            n=n.getParent();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected final void handleActionPerformed(ActionEvent event, Application app) {
+        EditableComponent ec = getEditableComponent();
+        if (ec != null) {
+            handleActionPerformed(event, ec);
+        }
+    }
+
+    protected abstract void handleActionPerformed(ActionEvent event, EditableComponent ec);
+
+    private static class TextInputControlAdapter implements EditableComponent {
+
+        final TextInputControl control;
+
+        public TextInputControlAdapter(TextInputControl control) {
+            this.control = control;
+        }
+
+        @Override
+        public void clearSelection() {
+            control.selectRange(control.getCaretPosition(), control.getCaretPosition());
+        }
+
+        @Override
+        public void copy() {
+            control.copy();
+        }
+
+        @Override
+        public void cut() {
+            control.cut();
+        }
+
+        @Override
+        public void deleteSelection() {
+            control.deleteText(control.getSelection());
+        }
+
+        @Override
+        public void duplicateSelection() {
+            control.insertText(control.getCaretPosition(), control.getSelectedText());
+        }
+
+        @Override
+        public void paste() {
+            control.paste();
+        }
+
+        @Override
+        public void selectAll() {
+            control.selectAll();
+        }
+
+        @Override
+        public ReadOnlyBooleanProperty selectionEmptyProperty() {
+            throw new UnsupportedOperationException("unsupported");
+        }
 
     }
 }

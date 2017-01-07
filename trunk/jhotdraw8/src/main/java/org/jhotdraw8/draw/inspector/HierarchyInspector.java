@@ -26,6 +26,7 @@ import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
+import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.ExpandedTreeItemIterator;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.DrawingView;
@@ -212,11 +213,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         if (oldValue != null) {
             oldValue.getSelectedFigures().removeListener(viewSelectionHandler);
+            treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT,null);
         }
         drawingView = newValue;
         if (newValue != null) {
             model.setDrawingModel(newValue.getModel());
             newValue.getSelectedFigures().addListener(viewSelectionHandler);
+            treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT,drawingView);
         } else {
             model.setDrawingModel(new SimpleDrawingModel());
         }

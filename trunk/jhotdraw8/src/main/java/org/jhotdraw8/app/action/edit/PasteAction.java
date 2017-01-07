@@ -23,7 +23,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PasteAction extends AbstractFocusOwnerAction {
+public class PasteAction extends AbstractSelectionAction {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,22 +51,7 @@ public class PasteAction extends AbstractFocusOwnerAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Application app) {
-        if (event.isConsumed()) {
-            return;
-        }
-        event.consume();
-        Project v = app.getActiveProject();
-        if (v != null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic = (TextInputControl) n;
-                //XXX TextInputControl already performs this action, even if we consumed the event!
-                //tic.paste();
-            } else if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.paste();
-            }
-        }
+    protected void handleActionPerformed(ActionEvent event, EditableComponent c) {
+        c.paste();
     }
 }

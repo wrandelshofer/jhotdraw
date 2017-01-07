@@ -50,22 +50,7 @@ public class CopyAction extends AbstractSelectionAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Application app) {
-        if (event.isConsumed()) {
-            return;
-        }
-        event.consume();
-        Project v = app.getActiveProject();
-        if (v != null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic = (TextInputControl) n;
-                // XXX TextInputControl does copy on its own, even if we consume the event
-                //  tic.copy();
-            } else if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.copy();
-            }
-        }
+    protected void handleActionPerformed(ActionEvent event, EditableComponent c) {
+        c.copy();
     }
 }

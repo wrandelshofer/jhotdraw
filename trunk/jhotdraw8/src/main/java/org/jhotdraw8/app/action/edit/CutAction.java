@@ -50,18 +50,8 @@ public class CutAction extends AbstractSelectionAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Application app) {
-        event.consume();
-        Project v = app.getActiveProject();
-        if (v != null && !v.isDisabled()) {
-            Node n = v.getNode().getScene().getFocusOwner();
-            if (n instanceof TextInputControl) {
-                TextInputControl tic = (TextInputControl) n;
-                tic.cut();
-            } else if (n instanceof EditableComponent) {
-                EditableComponent tic = (EditableComponent) n;
-                tic.cut();
-            }
-        }
+    protected void handleActionPerformed(ActionEvent event, EditableComponent c) {
+        c.cut();
     }
+
 }
