@@ -229,10 +229,10 @@ public class LineConnectionFigure extends AbstractLeafFigure implements Strokeab
         } else if (handleType == HandleType.MOVE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             if (get(START_CONNECTOR) == null) {
-                list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(START)));
+                list.add(new MoveHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE));
             }
             if (get(END_CONNECTOR) == null) {
-                list.add(new MoveHandle(this, Handle.STYLECLASS_HANDLE_MOVE, new PointLocator(END)));
+                list.add(new MoveHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE));
             }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));

@@ -44,10 +44,10 @@ public class MoveHandle extends LocatorHandle {
     private Set<Figure> groupReshapeableFigures;
 
     public MoveHandle(Figure figure, Locator locator) {
-        this(figure, STYLECLASS_HANDLE_MOVE, locator);
+        this(figure, locator, STYLECLASS_HANDLE_MOVE);
     }
 
-    public MoveHandle(Figure figure, String styleclass, Locator locator) {
+    public MoveHandle(Figure figure, Locator locator, String styleclass) {
         super(figure, locator);
         this.styleclass = styleclass;
         node = new Region();
@@ -76,11 +76,11 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public void updateNode(DrawingView view) {
         Figure f = owner;
-        Transform t = Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p = t==null?p:t.transform(p);
+        pickLocation = p = t == null ? p : t.transform(p);
 
         // The node is centered around the location. 
         // (The value 5.5 is half of the node size, which is 11,11.
@@ -120,7 +120,10 @@ public class MoveHandle extends LocatorHandle {
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
-            oldPoint = owner.getLocalToWorld().transform(loc);
+            final Transform localToWorld = owner.getLocalToWorld();
+            if (localToWorld != null) {
+                oldPoint = localToWorld.transform(loc);
+            }
         }
 
         if (oldPoint.equals(newPoint)) {
