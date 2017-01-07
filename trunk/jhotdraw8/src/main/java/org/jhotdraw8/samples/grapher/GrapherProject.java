@@ -104,6 +104,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.draw.figure.PageLabelFigure;
 
 /**
  * GrapherProject.
@@ -260,24 +261,28 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
 
     //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
     ToolsToolbar ttbar = new ToolsToolbar(editor);
-    Resources rsrc = Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
+    Resources labels = Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
     Supplier<Layer> layerFactory = () -> createFigure(SimpleLayer::new);
     Tool defaultTool;
-    ttbar.addTool(defaultTool = new SelectionTool("tool.selectFigure", HandleType.RESIZE, HandleType.ANCHOR, null, rsrc), 0, 0);
-    ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, rsrc), 0, 1);
-    ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, rsrc), 1, 1);
-    ttbar.addTool(new CreationTool("edit.createRectangle", rsrc, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0);
-    ttbar.addTool(new CreationTool("edit.createEllipse", rsrc, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
-    ttbar.addTool(new ConnectionTool("edit.createLineConnection", rsrc, () -> createFigure(LineConnectionFigure::new), layerFactory), 3, 1);
-    ttbar.addTool(new CreationTool("edit.createLine", rsrc, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
-    ttbar.addTool(new PolyCreationTool("edit.createPolyline", rsrc, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
-    ttbar.addTool(new PolyCreationTool("edit.createPolygon", rsrc, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
-    ttbar.addTool(new CreationTool("edit.createText", rsrc,//
+    ttbar.addTool(defaultTool = new SelectionTool("tool.selectFigure", HandleType.RESIZE, HandleType.ANCHOR, null, labels), 0, 0);
+    ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, labels), 0, 1);
+    ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, labels), 1, 1);
+    ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0);
+    ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
+    ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(LineConnectionFigure::new), layerFactory), 3, 1);
+    ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
+    ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
+    ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
+    ttbar.addTool(new CreationTool("edit.createText", labels,//
             () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
             layerFactory), 6, 1);
-    ttbar.addTool(new ImageCreationTool("edit.createImage", rsrc, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
-    ttbar.addTool(new CreationTool("edit.createSlice", rsrc, () -> createFigure(SliceFigure::new), layerFactory), 5, 0);
-    ttbar.addTool(new CreationTool("edit.createPage", rsrc, () -> createFigure(PageFigure::new), layerFactory), 6, 0);
+    ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
+            () -> createFigure(() -> new PageLabelFigure(0, 0,
+                    labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER,PageLabelFigure.NUM_PAGES_PLACEHOLDER), FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
+            layerFactory), 7, 1);
+    ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
+    ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 5, 0);
+    ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(PageFigure::new), layerFactory), 6, 0);
     ttbar.setDrawingEditor(editor);
     editor.setDefaultTool(defaultTool);
     toolsToolBar.getItems().add(ttbar);
@@ -338,23 +343,25 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
 
   @Override
   public CompletionStage<Void> write(URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
+      Drawing drawing=drawingView.getDrawing();
+      drawingView.setDrawing(new SimpleDrawing());
     return FXWorker.run(() -> {
       if (SvgExporter.SVG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
         SvgExportOutputFormat io = new SvgExportOutputFormat();
         io.setOptions(options);
-        io.write(uri, drawingView.getDrawing());
+        io.write(uri, drawing);
       } else if (BitmapExportOutputFormat.PNG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
         BitmapExportOutputFormat io = new BitmapExportOutputFormat();
         io.setOptions(options);
-        io.write(uri, drawingView.getDrawing());
+        io.write(uri, drawing);
       } else {
         IdFactory idFactory = new SimpleIdFactory();
         FigureFactory factory = new DefaultFigureFactory(idFactory);
         SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
         io.setOptions(options);
-        io.write(uri, drawingView.getDrawing());
+        io.write(uri, drawing);
       }
-    });
+    }).thenRun(()->drawingView.setDrawing(drawing));
   }
 
 }

@@ -12,7 +12,7 @@
       <items>
         <MenuItem id="file.new" mnemonicParsing="false" text="New" />
         <MenuItem id="file.open" mnemonicParsing="false" text="Open" />
-        <Menu id="file.openRecentMenu" mnemonicParsing="false" text="Open Recent" />
+        <Menu id="file.openRecentMenu" mnemonicParsing="false" text="%file.openRecent.text" />
         <MenuItem id="file.save" mnemonicParsing="false" text="Save" />
         <MenuItem id="file.saveAs" mnemonicParsing="false" text="Save as..." />
         <MenuItem id="file.revert" mnemonicParsing="false" text="Revert to Saved" />

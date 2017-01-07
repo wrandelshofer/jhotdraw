@@ -6,17 +6,19 @@ package org.jhotdraw8.draw.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.shape.Shape;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
+
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -36,38 +38,43 @@ import org.jhotdraw8.io.SimpleIdFactory;
 public abstract class AbstractExportOutputFormat implements OutputFormat, ExportOutputFormat {
 
     protected double drawingDpi = 72.0;
-    protected double pagesDpi = 72.0;
-    protected double slicesDpi = 72.0;
     private boolean exportDrawing = true;
     private boolean exportPages = false;
     private boolean exportSlices = false;
     private boolean exportSlices2x = false;
     private boolean exportSlices3x = false;
+    protected double pagesDpi = 72.0;
+    protected double slicesDpi = 72.0;
 
     protected abstract String getExtension();
 
     @Override
     public void setOptions(Map<? super Key<?>, Object> options) {
-exportDrawing=        EXPORT_DRAWING_KEY.get(options);
-exportPages=        EXPORT_PAGES_KEY.get(options);
-exportSlices=        EXPORT_SLICES_KEY.get(options);
-exportSlices2x=        EXPORT_SLICES_RESOLUTION_2X_KEY.get(options);
-exportSlices3x=        EXPORT_SLICES_RESOLUTION_3X_KEY.get(options);
-drawingDpi = EXPORT_DRAWING_DPI_KEY.get(options);
-pagesDpi = EXPORT_PAGES_DPI_KEY.get(options);
-slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
+        exportDrawing = EXPORT_DRAWING_KEY.get(options);
+        exportPages = EXPORT_PAGES_KEY.get(options);
+        exportSlices = EXPORT_SLICES_KEY.get(options);
+        exportSlices2x = EXPORT_SLICES_RESOLUTION_2X_KEY.get(options);
+        exportSlices3x = EXPORT_SLICES_RESOLUTION_3X_KEY.get(options);
+        drawingDpi = EXPORT_DRAWING_DPI_KEY.get(options);
+        pagesDpi = EXPORT_PAGES_DPI_KEY.get(options);
+        slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
     }
 
     @Override
     public void write(File file, Drawing drawing) throws IOException {
         if (exportDrawing) {
-        OutputFormat.super.write(file, drawing); //To change body of generated methods, choose Tools | Templates.
+            OutputFormat.super.write(file, drawing); //To change body of generated methods, choose Tools | Templates.
         }
         if (exportSlices) {
             writeSlices(file.getParentFile(), drawing);
         }
         if (exportPages) {
-            writePages(file.getParentFile(), drawing);
+            String basename = file.getName();
+            int p = basename.lastIndexOf('.');
+            if (p != -1) {
+                basename = basename.substring(0, p);
+            }
+            writePages(file.getParentFile(), basename, drawing);
         }
     }
 
@@ -83,7 +90,7 @@ slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
      */
     protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
-    private void writePages(File dir, Drawing drawing) throws IOException {
+    private void writePages(File dir, String basename, Drawing drawing) throws IOException {
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Page) {
@@ -94,7 +101,7 @@ slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, pagesDpi);
 
-        writePages(dir, drawing, pages, hints);
+        writePages(dir, basename, drawing, pages, hints);
     }
 
     /**
@@ -105,22 +112,50 @@ slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
      * @param hints
      * @throws java.io.IOException
      */
-    protected void writePages(File dir, Drawing drawing, List<Page> pages, Map<Key<?>, Object> hints) throws IOException {
-        Node node = toNode(drawing, Collections.singleton(drawing), hints);
+    protected void writePages(File dir, String basename, Drawing drawing, List<Page> pages, Map<Key<?>, Object> hints) throws IOException {
         IdFactory idFactory = new SimpleIdFactory();
-        int pageCount = 0;
+        int numberOfPages = 0;
         for (Page page : pages) {
             if (page.getId() != null) {
                 idFactory.putId(page, page.getId());
             }
-            pageCount += page.getNumberOfSubPages();
+            numberOfPages += page.getNumberOfSubPages();
         }
         int pageNumber = 0;
-
+        SimpleDrawingRenderer renderer = new SimpleDrawingRenderer();
+        Group rootNode = new Group();
+        Group parentOfPageNode = new Group();
         for (Page page : pages) {
             for (int internalPageNumber = 0, n = page.getNumberOfSubPages(); internalPageNumber < n; internalPageNumber++) {
-                File filename = new File(dir, idFactory.createId(page, "Page") + "_" + (pageNumber + 1) + "." + getExtension());
-                writePage(filename, page, node, pageCount, pageNumber, internalPageNumber);
+                File filename = new File(dir, basename + "_" + (pageNumber + 1) + "." + getExtension());
+
+                hints.put(RenderContext.RENDER_PAGE, page);
+                hints.put(RenderContext.RENDER_NUMBER_OF_PAGES, numberOfPages);
+                hints.put(RenderContext.RENDER_PAGE_NUMBER, pageNumber);
+                hints.put(RenderContext.RENDER_PAGE_INTERNAL_NUMBER, internalPageNumber);
+                renderer.getProperties().putAll(hints);
+                renderer.render(drawing);
+                final Node pageNode = renderer.getNode(page);
+                final Node drawingNode = renderer.getNode(drawing);
+
+                Shape pageClip = page.getPageClip(internalPageNumber);
+                Transform localToWorld = page.getLocalToWorld();
+                if (localToWorld == null) {
+                    pageClip.getTransforms().clear();
+                } else {
+                    pageClip.getTransforms().setAll(localToWorld);
+                }
+                drawingNode.setClip(pageClip);
+
+                Group oldParentOfPageNode = (Group) pageNode.getParent();
+                if (oldParentOfPageNode != null) {
+                    oldParentOfPageNode.getChildren().remove(pageNode);
+                }
+                parentOfPageNode.getChildren().setAll(pageNode);
+
+                rootNode.getChildren().setAll(drawingNode, parentOfPageNode);
+
+                writePage(filename, page, rootNode, numberOfPages, pageNumber, internalPageNumber);
 
                 pageNumber++;
             }
@@ -138,10 +173,10 @@ slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
         }
         writeSlices(dir, drawing, slices, "", slicesDpi);
         if (exportSlices2x) {
-        writeSlices(dir, drawing, slices, "@2x", 2*slicesDpi);
+            writeSlices(dir, drawing, slices, "@2x", 2 * slicesDpi);
         }
         if (exportSlices3x) {
-        writeSlices(dir, drawing, slices, "@3x", 3*slicesDpi);
+            writeSlices(dir, drawing, slices, "@3x", 3 * slicesDpi);
         }
     }
 
@@ -167,7 +202,7 @@ slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
             }
         }
         for (Slice slice : slices) {
-            File filename = new File(dir, idFactory.createId(slice, "Slice") +suffix+ "." + getExtension());
+            File filename = new File(dir, idFactory.createId(slice, "Slice") + suffix + "." + getExtension());
             writeSlice(filename, slice, node, dpi);
         }
     }

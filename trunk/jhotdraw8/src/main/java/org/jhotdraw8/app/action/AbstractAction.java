@@ -42,7 +42,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      * @param id the id of the action
      */
     public AbstractAction(String id) {
-        set(Action.ID, id);
+        set(Action.ID_KEY, id);
 
     }
 

@@ -40,8 +40,6 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.text.CssSize;
 import org.jhotdraw8.text.CssSize2D;
-import org.jhotdraw8.text.CssSizeInsets;
-import static java.lang.Math.max;
 
 /**
  * Defines a page layout for printing.
@@ -89,15 +87,15 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
         int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
         double innerPageWidth = (get(PAPER_WIDTH).getDefaultConvertedValue() - insets.getLeft() - insets.getRight());
         double innerPageHeight = (get(PAPER_HEIGHT).getDefaultConvertedValue() - insets.getTop() - insets.getBottom());
-        double totalInnerPageWidth=innerPageWidth * numPagesX - overlapX * numPagesX - 1;
-        double totalInnerPageHeight=innerPageHeight * numPagesY - overlapY * numPagesY - 1;
+        double totalInnerPageWidth = innerPageWidth * numPagesX - overlapX * numPagesX - 1;
+        double totalInnerPageHeight = innerPageHeight * numPagesY - overlapY * numPagesY - 1;
         double contentRatio = contentWidth / contentHeight;
         double innerPageRatio = totalInnerPageWidth / totalInnerPageHeight;
         double contentAreaFactor;
         if (contentRatio > innerPageRatio) {
-            contentAreaFactor = (contentWidth) /totalInnerPageWidth;
+            contentAreaFactor = (contentWidth) / totalInnerPageWidth;
         } else {
-            contentAreaFactor = (contentHeight) /totalInnerPageHeight;
+            contentAreaFactor = (contentHeight) / totalInnerPageHeight;
         }
         return contentAreaFactor;
     }
@@ -116,9 +114,12 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
         pageBoundsNode.setStroke(Color.LIGHTBLUE);
         pageBoundsNode.setStrokeType(StrokeType.CENTERED);
 
-        groupNode.getChildren().addAll(pageBoundsNode, contentBoundsNode);
+        javafx.scene.Group currentPageNode = new javafx.scene.Group();
+
+        groupNode.getChildren().addAll(pageBoundsNode, contentBoundsNode, currentPageNode);
         groupNode.getProperties().put("pageBounds", pageBoundsNode);
         groupNode.getProperties().put("contentBounds", contentBoundsNode);
+        groupNode.getProperties().put("currentPage", currentPageNode);
         return groupNode;
     }
 
@@ -163,7 +164,26 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
 
     @Override
     public Shape getPageClip(int internalPageNumber) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        double contentAreaFactor = computeContentAreaFactor();
+        Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
+        CssSize2D szOverlap = getStyled(PAGE_OVERLAP);
+        double overlapX = szOverlap.getX().getDefaultConvertedValue();
+        double overlapY = szOverlap.getY().getDefaultConvertedValue();
+        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
+
+        double pageX = get(X) - insets.getLeft() * contentAreaFactor;
+        double pageY = get(Y) - insets.getTop() * contentAreaFactor;;
+        double pageWidth = get(PAPER_WIDTH).getDefaultConvertedValue() * contentAreaFactor;
+        double pageHeight = get(PAPER_HEIGHT).getDefaultConvertedValue() * contentAreaFactor;
+        double pageOverlapX = (overlapX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
+        double pageOverlapY = (overlapY + insets.getTop() + insets.getBottom()) * contentAreaFactor;
+        int px = internalPageNumber % numPagesX;
+        int py = internalPageNumber / numPagesX;
+        double x = pageX + (pageWidth - pageOverlapX) * px;
+        double y = pageY + (pageHeight - pageOverlapY) * py;
+        return new Rectangle(x + insets.getLeft() * contentAreaFactor, y + insets.getTop() * contentAreaFactor,
+                pageWidth - (insets.getLeft() + insets.getRight()) * contentAreaFactor,
+                pageHeight - (insets.getTop() + insets.getBottom()) * contentAreaFactor);
     }
 
     @Override
@@ -196,6 +216,31 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
 
         Transform pageTransform = Transforms.concat(new Translate(x, y), new Scale(contentAreaFactor, contentAreaFactor));
         return pageTransform;
+    }
+
+    private Translate getPageTranslate(int internalPageNumber) {
+        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
+        int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
+
+        internalPageNumber = Math.max(0, Math.min(internalPageNumber, numPagesX * numPagesY));
+
+        int px = internalPageNumber % numPagesX;
+        int py = internalPageNumber / numPagesX;
+        Insets insets = getStyled(PAGE_INSETS).getDefaultConvertedValue();
+        CssSize2D overlap = getStyled(PAGE_OVERLAP);
+        double overlapX = overlap.getX().getDefaultConvertedValue();
+        double overlapY = overlap.getY().getDefaultConvertedValue();
+        double contentAreaFactor = computeContentAreaFactor();
+        double pageX = get(X) - insets.getLeft() * contentAreaFactor;
+        double pageY = get(Y) - insets.getTop() * contentAreaFactor;;
+        double pageWidth = get(PAPER_WIDTH).getDefaultConvertedValue() * contentAreaFactor;
+        double pageHeight = get(PAPER_HEIGHT).getDefaultConvertedValue() * contentAreaFactor;
+        double pageOverlapX = (overlapX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
+        double pageOverlapY = (overlapY + insets.getTop() + insets.getBottom()) * contentAreaFactor;
+        double x = (pageWidth - pageOverlapX) * px;
+        double y = (pageHeight - pageOverlapY) * py;
+
+        return new Translate(x, y);
     }
 
     @Override
@@ -243,11 +288,19 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
 
         Rectangle contentBoundsNode = (Rectangle) groupNode.getProperties().get("contentBounds");
         Path pageBoundsNode = (Path) groupNode.getProperties().get("pageBounds");
+        javafx.scene.Group currentPageNode = (javafx.scene.Group) groupNode.getProperties().get("currentPage");
 
         applyHideableFigureProperties(node);
-        if (ctx.get(RenderContext.RENDERING_INTENT) != RenderingIntent.EDITOR) {
+        if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR) {
+            node.setVisible(true);
+            contentBoundsNode.setVisible(true);
+            pageBoundsNode.setVisible(true);
+        } else if (ctx.get(RenderContext.RENDER_PAGE) == this) {
+            node.setVisible(true);
             contentBoundsNode.setVisible(false);
             pageBoundsNode.setVisible(false);
+        } else {
+            node.setVisible(false);
         }
 
         double contentWidth = get(WIDTH);
@@ -273,15 +326,19 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
             l.add(new LineTo(x, y + h));
             l.add(new ClosePath());
         }
-        List<Node> nodes = new ArrayList<Node>(getChildren().size() + 2);
-        nodes.add(pageBoundsNode);
-        nodes.add(contentBoundsNode);
+        List<Node> currentPageChildren = new ArrayList<Node>(getChildren().size() + 2);
+        //nodes.add(pageBoundsNode);
+        //nodes.add(contentBoundsNode);
+
+        int currentPage = ctx.get(RenderContext.RENDER_PAGE_INTERNAL_NUMBER);
+        currentPageNode.getTransforms().setAll(getPageTranslate(currentPage));
+
         for (Figure child : getChildren()) {
-            nodes.add(ctx.getNode(child));
+            currentPageChildren.add(ctx.getNode(child));
         }
-        ObservableList<Node> group = groupNode.getChildren();
-        if (!group.equals(nodes)) {
-            group.setAll(nodes);
+        ObservableList<Node> group = currentPageNode.getChildren();
+        if (!group.equals(currentPageChildren)) {
+            group.setAll(currentPageChildren);
         }
     }
 }

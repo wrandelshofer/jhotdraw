@@ -175,10 +175,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
         }
     }
 
-    protected abstract String getText();
+    protected abstract String getText(RenderContext ctx);
 
     protected void updateTextNode(RenderContext ctx, Text tn) {
-        tn.setText(getText());
+        tn.setText(getText( ctx));
         tn.setX(get(ORIGIN_X));
         tn.setY(get(ORIGIN_Y));
         applyTextFillableFigureProperties(tn);

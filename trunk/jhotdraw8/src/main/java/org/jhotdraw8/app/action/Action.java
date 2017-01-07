@@ -33,7 +33,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * The key used for storing the action in an action map, and for accessing
      * resources in resource bundles.
      */
-    StringKey ID = new StringKey("id");
+    StringKey ID_KEY = new StringKey("id");
     /**
      * The key used for storing the {@code String} name for the action, used for
      * a menu or button.
@@ -95,7 +95,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * @return The instance
      */
     default String getId() {
-        return get(ID);
+        return get(ID_KEY);
     }
 
     /**

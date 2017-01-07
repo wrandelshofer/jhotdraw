@@ -5,13 +5,14 @@
 package org.jhotdraw8.draw.figure;
 
 import java.lang.reflect.Field;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.geometry.Bounds;
 import javafx.print.Paper;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.SimpleFigureKey;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.text.CssSize2D;
 

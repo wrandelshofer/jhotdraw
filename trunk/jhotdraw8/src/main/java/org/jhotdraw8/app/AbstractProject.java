@@ -84,5 +84,6 @@ public abstract class AbstractProject extends AbstractDisableable implements Pro
     public void init() {
         initView();
         initActionMap(actionMap);
+                getNode().disableProperty().bind(disabledProperty());
     }
 }

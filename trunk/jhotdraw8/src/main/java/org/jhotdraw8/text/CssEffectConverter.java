@@ -44,8 +44,8 @@ import org.jhotdraw8.io.IdFactory;
  *                 width, Sep, height, Sep, iterations
  *              ] , ")";
  * ColorAdjust = "color-adjust(" , [
- *                 "hue", S, hue, Sep, 
- *                 "saturation" , S , saturation, Sep, 
+ *                 "hue", S, hue, Sep,
+ *                 "saturation" , S , saturation, Sep,
  *                 "brightness", S, brightness, Sep,
  *                 "contrast", S, contrast
  *              ] , ")";
@@ -112,7 +112,7 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append(BLOOM).append('(');
             out.append(nb.toString(fx.getThreshold() * 100));
             out.append("%)");
-             if (fx.getInput() != null) {
+            if (fx.getInput() != null) {
                 out.append(", ");
                 toString(out, idFactory, fx.getInput());
             }
@@ -125,7 +125,7 @@ public class CssEffectConverter implements Converter<Effect> {
             out.append(',');
             out.append(Integer.toString(fx.getIterations()));
             out.append(")");
-             if (fx.getInput() != null) {
+            if (fx.getInput() != null) {
                 out.append(", ");
                 toString(out, idFactory, fx.getInput());
             }
@@ -183,7 +183,7 @@ public class CssEffectConverter implements Converter<Effect> {
                 out.append('%');
             }
             out.append(")");
-             if (fx.getInput() != null) {
+            if (fx.getInput() != null) {
                 out.append(", ");
                 toString(out, idFactory, fx.getInput());
             }
@@ -201,11 +201,11 @@ public class CssEffectConverter implements Converter<Effect> {
             nb.toString(out, idFactory, fx.getOffsetX());
             out.append(',');
             nb.toString(out, idFactory, fx.getOffsetY());
-            out.append(',');
             if (fx.getInput() != null) {
                 out.append(", ");
                 toString(out, idFactory, fx.getInput());
             }
+            out.append(")");
         } else if (value instanceof GaussianBlur) {
             GaussianBlur fx = (GaussianBlur) value;
             out.append(GAUSSIAN_BLUR).append('(');
@@ -243,7 +243,7 @@ public class CssEffectConverter implements Converter<Effect> {
                 out.append(", ");
                 toString(out, idFactory, fx.getInput());
             }
-   } else if (value instanceof Shadow) {
+        } else if (value instanceof Shadow) {
             Shadow fx = (Shadow) value;
             out.append(SHADOW).append('(');
             out.append(blurTypeConverter.toString(fx.getBlurType()));
@@ -255,7 +255,7 @@ public class CssEffectConverter implements Converter<Effect> {
             if (fx.getInput() != null) {
                 out.append(", ");
                 toString(out, idFactory, fx.getInput());
-            }      
+            }
         } else {
             out.append("none");
         }
@@ -365,7 +365,7 @@ public class CssEffectConverter implements Converter<Effect> {
         if (tt.nextToken() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
         }
-        return new Bloom(Geom.clamp(threshold,0,1));
+        return new Bloom(Geom.clamp(threshold, 0, 1));
     }
 
     private Effect parseBoxBlur(CssTokenizerInterface tt) throws ParseException, IOException {
@@ -424,7 +424,7 @@ public class CssEffectConverter implements Converter<Effect> {
                 default:
                     tt.pushBack();
             }
-            adjust=Geom.clamp(adjust,0,1);
+            adjust = Geom.clamp(adjust, 0, 1);
             switch (ident) {
                 case "hue":
                     hue = adjust;
@@ -454,6 +454,7 @@ public class CssEffectConverter implements Converter<Effect> {
     private Effect parseDropShadow(CssTokenizerInterface tt) throws ParseException, IOException {
         return parseDropShadowOrInnerShadow(tt, true);
     }
+
     private Effect parseGaussianBlur(CssTokenizerInterface tt) throws ParseException, IOException {
         double radius = 5;
         switch (tt.nextToken()) {
@@ -472,6 +473,7 @@ public class CssEffectConverter implements Converter<Effect> {
     private Effect parseInnerShadow(CssTokenizerInterface tt) throws ParseException, IOException {
         return parseDropShadowOrInnerShadow(tt, false);
     }
+
     private Effect parseGlow(CssTokenizerInterface tt) throws ParseException, IOException {
         double level = 0.3;
         switch (tt.nextToken()) {
@@ -487,9 +489,8 @@ public class CssEffectConverter implements Converter<Effect> {
         if (tt.nextToken() != ')') {
             throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
         }
-        return new Glow(Geom.clamp(level,0,1));
+        return new Glow(Geom.clamp(level, 0, 1));
     }
-
 
     private Effect parseDropShadowOrInnerShadow(CssTokenizerInterface tt, boolean isDropShadow) throws ParseException, IOException {
         String func = isDropShadow ? DROP_SHADOW : INNER_SHADOW;
@@ -562,14 +563,14 @@ public class CssEffectConverter implements Converter<Effect> {
         }
 
         if (isDropShadow) {
-            return new DropShadow(blurType, color, Geom.clamp(radius,0,127), spreadOrChocke, offsetX, offsetY);
+            return new DropShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
         } else {
-            return new InnerShadow(blurType, color, Geom.clamp(radius,0,127), spreadOrChocke, offsetX, offsetY);
+            return new InnerShadow(blurType, color, Geom.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
         }
     }
 
     private Effect parseShadow(CssTokenizerInterface tt) throws ParseException, IOException {
-        String func=SHADOW;
+        String func = SHADOW;
         BlurType blurType = BlurType.GAUSSIAN;
         Color color = new Color(0, 0, 0, 0.75);
         double radius = 10.0;
@@ -603,12 +604,13 @@ public class CssEffectConverter implements Converter<Effect> {
             }
             radius = tt.currentNumericValue().doubleValue();
 
-               if (tt.nextToken() != ')') {
+            if (tt.nextToken() != ')') {
                 throw new ParseException("CSS Effect: ')'  expected", tt.getStartPosition());
             }
         }
-            return new Shadow(blurType, color,Geom.clamp( radius,0,127));
+        return new Shadow(blurType, color, Geom.clamp(radius, 0, 127));
     }
+
     @Override
     public Effect getDefaultValue() {
         return null;

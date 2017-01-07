@@ -29,6 +29,15 @@ import org.jhotdraw8.io.CharBufferReader;
  * @version $Id$
  */
 public class CssStringConverter implements Converter<String> {
+private final String helpText;
+    public CssStringConverter() {
+        this(null);
+    }
+
+    public CssStringConverter(String helpText) {
+        this.helpText = helpText;
+    }
+    
 
     @Override
     public String fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
@@ -37,6 +46,11 @@ public class CssStringConverter implements Converter<String> {
             throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
         }
         return tt.currentStringValue();
+    }
+
+    @Override
+    public String getHelpText() {
+        return helpText;
     }
 
     @Override
@@ -76,4 +90,7 @@ public class CssStringConverter implements Converter<String> {
     public String getDefaultValue() {
         return "";
     }
+    
+    
+    
 }
