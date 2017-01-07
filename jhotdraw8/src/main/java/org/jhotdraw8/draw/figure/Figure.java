@@ -317,6 +317,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             if (this instanceof ResizableFigure) {
                 ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
                 ResizeHandleKit.addEdgeResizeHandles(this, list, Handle.STYLECLASS_HANDLE_RESIZE);
+            } else {
+                list.add(new MoveHandle(this, RelativeLocator.northEast(), Handle.STYLECLASS_HANDLE_RESIZE));
+                list.add(new MoveHandle(this, RelativeLocator.northWest(), Handle.STYLECLASS_HANDLE_RESIZE));
+                list.add(new MoveHandle(this, RelativeLocator.southEast(), Handle.STYLECLASS_HANDLE_RESIZE));
+                list.add(new MoveHandle(this, RelativeLocator.southWest(), Handle.STYLECLASS_HANDLE_RESIZE));
+
             }
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
@@ -889,6 +895,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         final Transform ltw = getLocalToWorld();
         return ltw == null ? p : ltw.transform(p);
     }
+
     /**
      * Transforms the specified bounds from local coordinates into world
      * coordinates.
@@ -972,7 +979,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its local bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -1019,7 +1026,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its parent bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
