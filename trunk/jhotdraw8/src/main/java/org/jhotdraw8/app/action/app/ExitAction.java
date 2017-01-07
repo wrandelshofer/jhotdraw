@@ -132,6 +132,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveChanges() {
         DocumentProject v = unsavedView;
+        Resources labels=Resources.getResources("org.jhotdraw8.app.Labels");
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             URI uri = null;
@@ -147,7 +148,7 @@ public class ExitAction extends AbstractApplicationAction {
                         DocumentProject vi = (DocumentProject)p;
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION, labels.getString("application.exit.canNotSaveToOpenFile"));
                             alert.showAndWait();
                             continue Outer;
                         }
