@@ -54,25 +54,25 @@ public class AddToGroupAction extends AbstractSelectedAction {
     public static void addToGroup(DrawingView view, List<Figure> figures) {
         if (figures.size() < 2) {
             // FIXME internationalize me
-            new Alert(Alert.AlertType.INFORMATION, "You must select a group and the figures that should be added").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "You must select the figures and a group to which the figures should be added").showAndWait();
             return;
         }
-        Figure anchor = figures.get(0);
-        if (!(anchor instanceof Group) && !anchor.isAllowsChildren() || !anchor.isDecomposable()) {
+        Figure lead = figures.get(figures.size()-1);
+        if (!(lead instanceof Group) && !lead.isAllowsChildren() || !lead.isDecomposable()) {
             // FIXME internationalize me
-            new Alert(Alert.AlertType.INFORMATION, "The first figure in the selection must be a group.").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "The last figure in the selection must be a group.").showAndWait();
             return;
         }
-        if (!anchor.isEditable()) {
+        if (!lead.isEditable()) {
             // FIXME internationalize me
-            new Alert(Alert.AlertType.INFORMATION, "The first figure in the selection is not editable.").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "The last figure in the selection is not editable.").showAndWait();
             return;
         }
 
         List<Figure> reparentableFigures = new ArrayList<>();
-        for (int i = 1, n = figures.size(); i < n; i++) {
+        for (int i = 0, n = figures.size()-1; i < n; i++) {
             Figure f = figures.get(i);
-            if (f.isEditable() && f.isSuitableParent(anchor) && (f.getParent() != null && f.getParent().isEditable() && f.getParent().isDecomposable())) {
+            if (f.isEditable() && f.isSuitableParent(lead) && (f.getParent() != null && f.getParent().isEditable() && f.getParent().isDecomposable())) {
                 reparentableFigures.add(f);
             } else {
                 if ((f instanceof StyleableFigure)&&f.get(StyleableFigure.ID)!=null) {
@@ -88,7 +88,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
 
         DrawingModel m = view.getModel();
         for (Figure f : reparentableFigures) {
-            m.addChildTo(f, anchor);
+            m.addChildTo(f, lead);
         }
     }
 }

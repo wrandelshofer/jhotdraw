@@ -86,4 +86,7 @@ public class Transforms {
         public static Transform concat(Transform a, Transform b) {
        return (a==null) ? b : (b==null?a:a.createConcatenation(b));
     }
+                public static Transform concat(Transform a, Transform b, Transform c) {
+       return concat(concat(a,b),c);
+    }
 }

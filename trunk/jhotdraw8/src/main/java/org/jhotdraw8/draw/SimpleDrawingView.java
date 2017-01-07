@@ -1185,17 +1185,17 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @param handles The provided list
      */
     protected void createHandles(Map<Figure, List<Handle>> handles) {
-        Set<Figure> selection = getSelectedFigures();
+        ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
         if (selection.size()>1) {
             if (getAnchorHandleType() != null) {
-                Figure anchor = selection.iterator().next();
+                Figure anchor = selection.get(0);
                 List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
                 anchor.createHandles(getAnchorHandleType(), list);
             }
             if (getLeadHandleType() != null) {
-                Figure anchor = selection.iterator().next();
+                Figure anchor = selection.get(selection.size()-1);
                 List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
-                anchor.createHandles(getAnchorHandleType(), list);
+                anchor.createHandles(getLeadHandleType(), list);
             }
         }
         HandleType handleType = getHandleType();
