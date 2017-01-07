@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
@@ -49,25 +48,16 @@ import org.jhotdraw8.text.StringConverterAdapter;
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     @FXML
-    private TreeTableView<Figure> treeView;
-
-    @FXML
-    private TreeTableColumn<Figure, Boolean> visibleColumn;
-    @FXML
-    private TreeTableColumn<Figure, Boolean> lockedColumn;
-    @FXML
-    private TreeTableColumn<Figure, String> typeColumn;
-    @FXML
-    private TreeTableColumn<Figure, String> idColumn;
-    @FXML
     private TreeTableColumn<Figure, ImmutableObservableList<String>> classesColumn;
 
     private DrawingView drawingView;
-    private Node node;
-    private FigureTreePresentationModel model;
+    @FXML
+    private TreeTableColumn<Figure, String> idColumn;
     private boolean isUpdatingSelection;
-    private boolean willUpdateSelection;
-    private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
+    @FXML
+    private TreeTableColumn<Figure, Boolean> lockedColumn;
+    private FigureTreePresentationModel model;
+    private Node node;
     private final InvalidationListener treeSelectionHandler = change -> {
         if (model.isUpdating()) {
 //        updateSelectionInTree();
@@ -75,6 +65,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             updateSelectionInView();
         }
     };
+    @FXML
+    private TreeTableView<Figure> treeView;
+    @FXML
+    private TreeTableColumn<Figure, String> typeColumn;
+    private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
+    @FXML
+    private TreeTableColumn<Figure, Boolean> visibleColumn;
+    private boolean willUpdateSelection;
 
     private CssWordListConverter wordListConverter = new CssWordListConverter();
 
@@ -85,6 +83,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     public HierarchyInspector(URL fxmlUrl, ResourceBundle resources) {
         init(fxmlUrl, resources);
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
     }
 
     private void init(URL fxmlUrl, ResourceBundle resources) {
@@ -133,13 +136,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         TreeTableRow<Figure> row = getTreeTableRow();
                         boolean isEditable = false;
                         if (row != null) {
-                            Figure item =  row.getItem();
+                            Figure item = row.getItem();
                             //Test for disable condition
                             if (item != null && item.isSupportedKey(StyleableFigure.ID)) {
                                 isEditable = true;
                             }
 
-                            // show the computed  id! 
+                            // show the computed  id!
                             if (item != null) {
                                 setText(item.getId());
                             }
@@ -206,11 +209,6 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    public Node getNode() {
-        return node;
-    }
-
-    @Override
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         if (oldValue != null) {
             oldValue.getSelectedFigures().removeListener(viewSelectionHandler);
@@ -221,13 +219,6 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             newValue.getSelectedFigures().addListener(viewSelectionHandler);
         } else {
             model.setDrawingModel(new SimpleDrawingModel());
-        }
-    }
-
-    private void updateSelectionInTreeLater(SetChangeListener.Change<? extends Figure> change) {
-        if (!willUpdateSelection) {
-            willUpdateSelection = true;
-            Platform.runLater(this::updateSelectionInTree);
         }
     }
 
@@ -267,6 +258,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
             }
             isUpdatingSelection = false;
+        }
+    }
+
+    private void updateSelectionInTreeLater(SetChangeListener.Change<? extends Figure> change) {
+        if (!willUpdateSelection) {
+            willUpdateSelection = true;
+            Platform.runLater(this::updateSelectionInTree);
         }
     }
 
