@@ -5,6 +5,7 @@
 package org.jhotdraw8.app;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -13,6 +14,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
+import org.jhotdraw8.collection.Key;
 
 /**
  * A {@code DocumentVIew} is a specialization of {@link Project} for
@@ -61,11 +63,12 @@ public interface DocumentProject extends Project {
      * @param uri the URI
      * @param format the desired data format, null means default data format
      * should be used
+     * @param options read options
      * @param append whether to append to the current document or to replace it.
      * @return Returns a CompletionStage which is completed when the read
      * operation has finished.
      */
-    public CompletionStage<Void> read(URI uri, DataFormat format, boolean append);
+    public CompletionStage<Void> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append);
 
     /**
      * Asynchronously writes the content data of view to the specified URI using
@@ -77,10 +80,11 @@ public interface DocumentProject extends Project {
      * @param uri the URI
      * @param format the desired data format, null means default data format
      * should be used
+     * @param options write options
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    public CompletionStage<Void> write(URI uri, DataFormat format);
+    public CompletionStage<Void> write(URI uri, DataFormat format, Map<? super Key<?>, Object> options);
 
     /**
      * Clears the view.

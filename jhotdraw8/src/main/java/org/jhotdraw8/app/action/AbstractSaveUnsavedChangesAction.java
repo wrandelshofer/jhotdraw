@@ -203,7 +203,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
     }
 
     protected void saveViewToURI(final DocumentProject v, final URI uri, final URIChooser chooser) {
-        v.write(uri, chooser == null ? null : chooser.getDataFormat()).handle((result, exception) -> {
+        v.write(uri, chooser == null ? null : chooser.getDataFormat(),null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {

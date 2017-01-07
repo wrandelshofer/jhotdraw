@@ -58,24 +58,17 @@ import org.jhotdraw8.geom.Transforms;
 public class BitmapExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
 
     public final static DataFormat PNG_FORMAT = new DataFormat("image/png");
+    public final static DataFormat JPEG_FORMAT = new DataFormat("image/jpeg");
 
     private final static double INCH_2_MM = 25.4;
 
     @Override
     public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        WritableImage image = renderImage(drawing, selection);
+        WritableImage image = renderImage(drawing, selection,drawingDpi);
         out.put(DataFormat.IMAGE, image);
     }
 
-    public double getDpi() {
-        return dpi;
-    }
-
-    public void setDpi(double dpi) {
-        this.dpi = dpi;
-    }
-
-    private void writeImage(OutputStream out, WritableImage writableImage) throws IOException {
+    private void writeImage(OutputStream out, WritableImage writableImage, double dpi) throws IOException {
         BufferedImage image = SwingFXUtils.fromFXImage(writableImage, null);
 
         for (Iterator<ImageWriter> iw = ImageIO.getImageWritersByFormatName("png"); iw.hasNext();) {
@@ -87,7 +80,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
                 continue;
             }
 
-            setDPI(metadata);
+            setDPI(metadata,dpi);
 
             ImageOutputStream output = new MemoryCacheImageOutputStream(out);
 
@@ -100,13 +93,13 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     public void write(OutputStream out, Drawing drawing) throws IOException {
-        WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing));
+        WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing),drawingDpi);
         //ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
-        writeImage(out, writableImage);
+        writeImage(out, writableImage,drawingDpi);
 
     }
 
-    private void setDPI(IIOMetadata metadata) throws IIOInvalidTreeException {
+    private void setDPI(IIOMetadata metadata, double dpi) throws IIOInvalidTreeException {
         double dotsPerMilli = dpi / INCH_2_MM;
 
         IIOMetadataNode horiz = new IIOMetadataNode("HorizontalPixelSize");
@@ -125,7 +118,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         metadata.mergeTree("javax_imageio_1.0", root);
     }
 
-    private WritableImage renderImage(Drawing drawing, Collection<Figure> selection) throws IOException {
+    private WritableImage renderImage(Drawing drawing, Collection<Figure> selection, double dpi) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, dpi);
@@ -133,46 +126,46 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         Bounds bounds = Figure.visualBounds(selection);
 
         if (!Platform.isFxApplicationThread()) {
-            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(drawing, node, bounds), Platform::runLater);
+            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(drawing, node, bounds,drawingDpi), Platform::runLater);
             try {
                 return future.get();
             } catch (InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
-            return doRenderImage(drawing, node, bounds);
+            return doRenderImage(drawing, node, bounds,drawingDpi);
         }
     }
 
-    protected void writeSlice(File file, Slice slice, Node node) throws IOException {
-        WritableImage image = renderSlice(slice,slice.getBoundsInLocal(), node);
+    protected void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
+        WritableImage image = renderSlice(slice,slice.getBoundsInLocal(), node,dpi);
         try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
-            writeImage(out, image);
+            writeImage(out, image, dpi);
         }
     }
 
     @Override
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        WritableImage image = renderSlice(page,page.getPageBounds(internalPageNumber), node);
+        WritableImage image = renderSlice(page,page.getPageBounds(internalPageNumber), node,pagesDpi);
         try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
-            writeImage(out, image);
+            writeImage(out, image,pagesDpi);
         }
     }
 
-    private WritableImage renderSlice(Figure slice, Bounds bounds, Node node) throws IOException {
+    private WritableImage renderSlice(Figure slice, Bounds bounds, Node node, double dpi) throws IOException {
         if (!Platform.isFxApplicationThread()) {
-            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(slice, node, bounds), Platform::runLater);
+            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(slice, node, bounds,dpi), Platform::runLater);
             try {
                 return future.get();
             } catch (InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
-            return doRenderImage(slice, node, bounds);
+            return doRenderImage(slice, node, bounds,dpi);
         }
     }
 
-    private WritableImage doRenderImage(Figure slice, Node node, Bounds bounds) {
+    private WritableImage doRenderImage(Figure slice, Node node, Bounds bounds,double dpi) {
         SnapshotParameters parameters = new SnapshotParameters();
         double scale = dpi / RenderContext.DPI.getDefaultValue();
         parameters.setTransform(Transforms.concat(Transform.scale(scale, scale),slice.getWorldToLocal()));

@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -30,6 +31,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.collection.Key;
 
 /**
  * TeddyProject.
@@ -97,7 +99,7 @@ public class TeddyProject extends AbstractDocumentProject implements DocumentPro
   }
 
   @Override
-  public CompletionStage<Void> read(URI uri, DataFormat format, boolean append) {
+  public CompletionStage<Void> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
     return FXWorker.supply(() -> {
       StringBuilder builder = new StringBuilder();
       char[] cbuf = new char[8192];
@@ -117,7 +119,7 @@ public class TeddyProject extends AbstractDocumentProject implements DocumentPro
   }
 
   @Override
-  public CompletionStage<Void> write(URI uri, DataFormat format) {
+  public CompletionStage<Void> write(URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
     final String text = textArea.getText();
     return FXWorker.run(() -> {
       try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(uri)), StandardCharsets.UTF_8)) {

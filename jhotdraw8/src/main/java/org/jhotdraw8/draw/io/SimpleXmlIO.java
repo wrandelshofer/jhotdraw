@@ -28,6 +28,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.Layer;
@@ -128,6 +129,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     public URI getInternalHome() {
         return internalHome;
+    }
+
+    @Override
+    public void setOptions(Map<? super Key<?>, Object> options) {
+        //ignore.
     }
 
     @Override

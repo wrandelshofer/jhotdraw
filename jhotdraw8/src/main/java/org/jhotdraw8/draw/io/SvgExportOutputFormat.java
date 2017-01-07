@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.io;
 import org.jhotdraw8.svg.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.util.Collection;
@@ -179,7 +180,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     }
 
     @Override
-    protected void writeSlice(File file, Slice slice, Node node) throws IOException {
+    protected void writeSlice(File file, Slice slice, Node node,double dpi) throws IOException {
         SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
         markNodesOutsideBoundsWithSkip(node, slice.getBoundsInLocal());
         final Transform worldToLocal = slice.getWorldToLocal();

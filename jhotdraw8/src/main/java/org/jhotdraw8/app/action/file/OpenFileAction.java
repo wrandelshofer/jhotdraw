@@ -116,7 +116,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         v.addDisabler(this);
 
         // Open the file
-        v.read(uri, chooser == null ? null : chooser.getDataFormat(), false).whenComplete((result, exception) -> {
+        v.read(uri, chooser == null ? null : chooser.getDataFormat(),null, false).whenComplete((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
             } else if (exception != null) {

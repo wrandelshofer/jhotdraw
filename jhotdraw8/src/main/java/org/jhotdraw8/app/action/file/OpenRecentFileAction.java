@@ -103,7 +103,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         v.addDisabler(this);
 
         // Open the file
-        v.read(uri, null, false).whenComplete((result, exception) -> {
+        v.read(uri, null, null,false).whenComplete((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
             } else if (exception != null) {

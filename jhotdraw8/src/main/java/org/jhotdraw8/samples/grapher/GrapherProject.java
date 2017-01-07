@@ -103,6 +103,7 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.action.view.ToggleViewPropertyAction;
+import org.jhotdraw8.collection.Key;
 
 /**
  * GrapherProject.
@@ -313,7 +314,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
   }
 
   @Override
-  public CompletionStage<Void> read(URI uri, DataFormat format, boolean append) {
+  public CompletionStage<Void> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
     return FXWorker.supply(() -> {
       IdFactory idFactory = new SimpleIdFactory();
       FigureFactory factory = new DefaultFigureFactory(idFactory);
@@ -336,18 +337,21 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
   }
 
   @Override
-  public CompletionStage<Void> write(URI uri, DataFormat format) {
+  public CompletionStage<Void> write(URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
     return FXWorker.run(() -> {
       if (SvgExporter.SVG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
         SvgExportOutputFormat io = new SvgExportOutputFormat();
+        io.setOptions(options);
         io.write(uri, drawingView.getDrawing());
       } else if (BitmapExportOutputFormat.PNG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
         BitmapExportOutputFormat io = new BitmapExportOutputFormat();
+        io.setOptions(options);
         io.write(uri, drawingView.getDrawing());
       } else {
         IdFactory idFactory = new SimpleIdFactory();
         FigureFactory factory = new DefaultFigureFactory(idFactory);
         SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+        io.setOptions(options);
         io.write(uri, drawingView.getDrawing());
       }
     });

@@ -8,11 +8,15 @@
 package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
+import javafx.stage.Modality;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.collection.Key;
@@ -48,7 +52,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
      * @param saveAs whether to force a file dialog
      */
     public AbstractSaveFileAction(Application app, DocumentProject view, String id, boolean saveAs) {
-        super(app, view,DocumentProject.class);
+        super(app, view, DocumentProject.class);
         this.saveAs = saveAs;
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, id);
     }
@@ -71,10 +75,12 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         }
         oldFocusOwner = v.getNode().getScene().getFocusOwner();
         v.addDisabler(this);
-        saveView(v);
+        saveProjectChooseUri(v);
     }
 
-    protected void saveView(final DocumentProject v) {
+
+
+    protected void saveProjectChooseUri(final DocumentProject v) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -88,7 +94,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 // unless  multipe projects to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (Project pi : app.projects()) {
-                        DocumentProject vi=(DocumentProject)pi;
+                        DocumentProject vi = (DocumentProject) pi;
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -100,21 +106,37 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 break;
             }
             if (uri != null) {
-                saveViewToURI(v, uri, chsr.getDataFormat());
+                saveProjectChooseOptions(v, uri, chsr.getDataFormat());
             }
             v.removeDisabler(this);
             if (oldFocusOwner != null) {
                 oldFocusOwner.requestFocus();
             }
         } else {
-            saveViewToURI(v, v.getURI(), null);
+            saveProjectChooseOptions(v, v.getURI(), null);
         }
     }
-
-    protected void saveViewToURI(final DocumentProject v, final URI uri, final DataFormat format) {
-        v.write(uri, format).handle((result, exception) -> {
-            if (exception instanceof CancellationException) {
+    protected void saveProjectChooseOptions(final DocumentProject v, URI uri, DataFormat format) {
+        Map<? super Key<?>, Object> options = null;
+        Dialog<Map<? super Key<?>, Object>> dialog = createOptionsDialog(format);
+        if (dialog != null) {
+            dialog.initModality(Modality.WINDOW_MODAL);
+          dialog.initOwner(v.getNode().getScene().getWindow());          
+            Optional< Map<? super Key<?>, Object>> result = dialog.showAndWait();
+            
+            if (result.isPresent()) {
+                options = result.get();
+            } else {
                 v.removeDisabler(this);
+                return;
+            }
+        }
+        saveProjectToUri(v, uri,format,options);
+    }
+    protected void saveProjectToUri(final DocumentProject project, final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
+        project.write(uri, format,options).handle((result, exception) -> {
+            if (exception instanceof CancellationException) {
+                project.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
@@ -127,19 +149,23 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                         ((message == null) ? "" : message));
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
                 alert.showAndWait();
-                v.removeDisabler(this);
+                project.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
             } else {
-                handleSucceded(v, uri);
-                v.removeDisabler(this);
+                handleSucceded(project, uri);
+                project.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
                 }
             }
             return null;
         });
+    }
+
+    protected Dialog<Map<? super Key<?>, Object>> createOptionsDialog(DataFormat format) {
+        return null;
     }
 
     protected abstract void handleSucceded(DocumentProject v, URI uri);

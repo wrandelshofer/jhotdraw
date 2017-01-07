@@ -78,7 +78,7 @@ public class RevertAction extends AbstractProjectAction<DocumentProject> {
         if (uri == null) {
             view.clear().handle(handler);
         } else {
-            view.read(uri, null, false).handle(handler);
+            view.read(uri, null, null,false).handle(handler);
         }
     }
 
