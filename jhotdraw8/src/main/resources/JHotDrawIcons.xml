@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Drawing background="transparent" height="88" id="drawing1" width="88" xmlns="http://jhotdraw.org/samples/grapher">
+<Layer id="content">
+  <Ellipse center="55 11" id="ellipse2" radius="6.5 6.5" stroke-width="2"/>
+  <Rectangle bounds="5 5 12 12" fill="lightgreen" id="rectangle4" opacity="0.5" stroke="none" stroke-type="inside"/>
+  <Line end="20 5.5" id="line1" start="2 5.5" stroke="darkred"/>
+  <Line end="19.5 16.5" id="line2" start="2 16.5" stroke="darkred"/>
+  <Line end="5.5 20.5" id="line3" start="5.5 2" stroke="darkred"/>
+  <Line end="16.5 20" id="line4" start="16.5 2" stroke="darkred"/>
+  <Rectangle bounds="70 4 14 14" fill="linear-gradient(lightgray, white)" id="rectangle2" stroke="none" stroke-type="inside" stroke-width="2"/>
+  <Rectangle bounds="26 4 14 14" id="rectangle1" stroke-type="inside" stroke-width="2"/>
+  <Ellipse center="79.75 8.25" id="ellipse1" radius="1.75 1.75" stroke-type="inside"/>
+  <Line end="17 39" id="line5" start="5 27" stroke-linecap="square" stroke-width="2"/>
+  <Line end="39 39" id="line6" start="27 27" stroke-linecap="square" stroke-width="2"/>
+  <Rectangle bounds="25 25 4 4" id="rectangle3" stroke="grey" stroke-type="inside"/>
+  <Rectangle bounds="37 37 4 4" id="rectangle5" stroke="grey" stroke-type="inside"/>
+  <Polyline fill="none" id="polyline1" points="54 25, 48 28, 53 38, 60 39, 62 29, 57 31" stroke-linecap="square" stroke-width="2"/>
+  <Polygon id="polygon1" points="76 25, 70 28, 75 38, 82 39, 84 29, 78 31" stroke-linecap="square" stroke-width="2"/>
+  <Polyline id="polyline2" points="71 16, 74 9, 77 13, 80 12, 83 16"/>
+  <Rectangle bounds="70 4 14 14" fill="none" id="rectangle6" stroke-type="inside" stroke-width="2"/>
+  <Polygon id="polygon2" points="5 47, 13 47, 17 51.266666666666666, 17 63, 5 63" stroke="darkcyan" stroke-type="inside" stroke-width="2"/>
+  <Polyline id="polyline3" points="12.5 48, 12.5 52, 16.5 52" stroke="darkcyan"/>
+  <Label fill="none" font="normal normal 19 &quot;Futura Medium&quot;" id="label1" origin="25 63" stroke="none">A</Label>
+  <Line end="40.5 63" id="line7" start="40.5 48"/>
+</Layer>
+<Layer id="slices" locked="true" visible="false">
+  <Slice bounds="0 0 22 22" id="createSlice"/>
+  <Slice bounds="22 0 22 22" id="createRectangle"/>
+  <Slice bounds="44 0 22 22" id="createEllipse"/>
+  <Slice bounds="44 22 22 22" id="createPolyline"/>
+  <Slice bounds="22 22 22 22" id="createLineConnection"/>
+  <Slice bounds="0 22 22 22" id="createLine"/>
+  <Slice bounds="66 0 22 22" id="createImage"/>
+  <Slice bounds="66 22 22 22" id="createPolygon"/>
+  <Slice bounds="0 44 22 22" id="createPage"/>
+  <Slice bounds="22 44 22 22" id="createText"/>
+</Layer>
+<Layer id="pages">
+  <Page bounds="0 0 88 88" id="page1" num-pages="4 4" paper-size="40cm 40cm"/>
+</Layer>
+</Drawing>
