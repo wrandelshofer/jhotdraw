@@ -151,7 +151,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     @Override
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
-        double paperWidth = pw.getDefaultConvertedValue();
+        double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();
         WritableImage image = renderSlice(page, pageBounds, node, pagesDpi * factor);

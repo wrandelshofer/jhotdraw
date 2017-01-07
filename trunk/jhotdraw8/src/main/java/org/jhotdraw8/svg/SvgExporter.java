@@ -358,6 +358,9 @@ public class SvgExporter {
         if (isSkipNode(node)) {
             return;
         }
+        
+        writeClipPathDefs(doc, defsNode, node);
+        
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
             writePaintDefs(doc, defsNode, shape.getFill());
@@ -411,9 +414,21 @@ public class SvgExporter {
             }
         }
     }
+    private void writeClipAttributes(Element elem, Node node) {
+        Node clip=node.getClip();
+        if (clip==null)return;
+
+        String id = idFactory.getId(clip);
+        if (id != null) {
+            elem.setAttribute("clip-path", "url(#" + id + ")");
+        } else {
+            System.err.println("WARNING SvgExporter does not supported recursive clips!");
+        }
+    }
 
     private Element writeGroup(Document doc, Element parent, Group node) {
         Element elem = doc.createElement("g");
+        writeClipAttributes(elem, node);
         parent.appendChild(elem);
         return elem;
     }
@@ -476,14 +491,17 @@ public class SvgExporter {
             elem = writeShape(doc, parent, (Shape) node);
             writeFillAttributes(elem, (Shape) node);
             writeStrokeAttributes(elem, (Shape) node);
+            writeClipAttributes(elem, node);
         } else if (node instanceof Group) {
-            // a group can be omitted if it does not perform a transformation and does not apply an effect
+            // a group can be omitted if it does not perform a transformation, an effect or a clip
             boolean omitGroup = false;
             if (skipInvisibleNodes) {
                 Group g = (Group) node;
                 if ((g.getBlendMode() == null || g.getBlendMode() == BlendMode.SRC_OVER)
                         && g.getLocalToParentTransform().isIdentity()
-                        && g.getEffect() == null) {
+                        && g.getEffect() == null
+                        && g.getClip()==null
+                        ) {
                     omitGroup = true;
                 }
             }
@@ -519,7 +537,21 @@ public class SvgExporter {
         }
 
     }
-
+    
+        private void writeClipPathDefs(Document doc, Element defsNode, Node node) throws IOException {
+            // FIXME clip nodes can in turn have clips - we need to support recursive calls to defsNode!!!
+Node clip=            node.getClip();
+if (clip==null) return;
+        if (idFactory.getId(clip) == null) {
+                String id = idFactory.createId(clip, "clipPath");
+                Element elem = doc.createElement("clipPath");
+                defsNode.appendChild(doc.createTextNode("\n"));
+                writeNodeRecursively(doc,elem,clip,"\n");
+                elem.setAttribute("id", id);
+elem.appendChild(doc.createTextNode("\n"));
+ defsNode.appendChild(elem);
+            }
+        }
     private void writePaintDefs(Document doc, Element defsNode, Paint paint) throws IOException {
         if (idFactory.getId(paint) == null) {
             if (paint instanceof LinearGradient) {
