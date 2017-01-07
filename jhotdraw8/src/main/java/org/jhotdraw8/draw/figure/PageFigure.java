@@ -290,13 +290,12 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
         Path pageBoundsNode = (Path) groupNode.getProperties().get("pageBounds");
         javafx.scene.Group currentPageNode = (javafx.scene.Group) groupNode.getProperties().get("currentPage");
 
-        applyHideableFigureProperties(node);
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR) {
-            node.setVisible(true);
+            applyHideableFigureProperties(node);
             contentBoundsNode.setVisible(true);
             pageBoundsNode.setVisible(true);
         } else if (ctx.get(RenderContext.RENDER_PAGE) == this) {
-            node.setVisible(true);
+            applyHideableFigureProperties(node);
             contentBoundsNode.setVisible(false);
             pageBoundsNode.setVisible(false);
         } else {
