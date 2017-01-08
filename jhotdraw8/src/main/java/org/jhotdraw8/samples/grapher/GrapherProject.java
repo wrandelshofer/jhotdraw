@@ -350,7 +350,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         SvgExportOutputFormat io = new SvgExportOutputFormat();
         io.setOptions(options);
         io.write(uri, drawing);
-      } else if (BitmapExportOutputFormat.PNG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
+      } else if (BitmapExportOutputFormat.PNG_FORMAT.equals(format) || uri.getPath().endsWith(".png")) {
         BitmapExportOutputFormat io = new BitmapExportOutputFormat();
         io.setOptions(options);
         io.write(uri, drawing);

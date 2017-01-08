@@ -31,7 +31,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     public static final String ID = "file.export";
     private static final long serialVersionUID = 1L;
 
-    private final Function<DataFormat,Dialog<Map<? super Key<?>, Object>>> optionsDialog;
+    private final Function<DataFormat,Dialog<Map<? super Key<?>, Object>>> optionsDialogFactory;
 
     /**
      * Creates a new instance.
@@ -72,7 +72,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      */
     public ExportFileAction(Application app, DocumentProject project, String id,  Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
         super(app, project, id, true);
-        this.optionsDialog = optionsDialog;
+        this.optionsDialogFactory = optionsDialog;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 @Override
     protected Dialog<Map<? super Key<?>, Object>> createOptionsDialog(DataFormat format) {
-        return optionsDialog.apply(format);
+        return optionsDialogFactory==null?null:optionsDialogFactory.apply(format);
     }
 
     @Override

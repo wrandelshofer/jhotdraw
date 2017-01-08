@@ -50,14 +50,16 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
 
     @Override
     public void setOptions(Map<? super Key<?>, Object> options) {
-        exportDrawing = EXPORT_DRAWING_KEY.get(options);
-        exportPages = EXPORT_PAGES_KEY.get(options);
-        exportSlices = EXPORT_SLICES_KEY.get(options);
-        exportSlices2x = EXPORT_SLICES_RESOLUTION_2X_KEY.get(options);
-        exportSlices3x = EXPORT_SLICES_RESOLUTION_3X_KEY.get(options);
-        drawingDpi = EXPORT_DRAWING_DPI_KEY.get(options);
-        pagesDpi = EXPORT_PAGES_DPI_KEY.get(options);
-        slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
+        if (options != null) {
+            exportDrawing = EXPORT_DRAWING_KEY.get(options);
+            exportPages = EXPORT_PAGES_KEY.get(options);
+            exportSlices = EXPORT_SLICES_KEY.get(options);
+            exportSlices2x = EXPORT_SLICES_RESOLUTION_2X_KEY.get(options);
+            exportSlices3x = EXPORT_SLICES_RESOLUTION_3X_KEY.get(options);
+            drawingDpi = EXPORT_DRAWING_DPI_KEY.get(options);
+            pagesDpi = EXPORT_PAGES_DPI_KEY.get(options);
+            slicesDpi = EXPORT_SLICES_DPI_KEY.get(options);
+        }
     }
 
     @Override

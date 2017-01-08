@@ -155,6 +155,14 @@ public class SvgExporter {
         }
     }
 
+    public boolean isSkipInvisibleNodes() {
+        return skipInvisibleNodes;
+    }
+
+    public void setSkipInvisibleNodes(boolean skipInvisibleNodes) {
+        this.skipInvisibleNodes = skipInvisibleNodes;
+    }
+
     private boolean isSkipNode(Node node) {
         if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
             return true;
@@ -165,8 +173,8 @@ public class SvgExporter {
             }
             if (node instanceof Shape) {
                 Shape s = (Shape) node;
-                if ((s.getFill() == null||Objects.equals(s.getFill(),Color.TRANSPARENT)) 
-                        && (s.getStroke() == null||Objects.equals(s.getStroke(),Color.TRANSPARENT))) {
+                if ((s.getFill() == null || Objects.equals(s.getFill(), Color.TRANSPARENT))
+                        && (s.getStroke() == null || Objects.equals(s.getStroke(), Color.TRANSPARENT))) {
                     return true;
                 }
             }
@@ -310,6 +318,37 @@ public class SvgExporter {
         return elem;
     }
 
+    private void writeClipAttributes(Element elem, Node node) {
+        Node clip = node.getClip();
+        if (clip == null) {
+            return;
+        }
+
+        String id = idFactory.getId(clip);
+        if (id != null) {
+            elem.setAttribute("clip-path", "url(#" + id + ")");
+        } else {
+            System.err.println("WARNING SvgExporter does not supported recursive clips!");
+        }
+    }
+
+    private void writeClipPathDefs(Document doc, Element defsNode, Node node) throws IOException {
+        // FIXME clip nodes can in turn have clips - we need to support recursive calls to defsNode!!!
+        Node clip = node.getClip();
+        if (clip == null) {
+            return;
+        }
+        if (idFactory.getId(clip) == null) {
+            String id = idFactory.createId(clip, "clipPath");
+            Element elem = doc.createElement("clipPath");
+            defsNode.appendChild(doc.createTextNode("\n"));
+            writeNodeRecursively(doc, elem, clip, "\n");
+            elem.setAttribute("id", id);
+            elem.appendChild(doc.createTextNode("\n"));
+            defsNode.appendChild(elem);
+        }
+    }
+
     private void writeCompositingAttributes(Element elem, Node node) {
         if (node.getOpacity() != 1.0) {
             elem.setAttribute("opacity", nb.toString(node.getOpacity()));
@@ -358,9 +397,9 @@ public class SvgExporter {
         if (isSkipNode(node)) {
             return;
         }
-        
+
         writeClipPathDefs(doc, defsNode, node);
-        
+
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
             writePaintDefs(doc, defsNode, shape.getFill());
@@ -412,17 +451,6 @@ public class SvgExporter {
                     elem.setAttribute("fill-opacity", nb.toString(c.getOpacity()));
                 }
             }
-        }
-    }
-    private void writeClipAttributes(Element elem, Node node) {
-        Node clip=node.getClip();
-        if (clip==null)return;
-
-        String id = idFactory.getId(clip);
-        if (id != null) {
-            elem.setAttribute("clip-path", "url(#" + id + ")");
-        } else {
-            System.err.println("WARNING SvgExporter does not supported recursive clips!");
         }
     }
 
@@ -500,12 +528,12 @@ public class SvgExporter {
                 if ((g.getBlendMode() == null || g.getBlendMode() == BlendMode.SRC_OVER)
                         && g.getLocalToParentTransform().isIdentity()
                         && g.getEffect() == null
-                        && g.getClip()==null
-                        ) {
+                        && g.getClip() == null) {
                     omitGroup = true;
                 }
             }
             if (!omitGroup) {
+                parent.appendChild(doc.createTextNode(linebreak));
                 elem = writeGroup(doc, parent, (Group) node);
             }
         } else if (node instanceof Region) {
@@ -527,31 +555,17 @@ public class SvgExporter {
         if (node instanceof Parent) {
             final Parent pp = (Parent) node;
             final String lbi = linebreak + indent;
-            final Element parentElement = elem==null?parent:elem;
+            final Element parentElement = elem == null ? parent : elem;
             for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
                 writeNodeRecursively(doc, parentElement, child, lbi);
             }
-            if (elem!=null&&!pp.getChildrenUnmodifiable().isEmpty()) {
+            if (elem != null && !pp.getChildrenUnmodifiable().isEmpty()) {
                 elem.appendChild(doc.createTextNode(linebreak));
             }
         }
 
     }
-    
-        private void writeClipPathDefs(Document doc, Element defsNode, Node node) throws IOException {
-            // FIXME clip nodes can in turn have clips - we need to support recursive calls to defsNode!!!
-Node clip=            node.getClip();
-if (clip==null) return;
-        if (idFactory.getId(clip) == null) {
-                String id = idFactory.createId(clip, "clipPath");
-                Element elem = doc.createElement("clipPath");
-                defsNode.appendChild(doc.createTextNode("\n"));
-                writeNodeRecursively(doc,elem,clip,"\n");
-                elem.setAttribute("id", id);
-elem.appendChild(doc.createTextNode("\n"));
- defsNode.appendChild(elem);
-            }
-        }
+
     private void writePaintDefs(Document doc, Element defsNode, Paint paint) throws IOException {
         if (idFactory.getId(paint) == null) {
             if (paint instanceof LinearGradient) {
@@ -652,26 +666,33 @@ elem.appendChild(doc.createTextNode("\n"));
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
         StringBuilder buf = new StringBuilder();
+        char prev = '\0'; // previous command
         for (PathElement pe : node.getElements()) {
             if (buf.length() != 0) {
                 buf.append(' ');
             }
             if (pe instanceof MoveTo) {
                 MoveTo e = (MoveTo) pe;
-                buf.append('M')
-                        .append(nb.toString(e.getX()))
+                if (prev != 'M') {
+                    buf.append(prev = 'M');
+                }
+                buf.append(nb.toString(e.getX()))
                         .append(',')
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof LineTo) {
                 LineTo e = (LineTo) pe;
-                buf.append('L')
-                        .append(nb.toString(e.getX()))
+                if (prev != 'L') {
+                    buf.append(prev = 'L');
+                }
+                buf.append(nb.toString(e.getX()))
                         .append(',')
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof CubicCurveTo) {
                 CubicCurveTo e = (CubicCurveTo) pe;
-                buf.append('C')
-                        .append(nb.toString(e.getControlX1()))
+                if (prev != 'C') {
+                    buf.append(prev = 'C');
+                }
+                buf.append(nb.toString(e.getControlX1()))
                         .append(',')
                         .append(nb.toString(e.getControlY1()))
                         .append(',')
@@ -684,8 +705,10 @@ elem.appendChild(doc.createTextNode("\n"));
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof QuadCurveTo) {
                 QuadCurveTo e = (QuadCurveTo) pe;
-                buf.append('Q')
-                        .append(nb.toString(e.getControlX()))
+                if (prev != 'Q') {
+                    buf.append(prev = 'Q');
+                }
+                buf.append(nb.toString(e.getControlX()))
                         .append(',')
                         .append(nb.toString(e.getControlY()))
                         .append(',')
@@ -694,8 +717,10 @@ elem.appendChild(doc.createTextNode("\n"));
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof ArcTo) {
                 ArcTo e = (ArcTo) pe;
-                buf.append('A')
-                        .append(nb.toString(e.getRadiusX()))
+                if (prev != 'A') {
+                    buf.append(prev = 'A');
+                }
+                buf.append(nb.toString(e.getRadiusX()))
                         .append(',')
                         .append(nb.toString(e.getRadiusY()))
                         .append(',')
@@ -710,12 +735,20 @@ elem.appendChild(doc.createTextNode("\n"));
                         .append(nb.toString(e.getY()));
             } else if (pe instanceof HLineTo) {
                 HLineTo e = (HLineTo) pe;
-                buf.append('H').append(nb.toString(e.getX()));
+                if (prev != 'H') {
+                    buf.append(prev = 'H');
+                }
+                buf.append(nb.toString(e.getX()));
             } else if (pe instanceof VLineTo) {
                 VLineTo e = (VLineTo) pe;
-                buf.append('V').append(nb.toString(e.getY()));
+                if (prev != 'V') {
+                    buf.append(prev = 'V');
+                }
+                buf.append(nb.toString(e.getY()));
             } else if (pe instanceof ClosePath) {
-                buf.append('Z');
+                if (prev != 'Z') {
+                    buf.append(prev = 'Z');
+                }
             }
         }
         elem.setAttribute("d", buf.toString());

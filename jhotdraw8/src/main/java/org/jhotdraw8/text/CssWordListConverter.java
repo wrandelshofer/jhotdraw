@@ -7,9 +7,9 @@ package org.jhotdraw8.text;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import javafx.util.StringConverter;
+import java.util.Set;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.io.IdFactory;
 
@@ -25,7 +25,7 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
     @Override
     public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ArrayList<String> l = new ArrayList<>((int) v[0]);
+        Set<String> l = new LinkedHashSet<>((int) v[0]); // must be a set to ensure uniqueness of words
         for (int i = 0, n = (int) v[0]; i < n; i++) {
             l.add((String) v[i + 1]);
         }
