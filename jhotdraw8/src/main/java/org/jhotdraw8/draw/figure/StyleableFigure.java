@@ -42,7 +42,7 @@ public interface StyleableFigure extends Figure {
     public static ObservableWordListFigureKey STYLE_CLASS = new ObservableWordListFigureKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableObservableList.emptyList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
-     * are used for styling a figure with CSS.
+     * are used for styling a figure with CSS. The should not be made persistent.
      *
      * Default value: {@code null}.
      */

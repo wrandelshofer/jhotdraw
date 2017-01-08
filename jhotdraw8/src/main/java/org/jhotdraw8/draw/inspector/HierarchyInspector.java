@@ -230,7 +230,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             }
                             // show the computed  classes! 
                             if (figure != null) {
-                                setText(wordListConverter.toString(figure.getStyleClass()));
+                                setText(wordListConverter.toString(new ImmutableObservableList<>(figure.getStyleClass())));
                             }
                         }
                         if (isEditable) {

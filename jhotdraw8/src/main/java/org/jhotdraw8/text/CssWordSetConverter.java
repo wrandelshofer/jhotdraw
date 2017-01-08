@@ -12,11 +12,11 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import javafx.collections.FXCollections;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableObservableSet;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * WordListConverter converts an ImmutableObservableList of Strings into a
+ * WordSetConverter converts an ImmutableObservableSet of Strings into a
  * String.
  * <p>
  * The word list is actually a "set of space separated tokens", as specified in
@@ -37,7 +37,7 @@ import org.jhotdraw8.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssWordListConverter implements Converter<ImmutableObservableList<String>> {
+public class CssWordSetConverter implements Converter<ImmutableObservableSet<String>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ \n\r\t]+}", new CssConverterFactory());
 
@@ -46,7 +46,7 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
                     Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableSet<String> value) throws IOException {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];
@@ -60,18 +60,19 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
     }
 
     @Override
-    public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableObservableSet<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
         for (int i = 0, n = (int) v[0]; i < n; i++) {
             tokens.add((String) v[i + 1]);
         }
-        ImmutableObservableList<String> l = new ImmutableObservableList<>(tokens);
+        ImmutableObservableSet<String> l = new ImmutableObservableSet<>(tokens);
         return l;
     }
 
     @Override
-    public ImmutableObservableList<String> getDefaultValue() {
-        return ImmutableObservableList.emptyList();
+    public ImmutableObservableSet<String> getDefaultValue() {
+        return ImmutableObservableSet.emptySet();
     }
+
 }

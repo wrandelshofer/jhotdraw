@@ -11,12 +11,12 @@ import java.text.ParseException;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
-import javafx.collections.FXCollections;
-import org.jhotdraw8.collection.ImmutableObservableList;
+import javafx.css.PseudoClass;
+import org.jhotdraw8.collection.ImmutableObservableSet;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * WordListConverter converts an ImmutableObservableList of Strings into a
+ * WordSetConverter converts an ImmutableObservableSet of Strings into a
  * String.
  * <p>
  * The word list is actually a "set of space separated tokens", as specified in
@@ -37,42 +37,42 @@ import org.jhotdraw8.io.IdFactory;
  *
  * @author Werner Randelshofer
  */
-public class CssObservableWordListConverter implements Converter<ImmutableObservableList<String>> {
+public class CssPseudoClassConverter implements Converter<ImmutableObservableSet<PseudoClass>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ \n\r\t]+}", new CssConverterFactory());
 
-    public final static Comparator<String> NFD_COMPARATOR
-            = (o1, o2) -> Normalizer.normalize(o1, Normalizer.Form.NFD).compareTo(
-                    Normalizer.normalize(o2, Normalizer.Form.NFD));
+    public final static Comparator<PseudoClass> NFD_COMPARATOR
+            = (o1, o2) -> Normalizer.normalize(o1.getPseudoClassName(), Normalizer.Form.NFD).compareTo(
+                    Normalizer.normalize(o2.getPseudoClassName(), Normalizer.Form.NFD));
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
-        Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
+    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableSet<PseudoClass> value) throws IOException {
+        Set<PseudoClass> tokens = new TreeSet<>(NFD_COMPARATOR);
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];
         v[0] = value.size();
         int i = 1;
-        for (String token : tokens) {
-            v[i] = token;
+        for (PseudoClass token : tokens) {
+            v[i] = token.getPseudoClassName();
             i++;
         }
         formatter.toString(out, v);
     }
 
     @Override
-    public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableObservableSet<PseudoClass> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
+        Set<PseudoClass> tokens = new TreeSet<>(NFD_COMPARATOR);
         for (int i = 0, n = (int) v[0]; i < n; i++) {
-            tokens.add((String) v[i + 1]);
+            tokens.add(PseudoClass.getPseudoClass((String) v[i + 1]));
         }
-        ImmutableObservableList<String> l = new ImmutableObservableList<>(tokens);
+        ImmutableObservableSet<PseudoClass> l = new ImmutableObservableSet<>(tokens);
         return l;
     }
 
     @Override
-    public ImmutableObservableList<String> getDefaultValue() {
-        return ImmutableObservableList.emptyList();
+    public ImmutableObservableSet<PseudoClass> getDefaultValue() {
+        return ImmutableObservableSet.emptySet();
     }
 
 }
