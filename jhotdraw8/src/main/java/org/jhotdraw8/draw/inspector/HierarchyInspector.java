@@ -112,10 +112,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue().getValue(), StyleableFigure.ID) {
             @Override
             public String getValue() {
-                return  figure.getId();
+                return figure.getId();
             }
-                            
-                        }
+
+        }
         );
         visibleColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<Boolean>(model.getModel(),
@@ -128,12 +128,12 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         classesColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>(model.getModel(),
                         cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
-            @Override @SuppressWarnings("unchecked")
+            @Override
+            @SuppressWarnings("unchecked")
             public ImmutableObservableList<String> getValue() {
-                return new ImmutableObservableList(figure.getStyleClass());
+                return new ImmutableObservableList<>(figure.getStyleClass());
             }
-                            
-                        }
+        }
         );
 
         // This cell factory ensures that only styleable figures support editing of ids.
@@ -146,8 +146,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
                     @Override
                     public void cancelEdit() {
-                        super.cancelEdit(); 
-                        updateItem(getItem(),false);
+                        super.cancelEdit();
+                        updateItem(getItem(), false);
                     }
 
                     @Override
@@ -188,10 +188,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             @Override
             public TreeTableCell<Figure, ImmutableObservableList<String>> call(TreeTableColumn<Figure, ImmutableObservableList<String>> paramTableColumn) {
                 return new TextFieldTreeTableCell<Figure, ImmutableObservableList<String>>(new StringConverterAdapter<>(wordListConverter)) {
-                  @Override
+                    @Override
                     public void cancelEdit() {
-                        super.cancelEdit(); 
-                        updateItem(getItem(),false);
+                        super.cancelEdit();
+                        updateItem(getItem(), false);
                     }
 
                     @Override
@@ -222,8 +222,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
         });
 
-        OSXCollator collator=new OSXCollator();
-        final Comparator<String> comparator = (a,b)->collator.compare(a, b);
+        OSXCollator collator = new OSXCollator();
+        final Comparator<String> comparator = (a, b) -> collator.compare(a, b);
         typeColumn.setComparator(comparator);
         idColumn.setComparator(comparator);
         //classesColumn.setComparator(comparator);
@@ -242,13 +242,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     protected void onDrawingViewChanged(DrawingView oldValue, DrawingView newValue) {
         if (oldValue != null) {
             oldValue.getSelectedFigures().removeListener(viewSelectionHandler);
-            treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT,null);
+            treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, null);
         }
         drawingView = newValue;
         if (newValue != null) {
             model.setDrawingModel(newValue.getModel());
             newValue.getSelectedFigures().addListener(viewSelectionHandler);
-            treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT,drawingView);
+            treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, drawingView);
         } else {
             model.setDrawingModel(new SimpleDrawingModel());
         }
