@@ -6,11 +6,16 @@ package org.jhotdraw8.draw.inspector;
 
 import java.util.Collections;
 import java.util.Set;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.model.DrawingModelEvent;
+import org.jhotdraw8.event.Listener;
 
 /**
  * AbstractSelectionInspector.
@@ -24,6 +29,10 @@ public abstract class AbstractSelectionInspector implements Inspector {
     private final SetChangeListener<Figure> selectionListener = change -> {
         handleSelectionChanged(drawingView == null ? FXCollections.emptyObservableSet() : drawingView.getSelectedFigures());
     };
+
+    protected DrawingModel getDrawingModel() {
+        return drawingView.getModel();
+    }
 
     @Override
     public void setDrawingView(DrawingView newValue) {
@@ -40,10 +49,6 @@ public abstract class AbstractSelectionInspector implements Inspector {
 
     protected Set<Figure> getSelectedFigures() {
         return drawingView == null ? Collections.emptySet() : drawingView.getSelectedFigures();
-    }
-
-    protected DrawingModel getDrawingModel() {
-        return drawingView.getModel();
     }
 
     /**

@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Supplier;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,8 +26,12 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.model.DrawingModelEvent;
+import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.CssObservableWordListConverter;
 
@@ -36,21 +42,38 @@ import org.jhotdraw8.text.CssObservableWordListConverter;
  */
 public class StyleClassesInspector extends AbstractSelectionInspector {
 
-    private Node node;
-    @FXML
-    private ListView<StyleClassItem> listView;
     @FXML
     private Button addButton;
+    private final Listener<DrawingModelEvent> drawingModelEventListener = change -> {
+        if (change.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED) {
+            if ((Key<?>) change.getKey() == StyleableFigure.STYLE_CLASS) {
+                if (drawingView != null && drawingView.getSelectedFigures().contains(change.getFigure())) {
+                    updateListLater();
+                }
+            }
+        }
+    };
+    private Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
+    @FXML
+    private ListView<StyleClassItem> listView;
+    private final ChangeListener<DrawingModel> modelListener = (o, oldv, newv) -> {
+        if (oldv != null) {
+            oldv.removeDrawingModelListener(drawingModelEventListener);
+        }
+        if (newv != null) {
+            newv.addDrawingModelListener(drawingModelEventListener);
+        }
+    };
+    private Node node;
 
     @FXML
     private Button removeButton;
-    @FXML
-    private TextField textField;
-
-    private Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
 
     @SuppressWarnings("unchecked")
     private Key<Collection<String>> tagsKey = (Key<Collection<String>>) (Key<?>) StyleableFigure.STYLE_CLASS;
+    @FXML
+    private TextField textField;
+    private boolean willUpdateList;
 
     public StyleClassesInspector() {
         this(StyleClassesInspector.class.getResource("StyleClassesInspector.fxml"));
@@ -58,6 +81,57 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     public StyleClassesInspector(URL fxmlUrl) {
         init(fxmlUrl);
+    }
+
+    public void addTag(String wordList) {
+        for (String tagName : wordList.split(" ")) {
+            if (tagName != null && !tagName.trim().isEmpty()) {
+                tagName = tagName.trim();
+                for (Figure f : getSelectedFigures()) {
+                    @SuppressWarnings("unchecked")
+                    Collection<String> tags = f.get(tagsKey);
+                    Collection<String> newTags = listFactory.get();
+                    boolean contains = false;
+                    for (String t : tags) {
+                        if (tagName.equals(t)) {
+                            contains = true;
+                        }
+                        newTags.add(t);
+                    }
+                    if (!contains) {
+                        newTags.add(tagName);
+                        getDrawingModel().set(f, tagsKey, new ImmutableObservableList<>(newTags));
+                    }
+                }
+                updateList();
+            }
+        }
+    }
+
+    @Override
+    public void setDrawingView(DrawingView newValue) {
+        DrawingView oldValue = drawingView;
+        super.setDrawingView(newValue);
+        if (oldValue != null) {
+            oldValue.modelProperty().removeListener(modelListener);
+            modelListener.changed(oldValue.modelProperty(), oldValue.getModel(), null);
+        }
+        this.drawingView = newValue;
+        if (newValue != null) {
+            newValue.modelProperty().removeListener(modelListener);
+            modelListener.changed(newValue.modelProperty(), null, newValue.getModel());
+        }
+        handleDrawingViewChanged(oldValue, newValue);
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    @Override
+    protected void handleSelectionChanged(Set<Figure> newValue) {
+        updateList();
     }
 
     private void init(URL fxmlUrl) {
@@ -91,9 +165,29 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         });
     }
 
-    @Override
-    protected void handleSelectionChanged(Set<Figure> newValue) {
-        updateList();
+    public void removeTag(String wordList) {
+        for (String tagName : wordList.split(" ")) {
+            if (tagName != null && !tagName.trim().isEmpty()) {
+                tagName = tagName.trim();
+                for (Figure f : getSelectedFigures()) {
+                    @SuppressWarnings("unchecked")
+                    Collection<String> tags = f.get(tagsKey);
+                    Collection<String> newTags = listFactory.get();
+                    boolean contains = false;
+                    for (String t : tags) {
+                        if (tagName.equals(t)) {
+                            contains = true;
+                        } else {
+                            newTags.add(t);
+                        }
+                    }
+                    if (contains) {
+                        getDrawingModel().set(f, tagsKey, new ImmutableObservableList<>(newTags));
+                    }
+                }
+                updateList();
+            }
+        }
     }
 
     protected void updateList() {
@@ -121,58 +215,16 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         }
     }
 
-    @Override
-    public Node getNode() {
-        return node;
-    }
-
-    public void addTag(String wordList) {
-        for (String tagName : wordList.split(" ")) {
-            if (tagName != null && !tagName.trim().isEmpty()) {
-                tagName = tagName.trim();
-                for (Figure f : getSelectedFigures()) {
-                    @SuppressWarnings("unchecked")
-                    Collection<String> tags = f.get(tagsKey);
-                    Collection<String> newTags = listFactory.get();
-                    boolean contains = false;
-                    for (String t : tags) {
-                        if (tagName.equals(t)) {
-                            contains = true;
-                        }
-                        newTags.add(t);
-                    }
-                    if (!contains) {
-                        newTags.add(tagName);
-                        getDrawingModel().set(f, tagsKey, new ImmutableObservableList<>(newTags));
-                    }
-                }
-                updateList();
-            }
+    protected void updateListLater() {
+        if (!willUpdateList) {
+            willUpdateList = true;
+            Platform.runLater(this::updateListNow);
         }
     }
 
-    public void removeTag(String wordList) {
-        for (String tagName : wordList.split(" ")) {
-            if (tagName != null && !tagName.trim().isEmpty()) {
-                tagName = tagName.trim();
-                for (Figure f : getSelectedFigures()) {
-                    @SuppressWarnings("unchecked")
-                    Collection<String> tags = f.get(tagsKey);
-                    Collection<String> newTags = listFactory.get();
-                    boolean contains = false;
-                    for (String t : tags) {
-                        if (tagName.equals(t)) {
-                            contains = true;
-                        } else {
-                            newTags.add(t);
-                        }
-                    }
-                    if (contains) {
-                        getDrawingModel().set(f, tagsKey, new ImmutableObservableList<>(newTags));
-                    }
-                }
-                updateList();
-            }
-        }
+    protected void updateListNow() {
+        willUpdateList = false;
+        updateList();
     }
+
 }
