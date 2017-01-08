@@ -252,9 +252,9 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 () -> createFigure(() -> new PageLabelFigure(0, 0,
                         labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
                         FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
-                layerFactory), 7, 1);
+                layerFactory), 9, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
-        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 5, 0);
+        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             PageFigure pf = new PageFigure();
             pf.set(PageFigure.PAPER_SIZE, new CssSize2D(29.7, 21.0, "cm"));
@@ -264,7 +264,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                     FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null);
             pf.add(pl);
             return pf;
-        }), layerFactory), 6, 0);
+        }), layerFactory), 8, 1);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
