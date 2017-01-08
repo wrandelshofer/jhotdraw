@@ -9,7 +9,6 @@
   <Rectangle bounds="70 4 14 14" fill="linear-gradient(lightgray, white)" id="rectangle2" stroke="none" stroke-type="inside" stroke-width="2"/>
   <Rectangle bounds="26 4 14 14" id="rectangle1" stroke-type="inside" stroke-width="2"/>
   <Ellipse center="79.75 8.25" id="ellipse1" radius="1.75 1.75" stroke-type="inside"/>
-  <Line end="25 73" id="line5" start="29 73" stroke="grey" stroke-linecap="square" stroke-width="2"/>
   <Line end="39 39" id="line6" start="27 27" stroke-linecap="square" stroke-width="2"/>
   <Rectangle bounds="25 25 4 4" id="rectangle3" stroke="grey" stroke-type="inside"/>
   <Polyline fill="none" id="polyline1" points="54 25, 48 28, 53 38, 60 39, 62 29, 57 31" stroke-linecap="square" stroke-width="2"/>
@@ -19,23 +18,26 @@
   <Polygon id="polygon2" points="5 47, 13 47, 17 51.266666666666666, 17 63, 5 63" stroke="darkcyan" stroke-type="inside" stroke-width="2"/>
   <Polyline id="polyline3" points="12.5 48, 12.5 52, 16.5 52" stroke="darkcyan"/>
   <Label fill="none" font="normal normal 19 &quot;Futura Medium&quot;" id="label1" origin="25 63" stroke="none">A</Label>
-  <Line end="62.5 63" id="line7" start="62.5 48"/>
-  <Polygon fill="black" id="polygon4" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="-45 22"/>
+  <Line end="62.5 63" id="line7" start="62.5 48" stroke="darkcyan"/>
+  <Polygon fill="black" id="polygon4" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="3 21"/>
   <Line end="17 39" id="line9" start="5 27" stroke-linecap="square" stroke-width="2"/>
-  <Line end="31 68" id="line8" start="31 71" stroke="grey" stroke-linecap="square" stroke-width="2"/>
-  <Rectangle bounds="29 71 4 4" id="rectangle5" stroke="grey" stroke-type="inside"/>
-  <Polygon fill="black" id="polygon3" points="76.75 50, 80.5 58.5, 78 58, 78 62, 75.5 62, 75.5 58, 73 58.5" rotate="337.5" stroke="white" translate="-41.5 23"/>
-  <Group id="group1" rotate="28.125" translate="-23 0">
-    <Ellipse center="76 71" id="ellipse3" radius="2 2" stroke="grey"/>
-    <Rectangle bounds="71 75 10 8" fill="grey" id="rectangle8" stroke="grey" stroke-type="inside" stroke-width="2"/>
-    <Line end="76 73" id="line10" start="76 75" stroke="grey"/>
-  </Group>
-  <Polygon fill="black" id="polygon5" points="76.75 50, 80.5 58.5, 78 58, 78 62, 75.5 62, 75.5 58, 73 58.5" rotate="337.5" stroke="white" translate="-18.5 23"/>
-  <Label fill="none" font="normal normal 12 &quot;Futura Medium&quot;" id="label2" origin="45 60" stroke="none">${}</Label>
+  <Polygon fill="black" id="polygon5" points="76.75 50, 80.5 58.5, 78 58, 78 62, 75.5 62, 75.5 58, 73 58.5" rotate="337.5" stroke="white" translate="3.5 22"/>
+  <Label fill="none" font="normal normal 19 &quot;Futura Medium&quot;" id="label2" origin="49 63" stroke="none" textFill="darkcyan">#</Label>
   <Line end="40.5 63" id="line11" start="40.5 48"/>
   <Rectangle bounds="37 37 4 4" id="rectangle7" stroke="grey" stroke-type="inside"/>
+  <Polygon fill="black" id="polygon6" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="-45 22"/>
+  <Group id="group1" rotate="45" translate="0 2">
+    <Line end="49.5 72" id="line10" start="49.5 76" stroke="grey" stroke-width="2"/>
+    <Ellipse center="49.5 69.5" id="ellipse3" radius="2.5 2.5"/>
+  </Group>
+  <Polygon fill="black" id="polygon7" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="-19 22"/>
+  <Group id="group2">
+    <Line end="24 74" id="line5" start="28 74" stroke="grey" stroke-linecap="square" stroke-width="2"/>
+    <Line end="29 69" id="line8" start="29 72" stroke="grey" stroke-linecap="square" stroke-width="2"/>
+    <Rectangle bounds="26 71 5 5" id="rectangle5" stroke-type="inside"/>
+  </Group>
 </Layer>
-<Layer id="slices">
+<Layer id="slices" locked="true" visible="false">
   <Slice bounds="0 0 22 22" id="createSlice"/>
   <Slice bounds="22 0 22 22" id="createRectangle"/>
   <Slice bounds="44 0 22 22" id="createEllipse"/>
@@ -51,7 +53,7 @@
   <Slice bounds="44 66 22 22" id="transformationTool"/>
   <Slice bounds="44 44 22 22" id="createPageLabel"/>
 </Layer>
-<Layer id="pages">
+<Layer id="pages" locked="true" visible="false">
   <Page bounds="0 0 88 88" id="page1" num-pages="4 4" paper-size="40cm 40cm"/>
 </Layer>
 </Drawing>
