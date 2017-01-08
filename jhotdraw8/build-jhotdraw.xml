@@ -212,7 +212,7 @@
       <factory name="net.sf.saxon.TransformerFactoryImpl"/>      
     </xslt>
   </target>
-  <target name="do-docbook" depends="do-docbook.unzip-docbook,do-docbook.asciidoctor,do-docbook.validate,do-docbook.transform.xsltproc" description="generates specification and user documentation">
+  <target name="do-docbook" depends="do-docbook.compile,do-docbook.unzip-docbook,do-docbook.asciidoctor,do-docbook.validate,do-docbook.transform.xsltproc" description="generates specification and user documentation">
   </target>
       
   <target name="do-docbook.compile" depends="init">
