@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.inspector;
 import com.sun.javafx.scene.DirtyBits;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,7 +47,6 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.CssIdentConverter;
-import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.StyleRule;
@@ -254,7 +254,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             for (Parent p = textArea; p != null; p = p.getParent()) {
                 m.invoke(p, DirtyBits.NODE_CONTENTS);
             }
-        } catch (Exception e) {
+        } catch (NoSuchMethodException|IllegalAccessException|IllegalAccessError|InvocationTargetException e) {
             System.out.println("StylesAttributesInspector e:" + e);
         }
 
