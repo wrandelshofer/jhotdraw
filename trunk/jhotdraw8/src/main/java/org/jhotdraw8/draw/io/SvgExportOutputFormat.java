@@ -4,12 +4,9 @@
  */
 package org.jhotdraw8.draw.io;
 
-import java.io.BufferedOutputStream;
 import org.jhotdraw8.svg.*;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.util.Collection;
@@ -17,10 +14,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.geometry.Bounds;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.DataFormat;
 import javafx.scene.transform.Transform;
 import javax.xml.transform.Transformer;
@@ -135,6 +130,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
         SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, null);
+        exporter.setSkipInvisibleNodes(false);
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
         return doc;
