@@ -65,6 +65,10 @@ private final String helpText;
                 case ' ':
                     out.append(ch);
                     break;
+                case '\\':
+                    out.append('\\');
+                    out.append('\\');
+                    break;
                 case '\n':
                     out.append('\\');
                     out.append('\n');

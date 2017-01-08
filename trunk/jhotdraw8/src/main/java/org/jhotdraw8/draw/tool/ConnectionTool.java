@@ -17,6 +17,7 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.figure.AbstractLineConnectionFigure;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -29,7 +30,7 @@ import org.jhotdraw8.util.ReversedList;
  */
 public class ConnectionTool extends AbstractTool {
 
-    private Supplier<LineConnectionFigure> figureFactory;
+    private Supplier<AbstractLineConnectionFigure> figureFactory;
     private Supplier<Layer> layerFactory;
 
     /**
@@ -42,18 +43,18 @@ public class ConnectionTool extends AbstractTool {
      */
     private double minSize = 2;
 
-    public ConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> figureFactory) {
+    public ConnectionTool(String name, Resources rsrc, Supplier<AbstractLineConnectionFigure> figureFactory) {
         this(name, rsrc, figureFactory, SimpleLayer::new);
     }
 
-    public ConnectionTool(String name, Resources rsrc, Supplier<LineConnectionFigure> figureFactory,
+    public ConnectionTool(String name, Resources rsrc, Supplier<AbstractLineConnectionFigure> figureFactory,
             Supplier<Layer> layerFactory) {
         super(name, rsrc);
         this.figureFactory = figureFactory;
         this.layerFactory = layerFactory;
     }
 
-    public void setFactory(Supplier<LineConnectionFigure> factory) {
+    public void setFactory(Supplier<AbstractLineConnectionFigure> factory) {
         this.figureFactory = factory;
     }
 
