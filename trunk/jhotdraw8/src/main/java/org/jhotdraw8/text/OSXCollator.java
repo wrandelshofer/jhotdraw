@@ -86,6 +86,8 @@ public class OSXCollator extends Collator {
     }
     
     public int compare(String source, String target) {
+        if (source==null) return target==null?0:1;
+        if (target==null) return source==null?0:-1;
         return collator.compare(expandNumbers(source), expandNumbers(target));
     }
     
