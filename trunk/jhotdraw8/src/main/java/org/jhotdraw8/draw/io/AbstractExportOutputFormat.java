@@ -18,7 +18,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
-
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -174,11 +173,13 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
             }
         }
         writeSlices(dir, drawing, slices, "", slicesDpi);
-        if (exportSlices2x) {
-            writeSlices(dir, drawing, slices, "@2x", 2 * slicesDpi);
-        }
-        if (exportSlices3x) {
-            writeSlices(dir, drawing, slices, "@3x", 3 * slicesDpi);
+        if (!isResolutionIndependent()) {
+            if (exportSlices2x) {
+                writeSlices(dir, drawing, slices, "@2x", 2 * slicesDpi);
+            }
+            if (exportSlices3x) {
+                writeSlices(dir, drawing, slices, "@3x", 3 * slicesDpi);
+            }
         }
     }
 
@@ -208,4 +209,6 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
             writeSlice(filename, slice, node, dpi);
         }
     }
+
+    protected abstract boolean isResolutionIndependent();
 }

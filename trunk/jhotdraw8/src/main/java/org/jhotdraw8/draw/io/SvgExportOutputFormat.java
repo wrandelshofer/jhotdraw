@@ -106,6 +106,11 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         internalHome = uri;
     }
 
+    @Override
+    protected boolean isResolutionIndependent() {
+        return true;
+    }
+
     private void markNodesOutsideBoundsWithSkip(Node node, Bounds sceneBounds) {
         boolean intersects = node.intersects(node.sceneToLocal(sceneBounds));
         if (intersects) {
@@ -162,24 +167,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
 
-        
         SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
         markNodesOutsideBoundsWithSkip(node, page.getPageBounds(internalPageNumber));
-        Document doc = exporter.toDocument(node);
-        writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
-        node.getTransforms().clear();
-        write(file, doc);
-    }
-    protected void writePageOLD(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
-        markNodesOutsideBoundsWithSkip(node, page.getPageBounds(internalPageNumber));
-        
-        Transform worldToLocal = page.getWorldToLocal();
-        if (worldToLocal == null) {
-            node.getTransforms().clear();
-        } else {
-            node.getTransforms().setAll(worldToLocal);
-        }
         Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
@@ -195,6 +184,22 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         docElement.setAttribute("viewBox", nb.
                 toString(pb.getMinX()) + " " + nb.toString(pb.getMinY())
                 + " " + nb.toString(pb.getWidth()) + " " + nb.toString(pb.getHeight()));
+    }
+
+    protected void writePageOLD(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
+        markNodesOutsideBoundsWithSkip(node, page.getPageBounds(internalPageNumber));
+
+        Transform worldToLocal = page.getWorldToLocal();
+        if (worldToLocal == null) {
+            node.getTransforms().clear();
+        } else {
+            node.getTransforms().setAll(worldToLocal);
+        }
+        Document doc = exporter.toDocument(node);
+        writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
+        node.getTransforms().clear();
+        write(file, doc);
     }
 
     @Override
