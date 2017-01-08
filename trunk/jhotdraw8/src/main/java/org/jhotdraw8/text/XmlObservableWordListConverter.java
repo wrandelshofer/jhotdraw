@@ -9,6 +9,6 @@ package org.jhotdraw8.text;
  *
  * @author Werner Randelshofer
  */
-public class XmlObservableWordListConverter extends CssObservableWordListConverter {
+public class XmlObservableWordListConverter extends CssWordListConverter {
 
 }

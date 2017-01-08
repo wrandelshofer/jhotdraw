@@ -48,10 +48,11 @@ import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.XmlConnectorConverter;
 import org.jhotdraw8.text.DefaultConverter;
 import org.jhotdraw8.text.XmlPoint2DConverter;
-import org.jhotdraw8.text.CssObservableWordListConverter;
 import org.jhotdraw8.text.CssDoubleListConverter;
 import org.jhotdraw8.text.CssFont;
+import org.jhotdraw8.text.CssWordListConverter;
 import org.jhotdraw8.text.CssPoint2DListConverter;
+import org.jhotdraw8.text.CssPseudoClassConverter;
 import org.jhotdraw8.text.CssSize;
 import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSize2DConverter;
@@ -85,14 +86,14 @@ import org.jhotdraw8.text.XmlTransformListConverter;
 public class DefaultFigureFactory extends SimpleFigureFactory {
 
     public DefaultFigureFactory(IdFactory idFactory) {
-        addFigureKeysAndNames("Layer", SimpleLayer.class, Figure.getDeclaredAndInheritedKeys(SimpleLayer.class));
-        addFigureKeysAndNames("Clipping", SimpleClipping.class, Figure.getDeclaredAndInheritedKeys(SimpleClipping.class));
-        addFigureKeysAndNames("Rectangle", RectangleFigure.class, Figure.getDeclaredAndInheritedKeys(RectangleFigure.class));
-        addFigureKeysAndNames("Slice", SliceFigure.class, Figure.getDeclaredAndInheritedKeys(SliceFigure.class));
-        addFigureKeysAndNames("Group", GroupFigure.class, Figure.getDeclaredAndInheritedKeys(GroupFigure.class));
-        addFigureKeysAndNames("Polyline", PolylineFigure.class, Figure.getDeclaredAndInheritedKeys(PolylineFigure.class));
-        addFigureKeysAndNames("Polygon", PolygonFigure.class, Figure.getDeclaredAndInheritedKeys(PolygonFigure.class));
-        addFigureKeysAndNames("Page", PageFigure.class, Figure.getDeclaredAndInheritedKeys(PageFigure.class));
+        addFigureKeysAndNames("Layer", SimpleLayer.class);
+        addFigureKeysAndNames("Clipping", SimpleClipping.class);
+        addFigureKeysAndNames("Rectangle", RectangleFigure.class);
+        addFigureKeysAndNames("Slice", SliceFigure.class);
+        addFigureKeysAndNames("Group", GroupFigure.class);
+        addFigureKeysAndNames("Polyline", PolylineFigure.class);
+        addFigureKeysAndNames("Polygon", PolygonFigure.class);
+        addFigureKeysAndNames("Page", PageFigure.class);
 
         {
             Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class);
@@ -123,10 +124,10 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
             addFigureKeysAndNames("PageLabel", PageLabelFigure.class, keys);
         }
 
-        addFigureKeysAndNames("Line", LineFigure.class, Figure.getDeclaredAndInheritedKeys(LineFigure.class));
-        addFigureKeysAndNames("Ellipse", EllipseFigure.class, Figure.getDeclaredAndInheritedKeys(EllipseFigure.class));
-        addFigureKeysAndNames("LineConnection", LineConnectionFigure.class, Figure.getDeclaredAndInheritedKeys(LineConnectionFigure.class));
-        addFigureKeysAndNames("Image", ImageFigure.class, Figure.getDeclaredAndInheritedKeys(ImageFigure.class));
+        addFigureKeysAndNames("Line", LineFigure.class);
+        addFigureKeysAndNames("Ellipse", EllipseFigure.class);
+        addFigureKeysAndNames("LineConnection", LineConnectionFigure.class);
+        addFigureKeysAndNames("Image", ImageFigure.class);
 
         addConverterForType(String.class, new DefaultConverter());
         addConverterForType(Point2D.class, new XmlPoint2DConverter());
@@ -151,8 +152,8 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(CssSize.class, new CssSizeConverter());
         addConverterForType(CssSizeInsets.class, new CssSizeInsetsConverter());
         addConverterForType(CssSize2D.class, new CssSize2DConverter());
-
-        addConverter(StyleableFigure.STYLE_CLASS, new CssObservableWordListConverter());
+        
+       addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssDoubleListConverter());
         addConverter(StrokeableFigure.STROKE_LINE_CAP, new XmlEnumConverter<StrokeLineCap>(StrokeLineCap.class));
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));

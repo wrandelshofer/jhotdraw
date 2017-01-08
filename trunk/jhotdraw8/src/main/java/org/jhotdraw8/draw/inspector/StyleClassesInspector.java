@@ -33,7 +33,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.CssObservableWordListConverter;
+import org.jhotdraw8.text.CssWordListConverter;
 
 /**
  * FXML Controller class
@@ -192,7 +192,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     protected void updateList() {
         Set<Figure> newValue = getSelectedFigures();
-        Set<String> union = new TreeSet<>(CssObservableWordListConverter.NFD_COMPARATOR);
+        Set<String> union = new TreeSet<>(CssWordListConverter.NFD_COMPARATOR);
         Set<String> intersection = new HashSet<>();
 
         boolean first = true;
