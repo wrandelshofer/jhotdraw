@@ -1003,15 +1003,16 @@ public class SvgExporter {
         }
         if (shape.getStrokeType() != StrokeType.CENTERED) {
             // XXX this is currentl only a proposal for SVG 2 
+            //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (shape.getStrokeType()) {
                 case INSIDE:
-                    elem.setAttribute("stroke-position", "inside");
+                    elem.setAttribute("stroke-alignment", "inner");
                     break;
                 case CENTERED:
-                    elem.setAttribute("stroke-position", "middle");
+                    elem.setAttribute("stroke-alignment", "center");
                     break;
                 case OUTSIDE:
-                    elem.setAttribute("stroke-position", "outside");
+                    elem.setAttribute("stroke-alignment", "outer");
                     break;
                 default:
                     throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
@@ -1044,16 +1045,17 @@ public class SvgExporter {
             elem.setAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
         }
         if (style.getType() != StrokeType.CENTERED) {
-            // XXX this is currentl only a proposal for SVG 2 
+            // XXX this is currently only a proposal for SVG 2 
+            //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (style.getType()) {
                 case INSIDE:
-                    elem.setAttribute("stroke-position", "inside");
+                    elem.setAttribute("stroke-alignment", "inner");
                     break;
                 case CENTERED:
-                    elem.setAttribute("stroke-position", "middle");
+                    elem.setAttribute("stroke-alignment", "center");
                     break;
                 case OUTSIDE:
-                    elem.setAttribute("stroke-position", "outside");
+                    elem.setAttribute("stroke-alignment", "outer");
                     break;
                 default:
                     throw new InternalError("Unsupported stroke type " + style.getType());
