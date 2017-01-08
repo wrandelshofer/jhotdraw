@@ -40,10 +40,10 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
                         if (super.get() != valueAdded) {
                             set(valueAdded);
                         }
-                    }
-                } else if (change.wasRemoved()) {// was removed but not added
-                    if (super.get() != null) {
-                        set(null);
+                    } else if (change.wasRemoved()) {// was removed but not added
+                        if (super.get() != null) {
+                            set(null);
+                        }
                     }
                 }
             };
