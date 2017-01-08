@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -114,7 +115,6 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             public String getValue() {
                 return figure.getId();
             }
-
         }
         );
         visibleColumn.setCellValueFactory(
@@ -174,24 +174,47 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             setEditable(false);
                             this.setStyle("-fx-text-fill: grey");
                         }
-
                     }
-
                 };
             }
 
         });
         // This cell factory ensures that only styleable figures support editing of style classes.
-        // And it ensures, that the users sees the computed classes, and not the onesthat he entered. 
+        // And it ensures, that the users sees the computed style classes, and not the ones that he entered. 
+        // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
         classesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableList<String>>, TreeTableCell<Figure, ImmutableObservableList<String>>>() {
 
             @Override
             public TreeTableCell<Figure, ImmutableObservableList<String>> call(TreeTableColumn<Figure, ImmutableObservableList<String>> paramTableColumn) {
-                return new TextFieldTreeTableCell<Figure, ImmutableObservableList<String>>(new StringConverterAdapter<>(wordListConverter)) {
+                return new TextFieldTreeTableCell<Figure, ImmutableObservableList<String>>() {
+                    {
+                        setConverter(new StringConverterAdapter<>(wordListConverter));
+                    }
+
+                    private Set<String> syntheticClasses = new HashSet<>();
+
                     @Override
                     public void cancelEdit() {
                         super.cancelEdit();
                         updateItem(getItem(), false);
+                        syntheticClasses.clear();
+                    }
+
+                    @Override
+                    public void commitEdit(ImmutableObservableList<String> newValue) {
+                        LinkedHashSet<String> newValueSet = new LinkedHashSet<>(newValue);
+                        newValueSet.removeAll(syntheticClasses);
+                        super.commitEdit(new ImmutableObservableList<>(newValueSet));
+                    }
+
+                    @Override
+                    public void startEdit() {
+                        Figure figure = getTreeTableRow().getItem();
+                        figure.get(StyleableFigure.STYLE_CLASS);
+                        syntheticClasses.clear();
+                        syntheticClasses.addAll(figure.getStyleClass());
+                        syntheticClasses.removeAll(figure.get(StyleableFigure.STYLE_CLASS));
+                        super.startEdit();
                     }
 
                     @Override
@@ -200,14 +223,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         TreeTableRow<Figure> row = getTreeTableRow();
                         boolean isEditable = false;
                         if (row != null) {
-                            Figure item = row.getItem();
+                            Figure figure = row.getItem();
                             //Test for disable condition
-                            if (item != null && item.isSupportedKey(StyleableFigure.STYLE_CLASS)) {
+                            if (figure != null && figure.isSupportedKey(StyleableFigure.STYLE_CLASS)) {
                                 isEditable = true;
                             }
                             // show the computed  classes! 
-                            if (item != null) {
-                                setText(wordListConverter.toString(item.getStyleClass()));
+                            if (figure != null) {
+                                setText(wordListConverter.toString(figure.getStyleClass()));
                             }
                         }
                         if (isEditable) {
