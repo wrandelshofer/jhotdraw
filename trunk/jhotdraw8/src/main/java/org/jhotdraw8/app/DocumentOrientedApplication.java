@@ -394,7 +394,11 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
+        try {
+            isSystemMenuSupported = Toolkit.getToolkit().getSystemMenu().isSupported();
+        } catch (IllegalAccessError e) {
+            System.err.println("Warning: can not access com.sun.javafx.tk.Toolkit");
+        }
         actionMap = model.createApplicationActionMap(this);
         loadRecentUris(model.getName());
         if (isSystemMenuSupported) {
