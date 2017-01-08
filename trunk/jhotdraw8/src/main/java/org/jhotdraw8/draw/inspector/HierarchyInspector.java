@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.inspector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -39,6 +40,7 @@ import org.jhotdraw8.draw.model.FigureTreePresentationModel;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
 import org.jhotdraw8.text.CssWordListConverter;
+import org.jhotdraw8.text.OSXCollator;
 import org.jhotdraw8.text.StringConverterAdapter;
 
 /**
@@ -220,6 +222,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
         });
 
+        OSXCollator collator=new OSXCollator();
+        final Comparator<String> comparator = (a,b)->collator.compare(a, b);
+        typeColumn.setComparator(comparator);
+        idColumn.setComparator(comparator);
+        //classesColumn.setComparator(comparator);
 
         visibleColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
         lockedColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
