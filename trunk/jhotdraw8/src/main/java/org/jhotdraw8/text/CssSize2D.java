@@ -18,6 +18,10 @@ public class CssSize2D {
     private final CssSize x;
     private final CssSize y;
 
+    public CssSize2D(double x, double y, String units) {
+        this(new CssSize(x, units), new CssSize(y, units));
+    }
+
     public CssSize2D(CssSize x, CssSize y) {
         this.x = x;
         this.y = y;
