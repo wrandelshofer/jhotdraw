@@ -43,7 +43,6 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.Actions;
