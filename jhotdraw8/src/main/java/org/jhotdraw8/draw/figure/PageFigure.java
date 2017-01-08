@@ -61,8 +61,8 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Group, 
     public final static SizeStyleableFigureKey PAGE_OVERLAP_X = new SizeStyleableFigureKey("page-overlap-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     public final static SizeStyleableFigureKey PAGE_OVERLAP_Y = new SizeStyleableFigureKey("page-overlap-y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     public final static Size2DStyleableMapAccessor PAGE_OVERLAP = new Size2DStyleableMapAccessor("page-overlap", PAGE_OVERLAP_X, PAGE_OVERLAP_Y);
-    public final static SizeStyleableFigureKey PAPER_HEIGHT = new SizeStyleableFigureKey("paper-size-height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(210.0, "mm"));
-    public final static SizeStyleableFigureKey PAPER_WIDTH = new SizeStyleableFigureKey("paper-size-width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(297.0, "mm"));
+    public final static SizeStyleableFigureKey PAPER_HEIGHT = new SizeStyleableFigureKey("paper-size-height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(297.0, "mm"));
+    public final static SizeStyleableFigureKey PAPER_WIDTH = new SizeStyleableFigureKey("paper-size-width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(210.0, "mm"));
     public final static PaperSizeStyleableMapAccessor PAPER_SIZE = new PaperSizeStyleableMapAccessor("paper-size", PAPER_WIDTH, PAPER_HEIGHT);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.

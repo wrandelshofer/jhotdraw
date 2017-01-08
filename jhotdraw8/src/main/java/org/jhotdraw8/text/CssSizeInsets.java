@@ -2,7 +2,6 @@
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.text;
 
 import java.util.Objects;
@@ -15,10 +14,11 @@ import javafx.geometry.Insets;
  * @version $$Id$$
  */
 public class CssSizeInsets {
-private final CssSize top;
-private final CssSize right;
-private final CssSize bottom;
-private final CssSize left;
+
+    private final CssSize top;
+    private final CssSize right;
+    private final CssSize bottom;
+    private final CssSize left;
 
     public CssSizeInsets(CssSize top, CssSize right, CssSize bottom, CssSize left) {
         this.top = top;
@@ -27,8 +27,12 @@ private final CssSize left;
         this.left = left;
     }
 
-    CssSizeInsets() {
-       this(CssSize.ZERO,CssSize.ZERO, CssSize.ZERO,CssSize.ZERO);
+    public CssSizeInsets(double top, double right, double bottom, double left, String units) {
+        this(new CssSize(top, units), new CssSize(right, units), new CssSize(bottom, units), new CssSize(left, units));
+    }
+
+    public CssSizeInsets() {
+        this(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ZERO);
     }
 
     @Override
@@ -84,9 +88,8 @@ private final CssSize left;
         return hash;
     }
 
-    
     public Insets getDefaultConvertedValue() {
-        return new Insets(top.getConvertedValue(),right.getConvertedValue(),
-        bottom.getConvertedValue(),left.getConvertedValue());
+        return new Insets(top.getConvertedValue(), right.getConvertedValue(),
+                bottom.getConvertedValue(), left.getConvertedValue());
     }
 }

@@ -70,7 +70,7 @@ public class ToolsToolbar extends GridPane {
         setDrawingEditor(editor);
     }
 
-    public void addTool(Tool tool, int gridx, int gridy) {
+    public ToggleButton addTool(Tool tool, int gridx, int gridy) {
         ToggleButton button = new ToggleButton();
         if (tool.get(Tool.LARGE_ICON_KEY) != null) {
             button.setGraphic(tool.get(Tool.LARGE_ICON_KEY));
@@ -87,6 +87,7 @@ public class ToolsToolbar extends GridPane {
         }
         group.getToggles().add(button);
         add(button, gridx, gridy);
+        return button;
     }
 
     public ObjectProperty<DrawingEditor> drawingEditor() {
