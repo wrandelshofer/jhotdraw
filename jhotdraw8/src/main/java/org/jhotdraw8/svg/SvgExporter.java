@@ -674,7 +674,8 @@ public class SvgExporter {
             if (pe instanceof MoveTo) {
                 MoveTo e = (MoveTo) pe;
                 if (prev != 'M') {
-                    buf.append(prev = 'M');
+                    buf.append( 'M');
+                    prev = 'L'; // move implies line
                 }
                 buf.append(nb.toString(e.getX()))
                         .append(',')
