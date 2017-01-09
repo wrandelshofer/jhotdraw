@@ -31,6 +31,8 @@ import org.jhotdraw8.draw.handle.RotateHandle;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -170,17 +172,23 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         }
         return b;
     }
+    
+    /** FIXME should be private! */
+     static Map<Class<?>,Set<MapAccessor<?>>> declaredAndInheritedKeys=Collections.synchronizedMap(new HashMap<>());
+    
 
     /**
      * Returns all keys declared in this class and inherited from parent
      * classes.
      *
      * @param clazz A figure class.
-     * @return the keys
+     * @return an unmodifiable set of the keys
      */
     public static Set<MapAccessor<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {
         try {
-            Set<MapAccessor<?>> keys = new HashSet<>();
+         Set<MapAccessor<?>> keys =declaredAndInheritedKeys.get(clazz);
+         if (keys==null){
+             keys = new HashSet<>();
             LinkedList<Class<?>> todo = new LinkedList<>();
             Set<Class<?>> done = new HashSet<>();
             todo.add(clazz);
@@ -202,6 +210,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 }
 
             }
+            keys=Collections.unmodifiableSet(keys);
+            declaredAndInheritedKeys.put(clazz, keys);
+         }
             return keys;
         } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new InternalError("class can not read its own keys");
@@ -716,7 +727,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation returns all declared and inherited map
      * accessors.
      *
-     * @return the keys
+     * @return an unmodifiable set of keys
      */
     default Set<MapAccessor<?>> getSupportedKeys() {
         return Figure.getDeclaredAndInheritedKeys(this.getClass());
@@ -839,7 +850,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation returns all declared and inherited map
      * accessors.
      *
-     * @return the keys
+     * @param key a key
+     * @return whether the key is supported
      */
     default boolean isSupportedKey(MapAccessor<?> key) {
         return getSupportedKeys().contains(key);
