@@ -49,7 +49,7 @@ public class FXWorker {
             }
         };
         if (executor == null) {
-            new Thread(worker).start();
+            Executors.newSingleThreadExecutor() .execute(worker);
         } else {
             executor.execute(worker);
         }
