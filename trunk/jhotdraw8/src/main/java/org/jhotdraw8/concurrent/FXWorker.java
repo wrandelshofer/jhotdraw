@@ -7,6 +7,7 @@ package org.jhotdraw8.concurrent;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import javafx.application.Platform;
 
@@ -19,14 +20,14 @@ import javafx.application.Platform;
 public class FXWorker {
 
     /**
-     * Calls the runnable on the global thread pool. The completion stage is
+     * Calls the runnable on a new Thread. The completion stage is
      * completed on the FX Application Thread.
      *
      * @param runnable the runnable
      * @return the completion stage
      */
     public static CompletionStage<Void> run(CheckedRunnable runnable) {
-        return run(runnable, null);
+        return run(null, runnable);
     }
 
     /**
@@ -37,7 +38,7 @@ public class FXWorker {
      * @param executor the executor, if null then a new thread is created
      * @return the completion stage
      */
-    public static CompletionStage<Void> run(CheckedRunnable runnable, Executor executor) {
+    public static CompletionStage<Void> run(Executor executor, CheckedRunnable runnable) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Runnable worker = () -> {
             try {
@@ -56,7 +57,7 @@ public class FXWorker {
     }
 
     /**
-     * Calls the supplier on the global thread pool. The completion stage is
+     * Calls the supplier on a new Thread. The completion stage is
      * completed on the FX Application Thread.
      *
      * @param <T> the value type
@@ -64,7 +65,7 @@ public class FXWorker {
      * @return the completion stage
      */
     public static <T> CompletionStage<T> supply(CheckedSupplier<T> supplier) {
-        return supply(supplier, null);
+        return supply(null,supplier);
     }
 
     /**
@@ -77,9 +78,9 @@ public class FXWorker {
      * used
      * @return the completion stage
      */
-    public static <T> CompletionStage<T> supply(CheckedSupplier<T> supplier, Executor executor) {
+    public static <T> CompletionStage<T> supply(Executor executor, CheckedSupplier<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
-        (executor == null ? ForkJoinPool.commonPool() : executor).execute(() -> {
+        (executor == null ? Executors.newSingleThreadExecutor() : executor).execute(() -> {
             try {
                 T result = supplier.supply();
                 Platform.runLater(() -> {
