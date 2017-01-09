@@ -183,8 +183,8 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
 
     @Override
     public <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
-        if (source != null && source.getParent() == this) {
-            if (children.hasChangeListeners()) {
+        if (children.hasChangeListeners()) {
+            if (source != null && source.getParent() == this) {
                 children.fireItemUpdated(children.indexOf(source));
             }
         }

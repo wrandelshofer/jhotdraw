@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.io;
 import org.jhotdraw8.io.IdFactory;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Set;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -52,7 +53,6 @@ import org.jhotdraw8.text.CssDoubleListConverter;
 import org.jhotdraw8.text.CssFont;
 import org.jhotdraw8.text.CssWordListConverter;
 import org.jhotdraw8.text.CssPoint2DListConverter;
-import org.jhotdraw8.text.CssPseudoClassConverter;
 import org.jhotdraw8.text.CssSize;
 import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSize2DConverter;
@@ -96,7 +96,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Page", PageFigure.class);
 
         {
-            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class);
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class));
             keys.remove(Drawing.USER_AGENT_STYLESHEETS);
             keys.remove(Drawing.AUTHOR_STYLESHEETS);
             keys.remove(Drawing.INLINE_STYLESHEETS);
@@ -106,19 +106,19 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         }
 
         {
-            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(TextFigure.class);
+            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedKeys(TextFigure.class));
             keys.remove(TextFigure.TEXT);
             addNodeListKey(TextFigure.class, "", TextFigure.TEXT);
             addFigureKeysAndNames("Text", TextFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(LabelFigure.class);
+            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedKeys(LabelFigure.class));
             keys.remove(LabelFigure.TEXT);
             addNodeListKey(LabelFigure.class, "", LabelFigure.TEXT);
             addFigureKeysAndNames("Label", LabelFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedKeys(PageLabelFigure.class);
+            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedKeys(PageLabelFigure.class));
             keys.remove(PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
             addNodeListKey(PageLabelFigure.class, "", PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
             addFigureKeysAndNames("PageLabel", PageLabelFigure.class, keys);
