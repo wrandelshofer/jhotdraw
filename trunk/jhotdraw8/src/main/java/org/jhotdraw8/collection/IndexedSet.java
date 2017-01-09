@@ -738,4 +738,8 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         nextUpdate(index);
         endChange();
     }
+    
+    public boolean hasChangeListeners() {
+        return super.hasListeners();
+    }
 }

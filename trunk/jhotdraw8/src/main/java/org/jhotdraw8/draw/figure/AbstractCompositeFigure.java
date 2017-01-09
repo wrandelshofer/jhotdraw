@@ -174,7 +174,9 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     public void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
         final Figure source = event.getSource();
         if (source != null && source.getParent() == this) {
-            children.fireItemUpdated(children.indexOf(source));
+            if (children.hasChangeListeners()) {
+                children.fireItemUpdated(children.indexOf(source));
+            }
         }
         super.firePropertyChangeEvent(event); //To change body of generated methods, choose Tools | Templates.
     }
@@ -182,7 +184,9 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     @Override
     public <T> void firePropertyChangeEvent(Figure source, FigurePropertyChangeEvent.EventType type, Key<T> key, T oldValue, T newValue) {
         if (source != null && source.getParent() == this) {
-            children.fireItemUpdated(children.indexOf(source));
+            if (children.hasChangeListeners()) {
+                children.fireItemUpdated(children.indexOf(source));
+            }
         }
         super.firePropertyChangeEvent(source, type, key, oldValue, newValue); //To change body of generated methods, choose Tools | Templates.
     }
