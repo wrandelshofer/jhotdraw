@@ -385,7 +385,7 @@
   </target>
   <target name="docbook" depends="clean,javadoc,do-docbook" description="generates specification and user documentation">
   </target>
-  <target name="dist" depends="jar,javadoc,sysdoc,do-dist" description="Erstellt eine Distribution für eine Stand-Alone Applikation">
+  <target name="dist" depends="jar,javadoc,docbook,do-dist" description="Erstellt eine Distribution für eine Stand-Alone Applikation">
   </target>
   <target name="all" depends="dist" description="Erstellt alles">
   </target>
