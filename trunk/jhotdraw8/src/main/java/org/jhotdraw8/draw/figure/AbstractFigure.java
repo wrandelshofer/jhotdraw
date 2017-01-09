@@ -37,6 +37,7 @@ import org.jhotdraw8.css.StylesheetsManager;
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure {
 
+    private ObservableSet<Figure> dependentFigures;
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
 
         @Override
@@ -48,8 +49,46 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         }
 
     };
-    private ObservableSet<Figure> dependentFigures;
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
+
+    /**
+     * This implementation is empty.
+     *
+     * @param drawing the drawing from which this figure has been removed
+     */
+    @Override
+    public void addNotify(Drawing drawing) {
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
+        if (origin == StyleOrigin.USER && !Objects.equals(change.getValueRemoved(), change.getValueAdded())) {
+            if (willChange) {
+                if (change.getKey() instanceof FigureKey) {
+                    if (((FigureKey<?>) change.getKey()).getDirtyMask().containsOneOf(DirtyBits.DEPENDENCY)) {
+                        firePropertyChangeEvent(this, FigurePropertyChangeEvent.EventType.WILL_CHANGE, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
+                    }
+                }
+            } else {
+                firePropertyChangeEvent(this, FigurePropertyChangeEvent.EventType.CHANGED, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
+            }
+        }
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
+        for (MapAccessor<?> key : getSupportedKeys()) {
+            if (key instanceof StyleableMapAccessor<?>) {
+                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
+
+                CssMetaData<? extends Styleable, ?> md = sk.getCssMetaData();
+                list.add(md);
+            }
+        }
+        return list;
+    }
 
     @Override
     public final ObservableSet<Figure> getDependentFigures() {
@@ -60,8 +99,16 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public ObjectProperty<Figure> parentProperty() {
-        return parent;
+    public CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners() {
+        if (propertyChangeListeners == null) {
+            propertyChangeListeners = new CopyOnWriteArrayList<>();
+        }
+        return propertyChangeListeners;
+    }
+
+    @Override
+    public boolean hasPropertyChangeListeners() {
+        return propertyChangeListeners != null && !propertyChangeListeners.isEmpty();
     }
 
     /**
@@ -81,31 +128,33 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
-        for (MapAccessor<?> key : getSupportedKeys()) {
-            if (key instanceof StyleableMapAccessor<?>) {
-                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
-
-                CssMetaData<? extends Styleable, ?> md = sk.getCssMetaData();
-                list.add(md);
-            }
-        }
-        return list;
+    public ObjectProperty<Figure> parentProperty() {
+        return parent;
     }
 
+    /**
+     * This implementation is empty.
+     */
     @Override
-    public void updateCss() {
-        getStyleableMap().clearNonUserValues();
-        Drawing d = getDrawing();
-        if (d != null) {
-            StylesheetsManager<Figure> styleManager = d.getStyleManager();
-            styleManager.applyStylesheetsTo(this);
-            for (Figure child : getChildren()) {
-                child.updateCss();// should not recurse, because style manager knows better if it is worthwile?
-            }
-        }
-        invalidateTransforms();
+    public void removeAllConnectionTargets() {
+        // empty
+    }
+
+    /**
+     * This implementation is empty.
+     */
+    @Override
+    public void removeConnectionTarget(Figure connectedFigure) {
+        // empty
+    }
+
+    /**
+     * This implementation is empty.
+     *
+     * @param drawing the drawing to which this figure has been added
+     */
+    @Override
+    public void removeNotify(Drawing drawing) {
     }
 
     @Override
@@ -153,66 +202,18 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         return buf.toString();
     }
 
-    /**
-     * This implementation is empty.
-     */
     @Override
-    public void removeConnectionTarget(Figure connectedFigure) {
-        // empty
-    }
-
-    /**
-     * This implementation is empty.
-     */
-    @Override
-    public void removeAllConnectionTargets() {
-        // empty
-    }
-
-    /**
-     * This implementation is empty.
-     *
-     * @param drawing the drawing to which this figure has been added
-     */
-    @Override
-    public void removeNotify(Drawing drawing) {
-    }
-
-    /**
-     * This implementation is empty.
-     *
-     * @param drawing the drawing from which this figure has been removed
-     */
-    @Override
-    public void addNotify(Drawing drawing) {
-    }
-
-    @Override
-    public CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners() {
-        if (propertyChangeListeners == null) {
-            propertyChangeListeners = new CopyOnWriteArrayList<>();
-        }
-        return propertyChangeListeners;
-    }
-
-    @Override
-    public boolean hasPropertyChangeListeners() {
-        return propertyChangeListeners != null && !propertyChangeListeners.isEmpty();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
-        if (origin == StyleOrigin.USER && !Objects.equals(change.getValueRemoved(), change.getValueAdded())) {
-            if (willChange) {
-                if (change.getKey() instanceof FigureKey) {
-                    if (((FigureKey<?>) change.getKey()).getDirtyMask().containsOneOf(DirtyBits.DEPENDENCY)) {
-                        firePropertyChangeEvent(this, FigurePropertyChangeEvent.EventType.WILL_CHANGE, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
-                    }
-                }
-            } else {
-                firePropertyChangeEvent(this, FigurePropertyChangeEvent.EventType.CHANGED, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
+    public void updateCss() {
+        getStyleableMap().clearNonUserValues();
+        Drawing d = getDrawing();
+        if (d != null) {
+            StylesheetsManager<Figure> styleManager = d.getStyleManager();
+            styleManager.applyStylesheetsTo(this);
+            for (Figure child : getChildren()) {
+                child.updateCss();// should not recurse, because style manager knows better if it is worthwile?
             }
         }
+        invalidateTransforms();
     }
+
 }
