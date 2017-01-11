@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ import org.jhotdraw8.io.SimpleIdFactory;
  * @version $$Id: AbstractExportOutputFormat.java 1258 2017-01-05 18:38:14Z
  * rawcoder $$
  */
-public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
+public abstract class AbstractExportOutputFormat implements ExportOutputFormat, InternalExternalUriMixin {
 
     protected double drawingDpi = 72.0;
     private boolean exportDrawing = true;
@@ -42,10 +43,30 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     private boolean exportSlices = false;
     private boolean exportSlices2x = false;
     private boolean exportSlices3x = false;
+    private URI externalHome;
+    private URI internalHome;
     protected double pagesDpi = 72.0;
     protected double slicesDpi = 72.0;
 
     protected abstract String getExtension();
+
+    public URI getExternalHome() {
+        return externalHome;
+    }
+
+    @Override
+    public void setExternalHome(URI uri) {
+        externalHome = uri;
+    }
+
+    public URI getInternalHome() {
+        return internalHome;
+    }
+
+    @Override
+    public void setInternalHome(URI uri) {
+        internalHome = uri;
+    }
 
     @Override
     public void setOptions(Map<? super Key<?>, Object> options) {
@@ -96,6 +117,8 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
     protected void writePages(File dir, String basename, Drawing drawing) throws IOException {
+        setExternalHome(dir == null ? null : dir.toURI());
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Page) {
@@ -118,6 +141,8 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @throws java.io.IOException
      */
     protected void writePages(File dir, String basename, Drawing drawing, List<Page> pages, Map<Key<?>, Object> hints) throws IOException {
+        setExternalHome(dir == null ? null : dir.toURI());
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
         IdFactory idFactory = new SimpleIdFactory();
         int numberOfPages = 0;
         for (Page page : pages) {
@@ -132,7 +157,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         Group parentOfPageNode = new Group();
         for (Page page : pages) {
             for (int internalPageNumber = 0, n = page.getNumberOfSubPages(); internalPageNumber < n; internalPageNumber++) {
-                File filename = (dir==null)?null:new File(dir, basename + "_" + (pageNumber + 1) + "." + getExtension());
+                File filename = (dir == null) ? null : new File(dir, basename + "_" + (pageNumber + 1) + "." + getExtension());
 
                 hints.put(RenderContext.RENDER_PAGE, page);
                 hints.put(RenderContext.RENDER_NUMBER_OF_PAGES, numberOfPages);
@@ -145,12 +170,12 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
                 Shape pageClip = page.getPageClip(internalPageNumber);
                 Transform localToWorld = page.getWorldToLocal();
-                Group parentOfDrawing=new Group();
+                Group parentOfDrawing = new Group();
                 if (localToWorld == null) {
                     drawingNode.getTransforms().clear();
                 } else {
-            drawingNode.getTransforms().setAll(localToWorld);
-            parentOfDrawing.getTransforms().setAll(page.getLocalToWorld());
+                    drawingNode.getTransforms().setAll(localToWorld);
+                    parentOfDrawing.getTransforms().setAll(page.getLocalToWorld());
                 }
                 parentOfDrawing.getChildren().add(drawingNode);
                 parentOfDrawing.setClip(pageClip);
@@ -173,6 +198,8 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     protected abstract void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
 
     protected void writeSlices(File dir, Drawing drawing) throws IOException {
+        setExternalHome(dir == null ? null : dir.toURI());
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
         List<Slice> slices = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Slice) {
@@ -216,5 +243,4 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
             writeSlice(filename, slice, node, dpi);
         }
     }
-
 }

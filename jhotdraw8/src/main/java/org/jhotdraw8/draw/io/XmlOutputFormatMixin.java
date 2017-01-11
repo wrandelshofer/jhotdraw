@@ -29,15 +29,9 @@ import org.w3c.dom.Document;
  * @version $$Id: XmlOutputFormatMixin.java 1237 2016-12-20 08:57:59Z rawcoder
  * $$
  */
-public interface XmlOutputFormatMixin extends OutputFormat {
+public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriMixin {
 
-    URI getExternalHome();
 
-    void setExternalHome(URI uri);
-
-    URI getInternalHome();
-
-    void setInternalHome(URI uri);
 
     default Document toDocument(Drawing drawing) throws IOException {
         return toDocument(drawing, drawing.getChildren());
@@ -45,35 +39,6 @@ public interface XmlOutputFormatMixin extends OutputFormat {
 
     Document toDocument(Drawing drawing, Collection<Figure> selection) throws IOException;
 
-    default URI toExternal(URI uri) {
-        if (uri == null) {
-            return null;
-        }
-        URI internal = getInternalHome();
-        URI external = getExternalHome();
-        if (internal != null) {
-            uri = internal.resolve(uri);
-        }
-        if (external != null) {
-            uri = external.relativize(uri);
-        }
-        return uri;
-    }
-
-    default URI toInternal(URI uri) {
-        if (uri == null) {
-            return null;
-        }
-        URI internal = getInternalHome();
-        URI external = getExternalHome();
-        if (external != null) {
-            uri = external.resolve(uri);
-        }
-        if (internal != null) {
-            uri = internal.relativize(uri);
-        }
-        return uri;
-    }
 
     @Override
     default void write(File file, Drawing drawing) throws IOException {

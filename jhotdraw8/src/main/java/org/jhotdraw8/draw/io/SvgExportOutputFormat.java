@@ -62,11 +62,12 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XLINK_Q = "xlink";
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+
     private final String SVG_NS = "http://www.w3.org/2000/svg";
-    private URI externalHome;
+
     private IdFactory idFactory = new SimpleIdFactory();
     private String indent = "  ";
-    private URI internalHome;
+
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
@@ -76,18 +77,16 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     private final SvgTransformListConverter tx = new SvgTransformListConverter();
     private final CssTransformListConverter txc = new CssTransformListConverter();
 
+    private SvgExporter createExporter() {
+        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
+        exporter.setExternalHome(getExternalHome());
+        exporter.setInternalHome(getInternalHome());
+        return exporter;
+    }
+
     @Override
     protected String getExtension() {
         return "svg";
-    }
-
-    public URI getExternalHome() {
-        return externalHome;
-    }
-
-    @Override
-    public void setExternalHome(URI uri) {
-        externalHome = uri;
     }
 
     public String getIndent() {
@@ -96,15 +95,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     public void setIndent(String indent) {
         this.indent = indent;
-    }
-
-    public URI getInternalHome() {
-        return internalHome;
-    }
-
-    @Override
-    public void setInternalHome(URI uri) {
-        internalHome = uri;
     }
 
     @Override
@@ -135,8 +125,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
-        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, null);
-        exporter.setSkipInvisibleNodes(false);
+        SvgExporter exporter = createExporter();
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
         return doc;
@@ -159,6 +148,23 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         clipboard.put(SVG_FORMAT, out.toString());
     }
 
+    public void write(File file, Drawing drawing) throws IOException {
+        if (isExportDrawing()) {
+            XmlOutputFormatMixin.super.write(file, drawing);
+        }
+        if (isExportSlices()) {
+            writeSlices(file.getParentFile(), drawing);
+        }
+        if (isExportPages()) {
+            String basename = file.getName();
+            int p = basename.lastIndexOf('.');
+            if (p != -1) {
+                basename = basename.substring(0, p);
+            }
+            writePages(file.getParentFile(), basename, drawing);
+        }
+    }
+
     private void writeDrawingElementAttributes(Element docElement, Drawing drawing) throws IOException {
         docElement.setAttribute("width", nb.toString(drawing.get(Drawing.WIDTH)));
         docElement.setAttribute("height", nb.toString(drawing.get(Drawing.HEIGHT)));
@@ -168,8 +174,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
 
-        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
-        markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(),page.getPageBounds(internalPageNumber)));
+        SvgExporter exporter = createExporter();
+        markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
         Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
@@ -187,10 +193,9 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
                 + " " + nb.toString(pb.getWidth()) + " " + nb.toString(pb.getHeight()));
     }
 
-
     @Override
     protected void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
-        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
+        SvgExporter exporter = createExporter();
         markNodesOutsideBoundsWithSkip(node, slice.getBoundsInLocal());
         final Transform worldToLocal = slice.getWorldToLocal();
         if (worldToLocal != null) {
@@ -211,22 +216,5 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
                 toString(b.getMinX()) + " " + nb.toString(b.getMinY())
                 + " " + nb.toString(b.getWidth()) + " " + nb.toString(b.getHeight()));
     }
-    
-    
-    public void write(File file, Drawing drawing) throws IOException {
-        if (isExportDrawing()) {
-            XmlOutputFormatMixin.super.write(file, drawing); 
-        }
-        if (isExportSlices()) {
-            writeSlices(file.getParentFile(), drawing);
-        }
-        if (isExportPages()) {
-            String basename = file.getName();
-            int p = basename.lastIndexOf('.');
-            if (p != -1) {
-                basename = basename.substring(0, p);
-            }
-            writePages(file.getParentFile(), basename, drawing);
-        }
-    }
+
 }
