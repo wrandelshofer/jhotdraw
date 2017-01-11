@@ -8,7 +8,6 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.transform.Transform;
 import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
@@ -28,17 +27,16 @@ import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
  */
 public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
+    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
+    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Ellipse";
-
-    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
-    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
-    public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
-    public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 
     public EllipseFigure() {
         this(0, 0, 1, 1);
@@ -53,10 +51,35 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
     }
 
     @Override
+    public Node createNode(RenderContext drawingView) {
+        return new Ellipse();
+    }
+
+    @Override
+    public Connector findConnector(Point2D p, Figure prototype) {
+        return new ChopEllipseConnector();
+    }
+
+    @Override
     public Bounds getBoundsInLocal() {
         double rx = get(RADIUS_X);
         double ry = get(RADIUS_Y);
         return new BoundingBox(get(CENTER_X) - rx, get(CENTER_Y) - ry, rx * 2.0, ry * 2.0);
+    }
+
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
+    }
+
+    @Override
+    public boolean isLayoutable() {
+        return false;
+    }
+
+    @Override
+    public void layout() {
+        // empty
     }
 
     @Override
@@ -67,11 +90,6 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
         set(CENTER_Y, y + ry);
         set(RADIUS_X, rx);
         set(RADIUS_Y, ry);
-    }
-
-    @Override
-    public Node createNode(RenderContext drawingView) {
-        return new Ellipse();
     }
 
     @Override
@@ -88,26 +106,6 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
         n.setRadiusX(getStyled(RADIUS_X));
         n.setRadiusY(getStyled(RADIUS_Y));
         n.applyCss();
-    }
-
-    @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopEllipseConnector();
-    }
-
-    @Override
-    public String getTypeSelector() {
-        return TYPE_SELECTOR;
-    }
-
-    @Override
-    public void layout() {
-        // empty
-    }
-
-    @Override
-    public boolean isLayoutable() {
-        return false;
     }
 
 }
