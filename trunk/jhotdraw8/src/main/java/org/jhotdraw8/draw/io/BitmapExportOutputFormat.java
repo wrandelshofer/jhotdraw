@@ -154,6 +154,23 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     }
 
+    public void write(File file, Drawing drawing) throws IOException {
+        if (isExportDrawing()) {
+            OutputFormat.super.write(file, drawing);
+        }
+        if (isExportSlices()) {
+            writeSlices(file.getParentFile(), drawing);
+        }
+        if (isExportPages()) {
+            String basename = file.getName();
+            int p = basename.lastIndexOf('.');
+            if (p != -1) {
+                basename = basename.substring(0, p);
+            }
+            writePages(file.getParentFile(), basename, drawing);
+        }
+    }
+
     private void writeImage(OutputStream out, WritableImage writableImage, double dpi) throws IOException {
         BufferedImage image = SwingFXUtils.fromFXImage(writableImage, null);
 
@@ -196,20 +213,4 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
-        public void write(File file, Drawing drawing) throws IOException {
-        if (isExportDrawing()) {
-            OutputFormat.super.write(file, drawing); 
-        }
-        if (isExportSlices()) {
-            writeSlices(file.getParentFile(), drawing);
-        }
-        if (isExportPages()) {
-            String basename = file.getName();
-            int p = basename.lastIndexOf('.');
-            if (p != -1) {
-                basename = basename.substring(0, p);
-            }
-            writePages(file.getParentFile(), basename, drawing);
-        }
-    }
 }

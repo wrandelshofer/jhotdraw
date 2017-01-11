@@ -75,6 +75,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.jhotdraw8.draw.io.InternalExternalUriMixin;
 
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
@@ -96,7 +97,7 @@ import org.w3c.dom.Element;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SvgExporter {
+public class SvgExporter implements InternalExternalUriMixin {
 
     public final static DataFormat SVG_FORMAT = new DataFormat("image/svg+xml");
 
@@ -104,9 +105,11 @@ public class SvgExporter {
     private final static String XLINK_Q = "xlink";
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
     private final String SVG_NS = "http://www.w3.org/2000/svg";
+    private URI externalHome;
     private IdFactory idFactory = new SimpleIdFactory();
     private final Object imageUriKey;
     private String indent = "  ";
+    private URI internalHome;
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final XmlSizeListConverter nbList = new XmlSizeListConverter();
@@ -131,12 +134,36 @@ public class SvgExporter {
         return null;
     }
 
+    public URI getExternalHome() {
+        return externalHome;
+    }
+
+    /**
+     * Must be a directory and not a file.
+     */
+    public void setExternalHome(URI uri) {
+        externalHome = uri;
+    }
+
     public String getIndent() {
         return indent;
     }
 
     public void setIndent(String indent) {
         this.indent = indent;
+    }
+
+    public URI getInternalHome() {
+        return internalHome;
+    }
+
+    /**
+     * Must be a directory and not a file.
+     *
+     * @param uri
+     */
+    public void setInternalHome(URI uri) {
+        internalHome = uri;
     }
 
     private void initIdFactoryRecursively(javafx.scene.Node node) throws IOException {
@@ -474,7 +501,7 @@ public class SvgExporter {
         URI uri = (URI) node.getProperties().get(imageUriKey);
         String href = null;
         if (uri != null) {
-            href = uri.toString();
+            href =  toExternal(uri).toString();
         } else {
             if (node.getImage() != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -486,7 +513,7 @@ public class SvgExporter {
             }
         }
         if (href != null) {
-            elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href", href);
+            elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href",href);
         }
         return elem;
     }
@@ -674,7 +701,7 @@ public class SvgExporter {
             if (pe instanceof MoveTo) {
                 MoveTo e = (MoveTo) pe;
                 if (prev != 'M') {
-                    buf.append( 'M');
+                    buf.append('M');
                     prev = 'L'; // move implies line
                 }
                 buf.append(nb.toString(e.getX()))
@@ -1129,5 +1156,4 @@ public class SvgExporter {
             }
         }
     }
-
 }
