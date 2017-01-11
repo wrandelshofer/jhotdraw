@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
@@ -35,7 +35,7 @@ import org.jhotdraw8.css.StylesheetsManager;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure {
+public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
     private ObservableSet<Figure> dependentFigures;
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
@@ -50,6 +50,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     };
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
+    private final Map<? super Key<?>, Object> cachedValues = new HashMap<>();
 
     /**
      * This implementation is empty.
@@ -216,4 +217,13 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         invalidateTransforms();
     }
 
+    @Override
+    public <T> T setCachedValue(Key<T> key, T value) {
+        return key.put(cachedValues, value);
+    }
+
+    @Override
+    public <T> T getCachedValue(Key<T> key) {
+        return key.get(cachedValues);
+    }
 }

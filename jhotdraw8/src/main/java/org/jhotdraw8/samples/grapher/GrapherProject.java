@@ -335,7 +335,6 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
     @Override
     public CompletionStage<Void> print(PrinterJob job) {
         Drawing drawing = drawingView.getDrawing();
-        drawingView.setDrawing(new SimpleDrawing());
         return FXWorker.run(() -> {
             try {
                 PrinterExportFormat pof = new PrinterExportFormat();
@@ -347,7 +346,9 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 job.endJob();
             }
         }).handle((voidvalue, ex) -> {
-            drawingView.setDrawing(drawing);
+            if (ex != null) {
+                ex.printStackTrace();
+            }
             return null;
         });
 
@@ -379,7 +380,6 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
     @Override
     public CompletionStage<Void> write(URI uri, DataFormat format, Map<? super Key<?>, Object> options) {
         Drawing drawing = drawingView.getDrawing();
-        drawingView.setDrawing(new SimpleDrawing());
         return FXWorker.run(() -> {
             if (SvgExporter.SVG_FORMAT.equals(format) || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
@@ -396,7 +396,9 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 io.write(uri, drawing);
             }
         }).handle((voidvalue, ex) -> {
-            drawingView.setDrawing(drawing);
+            if (ex != null) {
+                ex.printStackTrace();
+            }
             return null;
         });
     }

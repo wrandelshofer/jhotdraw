@@ -12,6 +12,8 @@ import javafx.geometry.Point2D;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
+import javafx.print.PrintQuality;
+import javafx.print.PrintResolution;
 import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -50,24 +52,24 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return false;
     }
 
-    public  Paper findPaper(CssSize2D paperSize) {
+    public Paper findPaper(CssSize2D paperSize) {
         UnitConverter uc = new DefaultUnitConverter(72.0);
         double w = uc.convert(paperSize.getX(), UnitConverter.POINTS);
         double h = uc.convert(paperSize.getY(), UnitConverter.POINTS);
         for (Paper paper : job.getPrinter().getPrinterAttributes().getSupportedPapers()) {
 
-                    if (abs(paper.getWidth() - w) < 1 && abs(paper.getHeight() - h) < 1
-                            || abs(paper.getWidth() - h) < 1 && abs(paper.getHeight() - w) < 1) {
-                        return paper;
-                    }
+            if (abs(paper.getWidth() - w) < 1 && abs(paper.getHeight() - h) < 1
+                    || abs(paper.getWidth() - h) < 1 && abs(paper.getHeight() - w) < 1) {
+                return paper;
+            }
         }
         return Paper.A4;
     }
 
     private void printSlice(CssSize2D pageSize, Figure slice, Bounds viewportBounds, Node node, double dpi) throws IOException {
-            Paper paper = findPaper(pageSize);
-            Point2D psize=pageSize.getConvertedValue();
-        PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getX()<=psize.getY()?PageOrientation.PORTRAIT:PageOrientation.LANDSCAPE, 0, 0, 0, 0);
+        Paper paper = findPaper(pageSize);
+        Point2D psize = pageSize.getConvertedValue();
+        PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getX() <= psize.getY() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
         job.getJobSettings().setPageLayout(pl);
         paper = pl.getPaper();
         if (paper == null) {
@@ -103,7 +105,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
         printParent.getTransforms().addAll(
                 new Translate(-pl.getLeftMargin(), -pl.getTopMargin()),
-                new Scale(scaleFactor,scaleFactor),
+                new Scale(scaleFactor, scaleFactor),
                 new Translate(-viewportBounds.getMinX(), -viewportBounds.getMinY())
         // slice.getWorldToLocal()
         );

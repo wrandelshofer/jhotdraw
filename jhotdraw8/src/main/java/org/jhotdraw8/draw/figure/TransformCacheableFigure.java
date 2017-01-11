@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.Key;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
 import org.jhotdraw8.geom.Transforms;
 
@@ -20,15 +21,15 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id: TransformCacheableFigure.java 1120 2016-01-15 17:37:49Z
  * rawcoder $
  */
-public interface TransformCacheableFigure extends Figure {
+public interface TransformCacheableFigure extends CacheableFigure {
 
     @Override
     default Transform getParentToWorld() {
-        Transform t = CACHE ? get(PARENT_TO_WORLD) : null;
+        Transform t = CACHE ? getCachedValue(PARENT_TO_WORLD) : null;
         if (t == null) {
             t = getParent() == null ? IDENTITY_TRANSFORM : getParent().getLocalToWorld();
             if (CACHE) {
-                set(PARENT_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
+                setCachedValue(PARENT_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
             }
         }
         return t == IDENTITY_TRANSFORM ? null : t;
@@ -36,12 +37,12 @@ public interface TransformCacheableFigure extends Figure {
 
     @Override
     default Transform getLocalToWorld() {
-        Transform t = CACHE ? get(LOCAL_TO_WORLD) : null;
+        Transform t = CACHE ? getCachedValue(LOCAL_TO_WORLD) : null;
         if (t == null) {
             t = getLocalToParent();
             t = getParent() == null ? t : Transforms.concat(getParent().getLocalToWorld(), t);
             if (CACHE) {
-                set(LOCAL_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
+                setCachedValue(LOCAL_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
             }
         }
         return t == IDENTITY_TRANSFORM ? null : t;
@@ -49,22 +50,22 @@ public interface TransformCacheableFigure extends Figure {
 
     @Override
     default Transform getWorldToLocal() {
-        Transform t = get(WORLD_TO_LOCAL);
+        Transform t = getCachedValue(WORLD_TO_LOCAL);
         if (t == null) {
             t = getParentToLocal();
             t = getParent() == null ? t : Transforms.concat(t, getParent().getWorldToLocal());
-            set(WORLD_TO_LOCAL, t == null ? IDENTITY_TRANSFORM : t);
+            setCachedValue(WORLD_TO_LOCAL, t == null ? IDENTITY_TRANSFORM : t);
         }
         return t == IDENTITY_TRANSFORM ? null : t;
     }
 
     @Override
     default Transform getWorldToParent() {
-        Transform t = CACHE ? get(WORLD_TO_PARENT) : null;
+        Transform t = CACHE ? getCachedValue(WORLD_TO_PARENT) : null;
         if (t == null) {
             t = getParent() == null ? IDENTITY_TRANSFORM : getParent().getWorldToLocal();
             if (CACHE) {
-                set(WORLD_TO_PARENT, t == null ? IDENTITY_TRANSFORM : t);
+                setCachedValue(WORLD_TO_PARENT, t == null ? IDENTITY_TRANSFORM : t);
             }
         }
         return t == IDENTITY_TRANSFORM ? null : t;
@@ -77,10 +78,9 @@ public interface TransformCacheableFigure extends Figure {
         }
 
         // intentional use of long-circuit or-expressions!!
-        return null != set(PARENT_TO_WORLD, null)
-                | null != set(LOCAL_TO_WORLD, null)
-                | null != set(WORLD_TO_LOCAL, null)
-                | null != set(WORLD_TO_PARENT, null);
+        return null != setCachedValue(PARENT_TO_WORLD, null)
+                | null != setCachedValue(LOCAL_TO_WORLD, null)
+                | null != setCachedValue(WORLD_TO_LOCAL, null)
+                | null != setCachedValue(WORLD_TO_PARENT, null);
     }
-
 }

@@ -54,7 +54,7 @@ public interface Key<T> extends MapAccessor<T> {
     @Override
     default T get(Map<? super Key<?>, Object> a) {
         @SuppressWarnings("unchecked")
-        T value = a.containsKey(this) ? (T) a.get(this) : getDefaultValue();
+        T value = (T) a.getOrDefault(this, getDefaultValue());
         //assert isAssignable(value) : value + " is not assignable to " + getValueType();
         return value;
     }
@@ -99,10 +99,6 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Override
     default T put(Map<? super Key<?>, Object> a, T value) {
-        if (!isAssignable(value)) {
-            throw new IllegalArgumentException("Value is not assignable to key. key="
-                    + this + ", value=" + value);
-        }
         @SuppressWarnings("unchecked")
         T oldValue = (T) a.put(this, value);
         return oldValue;
