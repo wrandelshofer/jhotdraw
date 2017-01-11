@@ -132,11 +132,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     @Override
-    public void setOptions(Map<? super Key<?>, Object> options) {
-        //ignore.
-    }
-
-    @Override
     public Figure read(File file, Drawing drawing) throws IOException {
         setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
         setInternalHome(drawing == null ? getExternalHome() : drawing.get(Drawing.DOCUMENT_HOME));

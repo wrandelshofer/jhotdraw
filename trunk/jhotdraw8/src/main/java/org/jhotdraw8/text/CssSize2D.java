@@ -48,7 +48,7 @@ public class CssSize2D {
         return true;
     }
 
-    public Point2D getDefaultConvertedValue() {
+    public Point2D getConvertedValue() {
         return new Point2D(x.getConvertedValue(), y.getConvertedValue());
     }
 

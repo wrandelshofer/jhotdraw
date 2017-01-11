@@ -98,6 +98,7 @@ public interface DocumentProject extends Project {
     /**
      * Prints the current document.
      *
+     * @param job
      * @return Returns a CompletionStage which is completed when the print
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}

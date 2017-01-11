@@ -17,4 +17,18 @@ public class DefaultUnitConverter implements UnitConverter {
   public static DefaultUnitConverter getInstance() {
     return instance;
   }
+  
+  private final double dpi;
+
+    public DefaultUnitConverter(double dpi) {
+        this.dpi = dpi;
+    }
+
+    public DefaultUnitConverter() {
+        this(72);
+    }
+
+    public double getDpi() {
+        return dpi;
+    }
 }

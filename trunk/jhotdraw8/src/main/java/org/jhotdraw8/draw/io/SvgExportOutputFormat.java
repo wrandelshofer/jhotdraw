@@ -34,6 +34,7 @@ import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
+import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.text.CssSize;
@@ -168,7 +169,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
 
         SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
-        markNodesOutsideBoundsWithSkip(node, page.getPageBounds(internalPageNumber));
+        markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(),page.getPageBounds(internalPageNumber)));
+        node.getTransforms().setAll(page.getWorldToLocal());
         Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
@@ -178,7 +180,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     private void writePageElementAttributes(Element docElement, Page page, int internalPageNumber) throws IOException {
         Bounds b = page.getBoundsInLocal();
         Bounds pb = page.getPageBounds(internalPageNumber);
-        Transform tx = page.getWorldToLocal();
         docElement.setAttribute("width", sznb.toString(page.get(PageFigure.PAPER_WIDTH)));
         docElement.setAttribute("height", sznb.toString(page.get(PageFigure.PAPER_HEIGHT)));
         docElement.setAttribute("viewBox", nb.
@@ -186,21 +187,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
                 + " " + nb.toString(pb.getWidth()) + " " + nb.toString(pb.getHeight()));
     }
 
-    protected void writePageOLD(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
-        markNodesOutsideBoundsWithSkip(node, page.getPageBounds(internalPageNumber));
-
-        Transform worldToLocal = page.getWorldToLocal();
-        if (worldToLocal == null) {
-            node.getTransforms().clear();
-        } else {
-            node.getTransforms().setAll(worldToLocal);
-        }
-        Document doc = exporter.toDocument(node);
-        writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
-        node.getTransforms().clear();
-        write(file, doc);
-    }
 
     @Override
     protected void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
@@ -225,5 +211,22 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
                 toString(b.getMinX()) + " " + nb.toString(b.getMinY())
                 + " " + nb.toString(b.getWidth()) + " " + nb.toString(b.getHeight()));
     }
-
+    
+    
+    public void write(File file, Drawing drawing) throws IOException {
+        if (isExportDrawing()) {
+            XmlOutputFormatMixin.super.write(file, drawing); 
+        }
+        if (isExportSlices()) {
+            writeSlices(file.getParentFile(), drawing);
+        }
+        if (isExportPages()) {
+            String basename = file.getName();
+            int p = basename.lastIndexOf('.');
+            if (p != -1) {
+                basename = basename.substring(0, p);
+            }
+            writePages(file.getParentFile(), basename, drawing);
+        }
+    }
 }

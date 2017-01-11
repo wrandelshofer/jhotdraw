@@ -9,6 +9,7 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javafx.print.Paper;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.IdFactory;
@@ -126,5 +127,4 @@ public class CssPaperSizeConverter implements Converter<CssSize2D> {
         return "Format of ⟨PageSize⟩: " + "⟨width⟩mm ⟨height⟩mm｜⟨PaperFormat⟩ landscape｜⟨PaperFormat⟩ portrait"
                 + "\nFormat of ⟨PaperFormat⟩: " + buf.toString();
     }
-
 }

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.samples.grapher;
 
+import static com.sun.javafx.scene.CameraHelper.project;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
@@ -22,7 +23,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
 import javafx.geometry.Side;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
@@ -106,6 +106,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.PageLabelFigure;
+import org.jhotdraw8.draw.io.PrinterExportFormat;
 import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSizeInsets;
 
@@ -250,8 +251,8 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new PageLabelFigure(0, 0,
-                        labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
-                        FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
+                labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
+                FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
                 layerFactory), 9, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
         ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0);
@@ -333,7 +334,23 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
 
     @Override
     public CompletionStage<Void> print(PrinterJob job) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Drawing drawing = drawingView.getDrawing();
+        drawingView.setDrawing(new SimpleDrawing());
+        return FXWorker.run(() -> {
+            try {
+                PrinterExportFormat pof = new PrinterExportFormat();
+                pof.print(job, drawing);
+            } catch (IOException e) {
+
+            } finally {
+                System.out.println("GrapherProject. endjob");
+                job.endJob();
+            }
+        }).handle((voidvalue, ex) -> {
+            drawingView.setDrawing(drawing);
+            return null;
+        });
+
     }
 
     @Override
@@ -376,10 +393,12 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 IdFactory idFactory = new SimpleIdFactory();
                 FigureFactory factory = new DefaultFigureFactory(idFactory);
                 SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
-                io.setOptions(options);
                 io.write(uri, drawing);
             }
-        }).thenRun(() -> drawingView.setDrawing(drawing));
+        }).handle((voidvalue, ex) -> {
+            drawingView.setDrawing(drawing);
+            return null;
+        });
     }
 
 }

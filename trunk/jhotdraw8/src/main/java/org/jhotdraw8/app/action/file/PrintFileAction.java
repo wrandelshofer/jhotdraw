@@ -199,36 +199,16 @@ public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
                 getActiveProject().setEnabled(true);
             }
         }.start();
-    }
-    /**
-     * Returns true if the action is enabled.
-     * The enabled state of the action depends on the state that has been set
-     * using setEnabled() and on the enabled state of the application.
-     *
-     * @return true if the action is enabled, false otherwise
-     * @see Action#isEnabled
-     * /
-    @Override public boolean isEnabled() {
-        return super.isEnabled() && (getActiveProject() instanceof PrintableView);
     }*/
     @Override
     protected void handleActionPerformed(ActionEvent event, DocumentProject project) {
-        if (isDisabled()) {
-            return;
-        }
-
-        if (project != null) {
             
             PrinterJob job = PrinterJob.createPrinterJob();
             if (job != null&&  job.showPrintDialog(project.getNode().getScene().getWindow())) {
-                boolean success = job.printPage(project.getNode());
-                if (success) {
-                    job.endJob();
-                }
+                project.print(job);
             }else{
                 Alert alert=new Alert(AlertType.INFORMATION,"Sorry, no printer found");
                 alert.show();
             }
         }
-    }
 }

@@ -14,6 +14,7 @@ import static java.lang.Math.sqrt;
 import static java.lang.Math.atan;
 import static java.lang.Math.abs;
 import static java.lang.Double.isNaN;
+import javafx.geometry.Bounds;
 
 /**
  * Transforms.
@@ -88,5 +89,9 @@ public class Transforms {
     }
                 public static Transform concat(Transform a, Transform b, Transform c) {
        return concat(concat(a,b),c);
+    }
+
+    public static Bounds transform(Transform tx, Bounds b) {
+        return tx==null?b:tx.transform(b);
     }
 }
