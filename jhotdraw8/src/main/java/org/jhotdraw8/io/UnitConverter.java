@@ -15,6 +15,17 @@ import org.jhotdraw8.text.CssSize;
  * @version $$Id$$
  */
 public interface UnitConverter {
+
+    String CM = "cm";
+    String EM = "em";
+    String EX = "ex";
+    String INCH = "in";
+    String MM = "mm";
+    String PERCENTAGE="%";
+    String PICA = "pc";
+    String PIXEL = "px";
+    String POINTS = "pt";
+    
        /**
      * Gets the resolution in dots per inch.
      *
@@ -27,31 +38,31 @@ public interface UnitConverter {
       double factor = 1.0;
       if (unit != null) {
         switch (unit) {
-          case "%":
+          case PERCENTAGE:
             factor = 100;
             break;
-          case "px":
+          case PIXEL:
             factor = 1.0;
             break;
-          case "cm":
+          case CM:
             factor = 2.54 / getDpi();
             break;
-          case "mm":
+          case MM:
             factor = 25.4 / getDpi();
             break;
-          case "in":
+          case INCH:
             factor = 1.0 / getDpi();
             break;
-          case "pt":
+          case POINTS:
             factor = 72 / getDpi();
             break;
-          case "pc":
+          case PICA:
             factor = 72 * 12.0 / getDpi();
             break;
-          case "em":
+          case EM:
             factor = 1.0 / getFontSize();
             break;
-          case "ex":
+          case EX:
             factor = 1.0 / getFontXHeight();
             break;
         }

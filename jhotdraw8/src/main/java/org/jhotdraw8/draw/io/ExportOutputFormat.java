@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.io;
 
+import java.util.Map;
 import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.collection.DoubleKey;
 import org.jhotdraw8.collection.Key;
@@ -24,4 +25,10 @@ public interface ExportOutputFormat {
     Key<Boolean> EXPORT_SLICES_KEY = new BooleanKey("exportSlices", true);
     Key<Boolean> EXPORT_SLICES_RESOLUTION_2X_KEY = new BooleanKey("exportSlicesResolution2", false);
     Key<Boolean> EXPORT_SLICES_RESOLUTION_3X_KEY = new BooleanKey("exportSlicesResolution3", false);
+    
+    /** Sets output format options.
+     * @param options the options */
+    void setOptions(Map<? super Key<?>, Object> options);
+
+    
 }

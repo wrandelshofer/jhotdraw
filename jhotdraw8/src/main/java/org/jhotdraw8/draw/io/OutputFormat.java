@@ -62,7 +62,4 @@ public interface OutputFormat {
      */
     void write(OutputStream out, Drawing drawing) throws IOException;
     
-    /** Sets output format options.
-     * @param options the options */
-    void setOptions(Map<? super Key<?>, Object> options);
 }

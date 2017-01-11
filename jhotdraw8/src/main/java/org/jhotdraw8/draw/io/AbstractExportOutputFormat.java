@@ -34,7 +34,7 @@ import org.jhotdraw8.io.SimpleIdFactory;
  * @version $$Id: AbstractExportOutputFormat.java 1258 2017-01-05 18:38:14Z
  * rawcoder $$
  */
-public abstract class AbstractExportOutputFormat implements OutputFormat, ExportOutputFormat {
+public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
     protected double drawingDpi = 72.0;
     private boolean exportDrawing = true;
@@ -61,23 +61,27 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
         }
     }
 
-    @Override
-    public void write(File file, Drawing drawing) throws IOException {
-        if (exportDrawing) {
-            OutputFormat.super.write(file, drawing); //To change body of generated methods, choose Tools | Templates.
-        }
-        if (exportSlices) {
-            writeSlices(file.getParentFile(), drawing);
-        }
-        if (exportPages) {
-            String basename = file.getName();
-            int p = basename.lastIndexOf('.');
-            if (p != -1) {
-                basename = basename.substring(0, p);
-            }
-            writePages(file.getParentFile(), basename, drawing);
-        }
+    public boolean isExportDrawing() {
+        return exportDrawing;
     }
+
+    public boolean isExportPages() {
+        return exportPages;
+    }
+
+    public boolean isExportSlices() {
+        return exportSlices;
+    }
+
+    public boolean isExportSlices2x() {
+        return exportSlices2x;
+    }
+
+    public boolean isExportSlices3x() {
+        return exportSlices3x;
+    }
+
+    protected abstract boolean isResolutionIndependent();
 
     /**
      *
@@ -91,7 +95,7 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
      */
     protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
-    private void writePages(File dir, String basename, Drawing drawing) throws IOException {
+    protected void writePages(File dir, String basename, Drawing drawing) throws IOException {
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Page) {
@@ -128,7 +132,7 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
         Group parentOfPageNode = new Group();
         for (Page page : pages) {
             for (int internalPageNumber = 0, n = page.getNumberOfSubPages(); internalPageNumber < n; internalPageNumber++) {
-                File filename = new File(dir, basename + "_" + (pageNumber + 1) + "." + getExtension());
+                File filename = (dir==null)?null:new File(dir, basename + "_" + (pageNumber + 1) + "." + getExtension());
 
                 hints.put(RenderContext.RENDER_PAGE, page);
                 hints.put(RenderContext.RENDER_NUMBER_OF_PAGES, numberOfPages);
@@ -140,13 +144,16 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
                 final Node drawingNode = renderer.getNode(drawing);
 
                 Shape pageClip = page.getPageClip(internalPageNumber);
-                Transform localToWorld = page.getLocalToWorld();
+                Transform localToWorld = page.getWorldToLocal();
+                Group parentOfDrawing=new Group();
                 if (localToWorld == null) {
-                    pageClip.getTransforms().clear();
+                    drawingNode.getTransforms().clear();
                 } else {
-                    pageClip.getTransforms().setAll(localToWorld);
+            drawingNode.getTransforms().setAll(localToWorld);
+            parentOfDrawing.getTransforms().setAll(page.getLocalToWorld());
                 }
-                drawingNode.setClip(pageClip);
+                parentOfDrawing.getChildren().add(drawingNode);
+                parentOfDrawing.setClip(pageClip);
 
                 Group oldParentOfPageNode = (Group) pageNode.getParent();
                 if (oldParentOfPageNode != null) {
@@ -154,7 +161,7 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
                 }
                 parentOfPageNode.getChildren().setAll(pageNode);
 
-                rootNode.getChildren().setAll(drawingNode, parentOfPageNode);
+                rootNode.getChildren().setAll(parentOfDrawing, parentOfPageNode);
 
                 writePage(filename, page, rootNode, numberOfPages, pageNumber, internalPageNumber);
 
@@ -165,7 +172,7 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
 
     protected abstract void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
 
-    private void writeSlices(File dir, Drawing drawing) throws IOException {
+    protected void writeSlices(File dir, Drawing drawing) throws IOException {
         List<Slice> slices = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Slice) {
@@ -210,5 +217,4 @@ public abstract class AbstractExportOutputFormat implements OutputFormat, Export
         }
     }
 
-    protected abstract boolean isResolutionIndependent();
 }

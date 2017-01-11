@@ -19,25 +19,26 @@
   <Polyline id="polyline3" points="12.5 48, 12.5 52, 16.5 52" stroke="darkcyan"/>
   <Label fill="none" font="normal normal 19 &quot;Futura Medium&quot;" id="label1" origin="25 63" stroke="none">A</Label>
   <Line end="62.5 63" id="line7" start="62.5 48" stroke="darkcyan"/>
-  <Polygon fill="black" id="polygon4" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="3 21"/>
   <Line end="17 39" id="line9" start="5 27" stroke-linecap="square" stroke-width="2"/>
   <Polygon fill="black" id="polygon5" points="76.75 50, 80.5 58.5, 78 58, 78 62, 75.5 62, 75.5 58, 73 58.5" rotate="337.5" stroke="white" translate="3.5 22"/>
   <Label fill="none" font="normal normal 19 &quot;Futura Medium&quot;" id="label2" origin="49 63" stroke="none" textFill="darkcyan">#</Label>
   <Line end="40.5 63" id="line11" start="40.5 48"/>
   <Rectangle bounds="37 37 4 4" id="rectangle7" stroke="grey" stroke-type="inside"/>
   <Polygon fill="black" id="polygon6" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="-45 22"/>
-  <Group id="group1" rotate="45" translate="0 2">
-    <Line end="49.5 72" id="line10" start="49.5 76" stroke="grey" stroke-width="2"/>
-    <Ellipse center="49.5 69.5" id="ellipse3" radius="2.5 2.5"/>
-  </Group>
-  <Polygon fill="black" id="polygon7" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="-19 22"/>
+  <Polygon fill="black" id="polygon7" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="-19 23"/>
   <Group id="group2">
     <Line end="24 74" id="line5" start="28 74" stroke="grey" stroke-linecap="square" stroke-width="2"/>
     <Line end="29 69" id="line8" start="29 72" stroke="grey" stroke-linecap="square" stroke-width="2"/>
     <Rectangle bounds="26 71 5 5" id="rectangle5" stroke-type="inside"/>
   </Group>
+  <Polygon fill="black" id="polygon4" points="55 47, 60 58, 56.5 57, 56.5 62, 53.5 62, 53.5 57, 50 58" rotate="337.5" stroke="white" translate="4 22"/>
+  <Group id="group1" rotate="22.5" translate="-1 0">
+    <Line end="50.5 73" id="line10" start="50.5 76" stroke="grey" stroke-width="2"/>
+    <Ellipse center="50.5 72.5" id="ellipse3" radius="2.5 2.5"/>
+    <Polyline fill="none" id="polyline4" points="47 77, 54 77, 54 83" stroke="grey" stroke-width="2"/>
+  </Group>
 </Layer>
-<Layer id="slices" locked="true" visible="false">
+<Layer id="slices" locked="true">
   <Slice bounds="0 0 22 22" id="createSlice"/>
   <Slice bounds="22 0 22 22" id="createRectangle"/>
   <Slice bounds="44 0 22 22" id="createEllipse"/>

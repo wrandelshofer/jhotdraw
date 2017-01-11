@@ -21,13 +21,10 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.DataFormat;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -199,4 +196,20 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
+        public void write(File file, Drawing drawing) throws IOException {
+        if (isExportDrawing()) {
+            OutputFormat.super.write(file, drawing); 
+        }
+        if (isExportSlices()) {
+            writeSlices(file.getParentFile(), drawing);
+        }
+        if (isExportPages()) {
+            String basename = file.getName();
+            int p = basename.lastIndexOf('.');
+            if (p != -1) {
+                basename = basename.substring(0, p);
+            }
+            writePages(file.getParentFile(), basename, drawing);
+        }
+    }
 }
