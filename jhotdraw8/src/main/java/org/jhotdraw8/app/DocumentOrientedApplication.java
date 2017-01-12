@@ -141,6 +141,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                         Actions.bindMenuItem(mi, a);
                     } else {
                         a = new ScreenMenuBarProxyAction(this, mi.getId());
+                        a.set(Action.LABEL, mi.getText());
                         systemMenuActiveProjectActions.add(a);
                         Actions.bindMenuItem(mi, a, true);
                     }
