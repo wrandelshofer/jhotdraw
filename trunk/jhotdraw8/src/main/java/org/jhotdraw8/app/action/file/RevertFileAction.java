@@ -27,7 +27,7 @@ import org.jhotdraw8.app.Project;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RevertAction extends AbstractProjectAction<DocumentProject> {
+public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ public class RevertAction extends AbstractProjectAction<DocumentProject> {
      * @param app the application
      * @param project the view
      */
-    public RevertAction(Application app, DocumentProject project) {
+    public RevertFileAction(Application app, DocumentProject project) {
         super(app, project,DocumentProject.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }

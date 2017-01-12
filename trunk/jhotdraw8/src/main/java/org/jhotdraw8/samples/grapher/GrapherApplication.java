@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import org.jhotdraw8.app.DocumentOrientedApplication;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.app.action.file.RevertAction;
+import org.jhotdraw8.app.action.file.RevertFileAction;
 import org.jhotdraw8.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.util.FontIconDecoder;
@@ -44,7 +44,7 @@ public class GrapherApplication extends DocumentOrientedApplication {
         HierarchicalMap<String, Action> map = super.getActionMap();
 
         Action a;
-        map.put(RevertAction.ID, new RevertAction(this, null));
+        map.put(RevertFileAction.ID, new RevertFileAction(this, null));
         return map;
     }
 
