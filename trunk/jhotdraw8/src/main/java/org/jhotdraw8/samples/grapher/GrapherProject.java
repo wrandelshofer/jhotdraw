@@ -339,17 +339,9 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
             try {
                 PrinterExportFormat pof = new PrinterExportFormat();
                 pof.print(job, drawing);
-            } catch (IOException e) {
-
             } finally {
-                System.out.println("GrapherProject. endjob");
                 job.endJob();
             }
-        }).handle((voidvalue, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-            }
-            return null;
         });
 
     }
