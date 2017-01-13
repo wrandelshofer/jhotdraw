@@ -6,11 +6,14 @@ package org.jhotdraw8.collection;
 
 import java.util.AbstractSet;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import javafx.css.PseudoClass;
 
 /**
  * ImmutableObservableSet.
@@ -21,33 +24,69 @@ import javafx.collections.SetChangeListener;
  */
 public final class ImmutableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
-    private final LinkedHashSet<E> backingSet;
-
-    private final static ImmutableObservableSet<Object> EMPTY = new ImmutableObservableSet<Object>(new LinkedHashSet<Object>());
+    private final static ImmutableObservableSet<Object> EMPTY = new ImmutableObservableSet<>(Collections.emptySet());
+    private final Set<E> backingSet;
 
     public ImmutableObservableSet(Collection<E> copyMe) {
-        this.backingSet = new LinkedHashSet<>(copyMe);
+        switch (copyMe.size()) {
+            case 0:
+                backingSet = Collections.emptySet();
+                break;
+            case 1:
+                backingSet = Collections.singleton(copyMe.iterator().next());
+                break;
+            default:
+                this.backingSet = new LinkedHashSet<>(copyMe);
+        }
     }
 
-    private ImmutableObservableSet(LinkedHashSet<E> backingSet, boolean privateConstructor) {
-        this.backingSet = backingSet;
-    }
-
-    public static <T> ImmutableObservableSet<T> add(Collection<T> collection, T item) {
-        LinkedHashSet<T> a = new LinkedHashSet<T>(collection);
-        a.remove(item);
-        return new ImmutableObservableSet<T>(a, true);
-    }
-
-    public static <T> ImmutableObservableSet<T> remove(Collection<T> collection, T item) {
-        LinkedHashSet<T> a = new LinkedHashSet<T>(collection);
-        a.remove(item);
-        return new ImmutableObservableSet<T>(a, true);
+    public ImmutableObservableSet(Object[] array) {
+        this(array, 0, array.length);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ImmutableObservableSet<T> emptySet() {
-        return (ImmutableObservableSet<T>) EMPTY;
+    public ImmutableObservableSet(Object[] a, int offset, int length) {
+        switch (length) {
+            case 0:
+                backingSet = Collections.emptySet();
+                break;
+            case 1:
+                backingSet = Collections.singleton((E) a[offset]);
+                break;
+            default:
+                this.backingSet = new LinkedHashSet<>(Math.max(2 * length, 11));
+                for (int i = offset, n = offset + length; i < n; i++) {
+                    backingSet.add((E) a[i]);
+                }
+        }
+
+    }
+
+    private ImmutableObservableSet(boolean privateConstructor, LinkedHashSet<E> backingSet) {
+        this.backingSet = backingSet;
+    }
+
+    @Override
+    public boolean add(E e) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addListener(InvalidationListener listener) {
+    }
+
+    @Override
+    public void addListener(SetChangeListener<? super E> listener) {
+    }
+
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -73,43 +112,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
     }
 
     @Override
-    public int size() {
-        return backingSet.size();
-    }
-
-    @Override
-    public void addListener(InvalidationListener listener) {
-    }
-
-    @Override
-    public void removeListener(InvalidationListener listener) {
-    }
-
-    @Override
-    public void addListener(SetChangeListener<? super E> listener) {
-    }
-
-    @Override
-    public void removeListener(SetChangeListener<? super E> listener) {
-    }
-
-    @Override
-    public boolean add(E e) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean remove(Object o) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException();
     }
 
@@ -119,7 +122,49 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
     }
 
     @Override
-    public void clear() {
+    public void removeListener(InvalidationListener listener) {
+    }
+
+    @Override
+    public void removeListener(SetChangeListener<? super E> listener) {
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int size() {
+        return backingSet.size();
+    }
+    public void copyInto(Object[] out, int offset) {
+        int i=offset;
+        for (E e :this) {
+            out[i++]=e;
+        }
+    }
+
+    public static <T> ImmutableObservableSet<T> add(Collection<T> collection, T item) {
+        LinkedHashSet<T> a = new LinkedHashSet<T>(collection);
+        a.add(item);
+        return new ImmutableObservableSet<T>(true, a);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> ImmutableObservableSet<T> emptySet() {
+        return (ImmutableObservableSet<T>) EMPTY;
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static <T> ImmutableObservableSet<T> of(T... items) {
+        return items.length == 0 ? emptySet() : new ImmutableObservableSet<T>(items);
+    }
+
+    public static <T> ImmutableObservableSet<T> remove(Collection<T> collection, T item) {
+        LinkedHashSet<T> a = new LinkedHashSet<T>(collection);
+        a.remove(item);
+        return new ImmutableObservableSet<T>(true, a);
     }
 }

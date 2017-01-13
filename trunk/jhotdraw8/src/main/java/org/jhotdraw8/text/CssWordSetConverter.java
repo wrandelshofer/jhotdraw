@@ -51,22 +51,14 @@ public class CssWordSetConverter implements Converter<ImmutableObservableSet<Str
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];
         v[0] = value.size();
-        int i = 1;
-        for (String token : tokens) {
-            v[i] = token;
-            i++;
-        }
+        value.copyInto(v, 1);
         formatter.toString(out, v);
     }
 
     @Override
     public ImmutableObservableSet<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
-        for (int i = 0, n = (int) v[0]; i < n; i++) {
-            tokens.add((String) v[i + 1]);
-        }
-        ImmutableObservableSet<String> l = new ImmutableObservableSet<>(tokens);
+        ImmutableObservableSet<String> l = new ImmutableObservableSet<>(v,1,(int)v[0]);
         return l;
     }
 

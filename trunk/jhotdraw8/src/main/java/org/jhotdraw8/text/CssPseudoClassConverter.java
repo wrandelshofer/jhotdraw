@@ -9,8 +9,8 @@ import java.nio.CharBuffer;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.TreeSet;
 import javafx.css.PseudoClass;
 import org.jhotdraw8.collection.ImmutableObservableSet;
 import org.jhotdraw8.io.IdFactory;
@@ -47,26 +47,18 @@ public class CssPseudoClassConverter implements Converter<ImmutableObservableSet
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ImmutableObservableSet<PseudoClass> value) throws IOException {
-        Set<PseudoClass> tokens = new TreeSet<>(NFD_COMPARATOR);
+        Set<PseudoClass> tokens = new LinkedHashSet<>();
         tokens.addAll(value);
         Object[] v = new Object[tokens.size() + 1];
         v[0] = value.size();
-        int i = 1;
-        for (PseudoClass token : tokens) {
-            v[i] = token.getPseudoClassName();
-            i++;
-        }
+        value.copyInto(v, 1);
         formatter.toString(out, v);
     }
 
     @Override
     public ImmutableObservableSet<PseudoClass> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        Set<PseudoClass> tokens = new TreeSet<>(NFD_COMPARATOR);
-        for (int i = 0, n = (int) v[0]; i < n; i++) {
-            tokens.add(PseudoClass.getPseudoClass((String) v[i + 1]));
-        }
-        ImmutableObservableSet<PseudoClass> l = new ImmutableObservableSet<>(tokens);
+        ImmutableObservableSet<PseudoClass> l =  new ImmutableObservableSet<>(v,1,(int)v[0]);
         return l;
     }
 
