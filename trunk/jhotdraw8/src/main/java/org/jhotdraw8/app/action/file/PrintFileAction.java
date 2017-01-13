@@ -38,11 +38,21 @@ public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
      * @param app the application
      * @param view the view
      */
+    public PrintFileAction(Application app) {
+        this(app, null);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param app the application
+     * @param view the view
+     */
     public PrintFileAction(Application app, DocumentProject view) {
         super(app, view, DocumentProject.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
-    
+
     @Override
     protected void handleActionPerformed(ActionEvent event, DocumentProject project) {
         project.addDisabler(this);
