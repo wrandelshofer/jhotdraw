@@ -62,237 +62,6 @@ public class Shapes {
     }
 
     /**
-     * Returns true, if the outline of this shape contains the specified point.
-     *
-     * @param shape The shape.
-     * @param p The point to be tested.
-     * @param tolerance The tolerance for the test.
-     * @return true if contained within tolerance
-     */
-    public static boolean outlineContains(Shape shape, Point2D.Double p, double tolerance) {
-        double[] coords = new double[6];
-        double prevX = 0, prevY = 0;
-        double moveX = 0, moveY = 0;
-        for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), tolerance); !i.isDone(); i.next()) {
-            switch (i.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    if (Geom.lineContainsPoint(
-                            prevX, prevY, moveX, moveY,
-                            p.x, p.y, tolerance)) {
-                        return true;
-                    }
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    break;
-                case PathIterator.SEG_LINETO:
-                    if (Geom.lineContainsPoint(
-                            prevX, prevY, coords[0], coords[1],
-                            p.x, p.y, tolerance)) {
-                        return true;
-                    }
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    moveX = coords[0];
-                    moveY = coords[1];
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    break;
-                default:
-                    break;
-            }
-            prevX = coords[0];
-            prevY = coords[1];
-        }
-        return false;
-    }
-
-    /**
-     * Converts a Java Path iterator to a JavaFX shape.
-     *
-     * @param fxT A JavaFX Transform.
-     * @return An AWT Transform.
-     */
-    public static AffineTransform awtTransformFromFX(javafx.scene.transform.Transform fxT) {
-        if (fxT == null) {
-            return null;
-        }
-
-        double[] m = fxT.toArray(MatrixType.MT_2D_2x3);
-        return fxT == null ? null : new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
-    }
-
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @param fxT Optional transformation which is applied to the shape
-     * @return JavaFX Shape
-     */
-    public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape, javafx.scene.transform.Transform fxT) {
-        return fxShapeFromAWT(shape.getPathIterator(awtTransformFromFX(fxT)));
-    }
-
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @param at Optional transformation which is applied to the shape
-     * @return JavaFX Shape
-     */
-    public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape, AffineTransform at) {
-        return fxShapeFromAWT(shape.getPathIterator(at));
-    }
-
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @return JavaFX Shape
-     */
-    public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape) {
-        return fxShapeFromAWT(shape.getPathIterator(null));
-    }
-
-    /**
-     * Converts a Java Path iterator to a JavaFX shape.
-     *
-     * @param iter AWT Path Iterator
-     * @return JavaFX Shape
-     */
-    public static javafx.scene.shape.Path fxShapeFromAWT(PathIterator iter) {
-        javafx.scene.shape.Path fxpath = new javafx.scene.shape.Path();
-
-        switch (iter.getWindingRule()) {
-            case PathIterator.WIND_EVEN_ODD:
-                fxpath.setFillRule(javafx.scene.shape.FillRule.EVEN_ODD);
-                break;
-            case PathIterator.WIND_NON_ZERO:
-                fxpath.setFillRule(javafx.scene.shape.FillRule.NON_ZERO);
-                break;
-            default:
-                throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
-        }
-
-        fxpath.getElements().addAll(fxPathElementsFromAWT(iter));
-
-        return fxpath;
-    }
-
-    /**
-     * Converts a Java Path iterator to a JavaFX shape.
-     *
-     * @param iter AWT Path Iterator
-     * @return JavaFX Shape
-     */
-    public static List<PathElement> fxPathElementsFromAWT(PathIterator iter) {
-        List<PathElement> fxelem = new ArrayList<>();
-        double[] coords = new double[6];
-        for (; !iter.isDone(); iter.next()) {
-            switch (iter.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    fxelem.add(new ClosePath());
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    fxelem.add(new CubicCurveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]));
-                    break;
-                case PathIterator.SEG_LINETO:
-                    fxelem.add(new LineTo(coords[0], coords[1]));
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    fxelem.add(new MoveTo(coords[0], coords[1]));
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    fxelem.add(new QuadCurveTo(coords[0], coords[1], coords[2], coords[3]));
-                    break;
-            }
-        }
-        return fxelem;
-    }
-
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @return SVG Path
-     */
-    public static String svgStringFromAWT(Shape shape) {
-        return Shapes.svgStringFromAWT(shape.getPathIterator(null));
-    }
-
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @param at Optional transformation which is applied to the shape
-     * @return SVG Path
-     */
-    public static String svgStringFromAWT(Shape shape, AffineTransform at) {
-        return Shapes.svgStringFromAWT(shape.getPathIterator(at));
-    }
-
-    /**
-     * Converts a Java Path iterator to a JavaFX shape.
-     *
-     * @param iter AWT Path Iterator
-     * @return SVG Path
-     */
-    public static String svgStringFromAWT(PathIterator iter) {
-        XmlNumberConverter nb = new XmlNumberConverter();
-        StringBuilder buf = new StringBuilder();
-        double[] coords = new double[6];
-        boolean first = true;
-        for (; !iter.isDone(); iter.next()) {
-            if (first) {
-                first = false;
-            } else {
-                buf.append(' ');
-            }
-            switch (iter.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    buf.append('Z');
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    buf.append('C');
-                    for (int i = 0; i < 6; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_LINETO:
-                    buf.append('L');
-                    for (int i = 0; i < 2; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    buf.append('M');
-                    for (int i = 0; i < 2; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    buf.append('Q');
-                    for (int i = 0; i < 4; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-            }
-        }
-        return buf.toString();
-    }
-
-    /**
      * Converts a Java Path iterator to a JavaFX shape.
      *
      * @param fx A JavaFX shape
@@ -940,6 +709,249 @@ public class Shapes {
         }
 
         return out;
+    }
+
+    /**
+     * Converts a Java Path iterator to a JavaFX shape.
+     *
+     * @param fxT A JavaFX Transform.
+     * @return An AWT Transform.
+     */
+    public static AffineTransform awtTransformFromFX(javafx.scene.transform.Transform fxT) {
+        if (fxT == null) {
+            return null;
+        }
+
+        double[] m = fxT.toArray(MatrixType.MT_2D_2x3);
+        return fxT == null ? null : new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
+    }
+
+    /**
+     * Converts a Java Path iterator to a JavaFX shape.
+     *
+     * @param iter AWT Path Iterator
+     * @return JavaFX Shape
+     */
+    public static List<PathElement> fxPathElementsFromAWT(PathIterator iter) {
+        List<PathElement> fxelem = new ArrayList<>();
+        double[] coords = new double[6];
+        for (; !iter.isDone(); iter.next()) {
+            switch (iter.currentSegment(coords)) {
+                case PathIterator.SEG_CLOSE:
+                    fxelem.add(new ClosePath());
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    fxelem.add(new CubicCurveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]));
+                    break;
+                case PathIterator.SEG_LINETO:
+                    fxelem.add(new LineTo(coords[0], coords[1]));
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    fxelem.add(new MoveTo(coords[0], coords[1]));
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    fxelem.add(new QuadCurveTo(coords[0], coords[1], coords[2], coords[3]));
+                    break;
+            }
+        }
+        return fxelem;
+    }
+
+    public static List<PathElement> fxPathElementsFromFXSvgPath(SVGPath path) {
+        Path p = (Path) javafx.scene.shape.Shape.subtract(path, new Rectangle(0, 0));
+        return p.getElements();
+    }
+
+    public static List<PathElement> fxPathElementsFromFXSvgPath(String content) {
+        SVGPath svgPath = new SVGPath();
+        svgPath.setContent(content);
+        Path p = (Path) javafx.scene.shape.Shape.subtract(svgPath, new Rectangle(0, 0));
+        return p.getElements();
+    }
+
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @param fxT Optional transformation which is applied to the shape
+     * @return JavaFX Shape
+     */
+    public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape, javafx.scene.transform.Transform fxT) {
+        return fxShapeFromAWT(shape.getPathIterator(awtTransformFromFX(fxT)));
+    }
+
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @param at Optional transformation which is applied to the shape
+     * @return JavaFX Shape
+     */
+    public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape, AffineTransform at) {
+        return fxShapeFromAWT(shape.getPathIterator(at));
+    }
+
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @return JavaFX Shape
+     */
+    public static javafx.scene.shape.Path fxShapeFromAWT(Shape shape) {
+        return fxShapeFromAWT(shape.getPathIterator(null));
+    }
+
+    /**
+     * Converts a Java Path iterator to a JavaFX shape.
+     *
+     * @param iter AWT Path Iterator
+     * @return JavaFX Shape
+     */
+    public static javafx.scene.shape.Path fxShapeFromAWT(PathIterator iter) {
+        javafx.scene.shape.Path fxpath = new javafx.scene.shape.Path();
+
+        switch (iter.getWindingRule()) {
+            case PathIterator.WIND_EVEN_ODD:
+                fxpath.setFillRule(javafx.scene.shape.FillRule.EVEN_ODD);
+                break;
+            case PathIterator.WIND_NON_ZERO:
+                fxpath.setFillRule(javafx.scene.shape.FillRule.NON_ZERO);
+                break;
+            default:
+                throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
+        }
+
+        fxpath.getElements().addAll(fxPathElementsFromAWT(iter));
+
+        return fxpath;
+    }
+
+    /**
+     * Returns true, if the outline of this shape contains the specified point.
+     *
+     * @param shape The shape.
+     * @param p The point to be tested.
+     * @param tolerance The tolerance for the test.
+     * @return true if contained within tolerance
+     */
+    public static boolean outlineContains(Shape shape, Point2D.Double p, double tolerance) {
+        double[] coords = new double[6];
+        double prevX = 0, prevY = 0;
+        double moveX = 0, moveY = 0;
+        for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), tolerance); !i.isDone(); i.next()) {
+            switch (i.currentSegment(coords)) {
+                case PathIterator.SEG_CLOSE:
+                    if (Geom.lineContainsPoint(
+                            prevX, prevY, moveX, moveY,
+                            p.x, p.y, tolerance)) {
+                        return true;
+                    }
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    break;
+                case PathIterator.SEG_LINETO:
+                    if (Geom.lineContainsPoint(
+                            prevX, prevY, coords[0], coords[1],
+                            p.x, p.y, tolerance)) {
+                        return true;
+                    }
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    moveX = coords[0];
+                    moveY = coords[1];
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    break;
+                default:
+                    break;
+            }
+            prevX = coords[0];
+            prevY = coords[1];
+        }
+        return false;
+    }
+
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @return SVG Path
+     */
+    public static String svgStringFromAWT(Shape shape) {
+        return Shapes.svgStringFromAWT(shape.getPathIterator(null));
+    }
+
+    /**
+     * Converts a Java AWT Shape iterator to a JavaFX Shape.
+     *
+     * @param shape AWT Shape
+     * @param at Optional transformation which is applied to the shape
+     * @return SVG Path
+     */
+    public static String svgStringFromAWT(Shape shape, AffineTransform at) {
+        return Shapes.svgStringFromAWT(shape.getPathIterator(at));
+    }
+
+    /**
+     * Converts a Java Path iterator to a JavaFX shape.
+     *
+     * @param iter AWT Path Iterator
+     * @return SVG Path
+     */
+    public static String svgStringFromAWT(PathIterator iter) {
+        XmlNumberConverter nb = new XmlNumberConverter();
+        StringBuilder buf = new StringBuilder();
+        double[] coords = new double[6];
+        boolean first = true;
+        for (; !iter.isDone(); iter.next()) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(' ');
+            }
+            switch (iter.currentSegment(coords)) {
+                case PathIterator.SEG_CLOSE:
+                    buf.append('Z');
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    buf.append('C');
+                    for (int i = 0; i < 6; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_LINETO:
+                    buf.append('L');
+                    for (int i = 0; i < 2; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    buf.append('M');
+                    for (int i = 0; i < 2; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    buf.append('Q');
+                    for (int i = 0; i < 4; i++) {
+                        if (i != 0) {
+                            buf.append(',');
+                        }
+                        buf.append(nb.toString(coords[i]));
+                    }
+                    break;
+            }
+        }
+        return buf.toString();
     }
 
     public static List<PathElement> transformFXPathElements(List<PathElement> elements, javafx.scene.transform.Transform fxT) {
