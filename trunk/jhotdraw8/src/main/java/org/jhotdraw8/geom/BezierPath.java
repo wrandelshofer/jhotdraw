@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * BezierPath allows the construction of paths consisting of straight lines,
- * quadratic curves and cubic curves.
+ * BezierPath allows the construction of paths consisting of unconnected points,
+ * straight lines, quadratic curves and cubic curves.
  * <p>
  * A BezierPath is defined by its nodes. Each node has three control points: C0,
  * C1, C2. A mask defines which control points are in use. At a node, the path
@@ -39,7 +39,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Constant for having only control point C0 in effect. C0 is the point
-     * through whitch the curve passes.
+     * through which the curve passes.
      */
     public static final int C0_MASK = 0;
     /**
@@ -109,9 +109,15 @@ public class BezierPath extends ArrayList<BezierPath.Node>
          * tools shall keep all control points on the same line.
          */
         public boolean keepColinear = true;
+        /**
+         * This is a hint for editing tools. If this is set to true, the editing
+         * tools shall keep  C2 at the same distance from C0 as C1.
+         */
+        public boolean keepSameDistance = true;
 
         /**
-         * Whether a C0 node is a lineto or a moveTo.
+         * Whether a C0 node is a unconnected (lineTo) or connected (moveTo)
+         * with the previous node by a line.
          */
         public boolean moveTo = false;
         /**
