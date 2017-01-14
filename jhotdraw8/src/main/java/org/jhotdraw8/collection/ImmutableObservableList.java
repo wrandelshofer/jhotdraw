@@ -143,6 +143,7 @@ public final class ImmutableObservableList<E> extends ObservableListBase<E> impl
             return ImmutableObservableList.emptyList();
         }
         if (collection instanceof List) {
+            @SuppressWarnings("unchecked")
             List<T> list = (List) collection;
             return remove(list, list.indexOf(item));
         } else {

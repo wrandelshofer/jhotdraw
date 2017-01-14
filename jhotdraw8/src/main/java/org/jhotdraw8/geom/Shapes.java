@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ArcType;
@@ -262,8 +264,13 @@ public class Shapes {
     }
 
     private static Shape awtShapeFromFXSvgPath(SVGPath node) {
-        Path p = (Path) javafx.scene.shape.Shape.subtract(node, new Rectangle(0, 0));
-        return awtShapeFromFXPath(p);
+        Path2DDoubleBuilder b = new Path2DDoubleBuilder();
+        try {
+            buildFromSvgString(b, node.getContent());
+        } catch (IOException ex) {
+            // suppress error
+        }
+        return b.get();
     }
 
     /**
@@ -276,8 +283,23 @@ public class Shapes {
      * @return the SvgPath2D
      * @throws java.io.IOException if the String is not a valid path
      */
-    public static SvgPath2D awtShapeFromSvgString(String str) throws IOException {
-        SvgPath2D out = new SvgPath2D();
+    public static Path2D.Double awtShapeFromSvgString(String str) throws IOException {
+        Path2DDoubleBuilder b = new Path2DDoubleBuilder();
+        buildFromSvgString(b, str);
+        return b.get();
+    }
+
+    /**
+     * Returns a value as a SvgPath2D.
+     *
+     * Also supports elliptical arc commands 'a' and 'A' as specified in
+     * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
+     *
+     * @param str the SVG path
+     * @return build the builder
+     * @throws java.io.IOException if the String is not a valid path
+     */
+    public static void buildFromSvgString(PathBuilder builder, String str) throws IOException {
 
         Point2D.Double p = new Point2D.Double();
         Point2D.Double c1 = new Point2D.Double();
@@ -318,7 +340,7 @@ public class Shapes {
                     p.y = tt.nval;
                     s2.x = p.x;
                     s2.y = p.y;
-                    out.moveTo(p.x, p.y);
+                    builder.moveTo(p.x, p.y);
                     nextCommand = 'L';
                     break;
                 case 'm':
@@ -333,14 +355,14 @@ public class Shapes {
                     p.y += tt.nval;
                     s2.x = p.x;
                     s2.y = p.y;
-                    out.moveTo(p.x, p.y);
+                    builder.moveTo(p.x, p.y);
                     nextCommand = 'l';
 
                     break;
                 case 'Z':
                 case 'z':
                     // close path
-                    out.closePath();
+                    builder.closePath();
 
                     break;
                 case 'L':
@@ -355,7 +377,7 @@ public class Shapes {
                     p.y = tt.nval;
                     s2.x = p.x;
                     s2.y = p.y;
-                    out.lineTo(p.x, p.y);
+                    builder.lineTo(p.x, p.y);
                     nextCommand = 'L';
 
                     break;
@@ -371,7 +393,7 @@ public class Shapes {
                     p.y += tt.nval;
                     s2.x = p.x;
                     s2.y = p.y;
-                    out.lineTo(p.x, p.y);
+                    builder.lineTo(p.x, p.y);
                     nextCommand = 'l';
 
                     break;
@@ -383,7 +405,7 @@ public class Shapes {
                     p.x = tt.nval;
                     s2.x = p.x;
                     s2.y = p.y;
-                    out.lineTo(p.x, p.y);
+                    builder.lineTo(p.x, p.y);
                     nextCommand = 'H';
 
                     break;
@@ -395,7 +417,7 @@ public class Shapes {
                     p.x += tt.nval;
                     s2.x = p.x;
                     s2.y = p.y;
-                    out.lineTo(p.x, p.y);
+                    builder.lineTo(p.x, p.y);
                     nextCommand = 'h';
 
                     break;
@@ -407,7 +429,7 @@ public class Shapes {
                     p.y = tt.nval;
                     s2.x = p.x;
                     s2.y = p.y;
-                    out.lineTo(p.x, p.y);
+                    builder.lineTo(p.x, p.y);
                     nextCommand = 'V';
 
                     break;
@@ -419,7 +441,7 @@ public class Shapes {
                     p.y += tt.nval;
                     s2.x = p.x;
                     s2.y = p.y;
-                    out.lineTo(p.x, p.y);
+                    builder.lineTo(p.x, p.y);
                     nextCommand = 'v';
 
                     break;
@@ -451,7 +473,7 @@ public class Shapes {
                     p.y = tt.nval;
                     s2.x = 2 * c2.x - p.x;
                     s2.y = 2 * c2.y - p.y;
-                    out.curveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
+                    builder.curveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
                     nextCommand = 'C';
                     break;
 
@@ -483,7 +505,7 @@ public class Shapes {
                     p.y += tt.nval;
                     s2.x = 2 * c2.x - p.x;
                     s2.y = 2 * c2.y - p.y;
-                    out.curveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
+                    builder.curveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
                     nextCommand = 'c';
                     break;
 
@@ -509,7 +531,7 @@ public class Shapes {
                     p.y = tt.nval;
                     s2.x = 2 * c2.x - p.x;
                     s2.y = 2 * c2.y - p.y;
-                    out.curveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
+                    builder.smoothCurveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
                     nextCommand = 'S';
                     break;
 
@@ -535,7 +557,7 @@ public class Shapes {
                     p.y += tt.nval;
                     s2.x = 2 * c2.x - p.x;
                     s2.y = 2 * c2.y - p.y;
-                    out.curveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
+                    builder.smoothCurveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
                     nextCommand = 's';
                     break;
 
@@ -559,7 +581,7 @@ public class Shapes {
                     p.y = tt.nval;
                     s2.x = 2 * c1.x - p.x;
                     s2.y = 2 * c1.y - p.y;
-                    out.quadTo(c1.x, c1.y, p.x, p.y);
+                    builder.quadTo(c1.x, c1.y, p.x, p.y);
                     nextCommand = 'Q';
 
                     break;
@@ -582,7 +604,7 @@ public class Shapes {
                         throw new IOException("dy coordinate missing for 'q' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y += tt.nval;
-                    out.quadTo(c1.x, c1.y, p.x, p.y);
+                    builder.quadTo(c1.x, c1.y, p.x, p.y);
                     nextCommand = 'q';
 
                     break;
@@ -600,7 +622,7 @@ public class Shapes {
                     p.y = tt.nval;
                     s2.x = 2 * c1.x - p.x;
                     s2.y = 2 * c1.y - p.y;
-                    out.quadTo(c1.x, c1.y, p.x, p.y);
+                    builder.smoothQuadTo(c1.x, c1.y, p.x, p.y);
                     nextCommand = 'T';
 
                     break;
@@ -619,7 +641,7 @@ public class Shapes {
                     p.y += tt.nval;
                     s2.x = 2 * c1.x - p.x;
                     s2.y = 2 * c1.y - p.y;
-                    out.quadTo(c1.x, c1.y, p.x, p.y);
+                    builder.smoothQuadTo(c1.x, c1.y, p.x, p.y);
                     nextCommand = 's';
 
                     break;
@@ -651,15 +673,15 @@ public class Shapes {
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("x coordinate missing for 'A' at position " + tt.getStartPosition() + " in " + str);
                     }
-                    p.x = tt.nval;
+                    double x = tt.nval;
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("y coordinate missing for 'A' at position " + tt.getStartPosition() + " in " + str);
                     }
-                    p.y = tt.nval;
+                    double y = tt.nval;
 
-                    out.arcTo(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, p.x, p.y);
-                    s2.x = p.x;
-                    s2.y = p.y;
+                    builder.arcTo(p.x, p.y, rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
+                    p.x = x;
+                    p.y = y;
                     nextCommand = 'A';
                     break;
                 }
@@ -690,14 +712,14 @@ public class Shapes {
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("x coordinate missing for 'A' at position " + tt.getStartPosition() + " in " + str);
                     }
-                    p.x += tt.nval;
+                    double x = p.x + tt.nval;
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("y coordinate missing for 'A' at position " + tt.getStartPosition() + " in " + str);
                     }
-                    p.y += tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
-                    out.arcTo(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, p.x, p.y);
+                    double y = p.x + tt.nval;
+                    builder.arcTo(p.x, p.y, rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
+                    p.x = x;
+                    p.y = y;
 
                     nextCommand = 'a';
                     break;
@@ -707,8 +729,6 @@ public class Shapes {
                     throw new IOException("Illegal command: " + command);
             }
         }
-
-        return out;
     }
 
     /**
@@ -757,16 +777,18 @@ public class Shapes {
         return fxelem;
     }
 
-    public static List<PathElement> fxPathElementsFromFXSvgPath(SVGPath path) {
-        Path p = (Path) javafx.scene.shape.Shape.subtract(path, new Rectangle(0, 0));
-        return p.getElements();
+    public static List<PathElement> fxPathElementsFromFXSVGPath(SVGPath path) {
+        return fxPathElementsFromSvgString(path.getContent());
     }
 
-    public static List<PathElement> fxPathElementsFromFXSvgPath(String content) {
-        SVGPath svgPath = new SVGPath();
-        svgPath.setContent(content);
-        Path p = (Path) javafx.scene.shape.Shape.subtract(svgPath, new Rectangle(0, 0));
-        return p.getElements();
+    public static List<PathElement> fxPathElementsFromSvgString(String content) {
+        FXPathBuilder b = new FXPathBuilder();
+        try {
+            buildFromSvgString(b, content);
+        } catch (IOException ex) {
+            // suppress error, XXX really?
+        }
+        return b.get().getElements();
     }
 
     /**
