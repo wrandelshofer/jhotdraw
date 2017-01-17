@@ -45,17 +45,18 @@ public abstract class AbstractApplicationAction extends AbstractAction {
     public final Application getApplication() {
         return app;
     }
-    
-@Override
+
+    @Override
     protected final void handleActionPerformed(ActionEvent event) {
         handleActionPerformed(event, app);
     }
-    
-        /**
+
+    /**
      * This method is invoked when the action is not disabled and the event is
      * not consumed.
      *
      * @param event the action event
+     * @param app the applicatoin
      */
     protected abstract void handleActionPerformed(ActionEvent event, Application app);
 }

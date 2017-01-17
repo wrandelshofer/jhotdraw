@@ -28,7 +28,6 @@ import org.jhotdraw8.collection.Key;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <V> the type of project projects that this application manages
  */
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw8.app.Application {
 

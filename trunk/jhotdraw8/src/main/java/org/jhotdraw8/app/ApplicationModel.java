@@ -14,7 +14,6 @@ import org.jhotdraw8.gui.URIChooser;
  * {@code ApplicationModel} provides meta-data, actions and factory methods for
  * an {@link Application}.
  *
- * @param <V> supported project view type
  * @design.pattern Application Framework, KeyAbstraction.
  *
  * @author Werner Randelshofer.

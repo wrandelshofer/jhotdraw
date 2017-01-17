@@ -83,6 +83,7 @@ public abstract class AbstractProjectAction<P extends Project> extends AbstractA
      * not consumed.
      *
      * @param event the action event
+     * @param project the project
      */
     protected abstract void handleActionPerformed(ActionEvent event, P project);
 

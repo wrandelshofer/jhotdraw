@@ -26,6 +26,10 @@ private Supplier<R> resultSupplier;
 
     /**
      * Creates a new InputDialog.
+     * @param title the title
+     * @param headerText the header text
+     * @param inputForm the input form
+     * @param resultSupplier the result supplier
      */
     public InputDialog(String title, String headerText, Node inputForm, Supplier<R> resultSupplier) {
         final DialogPane dialogPane = getDialogPane();
@@ -51,6 +55,7 @@ private Supplier<R> resultSupplier;
 
     /**
      * Returns the input form used within this dialog.
+     * @return the input form
      */
     public final Node getInputForm() {
         return inputForm;
@@ -59,6 +64,7 @@ private Supplier<R> resultSupplier;
 
     /**
      * Sets the input form used within this dialog.
+     * @param newValue the new input form
      */
     public final void setInputForm(Node newValue) {
          inputForm = newValue;

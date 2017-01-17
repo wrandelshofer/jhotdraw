@@ -18,7 +18,7 @@ import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Presents a printer chooser to the user and then prints the
- * {@link org.jhotdraw8.app.ProjectView}.
+ * {@link org.jhotdraw8.app.DocumentProject}.
  * <p>
  * This action requires that the view implements the {@code PrintableView}
  * interface.
@@ -36,7 +36,6 @@ public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
      * Creates a new instance.
      *
      * @param app the application
-     * @param view the view
      */
     public PrintFileAction(Application app) {
         this(app, null);

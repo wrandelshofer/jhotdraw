@@ -88,6 +88,7 @@ private  DataFormat format;
 
     /**
      * Returns a new map.
+     * @return the export options
      */
     public Map<? super Key<?>, Object> getExportOptions() {
         Map<? super Key<?>, Object> map = new HashMap<>();

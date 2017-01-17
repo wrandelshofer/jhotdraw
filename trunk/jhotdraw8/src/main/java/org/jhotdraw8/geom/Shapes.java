@@ -295,8 +295,8 @@ public class Shapes {
      * Also supports elliptical arc commands 'a' and 'A' as specified in
      * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
      *
+     * @param builder the builder
      * @param str the SVG path
-     * @return build the builder
      * @throws java.io.IOException if the String is not a valid path
      */
     public static void buildFromSvgString(PathBuilder builder, String str) throws IOException {

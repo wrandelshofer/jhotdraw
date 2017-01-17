@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * Converts a {@codeCssSize2D} into a {@code String} and vice
+ * Converts a {@code CssSize2D} into a {@code String} and vice
  * versa.
  *
  * @author Werner Randelshofer

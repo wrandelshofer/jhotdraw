@@ -1,6 +1,14 @@
 /* @(#)Intersection.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
+ *
+ * This class is a based on:
+*
+*  Polynomial.js by Kevin Lindsey.
+ * Copyright (C) 2002, Kevin Lindsey.
+ *
+ * MgcPolynomial.cpp by David Eberly. 
+ * Copyright (c) 2000-2003 Magic Software, Inc.
  */
 package org.jhotdraw8.geom;
 
@@ -10,14 +18,18 @@ import java.util.List;
 import javafx.geometry.Point2D;
 
 /**
- * Intersection.
+ * Provides a collection of intersection tests.
  *
- * This class is a port of the Intersection.js by Kevin Lindsey.
+ * This class is a port of Intersection.js by Kevin Lindsey.
+ * Part of Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic Software. Inc.
  * <p>
  * References:
  * <p>
- * <a href="http://www.kevlindev.com/gui/index.htm>Intersection.js</a>,
- * Copyright (C) 2002, Kevin Lindsey.
+ * <a href="http://www.kevlindev.com/gui/index.htm">Intersection.js</a>, Copyright
+ * (c) 2002, Kevin Lindsey.
+ * <p>
+* <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright 2000-2003
+* (c) David Eberly. Magic Software, Inc.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
@@ -82,18 +94,16 @@ public List<Point2D> getPoints() {
     }
 
     /**
-     * ***
+     * Computes the intersection between quadratic bezier curve 'a' and
+     * quadratic bezier curve 'b'.
      *
-     * class methods
-     *
-     ****
-     */
-    /**
-     * ***
-     *
-     * intersectBezier2Bezier2
-     *
-     ****
+     * @param a1 control point 1 of 'a'
+     * @param a2 control point 2 of 'a'
+     * @param a3 control point 3 of 'a'
+     * @param b1 control point 1 of 'b'
+     * @param b2 control point 2 of 'b'
+     * @param b3 control point 3 of 'b'
+     * @return the computed result
      */
     public static Intersection intersectBezier2Bezier2(Point2D a1, Point2D a2, Point2D a3, Point2D b1, Point2D b2, Point2D b3) {
         Point2D a, b;
@@ -197,11 +207,19 @@ public List<Point2D> getPoints() {
     ;
 
 
-/*****
-*
-*   intersectBezier2Bezier3
-*
-*****/
+    /**
+     * Computes the intersection between quadratic bezier curve 'a' and
+     * cubic bezier curve 'b'.
+     *
+     * @param a1 control point 1 of 'a'
+     * @param a2 control point 2 of 'a'
+     * @param a3 control point 3 of 'a'
+     * @param b1 control point 1 of 'b'
+     * @param b2 control point 2 of 'b'
+     * @param b3 control point 3 of 'b'
+     * @param b4 control point 4 of 'b'
+     * @return the computed result
+     */
 public static Intersection intersectBezier2Bezier3(Point2D a1, Point2D a2, Point2D a3, Point2D b1, Point2D b2, Point2D b3, Point2D b4) {
         Point2D a, b, c, d;
         Point2D c12, c11, c10;
@@ -325,11 +343,17 @@ public static Intersection intersectBezier2Bezier3(Point2D a1, Point2D a2, Point
     ;
 
 
-/*****
-*
-*   intersectBezier2Circle
-*
-*****/
+/**
+     * Computes the intersection between quadratic bezier curve 'p' and
+     * the given circle.
+ * 
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param c the center of the circle
+     * @param r the radius of the circle
+     * @return the computed result
+ */
 public static Intersection intersectBezier2Circle(Point2D p1, Point2D p2, Point2D p3, Point2D c, double r) {
         return Intersection.intersectBezier2Ellipse(p1, p2, p3, c, r, r);
     }
@@ -337,11 +361,18 @@ public static Intersection intersectBezier2Circle(Point2D p1, Point2D p2, Point2
     ;
 
 
-/*****
-*
-*   intersectBezier2Ellipse
-*
-*****/
+/**
+     * Computes the intersection between quadratic bezier curve 'p' and
+     * the given ellipse.
+ * 
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param ec the center of the ellipse
+     * @param rx the x-radius of the ellipse
+     * @param ry the y-radius of the ellipse
+     * @return the computed result
+ */
 public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point2D p3, Point2D ec, double rx, double ry) {
         Point2D a, b;       // temporary variables
         Point2D c2, c1, c0; // coefficients of quadratic
@@ -383,35 +414,78 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
         return result;
     }
 
-    ;
-
-private static Point2D minp(Point2D a, Point2D b) {
+    /**
+     * Computes the coordinates of the top left corner of a rectangle given two
+     * corner points defining the extrema of the rectangle.
+     *
+     * @param a corner point a
+     * @param b corner point b
+     * @return the top left corner
+     */
+    private static Point2D minp(Point2D a, Point2D b) {
         return new Point2D(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()));
     }
 
+    /**
+     * Computes the coordinates of the bottom right corner of a rectangle given
+     * two corner points defining the extrema of the rectangle.
+     *
+     * @param a corner point a
+     * @param b corner point b
+     * @return the bottom right corner
+     */
     private static Point2D maxp(Point2D a, Point2D b) {
         return new Point2D(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
     }
 
+    /**
+     * Computes the linear interpolation/extrapolation between two points.
+     *
+     * @param a point a
+     * @param b point b
+     * @param t a value between [0, 1] defines the interpolation between a and
+     * b. Values outside this range yield an extrapolation.
+     * @return the interpolated or extrapolated value
+     */
     private static Point2D lerp(Point2D a, Point2D b, double t) {
         return new Point2D(a.getX() + (b.getX() - a.getX()) * t,
                 a.getY() + (b.getY() - a.getY()) * t);
     }
 
+    /**
+     * Returns true if point 'a' is greater or equal to point 'b'. Compares the
+     * x-coordinates first, and if they are equal compares the y-coordinates.
+     *
+     * @param a point a
+     * @param b point b
+     * @return true if a is greater or equal b
+     */
     private static boolean gte(Point2D a, Point2D b) {
         return a.getX() >= b.getX() && a.getY() >= b.getY();
     }
 
+    /**
+     * Returns true if point 'a' is less or equal to point 'b'. Compares the
+     * x-coordinates first, and if they are equal compares the y-coordinates.
+     *
+     * @param a point a
+     * @param b point b
+     * @return true if a is less or equal b
+     */
     private static boolean lte(Point2D a, Point2D b) {
         return a.getX() <= b.getX() && a.getY() <= b.getY();
     }
 
     /**
-     * ***
+     * Computes the intersection between quadratic bezier curve 'p' and the line
+     * 'a'.
      *
-     * intersectBezier2Line
-     *
-     ****
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param a1 point 1 of 'a'
+     * @param a2 point 2 of 'a'
+     * @return the computed intersection
      */
     public static Intersection intersectBezier2Line(Point2D p1, Point2D p2, Point2D p3, Point2D a1, Point2D a2) {
         Point2D a, b;             // temporary variables
@@ -483,15 +557,17 @@ private static Point2D minp(Point2D a, Point2D b) {
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectBezier2Polygon
-*
-*****/
-public static Intersection intersectBezier2Polygon(Point2D p1, Point2D p2, Point2D p3, List<Point2D> points) {
+    /**
+     * Computes the intersection between quadratic bezier curve 'p' and the
+     * given closed polygon.
+     *
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param points the points of the polygon
+     * @return the computed intersection
+     */
+    public static Intersection intersectBezier2Polygon(Point2D p1, Point2D p2, Point2D p3, List<Point2D> points) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points.size();
 
@@ -513,11 +589,18 @@ public static Intersection intersectBezier2Polygon(Point2D p1, Point2D p2, Point
     ;
 
 
-/*****
-*
-*   intersectBezier2Rectangle
-*
-*****/
+
+/**
+     * Computes the intersection between quadratic bezier curve 'p' and
+     * the provided rectangle.
+     * 
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param r1 corner point 1 of the rectangle
+     * @param r2 corner point 2 of the rectangle
+     * @return the computed intersection
+     */
 public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Point2D p3, Point2D r1, Point2D r2) {
         Point2D min = minp(r1, r2);
         Point2D max = maxp(r1, r2);
@@ -543,15 +626,21 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectBezier3Bezier3
-*
-*****/
-public static Intersection intersectBezier3Bezier3(Point2D a1, Point2D a2, Point2D a3, Point2D a4, Point2D b1, Point2D b2, Point2D b3, Point2D b4) {
+    /**
+     * Computes the intersection between cubic bezier curve 'a' and cubic bezier
+     * curve 'b'.
+     *
+     * @param a1 control point 1 of 'a'
+     * @param a2 control point 2 of 'a'
+     * @param a3 control point 3 of 'a'
+     * @param a4 control point 4 of 'a'
+     * @param b1 control point 1 of 'b'
+     * @param b2 control point 2 of 'b'
+     * @param b3 control point 3 of 'b'
+     * @param b4 control point 4 of 'b'
+     * @return the computed result
+     */
+    public static Intersection intersectBezier3Bezier3(Point2D a1, Point2D a2, Point2D a3, Point2D a4, Point2D b1, Point2D b2, Point2D b3, Point2D b4) {
         Point2D a, b, c, d;         // temporary variables
         Point2D c13, c12, c11, c10; // coefficients of cubic
         Point2D c23, c22, c21, c20; // coefficients of cubic
@@ -859,24 +948,36 @@ public static Intersection intersectBezier3Bezier3(Point2D a1, Point2D a2, Point
     ;
 
 
-/*****
-*
-*   intersectBezier3Circle
-*
-*****/
+/**
+     * Computes the intersection between cubic bezier curve 'p' and
+     * the given circle.
+ * 
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param p4 control point 4 of 'p'
+     * @param c the center of the circle
+     * @param r the radius of the circle
+     * @return the computed result
+ */
 public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D c, double r) {
         return Intersection.intersectBezier3Ellipse(p1, p2, p3, p4, c, r, r);
     }
 
-    ;
-
-
-/*****
-*
-*   intersectBezier3Ellipse
-*
-*****/
-public static Intersection intersectBezier3Ellipse(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D ec, double rx, double ry) {
+    /**
+     * Computes the intersection between cubic bezier curve 'p' and the given
+     * ellipse.
+     *
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param p4 control point 4 of 'p'
+     * @param ec the center of the ellipse
+     * @param rx the x-radius of the ellipse
+     * @param ry the y-radius of the ellipse
+     * @return the computed result
+     */
+    public static Intersection intersectBezier3Ellipse(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D ec, double rx, double ry) {
         Point2D a, b, c, d;       // temporary variables
         Point2D c3, c2, c1, c0;   // coefficients of cubic
         Intersection result = new Intersection(Status.NO_INTERSECTION);
@@ -935,15 +1036,18 @@ public static Intersection intersectBezier3Ellipse(Point2D p1, Point2D p2, Point
     ;
 
 
-/*****
-*
-*   intersectBezier3Line
-*
-*   Many thanks to Dan Sunday at SoftSurfer.com.  He gave me a very thorough
-*   sketch of the algorithm used here.  Without his help, I'm not sure when I
-*   would have figured out this intersection problem.
-*
-*****/
+    /**
+     * Computes the intersection between cubic bezier curve 'p' and
+     * the line 'a'.
+     * 
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param p4 control point 4 of 'p'
+     * @param a1 point 1 of 'a'
+     * @param a2 point 2 of 'a'
+     * @return the computed intersection
+     */
 public static Intersection intersectBezier3Line(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D a1, Point2D a2) {
         Point2D a, b, c, d;       // temporary variables
         Point2D c3, c2, c1, c0;   // coefficients of cubic
@@ -1039,15 +1143,18 @@ public static Intersection intersectBezier3Line(Point2D p1, Point2D p2, Point2D 
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectBezier3Polygon
-*
-*****/
-public static Intersection intersectBezier3Polygon(Point2D p1, Point2D p2, Point2D p3, Point2D p4, List<Point2D> points) {
+    /**
+     * Computes the intersection between cubic bezier curve 'p' and the given
+     * closed polygon.
+     *
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param p4 control point 4 of 'p'
+     * @param points the points of the polygon
+     * @return the computed intersection
+     */
+    public static Intersection intersectBezier3Polygon(Point2D p1, Point2D p2, Point2D p3, Point2D p4, List<Point2D> points) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points.size();
 
@@ -1066,15 +1173,19 @@ public static Intersection intersectBezier3Polygon(Point2D p1, Point2D p2, Point
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectBezier3Rectangle
-*
-*****/
-public static Intersection intersectBezier3Rectangle(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D r1, Point2D r2) {
+    /**
+     * Computes the intersection between cubic bezier curve 'p' and the provided
+     * rectangle.
+     *
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param p4 control point 4 of 'p'
+     * @param r1 corner point 1 of the rectangle
+     * @param r2 corner point 2 of the rectangle
+     * @return the computed intersection
+     */
+    public static Intersection intersectBezier3Rectangle(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D r1, Point2D r2) {
         Point2D min = minp(r1, r2);
         Point2D max = maxp(r1, r2);
         Point2D topRight = new Point2D(max.getX(), min.getY());
@@ -1099,15 +1210,16 @@ public static Intersection intersectBezier3Rectangle(Point2D p1, Point2D p2, Poi
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectCircleCircle
-*
-*****/
-public static Intersection intersectCircleCircle(Point2D c1, double r1, Point2D c2, double r2) {
+    /**
+     * Computes the intersection between circle 1 and circle 2.
+     *
+     * @param c1 the center of circle 1
+     * @param r1 the radius of circle 1
+     * @param c2 the center of circle 2
+     * @param r2 the radius of circle 2
+     * @return computed intersection
+     */
+    public static Intersection intersectCircleCircle(Point2D c1, double r1, Point2D c2, double r2) {
         Intersection result;
 
         // Determine minimum and maximum radii where circles can intersect
@@ -1146,27 +1258,30 @@ public static Intersection intersectCircleCircle(Point2D c1, double r1, Point2D 
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectCircleEllipse
-*
-*****/
-public static Intersection intersectCircleEllipse(Point2D cc, double r, Point2D ec, double rx, double ry) {
+    /**
+     * Computes the intersection between a circle and an ellipse.
+     *
+     * @param cc the center of the circle
+     * @param r the radius of the circle
+     * @param ec the center of the ellipse
+     * @param rx the x-radius of the ellipse
+     * @param ry the y-radius of the ellipse
+     * @return computed intersection
+     */
+    public static Intersection intersectCircleEllipse(Point2D cc, double r, Point2D ec, double rx, double ry) {
         return Intersection.intersectEllipseEllipse(cc, r, r, ec, rx, ry);
     }
 
-    ;
-
-
-/*****
-*
-*   intersectCircleLine
-*
-*****/
-public static Intersection intersectCircleLine(Point2D c, double r, Point2D a1, Point2D a2) {
+    /**
+     * Computes the intersection between a circle and a line.
+     *
+     * @param c the center of the circle
+     * @param r the radius of the circle
+     * @param a1 point 1 of the line
+     * @param a2 point 2 of the line
+     * @return computed intersection
+     */
+    public static Intersection intersectCircleLine(Point2D c, double r, Point2D a1, Point2D a2) {
         Intersection result;
         double a = (a2.getX() - a1.getX()) * (a2.getX() - a1.getX())
                 + (a2.getY() - a1.getY()) * (a2.getY() - a1.getY());
@@ -1208,15 +1323,15 @@ public static Intersection intersectCircleLine(Point2D c, double r, Point2D a1, 
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectCirclePolygon
-*
-*****/
-public static Intersection intersectCirclePolygon(Point2D c, double r, List<Point2D> points) {
+    /**
+     * Computes the intersection between a circle and a polygon.
+     *
+     * @param c the center of the circle
+     * @param r the radius of the circle
+     * @param points the points of the polygon
+     * @return computed intersection
+     */
+    public static Intersection intersectCirclePolygon(Point2D c, double r, List<Point2D> points) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points.size();
         Intersection inter = null;
@@ -1238,15 +1353,16 @@ public static Intersection intersectCirclePolygon(Point2D c, double r, List<Poin
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectCircleRectangle
-*
-*****/
-public static Intersection intersectCircleRectangle(Point2D c, double r, Point2D r1, Point2D r2) {
+    /**
+     * Computes the intersection between a circle and a rectangle.
+     *
+     * @param c the center of the circle
+     * @param r the radius of the circle
+     * @param r1 corner point 1 of the rectangle
+     * @param r2 corner point 2 of the rectangle
+     * @return computed intersection
+     */
+    public static Intersection intersectCircleRectangle(Point2D c, double r, Point2D r1, Point2D r2) {
         Point2D min = minp(r1, r2);
         Point2D max = maxp(r1, r2);
         Point2D topRight = new Point2D(max.getX(), min.getY());
@@ -1276,17 +1392,17 @@ public static Intersection intersectCircleRectangle(Point2D c, double r, Point2D
     ;
 
 
-/*****
-*
-*   intersectEllipseEllipse
-*   
-*   This code is based on MgcIntr2DElpElp.cpp written by David Eberly.  His
-*   code along with many other excellent examples are avaiable at his site:
-*   http://www.magic-software.com
-*
-*   NOTE: Rotation will need to be added to this function
-*
-*****/
+    /**
+     * Computes the intersection between two ellipses.
+     *
+     * @param c1 the center of ellipse 1
+     * @param rx1 the x-radius of ellipse 1
+     * @param ry1 the y-radius of ellipse 1
+     * @param c2 the center of ellipse 2
+     * @param rx2 the x-radius of ellipse 2
+     * @param ry2 the y-radius of ellipse 2
+     * @return computed intersection
+     */
 public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, double ry1, Point2D c2, double rx2, double ry2) {
         double[] a = {
             ry1 * ry1, 0, rx1 * rx1, -2 * ry1 * ry1 * c1.getX(), -2 * rx1 * rx1 * c1.getY(),
@@ -1334,16 +1450,16 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectEllipseLine
-*   
-*   NOTE: Rotation will need to be added to this function
-*
-*****/
+    /**
+     * Computes the intersection between an ellipse and a line.
+     *
+     * @param ec the center of the ellipse
+     * @param rx the x-radius of the ellipse
+     * @param ry the y-radius of the ellipse
+     * @param a1 point 1 of the line
+     * @param a2 point 2 of the line
+     * @return computed intersection
+     */
 public static Intersection intersectEllipseLine(Point2D ec, double rx, double ry, Point2D a1, Point2D a2) {
         Intersection result;
         Point2D origin = new Point2D(a1.getX(), a1.getY());
@@ -1393,14 +1509,15 @@ public static Intersection intersectEllipseLine(Point2D ec, double rx, double ry
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectEllipsePolygon
-*
-*****/
+    /**
+     * Computes the intersection between a circle and a polygon.
+     *
+     * @param c the center of the ellipse
+     * @param rx the x-radius of the ellipse
+     * @param ry the y-radius of the ellipse
+     * @param points the points of the polygon
+     * @return computed intersection
+     */
 public static Intersection intersectEllipsePolygon(Point2D c, double rx, double ry, List<Point2D> points) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points.size();
@@ -1422,12 +1539,16 @@ public static Intersection intersectEllipsePolygon(Point2D c, double rx, double 
 
     ;
 
-
-/*****
-*
-*   intersectEllipseRectangle
-*
-*****/
+    /**
+     * Computes the intersection between an ellipse and a rectangle.
+     *
+     * @param c the center of the ellipse
+     * @param rx the x-radius of the ellipse
+     * @param ry the y-radius of the ellipse
+     * @param r1 corner point 1 of the rectangle
+     * @param r2 corner point 2 of the rectangle
+     * @return computed intersection
+     */
 public static Intersection intersectEllipseRectangle(Point2D c, double rx, double ry, Point2D r1, Point2D r2) {
         Point2D min = minp(r1, r2);
         Point2D max = maxp(r1, r2);
@@ -1453,14 +1574,15 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectLineLine
-*
-*****/
+   /**
+     * Computes the intersection between two lines 'a' and 'b'
+     *
+     * @param a1 point 1 of line 'a'
+     * @param a2 point 2 of line 'a'
+     * @param b1 point 1 of line 'b'
+     * @param b2 point 2 of line 'b'
+     * @return computed intersection
+     */
 public static Intersection intersectLineLine(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
         Intersection result;
 
@@ -1494,14 +1616,14 @@ public static Intersection intersectLineLine(Point2D a1, Point2D a2, Point2D b1,
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectLinePolygon
-*
-*****/
+    /**
+     * Computes the intersection between a line and a polygon.
+     *
+     * @param a1 point 1 of the line
+     * @param a2 point 2 of the line
+     * @param points the points of the polygon
+     * @return computed intersection
+     */
 public static Intersection intersectLinePolygon(Point2D a1, Point2D a2, List<Point2D> points) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points.size();
@@ -1521,14 +1643,15 @@ public static Intersection intersectLinePolygon(Point2D a1, Point2D a2, List<Poi
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectLineRectangle
-*
-*****/
+    /**
+     * Computes the intersection between a line and a rectangle.
+     *
+     * @param a1 point 1 of the line
+     * @param a2 point 2 of the line
+     * @param r1 corner point 1 of the rectangle
+     * @param r2 corner point 2 of the rectangle
+     * @return computed intersection
+     */
 public static Intersection intersectLineRectangle(Point2D a1, Point2D a2, Point2D r1, Point2D r2) {
         Point2D min = minp(r1, r2);
         Point2D max = maxp(r1, r2);
@@ -1554,14 +1677,13 @@ public static Intersection intersectLineRectangle(Point2D a1, Point2D a2, Point2
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectPolygonPolygon
-*
-*****/
+    /**
+     * Computes the intersection between two polygons.
+     *
+     * @param points1 the points of the first polygon
+     * @param points2 the points of the second polygon
+     * @return computed intersection
+     */
 public static Intersection intersectPolygonPolygon(List<Point2D> points1, List<Point2D> points2) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points1.size();
@@ -1582,14 +1704,14 @@ public static Intersection intersectPolygonPolygon(List<Point2D> points1, List<P
 
     }
 
-    ;
-
-
-/*****
-*
-*   intersectPolygonRectangle
-*
-*****/
+    /**
+     * Computes the intersection between a polygon and a rectangle.
+     *
+     * @param points the points of the polygon
+     * @param r1 corner point 1 of the rectangle
+     * @param r2 corner point 2 of the rectangle
+     * @return computed intersection
+     */
 public static Intersection intersectPolygonRectangle(List<Point2D> points, Point2D r1, Point2D r2) {
         Point2D min = minp(r1, r2);
         Point2D max = maxp(r1, r2);
@@ -1615,14 +1737,15 @@ public static Intersection intersectPolygonRectangle(List<Point2D> points, Point
         return result;
     }
 
-    ;
-
-
-/*****
-*
-*   intersectRayRay
-*
-*****/
+    /**
+     * Computes the intersection between two infinitely long rays 'a' and 'b'.
+     *
+     * @param a1 point 1 of ray 'a'
+     * @param a2 point 2 of ray 'a'
+     * @param b1 point 1 of ray 'a'
+     * @param b2 point 2 of ray 'b'
+     * @return computed intersection
+     */
 public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
         Intersection result;
 
@@ -1651,14 +1774,16 @@ public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, P
         return result;
     }
 
-    ;
 
-
-/*****
-*
-*   intersectRectangleRectangle
-*
-*****/
+    /**
+     * Computes the intersection between two rectangles 'a' and 'b'.
+     *
+     * @param a1 corner point 1 of rectangle 'a'
+     * @param a2 corner point 2 of rectangle 'a'
+     * @param b1 corner point 1 of rectangle 'b'
+     * @param b2 corner point 2 of rectangle 'b'
+     * @return computed intersection
+     */
 public static Intersection intersectRectangleRectangle(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
         Point2D min = minp(a1, a2);
         Point2D max = maxp(a1, a2);
@@ -1687,15 +1812,12 @@ public static Intersection intersectRectangleRectangle(Point2D a1, Point2D a2, P
     ;
 
 
-/*****
-*
-*   bezout
-*
-*   This code is based on MgcIntr2DElpElp.cpp written by David Eberly.  His
-*   code along with many other excellent examples are available at his site:
-*   http://www.magic-software.com
-*
-*****/
+/**
+ * Constructs a polynomial as a Bezout determinant given two polynomials e1 and e2.
+     * @param e1 polynomial e1
+     * @param e2 polynomial e2
+     * @return the bezout determinant
+*/
 public static Polynomial bezout(double[] e1, double[] e2) {
         double AB = e1[0] * e2[1] - e2[0] * e1[1];
         double AC = e1[0] * e2[2] - e2[0] * e1[2];

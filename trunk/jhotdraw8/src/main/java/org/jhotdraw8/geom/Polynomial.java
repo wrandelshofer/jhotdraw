@@ -2,7 +2,13 @@
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  *
- * Original JavaScript Polynomial.js code is copyright 2002, Kevin Lindsey
+ * This class is a based on:
+*
+*   Polynomial.js by Kevin Lindsey.
+ * Copyright (C) 2002, Kevin Lindsey.
+ *
+ * MgcPolynomial.cpp by David Eberly. 
+ * Copyright (c) 2000-2003 Magic Software, Inc.
  */
 package org.jhotdraw8.geom;
 
@@ -17,13 +23,17 @@ import javafx.geometry.Point2D;
  * Polynomial encapsulates root finding functions needed by curve intersection
  * methods which are based on numerical calculations.
  * <p>
- * This class is a port of the Polynomial.js by Kevin Lindsey.
+ * This class is a port of Polynomial.js by Kevin Lindsey.
+ * Part of Polynomial.js is based on MgcPolynomial.cpp written by David Eberly, Magic Software. Inc.
  * <p>
  * References:
  * <p>
- * <a href="http://www.kevlindev.com/gui/index.htm>Polynomial.js</a>, Copyright
- * (C) 2002, Kevin Lindsey.
- *
+ * <a href="http://www.kevlindev.com/gui/index.htm">Polynomial.js</a>, Copyright
+ * (c) 2002, Kevin Lindsey.
+ * <p>
+* <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright 2000-2003
+* (c) David Eberly. Magic Software, Inc.
+*
  * @author Werner Randelshofer
  * @version $$Id$$
  */
@@ -33,8 +43,7 @@ public class Polynomial {
     private final static double ACCURACY = 6;
 
     /**
-     * ***
-     *
+     "
      * Interpolate. Computes y and dy for a given x.
      *
      * @param xs
@@ -44,7 +53,7 @@ public class Polynomial {
      * @param x
      * @return a tuple: y, dy. ***
      */
-    public static YDY interpolate(double[] xs, double[] ys, int n, int offset, double x) {
+    private static YDY interpolate(double[] xs, double[] ys, int n, int offset, double x) {
 
         double y = 0;
         double dy = 0;
@@ -90,11 +99,9 @@ public class Polynomial {
     }
 
     /**
-     * ***
-     *
-     * constructor
-     *
-     ****
+     * Creates a new polynomial.
+     * 
+     * @param coefs the coefficients of the polynomial
      */
     public Polynomial(double... coefs) {
         this.coefs = coefs;
@@ -122,11 +129,11 @@ public class Polynomial {
     }
 
     /**
-     * ***
-     *
-     * add
-     *
-     ****
+     * Adds the coefficients of that polynomial to this polynomial and
+     * returns the resulting polynomial. 
+     * Does not change this polynomial.
+     * @param that another polynomial
+     * @return a new polynomial containing the sum of this coefficients and that coefficients
      */
     public Polynomial add(Polynomial that) {
         Polynomial result = new Polynomial();
@@ -678,7 +685,7 @@ public double[] getCubicRoots() {
 
 
 /**
-*Returns the roots of a quartic polynomial (degree equals four).
+* Returns the roots of a quartic polynomial (degree equals four).
 *
 *   This code is based on MgcPolynomial.cpp written by David Eberly.  His
 *   code along with many other excellent examples are available at his site:

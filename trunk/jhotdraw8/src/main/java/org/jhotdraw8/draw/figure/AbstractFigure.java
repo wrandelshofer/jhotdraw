@@ -117,7 +117,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      * figure.
      * <p>
      * This implementation returns false if {@code newParent} is a
-     * {@link Drawing}. Because only {@link org.jhotdraw8.draw.Layer}s may have
+     * {@link Drawing}. Because only {@link org.jhotdraw8.draw.figure.Layer}s may have
      * {@code org.jhotdraw8.draw.Drawing} as a parent.
      *
      * @param newParent The new parent figure.
