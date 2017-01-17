@@ -23,17 +23,17 @@ import javafx.geometry.Point2D;
  * Polynomial encapsulates root finding functions needed by curve intersection
  * methods which are based on numerical calculations.
  * <p>
- * This class is a port of Polynomial.js by Kevin Lindsey.
- * Part of Polynomial.js is based on MgcPolynomial.cpp written by David Eberly, Magic Software. Inc.
+ * This class is a port of Polynomial.js by Kevin Lindsey. Part of Polynomial.js
+ * is based on MgcPolynomial.cpp written by David Eberly, Magic Software. Inc.
  * <p>
  * References:
  * <p>
  * <a href="http://www.kevlindev.com/gui/index.htm">Polynomial.js</a>, Copyright
  * (c) 2002, Kevin Lindsey.
  * <p>
-* <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright 2000-2003
-* (c) David Eberly. Magic Software, Inc.
-*
+ * <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright
+ * 2000-2003 (c) David Eberly. Magic Software, Inc.
+ *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
@@ -43,7 +43,7 @@ public class Polynomial {
     private final static double ACCURACY = 6;
 
     /**
-     "
+     * "
      * Interpolate. Computes y and dy for a given x.
      *
      * @param xs
@@ -100,7 +100,7 @@ public class Polynomial {
 
     /**
      * Creates a new polynomial.
-     * 
+     *
      * @param coefs the coefficients of the polynomial
      */
     public Polynomial(double... coefs) {
@@ -129,11 +129,12 @@ public class Polynomial {
     }
 
     /**
-     * Adds the coefficients of that polynomial to this polynomial and
-     * returns the resulting polynomial. 
-     * Does not change this polynomial.
+     * Adds the coefficients of this polynomial to the coefficients of that
+     * polynomial and returns the resulting polynomial. Does not change this
+     * polynomial.
+     *
      * @param that another polynomial
-     * @return a new polynomial containing the sum of this coefficients and that coefficients
+     * @return a new polynomial containing the sum of the coefficients
      */
     public Polynomial add(Polynomial that) {
         Polynomial result = new Polynomial();
@@ -152,11 +153,12 @@ public class Polynomial {
     }
 
     /**
-     * ***
+     * Multiplies the coefficients of this polynomial with the coefficients of
+     * that polynomial and returns the resulting polynomial. Does not change
+     * this polynomial.
      *
-     * multiply
-     *
-     ****
+     * @param that another polynomial
+     * @return a new polynomial containing the product of the coefficients
      */
     public Polynomial multiply(Polynomial that) {
         Polynomial result = new Polynomial(new double[this.getDegree() + that.getDegree()]);
@@ -171,13 +173,10 @@ public class Polynomial {
     }
 
     /**
-     * ***
+     * Divides the coefficients of this polynomial by the provided scalar.
+     * Change this polynomial in-place.
      *
-     * divide_scalar
-     *
-     * FIXME mutates in-place
-     *
-     ****
+     * @param scalar a scalar
      */
     public void divide_scalar(double scalar) {
         for (int i = 0; i < this.coefs.length; i++) {
@@ -220,6 +219,7 @@ public class Polynomial {
      *
      * @param min the lower bound of the interval
      * @param max the upper bound of the interval
+     * @return the potential root
      */
     public double bisection(double min, double max) {
         double minValue = this.eval(min);
@@ -311,6 +311,7 @@ public class Polynomial {
      * @param min the lower bound of the interval
      * @param max the upper bound of the interval
      * @param n the number of trapezoids
+     * @return the area of the polynomial
      */
     public double trapezoid(double min, double max, int n) {
 
@@ -431,18 +432,15 @@ public class Polynomial {
     }
 
     /**
-     * ***
-     *
-     * get degree
-     *
-     ****
+     * Returns the degree of this polynomial.
+     * @return the degree
      */
     public int getDegree() {
         return this.coefs.length - 1;
     }
 
     /**
-     * Returns the derivative of the current polynomial.
+     * Returns the derivative of this polynomial.
      *
      * @return returns the derivative of the current polynomial.
      */
@@ -457,9 +455,13 @@ public class Polynomial {
     }
 
     /**
-* Attempts to find the roots of the current polynomial. This method will attempt to decrease the degree of the polynomial using the simplify() method. Once the degree is determined, getRoots() dispatches the appropriate root-finding method for the degree of the polynomial.
-*<p>
-    NOTE Polynomials above the 4'th degree are not supported.
+     * Attempts to find the roots of the current polynomial. This method will
+     * attempt to decrease the degree of the polynomial using the simplify()
+     * method. Once the degree is determined, getRoots() dispatches the
+     * appropriate root-finding method for the degree of the polynomial.
+     * <p>
+     * NOTE Polynomials above the 4'th degree are not supported.
+     *
      * @return the roots of the polynomial
      */
     public double[] getRoots() {
@@ -583,38 +585,35 @@ public double[] getLinearRoot() {
 public double[] getQuadraticRoots() {
         double[] results = new double[0];
 
+        double a = this.coefs[2];
+        double b = this.coefs[1] / a;
+        double c = this.coefs[0] / a;
+        double d = b * b - 4 * c;
 
-            double a = this.coefs[2];
-            double b = this.coefs[1] / a;
-            double c = this.coefs[0] / a;
-            double d = b * b - 4 * c;
+        if (d > 0) {
+            double e = Math.sqrt(d);
 
-            if (d > 0) {
-                double e = Math.sqrt(d);
+            results = new double[]{
+                0.5 * (-b + e),
+                0.5 * (-b - e)};
+        } else if (d == 0) {
+            // really two roots with same value, but we only return one
+            results = new double[]{0.5 * -b};
+        }
 
-                results = new double[]{
-                    0.5 * (-b + e),
-                    0.5 * (-b - e)};
-            } else if (d == 0) {
-                // really two roots with same value, but we only return one
-                results = new double[]{0.5 * -b};
-            }
-        
         return results;
     }
 
-
-
-/**
-* Returns the roots of a cubic polynomial (degree equals three).
-*
-*   This code is based on MgcPolynomial.cpp written by David Eberly.  His
-*   code along with many other excellent examples are avaiable at his site:
-*   http://www.magic-software.com
-*
+    /**
+     * Returns the roots of a cubic polynomial (degree equals three).
+     *
+     * This code is based on MgcPolynomial.cpp written by David Eberly. His code
+     * along with many other excellent examples are avaiable at his site:
+     * http://www.magic-software.com
+     *
      * @return the roots
-*/
-public double[] getCubicRoots() {
+     */
+    public double[] getCubicRoots() {
         double[] results = new double[0];
 
         if (this.getDegree() == 3) {
@@ -681,19 +680,16 @@ public double[] getCubicRoots() {
         return results;
     }
 
-
-
-
-/**
-* Returns the roots of a quartic polynomial (degree equals four).
-*
-*   This code is based on MgcPolynomial.cpp written by David Eberly.  His
-*   code along with many other excellent examples are available at his site:
-*   http://www.magic-software.com
-*
+    /**
+     * Returns the roots of a quartic polynomial (degree equals four).
+     *
+     * This code is based on MgcPolynomial.cpp written by David Eberly. His code
+     * along with many other excellent examples are available at his site:
+     * http://www.magic-software.com
+     *
      * @return the roots
-*/
-public double[] getQuarticRoots() {
+     */
+    public double[] getQuarticRoots() {
 
         double[] results = new double[4];
         int numResults = 0;
