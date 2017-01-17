@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.tool.Tool;
  * The DrawingEditor invokes {@code activate()} and {@code deactivate()} methods
  * on the {@code Tool} if it becomes the active tool or loses this status.
  *
- * @design.pattern Drawing Framework, KeyAbstraction.
+ * @design.pattern org.jhotdraw8.draw.figure.Drawing Framework, KeyAbstraction.
  * @design.pattern DrawingEditor Mediator, Mediator. The DrawingEditor allows to
  * use the same {@code Tool} with multiple {@code DrawingView}s.
  *

@@ -350,6 +350,8 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     /**
      * Returns null if identity.
+     * @param styled whether the styled value should be used
+     * @return the transform or null
      */
     default Transform getParentToLocal(boolean styled) {
         Transform p2l = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;

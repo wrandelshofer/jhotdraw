@@ -21,7 +21,7 @@
  * The key interfaces for the representation of a drawing are:
  * </p>
  * <ul>
- * <li>{@link org.jhotdraw8.draw.Drawing}</li>
+ * <li>{@link org.jhotdraw8.draw.figure.Drawing}</li>
  * <li>{@link org.jhotdraw8.draw.figure.Figure}</li>
  * </ul>
  * <p>

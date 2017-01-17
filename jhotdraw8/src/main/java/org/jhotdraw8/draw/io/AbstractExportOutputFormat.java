@@ -105,14 +105,14 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
     protected abstract boolean isResolutionIndependent();
 
     /**
-     *
-     * @param file
-     * @param page
-     * @param node
-     * @param pageCount
-     * @param pageNumber
-     * @param internalPageNumber
-     * @throws IOException
+     * Writes a page.
+     * @param file the output file or null
+     * @param page the page figure
+     * @param node the node of the drawing
+     * @param pageCount the page count
+     * @param pageNumber the page number
+     * @param internalPageNumber the internal page number of the page figure
+     * @throws IOException if writing fails
      */
     protected abstract void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
@@ -133,12 +133,14 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
     }
 
     /**
-     *
-     * @param dir
-     * @param drawing
-     * @param pages
-     * @param hints
-     * @throws java.io.IOException
+     * Writes all pages of the drawing.
+     * 
+     * @param dir the output directory, null for print output
+     * @param basename the basename of the pages, null for print output
+     * @param drawing the drawing
+     * @param pages the pages
+     * @param hints the hints
+     * @throws java.io.IOException in case of failure
      */
     protected void writePages(File dir, String basename, Drawing drawing, List<Page> pages, Map<Key<?>, Object> hints) throws IOException {
         setExternalHome(dir == null ? null : dir.toURI());

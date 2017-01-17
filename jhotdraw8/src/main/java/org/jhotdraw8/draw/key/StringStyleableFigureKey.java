@@ -63,6 +63,7 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
      * @param name The name of the key.
      * @param mask The dirty mask.
      * @param defaultValue The default value.
+     * @param helpText the help text
      */
     public StringStyleableFigureKey(String name, DirtyMask mask, String defaultValue, String helpText) {
         super(name, String.class, false, mask, defaultValue);

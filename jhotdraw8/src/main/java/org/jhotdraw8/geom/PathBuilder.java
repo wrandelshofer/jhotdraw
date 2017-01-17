@@ -28,6 +28,8 @@ public interface PathBuilder {
      * The implementation of this method has been derived from Apache Batik
      * class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc
      *
+     * @param x0 the start point of the ellipse
+     * @param y0 the start point of the ellipse
      * @param rx the x radius of the ellipse
      * @param ry the y radius of the ellipse
      *

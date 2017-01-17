@@ -29,6 +29,7 @@ public abstract class AbstractFindAction<P extends Project> extends AbstractProj
      *
      * @param app the application
      * @param p the project
+     * @param pClass the class of the project
      */
     public AbstractFindAction(Application app, P p, Class<P> pClass) {
         super(app, p,pClass);

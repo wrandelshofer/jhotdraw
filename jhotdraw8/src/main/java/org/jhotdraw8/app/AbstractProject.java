@@ -22,7 +22,6 @@ import org.jhotdraw8.collection.Key;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <V> the project view type
  */
 public abstract class AbstractProject extends AbstractDisableable implements Project {
 

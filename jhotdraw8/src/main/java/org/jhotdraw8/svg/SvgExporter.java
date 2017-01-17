@@ -160,7 +160,7 @@ public class SvgExporter implements InternalExternalUriMixin {
     /**
      * Must be a directory and not a file.
      *
-     * @param uri
+     * @param uri the uri
      */
     public void setInternalHome(URI uri) {
         internalHome = uri;

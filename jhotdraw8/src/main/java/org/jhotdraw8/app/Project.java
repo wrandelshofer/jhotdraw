@@ -55,7 +55,6 @@ import org.jhotdraw8.beans.PropertyBean;
  * </li>
  * </ol>
  *
- * @param <V> the project type
  * @design.pattern Application Framework, KeyAbstraction.
  *
  * @author Werner Randelshofer

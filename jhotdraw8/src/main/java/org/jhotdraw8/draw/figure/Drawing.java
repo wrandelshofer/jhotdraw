@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.draw.figure.Figure;
 import java.io.File;
 import java.net.URI;
 import java.util.Collections;
@@ -14,12 +13,11 @@ import org.jhotdraw8.draw.key.SimpleFigureKey;
 import java.util.List;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
 import org.jhotdraw8.draw.key.CColorStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.draw.DrawingEditor;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -33,8 +31,8 @@ import org.jhotdraw8.css.StylesheetsManager;
  * @design.pattern Drawing Framework, KeyAbstraction. The drawing framework
  * supports the creation of editors for structured drawings. The key
  * abstractions of the framework are: null {@link Drawing}, {@link Figure}, {@link org.jhotdraw8.draw.handle.Handle},
- * {@link org.jhotdraw8.draw.tool.Tool}, {@link DrawingView},
- * {@link DrawingEditor}, {@link org.jhotdraw8.draw.model.DrawingModel}.
+ * {@link org.jhotdraw8.draw.tool.Tool}, {@link org.jhotdraw8.draw.DrawingView},
+ * {@link org.jhotdraw8.draw.DrawingEditor}, {@link org.jhotdraw8.draw.model.DrawingModel}.
  * @design.pattern org.jhotdraw8.draw.model.DrawingModel Facade, Subsystem.
  *
  * @design.pattern Drawing Strategy, Context.

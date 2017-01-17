@@ -29,7 +29,7 @@ import org.jhotdraw8.app.DocumentProject;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
- * to write unsaved changes of a {@link org.jhotdraw8.app.ProjectView} before a
+ * to write unsaved changes of a {@link org.jhotdraw8.app.DocumentProject} before a
  * destructive action is performed.
  * <p>
  * If the view has no unsaved changes, method {@code doIt} is invoked
