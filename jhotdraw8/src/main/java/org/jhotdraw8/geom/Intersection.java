@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javafx.geometry.Point2D;
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.c;
 
 /**
  * Intersection.
