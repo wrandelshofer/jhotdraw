@@ -282,7 +282,7 @@ public class DesignPatternTaglet implements Taglet {
         public DesignPatternHeaderTag(Doc holder, String instantiatingType, String patternName, String patternRole, SourcePosition position) {
             super(holder, new Tag[0], position);
             this.instantiatingType = instantiatingType;
-            this.patternName = patternName;
+            this.patternName = patternName.replaceAll("\\s+"," ");
             this.patternRole = patternRole;
         }
 
@@ -291,7 +291,7 @@ public class DesignPatternTaglet implements Taglet {
             return NAME;
         }
         
-        public String unqualfiedInstantiatingType() {
+        public String unqualifiedInstantiatingType() {
             return toUnqualifiedName(instantiatingType);
         }
 
@@ -375,7 +375,7 @@ public class DesignPatternTaglet implements Taglet {
                             }
                             if (descr != null) {
                                 if (descr.isEmpty()) {
-                                    System.err.println(lookedUpDpt.position() + ": warning: DesignPatternTaglet \"@" + NAME + " " + dpt.unqualfiedInstantiatingType() + " " + dpt.patternName + "\" must have a description.");
+                                    System.err.println(lookedUpDpt.position() + ": warning: DesignPatternTaglet \"@" + NAME + " " + dpt.unqualifiedInstantiatingType() + " " + dpt.patternName + "\" must have a description.");
                                     descriptions.put(key, descr);
                                 } else {
                                     descriptions.put(key, descr);
@@ -385,10 +385,10 @@ public class DesignPatternTaglet implements Taglet {
                                     return result.toArray(new Tag[result.size()]);
                                 }
                             } else {
-                                System.err.println(dpt.position() + ": warning: DesignPatternTaglet could not find a \"@" + NAME + " " + dpt.unqualfiedInstantiatingType() + " " + dpt.patternName + "\" tag in class " + dpt.instantiatingType + ".");
+                                System.err.println(dpt.position() + ": warning: DesignPatternTaglet could not find a \"@" + NAME + " " + dpt.unqualifiedInstantiatingType() + " " + dpt.patternName + "\" tag in class " + dpt.instantiatingType + ".");
                             }
                         } else {
-                            System.err.println(dpt.position() + ": warning: DesignPatternTaglet could not find class " + dpt.unqualfiedInstantiatingType() + ".");
+                            System.err.println(dpt.position() + ": warning: DesignPatternTaglet could not find class " + dpt.unqualifiedInstantiatingType() + ".");
                         }
                     }
                 }
