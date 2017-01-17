@@ -246,7 +246,7 @@
         header="${ant.project.name} ${version}" 
         windowtitle="${ant.project.name} ${version}"
         maxmemory="256M"
-        overview="${src.main.java}/org/jhotdraw/overview.html"
+        overview="${src.main.java}/org/jhotdraw8/overview.html"
         charset="UTF-8"
         >
             <taglet name="org.jhotdraw8.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
