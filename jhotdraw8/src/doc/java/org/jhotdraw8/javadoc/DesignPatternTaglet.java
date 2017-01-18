@@ -282,7 +282,7 @@ public class DesignPatternTaglet implements Taglet {
         public DesignPatternHeaderTag(Doc holder, String instantiatingType, String patternName, String patternRole, SourcePosition position) {
             super(holder, new Tag[0], position);
             this.instantiatingType = instantiatingType;
-            this.patternName = patternName.replaceAll("\\s+"," ");
+            this.patternName = patternName;
             this.patternRole = patternRole;
         }
 
@@ -434,9 +434,9 @@ public class DesignPatternTaglet implements Taglet {
 
         if (p0 != -1 && p1 != -1 && p2 != -1) {
             instantiatingType = toQualifiedName(tag, text.substring(0, p0).trim());
-            patternName = text.substring(p0 + 1, p1).trim();
-            patternRole = text.substring(p1 + 1, p2).trim();
-            description = text.substring(p2 + 1);
+            patternName =cleanupWhitespace( text.substring(p0 + 1, p1));
+            patternRole = cleanupWhitespace(text.substring(p1 + 1, p2));
+            description =cleanupWhitespace( text.substring(p2 + 1));
         } else {
             System.err.println(tag.position() + ": warning: DesignPatternTaglet illegal @" + NAME + " tag. Expected \"@" + NAME + " className patternName, roleName. description.\"");
             description = text;
@@ -454,4 +454,8 @@ public class DesignPatternTaglet implements Taglet {
 
         return parsed.toArray(new Tag[parsed.size()]);
     }
+    
+    private static String cleanupWhitespace(String str) {
+return str.replaceAll("\\s+"," ").trim();
+        }
 }

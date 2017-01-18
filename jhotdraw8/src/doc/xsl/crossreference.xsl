@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+ xmlns="http://docbook.org/ns/docbook"
+  xmlns:db="http://docbook.org/ns/docbook">
   <xsl:output method="xml"/>
 
   <!-- TODO customize transformation rules 
@@ -13,8 +15,12 @@
 </section>
 </xsl:template>
 
-<xsl:template match="section">
-  <content comment="{key('el-by-idref', @id)}" referencedid="{@id}" test="{@id}"/>
+<!-- suppress text and attributes -->
+<xsl:template match="text()|@*"/>
+
+<xsl:template match="db:section">
+  <content comment="{key('el-by-idref', @id)}" referencedid="{@xml:id}" test="{@xml:id}"/>
+   <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
