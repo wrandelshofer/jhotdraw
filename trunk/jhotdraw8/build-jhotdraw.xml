@@ -379,7 +379,7 @@
   </target>
   <target name="jar" depends="compile,do-jar" description="bundles the class files into a jar file">
   </target>
-  <target name="javadoc" depends="clean,compile,do-javadoc" description="generates api documentation">
+  <target name="javadoc" depends="clean,compile,,do-docbook.compile,do-javadoc" description="generates api documentation">
   </target>
   <target name="sysdoc" depends="clean,compile,javadoc,do-sysdoc" description="generates specification and user documentation">
   </target>
