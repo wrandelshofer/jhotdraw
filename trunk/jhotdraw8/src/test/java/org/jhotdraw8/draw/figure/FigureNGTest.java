@@ -100,12 +100,12 @@ public class FigureNGTest {
     }
     
     /**
-     * Test of getDeclaredAndInheritedKeys method, of class Figure.
+     * Test of getDeclaredAndInheritedMapAccessors method, of class Figure.
      */
     @Test
     public void testGetDeclaredAndInheritedKeys() {
-        Set<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedKeys(Figure.class);
-        Set<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedKeys(RectangleFigure.class);
+        Set<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);
+        Set<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedMapAccessors(RectangleFigure.class);
         System.out.println("rr:" + rectangleFigureKeys);
         Set<MapAccessor<?>> intersection = new HashSet<>(figureKeys);
         intersection.retainAll(rectangleFigureKeys);

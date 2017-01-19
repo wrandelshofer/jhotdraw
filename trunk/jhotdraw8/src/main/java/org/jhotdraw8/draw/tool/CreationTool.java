@@ -29,15 +29,9 @@ import org.jhotdraw8.util.ReversedList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CreationTool extends AbstractTool {
+public class CreationTool extends AbstractCreationTool<Figure> {
 
-    private Supplier<Figure> figureFactory;
-    private Supplier<Layer> layerFactory;
 
-    /**
-     * The created figure.
-     */
-    private Figure figure;
 
     /**
      * The rubber band.
@@ -54,23 +48,13 @@ public class CreationTool extends AbstractTool {
     }
 
     public CreationTool(String name, Resources rsrc, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
-        super(name, rsrc);
-        this.figureFactory = figureFactory;
-        this.layerFactory = layerFactory;
+        super(name, rsrc,figureFactory,layerFactory);
         node.setCursor(Cursor.CROSSHAIR);
-    }
-
-    public void setFigureFactory(Supplier<Figure> factory) {
-        this.figureFactory = factory;
-    }
-
-    public void setLayerFactory(Supplier<Layer> factory) {
-        this.layerFactory = factory;
     }
 
     @Override
     protected void stopEditing() {
-        figure = null;
+        createdFigure = null;
     }
 
     @Override
@@ -79,36 +63,36 @@ public class CreationTool extends AbstractTool {
         y1 = event.getY();
         x2 = x1;
         y2 = y1;
-        figure = createFigure();
-        Point2D c = view.getConstrainer().constrainPoint(figure, view.viewToDrawing(new Point2D(x1, y1)));
-        figure.reshapeInLocal(c.getX(), c.getY(), 1, 1);
+        createdFigure = createFigure();
+        Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToDrawing(new Point2D(x1, y1)));
+        createdFigure.reshapeInLocal(c.getX(), c.getY(), 1, 1);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getRoot();
 
-        Layer layer = getOrCreateLayer(view, figure);
+        Layer layer = getOrCreateLayer(view, createdFigure);
         view.setActiveLayer(layer);
 
-        dm.addChildTo(figure, layer);
+        dm.addChildTo(createdFigure, layer);
         event.consume();
     }
 
     @Override
     protected void handleMouseReleased(MouseEvent event, DrawingView dv) {
-        if (figure != null) {
+        if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
-                Point2D c1 = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(x1, y1));
-                Point2D c2 = dv.getConstrainer().translatePoint(figure, dv.viewToDrawing(x1
+                Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToDrawing(x1, y1));
+                Point2D c2 = dv.getConstrainer().translatePoint(createdFigure, dv.viewToDrawing(x1
                         + minSize, y1 + minSize), Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
                     c2 = new Point2D(c1.getX() + 10, c1.getY() + 10);
                 }
                 DrawingModel dm = dv.getModel();
-                dm.reshape(figure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
+                dm.reshape(createdFigure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
                         - c1.getY());
             }
             dv.selectedFiguresProperty().clear();
-            dv.selectedFiguresProperty().add(figure);
-            figure = null;
+            dv.selectedFiguresProperty().add(createdFigure);
+            createdFigure = null;
         }
         event.consume();
         fireToolDone();
@@ -116,17 +100,17 @@ public class CreationTool extends AbstractTool {
 
     @Override
     protected void handleMouseDragged(MouseEvent event, DrawingView dv) {
-        if (figure != null) {
+        if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
-            Point2D c1 = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(x1, y1));
-            Point2D c2 = dv.getConstrainer().constrainPoint(figure, dv.viewToDrawing(x2, y2));
+            Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToDrawing(x1, y1));
+            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToDrawing(x2, y2));
             double newWidth = c2.getX() - c1.getX();
             double newHeight = c2.getY() - c1.getY();
             // shift keeps the aspect ratio
             boolean keepAspect = event.isShiftDown();
             if (keepAspect) {
-                double preferredAspectRatio = figure.getPreferredAspectRatio();
+                double preferredAspectRatio = createdFigure.getPreferredAspectRatio();
                 double newRatio = newHeight / newWidth;
                 if (newRatio > preferredAspectRatio) {
                     newHeight = newWidth * preferredAspectRatio;
@@ -136,7 +120,7 @@ public class CreationTool extends AbstractTool {
             }
 
             DrawingModel dm = dv.getModel();
-            dm.reshape(figure, c1.getX(), c1.getY(), newWidth, newHeight);
+            dm.reshape(createdFigure, c1.getX(), c1.getY(), newWidth, newHeight);
         }
         event.consume();
     }
@@ -145,39 +129,7 @@ public class CreationTool extends AbstractTool {
     protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
     }
 
-    protected Figure createFigure() {
-        return figureFactory.get();
-    }
 
-    /**
-     * Finds a layer for the specified figure. Creates a new layer if no
-     * suitable layer can be found.
-     *
-     * @param dv the drawing view
-     * @param newFigure the figure
-     * @return a suitable layer for the figure
-     */
-    protected Layer getOrCreateLayer(DrawingView dv, Figure newFigure) {
-        // try to use the active layer
-        Layer activeLayer = dv.getActiveLayer();
-        if (activeLayer != null && activeLayer.isEditable() && activeLayer.isAllowsChildren()) {
-            return activeLayer;
-        }
-        // search for a suitable layer front to back
-        Layer layer = null;
-        for (Figure candidate : new ReversedList<>(dv.getDrawing().getChildren())) {
-            if (candidate.isEditable() && candidate.isAllowsChildren()) {
-                layer = (Layer) candidate;
-                break;
-            }
-        }
-        // create a new layer if necessary
-        if (layer == null) {
-            layer = layerFactory.get();
-            dv.getModel().addChildTo(layer, dv.getDrawing());
-        }
-        return layer;
-    }
 
     /**
      * This implementation is empty.
