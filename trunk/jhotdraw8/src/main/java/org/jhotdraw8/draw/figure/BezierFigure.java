@@ -17,7 +17,8 @@ import org.jhotdraw8.geom.BezierPath;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BezierFigure extends AbstractLeafFigure implements StyleableFigure, TransformableFigure {
+public class BezierFigure extends AbstractLeafFigure 
+        implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
     @Override
     public Node createNode(RenderContext ctx) {
@@ -52,24 +53,10 @@ public class BezierFigure extends AbstractLeafFigure implements StyleableFigure,
     }
 
     @Override
-    public boolean isDeletable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isEditable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public boolean isLayoutable() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public boolean isSelectable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {

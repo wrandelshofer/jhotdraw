@@ -138,7 +138,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     }
 
     public void addFigureKeysAndNames(String figureName, Class<? extends Figure> f) {
-        addFigureKeysAndNames(figureName,f,Figure.getDeclaredAndInheritedKeys(f));
+        addFigureKeysAndNames(figureName,f,Figure.getDeclaredAndInheritedMapAccessors(f));
     }
     public void addFigureKeysAndNames(String figureName, Class<? extends Figure> f, Collection<MapAccessor<?>> keys) {
         addFigure(figureName, f);

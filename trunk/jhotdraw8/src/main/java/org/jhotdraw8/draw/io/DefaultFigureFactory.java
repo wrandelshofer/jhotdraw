@@ -96,7 +96,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Page", PageFigure.class);
 
         {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedKeys(SimpleDrawing.class));
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(SimpleDrawing.class));
             keys.remove(Drawing.USER_AGENT_STYLESHEETS);
             keys.remove(Drawing.AUTHOR_STYLESHEETS);
             keys.remove(Drawing.INLINE_STYLESHEETS);
@@ -106,19 +106,19 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         }
 
         {
-            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedKeys(TextFigure.class));
+            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(TextFigure.class));
             keys.remove(TextFigure.TEXT);
             addNodeListKey(TextFigure.class, "", TextFigure.TEXT);
             addFigureKeysAndNames("Text", TextFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedKeys(LabelFigure.class));
+            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(LabelFigure.class));
             keys.remove(LabelFigure.TEXT);
             addNodeListKey(LabelFigure.class, "", LabelFigure.TEXT);
             addFigureKeysAndNames("Label", LabelFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedKeys(PageLabelFigure.class));
+            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(PageLabelFigure.class));
             keys.remove(PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
             addNodeListKey(PageLabelFigure.class, "", PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
             addFigureKeysAndNames("PageLabel", PageLabelFigure.class, keys);
