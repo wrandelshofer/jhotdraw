@@ -4,30 +4,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/HSVHarmonicColorWheelImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/AbstractColorWheelImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/CIEXYChromaticityDiagramImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/PolarColorWheelImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/HSLHarmonicColorWheelImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/JColorWheel.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/samples/color/ColorWheelsMain.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/build-draw.xml</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/DefaultColorSliderModel.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/ColorSliderUI.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/DiskColorWheelImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/ColorTrackImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/app/Application.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/ColorSquareImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/QuantizingColorWheelImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/gui/plaf/palette/PaletteFontChooserSelectionPanel.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/ColorUtil.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/AbstractNamedColorSpace.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/ColorSliderModel.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/ColorWheelChooser.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/CIELABColorSpace.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/CIELCHabColorSpace.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/ComplexColorWheelImageProducer.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/color/HSBColorSpace.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/BezierFigure.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/geom/BezierPath.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/geom/Bezier.java</file>
         </group>
     </open-files>
 </project-private>

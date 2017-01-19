@@ -15,17 +15,11 @@ import java.util.Collection;
 /**
  * A <em>handle tracker</em> provides the behavior for manipulating a
  * {@link Handle} of a figure to the {@link SelectionTool}.
- *
- * <hr>
- * <b>Design Patterns</b>
- *
- * <p><em>Strategy</em><br>
+ * 
+ * @design.pattern HandleTracker Chain of Responsibility, Handler. 
  * The different behavior states of the selection tool are implemented by
- * trackers.<br>
- * Context: {@link SelectionTool}; State: {@link DragTracker},
+ * trackers.  Context: {@link SelectionTool}; State: {@link DragTracker},
  * {@link HandleTracker}, {@link SelectAreaTracker}.
- * <hr>
- *
  *
  * @author Werner Randelshofer
  * @version $Id$
