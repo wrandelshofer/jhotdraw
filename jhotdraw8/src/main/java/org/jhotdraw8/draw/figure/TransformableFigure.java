@@ -4,10 +4,11 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -434,17 +435,9 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 | null != set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
     }
 
-    public static List<Key<?>> getDeclaredKeys() {
-        List<Key<?>> keys = new ArrayList<>();
-        for (Field f : TransformableFigure.class.getDeclaredFields()) {
-            if (Key.class.isAssignableFrom(f.getType())) {
-                try {
-                    keys.add((Key) f.get(null));
-                } catch (IllegalArgumentException | IllegalAccessException ex) {
-                    throw new InternalError(ex);
-                }
-            }
-        }
+    public static Set<Key<?>> getDeclaredKeys() {
+        Set<Key<?>> keys = new LinkedHashSet<>();
+       Figure.getDeclaredKeys(TransformableFigure.class, keys);
         return keys;
     }
 }

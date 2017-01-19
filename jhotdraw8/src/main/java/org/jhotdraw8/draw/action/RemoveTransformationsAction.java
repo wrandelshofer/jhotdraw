@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.action;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
@@ -52,7 +52,7 @@ public class RemoveTransformationsAction extends AbstractSelectedAction {
     }
 
     public static void removeTransformations(DrawingView view, Collection<Figure> figures) {
-        List<Key<?>> keys = TransformableFigure.getDeclaredKeys();
+        Set<Key<?>> keys = TransformableFigure.getDeclaredKeys();
 
         DrawingModel model = view.getModel();
         for (Figure child : figures) {

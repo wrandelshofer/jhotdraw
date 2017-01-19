@@ -172,10 +172,36 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         }
         return b;
     }
-    
-    /** FIXME should be private! */
-     static Map<Class<?>,Set<MapAccessor<?>>> declaredAndInheritedKeys=Collections.synchronizedMap(new HashMap<>());
-    
+
+    /**
+     * FIXME should be private!
+     */
+    static Map<Class<?>, Set<MapAccessor<?>>> declaredAndInheritedKeys = Collections.synchronizedMap(new HashMap<>());
+
+    public static void getDeclaredMapAccessors(Class<?> clazz, Collection<MapAccessor<?>> keys) {
+        try {
+            for (Field f : clazz.getDeclaredFields()) {
+                if (MapAccessor.class.isAssignableFrom(f.getType())) {
+                    MapAccessor<?> k = (MapAccessor<?>) f.get(null);
+                    keys.add(k);
+                }
+            }
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
+            throw new InternalError("class can not read its own keys");
+        }
+    }
+    public static void getDeclaredKeys(Class<?> clazz, Collection<Key<?>> keys) {
+        try {
+            for (Field f : clazz.getDeclaredFields()) {
+                if (Key.class.isAssignableFrom(f.getType())) {
+                    Key<?> k = (Key<?>) f.get(null);
+                    keys.add(k);
+                }
+            }
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
+            throw new InternalError("class can not read its own keys");
+        }
+    }
 
     /**
      * Returns all keys declared in this class and inherited from parent
@@ -184,22 +210,16 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param clazz A figure class.
      * @return an unmodifiable set of the keys
      */
-    public static Set<MapAccessor<?>> getDeclaredAndInheritedKeys(Class<?> clazz) {
-        try {
-         Set<MapAccessor<?>> keys =declaredAndInheritedKeys.get(clazz);
-         if (keys==null){
-             keys = new HashSet<>();
+    public static Set<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
+        Set<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
+        if (keys == null) {
+            keys = new HashSet<>();
             LinkedList<Class<?>> todo = new LinkedList<>();
             Set<Class<?>> done = new HashSet<>();
             todo.add(clazz);
             while (!todo.isEmpty()) {
                 Class<?> c = todo.removeFirst();
-                for (Field f : c.getDeclaredFields()) {
-                    if (MapAccessor.class.isAssignableFrom(f.getType())) {
-                        MapAccessor<?> k = (MapAccessor<?>) f.get(null);
-                        keys.add(k);
-                    }
-                }
+                getDeclaredMapAccessors(c, keys);
                 if (c.getSuperclass() != null) {
                     todo.add(c.getSuperclass());
                 }
@@ -210,13 +230,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 }
 
             }
-            keys=Collections.unmodifiableSet(keys);
+            keys = Collections.unmodifiableSet(keys);
             declaredAndInheritedKeys.put(clazz, keys);
-         }
-            return keys;
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new InternalError("class can not read its own keys");
         }
+        return keys;
     }
 
     /**
@@ -730,7 +747,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return an unmodifiable set of keys
      */
     default Set<MapAccessor<?>> getSupportedKeys() {
-        return Figure.getDeclaredAndInheritedKeys(this.getClass());
+        return Figure.getDeclaredAndInheritedMapAccessors(this.getClass());
     }
 
     /**
@@ -887,7 +904,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * This method is invoked on a figure by
      * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
-     * figure needs to be laid out again.
+     * figure needs to be laid out.
      * <p>
      * The default implementation of this method calls {@link #layout}.
      */
@@ -993,7 +1010,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its local bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -1040,7 +1057,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its parent bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call

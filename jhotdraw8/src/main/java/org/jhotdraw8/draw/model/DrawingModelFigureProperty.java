@@ -32,7 +32,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
         this.model = model;
         this.key = key;
         this.figure = figure;
-        this.isDeclaredKey = Figure.getDeclaredAndInheritedKeys(figure.getClass()).contains(key);
+        this.isDeclaredKey = Figure.getDeclaredAndInheritedMapAccessors(figure.getClass()).contains(key);
 
         if (key != null && isDeclaredKey) {
             this.modelListener = (event) -> {
