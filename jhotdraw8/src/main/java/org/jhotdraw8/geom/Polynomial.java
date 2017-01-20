@@ -23,8 +23,8 @@ import javafx.geometry.Point2D;
  * Polynomial encapsulates root finding functions needed by curve intersection
  * methods which are based on numerical calculations.
  * <p>
- * This class is a port of Polynomial.js by Kevin Lindsey. Part of Polynomial.js
- * is based on MgcPolynomial.cpp written by David Eberly, Magic Software. Inc.
+ * This class is a port of Polynomial.js by Kevin Lindsey. Parts of Polynomial.js
+ * are based on MgcPolynomial.cpp written by David Eberly, Magic Software. Inc.
  * <p>
  * References:
  * <p>
@@ -41,6 +41,18 @@ public class Polynomial {
 
     private final static double TOLERANCE = 1e-6;
     private final static double ACCURACY = 6;
+
+    private int simplifiedDegree() {
+        int popAt = this.getDegree();
+        for (int i = popAt; i >= 0; i--) {
+            if (Math.abs(this.coefs[i]) <= Polynomial.TOLERANCE) {
+                popAt = i;
+            } else {
+                break;
+            }
+        }
+        return popAt;
+    }
 
     /**
      * "
@@ -185,24 +197,16 @@ public class Polynomial {
     }
 
     /**
-     * ***
-     *
-     * simplify
-     *
-     ****
+     * Returns a simplified polynomial, by removing coefficients
+     * of the highest degrees if they have a very small absolute value.
      */
-    public void simplify() {
-        int popAt = this.getDegree();
-        for (int i = this.getDegree(); i >= 0; i--) {
-            if (Math.abs(this.coefs[i]) <= Polynomial.TOLERANCE) {
-                popAt = i;
-            } else {
-                break;
-            }
-        }
+    public Polynomial simplify() {
+        int popAt = simplifiedDegree();
+        if (popAt==this.getDegree()) return this;
+        
         double[] newCoefs = new double[popAt];
         System.arraycopy(this.coefs, 0, newCoefs, 0, popAt);
-        this.coefs = newCoefs;
+       return new Polynomial(newCoefs);
     }
 
     /**
@@ -467,22 +471,21 @@ public class Polynomial {
     public double[] getRoots() {
         double[] result;
 
-        this.simplify();
-        switch (this.getDegree()) {
+        switch (simplifiedDegree()) {
             case 0:
                 result = new double[0];
                 break;
             case 1:
-                result = this.getLinearRoot();
+                result = getLinearRoot();
                 break;
             case 2:
-                result = this.getQuadraticRoots();
+                result = getQuadraticRoots();
                 break;
             case 3:
-                result = this.getCubicRoots();
+                result = getCubicRoots();
                 break;
             case 4:
-                result = this.getQuarticRoots();
+                result = getQuarticRoots();
                 break;
             default:
                 result = new double[0];

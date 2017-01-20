@@ -66,14 +66,6 @@ public class GroupFigure extends AbstractCompositeFigure implements Group, Resiz
         return g;
     }
 
-    /**
-     * Returns false.
-     */
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return null;

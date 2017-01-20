@@ -105,19 +105,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice,Transformab
     }
 
     @Override
-    public void layout() {
-        // empty
-    }
-
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
-    @Override
     public boolean isSuitableParent(Figure newParent) {
         return Slice.super.isSuitableParent(newParent);
     }
-    
-    
 }

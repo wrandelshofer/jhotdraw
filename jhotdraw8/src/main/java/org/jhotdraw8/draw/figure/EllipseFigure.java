@@ -73,16 +73,6 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
     }
 
     @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
-    @Override
-    public void layout() {
-        // empty
-    }
-
-    @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
         double rx = max(0.0, width) / 2.0;
         double ry = max(0.0, height) / 2.0;

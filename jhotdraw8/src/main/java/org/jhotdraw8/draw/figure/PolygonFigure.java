@@ -128,15 +128,7 @@ public class PolygonFigure extends AbstractLeafFigure implements StrokeableFigur
         return TYPE_SELECTOR;
     }
 
-    @Override
-    public void layout() {
-        // empty
-    }
 
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
 
     public static double[] toPointArray(Figure f) {
         List<Point2D> points = f.get(POINTS);

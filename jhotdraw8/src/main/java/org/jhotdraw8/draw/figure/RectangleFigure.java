@@ -100,14 +100,4 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
-
-    @Override
-    public void layout() {
-        // empty
-    }
-
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
 }
