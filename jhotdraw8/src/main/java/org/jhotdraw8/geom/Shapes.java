@@ -304,7 +304,6 @@ public class Shapes {
         Point2D.Double p = new Point2D.Double();
         Point2D.Double c1 = new Point2D.Double();
         Point2D.Double c2 = new Point2D.Double();
-        Point2D.Double s2 = new Point2D.Double();
 
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(str));
         tt.resetSyntax();
@@ -338,8 +337,6 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'M' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y = tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
                     builder.moveTo(p.x, p.y);
                     nextCommand = 'L';
                     break;
@@ -353,8 +350,6 @@ public class Shapes {
                         throw new IOException("dy coordinate missing for 'm' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y += tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
                     builder.moveTo(p.x, p.y);
                     nextCommand = 'l';
 
@@ -375,8 +370,6 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'L' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y = tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
                     builder.lineTo(p.x, p.y);
                     nextCommand = 'L';
 
@@ -391,8 +384,6 @@ public class Shapes {
                         throw new IOException("dy coordinate missing for 'l' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y += tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
                     builder.lineTo(p.x, p.y);
                     nextCommand = 'l';
 
@@ -403,8 +394,6 @@ public class Shapes {
                         throw new IOException("x coordinate missing for 'H' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.x = tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
                     builder.lineTo(p.x, p.y);
                     nextCommand = 'H';
 
@@ -415,8 +404,6 @@ public class Shapes {
                         throw new IOException("dx coordinate missing for 'h' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.x += tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
                     builder.lineTo(p.x, p.y);
                     nextCommand = 'h';
 
@@ -427,8 +414,6 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'V' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y = tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
                     builder.lineTo(p.x, p.y);
                     nextCommand = 'V';
 
@@ -439,8 +424,6 @@ public class Shapes {
                         throw new IOException("dy coordinate missing for 'v' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y += tt.nval;
-                    s2.x = p.x;
-                    s2.y = p.y;
                     builder.lineTo(p.x, p.y);
                     nextCommand = 'v';
 
@@ -471,8 +454,6 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'C' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y = tt.nval;
-                    s2.x = 2 * c2.x - p.x;
-                    s2.y = 2 * c2.y - p.y;
                     builder.curveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
                     nextCommand = 'C';
                     break;
@@ -503,16 +484,12 @@ public class Shapes {
                         throw new IOException("dy coordinate missing for 'c' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y += tt.nval;
-                    s2.x = 2 * c2.x - p.x;
-                    s2.y = 2 * c2.y - p.y;
                     builder.curveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
                     nextCommand = 'c';
                     break;
 
                 case 'S':
                     // absolute-shorthand-curveto x2 y2 x y
-                    c1.x = s2.x;
-                    c1.y = s2.y;
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("x2 coordinate missing for 'S' at position " + tt.getStartPosition() + " in " + str);
                     }
@@ -529,16 +506,12 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'S' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y = tt.nval;
-                    s2.x = 2 * c2.x - p.x;
-                    s2.y = 2 * c2.y - p.y;
-                    builder.smoothCurveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
+                    builder.smoothCurveTo( c2.x, c2.y, p.x, p.y);
                     nextCommand = 'S';
                     break;
 
                 case 's':
                     // relative-shorthand-curveto dx2 dy2 dx dy
-                    c1.x = s2.x;
-                    c1.y = s2.y;
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("dx2 coordinate missing for 's' at position " + tt.getStartPosition() + " in " + str);
                     }
@@ -555,9 +528,7 @@ public class Shapes {
                         throw new IOException("dy coordinate missing for 's' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y += tt.nval;
-                    s2.x = 2 * c2.x - p.x;
-                    s2.y = 2 * c2.y - p.y;
-                    builder.smoothCurveTo(c1.x, c1.y, c2.x, c2.y, p.x, p.y);
+                    builder.smoothCurveTo(c2.x, c2.y, p.x, p.y);
                     nextCommand = 's';
                     break;
 
@@ -579,8 +550,6 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'Q' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y = tt.nval;
-                    s2.x = 2 * c1.x - p.x;
-                    s2.y = 2 * c1.y - p.y;
                     builder.quadTo(c1.x, c1.y, p.x, p.y);
                     nextCommand = 'Q';
 
@@ -610,8 +579,6 @@ public class Shapes {
                     break;
                 case 'T':
                     // absolute-shorthand-quadto x y
-                    c1.x = s2.x;
-                    c1.y = s2.y;
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("x coordinate missing for 'T' at position " + tt.getStartPosition() + " in " + str);
                     }
@@ -620,17 +587,13 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'T' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y = tt.nval;
-                    s2.x = 2 * c1.x - p.x;
-                    s2.y = 2 * c1.y - p.y;
-                    builder.smoothQuadTo(c1.x, c1.y, p.x, p.y);
+                    builder.smoothQuadTo(p.x, p.y);
                     nextCommand = 'T';
 
                     break;
 
                 case 't':
                     // relative-shorthand-quadto dx dy
-                    c1.x = s2.x;
-                    c1.y = s2.y;
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("dx coordinate missing for 't' at position " + tt.getStartPosition() + " in " + str);
                     }
@@ -639,9 +602,7 @@ public class Shapes {
                         throw new IOException("dy coordinate missing for 't' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y += tt.nval;
-                    s2.x = 2 * c1.x - p.x;
-                    s2.y = 2 * c1.y - p.y;
-                    builder.smoothQuadTo(c1.x, c1.y, p.x, p.y);
+                    builder.smoothQuadTo(p.x, p.y);
                     nextCommand = 's';
 
                     break;
@@ -679,7 +640,7 @@ public class Shapes {
                     }
                     double y = tt.nval;
 
-                    builder.arcTo(p.x, p.y, rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
+                    builder.arcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
                     p.x = x;
                     p.y = y;
                     nextCommand = 'A';
@@ -717,7 +678,7 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'A' at position " + tt.getStartPosition() + " in " + str);
                     }
                     double y = p.x + tt.nval;
-                    builder.arcTo(p.x, p.y, rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
+                    builder.arcTo( rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
                     p.x = x;
                     p.y = y;
 

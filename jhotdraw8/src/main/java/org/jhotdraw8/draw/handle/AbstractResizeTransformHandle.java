@@ -50,8 +50,8 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(11, 11);
-        node.getStyleClass().clear();
-        node.getStyleClass().add(styleclass);
+        
+        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
         node.setBorder(border);
         node.setBackground(bg);
     }

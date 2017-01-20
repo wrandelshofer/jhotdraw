@@ -1,4 +1,4 @@
-/* @(#)ConnectionFigureConnectionHandle.java
+/* @(#)PolyPointMoveHandle.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -62,8 +62,8 @@ public class PolyPointMoveHandle extends AbstractHandle {
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        node.getStyleClass().clear();
-        node.getStyleClass().add(styleclass);
+        
+        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }

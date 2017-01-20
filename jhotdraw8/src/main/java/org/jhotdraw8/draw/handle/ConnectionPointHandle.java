@@ -74,8 +74,7 @@ public class ConnectionPointHandle extends AbstractHandle {
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(10, 10);
-        node.getStyleClass().clear();
-        node.getStyleClass().add(styleclassDisconnected);
+        node.getStyleClass().setAll(styleclassDisconnected,STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
     }
 

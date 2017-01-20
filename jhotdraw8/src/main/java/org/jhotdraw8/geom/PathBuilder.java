@@ -2,13 +2,12 @@
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.geom;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.PathIterator;
-import static org.jhotdraw8.geom.BezierPath.C2_MASK;
+import javafx.geometry.Point2D;
 
 /**
  * PathBuilder.
@@ -16,11 +15,12 @@ import static org.jhotdraw8.geom.BezierPath.C2_MASK;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public interface PathBuilder {
-/** ArcTo.
-        * Adds an elliptical arc, defined by two radii, an angle from the x-axis, a
-     * flag to choose the large arc or not, a flag to indicate if we increase or
-     * decrease the angles and the final point of the arc.
+interface PathBuilder {
+
+    /**
+     * ArcTo. Adds an elliptical arc, defined by two radii, an angle from the
+     * x-axis, a flag to choose the large arc or not, a flag to indicate if we
+     * increase or decrease the angles and the final point of the arc.
      * <p>
      * As specified in
      * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
@@ -28,10 +28,8 @@ public interface PathBuilder {
      * The implementation of this method has been derived from Apache Batik
      * class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc
      *
-     * @param x0 the start point of the ellipse
-     * @param y0 the start point of the ellipse
-     * @param rx the x radius of the ellipse
-     * @param ry the y radius of the ellipse
+     * @param radiusX the x radius of the ellipse
+     * @param radiusY the y radius of the ellipse
      *
      * @param xAxisRotation the angle from the x-axis of the current coordinate
      * system to the x-axis of the ellipse in degrees.
@@ -47,18 +45,19 @@ public interface PathBuilder {
      * @param x the absolute x coordinate of the final point of the arc.
      * @param y the absolute y coordinate of the final point of the arc.
      */
-    default void arcTo(double x0, double y0, double rx, double ry,
+    default void arcTo(double radiusX, double radiusY,
             double xAxisRotation,
             double x, double y,
             boolean largeArcFlag, boolean sweepFlag
-            ) {
-
+    ) {
+        double x0, y0;
+        x0 = getLastX();
+        y0 = getLastY();
         // Ensure radii are valid
-        if (rx == 0 || ry == 0) {
+        if (radiusX == 0 || radiusY == 0) {
             lineTo(x, y);
             return;
         }
-
 
         if (x0 == x && y0 == y) {
             // If the endpoints (x, y) and (x0, y0) are identical, then this
@@ -80,19 +79,19 @@ public interface PathBuilder {
         double x1 = (cosAngle * dx2 + sinAngle * dy2);
         double y1 = (-sinAngle * dx2 + cosAngle * dy2);
         // Ensure radii are large enough
-        rx = Math.abs(rx);
-        ry = Math.abs(ry);
-        double Prx = rx * rx;
-        double Pry = ry * ry;
+        radiusX = Math.abs(radiusX);
+        radiusY = Math.abs(radiusY);
+        double Prx = radiusX * radiusX;
+        double Pry = radiusY * radiusY;
         double Px1 = x1 * x1;
         double Py1 = y1 * y1;
         // check that radii are large enough
         double radiiCheck = Px1 / Prx + Py1 / Pry;
         if (radiiCheck > 1) {
-            rx = Math.sqrt(radiiCheck) * rx;
-            ry = Math.sqrt(radiiCheck) * ry;
-            Prx = rx * rx;
-            Pry = ry * ry;
+            radiusX = Math.sqrt(radiiCheck) * radiusX;
+            radiusY = Math.sqrt(radiiCheck) * radiusY;
+            Prx = radiusX * radiusX;
+            Pry = radiusY * radiusY;
         }
 
         //
@@ -102,8 +101,8 @@ public interface PathBuilder {
         double sq = ((Prx * Pry) - (Prx * Py1) - (Pry * Px1)) / ((Prx * Py1) + (Pry * Px1));
         sq = (sq < 0) ? 0 : sq;
         double coef = (sign * Math.sqrt(sq));
-        double cx1 = coef * ((rx * y1) / ry);
-        double cy1 = coef * -((ry * x1) / rx);
+        double cx1 = coef * ((radiusX * y1) / radiusY);
+        double cy1 = coef * -((radiusY * x1) / radiusX);
 
         //
         // Step 3 : Compute (cx, cy) from (cx1, cy1)
@@ -116,10 +115,10 @@ public interface PathBuilder {
         //
         // Step 4 : Compute the angleStart (angle1) and the angleExtent (dangle)
         //
-        double ux = (x1 - cx1) / rx;
-        double uy = (y1 - cy1) / ry;
-        double vx = (-x1 - cx1) / rx;
-        double vy = (-y1 - cy1) / ry;
+        double ux = (x1 - cx1) / radiusX;
+        double uy = (y1 - cy1) / radiusY;
+        double vx = (-x1 - cx1) / radiusX;
+        double vy = (-y1 - cy1) / radiusY;
         double p, n;
 
         // Compute the angle start
@@ -145,8 +144,8 @@ public interface PathBuilder {
         // We can now build the resulting Arc2D in double precision
         //
         Arc2D.Double arc = new Arc2D.Double(
-                cx - rx, cy - ry,
-                rx * 2d, ry * 2d,
+                cx - radiusX, cy - radiusY,
+                radiusX * 2d, radiusY * 2d,
                 -angleStart, -angleExtent,
                 Arc2D.OPEN);
 
@@ -181,22 +180,55 @@ public interface PathBuilder {
         }
     }
 
-     void closePath();
+    void closePath();
 
-    public void curveTo(double x, double y, double x0, double y0, double x1, double y1);
+    void curveTo(double x1, double y1, double x2, double y2, double x, double y);
 
-     void lineTo(double x, double y);
- void moveTo(double x,double y);
-
-     void quadTo(double x, double y, double x0, double y0);
-
-
-    default void smoothQuadTo(double x, double y, double x0, double y0){
-        quadTo(x,y,x0,y0);
+    default void curveTo(Point2D c1, Point2D c2, Point2D p) {
+        curveTo(c1.getX(), c1.getY(), c2.getX(), c2.getY(), p.getX(), p.getY());
+    }
+    default void smoothCurveTo(Point2D c2, Point2D p) {
+        smoothCurveTo( c2.getX(), c2.getY(), p.getX(), p.getY());
     }
 
-    default void smoothCurveTo(double x, double y, double x0, double y0, double x1, double y1){
-        curveTo(x,y,x0,y0,x1,y1);
+    default Point2D getLastPoint() {
+        return new Point2D(getLastX(), getLastY());
+    }
+
+    double getLastX();
+
+    double getLastY();
+
+    double getLastCX();
+
+    double getLastCY();
+    default void lineTo(Point2D p) {
+        lineTo(p.getX(), p.getY());
+    }
+
+    void lineTo(double x, double y);
+
+    default void moveTo(Point2D p) {
+        moveTo(p.getX(), p.getY());
+    }
+
+    void moveTo(double x, double y);
+
+    void quadTo(double x1, double y1, double x, double y);
+
+    default void quadTo(Point2D p1, Point2D p2) {
+        quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+    }
+
+    default void smoothCurveTo(double x2, double y2, double x, double y) {
+        curveTo(getLastX()-getLastCX()+getLastX(), getLastY()-getLastCY()+getLastY(),x2,y2, x, y);
+    }
+
+    default void smoothQuadTo(Point2D p) {
+        smoothQuadTo(p.getX(),p.getY());
+    }
+    default void smoothQuadTo(double x, double y) {
+        quadTo(getLastX()-getLastCX()+getLastX(), getLastY()-getLastCY()+getLastY(), x, y);
     }
 
 }

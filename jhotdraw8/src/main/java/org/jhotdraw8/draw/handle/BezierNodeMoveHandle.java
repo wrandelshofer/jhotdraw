@@ -1,11 +1,13 @@
-/* @(#)ConnectionFigureConnectionHandle.java
- * Copyright (c) 2015 by the authors and contributors of JHotDraw.
+/* @(#)BezierNodeMoveHandle.java
+ * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw8.draw.handle;
 
+import static com.sun.javafx.scene.DirtyBits.REGION_SHAPE;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -17,14 +19,22 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -32,26 +42,41 @@ import org.jhotdraw8.geom.Transforms;
  *
  * @author Werner Randelshofer
  */
-public class MoveHandle extends LocatorHandle {
+public class BezierNodeMoveHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private Point2D oldPoint;
     private final Region node;
     private final String styleclass;
-    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
+    private final int pointIndex;
+    private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
+    private static final Path REGION_SHAPE_QUADRATIC = new Path();
+
+    static {
+        final ObservableList<PathElement> elements = REGION_SHAPE_QUADRATIC.getElements();
+        elements.add(new MoveTo(0, 0));
+        elements.add(new LineTo(4, -4));
+        elements.add(new LineTo(8, 0));
+        elements.add(new LineTo(4, 4));
+        elements.add(new ClosePath());
+    }
+    private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
 
-    public MoveHandle(Figure figure, Locator locator) {
-        this(figure, locator, STYLECLASS_HANDLE_MOVE);
+    public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex) {
+        this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_MOVE);
     }
 
-    public MoveHandle(Figure figure, Locator locator, String styleclass) {
-        super(figure, locator);
+    public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex, String styleclass) {
+        super(figure);
+        this.pointKey = pointKey;
+        this.pointIndex = pointIndex;
         this.styleclass = styleclass;
         node = new Region();
-        node.setShape(REGION_SHAPE);
+        node.setShape(REGION_SHAPE_LINEAR);
         node.setManaged(false);
         node.setScaleShape(false);
         node.setCenterShape(true);
@@ -73,6 +98,17 @@ public class MoveHandle extends LocatorHandle {
         return node;
     }
 
+    private Point2D getLocation() {
+        return getBezierNode().getC0();
+
+    }
+
+    private BezierNode getBezierNode() {
+        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
+        return list.get(pointIndex);
+
+    }
+
     @Override
     public void updateNode(DrawingView view) {
         Figure f = owner;
@@ -91,6 +127,15 @@ public class MoveHandle extends LocatorHandle {
         // rotates the node:
         node.setRotate(f.getStyled(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+
+        BezierNode bn = getBezierNode();
+        if ((bn.mask & BezierNode.C1C2_MASK) != 0) {
+            node.setShape(REGION_SHAPE_CUBIC);
+        } else if ((bn.mask & BezierNode.C1_MASK) != 0) {
+            node.setShape(REGION_SHAPE_QUADRATIC);
+        } else {
+            node.setShape(REGION_SHAPE_LINEAR);
+        }
     }
 
     @Override
@@ -120,10 +165,7 @@ public class MoveHandle extends LocatorHandle {
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
-            final Transform localToWorld = owner.getLocalToWorld();
-            if (localToWorld != null) {
-                oldPoint = localToWorld.transform(loc);
-            }
+            oldPoint = owner.getLocalToWorld().transform(loc);
         }
 
         if (oldPoint.equals(newPoint)) {

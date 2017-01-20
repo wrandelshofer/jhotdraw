@@ -10,7 +10,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import static java.lang.Math.*;
-import java.util.Collection;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -18,8 +17,6 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * Some geometric utilities.
@@ -1100,5 +1097,21 @@ public class Geom {
     public static Point2D west(Rectangle2D r) {
         return new Point2D(r.getMinX(), r.getMinY() + r.getHeight() / 2);
     }
+    /**
+     * Computes the linear interpolation/extrapolation between two points.
+     *
+     * @param a point a
+     * @param b point b
+     * @param t a value between [0, 1] defines the interpolation between a and
+     * b. Values outside this range yield an extrapolation.
+     * @return the interpolated or extrapolated value
+     */
+    public static Point2D lerp(Point2D a, Point2D b, double t) {
+        return lerp(a.getX(), a.getY(), b.getX(), b.getY(), t);
+    }
 
+    public static Point2D lerp(double x1, double y1, double x2, double y2, double t) {
+        return new Point2D(x1 + (x2 - x1) * t,
+                y1 + (y2 - y1) * t);
+    }
 }

@@ -147,10 +147,6 @@ public class FigureNGTest {
             return false;
         }
 
-        public boolean isLayoutable() {
-            return false;
-        }
-
         public boolean isSelectable() {
             return false;
         }
@@ -165,9 +161,6 @@ public class FigureNGTest {
 
         public Connector findConnector(Point2D pointInLocal, Figure prototype) {
             return null;
-        }
-
-        public void layout() {
         }
 
         public void updateCss() {

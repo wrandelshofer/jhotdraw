@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.samples.grapher;
 
-import static com.sun.javafx.scene.CameraHelper.project;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
@@ -105,8 +104,10 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.draw.figure.BezierFigure;
 import org.jhotdraw8.draw.figure.PageLabelFigure;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
+import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSizeInsets;
 
@@ -246,9 +247,11 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
+        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, BezierFigure.PATH, () -> createFigure(BezierFigure
+                ::new), layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
-                layerFactory), 6, 1);
+                layerFactory), 6, 0);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new PageLabelFigure(0, 0,
                 labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),

@@ -17,6 +17,7 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.connector.Connector;
+import static org.jhotdraw8.draw.figure.PolylineFigure.POINTS;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
@@ -92,8 +93,10 @@ public class PolygonFigure extends AbstractLeafFigure implements StrokeableFigur
         final ImmutableObservableList<Point2D> points = getStyled(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {
-            list.add(p.getX());
-            list.add(p.getY());
+            if (p != null) {
+                list.add(p.getX());
+                list.add(p.getY());
+            }
         }
         lineNode.getPoints().setAll(list);
         lineNode.applyCss();
@@ -107,14 +110,14 @@ public class PolygonFigure extends AbstractLeafFigure implements StrokeableFigur
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
-            list.add(new PolygonOutlineHandle(this, null, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
+            list.add(new PolygonOutlineHandle(this, POINTS, false,Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));
         } else if (handleType == HandleType.MOVE) {
-            list.add(new PolygonOutlineHandle(this, null, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
+            list.add(new PolygonOutlineHandle(this, POINTS,false, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             for (int i = 0, n = get(POINTS).size(); i < n; i++) {
                 list.add(new PolyPointMoveHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_MOVE));
             }
         } else if (handleType == HandleType.POINT) {
-            list.add(new PolygonOutlineHandle(this, POINTS, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            list.add(new PolygonOutlineHandle(this, POINTS, true,Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
             for (int i = 0, n = get(POINTS).size(); i < n; i++) {
                 list.add(new PolyPointEditHandle(this, POINTS, i, Handle.STYLECLASS_HANDLE_POINT));
             }
@@ -127,18 +130,4 @@ public class PolygonFigure extends AbstractLeafFigure implements StrokeableFigur
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
-
-
-
-    public static double[] toPointArray(Figure f) {
-        List<Point2D> points = f.get(POINTS);
-        double[] a = new double[points.size() * 2];
-        for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {
-            Point2D p = points.get(i);
-            a[j] = p.getX();
-            a[j + 1] = p.getY();
-        }
-        return a;
-    }
-
 }

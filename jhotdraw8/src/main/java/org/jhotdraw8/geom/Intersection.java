@@ -16,66 +16,50 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javafx.geometry.Point2D;
+import static org.jhotdraw8.geom.Geom.lerp;
 
 /**
  * Provides a collection of intersection tests.
  *
- * This class is a port of Intersection.js by Kevin Lindsey.
- * Part of Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic Software. Inc.
+ * This class is a port of Intersection.js by Kevin Lindsey. Part of
+ * Intersection.js is based on MgcPolynomial.cpp written by David Eberly, Magic
+ * Software. Inc.
  * <p>
  * References:
  * <p>
- * <a href="http://www.kevlindev.com/gui/index.htm">Intersection.js</a>, Copyright
- * (c) 2002, Kevin Lindsey.
+ * <a href="http://www.kevlindev.com/gui/index.htm">Intersection.js</a>,
+ * Copyright (c) 2002, Kevin Lindsey.
  * <p>
-* <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright 2000-2003
-* (c) David Eberly. Magic Software, Inc.
+ * <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright
+ * 2000-2003 (c) David Eberly. Magic Software, Inc.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
 public class Intersection {
 
-    enum Status {
-        INTERSECTION,
-        NO_INTERSECTION,
-        NO_INTERSECTION_INSIDE,
-        NO_INTERSECTION_OUTSIDE,
-        NO_INTERSECTION_TANGENT,
-        NO_INTERSECTION_COINCIDENT,
-        NO_INTERSECTION_PARALLEL
-    }
-
-    private Status status;
     private final ArrayList<Point2D> points;
+    private Status status;
+    private final ArrayList<Double> ts;
 
     public Intersection(Status status) {
 
         this.status = status;
         this.points = new ArrayList<>();
+        this.ts = new ArrayList<>();
     }
 
     ;
 
 
-/*****
-*
-*   appendPoint
-*
-*****/
-private void appendPoint(Point2D point) {
+/** Appends a point and the parameter t. */
+private void appendPoint(Point2D point, double t) {
         this.points.add(point);
+        this.ts.add(t);
     }
 
     ;
 
-    private boolean isEmpty() {
-        return points.isEmpty();
-    }
-
-    public int size() {
-        return points.size();
-    }
 
     /**
      * ***
@@ -88,14 +72,104 @@ private void appendPoint(Point2D point) {
         this.points.addAll(points);
     }
 
-    ;
-public List<Point2D> getPoints() {
+    public List<Point2D> getPoints() {
         return Collections.unmodifiableList(points);
+    }
+
+    public List<Double> getTs() {
+        return Collections.unmodifiableList(ts);
+    }
+
+    private boolean isEmpty() {
+        return points.isEmpty();
+    }
+
+    public int size() {
+        return points.size();
+    }
+
+    private void throwAwayTs() {
+        ts.clear();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append("Intersection{").append(status).append(", points=");
+        boolean first = true;
+        for (Point2D p : points) {
+            if (first) {
+                first = false;
+            } else {
+                b.append(' ');
+            }
+            b.append(p.getX()).append(',').append(p.getY());
+        }
+        b.append(", ts=").append(ts).append('}');
+        return b.toString();
+    }
+
+    enum Status {
+        INTERSECTION,
+        NO_INTERSECTION,
+        NO_INTERSECTION_INSIDE,
+        NO_INTERSECTION_OUTSIDE,
+        NO_INTERSECTION_TANGENT,
+        NO_INTERSECTION_COINCIDENT,
+        NO_INTERSECTION_PARALLEL
+    }
+
+    /**
+     * Constructs a polynomial as a Bezout determinant given two polynomials e1
+     * and e2.
+     *
+     * @param e1 polynomial e1
+     * @param e2 polynomial e2
+     * @return the bezout determinant
+     */
+    public static Polynomial bezout(double[] e1, double[] e2) {
+        double AB = e1[0] * e2[1] - e2[0] * e1[1];
+        double AC = e1[0] * e2[2] - e2[0] * e1[2];
+        double AD = e1[0] * e2[3] - e2[0] * e1[3];
+        double AE = e1[0] * e2[4] - e2[0] * e1[4];
+        double AF = e1[0] * e2[5] - e2[0] * e1[5];
+        double BC = e1[1] * e2[2] - e2[1] * e1[2];
+        double BE = e1[1] * e2[4] - e2[1] * e1[4];
+        double BF = e1[1] * e2[5] - e2[1] * e1[5];
+        double CD = e1[2] * e2[3] - e2[2] * e1[3];
+        double DE = e1[3] * e2[4] - e2[3] * e1[4];
+        double DF = e1[3] * e2[5] - e2[3] * e1[5];
+        double BFpDE = BF + DE;
+        double BEmCD = BE - CD;
+
+        return new Polynomial(
+                AB * BC - AC * AC,
+                AB * BEmCD + AD * BC - 2 * AC * AE,
+                AB * BFpDE + AD * BEmCD - AE * AE - 2 * AC * AF,
+                AB * DF + AD * BFpDE - 2 * AE * AF,
+                AD * DF - AF * AF
+        );
+
+    }
+
+    /**
+     * Returns true if point 'a' is greater or equal to point 'b'. Compares the
+     * x-coordinates first, and if they are equal compares the y-coordinates.
+     *
+     * @param a point a
+     * @param b point b
+     * @return true if a is greater or equal b
+     */
+    private static boolean gte(Point2D a, Point2D b) {
+        return a.getX() >= b.getX() && a.getY() >= b.getY();
     }
 
     /**
      * Computes the intersection between quadratic bezier curve 'a' and
      * quadratic bezier curve 'b'.
+     * <p>
+     * The intersection will contain the parameters 't' of curve 'a' in range
+     * [0,1].
      *
      * @param a1 control point 1 of 'a'
      * @param a2 control point 2 of 'a'
@@ -187,7 +261,7 @@ public List<Point2D> getPoints() {
                         if (0 <= xRoot && xRoot <= 1) {
                             for (int k = 0; k < yRoots.length; k++) {
                                 if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                    result.appendPoint(c22.multiply(s * s).add(c21.multiply(s).add(c20)));
+                                    result.appendPoint(c22.multiply(s * s).add(c21.multiply(s).add(c20)), xRoot);
                                     break checkRoots;
                                 }
                             }
@@ -210,6 +284,8 @@ public List<Point2D> getPoints() {
     /**
      * Computes the intersection between quadratic bezier curve 'a' and
      * cubic bezier curve 'b'.
+     * <p>
+     * The intersection will contain the parameters 't' of curve 'a' in range [0,1].
      *
      * @param a1 control point 1 of 'a'
      * @param a2 control point 2 of 'a'
@@ -322,7 +398,8 @@ public static Intersection intersectBezier2Bezier3(Point2D a1, Point2D a2, Point
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
                                 result.appendPoint(
-                                        c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
+                                        c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20))),
+                                        xRoot
                                 );
                                 break checkRoots;
                             }
@@ -364,6 +441,8 @@ public static Intersection intersectBezier2Circle(Point2D p1, Point2D p2, Point2
 /**
      * Computes the intersection between quadratic bezier curve 'p' and
      * the given ellipse.
+     * <p>
+     * The intersection will contain the parameters 't' of curve 'p' in range [0,1].
  * 
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
@@ -403,7 +482,7 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
             double t = roots[i];
 
             if (0 <= t && t <= 1) {
-                result.appendPoint(c2.multiply(t * t).add(c1.multiply(t).add(c0)));
+                result.appendPoint(c2.multiply(t * t).add(c1.multiply(t).add(c0)), t);
             }
         }
 
@@ -415,70 +494,11 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
     }
 
     /**
-     * Computes the coordinates of the top left corner of a rectangle given two
-     * corner points defining the extrema of the rectangle.
-     *
-     * @param a corner point a
-     * @param b corner point b
-     * @return the top left corner
-     */
-    private static Point2D minp(Point2D a, Point2D b) {
-        return new Point2D(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()));
-    }
-
-    /**
-     * Computes the coordinates of the bottom right corner of a rectangle given
-     * two corner points defining the extrema of the rectangle.
-     *
-     * @param a corner point a
-     * @param b corner point b
-     * @return the bottom right corner
-     */
-    private static Point2D maxp(Point2D a, Point2D b) {
-        return new Point2D(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
-    }
-
-    /**
-     * Computes the linear interpolation/extrapolation between two points.
-     *
-     * @param a point a
-     * @param b point b
-     * @param t a value between [0, 1] defines the interpolation between a and
-     * b. Values outside this range yield an extrapolation.
-     * @return the interpolated or extrapolated value
-     */
-    private static Point2D lerp(Point2D a, Point2D b, double t) {
-        return new Point2D(a.getX() + (b.getX() - a.getX()) * t,
-                a.getY() + (b.getY() - a.getY()) * t);
-    }
-
-    /**
-     * Returns true if point 'a' is greater or equal to point 'b'. Compares the
-     * x-coordinates first, and if they are equal compares the y-coordinates.
-     *
-     * @param a point a
-     * @param b point b
-     * @return true if a is greater or equal b
-     */
-    private static boolean gte(Point2D a, Point2D b) {
-        return a.getX() >= b.getX() && a.getY() >= b.getY();
-    }
-
-    /**
-     * Returns true if point 'a' is less or equal to point 'b'. Compares the
-     * x-coordinates first, and if they are equal compares the y-coordinates.
-     *
-     * @param a point a
-     * @param b point b
-     * @return true if a is less or equal b
-     */
-    private static boolean lte(Point2D a, Point2D b) {
-        return a.getX() <= b.getX() && a.getY() <= b.getY();
-    }
-
-    /**
      * Computes the intersection between quadratic bezier curve 'p' and the line
      * 'a'.
+     * <p>
+     * The intersection will contain the parameters 't' of curve 'a' in range
+     * [0,1].
      *
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
@@ -540,16 +560,16 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
                 if (a1.getX() == a2.getX()) {
                     if (min.getY() <= p6.getY() && p6.getY() <= max.getY()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p6);
+                        result.appendPoint(p6, t);
                     }
                 } else if (a1.getY() == a2.getY()) {
                     if (min.getX() <= p6.getX() && p6.getX() <= max.getX()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p6);
+                        result.appendPoint(p6, t);
                     }
                 } else if (gte(p6, min) && lte(p6, max)) {
                     result.status = Status.INTERSECTION;
-                    result.appendPoint(p6);
+                    result.appendPoint(p6, t);
                 }
             }
         }
@@ -560,6 +580,9 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
     /**
      * Computes the intersection between quadratic bezier curve 'p' and the
      * given closed polygon.
+     * <p>
+     * The intersection will contain the parameters 't' of curve 'a' in range
+     * [0,1].
      *
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
@@ -629,6 +652,9 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
     /**
      * Computes the intersection between cubic bezier curve 'a' and cubic bezier
      * curve 'b'.
+     * <p>
+     * The intersection will contain the parameters 't' of curve 'a' in range
+     * [0,1].
      *
      * @param a1 control point 1 of 'a'
      * @param a2 control point 2 of 'a'
@@ -684,237 +710,249 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
         c21 = new Point2D(c.getX(), c.getY());
 
         c20 = new Point2D(b1.getX(), b1.getY());
+        final double c10x = c10.getX();
 
-        double c10x2 = c10.getX() * c10.getX();
-        double c10x3 = c10.getX() * c10.getX() * c10.getX();
-        double c10y2 = c10.getY() * c10.getY();
-        double c10y3 = c10.getY() * c10.getY() * c10.getY();
-        double c11x2 = c11.getX() * c11.getX();
-        double c11x3 = c11.getX() * c11.getX() * c11.getX();
-        double c11y2 = c11.getY() * c11.getY();
-        double c11y3 = c11.getY() * c11.getY() * c11.getY();
-        double c12x2 = c12.getX() * c12.getX();
-        double c12x3 = c12.getX() * c12.getX() * c12.getX();
-        double c12y2 = c12.getY() * c12.getY();
-        double c12y3 = c12.getY() * c12.getY() * c12.getY();
-        double c13x2 = c13.getX() * c13.getX();
-        double c13x3 = c13.getX() * c13.getX() * c13.getX();
-        double c13y2 = c13.getY() * c13.getY();
-        double c13y3 = c13.getY() * c13.getY() * c13.getY();
-        double c20x2 = c20.getX() * c20.getX();
-        double c20x3 = c20.getX() * c20.getX() * c20.getX();
-        double c20y2 = c20.getY() * c20.getY();
-        double c20y3 = c20.getY() * c20.getY() * c20.getY();
-        double c21x2 = c21.getX() * c21.getX();
-        double c21x3 = c21.getX() * c21.getX() * c21.getX();
-        double c21y2 = c21.getY() * c21.getY();
-        double c22x2 = c22.getX() * c22.getX();
-        double c22x3 = c22.getX() * c22.getX() * c22.getX();
-        double c22y2 = c22.getY() * c22.getY();
-        double c23x2 = c23.getX() * c23.getX();
-        double c23x3 = c23.getX() * c23.getX() * c23.getX();
-        double c23y2 = c23.getY() * c23.getY();
-        double c23y3 = c23.getY() * c23.getY() * c23.getY();
+        double c10x2 = c10x * c10x;
+        double c10x3 = c10x * c10x * c10x;
+        final double c10y = c10.getY();
+        double c10y2 = c10y * c10y;
+        double c10y3 = c10y * c10y * c10y;
+        final double c11x = c11.getX();
+        double c11x2 = c11x * c11x;
+        double c11x3 = c11x * c11x * c11x;
+        final double c11y = c11.getY();
+        double c11y2 = c11y * c11y;
+        double c11y3 = c11y * c11y * c11y;
+        final double c12x = c12.getX();
+        double c12x2 = c12x * c12x;
+        double c12x3 = c12x * c12x * c12x;
+        final double c12y = c12.getY();
+        double c12y2 = c12y * c12y;
+        double c12y3 = c12y * c12y * c12y;
+        final double c13x = c13.getX();
+        double c13x2 = c13x * c13x;
+        double c13x3 = c13x * c13x * c13x;
+        final double c13y = c13.getY();
+        double c13y2 = c13y * c13y;
+        double c13y3 = c13y * c13y * c13y;
+        final double c20x = c20.getX();
+        double c20x2 = c20x * c20x;
+        double c20x3 = c20x * c20x * c20x;
+        final double c20y = c20.getY();
+        double c20y2 = c20y * c20y;
+        double c20y3 = c20y * c20y * c20y;
+        final double c21x = c21.getX();
+        double c21x2 = c21x * c21x;
+        double c21x3 = c21x * c21x * c21x;
+        final double c21y = c21.getY();
+        double c21y2 = c21y * c21y;
+        final double c22x = c22.getX();
+        double c22x2 = c22x * c22x;
+        double c22x3 = c22x * c22x * c22x;
+        final double c22y = c22.getY();
+        double c22y2 = c22y * c22y;
+        final double c23x = c23.getX();
+        double c23x2 = c23x * c23x;
+        double c23x3 = c23x * c23x * c23x;
+        final double c23y = c23.getY();
+        double c23y2 = c23y * c23y;
+        double c23y3 = c23y * c23y * c23y;
         Polynomial poly = new Polynomial(
-                -c13x3 * c23y3 + c13y3 * c23x3 - 3 * c13.getX() * c13y2 * c23x2 * c23.getY()
-                + 3 * c13x2 * c13.getY() * c23.getX() * c23y2,
-                -6 * c13.getX() * c22.getX() * c13y2 * c23.getX() * c23.getY() + 6 * c13x2 * c13.getY() * c22.getY() * c23.getX() * c23.getY() + 3 * c22.getX() * c13y3 * c23x2
-                - 3 * c13x3 * c22.getY() * c23y2 - 3 * c13.getX() * c13y2 * c22.getY() * c23x2 + 3 * c13x2 * c22.getX() * c13.getY() * c23y2,
-                -6 * c21.getX() * c13.getX() * c13y2 * c23.getX() * c23.getY() - 6 * c13.getX() * c22.getX() * c13y2 * c22.getY() * c23.getX() + 6 * c13x2 * c22.getX() * c13.getY() * c22.getY() * c23.getY()
-                + 3 * c21.getX() * c13y3 * c23x2 + 3 * c22x2 * c13y3 * c23.getX() + 3 * c21.getX() * c13x2 * c13.getY() * c23y2 - 3 * c13.getX() * c21.getY() * c13y2 * c23x2
-                - 3 * c13.getX() * c22x2 * c13y2 * c23.getY() + c13x2 * c13.getY() * c23.getX() * (6 * c21.getY() * c23.getY() + 3 * c22y2) + c13x3 * (-c21.getY() * c23y2
-                - 2 * c22y2 * c23.getY() - c23.getY() * (2 * c21.getY() * c23.getY() + c22y2)),
-                c11.getX() * c12.getY() * c13.getX() * c13.getY() * c23.getX() * c23.getY() - c11.getY() * c12.getX() * c13.getX() * c13.getY() * c23.getX() * c23.getY() + 6 * c21.getX() * c22.getX() * c13y3 * c23.getX()
-                + 3 * c11.getX() * c12.getX() * c13.getX() * c13.getY() * c23y2 + 6 * c10.getX() * c13.getX() * c13y2 * c23.getX() * c23.getY() - 3 * c11.getX() * c12.getX() * c13y2 * c23.getX() * c23.getY()
-                - 3 * c11.getY() * c12.getY() * c13.getX() * c13.getY() * c23x2 - 6 * c10.getY() * c13x2 * c13.getY() * c23.getX() * c23.getY() - 6 * c20.getX() * c13.getX() * c13y2 * c23.getX() * c23.getY()
-                + 3 * c11.getY() * c12.getY() * c13x2 * c23.getX() * c23.getY() - 2 * c12.getX() * c12y2 * c13.getX() * c23.getX() * c23.getY() - 6 * c21.getX() * c13.getX() * c22.getX() * c13y2 * c23.getY()
-                - 6 * c21.getX() * c13.getX() * c13y2 * c22.getY() * c23.getX() - 6 * c13.getX() * c21.getY() * c22.getX() * c13y2 * c23.getX() + 6 * c21.getX() * c13x2 * c13.getY() * c22.getY() * c23.getY()
-                + 2 * c12x2 * c12.getY() * c13.getY() * c23.getX() * c23.getY() + c22x3 * c13y3 - 3 * c10.getX() * c13y3 * c23x2 + 3 * c10.getY() * c13x3 * c23y2
-                + 3 * c20.getX() * c13y3 * c23x2 + c12y3 * c13.getX() * c23x2 - c12x3 * c13.getY() * c23y2 - 3 * c10.getX() * c13x2 * c13.getY() * c23y2
-                + 3 * c10.getY() * c13.getX() * c13y2 * c23x2 - 2 * c11.getX() * c12.getY() * c13x2 * c23y2 + c11.getX() * c12.getY() * c13y2 * c23x2 - c11.getY() * c12.getX() * c13x2 * c23y2
-                + 2 * c11.getY() * c12.getX() * c13y2 * c23x2 + 3 * c20.getX() * c13x2 * c13.getY() * c23y2 - c12.getX() * c12y2 * c13.getY() * c23x2
-                - 3 * c20.getY() * c13.getX() * c13y2 * c23x2 + c12x2 * c12.getY() * c13.getX() * c23y2 - 3 * c13.getX() * c22x2 * c13y2 * c22.getY()
-                + c13x2 * c13.getY() * c23.getX() * (6 * c20.getY() * c23.getY() + 6 * c21.getY() * c22.getY()) + c13x2 * c22.getX() * c13.getY() * (6 * c21.getY() * c23.getY() + 3 * c22y2)
-                + c13x3 * (-2 * c21.getY() * c22.getY() * c23.getY() - c20.getY() * c23y2 - c22.getY() * (2 * c21.getY() * c23.getY() + c22y2) - c23.getY() * (2 * c20.getY() * c23.getY() + 2 * c21.getY() * c22.getY())),
-                6 * c11.getX() * c12.getX() * c13.getX() * c13.getY() * c22.getY() * c23.getY() + c11.getX() * c12.getY() * c13.getX() * c22.getX() * c13.getY() * c23.getY() + c11.getX() * c12.getY() * c13.getX() * c13.getY() * c22.getY() * c23.getX()
-                - c11.getY() * c12.getX() * c13.getX() * c22.getX() * c13.getY() * c23.getY() - c11.getY() * c12.getX() * c13.getX() * c13.getY() * c22.getY() * c23.getX() - 6 * c11.getY() * c12.getY() * c13.getX() * c22.getX() * c13.getY() * c23.getX()
-                - 6 * c10.getX() * c22.getX() * c13y3 * c23.getX() + 6 * c20.getX() * c22.getX() * c13y3 * c23.getX() + 6 * c10.getY() * c13x3 * c22.getY() * c23.getY() + 2 * c12y3 * c13.getX() * c22.getX() * c23.getX()
-                - 2 * c12x3 * c13.getY() * c22.getY() * c23.getY() + 6 * c10.getX() * c13.getX() * c22.getX() * c13y2 * c23.getY() + 6 * c10.getX() * c13.getX() * c13y2 * c22.getY() * c23.getX()
-                + 6 * c10.getY() * c13.getX() * c22.getX() * c13y2 * c23.getX() - 3 * c11.getX() * c12.getX() * c22.getX() * c13y2 * c23.getY() - 3 * c11.getX() * c12.getX() * c13y2 * c22.getY() * c23.getX()
-                + 2 * c11.getX() * c12.getY() * c22.getX() * c13y2 * c23.getX() + 4 * c11.getY() * c12.getX() * c22.getX() * c13y2 * c23.getX() - 6 * c10.getX() * c13x2 * c13.getY() * c22.getY() * c23.getY()
-                - 6 * c10.getY() * c13x2 * c22.getX() * c13.getY() * c23.getY() - 6 * c10.getY() * c13x2 * c13.getY() * c22.getY() * c23.getX() - 4 * c11.getX() * c12.getY() * c13x2 * c22.getY() * c23.getY()
-                - 6 * c20.getX() * c13.getX() * c22.getX() * c13y2 * c23.getY() - 6 * c20.getX() * c13.getX() * c13y2 * c22.getY() * c23.getX() - 2 * c11.getY() * c12.getX() * c13x2 * c22.getY() * c23.getY()
-                + 3 * c11.getY() * c12.getY() * c13x2 * c22.getX() * c23.getY() + 3 * c11.getY() * c12.getY() * c13x2 * c22.getY() * c23.getX() - 2 * c12.getX() * c12y2 * c13.getX() * c22.getX() * c23.getY()
-                - 2 * c12.getX() * c12y2 * c13.getX() * c22.getY() * c23.getX() - 2 * c12.getX() * c12y2 * c22.getX() * c13.getY() * c23.getX() - 6 * c20.getY() * c13.getX() * c22.getX() * c13y2 * c23.getX()
-                - 6 * c21.getX() * c13.getX() * c21.getY() * c13y2 * c23.getX() - 6 * c21.getX() * c13.getX() * c22.getX() * c13y2 * c22.getY() + 6 * c20.getX() * c13x2 * c13.getY() * c22.getY() * c23.getY()
-                + 2 * c12x2 * c12.getY() * c13.getX() * c22.getY() * c23.getY() + 2 * c12x2 * c12.getY() * c22.getX() * c13.getY() * c23.getY() + 2 * c12x2 * c12.getY() * c13.getY() * c22.getY() * c23.getX()
-                + 3 * c21.getX() * c22x2 * c13y3 + 3 * c21x2 * c13y3 * c23.getX() - 3 * c13.getX() * c21.getY() * c22x2 * c13y2 - 3 * c21x2 * c13.getX() * c13y2 * c23.getY()
-                + c13x2 * c22.getX() * c13.getY() * (6 * c20.getY() * c23.getY() + 6 * c21.getY() * c22.getY()) + c13x2 * c13.getY() * c23.getX() * (6 * c20.getY() * c22.getY() + 3 * c21y2)
-                + c21.getX() * c13x2 * c13.getY() * (6 * c21.getY() * c23.getY() + 3 * c22y2) + c13x3 * (-2 * c20.getY() * c22.getY() * c23.getY() - c23.getY() * (2 * c20.getY() * c22.getY() + c21y2)
-                - c21.getY() * (2 * c21.getY() * c23.getY() + c22y2) - c22.getY() * (2 * c20.getY() * c23.getY() + 2 * c21.getY() * c22.getY())),
-                c11.getX() * c21.getX() * c12.getY() * c13.getX() * c13.getY() * c23.getY() + c11.getX() * c12.getY() * c13.getX() * c21.getY() * c13.getY() * c23.getX() + c11.getX() * c12.getY() * c13.getX() * c22.getX() * c13.getY() * c22.getY()
-                - c11.getY() * c12.getX() * c21.getX() * c13.getX() * c13.getY() * c23.getY() - c11.getY() * c12.getX() * c13.getX() * c21.getY() * c13.getY() * c23.getX() - c11.getY() * c12.getX() * c13.getX() * c22.getX() * c13.getY() * c22.getY()
-                - 6 * c11.getY() * c21.getX() * c12.getY() * c13.getX() * c13.getY() * c23.getX() - 6 * c10.getX() * c21.getX() * c13y3 * c23.getX() + 6 * c20.getX() * c21.getX() * c13y3 * c23.getX()
-                + 2 * c21.getX() * c12y3 * c13.getX() * c23.getX() + 6 * c10.getX() * c21.getX() * c13.getX() * c13y2 * c23.getY() + 6 * c10.getX() * c13.getX() * c21.getY() * c13y2 * c23.getX()
-                + 6 * c10.getX() * c13.getX() * c22.getX() * c13y2 * c22.getY() + 6 * c10.getY() * c21.getX() * c13.getX() * c13y2 * c23.getX() - 3 * c11.getX() * c12.getX() * c21.getX() * c13y2 * c23.getY()
-                - 3 * c11.getX() * c12.getX() * c21.getY() * c13y2 * c23.getX() - 3 * c11.getX() * c12.getX() * c22.getX() * c13y2 * c22.getY() + 2 * c11.getX() * c21.getX() * c12.getY() * c13y2 * c23.getX()
-                + 4 * c11.getY() * c12.getX() * c21.getX() * c13y2 * c23.getX() - 6 * c10.getY() * c21.getX() * c13x2 * c13.getY() * c23.getY() - 6 * c10.getY() * c13x2 * c21.getY() * c13.getY() * c23.getX()
-                - 6 * c10.getY() * c13x2 * c22.getX() * c13.getY() * c22.getY() - 6 * c20.getX() * c21.getX() * c13.getX() * c13y2 * c23.getY() - 6 * c20.getX() * c13.getX() * c21.getY() * c13y2 * c23.getX()
-                - 6 * c20.getX() * c13.getX() * c22.getX() * c13y2 * c22.getY() + 3 * c11.getY() * c21.getX() * c12.getY() * c13x2 * c23.getY() - 3 * c11.getY() * c12.getY() * c13.getX() * c22x2 * c13.getY()
-                + 3 * c11.getY() * c12.getY() * c13x2 * c21.getY() * c23.getX() + 3 * c11.getY() * c12.getY() * c13x2 * c22.getX() * c22.getY() - 2 * c12.getX() * c21.getX() * c12y2 * c13.getX() * c23.getY()
-                - 2 * c12.getX() * c21.getX() * c12y2 * c13.getY() * c23.getX() - 2 * c12.getX() * c12y2 * c13.getX() * c21.getY() * c23.getX() - 2 * c12.getX() * c12y2 * c13.getX() * c22.getX() * c22.getY()
-                - 6 * c20.getY() * c21.getX() * c13.getX() * c13y2 * c23.getX() - 6 * c21.getX() * c13.getX() * c21.getY() * c22.getX() * c13y2 + 6 * c20.getY() * c13x2 * c21.getY() * c13.getY() * c23.getX()
-                + 2 * c12x2 * c21.getX() * c12.getY() * c13.getY() * c23.getY() + 2 * c12x2 * c12.getY() * c21.getY() * c13.getY() * c23.getX() + 2 * c12x2 * c12.getY() * c22.getX() * c13.getY() * c22.getY()
-                - 3 * c10.getX() * c22x2 * c13y3 + 3 * c20.getX() * c22x2 * c13y3 + 3 * c21x2 * c22.getX() * c13y3 + c12y3 * c13.getX() * c22x2
-                + 3 * c10.getY() * c13.getX() * c22x2 * c13y2 + c11.getX() * c12.getY() * c22x2 * c13y2 + 2 * c11.getY() * c12.getX() * c22x2 * c13y2
-                - c12.getX() * c12y2 * c22x2 * c13.getY() - 3 * c20.getY() * c13.getX() * c22x2 * c13y2 - 3 * c21x2 * c13.getX() * c13y2 * c22.getY()
-                + c12x2 * c12.getY() * c13.getX() * (2 * c21.getY() * c23.getY() + c22y2) + c11.getX() * c12.getX() * c13.getX() * c13.getY() * (6 * c21.getY() * c23.getY() + 3 * c22y2)
-                + c21.getX() * c13x2 * c13.getY() * (6 * c20.getY() * c23.getY() + 6 * c21.getY() * c22.getY()) + c12x3 * c13.getY() * (-2 * c21.getY() * c23.getY() - c22y2)
-                + c10.getY() * c13x3 * (6 * c21.getY() * c23.getY() + 3 * c22y2) + c11.getY() * c12.getX() * c13x2 * (-2 * c21.getY() * c23.getY() - c22y2)
-                + c11.getX() * c12.getY() * c13x2 * (-4 * c21.getY() * c23.getY() - 2 * c22y2) + c10.getX() * c13x2 * c13.getY() * (-6 * c21.getY() * c23.getY() - 3 * c22y2)
-                + c13x2 * c22.getX() * c13.getY() * (6 * c20.getY() * c22.getY() + 3 * c21y2) + c20.getX() * c13x2 * c13.getY() * (6 * c21.getY() * c23.getY() + 3 * c22y2)
-                + c13x3 * (-2 * c20.getY() * c21.getY() * c23.getY() - c22.getY() * (2 * c20.getY() * c22.getY() + c21y2) - c20.getY() * (2 * c21.getY() * c23.getY() + c22y2)
-                - c21.getY() * (2 * c20.getY() * c23.getY() + 2 * c21.getY() * c22.getY())),
-                -c10.getX() * c11.getX() * c12.getY() * c13.getX() * c13.getY() * c23.getY() + c10.getX() * c11.getY() * c12.getX() * c13.getX() * c13.getY() * c23.getY() + 6 * c10.getX() * c11.getY() * c12.getY() * c13.getX() * c13.getY() * c23.getX()
-                - 6 * c10.getY() * c11.getX() * c12.getX() * c13.getX() * c13.getY() * c23.getY() - c10.getY() * c11.getX() * c12.getY() * c13.getX() * c13.getY() * c23.getX() + c10.getY() * c11.getY() * c12.getX() * c13.getX() * c13.getY() * c23.getX()
-                + c11.getX() * c11.getY() * c12.getX() * c12.getY() * c13.getX() * c23.getY() - c11.getX() * c11.getY() * c12.getX() * c12.getY() * c13.getY() * c23.getX() + c11.getX() * c20.getX() * c12.getY() * c13.getX() * c13.getY() * c23.getY()
-                + c11.getX() * c20.getY() * c12.getY() * c13.getX() * c13.getY() * c23.getX() + c11.getX() * c21.getX() * c12.getY() * c13.getX() * c13.getY() * c22.getY() + c11.getX() * c12.getY() * c13.getX() * c21.getY() * c22.getX() * c13.getY()
-                - c20.getX() * c11.getY() * c12.getX() * c13.getX() * c13.getY() * c23.getY() - 6 * c20.getX() * c11.getY() * c12.getY() * c13.getX() * c13.getY() * c23.getX() - c11.getY() * c12.getX() * c20.getY() * c13.getX() * c13.getY() * c23.getX()
-                - c11.getY() * c12.getX() * c21.getX() * c13.getX() * c13.getY() * c22.getY() - c11.getY() * c12.getX() * c13.getX() * c21.getY() * c22.getX() * c13.getY() - 6 * c11.getY() * c21.getX() * c12.getY() * c13.getX() * c22.getX() * c13.getY()
-                - 6 * c10.getX() * c20.getX() * c13y3 * c23.getX() - 6 * c10.getX() * c21.getX() * c22.getX() * c13y3 - 2 * c10.getX() * c12y3 * c13.getX() * c23.getX() + 6 * c20.getX() * c21.getX() * c22.getX() * c13y3
-                + 2 * c20.getX() * c12y3 * c13.getX() * c23.getX() + 2 * c21.getX() * c12y3 * c13.getX() * c22.getX() + 2 * c10.getY() * c12x3 * c13.getY() * c23.getY() - 6 * c10.getX() * c10.getY() * c13.getX() * c13y2 * c23.getX()
-                + 3 * c10.getX() * c11.getX() * c12.getX() * c13y2 * c23.getY() - 2 * c10.getX() * c11.getX() * c12.getY() * c13y2 * c23.getX() - 4 * c10.getX() * c11.getY() * c12.getX() * c13y2 * c23.getX()
-                + 3 * c10.getY() * c11.getX() * c12.getX() * c13y2 * c23.getX() + 6 * c10.getX() * c10.getY() * c13x2 * c13.getY() * c23.getY() + 6 * c10.getX() * c20.getX() * c13.getX() * c13y2 * c23.getY()
-                - 3 * c10.getX() * c11.getY() * c12.getY() * c13x2 * c23.getY() + 2 * c10.getX() * c12.getX() * c12y2 * c13.getX() * c23.getY() + 2 * c10.getX() * c12.getX() * c12y2 * c13.getY() * c23.getX()
-                + 6 * c10.getX() * c20.getY() * c13.getX() * c13y2 * c23.getX() + 6 * c10.getX() * c21.getX() * c13.getX() * c13y2 * c22.getY() + 6 * c10.getX() * c13.getX() * c21.getY() * c22.getX() * c13y2
-                + 4 * c10.getY() * c11.getX() * c12.getY() * c13x2 * c23.getY() + 6 * c10.getY() * c20.getX() * c13.getX() * c13y2 * c23.getX() + 2 * c10.getY() * c11.getY() * c12.getX() * c13x2 * c23.getY()
-                - 3 * c10.getY() * c11.getY() * c12.getY() * c13x2 * c23.getX() + 2 * c10.getY() * c12.getX() * c12y2 * c13.getX() * c23.getX() + 6 * c10.getY() * c21.getX() * c13.getX() * c22.getX() * c13y2
-                - 3 * c11.getX() * c20.getX() * c12.getX() * c13y2 * c23.getY() + 2 * c11.getX() * c20.getX() * c12.getY() * c13y2 * c23.getX() + c11.getX() * c11.getY() * c12y2 * c13.getX() * c23.getX()
-                - 3 * c11.getX() * c12.getX() * c20.getY() * c13y2 * c23.getX() - 3 * c11.getX() * c12.getX() * c21.getX() * c13y2 * c22.getY() - 3 * c11.getX() * c12.getX() * c21.getY() * c22.getX() * c13y2
-                + 2 * c11.getX() * c21.getX() * c12.getY() * c22.getX() * c13y2 + 4 * c20.getX() * c11.getY() * c12.getX() * c13y2 * c23.getX() + 4 * c11.getY() * c12.getX() * c21.getX() * c22.getX() * c13y2
-                - 2 * c10.getX() * c12x2 * c12.getY() * c13.getY() * c23.getY() - 6 * c10.getY() * c20.getX() * c13x2 * c13.getY() * c23.getY() - 6 * c10.getY() * c20.getY() * c13x2 * c13.getY() * c23.getX()
-                - 6 * c10.getY() * c21.getX() * c13x2 * c13.getY() * c22.getY() - 2 * c10.getY() * c12x2 * c12.getY() * c13.getX() * c23.getY() - 2 * c10.getY() * c12x2 * c12.getY() * c13.getY() * c23.getX()
-                - 6 * c10.getY() * c13x2 * c21.getY() * c22.getX() * c13.getY() - c11.getX() * c11.getY() * c12x2 * c13.getY() * c23.getY() - 2 * c11.getX() * c11y2 * c13.getX() * c13.getY() * c23.getX()
-                + 3 * c20.getX() * c11.getY() * c12.getY() * c13x2 * c23.getY() - 2 * c20.getX() * c12.getX() * c12y2 * c13.getX() * c23.getY() - 2 * c20.getX() * c12.getX() * c12y2 * c13.getY() * c23.getX()
-                - 6 * c20.getX() * c20.getY() * c13.getX() * c13y2 * c23.getX() - 6 * c20.getX() * c21.getX() * c13.getX() * c13y2 * c22.getY() - 6 * c20.getX() * c13.getX() * c21.getY() * c22.getX() * c13y2
-                + 3 * c11.getY() * c20.getY() * c12.getY() * c13x2 * c23.getX() + 3 * c11.getY() * c21.getX() * c12.getY() * c13x2 * c22.getY() + 3 * c11.getY() * c12.getY() * c13x2 * c21.getY() * c22.getX()
-                - 2 * c12.getX() * c20.getY() * c12y2 * c13.getX() * c23.getX() - 2 * c12.getX() * c21.getX() * c12y2 * c13.getX() * c22.getY() - 2 * c12.getX() * c21.getX() * c12y2 * c22.getX() * c13.getY()
-                - 2 * c12.getX() * c12y2 * c13.getX() * c21.getY() * c22.getX() - 6 * c20.getY() * c21.getX() * c13.getX() * c22.getX() * c13y2 - c11y2 * c12.getX() * c12.getY() * c13.getX() * c23.getX()
-                + 2 * c20.getX() * c12x2 * c12.getY() * c13.getY() * c23.getY() + 6 * c20.getY() * c13x2 * c21.getY() * c22.getX() * c13.getY() + 2 * c11x2 * c11.getY() * c13.getX() * c13.getY() * c23.getY()
-                + c11x2 * c12.getX() * c12.getY() * c13.getY() * c23.getY() + 2 * c12x2 * c20.getY() * c12.getY() * c13.getY() * c23.getX() + 2 * c12x2 * c21.getX() * c12.getY() * c13.getY() * c22.getY()
-                + 2 * c12x2 * c12.getY() * c21.getY() * c22.getX() * c13.getY() + c21x3 * c13y3 + 3 * c10x2 * c13y3 * c23.getX() - 3 * c10y2 * c13x3 * c23.getY()
-                + 3 * c20x2 * c13y3 * c23.getX() + c11y3 * c13x2 * c23.getX() - c11x3 * c13y2 * c23.getY() - c11.getX() * c11y2 * c13x2 * c23.getY()
-                + c11x2 * c11.getY() * c13y2 * c23.getX() - 3 * c10x2 * c13.getX() * c13y2 * c23.getY() + 3 * c10y2 * c13x2 * c13.getY() * c23.getX() - c11x2 * c12y2 * c13.getX() * c23.getY()
-                + c11y2 * c12x2 * c13.getY() * c23.getX() - 3 * c21x2 * c13.getX() * c21.getY() * c13y2 - 3 * c20x2 * c13.getX() * c13y2 * c23.getY() + 3 * c20y2 * c13x2 * c13.getY() * c23.getX()
-                + c11.getX() * c12.getX() * c13.getX() * c13.getY() * (6 * c20.getY() * c23.getY() + 6 * c21.getY() * c22.getY()) + c12x3 * c13.getY() * (-2 * c20.getY() * c23.getY() - 2 * c21.getY() * c22.getY())
-                + c10.getY() * c13x3 * (6 * c20.getY() * c23.getY() + 6 * c21.getY() * c22.getY()) + c11.getY() * c12.getX() * c13x2 * (-2 * c20.getY() * c23.getY() - 2 * c21.getY() * c22.getY())
-                + c12x2 * c12.getY() * c13.getX() * (2 * c20.getY() * c23.getY() + 2 * c21.getY() * c22.getY()) + c11.getX() * c12.getY() * c13x2 * (-4 * c20.getY() * c23.getY() - 4 * c21.getY() * c22.getY())
-                + c10.getX() * c13x2 * c13.getY() * (-6 * c20.getY() * c23.getY() - 6 * c21.getY() * c22.getY()) + c20.getX() * c13x2 * c13.getY() * (6 * c20.getY() * c23.getY() + 6 * c21.getY() * c22.getY())
-                + c21.getX() * c13x2 * c13.getY() * (6 * c20.getY() * c22.getY() + 3 * c21y2) + c13x3 * (-2 * c20.getY() * c21.getY() * c22.getY() - c20y2 * c23.getY()
-                - c21.getY() * (2 * c20.getY() * c22.getY() + c21y2) - c20.getY() * (2 * c20.getY() * c23.getY() + 2 * c21.getY() * c22.getY())),
-                -c10.getX() * c11.getX() * c12.getY() * c13.getX() * c13.getY() * c22.getY() + c10.getX() * c11.getY() * c12.getX() * c13.getX() * c13.getY() * c22.getY() + 6 * c10.getX() * c11.getY() * c12.getY() * c13.getX() * c22.getX() * c13.getY()
-                - 6 * c10.getY() * c11.getX() * c12.getX() * c13.getX() * c13.getY() * c22.getY() - c10.getY() * c11.getX() * c12.getY() * c13.getX() * c22.getX() * c13.getY() + c10.getY() * c11.getY() * c12.getX() * c13.getX() * c22.getX() * c13.getY()
-                + c11.getX() * c11.getY() * c12.getX() * c12.getY() * c13.getX() * c22.getY() - c11.getX() * c11.getY() * c12.getX() * c12.getY() * c22.getX() * c13.getY() + c11.getX() * c20.getX() * c12.getY() * c13.getX() * c13.getY() * c22.getY()
-                + c11.getX() * c20.getY() * c12.getY() * c13.getX() * c22.getX() * c13.getY() + c11.getX() * c21.getX() * c12.getY() * c13.getX() * c21.getY() * c13.getY() - c20.getX() * c11.getY() * c12.getX() * c13.getX() * c13.getY() * c22.getY()
-                - 6 * c20.getX() * c11.getY() * c12.getY() * c13.getX() * c22.getX() * c13.getY() - c11.getY() * c12.getX() * c20.getY() * c13.getX() * c22.getX() * c13.getY() - c11.getY() * c12.getX() * c21.getX() * c13.getX() * c21.getY() * c13.getY()
-                - 6 * c10.getX() * c20.getX() * c22.getX() * c13y3 - 2 * c10.getX() * c12y3 * c13.getX() * c22.getX() + 2 * c20.getX() * c12y3 * c13.getX() * c22.getX() + 2 * c10.getY() * c12x3 * c13.getY() * c22.getY()
-                - 6 * c10.getX() * c10.getY() * c13.getX() * c22.getX() * c13y2 + 3 * c10.getX() * c11.getX() * c12.getX() * c13y2 * c22.getY() - 2 * c10.getX() * c11.getX() * c12.getY() * c22.getX() * c13y2
-                - 4 * c10.getX() * c11.getY() * c12.getX() * c22.getX() * c13y2 + 3 * c10.getY() * c11.getX() * c12.getX() * c22.getX() * c13y2 + 6 * c10.getX() * c10.getY() * c13x2 * c13.getY() * c22.getY()
-                + 6 * c10.getX() * c20.getX() * c13.getX() * c13y2 * c22.getY() - 3 * c10.getX() * c11.getY() * c12.getY() * c13x2 * c22.getY() + 2 * c10.getX() * c12.getX() * c12y2 * c13.getX() * c22.getY()
-                + 2 * c10.getX() * c12.getX() * c12y2 * c22.getX() * c13.getY() + 6 * c10.getX() * c20.getY() * c13.getX() * c22.getX() * c13y2 + 6 * c10.getX() * c21.getX() * c13.getX() * c21.getY() * c13y2
-                + 4 * c10.getY() * c11.getX() * c12.getY() * c13x2 * c22.getY() + 6 * c10.getY() * c20.getX() * c13.getX() * c22.getX() * c13y2 + 2 * c10.getY() * c11.getY() * c12.getX() * c13x2 * c22.getY()
-                - 3 * c10.getY() * c11.getY() * c12.getY() * c13x2 * c22.getX() + 2 * c10.getY() * c12.getX() * c12y2 * c13.getX() * c22.getX() - 3 * c11.getX() * c20.getX() * c12.getX() * c13y2 * c22.getY()
-                + 2 * c11.getX() * c20.getX() * c12.getY() * c22.getX() * c13y2 + c11.getX() * c11.getY() * c12y2 * c13.getX() * c22.getX() - 3 * c11.getX() * c12.getX() * c20.getY() * c22.getX() * c13y2
-                - 3 * c11.getX() * c12.getX() * c21.getX() * c21.getY() * c13y2 + 4 * c20.getX() * c11.getY() * c12.getX() * c22.getX() * c13y2 - 2 * c10.getX() * c12x2 * c12.getY() * c13.getY() * c22.getY()
-                - 6 * c10.getY() * c20.getX() * c13x2 * c13.getY() * c22.getY() - 6 * c10.getY() * c20.getY() * c13x2 * c22.getX() * c13.getY() - 6 * c10.getY() * c21.getX() * c13x2 * c21.getY() * c13.getY()
-                - 2 * c10.getY() * c12x2 * c12.getY() * c13.getX() * c22.getY() - 2 * c10.getY() * c12x2 * c12.getY() * c22.getX() * c13.getY() - c11.getX() * c11.getY() * c12x2 * c13.getY() * c22.getY()
-                - 2 * c11.getX() * c11y2 * c13.getX() * c22.getX() * c13.getY() + 3 * c20.getX() * c11.getY() * c12.getY() * c13x2 * c22.getY() - 2 * c20.getX() * c12.getX() * c12y2 * c13.getX() * c22.getY()
-                - 2 * c20.getX() * c12.getX() * c12y2 * c22.getX() * c13.getY() - 6 * c20.getX() * c20.getY() * c13.getX() * c22.getX() * c13y2 - 6 * c20.getX() * c21.getX() * c13.getX() * c21.getY() * c13y2
-                + 3 * c11.getY() * c20.getY() * c12.getY() * c13x2 * c22.getX() + 3 * c11.getY() * c21.getX() * c12.getY() * c13x2 * c21.getY() - 2 * c12.getX() * c20.getY() * c12y2 * c13.getX() * c22.getX()
-                - 2 * c12.getX() * c21.getX() * c12y2 * c13.getX() * c21.getY() - c11y2 * c12.getX() * c12.getY() * c13.getX() * c22.getX() + 2 * c20.getX() * c12x2 * c12.getY() * c13.getY() * c22.getY()
-                - 3 * c11.getY() * c21x2 * c12.getY() * c13.getX() * c13.getY() + 6 * c20.getY() * c21.getX() * c13x2 * c21.getY() * c13.getY() + 2 * c11x2 * c11.getY() * c13.getX() * c13.getY() * c22.getY()
-                + c11x2 * c12.getX() * c12.getY() * c13.getY() * c22.getY() + 2 * c12x2 * c20.getY() * c12.getY() * c22.getX() * c13.getY() + 2 * c12x2 * c21.getX() * c12.getY() * c21.getY() * c13.getY()
-                - 3 * c10.getX() * c21x2 * c13y3 + 3 * c20.getX() * c21x2 * c13y3 + 3 * c10x2 * c22.getX() * c13y3 - 3 * c10y2 * c13x3 * c22.getY() + 3 * c20x2 * c22.getX() * c13y3
-                + c21x2 * c12y3 * c13.getX() + c11y3 * c13x2 * c22.getX() - c11x3 * c13y2 * c22.getY() + 3 * c10.getY() * c21x2 * c13.getX() * c13y2
-                - c11.getX() * c11y2 * c13x2 * c22.getY() + c11.getX() * c21x2 * c12.getY() * c13y2 + 2 * c11.getY() * c12.getX() * c21x2 * c13y2 + c11x2 * c11.getY() * c22.getX() * c13y2
-                - c12.getX() * c21x2 * c12y2 * c13.getY() - 3 * c20.getY() * c21x2 * c13.getX() * c13y2 - 3 * c10x2 * c13.getX() * c13y2 * c22.getY() + 3 * c10y2 * c13x2 * c22.getX() * c13.getY()
-                - c11x2 * c12y2 * c13.getX() * c22.getY() + c11y2 * c12x2 * c22.getX() * c13.getY() - 3 * c20x2 * c13.getX() * c13y2 * c22.getY() + 3 * c20y2 * c13x2 * c22.getX() * c13.getY()
-                + c12x2 * c12.getY() * c13.getX() * (2 * c20.getY() * c22.getY() + c21y2) + c11.getX() * c12.getX() * c13.getX() * c13.getY() * (6 * c20.getY() * c22.getY() + 3 * c21y2)
-                + c12x3 * c13.getY() * (-2 * c20.getY() * c22.getY() - c21y2) + c10.getY() * c13x3 * (6 * c20.getY() * c22.getY() + 3 * c21y2)
-                + c11.getY() * c12.getX() * c13x2 * (-2 * c20.getY() * c22.getY() - c21y2) + c11.getX() * c12.getY() * c13x2 * (-4 * c20.getY() * c22.getY() - 2 * c21y2)
-                + c10.getX() * c13x2 * c13.getY() * (-6 * c20.getY() * c22.getY() - 3 * c21y2) + c20.getX() * c13x2 * c13.getY() * (6 * c20.getY() * c22.getY() + 3 * c21y2)
-                + c13x3 * (-2 * c20.getY() * c21y2 - c20y2 * c22.getY() - c20.getY() * (2 * c20.getY() * c22.getY() + c21y2)),
-                -c10.getX() * c11.getX() * c12.getY() * c13.getX() * c21.getY() * c13.getY() + c10.getX() * c11.getY() * c12.getX() * c13.getX() * c21.getY() * c13.getY() + 6 * c10.getX() * c11.getY() * c21.getX() * c12.getY() * c13.getX() * c13.getY()
-                - 6 * c10.getY() * c11.getX() * c12.getX() * c13.getX() * c21.getY() * c13.getY() - c10.getY() * c11.getX() * c21.getX() * c12.getY() * c13.getX() * c13.getY() + c10.getY() * c11.getY() * c12.getX() * c21.getX() * c13.getX() * c13.getY()
-                - c11.getX() * c11.getY() * c12.getX() * c21.getX() * c12.getY() * c13.getY() + c11.getX() * c11.getY() * c12.getX() * c12.getY() * c13.getX() * c21.getY() + c11.getX() * c20.getX() * c12.getY() * c13.getX() * c21.getY() * c13.getY()
-                + 6 * c11.getX() * c12.getX() * c20.getY() * c13.getX() * c21.getY() * c13.getY() + c11.getX() * c20.getY() * c21.getX() * c12.getY() * c13.getX() * c13.getY() - c20.getX() * c11.getY() * c12.getX() * c13.getX() * c21.getY() * c13.getY()
-                - 6 * c20.getX() * c11.getY() * c21.getX() * c12.getY() * c13.getX() * c13.getY() - c11.getY() * c12.getX() * c20.getY() * c21.getX() * c13.getX() * c13.getY() - 6 * c10.getX() * c20.getX() * c21.getX() * c13y3
-                - 2 * c10.getX() * c21.getX() * c12y3 * c13.getX() + 6 * c10.getY() * c20.getY() * c13x3 * c21.getY() + 2 * c20.getX() * c21.getX() * c12y3 * c13.getX() + 2 * c10.getY() * c12x3 * c21.getY() * c13.getY()
-                - 2 * c12x3 * c20.getY() * c21.getY() * c13.getY() - 6 * c10.getX() * c10.getY() * c21.getX() * c13.getX() * c13y2 + 3 * c10.getX() * c11.getX() * c12.getX() * c21.getY() * c13y2
-                - 2 * c10.getX() * c11.getX() * c21.getX() * c12.getY() * c13y2 - 4 * c10.getX() * c11.getY() * c12.getX() * c21.getX() * c13y2 + 3 * c10.getY() * c11.getX() * c12.getX() * c21.getX() * c13y2
-                + 6 * c10.getX() * c10.getY() * c13x2 * c21.getY() * c13.getY() + 6 * c10.getX() * c20.getX() * c13.getX() * c21.getY() * c13y2 - 3 * c10.getX() * c11.getY() * c12.getY() * c13x2 * c21.getY()
-                + 2 * c10.getX() * c12.getX() * c21.getX() * c12y2 * c13.getY() + 2 * c10.getX() * c12.getX() * c12y2 * c13.getX() * c21.getY() + 6 * c10.getX() * c20.getY() * c21.getX() * c13.getX() * c13y2
-                + 4 * c10.getY() * c11.getX() * c12.getY() * c13x2 * c21.getY() + 6 * c10.getY() * c20.getX() * c21.getX() * c13.getX() * c13y2 + 2 * c10.getY() * c11.getY() * c12.getX() * c13x2 * c21.getY()
-                - 3 * c10.getY() * c11.getY() * c21.getX() * c12.getY() * c13x2 + 2 * c10.getY() * c12.getX() * c21.getX() * c12y2 * c13.getX() - 3 * c11.getX() * c20.getX() * c12.getX() * c21.getY() * c13y2
-                + 2 * c11.getX() * c20.getX() * c21.getX() * c12.getY() * c13y2 + c11.getX() * c11.getY() * c21.getX() * c12y2 * c13.getX() - 3 * c11.getX() * c12.getX() * c20.getY() * c21.getX() * c13y2
-                + 4 * c20.getX() * c11.getY() * c12.getX() * c21.getX() * c13y2 - 6 * c10.getX() * c20.getY() * c13x2 * c21.getY() * c13.getY() - 2 * c10.getX() * c12x2 * c12.getY() * c21.getY() * c13.getY()
-                - 6 * c10.getY() * c20.getX() * c13x2 * c21.getY() * c13.getY() - 6 * c10.getY() * c20.getY() * c21.getX() * c13x2 * c13.getY() - 2 * c10.getY() * c12x2 * c21.getX() * c12.getY() * c13.getY()
-                - 2 * c10.getY() * c12x2 * c12.getY() * c13.getX() * c21.getY() - c11.getX() * c11.getY() * c12x2 * c21.getY() * c13.getY() - 4 * c11.getX() * c20.getY() * c12.getY() * c13x2 * c21.getY()
-                - 2 * c11.getX() * c11y2 * c21.getX() * c13.getX() * c13.getY() + 3 * c20.getX() * c11.getY() * c12.getY() * c13x2 * c21.getY() - 2 * c20.getX() * c12.getX() * c21.getX() * c12y2 * c13.getY()
-                - 2 * c20.getX() * c12.getX() * c12y2 * c13.getX() * c21.getY() - 6 * c20.getX() * c20.getY() * c21.getX() * c13.getX() * c13y2 - 2 * c11.getY() * c12.getX() * c20.getY() * c13x2 * c21.getY()
-                + 3 * c11.getY() * c20.getY() * c21.getX() * c12.getY() * c13x2 - 2 * c12.getX() * c20.getY() * c21.getX() * c12y2 * c13.getX() - c11y2 * c12.getX() * c21.getX() * c12.getY() * c13.getX()
-                + 6 * c20.getX() * c20.getY() * c13x2 * c21.getY() * c13.getY() + 2 * c20.getX() * c12x2 * c12.getY() * c21.getY() * c13.getY() + 2 * c11x2 * c11.getY() * c13.getX() * c21.getY() * c13.getY()
-                + c11x2 * c12.getX() * c12.getY() * c21.getY() * c13.getY() + 2 * c12x2 * c20.getY() * c21.getX() * c12.getY() * c13.getY() + 2 * c12x2 * c20.getY() * c12.getY() * c13.getX() * c21.getY()
-                + 3 * c10x2 * c21.getX() * c13y3 - 3 * c10y2 * c13x3 * c21.getY() + 3 * c20x2 * c21.getX() * c13y3 + c11y3 * c21.getX() * c13x2 - c11x3 * c21.getY() * c13y2
-                - 3 * c20y2 * c13x3 * c21.getY() - c11.getX() * c11y2 * c13x2 * c21.getY() + c11x2 * c11.getY() * c21.getX() * c13y2 - 3 * c10x2 * c13.getX() * c21.getY() * c13y2
-                + 3 * c10y2 * c21.getX() * c13x2 * c13.getY() - c11x2 * c12y2 * c13.getX() * c21.getY() + c11y2 * c12x2 * c21.getX() * c13.getY() - 3 * c20x2 * c13.getX() * c21.getY() * c13y2
-                + 3 * c20y2 * c21.getX() * c13x2 * c13.getY(),
-                c10.getX() * c10.getY() * c11.getX() * c12.getY() * c13.getX() * c13.getY() - c10.getX() * c10.getY() * c11.getY() * c12.getX() * c13.getX() * c13.getY() + c10.getX() * c11.getX() * c11.getY() * c12.getX() * c12.getY() * c13.getY()
-                - c10.getY() * c11.getX() * c11.getY() * c12.getX() * c12.getY() * c13.getX() - c10.getX() * c11.getX() * c20.getY() * c12.getY() * c13.getX() * c13.getY() + 6 * c10.getX() * c20.getX() * c11.getY() * c12.getY() * c13.getX() * c13.getY()
-                + c10.getX() * c11.getY() * c12.getX() * c20.getY() * c13.getX() * c13.getY() - c10.getY() * c11.getX() * c20.getX() * c12.getY() * c13.getX() * c13.getY() - 6 * c10.getY() * c11.getX() * c12.getX() * c20.getY() * c13.getX() * c13.getY()
-                + c10.getY() * c20.getX() * c11.getY() * c12.getX() * c13.getX() * c13.getY() - c11.getX() * c20.getX() * c11.getY() * c12.getX() * c12.getY() * c13.getY() + c11.getX() * c11.getY() * c12.getX() * c20.getY() * c12.getY() * c13.getX()
-                + c11.getX() * c20.getX() * c20.getY() * c12.getY() * c13.getX() * c13.getY() - c20.getX() * c11.getY() * c12.getX() * c20.getY() * c13.getX() * c13.getY() - 2 * c10.getX() * c20.getX() * c12y3 * c13.getX()
-                + 2 * c10.getY() * c12x3 * c20.getY() * c13.getY() - 3 * c10.getX() * c10.getY() * c11.getX() * c12.getX() * c13y2 - 6 * c10.getX() * c10.getY() * c20.getX() * c13.getX() * c13y2
-                + 3 * c10.getX() * c10.getY() * c11.getY() * c12.getY() * c13x2 - 2 * c10.getX() * c10.getY() * c12.getX() * c12y2 * c13.getX() - 2 * c10.getX() * c11.getX() * c20.getX() * c12.getY() * c13y2
-                - c10.getX() * c11.getX() * c11.getY() * c12y2 * c13.getX() + 3 * c10.getX() * c11.getX() * c12.getX() * c20.getY() * c13y2 - 4 * c10.getX() * c20.getX() * c11.getY() * c12.getX() * c13y2
-                + 3 * c10.getY() * c11.getX() * c20.getX() * c12.getX() * c13y2 + 6 * c10.getX() * c10.getY() * c20.getY() * c13x2 * c13.getY() + 2 * c10.getX() * c10.getY() * c12x2 * c12.getY() * c13.getY()
-                + 2 * c10.getX() * c11.getX() * c11y2 * c13.getX() * c13.getY() + 2 * c10.getX() * c20.getX() * c12.getX() * c12y2 * c13.getY() + 6 * c10.getX() * c20.getX() * c20.getY() * c13.getX() * c13y2
-                - 3 * c10.getX() * c11.getY() * c20.getY() * c12.getY() * c13x2 + 2 * c10.getX() * c12.getX() * c20.getY() * c12y2 * c13.getX() + c10.getX() * c11y2 * c12.getX() * c12.getY() * c13.getX()
-                + c10.getY() * c11.getX() * c11.getY() * c12x2 * c13.getY() + 4 * c10.getY() * c11.getX() * c20.getY() * c12.getY() * c13x2 - 3 * c10.getY() * c20.getX() * c11.getY() * c12.getY() * c13x2
-                + 2 * c10.getY() * c20.getX() * c12.getX() * c12y2 * c13.getX() + 2 * c10.getY() * c11.getY() * c12.getX() * c20.getY() * c13x2 + c11.getX() * c20.getX() * c11.getY() * c12y2 * c13.getX()
-                - 3 * c11.getX() * c20.getX() * c12.getX() * c20.getY() * c13y2 - 2 * c10.getX() * c12x2 * c20.getY() * c12.getY() * c13.getY() - 6 * c10.getY() * c20.getX() * c20.getY() * c13x2 * c13.getY()
-                - 2 * c10.getY() * c20.getX() * c12x2 * c12.getY() * c13.getY() - 2 * c10.getY() * c11x2 * c11.getY() * c13.getX() * c13.getY() - c10.getY() * c11x2 * c12.getX() * c12.getY() * c13.getY()
-                - 2 * c10.getY() * c12x2 * c20.getY() * c12.getY() * c13.getX() - 2 * c11.getX() * c20.getX() * c11y2 * c13.getX() * c13.getY() - c11.getX() * c11.getY() * c12x2 * c20.getY() * c13.getY()
-                + 3 * c20.getX() * c11.getY() * c20.getY() * c12.getY() * c13x2 - 2 * c20.getX() * c12.getX() * c20.getY() * c12y2 * c13.getX() - c20.getX() * c11y2 * c12.getX() * c12.getY() * c13.getX()
-                + 3 * c10y2 * c11.getX() * c12.getX() * c13.getX() * c13.getY() + 3 * c11.getX() * c12.getX() * c20y2 * c13.getX() * c13.getY() + 2 * c20.getX() * c12x2 * c20.getY() * c12.getY() * c13.getY()
-                - 3 * c10x2 * c11.getY() * c12.getY() * c13.getX() * c13.getY() + 2 * c11x2 * c11.getY() * c20.getY() * c13.getX() * c13.getY() + c11x2 * c12.getX() * c20.getY() * c12.getY() * c13.getY()
-                - 3 * c20x2 * c11.getY() * c12.getY() * c13.getX() * c13.getY() - c10x3 * c13y3 + c10y3 * c13x3 + c20x3 * c13y3 - c20y3 * c13x3
-                - 3 * c10.getX() * c20x2 * c13y3 - c10.getX() * c11y3 * c13x2 + 3 * c10x2 * c20.getX() * c13y3 + c10.getY() * c11x3 * c13y2
-                + 3 * c10.getY() * c20y2 * c13x3 + c20.getX() * c11y3 * c13x2 + c10x2 * c12y3 * c13.getX() - 3 * c10y2 * c20.getY() * c13x3 - c10y2 * c12x3 * c13.getY()
-                + c20x2 * c12y3 * c13.getX() - c11x3 * c20.getY() * c13y2 - c12x3 * c20y2 * c13.getY() - c10.getX() * c11x2 * c11.getY() * c13y2
-                + c10.getY() * c11.getX() * c11y2 * c13x2 - 3 * c10.getX() * c10y2 * c13x2 * c13.getY() - c10.getX() * c11y2 * c12x2 * c13.getY() + c10.getY() * c11x2 * c12y2 * c13.getX()
-                - c11.getX() * c11y2 * c20.getY() * c13x2 + 3 * c10x2 * c10.getY() * c13.getX() * c13y2 + c10x2 * c11.getX() * c12.getY() * c13y2
-                + 2 * c10x2 * c11.getY() * c12.getX() * c13y2 - 2 * c10y2 * c11.getX() * c12.getY() * c13x2 - c10y2 * c11.getY() * c12.getX() * c13x2 + c11x2 * c20.getX() * c11.getY() * c13y2
-                - 3 * c10.getX() * c20y2 * c13x2 * c13.getY() + 3 * c10.getY() * c20x2 * c13.getX() * c13y2 + c11.getX() * c20x2 * c12.getY() * c13y2 - 2 * c11.getX() * c20y2 * c12.getY() * c13x2
-                + c20.getX() * c11y2 * c12x2 * c13.getY() - c11.getY() * c12.getX() * c20y2 * c13x2 - c10x2 * c12.getX() * c12y2 * c13.getY() - 3 * c10x2 * c20.getY() * c13.getX() * c13y2
-                + 3 * c10y2 * c20.getX() * c13x2 * c13.getY() + c10y2 * c12x2 * c12.getY() * c13.getX() - c11x2 * c20.getY() * c12y2 * c13.getX() + 2 * c20x2 * c11.getY() * c12.getX() * c13y2
-                + 3 * c20.getX() * c20y2 * c13x2 * c13.getY() - c20x2 * c12.getX() * c12y2 * c13.getY() - 3 * c20x2 * c20.getY() * c13.getX() * c13y2 + c12x2 * c20y2 * c12.getY() * c13.getX()
+                -c13x3 * c23y3 + c13y3 * c23x3 - 3 * c13x * c13y2 * c23x2 * c23y
+                + 3 * c13x2 * c13y * c23x * c23y2,
+                -6 * c13x * c22x * c13y2 * c23x * c23y + 6 * c13x2 * c13y * c22y * c23x * c23y + 3 * c22x * c13y3 * c23x2
+                - 3 * c13x3 * c22y * c23y2 - 3 * c13x * c13y2 * c22y * c23x2 + 3 * c13x2 * c22x * c13y * c23y2,
+                -6 * c21x * c13x * c13y2 * c23x * c23y - 6 * c13x * c22x * c13y2 * c22y * c23x + 6 * c13x2 * c22x * c13y * c22y * c23y
+                + 3 * c21x * c13y3 * c23x2 + 3 * c22x2 * c13y3 * c23x + 3 * c21x * c13x2 * c13y * c23y2 - 3 * c13x * c21y * c13y2 * c23x2
+                - 3 * c13x * c22x2 * c13y2 * c23y + c13x2 * c13y * c23x * (6 * c21y * c23y + 3 * c22y2) + c13x3 * (-c21y * c23y2
+                - 2 * c22y2 * c23y - c23y * (2 * c21y * c23y + c22y2)),
+                c11x * c12y * c13x * c13y * c23x * c23y - c11y * c12x * c13x * c13y * c23x * c23y + 6 * c21x * c22x * c13y3 * c23x
+                + 3 * c11x * c12x * c13x * c13y * c23y2 + 6 * c10x * c13x * c13y2 * c23x * c23y - 3 * c11x * c12x * c13y2 * c23x * c23y
+                - 3 * c11y * c12y * c13x * c13y * c23x2 - 6 * c10y * c13x2 * c13y * c23x * c23y - 6 * c20x * c13x * c13y2 * c23x * c23y
+                + 3 * c11y * c12y * c13x2 * c23x * c23y - 2 * c12x * c12y2 * c13x * c23x * c23y - 6 * c21x * c13x * c22x * c13y2 * c23y
+                - 6 * c21x * c13x * c13y2 * c22y * c23x - 6 * c13x * c21y * c22x * c13y2 * c23x + 6 * c21x * c13x2 * c13y * c22y * c23y
+                + 2 * c12x2 * c12y * c13y * c23x * c23y + c22x3 * c13y3 - 3 * c10x * c13y3 * c23x2 + 3 * c10y * c13x3 * c23y2
+                + 3 * c20x * c13y3 * c23x2 + c12y3 * c13x * c23x2 - c12x3 * c13y * c23y2 - 3 * c10x * c13x2 * c13y * c23y2
+                + 3 * c10y * c13x * c13y2 * c23x2 - 2 * c11x * c12y * c13x2 * c23y2 + c11x * c12y * c13y2 * c23x2 - c11y * c12x * c13x2 * c23y2
+                + 2 * c11y * c12x * c13y2 * c23x2 + 3 * c20x * c13x2 * c13y * c23y2 - c12x * c12y2 * c13y * c23x2
+                - 3 * c20y * c13x * c13y2 * c23x2 + c12x2 * c12y * c13x * c23y2 - 3 * c13x * c22x2 * c13y2 * c22y
+                + c13x2 * c13y * c23x * (6 * c20y * c23y + 6 * c21y * c22y) + c13x2 * c22x * c13y * (6 * c21y * c23y + 3 * c22y2)
+                + c13x3 * (-2 * c21y * c22y * c23y - c20y * c23y2 - c22y * (2 * c21y * c23y + c22y2) - c23y * (2 * c20y * c23y + 2 * c21y * c22y)),
+                6 * c11x * c12x * c13x * c13y * c22y * c23y + c11x * c12y * c13x * c22x * c13y * c23y + c11x * c12y * c13x * c13y * c22y * c23x
+                - c11y * c12x * c13x * c22x * c13y * c23y - c11y * c12x * c13x * c13y * c22y * c23x - 6 * c11y * c12y * c13x * c22x * c13y * c23x
+                - 6 * c10x * c22x * c13y3 * c23x + 6 * c20x * c22x * c13y3 * c23x + 6 * c10y * c13x3 * c22y * c23y + 2 * c12y3 * c13x * c22x * c23x
+                - 2 * c12x3 * c13y * c22y * c23y + 6 * c10x * c13x * c22x * c13y2 * c23y + 6 * c10x * c13x * c13y2 * c22y * c23x
+                + 6 * c10y * c13x * c22x * c13y2 * c23x - 3 * c11x * c12x * c22x * c13y2 * c23y - 3 * c11x * c12x * c13y2 * c22y * c23x
+                + 2 * c11x * c12y * c22x * c13y2 * c23x + 4 * c11y * c12x * c22x * c13y2 * c23x - 6 * c10x * c13x2 * c13y * c22y * c23y
+                - 6 * c10y * c13x2 * c22x * c13y * c23y - 6 * c10y * c13x2 * c13y * c22y * c23x - 4 * c11x * c12y * c13x2 * c22y * c23y
+                - 6 * c20x * c13x * c22x * c13y2 * c23y - 6 * c20x * c13x * c13y2 * c22y * c23x - 2 * c11y * c12x * c13x2 * c22y * c23y
+                + 3 * c11y * c12y * c13x2 * c22x * c23y + 3 * c11y * c12y * c13x2 * c22y * c23x - 2 * c12x * c12y2 * c13x * c22x * c23y
+                - 2 * c12x * c12y2 * c13x * c22y * c23x - 2 * c12x * c12y2 * c22x * c13y * c23x - 6 * c20y * c13x * c22x * c13y2 * c23x
+                - 6 * c21x * c13x * c21y * c13y2 * c23x - 6 * c21x * c13x * c22x * c13y2 * c22y + 6 * c20x * c13x2 * c13y * c22y * c23y
+                + 2 * c12x2 * c12y * c13x * c22y * c23y + 2 * c12x2 * c12y * c22x * c13y * c23y + 2 * c12x2 * c12y * c13y * c22y * c23x
+                + 3 * c21x * c22x2 * c13y3 + 3 * c21x2 * c13y3 * c23x - 3 * c13x * c21y * c22x2 * c13y2 - 3 * c21x2 * c13x * c13y2 * c23y
+                + c13x2 * c22x * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c13x2 * c13y * c23x * (6 * c20y * c22y + 3 * c21y2)
+                + c21x * c13x2 * c13y * (6 * c21y * c23y + 3 * c22y2) + c13x3 * (-2 * c20y * c22y * c23y - c23y * (2 * c20y * c22y + c21y2)
+                - c21y * (2 * c21y * c23y + c22y2) - c22y * (2 * c20y * c23y + 2 * c21y * c22y)),
+                c11x * c21x * c12y * c13x * c13y * c23y + c11x * c12y * c13x * c21y * c13y * c23x + c11x * c12y * c13x * c22x * c13y * c22y
+                - c11y * c12x * c21x * c13x * c13y * c23y - c11y * c12x * c13x * c21y * c13y * c23x - c11y * c12x * c13x * c22x * c13y * c22y
+                - 6 * c11y * c21x * c12y * c13x * c13y * c23x - 6 * c10x * c21x * c13y3 * c23x + 6 * c20x * c21x * c13y3 * c23x
+                + 2 * c21x * c12y3 * c13x * c23x + 6 * c10x * c21x * c13x * c13y2 * c23y + 6 * c10x * c13x * c21y * c13y2 * c23x
+                + 6 * c10x * c13x * c22x * c13y2 * c22y + 6 * c10y * c21x * c13x * c13y2 * c23x - 3 * c11x * c12x * c21x * c13y2 * c23y
+                - 3 * c11x * c12x * c21y * c13y2 * c23x - 3 * c11x * c12x * c22x * c13y2 * c22y + 2 * c11x * c21x * c12y * c13y2 * c23x
+                + 4 * c11y * c12x * c21x * c13y2 * c23x - 6 * c10y * c21x * c13x2 * c13y * c23y - 6 * c10y * c13x2 * c21y * c13y * c23x
+                - 6 * c10y * c13x2 * c22x * c13y * c22y - 6 * c20x * c21x * c13x * c13y2 * c23y - 6 * c20x * c13x * c21y * c13y2 * c23x
+                - 6 * c20x * c13x * c22x * c13y2 * c22y + 3 * c11y * c21x * c12y * c13x2 * c23y - 3 * c11y * c12y * c13x * c22x2 * c13y
+                + 3 * c11y * c12y * c13x2 * c21y * c23x + 3 * c11y * c12y * c13x2 * c22x * c22y - 2 * c12x * c21x * c12y2 * c13x * c23y
+                - 2 * c12x * c21x * c12y2 * c13y * c23x - 2 * c12x * c12y2 * c13x * c21y * c23x - 2 * c12x * c12y2 * c13x * c22x * c22y
+                - 6 * c20y * c21x * c13x * c13y2 * c23x - 6 * c21x * c13x * c21y * c22x * c13y2 + 6 * c20y * c13x2 * c21y * c13y * c23x
+                + 2 * c12x2 * c21x * c12y * c13y * c23y + 2 * c12x2 * c12y * c21y * c13y * c23x + 2 * c12x2 * c12y * c22x * c13y * c22y
+                - 3 * c10x * c22x2 * c13y3 + 3 * c20x * c22x2 * c13y3 + 3 * c21x2 * c22x * c13y3 + c12y3 * c13x * c22x2
+                + 3 * c10y * c13x * c22x2 * c13y2 + c11x * c12y * c22x2 * c13y2 + 2 * c11y * c12x * c22x2 * c13y2
+                - c12x * c12y2 * c22x2 * c13y - 3 * c20y * c13x * c22x2 * c13y2 - 3 * c21x2 * c13x * c13y2 * c22y
+                + c12x2 * c12y * c13x * (2 * c21y * c23y + c22y2) + c11x * c12x * c13x * c13y * (6 * c21y * c23y + 3 * c22y2)
+                + c21x * c13x2 * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c12x3 * c13y * (-2 * c21y * c23y - c22y2)
+                + c10y * c13x3 * (6 * c21y * c23y + 3 * c22y2) + c11y * c12x * c13x2 * (-2 * c21y * c23y - c22y2)
+                + c11x * c12y * c13x2 * (-4 * c21y * c23y - 2 * c22y2) + c10x * c13x2 * c13y * (-6 * c21y * c23y - 3 * c22y2)
+                + c13x2 * c22x * c13y * (6 * c20y * c22y + 3 * c21y2) + c20x * c13x2 * c13y * (6 * c21y * c23y + 3 * c22y2)
+                + c13x3 * (-2 * c20y * c21y * c23y - c22y * (2 * c20y * c22y + c21y2) - c20y * (2 * c21y * c23y + c22y2)
+                - c21y * (2 * c20y * c23y + 2 * c21y * c22y)),
+                -c10x * c11x * c12y * c13x * c13y * c23y + c10x * c11y * c12x * c13x * c13y * c23y + 6 * c10x * c11y * c12y * c13x * c13y * c23x
+                - 6 * c10y * c11x * c12x * c13x * c13y * c23y - c10y * c11x * c12y * c13x * c13y * c23x + c10y * c11y * c12x * c13x * c13y * c23x
+                + c11x * c11y * c12x * c12y * c13x * c23y - c11x * c11y * c12x * c12y * c13y * c23x + c11x * c20x * c12y * c13x * c13y * c23y
+                + c11x * c20y * c12y * c13x * c13y * c23x + c11x * c21x * c12y * c13x * c13y * c22y + c11x * c12y * c13x * c21y * c22x * c13y
+                - c20x * c11y * c12x * c13x * c13y * c23y - 6 * c20x * c11y * c12y * c13x * c13y * c23x - c11y * c12x * c20y * c13x * c13y * c23x
+                - c11y * c12x * c21x * c13x * c13y * c22y - c11y * c12x * c13x * c21y * c22x * c13y - 6 * c11y * c21x * c12y * c13x * c22x * c13y
+                - 6 * c10x * c20x * c13y3 * c23x - 6 * c10x * c21x * c22x * c13y3 - 2 * c10x * c12y3 * c13x * c23x + 6 * c20x * c21x * c22x * c13y3
+                + 2 * c20x * c12y3 * c13x * c23x + 2 * c21x * c12y3 * c13x * c22x + 2 * c10y * c12x3 * c13y * c23y - 6 * c10x * c10y * c13x * c13y2 * c23x
+                + 3 * c10x * c11x * c12x * c13y2 * c23y - 2 * c10x * c11x * c12y * c13y2 * c23x - 4 * c10x * c11y * c12x * c13y2 * c23x
+                + 3 * c10y * c11x * c12x * c13y2 * c23x + 6 * c10x * c10y * c13x2 * c13y * c23y + 6 * c10x * c20x * c13x * c13y2 * c23y
+                - 3 * c10x * c11y * c12y * c13x2 * c23y + 2 * c10x * c12x * c12y2 * c13x * c23y + 2 * c10x * c12x * c12y2 * c13y * c23x
+                + 6 * c10x * c20y * c13x * c13y2 * c23x + 6 * c10x * c21x * c13x * c13y2 * c22y + 6 * c10x * c13x * c21y * c22x * c13y2
+                + 4 * c10y * c11x * c12y * c13x2 * c23y + 6 * c10y * c20x * c13x * c13y2 * c23x + 2 * c10y * c11y * c12x * c13x2 * c23y
+                - 3 * c10y * c11y * c12y * c13x2 * c23x + 2 * c10y * c12x * c12y2 * c13x * c23x + 6 * c10y * c21x * c13x * c22x * c13y2
+                - 3 * c11x * c20x * c12x * c13y2 * c23y + 2 * c11x * c20x * c12y * c13y2 * c23x + c11x * c11y * c12y2 * c13x * c23x
+                - 3 * c11x * c12x * c20y * c13y2 * c23x - 3 * c11x * c12x * c21x * c13y2 * c22y - 3 * c11x * c12x * c21y * c22x * c13y2
+                + 2 * c11x * c21x * c12y * c22x * c13y2 + 4 * c20x * c11y * c12x * c13y2 * c23x + 4 * c11y * c12x * c21x * c22x * c13y2
+                - 2 * c10x * c12x2 * c12y * c13y * c23y - 6 * c10y * c20x * c13x2 * c13y * c23y - 6 * c10y * c20y * c13x2 * c13y * c23x
+                - 6 * c10y * c21x * c13x2 * c13y * c22y - 2 * c10y * c12x2 * c12y * c13x * c23y - 2 * c10y * c12x2 * c12y * c13y * c23x
+                - 6 * c10y * c13x2 * c21y * c22x * c13y - c11x * c11y * c12x2 * c13y * c23y - 2 * c11x * c11y2 * c13x * c13y * c23x
+                + 3 * c20x * c11y * c12y * c13x2 * c23y - 2 * c20x * c12x * c12y2 * c13x * c23y - 2 * c20x * c12x * c12y2 * c13y * c23x
+                - 6 * c20x * c20y * c13x * c13y2 * c23x - 6 * c20x * c21x * c13x * c13y2 * c22y - 6 * c20x * c13x * c21y * c22x * c13y2
+                + 3 * c11y * c20y * c12y * c13x2 * c23x + 3 * c11y * c21x * c12y * c13x2 * c22y + 3 * c11y * c12y * c13x2 * c21y * c22x
+                - 2 * c12x * c20y * c12y2 * c13x * c23x - 2 * c12x * c21x * c12y2 * c13x * c22y - 2 * c12x * c21x * c12y2 * c22x * c13y
+                - 2 * c12x * c12y2 * c13x * c21y * c22x - 6 * c20y * c21x * c13x * c22x * c13y2 - c11y2 * c12x * c12y * c13x * c23x
+                + 2 * c20x * c12x2 * c12y * c13y * c23y + 6 * c20y * c13x2 * c21y * c22x * c13y + 2 * c11x2 * c11y * c13x * c13y * c23y
+                + c11x2 * c12x * c12y * c13y * c23y + 2 * c12x2 * c20y * c12y * c13y * c23x + 2 * c12x2 * c21x * c12y * c13y * c22y
+                + 2 * c12x2 * c12y * c21y * c22x * c13y + c21x3 * c13y3 + 3 * c10x2 * c13y3 * c23x - 3 * c10y2 * c13x3 * c23y
+                + 3 * c20x2 * c13y3 * c23x + c11y3 * c13x2 * c23x - c11x3 * c13y2 * c23y - c11x * c11y2 * c13x2 * c23y
+                + c11x2 * c11y * c13y2 * c23x - 3 * c10x2 * c13x * c13y2 * c23y + 3 * c10y2 * c13x2 * c13y * c23x - c11x2 * c12y2 * c13x * c23y
+                + c11y2 * c12x2 * c13y * c23x - 3 * c21x2 * c13x * c21y * c13y2 - 3 * c20x2 * c13x * c13y2 * c23y + 3 * c20y2 * c13x2 * c13y * c23x
+                + c11x * c12x * c13x * c13y * (6 * c20y * c23y + 6 * c21y * c22y) + c12x3 * c13y * (-2 * c20y * c23y - 2 * c21y * c22y)
+                + c10y * c13x3 * (6 * c20y * c23y + 6 * c21y * c22y) + c11y * c12x * c13x2 * (-2 * c20y * c23y - 2 * c21y * c22y)
+                + c12x2 * c12y * c13x * (2 * c20y * c23y + 2 * c21y * c22y) + c11x * c12y * c13x2 * (-4 * c20y * c23y - 4 * c21y * c22y)
+                + c10x * c13x2 * c13y * (-6 * c20y * c23y - 6 * c21y * c22y) + c20x * c13x2 * c13y * (6 * c20y * c23y + 6 * c21y * c22y)
+                + c21x * c13x2 * c13y * (6 * c20y * c22y + 3 * c21y2) + c13x3 * (-2 * c20y * c21y * c22y - c20y2 * c23y
+                - c21y * (2 * c20y * c22y + c21y2) - c20y * (2 * c20y * c23y + 2 * c21y * c22y)),
+                -c10x * c11x * c12y * c13x * c13y * c22y + c10x * c11y * c12x * c13x * c13y * c22y + 6 * c10x * c11y * c12y * c13x * c22x * c13y
+                - 6 * c10y * c11x * c12x * c13x * c13y * c22y - c10y * c11x * c12y * c13x * c22x * c13y + c10y * c11y * c12x * c13x * c22x * c13y
+                + c11x * c11y * c12x * c12y * c13x * c22y - c11x * c11y * c12x * c12y * c22x * c13y + c11x * c20x * c12y * c13x * c13y * c22y
+                + c11x * c20y * c12y * c13x * c22x * c13y + c11x * c21x * c12y * c13x * c21y * c13y - c20x * c11y * c12x * c13x * c13y * c22y
+                - 6 * c20x * c11y * c12y * c13x * c22x * c13y - c11y * c12x * c20y * c13x * c22x * c13y - c11y * c12x * c21x * c13x * c21y * c13y
+                - 6 * c10x * c20x * c22x * c13y3 - 2 * c10x * c12y3 * c13x * c22x + 2 * c20x * c12y3 * c13x * c22x + 2 * c10y * c12x3 * c13y * c22y
+                - 6 * c10x * c10y * c13x * c22x * c13y2 + 3 * c10x * c11x * c12x * c13y2 * c22y - 2 * c10x * c11x * c12y * c22x * c13y2
+                - 4 * c10x * c11y * c12x * c22x * c13y2 + 3 * c10y * c11x * c12x * c22x * c13y2 + 6 * c10x * c10y * c13x2 * c13y * c22y
+                + 6 * c10x * c20x * c13x * c13y2 * c22y - 3 * c10x * c11y * c12y * c13x2 * c22y + 2 * c10x * c12x * c12y2 * c13x * c22y
+                + 2 * c10x * c12x * c12y2 * c22x * c13y + 6 * c10x * c20y * c13x * c22x * c13y2 + 6 * c10x * c21x * c13x * c21y * c13y2
+                + 4 * c10y * c11x * c12y * c13x2 * c22y + 6 * c10y * c20x * c13x * c22x * c13y2 + 2 * c10y * c11y * c12x * c13x2 * c22y
+                - 3 * c10y * c11y * c12y * c13x2 * c22x + 2 * c10y * c12x * c12y2 * c13x * c22x - 3 * c11x * c20x * c12x * c13y2 * c22y
+                + 2 * c11x * c20x * c12y * c22x * c13y2 + c11x * c11y * c12y2 * c13x * c22x - 3 * c11x * c12x * c20y * c22x * c13y2
+                - 3 * c11x * c12x * c21x * c21y * c13y2 + 4 * c20x * c11y * c12x * c22x * c13y2 - 2 * c10x * c12x2 * c12y * c13y * c22y
+                - 6 * c10y * c20x * c13x2 * c13y * c22y - 6 * c10y * c20y * c13x2 * c22x * c13y - 6 * c10y * c21x * c13x2 * c21y * c13y
+                - 2 * c10y * c12x2 * c12y * c13x * c22y - 2 * c10y * c12x2 * c12y * c22x * c13y - c11x * c11y * c12x2 * c13y * c22y
+                - 2 * c11x * c11y2 * c13x * c22x * c13y + 3 * c20x * c11y * c12y * c13x2 * c22y - 2 * c20x * c12x * c12y2 * c13x * c22y
+                - 2 * c20x * c12x * c12y2 * c22x * c13y - 6 * c20x * c20y * c13x * c22x * c13y2 - 6 * c20x * c21x * c13x * c21y * c13y2
+                + 3 * c11y * c20y * c12y * c13x2 * c22x + 3 * c11y * c21x * c12y * c13x2 * c21y - 2 * c12x * c20y * c12y2 * c13x * c22x
+                - 2 * c12x * c21x * c12y2 * c13x * c21y - c11y2 * c12x * c12y * c13x * c22x + 2 * c20x * c12x2 * c12y * c13y * c22y
+                - 3 * c11y * c21x2 * c12y * c13x * c13y + 6 * c20y * c21x * c13x2 * c21y * c13y + 2 * c11x2 * c11y * c13x * c13y * c22y
+                + c11x2 * c12x * c12y * c13y * c22y + 2 * c12x2 * c20y * c12y * c22x * c13y + 2 * c12x2 * c21x * c12y * c21y * c13y
+                - 3 * c10x * c21x2 * c13y3 + 3 * c20x * c21x2 * c13y3 + 3 * c10x2 * c22x * c13y3 - 3 * c10y2 * c13x3 * c22y + 3 * c20x2 * c22x * c13y3
+                + c21x2 * c12y3 * c13x + c11y3 * c13x2 * c22x - c11x3 * c13y2 * c22y + 3 * c10y * c21x2 * c13x * c13y2
+                - c11x * c11y2 * c13x2 * c22y + c11x * c21x2 * c12y * c13y2 + 2 * c11y * c12x * c21x2 * c13y2 + c11x2 * c11y * c22x * c13y2
+                - c12x * c21x2 * c12y2 * c13y - 3 * c20y * c21x2 * c13x * c13y2 - 3 * c10x2 * c13x * c13y2 * c22y + 3 * c10y2 * c13x2 * c22x * c13y
+                - c11x2 * c12y2 * c13x * c22y + c11y2 * c12x2 * c22x * c13y - 3 * c20x2 * c13x * c13y2 * c22y + 3 * c20y2 * c13x2 * c22x * c13y
+                + c12x2 * c12y * c13x * (2 * c20y * c22y + c21y2) + c11x * c12x * c13x * c13y * (6 * c20y * c22y + 3 * c21y2)
+                + c12x3 * c13y * (-2 * c20y * c22y - c21y2) + c10y * c13x3 * (6 * c20y * c22y + 3 * c21y2)
+                + c11y * c12x * c13x2 * (-2 * c20y * c22y - c21y2) + c11x * c12y * c13x2 * (-4 * c20y * c22y - 2 * c21y2)
+                + c10x * c13x2 * c13y * (-6 * c20y * c22y - 3 * c21y2) + c20x * c13x2 * c13y * (6 * c20y * c22y + 3 * c21y2)
+                + c13x3 * (-2 * c20y * c21y2 - c20y2 * c22y - c20y * (2 * c20y * c22y + c21y2)),
+                -c10x * c11x * c12y * c13x * c21y * c13y + c10x * c11y * c12x * c13x * c21y * c13y + 6 * c10x * c11y * c21x * c12y * c13x * c13y
+                - 6 * c10y * c11x * c12x * c13x * c21y * c13y - c10y * c11x * c21x * c12y * c13x * c13y + c10y * c11y * c12x * c21x * c13x * c13y
+                - c11x * c11y * c12x * c21x * c12y * c13y + c11x * c11y * c12x * c12y * c13x * c21y + c11x * c20x * c12y * c13x * c21y * c13y
+                + 6 * c11x * c12x * c20y * c13x * c21y * c13y + c11x * c20y * c21x * c12y * c13x * c13y - c20x * c11y * c12x * c13x * c21y * c13y
+                - 6 * c20x * c11y * c21x * c12y * c13x * c13y - c11y * c12x * c20y * c21x * c13x * c13y - 6 * c10x * c20x * c21x * c13y3
+                - 2 * c10x * c21x * c12y3 * c13x + 6 * c10y * c20y * c13x3 * c21y + 2 * c20x * c21x * c12y3 * c13x + 2 * c10y * c12x3 * c21y * c13y
+                - 2 * c12x3 * c20y * c21y * c13y - 6 * c10x * c10y * c21x * c13x * c13y2 + 3 * c10x * c11x * c12x * c21y * c13y2
+                - 2 * c10x * c11x * c21x * c12y * c13y2 - 4 * c10x * c11y * c12x * c21x * c13y2 + 3 * c10y * c11x * c12x * c21x * c13y2
+                + 6 * c10x * c10y * c13x2 * c21y * c13y + 6 * c10x * c20x * c13x * c21y * c13y2 - 3 * c10x * c11y * c12y * c13x2 * c21y
+                + 2 * c10x * c12x * c21x * c12y2 * c13y + 2 * c10x * c12x * c12y2 * c13x * c21y + 6 * c10x * c20y * c21x * c13x * c13y2
+                + 4 * c10y * c11x * c12y * c13x2 * c21y + 6 * c10y * c20x * c21x * c13x * c13y2 + 2 * c10y * c11y * c12x * c13x2 * c21y
+                - 3 * c10y * c11y * c21x * c12y * c13x2 + 2 * c10y * c12x * c21x * c12y2 * c13x - 3 * c11x * c20x * c12x * c21y * c13y2
+                + 2 * c11x * c20x * c21x * c12y * c13y2 + c11x * c11y * c21x * c12y2 * c13x - 3 * c11x * c12x * c20y * c21x * c13y2
+                + 4 * c20x * c11y * c12x * c21x * c13y2 - 6 * c10x * c20y * c13x2 * c21y * c13y - 2 * c10x * c12x2 * c12y * c21y * c13y
+                - 6 * c10y * c20x * c13x2 * c21y * c13y - 6 * c10y * c20y * c21x * c13x2 * c13y - 2 * c10y * c12x2 * c21x * c12y * c13y
+                - 2 * c10y * c12x2 * c12y * c13x * c21y - c11x * c11y * c12x2 * c21y * c13y - 4 * c11x * c20y * c12y * c13x2 * c21y
+                - 2 * c11x * c11y2 * c21x * c13x * c13y + 3 * c20x * c11y * c12y * c13x2 * c21y - 2 * c20x * c12x * c21x * c12y2 * c13y
+                - 2 * c20x * c12x * c12y2 * c13x * c21y - 6 * c20x * c20y * c21x * c13x * c13y2 - 2 * c11y * c12x * c20y * c13x2 * c21y
+                + 3 * c11y * c20y * c21x * c12y * c13x2 - 2 * c12x * c20y * c21x * c12y2 * c13x - c11y2 * c12x * c21x * c12y * c13x
+                + 6 * c20x * c20y * c13x2 * c21y * c13y + 2 * c20x * c12x2 * c12y * c21y * c13y + 2 * c11x2 * c11y * c13x * c21y * c13y
+                + c11x2 * c12x * c12y * c21y * c13y + 2 * c12x2 * c20y * c21x * c12y * c13y + 2 * c12x2 * c20y * c12y * c13x * c21y
+                + 3 * c10x2 * c21x * c13y3 - 3 * c10y2 * c13x3 * c21y + 3 * c20x2 * c21x * c13y3 + c11y3 * c21x * c13x2 - c11x3 * c21y * c13y2
+                - 3 * c20y2 * c13x3 * c21y - c11x * c11y2 * c13x2 * c21y + c11x2 * c11y * c21x * c13y2 - 3 * c10x2 * c13x * c21y * c13y2
+                + 3 * c10y2 * c21x * c13x2 * c13y - c11x2 * c12y2 * c13x * c21y + c11y2 * c12x2 * c21x * c13y - 3 * c20x2 * c13x * c21y * c13y2
+                + 3 * c20y2 * c21x * c13x2 * c13y,
+                c10x * c10y * c11x * c12y * c13x * c13y - c10x * c10y * c11y * c12x * c13x * c13y + c10x * c11x * c11y * c12x * c12y * c13y
+                - c10y * c11x * c11y * c12x * c12y * c13x - c10x * c11x * c20y * c12y * c13x * c13y + 6 * c10x * c20x * c11y * c12y * c13x * c13y
+                + c10x * c11y * c12x * c20y * c13x * c13y - c10y * c11x * c20x * c12y * c13x * c13y - 6 * c10y * c11x * c12x * c20y * c13x * c13y
+                + c10y * c20x * c11y * c12x * c13x * c13y - c11x * c20x * c11y * c12x * c12y * c13y + c11x * c11y * c12x * c20y * c12y * c13x
+                + c11x * c20x * c20y * c12y * c13x * c13y - c20x * c11y * c12x * c20y * c13x * c13y - 2 * c10x * c20x * c12y3 * c13x
+                + 2 * c10y * c12x3 * c20y * c13y - 3 * c10x * c10y * c11x * c12x * c13y2 - 6 * c10x * c10y * c20x * c13x * c13y2
+                + 3 * c10x * c10y * c11y * c12y * c13x2 - 2 * c10x * c10y * c12x * c12y2 * c13x - 2 * c10x * c11x * c20x * c12y * c13y2
+                - c10x * c11x * c11y * c12y2 * c13x + 3 * c10x * c11x * c12x * c20y * c13y2 - 4 * c10x * c20x * c11y * c12x * c13y2
+                + 3 * c10y * c11x * c20x * c12x * c13y2 + 6 * c10x * c10y * c20y * c13x2 * c13y + 2 * c10x * c10y * c12x2 * c12y * c13y
+                + 2 * c10x * c11x * c11y2 * c13x * c13y + 2 * c10x * c20x * c12x * c12y2 * c13y + 6 * c10x * c20x * c20y * c13x * c13y2
+                - 3 * c10x * c11y * c20y * c12y * c13x2 + 2 * c10x * c12x * c20y * c12y2 * c13x + c10x * c11y2 * c12x * c12y * c13x
+                + c10y * c11x * c11y * c12x2 * c13y + 4 * c10y * c11x * c20y * c12y * c13x2 - 3 * c10y * c20x * c11y * c12y * c13x2
+                + 2 * c10y * c20x * c12x * c12y2 * c13x + 2 * c10y * c11y * c12x * c20y * c13x2 + c11x * c20x * c11y * c12y2 * c13x
+                - 3 * c11x * c20x * c12x * c20y * c13y2 - 2 * c10x * c12x2 * c20y * c12y * c13y - 6 * c10y * c20x * c20y * c13x2 * c13y
+                - 2 * c10y * c20x * c12x2 * c12y * c13y - 2 * c10y * c11x2 * c11y * c13x * c13y - c10y * c11x2 * c12x * c12y * c13y
+                - 2 * c10y * c12x2 * c20y * c12y * c13x - 2 * c11x * c20x * c11y2 * c13x * c13y - c11x * c11y * c12x2 * c20y * c13y
+                + 3 * c20x * c11y * c20y * c12y * c13x2 - 2 * c20x * c12x * c20y * c12y2 * c13x - c20x * c11y2 * c12x * c12y * c13x
+                + 3 * c10y2 * c11x * c12x * c13x * c13y + 3 * c11x * c12x * c20y2 * c13x * c13y + 2 * c20x * c12x2 * c20y * c12y * c13y
+                - 3 * c10x2 * c11y * c12y * c13x * c13y + 2 * c11x2 * c11y * c20y * c13x * c13y + c11x2 * c12x * c20y * c12y * c13y
+                - 3 * c20x2 * c11y * c12y * c13x * c13y - c10x3 * c13y3 + c10y3 * c13x3 + c20x3 * c13y3 - c20y3 * c13x3
+                - 3 * c10x * c20x2 * c13y3 - c10x * c11y3 * c13x2 + 3 * c10x2 * c20x * c13y3 + c10y * c11x3 * c13y2
+                + 3 * c10y * c20y2 * c13x3 + c20x * c11y3 * c13x2 + c10x2 * c12y3 * c13x - 3 * c10y2 * c20y * c13x3 - c10y2 * c12x3 * c13y
+                + c20x2 * c12y3 * c13x - c11x3 * c20y * c13y2 - c12x3 * c20y2 * c13y - c10x * c11x2 * c11y * c13y2
+                + c10y * c11x * c11y2 * c13x2 - 3 * c10x * c10y2 * c13x2 * c13y - c10x * c11y2 * c12x2 * c13y + c10y * c11x2 * c12y2 * c13x
+                - c11x * c11y2 * c20y * c13x2 + 3 * c10x2 * c10y * c13x * c13y2 + c10x2 * c11x * c12y * c13y2
+                + 2 * c10x2 * c11y * c12x * c13y2 - 2 * c10y2 * c11x * c12y * c13x2 - c10y2 * c11y * c12x * c13x2 + c11x2 * c20x * c11y * c13y2
+                - 3 * c10x * c20y2 * c13x2 * c13y + 3 * c10y * c20x2 * c13x * c13y2 + c11x * c20x2 * c12y * c13y2 - 2 * c11x * c20y2 * c12y * c13x2
+                + c20x * c11y2 * c12x2 * c13y - c11y * c12x * c20y2 * c13x2 - c10x2 * c12x * c12y2 * c13y - 3 * c10x2 * c20y * c13x * c13y2
+                + 3 * c10y2 * c20x * c13x2 * c13y + c10y2 * c12x2 * c12y * c13x - c11x2 * c20y * c12y2 * c13x + 2 * c20x2 * c11y * c12x * c13y2
+                + 3 * c20x * c20y2 * c13x2 * c13y - c20x2 * c12x * c12y2 * c13y - 3 * c20x2 * c20y * c13x * c13y2 + c12x2 * c20y2 * c12y * c13x
         );
         double[] roots = poly.getRootsInInterval(0, 1);
 
         for (int i = 0; i < roots.length; i++) {
             double s = roots[i];
             double[] xRoots = new Polynomial(
-                    c13.getX(),
-                    c12.getX(),
-                    c11.getX(),
-                    c10.getX() - c20.getX() - s * c21.getX() - s * s * c22.getX() - s * s * s * c23.getX()
+                    c13x, c12x, c11x,
+                    c10x - c20x - s * c21x - s * s * c22x - s * s * s * c23x
             ).getRoots();
             double[] yRoots = new Polynomial(
-                    c13.getY(),
-                    c12.getY(),
-                    c11.getY(),
-                    c10.getY() - c20.getY() - s * c21.getY() - s * s * c22.getY() - s * s * s * c23.getY()
+                    c13y, c12y, c11y,
+                    c10y - c20y - s * c21y - s * s * c22y - s * s * s * c23y
             ).getRoots();
 
             if (xRoots.length > 0 && yRoots.length > 0) {
@@ -928,7 +966,8 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
                                 result.appendPoint(
-                                        c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
+                                        c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20))),
+                                        xRoot
                                 );
                                 break checkRoots;
                             }
@@ -1004,17 +1043,27 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
 
         double rxrx = rx * rx;
         double ryry = ry * ry;
+        final double c3x = c3.getX();
+        final double c3y = c3.getY();
+        final double c2x = c2.getX();
+        final double c1x = c1.getX();
+        final double c2y = c2.getY();
+        final double c1y = c1.getY();
+        final double ecx = ec.getX();
+        final double c0x = c0.getX();
+        final double c0y = c0.getY();
+        final double ecy = ec.getY();
         Polynomial poly = new Polynomial(
-                c3.getX() * c3.getX() * ryry + c3.getY() * c3.getY() * rxrx,
-                2 * (c3.getX() * c2.getX() * ryry + c3.getY() * c2.getY() * rxrx),
-                2 * (c3.getX() * c1.getX() * ryry + c3.getY() * c1.getY() * rxrx) + c2.getX() * c2.getX() * ryry + c2.getY() * c2.getY() * rxrx,
-                2 * c3.getX() * ryry * (c0.getX() - ec.getX()) + 2 * c3.getY() * rxrx * (c0.getY() - ec.getY())
-                + 2 * (c2.getX() * c1.getX() * ryry + c2.getY() * c1.getY() * rxrx),
-                2 * c2.getX() * ryry * (c0.getX() - ec.getX()) + 2 * c2.getY() * rxrx * (c0.getY() - ec.getY())
-                + c1.getX() * c1.getX() * ryry + c1.getY() * c1.getY() * rxrx,
-                2 * c1.getX() * ryry * (c0.getX() - ec.getX()) + 2 * c1.getY() * rxrx * (c0.getY() - ec.getY()),
-                c0.getX() * c0.getX() * ryry - 2 * c0.getY() * ec.getY() * rxrx - 2 * c0.getX() * ec.getX() * ryry
-                + c0.getY() * c0.getY() * rxrx + ec.getX() * ec.getX() * ryry + ec.getY() * ec.getY() * rxrx - rxrx * ryry
+                c3x * c3x * ryry + c3y * c3y * rxrx,
+                2 * (c3x * c2x * ryry + c3y * c2y * rxrx),
+                2 * (c3x * c1x * ryry + c3y * c1y * rxrx) + c2x * c2x * ryry + c2y * c2y * rxrx,
+                2 * c3x * ryry * (c0x - ecx) + 2 * c3y * rxrx * (c0y - ecy)
+                + 2 * (c2x * c1x * ryry + c2y * c1y * rxrx),
+                2 * c2x * ryry * (c0x - ecx) + 2 * c2y * rxrx * (c0y - ecy)
+                + c1x * c1x * ryry + c1y * c1y * rxrx,
+                2 * c1x * ryry * (c0x - ecx) + 2 * c1y * rxrx * (c0y - ecy),
+                c0x * c0x * ryry - 2 * c0y * ecy * rxrx - 2 * c0x * ecx * ryry
+                + c0y * c0y * rxrx + ecx * ecx * ryry + ecy * ecy * rxrx - rxrx * ryry
         );
         double[] roots = poly.getRootsInInterval(0, 1);
 
@@ -1022,7 +1071,8 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
             double t = roots[i];
 
             result.appendPoint(
-                    c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))
+                    c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0))),
+                    t
             );
         }
 
@@ -1126,16 +1176,16 @@ public static Intersection intersectBezier3Line(Point2D p1, Point2D p2, Point2D 
                 if (a1.getX() == a2.getX()) {
                     if (min.getY() <= p10.getY() && p10.getY() <= max.getY()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p10);
+                        result.appendPoint(p10, t);
                     }
                 } else if (a1.getY() == a2.getY()) {
                     if (min.getX() <= p10.getX() && p10.getX() <= max.getX()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p10);
+                        result.appendPoint(p10, t);
                     }
                 } else if (gte(p10, min) && lte(p10, max)) {
                     result.status = Status.INTERSECTION;
-                    result.appendPoint(p10);
+                    result.appendPoint(p10, t);
                 }
             }
         }
@@ -1245,16 +1295,17 @@ public static Intersection intersectBezier3Line(Point2D p1, Point2D p2, Point2D 
                     new Point2D(
                             p.getX() - b * (c2.getY() - c1.getY()),
                             p.getY() + b * (c2.getX() - c1.getX())
-                    )
+                    ),
+                    Double.NaN
             );
             result.appendPoint(
                     new Point2D(
                             p.getX() + b * (c2.getY() - c1.getY()),
                             p.getY() - b * (c2.getX() - c1.getX())
-                    )
+                    ), Double.NaN
             );
         }
-
+        result.throwAwayTs();
         return result;
     }
 
@@ -1282,45 +1333,9 @@ public static Intersection intersectBezier3Line(Point2D p1, Point2D p2, Point2D 
      * @return computed intersection
      */
     public static Intersection intersectCircleLine(Point2D c, double r, Point2D a1, Point2D a2) {
-        Intersection result;
-        double a = (a2.getX() - a1.getX()) * (a2.getX() - a1.getX())
-                + (a2.getY() - a1.getY()) * (a2.getY() - a1.getY());
-        double b = 2 * ((a2.getX() - a1.getX()) * (a1.getX() - c.getX())
-                + (a2.getY() - a1.getY()) * (a1.getY() - c.getY()));
-        double cc = c.getX() * c.getX() + c.getY() * c.getY() + a1.getX() * a1.getX() + a1.getY() * a1.getY()
-                - 2 * (c.getX() * a1.getX() + c.getY() * a1.getY()) - r * r;
-        double deter = b * b - 4 * a * cc;
-
-        if (deter < 0) {
-            result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
-        } else if (deter == 0) {
-            result = new Intersection(Status.NO_INTERSECTION_TANGENT);
-            // NOTE: should calculate this point
-        } else {
-            double e = Math.sqrt(deter);
-            double u1 = (-b + e) / (2 * a);
-            double u2 = (-b - e) / (2 * a);
-
-            if ((u1 < 0 || u1 > 1) && (u2 < 0 || u2 > 1)) {
-                if ((u1 < 0 && u2 < 0) || (u1 > 1 && u2 > 1)) {
-                    result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
-                } else {
-                    result = new Intersection(Status.NO_INTERSECTION_INSIDE);
-                }
-            } else {
-                result = new Intersection(Status.INTERSECTION);
-
-                if (0 <= u1 && u1 <= 1) {
-                    result.appendPoint(lerp(a1, a2, u1));
-                }
-
-                if (0 <= u2 && u2 <= 1) {
-                    result.appendPoint(lerp(a1, a2, u2));
-                }
-            }
-        }
-
-        return result;
+        Intersection inter = intersectLineCircle(a1, a2, c, r);
+        inter.throwAwayTs();
+        return inter;
     }
 
     /**
@@ -1437,7 +1452,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
                             = (b[0] * xRoots[x] + b[1] * yRoots[y] + b[3]) * xRoots[x]
                             + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
                     if (Math.abs(test) < norm1) {
-                        result.appendPoint(new Point2D(xRoots[x], yRoots[y]));
+                        result.appendPoint(new Point2D(xRoots[x], yRoots[y]), Double.NaN);
                     }
                 }
             }
@@ -1446,7 +1461,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
         }
-
+        result.throwAwayTs();
         return result;
     }
 
@@ -1460,52 +1475,9 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
      * @param a2 point 2 of the line
      * @return computed intersection
      */
-public static Intersection intersectEllipseLine(Point2D ec, double rx, double ry, Point2D a1, Point2D a2) {
-        Intersection result;
-        Point2D origin = new Point2D(a1.getX(), a1.getY());
-        Point2D dir = a2.subtract(a1);
-        Point2D center = new Point2D(ec.getX(), ec.getY());
-        Point2D diff = origin.subtract(center);
-        Point2D mDir = new Point2D(dir.getX() / (rx * rx), dir.getY() / (ry * ry));
-        Point2D mDiff = new Point2D(diff.getX() / (rx * rx), diff.getY() / (ry * ry));
-
-        double a = dir.dotProduct(mDir);
-        double b = dir.dotProduct(mDiff);
-        double c = diff.dotProduct(mDiff) - 1.0;
-        double d = b * b - a * c;
-
-        if (d < 0) {
-            result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
-        } else if (d > 0) {
-            double root = Math.sqrt(d);
-            double t_a = (-b - root) / a;
-            double t_b = (-b + root) / a;
-
-            if ((t_a < 0 || 1 < t_a) && (t_b < 0 || 1 < t_b)) {
-                if ((t_a < 0 && t_b < 0) || (t_a > 1 && t_b > 1)) {
-                    result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
-                } else {
-                    result = new Intersection(Status.NO_INTERSECTION_INSIDE);
-                }
-            } else {
-                result = new Intersection(Status.INTERSECTION);
-                if (0 <= t_a && t_a <= 1) {
-                    result.appendPoint(lerp(a1, a2, t_a));
-                }
-                if (0 <= t_b && t_b <= 1) {
-                    result.appendPoint(lerp(a1, a2, t_b));
-                }
-            }
-        } else {
-            double t = -b / a;
-            if (0 <= t && t <= 1) {
-                result = new Intersection(Status.INTERSECTION);
-                result.appendPoint(lerp(a1, a2, t));
-            } else {
-                result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
-            }
-        }
-
+    public static Intersection intersectEllipseLine(Point2D ec, double rx, double ry, Point2D a1, Point2D a2) {
+        Intersection result = intersectLineEllipse(a1, a2, ec, rx, ry);
+        result.throwAwayTs();
         return result;
     }
 
@@ -1518,7 +1490,7 @@ public static Intersection intersectEllipseLine(Point2D ec, double rx, double ry
      * @param points the points of the polygon
      * @return computed intersection
      */
-public static Intersection intersectEllipsePolygon(Point2D c, double rx, double ry, List<Point2D> points) {
+    public static Intersection intersectEllipsePolygon(Point2D c, double rx, double ry, List<Point2D> points) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points.size();
 
@@ -1574,7 +1546,136 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         return result;
     }
 
-   /**
+    /**
+     * Computes the intersection between a line and a circle.
+     * <p>
+     * The intersection will contain the parameters 't' of the line in range
+     * [0,1].
+     *
+     * @param c the center of the circle
+     * @param r the radius of the circle
+     * @param a1 point 1 of the line
+     * @param a2 point 2 of the line
+     * @return computed intersection
+     */
+    public static Intersection intersectLineCircle(Point2D a1, Point2D a2, Point2D c, double r) {
+        return intersectLineCircle(a1.getX(), a1.getY(), a2.getX(), a2.getY(), c.getX(), c.getY(), r);
+    }
+
+    /**
+     * Computes the intersection between a line and a circle.
+     * <p>
+     * The intersection will contain the parameters 't' of the line in range
+     * [0,1].
+     *
+     * @param c the center of the circle
+     * @param r the radius of the circle
+     * @param a1 point 1 of the line
+     * @param a2 point 2 of the line
+     * @return computed intersection
+     */
+    public static Intersection intersectLineCircle(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
+        Intersection result;
+        double a = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+        double b = 2 * ((x2 - x1) * (x1 - cx) + (y2 - y1) * (y1 - cy));
+        double cc = cx * cx + cy * cy + x1 * x1 + y1 * y1 - 2 * (cx * x1 + cy * y1) - r * r;
+        double deter = b * b - 4 * a * cc;
+
+        if (deter < 0) {
+            result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
+        } else if (deter == 0) {
+            result = new Intersection(Status.NO_INTERSECTION_TANGENT);
+            // NOTE: should calculate this point
+        } else {
+            double e = Math.sqrt(deter);
+            double u1 = (-b + e) / (2 * a);
+            double u2 = (-b - e) / (2 * a);
+
+            if ((u1 < 0 || u1 > 1) && (u2 < 0 || u2 > 1)) {
+                if ((u1 < 0 && u2 < 0) || (u1 > 1 && u2 > 1)) {
+                    result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
+                } else {
+                    result = new Intersection(Status.NO_INTERSECTION_INSIDE);
+                }
+            } else {
+                result = new Intersection(Status.INTERSECTION);
+
+                if (0 <= u1 && u1 <= 1) {
+                    result.appendPoint(lerp(x1, y1, x2, y2, u1), u1);
+                }
+
+                if (0 <= u2 && u2 <= 1) {
+                    result.appendPoint(lerp(x1, y1, x2, y2, u2), u2);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Computes the intersection between a line and an ellipse.
+     * <p>
+     * The intersection will contain the parameters 't' of the line in range
+     * [0,1].
+     *
+     * @param ec the center of the ellipse
+     * @param rx the x-radius of the ellipse
+     * @param ry the y-radius of the ellipse
+     * @param a1 point 1 of the line
+     * @param a2 point 2 of the line
+     * @return computed intersection
+     */
+    public static Intersection intersectLineEllipse(Point2D a1, Point2D a2, Point2D ec, double rx, double ry) {
+        Intersection result;
+        Point2D origin = new Point2D(a1.getX(), a1.getY());
+        Point2D dir = a2.subtract(a1);
+        Point2D center = new Point2D(ec.getX(), ec.getY());
+        Point2D diff = origin.subtract(center);
+        Point2D mDir = new Point2D(dir.getX() / (rx * rx), dir.getY() / (ry * ry));
+        Point2D mDiff = new Point2D(diff.getX() / (rx * rx), diff.getY() / (ry * ry));
+
+        double a = dir.dotProduct(mDir);
+        double b = dir.dotProduct(mDiff);
+        double c = diff.dotProduct(mDiff) - 1.0;
+        double d = b * b - a * c;
+
+        if (d < 0) {
+            result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
+        } else if (d > 0) {
+            double root = Math.sqrt(d);
+            double t_a = (-b - root) / a;
+            double t_b = (-b + root) / a;
+
+            if ((t_a < 0 || 1 < t_a) && (t_b < 0 || 1 < t_b)) {
+                if ((t_a < 0 && t_b < 0) || (t_a > 1 && t_b > 1)) {
+                    result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
+                } else {
+                    result = new Intersection(Status.NO_INTERSECTION_INSIDE);
+                }
+            } else {
+                result = new Intersection(Status.INTERSECTION);
+                if (0 <= t_a && t_a <= 1) {
+                    result.appendPoint(lerp(a1, a2, t_a), t_a);
+                }
+                if (0 <= t_b && t_b <= 1) {
+                    result.appendPoint(lerp(a1, a2, t_b), t_b);
+                }
+            }
+        } else {
+            double t = -b / a;
+            if (0 <= t && t <= 1) {
+                result = new Intersection(Status.INTERSECTION);
+                result.appendPoint(lerp(a1, a2, t), t);
+            } else {
+                result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Computes the intersection between two lines 'a' and 'b'
      *
      * @param a1 point 1 of line 'a'
@@ -1583,7 +1684,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @param b2 point 2 of line 'b'
      * @return computed intersection
      */
-public static Intersection intersectLineLine(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
+    public static Intersection intersectLineLine(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
         Intersection result;
 
         double ua_t = (b2.getX() - b1.getX()) * (a1.getY() - b1.getY()) - (b2.getY() - b1.getY()) * (a1.getX() - b1.getX());
@@ -1600,7 +1701,7 @@ public static Intersection intersectLineLine(Point2D a1, Point2D a2, Point2D b1,
                         new Point2D(
                                 a1.getX() + ua * (a2.getX() - a1.getX()),
                                 a1.getY() + ua * (a2.getY() - a1.getY())
-                        )
+                        ), ua
                 );
             } else {
                 result = new Intersection(Status.NO_INTERSECTION);
@@ -1618,13 +1719,16 @@ public static Intersection intersectLineLine(Point2D a1, Point2D a2, Point2D b1,
 
     /**
      * Computes the intersection between a line and a polygon.
+     * <p>
+     * The intersection will contain the parameters 't' of the line in range
+     * [0,1].
      *
      * @param a1 point 1 of the line
      * @param a2 point 2 of the line
      * @param points the points of the polygon
      * @return computed intersection
      */
-public static Intersection intersectLinePolygon(Point2D a1, Point2D a2, List<Point2D> points) {
+    public static Intersection intersectLinePolygon(Point2D a1, Point2D a2, List<Point2D> points) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points.size();
 
@@ -1645,6 +1749,9 @@ public static Intersection intersectLinePolygon(Point2D a1, Point2D a2, List<Poi
 
     /**
      * Computes the intersection between a line and a rectangle.
+     * <p>
+     * The intersection will contain the parameters 't' of the line in range
+     * [0,1].
      *
      * @param a1 point 1 of the line
      * @param a2 point 2 of the line
@@ -1652,7 +1759,7 @@ public static Intersection intersectLinePolygon(Point2D a1, Point2D a2, List<Poi
      * @param r2 corner point 2 of the rectangle
      * @return computed intersection
      */
-public static Intersection intersectLineRectangle(Point2D a1, Point2D a2, Point2D r1, Point2D r2) {
+    public static Intersection intersectLineRectangle(Point2D a1, Point2D a2, Point2D r1, Point2D r2) {
         Point2D min = minp(r1, r2);
         Point2D max = maxp(r1, r2);
         Point2D topRight = new Point2D(max.getX(), min.getY());
@@ -1684,7 +1791,7 @@ public static Intersection intersectLineRectangle(Point2D a1, Point2D a2, Point2
      * @param points2 the points of the second polygon
      * @return computed intersection
      */
-public static Intersection intersectPolygonPolygon(List<Point2D> points1, List<Point2D> points2) {
+    public static Intersection intersectPolygonPolygon(List<Point2D> points1, List<Point2D> points2) {
         Intersection result = new Intersection(Status.NO_INTERSECTION);
         int length = points1.size();
 
@@ -1712,7 +1819,7 @@ public static Intersection intersectPolygonPolygon(List<Point2D> points1, List<P
      * @param r2 corner point 2 of the rectangle
      * @return computed intersection
      */
-public static Intersection intersectPolygonRectangle(List<Point2D> points, Point2D r1, Point2D r2) {
+    public static Intersection intersectPolygonRectangle(List<Point2D> points, Point2D r1, Point2D r2) {
         Point2D min = minp(r1, r2);
         Point2D max = maxp(r1, r2);
         Point2D topRight = new Point2D(max.getX(), min.getY());
@@ -1739,6 +1846,9 @@ public static Intersection intersectPolygonRectangle(List<Point2D> points, Point
 
     /**
      * Computes the intersection between two infinitely long rays 'a' and 'b'.
+     * <p>
+     * The intersection will contain the parameters 't' of ray 'a' in range
+     * [0,MAX_VALUE].
      *
      * @param a1 point 1 of ray 'a'
      * @param a2 point 2 of ray 'a'
@@ -1746,7 +1856,7 @@ public static Intersection intersectPolygonRectangle(List<Point2D> points, Point
      * @param b2 point 2 of ray 'b'
      * @return computed intersection
      */
-public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
+    public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
         Intersection result;
 
         double ua_t = (b2.getX() - b1.getX()) * (a1.getY() - b1.getY()) - (b2.getY() - b1.getY()) * (a1.getX() - b1.getX());
@@ -1761,7 +1871,7 @@ public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, P
                     new Point2D(
                             a1.getX() + ua * (a2.getX() - a1.getX()),
                             a1.getY() + ua * (a2.getY() - a1.getY())
-                    )
+                    ), ua
             );
         } else {
             if (ua_t == 0 || ub_t == 0) {
@@ -1774,7 +1884,6 @@ public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, P
         return result;
     }
 
-
     /**
      * Computes the intersection between two rectangles 'a' and 'b'.
      *
@@ -1784,7 +1893,7 @@ public static Intersection intersectRayRay(Point2D a1, Point2D a2, Point2D b1, P
      * @param b2 corner point 2 of rectangle 'b'
      * @return computed intersection
      */
-public static Intersection intersectRectangleRectangle(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
+    public static Intersection intersectRectangleRectangle(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
         Point2D min = minp(a1, a2);
         Point2D max = maxp(a1, a2);
         Point2D topRight = new Point2D(max.getX(), min.getY());
@@ -1812,35 +1921,40 @@ public static Intersection intersectRectangleRectangle(Point2D a1, Point2D a2, P
     ;
 
 
-/**
- * Constructs a polynomial as a Bezout determinant given two polynomials e1 and e2.
-     * @param e1 polynomial e1
-     * @param e2 polynomial e2
-     * @return the bezout determinant
-*/
-public static Polynomial bezout(double[] e1, double[] e2) {
-        double AB = e1[0] * e2[1] - e2[0] * e1[1];
-        double AC = e1[0] * e2[2] - e2[0] * e1[2];
-        double AD = e1[0] * e2[3] - e2[0] * e1[3];
-        double AE = e1[0] * e2[4] - e2[0] * e1[4];
-        double AF = e1[0] * e2[5] - e2[0] * e1[5];
-        double BC = e1[1] * e2[2] - e2[1] * e1[2];
-        double BE = e1[1] * e2[4] - e2[1] * e1[4];
-        double BF = e1[1] * e2[5] - e2[1] * e1[5];
-        double CD = e1[2] * e2[3] - e2[2] * e1[3];
-        double DE = e1[3] * e2[4] - e2[3] * e1[4];
-        double DF = e1[3] * e2[5] - e2[3] * e1[5];
-        double BFpDE = BF + DE;
-        double BEmCD = BE - CD;
-
-        return new Polynomial(
-                AB * BC - AC * AC,
-                AB * BEmCD + AD * BC - 2 * AC * AE,
-                AB * BFpDE + AD * BEmCD - AE * AE - 2 * AC * AF,
-                AB * DF + AD * BFpDE - 2 * AE * AF,
-                AD * DF - AF * AF
-        );
+    /**
+     * Returns true if point 'a' is less or equal to point 'b'. Compares the
+     * x-coordinates first, and if they are equal compares the y-coordinates.
+     *
+     * @param a point a
+     * @param b point b
+     * @return true if a is less or equal b
+     */
+    private static boolean lte(Point2D a, Point2D b) {
+        return a.getX() <= b.getX() && a.getY() <= b.getY();
     }
-;
+
+    /**
+     * Computes the coordinates of the bottom right corner of a rectangle given
+     * two corner points defining the extrema of the rectangle.
+     *
+     * @param a corner point a
+     * @param b corner point b
+     * @return the bottom right corner
+     */
+    private static Point2D maxp(Point2D a, Point2D b) {
+        return new Point2D(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
+    }
+
+    /**
+     * Computes the coordinates of the top left corner of a rectangle given two
+     * corner points defining the extrema of the rectangle.
+     *
+     * @param a corner point a
+     * @param b corner point b
+     * @return the top left corner
+     */
+    private static Point2D minp(Point2D a, Point2D b) {
+        return new Point2D(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()));
+    }
 
 }
