@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.geom;
 
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.transform.Rotate;
@@ -15,6 +16,7 @@ import static java.lang.Math.atan;
 import static java.lang.Math.abs;
 import static java.lang.Double.isNaN;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 
 /**
  * Transforms.
@@ -91,7 +93,24 @@ public class Transforms {
        return concat(concat(a,b),c);
     }
 
+    public static Point2D deltaTransform(Transform t, double x, double y) {
+        if (t==null) return new Point2D(x,y);
+        else return t.deltaTransform(x,y);        
+    }
+    public static Point2D deltaTransform(Transform t, Point2D p) {
+        if (t==null) return p;
+        else return t.deltaTransform(p);        
+    }
+
+    public static AffineTransform toAWT(Transform t) {
+        if (t==null) return null;
+        return new AffineTransform(t.getMxx(),t.getMyx(),t.getMxy(),t.getMyy(),t.getTx(),t.getTy());
+    }
+
     public static Bounds transform(Transform tx, Bounds b) {
+        return tx==null?b:tx.transform(b);
+    }
+    public static Point2D transform(Transform tx, Point2D b) {
         return tx==null?b:tx.transform(b);
     }
 }

@@ -50,7 +50,7 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
     protected void initNode(Polygon r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().setAll(styleclass);
+        r.getStyleClass().setAll(styleclass,STYLECLASS_HANDLE);
     }
 
     @Override

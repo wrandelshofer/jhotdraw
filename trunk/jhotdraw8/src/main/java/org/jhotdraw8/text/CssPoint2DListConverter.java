@@ -42,10 +42,10 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
             if (first) {
                 first = false;
             } else {
-                out.append(", ");
+                out.append(' ');
             }
             out.append(doubleConverter.toString(p.getX()));
-            out.append(' ');
+            out.append(',');
             out.append(doubleConverter.toString(p.getY()));
         }
     }

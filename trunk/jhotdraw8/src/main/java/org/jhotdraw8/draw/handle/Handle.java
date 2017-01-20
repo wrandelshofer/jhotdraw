@@ -30,6 +30,10 @@ public interface Handle {
     // CSS style classes
     // ---
     /**
+     * Style class for all handles.
+     */
+    public final static String STYLECLASS_HANDLE = "handle";
+    /**
      * Style class for handles which draw the outline of a shape.
      */
     public final static String STYLECLASS_HANDLE_SELECT_OUTLINE = "handle-select-outline";
@@ -80,6 +84,14 @@ public interface Handle {
      * Style class for handles which draw a point of a shape.
      */
     public final static String STYLECLASS_HANDLE_POINT_OUTLINE = "handle-point-outline";
+    /**
+     * Style class for handles which draw a point of a shape.
+     */
+    public final static String STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE = "handle-control-point-outline";
+    /**
+     * Style class for handles which draw a point of a shape.
+     */
+    public final static String STYLECLASS_HANDLE_CONTROL_POINT = "handle-control-point";
     /**
      * Style class for handles which draw a connection point of a shape.
      */

@@ -39,8 +39,14 @@
   -fx-stroke: purple;
 }
 /* Styles the transform outline drawn by handles. See {@code Handle}. */
-.handle-point-outline {
+.handle-point-outline,
+.handle-control-point-outline {
   -fx-stroke: magenta;
+}
+
+/* Styles the transform outline drawn by handles. See {@code Handle}. */
+.handle-control-point-outline {
+  -fx-stroke-dash-array: 4;
 }
 
 /* Styles move and point handles. See {@code Handle}. */
@@ -49,7 +55,8 @@
   -fx-border-color: blue;
   -fx-background-color: white;
 }
-.handle-point {
+.handle-point,
+.handle-control-point {
   -fx-border-color: magenta;
   -fx-background-color: white;
 }
@@ -113,3 +120,6 @@
   -fx-border-color: -fx-focus-color;
 }
 
+.handle {
+-fx-effect: dropshadow(one-pass-box,white,3.24,1.0,0,0)    ;
+}

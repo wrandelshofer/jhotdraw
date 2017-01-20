@@ -46,7 +46,7 @@ public class LineOutlineHandle extends AbstractHandle {
     protected void initNode(Polyline r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().add(styleclass);
+        r.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
     }
 
     @Override

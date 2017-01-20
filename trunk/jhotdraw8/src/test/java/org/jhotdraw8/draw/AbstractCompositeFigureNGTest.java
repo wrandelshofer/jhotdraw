@@ -124,11 +124,6 @@ public class AbstractCompositeFigureNGTest {
         public void updateNode(RenderContext renderer, Node node) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-
-        @Override
-        public boolean isLayoutable() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
         
         @Override
         public String getTypeSelector() {
