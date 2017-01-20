@@ -121,16 +121,6 @@ public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, 
                 : cachedImage.getHeight() / cachedImage.getWidth();
     }
 
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
-    @Override
-    public void layout() {
-        // empty since we are not layoutable
-    }
-
     private void validateImage() {
         URI uri = get(IMAGE_URI);
         if (uri == null) {

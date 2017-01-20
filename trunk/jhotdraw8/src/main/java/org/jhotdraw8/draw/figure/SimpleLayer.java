@@ -76,14 +76,6 @@ public class SimpleLayer extends AbstractCompositeFigure
     }
 
     /**
-     * Returns false.
-     */
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
-    /**
      * This method whether the provided figure is a suitable parent for this
      * figure.
      * <p>

@@ -840,10 +840,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * Whether the {@code layout} method of this figure does anything.
+     * 
+     * The default implementation returns false.
      *
      * @return true if the {@code layout} method is not empty.
      */
-    boolean isLayoutable();
+    default boolean isLayoutable() {
+        return false;
+    }
 
     /**
      * Whether the figure is selectable by the user.
@@ -896,6 +900,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * This figure does not keep track of changes that require layout updates.
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
+     * 
+     * The default implementation is empty.
      */
     default void layout() {
 

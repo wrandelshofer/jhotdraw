@@ -103,14 +103,4 @@ public class TextFigure extends AbstractLeafFigure implements StrokeableFigure, 
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
-
-    @Override
-    public void layout() {
-        // empty
-    }
-
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
 }

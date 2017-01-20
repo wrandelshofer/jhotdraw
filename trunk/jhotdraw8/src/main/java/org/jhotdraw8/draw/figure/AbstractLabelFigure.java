@@ -186,11 +186,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     }
 
     @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
-    @Override
     public Connector findConnector(Point2D p, Figure prototype) {
         return new ChopRectangleConnector();
     }

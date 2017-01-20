@@ -116,15 +116,4 @@ public class ArcFigure extends AbstractLeafFigure implements StrokeableFigure, F
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
-
-    @Override
-    public void layout() {
-        // empty
-    }
-
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
 }

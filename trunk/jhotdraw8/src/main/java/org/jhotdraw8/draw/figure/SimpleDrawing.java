@@ -115,14 +115,6 @@ public class SimpleDrawing extends AbstractCompositeFigure
         set(HEIGHT, abs(height));
     }
 
-    /**
-     * Returns false.
-     */
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
     @Override
     public StylesheetsManager<Figure> getStyleManager() {
         if (styleManager == null) {
