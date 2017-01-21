@@ -22,13 +22,13 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  *
  * @author werni
  */
-public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implements StyleableMapAccessor<SVGPath> {
+public class SvgPathStyleableFigureKey extends SimpleFigureKey<String> implements StyleableMapAccessor<String> {
 
     private final static long serialVersionUID = 1L;
 
-    private final CssMetaData<?, SVGPath> cssMetaData;
+    private final CssMetaData<?, String> cssMetaData;
 
-    private Converter<SVGPath> converter;
+    private Converter<String> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -46,7 +46,7 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public SvgPathStyleableFigureKey(String name, SVGPath defaultValue) {
+    public SvgPathStyleableFigureKey(String name, String defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -59,8 +59,8 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
      * @param mask Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public SvgPathStyleableFigureKey(String key, DirtyMask mask, SVGPath defaultValue) {
-        super(key, SVGPath.class, mask, defaultValue);
+    public SvgPathStyleableFigureKey(String key, DirtyMask mask, String defaultValue) {
+        super(key, String.class, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
          cssMetaData = factory.createSVGPathCssMetaData(
@@ -69,28 +69,28 @@ public class SvgPathStyleableFigureKey extends SimpleFigureKey<SVGPath> implemen
          return spb.getStyleableProperty(this);
          });*/
 
-        Function<Styleable, StyleableProperty<SVGPath>> function = s -> {
+        Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, SVGPath> converter
-                = new StyleConverterAdapter<SVGPath>(getConverter());
-        CssMetaData<Styleable, SVGPath> md
-                = new SimpleCssMetaData<Styleable, SVGPath>(property, function,
+        final StyleConverter<String, String> converter
+                = new StyleConverterAdapter<String>(getConverter());
+        CssMetaData<Styleable, String> md
+                = new SimpleCssMetaData<Styleable, String>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<?, SVGPath> getCssMetaData() {
+    public CssMetaData<?, String> getCssMetaData() {
         return cssMetaData;
 
     }
 
     @Override
-    public Converter<SVGPath> getConverter() {
+    public Converter<String> getConverter() {
         if (converter == null) {
             converter = new CssSvgPathConverter(isNullable());
         }

@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -155,7 +156,15 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     }
 
     private void updateRegionNode(RenderContext ctx, Region node) {
-        node.setShape(getStyled(SHAPE));
+        String content = getStyled(SHAPE);
+        SVGPath svgPath;
+        if (content != null) {
+            svgPath = new SVGPath();
+            svgPath.setContent(content);
+        } else {
+            svgPath = null;
+        }
+        node.setShape(svgPath);
 
         Bounds b = getBoundsInLocal();
         node.resizeRelocate(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
@@ -178,7 +187,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
     protected abstract String getText(RenderContext ctx);
 
     protected void updateTextNode(RenderContext ctx, Text tn) {
-        tn.setText(getText( ctx));
+        tn.setText(getText(ctx));
         tn.setX(get(ORIGIN_X));
         tn.setY(get(ORIGIN_Y));
         applyTextFillableFigureProperties(tn);

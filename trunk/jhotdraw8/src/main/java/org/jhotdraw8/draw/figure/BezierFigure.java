@@ -56,7 +56,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public Connector findConnector(Point2D pointInLocal, Figure prototype) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override

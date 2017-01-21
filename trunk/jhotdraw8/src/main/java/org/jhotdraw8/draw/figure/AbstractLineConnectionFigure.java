@@ -171,10 +171,6 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         }
     }
 
-    @Override
-    public Node createNode(RenderContext drawingView) {
-        return new Line();
-    }
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
@@ -298,14 +294,5 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         set(START_TARGET, target);
     }
 
-    @Override
-    public void updateNode(RenderContext ctx, Node node) {
-        Line lineNode = (Line) node;
-        Point2D start = get(START);
-        lineNode.setStartX(start.getX());
-        lineNode.setStartY(start.getY());
-        Point2D end = get(END);
-        lineNode.setEndX(end.getX());
-        lineNode.setEndY(end.getY());
-    }
+
 }
