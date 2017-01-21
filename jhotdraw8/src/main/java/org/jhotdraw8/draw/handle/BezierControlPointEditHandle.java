@@ -116,7 +116,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     private Point2D getLocation() {
-        return (controlPointMask == BezierNode.C1_MASK) ? getBezierNode().getC1() : getBezierNode().getC2();
+        return getBezierNode().getC(controlPointMask);
 
     }
 
@@ -149,7 +149,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             node.setShape(REGION_SHAPE_CUSP);
         }
 
-        node.setVisible((bn.mask & BezierNode.MOVE_MASK) == 0 && (bn.mask & controlPointMask) != 0);
+        node.setVisible(!bn.isMoveTo() && (bn.isC(controlPointMask)));
 
     }
 

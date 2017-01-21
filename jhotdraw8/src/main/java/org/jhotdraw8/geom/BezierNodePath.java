@@ -71,8 +71,8 @@ public class BezierNodePath implements Shape {
         double x1 = Double.POSITIVE_INFINITY, y1 = Double.POSITIVE_INFINITY,
                 x2 = Double.NEGATIVE_INFINITY, y2 = Double.NEGATIVE_INFINITY;
         for (BezierNode n : nodes) {
-            double y = n.y0;
-            double x = n.x0;
+            double y = n.getY0();
+            double x = n.getX0();
             if (x < x1) {
                 x1 = x;
             }
@@ -85,9 +85,9 @@ public class BezierNodePath implements Shape {
             if (y > y2) {
                 y2 = y;
             }
-            if ((n.mask & BezierNode.C1_MASK) != 0) {
-                y = n.y1;
-                x = n.x1;
+            if (n.isC1()) {
+                y = n.getY1();
+                x = n.getX1();
                 if (x < x1) {
                     x1 = x;
                 }
@@ -101,9 +101,9 @@ public class BezierNodePath implements Shape {
                     y2 = y;
                 }
             }
-            if ((n.mask & BezierNode.C2_MASK) != 0) {
-                y = n.y2;
-                x = n.x2;
+            if (n.isC2()) {
+                y = n.getY2();
+                x = n.getX2();
                 if (x < x1) {
                     x1 = x;
                 }
