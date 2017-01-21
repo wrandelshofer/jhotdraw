@@ -229,7 +229,7 @@
           <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.html}/*/index.html"/>
       </apply>
     </target>
-  <target name="do-docbook.transform.xsltproc.chunked" depends="init" description="uses unix xsltproc command">  
+  <target name="do-docbook.transform.xsltproc.chunked" depends="init,do-docbook.validate" description="uses unix xsltproc command">  
      <apply executable="xsltproc" dir="." force="true">
             <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
             <env key="XML_DEBUG_CATALOG" value="1"/>
@@ -247,6 +247,16 @@
           </fileset>
           <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.chunked}/*/index.html"/>
       </apply>
+      <copy toDir="${basedir}/${build.doc.chunked}/handbook/JHotDraw8Handbook">
+          <fileset dir="${doc}/requirements/draw" >
+              <include name="**/*.svg"/>
+          </fileset>
+      </copy>
+      <copy toDir="${basedir}/${build.doc.chunked}/srs/JHotDraw8SRS">
+          <fileset dir="${doc}/requirements/draw" >
+              <include name="**/*.svg"/>
+          </fileset>
+      </copy>
     </target>
   <target name="do-docbook.transform.xsltproc.fo" depends="init" description="uses unix xsltproc command">  
      <apply executable="xsltproc" dir="." force="true">
@@ -286,6 +296,17 @@
           </fileset>
           <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/epub3/*"/>
       </apply>
+      
+       <copy toDir="${basedir}/${build}/doc/epub3/handbook/OEBPS">
+          <fileset dir="${doc}/requirements/draw" >
+              <include name="**/*.svg"/>
+          </fileset>
+      </copy>
+       <copy toDir="${basedir}/${build}/doc/epub3/srs/OEBPS">
+          <fileset dir="${doc}/requirements/draw" >
+              <include name="**/*.svg"/>
+          </fileset>
+      </copy>     
       
       <zip basedir="${basedir}/${build}/doc/epub3/srs" 
       destfile="${basedir}/${build}/doc/epub3/srs.epub">

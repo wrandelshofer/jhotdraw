@@ -67,7 +67,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         if (origin == StyleOrigin.USER && !Objects.equals(change.getValueRemoved(), change.getValueAdded())) {
             if (willChange) {
                 if (change.getKey() instanceof FigureKey) {
-                    if (((FigureKey<?>) change.getKey()).getDirtyMask().containsOneOf(DirtyBits.DEPENDENCY)) {
+                    if (((FigureKey<?>) change.getKey()).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
                         firePropertyChangeEvent(this, FigurePropertyChangeEvent.EventType.WILL_CHANGE, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
                     }
                 }
@@ -92,7 +92,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public final ObservableSet<Figure> getDependentFigures() {
+    public final ObservableSet<Figure> getLayoutObservers() {
         if (dependentFigures == null) {
             dependentFigures = FXCollections.observableSet(Collections.newSetFromMap(new IdentityHashMap<Figure, Boolean>()));
         }
@@ -137,15 +137,16 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      * This implementation is empty.
      */
     @Override
-    public void removeAllConnectionTargets() {
+    public void removeAllLayoutSubjects() {
         // empty
     }
 
     /**
      * This implementation is empty.
+     * @param connectedFigure the connected figure
      */
     @Override
-    public void removeConnectionTarget(Figure connectedFigure) {
+    public void removeLayoutSubject(Figure connectedFigure) {
         // empty
     }
 

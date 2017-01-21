@@ -92,7 +92,7 @@ public class FigureTreePresentationModel {
                         break;
                     case SUBTREE_NODES_CHANGED:
                         break;
-                    case DEPENDENCY_CHANGED:
+                    case LAYOUT_SUBJECT_CHANGED:
                     case TRANSFORM_CHANGED:
                     case PROPERTY_VALUE_CHANGED:
                         handleNodeInvalidated(f);

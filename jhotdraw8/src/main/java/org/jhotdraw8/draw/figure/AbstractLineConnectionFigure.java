@@ -53,11 +53,11 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     /**
      * The end connector.
      */
-    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM), null);
+    public static SimpleFigureKey<Connector> END_CONNECTOR = new SimpleFigureKey<>("endConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The end target.
      */
-    public static SimpleFigureKey<Figure> END_TARGET = new SimpleFigureKey<>("endTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM), null);
+    public static SimpleFigureKey<Figure> END_TARGET = new SimpleFigureKey<>("endTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The end position of the line.
      */
@@ -73,11 +73,11 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     /**
      * The start connector.
      */
-    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM), null);
+    public static SimpleFigureKey<Connector> START_CONNECTOR = new SimpleFigureKey<>("startConnector", Connector.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The start target.
      */
-    public static SimpleFigureKey<Figure> START_TARGET = new SimpleFigureKey<>("startTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.DEPENDENCY, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM), null);
+    public static SimpleFigureKey<Figure> START_TARGET = new SimpleFigureKey<>("startTarget", Figure.class, DirtyMask.of(DirtyBits.STATE, DirtyBits.LAYOUT_SUBJECT, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM), null);
     /**
      * The start position of the line.
      */
@@ -111,18 +111,18 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         // the connection targets changes
         ChangeListener<Figure> clStart = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(END_TARGET) != oldValue) {
-                oldValue.getDependentFigures().remove(AbstractLineConnectionFigure.this);
+                oldValue.getLayoutObservers().remove(AbstractLineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getDependentFigures().add(AbstractLineConnectionFigure.this);
+                newValue.getLayoutObservers().add(AbstractLineConnectionFigure.this);
             }
         };
         ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(START_TARGET) != oldValue) {
-                oldValue.getDependentFigures().remove(AbstractLineConnectionFigure.this);
+                oldValue.getLayoutObservers().remove(AbstractLineConnectionFigure.this);
             }
             if (newValue != null) {
-                newValue.getDependentFigures().add(AbstractLineConnectionFigure.this);
+                newValue.getLayoutObservers().add(AbstractLineConnectionFigure.this);
             }
         };
 
@@ -195,7 +195,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      * @return a list of connected figures
      */
     @Override
-    public Set<Figure> getProvidingFigures() {
+    public Set<Figure> getLayoutSubjects() {
         HashSet<Figure> ctf = new HashSet<>();
         if (get(START_TARGET) != null) {
             ctf.add(get(START_TARGET));
@@ -208,7 +208,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
 
     @Override
     public boolean isGroupReshapeableWith(Set<Figure> others) {
-        for (Figure f : getProvidingFigures()) {
+        for (Figure f : getLayoutSubjects()) {
             if (others.contains(f)) {
                 return false;
             }
@@ -247,18 +247,18 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void removeAllConnectionTargets() {
+    public void removeAllLayoutSubjects() {
         set(START_CONNECTOR, null);
         set(END_CONNECTOR, null);
     }
 
     @Override
-    public void removeConnectionTarget(Figure connectedFigure) {
-        if (connectedFigure != null) {
-            if (get(START_TARGET) != null && connectedFigure == get(START_TARGET)) {
+    public void removeLayoutSubject(Figure subject) {
+        if (subject != null) {
+            if (get(START_TARGET) != null && subject == get(START_TARGET)) {
                 set(START_TARGET, null);
             }
-            if (get(END_TARGET) != null && connectedFigure == get(END_TARGET)) {
+            if (get(END_TARGET) != null && subject == get(END_TARGET)) {
                 set(END_TARGET, null);
             }
         }

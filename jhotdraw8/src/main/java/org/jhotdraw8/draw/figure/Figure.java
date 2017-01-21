@@ -395,23 +395,24 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * This method is invoked on a figure by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
-     * dependency of a figure has changed.
+     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that one
+     * or more layout subjects have changed.
      * <p>
      * The default implementation of this method is empty.
      */
-    default void dependencyNotify() {
+    default void layoutSubjectChangeNotify() {
     }
 
     /**
-     * Disconnects all dependent and providing figures from this figure.
-     *
+     * Disconnects all layout subjects and layout observers from this figure.
+     * <p>
+     * This method is called, when the figure is about to be removed from a drawing.
      */
     default void disconnect() {
-        for (Figure connectedFigure : new ArrayList<Figure>(getDependentFigures())) {
-            connectedFigure.removeConnectionTarget(this);
+        for (Figure connectedFigure : new ArrayList<Figure>(getLayoutObservers())) {
+            connectedFigure.removeLayoutSubject(this);
         }
-        removeAllConnectionTargets();
+        removeAllLayoutSubjects();
     }
 
     /**
@@ -542,15 +543,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 + b.getMaxY()) * 0.5);
     }
 
-    /**
-     * Gets the child with the specified index from the figure.
-     *
-     * @param index the index
-     * @return the child
-     */
-    default Figure getChild(int index) {
-        return getChildren().get(index);
-    }
 
     /**
      * The child figures.
@@ -570,22 +562,23 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     ObservableList<Figure> getChildren();
 
     /**
-     * Returns all figures which derive their state from the state of this
+     * Returns all figures which observe  the layout of this
      * figure.
      * <p>
-     * When the state of this figure changes, then the state of the dependent
+     * When the layout of this figure changes, then the layout of the observers
      * figures must be updated.
      * <p>
      * The update strategy is implemented in {@link DrawingModel}.
      * {@code DrawingMode} observes state changes in figures and updates
-     * dependent figures. {@code DrawingModel} can coallesce multiply state
-     * changes of figures into a smaller number of updates. {@code DrawingModel}
-     * can also detect cyclic state dependencies and prevent endless update
+     * dependent figures. {@code DrawingModel} can coalesce multiple state
+     * changes of an observed figure into a smaller number of layout calls
+     * on the observers. {@code DrawingModel}
+     * can also detect cyclic layout dependencies and prevent endless update
      * loops.
      *
      * @return a list of dependent figures
      */
-    Set<Figure> getDependentFigures();
+    Set<Figure> getLayoutObservers();
 
     /**
      * Returns the ancestor Drawing.
@@ -597,26 +590,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         return getAncestor(Drawing.class);
     }
 
-    /**
-     * Gets the first child.
-     *
-     * @return The first child. Returns null if the figure has no getChildren.
-     */
-    default Figure getFirstChild() {
-        return getChildren().isEmpty() //
-                ? null//
-                : getChildren().get(getChildren().size() - 1);
-    }
-
-    /**
-     * Gets the last child.
-     *
-     * @return The last child. Returns null if the figure has no getChildren.
-     */
-    default Figure getLastChild() {
-        return getChildren().isEmpty() ? null : getChildren().get(0);
-    }
-
+ 
     /**
      * Returns the ancestor Layer.
      *
@@ -648,13 +622,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     Transform getLocalToWorld();
 
-    /**
-     * Returns the parent figure.
-     * <p>
-     * Note that there is no convenience method named {@code setParent}.
-     *
-     * @return parent figure or null, if the figure has no parent.
-     */
     @Override
     default Figure getParent() {
         return parentProperty().get();
@@ -702,18 +669,18 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners();
 
     /**
-     * Returns all figures which provide to the state of this figure.
+     * Returns all figures which are subject to the layout of this figure.
      * <p>
-     * When the state of a providing figure changes, then the state of this
+     * When the layout of a layout subject changes, then the layout of this
      * figure needs to be updated.
      * <p>
-     * See {@link #getDependentFigures} for a description of the update
+     * See {@link #getLayoutObservers} for a description of the update
      * strategy.
      *
      *
-     * @return a list of providing figures
+     * @return a list of layout subjects
      */
-    default Set<Figure> getProvidingFigures() {
+    default Set<Figure> getLayoutSubjects() {
         return Collections.emptySet();
     }
 
@@ -799,7 +766,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     boolean isAllowsChildren();
 
     /**
-     * Whether the figure is decomposable.
+     * Whether the figure is decomposable by the user.
      *
      * @return true if the figure is decomposable
      */
@@ -978,7 +945,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * Requests to remove all connection targets.
      */
-    void removeAllConnectionTargets();
+    void removeAllLayoutSubjects();
 
     // ----
     // property fields
@@ -988,7 +955,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param targetFigure a Figure which is a connection target.
      */
-    void removeConnectionTarget(Figure targetFigure);
+    void removeLayoutSubject(Figure targetFigure);
 
     /**
      * Invoked by {@code DrawingModel} when the figure is removed from a

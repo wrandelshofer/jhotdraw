@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns:xlink="http://www.w3.org/1999/xlink" baseProfile="tiny" height="240" version="1.2" width="320" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<clipPath id="clipPath1">
+<rect fill="#000000" height="240" stroke-linecap="square" stroke-miterlimit="10" width="320"/>
+</clipPath>
+</defs>
+
+<g class="Drawing" clip-path="url(#clipPath1)" id="drawing1">
+  <rect fill="#ffffff" height="240" id="background" stroke-linecap="square" stroke-miterlimit="10" width="320"/>
+    <rect class="Rectangle" fill="none" height="144" id="rectangle1" stroke="#000000" stroke-alignment="inner" width="105" x="160" y="45"/>
+    <rect class="Rectangle" fill="#ffffff" height="95" id="rectangle2" stroke="#000000" stroke-alignment="inner" stroke-width="2" width="150" x="85" y="65"/>
+      <text fill="#000000" font-family="Arial" font-size="12" font-style="normal" font-weight="normal" stroke-linecap="square" stroke-miterlimit="10" x="92" y="152.86328125">allowsChildren:boolean</text>
+      <text fill="#000000" font-family="Arial" font-size="12" font-style="normal" font-weight="normal" stroke-linecap="square" stroke-miterlimit="10" x="142" y="83.86328125">Figure</text>
+    <polygon class="Polygon" fill="#ffffff" id="polygon1" points="160,160 155,165 160,170 165,165" stroke="#000000"/>
+      <text fill="#000000" font-family="Arial" font-size="12" font-style="normal" font-weight="normal" stroke-linecap="square" stroke-miterlimit="10" x="92" y="112.86328125">parentProperty:Figure</text>
+    <line class="Line" fill="none" id="line1" stroke="#000000" x1="85" x2="235" y1="95" y2="95"/>
+      <text fill="#000000" font-family="Arial" font-size="12" font-style="normal" font-weight="normal" stroke-linecap="square" stroke-miterlimit="10" x="92" y="132.86328125">children:List&lt;Figure&gt;</text>
+</g>
+</svg>

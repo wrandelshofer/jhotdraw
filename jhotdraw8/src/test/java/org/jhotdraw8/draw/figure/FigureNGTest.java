@@ -115,10 +115,10 @@ public class FigureNGTest {
 
     public class FigureImpl extends AbstractStyleablePropertyBean implements Figure {
 
-        public void removeConnectionTarget(Figure targetFigure) {
+        public void removeLayoutSubject(Figure targetFigure) {
         }
 
-        public void removeAllConnectionTargets() {
+        public void removeAllLayoutSubjects() {
         }
 
         public ObjectProperty<Figure> parentProperty() {
@@ -176,7 +176,7 @@ public class FigureNGTest {
             return null;
         }
 
-        public Set<Figure> getDependentFigures() {
+        public Set<Figure> getLayoutObservers() {
             return null;
         }
 

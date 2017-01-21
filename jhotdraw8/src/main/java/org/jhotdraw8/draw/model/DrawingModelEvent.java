@@ -64,7 +64,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         /**
          * The connection of a figure has changed.
          */
-        DEPENDENCY_CHANGED,
+        LAYOUT_SUBJECT_CHANGED,
         /**
          * The transform of a figure has changed.
          */
@@ -121,7 +121,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     }
 
     public static <T> DrawingModelEvent dependencyChanged(DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.DEPENDENCY_CHANGED, figure, null, null, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.LAYOUT_SUBJECT_CHANGED, figure, null, null, -1, null, null, null);
     }
 
     public static <T> DrawingModelEvent transformChanged(DrawingModel source, Figure figure) {
