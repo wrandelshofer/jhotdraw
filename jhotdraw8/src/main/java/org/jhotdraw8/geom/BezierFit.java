@@ -57,10 +57,10 @@ public class BezierFit {
      * <p>
      * This is a convenience method for calling {@link #fitBezierPath}
      *
+     * @param builder the builder for the bezier path
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
      * digitized points.
-     * @return builder the bezier path builder
      */
     public static void fitBezierPath(PathBuilder builder, Point2D[] digitizedPoints, double error) {
         fitBezierPath(builder, Arrays.asList(digitizedPoints), error);
@@ -69,10 +69,10 @@ public class BezierFit {
     /**
      * Fits a bezier path to the specified list of digitized points.
      *
+     * @param builder the builder for the bezier path
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
      * digitized points.
-     * @return builder the bezier path builder
      */
     public static void fitBezierPath(PathBuilder builder, java.util.List<Point2D> digitizedPoints, double error) {
         // Split into segments at corners
@@ -142,10 +142,10 @@ public class BezierFit {
      * <p>
      * This is a convenience method for calling {@link #fitBezierPath}.
      *
+     * @param builder the builder for the bezier path
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
      * digitized points.
-     * @return the bezier path
      */
     public static void fitBezierPath(PathBuilder builder, BezierNodePath digitizedPoints, double error) {
         List<Point2D> d = new ArrayList<>();

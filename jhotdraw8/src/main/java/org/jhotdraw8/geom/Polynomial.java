@@ -199,6 +199,7 @@ public class Polynomial {
     /**
      * Returns a simplified polynomial, by removing coefficients
      * of the highest degrees if they have a very small absolute value.
+     * @return a new polynomial
      */
     public Polynomial simplify() {
         int popAt = simplifiedDegree();
