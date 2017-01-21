@@ -40,17 +40,17 @@ public class BezierNode {
      */
     public static final int C2_MASK = 4;
     /**
-     * Constant for having control points C0 and C2 in effect.
+     * Constant for having control points C1 and C2 in effect.
      */
-    public static final int C0C2_MASK = C0_MASK | C2_MASK;
+    public static final int C1C2_MASK = C1_MASK | C2_MASK;
     /**
      * Constant for having control points C0, C1 and C2 in effect.
      */
     public static final int C0C1C2_MASK = C0_MASK | C1_MASK | C2_MASK;
     /**
-     * Constant for having control points C1 and C2 in effect.
+     * Constant for having control points C0 and C2 in effect.
      */
-    public static final int C1C2_MASK = C1_MASK | C2_MASK;
+    public static final int C0C2_MASK = C0_MASK | C2_MASK;
     /**
      * Constant for having control point C0 in effect, but we are only moving to
      * this bezier node.
@@ -400,9 +400,41 @@ public class BezierNode {
         return equidistant;
     }
 
-
     public boolean isMoveTo() {
         return (mask & MOVE_MASK) == MOVE_MASK;
+    }
+
+    /**
+     * @param mask specifies which control point must be set
+     * @param c the c to set
+     * @return a new instance
+     */
+    public BezierNode setC(int mask, Point2D c) {
+        double x = c.getX(), y = c.getY();
+        double nx0, ny0, nx1, ny1, nx2, ny2;
+        if ((mask & C0_MASK) != 0) {
+            nx0 = x;
+            ny0 = y;
+        } else {
+            nx0 = x0;
+            ny0 = y0;
+        }
+        if ((mask & C1_MASK) != 0) {
+            nx1 = x;
+            ny1 = y;
+        } else {
+            nx1 = x1;
+            ny1 = y1;
+        }
+        if ((mask & C2_MASK) != 0) {
+            nx2 = x;
+            ny2 = y;
+        } else {
+            nx2 = x2;
+            ny2 = y2;
+        }
+
+        return new BezierNode(this.mask, equidistant, colinear, nx0, ny0, nx1, ny1, nx2, ny2);
     }
 
     /**
@@ -536,6 +568,11 @@ public class BezierNode {
      */
     public BezierNode setY2(double y2) {
         return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+    }
+
+    @Override
+    public String toString() {
+        return "BezierNode{" + "colinear=" + colinear + ", equidistant=" + equidistant + ", mask=" + mask + ", x0=" + x0 + ", x1=" + x1 + ", x2=" + x2 + ", y0=" + y0 + ", y1=" + y1 + ", y2=" + y2 + '}';
     }
 
     public BezierNode transform(Transform transform) {

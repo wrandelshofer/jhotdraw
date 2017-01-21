@@ -26,7 +26,7 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class XmlInsetsConverter implements Converter<Insets> {
 
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
+    private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Insets value) throws IOException {
@@ -50,13 +50,13 @@ public class XmlInsetsConverter implements Converter<Insets> {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:
-                return new Insets((double) v[1], (double) v[1], (double) v[1], (double) v[1]);
+                return new Insets(((Number)v[1]).doubleValue(), ((Number)v[1]).doubleValue(), ((Number)v[1]).doubleValue(), ((Number)v[1]).doubleValue());
             case 2:
-                return new Insets((double) v[1], (double) v[2], (double) v[1], (double) v[2]);
+                return new Insets(((Number)v[1]).doubleValue(), ((Number)v[2]).doubleValue(), ((Number)v[1]).doubleValue(), ((Number)v[2]).doubleValue());
             case 3:
-                return new Insets((double) v[1], (double) v[2], (double) v[3], (double) v[2]);
+                return new Insets(((Number)v[1]).doubleValue(), ((Number)v[2]).doubleValue(), ((Number)v[3]).doubleValue(), ((Number)v[2]).doubleValue());
             case 4:
-                return new Insets((double) v[1], (double) v[2], (double) v[3], (double) v[4]);
+                return new Insets(((Number)v[1]).doubleValue(), ((Number)v[2]).doubleValue(), ((Number)v[3]).doubleValue(), ((Number)v[4]).doubleValue());
             default:
                 throw new ParseException("Insets with 1 to 4 dimension values expected.", buf.position());
         }

@@ -201,7 +201,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
 
     @Override
     public void layout() {
-        // empty!
+       invalidateBounds();
     }
 
     @Override
