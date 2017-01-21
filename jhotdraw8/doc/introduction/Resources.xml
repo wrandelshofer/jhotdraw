@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>Resources</title>
+<itemizedlist>
+    <listitem>
+        <para>The JHotDraw 8 project web-site. </para>
+        <para><link xlink:href="jhotdraw8.website"/></para>
+    </listitem>
+</itemizedlist>
+
+<para>This section is empty.</para>
+</section>

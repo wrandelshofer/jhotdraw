@@ -41,6 +41,7 @@
   <property name="lib.doc.docbook" value="${build.doc.tools}/docbook-5.0b5"/>
   <property name="lib.doc.docbook-xsl" value="${build.doc.tools}/docbook-xsl-ns-1.79.1"/>
   <property name="build.doc.html" value="${build}/doc/html"/>
+  <property name="build.doc.chunked" value="${build}/doc/chunked"/>
   <property name="build.main.jars" value="${build}/jars"/>
   <property name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
 
@@ -166,40 +167,134 @@
             <arg line="${docbookfiles}"/>
         </exec>
     </target>
-  <target name="do-docbook.transform.xsltproc" depends="init" description="uses unix xsltproc command">
-      <exec executable="xsltproc" dir=".">
-          <arg value="--output"/><arg value="${build.doc.html}/chunked/handbook/jhotdraw8handbook.xml"/>
-          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
-          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
-          <arg value="--xinclude"/>
-          <arg value="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
-          <arg value="${build.doc.doc}/handbook/JHotDraw8Handbook.xml"/>
-      </exec>
-      <exec executable="xsltproc" dir=".">
-          <arg value="--output"/><arg value="${build.doc.html}/chunked/srs/jhotdraw8srs.xml"/>
-          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
-          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
-          <arg value="--xinclude"/>
-          <arg value="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
-          <arg value="${build.doc.doc}/srs/JHotDraw8SRS.xml"/>
-      </exec>
-      <exec executable="xsltproc" dir=".">
-          <arg value="--output"/><arg value="${build.doc.html}/book/handbook/jhotdraw8handbook.xml"/>
+  <target name="do-docbook.transform-hello.xsltproc" depends="init" description="uses unix xsltproc command">  
+     <apply executable="xsltproc" dir="." force="true">
+            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+            <env key="XML_DEBUG_CATALOG" value="1"/>
+
+            <arg value="--output"/>
+            <targetfile/>
           <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
           <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
           <arg value="--xinclude"/>
           <arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
-          <arg value="${build.doc.doc}/handbook/JHotDraw8Handbook.xml"/>
-      </exec>
-      <exec executable="xsltproc" dir=".">
-          <arg value="--output"/><arg value="${build.doc.html}/book/srs/jhotdraw8srs.xml"/>
+          <srcfile/>
+          
+          <fileset dir="${doc}" includes="*.xml"/>
+          <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.html}/*/index.html"/>
+      </apply>
+      
+     <apply executable="xsltproc" dir="." force="true">
+            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+            <env key="XML_DEBUG_CATALOG" value="1"/>
+
+          <arg value="--output"/><targetfile/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
+          <arg value="--xinclude"/>
+          <arg value="${lib.doc.docbook-xsl}/epub3/chunk.xsl"/>
+          <srcfile/>
+          
+          <fileset dir="${doc}" >
+              <include name="helloworld.xml"/>
+          </fileset>
+          <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/epub3/helloworld/*"/>
+      </apply>
+      <zip basedir="${basedir}/${build}/doc/epub3/helloworld" 
+      destfile="${basedir}/${build}/doc/epub3/helloworld.epub">
+          <include name="mimetype"/>
+          <include name="META-INF/**"/>
+          <include name="OEBPS/**"/>
+      </zip>
+      
+    </target>
+  <target name="do-docbook.transform.xsltproc" depends="init,do-docbook.transform.xsltproc.xhtml5,do-docbook.transform.xsltproc.chunked,do-docbook.transform.xsltproc.epub" description="uses unix xsltproc command">  
+    </target>
+  <target name="do-docbook.transform.xsltproc.xhtml5" depends="init" description="uses unix xsltproc command">  
+     <apply executable="xsltproc" dir="." force="true">
+            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+            <env key="XML_DEBUG_CATALOG" value="1"/>
+
+          <arg value="--output"/><targetfile/>
           <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
           <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
           <arg value="--xinclude"/>
           <arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
-          <arg value="${build.doc.doc}/srs/JHotDraw8SRS.xml"/>
-      </exec>
-  </target>
+          <srcfile/>
+          
+          <fileset dir="${build.doc.doc}" >
+              <include name="handbook/JHotDraw8Handbook.xml"/>
+              <include name="srs/JHotDraw8SRS.xml"/>
+          </fileset>
+          <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.html}/*/index.html"/>
+      </apply>
+    </target>
+  <target name="do-docbook.transform.xsltproc.chunked" depends="init" description="uses unix xsltproc command">  
+     <apply executable="xsltproc" dir="." force="true">
+            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+            <env key="XML_DEBUG_CATALOG" value="1"/>
+
+          <arg value="--output"/><targetfile/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
+          <arg value="--xinclude"/>
+          <arg value="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
+          <srcfile/>
+          
+          <fileset dir="${build.doc.doc}" >
+              <include name="handbook/JHotDraw8Handbook.xml"/>
+              <include name="srs/JHotDraw8SRS.xml"/>
+          </fileset>
+          <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.chunked}/*/index.html"/>
+      </apply>
+    </target>
+  <target name="do-docbook.transform.xsltproc.fo" depends="init" description="uses unix xsltproc command">  
+     <apply executable="xsltproc" dir="." force="true">
+            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+            <env key="XML_DEBUG_CATALOG" value="1"/>
+
+          <arg value="--output"/><targetfile/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
+          <arg value="--xinclude"/>
+          <arg value="${lib.doc.docbook-xsl}/fo/docbook.xsl"/>
+          <srcfile/>
+          
+          <fileset dir="${build.doc.doc}" >
+              <include name="handbook/JHotDraw8Handbook.xml"/>
+              <include name="srs/JHotDraw8SRS.xml"/>
+          </fileset>
+          <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/fo/*.xml"/>
+      </apply>
+    </target>
+    
+  <target name="do-docbook.transform.xsltproc.epub" depends="init" description="uses unix xsltproc command">  
+     <apply executable="xsltproc" dir="." force="true">
+            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+            <env key="XML_DEBUG_CATALOG" value="1"/>
+
+          <arg value="--output"/><targetfile/>
+          <arg value="--param"/><arg value="writing.mode"/><arg value="lr"/>
+          <arg value="--stringparam"/><arg value="bibliography.collection"/><arg value="${basedir}/${doc}/bibliography.xml"/>
+          <arg value="--xinclude"/>
+          <arg value="${lib.doc.docbook-xsl}/epub3/chunk.xsl"/>
+          <srcfile/>
+          
+          <fileset dir="${build.doc.doc}" >
+              <include name="handbook/JHotDraw8Handbook.xml"/>
+              <include name="srs/JHotDraw8SRS.xml"/>
+          </fileset>
+          <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/epub3/*"/>
+      </apply>
+      
+      <zip basedir="${basedir}/${build}/doc/epub3/srs" 
+      destfile="${basedir}/${build}/doc/epub3/srs.epub">
+          <include name="mimetype"/>
+          <include name="META-INF/**"/>
+          <include name="OEBPS/**"/>
+      </zip>
+    </target>
+
   <target name="do-docbook.transform.built-in" depends="init" description="uses ant xslt command">
     <xslt basedir="${doc}" destdir="${build.doc.html}/book-built-in"
             style="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl">
@@ -212,6 +307,7 @@
       <factory name="net.sf.saxon.TransformerFactoryImpl"/>      
     </xslt>
   </target>
+  
   <target name="do-docbook" depends="do-docbook.compile,do-docbook.unzip-docbook,do-docbook.asciidoctor,do-docbook.validate,do-docbook.transform.xsltproc" description="generates specification and user documentation">
   </target>
       

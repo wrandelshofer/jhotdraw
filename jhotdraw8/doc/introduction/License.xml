@@ -5,9 +5,9 @@
 <title>License</title>
 <para>JHotDraw 8 can be licensed under one of the following license models:</para>
 <itemizedlist>
-  <listitem><para><xref linkend="license.cc-by"/></para></listitem>
-  <listitem><para><xref linkend="license.lgpl"/></para></listitem>
+  <listitem><para><xref linkend="license.cc-by" xrefstyle="template:%t"/></para></listitem>
+  <listitem><para><xref linkend="license.lgpl"  xrefstyle="select: title"/> </para></listitem>
 </itemizedlist>
 <xi:include href="CC-BY.xml"/>
-<xi:include href="LGPL.xml"/>
+<xi:include href="LGPL.xml" />
 </section>

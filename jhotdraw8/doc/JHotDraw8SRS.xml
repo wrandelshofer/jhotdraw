@@ -13,13 +13,14 @@
 <copyright><year>2016</year><holder>by the authors and contributors of JHotDraw</holder></copyright>
 </info>
 <chapter><title>Introduction</title>
-<xi:include href="introduction/References.xml"/>
-<xi:include href="introduction/Purpose.xml"/>
+<xi:include href="srs/Purpose.xml"/>
 <xi:include href="introduction/Scope.xml"/>
 <xi:include href="introduction/Definitions.xml"/>
 <!--<xi:include href="introduction/Overview.xml"/>-->
 <xi:include href="introduction/MajorVersions.xml"/>
 <xi:include href="introduction/License.xml"/>
+<xi:include href="introduction/Resources.xml"/>
+<xi:include href="introduction/References.xml"/>
 </chapter>
 <chapter><title>Overall description</title>
 <xi:include href="overalldescription/ProductPerspective.xml"/>
