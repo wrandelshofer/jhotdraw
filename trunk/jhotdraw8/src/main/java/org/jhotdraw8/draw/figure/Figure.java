@@ -161,16 +161,31 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return bounds
      */
     public static Bounds bounds(Collection<Figure> selection) {
-        Bounds b = null;
+        double minx = Double.POSITIVE_INFINITY;
+        double miny = Double.POSITIVE_INFINITY;
+        double maxx = Double.NEGATIVE_INFINITY;
+        double maxy = Double.NEGATIVE_INFINITY;
+
         for (Figure f : selection) {
             Bounds fb = f.getLocalToWorld().transform(f.getBoundsInLocal());
-            if (b == null) {
-                b = fb;
-            } else {
-                b = Geom.union(b, fb);
+            double v = fb.getMaxX();
+            if (v > maxx) {
+                maxx = v;
+            }
+            v = fb.getMaxY();
+            if (v > maxy) {
+                maxy = v;
+            }
+            v = fb.getMinX();
+            if (v < minx) {
+                minx = v;
+            }
+            v = fb.getMinY();
+            if (v < miny) {
+                miny = v;
             }
         }
-        return b;
+        return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
     /**
@@ -190,6 +205,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
             throw new InternalError("class can not read its own keys");
         }
     }
+
     public static void getDeclaredKeys(Class<?> clazz, Collection<Key<?>> keys) {
         try {
             for (Field f : clazz.getDeclaredFields()) {
@@ -393,7 +409,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * Disconnects all layout subjects and layout observers from this figure.
      * <p>
-     * This method is called, when the figure is about to be removed from a drawing.
+     * This method is called, when the figure is about to be removed from a
+     * drawing.
      */
     default void disconnect() {
         for (Figure connectedFigure : new ArrayList<Figure>(getLayoutObservers())) {
@@ -530,7 +547,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 + b.getMaxY()) * 0.5);
     }
 
-
     /**
      * The child figures.
      * <p>
@@ -549,8 +565,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     ObservableList<Figure> getChildren();
 
     /**
-     * Returns all figures which observe  the layout of this
-     * figure.
+     * Returns all figures which observe the layout of this figure.
      * <p>
      * When the layout of this figure changes, then the layout of the observers
      * figures must be updated.
@@ -558,10 +573,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The update strategy is implemented in {@link DrawingModel}.
      * {@code DrawingMode} observes state changes in figures and updates
      * dependent figures. {@code DrawingModel} can coalesce multiple state
-     * changes of an observed figure into a smaller number of layout calls
-     * on the observers. {@code DrawingModel}
-     * can also detect cyclic layout dependencies and prevent endless update
-     * loops.
+     * changes of an observed figure into a smaller number of layout calls on
+     * the observers. {@code DrawingModel} can also detect cyclic layout
+     * dependencies and prevent endless update loops.
      *
      * @return a list of dependent figures
      */
@@ -577,7 +591,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         return getAncestor(Drawing.class);
     }
 
- 
     /**
      * Returns the ancestor Layer.
      *
@@ -661,8 +674,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * When the layout of a layout subject changes, then the layout of this
      * figure needs to be updated.
      * <p>
-     * See {@link #getLayoutObservers} for a description of the update
-     * strategy.
+     * See {@link #getLayoutObservers} for a description of the update strategy.
      *
      *
      * @return a list of layout subjects
@@ -794,7 +806,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * Whether the {@code layout} method of this figure does anything.
-     * 
+     *
      * The default implementation returns false.
      *
      * @return true if the {@code layout} method is not empty.
@@ -854,7 +866,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * This figure does not keep track of changes that require layout updates.
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
-     * 
+     *
      * The default implementation is empty.
      */
     default void layout() {
@@ -958,7 +970,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its local bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
@@ -1005,7 +1017,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The figure may choose to only partially change its parent bounds.
      * <p>
      * This method typically changes property values in this figure with null
-     * null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
+     * null null null null null null     {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
      * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
      * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM} in the
      * {@link org.jhotdraw8.draw.key.FigureKey}. This method may also call
