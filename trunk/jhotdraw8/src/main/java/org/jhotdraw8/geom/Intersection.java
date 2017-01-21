@@ -1568,10 +1568,13 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * The intersection will contain the parameters 't' of the line in range
      * [0,1].
      *
-     * @param c the center of the circle
+     * @param cx the center of the circle
+     * @param cy the center of the circle
      * @param r the radius of the circle
-     * @param a1 point 1 of the line
-     * @param a2 point 2 of the line
+     * @param x1 point 1 of the line
+     * @param y1 point 1 of the line
+     * @param x2 point 2 of the line
+     * @param y2 point 2 of the line
      * @return computed intersection
      */
     public static Intersection intersectLineCircle(double x1, double y1, double x2, double y2, double cx, double cy, double r) {
