@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="intro.applicationIntroduction">
-<title>Introduction/Purpose of Feature</title>
-<para>An application is a computer program which is designed to perform a group of actions on a project.</para>
-
- <para>The nature of the project depends on a specific implementation of an application.</para>
-
-   <para>Depending on the nature of a project, an application has typically one of the following application styles:</para>
- <itemizedlist>
-   <listitem><para>'Utility'. Here, the application 'is' the project. The user can start the application and immediately
-     perform actions, without ever having to select a project. Typical utility applications are: a calculator, a dictionary.</para></listitem>
-   <listitem><para>'Library-based'. Here, a project corresponds to a library. The user can start the application,
-     and then the application automatically opens the previously used library (or libraries).
-     The application provides actions on a library. Typically all changes are immediately made persistent in the library.
-     Typical library-based applications are: a photo library, a music library.</para></listitem>
-   <listitem><para>'Document-based'. Here, a project corresponds to a document The user can start the application,
-   and open an existing document or create a new one. The application provides actions on a working copy of the document.
-   Changes are only made persistent when the user explicitly saves them to the document.
-    Typical document-based applications are: a text editor, a drawing editor.</para>
-   </listitem>
- </itemizedlist>
- 
- <para>The purpose of the JHotDraw 8 application framework, is to support the creation of "Document-based" applications with Java.</para>
-
- <para>For more information about application styles, see <xref linkend="bib.ahig"/> and <xref linkend="bib.whig"/></para>
+    <title>Introduction/Purpose of Feature</title>
+    <para>The purpose of the application framework, is</para>
+    <itemizedlist>
+        <listitem>
+            <para>to manage the life-cycle of the application process</para>
+        </listitem>
+        <listitem>
+            <para>to manage the life-cycles of projects</para>
+        </listitem>
+        <listitem>  
+            <para>to provide containers for the user interface elements of the projects</para>
+        </listitem>
+    </itemizedlist>
 </section>

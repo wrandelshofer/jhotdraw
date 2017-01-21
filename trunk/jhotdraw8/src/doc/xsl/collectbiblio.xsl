@@ -9,9 +9,13 @@
 
  <!-- print the document skeleton -->
 <xsl:template match="/">
+<section>
+<title>References</title>
+<para>The following sources are referenced in this book:</para>
 <bibliography>
 <xsl:apply-templates/>
 </bibliography>
+</section>
 </xsl:template>
 
 <!-- suppress text and attributes -->

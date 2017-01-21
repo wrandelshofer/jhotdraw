@@ -2,15 +2,20 @@
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
 <title>Scope</title>
 
-<para>JHotDraw 8 is a framework for drawing editors written in the Java programming
+<para>"JHotDraw 8" is an object oriented framework for developing drawing editors in the Java programming
 language.</para>
 
-<para>It consists of two framework modules, which can be used independently,
-  and a number of demos ("samples"), which demonstrate typical uses of the framework:</para>
+<para>It consists of two independent frameworks, 
+  and a number of demos ("samples"), which demonstrate typical uses of the framework.</para>
 
+<para>Frameworks:</para>
 <itemizedlist>
     <listitem><para>the "Drawing Editor Framework"</para></listitem>
     <listitem><para>the "Application Framework"</para></listitem>
+</itemizedlist>
+
+<para>Samples:</para>
+<itemizedlist>
    <listitem><para>the "Mini" samples</para></listitem>
    <listitem><para>the "Grapher" sample</para></listitem>
    <listitem><para>the "Teddy" sample</para></listitem>
@@ -31,6 +36,6 @@ Such as such as <xref linkend="bib.ahig"/> and <xref linkend="bib.whig"/>.</para
 <para>The "Grapher" sample demonstrate a working drawing editor application. It focuses on many use cases
 of the application framework and the drawing framework.</para>
 
-<para>The "Teddy" sample demonstrates a working text editor. If focuses on the application framework only.</para>
+<para>The "Teddy" sample demonstrates a working text editor. It focuses on the application framework only.</para>
 
 </section>

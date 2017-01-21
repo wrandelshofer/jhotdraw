@@ -13,10 +13,10 @@
 </info>
   <!-- see IEEE 830 SRS -->
 <chapter><title>Introduction</title>
-<xi:include href="introduction/References.xml"/>
-<xi:include href="introduction/Purpose.xml"/>
+<xi:include href="handbook/Purpose.xml"/>
 <xi:include href="introduction/Definitions.xml"/>
 <xi:include href="introduction/Overview.xml"/>
+<xi:include href="introduction/References.xml"/>
 <xi:include href="introduction/MajorVersions.xml"/>
 <xi:include href="introduction/License.xml"/>
 </chapter>
