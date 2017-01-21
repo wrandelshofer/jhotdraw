@@ -116,10 +116,10 @@ public class BezierNodeEditHandle extends AbstractHandle {
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
         
         BezierNode bn = getBezierNode();
-        if ((bn.mask & BezierNode.C1C2_MASK) != 0) {
-            node.setShape(REGION_SHAPE_CUBIC);
-        } else if ((bn.mask & BezierNode.C1_MASK) != 0) {
-            node.setShape(REGION_SHAPE_QUADRATIC);
+        if (bn.isC1()&&bn.isC2()) {
+            node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
+        } else if (bn.isC1()) {
+            node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
         } else {
             node.setShape(REGION_SHAPE_LINEAR);
         } 

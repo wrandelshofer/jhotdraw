@@ -40,17 +40,17 @@ public class BezierNode {
      */
     public static final int C2_MASK = 4;
     /**
-     * Constant for having control points C1 and C2 in effect.
+     * Constant for having control points C0 and C2 in effect.
      */
-    public static final int C1C2_MASK = C1_MASK | C2_MASK;
+    public static final int C0C2_MASK = C0_MASK | C2_MASK;
     /**
      * Constant for having control points C0, C1 and C2 in effect.
      */
     public static final int C0C1C2_MASK = C0_MASK | C1_MASK | C2_MASK;
     /**
-     * Constant for having control points C0 and C2 in effect.
+     * Constant for having control points C1 and C2 in effect.
      */
-    public static final int C0C2_MASK = C0_MASK | C2_MASK;
+    public static final int C1C2_MASK = C1_MASK | C2_MASK;
     /**
      * Constant for having control point C0 in effect, but we are only moving to
      * this bezier node.
@@ -61,42 +61,42 @@ public class BezierNode {
      * This is a hint for editing tools. If this is set to true, the editing
      * tools shall keep all control points on the same line.
      */
-    public final boolean colinear;
+    private final boolean colinear;
     /**
      * This is a hint for editing tools. If this is set to true, the editing
      * tools shall keep C2 at the same distance from C0 as C1.
      */
-    public final boolean equidistant;
+    private final boolean equidistant;
     /**
      * This mask is used to describe which control points in addition to C0 are
      * in effect.
      */
-    public final int mask;
+    private final int mask;
 
     /**
      * Holds the y-coordinates of the control points C0, C1, C2.
      */
-    public final double x0;
+    private final double x0;
     /**
      * Holds the y-coordinates of the control points C0, C1, C2.
      */
-    public final double x1;
+    private final double x1;
     /**
      * Holds the y-coordinates of the control points C0, C1, C2.
      */
-    public final double x2;
+    private final double x2;
     /**
      * Holds the y-coordinates of the control points C0, C1, C2.
      */
-    public final double y0;
+    private final double y0;
     /**
      * Holds the y-coordinates of the control points C0, C1, C2.
      */
-    public final double y1;
+    private final double y1;
     /**
      * Holds the y-coordinates of the control points C0, C1, C2.
      */
-    public final double y2;
+    private final double y2;
 
     public BezierNode(Point2D c0) {
         this.mask = C0_MASK;
@@ -132,7 +132,9 @@ public class BezierNode {
         this.y0 = y0;
         this.y1 = y1;
         this.y2 = y2;
-if (equidistant) throw new InternalError("equidistant");        
+        if (equidistant) {
+            throw new InternalError("equidistant");
+        }
     }
 
     public boolean computeIsColinear() {
@@ -199,6 +201,19 @@ if (equidistant) throw new InternalError("equidistant");
             return false;
         }
         return true;
+    }
+
+    public Point2D getC(int mask) {
+        switch (mask) {
+            case C0_MASK:
+                return getC0();
+            case C1_MASK:
+                return getC1();
+            case C2_MASK:
+                return getC2();
+            default:
+                throw new IllegalArgumentException("illegal mask:" + mask);
+        }
     }
 
     public Point2D getC0() {
@@ -272,6 +287,19 @@ if (equidistant) throw new InternalError("equidistant");
         return minY;
     }
 
+    public double getX(int mask) {
+        switch (mask) {
+            case C0_MASK:
+                return getX0();
+            case C1_MASK:
+                return getX1();
+            case C2_MASK:
+                return getX2();
+            default:
+                throw new IllegalArgumentException("illegal mask:" + mask);
+        }
+    }
+
     /**
      * @return the x0
      */
@@ -291,6 +319,19 @@ if (equidistant) throw new InternalError("equidistant");
      */
     public double getX2() {
         return x2;
+    }
+
+    public double getY(int mask) {
+        switch (mask) {
+            case C0_MASK:
+                return getY0();
+            case C1_MASK:
+                return getY1();
+            case C2_MASK:
+                return getY2();
+            default:
+                throw new IllegalArgumentException("illegal mask:" + mask);
+        }
     }
 
     /**
@@ -329,11 +370,27 @@ if (equidistant) throw new InternalError("equidistant");
         return hash;
     }
 
+    public boolean isC(int mask) {
+        return (this.mask & mask) == mask;
+    }
+
+    public boolean isC1() {
+        return (mask & C1_MASK) == C1_MASK;
+    }
+
+    public boolean isC2() {
+        return (mask & C2_MASK) == C2_MASK;
+    }
+
     /**
      * @return the colinear
      */
     public boolean isColinear() {
         return colinear;
+    }
+
+    public boolean isControlPoint(int mask) {
+        return (mask & mask) == mask;
     }
 
     /**
@@ -343,7 +400,8 @@ if (equidistant) throw new InternalError("equidistant");
         return equidistant;
     }
 
-    public boolean isMove() {
+
+    public boolean isMoveTo() {
         return (mask & MOVE_MASK) == MOVE_MASK;
     }
 
@@ -421,7 +479,7 @@ if (equidistant) throw new InternalError("equidistant");
      * @return a new instance
      */
     public BezierNode setEquidistant(boolean equidistant) {
-        return new BezierNode(mask, equidistant,colinear,  x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**

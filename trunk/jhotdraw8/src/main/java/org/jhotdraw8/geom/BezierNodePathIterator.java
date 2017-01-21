@@ -93,37 +93,37 @@ private int windingRule;
                 BezierNode previous = nodes.get(nodes.size() - 1);
                 BezierNode current = nodes.get(0);
 
-                if ((previous.mask & BezierNode.C2_MASK) == 0) {
-                    if ((current.mask & BezierNode.C1_MASK) == 0) {
+                if (!previous.isC2()) {
+                    if (!current.isC1()) {
                         numCoords = 1;
                         type = SEG_LINETO;
-                        coords[0] = (float) current.x0;
-                        coords[1] = (float) current.y0;
+                        coords[0] = (float) current.getX0();
+                        coords[1] = (float) current.getY0();
                     } else {
                         numCoords = 2;
                         type = SEG_QUADTO;
-                        coords[0] = (float) current.x1;
-                        coords[1] = (float) current.y1;
-                        coords[2] = (float) current.x0;
-                        coords[3] = (float) current.y0;
+                        coords[0] = (float) current.getX1();
+                        coords[1] = (float) current.getY1();
+                        coords[2] = (float) current.getX0();
+                        coords[3] = (float) current.getY0();
                     }
                 } else {
-                    if ((current.mask & BezierNode.C1_MASK) == 0) {
+                    if (!current.isC1()) {
                         numCoords = 2;
                         type = SEG_QUADTO;
-                        coords[0] = (float) previous.x2;
-                        coords[1] = (float) previous.y2;
-                        coords[2] = (float) current.x0;
-                        coords[3] = (float) current.y0;
+                        coords[0] = (float) previous.getX2();
+                        coords[1] = (float) previous.getY2();
+                        coords[2] = (float) current.getX0();
+                        coords[3] = (float) current.getY0();
                     } else {
                         numCoords = 3;
                         type = SEG_CUBICTO;
-                        coords[0] = (float) previous.x2;
-                        coords[1] = (float) previous.y2;
-                        coords[2] = (float) current.x1;
-                        coords[3] = (float) current.y1;
-                        coords[4] = (float) current.x0;
-                        coords[5] = (float) current.y0;
+                        coords[0] = (float) previous.getX2();
+                        coords[1] = (float) previous.getY2();
+                        coords[2] = (float) current.getX1();
+                        coords[3] = (float) current.getY1();
+                        coords[4] = (float) current.getX0();
+                        coords[5] = (float) current.getY0();
                     }
                 }
             }
@@ -132,8 +132,8 @@ private int windingRule;
             return SEG_CLOSE;
         } else if (index == 0) {
             BezierNode current = nodes.get(index);
-            coords[0] = (float) current.x0;
-            coords[1] = (float) current.y0;
+            coords[0] = (float) current.getX0();
+            coords[1] = (float) current.getY0();
             numCoords = 1;
             type = SEG_MOVETO;
 
@@ -141,44 +141,44 @@ private int windingRule;
             BezierNode current = nodes.get(index);
             BezierNode previous = nodes.get(index - 1);
 
-            if ((current.mask & BezierNode.MOVE_MASK) == BezierNode.MOVE_MASK) {
+            if (current.isMoveTo()) {
                 numCoords = 1;
                     type = SEG_MOVETO;
-                    coords[0] = (float) current.x0;
-                    coords[1] = (float) current.y0;
+                    coords[0] = (float) current.getX0();
+                    coords[1] = (float) current.getY0();
 
-        }else if ((previous.mask & BezierNode.C2_MASK) == 0) {
-                if ((current.mask & BezierNode.C1_MASK) == 0) {
+        }else if (!previous.isC2()) {
+                if (current.isC1()) {
                     numCoords = 1;
                     type = SEG_LINETO;
-                    coords[0] = (float) current.x0;
-                    coords[1] = (float) current.y0;
+                    coords[0] = (float) current.getX0();
+                    coords[1] = (float) current.getY0();
 
                 } else {
                     numCoords = 2;
                     type = SEG_QUADTO;
-                    coords[0] = (float) current.x1;
-                    coords[1] = (float) current.y1;
-                    coords[2] = (float) current.x0;
-                    coords[3] = (float) current.y0;
+                    coords[0] = (float) current.getX1();
+                    coords[1] = (float) current.getY1();
+                    coords[2] = (float) current.getX0();
+                    coords[3] = (float) current.getY0();
                 }
             } else {
-                if ((current.mask & BezierNode.C1_MASK) == 0) {
+                if (!current.isC1()) {
                     numCoords = 2;
                     type = SEG_QUADTO;
-                    coords[0] = (float) previous.x2;
-                    coords[1] = (float) previous.y2;
-                    coords[2] = (float) current.x0;
-                    coords[3] = (float) current.y0;
+                    coords[0] = (float) previous.getX2();
+                    coords[1] = (float) previous.getY2();
+                    coords[2] = (float) current.getX0();
+                    coords[3] = (float) current.getY0();
                 } else {
                     numCoords = 3;
                     type = SEG_CUBICTO;
-                    coords[0] = (float) previous.x2;
-                    coords[1] = (float) previous.y2;
-                    coords[2] = (float) current.x1;
-                    coords[3] = (float) current.y1;
-                    coords[4] = (float) current.x0;
-                    coords[5] = (float) current.y0;
+                    coords[0] = (float) previous.getX2();
+                    coords[1] = (float) previous.getY2();
+                    coords[2] = (float) current.getX1();
+                    coords[3] = (float) current.getY1();
+                    coords[4] = (float) current.getX0();
+                    coords[5] = (float) current.getY0();
                 }
             }
         }
@@ -215,37 +215,37 @@ private int windingRule;
                 BezierNode previous = nodes.get(nodes.size() - 1);
                 BezierNode current = nodes.get(0);
 
-                if ((previous.mask & BezierNode.C2_MASK) == 0) {
-                    if ((current.mask & BezierNode.C1_MASK) == 0) {
+                if (!previous.isC2()) {
+                    if (!current.isC1()) {
                         numCoords = 1;
                         type = SEG_LINETO;
-                        coords[0] = current.x0;
-                        coords[1] = current.y0;
+                        coords[0] = current.getX0();
+                        coords[1] = current.getY0();
                     } else {
                         numCoords = 2;
                         type = SEG_QUADTO;
-                        coords[0] = current.x1;
-                        coords[1] = current.y1;
-                        coords[2] = current.x0;
-                        coords[3] = current.y0;
+                        coords[0] = current.getX1();
+                        coords[1] = current.getY1();
+                        coords[2] = current.getX0();
+                        coords[3] = current.getY0();
                     }
                 } else {
-                    if ((current.mask & BezierNode.C1_MASK) == 0) {
+                    if (!current.isC1()) {
                         numCoords = 2;
                         type = SEG_QUADTO;
-                        coords[0] = previous.x2;
-                        coords[1] = previous.y2;
-                        coords[2] = current.x0;
-                        coords[3] = current.y0;
+                        coords[0] = previous.getX2();
+                        coords[1] = previous.getY2();
+                        coords[2] = current.getX0();
+                        coords[3] = current.getY0();
                     } else {
                         numCoords = 3;
                         type = SEG_CUBICTO;
-                        coords[0] = previous.x2;
-                        coords[1] = previous.y2;
-                        coords[2] = current.x1;
-                        coords[3] = current.y1;
-                        coords[4] = current.x0;
-                        coords[5] = current.y0;
+                        coords[0] = previous.getX2();
+                        coords[1] = previous.getY2();
+                        coords[2] = current.getX1();
+                        coords[3] = current.getY1();
+                        coords[4] = current.getX0();
+                        coords[5] = current.getY0();
                     }
                 }
             }
@@ -254,8 +254,8 @@ private int windingRule;
             return SEG_CLOSE;
         } else if (index == 0) {
             BezierNode current = nodes.get(index);
-            coords[0] = current.x0;
-            coords[1] = current.y0;
+            coords[0] = current.getX0();
+            coords[1] = current.getY0();
             numCoords = 1;
             type = SEG_MOVETO;
 
@@ -263,44 +263,44 @@ private int windingRule;
             BezierNode current = nodes.get(index);
             BezierNode previous = nodes.get(index - 1);
 
-            if ((current.mask & BezierNode.MOVE_MASK) == BezierNode.MOVE_MASK) {
+            if (current.isMoveTo()) {
                 numCoords = 1;
                     type = SEG_MOVETO;
-                    coords[0] = (float) current.x0;
-                    coords[1] = (float) current.y0;
+                    coords[0] = (float) current.getX0();
+                    coords[1] = (float) current.getY0();
 
-        }else if ((previous.mask & BezierNode.C2_MASK) == 0) {
-                if ((current.mask & BezierNode.C1_MASK) == 0) {
+        }else if (!previous.isC2()) {
+                if (!current.isC1()) {
                     numCoords = 1;
                     type = SEG_LINETO;
-                    coords[0] = current.x0;
-                    coords[1] = current.y0;
+                    coords[0] = current.getX0();
+                    coords[1] = current.getY0();
 
                 } else {
                     numCoords = 2;
                     type = SEG_QUADTO;
-                    coords[0] = current.x1;
-                    coords[1] = current.y1;
-                    coords[2] = current.x0;
-                    coords[3] = current.y0;
+                    coords[0] = current.getX1();
+                    coords[1] = current.getY1();
+                    coords[2] = current.getX0();
+                    coords[3] = current.getY0();
                 }
             } else {
-                if ((current.mask & BezierNode.C1_MASK) == 0) {
+                if (!current.isC1()) {
                     numCoords = 2;
                     type = SEG_QUADTO;
-                    coords[0] = previous.x2;
-                    coords[1] = previous.y2;
-                    coords[2] = current.x0;
-                    coords[3] = current.y0;
+                    coords[0] = previous.getX2();
+                    coords[1] = previous.getY2();
+                    coords[2] = current.getX0();
+                    coords[3] = current.getY0();
                 } else {
                     numCoords = 3;
                     type = SEG_CUBICTO;
-                    coords[0] = previous.x2;
-                    coords[1] = previous.y2;
-                    coords[2] = current.x1;
-                    coords[3] = current.y1;
-                    coords[4] = current.x0;
-                    coords[5] = current.y0;
+                    coords[0] = previous.getX2();
+                    coords[1] = previous.getY2();
+                    coords[2] = current.getX1();
+                    coords[3] = current.getY1();
+                    coords[4] = current.getX0();
+                    coords[5] = current.getY0();
                 }
             }
         }

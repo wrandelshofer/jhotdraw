@@ -91,14 +91,14 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         Polyline node = getNode();
         List<Double> points = node.getPoints();
         points.clear();
-        if (!bn.isMove()) {
-            if ((bn.mask & BezierNode.C1_MASK) != 0) {
+        if (!bn.isMoveTo()) {
+            if (bn.isC1()) {
                 points.add(c1.getX());
                 points.add(c1.getY());
                 points.add(c0.getX());
                 points.add(c0.getY());
             }
-            if ((bn.mask & BezierNode.C2_MASK) != 0) {
+            if (bn.isC2()) {
                 if (points.isEmpty()) {
                     points.add(c0.getX());
                     points.add(c0.getY());

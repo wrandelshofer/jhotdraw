@@ -31,7 +31,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder {
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
         BezierNode last = getLastNode();
 
-        last=new BezierNode(last.getMask() | BezierNode.C2_MASK, last.equidistant, last.colinear, last.x0, last.y0, last.x1, last.y1, x1, y1);
+        last=new BezierNode(last.getMask() | BezierNode.C2_MASK, last.isEquidistant(), last.isColinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
         if (last.computeIsColinear()) last=last.setColinear(true);
         setLast(last);
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x2, y2, x - x2 + x, y - y2 + y));
@@ -55,14 +55,14 @@ public class BezierNodePathBuilder extends AbstractPathBuilder {
     @Override
     protected void doSmoothCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
         BezierNode last = getLastNode();
-        setLast(new BezierNode(last.mask | BezierNode.C2_MASK, true, true, last.x0, last.y0, last.x1, last.y1, x1, y1));
+        setLast(new BezierNode(last.getMask() | BezierNode.C2_MASK, true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1));
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x1,y1,x2,y2));
     }
 
     @Override
     protected void doSmoothQuadTo(double x1, double y1, double x, double y) {
         BezierNode last = getLastNode();
-        setLast(new BezierNode(last.mask, true, true, last.x0, last.y0, last.x1, last.y1, last.x2, last.y2));
+        setLast(new BezierNode(last.getMask(), true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), last.getX2(), last.getY2()));
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x1, y1, x1 ,y1));
     }
 
