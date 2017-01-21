@@ -33,10 +33,10 @@ public class LineConnectionWithMarkersFigure extends AbstractLineConnectionFigur
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "LineConnectionWithMarkers";
-    public final static SvgPathStyleableFigureKey START_MARKER = new SvgPathStyleableFigureKey("marker-shape-start", DirtyMask.of(DirtyBits.NODE), "M0,0 L-10,5 -10,-5Z");
-    public final static SvgPathStyleableFigureKey END_MARKER = new SvgPathStyleableFigureKey("marker-shape-end", DirtyMask.of(DirtyBits.NODE), "M0,0 L-10,5 -10,-5Z");
-    public final static DoubleStyleableFigureKey START_MARKER_LINE_INSET = new DoubleStyleableFigureKey("marker-line-inset-start", DirtyMask.of(DirtyBits.NODE), 10.0);
-    public final static DoubleStyleableFigureKey END_MARKER_LINE_INSET = new DoubleStyleableFigureKey("marker-line-inset-end", DirtyMask.of(DirtyBits.NODE), 10.0);
+    public final static SvgPathStyleableFigureKey START_MARKER = new SvgPathStyleableFigureKey("marker-shape-start", DirtyMask.of(DirtyBits.NODE), null);
+    public final static SvgPathStyleableFigureKey END_MARKER = new SvgPathStyleableFigureKey("marker-shape-end", DirtyMask.of(DirtyBits.NODE), null);
+    public final static DoubleStyleableFigureKey START_MARKER_LINE_INSET = new DoubleStyleableFigureKey("marker-line-inset-start", DirtyMask.of(DirtyBits.NODE), 0.0);
+    public final static DoubleStyleableFigureKey END_MARKER_LINE_INSET = new DoubleStyleableFigureKey("marker-line-inset-end", DirtyMask.of(DirtyBits.NODE), 0.0);
     public final static DoubleStyleableFigureKey START_MARKER_SCALE_FACTOR = new DoubleStyleableFigureKey("marker-scale-factor-start", DirtyMask.of(DirtyBits.NODE), 1.0);
     public final static DoubleStyleableFigureKey END_MARKER_SCALE_FACTOR = new DoubleStyleableFigureKey("marker-scale-factor-end", DirtyMask.of(DirtyBits.NODE), 1.0);
 
@@ -51,6 +51,10 @@ public class LineConnectionWithMarkersFigure extends AbstractLineConnectionFigur
     public LineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
         set(FILL_COLOR, new CssColor("black", Color.BLACK));
+        set(START_MARKER_LINE_INSET,10.0);
+        set(END_MARKER_LINE_INSET,10.0);
+        set(START_MARKER,"M0,0 L-10,5 -10,-5Z");
+        set(END_MARKER,"M0,0 L-10,5 -10,-5Z");
     }
 
     @Override
