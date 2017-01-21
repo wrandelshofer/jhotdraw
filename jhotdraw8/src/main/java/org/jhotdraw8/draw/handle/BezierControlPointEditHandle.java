@@ -93,8 +93,8 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(11, 11);
-        
-        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+
+        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
@@ -149,7 +149,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             node.setShape(REGION_SHAPE_CUSP);
         }
 
-        node.setVisible(!bn.isMoveTo() && (bn.isC(controlPointMask)));
+        node.setVisible(bn.isC(controlPointMask));
 
     }
 
@@ -176,13 +176,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
         if (!bn.isColinear()) {
             // move control point independently
-            if (controlPointMask == BezierNode.C1_MASK) {
-                view.getModel().set(f, pointKey,
-                        ImmutableObservableList.set(list, pointIndex, bn.setC1(p)));
-            } else {
-                view.getModel().set(f, pointKey,
-                        ImmutableObservableList.set(list, pointIndex, bn.setC2(p)));
-            }
+            BezierNode newBezierNode = bn.setC(controlPointMask, p);
+            view.getModel().set(f, pointKey,
+                    ImmutableObservableList.set(list, pointIndex, newBezierNode));
 
         } else {
             Point2D c0 = bn.getC0();
@@ -204,24 +200,20 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             p2 = new Point2D(
                     r * cosa + c0.getX(),
                     r * sina + c0.getY());
+            BezierNode newBezierNode;
             if (controlPointMask == BezierNode.C1_MASK) {
-                view.getModel().set(f, pointKey,
-                        ImmutableObservableList.set(list, pointIndex, bn.setC1(p).setC2(p2)));
+                newBezierNode = bn.setC1(p).setC2(p2);
 
             } else {
-                view.getModel().set(f, pointKey,
-                        ImmutableObservableList.set(list, pointIndex, bn.setC2(p).setC1(p2)));
+                newBezierNode = bn.setC2(p).setC1(p2);
             }
+            view.getModel().set(f, pointKey,
+                    ImmutableObservableList.set(list, pointIndex, newBezierNode));
         }
     }
 
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
-    }
-
-    @Override
-    public void handleMouseClicked(MouseEvent event, DrawingView dv) {
-
     }
 
     @Override
@@ -232,5 +224,16 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     @Override
     public Point2D getLocationInView() {
         return pickLocation;
+    }
+
+    @Override
+    public void handleMouseClicked(MouseEvent event, DrawingView dv) {
+        if (pointKey != null && event.getClickCount() == 2) {
+            ImmutableObservableList<BezierNode> list = owner.get(pointKey);
+            BezierNode bn = list.get(pointIndex);
+
+            dv.getModel().set(owner, pointKey,
+                    ImmutableObservableList.set(list, pointIndex, bn.setColinear(!bn.isColinear())));
+        }
     }
 }

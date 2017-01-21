@@ -84,6 +84,8 @@ public class BezierNodeTangentHandle extends AbstractHandle {
             return;
         }
         BezierNode bn = getBezierNode();
+        BezierNode prev=list.get((pointIndex+list.size()-1)%list.size());
+        BezierNode next=list.get((pointIndex+1)%list.size());
         Point2D c0 = Transforms.transform(t, bn.getC0());
         Point2D c1 = Transforms.transform(t, bn.getC1());
         Point2D c2 = Transforms.transform(t, bn.getC2());
@@ -91,8 +93,15 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         Polyline node = getNode();
         List<Double> points = node.getPoints();
         points.clear();
-        if (!bn.isMoveTo()) {
+         {
             if (bn.isC1()) {
+                points.add(c1.getX());
+                points.add(c1.getY());
+                points.add(c0.getX());
+                points.add(c0.getY());
+            }else if( prev.isC2()) {
+                c1 = Transforms.transform(t, prev.getC2());
+                
                 points.add(c1.getX());
                 points.add(c1.getY());
                 points.add(c0.getX());
@@ -105,7 +114,17 @@ public class BezierNodeTangentHandle extends AbstractHandle {
                 }
                 points.add(c2.getX());
                 points.add(c2.getY());
-            }
+            }else if(next.isC1()) {
+                c2 = Transforms.transform(t, next.getC1());
+                
+                if (points.isEmpty()) {
+                    points.add(c0.getX());
+                    points.add(c0.getY());
+                }
+                points.add(c2.getX());
+                points.add(c2.getY());
+             
+         }
         }
 
     }

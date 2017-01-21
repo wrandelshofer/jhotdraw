@@ -23,7 +23,8 @@ import org.jhotdraw8.io.CharBufferReader;
  * The null value will be converted to the CSS identifier "none".
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: XmlBezierNodeListConverter.java 1336 2017-01-21 16:56:49Z
+ * rawcoder $
  */
 public class XmlBezierNodeListConverter implements Converter<ImmutableObservableList<BezierNode>> {
 
@@ -35,7 +36,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableObservable
 
     @Override
     public ImmutableObservableList<BezierNode> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        String input=buf.toString();
+        String input = buf.toString();
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
 
         ImmutableObservableList<BezierNode> p = null;
@@ -43,22 +44,24 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableObservable
             if (!nullable) {
                 throw new ParseException("String expected. " + tt.currentToken(), buf.position());
             }
-            if (!"none".equals(tt.currentStringValue())) {
-                throw new ParseException("none or String expected. " + tt.currentToken(), buf.position());
+            if ("none".equals(tt.currentStringValue())) {
+                buf.position(buf.limit());
+
+                return p;
             }
-            p = null;
-        } else {
-            BezierNodePathBuilder builder=new BezierNodePathBuilder();
-            Shapes.buildFromSvgString(builder, input);
-            p = builder.getNodes();
         }
+        BezierNodePathBuilder builder = new BezierNodePathBuilder();
+        Shapes.buildFromSvgString(builder, input);
+        p = builder.getNodes();
+
         buf.position(buf.limit());
 
         return p;
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<BezierNode> value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory,
+             ImmutableObservableList<BezierNode> value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is null");
@@ -66,7 +69,6 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableObservable
             out.append("none");
             return;
         }
-        
 
         out.append(Shapes.svgStringFromAWT(new BezierNodePath(value).getPathIterator(null)));// we lose smooth!
 
