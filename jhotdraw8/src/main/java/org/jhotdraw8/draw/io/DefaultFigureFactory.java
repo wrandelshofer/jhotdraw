@@ -34,8 +34,10 @@ import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.StrokeableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.figure.BezierFigure;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
+import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.PageLabelFigure;
@@ -71,6 +73,7 @@ import org.jhotdraw8.text.XmlFFontConverter;
 import org.jhotdraw8.text.XmlFigureReferenceConverter;
 import org.jhotdraw8.text.XmlInsetsConverter;
 import org.jhotdraw8.text.SvgPaintConverter;
+import org.jhotdraw8.text.XmlBezierNodeListConverter;
 import org.jhotdraw8.text.XmlPaintableConverter;
 import org.jhotdraw8.text.XmlPoint3DConverter;
 import org.jhotdraw8.text.XmlRectangle2DConverter;
@@ -127,7 +130,9 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Line", LineFigure.class);
         addFigureKeysAndNames("Ellipse", EllipseFigure.class);
         addFigureKeysAndNames("LineConnection", LineConnectionFigure.class);
+        addFigureKeysAndNames("LineConnectionWithMarkers", LineConnectionWithMarkersFigure.class);
         addFigureKeysAndNames("Image", ImageFigure.class);
+        addFigureKeysAndNames("BezierPath", BezierFigure.class);
 
         addConverterForType(String.class, new DefaultConverter());
         addConverterForType(Point2D.class, new XmlPoint2DConverter());
@@ -160,6 +165,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(StrokeableFigure.STROKE_TYPE, new XmlEnumConverter<StrokeType>(StrokeType.class));
         addConverter(TransformableFigure.TRANSFORMS, new XmlTransformListConverter());
         addConverter(PolylineFigure.POINTS, new CssPoint2DListConverter());
+        addConverter(BezierFigure.PATH, new XmlBezierNodeListConverter(true));
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 
