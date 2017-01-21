@@ -9,7 +9,7 @@
     <para>By convention, a composite figure updates the parent property of a child figure, when a child figure is removed or added to the composite figure. 
         No other objects may update the parent property.</para>
     <para>Method isSuitableParent() allows to prevent undesired tree structures. 
-        A figure which returns false for a specific figure throws an UnsupportedOperationException, when it is added as a child to that specific figure.</para>
+        A figure which returns false for a specific figure throws an UnsupportedOperationException on an attempt to set that specific figure as the parent of the figure.</para>
     
     
     <mediaobject xml:id="fig.CompositeFigure" xreflabel="CompositeFigure">   

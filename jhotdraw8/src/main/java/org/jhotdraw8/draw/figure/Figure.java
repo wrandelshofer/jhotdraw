@@ -307,19 +307,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     void addNotify(Drawing drawing);
 
     /**
-     * Adds a listener which will be notified when a property value of the
-     * figure or of one of its descendants has changed.
-     * <p>
-     * This default implementation adds the listener to the list of property
-     * change listeners.
-     *
-     * @param listener the listener to be added
-     */
-    default void addPropertyChangeListener(Listener<FigurePropertyChangeEvent> listener) {
-        getPropertyChangeListeners().add(listener);
-    }
-
-    /**
      * Creates handles of the specified level and adds them to the provided
      * list.
      *
@@ -964,18 +951,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param drawing the drawing from which this figure has been removed
      */
     void removeNotify(Drawing drawing);
-
-    /**
-     * Removes a listener from the list of property change listeners.
-     * <p>
-     * This default implementation removes the listener from the list of
-     * property change listeners.
-     *
-     * @param listener the listener to be removed
-     */
-    default void removePropertyChangeListener(Listener<FigurePropertyChangeEvent> listener) {
-        getPropertyChangeListeners().remove(listener);
-    }
 
     /**
      * Attempts to change the local bounds of the figure.

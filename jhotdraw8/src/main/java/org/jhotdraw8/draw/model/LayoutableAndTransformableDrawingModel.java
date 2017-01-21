@@ -4,17 +4,17 @@
  */
 package org.jhotdraw8.draw.model;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiFunction;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
@@ -23,6 +23,7 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -36,9 +37,46 @@ import org.jhotdraw8.event.Listener;
  *
  * @author Werner Randelshofer
  * @version $Id: LayoutableAndTransformableDrawingModel.java 1139 2016-09-17
- 23:38:39Z rawcoder $
+ * 23:38:39Z rawcoder $
  */
 public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel {
+
+    private class MapProxy extends AbstractMap<Key<?>, Object> {
+
+        private Map<Key<?>, Object> target = null;
+        private Figure figure = null;
+
+        @Override
+        public Set<Entry<Key<?>, Object>> entrySet() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        public Figure getFigure() {
+            return figure;
+        }
+
+        public void setFigure(Figure figure) {
+            this.figure = figure;
+        }
+
+        public Map<Key<?>, Object> getTarget() {
+            return target;
+        }
+
+        public void setTarget(Map<Key<?>, Object> target) {
+            this.target = target;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Object put(Key<?> key, Object value) {
+            Object oldValue = target.put(key, value);
+            onPropertyChanged(figure, (Key<Object>) key, oldValue, oldValue);
+            return oldValue;
+        }
+
+    }
+    private MapProxy mapProxy = new MapProxy();
 
     private boolean isValidating = false;
     private boolean valid = true;
@@ -63,11 +101,13 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     }
 
     private void onRootChanged(Drawing oldValue, Drawing newValue) {
-        if (oldValue != null) {
-            oldValue.removePropertyChangeListener(propertyChangeHandler);
-        }
-        if (newValue != null) {
-            newValue.addPropertyChangeListener(propertyChangeHandler);
+        if (false) {
+            if (oldValue != null) {
+                newValue.getPropertyChangeListeners().add(propertyChangeHandler);
+            }
+            if (newValue != null) {
+                newValue.getPropertyChangeListeners().add(propertyChangeHandler);
+            }
         }
         fire(DrawingModelEvent.rootChanged(this, newValue));
     }
@@ -88,10 +128,32 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                     event.getNewValue()));
             Key<?> k = event.getKey();
             if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
-                fire(DrawingModelEvent.dependencyChanged(this, event.getSource()));
+                fire(DrawingModelEvent.layoutSubjectChanged(this, event.getSource()));
                 layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
                 for (Figure f : new ArrayList<>(layoutSubjectChange)) {
-                    fire(DrawingModelEvent.dependencyChanged((DrawingModel) this, f));
+                    fire(DrawingModelEvent.layoutSubjectChanged((DrawingModel) this, f));
+                }
+                layoutSubjectChange.clear();
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void onPropertyChanged(Figure figure, Key<T> key, T oldValue, T newValue) {
+        {
+            if (key instanceof FigureKey && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
+                layoutSubjectChange.clear();
+                layoutSubjectChange.addAll(figure.getLayoutSubjects());
+            }
+        }
+        {
+            fire(DrawingModelEvent.propertyValueChanged(this, figure,
+                    (Key<Object>) key, oldValue, newValue));
+            if (key instanceof FigureKey && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
+                fire(DrawingModelEvent.layoutSubjectChanged(this, figure));
+                layoutSubjectChange.addAll(figure.getLayoutSubjects());
+                for (Figure f : new ArrayList<>(layoutSubjectChange)) {
+                    fire(DrawingModelEvent.layoutSubjectChanged((DrawingModel) this, f));
                 }
                 layoutSubjectChange.clear();
             }
@@ -163,15 +225,31 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T set(Figure figure, MapAccessor<T> key, T newValue) {
-        return figure.set(key, newValue);
-        // event will be fired by method onPropertyChanged
+        if (key instanceof Key<?>) {
+            T oldValue = figure.set(key, newValue);
+            // event will be fired by method onPropertyChanged
+            onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
+            return oldValue;
+        } else {
+            mapProxy.setFigure(figure);
+            mapProxy.setTarget(figure.getProperties());
+            T oldValue = key.put(mapProxy, newValue);
+            // event will be fired by mapProxy
+            mapProxy.setFigure(null);
+            mapProxy.setTarget(null);
+            return oldValue;
+        }
+
     }
 
     @Override
-    public void remove(Figure figure, Key<?> key) {
-        figure.remove(key);
+    public <T> T remove(Figure figure, Key<T> key) {
+        T oldValue = figure.remove(key);
         // event will be fired by method onPropertyChanged
+        onPropertyChanged(figure, key, oldValue, key.getDefaultValue());
+        return oldValue;
     }
 
     @Override
@@ -424,10 +502,11 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                         invalidate();
                     }
                 }
+                break;
             }
-            break;
             case LAYOUT_CHANGED:
                 markDirty(figure, DirtyBits.LAYOUT);
+                invalidate();
                 break;
             case STYLE_CHANGED:
                 markDirty(figure, DirtyBits.STYLE);
