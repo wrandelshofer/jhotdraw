@@ -371,8 +371,10 @@ public interface DrawingModel extends Observable {
     /**
      * Removes the specified key from the figure.
      *
+     * @param <T> the value type
      * @param f a figure
      * @param remove a key
+     * @return the old value 
      */
-    public void remove(Figure f, Key<?> remove);
+    public <T> T remove(Figure f, Key<T> remove);
 }

@@ -120,7 +120,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
     }
 
-    public static <T> DrawingModelEvent dependencyChanged(DrawingModel source, Figure figure) {
+    public static <T> DrawingModelEvent layoutSubjectChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.LAYOUT_SUBJECT_CHANGED, figure, null, null, -1, null, null, null);
     }
 
