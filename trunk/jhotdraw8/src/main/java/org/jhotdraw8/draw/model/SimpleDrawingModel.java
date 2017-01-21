@@ -10,5 +10,5 @@ package org.jhotdraw8.draw.model;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleDrawingModel extends DependentAndTransformableDrawingModel {
+public class SimpleDrawingModel extends LayoutableAndTransformableDrawingModel {
 }

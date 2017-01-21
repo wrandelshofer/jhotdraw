@@ -41,6 +41,7 @@
 </section>
 <section><title>Drawing Editor Framework</title>
 <xi:include href="requirements/draw/DrawingIntroduction.xml"/>
+<xi:include href="requirements/draw/DrawingObjectModelTreeStructure.xml"/>
 </section>
 
 <!--

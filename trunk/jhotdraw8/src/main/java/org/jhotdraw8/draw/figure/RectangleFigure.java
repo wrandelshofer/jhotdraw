@@ -39,8 +39,8 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
-    public final static DoubleStyleableFigureKey ARC_HEIGHT = new DoubleStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.DEPENDENT_LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.DEPENDENT_LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ARC_HEIGHT = new DoubleStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), 0.0);
+    public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), 0.0);
     public final static Point2DStyleableMapAccessor ARC = new Point2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
     public RectangleFigure() {

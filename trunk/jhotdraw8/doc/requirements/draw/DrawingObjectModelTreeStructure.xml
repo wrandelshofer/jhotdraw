@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.drawingObjectModelTreeStructure">
+    <title>Drawing Object Model: Tree Structure</title>
+    <para>A drawing is represented as a tree structure.</para>
+    <para>The tree structure is implemented with the composite design pattern using the Figure type as shown in figure <xref  linkend="fig.CompositeFigure"/>.</para>
+    <para>Composite figures and leaf figures do not have distinct types.</para>
+    <para>A leaf figure returns false if asked whether it allows children. Its collection of child figures is unmodifiable, and always empty.</para>
+    <para>A composite figure returns true if asked whether it allows children. Its collection of child figures is modifiable.</para>
+    <para>By convention, a composite figure updates the parent property of a child figure, when a child figure is removed or added to the composite figure. 
+        No other objects may update the parent property.</para>
+    <para>Method isSuitableParent() allows to prevent undesired tree structures. 
+        A figure which returns false for a specific figure throws an UnsupportedOperationException, when it is added as a child to that specific figure.</para>
+    
+    
+    <mediaobject xml:id="fig.CompositeFigure" xreflabel="CompositeFigure">   
+        <info>
+            <title>CompositeFigure</title>
+        </info>
+        <imageobject >
+            <imagedata  format="SVG"  fileref="fig/CompositeFigure.svg"/>
+        </imageobject>
+        <caption>CompositeFigure: A drawing is represented as a tree structure of figures.</caption>
+    </mediaobject>
+</section>

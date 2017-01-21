@@ -34,7 +34,7 @@ public enum DirtyBits {
     NODE,
     /**
      * Affects the layout of the figure, the layout of its ancestors and the
-     * layout of dependent figures.
+     * layout of layout observing figures.
      * <p>
      * Method {@code Figure#layoutNotify} must be called on the figure, then in
      * ascending order on all its ancestors which perform layout, and then on
@@ -42,12 +42,12 @@ public enum DirtyBits {
      */
     LAYOUT,
     /**
-     * Affects the layout of dependent figures.
+     * Affects the layout of layout observing figures.
      * <p>
      * Method {@code Figure#layoutNotify} must be called on all dependent
      * figures and their ancestors.
      */
-    DEPENDENT_LAYOUT,
+    LAYOUT_OBSERVERS,
     /**
      * Affects the style of the figure.
      * <p>
@@ -56,11 +56,11 @@ public enum DirtyBits {
      */
     STYLE,
     /**
-     * Affects the dependency of the figure.
+     * Affects the layout subject(s) of the figure.
      * <p>
-     * Method {@code Figure#connectNotify} must be called on the figure.
+     * Method {@code Figure#layoutSubjectChangeNotify} must be called on the figure.
      */
-    DEPENDENCY,
+    LAYOUT_SUBJECT,
     /**
      * Affects the transform of the figure.
      * <p>

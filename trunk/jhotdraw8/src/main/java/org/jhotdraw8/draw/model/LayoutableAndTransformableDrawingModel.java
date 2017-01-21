@@ -1,4 +1,4 @@
-/* @(#)DependentAndTransformableDrawingModel.java
+/* @(#)LayoutableAndTransformableDrawingModel.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -32,13 +32,13 @@ import org.jhotdraw8.event.Listener;
 
 /**
  * A DrawingModel for drawings which contains {@code TransformableFigure}s and
- * dependent figures, like {@code LineConnectionFigure}.
+ * layout observing figures, like {@code LineConnectionFigure}.
  *
  * @author Werner Randelshofer
- * @version $Id: DependentAndTransformableDrawingModel.java 1139 2016-09-17
- * 23:38:39Z rawcoder $
+ * @version $Id: LayoutableAndTransformableDrawingModel.java 1139 2016-09-17
+ 23:38:39Z rawcoder $
  */
-public class DependentAndTransformableDrawingModel extends AbstractDrawingModel {
+public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel {
 
     private boolean isValidating = false;
     private boolean valid = true;
@@ -71,15 +71,15 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
         }
         fire(DrawingModelEvent.rootChanged(this, newValue));
     }
-    private Set<Figure> dependencyChange = new HashSet<>();
+    private Set<Figure> layoutSubjectChange = new HashSet<>();
 
     @SuppressWarnings("unchecked")
     private void onPropertyChanged(FigurePropertyChangeEvent event) {
         if (event.getType() == FigurePropertyChangeEvent.EventType.WILL_CHANGE) {
             Key<?> k = event.getKey();
-            if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.DEPENDENCY)) {
-                dependencyChange.clear();
-                dependencyChange.addAll(event.getSource().getProvidingFigures());
+            if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
+                layoutSubjectChange.clear();
+                layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
             }
         }
         if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
@@ -87,13 +87,13 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                     (Key<Object>) event.getKey(), event.getOldValue(),
                     event.getNewValue()));
             Key<?> k = event.getKey();
-            if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.DEPENDENCY)) {
+            if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
                 fire(DrawingModelEvent.dependencyChanged(this, event.getSource()));
-                dependencyChange.addAll(event.getSource().getProvidingFigures());
-                for (Figure f : new ArrayList<>(dependencyChange)) {
+                layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
+                for (Figure f : new ArrayList<>(layoutSubjectChange)) {
                     fire(DrawingModelEvent.dependencyChanged((DrawingModel) this, f));
                 }
-                dependencyChange.clear();
+                layoutSubjectChange.clear();
             }
         }
     }
@@ -224,7 +224,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
         while (true) {
             List<Figure> todoNext = new ArrayList<>();
             for (Figure figure : todo) {
-                for (Figure d : figure.getDependentFigures()) {
+                for (Figure d : figure.getLayoutObservers()) {
                     if (done.add(d)) {
                         todoNext.add(d);
                     }
@@ -270,7 +270,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                 }
             }
             // all figures with dirty bit "TRANSFORM"
-            // induce a dirty bit "DEPENDENT_LAYOUT" and "TRANSFORM_NOTIFY"  on all descendants
+            // induce a dirty bit "LAYOUT_OBSERVERS" and "TRANSFORM_NOTIFY"  on all descendants
             DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
             DirtyMask dmTransformNotify = DirtyMask.of(DirtyBits.TRANSFORM_NOTIFY);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
@@ -278,7 +278,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmTransform) && !dm.intersects(dmTransformNotify)) {
                     for (Figure a : f.preorderIterable()) {
-                        markDirty(a, DirtyBits.DEPENDENT_LAYOUT, DirtyBits.TRANSFORM_NOTIFY);
+                        markDirty(a, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM_NOTIFY);
                     }
                 }
             }
@@ -293,7 +293,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
             }
 
             // all figures with dirty flag "LAYOUT"
-            // induce a dirty flag "DEPENDENT_LAYOUT" on dependent figures,
+            // induce a dirty flag "LAYOUT_OBSERVERS" on dependent figures,
             // and induce a dirty Flag "NODE" on ancestors which implement the TransformableFigure interface. // really??
             DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
             List<Figure> todo = new ArrayList<>();
@@ -302,7 +302,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmLayout)) {
                     for (Figure subtree : f.preorderIterable()) {
-                        for (Figure d : subtree.getDependentFigures()) {
+                        for (Figure d : subtree.getLayoutObservers()) {
                             todo.add(d);
                         }
                     }
@@ -312,12 +312,12 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                         }
                     }
                 }
-                if (dm.intersects(DirtyBits.DEPENDENT_LAYOUT)) {
+                if (dm.intersects(DirtyBits.LAYOUT_OBSERVERS)) {
                     todo.add(f);
                 }
             }
 
-            // all figures with dirty flag "DEPENDENT_LAYOUT" must be laid out
+            // all figures with dirty flag "LAYOUT_OBSERVERS" must be laid out
             // transitively, including all of their layoutable ancestors.
             // We must then fix the transformation matrices again.
             LinkedHashSet<Figure> transitive = new LinkedHashSet<>(todo);
@@ -393,9 +393,9 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                 figure.removeNotify(event.getDrawing());
                 removeDirty(figure);
                 break;
-            case DEPENDENCY_CHANGED:
-                figure.dependencyNotify();
-                markDirty(figure, DirtyBits.DEPENDENT_LAYOUT);
+            case LAYOUT_SUBJECT_CHANGED:
+                figure.layoutSubjectChangeNotify();
+                markDirty(figure, DirtyBits.LAYOUT_OBSERVERS);
                 invalidate();
                 break;
             case TRANSFORM_CHANGED:
@@ -403,7 +403,7 @@ public class DependentAndTransformableDrawingModel extends AbstractDrawingModel 
                 invalidate();
                 break;
             case FIGURE_REMOVED_FROM_PARENT:
-                markDirty(event.getParent(), DirtyBits.DEPENDENT_LAYOUT, DirtyBits.NODE);
+                markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
                 invalidate();
                 break;
             case NODE_CHANGED:

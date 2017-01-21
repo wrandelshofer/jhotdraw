@@ -34,7 +34,7 @@ import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
  */
 public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure {
 
-    public final static Point2DListStyleableFigureKey POINTS = new Point2DListStyleableFigureKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.DEPENDENT_LAYOUT), ImmutableObservableList.emptyList());
+    public final static Point2DListStyleableFigureKey POINTS = new Point2DListStyleableFigureKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
