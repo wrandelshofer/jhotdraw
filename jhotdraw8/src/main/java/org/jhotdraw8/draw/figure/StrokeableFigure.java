@@ -123,16 +123,8 @@ public interface StrokeableFigure extends Figure {
      */
     public static DoubleListStyleableFigureKey STROKE_DASH_ARRAY = new DoubleListStyleableFigureKey("stroke-dasharray", DirtyMask.of(DirtyBits.NODE), ImmutableObservableList.emptyList());
 
-    /**
-     * Updates a shape node.
-     *
-     * @param shape a shape node
-     */
-    default void applyStrokeableFigureProperties(Shape shape) {
-        double d = getStyled(STROKE_DASH_OFFSET);
-        if (shape.getStrokeDashOffset() != d) {
-            shape.setStrokeDashOffset(d);
-        }
+    default void applyStrokeCapAndJoinProperties(Shape shape) {
+        double d;
         StrokeLineCap slp = getStyled(STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
             shape.setStrokeLineCap(slp);
@@ -145,23 +137,50 @@ public interface StrokeableFigure extends Figure {
         if (shape.getStrokeMiterLimit() != d) {
             shape.setStrokeMiterLimit(d);
         }
-        Paint p = Paintable.getPaint(getStyled(STROKE_COLOR));
-        if (!Objects.equals(shape.getStroke(), p)) {
-            shape.setStroke(p);
-        }
-        StrokeType st = getStyled(STROKE_TYPE);
-        if (shape.getStrokeType() != st) {
-            shape.setStrokeType(st);
-        }
-        d = getStyled(STROKE_WIDTH);
-        if (shape.getStrokeWidth() != d) {
-            shape.setStrokeWidth(d);
-        }
+    }
 
+    default void applyStrokeDashProperties(Shape shape) {
+        double d = getStyled(STROKE_DASH_OFFSET);
+        if (shape.getStrokeDashOffset() != d) {
+            shape.setStrokeDashOffset(d);
+        }
         List<Double> dashArray = getStyled(STROKE_DASH_ARRAY);
         if (!dashArray.equals(shape.getStrokeDashArray())) {
             shape.getStrokeDashArray().setAll(dashArray);
         }
     }
 
+    default void applyStrokeTypeProperties(Shape shape) {
+        StrokeType st = getStyled(STROKE_TYPE);
+        if (shape.getStrokeType() != st) {
+            shape.setStrokeType(st);
+        }
+    }
+
+    /**
+     * Updates a shape node.
+     *
+     * @param shape a shape node
+     */
+    default void applyStrokeableFigureProperties(Shape shape) {
+         applyStrokeColorProperties( shape) ;
+         applyStrokeWidthProperties( shape) ;
+        applyStrokeCapAndJoinProperties(shape);
+
+        applyStrokeTypeProperties(shape);
+        applyStrokeDashProperties(shape);
+    }
+    default void applyStrokeColorProperties(Shape shape) {
+        Paint p = Paintable.getPaint(getStyled(STROKE_COLOR));
+        if (!Objects.equals(shape.getStroke(), p)) {
+            shape.setStroke(p);
+        }
+    }
+    default void applyStrokeWidthProperties(Shape shape) {
+       double d = getStyled(STROKE_WIDTH);
+        if (shape.getStrokeWidth() != d) {
+            shape.setStrokeWidth(d);
+        }
+
+    }
 }

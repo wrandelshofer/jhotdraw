@@ -20,7 +20,7 @@ import org.jhotdraw8.io.CharBufferReader;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssSvgPathConverter implements Converter<SVGPath> {
+public class CssSvgPathConverter implements Converter<String> {
 
     private final boolean nullable;
 
@@ -29,10 +29,10 @@ public class CssSvgPathConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public SVGPath fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizer tt = new CssTokenizer(new CharBufferReader(buf));
 
-        SVGPath p = null;
+        String p = null;
         if (tt.nextToken() == CssTokenizer.TT_IDENT) {
             if (!nullable) {
                 throw new ParseException("String expected. " + tt.currentToken(), buf.position());
@@ -45,8 +45,7 @@ public class CssSvgPathConverter implements Converter<SVGPath> {
             if (tt.currentToken() != CssTokenizer.TT_STRING) {
                 throw new ParseException("Css String expected. " + tt.currentToken(), buf.position());
             }
-            p = new SVGPath();
-            p.setContent(tt.currentStringValue());
+            p = (tt.currentStringValue());
         }
         buf.position(buf.limit());
 
@@ -54,7 +53,7 @@ public class CssSvgPathConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, SVGPath value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is null");
@@ -63,7 +62,7 @@ public class CssSvgPathConverter implements Converter<SVGPath> {
             return;
         }
         out.append('"');
-        for (char ch : value.getContent().toCharArray()) {
+        for (char ch : value.toCharArray()) {
             switch (ch) {
                 case '"':
                     out.append('\\');
@@ -94,8 +93,8 @@ public class CssSvgPathConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public SVGPath getDefaultValue() {
-        SVGPath p = new SVGPath();
-        return p;
+    public String getDefaultValue() {
+        
+        return null;
     }
 }
