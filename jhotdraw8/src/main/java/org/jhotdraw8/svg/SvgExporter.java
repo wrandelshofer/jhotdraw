@@ -43,6 +43,7 @@ import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.FillRule;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
@@ -501,7 +502,7 @@ public class SvgExporter implements InternalExternalUriMixin {
         URI uri = (URI) node.getProperties().get(imageUriKey);
         String href = null;
         if (uri != null) {
-            href =  toExternal(uri).toString();
+            href = toExternal(uri).toString();
         } else {
             if (node.getImage() != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -513,7 +514,7 @@ public class SvgExporter implements InternalExternalUriMixin {
             }
         }
         if (href != null) {
-            elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href",href);
+            elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href", href);
         }
         return elem;
     }
@@ -959,6 +960,14 @@ public class SvgExporter implements InternalExternalUriMixin {
     private Element writeSVGPath(Document doc, Element parent, SVGPath node) {
         Element elem = doc.createElement("path");
         elem.setAttribute("d", node.getContent());
+        switch (node.getFillRule()) {
+            case NON_ZERO:
+                //    elem.setAttribute("fill-rule","nonzero");// default
+                break;
+            case EVEN_ODD:
+                elem.setAttribute("fill-rule", "evenodd");
+                break;
+        }
         parent.appendChild(elem);
         return elem;
     }
@@ -1128,29 +1137,29 @@ public class SvgExporter implements InternalExternalUriMixin {
 
     private void writeTextAttributes(Element elem, Text node) {
         Font ft = node.getFont();
-        elem.setAttribute("font-family", ft.getFamily());
+        elem.setAttribute("font-family", (ft.getFamily().equals(ft.getName()))?"'"+ft.getName()+"'":"'"+ ft.getName()+"', '"+ft.getFamily()+"'");
         elem.setAttribute("font-size", nb.toString(ft.getSize()));
         elem.setAttribute("font-style", ft.getStyle().contains("italic") ? "italic" : "normal");
-        elem.setAttribute("font-weight", ft.getStyle().contains("bold") ? "bold" : "normal");
+        elem.setAttribute("font-weight", ft.getStyle().contains("bold") ||ft.getName().toLowerCase().contains("bold")? "bold" : "normal");
     }
 
     private void writeTransformAttributes(Element elem, Node node) {
 
         // The transforms are applied before translateX, translateY, scaleX, 
         // scaleY and rotate transforms.
-        List< Transform> txs = new ArrayList<Transform>(node.getTransforms());
-        txs.add(new Translate(node.getTranslateX(), node.getTranslateY()));
+        List< Transform> txs = new ArrayList<>();
         Point2D pivot = Geom.center(node.getBoundsInLocal());
-        txs.add(new Scale(node.getScaleX(), node.getScaleY(), pivot.getX(), pivot.getY()));
+        txs.add(new Translate(node.getTranslateX(), node.getTranslateY()));
         txs.add(new Rotate(node.getRotate(), pivot.getX(), pivot.getY()));
-
+        txs.add(new Scale(node.getScaleX(), node.getScaleY(), pivot.getX(), pivot.getY()));
+        txs.addAll(node.getTransforms());
         writeTransformAttributes(elem, txs);
     }
 
     private void writeTransformAttributes(Element elem, List< Transform> txs) {
 
         if (txs.size() > 0) {
-            String value = tx.toString(new ReversedList<>(txs));
+            String value = tx.toString(txs);
             if (!value.isEmpty()) {
                 elem.setAttribute("transform", value);
             }
