@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<title>Major Versions</title>
+<xi:include href="JHotDraw8.xml"/>
+<xi:include href="JHotDraw7.xml"/>
+<xi:include href="JHotDraw6.xml"/>
+</section>

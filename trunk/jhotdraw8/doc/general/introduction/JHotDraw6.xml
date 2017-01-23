@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+
+<title>JHotDraw 6</title>
+
+<para>JHotDraw 6 is an evolutionary step from the JHotDraw versions 1 to 5.
+Code from prior versions is portable to JHotDraw 6.</para>
+
+<para>Application framework:</para>
+<itemizedlist>
+<listitem><para>Provides an application framework for drawing editors</para></listitem>
+</itemizedlist>
+    
+<para>Drawing editor framework:</para>
+<itemizedlist>
+<listitem><para>A figure, which depends on the state of other figures, automatically updates its state.</para></listitem>
+</itemizedlist>
+
+<para>General:</para>
+<itemizedlist>
+<listitem><para>The code makes use of Java 2 language features and the Java 1.2 SE API.</para></listitem>
+<listitem><para>The framework is built on top of the Java AWT class library and its design principles.</para></listitem>
+</itemizedlist>
+<para>Sample applications:</para>
+
+<itemizedlist>
+<listitem><para>Drawing Editor Demo 'JavaDraw'</para></listitem>
+<listitem><para>Network Editor Demo 'Net'</para></listitem>
+<listitem><para>Pert Editor Demo 'Pert' </para></listitem>
+<listitem><para>Mini usage studies of the framework 'Mini'</para></listitem>
+</itemizedlist>
+<para>The design and the majority of the JHotDraw 6 code was developed by Erich Gamma.</para>
+<!--
+-->
+</section>

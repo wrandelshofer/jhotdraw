@@ -431,6 +431,21 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     Connector findConnector(Point2D pointInLocal, Figure prototype);
 
+       /**
+     * Gets a connector for this figure at the given location.
+     *
+     * @param x the location of the connector in local coordinates.
+     * @param y the location of the connector in local coordinates.
+     * @param prototype The prototype used to create a connection or null if
+     * unknown. This allows for specific connectors for different connection
+     * figures.
+     * @return Returns the connector. Returns null if there is no connector at
+     * the given location.
+     */
+    default Connector findConnector(double x, double y, Figure prototype) {
+        return findConnector(new Point2D(x,y),prototype);
+    }
+
     /**
      * Fires a property change event.
      *
@@ -532,8 +547,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default Point2D getCenterInLocal() {
         Bounds b = getBoundsInLocal();
-        return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
-                + b.getMaxY()) * 0.5);
+       return Geom.center(b);
     }
 
     /**
@@ -543,8 +557,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default Point2D getCenterInParent() {
         Bounds b = getBoundsInParent();
-        return new Point2D((b.getMinX() + b.getMaxX()) * 0.5, (b.getMinY()
-                + b.getMaxY()) * 0.5);
+       return Geom.center(b);
     }
 
     /**
@@ -862,7 +875,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * Updates the layout of this figure, based on the layout of its children
-     * and the layout of providing figures.
+     * and the layout of observed layout subjects.
      * <p>
      * This figure does not keep track of changes that require layout updates.
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.

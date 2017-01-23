@@ -46,6 +46,10 @@ public class SimpleDrawing extends AbstractCompositeFigure
 
     public SimpleDrawing() {
     }
+    public SimpleDrawing(double width, double height) {
+        set(WIDTH,width);
+        set(HEIGHT, height);
+    }
 
     @Override
     public Node createNode(RenderContext drawingView) {

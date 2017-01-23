@@ -1,7 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
 
-<uri uri="file:///usr/share/xml/www.w3.org/1999/xlink" name="http://www.w3.org/1999/xlink"/>
-<uri uri="file:///usr/share/xml/docbook" name="http://docbook.org/ns/docbook"/>
+    <!-- ............................................................ -->
+    <!-- XML Catalog for DocBook .................................... -->
+    <!-- File catalog.xml ........................................... -->
 
+    <!-- Please direct all questions, bug reports, or suggestions for
+         changes to the docbook@lists.oasis-open.org mailing list.
+         For more information, see http://www.oasis-open.org/.
+    -->
+
+    <!-- This is a catalog data file for DocBook. It is provided as a
+         convenience in building your own catalog files. You need not
+         use the filenames listed here, and need not use the filename
+         method of identifying storage objects at all. See the
+         documentation for detailed information on the files associated
+         with the DocBook DTD. See XML Catalogs at
+         http://www.oasis-open.org/committees/entity/ for detailed
+         information on supplying and using catalog data.
+    -->
+
+    <public publicId="-//OASIS//DTD DocBook XML 5.0b5//EN" uri="dtd/docbook.dtd"/>
+
+    <system systemId="http://www.oasis-open.org/docbook/xml/5.0b5/dtd/docbook.dtd" uri="../build/doc/tools/docbook-5.0b5/dtd/docbook.dtd"/>
+
+    <system systemId="http://docbook.org/xml/5.0b5/dtd/docbook.dtd" uri="dtd/docbook.dtd"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/rng/docbook.rng" uri="rng/docbook.rng"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/rng/docbook.rng" uri="rng/docbook.rng"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/rng/docbookxi.rng" uri="rng/docbookxi.rng"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/rng/docbookxi.rng" uri="rng/docbookxi.rng"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/rng/docbook.rnc" uri="rng/docbook.rnc"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/rng/docbook.rnc" uri="rng/docbook.rnc"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/rng/docbookxi.rnc" uri="rng/docbookxi.rnc"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/rng/docbookxi.rnc" uri="rng/docbookxi.rnc"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/xsd/docbook.xsd" uri="xsd/docbook.xsd"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/xsd/docbook.xsd" uri="xsd/docbook.xsd"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/xsd/docbookxi.xsd" uri="xsd/docbookxi.xsd"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/xsd/docbookxi.xsd" uri="xsd/docbookxi.xsd"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/xsd/xi.xsd" uri="xsd/xi.xsd"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/xsd/xi.xsd" uri="xsd/xi.xsd"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/xsd/xlink.xsd" uri="xsd/xlink.xsd"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/xsd/xlink.xsd" uri="xsd/xlink.xsd"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/xsd/xml.xsd" uri="xsd/xml.xsd"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/xsd/xml.xsd" uri="xsd/xml.xsd"/>
+
+    <uri name="http://www.oasis-open.org/docbook/xml/5.0b5/sch/docbook.sch" uri="sch/docbook.sch"/>
+
+    <uri name="http://docbook.org/xml/5.0b5/sch/docbook.sch" uri="sch/docbook.sch"/>
+
+    <!-- End of XML Catalog for DocBook ............................. -->
+    <!-- ............................................................ -->
+    <!--
+    <rewriteSystem
+            systemIdStartString="file:///codesamples/"
+            rewritePrefix="../src/main/java" />
+    -->
+
+    <rewriteURI
+        uriStartString="file:///src/"
+        rewritePrefix="/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/" />
+    
+     <!--
+    <uri name="file:///src/org/jhotdraw8/samples/mini/ConnectingFiguresSample.java" 
+         uri="/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/src/main/java/org/jhotdraw8/samples/mini/ConnectingFiguresSample.java" />
+   -->
+
+    <uri
+        name="http://docbook.sourceforge.net/release/bibliography/bibliography.xml"
+        uri="file:///Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw8/doc/bibliography.xml"/>
 </catalog>

@@ -10,38 +10,38 @@
         <surname>Randelshofer</surname>
     </personname>
 </author>
-<copyright><year>2016</year><holder>by the authors and contributors of JHotDraw</holder></copyright>
+<copyright><year>2017</year><holder>by the authors and contributors of JHotDraw</holder></copyright>
 </info>
 <chapter><title>Introduction</title>
 <xi:include href="srs/Purpose.xml"/>
-<xi:include href="introduction/Scope.xml"/>
-<xi:include href="introduction/Definitions.xml"/>
+<xi:include href="general/introduction/Scope.xml"/>
+<xi:include href="general/introduction/Definitions.xml"/>
 <!--<xi:include href="introduction/Overview.xml"/>-->
-<xi:include href="introduction/MajorVersions.xml"/>
-<xi:include href="introduction/License.xml"/>
-<xi:include href="introduction/Resources.xml"/>
-<xi:include href="introduction/References.xml"/>
+<xi:include href="general/introduction/MajorVersions.xml"/>
+<xi:include href="general/introduction/License.xml"/>
+<xi:include href="general/introduction/Resources.xml"/>
+<xi:include href="general/introduction/References.xml"/>
 </chapter>
 <chapter><title>Overall description</title>
-<xi:include href="overalldescription/ProductPerspective.xml"/>
-<xi:include href="overalldescription/ProductFunctions.xml"/>
-<xi:include href="overalldescription/UserCharacteristics.xml"/>
-<xi:include href="overalldescription/Constraints.xml"/>
-<xi:include href="overalldescription/AssumptionsAndDependencies.xml"/>
+<xi:include href="srs/overalldescription/ProductPerspective.xml"/>
+<xi:include href="srs/overalldescription/ProductFunctions.xml"/>
+<xi:include href="srs/overalldescription/UserCharacteristics.xml"/>
+<xi:include href="srs/overalldescription/Constraints.xml"/>
+<xi:include href="srs/overalldescription/AssumptionsAndDependencies.xml"/>
 </chapter>
 <chapter><title>Specific requirements</title>
 <section><title>External Interface Requirements</title>
-<xi:include href="requirements/external/UserInterfaces.xml"/>
-<xi:include href="requirements/external/HardwareInterfaces.xml"/>
-<xi:include href="requirements/external/SoftwareInterfaces.xml"/>
-<xi:include href="requirements/external/CommunicationsInterfaces.xml"/>
+<xi:include href="srs/requirements/external/UserInterfaces.xml"/>
+<xi:include href="srs/requirements/external/HardwareInterfaces.xml"/>
+<xi:include href="srs/requirements/external/SoftwareInterfaces.xml"/>
+<xi:include href="srs/requirements/external/CommunicationsInterfaces.xml"/>
 </section>
 <section><title>Application Framework</title>
-<xi:include href="requirements/app/ApplicationIntroduction.xml"/>
+<xi:include href="srs/requirements/app/ApplicationIntroduction.xml"/>
 </section>
 <section><title>Drawing Editor Framework</title>
-<xi:include href="requirements/draw/DrawingIntroduction.xml"/>
-<xi:include href="requirements/draw/DrawingObjectModelTreeStructure.xml"/>
+<xi:include href="srs/requirements/draw/DrawingIntroduction.xml"/>
+<xi:include href="srs/requirements/draw/FigureTreeStructure.xml"/>
 </section>
 
 <!--
