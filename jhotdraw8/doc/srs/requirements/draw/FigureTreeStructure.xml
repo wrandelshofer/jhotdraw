@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.drawingObjectModelTreeStructure">
+    <title>Drawing Object Model: Tree Structure</title>
+    <para>A drawing is represented as a tree structure.</para>
+    <para>The tree structure is implemented with the composite design pattern using the Figure type as shown in figure <xref  linkend="fig.FigureTreeStructure"/>.</para>
+    
+    
+    <figure xml:id="fig.FigureTreeStructure">            
+        <title>Figure Tree Structure</title>
+
+        <mediaobject>   
+            <imageobject >
+                <imagedata  format="SVG"  fileref="FigureTreeStructure.svg"/>
+            </imageobject>
+            <caption>A drawing is represented as a tree structure of figures.</caption>
+        </mediaobject>
+    </figure>
+    
+    <itemizedlist>
+        <listitem>    
+            <para>Tree traversal methods are defined in the separate interface named TreeNode.</para>
+        </listitem>
+        <listitem>    
+            <para>Composite figures and leaf figures do not have distinct types.</para>
+        </listitem>
+        <listitem>    
+            <para>A leaf figure returns false if asked whether it allows children. Its collection of child figures is unmodifiable, and always empty.</para>
+        </listitem>
+        <listitem>    
+            <para>A composite figure returns true if asked whether it allows children. Its collection of child figures is modifiable.</para>
+        </listitem>
+        <listitem>    
+            <para>By convention, a composite figure updates the parent property of a child figure, when a child figure is removed or added to the composite figure. 
+                No other objects may update the parent property.</para>
+        </listitem>
+        <listitem>    
+            <para>Method isSuitableParent() allows to prevent undesired tree structures. 
+                A figure which returns false for a specific figure throws an UnsupportedOperationException on an attempt to set that specific figure as the parent of the figure.</para>
+        </listitem>
+    </itemizedlist>
+
+</section>

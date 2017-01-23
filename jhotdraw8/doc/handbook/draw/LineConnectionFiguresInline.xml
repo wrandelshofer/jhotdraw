@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="eg.lineConnectionFiguresInline">
+<title>Connecting two figures with a line (Inline)</title>
+    
+<para>A LineConnectionFigure can be used to connect two figures with a line.
+The line will stick to the two figures when the user moves or resizes the connected figures.</para>
+
+<para>The listing <xref  linkend="listing.ConnectingFiguresSampleInline"/> shows how to correctly set up a line connection figure.</para>
+
+
+<example xml:id="listing.ConnectingFiguresSampleInline">
+    <title>Inline ConnectingFiguresSample</title>
+  <programlisting language="java">
+public class ConnectingFiguresSample  {
+
+    public Drawing createDrawing() {
+        RectangleFigure a = new RectangleFigure(100, 80, 150, 100);<co  id="listing.Inline.create.co"  linkends="listing.Inline.create" />
+        RectangleFigure b = new RectangleFigure(300, 230, 150, 100);
+        LineConnectionFigure c = new LineConnectionFigure();
+        
+        c.setStartConnection(a, new ChopRectangleConnector());<co  id="listing.Inline.connectors.co"  linkends="listing.Inline.connectors" />
+        c.setEndConnection(b, new ChopRectangleConnector());
+        
+        c.layout();<co  id="listing.Inline.layout.co"  linkends="listing.Inline.layout" />
+        
+        Drawing drawing = new SimpleDrawing(600, 400);<co  id="listing.Inline.drawing.co"  linkends="listing.Inline.drawing" />
+        Layer layer = new SimpleLayer();
+        drawing.getChildren().addAll(layer);
+        layer.getChildren().addAll(a, b, c);
+        
+        return drawing;
+    }
+}      
+  </programlisting>
+</example>
+    <para>The example program performs the following steps:</para>
+
+<calloutlist>
+  <callout arearefs="listing.Inline.create.co"  id="listing.Inline.create" >
+    <para>Create two rectangle figures and a line connection figure.</para>
+  </callout>
+  <callout arearefs="listing.Inline.connectors.co"  id="listing.Inline.connectors" >
+    <para>Connect the line connection figure to the rectangle figures using chop rectangle connectors. 
+         The connectors implement the strategy for computing the connection locations.
+          Instead of specifying the connectors by ourselves, we could request them
+         from the rectangle figures. Depending on the coordinates and connection figure that we
+        provide, we may get a different kind of connector or none at all.</para>
+        <programlisting language="java">c.setStartConnection(a, a.findConnector(110,90, c));
+c.setEndConnection(b, b.findConnector(310,240, c));  </programlisting>
+  </callout>
+  <callout arearefs="listing.Inline.layout.co"  id="listing.Inline.layout" >
+    <para>Layout the line connection figure, so that it computes its start and end locations.
+         
+         The layout of the line connection figure depends on the layout of the rectangle figures.
+         Each time you change the layout of one of the rectangle figures, you have to call
+         layout on the connection figure. Figures do not automatically update their layout
+         due to performance reasons. A DrawingModel can be used to automate this.</para>
+  </callout>
+  <callout arearefs="listing.Inline.drawing.co"  id="listing.Inline.drawing" >
+    <para>Create a drawing and add a layer to it.
+        Then add the figures to the layer..</para>
+  </callout>
+</calloutlist>
+
+</section>

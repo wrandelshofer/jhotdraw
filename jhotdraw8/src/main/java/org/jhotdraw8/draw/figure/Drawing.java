@@ -25,8 +25,8 @@ import org.jhotdraw8.draw.DrawingEditor;
  * <b>Styling.</b> A drawing can have a style sheet which affects the style of
  * the figures.
  * <p>
- * <b>Layers.</b> By convention all children of a {@code Drawing} must be
- * {@link Layer}s.</p>
+ * <b>Layers.</b> By convention the children of a {@code Drawing} must be
+ * {@link Layer}s. To add figures to a drawing, first add a layer, and then add the figures to the layer.</p>
  *
  * @design.pattern Drawing Framework, KeyAbstraction. The drawing framework
  * supports the creation of editors for structured drawings. The key
@@ -134,4 +134,13 @@ public interface Drawing extends Figure {
      * @return the style manager
      */
     StylesheetsManager<Figure> getStyleManager();
+    
+    /**
+     * Performs one layout pass over the entire drawing.
+     */
+    default void layoutAll() {
+        for (Figure f : postorderIterable()) {
+            f.layout();
+        }
+    }
 }

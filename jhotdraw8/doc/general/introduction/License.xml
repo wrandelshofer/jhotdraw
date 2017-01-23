@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+               xmlns:xi="http://www.w3.org/2001/XInclude"
+>
+<title>License</title>
+<para>JHotDraw 8 can be licensed under one of the following license models:</para>
+<itemizedlist>
+  <listitem><para><xref linkend="license.cc-by" xrefstyle="template:%t"/></para></listitem>
+  <listitem><para><xref linkend="license.lgpl"  xrefstyle="select: title"/> </para></listitem>
+</itemizedlist>
+<xi:include href="CC-BY.xml"/>
+<xi:include href="LGPL.xml" />
+</section>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="intro.drawingIntroduction">
+    <title>Introduction/Purpose of Feature</title>
+    <para>The purpose of the drawing framework, is</para>
+    <itemizedlist>
+        <listitem>
+            <para>to define an object model for representing drawings</para>
+        </listitem>
+        <listitem>
+            <para>to provide the base components needed for displaying and editing a drawing</para>
+        </listitem>
+        <listitem>  
+            <para>to provide the base components needed for the persistence of drawings</para>
+        </listitem>
+        <listitem>  
+            <para>to support functionalities provided by the application framework, such as loading and saving, cut/copy/paste, and undo/redo.</para>
+        </listitem>
+    </itemizedlist>
+</section>
