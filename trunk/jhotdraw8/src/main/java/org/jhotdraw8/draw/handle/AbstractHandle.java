@@ -4,7 +4,9 @@
  */
 package org.jhotdraw8.draw.handle;
 
+import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Geom;
 
 /**
  * AbstractHandle.

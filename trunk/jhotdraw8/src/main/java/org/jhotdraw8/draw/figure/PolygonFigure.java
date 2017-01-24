@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
@@ -13,17 +15,18 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Polygon;
 import org.jhotdraw8.collection.ImmutableObservableList;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.connector.Connector;
-import static org.jhotdraw8.draw.figure.PolylineFigure.POINTS;
+import org.jhotdraw8.draw.connector.PathIteratorConnector;
+import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
 import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
 import org.jhotdraw8.draw.handle.PolygonOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
+import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.geom.Shapes;
 
 /**
  * A figure which draws a closed polygon.
@@ -31,7 +34,10 @@ import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PolygonFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure {
+public class PolygonFigure extends AbstractLeafFigure 
+        implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, 
+        LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure, 
+        ConnectableFigure, PathIterableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -65,6 +71,11 @@ public class PolygonFigure extends AbstractLeafFigure implements StrokeableFigur
             maxY = Math.max(maxY, p.getY());
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    }
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        return Shapes.pathIteratorFromPoints(get(POINTS),true,PathIterator.WIND_EVEN_ODD,tx);
     }
 
     @Override
@@ -104,7 +115,7 @@ public class PolygonFigure extends AbstractLeafFigure implements StrokeableFigur
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return null;
+        return new PathIteratorConnector(new RelativeLocator(getBoundsInLocal(),p));
     }
 
     @Override

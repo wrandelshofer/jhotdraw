@@ -18,6 +18,7 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.AbstractLineConnectionFigure;
+import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -82,11 +83,13 @@ public class ConnectionTool extends AbstractTool {
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
             for (Figure ff : list) {
-                newConnector = ff.findConnector(newPoint, figure);
+                 if (ff instanceof ConnectableFigure) {
+                        ConnectableFigure cff=(ConnectableFigure)ff;
+                newConnector = cff.findConnector(newPoint, figure);
                 if (newConnector != null) {
                     newConnectedFigure = ff;
                     break;
-                }
+                }}
             }
         }
         figure.set(LineConnectionFigure.START_CONNECTOR, newConnector);
@@ -118,11 +121,13 @@ public class ConnectionTool extends AbstractTool {
             if (!event.isMetaDown()) {
                 List<Figure> list = view.findFigures(pointInViewCoordinates, true);
                 for (Figure ff : list) {
-                    newConnector = ff.findConnector(ff.worldToLocal(newPoint), figure);
+                    if (ff instanceof ConnectableFigure) {
+                        ConnectableFigure cff=(ConnectableFigure)ff;
+                    newConnector = cff.findConnector(cff.worldToLocal(newPoint), figure);
                     if (newConnector != null) {
                         newConnectionTarget = ff;
                         break;
-                    }
+                    }                    }
                 }
             }
 

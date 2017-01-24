@@ -22,6 +22,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -121,6 +122,11 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
+    public boolean contains(double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+    }
+
     public Point2D getLocationInView() {
         return pickLocation;
     }

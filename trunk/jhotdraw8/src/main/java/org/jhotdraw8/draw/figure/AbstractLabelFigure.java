@@ -27,11 +27,13 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.FigureKey;
+import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.text.Paintable;
 
 /**
@@ -40,7 +42,8 @@ import org.jhotdraw8.text.Paintable;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public abstract class AbstractLabelFigure extends AbstractLeafFigure implements TextFillableFigure, FillableFigure, StrokeableFigure, FontableFigure {
+public abstract class AbstractLabelFigure extends AbstractLeafFigure
+        implements TextFillableFigure, FillableFigure, StrokeableFigure, FontableFigure, ConnectableFigure {
 
     public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
@@ -196,8 +199,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure implements 
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopRectangleConnector();
-    }
+        return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
+}
 
     @Override
     public void layout() {

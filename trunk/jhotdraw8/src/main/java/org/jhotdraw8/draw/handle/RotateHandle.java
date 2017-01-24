@@ -232,6 +232,11 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
+    public boolean contains(double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+    }
+
     public Point2D getLocationInView() {
         return pickLocation;
     }

@@ -2,7 +2,6 @@
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.geom;
 
 import java.awt.geom.AffineTransform;
@@ -18,20 +17,22 @@ import java.util.List;
  * BezierNodePathIterator.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $$Id: BezierNodePathIterator.java 1331 2017-01-21 09:25:12Z rawcoder
+ * $$
  */
 public class BezierNodePathIterator implements PathIterator {
-private final List<BezierNode> nodes;
-private  int index;
-private final boolean closed;
-private final AffineTransform affine;
-private int windingRule;
 
-    public BezierNodePathIterator(List<BezierNode>nodes, boolean closed, int windingRule, AffineTransform affine) {
+    private final List<BezierNode> nodes;
+    private int index;
+    private final boolean closed;
+    private final AffineTransform affine;
+    private int windingRule;
+
+    public BezierNodePathIterator(List<BezierNode> nodes, boolean closed, int windingRule, AffineTransform affine) {
         this.nodes = nodes;
-       this.closed = closed;
-        this.windingRule=windingRule;
-        this.affine=affine;
+        this.closed = closed;
+        this.windingRule = windingRule;
+        this.affine = affine;
     }
 
     /**
@@ -85,14 +86,24 @@ private int windingRule;
      */
     @Override
     public int currentSegment(float[] coords) {
+        
         int numCoords = 0;
         int type = 0;
-        if (index == nodes.size()) {
-            // We only get here for closed paths
-            if (nodes.size() > 1) {
-                BezierNode previous = nodes.get(nodes.size() - 1);
-                BezierNode current = nodes.get(0);
-
+        int size=nodes.size();
+        if (index>size)
+            return SEG_CLOSE;
+        
+        
+                BezierNode previous = nodes.get((index+size-1)%size);
+                BezierNode current = nodes.get(index%size);
+       
+                if (index==0) {
+                        type = SEG_LINETO;
+                        coords[0] = (float) current.getX0();
+                        coords[1] = (float) current.getY0();
+                    return type;
+                }
+        
                 if (!previous.isC2()) {
                     if (!current.isC1()) {
                         numCoords = 1;
@@ -126,62 +137,6 @@ private int windingRule;
                         coords[5] = (float) current.getY0();
                     }
                 }
-            }
-        } else if (index > nodes.size()) {
-            // We only get here for closed paths
-            return SEG_CLOSE;
-        } else if (index == 0) {
-            BezierNode current = nodes.get(index);
-            coords[0] = (float) current.getX0();
-            coords[1] = (float) current.getY0();
-            numCoords = 1;
-            type = SEG_MOVETO;
-
-        } else if (index < nodes.size()) {
-            BezierNode current = nodes.get(index);
-            BezierNode previous = nodes.get(index - 1);
-
-            if (current.isMoveTo()) {
-                numCoords = 1;
-                    type = SEG_MOVETO;
-                    coords[0] = (float) current.getX0();
-                    coords[1] = (float) current.getY0();
-
-        }else if (!previous.isC2()) {
-                if (current.isC1()) {
-                    numCoords = 1;
-                    type = SEG_LINETO;
-                    coords[0] = (float) current.getX0();
-                    coords[1] = (float) current.getY0();
-
-                } else {
-                    numCoords = 2;
-                    type = SEG_QUADTO;
-                    coords[0] = (float) current.getX1();
-                    coords[1] = (float) current.getY1();
-                    coords[2] = (float) current.getX0();
-                    coords[3] = (float) current.getY0();
-                }
-            } else {
-                if (!current.isC1()) {
-                    numCoords = 2;
-                    type = SEG_QUADTO;
-                    coords[0] = (float) previous.getX2();
-                    coords[1] = (float) previous.getY2();
-                    coords[2] = (float) current.getX0();
-                    coords[3] = (float) current.getY0();
-                } else {
-                    numCoords = 3;
-                    type = SEG_CUBICTO;
-                    coords[0] = (float) previous.getX2();
-                    coords[1] = (float) previous.getY2();
-                    coords[2] = (float) current.getX1();
-                    coords[3] = (float) current.getY1();
-                    coords[4] = (float) current.getX0();
-                    coords[5] = (float) current.getY0();
-                }
-            }
-        }
 
         if (affine != null) {
             affine.transform(coords, 0, coords, 0, numCoords);
@@ -265,11 +220,11 @@ private int windingRule;
 
             if (current.isMoveTo()) {
                 numCoords = 1;
-                    type = SEG_MOVETO;
-                    coords[0] = (float) current.getX0();
-                    coords[1] = (float) current.getY0();
+                type = SEG_MOVETO;
+                coords[0] = (float) current.getX0();
+                coords[1] = (float) current.getY0();
 
-        }else if (!previous.isC2()) {
+            } else if (!previous.isC2()) {
                 if (!current.isC1()) {
                     numCoords = 1;
                     type = SEG_LINETO;

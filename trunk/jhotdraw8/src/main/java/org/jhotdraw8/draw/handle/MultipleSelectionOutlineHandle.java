@@ -100,7 +100,8 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Point2D getLocationInView() {
-        return null;
+    public boolean contains(double x, double y, double tolerance) {
+        return false;
     }
+
 }

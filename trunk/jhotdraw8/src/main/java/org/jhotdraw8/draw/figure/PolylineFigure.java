@@ -32,7 +32,9 @@ import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure {
+public class PolylineFigure extends AbstractLeafFigure
+        implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, 
+        LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure {
 
     public final static Point2DListStyleableFigureKey POINTS = new Point2DListStyleableFigureKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
     /**
@@ -76,11 +78,6 @@ public class PolylineFigure extends AbstractLeafFigure implements StrokeableFigu
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Polyline();
-    }
-
-    @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        return null;
     }
 
     @Override

@@ -95,11 +95,6 @@ public class SliceFigure extends AbstractLeafFigure implements Slice,Transformab
     }
 
     @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopRectangleConnector();
-    }
-
-    @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }

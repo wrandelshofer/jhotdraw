@@ -811,11 +811,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             final Node node = e.getKey();
             final Handle handle = e.getValue();
             if (!handle.isSelectable())continue;
-            Point2D p = handle.getLocationInView();
-            if (p != null) {
-                if (Geom.length2(vx, vy, p.getX(), p.getY()) <= HANDLE_TOLERANCE) {
-                    return handle;
-                }
+            if (handle.contains(vx,vy, TOLERANCE)) {
+                   return handle;
             } else {
                 if (contains(node, new Point2D(vx, vy), TOLERANCE)) {
                     return handle;

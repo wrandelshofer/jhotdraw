@@ -11,13 +11,16 @@ import javafx.scene.Node;
 import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
-import org.jhotdraw8.draw.connector.ChopEllipseConnector;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.connector.EllipseConnector;
+import org.jhotdraw8.draw.connector.PathIteratorConnector;
+import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
+import org.jhotdraw8.draw.locator.RelativeLocator;
 
 /**
  * Renders a {@code javafx.scene.shape.Ellipse}.
@@ -25,7 +28,7 @@ import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure {
 
     public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
@@ -57,7 +60,7 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopEllipseConnector();
+        return new EllipseConnector(new RelativeLocator(getBoundsInLocal(),p));
     }
 
     @Override

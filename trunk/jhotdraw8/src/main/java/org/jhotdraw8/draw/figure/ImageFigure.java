@@ -17,16 +17,19 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.connector.EllipseConnector;
+import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.UriStyleableFigureKey;
+import org.jhotdraw8.draw.locator.RelativeLocator;
 
 /**
  * ImageFigure.
  *
  * @author Werner Randelshofer
  */
-public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -106,7 +109,7 @@ public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, 
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopRectangleConnector();
+            return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
     @Override

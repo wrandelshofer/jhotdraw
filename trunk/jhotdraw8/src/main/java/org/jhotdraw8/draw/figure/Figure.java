@@ -418,34 +418,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         }
         removeAllLayoutSubjects();
     }
-
-    /**
-     * Gets a connector for this figure at the given location.
-     *
-     * @param pointInLocal the location of the connector in local coordinates.
-     * @param prototype The prototype used to create a connection or null if
-     * unknown. This allows for specific connectors for different connection
-     * figures.
-     * @return Returns the connector. Returns null if there is no connector at
-     * the given location.
-     */
-    Connector findConnector(Point2D pointInLocal, Figure prototype);
-
-       /**
-     * Gets a connector for this figure at the given location.
-     *
-     * @param x the location of the connector in local coordinates.
-     * @param y the location of the connector in local coordinates.
-     * @param prototype The prototype used to create a connection or null if
-     * unknown. This allows for specific connectors for different connection
-     * figures.
-     * @return Returns the connector. Returns null if there is no connector at
-     * the given location.
-     */
-    default Connector findConnector(double x, double y, Figure prototype) {
-        return findConnector(new Point2D(x,y),prototype);
-    }
-
     /**
      * Fires a property change event.
      *
