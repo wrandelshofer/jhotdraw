@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.locator;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Geom;
 
 /**
  * A locator that specfies a point that is relative to the bounds of a figure.
@@ -36,6 +37,7 @@ public class RelativeLocator extends AbstractLocator {
     }
 
     /**
+     * Creates a new instance.
      * @param relativeX x-position relative to bounds expressed as a value
      * between 0 and 1.
      * @param relativeY y-position relative to bounds expressed as a value
@@ -44,6 +46,24 @@ public class RelativeLocator extends AbstractLocator {
     public RelativeLocator(double relativeX, double relativeY) {
         this.relativeX = relativeX;
         this.relativeY = relativeY;
+    }
+    /**
+     * Creates a new instance.
+     * @param bounds current local bounds of a figure 
+     * @param p a local coordinate on the figure
+     */
+    public RelativeLocator(Bounds bounds, Point2D p) {
+        this(bounds,p.getX(),p.getY());
+    }
+    /**
+     * Creates a new instance.
+     * @param bounds current local bounds of a figure 
+     * @param x a local coordinate on the figure
+     * @param y a local coordinate on the figre
+     */
+    public RelativeLocator(Bounds bounds, double x, double y) {
+        this(Geom.clamp((x-bounds.getMinX())/ bounds.getWidth(),0,1),
+         Geom.clamp((y-bounds.getMinY())/ bounds.getHeight(),0,1));
     }
 
     @Override

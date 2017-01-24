@@ -13,13 +13,14 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.locator.RelativeLocator;
 
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.
@@ -27,7 +28,7 @@ import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class RectangleFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, ConnectableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -93,7 +94,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new ChopRectangleConnector();
+            return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
     @Override

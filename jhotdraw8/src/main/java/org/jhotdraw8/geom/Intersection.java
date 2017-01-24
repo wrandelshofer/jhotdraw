@@ -12,9 +12,12 @@
  */
 package org.jhotdraw8.geom;
 
+import java.awt.geom.PathIterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import static org.jhotdraw8.geom.Geom.lerp;
 
@@ -61,15 +64,13 @@ private void appendPoint(Point2D point, double t) {
     ;
 
 
-    /**
-     * ***
-     *
-     * appendPoints
-     *
-     ****
-     */
-    private void appendPoints(List<Point2D> points) {
+private void appendPoints(List<Point2D> points) {
         this.points.addAll(points);
+    }
+
+    private void appendPoints(List<Point2D> points, List<Double> ts) {
+        this.points.addAll(points);
+        this.ts.addAll(ts);
     }
 
     public List<Point2D> getPoints() {
@@ -80,7 +81,7 @@ private void appendPoint(Point2D point, double t) {
         return Collections.unmodifiableList(ts);
     }
 
-    private boolean isEmpty() {
+    public boolean isEmpty() {
         return points.isEmpty();
     }
 
@@ -1622,6 +1623,23 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * The intersection will contain the parameters 't' of the line in range
      * [0,1].
      *
+     * @param e the bounds of the ellipse
+     * @param a1 point 1 of the line
+     * @param a2 point 2 of the line
+     * @return computed intersection
+     */
+    public static Intersection intersectLineEllipse(Point2D a1, Point2D a2, Bounds e) {
+        double rx = e.getWidth() * 0.5;
+        double ry = e.getHeight() * 0.5;
+        return intersectLineEllipse(a1, a2, new Point2D(e.getMinX() + rx, e.getMinY() + ry), rx, ry);
+    }
+
+    /**
+     * Computes the intersection between a line and an ellipse.
+     * <p>
+     * The intersection will contain the parameters 't' of the line in range
+     * [0,1].
+     *
      * @param ec the center of the ellipse
      * @param rx the x-radius of the ellipse
      * @param ry the y-radius of the ellipse
@@ -1688,11 +1706,23 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @return computed intersection
      */
     public static Intersection intersectLineLine(Point2D a1, Point2D a2, Point2D b1, Point2D b2) {
+        final double b2x = b2.getX();
+        final double b1x = b1.getX();
+        final double a1y = a1.getY();
+        final double b1y = b1.getY();
+        final double b2y = b2.getY();
+        final double a1x = a1.getX();
+        final double a2y = a2.getY();
+        final double a2x = a2.getX();
+        return intersectLineLine(a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y);
+    }
+
+    public static Intersection intersectLineLine(double a1x, double a1y, double a2x, double a2y, double b1x, double b1y, double b2x, double b2y) {
         Intersection result;
 
-        double ua_t = (b2.getX() - b1.getX()) * (a1.getY() - b1.getY()) - (b2.getY() - b1.getY()) * (a1.getX() - b1.getX());
-        double ub_t = (a2.getX() - a1.getX()) * (a1.getY() - b1.getY()) - (a2.getY() - a1.getY()) * (a1.getX() - b1.getX());
-        double u_b = (b2.getY() - b1.getY()) * (a2.getX() - a1.getX()) - (b2.getX() - b1.getX()) * (a2.getY() - a1.getY());
+        double ua_t = (b2x - b1x) * (a1y - b1y) - (b2y - b1y) * (a1x - b1x);
+        double ub_t = (a2x - a1x) * (a1y - b1y) - (a2y - a1y) * (a1x - b1x);
+        double u_b = (b2y - b1y) * (a2x - a1x) - (b2x - b1x) * (a2y - a1y);
 
         if (u_b != 0) {
             double ua = ua_t / u_b;
@@ -1700,11 +1730,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
             if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
                 result = new Intersection(Status.INTERSECTION);
-                result.appendPoint(
-                        new Point2D(
-                                a1.getX() + ua * (a2.getX() - a1.getX()),
-                                a1.getY() + ua * (a2.getY() - a1.getY())
-                        ), ua
+                result.appendPoint(new Point2D(
+                        a1x + ua * (a2x - a1x),
+                        a1y + ua * (a2y - a1y)
+                ), ua
                 );
             } else {
                 result = new Intersection(Status.NO_INTERSECTION);
@@ -1715,6 +1744,49 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             } else {
                 result = new Intersection(Status.NO_INTERSECTION_PARALLEL);
             }
+        }
+
+        return result;
+    }
+
+    public static Intersection intersectLinePathIterator(Point2D a, Point2D b, PathIterator pit) {
+        Intersection result = new Intersection(Status.NO_INTERSECTION);
+        final double ax = a.getX();
+        final double ay = a.getY();
+        final double bx = b.getX();
+        final double by = b.getY();
+        final double[] seg = new double[6];
+        double firstx = 0, firsty = 0;
+        double lastx = 0, lasty = 0;
+        double x, y;
+        for (; !pit.isDone(); pit.next()) {
+            Intersection inter;
+            switch (pit.currentSegment(seg)) {
+                case PathIterator.SEG_CLOSE:
+                    inter = Intersection.intersectLineLine(ax, ay, bx, by, lastx, lasty, firstx, firsty);
+                    result.appendPoints(inter.points, inter.ts);
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    break;
+                case PathIterator.SEG_LINETO:
+                    x = seg[0];
+                    y = seg[1];
+                    inter = Intersection.intersectLineLine(ax, ay, bx, by, lastx, lasty, x, y);
+                    result.appendPoints(inter.points, inter.ts);
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    lastx = firstx = seg[0];
+                    lasty = firsty = seg[1];
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    break;
+            }
+        }
+
+        if (!result.isEmpty()) {
+            result.status = Status.INTERSECTION;
         }
 
         return result;
@@ -1740,7 +1812,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             Point2D b2 = points.get((i + 1) % length);
             Intersection inter = Intersection.intersectLineLine(a1, a2, b1, b2);
 
-            result.appendPoints(inter.points);
+            result.appendPoints(inter.points, inter.ts);
         }
 
         if (!result.isEmpty()) {
@@ -1763,22 +1835,35 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      * @return computed intersection
      */
     public static Intersection intersectLineRectangle(Point2D a1, Point2D a2, Point2D r1, Point2D r2) {
-        Point2D min = minp(r1, r2);
-        Point2D max = maxp(r1, r2);
-        Point2D topRight = new Point2D(max.getX(), min.getY());
-        Point2D bottomLeft = new Point2D(min.getX(), max.getY());
+        return intersectLineRectangle(a1, a2,
+                Math.min(r1.getX(), r2.getX()),
+                Math.min(r1.getY(), r2.getY()),
+                Math.max(r1.getX(), r2.getX()),
+                Math.max(r1.getY(), r2.getY()));
+    }
 
-        Intersection inter1 = Intersection.intersectLineLine(min, topRight, a1, a2);
-        Intersection inter2 = Intersection.intersectLineLine(topRight, max, a1, a2);
-        Intersection inter3 = Intersection.intersectLineLine(max, bottomLeft, a1, a2);
-        Intersection inter4 = Intersection.intersectLineLine(bottomLeft, min, a1, a2);
+    public static Intersection intersectLineRectangle(Point2D a1, Point2D a2, Bounds r) {
+        return intersectLineRectangle(a1, a2, r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY());
+    }
+
+    public static Intersection intersectLineRectangle(Point2D a1, Point2D a2, double rminx, double rminy, double rmaxx, double rmaxy) {
+
+        Point2D min = new Point2D(rminx, rminy);
+        Point2D max = new Point2D(rmaxx, rmaxy);
+        Point2D topRight = new Point2D(rmaxx, rminy);
+        Point2D bottomLeft = new Point2D(rminx, rmaxy);
+
+        Intersection inter1 = Intersection.intersectLineLine(a1, a2, min, topRight);
+        Intersection inter2 = Intersection.intersectLineLine(a1, a2, topRight, max);
+        Intersection inter3 = Intersection.intersectLineLine(a1, a2, max, bottomLeft);
+        Intersection inter4 = Intersection.intersectLineLine(a1, a2, bottomLeft, min);
 
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
-        result.appendPoints(inter1.points);
-        result.appendPoints(inter2.points);
-        result.appendPoints(inter3.points);
-        result.appendPoints(inter4.points);
+        result.appendPoints(inter1.points, inter1.ts);
+        result.appendPoints(inter2.points, inter2.ts);
+        result.appendPoints(inter3.points, inter3.ts);
+        result.appendPoints(inter4.points, inter4.ts);
 
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;

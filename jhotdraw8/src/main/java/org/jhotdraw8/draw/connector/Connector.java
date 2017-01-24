@@ -4,8 +4,10 @@
  */
 package org.jhotdraw8.draw.connector;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Intersection;
 
 /**
  * A <em>connector</em> encapsulates a strategy for locating a connection point
@@ -94,5 +96,22 @@ public interface Connector {
      */
     default Point2D chopEnd(Figure connection, Figure target, Point2D start, Point2D end) {
         return chopStart(connection, target, end.getX(), end.getY(), start.getX(), start.getY());
+    }
+    
+    /** Returns the intersection of the line going from start to end with the target figure.
+     * 
+     * @param connection the connection figure
+     * @param target the target figure
+     * @param start the start point of the line
+     * @param end the end point of the line
+     * @return the intersection in the interval [0,1], null if no intersection. In case of multiple
+     * intersections returns the largest value.
+     */
+    default Double intersect(Figure connection, Figure target, Point2D start, Point2D end) {
+Point2D s=        target.worldToLocal(start);
+Point2D e=        target.worldToLocal(end);
+Bounds b=        target.getBoundsInLocal();
+Intersection i=Intersection.intersectLineRectangle(s, e, b);
+return i.isEmpty()?null:i.getTs().get(0);
     }
 }

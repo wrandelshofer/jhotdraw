@@ -14,6 +14,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -89,7 +90,8 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Point2D getLocationInView() {
-        return null;
+    public boolean contains(double x, double y, double tolerance) {
+    return false;
     }
+
 }

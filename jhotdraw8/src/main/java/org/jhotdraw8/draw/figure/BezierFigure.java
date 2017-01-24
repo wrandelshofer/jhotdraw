@@ -4,18 +4,24 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import static javafx.scene.input.KeyCode.W;
 import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.connector.PathIteratorConnector;
+import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeMoveHandle;
@@ -27,6 +33,8 @@ import org.jhotdraw8.draw.key.BezierNodeListStyleableFigureKey;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
+import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
@@ -40,10 +48,13 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class BezierFigure extends AbstractLeafFigure
-        implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure {
+        implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, 
+        StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
+        PathIterableFigure {
 
     public final static BezierNodeListStyleableFigureKey PATH = new BezierNodeListStyleableFigureKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
-    public final static BooleanStyleableFigureKey CLOSED = new BooleanStyleableFigureKey("closed", DirtyMask.of(DirtyBits.NODE),false);
+    public final static BooleanStyleableFigureKey CLOSED = new BooleanStyleableFigureKey("closed", DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT_OBSERVERS),false);
+    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fillRule", FillRule.class,DirtyMask.of(DirtyBits.NODE),FillRule.NON_ZERO);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -55,8 +66,8 @@ public class BezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public Connector findConnector(Point2D pointInLocal, Figure prototype) {
-        return null;
+    public Connector findConnector(Point2D p, Figure prototype) {
+        return new PathIteratorConnector(new RelativeLocator(getBoundsInLocal(),p));
     }
 
     @Override
@@ -77,6 +88,11 @@ public class BezierFigure extends AbstractLeafFigure
 
     public int getNodeCount() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+return        new BezierNodePath(get(PATH),get(CLOSED),get(FILL_RULE)).getPathIterator(tx);
     }
 
     public Point2D getPoint(int index, int coord) {

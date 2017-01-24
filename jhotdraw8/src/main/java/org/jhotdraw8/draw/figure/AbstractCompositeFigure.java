@@ -158,19 +158,6 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        ObservableList<Figure> cs = getChildren();
-        for (int i = cs.size() - 1; i >= 0; i--) {
-            Figure c = cs.get(i);
-            Connector cr = c.findConnector(p, prototype);
-            if (cr != null) {
-                return cr;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
         final Figure source = event.getSource();
         if (source != null && source.getParent() == this) {

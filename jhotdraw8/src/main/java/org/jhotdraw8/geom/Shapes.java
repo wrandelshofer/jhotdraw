@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ArcType;
@@ -45,6 +43,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.transform.MatrixType;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.io.StreamPosTokenizer;
 import org.jhotdraw8.svg.SvgPath2D;
 import org.jhotdraw8.text.XmlNumberConverter;
@@ -506,7 +505,7 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'S' at position " + tt.getStartPosition() + " in " + str);
                     }
                     p.y = tt.nval;
-                    builder.smoothCurveTo( c2.x, c2.y, p.x, p.y);
+                    builder.smoothCurveTo(c2.x, c2.y, p.x, p.y);
                     nextCommand = 'S';
                     break;
 
@@ -678,7 +677,7 @@ public class Shapes {
                         throw new IOException("y coordinate missing for 'A' at position " + tt.getStartPosition() + " in " + str);
                     }
                     double y = p.x + tt.nval;
-                    builder.arcTo( rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
+                    builder.arcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
                     p.x = x;
                     p.y = y;
 
@@ -852,6 +851,69 @@ public class Shapes {
             prevY = coords[1];
         }
         return false;
+    }
+
+    public static PathIterator pathIteratorFromPoints(List<javafx.geometry.Point2D> points, boolean closed, int windingRule, AffineTransform tx) {
+        return new PathIterator() {
+            int index = 0;
+            float[] srcf = new float[2];
+            double[] srcd = new double[2];
+
+            @Override
+            public int currentSegment(float[] coords) {
+                if (index < points.size()) {
+                    javafx.geometry.Point2D p = points.get(index);
+                    if (tx == null) {
+                        coords[0] = (float) p.getX();
+                        coords[1] = (float) p.getY();
+                    } else {
+                        srcf[0] = (float) p.getX();
+                        srcf[1] = (float) p.getY();
+                        tx.transform(srcf, 0, coords, 0, 1);
+                    }
+                    return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
+                } else if (index == points.size() && closed) {
+                    return PathIterator.SEG_CLOSE;
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+
+            @Override
+            public int currentSegment(double[] coords) {
+                if (index < points.size()) {
+                    javafx.geometry.Point2D p = points.get(index);
+                    if (tx == null) {
+                        coords[0] = p.getX();
+                        coords[1] = p.getY();
+                    } else {
+                        srcd[0] = p.getX();
+                        srcd[1] = p.getY();
+                        tx.transform(srcf, 0, coords, 0, 1);
+                    }
+                    return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
+                } else if (index == points.size() && closed) {
+                    return PathIterator.SEG_CLOSE;
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+
+            @Override
+            public int getWindingRule() {
+                return windingRule;
+            }
+
+            @Override
+            public boolean isDone() {
+                return index >= points.size() + (closed ? 1 : 0);
+            }
+
+            @Override
+            public void next() {
+if (index<Integer.MAX_VALUE)index++;            }
+
+        };
     }
 
     /**

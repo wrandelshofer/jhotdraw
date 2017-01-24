@@ -96,9 +96,10 @@ public class AnchorOutlineHandle extends AbstractHandle {
         return null;
     }
 
+
     @Override
-    public Point2D getLocationInView() {
-        return null;
+    public boolean contains(double x, double y, double tolerance) {
+      return false;
     }
 
 }

@@ -216,9 +216,11 @@ public interface Handle {
     Cursor getCursor();
 
     /**
-     * The pick location of the handle in view coordinates.
-     *
-     * @return the pick location or null if the handle is not interactive
+     * Whether the user picked the handle.
+     * @param x the point
+     * @param y the point
+     * @param tolerance the tolerance (radius squared around the point)
+      * @return true if we picked the handle
      */
-    Point2D getLocationInView();
+    boolean contains(double x, double y, double tolerance);
 }

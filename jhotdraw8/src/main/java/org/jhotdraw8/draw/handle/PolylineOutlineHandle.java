@@ -88,11 +88,11 @@ private boolean editable;
     public Cursor getCursor() {
         return null;
     }
-
     @Override
-    public Point2D getLocationInView() {
-        return null;
+    public boolean contains(double x, double y, double tolerance) {
+        return false;
     }
+
 
     @Override
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {

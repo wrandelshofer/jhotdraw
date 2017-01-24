@@ -105,11 +105,6 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
     }
 
     @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        return null;
-    }
-
-    @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_SELECT_OUTLINE));

@@ -165,8 +165,12 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     public boolean isSelectable() {
         return true;
     }
-
     @Override
+    public boolean contains(double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+    }
+
     public Point2D getLocationInView() {
         return pickLocation;
     }

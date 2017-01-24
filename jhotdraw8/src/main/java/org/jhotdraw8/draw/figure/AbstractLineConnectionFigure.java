@@ -13,25 +13,16 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.connector.Connector;
 import static java.lang.Math.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.connector.ChopRectangleConnector;
-import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
 import org.jhotdraw8.draw.handle.ConnectionPointHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.RotateHandle;
-import org.jhotdraw8.draw.handle.TransformHandleKit;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.PointLocator;
@@ -171,12 +162,6 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         }
     }
 
-
-    @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        return null;
-    }
-
     @Override
     public Bounds getBoundsInLocal() {
         Point2D start = get(START);
@@ -239,10 +224,14 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         // We must switch off rotations for the following computations
         // because
         if (startConnector != null && startTarget != null) {
-            set(START, worldToParent(startConnector.chopStart(this, startTarget, start, end)));
+            final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end));
+            if (p!=null)
+            set(START, p);
         }
         if (endConnector != null && endTarget != null) {
-            set(END, worldToParent(endConnector.chopEnd(this, endTarget, start, end)));
+            final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end));
+            if (p!=null)
+            set(END, p);
         }
     }
 
@@ -293,6 +282,5 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         set(START_CONNECTOR, connector);
         set(START_TARGET, target);
     }
-
 
 }

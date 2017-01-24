@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -23,7 +24,9 @@ import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -44,12 +47,18 @@ public class ConnectionPointHandle extends AbstractHandle {
     private final MapAccessor<Connector> connectorKey;
     private final MapAccessor<Figure> targetKey;
 
-    private final Region node;
+    private final javafx.scene.Group groupNode;
+    private final Region connectorNode;
+    private final Region lineNode;
     private final String styleclassDisconnected;
     private final String styleclassConnected;
+private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
 
+    static {
+        PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
+    }
     private static final Circle REGION_SHAPE = new Circle(4);
-    private Point2D pickLocation;
+    private Point2D pickLocation, connectorLocation;
     private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
@@ -68,34 +77,56 @@ public class ConnectionPointHandle extends AbstractHandle {
         this.targetKey = targetKey;
         this.styleclassDisconnected = styleclassDisconnected;
         this.styleclassConnected = styleclassConnected;
-        node = new Region();
-        node.setShape(REGION_SHAPE);
-        node.setManaged(false);
-        node.setScaleShape(false);
-        node.setCenterShape(true);
-        node.resize(10, 10);
-        node.getStyleClass().setAll(styleclassDisconnected,STYLECLASS_HANDLE);
-        node.setBorder(REGION_BORDER);
+        lineNode = new Region();
+        lineNode.setShape(REGION_SHAPE);
+        lineNode.setManaged(false);
+        lineNode.setScaleShape(false);
+        lineNode.setCenterShape(true);
+        lineNode.resize(10, 10);
+        lineNode.getStyleClass().setAll(styleclassDisconnected, STYLECLASS_HANDLE);
+        lineNode.setBorder(REGION_BORDER);
+
+        connectorNode = new Region();
+        connectorNode.setShape(PIVOT_NODE_SHAPE);
+        connectorNode.setManaged(false);
+        connectorNode.setScaleShape(false);
+        connectorNode.setCenterShape(true);
+        connectorNode.resize(10, 10);
+        connectorNode.getStyleClass().setAll(styleclassDisconnected, STYLECLASS_HANDLE);
+        connectorNode.setBorder(REGION_BORDER);
+ connectorNode.setBackground( REGION_BACKGROUND_CONNECTED);
+        groupNode = new javafx.scene.Group();
+        groupNode.getChildren().addAll(connectorNode, lineNode);
     }
 
     @Override
-    public Region getNode() {
-        return node;
+    public javafx.scene.Group getNode() {
+        return groupNode;
     }
 
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t =Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.get(pointKey);
-        pickLocation = p = t==null?p:t.transform(p);
+        pickLocation = p = t == null ? p : t.transform(p);
         boolean isConnected = f.get(connectorKey) != null && f.get(targetKey) != null;
-        node.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
-        node.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
-        node.relocate(p.getX() - 5, p.getY() - 5);
+        lineNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
+        lineNode.getStyleClass().set(0, isConnected ? styleclassConnected : styleclassDisconnected);
+        lineNode.relocate(p.getX() - 5, p.getY() - 5);
         // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+        lineNode.setRotate(f.getStyled(ROTATE));
+        lineNode.setRotationAxis(f.getStyled(ROTATION_AXIS));
+
+        connectorNode.setVisible(isConnected);
+        if (isConnected) {
+            connectorLocation = view.worldToView(f.get(connectorKey).getPositionInWorld(owner, f.get(targetKey)));
+            if (isConnected) {
+                connectorNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
+            }
+        } else {
+            connectorLocation = null;
+        }
     }
 
     @Override
@@ -121,13 +152,15 @@ public class ConnectionPointHandle extends AbstractHandle {
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
             for (Figure ff : list) {
-                Point2D pointInLocal = ff.worldToLocal(newPoint);
-                newConnector = ff.findConnector(pointInLocal, o);
+                 if (ff instanceof ConnectableFigure) {
+                        ConnectableFigure cff=(ConnectableFigure)ff;
+                Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
+                newConnector = cff.findConnector(pointInLocal, o);
                 if (newConnector != null) {
                     newConnectedFigure = ff;
                     constrainedPoint = newConnector.getPositionInLocal(o, ff);
                     break;
-                }
+                }                }
             }
         }
 
@@ -152,6 +185,17 @@ public class ConnectionPointHandle extends AbstractHandle {
     }
 
     @Override
+    public boolean contains(double x, double y, double tolerance) {
+        boolean b = false;
+        if (connectorLocation != null) {
+            b = Geom.length2(x, y, connectorLocation.getX(), connectorLocation.getY()) <= tolerance;
+        }
+        if (!b && pickLocation != null) {
+            b = Geom.length2(x, y, pickLocation.getX(), pickLocation.getY()) <= tolerance;
+        }
+        return b;
+    }
+
     public Point2D getLocationInView() {
         return pickLocation;
     }

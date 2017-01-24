@@ -17,6 +17,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A figure which groups child figures, so that they can be edited by the user
@@ -25,7 +26,8 @@ import org.jhotdraw8.geom.Geom;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GroupFigure extends AbstractCompositeFigure implements Group, ResizableFigure,  TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
+public class GroupFigure extends AbstractCompositeFigure 
+        implements Group, ResizableFigure,  TransformableFigure, HideableFigure, StyleableFigure, LockableFigure{
 
     /**
      * The CSS type selector for group objects is @code("group"}.
@@ -64,11 +66,6 @@ public class GroupFigure extends AbstractCompositeFigure implements Group, Resiz
          javafx.scene.Group g = new  javafx.scene.Group();
         g.setAutoSizeChildren(false);
         return g;
-    }
-
-    @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        return null;
     }
 
     @Override

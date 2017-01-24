@@ -13,6 +13,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.shape.FillRule;
 
 /**
  * BezierNodePath.
@@ -32,6 +33,10 @@ public class BezierNodePath implements Shape {
 
     public BezierNodePath( List<BezierNode> nodes) {
         this(nodes,false,PathIterator.WIND_EVEN_ODD);
+    }
+    public BezierNodePath( List<BezierNode> nodes , boolean closed, FillRule windingRule) {
+        this(nodes,false,windingRule==FillRule.EVEN_ODD?PathIterator.WIND_EVEN_ODD:PathIterator.WIND_NON_ZERO);
+        
     }
     public BezierNodePath( List<BezierNode> nodes , boolean closed, int windingRule) {
         this.nodes=nodes;
