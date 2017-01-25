@@ -4,9 +4,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/BezierFigure.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/geom/BezierPath.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/geom/Bezier.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/locator/RelativeDecoratorLocator.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/locator/Locator.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/locator/AbstractLocator.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/trunk/jhotdraw7/src/main/java/org/jhotdraw/draw/locator/RelativeLocator.java</file>
         </group>
     </open-files>
 </project-private>
