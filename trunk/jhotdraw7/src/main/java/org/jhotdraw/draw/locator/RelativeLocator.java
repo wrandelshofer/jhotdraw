@@ -15,7 +15,7 @@ import org.jhotdraw.geom.*;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 /**
- * A locator that specfies a point that is relative to the bounds
+ * A locator that specifies a point that is relative to the bounds
  * of a figure.
  *
  * @author Werner Randelshofer
