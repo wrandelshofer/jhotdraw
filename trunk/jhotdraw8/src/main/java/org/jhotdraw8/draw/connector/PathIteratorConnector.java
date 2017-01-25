@@ -5,9 +5,10 @@
 package org.jhotdraw8.draw.connector;
 
 import java.awt.geom.PathIterator;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
-import static org.jhotdraw8.draw.figure.Figure.bounds;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_COLOR;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
@@ -40,9 +41,10 @@ public class PathIteratorConnector extends LocatorConnector {
     @Override
     public Point2D chopStart(Figure connection, Figure target, Point2D start, Point2D end) {
         Double t = intersect(connection, target, start, end);
+        if (t!=null) return intersections.get(0);
         return t == null ? start : Geom.lerp(start, end, t);
     }
-
+public List<Point2D> intersections=new ArrayList<Point2D>();
     @Override
     public Double intersect(Figure connection, Figure target, Point2D start, Point2D end) {
         if (!(target instanceof PathIterableFigure)) {
@@ -76,6 +78,9 @@ public class PathIteratorConnector extends LocatorConnector {
         }
         
         Intersection i = Intersection.intersectLinePathIterator(s, e, pit);
+        intersections.clear();
+        intersections.addAll(i.getPoints());
+        
         double maxT = 0;
         for (double t : i.getTs()) {
             if (t > maxT) {
