@@ -24,6 +24,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.connector.PathIteratorConnector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
@@ -127,6 +128,9 @@ private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
         } else {
             connectorLocation = null;
         }
+        
+        groupNode.getChildren().clear();
+        groupNode.getChildren().addAll(connectorNode,lineNode);        
     }
 
     @Override

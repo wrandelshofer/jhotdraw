@@ -7,7 +7,7 @@
 *  Polynomial.js by Kevin Lindsey.
  * Copyright (C) 2002, Kevin Lindsey.
  *
- * MgcPolynomial.cpp by David Eberly. 
+ * MgcPolynomial.cpp by David Eberly.
  * Copyright (c) 2000-2003 Magic Software, Inc.
  */
 package org.jhotdraw8.geom;
@@ -20,6 +20,7 @@ import java.util.List;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import static org.jhotdraw8.geom.Geom.lerp;
+import static org.jhotdraw8.geom.Geom.pointOnLine;
 
 /**
  * Provides a collection of intersection tests.
@@ -35,6 +36,9 @@ import static org.jhotdraw8.geom.Geom.lerp;
  * <p>
  * <a href="http://www.magic-software.com">MgcPolynomial.cpp </a> Copyright
  * 2000-2003 (c) David Eberly. Magic Software, Inc.
+ * <p>
+ * <a href="http://pomax.github.io/bezierinfo/">A Primer on Bézier Curves</a>,
+ * Copyright © 2011-2016 Mike "Pomax" Kamermansy.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
@@ -424,7 +428,7 @@ public static Intersection intersectBezier2Bezier3(Point2D a1, Point2D a2, Point
 /**
      * Computes the intersection between quadratic bezier curve 'p' and
      * the given circle.
- * 
+ *
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
      * @param p3 control point 3 of 'p'
@@ -444,7 +448,7 @@ public static Intersection intersectBezier2Circle(Point2D p1, Point2D p2, Point2
      * the given ellipse.
      * <p>
      * The intersection will contain the parameters 't' of curve 'p' in range [0,1].
- * 
+ *
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
      * @param p3 control point 3 of 'p'
@@ -579,6 +583,107 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
     }
 
     /**
+     * Computes the intersection between quadratic bezier curve 'p' and the line
+     * 'a'.
+     * <p>
+     * The intersection will contain the parameters 't' of curve 'a' in range
+     * [0,1].
+     *
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param a1 point 1 of 'a'
+     * @param a2 point 2 of 'a'
+     * @return the computed intersection
+     */
+    public static Intersection intersectLineBezier2(Point2D a1, Point2D a2, Point2D p1, Point2D p2, Point2D p3) {
+        return intersectLineBezier2(
+                a1.getX(), a1.getY(),
+                a2.getX(), a2.getY(),
+                p1.getX(), p1.getY(),
+                p2.getX(), p2.getY(),
+                p3.getX(), p3.getY());
+    }
+
+    public static Intersection intersectLineBezier2(double ax, double ay, double bx, double by, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y) {
+        /* steps:
+         * 1. Rotate the bezier curve so that the line coincides with the x-axis.
+         *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
+        * 2. Insert the control points of the rotated bezier curve in the polynomial equation.
+        * 2. Find the roots of the polynomial equation.
+        */
+        
+        Point2D a, b;             // temporary variables
+        Point2D c2, c1, c0;       // coefficients of quadratic
+        double cl;               // c coefficient for normal form of line
+        Point2D n;                // normal for normal form of line
+        Point2D min = minp(ax, ay, bx, by); // used to determine if point is on line segment
+        Point2D max = maxp(ax, ay, bx, by); // used to determine if point is on line segment
+        Intersection result = new Intersection(Status.NO_INTERSECTION);
+        final Point2D p1 = new Point2D(p1x, p1y);
+        final Point2D p2 = new Point2D(p2x, p2y);
+//final Point2D p3 = new Point2D(p3x,p3y);
+        a = p2.multiply(-2);
+        c2 = p1.add(a.add(p3x, p3y));
+
+        a = p1.multiply(-2);
+        b = p2.multiply(2);
+        c1 = a.add(b);
+
+        c0 = new Point2D(p1x, p1y);
+
+        // Convert line to normal form: ax + by + c = 0
+        // Find normal to line: negative inverse of original line's slope
+        n = new Point2D(ay - by, bx - ax);
+
+        // Determine new c coefficient
+        cl = ax * by - bx * ay;
+
+        // Transform cubic coefficients to line's coordinate system and find roots
+        // of cubic
+        double[] roots = new Polynomial(
+                n.dotProduct(c2),
+                n.dotProduct(c1),
+                n.dotProduct(c0) + cl
+        ).getRoots();
+        // Any roots in closed interval [0,1] are intersections on Bezier, but
+        // might not be on the line segment.
+        // Find intersections and calculate point coordinates
+        for (int i = 0; i < roots.length; i++) {
+            double t = roots[i];
+
+            if (0 <= t && t <= 1) {
+                // We're within the Bezier curve
+                // Find point on Bezier
+                Point2D p4 = lerp(p1, p2, t);
+                Point2D p5 = lerp(p2x, p2y, p3x, p3y, t);
+
+                Point2D p6 = lerp(p4, p5, t);
+
+                // See if point is on line segment
+                // Had to make special cases for vertical and horizontal lines due
+                // to slight errors in calculation of p6
+                if (ax == bx) {
+                    if (min.getY() <= p6.getY() && p6.getY() <= max.getY()) {
+                        result.status = Status.INTERSECTION;
+                        result.appendPoint(p6, pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by));
+                    }
+                } else if (ay == by) {
+                    if (min.getX() <= p6.getX() && p6.getX() <= max.getX()) {
+                        result.status = Status.INTERSECTION;
+                        result.appendPoint(p6, pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by));
+                    }
+                } else if (gte(p6, min) && lte(p6, max)) {
+                    result.status = Status.INTERSECTION;
+                    result.appendPoint(p6, pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Computes the intersection between quadratic bezier curve 'p' and the
      * given closed polygon.
      * <p>
@@ -617,7 +722,7 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
 /**
      * Computes the intersection between quadratic bezier curve 'p' and
      * the provided rectangle.
-     * 
+     *
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
      * @param p3 control point 3 of 'p'
@@ -991,7 +1096,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
 /**
      * Computes the intersection between cubic bezier curve 'p' and
      * the given circle.
- * 
+ *
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
      * @param p3 control point 3 of 'p'
@@ -1090,7 +1195,7 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
     /**
      * Computes the intersection between cubic bezier curve 'p' and
      * the line 'a'.
-     * 
+     *
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
      * @param p3 control point 3 of 'p'
@@ -1781,6 +1886,12 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                     lasty = firsty = seg[1];
                     break;
                 case PathIterator.SEG_QUADTO:
+                    x = seg[2];
+                    y = seg[3];
+                    inter = Intersection.intersectLineBezier2(ax, ay, bx, by, lastx, lasty, seg[0], seg[1], x, y);
+                    result.appendPoints(inter.points, inter.ts);
+                    lastx = x;
+                    lasty = y;
                     break;
             }
         }
@@ -2033,6 +2144,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         return new Point2D(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
     }
 
+    private static Point2D maxp(double ax, double ay, double bx, double by) {
+        return new Point2D(Math.max(ax, bx), Math.max(ay, by));
+    }
+
     /**
      * Computes the coordinates of the top left corner of a rectangle given two
      * corner points defining the extrema of the rectangle.
@@ -2043,6 +2158,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
      */
     private static Point2D minp(Point2D a, Point2D b) {
         return new Point2D(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()));
+    }
+
+    private static Point2D minp(double ax, double ay, double bx, double by) {
+        return new Point2D(Math.min(ax, bx), Math.min(ay, by));
     }
 
 }

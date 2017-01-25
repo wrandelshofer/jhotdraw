@@ -23,8 +23,9 @@ import javafx.geometry.Point2D;
  * Polynomial encapsulates root finding functions needed by curve intersection
  * methods which are based on numerical calculations.
  * <p>
- * This class is a port of Polynomial.js by Kevin Lindsey. Parts of Polynomial.js
- * are based on MgcPolynomial.cpp written by David Eberly, Magic Software. Inc.
+ * This class is a port of Polynomial.js by Kevin Lindsey. Parts of
+ * Polynomial.js are based on MgcPolynomial.cpp written by David Eberly, Magic
+ * Software. Inc.
  * <p>
  * References:
  * <p>
@@ -112,11 +113,27 @@ public class Polynomial {
 
     /**
      * Creates a new polynomial.
+     * <p>
+     * The coefficients are in order by highest degree monomial first. For
+     * example, the following example initializes a Polynomial object for:
+     * <code>3x^4 + 2x^2 + 5</code>.
+     * <pre>
+     *var poly = new Polynomial(3, 0, 2, 0, 5);
+     * </pre> All coefficients from highest degree to degree 0 must be provided.
+     * A zero is used for monomials that are not present in the polynomial.
+     *
+     * NOTE: The polynomial coefficients are stored in an array in the reverse
+     * order to how they were specified. This has the benefit that the
+     * coefficient's position in the array corresponds to the degree of the
+     * monomial to which it belongs. *
      *
      * @param coefs the coefficients of the polynomial
      */
     public Polynomial(double... coefs) {
-        this.coefs = coefs;
+        this.coefs = new double[coefs.length];
+        for (int i = 0; i < coefs.length; i++) {
+            this.coefs[i] = coefs[coefs.length - i - 1];
+        }
 
         this._variable = "t";
     }
@@ -197,17 +214,20 @@ public class Polynomial {
     }
 
     /**
-     * Returns a simplified polynomial, by removing coefficients
-     * of the highest degrees if they have a very small absolute value.
+     * Returns a simplified polynomial, by removing coefficients of the highest
+     * degrees if they have a very small absolute value.
+     *
      * @return a new polynomial
      */
     public Polynomial simplify() {
         int popAt = simplifiedDegree();
-        if (popAt==this.getDegree()) return this;
-        
+        if (popAt == this.getDegree()) {
+            return this;
+        }
+
         double[] newCoefs = new double[popAt];
         System.arraycopy(this.coefs, 0, newCoefs, 0, popAt);
-       return new Polynomial(newCoefs);
+        return new Polynomial(newCoefs);
     }
 
     /**
@@ -438,6 +458,7 @@ public class Polynomial {
 
     /**
      * Returns the degree of this polynomial.
+     *
      * @return the degree
      */
     public int getDegree() {

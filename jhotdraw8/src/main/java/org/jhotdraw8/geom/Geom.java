@@ -1097,6 +1097,7 @@ public class Geom {
     public static Point2D west(Rectangle2D r) {
         return new Point2D(r.getMinX(), r.getMinY() + r.getHeight() / 2);
     }
+
     /**
      * Computes the linear interpolation/extrapolation between two points.
      *
@@ -1113,5 +1114,26 @@ public class Geom {
     public static Point2D lerp(double x1, double y1, double x2, double y2, double t) {
         return new Point2D(x1 + (x2 - x1) * t,
                 y1 + (y2 - y1) * t);
+    }
+
+    /**
+     * Given a point p on a line, computes t.
+     *
+     * @param px point
+     * @param py point
+     * @param x1 start of line
+     * @param y1 start of line
+     * @param x2 end of line
+     * @param y2 end of line
+     * @return t
+     */
+    public static double pointOnLine(double px, double py, double x1, double y1, double x2, double y2) {
+        double w = x2 - x1;
+        double h = y2 - y1;
+        if (Math.abs(w) > Math.abs(h)) {
+            return (px - x1) / w;
+        } else {
+            return (py - y1) / h;
+        }
     }
 }
