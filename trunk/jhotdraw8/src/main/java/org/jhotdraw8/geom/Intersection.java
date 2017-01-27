@@ -611,8 +611,8 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
          *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
         * 2. Insert the control points of the rotated bezier curve in the polynomial equation.
         * 2. Find the roots of the polynomial equation.
-        */
-        
+         */
+
         Point2D a, b;             // temporary variables
         Point2D c2, c1, c0;       // coefficients of quadratic
         double cl;               // c coefficient for normal form of line
@@ -1189,12 +1189,9 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
         return result;
     }
 
-    ;
-
-
     /**
-     * Computes the intersection between cubic bezier curve 'p' and
-     * the line 'a'.
+     * Computes the intersection between cubic bezier curve 'p' and the line
+     * 'a'.
      *
      * @param p1 control point 1 of 'p'
      * @param p2 control point 2 of 'p'
@@ -1204,7 +1201,7 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
      * @param a2 point 2 of 'a'
      * @return the computed intersection
      */
-public static Intersection intersectBezier3Line(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D a1, Point2D a2) {
+    public static Intersection intersectBezier3Line(Point2D p1, Point2D p2, Point2D p3, Point2D p4, Point2D a1, Point2D a2) {
         Point2D a, b, c, d;       // temporary variables
         Point2D c3, c2, c1, c0;   // coefficients of cubic
         double cl;               // c coefficient for normal form of line
@@ -1292,6 +1289,148 @@ public static Intersection intersectBezier3Line(Point2D p1, Point2D p2, Point2D 
                 } else if (gte(p10, min) && lte(p10, max)) {
                     result.status = Status.INTERSECTION;
                     result.appendPoint(p10, t);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Computes the intersection between cubic bezier curve 'p' and the line
+     * 'a'.
+     *
+     * @param p1x control point 1 of 'p'
+     * @param p2x control point 2 of 'p'
+     * @param p3x control point 3 of 'p'
+     * @param p4x control point 4 of 'p'
+     * @param ax point 1 of 'a'
+     * @param bx point 2 of 'a'
+     * @param p1y control point 1 of 'p'
+     * @param p2y control point 2 of 'p'
+     * @param p3y control point 3 of 'p'
+     * @param p4y control point 4 of 'p'
+     * @param ay point 1 of 'a'
+     * @param by point 2 of 'a'
+     *
+     * @return the computed intersection
+     */
+    public static Intersection intersectLineBezier3(double ax, double ay, double bx, double by, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y, double p4x, double p4y) {
+
+        Point2D a1 = new Point2D(ax, ay);
+        Point2D a2 = new Point2D(bx, by);
+        Point2D p1 = new Point2D(p1x, p1y);
+        Point2D p2 = new Point2D(p2x, p2y);
+        Point2D p3 = new Point2D(p3x, p3y);
+        Point2D p4 = new Point2D(p4x, p4y);
+        return intersectLineBezier3(a1, a2, p1, p2, p3, p4);
+    }
+
+    /**
+     * Computes the intersection between cubic bezier curve 'p' and the line
+     * 'a'.
+     *
+     * @param p1 control point 1 of 'p'
+     * @param p2 control point 2 of 'p'
+     * @param p3 control point 3 of 'p'
+     * @param p4 control point 4 of 'p'
+     * @param a1 point 1 of 'a'
+     * @param a2 point 2 of 'a'
+     * @return the computed intersection
+     */
+    public static Intersection intersectLineBezier3(Point2D a1, Point2D a2, Point2D p1, Point2D p2, Point2D p3, Point2D p4) {
+        double ax = a1.getX();
+        double ay = a1.getY();
+        double bx = a2.getX();
+        double by = a2.getY();
+
+        Point2D a, b, c, d;       // temporary variables
+        Point2D c3, c2, c1, c0;   // coefficients of cubic
+        double cl;               // c coefficient for normal form of line
+        Point2D n;                // normal for normal form of line
+        final Point2D amin = minp(a1, a2); // used to determine if point is on line segment
+        final Point2D amax = maxp(a1, a2); // used to determine if point is on line segment
+        Intersection result = new Intersection(Status.NO_INTERSECTION);
+
+        // Start with Bezier using Bernstein polynomials for weighting functions:
+        //     (1-t^3)P1 + 3t(1-t)^2P2 + 3t^2(1-t)P3 + t^3P4
+        //
+        // Expand and collect terms to form linear combinations of original Bezier
+        // controls.  This ends up with a vector cubic in t:
+        //     (-P1+3P2-3P3+P4)t^3 + (3P1-6P2+3P3)t^2 + (-3P1+3P2)t + P1
+        //             /\                  /\                /\       /\
+        //             ||                  ||                ||       ||
+        //             c3                  c2                c1       c0
+        // Calculate the coefficients
+        a = p1.multiply(-1);
+        b = p2.multiply(3);
+        c = p3.multiply(-3);
+        d = a.add(b.add(c.add(p4)));
+        c3 = new Point2D(d.getX(), d.getY());
+
+        a = p1.multiply(3);
+        b = p2.multiply(-6);
+        c = p3.multiply(3);
+        d = a.add(b.add(c));
+        c2 = new Point2D(d.getX(), d.getY());
+
+        a = p1.multiply(-3);
+        b = p2.multiply(3);
+        c = a.add(b);
+        c1 = new Point2D(c.getX(), c.getY());
+
+        c0 = new Point2D(p1.getX(), p1.getY());
+
+        // Convert line to normal form: ax + by + c = 0
+        // Find normal to line: negative inverse of original line's slope
+        n = new Point2D(a1.getY() - a2.getY(), a2.getX() - a1.getX());
+
+        // Determine new c coefficient
+        cl = a1.getX() * a2.getY() - a2.getX() * a1.getY();
+
+        // ?Rotate each cubic coefficient using line for new coordinate system?
+        // Find roots of rotated cubic
+        double[] roots = new Polynomial(
+                n.dotProduct(c3),
+                n.dotProduct(c2),
+                n.dotProduct(c1),
+                n.dotProduct(c0) + cl
+        ).getRoots();
+
+        // Any roots in closed interval [0,1] are intersections on Bezier, but
+        // might not be on the line segment.
+        // Find intersections and calculate point coordinates
+        for (int i = 0; i < roots.length; i++) {
+            double t = roots[i];
+
+            if (0 <= t && t <= 1) {
+                // We're within the Bezier curve
+                // Find point on Bezier
+                Point2D p5 = lerp(p1, p2, t);
+                Point2D p6 = lerp(p2, p3, t);
+                Point2D p7 = lerp(p3, p4, t);
+
+                Point2D p8 = lerp(p5, p6, t);
+                Point2D p9 = lerp(p6, p7, t);
+
+                Point2D p10 = lerp(p8, p9, t);
+
+                // See if point is on line segment
+                // Had to make special cases for vertical and horizontal lines due
+                // to slight errors in calculation of p10
+                if (a1.getX() == a2.getX()) {
+                    if (amin.getY() <= p10.getY() && p10.getY() <= amax.getY()) {
+                        result.status = Status.INTERSECTION;
+                        result.appendPoint(p10, pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by));
+                    }
+                } else if (a1.getY() == a2.getY()) {
+                    if (amin.getX() <= p10.getX() && p10.getX() <= amax.getX()) {
+                        result.status = Status.INTERSECTION;
+                        result.appendPoint(p10, pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by));
+                    }
+                } else if (gte(p10, amin) && lte(p10, amax)) {
+                    result.status = Status.INTERSECTION;
+                    result.appendPoint(p10, pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by));
                 }
             }
         }
@@ -1872,6 +2011,12 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                     result.appendPoints(inter.points, inter.ts);
                     break;
                 case PathIterator.SEG_CUBICTO:
+                    x = seg[4];
+                    y = seg[5];
+                    inter = Intersection.intersectLineBezier3(ax, ay, bx, by, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
+                    result.appendPoints(inter.points, inter.ts);
+                    lastx = x;
+                    lasty = y;
                     break;
                 case PathIterator.SEG_LINETO:
                     x = seg[0];

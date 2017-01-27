@@ -21,10 +21,11 @@ import org.jhotdraw8.geom.Intersection;
  * RectangleConnector.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $$Id: PathIteratorConnector.java 1346 2017-01-25 05:53:44Z rawcoder
+ * $$
  */
 public class PathIteratorConnector extends LocatorConnector {
-    
+
     public PathIteratorConnector() {
         super(new RelativeLocator(0.5, 0.5));
     }
@@ -32,7 +33,7 @@ public class PathIteratorConnector extends LocatorConnector {
     public PathIteratorConnector(Locator locator) {
         super(locator);
     }
-    
+
     @Override
     public Point2D chopStart(Figure connection, Figure target, double sx, double sy, double ex, double ey) {
         return chopStart(connection, target, new Point2D(sx, sy), new Point2D(ex, ey));
@@ -41,10 +42,10 @@ public class PathIteratorConnector extends LocatorConnector {
     @Override
     public Point2D chopStart(Figure connection, Figure target, Point2D start, Point2D end) {
         Double t = intersect(connection, target, start, end);
-        if (t!=null) return intersections.get(0);
+        // if (t!=null) return intersections.get(0);
         return t == null ? start : Geom.lerp(start, end, t);
     }
-public List<Point2D> intersections=new ArrayList<Point2D>();
+
     @Override
     public Double intersect(Figure connection, Figure target, Point2D start, Point2D end) {
         if (!(target instanceof PathIterableFigure)) {
@@ -55,7 +56,6 @@ public List<Point2D> intersections=new ArrayList<Point2D>();
         Point2D e = target.worldToLocal(end);
         PathIterator pit;
 
-        
         // FIXME does not take line join into account
         if (target.getStyled(STROKE_COLOR) != null) {
             double grow;
@@ -76,17 +76,15 @@ public List<Point2D> intersections=new ArrayList<Point2D>();
         } else {
             pit = pif.getPathIterator(null);
         }
-        
+
         Intersection i = Intersection.intersectLinePathIterator(s, e, pit);
-        intersections.clear();
-        intersections.addAll(i.getPoints());
-        
-        double maxT = 0;
+        double maxT = 0.0;
         for (double t : i.getTs()) {
             if (t > maxT) {
                 maxT = t;
             }
         }
+
         return i.isEmpty() ? null : maxT;
     }
 }

@@ -35,7 +35,7 @@ public class BezierNodePath implements Shape {
         this(nodes,false,PathIterator.WIND_EVEN_ODD);
     }
     public BezierNodePath( List<BezierNode> nodes , boolean closed, FillRule windingRule) {
-        this(nodes,false,windingRule==FillRule.EVEN_ODD?PathIterator.WIND_EVEN_ODD:PathIterator.WIND_NON_ZERO);
+        this(nodes,closed,windingRule==FillRule.EVEN_ODD?PathIterator.WIND_EVEN_ODD:PathIterator.WIND_NON_ZERO);
         
     }
     public BezierNodePath( List<BezierNode> nodes , boolean closed, int windingRule) {

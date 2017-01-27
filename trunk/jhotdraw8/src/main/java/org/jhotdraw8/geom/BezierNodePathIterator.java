@@ -26,10 +26,12 @@ public class BezierNodePathIterator implements PathIterator {
     private int index;
     private final boolean closed;
     private final AffineTransform affine;
+    private final int size ;
     private int windingRule;
 
     public BezierNodePathIterator(List<BezierNode> nodes, boolean closed, int windingRule, AffineTransform affine) {
         this.nodes = nodes;
+        size = nodes.size();
         this.closed = closed;
         this.windingRule = windingRule;
         this.affine = affine;
@@ -53,7 +55,9 @@ public class BezierNodePathIterator implements PathIterator {
      */
     @Override
     public boolean isDone() {
-        return (index >= nodes.size() + (closed ? 2 : 0));
+        // open path: we need one additional segment for the initial moveTo
+        // closed path: we need two additional segments: one for the initial moveTo and one for the closePath
+        return (index >= size + (closed ? 1: 0));
     }
 
     /**
@@ -89,7 +93,7 @@ public class BezierNodePathIterator implements PathIterator {
         
         int numCoords = 0;
         int type = 0;
-        int size=nodes.size();
+      
         if (index>size)
             return SEG_CLOSE;
         
@@ -164,49 +168,10 @@ public class BezierNodePathIterator implements PathIterator {
     public int currentSegment(double[] coords) {
         int numCoords = 0;
         int type = 0;
-        if (index == nodes.size()) {
+      if (index >= size) {
             // We only get here for closed paths
-            if (nodes.size() > 1) {
-                BezierNode previous = nodes.get(nodes.size() - 1);
-                BezierNode current = nodes.get(0);
-
-                if (!previous.isC2()) {
-                    if (!current.isC1()) {
-                        numCoords = 1;
-                        type = SEG_LINETO;
-                        coords[0] = current.getX0();
-                        coords[1] = current.getY0();
-                    } else {
-                        numCoords = 2;
-                        type = SEG_QUADTO;
-                        coords[0] = current.getX1();
-                        coords[1] = current.getY1();
-                        coords[2] = current.getX0();
-                        coords[3] = current.getY0();
-                    }
-                } else {
-                    if (!current.isC1()) {
-                        numCoords = 2;
-                        type = SEG_QUADTO;
-                        coords[0] = previous.getX2();
-                        coords[1] = previous.getY2();
-                        coords[2] = current.getX0();
-                        coords[3] = current.getY0();
-                    } else {
-                        numCoords = 3;
-                        type = SEG_CUBICTO;
-                        coords[0] = previous.getX2();
-                        coords[1] = previous.getY2();
-                        coords[2] = current.getX1();
-                        coords[3] = current.getY1();
-                        coords[4] = current.getX0();
-                        coords[5] = current.getY0();
-                    }
-                }
-            }
-        } else if (index > nodes.size()) {
-            // We only get here for closed paths
-            return SEG_CLOSE;
+                    numCoords = 0;
+          type= SEG_CLOSE;
         } else if (index == 0) {
             BezierNode current = nodes.get(index);
             coords[0] = current.getX0();
@@ -214,9 +179,9 @@ public class BezierNodePathIterator implements PathIterator {
             numCoords = 1;
             type = SEG_MOVETO;
 
-        } else if (index < nodes.size()) {
-            BezierNode current = nodes.get(index);
-            BezierNode previous = nodes.get(index - 1);
+        } else if (index < size) {
+            BezierNode current = nodes.get((index)%size);
+            BezierNode previous = nodes.get((index+size - 1)%size);
 
             if (current.isMoveTo()) {
                 numCoords = 1;
@@ -263,6 +228,7 @@ public class BezierNodePathIterator implements PathIterator {
         if (affine != null) {
             affine.transform(coords, 0, coords, 0, numCoords);
         }
+
         return type;
     }
 

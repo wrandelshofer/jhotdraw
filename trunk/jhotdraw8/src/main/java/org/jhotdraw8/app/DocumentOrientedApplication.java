@@ -40,6 +40,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -282,6 +283,8 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
             project.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
+        
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, event->System.out.println(event));
         stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
             if (newValue) {
                 activeProject.set(project);

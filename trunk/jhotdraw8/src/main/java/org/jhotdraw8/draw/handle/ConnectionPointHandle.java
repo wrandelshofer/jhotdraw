@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.handle;
 
 import java.util.List;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
@@ -16,6 +17,10 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.MapAccessor;
@@ -26,6 +31,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathIteratorConnector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
+import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
@@ -53,7 +59,7 @@ public class ConnectionPointHandle extends AbstractHandle {
     private final Region lineNode;
     private final String styleclassDisconnected;
     private final String styleclassConnected;
-private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
+    private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
 
     static {
         PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
@@ -95,7 +101,7 @@ private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
         connectorNode.resize(10, 10);
         connectorNode.getStyleClass().setAll(styleclassDisconnected, STYLECLASS_HANDLE);
         connectorNode.setBorder(REGION_BORDER);
- connectorNode.setBackground( REGION_BACKGROUND_CONNECTED);
+        connectorNode.setBackground(REGION_BACKGROUND_CONNECTED);
         groupNode = new javafx.scene.Group();
         groupNode.getChildren().addAll(connectorNode, lineNode);
     }
@@ -128,9 +134,9 @@ private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
         } else {
             connectorLocation = null;
         }
-        
+
         groupNode.getChildren().clear();
-        groupNode.getChildren().addAll(connectorNode,lineNode);        
+        groupNode.getChildren().addAll(connectorNode, lineNode);
     }
 
     @Override
@@ -156,15 +162,16 @@ private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
             for (Figure ff : list) {
-                 if (ff instanceof ConnectableFigure) {
-                        ConnectableFigure cff=(ConnectableFigure)ff;
-                Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
-                newConnector = cff.findConnector(pointInLocal, o);
-                if (newConnector != null) {
-                    newConnectedFigure = ff;
-                    constrainedPoint = newConnector.getPositionInLocal(o, ff);
-                    break;
-                }                }
+                if (ff instanceof ConnectableFigure) {
+                    ConnectableFigure cff = (ConnectableFigure) ff;
+                    Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
+                    newConnector = cff.findConnector(pointInLocal, o);
+                    if (newConnector != null) {
+                        newConnectedFigure = ff;
+                        constrainedPoint = newConnector.getPositionInLocal(o, ff);
+                        break;
+                    }
+                }
             }
         }
 
