@@ -587,7 +587,7 @@ private static double[] push(double[] a, double d) {
 *
      * @return the roots
 */
-public double[] getLinearRoot() {
+private double[] getLinearRoot() {
         double[] result = new double[0];
         double a = this.coefs[1];
 
@@ -607,7 +607,7 @@ public double[] getLinearRoot() {
 *
      * @return the roots
 */
-public double[] getQuadraticRoots() {
+private double[] getQuadraticRoots() {
         double[] results = new double[0];
 
         double a = this.coefs[2];
@@ -638,68 +638,65 @@ public double[] getQuadraticRoots() {
      *
      * @return the roots
      */
-    public double[] getCubicRoots() {
+    private double[] getCubicRoots() {
         double[] results = new double[0];
 
-        if (this.getDegree() == 3) {
-            double c3 = this.coefs[3];
-            double c2 = this.coefs[2] / c3;
-            double c1 = this.coefs[1] / c3;
-            double c0 = this.coefs[0] / c3;
+        double c3 = this.coefs[3];
+        double c2 = this.coefs[2] / c3;
+        double c1 = this.coefs[1] / c3;
+        double c0 = this.coefs[0] / c3;
 
-            double a = (3 * c1 - c2 * c2) / 3;
-            double b = (2 * c2 * c2 * c2 - 9 * c1 * c2 + 27 * c0) / 27;
-            double offset = c2 / 3;
-            double discrim = b * b / 4 + a * a * a / 27;
-            double halfB = b / 2;
+        double a = (3 * c1 - c2 * c2) / 3;
+        double b = (2 * c2 * c2 * c2 - 9 * c1 * c2 + 27 * c0) / 27;
+        double offset = c2 / 3;
+        double discrim = b * b / 4 + a * a * a / 27;
+        double halfB = b / 2;
 
-            if (Math.abs(discrim) <= Polynomial.TOLERANCE) {
-                discrim = 0;
-            }
+        if (Math.abs(discrim) <= Polynomial.TOLERANCE) {
+            discrim = 0;
+        }
 
-            if (discrim > 0) {
-                double e = Math.sqrt(discrim);
-                double tmp;
-                double root;
+        if (discrim > 0) {
+            double e = Math.sqrt(discrim);
+            double tmp;
+            double root;
 
-                tmp = -halfB + e;
-                if (tmp >= 0) {
-                    root = Math.pow(tmp, 1 / 3);
-                } else {
-                    root = -Math.pow(-tmp, 1 / 3);
-                }
-
-                tmp = -halfB - e;
-                if (tmp >= 0) {
-                    root += Math.pow(tmp, 1 / 3);
-                } else {
-                    root -= Math.pow(-tmp, 1 / 3);
-                }
-
-                results = new double[]{root - offset};
-            } else if (discrim < 0) {
-                double distance = Math.sqrt(-a / 3);
-                double angle = Math.atan2(Math.sqrt(-discrim), -halfB) / 3;
-                double cos = Math.cos(angle);
-                double sin = Math.sin(angle);
-                double sqrt3 = Math.sqrt(3);
-
-                results = new double[]{2 * distance * cos - offset,
-                    -distance * (cos + sqrt3 * sin) - offset,
-                    -distance * (cos - sqrt3 * sin) - offset};
+            tmp = -halfB + e;
+            if (tmp >= 0) {
+                root = Math.pow(tmp, 1.0 / 3.0);
             } else {
-                double tmp;
-
-                if (halfB >= 0) {
-                    tmp = -Math.pow(halfB, 1 / 3);
-                } else {
-                    tmp = Math.pow(-halfB, 1 / 3);
-                }
-
-                results = new double[]{2 * tmp - offset,
-                    // really should return next root twice, but we return only one
-                    -tmp - offset};
+                root = -Math.pow(-tmp, 1.0 / 3.0);
             }
+
+            tmp = -halfB - e;
+            if (tmp >= 0) {
+                root += Math.pow(tmp, 1.0 / 3.0);
+            } else {
+                root -= Math.pow(-tmp, 1.0 / 3.0);
+            }
+            results = new double[]{root - offset};
+        } else if (discrim < 0) {
+            double distance = Math.sqrt(-a / 3.0);
+            double angle = Math.atan2(Math.sqrt(-discrim), -halfB) / 3.0;
+            double cos = Math.cos(angle);
+            double sin = Math.sin(angle);
+            double sqrt3 = Math.sqrt(3);
+
+            results = new double[]{2 * distance * cos - offset,
+                -distance * (cos + sqrt3 * sin) - offset,
+                -distance * (cos - sqrt3 * sin) - offset};
+        } else {
+            double tmp;
+
+            if (halfB >= 0) {
+                tmp = -Math.pow(halfB, 1.0 / 3.0);
+            } else {
+                tmp = Math.pow(-halfB, 1.0 / 3.0);
+            }
+
+            results = new double[]{2 * tmp - offset,
+                // really should return next root twice, but we return only one
+                -tmp - offset};
         }
 
         return results;
@@ -714,78 +711,76 @@ public double[] getQuadraticRoots() {
      *
      * @return the roots
      */
-    public double[] getQuarticRoots() {
+    private double[] getQuarticRoots() {
 
         double[] results = new double[4];
         int numResults = 0;
 
-        if (this.getDegree() == 4) {
-            double c4 = this.coefs[4];
-            double c3 = this.coefs[3] / c4;
-            double c2 = this.coefs[2] / c4;
-            double c1 = this.coefs[1] / c4;
-            double c0 = this.coefs[0] / c4;
+        double c4 = this.coefs[4];
+        double c3 = this.coefs[3] / c4;
+        double c2 = this.coefs[2] / c4;
+        double c1 = this.coefs[1] / c4;
+        double c0 = this.coefs[0] / c4;
 
-            double[] resolveRoots = new Polynomial(
-                    1, -c2, c3 * c1 - 4 * c0, -c3 * c3 * c0 + 4 * c2 * c0 - c1 * c1
-            ).getCubicRoots();
-            double y = resolveRoots[0];
-            double discrim = c3 * c3 / 4 - c2 + y;
+        double[] resolveRoots = new Polynomial(
+                1, -c2, c3 * c1 - 4 * c0, -c3 * c3 * c0 + 4 * c2 * c0 - c1 * c1
+        ).getCubicRoots();
+        double y = resolveRoots[0];
+        double discrim = c3 * c3 / 4 - c2 + y;
 
-            if (Math.abs(discrim) <= Polynomial.TOLERANCE) {
-                discrim = 0;
+        if (Math.abs(discrim) <= Polynomial.TOLERANCE) {
+            discrim = 0;
+        }
+
+        if (discrim > 0) {
+            double e = Math.sqrt(discrim);
+            double t1 = 3 * c3 * c3 / 4 - e * e - 2 * c2;
+            double t2 = (4 * c3 * c2 - 8 * c1 - c3 * c3 * c3) / (4 * e);
+            double plus = t1 + t2;
+            double minus = t1 - t2;
+
+            if (Math.abs(plus) <= Polynomial.TOLERANCE) {
+                plus = 0;
+            }
+            if (Math.abs(minus) <= Polynomial.TOLERANCE) {
+                minus = 0;
             }
 
-            if (discrim > 0) {
-                double e = Math.sqrt(discrim);
-                double t1 = 3 * c3 * c3 / 4 - e * e - 2 * c2;
-                double t2 = (4 * c3 * c2 - 8 * c1 - c3 * c3 * c3) / (4 * e);
-                double plus = t1 + t2;
-                double minus = t1 - t2;
+            if (plus >= 0) {
+                double f = Math.sqrt(plus);
 
-                if (Math.abs(plus) <= Polynomial.TOLERANCE) {
-                    plus = 0;
+                results[numResults++] = -c3 / 4 + (e + f) / 2;
+                results[numResults++] = -c3 / 4 + (e - f) / 2;
+            }
+            if (minus >= 0) {
+                double f = Math.sqrt(minus);
+
+                results[numResults++] = -c3 / 4 + (f - e) / 2;
+                results[numResults++] = -c3 / 4 - (f + e) / 2;
+            }
+        } else if (discrim < 0) {
+            // no roots
+        } else {
+            double t2 = y * y - 4 * c0;
+
+            if (t2 >= -Polynomial.TOLERANCE) {
+                if (t2 < 0) {
+                    t2 = 0;
                 }
-                if (Math.abs(minus) <= Polynomial.TOLERANCE) {
-                    minus = 0;
+
+                t2 = 2 * Math.sqrt(t2);
+                double t1 = 3 * c3 * c3 / 4 - 2 * c2;
+                if (t1 + t2 >= Polynomial.TOLERANCE) {
+                    double d = Math.sqrt(t1 + t2);
+
+                    results[numResults++] = -c3 / 4 + d / 2;
+                    results[numResults++] = -c3 / 4 - d / 2;
                 }
+                if (t1 - t2 >= Polynomial.TOLERANCE) {
+                    double d = Math.sqrt(t1 - t2);
 
-                if (plus >= 0) {
-                    double f = Math.sqrt(plus);
-
-                    results[numResults++] = -c3 / 4 + (e + f) / 2;
-                    results[numResults++] = -c3 / 4 + (e - f) / 2;
-                }
-                if (minus >= 0) {
-                    double f = Math.sqrt(minus);
-
-                    results[numResults++] = -c3 / 4 + (f - e) / 2;
-                    results[numResults++] = -c3 / 4 - (f + e) / 2;
-                }
-            } else if (discrim < 0) {
-                // no roots
-            } else {
-                double t2 = y * y - 4 * c0;
-
-                if (t2 >= -Polynomial.TOLERANCE) {
-                    if (t2 < 0) {
-                        t2 = 0;
-                    }
-
-                    t2 = 2 * Math.sqrt(t2);
-                    double t1 = 3 * c3 * c3 / 4 - 2 * c2;
-                    if (t1 + t2 >= Polynomial.TOLERANCE) {
-                        double d = Math.sqrt(t1 + t2);
-
-                        results[numResults++] = -c3 / 4 + d / 2;
-                        results[numResults++] = -c3 / 4 - d / 2;
-                    }
-                    if (t1 - t2 >= Polynomial.TOLERANCE) {
-                        double d = Math.sqrt(t1 - t2);
-
-                        results[numResults++] = -c3 / 4 + d / 2;
-                        results[numResults++] = -c3 / 4 - d / 2;
-                    }
+                    results[numResults++] = -c3 / 4 + d / 2;
+                    results[numResults++] = -c3 / 4 - d / 2;
                 }
             }
         }

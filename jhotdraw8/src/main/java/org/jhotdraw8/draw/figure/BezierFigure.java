@@ -12,8 +12,6 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import static javafx.scene.input.KeyCode.W;
-import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
@@ -21,7 +19,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathIteratorConnector;
-import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeMoveHandle;
@@ -48,13 +45,13 @@ import org.jhotdraw8.geom.Shapes;
  * @version $Id$
  */
 public class BezierFigure extends AbstractLeafFigure
-        implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, 
+        implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure,
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
     public final static BezierNodeListStyleableFigureKey PATH = new BezierNodeListStyleableFigureKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
-    public final static BooleanStyleableFigureKey CLOSED = new BooleanStyleableFigureKey("closed", DirtyMask.of(DirtyBits.NODE,DirtyBits.LAYOUT_OBSERVERS),false);
-    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fillRule", FillRule.class,DirtyMask.of(DirtyBits.NODE),FillRule.NON_ZERO);
+    public final static BooleanStyleableFigureKey CLOSED = new BooleanStyleableFigureKey("closed", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), false);
+    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fillRule", FillRule.class, DirtyMask.of(DirtyBits.NODE), FillRule.NON_ZERO);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -67,7 +64,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new PathIteratorConnector(new RelativeLocator(getBoundsInLocal(),p));
+        return new PathIteratorConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
     @Override
@@ -92,7 +89,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-return        new BezierNodePath(get(PATH),get(CLOSED),get(FILL_RULE)).getPathIterator(tx);
+        return new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
     public Point2D getPoint(int index, int coord) {
@@ -108,7 +105,6 @@ return        new BezierNodePath(get(PATH),get(CLOSED),get(FILL_RULE)).getPathIt
         return TYPE_SELECTOR;
     }
 
-
     @Override
     public void reshapeInLocal(Transform transform) {
         ArrayList<BezierNode> newP = new ArrayList<>(get(PATH));
@@ -116,7 +112,7 @@ return        new BezierNodePath(get(PATH),get(CLOSED),get(FILL_RULE)).getPathIt
             newP.set(i, newP.get(i).transform(transform));
         }
         set(PATH, new ImmutableObservableList<>(newP));
-    }    
+    }
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
@@ -129,15 +125,16 @@ return        new BezierNodePath(get(PATH),get(CLOSED),get(FILL_RULE)).getPathIt
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(pathNode);
 
-        final List<PathElement> elements = Shapes.fxPathElementsFromAWT(new BezierNodePath(getStyled(PATH)).getPathIterator(null));
-        if (getStyled(CLOSED)) {
+        final List<PathElement> elements = Shapes.fxPathElementsFromAWT(new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(null));
+        /*        if (getStyled(CLOSED)) {
             elements.add(new ClosePath());
-        }
+        }*/
         if (!pathNode.getElements().equals(elements)) {
             pathNode.getElements().setAll(elements);
         }
 
     }
+
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
@@ -145,20 +142,19 @@ return        new BezierNodePath(get(PATH),get(CLOSED),get(FILL_RULE)).getPathIt
         } else if (handleType == HandleType.MOVE) {
             list.add(new BezierOutlineHandle(this, PATH, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             for (int i = 0, n = get(PATH).size(); i < n; i++) {
-               list.add(new BezierNodeMoveHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_MOVE));
+                list.add(new BezierNodeMoveHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_MOVE));
             }
         } else if (handleType == HandleType.POINT) {
             list.add(new BezierOutlineHandle(this, PATH, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
             for (int i = 0, n = get(PATH).size(); i < n; i++) {
-                list.add(new BezierNodeTangentHandle(this, PATH, i,Handle.STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE));
-                list.add(new BezierControlPointEditHandle(this, PATH, i,BezierNode.C1_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
-                list.add(new BezierControlPointEditHandle(this, PATH, i,BezierNode.C2_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                list.add(new BezierNodeTangentHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE));
+                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
+                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK, Handle.STYLECLASS_HANDLE_CONTROL_POINT));
                 list.add(new BezierNodeEditHandle(this, PATH, i, Handle.STYLECLASS_HANDLE_POINT));
             }
         } else {
             super.createHandles(handleType, list);
         }
     }
-    
-    
+
 }
