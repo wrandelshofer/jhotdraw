@@ -4,6 +4,7 @@
     
     <title>The Hello World Book</title>
 
-    <xi:include href="helloworld/hello.xml"/>
+    <xi:include href="Hello.xml"/>
+    <xi:include href="Installation.xml"/>
     
 </book>
