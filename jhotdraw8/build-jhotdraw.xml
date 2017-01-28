@@ -175,13 +175,17 @@
         <!--property name="docbookfiles" value="doc/JHotDraw8Handbook.xml"/-->
         <pathconvert property="docbookfiles" pathsep=" ">
             <map from="${basedir}${file.separator}" to=""/>
-            <fileset dir="${build.doc.doc}/handbook">
+            
+<!--            <fileset dir="${build.doc.doc}/handbook">
                 <include name="*.xml"/>
                 <exclude name="catalog.xml"/>
             </fileset>  
             <fileset dir="${build.doc.doc}/srs">
                 <include name="*.xml"/>
                 <exclude name="catalog.xml"/>
+            </fileset>  -->
+            <fileset dir="${build.doc.doc}">
+                <include name="**/Book.xml"/>
             </fileset>  
         </pathconvert>
         <echo message="${docbookfiles}"/>
@@ -571,22 +575,22 @@
         </java>
     </target>
     <target name="do-docbook.transform.saxon-helloworld" depends="init" description="uses saxon">
-        <java classname="com.icl.saxon.StyleSheet">
+<!--        <java classname="com.icl.saxon.StyleSheet">
             <arg value="-o"/>
             <arg file="${build.doc.html}/saxon/helloworld.xhtml"/>
-            <arg file="${doc}/helloworld.xml"/>
+            <arg file="${doc}/HelloWorld/Book.xml"/>
             <arg file="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
             <classpath>
                 <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
                     <include name="**/*.jar"/>
                 </fileset>
             </classpath>
-        </java>
+        </java>-->
         
         
         <call-saxon destdir="${build.doc}/epub3/helloworld"
-                            srcfile="${doc}/helloworld.xml"
-                            srcdir="${doc}/helloworld"
+                            srcfile="${doc}/HelloWorld/Book.xml"
+                            srcdir="${doc}/HelloWorld"
                             destfile="${build.doc.html}/epub3/HelloWorld.xhtml"
                             style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
                             imgdestdir="${build.doc}/epub3/helloworld/OEBPS"
