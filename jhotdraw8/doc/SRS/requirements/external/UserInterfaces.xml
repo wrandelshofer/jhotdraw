@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+<title>User Interfaces</title>
+<para>JHotDraw 8 is designed for the creation of document-oriented applications which run on a 
+  personal computer with a graphical user interface.</para>
+<para>Users can interact with the user interface of a JHotDraw 8 application using a keyboard, a mouse, a track pad or a touch screen.</para>
+<para>The Macintosh Human Interface Guidelines and the Windows User Experience are supported explicitly by  JHotDraw 8.</para>
+<para>See <xref linkend="bib.ahig"/> and <xref linkend="bib.whig"/>.</para>
+</section>
