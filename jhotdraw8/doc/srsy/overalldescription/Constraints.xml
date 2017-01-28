@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
-<title>Constraints</title>
-<para>JHotDraw 8 does not provide backwards compatibility to older versions of the framework.</para>
-</section>
