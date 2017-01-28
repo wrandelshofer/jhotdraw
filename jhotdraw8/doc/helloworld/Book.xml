@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" 
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docbook.org/ns/docbook http://www.oasis-open.org/docbook/xml/5.0b5/xsd/docbook.xsd"
+>
+   
+    <info>
+        <title>The Hello World Book</title>
+    
+        <author>
+            <personname>
+                <firstname>Werner</firstname>        
+                <surname>Randelshofer</surname>
+            </personname>
+        </author>
+    </info>
+
+    <chapter>
+        <title>Hello</title>
+        <para>Hello, my dear world.</para>
+    </chapter>
+    
+</book>
