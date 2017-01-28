@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" 
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<info>
+  <!-- see IEEE 830 SRS -->
+<title>JHotDraw 8: Software Requirements Specification</title>
+<author>
+    <personname>
+        <firstname>Werner</firstname>
+        <surname>Randelshofer</surname>
+    </personname>
+</author>
+<copyright><year>2017</year><holder>by the authors and contributors of JHotDraw</holder></copyright>
+</info>
+<chapter><title>Introduction</title>
+<xi:include href="srs/Purpose.xml"/>
+<xi:include href="general/introduction/Scope.xml"/>
+<xi:include href="general/introduction/Definitions.xml"/>
+<!--<xi:include href="introduction/Overview.xml"/>-->
+<xi:include href="general/introduction/MajorVersions.xml"/>
+<xi:include href="general/introduction/License.xml"/>
+<xi:include href="general/introduction/Resources.xml"/>
+<xi:include href="general/introduction/References.xml"/>
+</chapter>
+<chapter><title>Overall description</title>
+<xi:include href="srs/overalldescription/ProductPerspective.xml"/>
+<xi:include href="srs/overalldescription/ProductFunctions.xml"/>
+<xi:include href="srs/overalldescription/UserCharacteristics.xml"/>
+<xi:include href="srs/overalldescription/Constraints.xml"/>
+<xi:include href="srs/overalldescription/AssumptionsAndDependencies.xml"/>
+</chapter>
+<chapter><title>Specific requirements</title>
+<section><title>External Interface Requirements</title>
+<xi:include href="srs/requirements/external/UserInterfaces.xml"/>
+<xi:include href="srs/requirements/external/HardwareInterfaces.xml"/>
+<xi:include href="srs/requirements/external/SoftwareInterfaces.xml"/>
+<xi:include href="srs/requirements/external/CommunicationsInterfaces.xml"/>
+</section>
+<section><title>Application Framework</title>
+<xi:include href="srs/requirements/app/ApplicationIntroduction.xml"/>
+</section>
+<section><title>Drawing Editor Framework</title>
+<xi:include href="srs/requirements/draw/DrawingIntroduction.xml"/>
+<xi:include href="srs/requirements/draw/FigureTreeStructure.xml"/>
+</section>
+
+<!--
+3.2.1 System Feature 1
+3.2.1.1   Introduction/Purpose of feature
+3.2.1.2   Stimulus/Response sequence
+3.2.1.3   Associated functional requirements
+3.2.1.3.1   Functional requirement 1
+...
+3.2.1.3. n  Functional requirement  n
+ -->
+</chapter>
+  <!--
+3.3 Performance requirements
+3.4 Design constraints
+3.5 Software system attributes
+3.5.1 Reliability
+3.5.2 Availability
+3.5.3 Security
+3.5.4 Maintainability
+3.5.5 Portability
+3.6 Other requirements
+</chapter>
+  -->
+</book>
