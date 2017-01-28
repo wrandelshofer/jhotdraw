@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
-<title>Product Perspective</title>
-<para>JHotDraw 8 is provided as a NetBeans project in a public repository.</para>
-<para>For important milestones of JHotDraw 8, a binary distribution (a JAR file) can be provided.</para>
-<para>The milestones and the binary distributions are tagged, so that they can be associated easily.</para>
-</section>
