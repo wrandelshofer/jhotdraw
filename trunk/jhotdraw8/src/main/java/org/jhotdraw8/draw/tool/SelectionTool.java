@@ -375,6 +375,7 @@ public class SelectionTool extends AbstractTool {
             drawPane.setCenter(tracker.getNode());
             //drawPane.layout();
             node.cursorProperty().bindBidirectional(tracker.getNode().cursorProperty());
+            node.setCursor(Cursor.DEFAULT);
         }
     }
 
