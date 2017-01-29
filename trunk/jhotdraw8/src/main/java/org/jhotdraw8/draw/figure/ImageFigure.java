@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.figure;
 
 import java.net.URI;
-import javafx.collections.MapChangeListener;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -15,9 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.connector.EllipseConnector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;

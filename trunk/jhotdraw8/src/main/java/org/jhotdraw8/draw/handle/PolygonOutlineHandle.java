@@ -115,7 +115,7 @@ private boolean editable;
 
                 Intersection result = Intersection.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
                 if (result.getTs().size() == 2) {
-                    insertLocation = Geom.lerp(p1, p2, (result.getTs().get(0) + result.getTs().get(1)) / 2);
+                    insertLocation = Geom.lerp(p1, p2, (result.getIntersections().firstKey() + result.getIntersections().lastKey()) / 2);
                     insertAt = i;
                     break;
                 }

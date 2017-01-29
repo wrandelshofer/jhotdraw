@@ -18,7 +18,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.connector.PathIteratorConnector;
+import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeMoveHandle;
@@ -64,7 +64,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new PathIteratorConnector(new RelativeLocator(getBoundsInLocal(), p));
+        return new PathConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
     @Override

@@ -148,6 +148,7 @@ public class CssTokenizer implements CssTokenizerInterface {
         return stringValue;
     }
 
+
     @Override
     public Number currentNumericValue() {
         return numericValue;

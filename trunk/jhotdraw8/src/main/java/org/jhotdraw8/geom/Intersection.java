@@ -13,10 +13,12 @@
 package org.jhotdraw8.geom;
 
 import java.awt.geom.PathIterator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import static org.jhotdraw8.geom.Geom.lerp;
@@ -45,56 +47,44 @@ import static org.jhotdraw8.geom.Geom.pointOnLine;
  */
 public class Intersection {
 
-    private final ArrayList<Point2D> points;
     private Status status;
-    private final ArrayList<Double> ts;
+
+    private final SortedMap<Double, Point2D> intersections = new TreeMap<>();
 
     public Intersection(Status status) {
 
         this.status = status;
-        this.points = new ArrayList<>();
-        this.ts = new ArrayList<>();
     }
 
-    ;
-
-
-/** Appends a point and the parameter t. */
-private void appendPoint(Point2D point, double t) {
-        this.points.add(point);
-        this.ts.add(t);
+    /**
+     * Appends a point and the parameter t.
+     */
+    private void put(double t, Point2D point) {
+        intersections.put(t, point);
     }
 
-    ;
-
-
-private void appendPoints(List<Point2D> points) {
-        this.points.addAll(points);
+    private void putAll(Map<Double, Point2D> intersections) {
+        this.intersections.putAll(intersections);
     }
 
-    private void appendPoints(List<Point2D> points, List<Double> ts) {
-        this.points.addAll(points);
-        this.ts.addAll(ts);
+    public SortedMap<Double, Point2D> getIntersections() {
+        return intersections;
     }
 
-    public List<Point2D> getPoints() {
-        return Collections.unmodifiableList(points);
+    public Collection<Point2D> getPoints() {
+        return intersections.values();
     }
 
-    public List<Double> getTs() {
-        return Collections.unmodifiableList(ts);
+    public Set<Double> getTs() {
+        return intersections.keySet();
     }
 
     public boolean isEmpty() {
-        return points.isEmpty();
+        return intersections.isEmpty();
     }
 
     public int size() {
-        return points.size();
-    }
-
-    private void throwAwayTs() {
-        ts.clear();
+        return intersections.size();
     }
 
     @Override
@@ -102,7 +92,7 @@ private void appendPoints(List<Point2D> points) {
         StringBuilder b = new StringBuilder();
         b.append("Intersection{").append(status).append(", points=");
         boolean first = true;
-        for (Point2D p : points) {
+        for (Point2D p : getPoints()) {
             if (first) {
                 first = false;
             } else {
@@ -110,7 +100,7 @@ private void appendPoints(List<Point2D> points) {
             }
             b.append(p.getX()).append(',').append(p.getY());
         }
-        b.append(", ts=").append(ts).append('}');
+        b.append(", ts=").append(getTs()).append('}');
         return b.toString();
     }
 
@@ -266,7 +256,7 @@ private void appendPoints(List<Point2D> points) {
                         if (0 <= xRoot && xRoot <= 1) {
                             for (int k = 0; k < yRoots.length; k++) {
                                 if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                    result.appendPoint(c22.multiply(s * s).add(c21.multiply(s).add(c20)), xRoot);
+                                    result.put(xRoot, c22.multiply(s * s).add(c21.multiply(s).add(c20)));
                                     break checkRoots;
                                 }
                             }
@@ -402,9 +392,7 @@ public static Intersection intersectBezier2Bezier3(Point2D a1, Point2D a2, Point
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.appendPoint(
-                                        c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20))),
-                                        xRoot
+                                result.put(                                        xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
                                 );
                                 break checkRoots;
                             }
@@ -487,7 +475,7 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
             double t = roots[i];
 
             if (0 <= t && t <= 1) {
-                result.appendPoint(c2.multiply(t * t).add(c1.multiply(t).add(c0)), t);
+                result.put(t, c2.multiply(t * t).add(c1.multiply(t).add(c0)));
             }
         }
 
@@ -565,16 +553,16 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
                 if (a1.getX() == a2.getX()) {
                     if (min.getY() <= p6.getY() && p6.getY() <= max.getY()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p6, t);
+                        result.put(t, p6);
                     }
                 } else if (a1.getY() == a2.getY()) {
                     if (min.getX() <= p6.getX() && p6.getX() <= max.getX()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p6, t);
+                        result.put(t, p6);
                     }
                 } else if (gte(p6, min) && lte(p6, max)) {
                     result.status = Status.INTERSECTION;
-                    result.appendPoint(p6, t);
+                    result.put(t, p6);
                 }
             }
         }
@@ -666,16 +654,16 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
                 if (ax == bx) {
                     if (min.getY() <= p6.getY() && p6.getY() <= max.getY()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p6, pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by));
+                        result.put(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6);
                     }
                 } else if (ay == by) {
                     if (min.getX() <= p6.getX() && p6.getX() <= max.getX()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p6, pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by));
+                        result.put(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6);
                     }
                 } else if (gte(p6, min) && lte(p6, max)) {
                     result.status = Status.INTERSECTION;
-                    result.appendPoint(p6, pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by));
+                    result.put(pointOnLine(p6.getX(), p6.getY(), ax, ay, bx, by), p6);
                 }
             }
         }
@@ -705,7 +693,7 @@ public static Intersection intersectBezier2Ellipse(Point2D p1, Point2D p2, Point
             Point2D a2 = points.get((i + 1) % length);
             Intersection inter = Intersection.intersectBezier2Line(p1, p2, p3, a1, a2);
 
-            result.appendPoints(inter.getPoints());
+            result.putAll(inter.getIntersections());
         }
 
         if (result.size() > 0) {
@@ -743,10 +731,10 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
 
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
-        result.appendPoints(inter1.points);
-        result.appendPoints(inter2.points);
-        result.appendPoints(inter3.points);
-        result.appendPoints(inter4.points);
+        result.putAll(inter1.getIntersections());
+        result.putAll(inter2.getIntersections());
+        result.putAll(inter3.getIntersections());
+        result.putAll(inter4.getIntersections());
 
         if (result.size() > 0) {
             result.status = Status.INTERSECTION;
@@ -1071,9 +1059,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.appendPoint(
-                                        c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20))),
-                                        xRoot
+                                result.put(                                        xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
                                 );
                                 break checkRoots;
                             }
@@ -1176,9 +1162,7 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            result.appendPoint(
-                    c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0))),
-                    t
+            result.put(                    t, c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))
             );
         }
 
@@ -1279,16 +1263,16 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
                 if (a1.getX() == a2.getX()) {
                     if (min.getY() <= p10.getY() && p10.getY() <= max.getY()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p10, t);
+                        result.put(t, p10);
                     }
                 } else if (a1.getY() == a2.getY()) {
                     if (min.getX() <= p10.getX() && p10.getX() <= max.getX()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p10, t);
+                        result.put(t, p10);
                     }
                 } else if (gte(p10, min) && lte(p10, max)) {
                     result.status = Status.INTERSECTION;
-                    result.appendPoint(p10, t);
+                    result.put(t, p10);
                 }
             }
         }
@@ -1421,16 +1405,16 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
                 if (a1.getX() == a2.getX()) {
                     if (amin.getY() <= p10.getY() && p10.getY() <= amax.getY()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p10, pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by));
+                        result.put(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10);
                     }
                 } else if (a1.getY() == a2.getY()) {
                     if (amin.getX() <= p10.getX() && p10.getX() <= amax.getX()) {
                         result.status = Status.INTERSECTION;
-                        result.appendPoint(p10, pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by));
+                        result.put(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10);
                     }
                 } else if (gte(p10, amin) && lte(p10, amax)) {
                     result.status = Status.INTERSECTION;
-                    result.appendPoint(p10, pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by));
+                    result.put(pointOnLine(p10.getX(), p10.getY(), ax, ay, bx, by), p10);
                 }
             }
         }
@@ -1458,7 +1442,7 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
             Point2D a2 = points.get((i + 1) % length);
             Intersection inter = Intersection.intersectBezier3Line(p1, p2, p3, p4, a1, a2);
 
-            result.appendPoints(inter.points);
+            result.putAll(inter.getIntersections());
         }
 
         if (result.size() > 0) {
@@ -1493,10 +1477,10 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
 
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
-        result.appendPoints(inter1.points);
-        result.appendPoints(inter2.points);
-        result.appendPoints(inter3.points);
-        result.appendPoints(inter4.points);
+        result.putAll(inter1.getIntersections());
+        result.putAll(inter2.getIntersections());
+        result.putAll(inter3.getIntersections());
+        result.putAll(inter4.getIntersections());
 
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
@@ -1536,21 +1520,17 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
             Point2D p = lerp(c1, c2, a / c_dist);
             double b = h / c_dist;
 
-            result.appendPoint(
-                    new Point2D(
-                            p.getX() - b * (c2.getY() - c1.getY()),
-                            p.getY() + b * (c2.getX() - c1.getX())
-                    ),
-                    Double.NaN
+            result.put(                    Double.NaN, new Point2D(
+                    p.getX() - b * (c2.getY() - c1.getY()),
+                    p.getY() + b * (c2.getX() - c1.getX())
+            )
             );
-            result.appendPoint(
-                    new Point2D(
-                            p.getX() + b * (c2.getY() - c1.getY()),
-                            p.getY() - b * (c2.getX() - c1.getX())
-                    ), Double.NaN
+            result.put(Double.NaN, new Point2D(
+                    p.getX() + b * (c2.getY() - c1.getY()),
+                    p.getY() - b * (c2.getX() - c1.getX())
+            )
             );
         }
-        result.throwAwayTs();
         return result;
     }
 
@@ -1579,7 +1559,7 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
      */
     public static Intersection intersectCircleLine(Point2D c, double r, Point2D a1, Point2D a2) {
         Intersection inter = intersectLineCircle(a1, a2, c, r);
-        inter.throwAwayTs();
+
         return inter;
     }
 
@@ -1601,7 +1581,7 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
             Point2D a2 = points.get((i + 1) % length);
 
             inter = Intersection.intersectCircleLine(c, r, a1, a2);
-            result.appendPoints(inter.points);
+            result.putAll(inter.getIntersections());
         }
 
         if (!result.isEmpty()) {
@@ -1635,10 +1615,10 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
 
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
-        result.appendPoints(inter1.points);
-        result.appendPoints(inter2.points);
-        result.appendPoints(inter3.points);
-        result.appendPoints(inter4.points);
+        result.putAll(inter1.getIntersections());
+        result.putAll(inter2.getIntersections());
+        result.putAll(inter3.getIntersections());
+        result.putAll(inter4.getIntersections());
 
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
@@ -1697,7 +1677,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
                             = (b[0] * xRoots[x] + b[1] * yRoots[y] + b[3]) * xRoots[x]
                             + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
                     if (Math.abs(test) < norm1) {
-                        result.appendPoint(new Point2D(xRoots[x], yRoots[y]), Double.NaN);
+                        result.put(Double.NaN, new Point2D(xRoots[x], yRoots[y]));
                     }
                 }
             }
@@ -1706,7 +1686,6 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
         }
-        result.throwAwayTs();
         return result;
     }
 
@@ -1722,7 +1701,6 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
      */
     public static Intersection intersectEllipseLine(Point2D ec, double rx, double ry, Point2D a1, Point2D a2) {
         Intersection result = intersectLineEllipse(a1, a2, ec, rx, ry);
-        result.throwAwayTs();
         return result;
     }
 
@@ -1744,7 +1722,7 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
             Point2D b2 = points.get((i + 1) % length);
             Intersection inter = Intersection.intersectEllipseLine(c, rx, ry, b1, b2);
 
-            result.appendPoints(inter.points);
+            result.putAll(inter.getIntersections());
         }
 
         if (!result.isEmpty()) {
@@ -1779,10 +1757,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
-        result.appendPoints(inter1.points);
-        result.appendPoints(inter2.points);
-        result.appendPoints(inter3.points);
-        result.appendPoints(inter4.points);
+        result.putAll(inter1.getIntersections());
+        result.putAll(inter2.getIntersections());
+        result.putAll(inter3.getIntersections());
+        result.putAll(inter4.getIntersections());
 
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
@@ -1849,11 +1827,11 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                 result = new Intersection(Status.INTERSECTION);
 
                 if (0 <= u1 && u1 <= 1) {
-                    result.appendPoint(lerp(x1, y1, x2, y2, u1), u1);
+                    result.put(u1, lerp(x1, y1, x2, y2, u1));
                 }
 
                 if (0 <= u2 && u2 <= 1) {
-                    result.appendPoint(lerp(x1, y1, x2, y2, u2), u2);
+                    result.put(u2, lerp(x1, y1, x2, y2, u2));
                 }
             }
         }
@@ -1921,17 +1899,17 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             } else {
                 result = new Intersection(Status.INTERSECTION);
                 if (0 <= t_a && t_a <= 1) {
-                    result.appendPoint(lerp(a1, a2, t_a), t_a);
+                    result.put(t_a, lerp(a1, a2, t_a));
                 }
                 if (0 <= t_b && t_b <= 1) {
-                    result.appendPoint(lerp(a1, a2, t_b), t_b);
+                    result.put(t_b, lerp(a1, a2, t_b));
                 }
             }
         } else {
             double t = -b / a;
             if (0 <= t && t <= 1) {
                 result = new Intersection(Status.INTERSECTION);
-                result.appendPoint(lerp(a1, a2, t), t);
+                result.put(t, lerp(a1, a2, t));
             } else {
                 result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
             }
@@ -1974,10 +1952,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
             if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
                 result = new Intersection(Status.INTERSECTION);
-                result.appendPoint(new Point2D(
+                result.put(ua, new Point2D(
                         a1x + ua * (a2x - a1x),
                         a1y + ua * (a2y - a1y)
-                ), ua
+                )
                 );
             } else {
                 result = new Intersection(Status.NO_INTERSECTION);
@@ -2008,13 +1986,13 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             switch (pit.currentSegment(seg)) {
                 case PathIterator.SEG_CLOSE:
                     inter = Intersection.intersectLineLine(ax, ay, bx, by, lastx, lasty, firstx, firsty);
-                    result.appendPoints(inter.points, inter.ts);
+                    result.putAll(inter.getIntersections());
                     break;
                 case PathIterator.SEG_CUBICTO:
                     x = seg[4];
                     y = seg[5];
                     inter = Intersection.intersectLineBezier3(ax, ay, bx, by, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
-                    result.appendPoints(inter.points, inter.ts);
+                    result.putAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
@@ -2022,7 +2000,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                     x = seg[0];
                     y = seg[1];
                     inter = Intersection.intersectLineLine(ax, ay, bx, by, lastx, lasty, x, y);
-                    result.appendPoints(inter.points, inter.ts);
+                    result.putAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
@@ -2034,7 +2012,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                     x = seg[2];
                     y = seg[3];
                     inter = Intersection.intersectLineBezier2(ax, ay, bx, by, lastx, lasty, seg[0], seg[1], x, y);
-                    result.appendPoints(inter.points, inter.ts);
+                    result.putAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;
                     break;
@@ -2068,7 +2046,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             Point2D b2 = points.get((i + 1) % length);
             Intersection inter = Intersection.intersectLineLine(a1, a2, b1, b2);
 
-            result.appendPoints(inter.points, inter.ts);
+            result.putAll(inter.getIntersections());
         }
 
         if (!result.isEmpty()) {
@@ -2116,10 +2094,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
-        result.appendPoints(inter1.points, inter1.ts);
-        result.appendPoints(inter2.points, inter2.ts);
-        result.appendPoints(inter3.points, inter3.ts);
-        result.appendPoints(inter4.points, inter4.ts);
+        result.putAll(inter1.getIntersections());
+        result.putAll(inter2.getIntersections());
+        result.putAll(inter3.getIntersections());
+        result.putAll(inter4.getIntersections());
 
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
@@ -2144,7 +2122,7 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             Point2D a2 = points1.get((i + 1) % length);
             Intersection inter = Intersection.intersectLinePolygon(a1, a2, points2);
 
-            result.appendPoints(inter.points);
+            result.putAll(inter.getIntersections());
         }
 
         if (!result.isEmpty()) {
@@ -2176,10 +2154,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
-        result.appendPoints(inter1.points);
-        result.appendPoints(inter2.points);
-        result.appendPoints(inter3.points);
-        result.appendPoints(inter4.points);
+        result.putAll(inter1.getIntersections());
+        result.putAll(inter2.getIntersections());
+        result.putAll(inter3.getIntersections());
+        result.putAll(inter4.getIntersections());
 
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
@@ -2211,11 +2189,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
             double ua = ua_t / u_b;
 
             result = new Intersection(Status.INTERSECTION);
-            result.appendPoint(
-                    new Point2D(
-                            a1.getX() + ua * (a2.getX() - a1.getX()),
-                            a1.getY() + ua * (a2.getY() - a1.getY())
-                    ), ua
+            result.put(ua, new Point2D(
+                    a1.getX() + ua * (a2.getX() - a1.getX()),
+                    a1.getY() + ua * (a2.getY() - a1.getY())
+            )
             );
         } else {
             if (ua_t == 0 || ub_t == 0) {
@@ -2250,10 +2227,10 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
 
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
-        result.appendPoints(inter1.points);
-        result.appendPoints(inter2.points);
-        result.appendPoints(inter3.points);
-        result.appendPoints(inter4.points);
+        result.putAll(inter1.getIntersections());
+        result.putAll(inter2.getIntersections());
+        result.putAll(inter3.getIntersections());
+        result.putAll(inter4.getIntersections());
 
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;

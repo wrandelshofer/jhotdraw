@@ -50,6 +50,7 @@ public class SimpleHandleTracker extends AbstractTracker implements HandleTracke
     @Override
     public void trackMousePressed(MouseEvent event, DrawingView dv) {
         handle.handleMousePressed(event, dv);
+        node.setCursor(handle.getCursor());
     }
     @Override
     public void trackMouseClicked(MouseEvent event, DrawingView dv) {
@@ -59,12 +60,13 @@ public class SimpleHandleTracker extends AbstractTracker implements HandleTracke
     @Override
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
         handle.handleMouseReleased(event, dv);
-        // fireToolDone();
+        node.setCursor(handle.getCursor());
     }
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView dv) {
         handle.handleMouseDragged(event, dv);
+        node.setCursor(handle.getCursor());
     }
 
     @Override

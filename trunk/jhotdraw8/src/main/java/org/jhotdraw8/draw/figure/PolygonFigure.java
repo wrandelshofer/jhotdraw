@@ -17,7 +17,7 @@ import javafx.scene.shape.Polygon;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.connector.PathIteratorConnector;
+import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
@@ -115,7 +115,7 @@ public class PolygonFigure extends AbstractLeafFigure
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-        return new PathIteratorConnector(new RelativeLocator(getBoundsInLocal(),p));
+        return new PathConnector(new RelativeLocator(getBoundsInLocal(),p));
     }
 
     @Override

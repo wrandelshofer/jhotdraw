@@ -13,7 +13,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.EllipseConnector;
-import org.jhotdraw8.draw.connector.PathIteratorConnector;
+import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.DirtyBits;
