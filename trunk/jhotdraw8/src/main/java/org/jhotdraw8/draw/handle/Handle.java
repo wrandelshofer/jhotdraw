@@ -217,10 +217,11 @@ public interface Handle {
 
     /**
      * Whether the user picked the handle.
+     * @param dv the drawing view
      * @param x the point
      * @param y the point
-     * @param tolerance the tolerance (radius squared around the point)
+     * @param tolerance the tolerance (squared radius around the point)
       * @return true if we picked the handle
      */
-    boolean contains(double x, double y, double tolerance);
+    boolean contains(DrawingView dv, double x, double y, double tolerance);
 }

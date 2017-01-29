@@ -40,11 +40,9 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class BezierNodeEditHandle extends AbstractHandle {
 
-    private Point2D pickLocation;
-    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
-    private final int pointIndex;
-    private final Region node;
-    private final String styleclass;
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
     private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
     private static final Path REGION_SHAPE_QUADRATIC = new Path();
 
@@ -56,9 +54,11 @@ public class BezierNodeEditHandle extends AbstractHandle {
         elements.add(new LineTo(4, 4));
         elements.add(new ClosePath());
     }
-    private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private final Region node;
+    private Point2D pickLocation;
+    private final int pointIndex;
+    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
+    private final String styleclass;
 
     public BezierNodeEditHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex) {
         this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_POINT);
@@ -75,9 +75,21 @@ public class BezierNodeEditHandle extends AbstractHandle {
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(11, 11);
-        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
+    }
+
+    @Override
+    public boolean contains(DrawingView drawingView, double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+    }
+
+    private BezierNode getBezierNode() {
+        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
+        return list.get(pointIndex);
+
     }
 
     @Override
@@ -85,69 +97,18 @@ public class BezierNodeEditHandle extends AbstractHandle {
         return Cursor.CROSSHAIR;
     }
 
-    @Override
-    public Region getNode() {
-        return node;
-    }
-    private BezierNode getBezierNode() {
-        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
-        return list.get(pointIndex);
-
-    }
-    
-
     private Point2D getLocation() {
         return getBezierNode().getC0();
 
     }
 
-
-    @Override
-    public void updateNode(DrawingView view) {
-        Figure f = getOwner();
-        Transform t =Transforms.concat( view.getWorldToView(),f.getLocalToWorld());
-        ImmutableObservableList<BezierNode> list = f.get(pointKey);
-        if (pointIndex>=list.size()) return;
-        BezierNode p =getBezierNode();
-        Point2D c0=getLocation();
-        pickLocation = c0 = t==null?c0:t.transform(c0);
-        node.relocate(c0.getX() - 5, c0.getY() - 5);
-        // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
-        
-        BezierNode bn = getBezierNode();
-        if (bn.isC1()&&bn.isC2()) {
-            node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
-        } else if (bn.isC1()) {
-            node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
-        } else {
-            node.setShape(REGION_SHAPE_LINEAR);
-        } 
+    public Point2D getLocationInView() {
+        return pickLocation;
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
-    }
-
-    @Override
-    public void handleMouseDragged(MouseEvent event, DrawingView view) {
-        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
-
-        if (!event.isAltDown() && !event.isControlDown()) {
-            // alt or control switches the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
-        }
-        
-        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
-        if (pointIndex>=list.size()) return;
-          BezierNode p = list.get(pointIndex);
-        view.getModel().set(getOwner(), pointKey,
-                ImmutableObservableList.set(list, pointIndex,p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
-    }
-
-    @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    public Region getNode() {
+        return node;
     }
 
     @Override
@@ -161,17 +122,60 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
+    public void handleMouseDragged(MouseEvent event, DrawingView view) {
+        Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
+
+        if (!event.isAltDown() && !event.isControlDown()) {
+            // alt or control switches the constrainer off
+            newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+        }
+
+        ImmutableObservableList<BezierNode> list = owner.get(pointKey);
+        if (pointIndex >= list.size()) {
+            return;
+        }
+        BezierNode p = list.get(pointIndex);
+        view.getModel().set(getOwner(), pointKey,
+                ImmutableObservableList.set(list, pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
+    }
+
+    @Override
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    }
+
+    @Override
+    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    }
+
+    @Override
     public boolean isSelectable() {
         return true;
     }
 
     @Override
-    public boolean contains(double x, double y, double tolerance) {
-        Point2D p = getLocationInView();
-       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+    public void updateNode(DrawingView view) {
+        Figure f = getOwner();
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        ImmutableObservableList<BezierNode> list = f.get(pointKey);
+        if (pointIndex >= list.size()) {
+            return;
+        }
+        BezierNode p = getBezierNode();
+        Point2D c0 = getLocation();
+        pickLocation = c0 = t == null ? c0 : t.transform(c0);
+        node.relocate(c0.getX() - 5, c0.getY() - 5);
+        // rotates the node:
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+
+        BezierNode bn = getBezierNode();
+        if (bn.isC1() && bn.isC2()) {
+            node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
+        } else if (bn.isC1()) {
+            node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
+        } else {
+            node.setShape(REGION_SHAPE_LINEAR);
+        }
     }
 
-    public Point2D getLocationInView() {
-        return pickLocation;
-    }
 }

@@ -34,10 +34,11 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class PolylineOutlineHandle extends AbstractHandle {
 
+    private boolean editable;
+    private final MapAccessor<ImmutableObservableList<Point2D>> key;
+
     private Polyline node;
     private String styleclass;
-    private final MapAccessor<ImmutableObservableList<Point2D>> key;
-    private boolean editable;
 
     public PolylineOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key) {
         this(figure, key, true, STYLECLASS_HANDLE_MOVE_OUTLINE);
@@ -52,36 +53,9 @@ public class PolylineOutlineHandle extends AbstractHandle {
         initNode(node);
     }
 
-    protected void initNode(Polyline r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
-    }
-
     @Override
-    public Node getNode() {
-        return node;
-    }
-
-    @Override
-    public void updateNode(DrawingView view) {
-        Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Bounds b = getOwner().getBoundsInLocal();
-        double[] points = PolylineFigure.toPointArray(f, key);
-        if (t != null) {
-            t.transform2DPoints(points, 0, points, 0, points.length / 2);
-        }
-        ObservableList<Double> pp = node.getPoints();
-        pp.clear();
-        for (int i = 0; i < points.length; i++) {
-            pp.add(i, points[i]);
-        }
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return true;
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        return false;
     }
 
     @Override
@@ -90,8 +64,8 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public boolean contains(double x, double y, double tolerance) {
-        return false;
+    public Node getNode() {
+        return node;
     }
 
     @Override
@@ -126,4 +100,32 @@ public class PolylineOutlineHandle extends AbstractHandle {
             }
         }
     }
+
+    protected void initNode(Polyline r) {
+        r.setFill(null);
+        r.setStroke(Color.BLUE);
+        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return true;
+    }
+
+    @Override
+    public void updateNode(DrawingView view) {
+        Figure f = getOwner();
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Bounds b = getOwner().getBoundsInLocal();
+        double[] points = PolylineFigure.toPointArray(f, key);
+        if (t != null) {
+            t.transform2DPoints(points, 0, points, 0, points.length / 2);
+        }
+        ObservableList<Double> pp = node.getPoints();
+        pp.clear();
+        for (int i = 0; i < points.length; i++) {
+            pp.add(i, points[i]);
+        }
+    }
+
 }

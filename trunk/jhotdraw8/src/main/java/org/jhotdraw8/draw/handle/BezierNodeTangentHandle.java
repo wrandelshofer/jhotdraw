@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.handle;
 import java.util.List;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -31,14 +30,14 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class BezierNodeTangentHandle extends AbstractHandle {
 
-    private Point2D pickLocation;
-    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
-    private final int pointIndex;
-    private final Polyline node;
-    private final String styleclass;
-
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private final Polyline node;
+
+    private Point2D pickLocation;
+    private final int pointIndex;
+    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
+    private final String styleclass;
 
     public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex) {
         this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_CONTROL_POINT_OUTLINE);
@@ -51,18 +50,14 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         this.styleclass = styleclass;
         node = new Polyline();
         node.setManaged(false);
-        
-        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+
+        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override
-    public Cursor getCursor() {
-        return null;
-    }
-
-    @Override
-    public Polyline getNode() {
-        return node;
+    public boolean contains(DrawingView drawingView, double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
     }
 
     private BezierNode getBezierNode() {
@@ -71,9 +66,28 @@ public class BezierNodeTangentHandle extends AbstractHandle {
 
     }
 
+    @Override
+    public Cursor getCursor() {
+        return null;
+    }
+
     private Point2D getLocation() {
         return getBezierNode().getC0();
 
+    }
+
+    public Point2D getLocationInView() {
+        return pickLocation;
+    }
+
+    @Override
+    public Polyline getNode() {
+        return node;
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return false;
     }
 
     @Override
@@ -85,8 +99,8 @@ public class BezierNodeTangentHandle extends AbstractHandle {
             return;
         }
         BezierNode bn = getBezierNode();
-        BezierNode prev=list.get((pointIndex+list.size()-1)%list.size());
-        BezierNode next=list.get((pointIndex+1)%list.size());
+        BezierNode prev = list.get((pointIndex + list.size() - 1) % list.size());
+        BezierNode next = list.get((pointIndex + 1) % list.size());
         Point2D c0 = Transforms.transform(t, bn.getC0());
         Point2D c1 = Transforms.transform(t, bn.getC1());
         Point2D c2 = Transforms.transform(t, bn.getC2());
@@ -94,15 +108,15 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         Polyline node = getNode();
         List<Double> points = node.getPoints();
         points.clear();
-         {
+        {
             if (bn.isC1()) {
                 points.add(c1.getX());
                 points.add(c1.getY());
                 points.add(c0.getX());
                 points.add(c0.getY());
-            }else if( prev.isC2()) {
+            } else if (prev.isC2()) {
                 c1 = Transforms.transform(t, prev.getC2());
-                
+
                 points.add(c1.getX());
                 points.add(c1.getY());
                 points.add(c0.getX());
@@ -115,33 +129,19 @@ public class BezierNodeTangentHandle extends AbstractHandle {
                 }
                 points.add(c2.getX());
                 points.add(c2.getY());
-            }else if(next.isC1()) {
+            } else if (next.isC1()) {
                 c2 = Transforms.transform(t, next.getC1());
-                
+
                 if (points.isEmpty()) {
                     points.add(c0.getX());
                     points.add(c0.getY());
                 }
                 points.add(c2.getX());
                 points.add(c2.getY());
-             
-         }
+
+            }
         }
 
     }
 
-    @Override
-    public boolean isSelectable() {
-        return false;
-    }
-
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        Point2D p = getLocationInView();
-       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
-    }
-
-    public Point2D getLocationInView() {
-        return pickLocation;
-    }
 }

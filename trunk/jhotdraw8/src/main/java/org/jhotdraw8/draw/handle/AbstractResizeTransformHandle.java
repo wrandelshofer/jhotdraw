@@ -18,7 +18,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -30,17 +29,16 @@ import org.jhotdraw8.geom.Transforms;
  */
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
-    private Point2D pickLocation;
-    private Point2D oldPoint;
     private final Region node;
-    private final String styleclass;
-    protected Bounds startBounds;
-    private Transform startWorldToLocal;
-
+    private Point2D oldPoint;
+    private Point2D pickLocation;
     /**
      * The height divided by the width.
      */
     protected double preferredAspectRatio;
+    protected Bounds startBounds;
+    private Transform startWorldToLocal;
+    private final String styleclass;
 
     public AbstractResizeTransformHandle(Figure owner, String styleclass, Locator locator, Shape shape, Background bg, Border border) {
         super(owner, locator);
@@ -51,43 +49,19 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(11, 11);
-        
-        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+
+        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(border);
         node.setBackground(bg);
     }
 
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        Point2D p = getLocationInView();
-       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+    public Point2D getLocationInView() {
+        return pickLocation;
     }
 
     @Override
     public Region getNode() {
         return node;
-    }
-
-    @Override
-    public void updateNode(DrawingView view) {
-        Figure f = owner;
-        Transform t = Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
-        Bounds b = f.getBoundsInLocal();
-        Point2D p = getLocation();
-        pickLocation = p = t==null?p:t.transform(p);
-        node.relocate(p.getX() - 5, p.getY() - 5);
-        // rotates the node:
-        // f.applyTransformableFigureProperties(node);
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
-    }
-
-    @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
-        startBounds = owner.getBoundsInLocal();
-        startWorldToLocal = owner.getWorldToLocal();
-        preferredAspectRatio = owner.getPreferredAspectRatio();
     }
 
     @Override
@@ -108,7 +82,15 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
         Transform t = startWorldToLocal;//owner.getWorldToLocal();
 
-        resize(t==null?newPoint:t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
+        resize(t == null ? newPoint : t.transform(newPoint), owner, startBounds, view.getModel(), keepAspect);
+    }
+
+    @Override
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
+        oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
+        startBounds = owner.getBoundsInLocal();
+        startWorldToLocal = owner.getWorldToLocal();
+        preferredAspectRatio = owner.getPreferredAspectRatio();
     }
 
     @Override
@@ -119,11 +101,6 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     @Override
     public boolean isSelectable() {
         return true;
-    }
-
-
-    public Point2D getLocationInView() {
-        return pickLocation;
     }
 
     /**
@@ -137,4 +114,18 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
      * the figure on mouse pressed can be used as a reference.
      */
     protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect);
+
+    @Override
+    public void updateNode(DrawingView view) {
+        Figure f = owner;
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Bounds b = f.getBoundsInLocal();
+        Point2D p = getLocation();
+        pickLocation = p = t == null ? p : t.transform(p);
+        node.relocate(p.getX() - 5, p.getY() - 5);
+        // rotates the node:
+        // f.applyTransformableFigureProperties(node);
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+    }
 }

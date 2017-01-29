@@ -20,11 +20,11 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
@@ -43,26 +43,28 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class LineConnectorHandle extends AbstractHandle {
 
-    private final MapAccessor<Point2D> pointKey;
-    private final MapAccessor<Connector> connectorKey;
-    private final MapAccessor<Figure> targetKey;
-
-    private final javafx.scene.Group groupNode;
-    private final Region connectorNode;
-    private final Region lineNode;
-    private final String styleclassDisconnected;
-    private final String styleclassConnected;
     private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
-private boolean isConnected;
-private boolean isDragging;
+    private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Circle REGION_SHAPE = new Circle(4);
+
     static {
         PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
     }
-    private static final Circle REGION_SHAPE = new Circle(4);
-    private Point2D pickLocation, connectorLocation;
-    private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
-    private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private final MapAccessor<Connector> connectorKey;
+    private Point2D connectorLocation;
+
+    private final Region connectorNode;
+    private final javafx.scene.Group groupNode;
+    private boolean isConnected;
+    private boolean isDragging;
+    private final Region lineNode;
+    private Point2D pickLocation;
+    private final MapAccessor<Point2D> pointKey;
+    private final String styleclassConnected;
+    private final String styleclassDisconnected;
+    private final MapAccessor<Figure> targetKey;
 
     public LineConnectorHandle(Figure figure, MapAccessor<Point2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
@@ -98,13 +100,89 @@ private boolean isDragging;
         connectorNode.setBackground(REGION_BACKGROUND_CONNECTED);
         groupNode = new javafx.scene.Group();
         groupNode.getChildren().addAll(connectorNode, lineNode);
-        
-        isConnected = figure.get(connectorKey)!=null&&figure.get(targetKey)!=null;
+
+        isConnected = figure.get(connectorKey) != null && figure.get(targetKey) != null;
+    }
+
+    @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        boolean b = false;
+        if (connectorLocation != null) {
+            b = Geom.length2(x, y, connectorLocation.getX(), connectorLocation.getY()) <= tolerance;
+        }
+        if (!b && pickLocation != null) {
+            b = Geom.length2(x, y, pickLocation.getX(), pickLocation.getY()) <= tolerance;
+        }
+        return b;
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return isConnected || !isDragging ? Cursor.CROSSHAIR : Cursor.MOVE;
+    }
+
+    public Point2D getLocationInView() {
+        return pickLocation;
     }
 
     @Override
     public javafx.scene.Group getNode() {
         return groupNode;
+    }
+
+    @Override
+    public void handleMouseDragged(MouseEvent event, DrawingView view) {
+        isDragging = true;
+        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
+        Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
+
+        Point2D constrainedPoint;
+        if (!event.isAltDown() && !event.isControlDown()) {
+            // alt or control turns the constrainer off
+            constrainedPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+        } else {
+            constrainedPoint = newPoint;
+        }
+
+        Figure o = getOwner();
+        Connector newConnector = null;
+        Figure newConnectedFigure = null;
+        isConnected = false;
+        if (!event.isMetaDown()) {
+            List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+            for (Figure ff : list) {
+                if (ff instanceof ConnectableFigure) {
+                    ConnectableFigure cff = (ConnectableFigure) ff;
+                    Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
+                    newConnector = cff.findConnector(pointInLocal, o);
+                    if (newConnector != null) {
+                        newConnectedFigure = ff;
+                        constrainedPoint = newConnector.getPositionInLocal(o, ff);
+                        isConnected = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        DrawingModel model = view.getModel();
+        model.set(o, pointKey, getOwner().worldToLocal(constrainedPoint));
+        model.set(o, connectorKey, newConnector);
+        model.set(o, targetKey, newConnectedFigure);
+    }
+
+    @Override
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    }
+
+    @Override
+    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+        isDragging = false;
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return true;
     }
 
     @Override
@@ -133,82 +211,6 @@ private boolean isDragging;
 
         groupNode.getChildren().clear();
         groupNode.getChildren().addAll(connectorNode, lineNode);
-    }
-
-    @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
-    }
-
-    @Override
-    public void handleMouseDragged(MouseEvent event, DrawingView view) {
-        isDragging=true;
-        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-        Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
-
-        Point2D constrainedPoint;
-        if (!event.isAltDown() && !event.isControlDown()) {
-            // alt or control turns the constrainer off
-            constrainedPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
-        } else {
-            constrainedPoint = newPoint;
-        }
-
-        Figure o = getOwner();
-        Connector newConnector = null;
-        Figure newConnectedFigure = null;
-        isConnected=false;
-        if (!event.isMetaDown()) {
-            List<Figure> list = view.findFigures(pointInViewCoordinates, true);
-            for (Figure ff : list) {
-                if (ff instanceof ConnectableFigure) {
-                    ConnectableFigure cff = (ConnectableFigure) ff;
-                    Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
-                    newConnector = cff.findConnector(pointInLocal, o);
-                    if (newConnector != null) {
-                        newConnectedFigure = ff;
-                        constrainedPoint = newConnector.getPositionInLocal(o, ff);
-                        isConnected=true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        DrawingModel model = view.getModel();
-        model.set(o, pointKey, getOwner().worldToLocal(constrainedPoint));
-        model.set(o, connectorKey, newConnector);
-        model.set(o, targetKey, newConnectedFigure);
-    }
-
-    @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
-        isDragging=false;
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return true;
-    }
-
-    @Override
-    public Cursor getCursor() {
-        return isConnected||!isDragging?Cursor.CROSSHAIR:Cursor.MOVE;
-    }
-
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        boolean b = false;
-        if (connectorLocation != null) {
-            b = Geom.length2(x, y, connectorLocation.getX(), connectorLocation.getY()) <= tolerance;
-        }
-        if (!b && pickLocation != null) {
-            b = Geom.length2(x, y, pickLocation.getX(), pickLocation.getY()) <= tolerance;
-        }
-        return b;
-    }
-
-    public Point2D getLocationInView() {
-        return pickLocation;
     }
 
 }

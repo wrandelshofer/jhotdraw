@@ -4,9 +4,7 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.ArrayList;
 import java.util.List;
-import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -23,7 +21,6 @@ import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 
@@ -37,9 +34,10 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class BezierOutlineHandle extends AbstractHandle {
 
+    private final MapAccessor<ImmutableObservableList<BezierNode>> key;
+
     private Path node;
     private String styleclass;
-    private final MapAccessor<ImmutableObservableList<BezierNode>> key;
 
     public BezierOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> key) {
         this(figure, key, STYLECLASS_HANDLE_MOVE_OUTLINE);
@@ -53,15 +51,47 @@ public class BezierOutlineHandle extends AbstractHandle {
         initNode(node);
     }
 
-    protected void initNode(Path r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+    @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        return false;
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return null;
     }
 
     @Override
     public Node getNode() {
         return node;
+    }
+
+    @Override
+    public void handleMouseClicked(MouseEvent event, DrawingView dv) {
+
+        // FIXME implement me
+        if (key != null && event.getClickCount() == 2) {
+            double px = event.getX();
+            double py = event.getY();
+            double tolerance = SimpleDrawingView.TOLERANCE;
+
+            Point2D pInDrawing = dv.viewToWorld(new Point2D(px, py));
+            pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
+            Point2D pInLocal = owner.worldToLocal(pInDrawing);
+            //dv.getModel().set(owner, key, ImmutableObservableList.add(owner.get(key), insertAt, pInLocal));
+            dv.recreateHandles();
+        }
+    }
+
+    protected void initNode(Path r) {
+        r.setFill(null);
+        r.setStroke(Color.BLUE);
+        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return true;
     }
 
     @Override
@@ -71,39 +101,8 @@ public class BezierOutlineHandle extends AbstractHandle {
         Bounds b = getOwner().getBoundsInLocal();
         final ImmutableObservableList<BezierNode> nodes = f.getStyled(key);
         final BezierNodePath bnp = new BezierNodePath(nodes);
-        List<PathElement> elements=        Shapes.fxPathElementsFromAWT(bnp.getPathIterator(Transforms.toAWT(t)));
+        List<PathElement> elements = Shapes.fxPathElementsFromAWT(bnp.getPathIterator(Transforms.toAWT(t)));
         node.getElements().setAll(elements);
     }
 
-    @Override
-    public boolean isSelectable() {
-        return true;
-    }
-
-    @Override
-    public Cursor getCursor() {
-        return null;
-    }
-
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-  return false;
-    }
-
-    @Override
-    public void handleMouseClicked(MouseEvent event, DrawingView dv) {
-        
-        // FIXME implement me
-        if (key != null && event.getClickCount() == 2) {
-            double px = event.getX();
-            double py = event.getY();
-            double tolerance = SimpleDrawingView.TOLERANCE;
-
-                Point2D pInDrawing = dv.viewToWorld(new Point2D(px, py));
-                pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
-                Point2D pInLocal = owner.worldToLocal(pInDrawing);
-                //dv.getModel().set(owner, key, ImmutableObservableList.add(owner.get(key), insertAt, pInLocal));
-                dv.recreateHandles();
-            }
-    }
 }
