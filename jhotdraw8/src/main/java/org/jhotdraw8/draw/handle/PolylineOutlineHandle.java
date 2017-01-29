@@ -37,25 +37,25 @@ public class PolylineOutlineHandle extends AbstractHandle {
     private Polyline node;
     private String styleclass;
     private final MapAccessor<ImmutableObservableList<Point2D>> key;
-private boolean editable;
+    private boolean editable;
 
     public PolylineOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key) {
-        this(figure, key,true, STYLECLASS_HANDLE_MOVE_OUTLINE);
+        this(figure, key, true, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
 
-    public PolylineOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key,boolean editable, String styleclass) {
+    public PolylineOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key, boolean editable, String styleclass) {
         super(figure);
         this.key = key;
         node = new Polyline();
         this.styleclass = styleclass;
-        this.editable=editable;
+        this.editable = editable;
         initNode(node);
     }
 
     protected void initNode(Polyline r) {
         r.setFill(null);
         r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
     }
 
     @Override
@@ -68,7 +68,7 @@ private boolean editable;
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
-        double[] points = PolylineFigure.toPointArray(f,key);
+        double[] points = PolylineFigure.toPointArray(f, key);
         if (t != null) {
             t.transform2DPoints(points, 0, points, 0, points.length / 2);
         }
@@ -88,16 +88,16 @@ private boolean editable;
     public Cursor getCursor() {
         return null;
     }
+
     @Override
     public boolean contains(double x, double y, double tolerance) {
         return false;
     }
 
-
     @Override
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
 
-        if (editable&&key != null && event.getClickCount() == 2) {
+        if (editable && key != null && event.getClickCount() == 2) {
             List<Point2D> points = owner.get(key);
 
             Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
@@ -115,7 +115,7 @@ private boolean editable;
 
                 Intersection result = Intersection.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
                 if (result.getTs().size() == 2) {
-                    insertLocation = Geom.lerp(p1, p2, (result.getTs().get(0) + result.getTs().get(1)) / 2);
+                    insertLocation = Geom.lerp(p1, p2, (result.getIntersections().firstKey() + result.getIntersections().lastKey()) / 2);
                     insertAt = i;
                     break;
                 }

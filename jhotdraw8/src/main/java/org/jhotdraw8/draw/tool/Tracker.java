@@ -28,7 +28,7 @@ public interface Tracker {
     // Behaviors
     // ---
     /**
-     * Returns the node which presents tracker.
+     * Returns the node which presents the tracker.
      *
      * @return a node
      */

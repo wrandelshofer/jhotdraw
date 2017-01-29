@@ -1,6 +1,6 @@
 package org.jhotdraw8.samples.mini;
 
-import org.jhotdraw8.draw.connector.ChopRectangleConnector;
+import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
@@ -15,8 +15,8 @@ public class ConnectingFiguresSample  {
         RectangleFigure b = new RectangleFigure(300, 230, 150, 100);
         LineConnectionFigure c = new LineConnectionFigure();
         
-        c.setStartConnection(a, new ChopRectangleConnector()); // 2
-        c.setEndConnection(b, new ChopRectangleConnector());
+        c.setStartConnection(a, new RectangleConnector()); // 2
+        c.setEndConnection(b, new RectangleConnector());
         
         c.layout(); // 3
         

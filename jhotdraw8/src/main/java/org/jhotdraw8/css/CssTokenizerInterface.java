@@ -101,7 +101,7 @@ public interface CssTokenizerInterface {
     Number currentNumericValue();
 
     String currentStringValue();
-
+    
     int currentToken();
 
     int getLineNumber();

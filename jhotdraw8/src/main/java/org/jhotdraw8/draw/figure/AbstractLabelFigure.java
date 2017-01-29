@@ -25,7 +25,6 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.connector.ChopRectangleConnector;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;

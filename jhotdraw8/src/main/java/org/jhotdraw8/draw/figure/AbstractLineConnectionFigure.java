@@ -19,7 +19,7 @@ import static java.lang.Math.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.jhotdraw8.draw.handle.ConnectionPointHandle;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
@@ -149,12 +149,12 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
             }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
-            list.add(new ConnectionPointHandle(this, START, START_CONNECTOR, START_TARGET));
-            list.add(new ConnectionPointHandle(this, END, END_CONNECTOR, END_TARGET));
+            list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
+            list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
         } else if (handleType == HandleType.POINT) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
-            list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, START, START_CONNECTOR, START_TARGET));
-            list.add(new ConnectionPointHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, END, END_CONNECTOR, END_TARGET));
+            list.add(new LineConnectorHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, START, START_CONNECTOR, START_TARGET));
+            list.add(new LineConnectorHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, END, END_CONNECTOR, END_TARGET));
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_TRANSFORM_OUTLINE));
         } else {

@@ -66,7 +66,7 @@ public class MoveHandle extends LocatorHandle {
 
     @Override
     public Cursor getCursor() {
-        return Cursor.OPEN_HAND;
+        return Cursor.MOVE;
     }
 
     @Override

@@ -35,15 +35,6 @@ public RectangleConnector(Locator locator) {
 
 
     @Override
-    public Point2D chopStart(Figure connection, Figure target, double sx, double sy, double ex, double ey) {
-        return chopStart(connection,target,new Point2D(sx,sy),new Point2D(ex,ey));
-    }
-    @Override
-    public Point2D chopStart(Figure connection, Figure target, Point2D start, Point2D end) {
-        Double t = intersect(connection,target,start,end);
-        return t==null?null:Geom.lerp(start, end, t);
-    }
-    @Override
     public
 Double intersect(Figure connection, Figure target, Point2D start, Point2D end) {
 Point2D s=        target.worldToLocal(start);

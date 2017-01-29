@@ -37,10 +37,6 @@ public class LocatorConnector extends AbstractConnector {
         return locator;
     }
 
-    public void setLocator(Locator locator) {
-        this.locator = locator;
-    }
-
     @Override
     public Point2D getPositionInLocal(Figure connection, Figure target) {
         final Bounds b = target.getBoundsInLocal();

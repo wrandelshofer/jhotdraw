@@ -1,12 +1,10 @@
-/* @(#)RectangleConnector.java
+/* @(#)PathConnector.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
 package org.jhotdraw8.draw.connector;
 
 import java.awt.geom.PathIterator;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
@@ -14,42 +12,30 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_COLOR;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 
 /**
- * RectangleConnector.
+ * PathConnector. The target of the connection must implement {@link PathIterableFigure}.
  *
  * @author Werner Randelshofer
- * @version $$Id: PathIteratorConnector.java 1346 2017-01-25 05:53:44Z rawcoder
- * $$
+ * @version $$Id: PathConnector.java 1346 2017-01-25 05:53:44Z rawcoder
+ $$
  */
-public class PathIteratorConnector extends LocatorConnector {
+public class PathConnector extends LocatorConnector {
 
-    public PathIteratorConnector() {
+    public PathConnector() {
         super(new RelativeLocator(0.5, 0.5));
     }
 
-    public PathIteratorConnector(Locator locator) {
+    public PathConnector(Locator locator) {
         super(locator);
     }
 
-    @Override
-    public Point2D chopStart(Figure connection, Figure target, double sx, double sy, double ex, double ey) {
-        return chopStart(connection, target, new Point2D(sx, sy), new Point2D(ex, ey));
-    }
-
-    @Override
-    public Point2D chopStart(Figure connection, Figure target, Point2D start, Point2D end) {
-        Double t = intersect(connection, target, start, end);
-        // if (t!=null) return intersections.get(0);
-        return t == null ? start : Geom.lerp(start, end, t);
-    }
 
     @Override
     public Double intersect(Figure connection, Figure target, Point2D start, Point2D end) {
         if (!(target instanceof PathIterableFigure)) {
-            return 0.0;
+            return super.intersect(connection, target, start, end);
         }
         PathIterableFigure pif = (PathIterableFigure) target;
         Point2D s = target.worldToLocal(start);
@@ -78,13 +64,6 @@ public class PathIteratorConnector extends LocatorConnector {
         }
 
         Intersection i = Intersection.intersectLinePathIterator(s, e, pit);
-        double maxT = 0.0;
-        for (double t : i.getTs()) {
-            if (t > maxT) {
-                maxT = t;
-            }
-        }
-
-        return i.isEmpty() ? null : maxT;
+        return i.isEmpty() ? null : i.getIntersections().lastKey();
     }
 }

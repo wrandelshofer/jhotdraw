@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.connector.ChopRectangleConnector;
+import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
@@ -51,12 +51,12 @@ public class CssSample extends Application {
         LineConnectionFigure edge3Null = new LineConnectionFigure();
         LineConnectionFigure edgeNullNull = new LineConnectionFigure();
 
-        edge12.setStartConnection(vertex1, new ChopRectangleConnector());
-        edge12.setEndConnection(vertex2, new ChopRectangleConnector());
+        edge12.setStartConnection(vertex1, new RectangleConnector());
+        edge12.setEndConnection(vertex2, new RectangleConnector());
 
-        edge23.setStartConnection(vertex2, new ChopRectangleConnector());
-        edge23.setEndConnection(vertex3, new ChopRectangleConnector());
-        edge3Null.setStartConnection(vertex3, new ChopRectangleConnector());
+        edge23.setStartConnection(vertex2, new RectangleConnector());
+        edge23.setEndConnection(vertex3, new RectangleConnector());
+        edge3Null.setStartConnection(vertex3, new RectangleConnector());
         edge3Null.set(LineConnectionFigure.END, new Point2D(145, 15));
         edgeNullNull.set(LineConnectionFigure.START, new Point2D(65, 90));
         edgeNullNull.set(LineConnectionFigure.END, new Point2D(145, 95));

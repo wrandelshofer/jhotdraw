@@ -66,6 +66,14 @@ public class RelativeLocator extends AbstractLocator {
          Geom.clamp((y-bounds.getMinY())/ bounds.getHeight(),0,1));
     }
 
+    public double getRelativeX() {
+        return relativeX;
+    }
+
+    public double getRelativeY() {
+        return relativeY;
+    }
+
     @Override
     public Point2D locate(Figure owner) {
         Bounds bounds = owner.getBoundsInLocal();
