@@ -259,10 +259,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * Selection tolerance. Selectable margin around a figure.
      */
     public final static double TOLERANCE = 5;
-    /**
-     * Handle selection tolerance (square of radius).
-     */
-    public final static double HANDLE_TOLERANCE = 25;
+    public final static double TOLERANCE_SQUARED = TOLERANCE*TOLERANCE;
 
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
@@ -811,7 +808,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             final Node node = e.getKey();
             final Handle handle = e.getValue();
             if (!handle.isSelectable())continue;
-            if (handle.contains(vx,vy, TOLERANCE)) {
+            if (handle.contains(this,vx,vy, TOLERANCE_SQUARED)) {
                    return handle;
             } else {
                 if (contains(node, new Point2D(vx, vy), TOLERANCE)) {

@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -18,7 +17,6 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -48,10 +46,14 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
         initNode(node);
     }
 
-    protected void initNode(Polygon r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().setAll(styleclass,STYLECLASS_HANDLE);
+    @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        return false;
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return null;
     }
 
     @Override
@@ -59,15 +61,26 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
         return node;
     }
 
+    protected void initNode(Polygon r) {
+        r.setFill(null);
+        r.setStroke(Color.BLUE);
+        r.getStyleClass().setAll(styleclass, STYLECLASS_HANDLE);
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return false;
+    }
+
     @Override
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(),f.getParentToWorld());
+        Transform t = Transforms.concat(view.getWorldToView(), f.getParentToWorld());
         if (f instanceof TransformableFigure) {
             TransformableFigure tf = (TransformableFigure) f;
-            t = Transforms.concat(t,new Translate(tf.get(TRANSLATE_X), tf.get(TRANSLATE_Y)));
+            t = Transforms.concat(t, new Translate(tf.get(TRANSLATE_X), tf.get(TRANSLATE_Y)));
         }
-        t = Transforms.concat(Transform.translate(0.5, 0.5),t);
+        t = Transforms.concat(Transform.translate(0.5, 0.5), t);
         Bounds b = f.getBoundsInLocal();
         points[0] = b.getMinX();
         points[1] = b.getMinY();
@@ -77,7 +90,7 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
         points[5] = b.getMaxY();
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
-        if (t!=null&&t.isType2D()) {
+        if (t != null && t.isType2D()) {
             t.transform2DPoints(points, 0, points, 0, 4);
         }
 
@@ -88,21 +101,5 @@ public class BoundsInTransformOutlineHandle extends AbstractHandle {
 
         node.getStrokeDashArray().setAll(2.0);
     }
-
-    @Override
-    public boolean isSelectable() {
-        return false;
-    }
-
-    @Override
-    public Cursor getCursor() {
-        return null;
-    }
-
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        return false;
-    }
-
 
 }

@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import java.util.HashSet;
-import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -19,13 +17,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
 
@@ -36,35 +30,19 @@ import org.jhotdraw8.geom.Geom;
  */
 public class MultipleSelectionMoveHandle extends AbstractHandle {
 
-    private double relativeX;
-    private double relativeY;
-    private Point2D pickLocation;
-    private Point2D oldPoint;
-    private final Region node;
-    private final String styleclass;
-    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private Point2D locationInDrawing;
+    private final Region node;
+    private Point2D oldPoint;
+    private Point2D pickLocation;
+    private double relativeX;
+    private double relativeY;
+    private final String styleclass;
 
     public MultipleSelectionMoveHandle(double relativeX, double relativeY) {
         this(relativeX, relativeY, STYLECLASS_HANDLE_MULTI_MOVE);
-    }
-
-    public static MultipleSelectionMoveHandle northWest() {
-        return new MultipleSelectionMoveHandle(0.0, 0.0);
-    }
-
-    public static MultipleSelectionMoveHandle northEast() {
-        return new MultipleSelectionMoveHandle(1.0, 0.0);
-    }
-
-    public static MultipleSelectionMoveHandle southWest() {
-        return new MultipleSelectionMoveHandle(0.0, 1.0);
-    }
-
-    public static MultipleSelectionMoveHandle southEast() {
-        return new MultipleSelectionMoveHandle(1.0, 1.0);
     }
 
     public MultipleSelectionMoveHandle(double relativeX, double relativeY, String styleclass) {
@@ -78,10 +56,16 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(11, 11);
-        
-        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+
+        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
+    }
+
+    @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
     }
 
     @Override
@@ -89,31 +73,17 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         return Cursor.OPEN_HAND;
     }
 
+    private Point2D getLocation(DrawingView dv) {
+        return locationInDrawing == null ? null : dv.drawingToView(locationInDrawing);
+    }
+
+    public Point2D getLocationInView() {
+        return pickLocation;
+    }
+
     @Override
     public Region getNode() {
         return node;
-    }
-
-    @Override
-    public void updateNode(DrawingView view) {
-        updateLocation(view);
-        Point2D p = getLocation(view);
-        //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p;
-
-        // The node is centered around the location. 
-        // (The value 5.5 is half of the node size, which is 11,11.
-        // 0.5 is subtracted from 5.5 so that the node snaps between pixels
-        // so that we get sharp lines. 
-        if (p != null) {
-            node.relocate(p.getX() - 5, p.getY() - 5);
-        }
-    }
-
-    @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
-
     }
 
     @Override
@@ -157,6 +127,12 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     @Override
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
+        oldPoint = view.getConstrainer().constrainPoint(getOwner(), view.viewToWorld(new Point2D(event.getX(), event.getY())));
+
+    }
+
+    @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fire undoable edit
     }
@@ -164,19 +140,6 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     @Override
     public boolean isSelectable() {
         return true;
-    }
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        Point2D p = getLocationInView();
-       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
-    }
-
-    public Point2D getLocationInView() {
-        return pickLocation;
-    }
-
-    private Point2D getLocation(DrawingView dv) {
-        return locationInDrawing == null ? null : dv.drawingToView(locationInDrawing);
     }
 
     private void updateLocation(DrawingView dv) {
@@ -191,5 +154,37 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
             }
         }
         locationInDrawing = b == null ? null : new Point2D(b.getMinX() + relativeX * b.getWidth(), b.getMinY() + relativeY * b.getHeight());
+    }
+
+    @Override
+    public void updateNode(DrawingView view) {
+        updateLocation(view);
+        Point2D p = getLocation(view);
+        //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
+        pickLocation = p;
+
+        // The node is centered around the location.
+        // (The value 5.5 is half of the node size, which is 11,11.
+        // 0.5 is subtracted from 5.5 so that the node snaps between pixels
+        // so that we get sharp lines.
+        if (p != null) {
+            node.relocate(p.getX() - 5, p.getY() - 5);
+        }
+    }
+
+    public static MultipleSelectionMoveHandle northEast() {
+        return new MultipleSelectionMoveHandle(1.0, 0.0);
+    }
+
+    public static MultipleSelectionMoveHandle northWest() {
+        return new MultipleSelectionMoveHandle(0.0, 0.0);
+    }
+
+    public static MultipleSelectionMoveHandle southEast() {
+        return new MultipleSelectionMoveHandle(1.0, 1.0);
+    }
+
+    public static MultipleSelectionMoveHandle southWest() {
+        return new MultipleSelectionMoveHandle(0.0, 1.0);
     }
 }

@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -43,15 +42,9 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
         initNode(node);
     }
 
-    protected void initNode(Polygon r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
-    }
-
     @Override
-    public Node getNode() {
-        return node;
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        return false;
     }
 
     private Bounds getBounds(DrawingView dv) {
@@ -66,6 +59,27 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
             }
         }
         return b == null ? null : dv.getWorldToView().transform(b);
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return null;
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    protected void initNode(Polygon r) {
+        r.setFill(null);
+        r.setStroke(Color.BLUE);
+        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return false;
     }
 
     @Override
@@ -87,21 +101,6 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
         for (int i = 0; i < points.length; i++) {
             pp.set(i, Math.round(points[i] + 0.5) - 0.5);
         }
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return false;
-    }
-
-    @Override
-    public Cursor getCursor() {
-        return null;
-    }
-
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        return false;
     }
 
 }

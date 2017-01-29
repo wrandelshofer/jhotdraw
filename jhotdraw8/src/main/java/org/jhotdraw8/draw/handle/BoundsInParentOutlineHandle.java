@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -14,7 +13,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -44,15 +42,30 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
         initNode(node);
     }
 
-    protected void initNode(Polygon r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+    @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        return false;
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return null;
     }
 
     @Override
     public Node getNode() {
         return node;
+    }
+
+    protected void initNode(Polygon r) {
+        r.setFill(null);
+        r.setStroke(Color.BLUE);
+        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return false;
     }
 
     @Override
@@ -77,21 +90,6 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
         for (int i = 0; i < points.length; i++) {
             pp.set(i, points[i]);
         }
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return false;
-    }
-
-    @Override
-    public Cursor getCursor() {
-        return null;
-    }
-
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-    return false;
     }
 
 }

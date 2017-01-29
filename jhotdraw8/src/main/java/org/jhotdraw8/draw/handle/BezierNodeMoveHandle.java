@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import static com.sun.javafx.scene.DirtyBits.REGION_SHAPE;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.collections.ObservableList;
@@ -45,12 +44,9 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class BezierNodeMoveHandle extends AbstractHandle {
 
-    private Point2D pickLocation;
-    private Point2D oldPoint;
-    private final Region node;
-    private final String styleclass;
-    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
-    private final int pointIndex;
+    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
     private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
     private static final Path REGION_SHAPE_QUADRATIC = new Path();
 
@@ -62,10 +58,13 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         elements.add(new LineTo(4, 4));
         elements.add(new ClosePath());
     }
-    private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
+    private final Region node;
+    private Point2D oldPoint;
+    private Point2D pickLocation;
+    private final int pointIndex;
+    private final MapAccessor<ImmutableObservableList<BezierNode>> pointKey;
+    private final String styleclass;
 
     public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableObservableList<BezierNode>> pointKey, int pointIndex) {
         this(figure, pointKey, pointIndex, STYLECLASS_HANDLE_MOVE);
@@ -83,25 +82,15 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        
-        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
 
     @Override
-    public Cursor getCursor() {
-        return Cursor.OPEN_HAND;
-    }
-
-    @Override
-    public Region getNode() {
-        return node;
-    }
-
-    private Point2D getLocation() {
-        return getBezierNode().getC0();
-
+    public boolean contains(DrawingView drawingView, double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
     }
 
     private BezierNode getBezierNode() {
@@ -111,47 +100,22 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(DrawingView view) {
-        Figure f = owner;
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Bounds b = f.getBoundsInLocal();
-        Point2D p = getLocation();
-        //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p = t == null ? p : t.transform(p);
+    public Cursor getCursor() {
+        return Cursor.OPEN_HAND;
+    }
 
-        // The node is centered around the location. 
-        // (The value 5.5 is half of the node size, which is 11,11.
-        // 0.5 is subtracted from 5.5 so that the node snaps between pixels
-        // so that we get sharp lines. 
-        node.relocate(p.getX() - 5, p.getY() - 5);
+    private Point2D getLocation() {
+        return getBezierNode().getC0();
 
-        // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+    }
 
-        BezierNode bn = getBezierNode();
-        if (bn.isC1()&&bn.isC2()) {
-            node.setShape(REGION_SHAPE_CUBIC);
-        } else if (bn.isC1()||bn.isC2()) {
-            node.setShape(REGION_SHAPE_QUADRATIC);
-        } else {
-            node.setShape(REGION_SHAPE_LINEAR);
-        }
+    public Point2D getLocationInView() {
+        return pickLocation;
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
-        oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
-
-        // determine which figures can be reshaped together as a group
-        Set<Figure> selectedFigures = view.getSelectedFigures();
-        groupReshapeableFigures = new HashSet<>();
-        for (Figure f : view.getSelectedFigures()) {
-            if (f.isGroupReshapeableWith(selectedFigures)) {
-                groupReshapeableFigures.add(f);
-            }
-        }
-        groupReshapeableFigures = view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
+    public Region getNode() {
+        return node;
     }
 
     @Override
@@ -188,6 +152,60 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         oldPoint = newPoint;
     }
 
+    @Override
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
+        oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
+
+        // determine which figures can be reshaped together as a group
+        Set<Figure> selectedFigures = view.getSelectedFigures();
+        groupReshapeableFigures = new HashSet<>();
+        for (Figure f : view.getSelectedFigures()) {
+            if (f.isGroupReshapeableWith(selectedFigures)) {
+                groupReshapeableFigures.add(f);
+            }
+        }
+        groupReshapeableFigures = view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
+    }
+
+    @Override
+    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+        // FIXME fire undoable edit
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return true;
+    }
+
+    @Override
+    public void updateNode(DrawingView view) {
+        Figure f = owner;
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Bounds b = f.getBoundsInLocal();
+        Point2D p = getLocation();
+        //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
+        pickLocation = p = t == null ? p : t.transform(p);
+
+        // The node is centered around the location.
+        // (The value 5.5 is half of the node size, which is 11,11.
+        // 0.5 is subtracted from 5.5 so that the node snaps between pixels
+        // so that we get sharp lines.
+        node.relocate(p.getX() - 5, p.getY() - 5);
+
+        // rotates the node:
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+
+        BezierNode bn = getBezierNode();
+        if (bn.isC1() && bn.isC2()) {
+            node.setShape(REGION_SHAPE_CUBIC);
+        } else if (bn.isC1() || bn.isC2()) {
+            node.setShape(REGION_SHAPE_QUADRATIC);
+        } else {
+            node.setShape(REGION_SHAPE_LINEAR);
+        }
+    }
+
     /**
      * Translates the specified figure, given the old and new position of a
      * point.
@@ -206,25 +224,5 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         } else {
             f.reshapeInParent(tx);
         }
-    }
-
-    @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
-        // FIXME fire undoable edit
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return true;
-    }
-
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        Point2D p = getLocationInView();
-       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
-    }
-
-    public Point2D getLocationInView() {
-        return pickLocation;
     }
 }

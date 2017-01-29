@@ -35,27 +35,33 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class PolygonOutlineHandle extends AbstractHandle {
 
+    private boolean editable;
+    private final MapAccessor<ImmutableObservableList<Point2D>> key;
+
     private Polygon node;
     private String styleclass;
-    private final MapAccessor<ImmutableObservableList<Point2D>> key;
-private boolean editable;
+
     public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key) {
-        this(figure, key, true,STYLECLASS_HANDLE_MOVE_OUTLINE);
+        this(figure, key, true, STYLECLASS_HANDLE_MOVE_OUTLINE);
     }
 
-    public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key,boolean editable, String styleclass) {
+    public PolygonOutlineHandle(Figure figure, MapAccessor<ImmutableObservableList<Point2D>> key, boolean editable, String styleclass) {
         super(figure);
         this.key = key;
-        this.editable=editable;
+        this.editable = editable;
         node = new Polygon();
         this.styleclass = styleclass;
         initNode(node);
     }
 
-    protected void initNode(Polygon r) {
-        r.setFill(null);
-        r.setStroke(Color.BLUE);
-        r.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+    @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        return false;
+    }
+
+    @Override
+    public Cursor getCursor() {
+        return null;
     }
 
     @Override
@@ -64,40 +70,9 @@ private boolean editable;
     }
 
     @Override
-    public void updateNode(DrawingView view) {
-        Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Bounds b = getOwner().getBoundsInLocal();
-        double[] points = PolylineFigure.toPointArray(f, key);
-        if (t != null) {
-            t.transform2DPoints(points, 0, points, 0, points.length / 2);
-        }
-        ObservableList<Double> pp = node.getPoints();
-        pp.clear();
-        for (int i = 0; i < points.length; i++) {
-            pp.add(i, points[i]);
-        }
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return true;
-    }
-
-    @Override
-    public Cursor getCursor() {
-        return null;
-    }
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        return false;
-    }
-
-
-    @Override
     public void handleMouseClicked(MouseEvent event, DrawingView dv) {
 
-        if (editable&&key != null && event.getClickCount() == 2) {
+        if (editable && key != null && event.getClickCount() == 2) {
             List<Point2D> points = owner.get(key);
 
             Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
@@ -124,6 +99,33 @@ private boolean editable;
                 dv.getModel().set(owner, key, ImmutableObservableList.add(owner.get(key), insertAt, insertLocation));
                 dv.recreateHandles();
             }
+        }
+    }
+
+    protected void initNode(Polygon r) {
+        r.setFill(null);
+        r.setStroke(Color.BLUE);
+        r.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return true;
+    }
+
+    @Override
+    public void updateNode(DrawingView view) {
+        Figure f = getOwner();
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Bounds b = getOwner().getBoundsInLocal();
+        double[] points = PolylineFigure.toPointArray(f, key);
+        if (t != null) {
+            t.transform2DPoints(points, 0, points, 0, points.length / 2);
+        }
+        ObservableList<Double> pp = node.getPoints();
+        pp.clear();
+        for (int i = 0; i < points.length; i++) {
+            pp.add(i, points[i]);
         }
     }
 }

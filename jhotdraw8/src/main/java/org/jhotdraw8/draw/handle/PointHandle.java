@@ -31,13 +31,14 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class PointHandle extends AbstractHandle {
 
-    private Point2D pickLocation;
-    private final MapAccessor<Point2D> pointKey;
-    private final Region node;
-    private final String styleclass;
-    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+    private final Region node;
+
+    private Point2D pickLocation;
+    private final MapAccessor<Point2D> pointKey;
+    private final String styleclass;
 
     public PointHandle(Figure figure, MapAccessor<Point2D> pointKey) {
         this(figure, STYLECLASS_HANDLE_POINT, pointKey);
@@ -53,10 +54,16 @@ public class PointHandle extends AbstractHandle {
         node.setScaleShape(false);
         node.setCenterShape(true);
         node.resize(11, 11);
-        
-        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+
+        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
+    }
+
+    @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
     }
 
     @Override
@@ -64,25 +71,13 @@ public class PointHandle extends AbstractHandle {
         return Cursor.CROSSHAIR;
     }
 
+    public Point2D getLocationInView() {
+        return pickLocation;
+    }
+
     @Override
     public Region getNode() {
         return node;
-    }
-
-    @Override
-    public void updateNode(DrawingView view) {
-        Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(),f.getLocalToWorld());
-        Point2D p = f.get(pointKey);
-        pickLocation = p = t==null?p:t.transform(p);
-        node.relocate(p.getX() - 5, p.getY() - 5);
-        // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
-        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
-    }
-
-    @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
     }
 
     @Override
@@ -98,6 +93,10 @@ public class PointHandle extends AbstractHandle {
     }
 
     @Override
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    }
+
+    @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
     }
 
@@ -105,13 +104,17 @@ public class PointHandle extends AbstractHandle {
     public boolean isSelectable() {
         return true;
     }
+
     @Override
-    public boolean contains(double x, double y, double tolerance) {
-        Point2D p = getLocationInView();
-       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+    public void updateNode(DrawingView view) {
+        Figure f = getOwner();
+        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Point2D p = f.get(pointKey);
+        pickLocation = p = t == null ? p : t.transform(p);
+        node.relocate(p.getX() - 5, p.getY() - 5);
+        // rotates the node:
+        node.setRotate(f.getStyled(ROTATE));
+        node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }
 
-    public Point2D getLocationInView() {
-        return pickLocation;
-    }
 }

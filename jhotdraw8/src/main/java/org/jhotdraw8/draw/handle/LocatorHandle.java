@@ -5,8 +5,10 @@
 package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
+import org.jhotdraw8.geom.Geom;
 
 /**
  * A LocatorHandle implements a Handle by delegating the location requests to a
@@ -39,5 +41,16 @@ public abstract class LocatorHandle extends AbstractHandle {
      */
     protected Point2D getLocation() {
         return locator.locate(owner);
+    }
+    
+    protected Point2D getLocation(DrawingView dv) {
+return dv.worldToView(       owner.localToWorld(getLocation()));
+    }
+    
+    
+        @Override
+    public boolean contains(DrawingView dv,double x, double y, double tolerance) {
+        Point2D p = getLocation(dv);
+       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
     }
 }

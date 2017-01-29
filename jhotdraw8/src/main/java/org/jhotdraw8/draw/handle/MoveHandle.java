@@ -43,7 +43,7 @@ public class MoveHandle extends LocatorHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
-
+private boolean pressed;
     public MoveHandle(Figure figure, Locator locator) {
         this(figure, locator, STYLECLASS_HANDLE_MOVE);
     }
@@ -66,7 +66,7 @@ public class MoveHandle extends LocatorHandle {
 
     @Override
     public Cursor getCursor() {
-        return Cursor.MOVE;
+        return pressed?Cursor.CLOSED_HAND:Cursor.HAND;
     }
 
     @Override
@@ -96,6 +96,7 @@ public class MoveHandle extends LocatorHandle {
 
     @Override
     public void handleMousePressed(MouseEvent event, DrawingView view) {
+        pressed=true;
         oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         // determine which figures can be reshaped together as a group
@@ -168,7 +169,8 @@ public class MoveHandle extends LocatorHandle {
 
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
-        // FIXME fire undoable edit
+        pressed=false;
+        // FIXME create undoable edit
     }
 
     @Override
@@ -176,11 +178,7 @@ public class MoveHandle extends LocatorHandle {
         return true;
     }
 
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        Point2D p = getLocationInView();
-       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
-    }
+
 
     public Point2D getLocationInView() {
         return pickLocation;

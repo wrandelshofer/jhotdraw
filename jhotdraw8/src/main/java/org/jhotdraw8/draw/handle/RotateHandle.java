@@ -26,8 +26,8 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
@@ -40,26 +40,26 @@ import org.jhotdraw8.geom.Transforms;
  */
 public class RotateHandle extends AbstractHandle {
 
-    private Point2D pickLocation;
-    private final Group group;
-    private final Region pickNode;
-    private final Region pivotNode;
-    private final Line line;
-
-    private double lineLength = 10.0;
+    private static final Background HANDLE_REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final Border HANDLE_REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
 
     private static final Circle PICK_NODE_SHAPE = new Circle(3);
     private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
 
-    static {
-        PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
-    }
-    private static final Background HANDLE_REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    private static final Border HANDLE_REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
     private static final Background PIVOT_REGION_BACKGROUND = new Background(new BackgroundFill(Color.PURPLE, null, null));
     private static final Border PIVOT_REGION_BORDER = null;
 
+    static {
+        PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
+    }
+    private final Group group;
+
     private Set<Figure> groupReshapeableFigures;
+    private final Line line;
+    private double lineLength = 10.0;
+    private Point2D pickLocation;
+    private final Region pickNode;
+    private final Region pivotNode;
 
     public RotateHandle(TransformableFigure figure) {
         this(figure, STYLECLASS_HANDLE_ROTATE, STYLECLASS_HANDLE_TRANSFORM_OUTLINE, STYLECLASS_HANDLE_PIVOT);
@@ -98,13 +98,117 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        Point2D p = getLocationInView();
+        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+    }
+
+    @Override
     public Cursor getCursor() {
         return Cursor.CROSSHAIR;
+    }
+
+    public Point2D getLocationInView() {
+        return pickLocation;
     }
 
     @Override
     public Group getNode() {
         return group;
+    }
+
+    @Override
+    public TransformableFigure getOwner() {
+        return (TransformableFigure) super.getOwner();
+    }
+
+    private Transform getRotateToWorld() {
+        TransformableFigure o = getOwner();
+        Transform t = o.getParentToWorld();
+
+        Point2D center = Geom.center(o.getBoundsInLocal());
+        Transform translate = Transform.translate(o.getStyled(TransformableFigure.TRANSLATE_X), o.getStyled(TransformableFigure.TRANSLATE_Y));
+        Transform scale = Transform.scale(o.getStyled(TransformableFigure.SCALE_X), o.getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
+        Transform rotate = Transform.rotate(o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
+
+        // t = ((TransformableFigure)o).getInverseTransform().createConcatenation(rotate).createConcatenation(scale).createConcatenation(translate);
+        t = Transforms.concat(t, Transforms.concat(translate, rotate));//.createConcatenation(translate).createConcatenation(t);
+
+        return t;
+    }
+
+    private Transform getWorldToRotate() {
+        TransformableFigure o = getOwner();
+        Transform t = o.getWorldToParent();
+        Point2D center = Geom.center(o.getBoundsInLocal());
+
+        Transform translate = Transform.translate(-o.getStyled(TransformableFigure.TRANSLATE_X), -o.getStyled(TransformableFigure.TRANSLATE_Y));
+        Transform scale = Transform.scale(1.0 / o.getStyled(TransformableFigure.SCALE_X), 1.0 / o.getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
+        Transform rotate = Transform.rotate(-o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
+
+        // t = ((TransformableFigure)o).getInverseTransform().createConcatenation(rotate).createConcatenation(scale).createConcatenation(translate);
+        t = Transforms.concat(t, translate);
+
+        return t;
+    }
+
+    @Override
+    public void handleMouseDragged(MouseEvent event, DrawingView view) {
+        TransformableFigure o = getOwner();
+        Point2D center = Geom.center(o.getBoundsInLocal());
+        Transform t = Transforms.concat(getWorldToRotate(), view.getViewToWorld());
+        Point2D newPoint = (t == null) ? new Point2D(event.getX(), event.getY()) : t.transform(new Point2D(event.getX(), event.getY()));
+        double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
+
+        newRotate = newRotate % 360;
+        if (newRotate < 0) {
+            newRotate += 360;
+        }
+
+        if (!event.isAltDown() && !event.isControlDown()) {
+            // alt or control turns the constrainer off
+            newRotate = view.getConstrainer().constrainAngle(getOwner(), newRotate);
+        }
+        if (event.isMetaDown()) {
+            // meta snaps the location of the handle to the grid
+        }
+
+        DrawingModel model = view.getModel();
+        if (event.isShiftDown()) {
+            // shift transforms all selected figures
+            for (Figure f : groupReshapeableFigures) {
+                if (f instanceof TransformableFigure) {
+                    model.set(f, TransformableFigure.ROTATE, newRotate);
+                }
+            }
+        } else {
+            model.set(getOwner(), TransformableFigure.ROTATE, newRotate);
+        }
+    }
+
+    @Override
+    public void handleMousePressed(MouseEvent event, DrawingView view) {
+        pivotNode.setVisible(true);
+        // determine which figures can be reshaped together as a group
+        Set<Figure> selectedFigures = view.getSelectedFigures();
+        groupReshapeableFigures = new HashSet<>();
+        for (Figure f : view.getSelectedFigures()) {
+            if (f.isGroupReshapeableWith(selectedFigures)) {
+                groupReshapeableFigures.add(f);
+            }
+        }
+        groupReshapeableFigures = view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
+    }
+
+    @Override
+    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+        pivotNode.setVisible(false);
+        // FIXME fire undoable edit event
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return true;
     }
 
     @Override
@@ -137,107 +241,4 @@ public class RotateHandle extends AbstractHandle {
         line.setEndY(p.getY());
     }
 
-    private Transform getWorldToRotate() {
-        TransformableFigure o = getOwner();
-        Transform t = o.getWorldToParent();
-        Point2D center = Geom.center(o.getBoundsInLocal());
-
-        Transform translate = Transform.translate(-o.getStyled(TransformableFigure.TRANSLATE_X), -o.getStyled(TransformableFigure.TRANSLATE_Y));
-        Transform scale = Transform.scale(1.0 / o.getStyled(TransformableFigure.SCALE_X), 1.0 / o.getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(-o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
-
-        // t = ((TransformableFigure)o).getInverseTransform().createConcatenation(rotate).createConcatenation(scale).createConcatenation(translate);
-        t = Transforms.concat(t, translate);
-
-        return t;
-    }
-
-    private Transform getRotateToWorld() {
-        TransformableFigure o = getOwner();
-        Transform t = o.getParentToWorld();
-
-        Point2D center = Geom.center(o.getBoundsInLocal());
-        Transform translate = Transform.translate(o.getStyled(TransformableFigure.TRANSLATE_X), o.getStyled(TransformableFigure.TRANSLATE_Y));
-        Transform scale = Transform.scale(o.getStyled(TransformableFigure.SCALE_X), o.getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
-        Transform rotate = Transform.rotate(o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
-
-        // t = ((TransformableFigure)o).getInverseTransform().createConcatenation(rotate).createConcatenation(scale).createConcatenation(translate);
-        t = Transforms.concat(t,Transforms.concat(translate,rotate));//.createConcatenation(translate).createConcatenation(t);
-
-        return t;
-    }
-
-    @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
-        pivotNode.setVisible(true);
-        // determine which figures can be reshaped together as a group
-        Set<Figure> selectedFigures = view.getSelectedFigures();
-        groupReshapeableFigures = new HashSet<>();
-        for (Figure f : view.getSelectedFigures()) {
-            if (f.isGroupReshapeableWith(selectedFigures)) {
-                groupReshapeableFigures.add(f);
-            }
-        }
-        groupReshapeableFigures = view.getFiguresWithCompatibleHandle(groupReshapeableFigures, this);
-    }
-
-    @Override
-    public void handleMouseDragged(MouseEvent event, DrawingView view) {
-        TransformableFigure o = getOwner();
-        Point2D center = Geom.center(o.getBoundsInLocal());
-        Transform t = Transforms.concat(getWorldToRotate(),view.getViewToWorld());
-        Point2D newPoint =  (t==null)?new Point2D(event.getX(), event.getY()): t.transform(new Point2D(event.getX(), event.getY()));
-        double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
-
-        newRotate = newRotate % 360;
-        if (newRotate < 0) {
-            newRotate += 360;
-        }
-
-        if (!event.isAltDown() && !event.isControlDown()) {
-            // alt or control turns the constrainer off
-            newRotate = view.getConstrainer().constrainAngle(getOwner(), newRotate);
-        }
-        if (event.isMetaDown()) {
-            // meta snaps the location of the handle to the grid
-        }
-
-        DrawingModel model = view.getModel();
-        if (event.isShiftDown()) {
-            // shift transforms all selected figures
-            for (Figure f : groupReshapeableFigures) {
-                if (f instanceof TransformableFigure) {
-                    model.set(f, TransformableFigure.ROTATE, newRotate);
-                }
-            }
-        } else {
-            model.set(getOwner(), TransformableFigure.ROTATE, newRotate);
-        }
-    }
-
-    @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
-        pivotNode.setVisible(false);
-        // FIXME fire undoable edit event
-    }
-
-    @Override
-    public TransformableFigure getOwner() {
-        return (TransformableFigure) super.getOwner();
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return true;
-    }
-
-    @Override
-    public boolean contains(double x, double y, double tolerance) {
-        Point2D p = getLocationInView();
-       return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
-    }
-
-    public Point2D getLocationInView() {
-        return pickLocation;
-    }
 }
