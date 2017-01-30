@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="req.drawingObjectModelTreeStructure">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en" xml:id="design.drawingObjectModelTreeStructure">
     <title>Drawing Object Model: Tree Structure</title>
     <para>A drawing is represented as a tree structure.</para>
     <para>The tree structure is implemented with the composite design pattern using the Figure type as shown in figure <xref  linkend="fig.FigureTreeStructure"/>.</para>

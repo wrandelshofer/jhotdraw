@@ -16,16 +16,16 @@ The line will stick to the two figures when the user moves or resizes the connec
 public class ConnectingFiguresSample  {
 
     public Drawing createDrawing() {
-        RectangleFigure a = new RectangleFigure(100, 80, 150, 100);<co  id="listing.Inline.create.co"  linkends="listing.Inline.create" />
+        RectangleFigure a = new RectangleFigure(100, 80, 150, 100);<co xml:id="listing.Inline.create.co"  linkends="listing.Inline.create" />
         RectangleFigure b = new RectangleFigure(300, 230, 150, 100);
         LineConnectionFigure c = new LineConnectionFigure();
         
-        c.setStartConnection(a, new ChopRectangleConnector());<co  id="listing.Inline.connectors.co"  linkends="listing.Inline.connectors" />
+        c.setStartConnection(a, new ChopRectangleConnector());<co xml:id="listing.Inline.connectors.co"  linkends="listing.Inline.connectors" />
         c.setEndConnection(b, new ChopRectangleConnector());
         
-        c.layout();<co  id="listing.Inline.layout.co"  linkends="listing.Inline.layout" />
+        c.layout();<co xml:id="listing.Inline.layout.co"  linkends="listing.Inline.layout" />
         
-        Drawing drawing = new SimpleDrawing(600, 400);<co  id="listing.Inline.drawing.co"  linkends="listing.Inline.drawing" />
+        Drawing drawing = new SimpleDrawing(600, 400);<co xml:id="listing.Inline.drawing.co"  linkends="listing.Inline.drawing" />
         Layer layer = new SimpleLayer();
         drawing.getChildren().addAll(layer);
         layer.getChildren().addAll(a, b, c);
@@ -38,10 +38,10 @@ public class ConnectingFiguresSample  {
     <para>The example program performs the following steps:</para>
 
 <calloutlist>
-  <callout arearefs="listing.Inline.create.co"  id="listing.Inline.create" >
+  <callout arearefs="listing.Inline.create.co" xml:id="listing.Inline.create" >
     <para>Create two rectangle figures and a line connection figure.</para>
   </callout>
-  <callout arearefs="listing.Inline.connectors.co"  id="listing.Inline.connectors" >
+  <callout arearefs="listing.Inline.connectors.co" xml:id="listing.Inline.connectors" >
     <para>Connect the line connection figure to the rectangle figures using chop rectangle connectors. 
          The connectors implement the strategy for computing the connection locations.
           Instead of specifying the connectors by ourselves, we could request them
@@ -50,7 +50,7 @@ public class ConnectingFiguresSample  {
         <programlisting language="java">c.setStartConnection(a, a.findConnector(110,90, c));
 c.setEndConnection(b, b.findConnector(310,240, c));  </programlisting>
   </callout>
-  <callout arearefs="listing.Inline.layout.co"  id="listing.Inline.layout" >
+  <callout arearefs="listing.Inline.layout.co" xml:id="listing.Inline.layout" >
     <para>Layout the line connection figure, so that it computes its start and end locations.
          
          The layout of the line connection figure depends on the layout of the rectangle figures.
@@ -58,7 +58,7 @@ c.setEndConnection(b, b.findConnector(310,240, c));  </programlisting>
          layout on the connection figure. Figures do not automatically update their layout
          due to performance reasons. A DrawingModel can be used to automate this.</para>
   </callout>
-  <callout arearefs="listing.Inline.drawing.co"  id="listing.Inline.drawing" >
+  <callout arearefs="listing.Inline.drawing.co" xml:id="listing.Inline.drawing" >
     <para>Create a drawing and add a layer to it.
         Then add the figures to the layer..</para>
   </callout>

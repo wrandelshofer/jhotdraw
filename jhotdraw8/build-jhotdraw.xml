@@ -107,6 +107,11 @@
         <copy  todir="${build.doc.doc}/handbook">
             <fileset dir="${doc}"/>
         </copy>
+        <copy  todir="${lib.doc.docbook-xsl}">
+            <fileset dir="${doc}/config">
+                <include name="*.xsl"/>
+            </fileset>
+        </copy>
         <copy  todir="${build.doc.doc}/srs">
             <fileset dir="${doc}"/>
         </copy>
@@ -133,6 +138,29 @@
         -->
     </target>
     <target name="do-docbook.crossreference" depends="init,do-docbook.asciidoctor" description="creates a cross-reference uses unix xsltproc command">
+    </target>
+    <target name="do-docbook.crossreferenceOFF" depends="init,do-docbook.asciidoctor" description="creates a cross-reference uses unix xsltproc command">
+
+<!--        
+        <apply executable="xsltproc" dir=".">
+            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+            <env key="XML_DEBUG_CATALOG" value="1"/>
+          
+            <arg value="- -output"/>
+            <arg value="${build.doc.doc}/handbook/general/introduction/crossreference.xml"/>
+            <arg value="- -param"/>
+            <arg value="writing.mode"/>
+            <arg value="lr"/>
+            <arg value="- -xinclude"/>
+            <arg value="${src.doc.xsl}/crossreference.xsl"/>
+            <srcfile/>           
+            
+            <fileset dir="${build.doc.doc}">
+                <include name="**/Book.xml"/>
+            </fileset>  
+        </apply>
+        -->
+        
         <exec executable="xsltproc" dir=".">
             <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
             <env key="XML_DEBUG_CATALOG" value="1"/>
@@ -188,17 +216,16 @@
                 <include name="**/Book.xml"/>
             </fileset>  
         </pathconvert>
-        <echo message="${docbookfiles}"/>
+        <echo message="docbookfiles: ${docbookfiles}"/>
         <exec executable="xmllint" dir=".">
-            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+            <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/validate/catalog.xml"/>
             
             <arg value="--noout"/>
             <arg value="--xinclude"/>
             <arg value="--schema"/>
             <arg value="${lib.doc.docbook}/xsd/docbook.xsd"/>
-            <!--arg value="- -relaxng"/>
-            <arg value="${lib.doc.docbook}/rng/docbook.rng"/-->
-            <!--arg value="doc/introduction/Introduction.xml"/-->
+<!--           <arg value="- -relaxng"/>
+            <arg value="${lib.doc.docbook}/rng/docbook.rng"/>-->
             <arg line="${docbookfiles}"/>
         </exec>
     </target>
@@ -455,15 +482,15 @@
     </macrodef>
     <target name="do-docbook.transform.saxon.chunk" depends="init,do-docbook.crossreference" description="uses saxon">
         <call-saxon destdir="${build.doc}/chunk/handbook"
-                    srcfile="${build.doc.doc}/handbook/JHotDraw8Handbook.xml"
-                    srcdir="${build.doc.doc}/handbook"
+                    srcfile="${build.doc.doc}/handbook/handbook/Book.xml"
+                    srcdir="${build.doc.doc}/handbook/handbook"
                     destfile="${build.doc}/chunk/handbook/JHotDraw8Handbook.xhtml"
                     style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
         />
         
         <call-saxon destdir="${build.doc}/chunk/srs"
-                    srcfile="${build.doc.doc}/srs/JHotDraw8SRS.xml"
-                    srcdir="${build.doc.doc}/srs"
+                    srcfile="${build.doc.doc}/srs/srs/Book.xml"
+                    srcdir="${build.doc.doc}/srs/srs"
                     destfile="${build.docl}/chunk/srs/JHotDraw8SRS.xhtml"
                     style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
         />
