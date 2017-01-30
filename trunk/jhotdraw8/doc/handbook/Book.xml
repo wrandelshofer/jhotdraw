@@ -16,16 +16,16 @@
     </info>
     <chapter>
         <title>Introduction</title>
-        <xi:include href="handbook/Purpose.xml"/>
-        <xi:include href="general/introduction/Definitions.xml"/>
-        <xi:include href="general/introduction/References.xml"/>
+        <xi:include href="introduction/Purpose.xml"/>
+        <xi:include href="../general/introduction/Definitions.xml"/>
+        <xi:include href="../general/introduction/References.xml"/>
     </chapter>
     <chapter>
         <title>The Drawing Framework</title>
         <section>
             <title>Examples</title>
-            <xi:include href="handbook/draw/LineConnectionFigures.xml"/>
-            <xi:include href="handbook/draw/LineConnectionFiguresInline.xml"/>
+            <xi:include href="draw/LineConnectionFigures.xml"/>
+            <xi:include href="draw/LineConnectionFiguresInline.xml"/>
         </section>
     </chapter>
 </book>
