@@ -12,12 +12,12 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Group;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
+import org.jhotdraw8.draw.figure.Groupable;
 
 /**
  * AddToGroupAction.
@@ -58,7 +58,7 @@ public class RemoveFromGroupAction extends AbstractSelectedAction {
             Layer layer = f.getAncestor(Layer.class);
             if (layer.isEditable()) {
     if                    (f.getParent() != null && f.getParent().isDecomposable()
-                        && f.getParent().isEditable()&&(f.getParent()instanceof Group)) {
+                        && f.getParent().isEditable()&&(f.getParent()instanceof Groupable)) {
                 if (f.isEditable()) {
                     reparentableFigures.add(f);
                 } else {

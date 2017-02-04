@@ -5,9 +5,12 @@
 package org.jhotdraw8.app;
 
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletionStage;
+import java.util.prefs.Preferences;
 import javafx.scene.control.MenuBar;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
+import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.gui.URIChooser;
 
 /**
@@ -30,6 +33,10 @@ public interface ApplicationModel {
      *
      * @return a new instance
      */
+    default CompletionStage<Project> createProjectAsync() {
+        return FXWorker.supply(this::createProject);
+    }
+
     public Project createProject();
     // URI choosers
 
@@ -98,10 +105,13 @@ public interface ApplicationModel {
      *
      * @return a menu bar
      */
+    default CompletionStage<MenuBar> createMenuBarAsync() {
+        return FXWorker.supply(this::createMenuBar);
+    }    
     MenuBar createMenuBar();
 
     /**
-     * Gets the resource bundle for use by the application.
+     * Gets the resource bundle of the application.
      *
      * @return the resource bundle
      */
@@ -114,4 +124,8 @@ public interface ApplicationModel {
      * @return the application map
      */
     HierarchicalMap<String, Action> createApplicationActionMap(Application app);
+
+    /** Gets the preferences of the application.
+     * @return the preferences */
+    Preferences getPreferences();
 }

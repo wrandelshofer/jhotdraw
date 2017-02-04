@@ -27,7 +27,7 @@ import org.jhotdraw8.geom.Transforms;
  * @version $Id$
  */
 public class GroupFigure extends AbstractCompositeFigure 
-        implements Group, ResizableFigure,  TransformableFigure, HideableFigure, StyleableFigure, LockableFigure{
+        implements Groupable, ResizableFigure,  TransformableFigure, HideableFigure, StyleableFigure, LockableFigure{
 
     /**
      * The CSS type selector for group objects is @code("group"}.

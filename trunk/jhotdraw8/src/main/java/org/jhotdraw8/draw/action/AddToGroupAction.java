@@ -12,11 +12,11 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Group;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
+import org.jhotdraw8.draw.figure.Groupable;
 
 /**
  * AddToGroupAction.
@@ -58,7 +58,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
             return;
         }
         Figure lead = figures.get(figures.size()-1);
-        if (!(lead instanceof Group) && !lead.isAllowsChildren() || !lead.isDecomposable()) {
+        if (!(lead instanceof Groupable) && !lead.isAllowsChildren() || !lead.isDecomposable()) {
             // FIXME internationalize me
             new Alert(Alert.AlertType.INFORMATION, "The last figure in the selection must be a group.").showAndWait();
             return;

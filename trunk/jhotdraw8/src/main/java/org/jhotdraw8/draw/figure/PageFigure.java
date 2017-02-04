@@ -48,7 +48,7 @@ import org.jhotdraw8.text.CssSize2D;
  *
  * @author Werner Randelshofer
  */
-public class PageFigure extends AbstractCompositeFigure implements Page, Group, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
+public class PageFigure extends AbstractCompositeFigure implements Page, Groupable, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
 
     public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey NUM_PAGES_X = new DoubleStyleableFigureKey("num-pages-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);

@@ -15,11 +15,11 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Group;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
+import org.jhotdraw8.draw.figure.Groupable;
 
 /**
  * UngroupAction.
@@ -61,7 +61,7 @@ public class UngroupAction extends AbstractSelectedAction {
         }
 
         for (Figure f : figures) {
-            if (!(f instanceof Group)) {
+            if (!(f instanceof Groupable)) {
                 // FIXME internationalize me
                 new Alert(Alert.AlertType.INFORMATION, "Only groups can be ungrouped").showAndWait();
                 return;
