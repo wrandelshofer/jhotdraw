@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
-import org.jhotdraw8.draw.figure.Groupable;
+import org.jhotdraw8.draw.figure.Grouping;
 
 /**
  * UngroupAction.
@@ -61,7 +61,7 @@ public class UngroupAction extends AbstractSelectedAction {
         }
 
         for (Figure f : figures) {
-            if (!(f instanceof Groupable)) {
+            if (!(f instanceof Grouping)) {
                 // FIXME internationalize me
                 new Alert(Alert.AlertType.INFORMATION, "Only groups can be ungrouped").showAndWait();
                 return;

@@ -17,7 +17,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
-import org.jhotdraw8.draw.figure.Groupable;
+import org.jhotdraw8.draw.figure.Grouping;
 
 /**
  * AddToGroupAction.
@@ -58,7 +58,7 @@ public class RemoveFromGroupAction extends AbstractSelectedAction {
             Layer layer = f.getAncestor(Layer.class);
             if (layer.isEditable()) {
     if                    (f.getParent() != null && f.getParent().isDecomposable()
-                        && f.getParent().isEditable()&&(f.getParent()instanceof Groupable)) {
+                        && f.getParent().isEditable()&&(f.getParent()instanceof Grouping)) {
                 if (f.isEditable()) {
                     reparentableFigures.add(f);
                 } else {

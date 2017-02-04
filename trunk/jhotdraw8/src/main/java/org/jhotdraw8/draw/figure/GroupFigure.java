@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @version $Id$
  */
 public class GroupFigure extends AbstractCompositeFigure
-        implements Groupable, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
+        implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
 
     /**
      * The CSS type selector for group objects is @code("group"}.
