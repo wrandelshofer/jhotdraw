@@ -268,7 +268,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
         }
         Scene scene = new Scene(borderPane);
 
-        PreferencesUtil.installStagePrefsHandler(Preferences.userNodeForPackage(getClass()), "stage", stage);
+        PreferencesUtil.installStagePrefsHandler(model.getPreferences(), "stage", stage);
 
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> {

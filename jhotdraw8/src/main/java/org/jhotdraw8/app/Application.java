@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import org.jhotdraw8.collection.HierarchicalMap;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
@@ -24,7 +25,7 @@ import org.jhotdraw8.beans.PropertyBean;
  * @design.pattern Application Framework, KeyAbstraction. The application
  * framework supports the creation of document oriented applications which can
  * support platform-specific guidelines. The application framework consists of
- * the following key abstractions:  {@link Application}, {@link ApplicationModel}, {@link Project}, 
+ * the following key abstractions: null {@link Application}, {@link ApplicationModel}, {@link Project}, 
  * {@link Action}.
  *
  * @author Werner Randelshofer
@@ -34,6 +35,14 @@ public interface Application extends Disableable, PropertyBean {
 
     public static final String RECENT_URIS_PROPERTY = "recentUris";
     public static final String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
+    public static final String MODEL_PROPERTY = "model";
+
+    /**
+     * The application model.
+     *
+     * @return the model
+     */
+    public ObjectProperty<ApplicationModel> modelProperty();
 
     /**
      * The set of projects contains all open projects..
@@ -85,8 +94,8 @@ public interface Application extends Disableable, PropertyBean {
     }
 
     /**
-     * Provides the currently active project. This is the last project which was focus
-     * owner. Returns null, if the application has no projects.
+     * Provides the currently active project. This is the last project which was
+     * focus owner. Returns null, if the application has no projects.
      *
      * @return The active view.
      */
@@ -116,14 +125,18 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the model
      */
-    public ApplicationModel getModel();
+    default ApplicationModel getModel() {
+        return modelProperty().get();
+    }
 
     /**
      * Sets the application model.
      *
      * @param newValue the model
      */
-    public void setModel(ApplicationModel newValue);
+    default void setModel(ApplicationModel newValue) {
+        modelProperty().set(newValue);
+    }
 
     /**
      * Exits the application.
@@ -139,6 +152,10 @@ public interface Application extends Disableable, PropertyBean {
         return null;
     }
 
+    default void addProject() {
+        createProject().thenAccept(this::add);
+    }
+    
     /**
      * Creates a new view, initializes it, then invokes the callback.
      *
@@ -165,5 +182,9 @@ public interface Application extends Disableable, PropertyBean {
 
     default int getMaxNumberOfRecentUris() {
         return maxNumberOfRecentUrisProperty().get();
+    }
+
+    default void setMaxNumberOfRecentUris(int newValue) {
+        maxNumberOfRecentUrisProperty().set(newValue);
     }
 }

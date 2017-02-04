@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
+import java.util.prefs.Preferences;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
@@ -49,15 +50,24 @@ public class SimpleApplicationModel implements ApplicationModel {
     private final List<URIExtensionFilter> saveExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
-    private Supplier<DocumentProject> viewFactory;
+    private Supplier<DocumentProject> projectFactory;
     private URL menuFxml;
 
     public SimpleApplicationModel() {
 
     }
 
-    public SimpleApplicationModel(String name,
+    public SimpleApplicationModel(
             Supplier<DocumentProject> viewFactory,
+            URL menuFxml,
+            String fileDescription,
+            DataFormat format,
+            String fileExtension) {
+        this(null, viewFactory, menuFxml, fileDescription, format, fileExtension);
+    }
+
+    public SimpleApplicationModel(String name,
+            Supplier<DocumentProject> projectFactory,
             URL menuFxml,
             String fileDescription,
             DataFormat format,
@@ -67,15 +77,20 @@ public class SimpleApplicationModel implements ApplicationModel {
         URIExtensionFilter fef = new URIExtensionFilter(fileDescription, format, fileExtension);
         openExtensionFilters.add(fef);
         saveExtensionFilters.add(fef);
-        this.viewFactory = viewFactory;
+        this.projectFactory = projectFactory;
     }
 
-    public Supplier<DocumentProject> getViewFactory() {
-        return viewFactory;
+    @Override
+    public Preferences getPreferences() {
+        return Preferences.userNodeForPackage(getClass());
     }
 
-    public void setViewFactory(Supplier<DocumentProject> viewFactory) {
-        this.viewFactory = viewFactory;
+    public Supplier<DocumentProject> getProjectFactory() {
+        return projectFactory;
+    }
+
+    public void setProjectFactory(Supplier<DocumentProject> projectFactory) {
+        this.projectFactory = projectFactory;
     }
 
     public URL getMenuFxml() {
@@ -104,7 +119,7 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     @Override
     public DocumentProject createProject() {
-        return viewFactory.get();
+        return projectFactory.get();
     }
 
     @Override
@@ -141,7 +156,7 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     @Override
     public String getName() {
-        return name;
+        return name != null ? name : getClass().getPackage().getImplementationVersion();
     }
 
     public void setName(String newValue) {
@@ -165,6 +180,9 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     @Override
     public MenuBar createMenuBar() {
+        if (menuFxml == null) {
+            return null;
+        }
         FXMLLoader loader = new FXMLLoader();
         loader.setResources(getResources());
         try (InputStream in = menuFxml.openStream()) {

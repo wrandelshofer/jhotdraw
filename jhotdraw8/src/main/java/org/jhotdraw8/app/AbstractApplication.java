@@ -11,11 +11,13 @@ import java.util.LinkedHashSet;
 import java.util.prefs.Preferences;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
@@ -39,6 +41,8 @@ public abstract class AbstractApplication extends javafx.application.Application
      * Holds the disablers.
      */
     private final ObservableSet<Object> disablers = FXCollections.observableSet();
+    /** Holds the model.*/
+    private final ObjectProperty<ApplicationModel> model=new SimpleObjectProperty<>(this,MODEL_PROPERTY,null);
 
     /**
      * Holds the max number of recent URIs.
@@ -125,6 +129,11 @@ public abstract class AbstractApplication extends javafx.application.Application
     @Override
     public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
+    }
+
+    @Override
+    public ObjectProperty<ApplicationModel> modelProperty() {
+        return model;
     }
 
     @Override
