@@ -42,6 +42,7 @@ public class DocumentApplication extends AbstractApplication {
         addProject(new Stage());
     }
 
+    @SuppressWarnings("unchecked")
     private void addProject(Stage stage) {
         final Function<Throwable, ?> exceptionHandler = (ex) -> {
             if (ex != null) {
@@ -52,8 +53,8 @@ public class DocumentApplication extends AbstractApplication {
             };
             stage.close();
             return null;
-        };        
-        
+        };
+
         PreferencesUtil.installStagePrefsHandler(Preferences.userNodeForPackage(getClass()), "stage", stage);
         final CompletionStage<Project> createProject = getModel().createProjectAsync();
         final CompletionStage<MenuBar> createMenuBar = getModel().createMenuBarAsync();
@@ -66,7 +67,7 @@ public class DocumentApplication extends AbstractApplication {
             if (ex != null) {
                 exceptionHandler.apply(ex);
             } else {
-                if ( mb != null) {
+                if (mb != null) {
                     mb.setUseSystemMenuBar(true);
                     rootPane.setTop(mb);
                 }

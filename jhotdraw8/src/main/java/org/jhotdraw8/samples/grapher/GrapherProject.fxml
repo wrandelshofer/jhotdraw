@@ -1,37 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <ToolBar fx:id="toolsToolBar" prefHeight="40.0" prefWidth="200.0" styleClass="tools" VBox.vgrow="NEVER" />
-    <SplitPane fx:id="mainSplitPane" dividerPositions="0.5" VBox.vgrow="ALWAYS">
-      <items>
-        <ScrollPane fx:id="viewScrollPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
-          <styleClass>
-            <String fx:value="view" />
-            <String fx:value="flush" />
-          </styleClass>
-        </ScrollPane>
-        <ScrollPane fx:id="detailsScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" SplitPane.resizableWithParent="false">
-          <content>
-            <VBox fx:id="detailsVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-          </content>
-          <styleClass>
-            <String fx:value="details" />
-            <String fx:value="flush" />
-            <String fx:value="inspector" />
-          </styleClass>
-        </ScrollPane>
-      </items>
-      <styleClass>
-        <String fx:value="main" />
-        <String fx:value="flush" />
-      </styleClass>
-    </SplitPane>
+      <BorderPane fx:id="contentPane" VBox.vgrow="ALWAYS" />
   </children>
 </VBox>
