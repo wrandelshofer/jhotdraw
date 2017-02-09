@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -20,17 +20,18 @@ import java.util.prefs.Preferences;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Side;
+import javafx.geometry.Orientation;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.DataFormat;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -108,6 +109,13 @@ import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.PageLabelFigure;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
 import org.jhotdraw8.draw.tool.BezierCreationTool;
+import org.jhotdraw8.gui.dock.Dock;
+import org.jhotdraw8.gui.dock.DockItem;
+import org.jhotdraw8.gui.dock.DockRoot;
+import org.jhotdraw8.gui.dock.ScrollableVBoxTrack;
+import org.jhotdraw8.gui.dock.SingleItemDock;
+import org.jhotdraw8.gui.dock.SplitPaneTrack;
+import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSizeInsets;
 
@@ -135,14 +143,22 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
 
     private DrawingEditor editor;
     @FXML
-    private SplitPane mainSplitPane;
+    private BorderPane contentPane;
     private Node node;
     @FXML
     private ToolBar toolsToolBar;
-    @FXML
-    private ScrollPane viewScrollPane;
+    private DockRoot dockRoot;
 
-    private void addInspector(Inspector inspector, String id, Priority grow, List<Node> list) {
+    private DockItem addInspector(Inspector inspector, String id, Priority grow) {
+        Resources r = Labels.getResources();
+        DockItem dockItem = new DockItem();
+        dockItem.setText(r.getString(id + ".toolbar"));
+        dockItem.setContent(inspector.getNode());
+        dockItem.getProperties().put("inspector", inspector);
+        return dockItem;
+    }
+
+    private void addInspectorOLD(Inspector inspector, String id, Priority grow) {
         Resources r = Labels.getResources();
 
         Accordion a = new Accordion();
@@ -150,7 +166,6 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         Pane n = (Pane) inspector.getNode();
         TitledPane t = new TitledPane(r.getString(id + ".toolbar"), n);
         a.getPanes().add(t);
-        list.add(a);
         a.getProperties().put("inspector", inspector);
 
         // Make sure that an expanded accordion has the specified grow priority.
@@ -247,8 +262,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
-        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, BezierFigure.PATH, () -> createFigure(BezierFigure
-                ::new), layerFactory), 6, 1);
+        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
                 layerFactory), 6, 0);
@@ -305,6 +319,10 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
 
+        ScrollPane viewScrollPane = new ScrollPane();
+        viewScrollPane.setFitToHeight(true);
+        viewScrollPane.setFitToWidth(true);
+        viewScrollPane.getStyleClass().addAll("view", "flush");
         viewScrollPane.setContent(drawingView.getNode());
 
         Supplier<Layer> layerFactory = initToolBar();
@@ -313,22 +331,50 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         ztbar.zoomFactorProperty().bindBidirectional(drawingView.zoomFactorProperty());
         toolsToolBar.getItems().add(ztbar);
 
+        // set up the docking framework
+        dockRoot = new DockRoot();
+        dockRoot.setDockFactory(TabbedAccordionDock::new);
+        dockRoot.setVerticalTrackFactory(ScrollableVBoxTrack::new);
+        dockRoot.setHorizontalTrackFactory(SplitPaneTrack::createHorizontalTrack);
+        dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
+        dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, () -> new SplitPaneTrack(Orientation.VERTICAL));
+        DockItem dockItem = new DockItem(null, viewScrollPane);
+        SingleItemDock singleItemDock = new SingleItemDock(dockItem);
+        dockRoot.addDock(singleItemDock);
+
+        contentPane.setCenter(dockRoot);
+
         FXWorker.supply(() -> {
-            List<Node> list = new LinkedList<>();
-            addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS, list);
-            addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER, list);
-            addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS, list);
-            addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS, list);
-            addInspector(new HierarchyInspector(), "figureHierarchy", Priority.ALWAYS, list);
-            addInspector(new DrawingInspector(), "drawing", Priority.NEVER, list);
-            addInspector(new GridInspector(), "grid", Priority.NEVER, list);
-            return list;
+            Set<Dock> d = new LinkedHashSet<>();
+            Dock dock = new TabbedAccordionDock();
+            dock.getItems().add(addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS));
+            dock.getItems().add(addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER));
+            dock.getItems().add(addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS));
+            d.add(dock);
+            dock = new TabbedAccordionDock();
+            dock.getItems().add(addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS));
+            dock.getItems().add(addInspector(new HierarchyInspector(), "figureHierarchy", Priority.ALWAYS));
+            d.add(dock);
+            dock = new TabbedAccordionDock();
+            dock.getItems().add(addInspector(new DrawingInspector(), "drawing", Priority.NEVER));
+            dock.getItems().add(addInspector(new GridInspector(), "grid", Priority.NEVER));
+            d.add(dock);
+            return d;
         }).thenAccept(list -> {
-            for (Node n : list) {
-                Inspector i = (Inspector) n.getProperties().get("inspector");
-                i.setDrawingView(drawingView);
+            ScrollableVBoxTrack vtrack = new ScrollableVBoxTrack();
+            Set<DockItem> items = new LinkedHashSet<>();
+            for (Dock dock : list) {
+                for (DockItem n : dock.getItems()) {
+                    items.add(n);
+                    Inspector i = (Inspector) n.getProperties().get("inspector");
+                    i.setDrawingView(drawingView);
+                }
+                vtrack.getItems().add(dock.getNode());
             }
-            detailsVBox.getChildren().addAll(list);
+            SplitPaneTrack htrack = SplitPaneTrack.createHorizontalTrack();
+            htrack.getItems().add(vtrack.getNode());
+            dockRoot.addTrack(htrack);
+            dockRoot.setDockableItems(FXCollections.observableSet(items));
         }).exceptionally(e -> {
             e.printStackTrace();
             return null;
@@ -369,7 +415,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         );
 
         Preferences prefs = Preferences.userNodeForPackage(GrapherProject.class);
-        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
+//        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 
     @Override
