@@ -17,6 +17,7 @@ import javafx.geometry.VPos;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.FillRule;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -109,19 +110,19 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         }
 
         {
-            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(TextFigure.class));
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(TextFigure.class));
             keys.remove(TextFigure.TEXT);
             addNodeListKey(TextFigure.class, "", TextFigure.TEXT);
             addFigureKeysAndNames("Text", TextFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(LabelFigure.class));
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(LabelFigure.class));
             keys.remove(LabelFigure.TEXT);
             addNodeListKey(LabelFigure.class, "", LabelFigure.TEXT);
             addFigureKeysAndNames("Label", LabelFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys =  new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(PageLabelFigure.class));
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(PageLabelFigure.class));
             keys.remove(PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
             addNodeListKey(PageLabelFigure.class, "", PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
             addFigureKeysAndNames("PageLabel", PageLabelFigure.class, keys);
@@ -157,8 +158,9 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(CssSize.class, new CssSizeConverter());
         addConverterForType(CssSizeInsets.class, new CssSizeInsetsConverter());
         addConverterForType(CssSize2D.class, new CssSize2DConverter());
-        
-       addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());
+        addConverterForType(FillRule.class, new XmlEnumConverter<FillRule>(FillRule.class));
+
+        addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssDoubleListConverter());
         addConverter(StrokeableFigure.STROKE_LINE_CAP, new XmlEnumConverter<StrokeLineCap>(StrokeLineCap.class));
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
