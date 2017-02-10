@@ -30,8 +30,8 @@ public class ScrollableVBoxTrack extends Control implements Track {
     private ScrollPane scrollPane = new ScrollPane(vbox);
 
     public ScrollableVBoxTrack() {
-                setSkin(new CustomSkin<>(this));
-                        getStyleClass().add("track");
+        setSkin(new CustomSkin<>(this));
+        getStyleClass().add("track");
         getChildren().add(scrollPane);
         setMinWidth(10);
         setMinHeight(10);
