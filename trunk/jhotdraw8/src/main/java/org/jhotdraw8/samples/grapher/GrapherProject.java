@@ -336,8 +336,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         dockRoot.setDockFactory(TabbedAccordionDock::new);
         dockRoot.setVerticalTrackFactory(ScrollableVBoxTrack::new);
         dockRoot.setHorizontalTrackFactory(SplitPaneTrack::createHorizontalTrack);
-        dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
-        dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, () -> new SplitPaneTrack(Orientation.VERTICAL));
+       // dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
         DockItem dockItem = new DockItem(null, viewScrollPane);
         SingleItemDock singleItemDock = new SingleItemDock(dockItem);
         dockRoot.addDock(singleItemDock);
@@ -379,6 +378,8 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
             e.printStackTrace();
             return null;
         });
+        
+       dockRoot.getStylesheets().add(GrapherProject.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString());
     }
 
     @Override
