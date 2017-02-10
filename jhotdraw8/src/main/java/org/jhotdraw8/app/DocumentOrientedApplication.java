@@ -157,16 +157,16 @@ public class DocumentOrientedApplication extends AbstractApplication {
     @Override
     public CompletionStage<Project> createProject() {
         return FXWorker.supply(() -> getModel().createProject())
-                .thenApply((v) -> {
+                .handle((v, e) -> {
+                    if (e != null) {
+                        e.printStackTrace();
+                        final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+                        Alert alert = new Alert(Alert.AlertType.ERROR,
+                                labels.getString("application.createView.error"));
+                        alert.show();
+                    }
                     return v;
-                }).exceptionally(e -> {
-            e.printStackTrace();
-            final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-            Alert alert = new Alert(Alert.AlertType.ERROR,
-                    labels.getString("application.createView.error"));
-            alert.show();
-            return null;
-        });
+                });
     }
 
     private void disambiguateProjects() {
@@ -283,8 +283,8 @@ public class DocumentOrientedApplication extends AbstractApplication {
 
             project.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
-        
-        stage.addEventFilter(KeyEvent.KEY_RELEASED, event->System.out.println(event));
+
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, event -> System.out.println(event));
         stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
             if (newValue) {
                 activeProject.set(project);
@@ -416,7 +416,6 @@ public class DocumentOrientedApplication extends AbstractApplication {
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
         }
 
-        // FIXME - We suppress here 2 exceptions!
         final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
         createProject().whenComplete((pv, ex1) -> {
             DocumentProject v = (DocumentProject) pv;
@@ -430,13 +429,21 @@ public class DocumentOrientedApplication extends AbstractApplication {
             v.addDisabler(this);
             v.clear().whenComplete((result, ex) -> {
                 if (ex != null) {
+                    ex.printStackTrace();
                     new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error")).show();
                 } else {
                     v.removeDisabler(this);
                 }
             });
-        });
+        }).handle((v,ex) -> {
+            ex.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,
+                    labels.getString("application.createView.error")).showAndWait();
+           exit();
+            return null;
+        }
+        );
     }
 
     private void updateRecentMenuItemsInAllMenuBars(Observable o) {
