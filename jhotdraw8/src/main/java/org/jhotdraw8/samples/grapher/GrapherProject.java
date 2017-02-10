@@ -9,7 +9,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -23,7 +22,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
@@ -253,13 +251,14 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         Resources labels = Resources.getResources("org.jhotdraw8.samples.grapher.Labels");
         Supplier<Layer> layerFactory = () -> createFigure(SimpleLayer::new);
         Tool defaultTool;
-        ttbar.addTool(defaultTool = new SelectionTool("tool.selectFigure", HandleType.RESIZE, null, HandleType.LEAD, labels), 0, 0);
+        ttbar.addTool(defaultTool = new SelectionTool("tool.resizeFigure", HandleType.RESIZE, null, HandleType.LEAD, labels), 0, 0);
+        ttbar.addTool(defaultTool = new SelectionTool("tool.moveFigure", HandleType.MOVE, null, HandleType.LEAD, labels), 1, 0);
         ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, labels), 0, 1);
         ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, labels), 1, 1);
-        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0);
+        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0,16);
         ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(LineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
-        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1);
+        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1,16);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory), 6, 1);
@@ -272,7 +271,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
                 layerFactory), 9, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
-        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0);
+        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0,16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             PageFigure pf = new PageFigure();
             pf.set(PageFigure.PAPER_SIZE, new CssSize2D(297, 210, "mm"));
@@ -282,7 +281,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                     FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null);
             pf.add(pl);
             return pf;
-        }), layerFactory), 8, 1);
+        }), layerFactory), 8, 1,16);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
@@ -336,7 +335,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         dockRoot.setDockFactory(TabbedAccordionDock::new);
         dockRoot.setVerticalTrackFactory(ScrollableVBoxTrack::new);
         dockRoot.setHorizontalTrackFactory(SplitPaneTrack::createHorizontalTrack);
-       // dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
+        // dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
         DockItem dockItem = new DockItem(null, viewScrollPane);
         SingleItemDock singleItemDock = new SingleItemDock(dockItem);
         dockRoot.addDock(singleItemDock);
@@ -378,8 +377,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
             e.printStackTrace();
             return null;
         });
-        
-       dockRoot.getStylesheets().add(GrapherProject.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString());
+
     }
 
     @Override

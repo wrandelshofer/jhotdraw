@@ -100,7 +100,11 @@ import org.w3c.dom.Element;
  */
 public class SvgExporter implements InternalExternalUriMixin {
 
-    public final static DataFormat SVG_FORMAT = new DataFormat("image/svg+xml");
+    public final static DataFormat SVG_FORMAT; static {
+    DataFormat fmt= DataFormat.lookupMimeType("image/svg+xml");
+    if (fmt==null) fmt=new DataFormat("image/svg+xml");
+    SVG_FORMAT=fmt;
+}
 
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XLINK_Q = "xlink";

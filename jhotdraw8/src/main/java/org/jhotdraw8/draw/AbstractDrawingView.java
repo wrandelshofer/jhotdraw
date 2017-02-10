@@ -110,7 +110,14 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         if (out == null) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         } else {
-            Map<DataFormat, Object> content = new LinkedHashMap<>();
+            Map<DataFormat, Object> content = new LinkedHashMap<DataFormat, Object>() {
+                @Override
+                public Object put(DataFormat key,Object value) {
+                    if (key==null)throw new IllegalArgumentException("key == null");
+                    return super.put(key, value); 
+                }
+                
+            };
             try {
                 final ObservableSet<Figure> selectedFigures = getSelectedFigures();
 
