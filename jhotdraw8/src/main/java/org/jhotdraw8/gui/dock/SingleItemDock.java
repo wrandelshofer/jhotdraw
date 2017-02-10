@@ -56,13 +56,6 @@ public class SingleItemDock extends Control implements Dock {
             }
         });
 
-        parentProperty().addListener((o, oldv, newv) -> {
-            if (newv != null) {
-                newv.setStyle("-fx-background-color:transparent;-fx-border-width:0,0;-fx-padding:0;");
-                System.out.println("SingleItemDoc parent:" + newv + " newvp:" + newv.getParent());
-            }
-        });
-
         if (item != null) {
             items.add(item);
         }
