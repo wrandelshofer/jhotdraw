@@ -23,6 +23,7 @@ public class SplitPaneTrack extends SplitPane implements Track {
 
     public SplitPaneTrack(Orientation o) {
         setOrientation(o);
+                getStyleClass().add("track");
         setStyle("-fx-background-color:transparent;-fx-border-width:0,0;-fx-padding:0;");
 
     }

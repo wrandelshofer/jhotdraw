@@ -17,6 +17,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 /**
@@ -41,6 +42,7 @@ this(null,content);
         graphicProperty().addListener(this::graphicChanged);
         setGraphic(new Text("[.]"));
         setClosable(false);
+                getStyleClass().add("dockItem");
     }
 
     public ObjectProperty dockProperty() {
@@ -74,7 +76,10 @@ this(null,content);
         Node graphic = getGraphic();
         draggedTab = this;
         Dragboard db = graphic.startDragAndDrop(TransferMode.MOVE);
-        db.setDragView(graphic.snapshot(null, null), e.getX(), e.getY());
+       
+        db.setDragView(
+              (  graphic.getParent()==null?graphic:graphic.getParent()).snapshot(null, null), 
+        e.getX(), e.getY());
         ClipboardContent content = new ClipboardContent();
         content.put(DOCKABLE_TAB_FORMAT, System.identityHashCode(this));
         db.setContent(content);

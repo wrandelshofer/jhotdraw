@@ -16,6 +16,12 @@
       this is a HBox to which we add labels and progress bars as needed
 */
 
+.dock * {
+      -fx-font-size: 11px;
+}
+.track .split-pane-divider {
+      -fx-padding: 0 1px 0 1px;  
+}
 .tools  {
 }
 

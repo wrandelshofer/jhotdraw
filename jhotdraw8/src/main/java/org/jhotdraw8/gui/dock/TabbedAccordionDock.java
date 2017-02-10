@@ -32,6 +32,7 @@ public class TabbedAccordionDock extends Control implements Dock {
     public TabbedAccordionDock() {
 
         setSkin(new CustomSkin<>(this));
+        getStyleClass().add("dock");
         getChildren().add(accordion);
         accordion.getPanes().add(titlePane);
         accordion.setExpandedPane(titlePane);

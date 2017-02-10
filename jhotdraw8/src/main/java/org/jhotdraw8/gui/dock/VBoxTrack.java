@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 public class VBoxTrack extends VBox implements Track {
 
     public VBoxTrack() {
-        getItems().addListener(new ListChangeListener<Node>() {
+       /* getItems().addListener(new ListChangeListener<Node>() {
             @Override
             public void onChanged(ListChangeListener.Change<? extends Node> c) {
                 while (c.next()) {
@@ -31,7 +31,7 @@ public class VBoxTrack extends VBox implements Track {
                     }
                 }
             }
-        });
+        });*/
     }
 
     @Override

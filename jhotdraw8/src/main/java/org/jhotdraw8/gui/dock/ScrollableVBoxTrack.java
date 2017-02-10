@@ -16,6 +16,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.jhotdraw8.gui.CustomSkin;
 
 /**
  * ScrollableVBoxTrack.
@@ -29,6 +30,8 @@ public class ScrollableVBoxTrack extends Control implements Track {
     private ScrollPane scrollPane = new ScrollPane(vbox);
 
     public ScrollableVBoxTrack() {
+                setSkin(new CustomSkin<>(this));
+                        getStyleClass().add("track");
         getChildren().add(scrollPane);
         setMinWidth(10);
         setMinHeight(10);
