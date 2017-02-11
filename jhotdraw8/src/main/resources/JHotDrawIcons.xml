@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><Drawing background="transparent" height="88" id="drawing1" width="128" xmlns="http://jhotdraw.org/samples/grapher">
 <Layer id="content">
+  <Rectangle bounds="90 46 19 16" fill="none" id="rectangle12" stroke="grey" stroke-type="inside"/>
+  <Rectangle bounds="68 72 14 10" fill="none" id="rectangle24" stroke="grey" stroke-type="inside"/>
   <Rectangle bounds="90 46 14 11" fill="none" id="rectangle9" stroke="grey" stroke-type="inside" stroke-width="2"/>
   <Ellipse center="55 11" id="ellipse2" radius="6.5 6.5" stroke-width="2"/>
   <Rectangle bounds="5 5 12 12" fill="lightgreen" id="rectangle4" opacity="0.5" stroke="none" stroke-type="inside"/>

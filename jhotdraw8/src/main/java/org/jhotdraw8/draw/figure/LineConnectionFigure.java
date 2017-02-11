@@ -42,6 +42,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
+
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Line();
