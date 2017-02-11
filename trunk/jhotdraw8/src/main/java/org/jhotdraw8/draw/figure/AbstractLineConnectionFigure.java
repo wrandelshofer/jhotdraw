@@ -35,7 +35,7 @@ import org.jhotdraw8.draw.locator.PointLocator;
  * $
  */
 public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
-        implements NonTransformableFigure {
+        implements NonTransformableFigure, ConnectingFigure {
 
     /**
      * The end position of the line.
@@ -123,17 +123,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         endTargetProperty.addListener(clEnd);
     }
 
-    /**
-     * Returns true if this figure can connect to the specified figure with the
-     * specified connector.
-     *
-     * @param figure The figure to which we want connect
-     * @param connector The connector that we want to use
-     * @return true if the connection is supported
-     */
-    public boolean canConnect(Figure figure, Connector connector) {
-        return true;
-    }
+
 
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {

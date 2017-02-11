@@ -19,6 +19,7 @@ import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.AbstractLineConnectionFigure;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
+import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -31,31 +32,31 @@ import org.jhotdraw8.util.ReversedList;
  */
 public class ConnectionTool extends AbstractTool {
 
-    private Supplier<AbstractLineConnectionFigure> figureFactory;
+    private Supplier<ConnectingFigure> figureFactory;
     private Supplier<Layer> layerFactory;
 
     /**
      * The created figure.
      */
-    private Figure figure;
+    private ConnectingFigure figure;
 
     /**
      * The minimum size of a created figure (in view coordinates.
      */
     private double minSize = 2;
 
-    public ConnectionTool(String name, Resources rsrc, Supplier<AbstractLineConnectionFigure> figureFactory) {
+    public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory) {
         this(name, rsrc, figureFactory, SimpleLayer::new);
     }
 
-    public ConnectionTool(String name, Resources rsrc, Supplier<AbstractLineConnectionFigure> figureFactory,
+    public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory,
             Supplier<Layer> layerFactory) {
         super(name, rsrc);
         this.figureFactory = figureFactory;
         this.layerFactory = layerFactory;
     }
 
-    public void setFactory(Supplier<AbstractLineConnectionFigure> factory) {
+    public void setFactory(Supplier<ConnectingFigure> factory) {
         this.figureFactory = factory;
     }
 
@@ -82,14 +83,20 @@ public class ConnectionTool extends AbstractTool {
         Figure newConnectedFigure = null;
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
-            for (Figure ff : list) {
-                 if (ff instanceof ConnectableFigure) {
-                        ConnectableFigure cff=(ConnectableFigure)ff;
-                newConnector = cff.findConnector(newPoint, figure);
-                if (newConnector != null) {
-                    newConnectedFigure = ff;
-                    break;
-                }}
+            for (Figure f1 : list) {
+                for (Figure ff : f1.breadthFirstIterable()) {
+                    if (ff instanceof ConnectableFigure) {
+                        ConnectableFigure cff = (ConnectableFigure) ff;
+                        Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
+                        if (ff.getBoundsInLocal().contains(pointInLocal)) {
+                            newConnector = cff.findConnector(pointInLocal, figure);
+                            if (newConnector != null && figure.canConnect(ff, newConnector)) {
+                                newConnectedFigure = ff;
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
         figure.set(LineConnectionFigure.START_CONNECTOR, newConnector);
@@ -115,22 +122,6 @@ public class ConnectionTool extends AbstractTool {
         if (figure != null) {
             Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
             Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
-
-            Connector newConnector = null;
-            Figure newConnectionTarget = null;
-            if (!event.isMetaDown()) {
-                List<Figure> list = view.findFigures(pointInViewCoordinates, true);
-                for (Figure ff : list) {
-                    if (ff instanceof ConnectableFigure) {
-                        ConnectableFigure cff=(ConnectableFigure)ff;
-                    newConnector = cff.findConnector(cff.worldToLocal(newPoint), figure);
-                    if (newConnector != null) {
-                        newConnectionTarget = ff;
-                        break;
-                    }                    }
-                }
-            }
-
             Point2D constrainedPoint;
             if (!event.isAltDown() && !event.isControlDown()) {
                 // alt or control turns the constrainer off
@@ -138,8 +129,30 @@ public class ConnectionTool extends AbstractTool {
             } else {
                 constrainedPoint = newPoint;
             }
-
+            Connector newConnector = null;
+            Figure newConnectionTarget = null;
             DrawingModel model = view.getModel();
+            // must clear end target, otherwise findConnector won't work as expected
+            model.set(figure, LineConnectionFigure.END_TARGET, null);
+            if (!event.isMetaDown()) {
+                List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+                for (Figure f1 : list) {
+                    for (Figure ff : f1.breadthFirstIterable()) {
+                        if (ff instanceof ConnectableFigure) {
+                            ConnectableFigure cff = (ConnectableFigure) ff;
+                            Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
+                            if (ff.getBoundsInLocal().contains(pointInLocal)) {
+                                newConnector = cff.findConnector(pointInLocal, figure);
+                                if (newConnector != null && figure.canConnect(ff, newConnector)) {
+                                    newConnectionTarget = ff;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             model.set(figure, LineConnectionFigure.END, figure.worldToLocal(constrainedPoint));
             model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
             model.set(figure, LineConnectionFigure.END_TARGET, newConnectionTarget);
