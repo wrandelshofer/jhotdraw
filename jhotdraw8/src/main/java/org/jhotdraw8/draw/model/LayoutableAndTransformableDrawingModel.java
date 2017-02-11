@@ -343,7 +343,8 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                     for (Figure a : f.ancestorIterable()) {
                         if (a instanceof TransformableFigure) {
                             markDirty(a, DirtyBits.NODE, DirtyBits.TRANSFORM);
-                        }
+                        }else
+                            markDirty(a, DirtyBits.NODE);
                     }
                 }
             }

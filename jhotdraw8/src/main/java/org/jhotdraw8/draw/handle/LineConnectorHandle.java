@@ -22,7 +22,9 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
+import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -66,13 +68,13 @@ public class LineConnectorHandle extends AbstractHandle {
     private final String styleclassDisconnected;
     private final MapAccessor<Figure> targetKey;
 
-    public LineConnectorHandle(Figure figure, MapAccessor<Point2D> pointKey,
+    public LineConnectorHandle(ConnectingFigure figure, MapAccessor<Point2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
                 connectorKey, targetKey);
     }
 
-    public LineConnectorHandle(Figure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<Point2D> pointKey,
+    public LineConnectorHandle(ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<Point2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         super(figure);
         this.pointKey = pointKey;
@@ -131,6 +133,11 @@ public class LineConnectorHandle extends AbstractHandle {
     }
 
     @Override
+    public ConnectingFigure getOwner() {
+        return (ConnectingFigure) super.getOwner();
+    }
+
+    @Override
     public void handleMouseDragged(MouseEvent event, DrawingView view) {
         isDragging = true;
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
@@ -144,28 +151,34 @@ public class LineConnectorHandle extends AbstractHandle {
             constrainedPoint = newPoint;
         }
 
-        Figure o = getOwner();
+        ConnectingFigure o = getOwner();
         Connector newConnector = null;
         Figure newConnectedFigure = null;
         isConnected = false;
+            // must clear end target, otherwise findConnector won't work as expected
+        DrawingModel model = view.getModel();
+            model.set(o, targetKey, null);
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
-            for (Figure ff : list) {
-                if (ff instanceof ConnectableFigure) {
-                    ConnectableFigure cff = (ConnectableFigure) ff;
-                    Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
-                    newConnector = cff.findConnector(pointInLocal, o);
-                    if (newConnector != null) {
-                        newConnectedFigure = ff;
-                        constrainedPoint = newConnector.getPositionInLocal(o, ff);
-                        isConnected = true;
-                        break;
+            for (Figure f1 : list) {
+                for (Figure ff : f1.breadthFirstIterable()) {
+                    if (ff instanceof ConnectableFigure) {
+                        ConnectableFigure cff = (ConnectableFigure) ff;
+                        Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
+                        if (ff.getBoundsInLocal().contains(pointInLocal)) {
+                            newConnector = cff.findConnector(pointInLocal, o);
+                            if (newConnector != null && o.canConnect(ff, newConnector)) {
+                                newConnectedFigure = ff;
+                                constrainedPoint = newConnector.getPositionInLocal(o, ff);
+                                isConnected = true;
+                                break;
+                            }
+                        }
                     }
                 }
             }
         }
 
-        DrawingModel model = view.getModel();
         model.set(o, pointKey, getOwner().worldToLocal(constrainedPoint));
         model.set(o, connectorKey, newConnector);
         model.set(o, targetKey, newConnectedFigure);

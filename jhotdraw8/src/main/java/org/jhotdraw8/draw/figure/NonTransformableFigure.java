@@ -4,7 +4,12 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.util.List;
+import javafx.geometry.Bounds;
+import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.ImmutableObservableList;
+import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -30,7 +35,7 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
 
     @Override
     default void reshapeInParent(Transform transform) {
-        reshapeInLocal(Transforms.concat(getParentToLocal(),transform));
+        reshapeInLocal(Transforms.concat(getParentToLocal(), transform));
     }
 
     @Override
@@ -41,5 +46,12 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
     @Override
     default Transform getParentToLocal() {
         return FigureImplementationDetails.IDENTITY_TRANSFORM;
+    }
+
+    @Override
+    default void reshapeInLocal(Transform transform) {
+        Bounds b = getBoundsInLocal();
+        b = transform.transform(b);
+        reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 }

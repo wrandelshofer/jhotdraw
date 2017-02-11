@@ -73,6 +73,8 @@ import java.util.ResourceBundle;
  */
 public class Resources extends ResourceBundle implements Serializable {
 
+    final static public String PARENT_RESOURCE_KEY = "$parent";
+
     private static final HashSet<String> acceleratorKeys = new HashSet<String>(
             Arrays.asList(new String[]{
         "shift", "control", "ctrl", "meta", "alt", "altGraph"
@@ -213,12 +215,16 @@ public class Resources extends ResourceBundle implements Serializable {
 
         Resources potentialParent = null;
         try {
-            String parentBaseName = this.resource.getString("$parent");
+            String parentBaseName = this.resource.getString(PARENT_RESOURCE_KEY);
             if (parentBaseName != null && !Objects.equals(baseName, parentBaseName)) {
                 potentialParent = new Resources(parentBaseName, locale);
             }
+            if (potentialParent == null) {
+                System.err.println("Can't find parent resource bundle. =" + PARENT_RESOURCE_KEY + "=" + parentBaseName);
+            } else {
+                //System.out.println("Found parent resource bundle. " + PARENT_RESOURCE_KEY + "=" + parentBaseName);
+            }
         } catch (MissingResourceException e) {
-
         }
         this.parent = potentialParent;
     }
