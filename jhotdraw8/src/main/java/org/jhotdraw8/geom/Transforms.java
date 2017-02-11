@@ -26,6 +26,34 @@ import javafx.geometry.Point2D;
  */
 public class Transforms {
 
+    public static Transform concat(Transform a, Transform b) {
+        return (a == null) ? b : (b == null ? a : a.createConcatenation(b));
+    }
+
+    public static Transform concat(Transform a, Transform b, Transform c) {
+        return concat(concat(a, b), c);
+    }
+
+    public static Transform createReshapeTransform(Bounds f, Bounds t) {
+        return createReshapeTransform(
+                f.getMinX(), f.getMinY(), f.getWidth(), f.getHeight(),
+                t.getMinX(), t.getMinY(), t.getWidth(), t.getHeight()
+        );
+    }
+
+    public static Transform createReshapeTransform(double fx, double fy, double fw, double fh, double tx, double ty, double tw, double th) {
+        double sx = tw / fw;
+        double sy = th / fh;
+
+        Transform t = new Translate(tx - fx, ty - fy);
+        if (!Double.isNaN(sx) && !Double.isNaN(sy)
+                && !Double.isInfinite(sx) && !Double.isInfinite(sy)
+                && (sx != 1d || sy != 1d)) {
+            t = Transforms.concat(t, new Scale(sx, sy, fx, fy));
+        }
+        return t;
+    }
+
     /**
      * Decomposes the given transformation matrix into rotation, followed by
      * scale and then translation. Returns the matrix if the decomposition
@@ -85,32 +113,36 @@ public class Transforms {
 
         return list;
     }
-    
-        public static Transform concat(Transform a, Transform b) {
-       return (a==null) ? b : (b==null?a:a.createConcatenation(b));
-    }
-                public static Transform concat(Transform a, Transform b, Transform c) {
-       return concat(concat(a,b),c);
-    }
 
     public static Point2D deltaTransform(Transform t, double x, double y) {
-        if (t==null) return new Point2D(x,y);
-        else return t.deltaTransform(x,y);        
+        if (t == null) {
+            return new Point2D(x, y);
+        } else {
+            return t.deltaTransform(x, y);
+        }
     }
+
     public static Point2D deltaTransform(Transform t, Point2D p) {
-        if (t==null) return p;
-        else return t.deltaTransform(p);        
+        if (t == null) {
+            return p;
+        } else {
+            return t.deltaTransform(p);
+        }
     }
 
     public static AffineTransform toAWT(Transform t) {
-        if (t==null) return null;
-        return new AffineTransform(t.getMxx(),t.getMyx(),t.getMxy(),t.getMyy(),t.getTx(),t.getTy());
+        if (t == null) {
+            return null;
+        }
+        return new AffineTransform(t.getMxx(), t.getMyx(), t.getMxy(), t.getMyy(), t.getTx(), t.getTy());
     }
 
     public static Bounds transform(Transform tx, Bounds b) {
-        return tx==null?b:tx.transform(b);
+        return tx == null ? b : tx.transform(b);
     }
+
     public static Point2D transform(Transform tx, Point2D b) {
-        return tx==null?b:tx.transform(b);
+        return tx == null ? b : tx.transform(b);
     }
+
 }
