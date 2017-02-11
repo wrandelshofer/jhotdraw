@@ -49,10 +49,7 @@ import org.jhotdraw8.geom.Transforms;
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
 
-    /**
-     * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
-     */
-    public final static String TYPE_SELECTOR = "Region";
+
 
     public final static DoubleStyleableFigureKey X = RectangleFigure.X;
     public final static DoubleStyleableFigureKey Y = RectangleFigure.Y;
@@ -123,8 +120,5 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
 
 
-    @Override
-    public String getTypeSelector() {
-        return TYPE_SELECTOR;
-    }
+  
 }
