@@ -45,7 +45,7 @@ this(null,content);
                 getStyleClass().add("dockItem");
     }
 
-    public ObjectProperty dockProperty() {
+    public ObjectProperty<Dock> dockProperty() {
         return dock;
     }
 

@@ -402,8 +402,9 @@ public class DockRoot extends Control {
 
         if (zone != null) {
             e.acceptTransferModes(TransferMode.MOVE);
+                 e.consume();
         }
-        e.consume();
+
 
     }
 
