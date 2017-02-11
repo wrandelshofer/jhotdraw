@@ -646,7 +646,7 @@ public class Shapes {
                     break;
                 }
                 case 'a': {
-                    // absolute-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
+                    // relative-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("rx coordinate missing for 'A' at position " + tt.getStartPosition() + " in " + str);
                     }
@@ -676,7 +676,7 @@ public class Shapes {
                     if (tt.nextToken() != StreamPosTokenizer.TT_NUMBER) {
                         throw new IOException("y coordinate missing for 'A' at position " + tt.getStartPosition() + " in " + str);
                     }
-                    double y = p.x + tt.nval;
+                    double y = p.y + tt.nval;
                     builder.arcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
                     p.x = x;
                     p.y = y;
