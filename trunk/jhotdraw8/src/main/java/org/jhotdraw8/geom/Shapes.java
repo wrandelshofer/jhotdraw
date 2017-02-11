@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.geometry.Bounds;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ArcType;
@@ -44,6 +47,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.transform.MatrixType;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.draw.figure.AbstractRegionFigure;
 import org.jhotdraw8.io.StreamPosTokenizer;
 import org.jhotdraw8.svg.SvgPath2D;
 import org.jhotdraw8.text.XmlNumberConverter;
@@ -1004,5 +1008,37 @@ if (index<Integer.MAX_VALUE)index++;            }
         awtShapeFromFXPathElements(elements);
         return result;
     }
-
+    
+    /**
+     * Fits the specified SVGPath into the given bounds.
+     * 
+     * @param pathstr an SVGPath String
+     * @param b the desired bounds
+     * @param elems on output contains the reshaped path elements
+     */
+    public static void reshapePathElements(String pathstr, Bounds b, List<PathElement> elems) {
+        if (pathstr != null) {
+            try {
+                Shape shape = Shapes.awtShapeFromSvgString(pathstr);
+                java.awt.geom.Rectangle2D r2d = shape.getBounds2D();
+                Transform tx = Transforms.createReshapeTransform(
+                        r2d.getX(), r2d.getY(), r2d.getWidth(), r2d.getHeight(),
+                        b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()
+                );
+            elems.clear();
+                elems.addAll( Shapes.fxPathElementsFromAWT(shape.getPathIterator(Transforms.toAWT(tx))));
+            } catch (IOException ex) {
+                pathstr = null;
+                Logger.getLogger(Shape.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (pathstr == null) {
+            elems.clear();
+            elems.add(new MoveTo(b.getMinX(), b.getMinY()));
+            elems.add(new LineTo(b.getMaxX(), b.getMinY()));
+            elems.add(new LineTo(b.getMaxX(), b.getMaxY()));
+            elems.add(new LineTo(b.getMinX(), b.getMaxY()));
+            elems.add(new ClosePath());
+        }
+    }
 }

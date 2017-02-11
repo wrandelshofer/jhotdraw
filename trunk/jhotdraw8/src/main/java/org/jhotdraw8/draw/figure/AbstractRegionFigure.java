@@ -100,6 +100,8 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         return new Path();
     }
 
+
+
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         Path path = (Path) node;
@@ -116,28 +118,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
             pathElements = FXCollections.observableArrayList();
         }
         Bounds b = getBoundsInLocal();
-        if (pathstr != null) {
-            try {
-                Shape shape = Shapes.awtShapeFromSvgString(pathstr);
-                java.awt.geom.Rectangle2D r2d = shape.getBounds2D();
-                Transform tx = Transforms.createReshapeTransform(
-                        r2d.getX(), r2d.getY(), r2d.getWidth(), r2d.getHeight(),
-                        b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()
-                );
-                pathElements = Shapes.fxPathElementsFromAWT(shape.getPathIterator(Transforms.toAWT(tx)));
-            } catch (IOException ex) {
-                pathstr = null;
-                Logger.getLogger(AbstractRegionFigure.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if (pathstr == null) {
-            pathElements.clear();
-            pathElements.add(new MoveTo(b.getMinX(), b.getMinY()));
-            pathElements.add(new LineTo(b.getMaxX(), b.getMinY()));
-            pathElements.add(new LineTo(b.getMaxX(), b.getMaxY()));
-            pathElements.add(new LineTo(b.getMinX(), b.getMaxY()));
-            pathElements.add(new ClosePath());
-        }
+        Shapes.reshapePathElements(pathstr, b, pathElements);
     }
 
 

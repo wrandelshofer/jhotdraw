@@ -32,7 +32,8 @@ import org.jhotdraw8.util.ReversedList;
 public class CreationTool extends AbstractCreationTool<Figure> {
 
 
-
+private double defaultWidth=10;
+private double defaultHeight=10;
     /**
      * The rubber band.
      */
@@ -52,6 +53,22 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         node.setCursor(Cursor.CROSSHAIR);
     }
 
+    public double getDefaultHeight() {
+        return defaultHeight;
+    }
+
+    public void setDefaultHeight(double defaultHeight) {
+        this.defaultHeight = defaultHeight;
+    }
+
+    public double getDefaultWidth() {
+        return defaultWidth;
+    }
+
+    public void setDefaultWidth(double defaultWidth) {
+        this.defaultWidth = defaultWidth;
+    }
+
     @Override
     protected void stopEditing() {
         createdFigure = null;
@@ -65,7 +82,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         y2 = y1;
         createdFigure = createFigure();
         Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToDrawing(new Point2D(x1, y1)));
-        createdFigure.reshapeInLocal(c.getX(), c.getY(), 1, 1);
+        createdFigure.reshapeInLocal(c.getX(), c.getY(), defaultWidth, defaultHeight);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getRoot();
 
@@ -84,7 +101,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
                 Point2D c2 = dv.getConstrainer().translatePoint(createdFigure, dv.viewToDrawing(x1
                         + minSize, y1 + minSize), Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
-                    c2 = new Point2D(c1.getX() + 10, c1.getY() + 10);
+                    c2 = new Point2D(c1.getX() + defaultWidth, c1.getY() + defaultHeight);
                 }
                 DrawingModel dm = dv.getModel();
                 dm.reshape(createdFigure, c1.getX(), c1.getY(), c2.getX() - c1.getX(), c2.getY()
