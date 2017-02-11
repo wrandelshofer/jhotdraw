@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.event.EventType;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -333,6 +334,10 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     protected void handleKeyPressed(KeyEvent event, DrawingView view) {
+        if (event.getCode()==KeyCode.ESCAPE) {
+            fireToolDone();
+        }else if (event.getCode()==KeyCode.ENTER) {
+            stopEditing();}
     }
 
     protected void handleKeyReleased(KeyEvent event, DrawingView view) {

@@ -135,9 +135,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
         }
     }
 
-    /**
-     * This implementation is empty.
-     */
+
     @Override
     public void activate(SimpleDrawingEditor editor) {
         requestFocus();
