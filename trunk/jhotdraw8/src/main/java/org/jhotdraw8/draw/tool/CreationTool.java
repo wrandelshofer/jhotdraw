@@ -18,6 +18,8 @@ import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
+import org.jhotdraw8.draw.figure.AnchorableFigure;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -81,8 +83,13 @@ private double defaultHeight=10;
         x2 = x1;
         y2 = y1;
         createdFigure = createFigure();
+        
+        double anchorX=Geom.clamp(createdFigure.get(AnchorableFigure.ANCHOR_X),0,1);
+        double anchorY=Geom.clamp(createdFigure.get(AnchorableFigure.ANCHOR_Y),0,1);
+        
+        
         Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToDrawing(new Point2D(x1, y1)));
-        createdFigure.reshapeInLocal(c.getX(), c.getY(), defaultWidth, defaultHeight);
+        createdFigure.reshapeInLocal(c.getX()-defaultWidth*anchorX, c.getY()-defaultHeight*anchorY, defaultWidth, defaultHeight);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getRoot();
 

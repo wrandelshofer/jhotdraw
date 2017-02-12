@@ -18,8 +18,8 @@ import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.SymmetricPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 
 /**
@@ -42,7 +42,7 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
     public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
     public final static DoubleStyleableFigureKey ARC_HEIGHT = new DoubleStyleableFigureKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), 0.0);
     public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), 0.0);
-    public final static Point2DStyleableMapAccessor ARC = new Point2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
+    public final static SymmetricPoint2DStyleableMapAccessor ARC = new SymmetricPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
     public RectangleFigure() {
         this(0, 0, 1, 1);
