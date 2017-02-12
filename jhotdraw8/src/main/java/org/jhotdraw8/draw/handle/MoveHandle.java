@@ -43,7 +43,8 @@ public class MoveHandle extends LocatorHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
-private boolean pressed;
+    private boolean pressed;
+
     public MoveHandle(Figure figure, Locator locator) {
         this(figure, locator, STYLECLASS_HANDLE_MOVE);
     }
@@ -58,15 +59,14 @@ private boolean pressed;
         node.setCenterShape(true);
         node.resize(11, 11);
 
-        
-        node.getStyleClass().addAll(styleclass,STYLECLASS_HANDLE);
+        node.getStyleClass().addAll(styleclass, STYLECLASS_HANDLE);
         node.setBorder(REGION_BORDER);
         node.setBackground(REGION_BACKGROUND);
     }
 
     @Override
     public Cursor getCursor() {
-        return pressed?Cursor.CLOSED_HAND:Cursor.HAND;
+        return pressed ? Cursor.CLOSED_HAND : Cursor.HAND;
     }
 
     @Override
@@ -96,7 +96,7 @@ private boolean pressed;
 
     @Override
     public void handleMousePressed(MouseEvent event, DrawingView view) {
-        pressed=true;
+        pressed = true;
         oldPoint = view.getConstrainer().constrainPoint(owner, view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         // determine which figures can be reshaped together as a group
@@ -123,9 +123,7 @@ private boolean pressed;
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
             final Transform localToWorld = owner.getLocalToWorld();
-            if (localToWorld != null) {
-                oldPoint = localToWorld.transform(loc);
-            }
+            oldPoint = Transforms.transform(localToWorld, loc);
         }
 
         if (oldPoint.equals(newPoint)) {
@@ -169,7 +167,7 @@ private boolean pressed;
 
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
-        pressed=false;
+        pressed = false;
         // FIXME create undoable edit
     }
 
@@ -177,8 +175,6 @@ private boolean pressed;
     public boolean isSelectable() {
         return true;
     }
-
-
 
     public Point2D getLocationInView() {
         return pickLocation;

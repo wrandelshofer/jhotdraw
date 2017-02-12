@@ -13,8 +13,10 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingView;
+import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
+import org.jhotdraw8.geom.Geom;
 
 /**
  * |@code SimpleDragTracker} implements interactions with the content area of a
@@ -91,8 +93,14 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
         if (event.isMetaDown()) {
             // meta snaps the top left corner of the anchor figure to the grid
+            // or whatever corner is specified in the anchor
             Bounds bounds = anchorFigure.getBoundsInLocal();
-            Point2D loc = new Point2D(bounds.getMinX(), bounds.getMinY());
+            
+        double anchorX=Geom.clamp(anchorFigure.get(AnchorableFigure.ANCHOR_X),0,1);
+        double anchorY=Geom.clamp(anchorFigure.get(AnchorableFigure.ANCHOR_Y),0,1);
+        
+            Point2D loc = new Point2D(bounds.getMinX()+anchorX*bounds.getWidth(), 
+                    bounds.getMinY()+anchorY*bounds.getHeight());
             oldPoint = anchorFigure.localToWorld(loc);
         }
 
