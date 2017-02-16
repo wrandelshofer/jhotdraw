@@ -5,7 +5,14 @@
 
 package org.jhotdraw8.draw.figure;
 
+import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.connector.Connector;
+import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.END;
+import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.END_CONNECTOR;
+import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.END_TARGET;
+import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.START;
+import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.START_CONNECTOR;
+import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.START_TARGET;
 
 /**
  * ConnectingFigure.

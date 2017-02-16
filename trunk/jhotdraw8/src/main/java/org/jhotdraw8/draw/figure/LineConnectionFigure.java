@@ -64,4 +64,6 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
     }
+    
+
 }
