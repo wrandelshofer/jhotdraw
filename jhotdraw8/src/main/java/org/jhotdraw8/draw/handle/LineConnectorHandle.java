@@ -57,8 +57,8 @@ public class LineConnectorHandle extends AbstractHandle {
     private final MapAccessor<Connector> connectorKey;
     private Point2D connectorLocation;
 
-    private final Region connectorNode;
-    private final javafx.scene.Group groupNode;
+   // private final Region connectorNode;
+   // private final javafx.scene.Group groupNode;
     private boolean isConnected;
     private boolean isDragging;
     private final Region lineNode;
@@ -91,18 +91,6 @@ public class LineConnectorHandle extends AbstractHandle {
         lineNode.getStyleClass().setAll(styleclassDisconnected, STYLECLASS_HANDLE);
         lineNode.setBorder(REGION_BORDER);
 
-        connectorNode = new Region();
-        connectorNode.setShape(PIVOT_NODE_SHAPE);
-        connectorNode.setManaged(false);
-        connectorNode.setScaleShape(false);
-        connectorNode.setCenterShape(true);
-        connectorNode.resize(10, 10);
-        connectorNode.getStyleClass().setAll(styleclassDisconnected, STYLECLASS_HANDLE);
-        connectorNode.setBorder(REGION_BORDER);
-        connectorNode.setBackground(REGION_BACKGROUND_CONNECTED);
-        groupNode = new javafx.scene.Group();
-        groupNode.getChildren().addAll(connectorNode, lineNode);
-
         isConnected = figure.get(connectorKey) != null && figure.get(targetKey) != null;
     }
 
@@ -120,7 +108,7 @@ public class LineConnectorHandle extends AbstractHandle {
 
     @Override
     public Cursor getCursor() {
-        return isConnected || !isDragging ? Cursor.CROSSHAIR : Cursor.MOVE;
+        return isConnected &&isDragging ? Cursor.NONE : Cursor.MOVE;
     }
 
     public Point2D getLocationInView() {
@@ -128,8 +116,8 @@ public class LineConnectorHandle extends AbstractHandle {
     }
 
     @Override
-    public javafx.scene.Group getNode() {
-        return groupNode;
+    public Region getNode() {
+        return lineNode;
     }
 
     @Override
@@ -141,14 +129,14 @@ public class LineConnectorHandle extends AbstractHandle {
     public void handleMouseDragged(MouseEvent event, DrawingView view) {
         isDragging = true;
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-        Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
+        Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
 
         Point2D constrainedPoint;
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            constrainedPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
+            constrainedPoint = view.getConstrainer().constrainPoint(getOwner(), unconstrainedPoint);
         } else {
-            constrainedPoint = newPoint;
+            constrainedPoint = unconstrainedPoint;
         }
 
         ConnectingFigure o = getOwner();
@@ -164,9 +152,9 @@ public class LineConnectorHandle extends AbstractHandle {
                 for (Figure ff : f1.breadthFirstIterable()) {
                     if (ff instanceof ConnectableFigure) {
                         ConnectableFigure cff = (ConnectableFigure) ff;
-                        Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
+                        Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                         if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                            newConnector = cff.findConnector(pointInLocal, o);
+                            newConnector = cff.findConnector( cff.worldToLocal(constrainedPoint), o);
                             if (newConnector != null && o.canConnect(ff, newConnector)) {
                                 newConnectedFigure = ff;
                                 constrainedPoint = newConnector.getPositionInLocal(o, ff);
@@ -212,18 +200,15 @@ public class LineConnectorHandle extends AbstractHandle {
         lineNode.setRotate(f.getStyled(ROTATE));
         lineNode.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
-        connectorNode.setVisible(isConnected);
         if (isConnected) {
             connectorLocation = view.worldToView(f.get(connectorKey).getPositionInWorld(owner, f.get(targetKey)));
-            if (isConnected) {
-                connectorNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
-            }
+                lineNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
         } else {
             connectorLocation = null;
         }
-
+/*
         groupNode.getChildren().clear();
-        groupNode.getChildren().addAll(connectorNode, lineNode);
+        groupNode.getChildren().addAll(connectorNode, lineNode);*/
     }
 
 }

@@ -19,6 +19,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
@@ -553,7 +554,15 @@ public interface DrawingView extends RenderContext {
     default Point2D worldToView(Point2D world) {
         return getWorldToView().transform(world);
     }
-
+    /**
+     * Converts world coordinates into view coordinates.
+     *
+     * @param world a box in world coordinates
+     * @return the corresponding box in view coordinates
+     */
+    default Bounds worldToView(Bounds world) {
+        return getWorldToView().transform(world);
+    }
     /**
      * Converts view coordinates into drawing coordinates.
      *
