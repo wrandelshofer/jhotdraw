@@ -320,7 +320,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param drawing the drawing to which this figure has been added
      */
-    void addNotify(Drawing drawing);
+    default void addNotify(Drawing drawing) {}
 
     /**
      * Creates handles of the specified level and adds them to the provided
@@ -947,7 +947,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param drawing the drawing from which this figure has been removed
      */
-    void removeNotify(Drawing drawing);
+    default void removeNotify(Drawing drawing) {}
 
     /**
      * Attempts to change the local bounds of the figure.

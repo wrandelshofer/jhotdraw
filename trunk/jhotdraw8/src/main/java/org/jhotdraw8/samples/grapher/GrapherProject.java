@@ -335,7 +335,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         dockRoot.setDockFactory(TabbedAccordionDock::new);
         dockRoot.setVerticalTrackFactory(ScrollableVBoxTrack::new);
         dockRoot.setHorizontalTrackFactory(SplitPaneTrack::createHorizontalTrack);
-        // dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
+        dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
         DockItem dockItem = new DockItem(null, viewScrollPane);
         SingleItemDock singleItemDock = new SingleItemDock(dockItem);
         dockRoot.addDock(singleItemDock);

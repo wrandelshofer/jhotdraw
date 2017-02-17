@@ -129,7 +129,6 @@ public class DockRoot extends Control {
                     }
                     track = parentTrack;
                 }
-                System.out.println("oldDock isEmpty  @" + oldDock.hashCode() + " " + oldDock.getNode().getParent() + " (should be null!");
             }
         }
     }

@@ -10,7 +10,7 @@
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="inspector" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
   <center>
-    <ListView fx:id="listView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="48.0" prefHeight="200.0" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
+    <ListView fx:id="listView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="44.0" minWidth="44.0" prefHeight="200.0" styleClass="flushTopRightLeft" BorderPane.alignment="CENTER" />
   </center>
   <bottom>
     <HBox BorderPane.alignment="CENTER">

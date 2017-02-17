@@ -52,14 +52,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
     private final Map<? super Key<?>, Object> cachedValues = new HashMap<>();
 
-    /**
-     * This implementation is empty.
-     *
-     * @param drawing the drawing from which this figure has been removed
-     */
-    @Override
-    public void addNotify(Drawing drawing) {
-    }
+
 
     @Override
     @SuppressWarnings("unchecked")
@@ -148,15 +141,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     @Override
     public void removeLayoutSubject(Figure connectedFigure) {
         // empty
-    }
-
-    /**
-     * This implementation is empty.
-     *
-     * @param drawing the drawing to which this figure has been added
-     */
-    @Override
-    public void removeNotify(Drawing drawing) {
     }
 
     @Override
