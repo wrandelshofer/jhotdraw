@@ -19,6 +19,8 @@ import static java.lang.Math.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import org.jhotdraw8.draw.handle.LineConnectorHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.LineConnectionOutlineHandle;
@@ -38,11 +40,20 @@ import org.jhotdraw8.draw.locator.PointLocator;
 public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         implements NonTransformableFigure, LineConnectingFigure {
 
-    
+    private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
+
+    /**
+     * Holds a strong reference to the property.
+     */
+    private Property<Connector> endConnectorProperty;
     /**
      * Holds a strong reference to the property.
      */
     private Property<Figure> endTargetProperty;
+    /**
+     * Holds a strong reference to the property.
+     */
+    private Property<Connector> startConnectorProperty;
     /**
      * Holds a strong reference to the property.
      */
@@ -69,6 +80,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
             if (newValue != null) {
                 newValue.getLayoutObservers().add(AbstractLineConnectionFigure.this);
             }
+            updateConnectedProperty();
         };
         ChangeListener<Figure> clEnd = (observable, oldValue, newValue) -> {
             if (oldValue != null && get(START_TARGET) != oldValue) {
@@ -77,15 +89,42 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
             if (newValue != null) {
                 newValue.getLayoutObservers().add(AbstractLineConnectionFigure.this);
             }
+            updateConnectedProperty();
+        };
+        ChangeListener<Connector> clConnector = (observable, oldValue, newValue) -> {
+            updateConnectedProperty();
         };
 
         startTargetProperty = START_TARGET.propertyAt(getProperties());
         startTargetProperty.addListener(clStart);
         endTargetProperty = END_TARGET.propertyAt(getProperties());
         endTargetProperty.addListener(clEnd);
+        startConnectorProperty = START_CONNECTOR.propertyAt(getProperties());
+        startConnectorProperty.addListener(clConnector);
+        endConnectorProperty = END_CONNECTOR.propertyAt(getProperties());
+        endConnectorProperty.addListener(clConnector);
+
+        connected.addListener((o, oldv, newv) -> {
+            if (newv) {
+                connectedNotify();
+            } else {
+                disconnectedNotify();
+            }
+        });
     }
 
+    /**
+     * This method is called, when connectedProperty becomes true.
+     * This implementation is empty.
+     */
+    protected void connectedNotify() {
+    }
 
+    /** This property is true when the figure is connected.
+     * @return  the connected property */
+    public ReadOnlyBooleanProperty connectedProperty() {
+        return connected.getReadOnlyProperty();
+    }
 
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
@@ -112,6 +151,13 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         } else {
             super.createHandles(handleType, list);
         }
+    }
+
+  /**
+     * This method is called, when connectedProperty becomes false.
+     * This implementation is empty.
+     */
+    protected void disconnectedNotify() {
     }
 
     @Override
@@ -141,6 +187,10 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
             ctf.add(get(END_TARGET));
         }
         return ctf;
+    }
+
+    public boolean isConnected() {
+        return connected.get();
     }
 
     @Override
@@ -177,13 +227,15 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         // because
         if (startConnector != null && startTarget != null) {
             final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end));
-            if (p!=null)
-            set(START, p);
+            if (p != null) {
+                set(START, p);
+            }
         }
         if (endConnector != null && endTarget != null) {
             final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end));
-            if (p!=null)
-            set(END, p);
+            if (p != null) {
+                set(END, p);
+            }
         }
     }
 
@@ -233,6 +285,11 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     public void setStartConnection(Figure target, Connector connector) {
         set(START_CONNECTOR, connector);
         set(START_TARGET, target);
+    }
+
+    private void updateConnectedProperty() {
+        connected.set(get(START_CONNECTOR) != null
+                && get(START_TARGET) != null && get(END_CONNECTOR) != null && get(END_TARGET) != null);
     }
 
 }
