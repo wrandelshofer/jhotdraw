@@ -466,7 +466,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
             if (id != null && !id.isEmpty()) {
                 if (factory.getObject(id) != null) {
-                    System.err.println("warning: duplicate id " + id + " in element " + elem.getTagName());
+                    System.err.println("SimpleXmlIO warning: duplicate id " + id + " in element " + elem.getTagName());
                     factory.putId(figure, id);
                 } else {
                     factory.putId(figure, id);
@@ -631,7 +631,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * External URI is relative to file that we are reading. Make it relative to
-     * document home.
+     * document home or make it absolute.
      *
      * @param drawing the drawing
      * @param external the external uri
