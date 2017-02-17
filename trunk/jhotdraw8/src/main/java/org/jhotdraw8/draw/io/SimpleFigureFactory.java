@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
+import javafx.css.Styleable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
@@ -343,8 +344,9 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         if (!strToKey.containsKey(attributeName)) {
             Set<Class<? extends Figure>> set = (skipAttributes.get(attributeName));
             if (set == null || !set.contains(f.getClass())) {
-                throw new IOException("no mapping for attribute " + attributeName
+                System.err.println("SimpleFigureFactory WARNING no mapping for attribute " + attributeName
                         + " in figure " + f.getClass());
+                return null;
             }
         }
         return strToKey.get(attributeName);
@@ -623,9 +625,9 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         String id = getId(object);
 
         if (id == null) {
-            if (object instanceof StyleableFigure) {
-                StyleableFigure f = (StyleableFigure) object;
-                id = f.get(StyleableFigure.ID);
+            if (object instanceof Styleable) {
+                Styleable f = (Styleable) object;
+                id = f.getId();
                 if (id != null && getObject(id) == null) {
                     putId(object, id);
                 } else {
@@ -642,9 +644,9 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         String id = getId(object);
 
         if (id == null) {
-            if (object instanceof StyleableFigure) {
-                StyleableFigure f = (StyleableFigure) object;
-                id = f.get(StyleableFigure.ID);
+            if (object instanceof Styleable) {
+                Styleable f = (Styleable) object;
+                id = f.getId();
                 if (id != null) {
                     putId(object, id);
                 } else {
