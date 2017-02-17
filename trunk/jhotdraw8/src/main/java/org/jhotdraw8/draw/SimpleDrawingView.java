@@ -1250,7 +1250,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         DrawingModel model = getModel();
         for (Figure f : figures) {
             if (f.isDeletable()) {
-                model.disconnect(f);
+                for (Figure d:f.preorderIterable()) {
+                model.disconnect(d);
+                }
                 model.removeFromParent(f);
             }
         }

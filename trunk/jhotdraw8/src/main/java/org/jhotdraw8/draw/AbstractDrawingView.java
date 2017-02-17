@@ -101,7 +101,12 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         final List<Figure> selectedFigures = new ArrayList<>(getSelectedFigures());
         DrawingModel m = getModel();
         for (Figure f : selectedFigures) {
-            m.removeFromParent(f);
+            if (f.isDeletable()) {
+                for (Figure d:f.preorderIterable()) {
+                m.disconnect(d);
+                }
+                m.removeFromParent(f);
+            }
         }
     }
 

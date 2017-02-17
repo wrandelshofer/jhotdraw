@@ -192,10 +192,14 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
         Drawing newDrawing = child.getDrawing();
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
-                fire(DrawingModelEvent.figureRemovedFromDrawing((DrawingModel) this, oldDrawing, child));
+                for (Figure f : child.preorderIterable()) {
+                    fire(DrawingModelEvent.figureRemovedFromDrawing((DrawingModel) this, oldDrawing, f));
+                }
             }
             if (newDrawing != null) { // must be null!!!
-                fire(DrawingModelEvent.figureAddedToDrawing((DrawingModel) this, newDrawing, child));
+                for (Figure f : child.preorderIterable()) {
+                    fire(DrawingModelEvent.figureAddedToDrawing((DrawingModel) this, newDrawing, f));
+                }
             }
         }
     }
@@ -214,10 +218,14 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
         Drawing newDrawing = child.getDrawing();
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
-                fire(DrawingModelEvent.figureRemovedFromDrawing((DrawingModel) this, oldDrawing, child));
+                for (Figure f : child.preorderIterable()) {
+                    fire(DrawingModelEvent.figureRemovedFromDrawing((DrawingModel) this, oldDrawing, f));
+                }
             }
             if (newDrawing != null) {
-                fire(DrawingModelEvent.figureAddedToDrawing((DrawingModel) this, newDrawing, child));
+                for (Figure f : child.preorderIterable()) {
+                    fire(DrawingModelEvent.figureAddedToDrawing((DrawingModel) this, newDrawing, f));
+                }
             }
         }
         fire(DrawingModelEvent.figureAddedToParent((DrawingModel) this, child, parent, index));
@@ -343,8 +351,9 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                     for (Figure a : f.ancestorIterable()) {
                         if (a instanceof TransformableFigure) {
                             markDirty(a, DirtyBits.NODE, DirtyBits.TRANSFORM);
-                        }else
+                        } else {
                             markDirty(a, DirtyBits.NODE);
+                        }
                     }
                 }
             }

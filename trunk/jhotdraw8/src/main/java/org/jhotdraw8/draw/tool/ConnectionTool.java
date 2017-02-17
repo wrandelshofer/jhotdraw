@@ -17,7 +17,6 @@ import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.figure.AbstractLineConnectionFigure;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.util.ReversedList;
@@ -32,13 +31,13 @@ import org.jhotdraw8.util.ReversedList;
  */
 public class ConnectionTool extends AbstractTool {
 
-    private Supplier<ConnectingFigure> figureFactory;
-    private Supplier<Layer> layerFactory;
-
     /**
      * The created figure.
      */
     private ConnectingFigure figure;
+
+    private Supplier<ConnectingFigure> figureFactory;
+    private Supplier<Layer> layerFactory;
 
     /**
      * The minimum size of a created figure (in view coordinates.
@@ -58,110 +57,6 @@ public class ConnectionTool extends AbstractTool {
 
     public void setFactory(Supplier<ConnectingFigure> factory) {
         this.figureFactory = factory;
-    }
-
-    @Override
-    protected void stopEditing() {
-        figure = null;
-    }
-
-    @Override
-    protected void handleMousePressed(MouseEvent event, DrawingView view) {
-        requestFocus();
-        figure = figureFactory.get();
-        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-        Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
-        Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, newPoint);
-        figure.reshapeInLocal(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
-        DrawingModel dm = view.getModel();
-        Drawing drawing = dm.getRoot();
-
-        Layer layer = getOrCreateLayer(view, figure);
-        view.setActiveLayer(layer);
-
-        Connector newConnector = null;
-        Figure newConnectedFigure = null;
-        if (!event.isMetaDown()) {
-            List<Figure> list = view.findFigures(pointInViewCoordinates, true);
-            for (Figure f1 : list) {
-                for (Figure ff : f1.breadthFirstIterable()) {
-                    if (ff instanceof ConnectableFigure) {
-                        ConnectableFigure cff = (ConnectableFigure) ff;
-                        Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
-                        if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                            newConnector = cff.findConnector(pointInLocal, figure);
-                            if (newConnector != null && figure.canConnect(ff, newConnector)) {
-                                newConnectedFigure = ff;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        figure.set(LineConnectionFigure.START_CONNECTOR, newConnector);
-        figure.set(LineConnectionFigure.START_TARGET, newConnectedFigure);
-
-        dm.addChildTo(figure, layer);
-        event.consume();
-    }
-
-    @Override
-    protected void handleMouseReleased(MouseEvent event, DrawingView view) {
-        if (figure != null) {
-            handleMouseDragged(event, view);
-            view.getSelectedFigures().clear();
-            view.getSelectedFigures().add(figure);
-            figure = null;
-        }
-        fireToolDone();
-    }
-
-    @Override
-    protected void handleMouseDragged(MouseEvent event, DrawingView view) {
-        if (figure != null) {
-            Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-            Point2D newPoint = view.viewToWorld(pointInViewCoordinates);
-            Point2D constrainedPoint;
-            if (!event.isAltDown() && !event.isControlDown()) {
-                // alt or control turns the constrainer off
-                constrainedPoint = view.getConstrainer().constrainPoint(figure, newPoint);
-            } else {
-                constrainedPoint = newPoint;
-            }
-            Connector newConnector = null;
-            Figure newConnectionTarget = null;
-            DrawingModel model = view.getModel();
-            // must clear end target, otherwise findConnector won't work as expected
-            model.set(figure, LineConnectionFigure.END_TARGET, null);
-            if (!event.isMetaDown()) {
-                List<Figure> list = view.findFigures(pointInViewCoordinates, true);
-                for (Figure f1 : list) {
-                    for (Figure ff : f1.breadthFirstIterable()) {
-                        if (ff instanceof ConnectableFigure) {
-                            ConnectableFigure cff = (ConnectableFigure) ff;
-                            Point2D pointInLocal = cff.worldToLocal(constrainedPoint);
-                            if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                                newConnector = cff.findConnector(pointInLocal, figure);
-                                if (newConnector != null && figure.canConnect(ff, newConnector)) {
-                                    newConnectionTarget = ff;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            model.set(figure, LineConnectionFigure.END, figure.worldToLocal(constrainedPoint));
-            model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
-            model.set(figure, LineConnectionFigure.END_TARGET, newConnectionTarget);
-        }
-        event.consume();
-    }
-
-    @Override
-    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
     }
 
     /**
@@ -192,6 +87,110 @@ public class ConnectionTool extends AbstractTool {
             dv.getModel().addChildTo(layer, dv.getDrawing());
         }
         return layer;
+    }
+
+    @Override
+    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    }
+
+    @Override
+    protected void handleMouseDragged(MouseEvent event, DrawingView view) {
+        if (figure != null) {
+            Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
+            Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
+            Point2D constrainedPoint;
+            if (!event.isAltDown() && !event.isControlDown()) {
+                // alt or control turns the constrainer off
+                constrainedPoint = view.getConstrainer().constrainPoint(figure, unconstrainedPoint);
+            } else {
+                constrainedPoint = unconstrainedPoint;
+            }
+            Connector newConnector = null;
+            Figure newConnectionTarget = null;
+            DrawingModel model = view.getModel();
+            // must clear end target, otherwise findConnector won't work as expected
+            model.set(figure, LineConnectionFigure.END_TARGET, null);
+            if (!event.isMetaDown()) {
+                List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+                for (Figure f1 : list) {
+                    for (Figure ff : f1.breadthFirstIterable()) {
+                        if (ff instanceof ConnectableFigure) {
+                            ConnectableFigure cff = (ConnectableFigure) ff;
+                            Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
+                            if (ff.getBoundsInLocal().contains(pointInLocal)) {
+                                newConnector = cff.findConnector( cff.worldToLocal(constrainedPoint), figure);
+                                if (newConnector != null && figure.canConnect(ff, newConnector)) {
+                                    newConnectionTarget = ff;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            model.set(figure, LineConnectionFigure.END, figure.worldToLocal(constrainedPoint));
+            model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
+            model.set(figure, LineConnectionFigure.END_TARGET, newConnectionTarget);
+        }
+        event.consume();
+    }
+
+    @Override
+    protected void handleMousePressed(MouseEvent event, DrawingView view) {
+        requestFocus();
+        figure = figureFactory.get();
+        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
+        Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
+        Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, unconstrainedPoint);
+        figure.reshapeInLocal(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
+        DrawingModel dm = view.getModel();
+        Drawing drawing = dm.getRoot();
+
+        Layer layer = getOrCreateLayer(view, figure);
+        view.setActiveLayer(layer);
+
+        Connector newConnector = null;
+        Figure newConnectedFigure = null;
+        if (!event.isMetaDown()) {
+            List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+            for (Figure f1 : list) {
+                for (Figure ff : f1.breadthFirstIterable()) {
+                    if (ff instanceof ConnectableFigure) {
+                        ConnectableFigure cff = (ConnectableFigure) ff;
+                        Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
+                        if (ff.getBoundsInLocal().contains(pointInLocal)) {
+                            newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure);
+                            if (newConnector != null && figure.canConnect(ff, newConnector)) {
+                                newConnectedFigure = ff;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        figure.set(LineConnectionFigure.START_CONNECTOR, newConnector);
+        figure.set(LineConnectionFigure.START_TARGET, newConnectedFigure);
+
+        dm.addChildTo(figure, layer);
+        event.consume();
+    }
+
+    @Override
+    protected void handleMouseReleased(MouseEvent event, DrawingView view) {
+        if (figure != null) {
+            handleMouseDragged(event, view);
+            view.getSelectedFigures().clear();
+            view.getSelectedFigures().add(figure);
+            figure = null;
+        }
+        fireToolDone();
+    }
+
+    @Override
+    protected void stopEditing() {
+        figure = null;
     }
 
 }
