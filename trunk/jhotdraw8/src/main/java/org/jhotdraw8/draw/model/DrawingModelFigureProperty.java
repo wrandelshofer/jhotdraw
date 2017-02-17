@@ -5,8 +5,6 @@
 package org.jhotdraw8.draw.model;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.MapChangeListener;
-import javafx.collections.WeakMapChangeListener;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
@@ -29,19 +27,27 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
     private final boolean isDeclaredKey;
 
     public DrawingModelFigureProperty(DrawingModel model, Figure figure, Key<T> key) {
+        this(model, figure, key, false);
+    }
+
+    public DrawingModelFigureProperty(DrawingModel model, Figure figure, Key<T> key, boolean allKeys) {
         this.model = model;
         this.key = key;
         this.figure = figure;
         this.isDeclaredKey = Figure.getDeclaredAndInheritedMapAccessors(figure.getClass()).contains(key);
 
-        if (key != null && isDeclaredKey) {
+        if (key != null) {
             this.modelListener = (event) -> {
                 if (event.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED
-                        && this.figure == event.getFigure() && this.key == event.getKey()) {
-                    @SuppressWarnings("unchecked")
-                    T newValue = (T) event.getNewValue();
-                    if (super.get() != newValue) {
-                        set(newValue);
+                        && this.figure == event.getFigure()) {
+                    if (this.key == event.getKey()) {
+                        @SuppressWarnings("unchecked")
+                        T newValue = (T) event.getNewValue();
+                        if (super.get() != newValue) {
+                            set(newValue);
+                        }
+                    } else if (allKeys) {
+                        updateValue();
                     }
                 }
             };
@@ -62,11 +68,12 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
     @Override
     public void setValue(T value) {
-        if (value != null && !key.isAssignable(value)) {
-            throw new IllegalArgumentException("value is not assignable " + value);
+        if (isDeclaredKey) {
+            if (value != null && !key.isAssignable(value)) {
+                throw new IllegalArgumentException("value is not assignable " + value);
+            }
+            model.set(figure, key, value);
         }
-        model.set(figure, key, value);
-
         // Note: super must be called after "put", so that listeners
         //       can be properly informed.
         super.setValue(value);
@@ -78,5 +85,11 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
         if (model != null) {
             model.removeDrawingModelListener(weakListener);
         }
+    }
+
+    /**
+     * This implementation is empty.
+     */
+    protected void updateValue() {
     }
 }

@@ -232,9 +232,12 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
     @Override
     public String toString() {
-        return "DrawingModelEvent{" + "figure=" + figure + ", key=" + key
+        return "DrawingModelEvent{"
+                + (figure==null?null: figure.getTypeSelector()+"@"+Integer.toHexString(System.identityHashCode(figure)))
+                + ", key=" + key
                 + ", oldValue=" + oldValue + ", newValue=" + newValue
-                + ", parent=" + parent + ", index=" + index + ", eventType="
+                + ", parent=" + (parent==null?null: parent.getTypeSelector()+"@"+Integer.toHexString(System.identityHashCode(parent))) 
+                + ", index=" + index + ", eventType="
                 + eventType + ", source=" + source + '}';
     }
 
