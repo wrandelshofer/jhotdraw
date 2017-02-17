@@ -23,7 +23,6 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
-import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -352,7 +351,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                         if (a instanceof TransformableFigure) {
                             markDirty(a, DirtyBits.NODE, DirtyBits.TRANSFORM);
                         } else {
-                            markDirty(a, DirtyBits.NODE);
+//                            markDirty(a, DirtyBits.NODE);
                         }
                     }
                 }
@@ -395,7 +394,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                         }
                     }
                     for (Figure a : f.ancestorIterable()) {
-                        if (a instanceof TransformableFigure) {
+                        if (a instanceof TransformableFigure) {            
                             markDirty(a, DirtyBits.NODE);
                         }
                     }
