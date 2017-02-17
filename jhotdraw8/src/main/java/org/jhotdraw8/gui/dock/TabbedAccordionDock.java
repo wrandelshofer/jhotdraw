@@ -4,16 +4,21 @@
  */
 package org.jhotdraw8.gui.dock;
 
+import static java.lang.Double.max;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jhotdraw8.gui.CustomSkin;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Control;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
@@ -24,9 +29,12 @@ import javafx.scene.layout.VBox;
  */
 public class TabbedAccordionDock extends Control implements Dock {
 
+    private ObjectProperty<Track> track = new SimpleObjectProperty<>();
+
     private TabPane tabPane = new TabPane();
     private Accordion accordion = new Accordion();
     private TitledPane titlePane = new TitledPane();
+    private ResizePane resizePane = new ResizePane();
     private ObservableList<DockItem> items = FXCollections.observableArrayList();
 
     public TabbedAccordionDock() {
@@ -36,10 +44,7 @@ public class TabbedAccordionDock extends Control implements Dock {
         getChildren().add(accordion);
         accordion.getPanes().add(titlePane);
         accordion.setExpandedPane(titlePane);
-//        setMaxHeight(Double.MAX_VALUE);
-//        setMaxWidth(Double.MAX_VALUE);
-//        setMinWidth(10);
-        //   setMinHeight(10);
+
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
         VBox.setVgrow(this, Priority.SOMETIMES);
 
@@ -62,17 +67,9 @@ public class TabbedAccordionDock extends Control implements Dock {
 
         });
 
-//        titlePane.expandedProperty().addListener((o, oldv, newv) -> {
-//            if (newv) {
-//                setMaxHeight(Double.MAX_VALUE);
-//                setMinHeight(titlePane.getMinHeight()+26);
-//            } else {
-//                setMaxHeight(accordion.prefHeight(-1));
-//                setMinHeight(26);
-//                //setMaxHeight(26);
-//            }
-//            titlePane.requestLayout();
-//        });
+        trackProperty().addListener((o, oldv, newv) -> {
+            resizePane.setUserResizable(newv != null && !newv.resizesItems());
+        });
     }
 
     @Override
@@ -95,54 +92,51 @@ public class TabbedAccordionDock extends Control implements Dock {
         return true;
     }
 
-    private void updateView() {
-        try {
-            doUpdateView();
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+    @Override
+    public ObjectProperty<Track> trackProperty() {
+        return track;
     }
 
-    private void doUpdateView() {
+    private void updateView() {
         switch (items.size()) {
-            case 0:
+            case 0: {
+                resizePane.setCenter(null);
+                tabPane.getTabs().clear();
                 titlePane.setText(null);
                 titlePane.setGraphic(null);
                 titlePane.setContent(null);
-                tabPane.getTabs().clear();
-                titlePane.requestLayout();
                 break;
+            }
             case 1: {
-                DockItem i = items.get(0);
                 tabPane.getTabs().clear();
+                DockItem i = items.get(0);
                 titlePane.setText(i.getText());
                 titlePane.setGraphic(i.getGraphic());
-                titlePane.setContent(i.getContent());
-                titlePane.requestLayout();
+                titlePane.setContent(resizePane);
+                resizePane.setCenter(i.getContent());
                 break;
             }
             default: {
+                resizePane.setCenter(tabPane);
                 titlePane.setGraphic(null);
-                titlePane.setContent(tabPane);
                 tabPane.getTabs().setAll(items);
                 StringBuilder b = new StringBuilder();
+                double minHeight = 0;
                 for (DockItem i : items) {
+                    Node content = i.getContent();
+                    if (content instanceof Region) {
+                        minHeight = max(minHeight, ((Region) content).minHeight(-1));
+                    }
                     if (b.length() > 0) {
                         b.append(", ");
                     }
                     b.append(i.getText());
                 }
+                tabPane.setMinHeight(minHeight + 44);
                 titlePane.setText(b.toString());
-                tabPane.requestLayout();
+                titlePane.setContent(resizePane);
                 break;
             }
         }
-        requestLayout();
-    }
-
-    @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
-        accordion.resizeRelocate(0, 0, getWidth(), getHeight());
     }
 }

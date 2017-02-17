@@ -21,6 +21,14 @@ import javafx.scene.Node;
  */
 public interface Track {
 
+    /**
+     * A track can contain Track and Dock items.
+     * <p>
+     * By convention a track updates the trackProperty of a Dock if it is added or removed
+     * from its items list.
+     * 
+     * @return the items
+     */
     ObservableList<Node> getItems();
 
     /**
@@ -32,4 +40,12 @@ public interface Track {
     }
 
     Orientation getOrientation();
+    
+    /**
+     * Returns true if this track resizes the items. 
+     * If this method returns true, an item of the track should not provide resize controls. 
+     * 
+     * @return true if the track resizes items. 
+     */
+    default boolean resizesItems() { return true; }
 }

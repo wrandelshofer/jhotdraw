@@ -7,7 +7,7 @@
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
   <center>
-    <TreeTableView fx:id="treeView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" prefHeight="240.0" styleClass="flush" BorderPane.alignment="CENTER">
+    <TreeTableView fx:id="treeView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="66.0" prefHeight="200.0" styleClass="flush" BorderPane.alignment="CENTER">
       <columns>
         <TreeTableColumn fx:id="visibleColumn" prefWidth="75.0" sortable="false" text="%object.visible.text" />
         <TreeTableColumn fx:id="lockedColumn" prefWidth="75.0" sortable="false" text="%object.locked.text" />

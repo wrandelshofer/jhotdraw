@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.gui.dock;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -86,4 +88,12 @@ public class SingleItemDock extends Control implements Dock {
     protected double computePrefWidth(double height) {
         return borderPane.prefWidth(height);
     }
+    
+    private ObjectProperty<Track> track=new SimpleObjectProperty<>();
+    @Override
+    public ObjectProperty<Track> trackProperty() {
+        return track;
+    }
+
+
 }

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.gui.dock;
 
+import javafx.beans.property.ObjectProperty;
 import org.jhotdraw8.gui.dock.DockItem;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -24,4 +25,14 @@ public interface Dock {
     
     /** Returns true if the user may add and remove items. */
     boolean isEditable();
+    
+         ObjectProperty<Track> trackProperty();
+
+    default Track getTrack() {
+        return trackProperty().get();
+    }
+
+    default void setTrack(Track value) {
+         trackProperty().set(value);
+    }
 }

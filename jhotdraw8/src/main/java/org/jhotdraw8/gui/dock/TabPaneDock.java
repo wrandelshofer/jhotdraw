@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.gui.dock;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jhotdraw8.gui.CustomSkin;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -72,5 +74,11 @@ public class TabPaneDock extends Control implements Dock {
         super.layoutChildren();
         tabPane.resizeRelocate(0, 0, getWidth(), getHeight());
     }
+private ObjectProperty<Track> track=new SimpleObjectProperty<>();
+    @Override
+    public ObjectProperty<Track> trackProperty() {
+        return track;
+    }
+
 
 }

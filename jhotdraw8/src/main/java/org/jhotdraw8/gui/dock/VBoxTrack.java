@@ -20,18 +20,28 @@ import javafx.scene.layout.VBox;
 public class VBoxTrack extends VBox implements Track {
 
     public VBoxTrack() {
-       /* getItems().addListener(new ListChangeListener<Node>() {
+getItems().addListener(new ListChangeListener<Node>() {
             @Override
             public void onChanged(ListChangeListener.Change<? extends Node> c) {
                 while (c.next()) {
                     for (Node remitem : c.getRemoved()) {
+                        if (remitem instanceof Dock) {
+                            Dock d=(Dock)remitem;
+                            d.setTrack(null);
+                        }
                     }
                     for (Node additem : c.getAddedSubList()) {
-                        VBox.setVgrow(additem, Priority.SOMETIMES);
+                        if (additem instanceof Dock) {
+                            Dock d=(Dock)additem;
+                            d.setTrack(VBoxTrack.this);
+                        }
                     }
                 }
+
+                //updateResizableWithParent();
             }
-        });*/
+
+        });
     }
 
     @Override
