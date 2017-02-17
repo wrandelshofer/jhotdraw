@@ -74,11 +74,6 @@ import org.w3c.dom.ProcessingInstruction;
 public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMixin, XmlInputFormatMixin, ClipboardOutputFormat, ClipboardInputFormat {
 
     /**
-     * Comments which appear before an XML element of a figure are associated to
-     * the figure as a comment.
-     */
-    public final static SimpleFigureKey<List<String>> XML_HEAD_COMMENT_KEY = new SimpleFigureKey<List<String>>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
-    /**
      * Comments which appear inside an XML element, that can not be associated
      * to as a head comment.
      */
@@ -88,16 +83,20 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * epilog of an XML file, are associated to the drawing.
      */
     public final static SimpleFigureKey<List<String>> XML_EPILOG_COMMENT_KEY = new SimpleFigureKey<List<String>>("xmlTailComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
-
-    private String indent = "  ";
-    private FigureFactory factory;
-    private String namespaceURI;
-    private String namespaceQualifier;
-    private HashMap<Figure, Element> figureToElementMap = new HashMap<>();
-    private URI externalHome;
-    private URI internalHome;
-    private List<String> comments;
+    /**
+     * Comments which appear before an XML element of a figure are associated to
+     * the figure as a comment.
+     */
+    public final static SimpleFigureKey<List<String>> XML_HEAD_COMMENT_KEY = new SimpleFigureKey<List<String>>("xmlHeadComment", List.class, new Class<?>[]{String.class}, DirtyMask.EMPTY, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
+    private List<String> comments;
+    private URI externalHome;
+    private FigureFactory factory;
+    private HashMap<Figure, Element> figureToElementMap = new HashMap<>();
+    private String indent = "  ";
+    private URI internalHome;
+    private String namespaceQualifier;
+    private String namespaceURI;
 
     public SimpleXmlIO(FigureFactory factory) {
         this(factory, null, null, null);
@@ -109,11 +108,126 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         this.namespaceQualifier = namespaceQualifier;
     }
 
+    private Element createElement(Document doc, String unqualifiedName) throws IOException {
+        if (namespaceURI == null || namespaceQualifier == null) {
+            return doc.createElement(unqualifiedName);
+        }
+        if (namespaceQualifier == null) {
+            return doc.createElementNS(namespaceURI, unqualifiedName);
+        } else {
+            return doc.createElementNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName);
+        }
+    }
+
     /**
-     * Must be a directory and not a file.
+     * External URI is relative to file that we are reading. Make it relative to
+     * document home or make it absolute.
+     *
+     * @param drawing the drawing
+     * @param external the external uri
+     * @return the internal uri
      */
-    public void setExternalHome(URI uri) {
-        externalHome = uri;
+    private URI externalToInternal(Drawing drawing, URI external) {
+        URI internal = external;
+        if (externalHome != null) {
+            internal = externalHome.resolve(internal);
+        }
+        if (internalHome != null) {
+            internal = internalHome.relativize(internal);
+        }
+        return internal;
+    }
+
+    public Figure fromDocument(Document doc, Drawing oldDrawing) throws IOException {
+        factory.reset();
+        if (oldDrawing != null) {
+            Figure probe = readNode(doc.getDocumentElement());
+            if (probe instanceof Clipping) {
+                for (Figure f : oldDrawing.preorderIterable()) {
+                    factory.createId(f);
+                }
+            } else {
+                factory.reset();
+            }
+        }
+
+        figureToElementMap.clear();
+        Drawing external = null;
+        Clipping clipping = null;
+        NodeList list = doc.getChildNodes();
+        comments = new ArrayList<>();
+        for (int i = 0; i < list.getLength(); i++) {
+            Node node = list.item(i);
+            switch (node.getNodeType()) {
+                case Node.COMMENT_NODE:
+                    comments.add(((Comment) node).getTextContent());
+                    break;
+                case Node.ELEMENT_NODE:
+                    Figure f = readNodesRecursively(node);
+                    if (f instanceof Drawing) {
+                        external = (Drawing) f;
+                    } else if (f instanceof Clipping) {
+                        clipping = (Clipping) f;
+                    }
+            }
+        }
+        if (external != null) {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                switch (node.getNodeType()) {
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        readProcessingInstruction(doc, (ProcessingInstruction) node, external);
+                        break;
+                }
+            }
+        }
+        if (external == null && clipping == null) {
+            if (namespaceURI == null) {
+                throw new IOException("The document does not contain a drawing.");
+            } else {
+                throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
+            }
+        }
+        if (external != null) {
+            external.set(Drawing.DOCUMENT_HOME, getExternalHome());
+            external.set(XML_EPILOG_COMMENT_KEY, comments);
+        }
+        try {
+            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
+                readElementAttributes(entry.getKey(), entry.getValue());
+                readElementNodeList(entry.getKey(), entry.getValue());
+            }
+        } finally {
+            figureToElementMap.clear();
+        }
+        comments = null;
+        if (external != null) {
+            Drawing internal = factory.fromExternalDrawing(external);
+            internal.updateCss();
+            return internal;
+        } else {
+            return clipping;
+        }
+    }
+
+    private String getAttribute(Element elem, String unqualifiedName) {
+        if (namespaceURI == null) {
+            return elem.getAttribute(unqualifiedName);
+        } else if (elem.hasAttributeNS(namespaceURI, unqualifiedName)) {
+            return elem.getAttributeNS(namespaceURI, unqualifiedName);
+        } else if (elem.isDefaultNamespace(namespaceURI)) {
+            return elem.getAttribute(unqualifiedName);
+        }
+        return null;
+    }
+
+    private DataFormat getDataFormat() {
+        String mimeType = "application/xml";
+        DataFormat df = DataFormat.lookupMimeType(mimeType);
+        if (df == null) {
+            df = new DataFormat(mimeType);
+        }
+        return df;
     }
 
     public URI getExternalHome() {
@@ -123,12 +237,67 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     /**
      * Must be a directory and not a file.
      */
-    public void setInternalHome(URI uri) {
-        internalHome = uri;
+    public void setExternalHome(URI uri) {
+        externalHome = uri;
+    }
+
+    public void setFactory(FigureFactory factory) {
+        this.factory = factory;
+    }
+
+    public Figure getFigure(String id) throws IOException {
+        Figure f = (Figure) factory.getObject(id);
+        /*        if (f == null) {
+        throw new IOException("no figure for id:" + id);
+        }*/
+        return f;
+    }
+
+    public String getIndent() {
+        return indent;
+    }
+
+    public void setIndent(String indent) {
+        this.indent = indent;
     }
 
     public URI getInternalHome() {
         return internalHome;
+    }
+
+    /**
+     * Must be a directory and not a file.
+     */
+    public void setInternalHome(URI uri) {
+        internalHome = uri;
+    }
+
+    public void setNamespaceURI(String namespaceURI) {
+        this.namespaceURI = namespaceURI;
+    }
+
+    /**
+     * Internal URI is relative to document home. Make it relative to the file.
+     * we are writing.
+     *
+     * @param drawing the drawing
+     * @param internal the internal uri
+     * @return the external uri
+     */
+    private URI internalToExternal(Drawing drawing, URI internal) {
+        URI external = internal;
+        if (internalHome != null) {
+            external = internalHome.resolve(external);
+        }
+        if (externalHome != null) {
+            external = externalHome.relativize(external);
+        }
+        return external;
+    }
+
+    @Override
+    public boolean isNamespaceAware() {
+        return namespaceURI != null;
     }
 
     @Override
@@ -140,6 +309,227 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     public Figure read(Document in, Drawing drawing) throws IOException {
         return fromDocument(in, drawing);
+    }
+
+    @Override
+    public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Layer layer) throws IOException {
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
+        setExternalHome(null);
+        Object content = clipboard.getContent(getDataFormat());
+        if (content instanceof String) {
+            Set<Figure> figures = new LinkedHashSet<>();
+            Figure newDrawing = read((String) content, drawing);
+            factory.reset();
+            for (Figure f : drawing.preorderIterable()) {
+                factory.createId(f);
+            }
+            if (layer == null) {
+                layer = (Layer) drawing.getLastChild();
+                if (layer == null) {
+                    layer = new SimpleLayer();
+                    layer.set(StyleableFigure.ID, factory.createId(layer));
+                    model.addChildTo(layer, drawing);
+                }
+            }
+            for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
+                newDrawing.remove(f);
+                String id = factory.createId(f);
+                f.set(StyleableFigure.ID, id);
+                if (f instanceof Layer) {
+                    model.addChildTo(f, drawing);
+                } else {
+                    model.addChildTo(f, layer);
+                }
+            }
+            return figures;
+        } else {
+            throw new IOException("no data found");
+        }
+    }
+
+    @Override
+    public Figure read(InputStream in, Drawing drawing) throws IOException {
+        return XmlInputFormatMixin.super.read(in, drawing);
+    }
+
+    /**
+     * Reads the attributes of the specified element.
+     */
+    private void readElementAttributes(Figure figure, Element elem) throws IOException {
+        for (MapAccessor<?> ma : factory.figureAttributeKeys(figure)) {
+            @SuppressWarnings("unchecked")
+            MapAccessor<Object> mao = (MapAccessor<Object>) ma;
+            Object defaultValue = factory.getDefaultValue(figure, ma);
+            figure.set(mao, defaultValue);
+        }
+
+        NamedNodeMap attrs = elem.getAttributes();
+        for (int i = 0, n = attrs.getLength(); i < n; i++) {
+            Attr attr = (Attr) attrs.item(i);
+            if (attr.getNamespaceURI() != null && !attr.getNamespaceURI().equals(namespaceURI)) {
+                continue;
+            }
+
+            /*if (factory.getObjectIdAttribute().equals(attr.getLocalName())) {
+                continue;
+            }*/
+            @SuppressWarnings("unchecked")
+            MapAccessor<Object> key = (MapAccessor<Object>) factory.nameToKey(figure, attr.getLocalName());
+            if (key != null && factory.figureAttributeKeys(figure).contains(key)) {
+                Object value = null;
+                if (Figure.class.isAssignableFrom(key.getValueType())) {
+                    value = getFigure(attr.getValue());
+                } else {
+                    value = factory.stringToValue(key, attr.getValue());
+                }
+
+                if (value instanceof URI) {
+                    value = externalToInternal(figure.getDrawing(), (URI) value);
+                }
+
+                figure.set(key, value);
+            }
+        }
+    }
+
+    /**
+     * Reads the children of the specified element as a node list.
+     */
+    private void readElementNodeList(Figure figure, Element elem) throws IOException {
+        Set<MapAccessor<?>> keys = factory.figureNodeListKeys(figure);
+        for (MapAccessor<?> ky : keys) {
+            @SuppressWarnings("unchecked")
+            MapAccessor<Object> key = (MapAccessor<Object>) ky;
+            String name = factory.keyToElementName(figure, key);
+            if ("".equals(name)) {
+                List<Node> nodeList = new ArrayList<>();
+                NodeList children = elem.getChildNodes();
+                for (int i = 0, n = children.getLength(); i < n; i++) {
+                    Node child = children.item(i);
+                    if (child.getNodeType() == Node.TEXT_NODE) {
+                        nodeList.add(child);
+                    } else if (child.getNodeType() == Node.ELEMENT_NODE) {
+                        // filter out element nodes of child figures
+                        Element childElem = (Element) child;
+                        if (namespaceURI != null) {
+                            if (!namespaceURI.equals(childElem.getNamespaceURI())) {
+                                nodeList.add(child);
+                            }
+                        } else {
+                            try {
+                                if (factory.nameToFigure(childElem.getLocalName()) != null) {
+                                    continue;
+                                }
+                            } catch (IOException e) {
+                                continue;
+                            }
+                            nodeList.add(child);
+                        }
+                    }
+                }
+                Object value = factory.nodeListToValue(key, nodeList);
+                figure.set(key, value);
+            } else {
+                throw new UnsupportedOperationException("Reading of sub-elements is not yet supported");
+            }
+        }
+
+    }
+
+    /**
+     * Creates a figure but does not process the getProperties.
+     */
+    private Figure readNode(Node node) throws IOException {
+        if (node instanceof Element) {
+            Element elem = (Element) node;
+            if (namespaceURI != null) {
+                if (!namespaceURI.equals(elem.getNamespaceURI())) {
+                    return null;
+                }
+            }
+            Figure figure = factory.nameToFigure(elem.getLocalName());
+            if (figure == null) {
+                return null;
+            }
+            figureToElementMap.put(figure, elem);
+            String id = getAttribute(elem, factory.getObjectIdAttribute());
+
+            if (id != null && !id.isEmpty()) {
+                if (factory.getObject(id) != null) {
+                    System.err.println("SimpleXmlIO warning: duplicate id " + id + " in element " + elem.getTagName());
+                    factory.putId(figure, id);
+                } else {
+                    factory.putId(figure, id);
+                }
+            }
+            return figure;
+        }
+        return null;
+    }
+
+    /**
+     * Creates a figure but does not process the getProperties.
+     */
+    private Figure readNodesRecursively(Node node) throws IOException {
+        switch (node.getNodeType()) {
+            case Node.ELEMENT_NODE:
+                Figure figure = readNode(node);
+                if (!comments.isEmpty()) {
+                    figure.set(XML_HEAD_COMMENT_KEY, comments);
+                    comments = new ArrayList<>();
+                }
+                NodeList list = node.getChildNodes();
+                for (int i = 0; i < list.getLength(); i++) {
+                    Figure child = readNodesRecursively(list.item(i));
+                    if (child instanceof Figure) {
+                        if (!child.isSuitableParent(figure)) {
+                            throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + ((Element) node).getTagName() + ".");
+                        }
+                        figure.add(child);
+                    }
+                }
+                if (!comments.isEmpty()) {
+                    figure.set(XML_BODY_COMMENT_KEY, comments);
+                    comments = new ArrayList<>();
+                }
+                return figure;
+            case Node.COMMENT_NODE:
+                comments.add(node.getTextContent());
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    private void readProcessingInstruction(Document doc, ProcessingInstruction pi, Drawing external) {
+        if (factory.getStylesheetsKey() != null) {
+            if ("xml-stylesheet".equals(pi.getNodeName()) && pi.getData() != null) {
+                Matcher m = hrefPattern.matcher(pi.getData());
+                if (m.matches()) {
+                    String href = m.group(1);
+
+                    URI uri = URI.create(href);
+                    uri = externalToInternal(external, uri);
+
+                    List<URI> listOrNull = external.get(factory.getStylesheetsKey());
+                    List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull);
+                    stylesheets.add(uri);
+                    external.set(factory.getStylesheetsKey(), stylesheets);
+                }
+            }
+        }
+    }
+
+    private void setAttribute(Element elem, String unqualifiedName, String value) throws IOException {
+        if (namespaceURI == null || namespaceQualifier == null) {
+            if (!elem.hasAttribute(unqualifiedName)) {
+                elem.setAttribute(unqualifiedName, value);
+            }
+        } else {
+            if (!elem.hasAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName)) {
+                elem.setAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName, value);
+            }
+        }
     }
 
     public Document toDocument(Drawing internal, Collection<Figure> selection) throws IOException {
@@ -230,14 +620,50 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    private Element createElement(Document doc, String unqualifiedName) throws IOException {
-        if (namespaceURI == null || namespaceQualifier == null) {
-            return doc.createElement(unqualifiedName);
+    @Override
+    public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
+        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
+        setExternalHome(null);
+        StringWriter sw = new StringWriter();
+        write(sw, drawing, selection);
+        out.put(getDataFormat(), sw.toString());
+    }
+
+    private void writeElementAttributes(Element elem, Figure figure) throws IOException {
+        setAttribute(elem, factory.getObjectIdAttribute(), factory.createId(figure));
+        for (MapAccessor<?> k : factory.figureAttributeKeys(figure)) {
+            if (k.isTransient()) {
+                continue;
+            }
+            @SuppressWarnings("unchecked")
+            MapAccessor<Object> key = (MapAccessor<Object>) k;
+            Object value = figure.get(key);
+
+            if (value instanceof URI) {
+                value = internalToExternal(figure.getDrawing(), (URI) value);
+            }
+
+            if (!factory.isDefaultValue(figure, key, value)) {
+                String name = factory.keyToName(figure, key);
+                if (Figure.class.isAssignableFrom(key.getValueType())) {
+                    setAttribute(elem, name, factory.createId(value));
+                } else {
+                    setAttribute(elem, name, factory.valueToString(key, value));
+                }
+            }
         }
-        if (namespaceQualifier == null) {
-            return doc.createElementNS(namespaceURI, unqualifiedName);
-        } else {
-            return doc.createElementNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName);
+    }
+
+    private void writeElementNodeList(Document document, Element elem, Figure figure) throws IOException {
+        for (MapAccessor<?> k : factory.figureNodeListKeys(figure)) {
+            @SuppressWarnings("unchecked")
+            MapAccessor<Object> key = (MapAccessor<Object>) k;
+            Object value = figure.get(key);
+            if (!factory.isDefaultValue(figure, key, value)) {
+                for (Node node : factory.valueToNodeList(key, value, document)) {
+                    elem.appendChild(node);
+                }
+            }
         }
     }
 
@@ -279,296 +705,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    private void setAttribute(Element elem, String unqualifiedName, String value) throws IOException {
-        if (namespaceURI == null || namespaceQualifier == null) {
-            if (!elem.hasAttribute(unqualifiedName)) {
-                elem.setAttribute(unqualifiedName, value);
-            }
-        } else {
-            if (!elem.hasAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName)) {
-                elem.setAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName, value);
-            }
-        }
-    }
-
-    private void writeElementAttributes(Element elem, Figure figure) throws IOException {
-        setAttribute(elem, factory.getObjectIdAttribute(), factory.createId(figure));
-        for (MapAccessor<?> k : factory.figureAttributeKeys(figure)) {
-            if (k.isTransient()) {
-                continue;
-            }
-            @SuppressWarnings("unchecked")
-            MapAccessor<Object> key = (MapAccessor<Object>) k;
-            Object value = figure.get(key);
-
-            if (value instanceof URI) {
-                value = internalToExternal(figure.getDrawing(), (URI) value);
-            }
-
-            if (!factory.isDefaultValue(figure, key, value)) {
-                String name = factory.keyToName(figure, key);
-                if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    setAttribute(elem, name, factory.createId(value));
-                } else {
-                    setAttribute(elem, name, factory.valueToString(key, value));
-                }
-            }
-        }
-    }
-
-    private void writeElementNodeList(Document document, Element elem, Figure figure) throws IOException {
-        for (MapAccessor<?> k : factory.figureNodeListKeys(figure)) {
-            @SuppressWarnings("unchecked")
-            MapAccessor<Object> key = (MapAccessor<Object>) k;
-            Object value = figure.get(key);
-            if (!factory.isDefaultValue(figure, key, value)) {
-                for (Node node : factory.valueToNodeList(key, value, document)) {
-                    elem.appendChild(node);
-                }
-            }
-        }
-    }
-
-    public Figure fromDocument(Document doc, Drawing oldDrawing) throws IOException {
-        factory.reset();
-        if (oldDrawing != null) {
-            Figure probe = readNode(doc.getDocumentElement());
-            if (probe instanceof Clipping) {
-                for (Figure f : oldDrawing.preorderIterable()) {
-                    factory.createId(f);
-                }
-            } else {
-                factory.reset();
-            }
-        }
-
-        figureToElementMap.clear();
-        Drawing external = null;
-        Clipping clipping = null;
-        NodeList list = doc.getChildNodes();
-        comments = new ArrayList<>();
-        for (int i = 0; i < list.getLength(); i++) {
-            Node node = list.item(i);
-            switch (node.getNodeType()) {
-                case Node.COMMENT_NODE:
-                    comments.add(((Comment) node).getTextContent());
-                    break;
-                case Node.ELEMENT_NODE:
-                    Figure f = readNodesRecursively(node);
-                    if (f instanceof Drawing) {
-                        external = (Drawing) f;
-                    } else if (f instanceof Clipping) {
-                        clipping = (Clipping) f;
-                    }
-            }
-        }
-        if (external != null) {
-            for (int i = 0; i < list.getLength(); i++) {
-                Node node = list.item(i);
-                switch (node.getNodeType()) {
-                    case Node.PROCESSING_INSTRUCTION_NODE:
-                        readProcessingInstruction(doc, (ProcessingInstruction) node, external);
-                        break;
-                }
-            }
-        }
-        if (external == null && clipping == null) {
-            if (namespaceURI == null) {
-                throw new IOException("The document does not contain a drawing.");
-            } else {
-                throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
-            }
-        }
-        if (external != null) {
-            external.set(Drawing.DOCUMENT_HOME, getExternalHome());
-            external.set(XML_EPILOG_COMMENT_KEY, comments);
-        }
-        try {
-            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
-                readElementAttributes(entry.getKey(), entry.getValue());
-                readElementNodeList(entry.getKey(), entry.getValue());
-            }
-        } finally {
-            figureToElementMap.clear();
-        }
-        comments = null;
-        if (external != null) {
-            Drawing internal = factory.fromExternalDrawing(external);
-            internal.updateCss();
-            return internal;
-        } else {
-            return clipping;
-        }
-    }
-
-    private String getAttribute(Element elem, String unqualifiedName) {
-        if (namespaceURI == null) {
-            return elem.getAttribute(unqualifiedName);
-        } else if (elem.hasAttributeNS(namespaceURI, unqualifiedName)) {
-            return elem.getAttributeNS(namespaceURI, unqualifiedName);
-        } else if (elem.isDefaultNamespace(namespaceURI)) {
-            return elem.getAttribute(unqualifiedName);
-        }
-        return null;
-    }
-
-    /**
-     * Creates a figure but does not process the getProperties.
-     */
-    private Figure readNodesRecursively(Node node) throws IOException {
-        switch (node.getNodeType()) {
-            case Node.ELEMENT_NODE:
-                Figure figure = readNode(node);
-                if (!comments.isEmpty()) {
-                    figure.set(XML_HEAD_COMMENT_KEY, comments);
-                    comments = new ArrayList<>();
-                }
-                NodeList list = node.getChildNodes();
-                for (int i = 0; i < list.getLength(); i++) {
-                    Figure child = readNodesRecursively(list.item(i));
-                    if (child instanceof Figure) {
-                        if (!child.isSuitableParent(figure)) {
-                            throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + ((Element) node).getTagName() + ".");
-                        }
-                        figure.add(child);
-                    }
-                }
-                if (!comments.isEmpty()) {
-                    figure.set(XML_BODY_COMMENT_KEY, comments);
-                    comments = new ArrayList<>();
-                }
-                return figure;
-            case Node.COMMENT_NODE:
-                comments.add(node.getTextContent());
-                return null;
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * Creates a figure but does not process the getProperties.
-     */
-    private Figure readNode(Node node) throws IOException {
-        if (node instanceof Element) {
-            Element elem = (Element) node;
-            if (namespaceURI != null) {
-                if (!namespaceURI.equals(elem.getNamespaceURI())) {
-                    return null;
-                }
-            }
-            Figure figure = factory.nameToFigure(elem.getLocalName());
-            if (figure == null) {
-                return null;
-            }
-            figureToElementMap.put(figure, elem);
-            String id = getAttribute(elem, factory.getObjectIdAttribute());
-
-            if (id != null && !id.isEmpty()) {
-                if (factory.getObject(id) != null) {
-                    System.err.println("SimpleXmlIO warning: duplicate id " + id + " in element " + elem.getTagName());
-                    factory.putId(figure, id);
-                } else {
-                    factory.putId(figure, id);
-                }
-            }
-            return figure;
-        }
-        return null;
-    }
-
-    /**
-     * Reads the attributes of the specified element.
-     */
-    private void readElementAttributes(Figure figure, Element elem) throws IOException {
-        for (MapAccessor<?> ma : factory.figureAttributeKeys(figure)) {
-            @SuppressWarnings("unchecked")
-            MapAccessor<Object> mao = (MapAccessor<Object>) ma;
-            Object defaultValue = factory.getDefaultValue(figure, ma);
-            figure.set(mao, defaultValue);
-        }
-
-        NamedNodeMap attrs = elem.getAttributes();
-        for (int i = 0, n = attrs.getLength(); i < n; i++) {
-            Attr attr = (Attr) attrs.item(i);
-            if (attr.getNamespaceURI() != null && !attr.getNamespaceURI().equals(namespaceURI)) {
-                continue;
-            }
-
-            /*if (factory.getObjectIdAttribute().equals(attr.getLocalName())) {
-                continue;
-            }*/
-            @SuppressWarnings("unchecked")
-            MapAccessor<Object> key = (MapAccessor<Object>) factory.nameToKey(figure, attr.getLocalName());
-            if (key != null && factory.figureAttributeKeys(figure).contains(key)) {
-                Object value = null;
-                if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    value = getFigure(attr.getValue());
-                } else {
-                    value = factory.stringToValue(key, attr.getValue());
-                }
-
-                if (value instanceof URI) {
-                    value = externalToInternal(figure.getDrawing(), (URI) value);
-                }
-
-                figure.set(key, value);
-            }
-        }
-    }
-
-    /**
-     * Reads the children of the specified element as a node list.
-     */
-    private void readElementNodeList(Figure figure, Element elem) throws IOException {
-        Set<MapAccessor<?>> keys = factory.figureNodeListKeys(figure);
-        for (MapAccessor<?> ky : keys) {
-            @SuppressWarnings("unchecked")
-            MapAccessor<Object> key = (MapAccessor<Object>) ky;
-            String name = factory.keyToElementName(figure, key);
-            if ("".equals(name)) {
-                List<Node> nodeList = new ArrayList<>();
-                NodeList children = elem.getChildNodes();
-                for (int i = 0, n = children.getLength(); i < n; i++) {
-                    Node child = children.item(i);
-                    if (child.getNodeType() == Node.TEXT_NODE) {
-                        nodeList.add(child);
-                    } else if (child.getNodeType() == Node.ELEMENT_NODE) {
-                        // filter out element nodes of child figures
-                        Element childElem = (Element) child;
-                        if (namespaceURI != null) {
-                            if (!namespaceURI.equals(childElem.getNamespaceURI())) {
-                                nodeList.add(child);
-                            }
-                        } else {
-                            try {
-                                if (factory.nameToFigure(childElem.getLocalName()) != null) {
-                                    continue;
-                                }
-                            } catch (IOException e) {
-                                continue;
-                            }
-                            nodeList.add(child);
-                        }
-                    }
-                }
-                Object value = factory.nodeListToValue(key, nodeList);
-                figure.set(key, value);
-            } else {
-                throw new UnsupportedOperationException("Reading of sub-elements is not yet supported");
-            }
-        }
-
-    }
-
-    public Figure getFigure(String id) throws IOException {
-        Figure f = (Figure) factory.getObject(id);
-        /*        if (f == null) {
-            throw new IOException("no figure for id:" + id);
-        }*/
-        return f;
-    }
-
     // XXX maybe this should not be in SimpleXmlIO?
     private void writeProcessingInstructions(Document doc, Drawing external) {
         Element docElement = doc.getDocumentElement();
@@ -589,135 +725,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             }
         }
 
-    }
-
-    private void readProcessingInstruction(Document doc, ProcessingInstruction pi, Drawing external) {
-        if (factory.getStylesheetsKey() != null) {
-            if ("xml-stylesheet".equals(pi.getNodeName()) && pi.getData() != null) {
-                Matcher m = hrefPattern.matcher(pi.getData());
-                if (m.matches()) {
-                    String href = m.group(1);
-
-                    URI uri = URI.create(href);
-                    uri = externalToInternal(external, uri);
-
-                    List<URI> listOrNull = external.get(factory.getStylesheetsKey());
-                    List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull);
-                    stylesheets.add(uri);
-                    external.set(factory.getStylesheetsKey(), stylesheets);
-                }
-            }
-        }
-    }
-
-    /**
-     * Internal URI is relative to document home. Make it relative to the file.
-     * we are writing.
-     *
-     * @param drawing the drawing
-     * @param internal the internal uri
-     * @return the external uri
-     */
-    private URI internalToExternal(Drawing drawing, URI internal) {
-        URI external = internal;
-        if (internalHome != null) {
-            external = internalHome.resolve(external);
-        }
-        if (externalHome != null) {
-            external = externalHome.relativize(external);
-        }
-        return external;
-    }
-
-    /**
-     * External URI is relative to file that we are reading. Make it relative to
-     * document home or make it absolute.
-     *
-     * @param drawing the drawing
-     * @param external the external uri
-     * @return the internal uri
-     */
-    private URI externalToInternal(Drawing drawing, URI external) {
-        URI internal = external;
-        if (externalHome != null) {
-            internal = externalHome.resolve(internal);
-        }
-        if (internalHome != null) {
-            internal = internalHome.relativize(internal);
-        }
-        return internal;
-    }
-
-    private DataFormat getDataFormat() {
-        String mimeType = "application/xml";
-        DataFormat df = DataFormat.lookupMimeType(mimeType);
-        if (df == null) {
-            df = new DataFormat(mimeType);
-        }
-        return df;
-    }
-
-    @Override
-    public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
-        setExternalHome(null);
-        StringWriter sw = new StringWriter();
-        write(sw, drawing, selection);
-        out.put(getDataFormat(), sw.toString());
-    }
-
-    @Override
-    public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Layer layer) throws IOException {
-        setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
-        setExternalHome(null);
-        Object content = clipboard.getContent(getDataFormat());
-        if (content instanceof String) {
-            Set<Figure> figures = new LinkedHashSet<>();
-            Figure newDrawing = read((String) content, drawing);
-            factory.reset();
-            for (Figure f : drawing.preorderIterable()) {
-                factory.createId(f);
-            }
-            if (layer == null) {
-                layer = (Layer) drawing.getLastChild();
-                if (layer == null) {
-                    layer = new SimpleLayer();
-                    layer.set(StyleableFigure.ID, factory.createId(layer));
-                    model.addChildTo(layer, drawing);
-                }
-            }
-            for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
-                newDrawing.remove(f);
-                String id = factory.createId(f);
-                f.set(StyleableFigure.ID, id);
-                if (f instanceof Layer) {
-                    model.addChildTo(f, drawing);
-                } else {
-                    model.addChildTo(f, layer);
-                }
-            }
-            return figures;
-        } else {
-            throw new IOException("no data found");
-        }
-    }
-
-    @Override
-    public boolean isNamespaceAware() {
-        return namespaceURI != null;
-    }
-
-    @Override
-    public Figure read(InputStream in, Drawing drawing) throws IOException {
-        return XmlInputFormatMixin.super.read(in, drawing);
-    }
-
-    public String getIndent() {
-        return indent;
-    }
-
-    public void setIndent(String indent) {
-        this.indent = indent;
     }
 
 }
