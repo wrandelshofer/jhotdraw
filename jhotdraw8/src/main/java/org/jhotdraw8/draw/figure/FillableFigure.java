@@ -27,7 +27,7 @@ public interface FillableFigure extends Figure {
      * Defines the paint used for filling the interior of the figure. Default
      * value: {@code Color.WHITE}.
      */
-    public static PaintableStyleableFigureKey FILL_COLOR = new PaintableStyleableFigureKey("fill", new CssColor("white", Color.WHITE));
+    public static PaintableStyleableFigureKey FILL = new PaintableStyleableFigureKey("fill", new CssColor("white", Color.WHITE));
 
     /**
      * Updates a shape node.
@@ -35,7 +35,7 @@ public interface FillableFigure extends Figure {
      * @param shape a shape node
      */
     default void applyFillableFigureProperties(Shape shape) {
-        Paint p = Paintable.getPaint(getStyled(FILL_COLOR));
+        Paint p = Paintable.getPaint(getStyled(FILL));
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);
         }

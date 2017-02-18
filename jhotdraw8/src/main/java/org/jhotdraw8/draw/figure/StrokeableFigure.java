@@ -81,7 +81,7 @@ public interface StrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static PaintableStyleableFigureKey STROKE_COLOR = new PaintableStyleableFigureKey("stroke", new CssColor("black", Color.BLACK));
+    public static PaintableStyleableFigureKey STROKE = new PaintableStyleableFigureKey("stroke", new CssColor("black", Color.BLACK));
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
@@ -171,7 +171,7 @@ public interface StrokeableFigure extends Figure {
         applyStrokeDashProperties(shape);
     }
     default void applyStrokeColorProperties(Shape shape) {
-        Paint p = Paintable.getPaint(getStyled(STROKE_COLOR));
+        Paint p = Paintable.getPaint(getStyled(STROKE));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }

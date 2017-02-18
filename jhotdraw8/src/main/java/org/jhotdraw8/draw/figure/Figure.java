@@ -275,7 +275,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 for (Figure ff : f.preorderIterable()) {
                     fb = ff.getBoundsInLocal();
                     double grow = 0.0;
-                    if (ff.get(StrokeableFigure.STROKE_COLOR) != null) {
+                    if (ff.get(StrokeableFigure.STROKE) != null) {
                         switch (ff.get(StrokeableFigure.STROKE_TYPE)) {
                             case CENTERED:
                                 grow += ff.get(StrokeableFigure.STROKE_WIDTH) * 0.5;
