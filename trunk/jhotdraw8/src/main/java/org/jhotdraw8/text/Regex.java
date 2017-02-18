@@ -63,7 +63,7 @@ public class Regex {
 
         Matcher m = pattern.matcher(str);
         try {
-            return replace == null ? m.replaceFirst("$0") : m.replaceAll(replace);
+            return replace == null ? m.replaceAll("$0") : m.replaceAll(replace);
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             return str;
