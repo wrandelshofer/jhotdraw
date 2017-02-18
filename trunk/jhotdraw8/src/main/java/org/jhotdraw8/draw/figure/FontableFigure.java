@@ -5,6 +5,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.geometry.HPos;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import javafx.geometry.VPos;
@@ -54,10 +55,10 @@ public interface FontableFigure extends Figure {
      * The text alignment. Default value: {@code left}
      */
     public static EnumStyleableFigureKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableFigureKey<>("textAlignment", TextAlignment.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), TextAlignment.LEFT);
-    /**
-     * The text origin. Default value: {@code baseline}
+       /**
+     * The vertical position of the text. Default value: {@code baseline}
      */
-    public static EnumStyleableFigureKey<VPos> TEXT_ORIGIN = new EnumStyleableFigureKey<>("textOrigin", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), VPos.BASELINE);
+    public static EnumStyleableFigureKey<VPos> TEXT_VPOS = new EnumStyleableFigureKey<>("textVPos", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), VPos.BASELINE);
     /**
      * Whether to underline the text. Default value: {@code false}
      */
@@ -98,7 +99,7 @@ public interface FontableFigure extends Figure {
         if (text.isStrikethrough() != b) {
             text.setStrikethrough(b);
         }
-        VPos vp = getStyled(TEXT_ORIGIN);
+        VPos vp = getStyled(TEXT_VPOS);
         if (text.getTextOrigin() != vp) {
             text.setTextOrigin(vp);
         }

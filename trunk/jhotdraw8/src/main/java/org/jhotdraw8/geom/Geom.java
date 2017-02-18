@@ -959,7 +959,7 @@ public class Geom {
      * @param l1y point 1 on the line
      * @param l2x point 2 on the line
      * @param l2y point 2 on the line
-     * @return the perpendicular vector of length {@code vectorLength}
+     * @return the perpendicular vector of length {@code 1}
      */
     public static Point2D perp(double l1x, double l1y, double l2x, double l2y) {
         // matlab: v    = p2 - p1
@@ -975,6 +975,16 @@ public class Geom {
         double m = norm == 0 ? 0 : 1 / norm;
 
         return new Point2D(cvx * m, cvy * m);
+    }
+
+    /**
+     * Gets a unit vector which is perpendicular to the given tangent vector.
+     *
+     * @param tangentVector tangent vector
+     * @return the perpendicular vector of length {@code 1}
+     */
+    public static Point2D perp(Point2D tangent) {
+        return perp(0, 0, tangent.getX(), tangent.getY());
     }
 
     /**

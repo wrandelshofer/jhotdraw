@@ -48,20 +48,16 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static Point2DStyleableMapAccessor ORIGIN = new Point2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
 
-    public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_BOTTOM = new DoubleStyleableFigureKey("paddingBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_LEFT = new DoubleStyleableFigureKey("paddingLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
 
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
-    /**
-     * The CSS type selector for a label object is {@code "Label"}.
-     */
-    public final static String TYPE_SELECTOR = "Label";
 
-    private Text textNode;
     protected transient Bounds boundsInLocal;
+    private Text textNode;
 
     public AbstractLabelFigure() {
         this(0, 0);
@@ -77,24 +73,23 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         set(ORIGIN, new Point2D(x, y));
     }
 
-    /**
-     * Returns the bounds of the node for layout calculations. These bounds
-     * include the text of the node and the padding.
-     *
-     * @return the layout bounds
-     */
-    public Bounds getLayoutBounds() {
-        if (textNode == null) {
-            textNode = new Text();
-        }
-        updateTextNode(null, textNode);
-        Bounds b = textNode.getLayoutBounds();
-        Insets i = getStyled(PADDING);
-        return new BoundingBox(
-                b.getMinX() - i.getLeft(),
-                b.getMinY() - i.getTop(),
-                b.getWidth() + i.getLeft() + i.getRight(),
-                textNode.getBaselineOffset() + i.getTop() + i.getBottom());
+    @Override
+    public Node createNode(RenderContext drawingView) {
+        Group g = new Group();
+        g.setAutoSizeChildren(false);
+        Region r = new Region();
+        r.setScaleShape(true);
+        // g.getChildren().add(r);
+        Text text = new Text();
+        g.getChildren().add(text);
+        g.getProperties().put("region", r);
+        g.getProperties().put("text", text);
+        return g;
+    }
+
+    @Override
+    public Connector findConnector(Point2D p, Figure prototype) {
+        return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
     @Override
@@ -112,8 +107,45 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         return boundsInLocal;
     }
 
+    /**
+     * Returns the bounds of the node for layout calculations. These bounds
+     * include the text of the node and the padding.
+     *
+     * @return the layout bounds
+     */
+    public Bounds getLayoutBounds() {
+        if (textNode == null) {
+            textNode = new Text();
+        }
+        updateTextNode(null, textNode);
+        Bounds b = textNode.getLayoutBounds();
+        Insets i = getStyled(PADDING);
+
+        return new BoundingBox(
+                b.getMinX() - i.getLeft(),
+                b.getMinY() - i.getTop(),
+                b.getWidth() + i.getLeft() + i.getRight(),
+                textNode.getBaselineOffset() + i.getTop() + i.getBottom());
+    }
+
+    protected abstract String getText(RenderContext ctx);
+
     private void invalidateBounds() {
         boundsInLocal = null;
+    }
+
+    @Override
+    protected void invalidated(Key<?> key) {
+        super.invalidated(key);
+        if ((key instanceof FigureKey)
+                && ((FigureKey) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT)) {
+            invalidateBounds();
+        }
+    }
+
+    @Override
+    public void layout() {
+        invalidateBounds();
     }
 
     @Override
@@ -122,20 +154,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Insets i = getStyled(PADDING);
         set(ORIGIN, new Point2D(x + i.getLeft(), y + lb.getHeight() - i.getBottom()));
         invalidateBounds();
-    }
-
-    @Override
-    public Node createNode(RenderContext drawingView) {
-        Group g = new Group();
-        g.setAutoSizeChildren(false);
-        Region r = new Region();
-        r.setScaleShape(true);
-        // g.getChildren().add(r);
-        Text text = new Text();
-        g.getChildren().add(text);
-        g.getProperties().put("region", r);
-        g.getProperties().put("text", text);
-        return g;
     }
 
     @Override
@@ -186,37 +204,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         }
     }
 
-    protected abstract String getText(RenderContext ctx);
-
     protected void updateTextNode(RenderContext ctx, Text tn) {
         tn.setText(getText(ctx));
         tn.setX(get(ORIGIN_X));
         tn.setY(get(ORIGIN_Y));
         applyTextFillableFigureProperties(tn);
         applyFontableFigureProperties(ctx, tn);
-    }
-
-    @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
-}
-
-    @Override
-    public void layout() {
-       invalidateBounds();
-    }
-
-    @Override
-    public String getTypeSelector() {
-        return TYPE_SELECTOR;
-    }
-
-    @Override
-    protected void invalidated(Key<?> key) {
-        super.invalidated(key);
-        if ((key instanceof FigureKey)
-                && ((FigureKey) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT)) {
-            invalidateBounds();
-        }
     }
 }

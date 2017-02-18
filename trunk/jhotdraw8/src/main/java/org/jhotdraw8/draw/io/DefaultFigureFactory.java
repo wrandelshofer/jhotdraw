@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -150,6 +151,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Boolean.class, new XmlBooleanConverter());
         addConverterForType(TextAlignment.class, new XmlEnumConverter<TextAlignment>(TextAlignment.class));
         addConverterForType(VPos.class, new XmlEnumConverter<VPos>(VPos.class));
+        addConverterForType(HPos.class, new XmlEnumConverter<HPos>(HPos.class));
         addConverterForType(CssFont.class, new XmlFFontConverter());
         addConverterForType(Rectangle2D.class, new XmlRectangle2DConverter());
         addConverterForType(BlendMode.class, new XmlEnumConverter<BlendMode>(BlendMode.class));
