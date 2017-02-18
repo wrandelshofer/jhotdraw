@@ -458,6 +458,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
         double f = getZoomFactor();
         Drawing d = getDrawing();
+        if (d==null) return;
         double dw = d.get(Drawing.WIDTH);
         double dh = d.get(Drawing.HEIGHT);
         int imgw = Math.min(16000, Math.max(1, (int) (dw)));
