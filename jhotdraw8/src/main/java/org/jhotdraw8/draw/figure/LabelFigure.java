@@ -16,7 +16,10 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @version $Id$
  */
 public class LabelFigure extends AbstractLabelFigure implements HideableFigure, FontableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
-
+    /**
+     * The CSS type selector for a label object is {@code "Label"}.
+     */
+    public final static String TYPE_SELECTOR = "Label";
     public LabelFigure() {
         this(0, 0, "");
     }
@@ -24,7 +27,7 @@ public class LabelFigure extends AbstractLabelFigure implements HideableFigure, 
     public LabelFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
-
+    
     public LabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
@@ -47,5 +50,11 @@ public class LabelFigure extends AbstractLabelFigure implements HideableFigure, 
     @Override
     protected String getText(RenderContext ctx) {
         return get(TEXT);
+    }
+    
+    
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
     }
 }

@@ -9,6 +9,7 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A <em>connector</em> encapsulates a strategy for locating a connection point
@@ -32,6 +33,18 @@ public interface Connector {
      * figure.
      */
     Point2D getPositionInLocal(Figure connection, Figure target);
+    /**
+     * Returns the tangent vector on the target figure for the specified connection figure
+     * in local coordinates.
+     *
+     * @param connection a connection figure
+     * @param target the target
+     * @return A tangent vector on the target figure in local coordinates of the target
+     * figure.
+     */
+   default Point2D getTangentInLocal(Figure connection, Figure target) {
+       return new Point2D(1.0,0.0);
+   }
 
     /**
      * Returns a point on the target figure for the specified connection figure
@@ -43,6 +56,41 @@ public interface Connector {
      */
     default Point2D getPositionInWorld(Figure connection, Figure target) {
         return target.localToWorld(getPositionInLocal(connection, target));
+    }
+    /**
+     * Returns a point on the target figure for the specified connection figure
+     * in parent coordinates.
+     *
+     * @param connection a connection figure
+     * @param target the target
+     * @return A point on the target figure in parent coordinates.
+     */
+    default Point2D getPositionInParent(Figure connection, Figure target) {
+        return Transforms.transform(target.getLocalToParent(),getPositionInLocal(connection, target));
+    }
+    /**
+     * Returns a tangent vector on the target figure for the specified connection figure
+     * in world coordinates.
+     *
+     * @param connection a connection figure
+     * @param target the target
+     * @return A point on the target figure in world coordinates.
+     */
+    default Point2D getTangentInWorld(Figure connection, Figure target) {
+        return Transforms.deltaTransform( target.getLocalToWorld(),
+        getTangentInLocal(connection, target));
+    }
+    /**
+     * Returns a tangent vector on the target figure for the specified connection figure
+     * in parent coordinates.
+     *
+     * @param connection a connection figure
+     * @param target the target
+     * @return A point on the target figure in parent coordinates.
+     */
+    default Point2D getTangentInParent(Figure connection, Figure target) {
+        return Transforms.deltaTransform( target.getLocalToParent(),
+        getTangentInLocal(connection, target));
     }
 
     /**

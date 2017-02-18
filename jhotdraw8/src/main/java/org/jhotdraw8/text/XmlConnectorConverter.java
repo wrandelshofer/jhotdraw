@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
@@ -25,9 +26,9 @@ import org.jhotdraw8.io.IdFactory;
  * <p>
  * This converter supports the following connectors:
  * <ul>
- * <li>CenterConnector</li>
- * <li>ChopRectangleConnector</li>
- * <li>ChopEllipseConnector</li>
+ * <li>PathConnector</li>
+ * <li>RectangleConnector</li>
+ * <li>EllipseConnector</li>
  * </ul>
  *
  * @author Werner Randelshofer

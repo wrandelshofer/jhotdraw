@@ -5,9 +5,6 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.SimpleFigureKey;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.BoundingBox;
@@ -26,8 +23,6 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.LineConnectionOutlineHandle;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.PointLocator;
 
 /**
@@ -106,22 +101,25 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
 
         connected.addListener((o, oldv, newv) -> {
             if (newv) {
-                connectedNotify();
+                connectNotify();
             } else {
-                disconnectedNotify();
+                disconnectNotify();
             }
         });
     }
 
     /**
-     * This method is called, when connectedProperty becomes true.
-     * This implementation is empty.
+     * This method is called, when connectedProperty becomes true. This
+     * implementation is empty.
      */
-    protected void connectedNotify() {
+    protected void connectNotify() {
     }
 
-    /** This property is true when the figure is connected.
-     * @return  the connected property */
+    /**
+     * This property is true when the figure is connected.
+     *
+     * @return the connected property
+     */
     public ReadOnlyBooleanProperty connectedProperty() {
         return connected.getReadOnlyProperty();
     }
@@ -153,11 +151,11 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         }
     }
 
-  /**
-     * This method is called, when connectedProperty becomes false.
-     * This implementation is empty.
+    /**
+     * This method is called, when connectedProperty becomes false. This
+     * implementation is empty.
      */
-    protected void disconnectedNotify() {
+    protected void disconnectNotify() {
     }
 
     @Override
@@ -241,20 +239,20 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
 
     @Override
     public void removeAllLayoutSubjects() {
-        set(START_CONNECTOR, null);
-        set(END_CONNECTOR, null);
+        set(START_TARGET, null);
+        set(END_TARGET, null);
     }
 
     @Override
     public void removeLayoutSubject(Figure subject) {
-        if (subject != null) {
-            if (get(START_TARGET) != null && subject == get(START_TARGET)) {
-                set(START_TARGET, null);
-            }
-            if (get(END_TARGET) != null && subject == get(END_TARGET)) {
-                set(END_TARGET, null);
-            }
+
+        if (subject == get(START_TARGET)) {
+            set(START_TARGET, null);
         }
+        if (subject == get(END_TARGET)) {
+            set(END_TARGET, null);
+        }
+
     }
 
     @Override

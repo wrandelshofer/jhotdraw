@@ -29,6 +29,7 @@ import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableFigureKey;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.*;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -120,7 +121,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      *
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyTransformableFigurePropertiesFast(Node node) {
+    default void applyTransformableFigureProperties(Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
         if (t.isIdentity()) {
@@ -137,7 +138,10 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
-    default void applyTransformableFigureProperties(Node node) {
+    default void applyTransformableFigureProperties(RenderContext ctx,Node node) {
+        applyTransformableFigureProperties(node);
+    }
+    default void applyTransformableFigurePropertiesWRONG(Node node) {
         double tx = getStyled(TRANSLATE_X);
         double ty = getStyled(TRANSLATE_Y);
         double r = getStyled(ROTATE);
