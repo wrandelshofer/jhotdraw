@@ -8,11 +8,11 @@ import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_COLOR;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Intersection;
+import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 
 /**
  * PathConnector. The target of the connection must implement {@link PathIterableFigure}.
@@ -43,7 +43,7 @@ public class PathConnector extends LocatorConnector {
         PathIterator pit;
 
         // FIXME does not take line join into account
-        if (target.getStyled(STROKE_COLOR) != null) {
+        if (target.getStyled(STROKE) != null) {
             double grow;
             switch (target.getStyled(STROKE_TYPE)) {
                 case CENTERED:

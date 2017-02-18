@@ -263,12 +263,12 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
-                () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
+                () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
                 layerFactory), 6, 0);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
                 () -> createFigure(() -> new PageLabelFigure(0, 0,
                 labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
-                FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null)), //
+                FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
                 layerFactory), 9, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
         ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0,16);
@@ -278,7 +278,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
             pf.set(PageFigure.PAGE_INSETS, new CssSizeInsets(2, 1, 2, 1, "cm"));
             PageLabelFigure pl = new PageLabelFigure(740, 570, labels.getFormatted("pageLabel.text",
                     PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
-                    FillableFigure.FILL_COLOR, null, StrokeableFigure.STROKE_COLOR, null);
+                    FillableFigure.FILL, null, StrokeableFigure.STROKE, null);
             pf.add(pl);
             return pf;
         }), layerFactory), 8, 1,16);

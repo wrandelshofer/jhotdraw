@@ -65,8 +65,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     public AbstractLabelFigure(Point2D position) {
         this(position.getX(), position.getY());
-        set(FILL_COLOR, null);
-        set(STROKE_COLOR, null);
+        set(FILL, null);
+        set(STROKE, null);
     }
 
     public AbstractLabelFigure(double x, double y) {
@@ -164,7 +164,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         updateRegionNode(ctx, r);
         updateTextNode(ctx, t);
 
-        if (getStyled(FILL_COLOR) != null || getStyled(STROKE_COLOR) != null) {
+        if (getStyled(FILL) != null || getStyled(STROKE) != null) {
             if (g.getChildren().size() != 2) {
                 g.getChildren().setAll(r, t);
             }
@@ -189,10 +189,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Bounds b = getBoundsInLocal();
         node.resizeRelocate(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
 
-        Paint fillColor = Paintable.getPaint(getStyled(FILL_COLOR));
+        Paint fillColor = Paintable.getPaint(getStyled(FILL));
         node.setBackground(fillColor == null ? null : new Background(new BackgroundFill(fillColor, null, null)));
 
-        Paint strokeColor = Paintable.getPaint(getStyled(STROKE_COLOR));
+        Paint strokeColor = Paintable.getPaint(getStyled(STROKE));
         double strokeWidth = getStyled(STROKE_WIDTH);
         if (strokeColor == null || strokeWidth == 0) {
             node.setBorder(Border.EMPTY);

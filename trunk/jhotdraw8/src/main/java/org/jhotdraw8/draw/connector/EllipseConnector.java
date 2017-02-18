@@ -9,13 +9,13 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
-import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_COLOR;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_WIDTH;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
+import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
 
 /**
  * EllipseConnector.
@@ -42,7 +42,7 @@ Point2D e=        target.worldToLocal(end);
 Bounds bounds=        target.getBoundsInLocal();
 
      // FIXME does not take line join into account
-        if (target.getStyled(STROKE_COLOR) != null) {
+        if (target.getStyled(STROKE) != null) {
             double grow;
             switch (target.getStyled(STROKE_TYPE)) {
                 case CENTERED:

@@ -50,7 +50,7 @@ public class LineConnectionWithMarkersFigure extends AbstractLineConnectionFigur
 
     public LineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
-        set(FILL_COLOR, new CssColor("black", Color.BLACK));
+        set(FILL, new CssColor("black", Color.BLACK));
         set(START_MARKER_LINE_INSET,10.0);
         set(END_MARKER_LINE_INSET,10.0);
         set(START_MARKER,"M0,0 L-10,5 -10,-5Z");
