@@ -4,13 +4,10 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 
 /**
  * A figure which draws a line connection between two figures.
@@ -39,13 +36,13 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     }
 
     @Override
-    public String getTypeSelector() {
-        return TYPE_SELECTOR;
+    public Node createNode(RenderContext drawingView) {
+        return new Line();
     }
 
     @Override
-    public Node createNode(RenderContext drawingView) {
-        return new Line();
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
     }
 
     @Override
@@ -64,6 +61,5 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
     }
-    
 
 }
