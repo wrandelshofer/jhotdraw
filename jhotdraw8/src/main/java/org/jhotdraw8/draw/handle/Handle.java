@@ -69,6 +69,10 @@ public interface Handle {
      */
     public final static String STYLECLASS_HANDLE_MOVE = "handle-move";
     /**
+     * Style class for handles which do not move a shape.
+     */
+    public final static String STYLECLASS_HANDLE_MOVE_LOCKED = "handle-move-locked";
+    /**
      * Style class for handles which move multiple shapes.
      */
     public final static String STYLECLASS_HANDLE_MULTI_MOVE = "handle-multi-move";

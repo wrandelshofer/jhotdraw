@@ -13,11 +13,8 @@
 package org.jhotdraw8.geom;
 
 import static java.lang.Double.isNaN;
-import static java.lang.Double.min;
-import java.lang.reflect.Array;
-import static java.time.Instant.MAX;
 import java.util.ArrayList;
-import javafx.geometry.Point2D;
+import java.util.Arrays;
 
 /**
  * Polynomial encapsulates root finding functions needed by curve intersection
@@ -44,15 +41,11 @@ public class Polynomial {
     private final static double ACCURACY = 6;
 
     private int simplifiedDegree() {
-        int popAt = this.getDegree();
-        for (int i = popAt; i >= 0; i--) {
-            if (Math.abs(this.coefs[i]) <= Polynomial.TOLERANCE) {
-                popAt = i;
-            } else {
-                break;
-            }
+        int i = this.getDegree();
+        while (i > 0 && Math.abs(this.coefs[i]) <= Polynomial.TOLERANCE) {
+            i--;
         }
-        return popAt;
+        return i;
     }
 
     /**
@@ -135,10 +128,10 @@ public class Polynomial {
             this.coefs[i] = coefs[coefs.length - i - 1];
         }
 
-        this._variable = "t";
+        this.variable = "t";
     }
     private double[] coefs;
-    private final String _variable;
+    private final String variable;
 
     /**
      * Evaluates the polynomial at the specified x value.
@@ -287,14 +280,18 @@ public class Polynomial {
      * toString
      *
      ****
+     * @return string representation
      */
     public String toString() {
+        if (true) {
+            return Arrays.toString(this.coefs);
+        }
         ArrayList<String> coefs = new ArrayList<String>();
         ArrayList<String> signs = new ArrayList<String>();
 
         for (int i = this.coefs.length - 1; i >= 0; i--) {
-            double value = Math.round(this.coefs[i] * 1000) / 1000;
-            //double value = this.coefs[i];
+            // double value = Math.round(this.coefs[i] * 1000) / 1000;
+            double value = this.coefs[i];
 
             if (value != 0) {
                 String sign = (value < 0) ? " - " : " + ";
@@ -303,9 +300,9 @@ public class Polynomial {
                 String strvalue = Double.toString(value);
                 if (i > 0) {
                     if (value == 1) {
-                        strvalue = this._variable;
+                        strvalue = this.variable;
                     } else {
-                        strvalue = value + this._variable;
+                        strvalue = value + this.variable;
                     }
                 }
                 if (i > 1) {
@@ -317,7 +314,9 @@ public class Polynomial {
             }
         }
 
-        signs.set(0, (signs.get(0) == " + ") ? "" : "-");
+        if (signs.size() > 0) {
+            signs.set(0, (signs.get(0) == " + ") ? "" : "-");
+        }
 
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < coefs.size(); i++) {
