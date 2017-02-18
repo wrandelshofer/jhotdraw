@@ -35,7 +35,7 @@ public class FigureSelectorModelNGTest {
         LabelFigure figure = new LabelFigure();
         FigureSelectorModel instance = new FigureSelectorModel();
         
-        final PaintableStyleableFigureKey key = FillableFigure.FILL_COLOR;
+        final PaintableStyleableFigureKey key = FillableFigure.FILL;
         final String attrName=key.getCssName();
         final Converter<Paintable> converter=key.getConverter();
         

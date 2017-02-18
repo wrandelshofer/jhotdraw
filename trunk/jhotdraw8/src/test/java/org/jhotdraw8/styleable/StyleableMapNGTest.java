@@ -32,7 +32,7 @@ public class StyleableMapNGTest {
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         StyleableMap<Key<?>, Object> instance = new StyleableMap<>();
-        final PaintableStyleableFigureKey key = FillableFigure.FILL_COLOR;
+        final PaintableStyleableFigureKey key = FillableFigure.FILL;
         
         
        assertNotNull(key.getDefaultValue(),"need a key with a non-null default value for this test");

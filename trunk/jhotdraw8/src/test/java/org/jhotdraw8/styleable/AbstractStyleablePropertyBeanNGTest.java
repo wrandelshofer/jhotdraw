@@ -39,7 +39,7 @@ public class AbstractStyleablePropertyBeanNGTest {
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         AbstractStyleablePropertyBean instance = new AbstractStyleablePropertyBeanImpl();
-        final PaintableStyleableFigureKey key = FillableFigure.FILL_COLOR;
+        final PaintableStyleableFigureKey key = FillableFigure.FILL;
         
         
        assertNotNull(key.getDefaultValue(),"need a key with a non-null default value for this test");
