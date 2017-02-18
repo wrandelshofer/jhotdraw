@@ -23,6 +23,7 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.LineConnectionOutlineHandle;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 
 /**
@@ -132,10 +133,12 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
             list.add(new LineOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             if (get(START_CONNECTOR) == null) {
                 list.add(new MoveHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE));
-            }
+            }else
+                list.add(new SelectionHandle(this, new PointLocator(START), Handle.STYLECLASS_HANDLE_MOVE_LOCKED));
             if (get(END_CONNECTOR) == null) {
                 list.add(new MoveHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE));
-            }
+            }else
+                list.add(new SelectionHandle(this, new PointLocator(END), Handle.STYLECLASS_HANDLE_MOVE_LOCKED));
         } else if (handleType == HandleType.RESIZE) {
             list.add(new LineConnectionOutlineHandle(this, Handle.STYLECLASS_HANDLE_RESIZE_OUTLINE));
             list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));

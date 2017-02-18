@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Regex.
+ * Find - ReplaceAll regular expression.
  *
  * @author Werner Randelshofer
  * @version $Id$

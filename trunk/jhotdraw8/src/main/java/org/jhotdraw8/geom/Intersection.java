@@ -13,6 +13,7 @@
 package org.jhotdraw8.geom;
 
 import java.awt.geom.PathIterator;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -392,7 +393,7 @@ public static Intersection intersectBezier2Bezier3(Point2D a1, Point2D a2, Point
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.put(                                        xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
+                                result.put(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
                                 );
                                 break checkRoots;
                             }
@@ -1059,7 +1060,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
                     if (0 <= xRoot && xRoot <= 1) {
                         for (int k = 0; k < yRoots.length; k++) {
                             if (Math.abs(xRoot - yRoots[k]) < TOLERANCE) {
-                                result.put(                                        xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
+                                result.put(xRoot, c23.multiply(s * s * s).add(c22.multiply(s * s).add(c21.multiply(s).add(c20)))
                                 );
                                 break checkRoots;
                             }
@@ -1162,7 +1163,7 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            result.put(                    t, c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))
+            result.put(t, c3.multiply(t * t * t).add(c2.multiply(t * t).add(c1.multiply(t).add(c0)))
             );
         }
 
@@ -1374,12 +1375,13 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
 
         // ?Rotate each cubic coefficient using line for new coordinate system?
         // Find roots of rotated cubic
-        double[] roots = new Polynomial(
+        final Polynomial polynomial = new Polynomial(
                 n.dotProduct(c3),
                 n.dotProduct(c2),
                 n.dotProduct(c1),
                 n.dotProduct(c0) + cl
-        ).getRoots();
+        );
+        double[] roots = polynomial.getRoots();
 
         // Any roots in closed interval [0,1] are intersections on Bezier, but
         // might not be on the line segment.
@@ -1520,7 +1522,7 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
             Point2D p = lerp(c1, c2, a / c_dist);
             double b = h / c_dist;
 
-            result.put(                    Double.NaN, new Point2D(
+            result.put(Double.NaN, new Point2D(
                     p.getX() - b * (c2.getY() - c1.getY()),
                     p.getY() + b * (c2.getX() - c1.getX())
             )
@@ -1992,6 +1994,12 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
                     x = seg[4];
                     y = seg[5];
                     inter = Intersection.intersectLineBezier3(ax, ay, bx, by, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
+                    Intersection inter2 = Intersection.intersectBezier3Line(new Point2D(lastx, lasty), new Point2D(seg[0], seg[1]),
+                            new Point2D(seg[2], seg[3]), new Point2D(x, y), new Point2D(ax, ay), new Point2D(bx, by));
+                    if (inter.getIntersections().size() != inter2.getIntersections().size()) {
+                        System.out.println("Intersection found:" + inter);
+                        System.out.println("  wanted:" + inter2);
+                    }
                     result.putAll(inter.getIntersections());
                     lastx = x;
                     lasty = y;

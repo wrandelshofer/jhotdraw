@@ -30,6 +30,10 @@ public class CssRegexConverter implements Converter<Regex> {
     private final CssStringConverter stringConverter = new CssStringConverter();
     private final boolean nullable;
 
+    /**
+     * Creates a new instance.
+     * @param nullable Whether the regular expression is nullable. 
+     */
     public CssRegexConverter(boolean nullable) {
         this.nullable = nullable;
     }

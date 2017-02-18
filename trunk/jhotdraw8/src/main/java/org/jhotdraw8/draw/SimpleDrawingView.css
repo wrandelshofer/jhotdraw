@@ -55,6 +55,11 @@
   -fx-border-color: blue;
   -fx-background-color: white;
 }
+
+.handle-move-locked {
+  -fx-border-color: white;
+  -fx-background-color: blue;
+}
 .handle-point,
 .handle-control-point {
   -fx-border-color: magenta;

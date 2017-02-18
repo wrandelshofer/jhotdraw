@@ -8,6 +8,7 @@
 package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
+import java.util.MissingResourceException;
 import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -98,31 +99,38 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         openViewFromURI(view, uri);
     }
 
+    private void handleException(final DocumentProject v,Throwable exception) throws MissingResourceException {
+        Throwable value = exception;
+        exception.printStackTrace();
+        String message = (value != null && value.getMessage()
+                != null) ? value.getMessage() : value.toString();
+        Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                ((message == null) ? "" : message));
+        alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
+        alert.showAndWait();
+        v.removeDisabler(this);
+    }
+
     protected void openViewFromURI(final DocumentProject v, final URI uri) {
         final Application app = getApplication();
         v.addDisabler(this);
 
         // Open the file
+        try {
         v.read(uri, null, null,false).whenComplete((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
             } else if (exception != null) {
-                Throwable value = exception;
-                exception.printStackTrace();
-                String message = (value != null && value.getMessage()
-                        != null) ? value.getMessage() : value.toString();
-                Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-                Alert alert = new Alert(Alert.AlertType.ERROR,
-                        ((message == null) ? "" : message));
-                alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
-                alert.showAndWait();
-                v.removeDisabler(this);
+                    handleException(v,exception);
             } else {
                 v.setURI(uri);
                 v.clearModified();
                 v.setTitle(URIUtil.getName(uri));
                 v.removeDisabler(this);
             }
-        });
+        });} catch (Throwable t) {
+            handleException(v,t);
+        }
     }
 }
