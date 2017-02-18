@@ -35,6 +35,13 @@ public class CssRegexConverter implements Converter<Regex> {
     }
 
     @Override
+    public String getHelpText() {
+         return "Format of ⟨RegReplace⟩: none | ⟨Match⟩ ⟨Replace⟩"
+                 +"\nFormat of ⟨Match⟩: \"match\""
+                 +"\nFormat of ⟨Replace⟩: \"replacement\"";
+    }
+
+    @Override
     public void toString(Appendable out, IdFactory idFactory, Regex value) throws IOException {
         if (value == null) {
             if (nullable) {
