@@ -106,7 +106,8 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
             fireDrawingModelInvalidated();
         }
     }
-private final  boolean listenOnDrawing;
+    private final boolean listenOnDrawing;
+
     private void onRootChanged(Drawing oldValue, Drawing newValue) {
         if (listenOnDrawing) {
             if (oldValue != null) {
@@ -402,7 +403,7 @@ private final  boolean listenOnDrawing;
                         }
                     }
                     for (Figure a : f.ancestorIterable()) {
-                        if (a instanceof TransformableFigure) {            
+                        if (a instanceof TransformableFigure) {
                             markDirty(a, DirtyBits.NODE);
                         }
                     }
@@ -414,13 +415,22 @@ private final  boolean listenOnDrawing;
 
             // all figures with dirty flag "LAYOUT_OBSERVERS" must be laid out
             // transitively, including all of their layoutable ancestors.
-            // We must then fix the transformation matrices again.
+            // We perfrom two layout passes, first the in-dependent figures,
+            // then those which depend on the layout of other figures.
             LinkedHashSet<Figure> transitive = new LinkedHashSet<>(todo);
             transitivelyCollectDependentFigures(todo, transitive);
             collectLayoutableAncestors(new ArrayList<>(transitive), transitive);
             for (Figure f : transitive) {
-                this.layout(f);
-                markDirty(f, DirtyBits.NODE);
+                if (f.getLayoutSubjects().isEmpty()) {
+                    markDirty(f, DirtyBits.NODE);
+                    this.layout(f);
+                }
+            }
+            for (Figure f : transitive) {
+                if (!f.getLayoutSubjects().isEmpty()) {
+                    markDirty(f, DirtyBits.NODE);
+                    this.layout(f);
+                }
             }
 
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
