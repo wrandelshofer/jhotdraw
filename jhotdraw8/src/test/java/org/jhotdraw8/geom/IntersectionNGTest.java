@@ -6,7 +6,9 @@
 package org.jhotdraw8.geom;
 
 import java.awt.geom.PathIterator;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import static org.testng.Assert.*;
@@ -31,7 +33,7 @@ public class IntersectionNGTest {
         System.out.println("getPoints");
         Intersection instance = null;
         List expResult = null;
-        List result = instance.getPoints();
+        Collection<Point2D> result = instance.getPoints();
         assertEquals(result, expResult);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -45,7 +47,7 @@ public class IntersectionNGTest {
         System.out.println("getTs");
         Intersection instance = null;
         List expResult = null;
-        List result = instance.getTs();
+        Set<Double> result = instance.getTs();
         assertEquals(result, expResult);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
