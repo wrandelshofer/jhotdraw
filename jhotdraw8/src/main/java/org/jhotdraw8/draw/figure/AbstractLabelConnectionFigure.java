@@ -60,7 +60,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The perpendicular offset of the label.
      */
-    public final static DoubleStyleableFigureKey LABEL_OFFSET = new DoubleStyleableFigureKey("labelOffset", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 10.0);
+    public final static DoubleStyleableFigureKey LABEL_OFFSET = new DoubleStyleableFigureKey("labelOffset", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 12.0);
     /**
      * Holds a strong reference to the property.
      */
