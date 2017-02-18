@@ -40,6 +40,14 @@ import org.jhotdraw8.event.Listener;
  */
 public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel {
 
+    public LayoutableAndTransformableDrawingModel() {
+        this.listenOnDrawing = false;
+    }
+
+    public LayoutableAndTransformableDrawingModel(boolean listenOnDrawing) {
+        this.listenOnDrawing = listenOnDrawing;
+    }
+
     private class MapProxy extends AbstractMap<Key<?>, Object> {
 
         private Map<Key<?>, Object> target = null;
@@ -98,9 +106,9 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
             fireDrawingModelInvalidated();
         }
     }
-
+private final  boolean listenOnDrawing;
     private void onRootChanged(Drawing oldValue, Drawing newValue) {
-        if (false) {
+        if (listenOnDrawing) {
             if (oldValue != null) {
                 newValue.getPropertyChangeListeners().add(propertyChangeHandler);
             }
