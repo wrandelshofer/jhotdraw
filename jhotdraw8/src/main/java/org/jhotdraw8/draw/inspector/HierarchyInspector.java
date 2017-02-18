@@ -110,7 +110,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
         idColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<String>(model.getModel(),
-                        cell.getValue().getValue(), StyleableFigure.ID,true) {
+                        cell.getValue().getValue(), StyleableFigure.ID) {
             @Override
             public String getValue() {
                 return figure.getId();
