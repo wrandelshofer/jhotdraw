@@ -103,6 +103,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.BezierFigure;
+import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.PageLabelFigure;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
@@ -239,6 +240,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 VIEWTOGGLE_PROPERTIES,
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels"), detailsVisible));
         map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(GroupFigure::new)));
+        map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(CombinedPathFigure::new)));
         map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
         map.put(AddToGroupAction.ID, new AddToGroupAction(getApplication(), editor));
         map.put(RemoveFromGroupAction.ID, new RemoveFromGroupAction(getApplication(), editor));

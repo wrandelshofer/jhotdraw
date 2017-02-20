@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
@@ -25,6 +27,7 @@ import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
 import org.jhotdraw8.draw.handle.PolylineOutlineHandle;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
+import org.jhotdraw8.geom.Shapes;
 
 /**
  * A figure which draws a connected line segments.
@@ -34,7 +37,8 @@ import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
  */
 public class PolylineFigure extends AbstractLeafFigure
         implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, 
-        LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure {
+        LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
+        PathIterableFigure{
 
     public final static Point2DListStyleableFigureKey POINTS = new Point2DListStyleableFigureKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
     /**
@@ -94,6 +98,11 @@ public class PolylineFigure extends AbstractLeafFigure
             maxY = Math.max(maxY, p.getY());
         }
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    }
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+       return Shapes.pathIteratorFromPoints(get(POINTS), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
     @Override

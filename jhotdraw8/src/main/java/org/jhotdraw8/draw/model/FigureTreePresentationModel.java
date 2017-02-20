@@ -134,11 +134,12 @@ public class FigureTreePresentationModel {
         items.clear();
         items.put(drawing, root);
         int childIndex = 0;
+        if (drawing!=null) {
         for (Figure child : drawing.getChildren()) {
             handleSubtreeAddedToDrawing(child, drawing, childIndex);
             handleFigureAdded(child, drawing, childIndex);
             childIndex++;
-        }
+        }}
     }
 
     private void handleFigureAdded(Figure f, Figure parentFigure, int index) {

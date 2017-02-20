@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import static java.lang.Math.*;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -11,6 +13,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
@@ -21,6 +24,7 @@ import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SymmetricPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.geom.Shapes;
 
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.
@@ -28,7 +32,10 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, ConnectableFigure {
+public class RectangleFigure extends AbstractLeafFigure
+        implements StrokeableFigure, FillableFigure, TransformableFigure, 
+        ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, 
+        ConnectableFigure, PathIterableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -57,9 +64,25 @@ public class RectangleFigure extends AbstractLeafFigure implements StrokeableFig
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
+    private Shape getBounds() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
+    }
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        Rectangle shape=new Rectangle();
+       shape.setX(get(X));
+        shape.setY(get(Y));
+        shape.setWidth(get(WIDTH));
+        shape.setHeight(get(HEIGHT));
+        shape.setArcWidth(getStyled(ARC_WIDTH));
+        shape.setArcHeight(getStyled(ARC_HEIGHT));        
+       return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
     @Override

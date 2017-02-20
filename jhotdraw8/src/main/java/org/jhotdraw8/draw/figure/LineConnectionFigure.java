@@ -4,10 +4,17 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
+import static org.jhotdraw8.draw.figure.LineFigure.END_X;
+import static org.jhotdraw8.draw.figure.LineFigure.END_Y;
+import static org.jhotdraw8.draw.figure.LineFigure.START_X;
+import static org.jhotdraw8.draw.figure.LineFigure.START_Y;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.Shapes;
 
 /**
  * A figure which draws a line connection between two figures.
@@ -16,7 +23,8 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @version $Id$
  */
 public class LineConnectionFigure extends AbstractLineConnectionFigure
-        implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+        implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
+        PathIterableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -60,6 +68,11 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         applyStrokeableFigureProperties(lineNode);
         applyCompositableFigureProperties(node);
         applyStyleableFigureProperties(ctx, node);
+    }
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        return Shapes.awtShapeFromFX(new Line(get(START_X), get(START_Y), get(END_X), get(END_Y))).getPathIterator(tx);
     }
 
 }

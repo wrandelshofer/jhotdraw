@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -12,11 +14,16 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import static org.jhotdraw8.draw.figure.LineFigure.END_X;
+import static org.jhotdraw8.draw.figure.LineFigure.END_Y;
+import static org.jhotdraw8.draw.figure.LineFigure.START_X;
+import static org.jhotdraw8.draw.figure.LineFigure.START_Y;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.text.CssColor;
 
 /**
@@ -27,7 +34,8 @@ import org.jhotdraw8.text.CssColor;
  * rawcoder $$
  */
 public class LineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
-        implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+        implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, 
+        LockableFigure, CompositableFigure, PathIterableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -51,10 +59,10 @@ public class LineConnectionWithMarkersFigure extends AbstractLineConnectionFigur
     public LineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
         set(FILL, new CssColor("black", Color.BLACK));
-        set(START_MARKER_LINE_INSET,10.0);
-        set(END_MARKER_LINE_INSET,10.0);
-        set(START_MARKER,"M0,0 L-10,5 -10,-5Z");
-        set(END_MARKER,"M0,0 L-10,5 -10,-5Z");
+        set(START_MARKER_LINE_INSET, 10.0);
+        set(END_MARKER_LINE_INSET, 10.0);
+        set(START_MARKER, "M0,0 L-10,5 -10,-5Z");
+        set(END_MARKER, "M0,0 L-10,5 -10,-5Z");
     }
 
     @Override
@@ -94,10 +102,10 @@ public class LineConnectionWithMarkersFigure extends AbstractLineConnectionFigur
         updateMarkerNode(ctx, g, (SVGPath) g.getProperties().get("endMarker"), end, start, endMarkerStr, getStyled(END_MARKER_SCALE_FACTOR));
 
         Point2D dir = end.subtract(start).normalize();
-        if (startInset != 0 && startMarkerStr!=null) {
+        if (startInset != 0 && startMarkerStr != null) {
             start = start.add(dir.multiply(startInset * getStyled(START_MARKER_SCALE_FACTOR)));
         }
-        if (endInset != 0&&endMarkerStr!=null) {
+        if (endInset != 0 && endMarkerStr != null) {
             end = end.add(dir.multiply(-endInset * getStyled(END_MARKER_SCALE_FACTOR)));
         }
         lineNode.setStartX(start.getX());
@@ -125,6 +133,11 @@ public class LineConnectionWithMarkersFigure extends AbstractLineConnectionFigur
             group.getChildren().remove(markerNode);
         }
 
+    }
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        // FIXME include markers in path
+        return Shapes.awtShapeFromFX(new Line(get(START_X),get(START_Y),get(END_X),get(END_Y))).getPathIterator(tx);
     }
 
 }

@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -11,16 +13,22 @@ import javafx.scene.Node;
 import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.EllipseConnector;
-import org.jhotdraw8.draw.connector.PathConnector;
-import org.jhotdraw8.draw.connector.RectangleConnector;
+import static org.jhotdraw8.draw.figure.RectangleFigure.ARC_HEIGHT;
+import static org.jhotdraw8.draw.figure.RectangleFigure.ARC_WIDTH;
+import static org.jhotdraw8.draw.figure.RectangleFigure.HEIGHT;
+import static org.jhotdraw8.draw.figure.RectangleFigure.WIDTH;
+import static org.jhotdraw8.draw.figure.RectangleFigure.X;
+import static org.jhotdraw8.draw.figure.RectangleFigure.Y;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.geom.Shapes;
 
 /**
  * Renders a {@code javafx.scene.shape.Ellipse}.
@@ -28,7 +36,9 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure {
+public class EllipseFigure extends AbstractLeafFigure 
+        implements StrokeableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, 
+        LockableFigure, CompositableFigure,ConnectableFigure,PathIterableFigure {
 
     public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
@@ -68,6 +78,17 @@ public class EllipseFigure extends AbstractLeafFigure implements StrokeableFigur
         double rx = get(RADIUS_X);
         double ry = get(RADIUS_Y);
         return new BoundingBox(get(CENTER_X) - rx, get(CENTER_Y) - ry, rx * 2.0, ry * 2.0);
+    }
+
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        Ellipse shape=new Ellipse();
+       shape.setCenterX(get(CENTER_X));
+        shape.setCenterY(get(CENTER_Y));
+        shape.setRadiusX(get(RADIUS_X));
+        shape.setRadiusY(get(RADIUS_Y));
+       return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
     @Override

@@ -17,7 +17,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 /**
@@ -40,7 +39,7 @@ this(null,content);
     public DockItem(String text, Node content) {
         super(text, content);
         graphicProperty().addListener(this::graphicChanged);
-        setGraphic(new Text("[.]"));
+        setGraphic(new Text("❏"));
         setClosable(false);
                 getStyleClass().add("dockItem");
     }

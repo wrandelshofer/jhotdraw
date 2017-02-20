@@ -46,6 +46,7 @@ import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.VLineTo;
+import javafx.scene.text.Text;
 import javafx.scene.transform.MatrixType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.io.StreamPosTokenizer;
@@ -95,6 +96,8 @@ public class Shapes {
             return awtShapeFromFXRectangle((Rectangle) fx);
         } else if (fx instanceof SVGPath) {
             return awtShapeFromFXSvgPath((SVGPath) fx);
+        } else if (fx instanceof Text) {
+            return awtShapeFromFXText((Text) fx);
         } else {
             throw new UnsupportedOperationException("unsupported shape " + fx);
         }
@@ -160,6 +163,11 @@ public class Shapes {
     private static Shape awtShapeFromFXLine(Line node) {
         Line2D.Double p = new Line2D.Double(node.getStartX(), node.getStartY(), node.getEndX(), node.getEndY());
         return p;
+    }
+
+    private static Shape awtShapeFromFXText(Text node) {
+        Path path = (Path) javafx.scene.shape.Shape.subtract(node, new Rectangle());
+        return awtShapeFromFXPath(path);
     }
 
     private static Shape awtShapeFromFXPath(Path node) {
@@ -291,6 +299,32 @@ public class Shapes {
         buildFromSvgString(b, str);
 
         return b.get();
+    }
+
+    public static void buildFromPathIterator(PathBuilder builder, PathIterator iter) throws IOException {
+        double[] coords = new double[6];
+        for (; !iter.isDone(); iter.next()) {
+            switch (iter.currentSegment(coords)) {
+                case PathIterator.SEG_CLOSE:
+                    builder.closePath();
+                    break;
+
+                case PathIterator.SEG_CUBICTO:
+                    builder.curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
+                    break;
+                case PathIterator.SEG_LINETO:
+                    builder.lineTo(coords[0], coords[1]);
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    builder.quadTo(coords[0], coords[1], coords[2], coords[3]);
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    builder.moveTo(coords[0], coords[1]);
+                    break;
+                default:
+                    throw new InternalError("unsupported segment type:" + iter.currentSegment(coords));
+            }
+        }
     }
 
     /**
@@ -897,7 +931,7 @@ public class Shapes {
                     } else {
                         srcd[0] = p.getX();
                         srcd[1] = p.getY();
-                        tx.transform(srcf, 0, coords, 0, 1);
+                        tx.transform(srcd, 0, coords, 0, 1);
                     }
                     return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
                 } else if (index == points.size() && closed) {
