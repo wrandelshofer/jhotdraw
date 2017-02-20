@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,21 +44,24 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         CompositableFigure,
         ConnectableFigure, PathIterableFigure {
 
-    /**
-     * The CSS type selector for group objects is @code("group"}.
-     */
-    public final static String TYPE_SELECTOR = "CombinedPath";
-    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = BezierFigure.FILL_RULE;
-    public static DoubleStyleableFigureKey COMBINE_STROKE_WIDTH = new DoubleStyleableFigureKey("combine-stroke-width", DirtyMask.of(DirtyBits.NODE), 0.0);
+    public final static EnumStyleableFigureKey<CagOperation> CAG_OPERATION = new EnumStyleableFigureKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), CagOperation.NONE);
     public static EnumStyleableFigureKey<StrokeLineCap> COMBINE_STROKE_LINE_CAP = new EnumStyleableFigureKey<>("combine-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.BUTT);
     public static EnumStyleableFigureKey<StrokeLineJoin> COMBINE_STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("combine-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
     public static DoubleStyleableFigureKey COMBINE_STROKE_MITER_LIMIT = new DoubleStyleableFigureKey("combine-stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), 4.0);
 
-    public static enum Combination {
-    APPEND,UNION,SUBTRACT,INTERSECT
-}
-    public final static EnumStyleableFigureKey<Combination> COMBINATION_MODE = new EnumStyleableFigureKey<>("combination-mode", Combination.class, DirtyMask.of(DirtyBits.NODE), Combination.APPEND);
-    
+    public static DoubleStyleableFigureKey COMBINE_STROKE_WIDTH = new DoubleStyleableFigureKey("combine-stroke-width", DirtyMask.of(DirtyBits.NODE), 0.0);
+    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = BezierFigure.FILL_RULE;
+    /**
+     * The CSS type selector for group objects is @code("group"}.
+     */
+    public final static String TYPE_SELECTOR = "CombinedPath";
+
+    @Override
+    public Node createNode(RenderContext drawingView) {
+
+        return new Path();
+    }
+
     @Override
     public Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -65,51 +69,104 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
+        CagOperation op = getStyled(CAG_OPERATION);
         List<PathIterator> iterators = new ArrayList<>();
-        for (Figure child : getChildren()) {
-            if (child instanceof PathIterableFigure) {
-                final PathIterableFigure pathIterable = (PathIterableFigure) child;
-                AffineTransform childTx =tx;
-            final Transform localToParent = child.getLocalToParent();
-                if (localToParent != null) {               
-                    AffineTransform ltpTx = Transforms.toAWT(localToParent);             
-                    if (tx != null) {
-                        childTx=(AffineTransform)tx.clone();
-                        childTx.concatenate(ltpTx);
-                    } else {
-                        childTx = ltpTx;
+        Area area = null;
+        boolean first = true;
+        try {
+            for (Figure child : getChildren()) {
+                if (child instanceof PathIterableFigure) {
+                    final PathIterableFigure pathIterable = (PathIterableFigure) child;
+                    AffineTransform childTx = tx;
+                    final Transform localToParent = child.getLocalToParent();
+                    if (localToParent != null) {
+                        AffineTransform ltpTx = Transforms.toAWT(localToParent);
+                        if (tx != null) {
+                            childTx = (AffineTransform) tx.clone();
+                            childTx.concatenate(ltpTx);
+                        } else {
+                            childTx = ltpTx;
+                        }
                     }
-                }                
-        
-                iterators.add(pathIterable.getPathIterator(childTx));
+                    final PathIterator pathIterator = pathIterable.getPathIterator(childTx);
+                    if (first) {
+                        first = false;
+                        switch (op) {
+                            case NONE:
+                                iterators.add(pathIterator);
+                                break;
+                            case ADD:
+                            case INTERSECT:
+                            case SUBTRACT:
+                            case XOR:
+                                area = new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), pathIterator).get());
+                                break;
+                            default:
+                                throw new UnsupportedOperationException("" + op);
+                        }
+                        iterators.add(pathIterator);
+                    } else {
+                        switch (op) {
+                            case ADD:
+                                area.add(new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), pathIterator).get()));
+                                break;
+                            case NONE:
+                                iterators.add(pathIterator);
+                                break;
+                            case INTERSECT:
+                                area.intersect(new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), pathIterator).get()));
+                                break;
+                            case SUBTRACT:
+                                area.subtract(new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), pathIterator).get()));
+                                break;
+                            case XOR:
+                                area.exclusiveOr(new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), pathIterator).get()));
+                                break;
+                        }
+                    }
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        PathIterator iter= new CombinedPathIterator(getStyled(FILL_RULE), iterators);
-        double combineStrokeWidth=getStyled(COMBINE_STROKE_WIDTH);
-        if (combineStrokeWidth>0) {
+        PathIterator iter = area != null ? area.getPathIterator(null) : new CombinedPathIterator(getStyled(FILL_RULE), iterators);
+        double combineStrokeWidth = getStyled(COMBINE_STROKE_WIDTH);
+        if (combineStrokeWidth > 0) {
             int cap;
             int join;
             switch (getStyled(COMBINE_STROKE_LINE_CAP)) {
-                case BUTT:default:
-                    cap=BasicStroke.CAP_BUTT;break;
-                    case ROUND: cap=BasicStroke.CAP_ROUND;break;
-                    case SQUARE:cap=BasicStroke.CAP_SQUARE;break;
+                case BUTT:
+                default:
+                    cap = BasicStroke.CAP_BUTT;
+                    break;
+                case ROUND:
+                    cap = BasicStroke.CAP_ROUND;
+                    break;
+                case SQUARE:
+                    cap = BasicStroke.CAP_SQUARE;
+                    break;
             }
             switch (getStyled(COMBINE_STROKE_LINE_JOIN)) {
                 default:
-                case BEVEL:join=BasicStroke.JOIN_BEVEL;break;
-                case MITER:join=BasicStroke.JOIN_MITER;break;
-                case ROUND:join=BasicStroke.JOIN_ROUND;break;
+                case BEVEL:
+                    join = BasicStroke.JOIN_BEVEL;
+                    break;
+                case MITER:
+                    join = BasicStroke.JOIN_MITER;
+                    break;
+                case ROUND:
+                    join = BasicStroke.JOIN_ROUND;
+                    break;
             }
-            BasicStroke stroke=new BasicStroke((float)combineStrokeWidth,cap,join,getStyled(COMBINE_STROKE_MITER_LIMIT).floatValue());
-            Path2DDoubleBuilder builder=new Path2DDoubleBuilder();
+            BasicStroke stroke = new BasicStroke((float) combineStrokeWidth, cap, join, getStyled(COMBINE_STROKE_MITER_LIMIT).floatValue());
+            Path2DDoubleBuilder builder = new Path2DDoubleBuilder();
             try {
                 Shapes.buildFromPathIterator(builder, iter);
 
             } catch (IOException ex) {
                 throw new InternalError(ex);
             }
-          iter=  stroke.createStrokedShape(builder.get()).getPathIterator(null);
+            iter = stroke.createStrokedShape(builder.get()).getPathIterator(null);
         }
         return iter;
     }
@@ -120,9 +177,14 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public Node createNode(RenderContext drawingView) {
-
-        return new Path();
+    public void reshapeInLocal(Transform transform) {
+        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
+        flattenTransforms();
+        Transform localTransform = transform;
+        //Transform localTransform = transform.createConcatenation(getParentToLocal());
+        for (Figure child : getChildren()) {
+            child.reshapeInParent(localTransform);
+        }
     }
 
     @Override
@@ -140,15 +202,11 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         n.getElements().setAll(Shapes.fxPathElementsFromAWT(getPathIterator(null)));
     }
 
-    @Override
-    public void reshapeInLocal(Transform transform) {
-        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
-        flattenTransforms();
-        Transform localTransform = transform;
-        //Transform localTransform = transform.createConcatenation(getParentToLocal());
-        for (Figure child : getChildren()) {
-            child.reshapeInParent(localTransform);
-        }
+    /**
+     * Constructive Area Geometry Operation (CAG Operation.
+     */
+    public static enum CagOperation {
+        NONE, ADD, SUBTRACT, INTERSECT, XOR
     }
 
 }

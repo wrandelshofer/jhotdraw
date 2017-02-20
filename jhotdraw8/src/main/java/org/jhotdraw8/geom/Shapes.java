@@ -301,7 +301,7 @@ public class Shapes {
         return b.get();
     }
 
-    public static void buildFromPathIterator(PathBuilder builder, PathIterator iter) throws IOException {
+    public static <T extends PathBuilder> T buildFromPathIterator(T builder, PathIterator iter) throws IOException {
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
@@ -325,6 +325,7 @@ public class Shapes {
                     throw new InternalError("unsupported segment type:" + iter.currentSegment(coords));
             }
         }
+        return builder;
     }
 
     /**
