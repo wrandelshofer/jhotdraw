@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
@@ -24,6 +26,7 @@ import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.PointLocator;
+import org.jhotdraw8.geom.Shapes;
 
 /**
  * A figure which draws a straight line from a start point to an end point.
@@ -31,7 +34,9 @@ import org.jhotdraw8.draw.locator.PointLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, TransformableFigure {
+public class LineFigure extends AbstractLeafFigure 
+        implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, 
+        CompositableFigure, TransformableFigure, PathIterableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -68,6 +73,11 @@ public class LineFigure extends AbstractLeafFigure implements StrokeableFigure, 
                 min(start.getY(), end.getY()),//
                 abs(start.getX() - end.getX()), //
                 abs(start.getY() - end.getY()));
+    }
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        return Shapes.awtShapeFromFX(new Line(get(START_X),get(START_Y),get(END_X),get(END_Y))).getPathIterator(tx);
     }
 
     @Override

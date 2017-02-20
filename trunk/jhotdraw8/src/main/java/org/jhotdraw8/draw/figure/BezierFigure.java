@@ -51,7 +51,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     public final static BezierNodeListStyleableFigureKey PATH = new BezierNodeListStyleableFigureKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
     public final static BooleanStyleableFigureKey CLOSED = new BooleanStyleableFigureKey("closed", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), false);
-    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fillRule", FillRule.class, DirtyMask.of(DirtyBits.NODE), FillRule.NON_ZERO);
+    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fillRule", FillRule.class, DirtyMask.of(DirtyBits.NODE), FillRule.EVEN_ODD);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -124,7 +124,7 @@ public class BezierFigure extends AbstractLeafFigure
         applyFillableFigureProperties(pathNode);
         applyTransformableFigureProperties(node);
         applyCompositableFigureProperties(pathNode);
-
+        pathNode.setFillRule(getStyled(FILL_RULE));
         final List<PathElement> elements = Shapes.fxPathElementsFromAWT(new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(null));
         /*        if (getStyled(CLOSED)) {
             elements.add(new ClosePath());

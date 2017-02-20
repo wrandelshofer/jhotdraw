@@ -28,6 +28,7 @@ import org.jhotdraw8.app.Project;
 public class GroupAction extends AbstractSelectedAction {
 
     public static final String ID = "edit.group";
+    public static final String COMBINE_PATHS_ID = "edit.combinePaths";
     public final Supplier<Figure> groupFactory;
 
     /**
@@ -38,10 +39,13 @@ public class GroupAction extends AbstractSelectedAction {
      * @param groupFactory the group factory
      */
     public GroupAction(Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
+        this(ID,app,editor,groupFactory);
+    }
+    public GroupAction(String id, Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
         super(app, editor);
         Resources labels
                 = Resources.getResources("org.jhotdraw8.draw.Labels");
-        labels.configureAction(this, ID);
+        labels.configureAction(this, id);
         this.groupFactory = groupFactory;
         if (groupFactory == null) {
             addDisabler("groupFactory==null");

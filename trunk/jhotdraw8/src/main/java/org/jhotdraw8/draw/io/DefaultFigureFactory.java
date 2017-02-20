@@ -39,6 +39,7 @@ import org.jhotdraw8.draw.figure.StrokeableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.BezierFigure;
+import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
@@ -103,6 +104,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addFigureKeysAndNames("Polyline", PolylineFigure.class);
         addFigureKeysAndNames("Polygon", PolygonFigure.class);
         addFigureKeysAndNames("Page", PageFigure.class);
+        addFigureKeysAndNames("CombinedPath", CombinedPathFigure.class);
 
         {
             Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(SimpleDrawing.class));
@@ -110,7 +112,6 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
             keys.remove(Drawing.AUTHOR_STYLESHEETS);
             keys.remove(Drawing.INLINE_STYLESHEETS);
             keys.remove(Drawing.DOCUMENT_HOME);
-            addNodeListKey(TextFigure.class, "", TextFigure.TEXT);
             addFigureKeysAndNames("Drawing", SimpleDrawing.class, keys);
         }
 

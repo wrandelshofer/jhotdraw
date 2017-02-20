@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import javafx.geometry.BoundingBox;
@@ -23,16 +25,20 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import static org.jhotdraw8.draw.figure.TextFigure.ORIGIN;
+import static org.jhotdraw8.draw.figure.TextableFigure.TEXT;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.text.Paintable;
 
 /**
@@ -42,7 +48,8 @@ import org.jhotdraw8.text.Paintable;
  * @version $Id$
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure
-        implements TextFillableFigure, FillableFigure, StrokeableFigure, FontableFigure, ConnectableFigure {
+        implements TextFillableFigure, FillableFigure, StrokeableFigure,
+        FontableFigure, ConnectableFigure, PathIterableFigure {
 
     public final static DoubleStyleableFigureKey ORIGIN_X = new DoubleStyleableFigureKey("originX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey ORIGIN_Y = new DoubleStyleableFigureKey("originY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
@@ -210,5 +217,16 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         tn.setY(get(ORIGIN_Y));
         applyTextFillableFigureProperties(tn);
         applyFontableFigureProperties(ctx, tn);
+    }
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        Text tn = new Text();
+        tn.setText(getText(null));
+        tn.setX(getStyled(ORIGIN).getX());
+        tn.setY(getStyled(ORIGIN).getY());
+        tn.setBoundsType(TextBoundsType.VISUAL);
+        applyFontableFigureProperties(null, tn);
+        return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
 }

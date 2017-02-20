@@ -415,22 +415,12 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
 
             // all figures with dirty flag "LAYOUT_OBSERVERS" must be laid out
             // transitively, including all of their layoutable ancestors.
-            // We perfrom two layout passes, first the in-dependent figures,
-            // then those which depend on the layout of other figures.
             LinkedHashSet<Figure> transitive = new LinkedHashSet<>(todo);
             transitivelyCollectDependentFigures(todo, transitive);
             collectLayoutableAncestors(new ArrayList<>(transitive), transitive);
-            for (Figure f : transitive) {
-                if (f.getLayoutSubjects().isEmpty()) {
+            for (Figure f : transitive) {      
                     markDirty(f, DirtyBits.NODE);
                     this.layout(f);
-                }
-            }
-            for (Figure f : transitive) {
-                if (!f.getLayoutSubjects().isEmpty()) {
-                    markDirty(f, DirtyBits.NODE);
-                    this.layout(f);
-                }
             }
 
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);

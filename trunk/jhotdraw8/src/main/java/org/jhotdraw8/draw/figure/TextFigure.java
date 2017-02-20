@@ -4,10 +4,13 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
@@ -15,9 +18,14 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import static org.jhotdraw8.draw.figure.LineFigure.END_X;
+import static org.jhotdraw8.draw.figure.LineFigure.END_Y;
+import static org.jhotdraw8.draw.figure.LineFigure.START_X;
+import static org.jhotdraw8.draw.figure.LineFigure.START_Y;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.geom.Shapes;
 
 /**
  * {@code TextFigure} is a {@code FontableFigure} which supports stroking and
@@ -26,8 +34,10 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractLeafFigure 
-        implements StrokeableFigure, FillableFigure, TransformableFigure, FontableFigure, TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure {
+public class TextFigure extends AbstractLeafFigure
+        implements StrokeableFigure, FillableFigure, TransformableFigure, FontableFigure,
+        TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
+        ConnectableFigure, PathIterableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -93,16 +103,29 @@ public class TextFigure extends AbstractLeafFigure
         applyCompositableFigureProperties(tn);
         applyFontableFigureProperties(ctx, tn);
         applyStyleableFigureProperties(ctx, node);
-        tn.applyCss();
+        tn.applyCss();// really??
     }
 
     @Override
     public Connector findConnector(Point2D p, Figure prototype) {
-            return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
+        return new RectangleConnector(new RelativeLocator(getBoundsInLocal(), p));
     }
 
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        Text tn=new Text();
+         tn.setText(get(TEXT));
+        tn.setX(getStyled(ORIGIN).getX());
+        tn.setY(getStyled(ORIGIN).getY());
+        tn.setBoundsType(TextBoundsType.VISUAL);
+        applyTextableFigureProperties(tn);
+        applyFontableFigureProperties(null, tn);
+        applyStyleableFigureProperties(null, tn);
+        return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
+    }
+
 }
