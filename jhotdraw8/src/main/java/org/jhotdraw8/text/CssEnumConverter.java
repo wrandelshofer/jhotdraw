@@ -21,16 +21,21 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
 
     private final Class<E> enumClass;
     private final String name;
+    private final boolean nullable;
 
-    public CssEnumConverter(Class<E> enumClass) {
+    public CssEnumConverter(Class<E> enumClass, boolean nullable) {
         this.enumClass = enumClass;
         this.name = enumClass.getName().substring(enumClass.getName().lastIndexOf('.') + 1);
+        this.nullable = nullable;
     }
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, E value) throws IOException {
         if (value == null) {
-            out.append("null");
+            if (!nullable) {
+                throw new IllegalArgumentException("value is not nullable. enum type:" + enumClass + " value:" + value);
+            }
+            out.append("none");
         } else {
             for (char ch : value.toString().toLowerCase().replace('_', '-').toCharArray()) {
                 if (Character.isWhitespace(ch)) {
@@ -52,8 +57,8 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
             in.position(pos);
             throw new ParseException("word expected", pos);
         }
-        if (out.toString().equals("null")) {
-            return null;
+        if (out.toString().equals("none")) {
+            return nullable ? null : getDefaultValue();
         }
         try {
             return Enum.valueOf(enumClass, out.toString().toUpperCase().replace('-', '_'));
@@ -63,15 +68,18 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
     }
 
     public E parse(CssTokenizerInterface tt) throws ParseException, IOException {
-        if (tt.nextToken()!=CssTokenizer.TT_IDENT) throw new ParseException("identifier expected",tt.getStartPosition());
-        
-        String identifier=tt.currentStringValue();
+        if (tt.nextToken() != CssTokenizer.TT_IDENT) {
+            throw new ParseException("identifier expected", tt.getStartPosition());
+        }
+
+        String identifier = tt.currentStringValue();
         try {
             return Enum.valueOf(enumClass, identifier.toUpperCase().replace('-', '_'));
         } catch (IllegalArgumentException e) {
-            throw new ParseException("illegal identifier:"+identifier, tt.getStartPosition());
+            throw new ParseException("illegal identifier:" + identifier, tt.getStartPosition());
         }
     }
+
     @Override
     public E getDefaultValue() {
         try {
@@ -95,6 +103,10 @@ public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
         StringBuilder buf = new StringBuilder("Format of ⟨");
         buf.append(name).append("⟩: ");
         boolean first = true;
+        if (nullable) {
+            buf.append("none");
+            first=false;
+        }
         for (Field f : enumClass.getDeclaredFields()) {
             if (f.isEnumConstant()) {
                 if (first) {

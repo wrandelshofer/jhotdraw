@@ -191,7 +191,9 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     public boolean remove(Object o) {
         boolean modified = backingSet.remove(o);
         if (modified) {
-            fireRemoved((E) o);
+            @SuppressWarnings("unchecked")
+            final E e = (E) o;
+            fireRemoved(e);
             fireInvalidated();
         }
         return modified;
@@ -200,10 +202,12 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     @Override
     public boolean removeAll(Collection<?> c) {
         boolean modified = false;
-        for (Object e : c) {
+        for (Object o : c) {
+            @SuppressWarnings("unchecked")
+            final E e = (E) o;
             boolean removed = backingSet.remove(e);
             if (removed) {
-                fireRemoved((E) e);
+                fireRemoved(e);
                 modified = true;
             }
         }

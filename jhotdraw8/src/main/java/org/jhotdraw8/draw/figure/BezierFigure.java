@@ -51,7 +51,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     public final static BezierNodeListStyleableFigureKey PATH = new BezierNodeListStyleableFigureKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
     public final static BooleanStyleableFigureKey CLOSED = new BooleanStyleableFigureKey("closed", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), false);
-    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fillRule", FillRule.class, DirtyMask.of(DirtyBits.NODE), FillRule.EVEN_ODD);
+    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = new EnumStyleableFigureKey<>("fillRule", FillRule.class, DirtyMask.of(DirtyBits.NODE), false,FillRule.EVEN_ODD);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */

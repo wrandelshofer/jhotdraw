@@ -7,6 +7,7 @@
  */
 package org.jhotdraw8.geom;
 
+import java.awt.BasicStroke;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -45,6 +46,11 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import static javafx.scene.shape.StrokeLineJoin.BEVEL;
+import static javafx.scene.shape.StrokeLineJoin.MITER;
+import static javafx.scene.shape.StrokeLineJoin.ROUND;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.text.Text;
 import javafx.scene.transform.MatrixType;
@@ -1081,6 +1087,36 @@ public class Shapes {
             elems.add(new LineTo(b.getMaxX(), b.getMaxY()));
             elems.add(new LineTo(b.getMinX(), b.getMaxY()));
             elems.add(new ClosePath());
+        }
+    }
+
+    public static int awtCapFromFX(StrokeLineCap cap) {
+        if (cap == null) {
+            return BasicStroke.CAP_BUTT;
+        }
+        switch (cap) {
+            case BUTT:
+            default:
+                return BasicStroke.CAP_BUTT;
+            case ROUND:
+                return BasicStroke.CAP_ROUND;
+            case SQUARE:
+                return BasicStroke.CAP_SQUARE;
+        }
+    }
+
+    public static int awtJoinFromFX(StrokeLineJoin join) {
+        if (join == null) {
+            return BasicStroke.JOIN_BEVEL;
+        }
+        switch (join) {
+            default:
+            case BEVEL:
+                return BasicStroke.JOIN_BEVEL;
+            case MITER:
+                return BasicStroke.JOIN_MITER;
+            case ROUND:
+                return BasicStroke.JOIN_ROUND;
         }
     }
 }

@@ -23,6 +23,8 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
     private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, T> cssMetaData;
+    
+    private final boolean nullable;
 
     /**
      * Creates a new instance with the specified name, enum class, mask and with
@@ -33,7 +35,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
      * @param mask The mask.
      */
     public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask) {
-        this(name, clazz, mask, null);
+        this(name, clazz, mask, true,null);
     }
 
     /**
@@ -45,8 +47,12 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
      * @param mask The mask.
      * @param defaultValue The default value.
      */
-    public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask, T defaultValue) {
+    public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask, boolean nullable,T defaultValue) {
         super(name, clazz, mask, defaultValue);
+        
+        this.nullable=nullable;
+        
+        if (!nullable&&defaultValue==null)throw new IllegalArgumentException("defaultValue may only be null if nullable=true");
 
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<Styleable>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
@@ -67,7 +73,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
     @Override
     public Converter<T> getConverter() {
         if (converter == null) {
-            converter = new CssEnumConverter<T>(getValueType());
+            converter = new CssEnumConverter<T>(getValueType(),nullable);
         }
         return converter;
     }

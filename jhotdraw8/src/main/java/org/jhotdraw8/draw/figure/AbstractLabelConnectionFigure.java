@@ -43,7 +43,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The horizontal position of the text. Default value: {@code baseline}
      */
-    public static EnumStyleableFigureKey<HPos> TEXT_HPOS = new EnumStyleableFigureKey<>("textHPos", HPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), HPos.LEFT);
+    public static EnumStyleableFigureKey<HPos> TEXT_HPOS = new EnumStyleableFigureKey<>("textHPos", HPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false,HPos.LEFT);
 
     /**
      * The label target.

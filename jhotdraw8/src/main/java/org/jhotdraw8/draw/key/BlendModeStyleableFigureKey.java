@@ -62,7 +62,7 @@ public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> impl
     @Override
     public Converter<BlendMode> getConverter() {
         if (converter == null) {
-            converter = new CssEnumConverter<BlendMode>(BlendMode.class);
+            converter = new CssEnumConverter<BlendMode>(BlendMode.class,false);
         }
         return converter;
     }
