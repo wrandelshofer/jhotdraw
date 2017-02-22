@@ -20,6 +20,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -46,7 +47,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         CompositableFigure,
         ConnectableFigure, PathIterableFigure {
 
-    public final static EnumStyleableFigureKey<CagOperation> CAG_OPERATION = new EnumStyleableFigureKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE),true, null);
+    public final static EnumStyleableFigureKey<CagOperation> CAG_OPERATION = new EnumStyleableFigureKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), true, null);
     public final static EnumStyleableFigureKey<FillRule> FILL_RULE = BezierFigure.FILL_RULE;
     /**
      * The CSS type selector for group objects is @code("group"}.
@@ -82,8 +83,25 @@ public class CombinedPathFigure extends AbstractCompositeFigure
             if (stroke != null) {
                 double strokeWidth = f.getStyled(STROKE_WIDTH);
                 if (strokeWidth > 0.0) {
-                    BasicStroke basicStroke = new BasicStroke((float) strokeWidth, Shapes.awtCapFromFX(f.getStyled(STROKE_LINE_CAP)),
-                            Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue());
+                    BasicStroke basicStroke;
+                    final ImmutableObservableList<Double> dashArray = f.getStyled(STROKE_DASH_ARRAY);
+                    if (dashArray != null&&!dashArray.isEmpty()) {
+                        double dashOffset = f.getStyled(STROKE_DASH_OFFSET);
+                        float[] dash = new float[dashArray.size()];
+                        boolean allZero=false;
+                        for (int i = 0, n = dashArray.size(); i < n; i++) {
+                            dash[i] = dashArray.get(i).floatValue();
+                            allZero=allZero&&dash[i]==0f;
+                        }
+                        if (allZero)dash=null;
+                        basicStroke = new BasicStroke((float) strokeWidth, Shapes.awtCapFromFX(f.getStyled(STROKE_LINE_CAP)),
+                                Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue(), dash, (float) dashOffset);
+
+                    } else {
+                        basicStroke = new BasicStroke((float) strokeWidth, Shapes.awtCapFromFX(f.getStyled(STROKE_LINE_CAP)),
+                                Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue());
+
+                    }
                     try {
                         iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), iter).get()).getPathIterator(null);
                     } catch (IOException ex) {
@@ -98,7 +116,9 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
-        if (op!=null) return getPathIteratorCAG(tx, op) ;
+        if (op != null) {
+            return getPathIteratorCAG(tx, op);
+        }
         List<PathIterator> iterators = new ArrayList<>();
         for (Figure child : getChildren()) {
             final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
