@@ -89,7 +89,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     protected void loadRecentUris(String applicationId) {
-        Preferences prefs = Preferences.userNodeForPackage(AbstractApplication.class);
+        Preferences prefs = getModel().getPreferences();
         String recentUrisSerialized = prefs.get(applicationId + ".recentUris", "");
         for (String str : recentUrisSerialized.split("\t")) {
             if (str.isEmpty()) {
