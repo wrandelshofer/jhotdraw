@@ -947,23 +947,25 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             Platform.runLater(repainter);
         }
     }
+    
     @Override
     public void scrollFigureToVisible(Figure f) {
-        Bounds figureBounds=  worldToView( f.localToWorld(  f.getBoundsInLocal()));
-        
+        Bounds boundsInView =  worldToView( f.localToWorld(  f.getBoundsInLocal()));
+        scrollRectToVisible(boundsInView);
+    }
+    public void scrollRectToVisible(Bounds boundsInView) {
         ScrollPane sp = getScrollPane();
         final Bounds contentPaneBounds = sp.getContent().getBoundsInLocal();
         
         double width = contentPaneBounds.getWidth();
         double height = sp.getContent().getBoundsInLocal().getHeight();
         
-        double x = figureBounds.getMinX()+figureBounds.getWidth()*0.5;
-        double y = figureBounds.getMinY()+figureBounds.getHeight()*0.5;
+        double x = boundsInView.getMinX()+boundsInView.getWidth()*0.5;
+        double y = boundsInView.getMinY()+boundsInView.getHeight()*0.5;
         
         // scrolling values range from 0 to 1
         sp.setVvalue(Geom.clamp(y/height,0.0,1.0));
-        sp.setHvalue(Geom.clamp(x/width,0.0,1.0));
-        
+        sp.setHvalue(Geom.clamp(x/width,0.0,1.0));        
     }
 
     /**
