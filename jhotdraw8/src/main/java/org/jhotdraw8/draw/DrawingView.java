@@ -642,4 +642,8 @@ public interface DrawingView extends RenderContext {
     }
 
     public void recreateHandles();
+    
+    /** Scrolls the specified figure to visible.
+     * @param f A figure in the drawing of this DrawingView. */ 
+    void scrollFigureToVisible(Figure f);
 }

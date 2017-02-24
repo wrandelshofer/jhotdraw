@@ -57,7 +57,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private DrawingView drawingView;
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
-    private boolean isUpdatingSelection;
+    private boolean isUpdatingSelectionInView;
     @FXML
     private TreeTableColumn<Figure, Boolean> lockedColumn;
     private FigureTreePresentationModel model;
@@ -76,7 +76,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
     @FXML
     private TreeTableColumn<Figure, Boolean> visibleColumn;
-    private boolean willUpdateSelection;
+    private boolean willUpdateSelectionInTree;
 
     private CssWordListConverter wordListConverter = new CssWordListConverter();
 
@@ -263,7 +263,15 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         treeView.getSelectionModel().getSelectedCells().addListener(treeSelectionHandler);
 
-//        model.updatingProperty().addListener(modelUpdateHandler);
+        
+        treeView.setOnMouseClicked(event->{
+            if (event.getClickCount()==2) {
+                final TreeItem<Figure> selectedItem = treeView.getSelectionModel().getSelectedItem();
+                if (selectedItem!=null&&drawingView!=null) {
+                    drawingView.scrollFigureToVisible(selectedItem.getValue());
+                }
+            }
+        });
     }
 
     @Override
@@ -283,9 +291,9 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     }
 
     private void updateSelectionInTree() {
-        willUpdateSelection = false;
-        if (!isUpdatingSelection) {
-            isUpdatingSelection = true;
+        willUpdateSelectionInTree = false;
+        if (!isUpdatingSelectionInView) {
+            isUpdatingSelectionInView = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
             // Performance: collecting all indices and then setting them all at once is 
             // much faster than invoking selectionModel.select(Object) for each item.
@@ -317,20 +325,20 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         index++;
                     }
             }
-            isUpdatingSelection = false;
+            isUpdatingSelectionInView = false;
         }
     }
 
     private void updateSelectionInTreeLater(SetChangeListener.Change<? extends Figure> change) {
-        if (!willUpdateSelection) {
-            willUpdateSelection = true;
+        if (!willUpdateSelectionInTree&&!isUpdatingSelectionInView) {
+            willUpdateSelectionInTree = true;
             Platform.runLater(this::updateSelectionInTree);
         }
     }
 
     private void updateSelectionInView() {
-        if (!isUpdatingSelection) {
-            isUpdatingSelection = true;
+        if (!isUpdatingSelectionInView) {
+            isUpdatingSelectionInView = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
             Set<Figure> newSelection = new LinkedHashSet<>();
             for (TreeItem<Figure> item : selectionModel.getSelectedItems()) {
@@ -340,7 +348,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
             drawingView.getSelectedFigures().retainAll(newSelection);
             drawingView.getSelectedFigures().addAll(newSelection);
-            isUpdatingSelection = false;
+            isUpdatingSelectionInView = false;
         }
     }
 
