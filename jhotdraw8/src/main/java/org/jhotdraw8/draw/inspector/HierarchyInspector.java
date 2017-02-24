@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
@@ -118,7 +119,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
             @Override
             protected void updateValue() {
-                setValue(figure.getId()) ;
+                setValue(figure.getId());
             }
         }
         );
@@ -263,14 +264,15 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         treeView.getSelectionModel().getSelectedCells().addListener(treeSelectionHandler);
 
-        
-        treeView.setOnMouseClicked(event->{
-            if (event.getClickCount()==2) {
-                final TreeItem<Figure> selectedItem = treeView.getSelectionModel().getSelectedItem();
-                if (selectedItem!=null&&drawingView!=null) {
-                    drawingView.scrollFigureToVisible(selectedItem.getValue());
+        treeView.setRowFactory(tv -> {
+            TreeTableRow<Figure> row = new TreeTableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Figure rowData = row.getItem();
+                    drawingView.scrollFigureToVisible(rowData);
                 }
-            }
+            });
+            return row;
         });
     }
 
@@ -330,7 +332,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     }
 
     private void updateSelectionInTreeLater(SetChangeListener.Change<? extends Figure> change) {
-        if (!willUpdateSelectionInTree&&!isUpdatingSelectionInView) {
+        if (!willUpdateSelectionInTree && !isUpdatingSelectionInView) {
             willUpdateSelectionInTree = true;
             Platform.runLater(this::updateSelectionInTree);
         }
