@@ -113,7 +113,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue().getValue(), StyleableFigure.ID) {
             @Override
             public String getValue() {
-                return figure.getId();
+                return figure.get(StyleableFigure.ID);
             }
 
             @Override
