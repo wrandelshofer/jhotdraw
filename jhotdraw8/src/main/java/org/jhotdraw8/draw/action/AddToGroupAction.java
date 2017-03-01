@@ -35,8 +35,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
      */
     public AddToGroupAction(Application app, DrawingEditor editor) {
         super(app, editor);
-        Resources labels
-                = Resources.getResources("org.jhotdraw8.draw.Labels");
+        Resources labels = Resources.getResources("org.jhotdraw8.draw.Labels");
         labels.configureAction(this, ID);
     }
 
