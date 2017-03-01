@@ -126,6 +126,17 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /**
+     * Sets the child with the specified index from the node.
+     *
+     * @param index the index
+     * @param newChild the new child
+     * @return the old child
+     */
+    default T setChild(int index, T newChild) {
+        return getChildren().set(index, newChild);
+    }
+
+    /**
      * Returns the children of the tree node.
      * <p>
      * In order to keep the tree structure consistent, the following rules must
@@ -166,12 +177,12 @@ public interface TreeNode<T extends TreeNode<T>> {
     /**
      * Returns the parent of the tree node.
      * <p>
-     * Note that - by convention - the parent 
-     * property is changed only by a parent tree node.
+     * Note that - by convention - the parent property is changed only by a
+     * parent tree node.
      *
      * @return the parent. Returns null if the tree node has no parent.
      */
-     T getParent();
+    T getParent();
 
     /**
      * Returns the path to this node.
@@ -243,6 +254,7 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /**
+     * @param <T> the tree node type
      * @design.pattern TreeNode Iterator, Iterator.
      */
     static class BreadthFirstIterator<T extends TreeNode<T>> implements Iterator<T> {
