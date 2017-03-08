@@ -192,7 +192,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 l2p = IDENTITY_TRANSFORM;
             }
             if (CACHE && styled) {
-                set(FigureImplementationDetails.PARENT_TO_LOCAL, l2p);
+                set(FigureImplementationDetails.LOCAL_TO_PARENT, l2p);
             }
         }
         return l2p;
@@ -359,7 +359,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * @return the transform or null
      */
     default Transform getParentToLocal(boolean styled) {
-        Transform p2l = CACHE ? get(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
+        Transform p2l = CACHE ? get(FigureImplementationDetails.PARENT_TO_LOCAL) : null;
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
