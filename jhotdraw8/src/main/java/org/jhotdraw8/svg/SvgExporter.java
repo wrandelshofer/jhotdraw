@@ -100,11 +100,15 @@ import org.w3c.dom.Element;
  */
 public class SvgExporter implements InternalExternalUriMixin {
 
-    public final static DataFormat SVG_FORMAT; static {
-    DataFormat fmt= DataFormat.lookupMimeType("image/svg+xml");
-    if (fmt==null) fmt=new DataFormat("image/svg+xml");
-    SVG_FORMAT=fmt;
-}
+    public final static DataFormat SVG_FORMAT;
+
+    static {
+        DataFormat fmt = DataFormat.lookupMimeType("image/svg+xml");
+        if (fmt == null) {
+            fmt = new DataFormat("image/svg+xml");
+        }
+        SVG_FORMAT = fmt;
+    }
 
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XLINK_Q = "xlink";
@@ -1141,10 +1145,10 @@ public class SvgExporter implements InternalExternalUriMixin {
 
     private void writeTextAttributes(Element elem, Text node) {
         Font ft = node.getFont();
-        elem.setAttribute("font-family", (ft.getFamily().equals(ft.getName()))?"'"+ft.getName()+"'":"'"+ ft.getName()+"', '"+ft.getFamily()+"'");
+        elem.setAttribute("font-family", (ft.getFamily().equals(ft.getName())) ? "'" + ft.getName() + "'" : "'" + ft.getName() + "', '" + ft.getFamily() + "'");
         elem.setAttribute("font-size", nb.toString(ft.getSize()));
         elem.setAttribute("font-style", ft.getStyle().contains("italic") ? "italic" : "normal");
-        elem.setAttribute("font-weight", ft.getStyle().contains("bold") ||ft.getName().toLowerCase().contains("bold")? "bold" : "normal");
+        elem.setAttribute("font-weight", ft.getStyle().contains("bold") || ft.getName().toLowerCase().contains("bold") ? "bold" : "normal");
     }
 
     private void writeTransformAttributes(Element elem, Node node) {
