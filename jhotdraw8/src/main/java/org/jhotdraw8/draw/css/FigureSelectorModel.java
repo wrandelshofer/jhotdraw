@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
+import javafx.css.PseudoClass;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
@@ -200,7 +201,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
 
         // XXX we unnecessarily create many pseudo class states!
-        return element.getPseudoClassStates().contains(pseudoClass);
+        return element.getPseudoClassStates().contains(PseudoClass.getPseudoClass(pseudoClass));
     }
 
     @Override
