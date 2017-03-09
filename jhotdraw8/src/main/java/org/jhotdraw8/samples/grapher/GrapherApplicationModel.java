@@ -16,6 +16,7 @@ import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
+import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.util.Resources;
 
 /**
@@ -33,6 +34,7 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
                 "XML Files", null, "*.xml");
         getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
         getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_FORMAT, "*.png"));
+        getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT, "*.ser.xml"));
     }
 
     @Override

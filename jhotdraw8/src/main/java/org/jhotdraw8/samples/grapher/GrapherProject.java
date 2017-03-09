@@ -107,6 +107,7 @@ import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.PageLabelFigure;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
+import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.gui.dock.Dock;
 import org.jhotdraw8.gui.dock.DockItem;
@@ -430,6 +431,9 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
             } else if (BitmapExportOutputFormat.PNG_FORMAT.equals(format) || uri.getPath().endsWith(".png")) {
                 BitmapExportOutputFormat io = new BitmapExportOutputFormat();
                 io.setOptions(options);
+                io.write(uri, drawing);
+            } else if (XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT.equals(format) || uri.getPath().endsWith(".ser.xml")) {
+                XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
                 io.write(uri, drawing);
             } else {
                 IdFactory idFactory = new SimpleIdFactory();

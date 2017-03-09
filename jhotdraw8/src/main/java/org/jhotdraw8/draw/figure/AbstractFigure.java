@@ -211,4 +211,46 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     public <T> T getCachedValue(Key<T> key) {
         return key.get(cachedValues);
     }
+    
+       /**
+     * Replaces the properties map of this figure with the contents of the specified map.
+     * <p>
+     * This method is used for XML serialization using the Java XMLEncoder and XMLDecoder classes.
+     *
+     * @param newMap the new properties
+     */
+    public void setPropertyMap(HashMap<String,Object> newMap) {
+        HashMap<String,Key<?>> keyst=new HashMap<>();
+        Map<Key<?>,Object> m=getProperties();
+        for (MapAccessor<?> ma:Figure.getDeclaredAndInheritedMapAccessors(getClass()))
+            if (ma instanceof Key<?>) {
+                keyst.put(ma.getName(),(Key<?>)ma);
+            }
+        for (Map.Entry<String,Object> e:newMap.entrySet()) {
+            String name=e.getKey();
+            Key<?> key=keyst.get(name);
+            if (key!=null) {
+            m.put(key,e.getValue());
+            }
+        }
+    }
+
+    /**
+     * Returns a new map instance with all properties of this figure.
+     * <p>
+     * This method is used for XML serialization using the Java XMLEncoder and
+     * XMLDecoder classes.
+     *
+     * @return a new list instance
+     */
+    public HashMap<String,Object> getPropertyMap() {
+        HashMap<String,Object> result=new HashMap<>();
+        for (Map.Entry<Key<?>,Object> e:getProperties().entrySet()) {
+            Key<?> k=e.getKey();
+            if (!Objects.equals(e.getValue(),k.getDefaultValue())) {
+            result.put(k.getName(),e.getValue());
+            }
+        }
+        return result;
+    }
 }

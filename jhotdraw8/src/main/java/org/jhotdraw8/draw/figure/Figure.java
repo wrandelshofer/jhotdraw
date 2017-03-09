@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import java.io.Serializable;
 import org.jhotdraw8.draw.handle.HandleType;
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -15,7 +16,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import java.util.ArrayList;
@@ -129,7 +129,7 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
+public interface Figure extends StyleablePropertyBean, TreeNode<Figure>, Serializable {
 
     // ----
     // various declarations
@@ -548,6 +548,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     @Override
     ObservableList<Figure> getChildren();
+    
+
 
     /**
      * Returns all figures which observe the layout of this figure.
