@@ -182,7 +182,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         }
     }
 
-    private void updateRegionNode(RenderContext ctx, Region node) {
+    protected void updateRegionNode(RenderContext ctx, Region node) {
         String content = getStyled(SHAPE);
         SVGPath svgPath;
         if (content != null) {
