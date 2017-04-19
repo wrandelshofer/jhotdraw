@@ -20,7 +20,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
@@ -41,6 +40,7 @@ import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw8.draw.model.FigureTreePresentationModel;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
+import org.jhotdraw8.text.CachingCollator;
 import org.jhotdraw8.text.CssWordListConverter;
 import org.jhotdraw8.text.OSXCollator;
 import org.jhotdraw8.text.StringConverterAdapter;
@@ -51,6 +51,7 @@ import org.jhotdraw8.text.StringConverterAdapter;
  * @author werni
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
+  private final      CachingCollator collator = new CachingCollator(new OSXCollator());
 
     @FXML
     private TreeTableColumn<Figure, ImmutableObservableList<String>> classesColumn;
@@ -251,7 +252,6 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
         });
 
-        OSXCollator collator = new OSXCollator();
         final Comparator<String> comparator = (a, b) -> collator.compare(a, b);
         typeColumn.setComparator(comparator);
         idColumn.setComparator(comparator);
