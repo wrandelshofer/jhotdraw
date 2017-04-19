@@ -813,7 +813,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         
         drawingPane = new Group();
         //drawingPane.setCacheHint(CacheHint.QUALITY);
-        drawingPane.setCache(true);
+        drawingPane.setCache(false);
         //drawingPane.setScaleX(zoomFactor.get());
         //drawingPane.setScaleY(zoomFactor.get());
         drawingSubScene.getChildren().addAll(canvasPane, drawingPane);
