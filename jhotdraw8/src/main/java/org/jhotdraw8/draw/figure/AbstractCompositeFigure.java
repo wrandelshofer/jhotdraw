@@ -13,6 +13,7 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.collection.IndexedSet;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import java.util.ArrayList;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
 
@@ -176,5 +177,27 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
             }
         }
         super.firePropertyChangeEvent(source, type, key, oldValue, newValue); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * Replaces the children of this figure with the specified list of children.
+     * <p>
+     * This method is used for XML serialization using the Java XMLEncoder and XMLDecoder classes.
+     *
+     * @param newChildren the new children
+     */
+    public void setChildList(ArrayList<Figure> newChildren) {
+        getChildren().setAll(newChildren);
+    }
+
+    /**
+     * Returns a new list instance with all children of this figure.
+     * <p>
+     * This method is used for XML serialization using the Java XMLEncoder and XMLDecoder classes.
+     *
+     * @return a new list instance
+     */
+    public ArrayList<Figure> getChildList() {
+        return new ArrayList<Figure>(getChildren());
     }
 }
