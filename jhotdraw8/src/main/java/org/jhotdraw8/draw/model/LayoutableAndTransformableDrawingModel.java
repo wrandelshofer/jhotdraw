@@ -348,7 +348,20 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     public void validate() {
         if (!valid) {
             isValidating = true;
-
+            
+            
+            DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmStyle)) {
+                    f.stylesheetNotify();
+                    for (Figure subf : f.preorderIterable()) {
+                        markDirty(subf, DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
+                    }
+                }
+            }
+            
             // all figures with dirty bit "TRANSFORM" or "LAYOUT"
             // induce a dirty bit "TRANSFORM" on all ancestors which implement the TransformableFigure interface.
             DirtyMask dmTransformLayout = DirtyMask.of(DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
@@ -423,17 +436,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                     this.layout(f);
             }
 
-            DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
-            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
-                Figure f = entry.getKey();
-                DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmStyle)) {
-                    f.stylesheetNotify();
-                    for (Figure subf : f.preorderIterable()) {
-                        markDirty(subf, DirtyBits.NODE);
-                    }
-                }
-            }
+
 
             // For all figures with dirty flag Node 
             // we must fire node invalidation
@@ -446,14 +449,14 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 }
             }
 
-            /*
+            
             for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmTransform)) {
-                    recursivelyInvalidateTransforms(f);
+                    f.transformNotify();
                 }
-            }*/
+            }
             dirties.clear();
 
             isValidating = false;
@@ -536,7 +539,6 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     }
 
     private void recursivelyInvalidateTransforms(Figure f) {
-        System.out.println("D&TDrawingModel invalidateTransform: " + f.getId());
         if (f.transformNotify()) {
             for (Figure child : f.getChildren()) {
                 recursivelyInvalidateTransforms(child);
