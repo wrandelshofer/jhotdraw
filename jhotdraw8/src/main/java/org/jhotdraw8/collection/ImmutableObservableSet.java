@@ -7,13 +7,12 @@ package org.jhotdraw8.collection;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import javafx.css.PseudoClass;
 
 /**
  * ImmutableObservableSet.
@@ -36,7 +35,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
                 backingSet = Collections.singleton(copyMe.iterator().next());
                 break;
             default:
-                this.backingSet = new LinkedHashSet<>(copyMe);
+                this.backingSet = new HashSet<>(copyMe);
         }
     }
 
@@ -54,7 +53,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
                 backingSet = Collections.singleton((E) a[offset]);
                 break;
             default:
-                this.backingSet = new LinkedHashSet<>(Math.max(2 * length, 11));
+                this.backingSet = new HashSet<>(Math.max(2 * length, 11));
                 for (int i = offset, n = offset + length; i < n; i++) {
                     backingSet.add((E) a[i]);
                 }
@@ -62,7 +61,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
 
     }
 
-    private ImmutableObservableSet(boolean privateConstructor, LinkedHashSet<E> backingSet) {
+    private ImmutableObservableSet(boolean privateConstructor, Set<E> backingSet) {
         this.backingSet = backingSet;
     }
 
@@ -146,7 +145,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
     }
 
     public static <T> ImmutableObservableSet<T> add(Collection<T> collection, T item) {
-        LinkedHashSet<T> a = new LinkedHashSet<T>(collection);
+        Set<T> a = new HashSet<T>(collection);
         a.add(item);
         return new ImmutableObservableSet<T>(true, a);
     }
@@ -163,7 +162,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
     }
 
     public static <T> ImmutableObservableSet<T> remove(Collection<T> collection, T item) {
-        LinkedHashSet<T> a = new LinkedHashSet<T>(collection);
+        Set<T> a = new HashSet<T>(collection);
         a.remove(item);
         return new ImmutableObservableSet<T>(true, a);
     }

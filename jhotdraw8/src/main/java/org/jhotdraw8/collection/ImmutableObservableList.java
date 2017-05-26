@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
@@ -147,7 +148,7 @@ public final class ImmutableObservableList<E> extends ObservableListBase<E> impl
             List<T> list = (List) collection;
             return remove(list, list.indexOf(item));
         } else {
-            ArrayList<T> a = new ArrayList<T>(collection);// linear
+            List<T> a = new ArrayList<T>(collection);// linear
             a.remove(item);// linear
             return new ImmutableObservableList<>(a);// linear
         }
