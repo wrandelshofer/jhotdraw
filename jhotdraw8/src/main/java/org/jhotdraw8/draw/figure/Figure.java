@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.io.Serializable;
 import org.jhotdraw8.draw.handle.HandleType;
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -129,7 +128,7 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface Figure extends StyleablePropertyBean, TreeNode<Figure>, Serializable {
+public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     // ----
     // various declarations
