@@ -284,7 +284,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
             project.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
 
-        stage.addEventFilter(KeyEvent.KEY_RELEASED, event -> System.out.println(event));
+        //stage.addEventFilter(KeyEvent.KEY_RELEASED, event -> System.out.println(event));
         stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
             if (newValue) {
                 activeProject.set(project);
