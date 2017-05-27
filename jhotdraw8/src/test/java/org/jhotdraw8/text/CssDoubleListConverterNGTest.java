@@ -35,7 +35,7 @@ public class CssDoubleListConverterNGTest {
         StringBuilder out =new StringBuilder();
         IdFactory idFactory = null;
         CssDoubleListConverter instance = new CssDoubleListConverter();
-        instance.toString(out, idFactory, value==null?null:new ImmutableObservableList(value));
+        instance.toString(out, idFactory, value==null?null:new ImmutableObservableList<>(value));
         String actual = out.toString();
          System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);

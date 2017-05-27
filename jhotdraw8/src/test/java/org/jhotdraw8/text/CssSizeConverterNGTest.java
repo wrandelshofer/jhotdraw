@@ -5,6 +5,7 @@
 package org.jhotdraw8.text;
 
 import java.nio.CharBuffer;
+import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import static org.testng.Assert.*;
@@ -31,7 +32,7 @@ public class CssSizeConverterNGTest {
         System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
-        CssDoubleConverter instance = new CssDoubleConverter(true);
+        CssDoubleConverter instance = new CssDoubleConverter(new DefaultUnitConverter(90.0),true);
         instance.toString(out, idFactory, value);
         String actual = out.toString();
         System.out.println("  expected: " + expected);
@@ -47,7 +48,7 @@ public class CssSizeConverterNGTest {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
-        CssDoubleConverter instance = new CssDoubleConverter(true);
+        CssDoubleConverter instance = new CssDoubleConverter(new DefaultUnitConverter(90.0),true);
         Double actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
