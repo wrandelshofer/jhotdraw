@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface IdFactory extends UnitConverter {
+public interface IdFactory {
 
 
     /**
@@ -23,7 +23,8 @@ public interface IdFactory extends UnitConverter {
      * @return the id
      */
     default String createId(Object object) {
-        return createId(object, "");
+        String id = createId(object, "");
+        return id;
     }
 
     /**
@@ -35,7 +36,16 @@ public interface IdFactory extends UnitConverter {
      * @return the id
      */
     public String createId(Object object, String prefix);
-
+    /**
+     * Creates an id for the specified object. If the object already has an id,
+     * then that id is returned.
+     *
+     * @param object the object
+     * @param prefix the prefix used to create a new id, if the desired id is taken
+     * @param id the desired id
+     * @return the id
+     */
+    public String createId(Object object, String prefix, String id);
 
      /**
      * Gets an id for the specified object. Returns null if the object has no

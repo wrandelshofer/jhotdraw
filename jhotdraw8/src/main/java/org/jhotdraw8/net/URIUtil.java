@@ -33,7 +33,7 @@ public class URIUtil {
      */
     public static String getName(URI uri) {
         if (uri.getScheme() != null && "file".equals(uri.getScheme())) {
-            return new File(uri).getName();
+            return new File(uri).getName()+" ["+new File(uri).getPath()+"]";
         }
         return uri.toString();
     }

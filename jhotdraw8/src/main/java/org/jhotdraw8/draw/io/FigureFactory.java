@@ -21,7 +21,7 @@ import org.w3c.dom.Node;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface FigureFactory extends IdFactory {
+public interface FigureFactory {
 
     /**
      * Maps a figure to an XML element name.

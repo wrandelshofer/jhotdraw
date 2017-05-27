@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.io.IdFactory;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
@@ -95,7 +94,7 @@ import org.jhotdraw8.text.XmlTransformListConverter;
  */
 public class DefaultFigureFactory extends SimpleFigureFactory {
 
-    public DefaultFigureFactory(IdFactory idFactory) {
+    public DefaultFigureFactory() {
         addFigureKeysAndNames("Layer", SimpleLayer.class);
         addFigureKeysAndNames("Clipping", SimpleClipping.class);
         addFigureKeysAndNames("Rectangle", RectangleFigure.class);

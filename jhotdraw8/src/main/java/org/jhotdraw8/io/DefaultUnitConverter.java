@@ -12,20 +12,20 @@ package org.jhotdraw8.io;
  */
 public class DefaultUnitConverter implements UnitConverter {
 
-  final static DefaultUnitConverter instance = new DefaultUnitConverter();
+    final static DefaultUnitConverter instance = new DefaultUnitConverter(90);
 
-  public static DefaultUnitConverter getInstance() {
-    return instance;
-  }
-  
-  private final double dpi;
+    public static DefaultUnitConverter getInstance() {
+        return instance;
+    }
+
+    private final double dpi;
 
     public DefaultUnitConverter(double dpi) {
         this.dpi = dpi;
     }
 
     public DefaultUnitConverter() {
-        this(72);
+        this(72.0);
     }
 
     public double getDpi() {

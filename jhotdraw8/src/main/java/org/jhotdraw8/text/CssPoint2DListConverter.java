@@ -9,12 +9,13 @@ import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.UnitConverter;
 
 /**
  * CssSizeListConverter.
@@ -26,6 +27,7 @@ import org.jhotdraw8.io.IdFactory;
 public class CssPoint2DListConverter implements Converter<ImmutableObservableList<Point2D>> {
 
     private CssDoubleConverter doubleConverter = new CssDoubleConverter();
+    private UnitConverter unitConverter = DefaultUnitConverter.getInstance();
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<Point2D> value) throws IOException {
@@ -84,12 +86,12 @@ public class CssPoint2DListConverter implements Converter<ImmutableObservableLis
         switch (tt.nextToken()) {
             case CssTokenizerInterface.TT_DIMENSION: {
                 double value = tt.currentNumericValue().doubleValue();
-                x = idFactory.convert(value, tt.currentStringValue(), "px");
+                x = unitConverter.convert(value, tt.currentStringValue(), "px");
                 break;
             }
             case CssTokenizerInterface.TT_PERCENTAGE: {
                 double value = tt.currentNumericValue().doubleValue() / 100.0;
-                x = idFactory.convert(value, "%", "px");
+                x = unitConverter.convert(value, "%", "px");
                 break;
             }
             case CssTokenizerInterface.TT_NUMBER: {

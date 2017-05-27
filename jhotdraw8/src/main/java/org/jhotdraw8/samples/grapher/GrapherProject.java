@@ -87,7 +87,6 @@ import org.jhotdraw8.draw.inspector.Labels;
 import org.jhotdraw8.draw.io.DefaultFigureFactory;
 import org.jhotdraw8.draw.io.FigureFactory;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.draw.io.SimpleXmlIO;
 import org.jhotdraw8.draw.tool.ConnectionTool;
 import org.jhotdraw8.draw.tool.CreationTool;
@@ -107,6 +106,7 @@ import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.PageLabelFigure;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
+import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.gui.dock.Dock;
@@ -255,13 +255,13 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         Supplier<Layer> layerFactory = () -> createFigure(SimpleLayer::new);
         Tool defaultTool;
         ttbar.addTool(defaultTool = new SelectionTool("tool.resizeFigure", HandleType.RESIZE, null, HandleType.LEAD, labels), 0, 0);
-        ttbar.addTool( new SelectionTool("tool.moveFigure", HandleType.MOVE, null, HandleType.LEAD, labels), 1, 0);
+        ttbar.addTool(new SelectionTool("tool.moveFigure", HandleType.MOVE, null, HandleType.LEAD, labels), 1, 0);
         ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, labels), 0, 1);
         ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, labels), 1, 1);
-        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0,16);
+        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0, 16);
         ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(LineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
-        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1,16);
+        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1, 16);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory), 6, 1);
@@ -274,7 +274,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
                 layerFactory), 9, 1);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
-        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0,16);
+        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             PageFigure pf = new PageFigure();
             pf.set(PageFigure.PAPER_SIZE, new CssSize2D(297, 210, "mm"));
@@ -284,7 +284,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                     FillableFigure.FILL, null, StrokeableFigure.STROKE, null);
             pf.add(pl);
             return pf;
-        }), layerFactory), 8, 1,16);
+        }), layerFactory), 8, 1, 16);
         ttbar.setDrawingEditor(editor);
         editor.setDefaultTool(defaultTool);
         toolsToolBar.getItems().add(ttbar);
@@ -311,8 +311,8 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
             modified.set(true);
         });
 
-        IdFactory idFactory = new SimpleIdFactory();
-        FigureFactory factory = new DefaultFigureFactory(idFactory);
+        FigureFactory factory = new DefaultFigureFactory();
+        IdFactory idFactory = new SimpleFigureIdFactory();
         SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
                 io, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
@@ -400,8 +400,8 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
     @Override
     public CompletionStage<Void> read(URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean append) {
         return FXWorker.supply(() -> {
-            IdFactory idFactory = new SimpleIdFactory();
-            FigureFactory factory = new DefaultFigureFactory(idFactory);
+            FigureFactory factory = new DefaultFigureFactory();
+            IdFactory idFactory = new SimpleFigureIdFactory();
             SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
             SimpleDrawing drawing = (SimpleDrawing) io.read(uri, null);
             System.out.println("READING..." + uri);
@@ -436,8 +436,8 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
                 io.write(uri, drawing);
             } else {
-                IdFactory idFactory = new SimpleIdFactory();
-                FigureFactory factory = new DefaultFigureFactory(idFactory);
+                FigureFactory factory = new DefaultFigureFactory();
+                IdFactory idFactory = new SimpleFigureIdFactory();
                 SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
                 io.write(uri, drawing);
             }

@@ -30,12 +30,17 @@ import org.jhotdraw8.io.CharBufferReader;
  */
 public class CssStringConverter implements Converter<String> {
 private final String helpText;
+private final char quoteChar;
+private final String defaultValue;
+
     public CssStringConverter() {
-        this(null);
+        this('\'',null);
     }
 
-    public CssStringConverter(String helpText) {
+    public CssStringConverter(char quoteChar, String helpText) {
+        this.quoteChar=quoteChar;
         this.helpText = helpText;
+        defaultValue=""+quoteChar+quoteChar;
     }
     
 
@@ -55,13 +60,9 @@ private final String helpText;
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {
-        out.append('"');
+        out.append(quoteChar);
         for (char ch : value.toCharArray()) {
             switch (ch) {
-                case '"':
-                    out.append('\\');
-                    out.append('"');
-                    break;
                 case ' ':
                     out.append(ch);
                     break;
@@ -74,6 +75,11 @@ private final String helpText;
                     out.append('\n');
                     break;
                 default:
+                    if (ch == quoteChar) {
+                        out.append('\\');
+                    out.append(quoteChar);
+                    }else{
+                    
                     if (Character.isISOControl(ch) || Character.isWhitespace(ch)) {
                         out.append('\\');
                         String hex = Integer.toHexString(ch);
@@ -84,15 +90,17 @@ private final String helpText;
                     } else {
                         out.append(ch);
                     }
+                    
+                    }
                     break;
             }
         }
-        out.append('"');
+        out.append(quoteChar);
     }
 
     @Override
     public String getDefaultValue() {
-        return "";
+        return defaultValue;
     }
     
     

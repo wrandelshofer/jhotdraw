@@ -12,6 +12,7 @@ import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.io.UnitConverter;
 
 /**
  * CssDoubleConverter.
@@ -32,12 +33,14 @@ import org.jhotdraw8.io.SimpleIdFactory;
 public class CssDoubleConverter implements Converter<Double> {
 
     private final  CssSizeConverter sizeConverter ;
-
+    private final UnitConverter unitConverter;
+    
     public CssDoubleConverter() {
-        this(false);
+        this(DefaultUnitConverter.getInstance(), false);
     }
 
-    public CssDoubleConverter(boolean nullable) {
+    public CssDoubleConverter(UnitConverter unitConverter , boolean nullable) {
+        this.unitConverter = unitConverter;
         sizeConverter =new CssSizeConverter(nullable);
     }
 
@@ -45,8 +48,7 @@ public class CssDoubleConverter implements Converter<Double> {
     @Override
     public Double fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CssSize size=sizeConverter.fromString(buf,idFactory);
-        return size==null?null:(idFactory!=null?  idFactory.convert(size.getValue(),size.getUnits(), "px"):
-                DefaultUnitConverter.getInstance().convert(size.getValue(),size.getUnits(), "px"));
+        return size==null?null:unitConverter.convert(size.getValue(),size.getUnits(), "px");
     }
 
     @Override

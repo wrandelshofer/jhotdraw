@@ -34,10 +34,10 @@ public class XMLEncoderOutputFormat implements OutputFormat {
     @Override
     public void write(OutputStream out, Drawing drawing) throws IOException {
         try (XMLEncoder o = new XMLEncoder(out)) {
-            final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
+           /* final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
             o.setPersistenceDelegate(Figure.class, delegate);
             o.setPersistenceDelegate(Drawing.class, delegate);
-            o.setPersistenceDelegate(RectangleFigure.class, delegate);
+            o.setPersistenceDelegate(RectangleFigure.class, delegate);*/
             o.writeObject(drawing);
         }
     }

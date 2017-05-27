@@ -5,7 +5,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.io.IdFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +39,7 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.io.IdFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;
 import org.w3c.dom.DOMImplementation;
@@ -90,24 +90,26 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     private List<String> comments;
     private URI externalHome;
-    private FigureFactory factory;
+    protected FigureFactory figureFactory;
+    protected IdFactory idFactory;
     private HashMap<Figure, Element> figureToElementMap = new HashMap<>();
-    private String indent = "  ";
+    protected String indent = "  ";
     private URI internalHome;
-    private String namespaceQualifier;
-    private String namespaceURI;
+    protected String namespaceQualifier;
+    protected String namespaceURI;
 
-    public SimpleXmlIO(FigureFactory factory) {
-        this(factory, null, null, null);
+    public SimpleXmlIO(FigureFactory factory, IdFactory idFactory) {
+        this(factory,idFactory, null, null);
     }
 
     public SimpleXmlIO(FigureFactory factory, IdFactory idFactory, String namespaceURI, String namespaceQualifier) {
-        this.factory = factory;
+        this.figureFactory = factory;
+        this.idFactory = idFactory;
         this.namespaceURI = namespaceURI;
         this.namespaceQualifier = namespaceQualifier;
     }
 
-    private Element createElement(Document doc, String unqualifiedName) throws IOException {
+    protected Element createElement(Document doc, String unqualifiedName) throws IOException {
         if (namespaceURI == null || namespaceQualifier == null) {
             return doc.createElement(unqualifiedName);
         }
@@ -138,15 +140,15 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     public Figure fromDocument(Document doc, Drawing oldDrawing) throws IOException {
-        factory.reset();
+        idFactory.reset();
         if (oldDrawing != null) {
             Figure probe = readNode(doc.getDocumentElement());
             if (probe instanceof Clipping) {
                 for (Figure f : oldDrawing.preorderIterable()) {
-                    factory.createId(f);
+                    idFactory.createId(f);
                 }
             } else {
-                factory.reset();
+                idFactory.reset();
             }
         }
 
@@ -201,7 +203,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
         comments = null;
         if (external != null) {
-            Drawing internal = factory.fromExternalDrawing(external);
+            Drawing internal = figureFactory.fromExternalDrawing(external);
             internal.updateCss();
             return internal;
         } else {
@@ -240,12 +242,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         externalHome = uri;
     }
 
-    public void setFactory(FigureFactory factory) {
-        this.factory = factory;
+    public void setFigureFactory(FigureFactory figureFactory) {
+        this.figureFactory = figureFactory;
     }
 
     public Figure getFigure(String id) throws IOException {
-        Figure f = (Figure) factory.getObject(id);
+        Figure f = (Figure) idFactory.getObject(id);
         /*        if (f == null) {
         throw new IOException("no figure for id:" + id);
         }*/
@@ -318,21 +320,21 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         if (content instanceof String) {
             Set<Figure> figures = new LinkedHashSet<>();
             Figure newDrawing = read((String) content, drawing);
-            factory.reset();
+            idFactory.reset();
             for (Figure f : drawing.preorderIterable()) {
-                factory.createId(f);
+                idFactory.createId(f);
             }
             if (layer == null) {
                 layer = (Layer) drawing.getLastChild();
                 if (layer == null) {
                     layer = new SimpleLayer();
-                    layer.set(StyleableFigure.ID, factory.createId(layer));
+                    layer.set(StyleableFigure.ID, idFactory.createId(layer));
                     model.addChildTo(layer, drawing);
                 }
             }
             for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
                 newDrawing.remove(f);
-                String id = factory.createId(f);
+                String id = idFactory.createId(f);
                 f.set(StyleableFigure.ID, id);
                 if (f instanceof Layer) {
                     model.addChildTo(f, drawing);
@@ -355,10 +357,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Reads the attributes of the specified element.
      */
     private void readElementAttributes(Figure figure, Element elem) throws IOException {
-        for (MapAccessor<?> ma : factory.figureAttributeKeys(figure)) {
+        for (MapAccessor<?> ma : figureFactory.figureAttributeKeys(figure)) {
             @SuppressWarnings("unchecked")
             MapAccessor<Object> mao = (MapAccessor<Object>) ma;
-            Object defaultValue = factory.getDefaultValue(figure, ma);
+            Object defaultValue = figureFactory.getDefaultValue(figure, ma);
             figure.set(mao, defaultValue);
         }
 
@@ -369,17 +371,17 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 continue;
             }
 
-            /*if (factory.getObjectIdAttribute().equals(attr.getLocalName())) {
+            /*if (idFactory.getObjectIdAttribute().equals(attr.getLocalName())) {
                 continue;
             }*/
             @SuppressWarnings("unchecked")
-            MapAccessor<Object> key = (MapAccessor<Object>) factory.nameToKey(figure, attr.getLocalName());
-            if (key != null && factory.figureAttributeKeys(figure).contains(key)) {
+            MapAccessor<Object> key = (MapAccessor<Object>) figureFactory.nameToKey(figure, attr.getLocalName());
+            if (key != null && figureFactory.figureAttributeKeys(figure).contains(key)) {
                 Object value = null;
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
                     value = getFigure(attr.getValue());
                 } else {
-                    value = factory.stringToValue(key, attr.getValue());
+                    value = figureFactory.stringToValue(key, attr.getValue());
                 }
 
                 if (value instanceof URI) {
@@ -395,11 +397,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * Reads the children of the specified element as a node list.
      */
     private void readElementNodeList(Figure figure, Element elem) throws IOException {
-        Set<MapAccessor<?>> keys = factory.figureNodeListKeys(figure);
+        Set<MapAccessor<?>> keys = figureFactory.figureNodeListKeys(figure);
         for (MapAccessor<?> ky : keys) {
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) ky;
-            String name = factory.keyToElementName(figure, key);
+            String name = figureFactory.keyToElementName(figure, key);
             if ("".equals(name)) {
                 List<Node> nodeList = new ArrayList<>();
                 NodeList children = elem.getChildNodes();
@@ -416,7 +418,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                             }
                         } else {
                             try {
-                                if (factory.nameToFigure(childElem.getLocalName()) != null) {
+                                if (figureFactory.nameToFigure(childElem.getLocalName()) != null) {
                                     continue;
                                 }
                             } catch (IOException e) {
@@ -426,7 +428,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                         }
                     }
                 }
-                Object value = factory.nodeListToValue(key, nodeList);
+                Object value = figureFactory.nodeListToValue(key, nodeList);
                 figure.set(key, value);
             } else {
                 throw new UnsupportedOperationException("Reading of sub-elements is not yet supported");
@@ -446,19 +448,19 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     return null;
                 }
             }
-            Figure figure = factory.nameToFigure(elem.getLocalName());
+            Figure figure = figureFactory.nameToFigure(elem.getLocalName());
             if (figure == null) {
                 return null;
             }
             figureToElementMap.put(figure, elem);
-            String id = getAttribute(elem, factory.getObjectIdAttribute());
+            String id = getAttribute(elem, figureFactory.getObjectIdAttribute());
 
             if (id != null && !id.isEmpty()) {
-                if (factory.getObject(id) != null) {
+                if (idFactory.getObject(id) != null) {
                     System.err.println("SimpleXmlIO warning: duplicate id " + id + " in element " + elem.getTagName());
-                    factory.putId(figure, id);
+                    idFactory.putId(figure, id);
                 } else {
-                    factory.putId(figure, id);
+                    idFactory.putId(figure, id);
                 }
             }
             return figure;
@@ -501,7 +503,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     private void readProcessingInstruction(Document doc, ProcessingInstruction pi, Drawing external) {
-        if (factory.getStylesheetsKey() != null) {
+        if (figureFactory.getStylesheetsKey() != null) {
             if ("xml-stylesheet".equals(pi.getNodeName()) && pi.getData() != null) {
                 Matcher m = hrefPattern.matcher(pi.getData());
                 if (m.matches()) {
@@ -510,16 +512,16 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     URI uri = URI.create(href);
                     uri = externalToInternal(external, uri);
 
-                    List<URI> listOrNull = external.get(factory.getStylesheetsKey());
+                    List<URI> listOrNull = external.get(figureFactory.getStylesheetsKey());
                     List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull);
                     stylesheets.add(uri);
-                    external.set(factory.getStylesheetsKey(), stylesheets);
+                    external.set(figureFactory.getStylesheetsKey(), stylesheets);
                 }
             }
         }
     }
 
-    private void setAttribute(Element elem, String unqualifiedName, String value) throws IOException {
+    protected void setAttribute(Element elem, String unqualifiedName, String value) throws IOException {
         if (namespaceURI == null || namespaceQualifier == null) {
             if (!elem.hasAttribute(unqualifiedName)) {
                 elem.setAttribute(unqualifiedName, value);
@@ -548,18 +550,19 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         try {
             Clipping external = new SimpleClipping();
 
-            factory.reset();
+            idFactory.reset();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             Document doc;
+            final String docElemName = figureFactory.figureToName(external);
             if (namespaceURI != null) {
                 builderFactory.setNamespaceAware(true);
                 DocumentBuilder builder = builderFactory.newDocumentBuilder();
                 DOMImplementation domImpl = builder.getDOMImplementation();
-                doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? factory.figureToName(external) : namespaceQualifier + ":" + factory.figureToName(internal), null);
+                doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? docElemName : namespaceQualifier + ":" + docElemName, null);
             } else {
                 DocumentBuilder builder = builderFactory.newDocumentBuilder();
                 doc = builder.newDocument();
-                Element elem = doc.createElement(factory.figureToName(external));
+                Element elem = doc.createElement(docElemName);
                 doc.appendChild(elem);
             }
 
@@ -577,20 +580,20 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     public Document toDocument(Drawing internal) throws IOException {
         try {
-            Drawing external = factory.toExternalDrawing(internal);
+            Drawing external = figureFactory.toExternalDrawing(internal);
 
-            factory.reset();
+            idFactory.reset();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             Document doc;
             if (namespaceURI != null) {
                 builderFactory.setNamespaceAware(true);
                 DocumentBuilder builder = builderFactory.newDocumentBuilder();
                 DOMImplementation domImpl = builder.getDOMImplementation();
-                doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? factory.figureToName(external) : namespaceQualifier + ":" + factory.figureToName(internal), null);
+                doc = domImpl.createDocument(namespaceURI, namespaceQualifier == null ? figureFactory.figureToName(external) : namespaceQualifier + ":" + figureFactory.figureToName(internal), null);
             } else {
                 DocumentBuilder builder = builderFactory.newDocumentBuilder();
                 doc = builder.newDocument();
-                Element elem = doc.createElement(factory.figureToName(external));
+                Element elem = doc.createElement(figureFactory.figureToName(external));
                 doc.appendChild(elem);
             }
 
@@ -628,9 +631,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         out.put(getDataFormat(), sw.toString());
     }
 
-    private void writeElementAttributes(Element elem, Figure figure) throws IOException {
-        setAttribute(elem, factory.getObjectIdAttribute(), factory.createId(figure));
-        for (MapAccessor<?> k : factory.figureAttributeKeys(figure)) {
+    protected void writeElementAttributes(Element elem, Figure figure) throws IOException {
+ String id=idFactory.createId(figure);
+        setAttribute(elem, figureFactory.getObjectIdAttribute(), id);
+        for (MapAccessor<?> k : figureFactory.figureAttributeKeys(figure)) {
             if (k.isTransient()) {
                 continue;
             }
@@ -642,35 +646,35 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 value = internalToExternal(figure.getDrawing(), (URI) value);
             }
 
-            if (!factory.isDefaultValue(figure, key, value)) {
-                String name = factory.keyToName(figure, key);
+            if (!figureFactory.isDefaultValue(figure, key, value)) {
+                String name = figureFactory.keyToName(figure, key);
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
-                    setAttribute(elem, name, factory.createId(value));
+                    setAttribute(elem, name, idFactory.createId(value));
                 } else {
-                    setAttribute(elem, name, factory.valueToString(key, value));
+                    setAttribute(elem, name, figureFactory.valueToString(key, value));
                 }
             }
         }
     }
 
     private void writeElementNodeList(Document document, Element elem, Figure figure) throws IOException {
-        for (MapAccessor<?> k : factory.figureNodeListKeys(figure)) {
+        for (MapAccessor<?> k : figureFactory.figureNodeListKeys(figure)) {
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) k;
             Object value = figure.get(key);
-            if (!factory.isDefaultValue(figure, key, value)) {
-                for (Node node : factory.valueToNodeList(key, value, document)) {
+            if (!figureFactory.isDefaultValue(figure, key, value)) {
+                for (Node node : figureFactory.valueToNodeList(key, value, document)) {
                     elem.appendChild(node);
                 }
             }
         }
     }
 
-    private void writeNodeRecursively(Document doc, Element parent, Figure figure, String linebreak) throws IOException {
+    protected void writeNodeRecursively(Document doc, Element parent, Figure figure, String linebreak) throws IOException {
         try {
-            String elementName = factory.figureToName(figure);
+            String elementName = figureFactory.figureToName(figure);
             if (elementName == null) {
-                // => the factory decided that we should skip the figure
+                // => the figureFactory decided that we should skip the figure
                 return;
             }
             Element elem = createElement(doc, elementName);
@@ -683,11 +687,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             }
             for (Figure child : figure.getChildren()) {
                 final String lbi = linebreak + indent;
-                if (factory.figureToName(child) != null) {
+                if (figureFactory.figureToName(child) != null) {
                     writeNodeRecursively(doc, elem, child, lbi);
                 }
             }
-            boolean hasNoElementNodes = factory.figureNodeListKeys(figure).isEmpty();
+            boolean hasNoElementNodes = figureFactory.figureNodeListKeys(figure).isEmpty();
             for (String string : figure.get(XML_BODY_COMMENT_KEY)) {
                 if (hasNoElementNodes) {
                     elem.appendChild(doc.createTextNode(linebreak));
@@ -707,8 +711,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     // XXX maybe this should not be in SimpleXmlIO?
     private void writeProcessingInstructions(Document doc, Drawing external) {
         Element docElement = doc.getDocumentElement();
-        if (factory.getStylesheetsKey() != null && external.get(factory.getStylesheetsKey()) != null) {
-            for (Object stylesheet : external.get(factory.getStylesheetsKey())) {
+        if (figureFactory.getStylesheetsKey() != null && external.get(figureFactory.getStylesheetsKey()) != null) {
+            for (Object stylesheet : external.get(figureFactory.getStylesheetsKey())) {
                 if (stylesheet instanceof URI) {
                     stylesheet = internalToExternal(external, (URI) stylesheet);
 

@@ -13,7 +13,9 @@ import java.util.Iterator;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
+import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.UnitConverter;
 
 /**
  * CssDoubleListConverter.
@@ -25,6 +27,7 @@ import org.jhotdraw8.io.IdFactory;
 public class CssDoubleListConverter implements Converter<ImmutableObservableList<Double>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,choice,0#none|1#{1,list,{2,number}|[ ]+}}", new CssConverterFactory());
+    private UnitConverter unitConverter = DefaultUnitConverter.getInstance();
 
 
     @Override
@@ -44,12 +47,12 @@ public class CssDoubleListConverter implements Converter<ImmutableObservableList
             switch (tt.nextToken()) {
                 case CssTokenizerInterface.TT_DIMENSION: {
                     double value = tt.currentNumericValue().doubleValue();
-                    l.add(idFactory.convert(value, tt.currentStringValue(), "px"));
+                    l.add(unitConverter.convert(value, tt.currentStringValue(), "px"));
                     break;
                 }
                 case CssTokenizerInterface.TT_PERCENTAGE: {
                     double value = tt.currentNumericValue().doubleValue() / 100.0;
-                    l.add(idFactory.convert(value, "%", "px"));
+                    l.add(unitConverter.convert(value, "%", "px"));
                     break;
                 }
                 case CssTokenizerInterface.TT_NUMBER: {

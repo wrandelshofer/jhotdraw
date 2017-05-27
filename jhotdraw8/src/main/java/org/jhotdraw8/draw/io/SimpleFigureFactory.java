@@ -22,7 +22,7 @@ import javafx.css.Styleable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -34,7 +34,7 @@ import org.w3c.dom.Text;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactory {
+public class SimpleFigureFactory implements FigureFactory {
 
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
     private final Map<FigureAccessorKey<?>, Object> defaultValueMap = new HashMap<>();
@@ -54,6 +54,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
     private final Map<String, Converter<?>> valueFromXML = new HashMap<>();
 
     private final Map<String, Converter<?>> valueToXML = new HashMap<>();
+    private IdFactory idFactory = new SimpleFigureIdFactory();
 
     public SimpleFigureFactory() {
     }
@@ -321,25 +322,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         keyToAttr.clear();
     }
 
-    @Override
-    public String createId(Object object) {
-        String id = getId(object);
 
-        if (id == null) {
-            if (object instanceof Styleable) {
-                Styleable f = (Styleable) object;
-                id = f.getId();
-                if (id != null && getObject(id) == null) {
-                    putId(object, id);
-                } else {
-                    id = super.createId(object, f.getTypeSelector().toLowerCase());
-                }
-            } else {
-                id = super.createId(object);
-            }
-        }
-        return id;
-    }
 
     @Override
     public MapAccessor<?> elementNameToKey(Figure f, String attributeName) throws IOException {
@@ -499,24 +482,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
         }
     }
 
-    public String putId(Object object) {
-        String id = getId(object);
 
-        if (id == null) {
-            if (object instanceof Styleable) {
-                Styleable f = (Styleable) object;
-                id = f.getId();
-                if (id != null) {
-                    putId(object, id);
-                } else {
-                    id = super.createId(object, f.getTypeSelector());
-                }
-            } else {
-                id = super.createId(object);
-            }
-        }
-        return id;
-    }
 
     /**
      * Globally removes the specified key.
@@ -591,7 +557,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
                 throw new IOException("no converter for key \"" + key + "\" with attribute type "
                         + key.getFullValueType());
             }
-            return converter.fromString(CharBuffer.wrap(string), this);
+            return converter.fromString(CharBuffer.wrap(string), idFactory);
         } catch (ParseException ex) {
             throw new IOException(ex);
         }
@@ -625,7 +591,7 @@ public class SimpleFigureFactory extends SimpleIdFactory implements FigureFactor
                     + key.getFullValueType());
         }
         StringBuilder builder = new StringBuilder();
-        converter.toString(builder, this, value);
+        converter.toString(builder, idFactory, value);
         return builder.toString();
     }
 

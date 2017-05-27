@@ -74,7 +74,7 @@ public class StringStyleableFigureKey extends SimpleFigureKey<String> implements
          StyleablePropertyBean spb = (StyleablePropertyBean) s;
          return spb.getStyleableProperty(this);
          });*/
-        converter = new CssStringConverter(helpText);
+        converter = new CssStringConverter('\'', helpText);
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
