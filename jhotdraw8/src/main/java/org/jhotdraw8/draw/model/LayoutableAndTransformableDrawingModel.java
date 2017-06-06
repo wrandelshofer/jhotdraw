@@ -29,6 +29,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.FigureKey;
 import static org.jhotdraw8.draw.model.DrawingModel.ROOT_PROPERTY;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.tree.TreeModelEvent;
 
 /**
  * A DrawingModel for drawings which contains {@code TransformableFigure}s and
@@ -117,7 +118,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 newValue.getPropertyChangeListeners().add(propertyChangeHandler);
             }
         }
-        fire(DrawingModelEvent.rootChanged(this, newValue));
+        fireTreeModelEvent(TreeModelEvent.rootChanged(this, newValue));
     }
     private Set<Figure> layoutSubjectChange = new HashSet<>();
 
@@ -131,15 +132,15 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
             }
         }
         if (event.getType() == FigurePropertyChangeEvent.EventType.CHANGED) {
-            fire(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
+            fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     (Key<Object>) event.getKey(), event.getOldValue(),
                     event.getNewValue()));
             Key<?> k = event.getKey();
             if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
-                fire(DrawingModelEvent.layoutSubjectChanged(this, event.getSource()));
+                fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged(this, event.getSource()));
                 layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
                 for (Figure f : new ArrayList<>(layoutSubjectChange)) {
-                    fire(DrawingModelEvent.layoutSubjectChanged((DrawingModel) this, f));
+                    fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged((DrawingModel) this, f));
                 }
                 layoutSubjectChange.clear();
             }
@@ -155,13 +156,13 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
             }
         }
         {
-            fire(DrawingModelEvent.propertyValueChanged(this, figure,
+            fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                     (Key<Object>) key, oldValue, newValue));
             if (key instanceof FigureKey && ((FigureKey<?>) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
-                fire(DrawingModelEvent.layoutSubjectChanged(this, figure));
+                fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged(this, figure));
                 layoutSubjectChange.addAll(figure.getLayoutSubjects());
                 for (Figure f : new ArrayList<>(layoutSubjectChange)) {
-                    fire(DrawingModelEvent.layoutSubjectChanged((DrawingModel) this, f));
+                    fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged((DrawingModel) this, f));
                 }
                 layoutSubjectChange.clear();
             }
@@ -181,8 +182,13 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     }
 
     @Override
-    public ObjectProperty<Drawing> rootProperty() {
+    public ObjectProperty<Drawing> drawingProperty() {
         return root;
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    public ObjectProperty<Figure> rootProperty() {
+        return (ObjectProperty<Figure>)(ObjectProperty<?>)root;
     }
 
     @Override
@@ -193,20 +199,20 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
             int index = parent.getChildren().indexOf(child);
             if (index != -1) {
                 parent.getChildren().remove(index);
-                fire(DrawingModelEvent.figureRemovedFromParent((DrawingModel) this, child, parent, index));
-                fire(DrawingModelEvent.nodeInvalidated((DrawingModel) this, parent));
+                fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent((DrawingModel) this, child, parent, index));
+                fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, parent));
             }
         }
         Drawing newDrawing = child.getDrawing();
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fire(DrawingModelEvent.figureRemovedFromDrawing((DrawingModel) this, oldDrawing, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree((DrawingModel) this, oldDrawing, f));
                 }
             }
             if (newDrawing != null) { // must be null!!!
                 for (Figure f : child.preorderIterable()) {
-                    fire(DrawingModelEvent.figureAddedToDrawing((DrawingModel) this, newDrawing, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree((DrawingModel) this, newDrawing, f));
                 }
             }
         }
@@ -219,25 +225,25 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
         if (oldParent != null) {
             int oldChildIndex = oldParent.getChildren().indexOf(child);
             oldParent.remove(child);
-            fire(DrawingModelEvent.figureRemovedFromParent((DrawingModel) this, child, oldParent, oldChildIndex));
-            fire(DrawingModelEvent.nodeInvalidated((DrawingModel) this, oldParent));
+            fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent((DrawingModel) this, child, oldParent, oldChildIndex));
+            fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, oldParent));
         }
         parent.getChildren().add(index, child);
         Drawing newDrawing = child.getDrawing();
         if (oldDrawing != newDrawing) {
             if (oldDrawing != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fire(DrawingModelEvent.figureRemovedFromDrawing((DrawingModel) this, oldDrawing, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree((DrawingModel) this, oldDrawing, f));
                 }
             }
             if (newDrawing != null) {
                 for (Figure f : child.preorderIterable()) {
-                    fire(DrawingModelEvent.figureAddedToDrawing((DrawingModel) this, newDrawing, f));
+                    fireTreeModelEvent(TreeModelEvent.nodeAddedToTree((DrawingModel) this, newDrawing, f));
                 }
             }
         }
-        fire(DrawingModelEvent.figureAddedToParent((DrawingModel) this, child, parent, index));
-        fire(DrawingModelEvent.nodeInvalidated((DrawingModel) this, parent));
+        fireTreeModelEvent(TreeModelEvent.nodeAddedToParent((DrawingModel) this, child, parent, index));
+        fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, parent));
     }
 
     @Override
@@ -271,37 +277,37 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     @Override
     public void reshapeInLocal(Figure f, Transform transform) {
         f.reshapeInLocal(transform);
-        fire(DrawingModelEvent.layoutChanged(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     @Override
     public void reshapeInParent(Figure f, Transform transform) {
         f.reshapeInParent(transform);
-        fire(DrawingModelEvent.layoutChanged(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     @Override
     public void transformInParent(Figure f, Transform transform) {
         f.transformInParent(transform);
-        fire(DrawingModelEvent.transformChanged(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
     }
 
     @Override
     public void transformInLocal(Figure f, Transform transform) {
         f.transformInLocal(transform);
-        fire(DrawingModelEvent.transformChanged(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
     }
 
     @Override
     public void reshape(Figure f, double x, double y, double width, double height) {
         f.reshapeInLocal(x, y, width, height);
-        fire(DrawingModelEvent.layoutChanged(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     @Override
     public void layout(Figure f) {
         f.layoutNotify();
-        fire(DrawingModelEvent.layoutChanged(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     @Override
@@ -439,7 +445,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
 
 
             // For all figures with dirty flag Node 
-            // we must fire node invalidation
+            // we must fireDrawingModelEvent node invalidation
             DirtyMask dmNode = DirtyMask.of(DirtyBits.NODE);
             for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
                 Figure f = entry.getKey();
@@ -465,32 +471,23 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     }
 
     @Override
-    public void fire(DrawingModelEvent event) {
-        for (Listener<DrawingModelEvent> l : getDrawingModelListeners()) {
-            l.handle(event);
-        }
-        handle(event);
+    public void fireDrawingModelEvent(DrawingModelEvent event) {
+        super.fireDrawingModelEvent(event);
+        handleDrawingModelEvent(event);
     }
-
-    protected void handle(DrawingModelEvent event) {
+    @Override
+    public void fireTreeModelEvent(TreeModelEvent<Figure> event) {
+        super.fireTreeModelEvent(event);
+        handleTreeModelEvent(event);
+    }
+    protected void handleDrawingModelEvent(DrawingModelEvent event) {
         if (isValidating) {
             return;
         }
 
-        final Figure figure = event.getFigure();
+        final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
-            case FIGURE_ADDED_TO_PARENT:
-                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.STYLE);
-                invalidate();
-                break;
-            case SUBTREE_ADDED_TO_DRAWING:
-                figure.addNotify(event.getDrawing());
-                break;
-            case SUBTREE_REMOVED_FROM_DRAWING:
-                figure.removeNotify(event.getDrawing());
-                removeDirty(figure);
-                break;
             case LAYOUT_SUBJECT_CHANGED:
                 figure.layoutSubjectChangeNotify();
                 markDirty(figure, DirtyBits.LAYOUT_OBSERVERS);
@@ -499,18 +496,6 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
             case TRANSFORM_CHANGED:
                 markDirty(figure, DirtyBits.TRANSFORM);
                 invalidate();
-                break;
-            case FIGURE_REMOVED_FROM_PARENT:
-                markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
-                invalidate();
-                break;
-            case NODE_CHANGED:
-                break;
-            case ROOT_CHANGED:
-                dirties.clear();
-                valid = true;
-                break;
-            case SUBTREE_NODES_CHANGED:
                 break;
             case PROPERTY_VALUE_CHANGED: {
                 Key<?> key = event.getKey();
@@ -537,7 +522,42 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                         + "not supported");
         }
     }
+    protected void handleTreeModelEvent(TreeModelEvent<Figure> event) {
+        if (isValidating) {
+            return;
+        }
 
+        final Figure figure =event.getNode();
+
+        switch (event.getEventType()) {
+            case NODE_ADDED_TO_PARENT:
+                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.STYLE);
+                invalidate();
+                break;
+            case NODE_ADDED_TO_TREE:
+                figure.addNotify((Drawing)event.getRoot());
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                figure.removeNotify((Drawing)event.getRoot());
+                removeDirty(figure);
+                break;
+            case NODE_REMOVED_FROM_PARENT:
+                markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
+                invalidate();
+                break;
+            case NODE_CHANGED:
+                break;
+            case ROOT_CHANGED:
+                dirties.clear();
+                valid = true;
+                break;
+            case SUBTREE_NODES_CHANGED:
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + "not supported");
+        }
+    }
     private void recursivelyInvalidateTransforms(Figure f) {
         if (f.transformNotify()) {
             for (Figure child : f.getChildren()) {

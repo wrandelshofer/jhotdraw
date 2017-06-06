@@ -134,7 +134,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
 
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
-        // FIXME fire undoable edit
+        // FIXME fireDrawingModelEvent undoable edit
     }
 
     @Override

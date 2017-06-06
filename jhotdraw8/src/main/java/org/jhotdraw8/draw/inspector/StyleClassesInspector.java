@@ -47,7 +47,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     private final Listener<DrawingModelEvent> drawingModelEventListener = change -> {
         if (change.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED) {
             if ((Key<?>) change.getKey() == StyleableFigure.STYLE_CLASS) {
-                if (drawingView != null && drawingView.getSelectedFigures().contains(change.getFigure())) {
+                if (drawingView != null && drawingView.getSelectedFigures().contains(change.getNode())) {
                     updateListLater();
                 }
             }

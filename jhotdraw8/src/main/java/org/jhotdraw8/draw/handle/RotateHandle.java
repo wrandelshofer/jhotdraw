@@ -203,7 +203,7 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
         pivotNode.setVisible(false);
-        // FIXME fire undoable edit event
+        // FIXME fireDrawingModelEvent undoable edit event
     }
 
     @Override

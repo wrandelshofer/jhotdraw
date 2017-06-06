@@ -420,7 +420,7 @@ public interface DrawingView extends RenderContext {
     }
 
     default Drawing getDrawing() {
-        return modelProperty().get().getRoot();
+        return modelProperty().get().getDrawing();
     }
 
     default void setConstrainer(Constrainer newValue) {

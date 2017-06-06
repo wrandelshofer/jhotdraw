@@ -36,14 +36,15 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
-import org.jhotdraw8.draw.model.FigureTreePresentationModel;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
 import org.jhotdraw8.text.CachingCollator;
 import org.jhotdraw8.text.CssWordListConverter;
 import org.jhotdraw8.text.OSXCollator;
 import org.jhotdraw8.text.StringConverterAdapter;
+import org.jhotdraw8.tree.SimpleTreePresentationModel;
 
 /**
  * FXML Controller class
@@ -62,7 +63,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private boolean isUpdatingSelectionInView;
     @FXML
     private TreeTableColumn<Figure, Boolean> lockedColumn;
-    private FigureTreePresentationModel model;
+    private SimpleTreePresentationModel<Figure> model;
     private Node node;
     private final InvalidationListener treeSelectionHandler = change -> {
         if (model.isUpdating()) {
@@ -106,12 +107,12 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             throw new InternalError(ex);
         }
 
-        model = new FigureTreePresentationModel();
+        model = new SimpleTreePresentationModel<>();
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(
                 cell.getValue().getValue().getTypeSelector())
         );
         idColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<String>(model.getModel(),
+                cell -> new DrawingModelFigureProperty<String>((DrawingModel)model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.ID) {
             @Override
             public String getValue() {
@@ -125,15 +126,15 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
         );
         visibleColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<Boolean>(model.getModel(),
+                cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel)model.getTreeModel(),
                         cell.getValue().getValue(), HideableFigure.VISIBLE)
         );
         lockedColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<Boolean>(model.getModel(),
+                cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel)model.getTreeModel(),
                         cell.getValue().getValue(), LockableFigure.LOCKED)
         );
         classesColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>(model.getModel(),
+                cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>((DrawingModel)model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
             @Override
             @SuppressWarnings("unchecked")
@@ -284,11 +285,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
         drawingView = newValue;
         if (newValue != null) {
-            model.setDrawingModel(newValue.getModel());
+            model.setTreeModel(newValue.getModel());
             newValue.getSelectedFigures().addListener(viewSelectionHandler);
             treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, drawingView);
         } else {
-            model.setDrawingModel(new SimpleDrawingModel());
+            model.setTreeModel(new SimpleDrawingModel());
         }
     }
 

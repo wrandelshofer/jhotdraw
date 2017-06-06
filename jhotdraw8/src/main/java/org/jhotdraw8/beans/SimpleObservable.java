@@ -18,30 +18,11 @@ import javafx.beans.Observable;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleObservable implements Observable {
+public class SimpleObservable implements ObservableMixin {
 
     private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
     public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         return invalidationListeners;
-    }
-
-    @Override
-    public void addListener(InvalidationListener listener) {
-        invalidationListeners.add(listener);
-    }
-
-    @Override
-    public void removeListener(InvalidationListener listener) {
-        invalidationListeners.remove(listener);
-    }
-
-    /**
-     * Notifies all registered invalidation listeners.
-     */
-    public void fireInvalidated() {
-        for (InvalidationListener l : invalidationListeners) {
-            l.invalidated(this);
-        }
     }
 }

@@ -17,14 +17,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.CssColorConverter;
-import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.text.XmlDoubleConverter;
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.tree.TreeModelEvent;
 
 /**
  * FXML Controller class
@@ -117,7 +115,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
     }
 
     private void commitEdits() {
-        drawingView.getModel().fire(DrawingModelEvent.nodeInvalidated(drawingView.getModel(), drawingView.getDrawing()));
+        drawingView.getModel().fireTreeModelEvent(TreeModelEvent.nodeInvalidated(drawingView.getModel(), drawingView.getDrawing()));
     }
 
     @Override

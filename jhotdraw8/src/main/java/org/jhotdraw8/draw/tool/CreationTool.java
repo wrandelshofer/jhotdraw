@@ -91,7 +91,7 @@ private double defaultHeight=10;
         Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToDrawing(new Point2D(x1, y1)));
         createdFigure.reshapeInLocal(c.getX()-defaultWidth*anchorX, c.getY()-defaultHeight*anchorY, defaultWidth, defaultHeight);
         DrawingModel dm = view.getModel();
-        Drawing drawing = dm.getRoot();
+        Drawing drawing = dm.getDrawing();
 
         Layer layer = getOrCreateLayer(view, createdFigure);
         view.setActiveLayer(layer);

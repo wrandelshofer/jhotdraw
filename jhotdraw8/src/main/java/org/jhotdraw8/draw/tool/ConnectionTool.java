@@ -145,7 +145,7 @@ public class ConnectionTool extends AbstractTool {
         Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, unconstrainedPoint);
         figure.reshapeInLocal(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
-        Drawing drawing = dm.getRoot();
+        Drawing drawing = dm.getDrawing();
 
         Layer layer = getOrCreateLayer(view, figure);
         view.setActiveLayer(layer);

@@ -5,19 +5,20 @@
  */
 package org.jhotdraw8.draw.model;
 
+import org.jhotdraw8.tree.TreeModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.tree.TreeModelEvent;
 
 /**
  * {@code DrawingModel} provides {@code DrawingModelEvent}s about a
@@ -61,12 +62,12 @@ import org.jhotdraw8.event.Listener;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public interface DrawingModel extends Observable {
+public interface DrawingModel extends Observable, TreeModel<Figure> {
 
     /**
-     * Name of the root property.
+     * Name of the drawing property.
      */
-    String ROOT_PROPERTY = "root";
+    String DRAWING_PROPERTY = "drawing";
 
     /**
      * List of drawing model listeners.
@@ -87,7 +88,7 @@ public interface DrawingModel extends Observable {
      *
      * @return the root
      */
-    ObjectProperty<Drawing> rootProperty();
+    ObjectProperty<Drawing> drawingProperty();
 
     /**
      * Adds a listener for {@code DrawingModelEvent}s.
@@ -122,8 +123,8 @@ public interface DrawingModel extends Observable {
      *
      * @return the drawing
      */
-    default Drawing getRoot() {
-        return rootProperty().get();
+    default Drawing getDrawing() {
+        return drawingProperty().get();
     }
 
     /**
@@ -132,8 +133,8 @@ public interface DrawingModel extends Observable {
      *
      * @param root the new root
      */
-    default void setRoot(Drawing root) {
-        rootProperty().set(root);
+    default void setDrawing(Drawing root) {
+        drawingProperty().set(root);
     }
 
     /**
@@ -283,7 +284,11 @@ public interface DrawingModel extends Observable {
      *
      * @param event the event
      */
-    void fire(DrawingModelEvent event);
+    default void fireDrawingModelEvent(DrawingModelEvent event) {
+       for (Listener<DrawingModelEvent> l : getDrawingModelListeners()) {
+           l.handle(event);
+       }
+    }
 
     /**
      * Validates the model. This method is invoked by {@code DrawingView} each
@@ -300,7 +305,7 @@ public interface DrawingModel extends Observable {
      * @param f the figure
      */
     default void fireNodeInvalidated(Figure f) {
-        fire(DrawingModelEvent.nodeInvalidated(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, f));
     }
 
     /**
@@ -313,7 +318,7 @@ public interface DrawingModel extends Observable {
      * @param newValue the new value
      */
     default <T> void firePropertyValueChanged(Figure f, Key<T> key, T oldValue, T newValue) {
-        fire(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue));
+        fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue));
     }
 
     /**
@@ -322,7 +327,7 @@ public interface DrawingModel extends Observable {
      * @param f the figure
      */
     default void fireTransformInvalidated(Figure f) {
-        fire(DrawingModelEvent.transformChanged(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
     }
 
     /**
@@ -331,7 +336,7 @@ public interface DrawingModel extends Observable {
      * @param f the figure
      */
     default void fireLayoutInvalidated(Figure f) {
-        fire(DrawingModelEvent.layoutChanged(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
     }
 
     /**
@@ -340,7 +345,7 @@ public interface DrawingModel extends Observable {
      * @param f the figure
      */
     default void fireStyleInvalidated(Figure f) {
-        fire(DrawingModelEvent.styleInvalidated(this, f));
+        fireDrawingModelEvent(DrawingModelEvent.styleInvalidated(this, f));
     }
 
     /**

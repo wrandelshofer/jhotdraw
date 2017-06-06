@@ -66,10 +66,23 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.app.EditableComponent;
+import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.LAYOUT_CHANGED;
+import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.LAYOUT_SUBJECT_CHANGED;
+import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED;
+import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.STYLE_CHANGED;
+import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.TRANSFORM_CHANGED;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.tree.TreeModelEvent;
+import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_ADDED_TO_PARENT;
+import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_ADDED_TO_TREE;
+import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_CHANGED;
+import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_REMOVED_FROM_PARENT;
+import static org.jhotdraw8.tree.TreeModelEvent.EventType.NODE_REMOVED_FROM_TREE;
+import static org.jhotdraw8.tree.TreeModelEvent.EventType.ROOT_CHANGED;
+import static org.jhotdraw8.tree.TreeModelEvent.EventType.SUBTREE_NODES_CHANGED;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -156,30 +169,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * The number of nodes that are maximally updated per frame.
      */
     private int maxUpdate = 100;
-    private final Listener<DrawingModelEvent> modelHandler = new Listener<DrawingModelEvent>() {
+    private final Listener<DrawingModelEvent> drawingModelHandler = new Listener<DrawingModelEvent>() {
 
         @Override
         public void handle(DrawingModelEvent event) {
-            Figure f = event.getFigure();
+            Figure f = event.getNode();
             switch (event.getEventType()) {
-                case FIGURE_ADDED_TO_PARENT:
-                    handleFigureAdded(f);
-                    break;
-                case FIGURE_REMOVED_FROM_PARENT:
-                    handleFigureRemoved(f);
-                    break;
-                case SUBTREE_ADDED_TO_DRAWING:
-                    handleFigureRemovedFromDrawing(f);
-                    break;
-                case SUBTREE_REMOVED_FROM_DRAWING:
-                    for (Figure d : f.preorderIterable()) {
-                        getSelectedFigures().remove(d);
-                    }
-                    repaint();
-                    break;
-                case NODE_CHANGED:
-                    handleNodeChanged(f);
-                    break;
                 case LAYOUT_CHANGED:
                     if (f == getDrawing()) {
                         invalidateConstrainerNode();
@@ -190,6 +185,41 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 case STYLE_CHANGED:
                     repaint();
                     break;
+                case PROPERTY_VALUE_CHANGED:
+                case LAYOUT_SUBJECT_CHANGED:
+                case TRANSFORM_CHANGED:
+                    break;
+                default:
+                    throw new UnsupportedOperationException(event.getEventType()
+                            + " not supported");
+            }
+        }
+
+    };
+    private final Listener<TreeModelEvent<Figure>> treeModelHandler = new Listener<TreeModelEvent<Figure>>() {
+
+        @Override
+        public void handle(TreeModelEvent<Figure> event) {
+            Figure f = event.getNode();
+            switch (event.getEventType()) {
+                case NODE_ADDED_TO_PARENT:
+                    handleFigureAdded(f);
+                    break;
+                case NODE_REMOVED_FROM_PARENT:
+                    handleFigureRemoved(f);
+                    break;
+                case NODE_ADDED_TO_TREE:
+                    handleFigureRemovedFromDrawing(f);
+                    break;
+                case NODE_REMOVED_FROM_TREE:
+                    for (Figure d : f.preorderIterable()) {
+                        getSelectedFigures().remove(d);
+                    }
+                    repaint();
+                    break;
+                case NODE_CHANGED:
+                    handleNodeChanged(f);
+                    break;
                 case ROOT_CHANGED:
                     handleDrawingChanged();
                     updateLayout();
@@ -198,10 +228,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 case SUBTREE_NODES_CHANGED:
                     handleSubtreeNodesChanged(f);
                     repaint();
-                    break;
-                case PROPERTY_VALUE_CHANGED:
-                case LAYOUT_SUBJECT_CHANGED:
-                case TRANSFORM_CHANGED:
                     break;
                 default:
                     throw new UnsupportedOperationException(event.getEventType()
@@ -717,7 +743,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         clearSelection();
         drawingPane.getChildren().clear();
         activeLayer.set(null);
-        Drawing d = getModel().getRoot();
+        Drawing d = getModel().getDrawing();
         drawing.set(d);
         if (d != null) {
             if (drawingImageView != null) {
@@ -762,12 +788,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private void handleNewDrawingModel(DrawingModel oldValue, DrawingModel newValue) {
         if (oldValue != null) {
             clearSelection();
-            oldValue.removeDrawingModelListener(modelHandler);
+            oldValue.removeTreeModelListener(treeModelHandler);
+            oldValue.removeDrawingModelListener(drawingModelHandler);
             oldValue.removeListener(modelInvalidationListener);
             drawing.setValue(null);
         }
         if (newValue != null) {
-            newValue.addDrawingModelListener(modelHandler);
+            newValue.addDrawingModelListener(drawingModelHandler);
+            newValue.addTreeModelListener(treeModelHandler);
             newValue.addListener(modelInvalidationListener);
             handleDrawingChanged();
             updateLayout();
