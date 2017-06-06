@@ -20,6 +20,7 @@ import javafx.collections.SetChangeListener;
  *
  * @author Werner Randelshofer
  * @version $$Id$$
+ * @param <E> the element type
  */
 public class ModifiableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 
@@ -118,8 +119,19 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
             }
         }
     }
-
+    
+    /**
+     * The method {@code invalidated()} can be overridden to receive
+     * invalidation notifications. This is the preferred option in
+     * {@code Objects} defining the property, because it requires less memory.
+     *
+     * The default implementation is empty.
+     */
+    protected void invalidated() {
+    }
+    
     private void fireInvalidated() {
+        invalidated();
         if (invalidationListeners != null) {
             for (InvalidationListener l : invalidationListeners) {
                 l.invalidated(this);
