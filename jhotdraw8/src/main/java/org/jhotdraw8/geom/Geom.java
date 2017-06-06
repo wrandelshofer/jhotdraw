@@ -980,7 +980,7 @@ public class Geom {
     /**
      * Gets a unit vector which is perpendicular to the given tangent vector.
      *
-     * @param tangentVector tangent vector
+     * @param tangent tangent vector
      * @return the perpendicular vector of length {@code 1}
      */
     public static Point2D perp(Point2D tangent) {

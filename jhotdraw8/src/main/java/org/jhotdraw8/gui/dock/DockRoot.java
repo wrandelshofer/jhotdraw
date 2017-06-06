@@ -44,6 +44,7 @@ import javafx.util.Duration;
  * <li>Dock: provides space for one or more dock items. Can hold zero or more
  * DockItems.</li>
  * <li>DockItem: represents an item of a Dock.</li>
+ * </ul>
  * <p>
  * <b>Drag and drop operations:</b>
  * <p>

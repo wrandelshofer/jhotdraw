@@ -23,7 +23,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
     private final static long serialVersionUID = 1L;
 
     private final CssMetaData<?, T> cssMetaData;
-    
+
     private final boolean nullable;
 
     /**
@@ -35,7 +35,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
      * @param mask The mask.
      */
     public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask) {
-        this(name, clazz, mask, true,null);
+        this(name, clazz, mask, true, null);
     }
 
     /**
@@ -45,14 +45,17 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
      * @param name The name of the key.
      * @param clazz The enum class.
      * @param mask The mask.
+     * @param nullable Whether the value is nullable
      * @param defaultValue The default value.
      */
-    public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask, boolean nullable,T defaultValue) {
+    public EnumStyleableFigureKey(String name, Class<T> clazz, DirtyMask mask, boolean nullable, T defaultValue) {
         super(name, clazz, mask, defaultValue);
-        
-        this.nullable=nullable;
-        
-        if (!nullable&&defaultValue==null)throw new IllegalArgumentException("defaultValue may only be null if nullable=true");
+
+        this.nullable = nullable;
+
+        if (!nullable && defaultValue == null) {
+            throw new IllegalArgumentException("defaultValue may only be null if nullable=true");
+        }
 
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<Styleable>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
@@ -73,7 +76,7 @@ public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T
     @Override
     public Converter<T> getConverter() {
         if (converter == null) {
-            converter = new CssEnumConverter<T>(getValueType(),nullable);
+            converter = new CssEnumConverter<T>(getValueType(), nullable);
         }
         return converter;
     }

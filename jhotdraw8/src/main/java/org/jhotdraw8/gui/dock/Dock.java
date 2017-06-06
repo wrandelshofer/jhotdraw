@@ -23,7 +23,9 @@ public interface Dock {
         return (Node) this;
     }
     
-    /** Returns true if the user may add and remove items. */
+    /** Returns true if the user may add and remove items.
+     * @return  true if editable by user
+     */
     boolean isEditable();
     
          ObjectProperty<Track> trackProperty();
