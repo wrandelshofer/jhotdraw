@@ -26,11 +26,22 @@ public class AbstractObservable implements Observable {
         invalidationListeners.add(listener);
     }
 
+    /**
+     * The method {@code invalidated()} can be overridden to receive
+     * invalidation notifications. This is the preferred option in
+     * {@code Objects} defining the property, because it requires less memory.
+     *
+     * The default implementation is empty.
+     */
+    protected void invalidated() {
+    }
+
     protected void fireInvalidated() {
         fireInvalidated(this);
     }
 
     protected void fireInvalidated(Observable o) {
+        invalidated();
         if (invalidationListeners != null) {
             for (InvalidationListener l : invalidationListeners) {
                 l.invalidated(o);
