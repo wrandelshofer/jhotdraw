@@ -66,19 +66,24 @@ public class SimpleIdFactory implements IdFactory {
         }
         return id;
     }
+
     public String createId(Object object, String prefix, String idx) {
         String existingId = objectToId.get(object);
         if (existingId == null) {
-            long pNextId = prefixToNextId.getOrDefault(prefix, 1L);
+            if (idx != null && !idToObject.containsKey(idx)) {
+                existingId = idx;
+            } else {
+                long pNextId = prefixToNextId.getOrDefault(prefix, 1L);
 
-            do { // XXX linear search
-                existingId = (prefix == null ? "" : prefix) + Long.toString(pNextId++);
-            } while (idToObject.containsKey(existingId));
+                do { // XXX linear search
+                    existingId = (prefix == null ? "" : prefix) + Long.toString(pNextId++);
+                } while (idToObject.containsKey(existingId));
+                prefixToNextId.put(prefix, pNextId);
+            }
             objectToId.put(object, existingId);
             idToObject.put(existingId, object);
-            prefixToNextId.put(prefix, pNextId);
-        }else{
-            
+        } else {
+
         }
         return existingId;
     }
