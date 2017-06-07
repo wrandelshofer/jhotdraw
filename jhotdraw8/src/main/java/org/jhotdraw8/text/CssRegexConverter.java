@@ -17,7 +17,7 @@ import org.jhotdraw8.io.IdFactory;
  *
  * Parses the following EBNF:
  * <pre>
- * Regex := "none" | Find , [ Replace ] ;
+ * Regex := "none" | "regex(" Find  ","   [ Replace ] ")" ;
  * Find := TT_STRING;
  * Replace := TT_STRING;
  * </pre>
@@ -32,7 +32,8 @@ public class CssRegexConverter implements Converter<Regex> {
 
     /**
      * Creates a new instance.
-     * @param nullable Whether the regular expression is nullable. 
+     *
+     * @param nullable Whether the regular expression is nullable.
      */
     public CssRegexConverter(boolean nullable) {
         this.nullable = nullable;
@@ -40,9 +41,9 @@ public class CssRegexConverter implements Converter<Regex> {
 
     @Override
     public String getHelpText() {
-         return "Format of ⟨RegReplace⟩: none | ⟨Match⟩ ⟨Replace⟩"
-                 +"\nFormat of ⟨Match⟩: \"match\""
-                 +"\nFormat of ⟨Replace⟩: \"replacement\"";
+        return "Format of ⟨RegReplace⟩: none | replace(⟨Match⟩, ⟨Replace⟩)"
+                + "\nFormat of ⟨Match⟩: \"match\""
+                + "\nFormat of ⟨Replace⟩: \"replacement\"";
     }
 
     @Override
@@ -60,13 +61,16 @@ public class CssRegexConverter implements Converter<Regex> {
             out.append("none");
             return;
         }
+        out.append("replace(");
+
         stringConverter.toString(out, find);
 
         String replace = value.getReplace();
         if (replace != null) {
-            out.append(' ');
+            out.append(", ");
             stringConverter.toString(out, replace);
         }
+        out.append(')');
     }
 
     @Override
@@ -77,17 +81,37 @@ public class CssRegexConverter implements Converter<Regex> {
         String replace = null;
 
         switch (tt.nextToken()) {
-            case CssTokenizer.TT_STRING:
-                find = tt.currentStringValue();
+            case CssTokenizer.TT_FUNCTION:
+                if ("replace".equals(tt.currentStringValue())) {
+                } else {
+                    throw new ParseException("\"replace(\" or \"none\" expected", tt.getStartPosition());
+                }
                 break;
             case CssTokenizer.TT_IDENT:
                 if ("none".equals(tt.currentStringValue())) {
+                    tt.skipWhitespace();
+                    in.position(tt.getStartPosition());
+                    return new Regex();
                 } else {
-                    throw new ParseException("find string or none expected", tt.getStartPosition());
+                    throw new ParseException("\"replace(\" or \"none\" expected", tt.getStartPosition());
                 }
+            default:
+                throw new ParseException("find string expected", tt.getStartPosition());
+        }
+        switch (tt.nextToken()) {
+            case CssTokenizer.TT_STRING:
+                find = tt.currentStringValue();
                 break;
             default:
                 throw new ParseException("find string expected", tt.getStartPosition());
+        }
+
+        switch (tt.nextToken()) {
+            case ',':
+                break;
+            default:
+                tt.pushBack();
+                break;
         }
 
         switch (tt.nextToken()) {
@@ -98,6 +122,12 @@ public class CssRegexConverter implements Converter<Regex> {
                 break;
             default:
                 throw new ParseException("replace string expected", tt.getStartPosition());
+        }
+        switch (tt.nextToken()) {
+            case ')':
+                break;
+            default:
+                throw new ParseException("closing bracket \")\" expected", tt.getStartPosition());
         }
         tt.skipWhitespace();
         in.position(tt.getStartPosition());
