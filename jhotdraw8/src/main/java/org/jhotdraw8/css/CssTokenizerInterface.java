@@ -100,8 +100,10 @@ public interface CssTokenizerInterface {
 
     Number currentNumericValue();
 
+    /** Returns the current string value. */
     String currentStringValue();
     
+    /** Returns the current token id. */
     int currentToken();
 
     int getLineNumber();
