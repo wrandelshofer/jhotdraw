@@ -54,9 +54,17 @@ public class SimpleFigureFactory implements FigureFactory {
     private final Map<String, Converter<?>> valueFromXML = new HashMap<>();
 
     private final Map<String, Converter<?>> valueToXML = new HashMap<>();
-    private IdFactory idFactory = new SimpleFigureIdFactory();
+    private IdFactory idFactory;
 
     public SimpleFigureFactory() {
+        this(new SimpleFigureIdFactory());
+    }
+
+    public SimpleFigureFactory(IdFactory idFactory) {
+        if (idFactory == null) {
+            throw new IllegalArgumentException("idFactory is null");
+        }
+        this.idFactory = idFactory;
     }
 
     /**
@@ -322,8 +330,6 @@ public class SimpleFigureFactory implements FigureFactory {
         keyToAttr.clear();
     }
 
-
-
     @Override
     public MapAccessor<?> elementNameToKey(Figure f, String attributeName) throws IOException {
         HashMap<String, MapAccessor<?>> strToKey = elemToKey.get(f.getClass());
@@ -371,6 +377,14 @@ public class SimpleFigureFactory implements FigureFactory {
         } else {
             return key.getDefaultValue();
         }
+    }
+
+    public IdFactory getIdFactory() {
+        return idFactory;
+    }
+
+    public void setIdFactory(IdFactory idFactory) {
+        this.idFactory = idFactory;
     }
 
     /**
@@ -481,8 +495,6 @@ public class SimpleFigureFactory implements FigureFactory {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
-
-
 
     /**
      * Globally removes the specified key.
@@ -633,4 +645,5 @@ public class SimpleFigureFactory implements FigureFactory {
         }
 
     }
+
 }
