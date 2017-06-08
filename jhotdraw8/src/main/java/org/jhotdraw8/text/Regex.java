@@ -54,6 +54,9 @@ public class Regex {
      * @return the replaced string
      */
     public String apply(String str) {
+        if (str == null) {
+            return str;
+        }
         if (find == null) {
             return replace == null ? str : replace;
         }
