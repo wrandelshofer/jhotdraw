@@ -153,7 +153,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Paintable.class, new XmlPaintableConverter());
         addConverterForType(CssColor.class, new XmlCColorConverter(true));
         addConverterForType(Boolean.class, new XmlBooleanConverter());
-        addConverterForType(TextAlignment.class, new XmlEnumConverter<TextAlignment>(TextAlignment.class));
+        addConverterForType(TextAlignment.class, new XmlEnumConverter<>(TextAlignment.class));
         addConverterForType(CombinedPathFigure.CagOperation.class, new XmlEnumConverter<CombinedPathFigure.CagOperation>(CombinedPathFigure.CagOperation.class));
         addConverterForType(VPos.class, new XmlEnumConverter<>(VPos.class));
         addConverterForType(HPos.class, new XmlEnumConverter<>(HPos.class));
@@ -161,7 +161,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Rectangle2D.class, new XmlRectangle2DConverter());
         addConverterForType(BlendMode.class, new XmlEnumConverter<>(BlendMode.class));
         addConverterForType(Effect.class, new XmlEffectConverter());
-        addConverterForType(Figure.class, new XmlObjectReferenceConverter());
+        addConverterForType(Figure.class, new XmlObjectReferenceConverter<>());
         addConverterForType(CssSize.class, new CssSizeConverter());
         addConverterForType(CssSizeInsets.class, new CssSizeInsetsConverter());
         addConverterForType(CssSize2D.class, new CssSize2DConverter());
