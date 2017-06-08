@@ -51,6 +51,7 @@ import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
 import org.jhotdraw8.draw.figure.SliceFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
+import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.CssColor;
 import org.jhotdraw8.text.XmlConnectorConverter;
 import org.jhotdraw8.text.DefaultConverter;
@@ -95,6 +96,10 @@ import org.jhotdraw8.text.XmlTransformListConverter;
 public class DefaultFigureFactory extends SimpleFigureFactory {
 
     public DefaultFigureFactory() {
+        this(new SimpleFigureIdFactory());
+    }
+    public DefaultFigureFactory(IdFactory idFactory){
+        super(idFactory);
         addFigureKeysAndNames("Layer", SimpleLayer.class);
         addFigureKeysAndNames("Clipping", SimpleClipping.class);
         addFigureKeysAndNames("Rectangle", RectangleFigure.class);
@@ -161,7 +166,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Rectangle2D.class, new XmlRectangle2DConverter());
         addConverterForType(BlendMode.class, new XmlEnumConverter<>(BlendMode.class));
         addConverterForType(Effect.class, new XmlEffectConverter());
-        addConverterForType(Figure.class, new XmlObjectReferenceConverter<>());
+        addConverterForType(Figure.class, new XmlObjectReferenceConverter<>(Figure.class));
         addConverterForType(CssSize.class, new CssSizeConverter());
         addConverterForType(CssSizeInsets.class, new CssSizeInsetsConverter());
         addConverterForType(CssSize2D.class, new CssSize2DConverter());
