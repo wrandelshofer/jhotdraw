@@ -76,7 +76,7 @@ import org.jhotdraw8.text.XmlDoubleConverter;
 import org.jhotdraw8.text.XmlEffectConverter;
 import org.jhotdraw8.text.XmlEnumConverter;
 import org.jhotdraw8.text.XmlFFontConverter;
-import org.jhotdraw8.text.XmlFigureReferenceConverter;
+import org.jhotdraw8.text.XmlObjectReferenceConverter;
 import org.jhotdraw8.text.XmlInsetsConverter;
 import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.XmlBezierNodeListConverter;
@@ -161,7 +161,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(Rectangle2D.class, new XmlRectangle2DConverter());
         addConverterForType(BlendMode.class, new XmlEnumConverter<>(BlendMode.class));
         addConverterForType(Effect.class, new XmlEffectConverter());
-        addConverterForType(Figure.class, new XmlFigureReferenceConverter());
+        addConverterForType(Figure.class, new XmlObjectReferenceConverter());
         addConverterForType(CssSize.class, new CssSizeConverter());
         addConverterForType(CssSizeInsets.class, new CssSizeInsetsConverter());
         addConverterForType(CssSize2D.class, new CssSize2DConverter());
