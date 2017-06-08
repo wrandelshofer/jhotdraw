@@ -19,15 +19,34 @@ import org.jhotdraw8.io.IdFactory;
  */
 public class XmlObjectReferenceConverter<T> implements Converter<T> {
 
+    private final Class<T> clazz;
+
+    /** 
+     * Creates a new instance
+     * @param clazz the type class
+     * @throws IllegalArgumentException if clazz is null
+     */
+    public XmlObjectReferenceConverter(Class<T> clazz) {
+        if (clazz==null)throw new IllegalArgumentException("clazz is null");
+        this.clazz = clazz;
+    }
+
     @Override
     public void toString(Appendable out, IdFactory idFactory, T value) throws IOException {
-        out.append(idFactory.getId(value));
+        out.append(value == null ? "none" : idFactory.getId(value));
     }
 
     @Override
     public T fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         String str = buf.toString();
-        return (T) idFactory.getObject(str);
+        if ("none".equals(str)) {
+            return null;
+        }
+        Object obj = idFactory.getObject(str);
+
+        @SuppressWarnings("unchecked")
+        T value = clazz.isInstance(obj) ? (T) obj : null;
+        return value;
     }
 
     @Override
