@@ -24,14 +24,14 @@ public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> 
     }
 
     @Override
-    public V getValue() {
+    public V get() {
         @SuppressWarnings("unchecked")
         V ret = accessor.get(map);
         return ret;
     }
 
     @Override
-    public void setValue(V value) {
+    public void set(V value) {
         if (value != null && !tClazz.isAssignableFrom(value.getClass())) {
             throw new IllegalArgumentException("value is not assignable " + value);
         }
@@ -39,6 +39,6 @@ public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> 
 
         // Note: super must be called after "put", so that listeners
         //       can be properly informed.
-        super.setValue(value);
+        super.set(value);
     }
 }
