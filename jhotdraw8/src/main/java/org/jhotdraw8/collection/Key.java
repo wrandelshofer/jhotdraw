@@ -190,7 +190,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @param map a map
      * @return a property for the map entry
      */
-    default Property<T> propertyAt(final ObservableMap<Key<?>, Object> map) {
+    default ObjectProperty<T> propertyAt(final ObservableMap<Key<?>, Object> map) {
         return new KeyMapEntryProperty<>(map, this);
     }
 
