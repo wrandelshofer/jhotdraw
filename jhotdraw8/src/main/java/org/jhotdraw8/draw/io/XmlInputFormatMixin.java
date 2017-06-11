@@ -4,14 +4,21 @@
  */
 package org.jhotdraw8.draw.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.w3c.dom.Document;
@@ -67,4 +74,16 @@ public interface XmlInputFormatMixin {
 
     Figure read(Document in, Drawing drawing) throws IOException;
 
+    static void validateXML(URI xmlUri, URI schemaUri) throws IOException {
+        Source xmlFile = new StreamSource(new File(xmlUri));
+        SchemaFactory schemaFactory = SchemaFactory
+                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try {
+            Schema schema = schemaFactory.newSchema(new File(schemaUri));
+            Validator validator = schema.newValidator();
+            validator.validate(xmlFile);
+        } catch (SAXException e) {
+            throw new IOException(e);
+        }
+    }
 }
