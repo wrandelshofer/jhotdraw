@@ -11,6 +11,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -31,14 +32,11 @@ import org.w3c.dom.Document;
  */
 public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriMixin {
 
-
-
     default Document toDocument(Drawing drawing) throws IOException {
         return toDocument(drawing, drawing.getChildren());
     }
 
     Document toDocument(Drawing drawing, Collection<Figure> selection) throws IOException;
-
 
     @Override
     default void write(File file, Drawing drawing) throws IOException {
@@ -50,7 +48,11 @@ public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriM
 
     default void write(File file, Document doc) throws TransformerFactoryConfigurationError, IOException {
         try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
+            final TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer t = factory.newTransformer();
+            t.setOutputProperty(OutputKeys.INDENT, "yes");
+            t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(file);
             t.transform(source, result);
@@ -71,7 +73,11 @@ public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriM
 
     default void write(OutputStream out, Document doc) throws IOException {
         try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
+            final TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer t = factory.newTransformer();
+            t.setOutputProperty(OutputKeys.INDENT, "yes");
+            t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(out);
             t.transform(source, result);
