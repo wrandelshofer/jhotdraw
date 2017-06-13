@@ -33,79 +33,10 @@ import org.jhotdraw8.draw.figure.Figure;
  */
 public class GridConstrainer extends AbstractConstrainer {
 
-    private final Group node = new Group();
-    private final Path minorNode = new Path();
-    private final Path majorNode = new Path();
-
     /**
      * Up-Vector.
      */
     private final Point2D UP = new Point2D(0, 1);
-
-    /**
-     * The x-origin of the grid.
-     */
-    private final DoubleProperty x = new SimpleDoubleProperty(this, "x") {
-
-        @Override
-        public void invalidated() {
-            fireInvalidated();
-        }
-    };
-
-    /**
-     * The y-origin of the grid.
-     */
-    private final DoubleProperty y = new SimpleDoubleProperty(this, "y") {
-
-        @Override
-        public void invalidated() {
-            fireInvalidated();
-        }
-    };
-
-    /**
-     * The x-factor for the major grid of the grid.
-     */
-    private final IntegerProperty majorY = new SimpleIntegerProperty(this, "major-y", 5) {
-
-        @Override
-        public void invalidated() {
-            fireInvalidated();
-        }
-    };
-    /**
-     * The x-factor for the major grid of the grid.
-     */
-    private final IntegerProperty majorX = new SimpleIntegerProperty(this, "major-x", 5) {
-
-        @Override
-        public void invalidated() {
-            fireInvalidated();
-        }
-    };
-    /**
-     * Width of a grid cell. The value 0 turns the constrainer off for the
-     * horizontal axis.
-     */
-    private final DoubleProperty width = new SimpleDoubleProperty(this, "width") {
-
-        @Override
-        public void invalidated() {
-            fireInvalidated();
-        }
-    };
-    /**
-     * Height of a grid cell. The value 0 turns the constrainer off for the
-     * vertical axis.
-     */
-    private final DoubleProperty height = new SimpleDoubleProperty(this, "height") {
-
-        @Override
-        public void invalidated() {
-            fireInvalidated();
-        }
-    };
     /**
      * The angle for constrained rotations on the grid (in degrees). The value 0
      * turns the constrainer off for rotations.
@@ -128,9 +59,74 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
     /**
+     * Height of a grid cell. The value 0 turns the constrainer off for the
+     * vertical axis.
+     */
+    private final DoubleProperty height = new SimpleDoubleProperty(this, "height") {
+
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+    private final Path majorNode = new Path();
+    /**
+     * The x-factor for the major grid of the grid.
+     */
+    private final IntegerProperty majorX = new SimpleIntegerProperty(this, "major-x", 5) {
+
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+    /**
+     * The x-factor for the major grid of the grid.
+     */
+    private final IntegerProperty majorY = new SimpleIntegerProperty(this, "major-y", 5) {
+
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+    private final Path minorNode = new Path();
+    private final Group node = new Group();
+    /**
      * Whether to snap to the grid.
      */
     private final BooleanProperty snapToGrid = new SimpleBooleanProperty(this, "snapToGrid", true) {
+
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+    /**
+     * Width of a grid cell. The value 0 turns the constrainer off for the
+     * horizontal axis.
+     */
+    private final DoubleProperty width = new SimpleDoubleProperty(this, "width") {
+
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+    /**
+     * The x-origin of the grid.
+     */
+    private final DoubleProperty x = new SimpleDoubleProperty(this, "x") {
+
+        @Override
+        public void invalidated() {
+            fireInvalidated();
+        }
+    };
+    /**
+     * The y-origin of the grid.
+     */
+    private final DoubleProperty y = new SimpleDoubleProperty(this, "y") {
 
         @Override
         public void invalidated() {
@@ -180,6 +176,77 @@ public class GridConstrainer extends AbstractConstrainer {
         this.majorY.set(majory);
 
         node.getChildren().addAll(minorNode, majorNode);
+    }
+
+    public DoubleProperty angleProperty() {
+        return angle;
+    }
+
+    public BooleanProperty drawGridProperty() {
+        return drawGrid;
+    }
+
+    public double getHeight() {
+        return height.get();
+    }
+
+    public int getMajorX() {
+        return majorX.get();
+    }
+
+    public int getMajorY() {
+        return majorY.get();
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    public double getWidth() {
+        return width.get();
+    }
+
+    public DoubleProperty heightProperty() {
+        return height;
+    }
+
+    public IntegerProperty majorXProperty() {
+        return majorX;
+    }
+
+    public IntegerProperty majorYProperty() {
+        return majorY;
+    }
+
+    public BooleanProperty snapToGridProperty() {
+        return snapToGrid;
+    }
+
+    @Override
+    public double translateAngle(Figure f, double angle, double dir) {
+        if (!snapToGrid.get()) {
+            return angle;
+        }
+
+        double cAngle = this.angle.get();
+
+        if (cAngle == 0) {
+            return angle;
+        }
+
+        double ta = angle / cAngle;
+
+        if (Double.isNaN(dir) || dir == 0) {
+            ta = round(ta);
+        } else if (dir < 0) {
+            ta = floor(ta + 1);
+        } else {
+            ta = ceil(ta - 1);
+        }
+
+        double result = (ta * cAngle) % 360;
+        return result < 0 ? 360 + result : result;
     }
 
     @Override
@@ -245,37 +312,6 @@ public class GridConstrainer extends AbstractConstrainer {
         }
 
         return new Rectangle2D(tx * cwidth + cx, ty * cheight + cy, r.getWidth(), r.getHeight());
-    }
-
-    @Override
-    public double translateAngle(Figure f, double angle, double dir) {
-        if (!snapToGrid.get()) {
-            return angle;
-        }
-
-        double cAngle = this.angle.get();
-
-        if (cAngle == 0) {
-            return angle;
-        }
-
-        double ta = angle / cAngle;
-
-        if (Double.isNaN(dir) || dir == 0) {
-            ta = round(ta);
-        } else if (dir < 0) {
-            ta = floor(ta + 1);
-        } else {
-            ta = ceil(ta - 1);
-        }
-
-        double result = (ta * cAngle) % 360;
-        return result < 0 ? 360 + result : result;
-    }
-
-    @Override
-    public Node getNode() {
-        return node;
     }
 
     @Override
@@ -379,40 +415,16 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     }
 
+    public DoubleProperty widthProperty() {
+        return width;
+    }
+
     public DoubleProperty xProperty() {
         return x;
     }
 
     public DoubleProperty yProperty() {
         return y;
-    }
-
-    public DoubleProperty widthProperty() {
-        return width;
-    }
-
-    public DoubleProperty heightProperty() {
-        return height;
-    }
-
-    public DoubleProperty angleProperty() {
-        return angle;
-    }
-
-    public BooleanProperty drawGridProperty() {
-        return drawGrid;
-    }
-
-    public BooleanProperty snapToGridProperty() {
-        return snapToGrid;
-    }
-
-    public IntegerProperty majorYProperty() {
-        return majorY;
-    }
-
-    public IntegerProperty majorXProperty() {
-        return majorX;
     }
 
 }
