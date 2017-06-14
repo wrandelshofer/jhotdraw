@@ -52,14 +52,14 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
     }
 
     @Override
-    public T getValue() {
+    public T get() {
         @SuppressWarnings("unchecked")
         T temp = (T) map.get(key);
         return temp;
     }
 
     @Override
-    public void setValue(T value) {
+    public void set(T value) {
         if (value != null && !tClazz.isAssignableFrom(value.getClass())) {
             throw new IllegalArgumentException("value is not assignable " + value);
         }
