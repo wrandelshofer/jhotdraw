@@ -68,7 +68,7 @@ public class MapEntryProperty<K, V, T extends V> extends ReadOnlyObjectWrapper<T
 
         // Note: super must be called after "put", so that listeners
         //       can be properly informed.
-        super.setValue(value);
+        super.set(value);
     }
 
     @Override
