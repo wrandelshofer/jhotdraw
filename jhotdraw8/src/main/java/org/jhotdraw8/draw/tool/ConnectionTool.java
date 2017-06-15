@@ -19,6 +19,7 @@ import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
+import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.util.ReversedList;
 
 /**
@@ -44,13 +45,22 @@ public class ConnectionTool extends AbstractTool {
      */
     private double minSize = 2;
 
+    private HandleType handleType = null;
+
     public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory) {
         this(name, rsrc, figureFactory, SimpleLayer::new);
     }
 
     public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory,
             Supplier<Layer> layerFactory) {
+        this(name, rsrc, null, figureFactory, layerFactory);
+
+    }
+
+    public ConnectionTool(String name, Resources rsrc, HandleType handleType, Supplier<ConnectingFigure> figureFactory,
+            Supplier<Layer> layerFactory) {
         super(name, rsrc);
+        this.handleType = handleType;
         this.figureFactory = figureFactory;
         this.layerFactory = layerFactory;
     }
@@ -118,7 +128,7 @@ public class ConnectionTool extends AbstractTool {
                             ConnectableFigure cff = (ConnectableFigure) ff;
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                             if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                                newConnector = cff.findConnector( cff.worldToLocal(constrainedPoint), figure);
+                                newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure);
                                 if (newConnector != null && figure.canConnect(ff, newConnector)) {
                                     newConnectionTarget = ff;
                                     break;
@@ -140,6 +150,9 @@ public class ConnectionTool extends AbstractTool {
     protected void handleMousePressed(MouseEvent event, DrawingView view) {
         requestFocus();
         figure = figureFactory.get();
+        if (handleType != null) {
+            view.setHandleType(handleType);
+        }
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
         Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, unconstrainedPoint);
