@@ -46,8 +46,9 @@ public class SimpleDrawing extends AbstractCompositeFigure
 
     public SimpleDrawing() {
     }
+
     public SimpleDrawing(double width, double height) {
-        set(WIDTH,width);
+        set(WIDTH, width);
         set(HEIGHT, height);
     }
 
@@ -59,6 +60,60 @@ public class SimpleDrawing extends AbstractCompositeFigure
         background.setId("background");
         g.getProperties().put("background", background);
         return g;
+    }
+
+    protected StylesheetsManager<Figure> createStyleManager() {
+        return new SimpleStylesheetsManager<>(new FigureSelectorModel());
+    }
+
+    /**
+     * The bounds of this drawing is determined by its {@code WIDTH} and and
+     * {@code HEIGHT}.
+     * <p>
+     * The bounds of its child figures does not affect the bounds of this
+     * drawing.
+     *
+     * @return bounding box (0, 0, WIDTH, HEIGHT).
+     */
+    @Override
+    public Bounds getBoundsInLocal() {
+        return new BoundingBox(0.0, 0.0, get(WIDTH), get(HEIGHT));
+
+    }
+
+    @Override
+    public StylesheetsManager<Figure> getStyleManager() {
+        if (styleManager == null) {
+            styleManager = createStyleManager();
+            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
+        }
+        return styleManager;
+    }
+
+    @Override
+    public void reshapeInLocal(Transform transform) {
+        Bounds b = getBoundsInLocal();
+        b = transform.transform(b);
+        reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+    }
+
+    @Override
+    public void reshapeInLocal(double x, double y, double width, double height) {
+
+        set(WIDTH, abs(width));
+        set(HEIGHT, abs(height));
+    }
+
+    @Override
+    public void stylesheetNotify() {
+        if (styleManager != null) {
+            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
+        }
+        super.stylesheetNotify();
     }
 
     @Override
@@ -88,60 +143,6 @@ public class SimpleDrawing extends AbstractCompositeFigure
         if (!group.equals(nodes)) {
             group.setAll(nodes);
         }
-    }
-
-    /**
-     * The bounds of this drawing is determined by its {@code WIDTH} and and
-     * {@code HEIGHT}.
-     * <p>
-     * The bounds of its child figures does not affect the bounds of this
-     * drawing.
-     *
-     * @return bounding box (0, 0, WIDTH, HEIGHT).
-     */
-    @Override
-    public Bounds getBoundsInLocal() {
-        return new BoundingBox(0.0, 0.0, get(WIDTH), get(HEIGHT));
-
-    }
-
-    @Override
-    public void reshapeInLocal(Transform transform) {
-        Bounds b = getBoundsInLocal();
-        b = transform.transform(b);
-        reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
-    }
-
-    @Override
-    public void reshapeInLocal(double x, double y, double width, double height) {
-
-        set(WIDTH, abs(width));
-        set(HEIGHT, abs(height));
-    }
-
-    @Override
-    public StylesheetsManager<Figure> getStyleManager() {
-        if (styleManager == null) {
-            styleManager = createStyleManager();
-            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
-            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
-            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
-        }
-        return styleManager;
-    }
-
-    protected StylesheetsManager<Figure> createStyleManager() {
-        return new SimpleStylesheetsManager<>(new FigureSelectorModel());
-    }
-
-    @Override
-    public void stylesheetNotify() {
-        if (styleManager != null) {
-            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS));
-            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS));
-            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS));
-        }
-        super.stylesheetNotify();
     }
 
 }
