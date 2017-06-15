@@ -64,10 +64,6 @@ public class RectangleFigure extends AbstractLeafFigure
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    private Shape getBounds() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
