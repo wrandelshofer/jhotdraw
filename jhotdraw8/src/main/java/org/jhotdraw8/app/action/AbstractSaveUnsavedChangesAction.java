@@ -93,9 +93,10 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                     new ButtonType(labels.getString("file.saveBefore.dontSaveOption.text"), ButtonBar.ButtonData.NO)//
                 };
 
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                final Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                         labels.getString("file.saveBefore.doYouWantToSave.details"),
                         options);
+                alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.saveBefore.doYouWantToSave.message",//
                         v.getTitle(), v.getDisambiguation()));
 
@@ -183,6 +184,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
+                            alert.getDialogPane().setMaxWidth(640.0);
                             alert.showAndWait();
                             continue Outer;
                         }
@@ -215,6 +217,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         ((message == null) ? "" : message));
+                alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
                 alert.showAndWait();
                 v.removeDisabler(this);

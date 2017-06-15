@@ -39,8 +39,9 @@ public class GroupAction extends AbstractSelectedAction {
      * @param groupFactory the group factory
      */
     public GroupAction(Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
-        this(ID,app,editor,groupFactory);
+        this(ID, app, editor, groupFactory);
     }
+
     public GroupAction(String id, Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
         super(app, editor);
         Resources labels
@@ -66,7 +67,9 @@ public class GroupAction extends AbstractSelectedAction {
     public static void group(DrawingView view, Collection<Figure> figures, Supplier<Figure> groupFactory) {
         // We don't add an empty group
         if (figures.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be grouped").showAndWait();
+            final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be grouped");
+            alert.getDialogPane().setMaxWidth(640.0);
+            alert.showAndWait();
             return;
         }
         Figure first = figures.iterator().next();
@@ -75,18 +78,24 @@ public class GroupAction extends AbstractSelectedAction {
         for (Figure child : figures) {
             if (child instanceof Layer) {
                 // FIXME internationalize me
-                new Alert(Alert.AlertType.INFORMATION, "Layers can not be grouped").showAndWait();
+                final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Layers can not be grouped");
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.showAndWait();
                 return;
             }
             if (child.getDrawing() != drawing) {
                 // FIXME internationalize me
-                new Alert(Alert.AlertType.INFORMATION, " Only figures in primary drawing can be grouped").showAndWait();
+                final Alert alert = new Alert(Alert.AlertType.INFORMATION, " Only figures in primary drawing can be grouped");
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.showAndWait();
                 return;
             }
             Figure parent = child.getParent();
             if (parent != null && (!parent.isEditable() || !parent.isDecomposable())) {
                 // FIXME internationalize me
-                new Alert(Alert.AlertType.INFORMATION, "Only figures in editable and decomposable parents can be grouped").showAndWait();
+                final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Only figures in editable and decomposable parents can be grouped");
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.showAndWait();
                 return;
             }
         }

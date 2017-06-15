@@ -98,6 +98,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
+                alert.getDialogPane().setMaxWidth(640.0);
                             alert.showAndWait();
                             continue Outer;
                         }
@@ -147,6 +148,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         ((message == null) ? "" : message));
+                alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
                 alert.showAndWait();
                 project.removeDisabler(this);

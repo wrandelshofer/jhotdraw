@@ -60,6 +60,7 @@ public class PrintFileAction extends AbstractProjectAction<DocumentProject> {
             project.print(job).thenRun(() -> project.removeDisabler(this));
         } else {
             Alert alert = new Alert(AlertType.INFORMATION, "Sorry, no printer found");
+                alert.getDialogPane().setMaxWidth(640.0);
             alert.show();
             project.removeDisabler(this);
         }

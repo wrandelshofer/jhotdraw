@@ -40,7 +40,7 @@ public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
      * @param project the view
      */
     public RevertFileAction(Application app, DocumentProject project) {
-        super(app, project,DocumentProject.class);
+        super(app, project, DocumentProject.class);
         Resources.getResources("org.jhotdraw8.app.Labels").configureAction(this, ID);
     }
 
@@ -53,6 +53,7 @@ public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
         if (project.isModified()) {
             Alert alert = new Alert(Alert.AlertType.WARNING,
                     "Do you want to revert?\nYou will lose your changes when you revert.", ButtonType.YES, ButtonType.CANCEL);
+            alert.getDialogPane().setMaxWidth(640.0);
             Optional<ButtonType> answer = alert.showAndWait();
             if (answer.isPresent() && answer.get() == ButtonType.YES) {
                 doIt(project, uri);
@@ -67,7 +68,9 @@ public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
 
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {
             if (throwable != null) {
-                new Alert(Alert.AlertType.ERROR, throwable.getLocalizedMessage() == null ? throwable.toString() : throwable.getLocalizedMessage()).showAndWait();
+                Alert alert = new Alert(Alert.AlertType.ERROR, throwable.getLocalizedMessage() == null ? throwable.toString() : throwable.getLocalizedMessage());
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.showAndWait();
                 throwable.printStackTrace();
             }
             view.clearModified();
@@ -78,7 +81,7 @@ public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
         if (uri == null) {
             view.clear().handle(handler);
         } else {
-            view.read(uri, null, null,false).handle(handler);
+            view.read(uri, null, null, false).handle(handler);
         }
     }
 

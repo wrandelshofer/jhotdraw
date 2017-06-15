@@ -48,8 +48,10 @@ public class DocumentApplication extends AbstractApplication {
             if (ex != null) {
                 ex.printStackTrace();
                 Resources labels = getLabels();
-                new Alert(Alert.AlertType.ERROR,
-                        labels.getString("application.createView.error")).showAndWait();
+                Alert alert=new Alert(Alert.AlertType.ERROR,
+                        labels.getString("application.createView.error"));
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.showAndWait();
             };
             stage.close();
             return null;

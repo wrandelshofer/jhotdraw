@@ -163,6 +163,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
                         final Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                         Alert alert = new Alert(Alert.AlertType.ERROR,
                                 labels.getString("application.createView.error"));
+                        alert.getDialogPane().setMaxWidth(640.0);
                         alert.show();
                     }
                     return v;
@@ -421,8 +422,10 @@ public class DocumentOrientedApplication extends AbstractApplication {
             DocumentProject v = (DocumentProject) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
-                new Alert(Alert.AlertType.ERROR,
-                        labels.getString("application.createView.error")).show();
+                final Alert alert = new Alert(Alert.AlertType.ERROR,
+                        labels.getString("application.createView.error"));
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.show();
                 return;
             }
             add(v);
@@ -430,17 +433,21 @@ public class DocumentOrientedApplication extends AbstractApplication {
             v.clear().whenComplete((result, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();
-                    new Alert(Alert.AlertType.ERROR,
-                            labels.getString("application.createView.error")).show();
+                    final Alert alert = new Alert(Alert.AlertType.ERROR,
+                            labels.getString("application.createView.error"));
+                    alert.getDialogPane().setMaxWidth(640.0);
+                    alert.show();
                 } else {
                     v.removeDisabler(this);
                 }
             });
-        }).handle((v,ex) -> {
+        }).handle((v, ex) -> {
             ex.printStackTrace();
-            new Alert(Alert.AlertType.ERROR,
-                    labels.getString("application.createView.error")).showAndWait();
-           exit();
+            final Alert alert = new Alert(Alert.AlertType.ERROR,
+                    labels.getString("application.createView.error"));
+            alert.getDialogPane().setMaxWidth(640.0);
+            alert.showAndWait();
+            exit();
             return null;
         }
         );

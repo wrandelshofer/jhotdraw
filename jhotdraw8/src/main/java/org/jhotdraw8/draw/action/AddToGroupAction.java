@@ -53,33 +53,44 @@ public class AddToGroupAction extends AbstractSelectedAction {
     public static void addToGroup(DrawingView view, List<Figure> figures) {
         if (figures.size() < 2) {
             // FIXME internationalize me
-            new Alert(Alert.AlertType.INFORMATION, "You must select the figures and a group to which the figures should be added").showAndWait();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "You must select the figures and a group to which the figures should be added");
+            alert.getDialogPane().setMaxWidth(640.0);
+            alert.showAndWait();
             return;
         }
-        Figure lead = figures.get(figures.size()-1);
+        Figure lead = figures.get(figures.size() - 1);
         if (!(lead instanceof Grouping) && !lead.isAllowsChildren() || !lead.isDecomposable()) {
             // FIXME internationalize me
-            new Alert(Alert.AlertType.INFORMATION, "The last figure in the selection must be a group.").showAndWait();
+            final Alert alert = new Alert(Alert.AlertType.INFORMATION, "The last figure in the selection must be a group.");
+            alert.getDialogPane().setMaxWidth(640.0);
+            alert.showAndWait();
             return;
         }
         if (!lead.isEditable()) {
             // FIXME internationalize me
-            new Alert(Alert.AlertType.INFORMATION, "The last figure in the selection is not editable.").showAndWait();
+            final Alert alert = new Alert(Alert.AlertType.INFORMATION, "The last figure in the selection is not editable.");
+            alert.getDialogPane().setMaxWidth(640.0);
+            alert.showAndWait();
             return;
         }
 
         List<Figure> reparentableFigures = new ArrayList<>();
-        for (int i = 0, n = figures.size()-1; i < n; i++) {
+        for (int i = 0, n = figures.size() - 1; i < n; i++) {
             Figure f = figures.get(i);
             if (f.isEditable() && f.isSuitableParent(lead) && (f.getParent() != null && f.getParent().isEditable() && f.getParent().isDecomposable())) {
                 reparentableFigures.add(f);
             } else {
-                if ((f instanceof StyleableFigure)&&f.get(StyleableFigure.ID)!=null) {
-                // FIXME internationalize me
-                    new Alert(Alert.AlertType.INFORMATION, "The figure with id \""+f.get(StyleableFigure.ID)+"\" can not be added to the group.").showAndWait();
+                if ((f instanceof StyleableFigure) && f.get(StyleableFigure.ID) != null) {
+                    // FIXME internationalize me
+                    final Alert alert = new Alert(Alert.AlertType.INFORMATION, "The figure with id \"" + f.get(StyleableFigure.ID) + "\" can not be added to the group.");
+                    alert.getDialogPane().setMaxWidth(640.0);
+
+                    alert.showAndWait();
                 } else {
-                // FIXME internationalize me
-                    new Alert(Alert.AlertType.INFORMATION, "One of the selected figures can not be added to the group.").showAndWait();
+                    // FIXME internationalize me
+                    final Alert alert = new Alert(Alert.AlertType.INFORMATION, "One of the selected figures can not be added to the group.");
+                    alert.getDialogPane().setMaxWidth(640.0);
+                    alert.showAndWait();
                 }
                 return;
             }

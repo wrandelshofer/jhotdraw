@@ -57,30 +57,39 @@ public class RemoveFromGroupAction extends AbstractSelectedAction {
         for (Figure f : figures) {
             Layer layer = f.getAncestor(Layer.class);
             if (layer.isEditable()) {
-    if                    (f.getParent() != null && f.getParent().isDecomposable()
-                        && f.getParent().isEditable()&&(f.getParent()instanceof Grouping)) {
-                if (f.isEditable()) {
-                    reparentableFigures.add(f);
+                if (f.getParent() != null && f.getParent().isDecomposable()
+                        && f.getParent().isEditable() && (f.getParent() instanceof Grouping)) {
+                    if (f.isEditable()) {
+                        reparentableFigures.add(f);
+                    } else {
+                        if ((f instanceof StyleableFigure) && f.get(StyleableFigure.ID) != null) {
+                            // FIXME internationalize me
+                            final Alert alert = new Alert(Alert.AlertType.INFORMATION, "The figure with id \"" + f.get(StyleableFigure.ID) + "\" can not be removed from the group.");
+                            alert.getDialogPane().setMaxWidth(640.0);
+                            alert.showAndWait();
+                        } else {
+                            // FIXME internationalize me
+                            final Alert alert = new Alert(Alert.AlertType.INFORMATION, "One of the selected figures can not be removed from the group.");
+                            alert.getDialogPane().setMaxWidth(640.0);
+                            alert.showAndWait();
+                        }
+                        return;
+                    }
                 } else {
                     if ((f instanceof StyleableFigure) && f.get(StyleableFigure.ID) != null) {
                         // FIXME internationalize me
-                        new Alert(Alert.AlertType.INFORMATION, "The figure with id \"" + f.get(StyleableFigure.ID) + "\" can not be removed from the group.").showAndWait();
+                        final Alert alert = new Alert(Alert.AlertType.INFORMATION, "The figure with id \"" + f.get(StyleableFigure.ID) + "\" is not inside an editable group.");
+                        alert.getDialogPane().setMaxWidth(640.0);
+                        alert.showAndWait();
                     } else {
                         // FIXME internationalize me
-                        new Alert(Alert.AlertType.INFORMATION, "One of the selected figures can not be removed from the group.").showAndWait();
+                        final Alert alert = new Alert(Alert.AlertType.INFORMATION, "One of the selected figures is not inside an editable group.");
+                        alert.getDialogPane().setMaxWidth(640.0);
+                        alert.showAndWait();
                     }
                     return;
                 }
-            }else{
-                    if ((f instanceof StyleableFigure) && f.get(StyleableFigure.ID) != null) {
-                        // FIXME internationalize me
-                        new Alert(Alert.AlertType.INFORMATION, "The figure with id \"" + f.get(StyleableFigure.ID) + "\" is not inside an editable group.").showAndWait();
-                    } else {
-                        // FIXME internationalize me
-                        new Alert(Alert.AlertType.INFORMATION, "One of the selected figures is not inside an editable group.").showAndWait();
-                    }
-                    return;
-                    }}
+            }
         }
 
         DrawingModel m = view.getModel();

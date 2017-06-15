@@ -74,7 +74,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             // Search for an empty view
             DocumentProject emptyView;
             if (reuseEmptyViews) {
-                emptyView =(DocumentProject)app.getActiveProject();//FIXME class cast exception
+                emptyView = (DocumentProject) app.getActiveProject();//FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -87,7 +87,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             if (emptyView == null) {
                 app.createProject().thenAccept(v -> {
                     app.add(v);
-                    doIt((DocumentProject)v, true);
+                    doIt((DocumentProject) v, true);
                 });
             } else {
                 doIt(emptyView, false);
@@ -99,7 +99,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         openViewFromURI(view, uri);
     }
 
-    private void handleException(final DocumentProject v,Throwable exception) throws MissingResourceException {
+    private void handleException(final DocumentProject v, Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
         String message = (value != null && value.getMessage()
@@ -107,6 +107,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
         Alert alert = new Alert(Alert.AlertType.ERROR,
                 ((message == null) ? "" : message));
+        alert.getDialogPane().setMaxWidth(640.0);
         alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
         alert.showAndWait();
         v.removeDisabler(this);
@@ -118,19 +119,20 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
         // Open the file
         try {
-        v.read(uri, null, null,false).whenComplete((result, exception) -> {
-            if (exception instanceof CancellationException) {
-                v.removeDisabler(this);
-            } else if (exception != null) {
-                    handleException(v,exception);
-            } else {
-                v.setURI(uri);
-                v.clearModified();
-                v.setTitle(URIUtil.getName(uri));
-                v.removeDisabler(this);
-            }
-        });} catch (Throwable t) {
-            handleException(v,t);
+            v.read(uri, null, null, false).whenComplete((result, exception) -> {
+                if (exception instanceof CancellationException) {
+                    v.removeDisabler(this);
+                } else if (exception != null) {
+                    handleException(v, exception);
+                } else {
+                    v.setURI(uri);
+                    v.clearModified();
+                    v.setTitle(URIUtil.getName(uri));
+                    v.removeDisabler(this);
+                }
+            });
+        } catch (Throwable t) {
+            handleException(v, t);
         }
     }
 }

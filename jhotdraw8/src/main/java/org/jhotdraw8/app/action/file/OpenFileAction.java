@@ -127,6 +127,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                 Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         ((message == null) ? "" : message));
+                alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
                 alert.showAndWait();
                 v.removeDisabler(this);

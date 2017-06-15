@@ -56,26 +56,34 @@ public class UngroupAction extends AbstractSelectedAction {
 
     public static void ungroup(DrawingView view, Collection<Figure> figures) {
         if (figures.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be ungrouped").showAndWait();
+            final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be ungrouped");
+            alert.getDialogPane().setMaxWidth(640.0);
+            alert.showAndWait();
             return;
         }
 
         for (Figure f : figures) {
             if (!(f instanceof Grouping)) {
                 // FIXME internationalize me
-                new Alert(Alert.AlertType.INFORMATION, "Only groups can be ungrouped").showAndWait();
+                final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Only groups can be ungrouped");
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.showAndWait();
                 return;
             }
 
             if (f != null && (!f.isEditable() || !f.isDecomposable())) {
                 // FIXME internationalize me
-                new Alert(Alert.AlertType.INFORMATION, "Only editable and decomposable figures can be ungrouped").showAndWait();
+                final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Only editable and decomposable figures can be ungrouped");
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.showAndWait();
                 return;
             }
             Figure parent = f.getParent();
             if (parent == null || !parent.isEditable() || !parent.isDecomposable()) {
                 // FIXME internationalize me
-                new Alert(Alert.AlertType.INFORMATION, "Only groups in editable and decomposable parents can be ungrouped").showAndWait();
+                final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Only groups in editable and decomposable parents can be ungrouped");
+                alert.getDialogPane().setMaxWidth(640.0);
+                alert.showAndWait();
                 return;
             }
         }
@@ -94,7 +102,9 @@ public class UngroupAction extends AbstractSelectedAction {
         Figure parent = group.getParent();
         if (parent != null && (!parent.isEditable() || !parent.isDecomposable())) {
             // FIXME internationalize me
-            new Alert(Alert.AlertType.INFORMATION, "Only groups in editable and decomposable parents can be ungrouped").showAndWait();
+            final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Only groups in editable and decomposable parents can be ungrouped");
+            alert.getDialogPane().setMaxWidth(640.0);
+            alert.showAndWait();
             return;
         }
         DrawingModel model = view.getModel();

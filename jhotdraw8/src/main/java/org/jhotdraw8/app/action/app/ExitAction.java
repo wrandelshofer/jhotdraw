@@ -149,6 +149,7 @@ public class ExitAction extends AbstractApplicationAction {
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, labels.getString("application.exit.canNotSaveToOpenFile"));
+                            alert.getDialogPane().setMaxWidth(640.0);
                             alert.showAndWait();
                             continue Outer;
                         }
@@ -187,6 +188,7 @@ public class ExitAction extends AbstractApplicationAction {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                     labels.getString("application.exit.doYouWantToSave.details"),
                     options);
+                alert.getDialogPane().setMaxWidth(640.0);
             alert.setHeaderText(labels.getFormatted("application.exit.doYouWantToSave.message", //
                     unsavedView.getTitle(), unsavedView.getDisambiguation()));
             unsavedView.getNode().getScene().getWindow().requestFocus();
@@ -275,6 +277,7 @@ public class ExitAction extends AbstractApplicationAction {
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
                         + ((message == null) ? "" : message));
+                alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -304,6 +307,7 @@ public class ExitAction extends AbstractApplicationAction {
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
                         + ((message == null) ? "" : message));
+                alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {

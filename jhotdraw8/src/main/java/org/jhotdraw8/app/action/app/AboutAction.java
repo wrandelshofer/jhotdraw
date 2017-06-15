@@ -53,6 +53,7 @@ public class AboutAction extends AbstractApplicationAction {
                 + ", " + System.getProperty("java.vm.vendor")
                 + "\n  OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
                 + ", " + System.getProperty("os.arch"));
+                alert.getDialogPane().setMaxWidth(640.0);
         alert.setHeaderText(model.getName() + (model.getVersion() == null ? "" : " " + model.getVersion()));
         alert.setGraphic(null);
         alert.initModality(Modality.NONE);
