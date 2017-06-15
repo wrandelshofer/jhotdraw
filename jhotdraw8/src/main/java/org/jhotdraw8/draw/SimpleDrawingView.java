@@ -279,6 +279,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
         @Override
         protected void fireValueChangedEvent() {
+            super.fireValueChangedEvent();
             double newValue = get();
             Scale st = new Scale(newValue, newValue);
             if (drawingPane != null) {

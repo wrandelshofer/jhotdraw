@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import org.jhotdraw8.app.AbstractDisableable;
@@ -59,6 +60,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             stopEditing();
         });
     }
+
 
     private class EventPane extends BorderPane implements EditableComponent {
 
@@ -148,16 +150,12 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     protected final BorderPane drawPane = new BorderPane();
     protected final StackPane node = new StackPane();
 
-    /**
-     * Listeners.
-     */
-    private final LinkedList<Listener<HandleEvent>> handleListeners = new LinkedList<>();
 
     {
         eventPane.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
             try {
-                if (drawingView.get() != null) {
-                    DrawingView dv = drawingView.get();
+               DrawingView dv = drawingView.get();
+            if (dv!= null) {
                     EventType<? extends MouseEvent> type = event.getEventType();
                     if (type == MouseEvent.MOUSE_MOVED) {
                         handleMouseMoved(event, dv);
@@ -181,8 +179,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             }
         });
         eventPane.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {
-            if (drawingView.get() != null) {
-                DrawingView dv = drawingView.get();
+           DrawingView dv = drawingView.get();
+            if (dv!= null) {
                 EventType<? extends KeyEvent> type = event.getEventType();
                 if (type == KeyEvent.KEY_PRESSED) {
                     handleKeyPressed(event, dv);
@@ -194,6 +192,22 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                 event.consume();
             }
         });
+        eventPane.addEventHandler(ZoomEvent.ANY, (ZoomEvent event)->{DrawingView dv = drawingView.get();
+            if (dv!= null) {
+                EventType<? extends ZoomEvent> type = event.getEventType();
+                if (type == ZoomEvent.ZOOM) {
+                    handleZoom(event, dv);
+                } else if (type == ZoomEvent.ZOOM_STARTED) {
+                    handleZoomStarted(event, dv);
+                } else if (type == ZoomEvent.ZOOM_FINISHED) {
+                    handleZoomFinished(event, dv);
+                }
+                event.consume();
+            
+            }
+            
+        });
+        
     }
     /**
      * Listeners.
@@ -379,6 +393,12 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         }
     }
 
+    protected void handleZoom(ZoomEvent event, DrawingView dv) {
+    }
+    protected void handleZoomStarted(ZoomEvent event, DrawingView dv) {
+    }
+    protected void handleZoomFinished(ZoomEvent event, DrawingView dv) {
+    }
     protected void fireToolStarted() {
         fire(new ToolEvent(this, ToolEvent.EventType.TOOL_STARTED));
     }

@@ -10,6 +10,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ZoomEvent;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -104,6 +105,7 @@ public class SelectionTool extends AbstractTool {
         super(name, rsrc);
         this.handleType = handleType;
     }
+
     public SelectionTool(String name, HandleType handleType, HandleType anchorHandleType, HandleType leadHandleType, Resources rsrc) {
         super(name, rsrc);
         this.handleType = handleType;
@@ -173,7 +175,7 @@ public class SelectionTool extends AbstractTool {
                             break;
                         }
                     }
-                     // find in entire drawing
+                    // find in entire drawing
                     if (pressedFigure == null) {
                         pressedFigure = view.findFigure(vx, vy);
                     }
@@ -248,6 +250,7 @@ public class SelectionTool extends AbstractTool {
         }
 //        setTracker(null);
     }
+
     @Override
     protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
         if (tracker != null) {
@@ -394,5 +397,18 @@ public class SelectionTool extends AbstractTool {
     // ---
     public boolean isSelectBehindEnabled() {
         return selectBehindEnabled.get();
+    }
+
+    double zoomFactor = 1.0;
+
+    protected void handleZoom(ZoomEvent event, DrawingView dv) {
+        dv.setZoomFactor(zoomFactor * event.getTotalZoomFactor());
+    }
+
+    protected void handleZoomStarted(ZoomEvent event, DrawingView dv) {
+        zoomFactor = dv.getZoomFactor();
+    }
+
+    protected void handleZoomFinished(ZoomEvent event, DrawingView dv) {
     }
 }
