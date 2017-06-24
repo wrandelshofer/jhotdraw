@@ -4,17 +4,20 @@
  */
 package org.jhotdraw8.draw.io;
 
+import ch.systransis.arl.ferro.io.ManifestReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URL;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -75,15 +78,32 @@ public interface XmlInputFormatMixin {
     Figure read(Document in, Drawing drawing) throws IOException;
 
     static void validateXML(URI xmlUri, URI schemaUri) throws IOException {
-        Source xmlFile = new StreamSource(new File(xmlUri));
-        SchemaFactory schemaFactory = SchemaFactory
-                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        try {
-            Schema schema = schemaFactory.newSchema(new File(schemaUri));
+        try (InputStream schemaStream = schemaUri.toURL().openStream();
+                InputStream xmlStream = xmlUri.toURL().openStream()) {
+            SchemaFactory factory = SchemaFactory
+                    .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema
+                    = factory.newSchema(new StreamSource(schemaStream));
             Validator validator = schema.newValidator();
-            validator.validate(xmlFile);
+            validator.validate(new StreamSource(xmlStream));
         } catch (SAXException e) {
             throw new IOException(e);
+        }
+    }
+
+    static void validateDocument(Document doc, URI schemaUri) throws IOException {
+        validateDocument(doc, schemaUri.toURL());
+    }
+    static void validateDocument(Document doc, URL schemaUrl) throws IOException {
+        SchemaFactory factory = SchemaFactory
+                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try (InputStream schemaStream = schemaUrl.openStream()) {
+            Schema schema
+                    = factory.newSchema(new StreamSource(schemaStream));
+            Validator validator = schema.newValidator();
+            validator.validate(new DOMSource(doc));
+        } catch (SAXException e) {
+            throw new IOException("The document is invalid.\n" + e.getMessage(), e);
         }
     }
 }
