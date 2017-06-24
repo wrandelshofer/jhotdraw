@@ -49,6 +49,11 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
         this.listenOnDrawing = listenOnDrawing;
     }
 
+    @Override
+    public void invalidated() {
+        // empty
+    }
+
     private class MapProxy extends AbstractMap<Key<?>, Object> {
 
         private Map<Key<?>, Object> target = null;

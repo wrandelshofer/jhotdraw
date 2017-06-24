@@ -15,7 +15,7 @@
     <property name="copyright" value="Copyright (c) 2016 by the authors and contributors of JHotDraw."/>
     <exec executable="svnversion" outputproperty="svn.version" />
     <!--property name="version" value="rev${svn.version}"-->
-    <property name="version" value="git20170606-4d8700b"/>
+    <property name="version" value="git20170608-6d6a32c"/>
 
     <property name="manifest.application-name" value="${ant.project.name}"/>
     <property name="manifest.implementation-version" value="${version}"/>

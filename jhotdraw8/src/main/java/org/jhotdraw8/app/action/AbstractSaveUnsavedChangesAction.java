@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
@@ -49,7 +49,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
     /**
      *
      */
-    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new SimpleKey<URIChooser>(
+    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<URIChooser>(
             "saveChooser", URIChooser.class, null);
 
     private static final long serialVersionUID = 1L;

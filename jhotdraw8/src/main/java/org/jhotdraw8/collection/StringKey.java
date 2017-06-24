@@ -10,7 +10,7 @@ package org.jhotdraw8.collection;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class StringKey extends SimpleKey<String> {
+public class StringKey extends ObjectKey<String> {
 
     private final static long serialVersionUID = 1L;
 

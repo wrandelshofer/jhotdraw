@@ -45,7 +45,7 @@ public class GridConstrainer extends AbstractConstrainer {
 
         @Override
         public void invalidated() {
-            fireInvalidated();
+            fireInvalidated(this);
         }
     };
     /**

@@ -15,15 +15,12 @@ import javafx.beans.Observable;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class AbstractObservable implements Observable {
+public class AbstractObservable implements ObservableMixin {
 
-    private List<InvalidationListener> invalidationListeners;
+    private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
-    public void addListener(InvalidationListener listener) {
-        if (invalidationListeners == null) {
-            invalidationListeners = new CopyOnWriteArrayList<>();
-        }
-        invalidationListeners.add(listener);
+    public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
+        return invalidationListeners;
     }
 
     /**
@@ -33,28 +30,7 @@ public class AbstractObservable implements Observable {
      *
      * The default implementation is empty.
      */
-    protected void invalidated() {
+    public void invalidated() {
     }
 
-    protected void fireInvalidated() {
-        fireInvalidated(this);
-    }
-
-    protected void fireInvalidated(Observable o) {
-        invalidated();
-        if (invalidationListeners != null) {
-            for (InvalidationListener l : invalidationListeners) {
-                l.invalidated(o);
-            }
-        }
-    }
-
-    public void removeListener(InvalidationListener listener) {
-        if (invalidationListeners != null) {
-            invalidationListeners.remove(listener);
-            if (invalidationListeners.isEmpty()) {
-                invalidationListeners = null;
-            }
-        }
-    }
 }

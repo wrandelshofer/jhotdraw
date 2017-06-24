@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.StringKey;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 
 /**
  * Action.
@@ -53,13 +53,13 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * The key used for storing a small icon, such as {@code ImageView}. This is
      * typically used with menus.
      */
-    Key<Node> SMALL_ICON = new SimpleKey<>("SmallIcon", Node.class);
+    Key<Node> SMALL_ICON = new ObjectKey<>("SmallIcon", Node.class);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
      * accelerator for the action.
      */
-    Key<KeyCombination> ACCELERATOR_KEY = new SimpleKey<>("AcceleratorKey", KeyCombination.class);
+    Key<KeyCombination> ACCELERATOR_KEY = new ObjectKey<>("AcceleratorKey", KeyCombination.class);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
@@ -67,13 +67,13 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @since 1.3
      */
-    Key<KeyCombination> MNEMONIC_KEY = new SimpleKey<>("MnemonicKey", KeyCombination.class);
+    Key<KeyCombination> MNEMONIC_KEY = new ObjectKey<>("MnemonicKey", KeyCombination.class);
 
     /**
      * The key used for large icon, such as {@code ImageView}. This is typically
      * used by buttons.
      */
-    Key<Node> LARGE_ICON_KEY = new SimpleKey<>("SwingLargeIconKey", Node.class);
+    Key<Node> LARGE_ICON_KEY = new ObjectKey<>("SwingLargeIconKey", Node.class);
 
     /**
      * The selected property.

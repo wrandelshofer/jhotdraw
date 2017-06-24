@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 
 /**
  * SimpleFigureKey.
@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.SimpleKey;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SimpleFigureKey<T> extends SimpleKey<T> implements FigureKey<T> {
+public class SimpleFigureKey<T> extends ObjectKey<T> implements FigureKey<T> {
 
     final static long serialVersionUID = 1L;
 

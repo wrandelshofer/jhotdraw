@@ -5,7 +5,7 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -13,7 +13,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author werni
  */
-public class SimpleStyleableKey<T> extends SimpleKey<T> implements StyleableMapAccessor<T> {
+public class SimpleStyleableKey<T> extends ObjectKey<T> implements StyleableMapAccessor<T> {
 
     private final static long serialVersionUID = 1L;
 
