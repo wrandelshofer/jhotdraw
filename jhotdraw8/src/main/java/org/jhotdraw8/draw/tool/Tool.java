@@ -11,7 +11,7 @@ import org.jhotdraw8.app.Disableable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.collection.StringKey;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -68,13 +68,13 @@ public interface Tool extends PropertyBean, Disableable {
      * The key used for storing a small icon, such as {@code ImageView}. This is
      * typically used with menus.
      */
-    public static final Key<Node> SMALL_ICON = new SimpleKey<>("SmallIcon", Node.class);
+    public static final Key<Node> SMALL_ICON = new ObjectKey<>("SmallIcon", Node.class);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
      * accelerator for the action.
      */
-    public static final Key<KeyCombination> ACCELERATOR_KEY = new SimpleKey<>("AcceleratorKey", KeyCombination.class);
+    public static final Key<KeyCombination> ACCELERATOR_KEY = new ObjectKey<>("AcceleratorKey", KeyCombination.class);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
@@ -82,7 +82,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @since 1.3
      */
-    public static final Key<KeyCombination> MNEMONIC_KEY = new SimpleKey<>("MnemonicKey", KeyCombination.class);
+    public static final Key<KeyCombination> MNEMONIC_KEY = new ObjectKey<>("MnemonicKey", KeyCombination.class);
 
     /**
      * The key used for storing a {@code Boolean} that corresponds to the
@@ -97,7 +97,7 @@ public interface Tool extends PropertyBean, Disableable {
      * The key used for large icon, such as {@code ImageView}. This is typically
      * used by buttons.
      */
-    public static final Key<Node> LARGE_ICON_KEY = new SimpleKey<>("SwingLargeIconKey", Node.class);
+    public static final Key<Node> LARGE_ICON_KEY = new ObjectKey<>("SwingLargeIconKey", Node.class);
 
     // ---
     // Properties

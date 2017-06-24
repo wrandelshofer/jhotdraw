@@ -1,4 +1,4 @@
-/* @(#)SimpleKey.java
+/* @(#)ObjectKey.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -31,7 +31,7 @@ import java.util.List;
  * @version $Id$
  * @param <T> The value type.
  */
-public class SimpleKey<T> implements Key<T> {
+public class ObjectKey<T> implements Key<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,7 +66,7 @@ public class SimpleKey<T> implements Key<T> {
      * @param name The name of the key.
      * @param clazz The type of the value.
      */
-    public SimpleKey(String name, Class<T> clazz) {
+    public ObjectKey(String name, Class<T> clazz) {
         this(name, clazz, null, null);
     }
 
@@ -78,7 +78,7 @@ public class SimpleKey<T> implements Key<T> {
      * @param clazz The type of the value.
      * @param defaultValue The default value.
      */
-    public SimpleKey(String name, Class<T> clazz, T defaultValue) {
+    public ObjectKey(String name, Class<T> clazz, T defaultValue) {
         this(name, clazz, null, defaultValue);
     }
 
@@ -92,7 +92,7 @@ public class SimpleKey<T> implements Key<T> {
      * type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public SimpleKey(String name, Class<?> clazz, Class<?>[] typeParameters, T defaultValue) {
+    public ObjectKey(String name, Class<?> clazz, Class<?>[] typeParameters, T defaultValue) {
         this(name, clazz, typeParameters, true, defaultValue);
     }
 
@@ -107,7 +107,7 @@ public class SimpleKey<T> implements Key<T> {
      * @param isNullable Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public SimpleKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
+    public ObjectKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }

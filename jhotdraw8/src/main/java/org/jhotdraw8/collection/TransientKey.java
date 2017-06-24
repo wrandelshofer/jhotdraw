@@ -10,7 +10,7 @@ package org.jhotdraw8.collection;
  * @author Werner Randelshofer
  * @param <T> the value type
  */
-public class TransientKey<T> extends SimpleKey<T> {
+public class TransientKey<T> extends ObjectKey<T> {
 
     private static final long serialVersionUID = 1L;
 

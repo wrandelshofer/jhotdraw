@@ -54,7 +54,7 @@ import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
@@ -68,7 +68,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
  */
 public class DocumentOrientedApplication extends AbstractApplication {
 
-    private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
+    private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
     private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
 
     /**

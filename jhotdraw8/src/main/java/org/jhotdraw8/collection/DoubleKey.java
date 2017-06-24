@@ -10,7 +10,7 @@ package org.jhotdraw8.collection;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DoubleKey extends SimpleKey<Double> {
+public class DoubleKey extends ObjectKey<Double> {
 
     private final static long serialVersionUID = 1L;
 

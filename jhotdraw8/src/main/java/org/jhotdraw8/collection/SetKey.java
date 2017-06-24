@@ -10,7 +10,7 @@ package org.jhotdraw8.collection;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SetKey<E> extends SimpleKey<ImmutableObservableSet<E>> {
+public class SetKey<E> extends ObjectKey<ImmutableObservableSet<E>> {
 
     private final static long serialVersionUID = 1L;
 

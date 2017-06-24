@@ -37,7 +37,7 @@ public class KeyNGTest {
         // setup
         ObservableMap<Key<?>, Object> om = FXCollections.observableHashMap();
         MapProperty<Key<?>, Object> mp = new SimpleMapProperty<>(om);
-        SimpleKey<String> sk = new SimpleKey<>("s", String.class);
+        ObjectKey<String> sk = new ObjectKey<>("s", String.class);
         Property<String> ps = sk.propertyAt(mp);
         
         // test 1
@@ -52,7 +52,7 @@ public class KeyNGTest {
         // setup
         ObservableMap<Key<?>, Object> om = FXCollections.observableHashMap();
         MapProperty<Key<?>, Object> mp = new SimpleMapProperty<>(om);
-        SimpleKey<String> sk = new SimpleKey<>("s", String.class);
+        ObjectKey<String> sk = new ObjectKey<>("s", String.class);
         Property<String> ps = sk.propertyAt(mp);
         
         // test 2
@@ -67,7 +67,7 @@ public class KeyNGTest {
         // setup
         ObservableMap<Key<?>, Object> om = FXCollections.observableHashMap();
         MapProperty<Key<?>, Object> mp = new SimpleMapProperty<>(om);
-        SimpleKey<String> sk = new SimpleKey<>("s", String.class);
+        ObjectKey<String> sk = new ObjectKey<>("s", String.class);
         Property<String> ps = sk.propertyAt(mp);
         
         // test 3
@@ -84,7 +84,7 @@ public class KeyNGTest {
         // setup
         ObservableMap<Key<?>, Object> om = FXCollections.observableHashMap();
         MapProperty<Key<?>, Object> mp = new SimpleMapProperty<>(om);
-        SimpleKey<String> sk = new SimpleKey<>("s", String.class);
+        ObjectKey<String> sk = new ObjectKey<>("s", String.class);
         Property<String> ps = sk.propertyAt(mp);
         
         // test 4
@@ -101,7 +101,7 @@ public class KeyNGTest {
         // setup
         ObservableMap<Key<?>, Object> om = FXCollections.observableHashMap();
         MapProperty<Key<?>, Object> mp = new SimpleMapProperty<>(om);
-        SimpleKey<String> sk = new SimpleKey<>("s", String.class);
+        ObjectKey<String> sk = new ObjectKey<>("s", String.class);
         Property<String> ps = sk.propertyAt(mp);
         
         // test 5
@@ -120,7 +120,7 @@ public class KeyNGTest {
         // setup
         ObservableMap<Key<?>, Object> om = FXCollections.observableHashMap();
         MapProperty<Key<?>, Object> mp = new SimpleMapProperty<>(om);
-        SimpleKey<String> sk = new SimpleKey<>("s", String.class);
+        ObjectKey<String> sk = new ObjectKey<>("s", String.class);
         Property<String> ps = sk.propertyAt(mp);
         
         // test 6
@@ -139,7 +139,7 @@ public class KeyNGTest {
         // setup
         ObservableMap<Key<?>, Object> om = FXCollections.observableHashMap();
         MapProperty<Key<?>, Object> mp = new SimpleMapProperty<>(om);
-        SimpleKey<Paint> sk = new SimpleKey<>("c", Paint.class);
+        ObjectKey<Paint> sk = new ObjectKey<>("c", Paint.class);
         Property<Paint> ps = sk.propertyAt(mp);
         
         // test 6

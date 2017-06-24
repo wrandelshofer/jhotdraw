@@ -8,7 +8,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import javafx.scene.Node;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.draw.figure.Page;
 
 /**
@@ -30,17 +30,17 @@ public interface RenderContext extends PropertyBean {
     // ---
     // keys
     // ---
-    Key<RenderingIntent> RENDERING_INTENT = new SimpleKey<>("renderingIntent", RenderingIntent.class, RenderingIntent.EDITOR);
+    Key<RenderingIntent> RENDERING_INTENT = new ObjectKey<>("renderingIntent", RenderingIntent.class, RenderingIntent.EDITOR);
 
     /**
      * The dots per inch of the rendering device.
      */
-    Key<Double> DPI = new SimpleKey<>("dpi", Double.class, 72.0);
+    Key<Double> DPI = new ObjectKey<>("dpi", Double.class, 72.0);
 
-    Key<Page> RENDER_PAGE = new SimpleKey<>("renderPage", Page.class, null);
-    Key<Integer> RENDER_PAGE_NUMBER = new SimpleKey<>("renderPageNumber", Integer.class, 0);
-    Key<Integer> RENDER_NUMBER_OF_PAGES = new SimpleKey<>("renderNumberOfPages", Integer.class, 1);
-    Key<Integer> RENDER_PAGE_INTERNAL_NUMBER = new SimpleKey<>("renderPageInternalNumber", Integer.class, 0);
+    Key<Page> RENDER_PAGE = new ObjectKey<>("renderPage", Page.class, null);
+    Key<Integer> RENDER_PAGE_NUMBER = new ObjectKey<>("renderPageNumber", Integer.class, 0);
+    Key<Integer> RENDER_NUMBER_OF_PAGES = new ObjectKey<>("renderNumberOfPages", Integer.class, 1);
+    Key<Integer> RENDER_PAGE_INTERNAL_NUMBER = new ObjectKey<>("renderPageInternalNumber", Integer.class, 0);
     // ---
     // behavior
     // ---

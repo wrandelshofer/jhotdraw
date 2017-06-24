@@ -20,7 +20,7 @@ import javafx.stage.Modality;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
@@ -41,7 +41,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
     private Node oldFocusOwner;
-    private final Key<URIChooser> saveChooserKey = new SimpleKey<>("saveChooser", URIChooser.class);
+    private final Key<URIChooser> saveChooserKey = new ObjectKey<>("saveChooser", URIChooser.class);
 
     /**
      * Creates a new instance.

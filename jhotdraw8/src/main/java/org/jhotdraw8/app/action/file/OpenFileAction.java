@@ -14,7 +14,7 @@ import javafx.scene.control.Alert;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleKey;
+import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
@@ -31,7 +31,7 @@ import org.jhotdraw8.app.Project;
 public class OpenFileAction extends AbstractApplicationAction {
 
     private static final long serialVersionUID = 1L;
-    public final static Key<URIChooser> OPEN_CHOOSER_KEY = new SimpleKey<>("openChooser", URIChooser.class);
+    public final static Key<URIChooser> OPEN_CHOOSER_KEY = new ObjectKey<>("openChooser", URIChooser.class);
     public static final String ID = "file.open";
     private boolean reuseEmptyViews = true;
 
