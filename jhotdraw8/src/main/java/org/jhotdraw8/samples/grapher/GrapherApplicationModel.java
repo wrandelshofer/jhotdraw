@@ -31,7 +31,7 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
     public GrapherApplicationModel() {
         super("Grapher", GrapherProject::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
-                "XML Files", null, "*.xml");
+                "XML Files", XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT, "*.xml");
         getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
         getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_FORMAT, "*.png"));
         getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT, "*.ser.xml"));

@@ -8,6 +8,7 @@
 package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -55,13 +56,13 @@ public class OpenFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt,Application app) {
+    protected void handleActionPerformed(ActionEvent evt, Application app) {
         {
             app.addDisabler(this);
             // Search for an empty view
             DocumentProject emptyView;
             if (reuseEmptyViews) {
-                emptyView =(DocumentProject) app.getActiveProject(); // FIXME class cast exception
+                emptyView = (DocumentProject) app.getActiveProject(); // FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -72,7 +73,7 @@ public class OpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createProject().thenAccept(v -> doIt((DocumentProject)v, true));
+                app.createProject().thenAccept(v -> doIt((DocumentProject) v, true));
             } else {
                 doIt(emptyView, false);
             }
@@ -88,7 +89,7 @@ public class OpenFileAction extends AbstractApplicationAction {
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
                 for (Project vp : getApplication().projects()) {
-                    DocumentProject v=(DocumentProject)vp;
+                    DocumentProject v = (DocumentProject) vp;
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
@@ -116,7 +117,7 @@ public class OpenFileAction extends AbstractApplicationAction {
         v.addDisabler(this);
 
         // Open the file
-        v.read(uri, chooser == null ? null : chooser.getDataFormat(),null, false).whenComplete((result, exception) -> {
+        v.read(uri, chooser == null ? null : chooser.getDataFormat(), null, false).whenComplete((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
             } else if (exception != null) {
@@ -135,7 +136,10 @@ public class OpenFileAction extends AbstractApplicationAction {
                 v.setURI(uri);
                 v.clearModified();
                 v.setTitle(URIUtil.getName(uri));
-                getApplication().addRecentURI(uri);
+
+                String mimeType =  (chooser.getDataFormat() == null) ? null
+                        :  chooser.getDataFormat().getIdentifiers().iterator().next();
+                getApplication().addRecentURI(URIUtil.addQuery(uri, "mimeType",mimeType));
                 v.removeDisabler(this);
             }
         });

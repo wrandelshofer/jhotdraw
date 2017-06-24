@@ -10,6 +10,9 @@ package org.jhotdraw8.net;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * URIUtil.
@@ -33,8 +36,102 @@ public class URIUtil {
      */
     public static String getName(URI uri) {
         if (uri.getScheme() != null && "file".equals(uri.getScheme())) {
-            return new File(uri).getName()+" ["+new File(uri).getPath()+"]";
+            File file = new File(clearQuery(uri));
+            return file.getName() + " [" + file.getPath() + "]";
         }
         return uri.toString();
+    }
+
+    /**
+     * Adds a query. If a query is already present, adds it after a '&'
+     * character. Both, the key, and the value may not include the characters
+     * '&' and '='.
+     *
+     * @param uri an uri
+     * @param key the key
+     * @param value the value
+     * @return the updated query
+     */
+    public static URI addQuery(URI uri, String key, String value) {
+        if (key == null || value == null) {
+            return uri;
+        }
+        if (key.indexOf('=') != -1) {
+            throw new IllegalArgumentException("key:" + key);
+        }
+        if (value.indexOf('=') != -1) {
+            throw new IllegalArgumentException("value:" + value);
+        }
+
+        return addQuery(uri, key + '=' + value);
+    }
+
+    /**
+     * Adds a query. If a query is already present, adds it after a '&'
+     * character. The query may not include the character '&'.
+     *
+     * @param uri an uri
+     * @param query the query
+     * @return the updated query
+     */
+    public static URI addQuery(URI uri, String query) {
+        if (query == null) {
+            return uri;
+        }
+        if (query.indexOf('&') != -1) {
+            throw new IllegalArgumentException("query:" + query);
+        }
+
+        String oldQuery = uri.getQuery();
+        String newQuery = oldQuery == null ? query : oldQuery + "&" + query;
+
+        return setQuery(uri, newQuery);
+    }
+
+    /**
+     * Sets the query on the specified URI. If a query is already present, it is
+     * removed.
+     *
+     * @param uri an uri
+     * @param query the query
+     * @return the update uri
+     */
+    public static URI setQuery(URI uri, String query) {
+        URI u = uri;
+        try {
+            u = new URI(u.getScheme(),
+                    u.getUserInfo(), u.getHost(), u.getPort(),
+                    u.getPath(), query,
+                    u.getFragment());
+        } catch (URISyntaxException ex) {
+            ex.printStackTrace();
+        }
+        return u;
+    }
+
+    public static URI clearQuery(URI uri) {
+
+        return setQuery(uri, null);
+    }
+
+    /**
+     * Parses the query of the URI. Assumes that the query consists of
+     * '&'-separated, key '=' value pairs.
+     *
+     * @param uri an URI
+     * @return a map
+     */
+    public static Map<String, String> parseQuery(URI uri) {
+        String query = uri.getQuery();
+        Map<String, String> map = new LinkedHashMap<>();
+        if (query != null) {
+            for (String pair : query.split("&")) {
+                int p = pair.indexOf('=');
+                String key = pair.substring(0, p);
+                String value = pair.substring(p + 1);
+                map.put(key, value);
+            }
+        }
+        return map;
     }
 }
