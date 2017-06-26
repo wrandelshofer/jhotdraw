@@ -416,7 +416,7 @@ public interface DrawingView extends RenderContext {
     }
 
     default void setDrawing(Drawing newValue) {
-        modelProperty().get().setRoot(newValue);
+        getModel().setRoot(newValue);
     }
 
     default Drawing getDrawing() {
