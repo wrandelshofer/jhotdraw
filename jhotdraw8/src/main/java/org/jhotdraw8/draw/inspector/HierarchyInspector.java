@@ -52,7 +52,8 @@ import org.jhotdraw8.tree.SimpleTreePresentationModel;
  * @author werni
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
-  private final      CachingCollator collator = new CachingCollator(new OSXCollator());
+
+    private final CachingCollator collator = new CachingCollator(new OSXCollator());
 
     @FXML
     private TreeTableColumn<Figure, ImmutableObservableList<String>> classesColumn;
@@ -109,14 +110,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
         model = new SimpleTreePresentationModel<>();
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(
-                cell.getValue().getValue().getTypeSelector())
+                cell.getValue().getValue() == null ? null : cell.getValue().getValue().getTypeSelector())
         );
         idColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<String>((DrawingModel)model.getTreeModel(),
+                cell -> new DrawingModelFigureProperty<String>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.ID) {
             @Override
             public String getValue() {
-                return figure.get(StyleableFigure.ID);
+                return figure == null ? null : figure.get(StyleableFigure.ID);
             }
 
             @Override
@@ -126,20 +127,20 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
         );
         visibleColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel)model.getTreeModel(),
+                cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), HideableFigure.VISIBLE)
         );
         lockedColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel)model.getTreeModel(),
+                cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), LockableFigure.LOCKED)
         );
         classesColumn.setCellValueFactory(
-                cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>((DrawingModel)model.getTreeModel(),
+                cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
             @Override
             @SuppressWarnings("unchecked")
             public ImmutableObservableList<String> getValue() {
-                return new ImmutableObservableList<>(figure.getStyleClass());
+                return new ImmutableObservableList<>(figure == null ? null : figure.getStyleClass());
             }
         }
         );
