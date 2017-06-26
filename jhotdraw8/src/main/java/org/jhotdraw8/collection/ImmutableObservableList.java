@@ -26,7 +26,7 @@ public final class ImmutableObservableList<E> extends ObservableListBase<E> impl
     private final Object[] array;
 
     public ImmutableObservableList(Collection<E> copyItems) {
-        this.array = copyItems.toArray();
+        this.array = copyItems == null ? new Object[0] : copyItems.toArray();
     }
 
     public ImmutableObservableList(Object[] array) {
