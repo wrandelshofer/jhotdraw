@@ -99,6 +99,9 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
         @Override
         public void set(Drawing newValue) {
             Drawing oldValue = get();
+            if (newValue == null && oldValue != null) {
+                throw new IllegalArgumentException("null");
+            }
             super.set(newValue);
             onRootChanged(oldValue, newValue);
         }
@@ -190,10 +193,11 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     public ObjectProperty<Drawing> drawingProperty() {
         return root;
     }
+
     @Override
     @SuppressWarnings("unchecked")
     public ObjectProperty<Figure> rootProperty() {
-        return (ObjectProperty<Figure>)(ObjectProperty<?>)root;
+        return (ObjectProperty<Figure>) (ObjectProperty<?>) root;
     }
 
     @Override
@@ -359,8 +363,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     public void validate() {
         if (!valid) {
             isValidating = true;
-            
-            
+
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
@@ -372,7 +375,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                     }
                 }
             }
-            
+
             // all figures with dirty bit "TRANSFORM" or "LAYOUT"
             // induce a dirty bit "TRANSFORM" on all ancestors which implement the TransformableFigure interface.
             DirtyMask dmTransformLayout = DirtyMask.of(DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
@@ -442,12 +445,10 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
             LinkedHashSet<Figure> transitive = new LinkedHashSet<>(todo);
             transitivelyCollectDependentFigures(todo, transitive);
             collectLayoutableAncestors(new ArrayList<>(transitive), transitive);
-            for (Figure f : transitive) {      
-                    markDirty(f, DirtyBits.NODE);
-                    this.layout(f);
+            for (Figure f : transitive) {
+                markDirty(f, DirtyBits.NODE);
+                this.layout(f);
             }
-
-
 
             // For all figures with dirty flag Node 
             // we must fireDrawingModelEvent node invalidation
@@ -460,7 +461,6 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 }
             }
 
-            
             for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
@@ -480,11 +480,13 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
         super.fireDrawingModelEvent(event);
         handleDrawingModelEvent(event);
     }
+
     @Override
     public void fireTreeModelEvent(TreeModelEvent<Figure> event) {
         super.fireTreeModelEvent(event);
         handleTreeModelEvent(event);
     }
+
     protected void handleDrawingModelEvent(DrawingModelEvent event) {
         if (isValidating) {
             return;
@@ -527,12 +529,13 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                         + "not supported");
         }
     }
+
     protected void handleTreeModelEvent(TreeModelEvent<Figure> event) {
         if (isValidating) {
             return;
         }
 
-        final Figure figure =event.getNode();
+        final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
             case NODE_ADDED_TO_PARENT:
@@ -540,10 +543,10 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 invalidate();
                 break;
             case NODE_ADDED_TO_TREE:
-                figure.addNotify((Drawing)event.getRoot());
+                figure.addNotify((Drawing) event.getRoot());
                 break;
             case NODE_REMOVED_FROM_TREE:
-                figure.removeNotify((Drawing)event.getRoot());
+                figure.removeNotify((Drawing) event.getRoot());
                 removeDirty(figure);
                 break;
             case NODE_REMOVED_FROM_PARENT:
@@ -563,6 +566,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                         + "not supported");
         }
     }
+
     private void recursivelyInvalidateTransforms(Figure f) {
         if (f.transformNotify()) {
             for (Figure child : f.getChildren()) {
