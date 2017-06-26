@@ -6,24 +6,34 @@ package org.jhotdraw8.draw.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URL;
 import java.util.Collection;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * XmlOutputFormatMixin.
@@ -45,22 +55,7 @@ public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriM
         setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
         setInternalHome(drawing.get(Drawing.DOCUMENT_HOME));
         Document doc = toDocument(drawing);
-        write(file, doc);
-    }
-
-    default void write(File file, Document doc) throws TransformerFactoryConfigurationError, IOException {
-        try {
-            final TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer t = factory.newTransformer();
-            t.setOutputProperty(OutputKeys.INDENT, "yes");
-            t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(file);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
+        XmlUtil.write(file, doc);
     }
 
     @Override
@@ -70,23 +65,9 @@ public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriM
 
     default void write(OutputStream out, Drawing drawing, Collection<Figure> selection) throws IOException {
         Document doc = toDocument(drawing, selection);
-        write(out, doc);
+        XmlUtil.write(out, doc);
     }
 
-    default void write(OutputStream out, Document doc) throws IOException {
-        try {
-            final TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer t = factory.newTransformer();
-            t.setOutputProperty(OutputKeys.INDENT, "yes");
-            t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
-    }
 
     default void write(Writer out, Drawing drawing, Collection<Figure> selection) throws IOException {
         Document doc = toDocument(drawing, selection);
@@ -99,33 +80,5 @@ public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriM
             throw new IOException(ex);
         }
     }
-   /** Creates a document. 
-     * 
-     * @param nsURI nullable namespace URI
-     * @param nsQualifier nullable namespace qualifier
-     * @param docElemName notnull name of the document element
-     * @return a new Document
-     * @throws IOException if the parser configuration fails
-     */
-    default Document createDocument(String nsURI, String nsQualifier, String docElemName) throws IOException {
-        try {
-            Document doc;
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            if (nsURI != null) {
-                builderFactory.setNamespaceAware(true);
-                DocumentBuilder builder = builderFactory.newDocumentBuilder();
-                DOMImplementation domImpl = builder.getDOMImplementation();
-                doc = domImpl.createDocument(nsURI, nsQualifier == null ? docElemName : nsQualifier + ":" + docElemName, null);
-            } else {
-                DocumentBuilder builder = builderFactory.newDocumentBuilder();
-                doc = builder.newDocument();
-                Element elem = doc.createElement(docElemName);
-                doc.appendChild(elem);
-            }
-            return doc;
-        } catch (ParserConfigurationException ex) {
-            throw new IOException(ex);
-        }
-        
-    }
+
 }

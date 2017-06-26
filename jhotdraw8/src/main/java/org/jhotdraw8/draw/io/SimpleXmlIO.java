@@ -40,6 +40,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;
 import org.w3c.dom.DOMImplementation;
@@ -559,7 +560,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
         idFactory.reset();
         final String docElemName = figureFactory.figureToName(external);
-        Document doc = createDocument(namespaceURI, namespaceQualifier, docElemName);
+        Document doc = XmlUtil.createDocument(namespaceURI, namespaceQualifier, docElemName);
 
         Element docElement = doc.getDocumentElement();
         for (Figure child : ordered) {
@@ -573,7 +574,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
             idFactory.reset();
             final String docElemName = figureFactory.figureToName(external);
-            Document doc = createDocument(namespaceURI, namespaceQualifier, docElemName);
+            Document doc = XmlUtil.createDocument(namespaceURI, namespaceQualifier, docElemName);
 
             Element docElement = doc.getDocumentElement();
 

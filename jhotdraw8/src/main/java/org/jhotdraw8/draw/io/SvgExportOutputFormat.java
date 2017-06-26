@@ -44,6 +44,7 @@ import org.jhotdraw8.text.SvgTransformListConverter;
 import org.jhotdraw8.text.XmlNumberConverter;
 import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.XmlSizeListConverter;
+import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -184,7 +185,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
-        write(file, doc);
+        XmlUtil.write(file, doc);
     }
 
     private void writePageElementAttributes(Element docElement, Page page, int internalPageNumber) throws IOException {
@@ -208,7 +209,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         Document doc = exporter.toDocument(node);
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
         node.getTransforms().clear();
-        write(file, doc);
+        XmlUtil.write(file, doc);
     }
 
     private void writeSliceElementAttributes(Element docElement, Slice slice) throws IOException {

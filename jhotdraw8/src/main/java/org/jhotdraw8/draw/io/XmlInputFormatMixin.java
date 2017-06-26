@@ -77,33 +77,4 @@ public interface XmlInputFormatMixin {
 
     Figure read(Document in, Drawing drawing) throws IOException;
 
-    static void validateXML(URI xmlUri, URI schemaUri) throws IOException {
-        try (InputStream schemaStream = schemaUri.toURL().openStream();
-                InputStream xmlStream = xmlUri.toURL().openStream()) {
-            SchemaFactory factory = SchemaFactory
-                    .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema
-                    = factory.newSchema(new StreamSource(schemaStream));
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(xmlStream));
-        } catch (SAXException e) {
-            throw new IOException(e);
-        }
-    }
-
-    static void validateDocument(Document doc, URI schemaUri) throws IOException {
-        validateDocument(doc, schemaUri.toURL());
-    }
-    static void validateDocument(Document doc, URL schemaUrl) throws IOException {
-        SchemaFactory factory = SchemaFactory
-                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        try (InputStream schemaStream = schemaUrl.openStream()) {
-            Schema schema
-                    = factory.newSchema(new StreamSource(schemaStream));
-            Validator validator = schema.newValidator();
-            validator.validate(new DOMSource(doc));
-        } catch (SAXException e) {
-            throw new IOException("The document is invalid.\n" + e.getMessage(), e);
-        }
-    }
 }
