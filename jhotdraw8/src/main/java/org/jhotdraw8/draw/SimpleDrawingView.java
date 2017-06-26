@@ -496,6 +496,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private Figure findFigureRecursiveInSet(Parent p, Point2D pp, Set<Figure> figures, double tolerance) {
+        if (p==null)return null;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -696,6 +697,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
     @Override
     public Node getNode(Figure f) {
+        if (f==null) return null;
         Node n = figureToNodeMap.get(f);
         if (n == null) {
             n = f.createNode(this);
