@@ -62,9 +62,9 @@ public enum DirtyBits {
      */
     LAYOUT_SUBJECT,
     /**
-     * Affects the transform of the figure.
+     * Affects the transform of the figure and all descendant figures.
      * <p>
-     * Method {@code Figure#transformNotify} must be called on the figure.
+     * Method {@code Figure#transformNotify} must be called on the figure and all its descendant figures.
      */
     TRANSFORM,
     /**

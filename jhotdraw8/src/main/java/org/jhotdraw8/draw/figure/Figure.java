@@ -734,9 +734,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * Invalidates the transformation matrices of this figure.
      * <p>
      * This figure does not keep track of changes that cause the invalidation of
-     * its tranformation matrices. Use a
+     * its transformation matrices. Use a
      * {@link org.jhotdraw8.draw.model.DrawingModel} to manage the
-     * transformation matrices of the figures in a drawing.
+     * transformation matrices of the figures in a drawing. Or call this method on
+     * a figure and all its descendants, after you have performed a change which
+     * invalidated the transform matrices of the figure.
      *
      * @return true if the transformation matrices of the child figures must be
      * invalidated as well
