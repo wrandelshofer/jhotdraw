@@ -87,7 +87,7 @@ private XmlUtil(){}
         }
     }
     public static void validate(URI xmlUri, URI schemaUri) throws IOException {
-        try (InputStream schemaStream = schemaUri.toURL().openStream()) {
+        try {
             SchemaFactory factory = SchemaFactory
                     .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema
