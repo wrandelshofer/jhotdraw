@@ -8,9 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.net.URI;
 import java.util.Collection;
-import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -18,10 +19,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * XmlOutputFormatMixin.
@@ -97,5 +99,33 @@ public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriM
             throw new IOException(ex);
         }
     }
-
+   /** Creates a document. 
+     * 
+     * @param nsURI nullable namespace URI
+     * @param nsQualifier nullable namespace qualifier
+     * @param docElemName notnull name of the document element
+     * @return a new Document
+     * @throws IOException if the parser configuration fails
+     */
+    default Document createDocument(String nsURI, String nsQualifier, String docElemName) throws IOException {
+        try {
+            Document doc;
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            if (nsURI != null) {
+                builderFactory.setNamespaceAware(true);
+                DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                DOMImplementation domImpl = builder.getDOMImplementation();
+                doc = domImpl.createDocument(nsURI, nsQualifier == null ? docElemName : nsQualifier + ":" + docElemName, null);
+            } else {
+                DocumentBuilder builder = builderFactory.newDocumentBuilder();
+                doc = builder.newDocument();
+                Element elem = doc.createElement(docElemName);
+                doc.appendChild(elem);
+            }
+            return doc;
+        } catch (ParserConfigurationException ex) {
+            throw new IOException(ex);
+        }
+        
+    }
 }
