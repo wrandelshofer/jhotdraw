@@ -8,19 +8,18 @@
 package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentProject;
+import org.jhotdraw8.app.Project;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.DocumentProject;
-import org.jhotdraw8.app.Project;
 
 /**
  * Presents an {@code URIChooser} and loads the selected URI into an empty view.
