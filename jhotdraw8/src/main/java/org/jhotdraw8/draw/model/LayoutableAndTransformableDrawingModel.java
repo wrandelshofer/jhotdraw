@@ -117,7 +117,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
     private void onRootChanged(Drawing oldValue, Drawing newValue) {
         if (listenOnDrawing) {
             if (oldValue != null) {
-                newValue.getPropertyChangeListeners().add(propertyChangeHandler);
+                oldValue.getPropertyChangeListeners().remove(propertyChangeHandler);
             }
             if (newValue != null) {
                 newValue.getPropertyChangeListeners().add(propertyChangeHandler);
