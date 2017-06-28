@@ -25,8 +25,9 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     protected final StyleableMap<Key<?>, Object> properties = new StyleableMap<Key<?>, Object>() {
 
         @Override
+        @SuppressWarnings("unchecked")
         protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
-            invalidated(change.getKey());
+            changed((Key<Object>)change.getKey(),change.getValueRemoved(),change.getValueAdded());
             AbstractStyleablePropertyBean.this.callObservers(origin, willChange, change);
             super.callObservers(origin, willChange, change);
         }
@@ -95,9 +96,12 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
      * This method is invoked just before listeners are notified. This
      * implementation is empty.
      *
-     * @param key the invalidated key
+     * @param <T> the type
+     * @param key the changed key
+     * @param oldValue the old value
+     * @param newValue the new value
      */
-    protected void invalidated(Key<?> key) {
+    protected <T>void changed(Key<T> key, T oldValue, T newValue) {
     }
 
     /**

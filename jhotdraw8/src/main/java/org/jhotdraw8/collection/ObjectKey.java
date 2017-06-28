@@ -192,6 +192,6 @@ public class ObjectKey<T> implements Key<T> {
     @Override
     public String toString() {
         String keyClass = getClass().getName();
-        return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{\"" + name + "\"}";
+        return keyClass.substring(keyClass.lastIndexOf('.') + 1) +"@"+System.identityHashCode(this)+ " {\"" + name + "\"}";
     }
 }

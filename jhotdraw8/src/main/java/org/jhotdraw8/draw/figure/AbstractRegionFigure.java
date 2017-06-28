@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -117,8 +118,4 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         Bounds b = getBoundsInLocal();
         Shapes.reshapePathElements(pathstr, b, pathElements);
     }
-
-
-
-  
 }

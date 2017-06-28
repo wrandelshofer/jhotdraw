@@ -16,7 +16,12 @@ import javafx.css.StyleOrigin;
  * @version $Id$
  */
 public interface SelectorModel<T> {
-
+    /**
+     * This keyword is used to reset a property.
+     * 
+     *<a href="https://www.w3.org/TR/css3-cascade/#initial">Resetting a Property: the 'initial' keyword.</a>
+     */
+String INITIAL_KEYWORD="initial";
     /**
      * Returns true if the element has the specified id.
      *

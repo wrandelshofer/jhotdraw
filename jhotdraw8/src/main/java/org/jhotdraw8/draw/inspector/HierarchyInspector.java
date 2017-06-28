@@ -16,6 +16,7 @@ import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.SetChangeListener;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -31,6 +32,7 @@ import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.ExpandedTreeItemIterator;
 import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.collection.ImmutableObservableSet;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -41,6 +43,7 @@ import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
 import org.jhotdraw8.text.CachingCollator;
+import org.jhotdraw8.text.CssSetConverter;
 import org.jhotdraw8.text.CssWordListConverter;
 import org.jhotdraw8.text.OSXCollator;
 import org.jhotdraw8.text.StringConverterAdapter;
@@ -53,10 +56,12 @@ import org.jhotdraw8.tree.SimpleTreePresentationModel;
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
-    private final CachingCollator collator = new CachingCollator(new OSXCollator());
 
     @FXML
-    private TreeTableColumn<Figure, ImmutableObservableList<String>> classesColumn;
+    private TreeTableColumn<Figure, ImmutableObservableList<String>> styleClassesColumn;
+    @FXML
+    private TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>> pseudoClassesColumn;
+    private final CachingCollator collator = new CachingCollator(new OSXCollator());
 
     private DrawingView drawingView;
     @FXML
@@ -134,7 +139,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 cell -> new DrawingModelFigureProperty<Boolean>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), LockableFigure.LOCKED)
         );
-        classesColumn.setCellValueFactory(
+        styleClassesColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<ImmutableObservableList<String>>((DrawingModel) model.getTreeModel(),
                         cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
             @Override
@@ -144,6 +149,17 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
         }
         );
+        pseudoClassesColumn.setCellValueFactory(
+                cell -> new DrawingModelFigureProperty<ImmutableObservableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
+                        cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
+            @Override
+            @SuppressWarnings("unchecked")
+            public ImmutableObservableSet<PseudoClass> getValue() {
+                return new ImmutableObservableSet<>(figure == null ? null : figure.getPseudoClassStates());
+            }
+        }
+        );
+        
 
         // This cell factory ensures that only styleable figures support editing of ids.
         // And it ensures, that the users sees the computed id, and not the one that he entered. 
@@ -191,7 +207,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // This cell factory ensures that only styleable figures support editing of style classes.
         // And it ensures, that the users sees the computed style classes, and not the ones that he entered. 
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
-        classesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableList<String>>, TreeTableCell<Figure, ImmutableObservableList<String>>>() {
+        styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableList<String>>, TreeTableCell<Figure, ImmutableObservableList<String>>>() {
 
             @Override
             public TreeTableCell<Figure, ImmutableObservableList<String>> call(TreeTableColumn<Figure, ImmutableObservableList<String>> paramTableColumn) {
@@ -250,6 +266,18 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             this.setStyle("-fx-text-fill: grey");
                         }
                     }
+                };
+            }
+        });
+CssSetConverter<PseudoClass> pseudoClassConverter=new CssSetConverter<>();
+pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableObservableSet<PseudoClass>>>() {
+            @Override
+            public TreeTableCell<Figure, ImmutableObservableSet<PseudoClass>> call(TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>> paramTableColumn) {
+                return new TextFieldTreeTableCell<Figure, ImmutableObservableSet<PseudoClass>>() {
+                    {
+                        setConverter(new StringConverterAdapter<>(pseudoClassConverter));
+                    }
+
                 };
             }
         });

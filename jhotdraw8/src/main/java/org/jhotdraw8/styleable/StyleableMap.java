@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.BiFunction;
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
@@ -115,7 +114,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
                 T oldValue = (T) setValue(i, NO_VALUE);
                 if (this.origin == origin.ordinal()) {
                     this.origin = -1;
-                    for (int j = origin.ordinal() - 1; j >= 0; j--) {
+                    for (int j = origin.ordinal(); j >= 0; j--) {
                         if (getValue(j) != NO_VALUE) {
                             this.origin = j;
                             break;
@@ -219,7 +218,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
 
     public StyleableMap() {
         this.backingMap = new IdentityHashMap<>();
-    }
+                }
 
     private class SimpleChange extends MapChangeListener.Change<K, V> {
 
@@ -491,7 +490,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             sv.setValue(o, value);
             callObservers(o, false, change);
         }
-        return ret;
+            return ret;
     }
 
     /**
@@ -568,7 +567,7 @@ public class StyleableMap<K, V> implements ObservableMap<K, V> {
             StyledValue sv = e.getValue();
             sv.removeValue(StyleOrigin.INLINE);
             sv.removeValue(StyleOrigin.AUTHOR);
-            sv.removeValue(StyleOrigin.USER_AGENT);
+           // sv.removeValue(StyleOrigin.USER_AGENT);
             // We do not remove empty values because the values will be
             // probably set right again after the map was cleared.
             /*if (sv.isEmpty()) {
