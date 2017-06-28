@@ -84,6 +84,7 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
 
     public PageFigure() {
         set(FILL, new CssColor(Color.TRANSPARENT));
+        set(STROKE_TYPE, StrokeType.CENTERED);
     }
 
     private void addBounds(final List<PathElement> pbList, Bounds b) {
@@ -136,9 +137,6 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
         contentBoundsNode.setStrokeType(StrokeType.INSIDE);
 
         Path pageBoundsNode = new Path();
-        pageBoundsNode.setFill(Paintable.getPaint(getStyled(FILL)));
-        pageBoundsNode.setStroke(Paintable.getPaint(getStyled(STROKE)));
-        pageBoundsNode.setStrokeType(StrokeType.CENTERED);
 
         Path insetsBoundsNode = new Path();
         insetsBoundsNode.setFill(null);
@@ -351,6 +349,9 @@ private Bounds getContentBounds(int internalPageNumber) {
         Path pageInsetsNode = (Path) groupNode.getProperties().get(PAGE_INSETS_PROPERTY);
         javafx.scene.Group currentPageNode = (javafx.scene.Group) groupNode.getProperties().get(CURRENT_PAGE_PROPERTY);
 
+        applyFillableFigureProperties(pageBoundsNode);
+        applyStrokeableFigureProperties(pageBoundsNode);
+        
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR) {
             applyHideableFigureProperties(node);
             contentBoundsNode.setVisible(true);

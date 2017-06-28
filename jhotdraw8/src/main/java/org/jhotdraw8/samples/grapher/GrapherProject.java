@@ -283,7 +283,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
             PageFigure pf = new PageFigure();
             pf.set(PageFigure.PAPER_SIZE, new CssSize2D(297, 210, "mm"));
             pf.set(PageFigure.PAGE_INSETS, new CssSizeInsets(2, 1, 2, 1, "cm"));
-            PageLabelFigure pl = new PageLabelFigure(740, 570, labels.getFormatted("pageLabel.text",
+            PageLabelFigure pl = new PageLabelFigure(940, 700, labels.getFormatted("pageLabel.text",
                     PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
                     FillableFigure.FILL, null, StrokeableFigure.STROKE, null);
             pf.add(pl);
