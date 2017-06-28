@@ -27,9 +27,11 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.collection.ImmutableObservableList;
+import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.Paintable;
 import org.jhotdraw8.draw.key.PaperSizeStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
@@ -48,7 +50,9 @@ import org.jhotdraw8.text.CssSize2D;
  *
  * @author Werner Randelshofer
  */
-public class PageFigure extends AbstractCompositeFigure implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
+public class PageFigure extends AbstractCompositeFigure implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
+FillableFigure, StrokeableFigure
+{
 
     public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey NUM_PAGES_X = new DoubleStyleableFigureKey("num-pages-x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
@@ -77,6 +81,10 @@ public class PageFigure extends AbstractCompositeFigure implements Page, Groupin
     private final static Object PAGE_INSETS_PROPERTY = new Object();
     private final static Object PAGE_BOUNDS_PROPERTY = new Object();
 private final static Object CURRENT_PAGE_PROPERTY = new Object();
+
+    public PageFigure() {
+        set(FILL, new CssColor(Color.TRANSPARENT));
+    }
 
     private void addBounds(final List<PathElement> pbList, Bounds b) {
         double x = b.getMinX();
@@ -124,17 +132,17 @@ private final static Object CURRENT_PAGE_PROPERTY = new Object();
 
         Rectangle contentBoundsNode = new Rectangle();
         contentBoundsNode.setFill(null);
-        contentBoundsNode.setStroke(Color.MEDIUMBLUE);
+        contentBoundsNode.setStroke(Color.LIGHTGRAY);
         contentBoundsNode.setStrokeType(StrokeType.INSIDE);
 
         Path pageBoundsNode = new Path();
-        pageBoundsNode.setFill(Color.TRANSPARENT);
-        pageBoundsNode.setStroke(Color.LIGHTBLUE);
+        pageBoundsNode.setFill(Paintable.getPaint(getStyled(FILL)));
+        pageBoundsNode.setStroke(Paintable.getPaint(getStyled(STROKE)));
         pageBoundsNode.setStrokeType(StrokeType.CENTERED);
 
         Path insetsBoundsNode = new Path();
         insetsBoundsNode.setFill(null);
-        insetsBoundsNode.setStroke(Color.LIGHTBLUE);
+        insetsBoundsNode.setStroke(Color.LIGHTGRAY);
         insetsBoundsNode.setStrokeType(StrokeType.CENTERED);
         insetsBoundsNode.getStrokeDashArray().setAll(5.0);
         

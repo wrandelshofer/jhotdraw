@@ -1,4 +1,4 @@
-/* @(#)CColorStyleableFigureKey.java
+/* @(#)CssColorStyleableFigureKey.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -15,14 +15,13 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
-import org.jhotdraw8.text.CssColor;
 
 /**
- * CColorStyleableFigureKey.
+ * CssColorStyleableFigureKey.
  *
  * @author werni
  */
-public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implements StyleableMapAccessor<CssColor> {
+public class CssColorStyleableFigureKey extends SimpleFigureKey<CssColor> implements StyleableMapAccessor<CssColor> {
 
     private final static long serialVersionUID = 1L;
 
@@ -34,7 +33,7 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implemen
      *
      * @param name The name of the key.
      */
-    public CColorStyleableFigureKey(String name) {
+    public CssColorStyleableFigureKey(String name) {
         this(name, null);
     }
 
@@ -44,7 +43,7 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implemen
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public CColorStyleableFigureKey(String name, CssColor defaultValue) {
+    public CssColorStyleableFigureKey(String name, CssColor defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -57,7 +56,7 @@ public class CColorStyleableFigureKey extends SimpleFigureKey<CssColor> implemen
      * @param mask Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public CColorStyleableFigureKey(String key, DirtyMask mask, CssColor defaultValue) {
+    public CssColorStyleableFigureKey(String key, DirtyMask mask, CssColor defaultValue) {
         super(key, CssColor.class, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);

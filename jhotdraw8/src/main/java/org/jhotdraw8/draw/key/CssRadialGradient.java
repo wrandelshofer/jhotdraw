@@ -2,8 +2,9 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.text;
+package org.jhotdraw8.draw.key;
 
+import org.jhotdraw8.draw.key.Paintable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -11,6 +12,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
+import org.jhotdraw8.text.CssStop;
 
 /**
  * CssRadialGradient.
@@ -95,7 +97,7 @@ public class CssRadialGradient implements Paintable {
         return getRadialGradient();
     }
 
-    Iterable<CssStop> getStops() {
+    public Iterable<CssStop> getStops() {
         return Arrays.asList(cstops);
     }
 

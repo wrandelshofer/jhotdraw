@@ -39,7 +39,7 @@ import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.text.Paintable;
+import org.jhotdraw8.draw.key.Paintable;
 
 /**
  * AbstractLabelFigure.

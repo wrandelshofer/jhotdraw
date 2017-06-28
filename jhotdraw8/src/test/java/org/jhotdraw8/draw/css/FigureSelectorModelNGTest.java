@@ -9,7 +9,7 @@ import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.Paintable;
+import org.jhotdraw8.draw.key.Paintable;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;

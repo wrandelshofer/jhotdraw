@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.draw.key.CssColor;
 import java.util.Objects;
 
 /**

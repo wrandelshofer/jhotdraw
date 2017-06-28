@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.draw.key.Paintable;
 import java.nio.CharBuffer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;

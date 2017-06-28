@@ -4,6 +4,10 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.draw.key.CssRadialGradient;
+import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.draw.key.CssLinearGradient;
+import org.jhotdraw8.draw.key.Paintable;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;

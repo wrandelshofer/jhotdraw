@@ -15,7 +15,6 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssPaintableConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
-import org.jhotdraw8.text.Paintable;
 
 /**
  * PaintStyleableFigureKey.

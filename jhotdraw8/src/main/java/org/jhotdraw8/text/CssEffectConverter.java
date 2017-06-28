@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.draw.key.CssColor;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;

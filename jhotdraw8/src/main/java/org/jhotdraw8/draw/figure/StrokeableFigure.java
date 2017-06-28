@@ -19,8 +19,8 @@ import org.jhotdraw8.draw.key.DoubleListStyleableFigureKey;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.text.CssColor;
-import org.jhotdraw8.text.Paintable;
+import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.draw.key.Paintable;
 
 /**
  * Interface for figures which render a {@code javafx.scene.shape.Shape} and can

@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.text.CssColor;
+import org.jhotdraw8.draw.key.CssColor;
 
 /**
  * LineConnectionWithMarkersFigure.

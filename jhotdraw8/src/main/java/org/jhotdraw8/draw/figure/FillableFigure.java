@@ -9,8 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
-import org.jhotdraw8.text.CssColor;
-import org.jhotdraw8.text.Paintable;
+import org.jhotdraw8.draw.key.CssColor;
+import org.jhotdraw8.draw.key.Paintable;
 
 /**
  * Interface figures which render a {@code javafx.scene.shape.Shape} and can be

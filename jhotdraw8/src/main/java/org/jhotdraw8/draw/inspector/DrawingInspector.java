@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.CssColor;
+import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.text.XmlDoubleConverter;

@@ -30,7 +30,7 @@ import org.jhotdraw8.geom.CombinedPathIterator;
 import org.jhotdraw8.geom.Path2DDoubleBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
-import org.jhotdraw8.text.Paintable;
+import org.jhotdraw8.draw.key.Paintable;
 
 /**
  * This is lake a group, but the shapes of the child figures are presented as a

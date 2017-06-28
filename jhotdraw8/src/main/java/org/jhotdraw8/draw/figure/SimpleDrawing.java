@@ -20,7 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
-import org.jhotdraw8.text.CssColor;
+import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.css.StylesheetsManager;
 import static java.lang.Math.abs;
 import javafx.collections.MapChangeListener;
@@ -28,7 +28,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
-import org.jhotdraw8.text.Paintable;
+import org.jhotdraw8.draw.key.Paintable;
 
 /**
  * SimpleDrawing.
