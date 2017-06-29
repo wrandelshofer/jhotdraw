@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -14,5 +15,18 @@ import java.util.Set;
  */
 public interface CompositeMapAccessor<T> extends MapAccessor<T> {
 
+    long serialVersionUID = 1L;
+
+    @Override
+    default boolean containsKey(Map<Key<?>, Object> map) {
+        for (MapAccessor<?> sub : getSubAccessors()) {
+            if (!sub.containsKey(map)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Set<MapAccessor<?>> getSubAccessors();
+
 }

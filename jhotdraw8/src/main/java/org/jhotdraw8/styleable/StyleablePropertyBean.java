@@ -48,6 +48,15 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @return The styled value.
      */
     public <T> T getStyled(MapAccessor<T> key);
+   /**
+     * Returns the styled value.
+     *
+     * @param <T> The value type
+     * @param key The property key
+     * @param origin The style origin
+     * @return The styled value.
+     */
+    public <T> T getStyled(StyleOrigin origin, MapAccessor<T> key);
 
     /**
      * Sets a styled value.
@@ -76,4 +85,16 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @param origin The origin.
      */
     public void removeAll(StyleOrigin origin);
+    
+       /**
+     * Returns if a key is present for that style origin.
+     *
+     * @param <T> The value type
+     * @param key The property key
+     * @param origin The style origin
+     * @return True if a value is present.
+     */
+    public <T> boolean containsKey(StyleOrigin origin, MapAccessor<T> key);
+
+
 }

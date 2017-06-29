@@ -43,6 +43,11 @@ public interface Key<T> extends MapAccessor<T> {
 
     final static long serialVersionUID = 1L;
 
+    @Override
+    public default boolean containsKey(Map<Key<?>, Object> map) {
+       return map.containsKey(this);
+    }
+
     public String getFullValueType();
 
     /**

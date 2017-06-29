@@ -24,6 +24,14 @@ public interface MapAccessor<T> extends Serializable {
     final static long serialVersionUID = 1L;
 
     /**
+     * Whether the map contains all keys required by this map accessor.
+     * 
+    * @param map
+     * @return true if map contains all keys required by this map accessor.
+     */
+    boolean containsKey(Map<Key<?>, Object> map);
+
+    /**
      * Returns the name string.
      *
      * @return name string.

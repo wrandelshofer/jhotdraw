@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.styleable;
 
+import java.util.Map;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
@@ -69,6 +70,17 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
         return ret;
     }
 
+    @Override
+    public <T> T getStyled(StyleOrigin origin, MapAccessor<T> key) {
+        Map<Key<?>, Object> map = getStyleableMap().getMap(origin);
+        return key.get(map);
+    }
+
+    @Override
+    public <T> boolean containsKey(StyleOrigin origin, MapAccessor<T> key) {
+        return key.containsKey(getStyleableMap().getMap(origin));
+    }
+
     /**
      * Sets the style value.
      */
@@ -116,4 +128,6 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
 
     }
+    
+    
 }

@@ -21,7 +21,7 @@ public interface SelectorModel<T> {
      * 
      *<a href="https://www.w3.org/TR/css3-cascade/#initial">Resetting a Property: the 'initial' keyword.</a>
      */
-String INITIAL_KEYWORD="initial";
+String INITIAL_VALUE_KEYWORD="initial";
     /**
      * Returns true if the element has the specified id.
      *

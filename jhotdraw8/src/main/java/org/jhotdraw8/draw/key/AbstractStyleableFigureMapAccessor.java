@@ -8,8 +8,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.jhotdraw8.collection.CompositeMapAccessor;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.StyleableMapAccessor;
 
@@ -94,6 +96,11 @@ public abstract class AbstractStyleableFigureMapAccessor<T> implements Styleable
             }
         }
         dirtyMask = m;
+    }
+
+    @Override
+    public boolean containsKey(Map<Key<?>, Object> map) {
+        return CompositeMapAccessor.super.containsKey(map); 
     }
 
     /**
