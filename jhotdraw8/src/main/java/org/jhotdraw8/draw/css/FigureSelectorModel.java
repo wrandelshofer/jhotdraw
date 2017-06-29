@@ -11,9 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
@@ -22,11 +19,10 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.SelectorModel;
-import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssStringConverter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 
 /**
  * FigureSelectorModel.
