@@ -61,7 +61,8 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
 
         @Override
         public Set<Entry<Key<?>, Object>> entrySet() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            // FIXME should listen on changes of the entry set!
+            return target.entrySet();
         }
 
         public Figure getFigure() {
