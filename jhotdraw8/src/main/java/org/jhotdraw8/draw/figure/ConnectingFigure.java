@@ -32,4 +32,13 @@ public interface ConnectingFigure extends Figure {
     default boolean canConnect(Figure figure, Connector connector) {
         return true;
     }
+    
+        /**
+     * This method is called from DrawingModel, when the connected state of a figure has changed. This
+     * implementation is empty.
+     */
+    default void connectNotify() {
+    }
+
+
 }

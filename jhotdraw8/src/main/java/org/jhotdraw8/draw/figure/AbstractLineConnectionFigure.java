@@ -99,31 +99,8 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         startConnectorProperty.addListener(clConnector);
         endConnectorProperty = END_CONNECTOR.propertyAt(getProperties());
         endConnectorProperty.addListener(clConnector);
-
-        connected.addListener((o, oldv, newv) -> {
-            if (newv) {
-                connectNotify();
-            } else {
-                disconnectNotify();
-            }
-        });
     }
 
-    /**
-     * This method is called, when connectedProperty becomes true. This
-     * implementation is empty.
-     */
-    protected void connectNotify() {
-    }
-
-    /**
-     * This property is true when the figure is connected.
-     *
-     * @return the connected property
-     */
-    public ReadOnlyBooleanProperty connectedProperty() {
-        return connected.getReadOnlyProperty();
-    }
 
     @Override
     public void createHandles(HandleType handleType, List<Handle> list) {
@@ -152,13 +129,6 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         } else {
             super.createHandles(handleType, list);
         }
-    }
-
-    /**
-     * This method is called, when connectedProperty becomes false. This
-     * implementation is empty.
-     */
-    protected void disconnectNotify() {
     }
 
     @Override

@@ -90,28 +90,6 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         labelTargetProperty.addListener(clTarget);
         labelConnectorProperty = LABEL_CONNECTOR.propertyAt(getProperties());
         labelConnectorProperty.addListener(clConnector);
-
-        connected.addListener((o, oldv, newv) -> {
-            if (newv) {
-                connectNotify();
-            } else {
-                disconnectNotify();
-            }
-        });
-    }
-
-    /**
-     * This method is called, when connectedProperty becomes true. This
-     * implementation is empty.
-     */
-    protected void connectNotify() {
-    }
-
-    /**
-     * This method is called, when connectedProperty becomes false. This
-     * implementation is empty.
-     */
-    protected void disconnectNotify() {
     }
 
     private void updateConnectedProperty() {
