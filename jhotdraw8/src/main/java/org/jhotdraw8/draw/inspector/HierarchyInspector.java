@@ -56,7 +56,6 @@ import org.jhotdraw8.tree.SimpleTreePresentationModel;
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
-
     @FXML
     private TreeTableColumn<Figure, ImmutableObservableList<String>> styleClassesColumn;
     @FXML
@@ -145,7 +144,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             @Override
             @SuppressWarnings("unchecked")
             public ImmutableObservableList<String> getValue() {
-                return new ImmutableObservableList<>(figure == null ? null : figure.getStyleClass());
+                return figure == null ? null : new ImmutableObservableList<>(figure.getStyleClass());
             }
         }
         );
@@ -155,11 +154,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             @Override
             @SuppressWarnings("unchecked")
             public ImmutableObservableSet<PseudoClass> getValue() {
-                return new ImmutableObservableSet<>(figure == null ? null : figure.getPseudoClassStates());
+                return figure == null ? null : new ImmutableObservableSet<>(figure.getPseudoClassStates());
             }
         }
         );
-        
 
         // This cell factory ensures that only styleable figures support editing of ids.
         // And it ensures, that the users sees the computed id, and not the one that he entered. 
@@ -269,8 +267,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 };
             }
         });
-CssSetConverter<PseudoClass> pseudoClassConverter=new CssSetConverter<>();
-pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableObservableSet<PseudoClass>>>() {
+        CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>();
+        pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableObservableSet<PseudoClass>>>() {
             @Override
             public TreeTableCell<Figure, ImmutableObservableSet<PseudoClass>> call(TreeTableColumn<Figure, ImmutableObservableSet<PseudoClass>> paramTableColumn) {
                 return new TextFieldTreeTableCell<Figure, ImmutableObservableSet<PseudoClass>>() {
