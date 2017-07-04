@@ -16,6 +16,7 @@ import org.jhotdraw8.io.IdFactory;
  * Converts references to figures.
  *
  * @author Werner Randelshofer
+ * @param <T> the type
  */
 public class XmlObjectReferenceConverter<T> implements Converter<T> {
 
@@ -43,6 +44,7 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
             return null;
         }
         Object obj = idFactory.getObject(str);
+System.out.println("XmlObjectReferenceConverter getObject:"+str+" = "+obj);        
 
         @SuppressWarnings("unchecked")
         T value = clazz.isInstance(obj) ? (T) obj : null;

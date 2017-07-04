@@ -2,7 +2,6 @@
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-
 package org.jhotdraw8.collection;
 
 import java.util.Collections;
@@ -18,7 +17,7 @@ import java.util.Set;
  * @param <E> the element type of the set
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
-
+private final static long serialVersionUID=1L;
     private final MapAccessor<ImmutableObservableSet<E>> setAccessor;
     private final E value;
     private boolean defaultValue;
@@ -26,21 +25,23 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     private final boolean isTransient;
 
     public SetValueMapAccessor(String name, boolean isTransient, MapAccessor<ImmutableObservableSet<E>> setAccessor, E value, boolean defaultValue) {
-        if (value==null)throw new IllegalArgumentException("value is null");
+        if (value == null) {
+            throw new IllegalArgumentException("value is null");
+        }
         this.setAccessor = setAccessor;
         this.value = value;
-        this.defaultValue=defaultValue;
-        this.name=name;
-        this.isTransient=isTransient;
+        this.defaultValue = defaultValue;
+        this.name = name;
+        this.isTransient = isTransient;
     }
 
-    public SetValueMapAccessor( String name, MapAccessor<ImmutableObservableSet<E>> setAccessor, E value) {
-        this(name, false,setAccessor,value,false);
+    public SetValueMapAccessor(String name, MapAccessor<ImmutableObservableSet<E>> setAccessor, E value) {
+        this(name, false, setAccessor, value, false);
     }
 
     @Override
     public Boolean get(Map<? super Key<?>, Object> a) {
-return       setAccessor.get(a).contains(value);
+        return setAccessor.get(a).contains(value);
     }
 
     @Override
@@ -65,27 +66,27 @@ return       setAccessor.get(a).contains(value);
 
     @Override
     public Class<Boolean> getValueType() {
-      return Boolean.class;
+        return Boolean.class;
     }
 
     @Override
     public List<Class<?>> getValueTypeParameters() {
-      return Collections.emptyList();
+        return Collections.emptyList();
     }
 
     @Override
     public boolean isTransient() {
-       return false;
+        return isTransient;
     }
 
     @Override
     public Boolean put(Map<? super Key<?>, Object> a, Boolean value) {
-        ImmutableObservableSet<E> set=        setAccessor.get(a);
+        ImmutableObservableSet<E> set = setAccessor.get(a);
         boolean oldValue = set.contains(this.value);
-        if (value!=null&&value.booleanValue()) {
-            set=ImmutableObservableSet.add(set, this.value);
-        }else{
-            set=ImmutableObservableSet.remove(set, this.value);
+        if (value != null && value.booleanValue()) {
+            set = ImmutableObservableSet.add(set, this.value);
+        } else {
+            set = ImmutableObservableSet.remove(set, this.value);
         }
         setAccessor.put(a, set);
         return oldValue;
@@ -96,5 +97,4 @@ return       setAccessor.get(a).contains(value);
         return put(a, false);
     }
 
-   
 }

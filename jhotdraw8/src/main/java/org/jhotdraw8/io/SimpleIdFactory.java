@@ -41,7 +41,7 @@ public class SimpleIdFactory implements IdFactory {
         return idToObject.get(id);
     }
 
-    public void putId(Object object, String id) {
+    public void putId( String id, Object object) {
         String oldId = objectToId.put(object, id);
         if (oldId != null) {
             idToObject.remove(oldId);

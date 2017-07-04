@@ -157,24 +157,24 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 idFactory.reset();
             }
         }
-        return readDrawingOrClipping(doc, oldDrawing);
+        return readDrawingOrClippingFromDocument(doc, oldDrawing);
     }
 
     /**
      * Reads drawing or clipping starting from the specified node. The idFactory
      * must have been iniitalised before this method is called.
      *
-     * @param parent
+     * @param doc
      * @param oldDrawing
      * @return
      * @throws IOException
      */
-    protected Figure readDrawingOrClipping(Node parent, Drawing oldDrawing) throws IOException {
+    protected Figure readDrawingOrClippingFromDocument(Document doc, Drawing oldDrawing) throws IOException {
 
         figureToElementMap.clear();
         Drawing external = null;
         Clipping clipping = null;
-        NodeList list = parent.getChildNodes();
+        NodeList list = doc.getChildNodes();
         comments = new ArrayList<>();
         for (int i = 0, n = list.getLength(); i < n; i++) {
             Node node = list.item(i);
@@ -196,7 +196,67 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 Node node = list.item(i);
                 switch (node.getNodeType()) {
                     case Node.PROCESSING_INSTRUCTION_NODE:
-                        readProcessingInstruction(parent.getOwnerDocument(), (ProcessingInstruction) node, external);
+                        readProcessingInstruction(doc.getOwnerDocument(), (ProcessingInstruction) node, external);
+                        break;
+                }
+            }
+        }
+        if (external == null && clipping == null) {
+            if (namespaceURI == null) {
+                throw new IOException("The document does not contain a drawing.");
+            } else {
+                throw new IOException("The document does not contain a drawing in namespace \"" + namespaceURI + "\".");
+            }
+        }
+        if (external != null) {
+            external.set(Drawing.DOCUMENT_HOME, getExternalHome());
+            external.set(XML_EPILOG_COMMENT_KEY, comments);
+        }
+        try {
+            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
+                readElementAttributes(entry.getKey(), entry.getValue());
+                readElementNodeList(entry.getKey(), entry.getValue());
+            }
+        } finally {
+            figureToElementMap.clear();
+        }
+        comments = null;
+        if (external != null) {
+            Drawing internal = figureFactory.fromExternalDrawing(external);
+            internal.updateCss();
+            return internal;
+        } else {
+            return clipping;
+        }
+    }
+    /**
+     * Reads drawing or clipping starting from the specified node. The idFactory
+     * must have been iniitalised before this method is called.
+     *
+     * @param drawingElement
+     * @param oldDrawing
+     * @return
+     * @throws IOException
+     */
+    protected Figure readDrawingOrClipping(Element drawingElement, Drawing oldDrawing) throws IOException {
+
+        figureToElementMap.clear();
+        Drawing external = null;
+        Clipping clipping = null;
+        NodeList list = drawingElement.getChildNodes();
+        comments = new ArrayList<>();
+                    Figure f = readNodesRecursively(drawingElement);
+                    if (f instanceof Drawing) {
+                        external = (Drawing) f;
+                    } else if (f instanceof Clipping) {
+                        clipping = (Clipping) f;
+                    }
+        if (external != null) {
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                switch (node.getNodeType()) {
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        readProcessingInstruction(drawingElement.getOwnerDocument(), (ProcessingInstruction) node, external);
                         break;
                 }
             }
@@ -469,9 +529,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             if (id != null && !id.isEmpty()) {
                 if (idFactory.getObject(id) != null) {
                     System.err.println("SimpleXmlIO warning: duplicate id " + id + " in element " + elem.getTagName());
-                    idFactory.putId(figure, id);
+                    idFactory.putId(id,figure);
                 } else {
-                    idFactory.putId(figure, id);
+                    idFactory.putId(id,figure);
                 }
             }
             return figure;
@@ -481,6 +541,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Creates a figure but does not process the getProperties.
+     * @param node a node
+     * @return a figure
+     * @throws java.io.IOException in case of failure
      */
     protected Figure readNodesRecursively(Node node) throws IOException {
         switch (node.getNodeType()) {
@@ -622,7 +685,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 value = internalToExternal(figure.getDrawing(), (URI) value);
             }
 
-            if (figure.containsKey(StyleOrigin.USER, key) && !figureFactory.isDefaultValue(figure, key, value)) {
+            if (!key.isTransient() && figure.containsKey(StyleOrigin.USER, key) && !figureFactory.isDefaultValue(figure, key, value)) {
                 String name = figureFactory.keyToName(figure, key);
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
                     setAttribute(elem, name, idFactory.createId(value));
@@ -638,7 +701,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) k;
             Object value = figure.get(key);
-            if (!figureFactory.isDefaultValue(figure, key, value)) {
+            if (!key.isTransient() && figure.containsKey(StyleOrigin.USER, key) && !figureFactory.isDefaultValue(figure, key, value)) {
                 for (Node node : figureFactory.valueToNodeList(key, value, document)) {
                     elem.appendChild(node);
                 }

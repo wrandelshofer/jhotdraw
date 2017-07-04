@@ -178,7 +178,7 @@ public class SvgExporter implements InternalExternalUriMixin {
     private void initIdFactoryRecursively(javafx.scene.Node node) throws IOException {
         String id = node.getId();
         if (id != null && idFactory.getObject(id) == null) {
-            idFactory.putId(node, id);
+            idFactory.putId(id, node);
         } else {
             idFactory.createId(node, node.getTypeSelector().toLowerCase());
         }

@@ -149,7 +149,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
         int numberOfPages = 0;
         for (Page page : pages) {
             if (page.getId() != null) {
-                idFactory.putId(page, page.getId());
+                idFactory.putId( page.getId(), page);
             }
             numberOfPages += page.getNumberOfSubPages();
         }
@@ -237,7 +237,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
         IdFactory idFactory = new SimpleIdFactory();
         for (Figure slice : slices) {
             if (slice.getId() != null) {
-                idFactory.putId(slice, slice.getId());
+                idFactory.putId( slice.getId(), slice);
             }
         }
         for (Slice slice : slices) {

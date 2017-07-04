@@ -67,10 +67,10 @@ public interface IdFactory {
      * Puts an id for the specified object. If the object already has an id, the
      * old id is replaced.
      *
-     * @param object the object
      * @param id the id
+     * @param object the object
      */
-    public void putId(Object object, String id);
+    public void putId(String id, Object object);
     /**
      * Clears all ids.
      */
