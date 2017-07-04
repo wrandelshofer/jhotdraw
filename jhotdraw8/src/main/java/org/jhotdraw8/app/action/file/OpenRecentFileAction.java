@@ -114,6 +114,9 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                 ((message == null) ? "" : message));
         alert.getDialogPane().setMaxWidth(640.0);
         alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
+        
+        // Note: we must invoke clear() or read() on the project, before we start using it.
+        v.clear();
         alert.showAndWait();
         v.removeDisabler(this);
     }
