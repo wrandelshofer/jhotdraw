@@ -126,6 +126,8 @@ public class SimpleFigureFactory implements FigureFactory {
      * <p>
      * {@code figureClass.newInstance()} is used to instantiate a figure from a
      * name.</p>
+     * <p>
+     * If a figure with this name has already been added, it will be replaced by this figure.
      *
      * @param name The element name
      * @param figureClass The figure class is used both for instantiation of a
@@ -133,17 +135,17 @@ public class SimpleFigureFactory implements FigureFactory {
      */
     public void addFigure(String name, Class<? extends Figure> figureClass) {
         if (!nameToFigure.containsKey(name)) {
-            nameToFigure.put(name, () -> {
-                try {
-                    return figureClass.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new InternalError("Couldn't instantiate " + figureClass, e);
-                }
-            });
+            figureToName.remove(nameToFigure.get(name));
         }
-        if (!figureToName.containsKey(figureClass)) {
-            figureToName.put(figureClass, name);
-        }
+        nameToFigure.put(name, () -> {
+            try {
+                return figureClass.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new InternalError("Couldn't instantiate " + figureClass, e);
+            }
+        });
+
+        figureToName.put(figureClass, name);
     }
 
     /**
@@ -152,6 +154,8 @@ public class SimpleFigureFactory implements FigureFactory {
      * <p>
      * The provided {@code figureSupplier} is used to instantiate a figure from
      * a name.</p>
+     * <p>
+     * If a figure with this name has already been added, it will be replaced by this figure.
      *
      * @param name The element name
      * @param figureSupplier The figure supplier is used for instantiating a
@@ -161,11 +165,10 @@ public class SimpleFigureFactory implements FigureFactory {
      */
     public void addFigure(String name, Class<? extends Figure> figureClass, Supplier<Figure> figureSupplier) {
         if (!nameToFigure.containsKey(name)) {
-            nameToFigure.put(name, figureSupplier);
+            figureToName.remove(nameToFigure.get(name));
         }
-        if (!figureToName.containsKey(figureClass)) {
-            figureToName.put(figureClass, name);
-        }
+        nameToFigure.put(name, figureSupplier);
+        figureToName.put(figureClass, name);
     }
 
     /**
