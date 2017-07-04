@@ -4,42 +4,27 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import java.io.IOException;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
-import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
-
 import javafx.scene.shape.StrokeType;
-import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.connector.PathConnector;
 import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE_TYPE;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
-import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * Renders a Shape (either a Rectangle or an SVGPath) inside a rectangular region.

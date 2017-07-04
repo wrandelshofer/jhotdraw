@@ -36,13 +36,15 @@ public class XmlSvgPathConverter implements Converter<SVGPath> {
         out.position(0);
         out.limit(count);
         SVGPath p = new SVGPath();
-        p.setContent(out.toString());
+        final String string = out.toString();
+        p.setContent("none".equals(string)?null:string);
         return p;
     }
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, SVGPath value) throws IOException {
-        out.append(value.getContent());
+        final String content = value.getContent();
+        out.append(content==null?"none":content);
     }
 
     @Override

@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.css.StyleOrigin;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -140,11 +141,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     protected boolean isClipping(Element elem) throws IOException {
-            Figure probe = readNode(elem);
-            return probe instanceof Clipping;
-        
+        Figure probe = readNode(elem);
+        return probe instanceof Clipping;
+
     }
-    
+
     public Figure fromDocument(Document doc, Drawing oldDrawing) throws IOException {
         idFactory.reset();
         if (oldDrawing != null) {
@@ -158,23 +159,24 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
         return readDrawingOrClipping(doc, oldDrawing);
     }
-    
+
     /**
-     * Reads drawing or clipping starting from the specified node.
-     * The idFactory must have been iniitalised before this method is called.
+     * Reads drawing or clipping starting from the specified node. The idFactory
+     * must have been iniitalised before this method is called.
+     *
      * @param parent
      * @param oldDrawing
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
-   protected Figure readDrawingOrClipping(Node parent, Drawing oldDrawing) throws IOException {
- 
+    protected Figure readDrawingOrClipping(Node parent, Drawing oldDrawing) throws IOException {
+
         figureToElementMap.clear();
         Drawing external = null;
         Clipping clipping = null;
         NodeList list = parent.getChildNodes();
         comments = new ArrayList<>();
-        for (int i = 0, n=list.getLength(); i < n; i++) {
+        for (int i = 0, n = list.getLength(); i < n; i++) {
             Node node = list.item(i);
             switch (node.getNodeType()) {
                 case Node.COMMENT_NODE:
@@ -570,30 +572,30 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     public Document toDocument(Drawing internal) throws IOException {
-            Drawing external = figureFactory.toExternalDrawing(internal);
+        Drawing external = figureFactory.toExternalDrawing(internal);
 
-            idFactory.reset();
-            final String docElemName = figureFactory.figureToName(external);
-            Document doc = XmlUtil.createDocument(namespaceURI, namespaceQualifier, docElemName);
+        idFactory.reset();
+        final String docElemName = figureFactory.figureToName(external);
+        Document doc = XmlUtil.createDocument(namespaceURI, namespaceQualifier, docElemName);
 
-            Element docElement = doc.getDocumentElement();
+        Element docElement = doc.getDocumentElement();
 
-            writeProcessingInstructions(doc, external);
-            for (String string : external.get(XML_HEAD_COMMENT_KEY)) {
-                doc.insertBefore(doc.createComment(string), docElement);
-            }
-            writeElementAttributes(docElement, external);
-            String linebreak = "\n";
-            for (Figure child : external.getChildren()) {
-                writeNodeRecursively(doc, docElement, child);
-            }
-            for (String string : external.get(XML_BODY_COMMENT_KEY)) {
-                docElement.appendChild(doc.createComment(string));
-            }
-            for (String string : external.get(XML_EPILOG_COMMENT_KEY)) {
-                doc.appendChild(doc.createComment(string));
-            }
-            return doc;
+        writeProcessingInstructions(doc, external);
+        for (String string : external.get(XML_HEAD_COMMENT_KEY)) {
+            doc.insertBefore(doc.createComment(string), docElement);
+        }
+        writeElementAttributes(docElement, external);
+        String linebreak = "\n";
+        for (Figure child : external.getChildren()) {
+            writeNodeRecursively(doc, docElement, child);
+        }
+        for (String string : external.get(XML_BODY_COMMENT_KEY)) {
+            docElement.appendChild(doc.createComment(string));
+        }
+        for (String string : external.get(XML_EPILOG_COMMENT_KEY)) {
+            doc.appendChild(doc.createComment(string));
+        }
+        return doc;
     }
 
     @Override
@@ -620,7 +622,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 value = internalToExternal(figure.getDrawing(), (URI) value);
             }
 
-            if (!figureFactory.isDefaultValue(figure, key, value)) {
+            if (figure.containsKey(StyleOrigin.USER, key) && !figureFactory.isDefaultValue(figure, key, value)) {
                 String name = figureFactory.keyToName(figure, key);
                 if (Figure.class.isAssignableFrom(key.getValueType())) {
                     setAttribute(elem, name, idFactory.createId(value));
