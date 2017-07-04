@@ -146,11 +146,11 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      * Returns all figures which are connected by this figure - they provide to
      * the layout of this figure.
      *
-     * @return a list of connected figures
+     * @return an unmodifiable set of connected figures
      */
     @Override
     public Set<Figure> getLayoutSubjects() {
-        HashSet<Figure> ctf = new HashSet<>();
+        Set<Figure> ctf = new HashSet<>();
         if (get(START_TARGET) != null) {
             ctf.add(get(START_TARGET));
         }
