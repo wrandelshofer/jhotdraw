@@ -379,6 +379,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
 
             // all figures with dirty bit "TRANSFORM" or "LAYOUT"
             // induce a dirty bit "TRANSFORM" on all ancestors which implement the TransformableFigure interface.
+            // induce a dirty bit "LAYOUT" on all ancestors which implement the LayoutableFigure interface.
             DirtyMask dmTransformLayout = DirtyMask.of(DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
@@ -387,8 +388,9 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                     for (Figure a : f.ancestorIterable()) {
                         if (a instanceof TransformableFigure) {
                             markDirty(a, DirtyBits.NODE, DirtyBits.TRANSFORM);
-                        } else {
-//                            markDirty(a, DirtyBits.NODE);
+                        }
+                        if (a.isLayoutable()) {
+                            markDirty(a, DirtyBits.NODE, DirtyBits.LAYOUT);
                         }
                     }
                 }
@@ -441,9 +443,18 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 }
             }
 
+            // all figures with dirty flag "LAYOUT" must be laid out
+            for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmLayout)) {
+                    this.layout(f);
+                }
+            }
+            
             // all figures with dirty flag "LAYOUT_OBSERVERS" must be laid out
             // transitively, including all of their layoutable ancestors.
-            LinkedHashSet<Figure> transitive = new LinkedHashSet<>(todo);
+            Set<Figure> transitive = new LinkedHashSet<>(todo);
             transitivelyCollectDependentFigures(todo, transitive);
             collectLayoutableAncestors(new ArrayList<>(transitive), transitive);
             for (Figure f : transitive) {
