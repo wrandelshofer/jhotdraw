@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
@@ -35,7 +36,7 @@ public final class ImmutableObservableSet<E> extends AbstractSet<E> implements O
                 backingSet = Collections.singleton(copyMe.iterator().next());
                 break;
             default:
-                this.backingSet = new HashSet<>(copyMe);
+                this.backingSet = new LinkedHashSet<>(copyMe);
         }
     }
 
