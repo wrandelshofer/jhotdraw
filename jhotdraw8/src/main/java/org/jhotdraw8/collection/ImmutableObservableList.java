@@ -4,10 +4,13 @@
  */
 package org.jhotdraw8.collection;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javafx.beans.InvalidationListener;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 
@@ -19,7 +22,7 @@ import javafx.collections.ObservableListBase;
  * rawcoder $$
  * @param <E> element type
  */
-public final class ImmutableObservableList<E> extends ObservableListBase<E> implements ObservableList<E> {
+public final class ImmutableObservableList<E> extends AbstractList<E> implements ObservableList<E> {
 
     private final static ImmutableObservableList<Object> EMPTY = new ImmutableObservableList<Object>(true, new Object[0]);
 
@@ -49,6 +52,20 @@ public final class ImmutableObservableList<E> extends ObservableListBase<E> impl
     }
 
     @Override
+    public void addListener(ListChangeListener<? super E> listener) {
+        // nothing to do
+    }
+
+    @Override
+    public void addListener(InvalidationListener listener) {
+        // nothing to do
+    }
+
+    public void copyInto(Object[] out, int offset) {
+        System.arraycopy(array, 0, out, offset, array.length);
+    }
+
+    @Override
     public E get(int index) {
         @SuppressWarnings("unchecked")
         E value = (E) array[index];
@@ -64,6 +81,16 @@ public final class ImmutableObservableList<E> extends ObservableListBase<E> impl
     @SafeVarargs
     public final boolean removeAll(E... elements) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeListener(ListChangeListener<? super E> listener) {
+        // nothing to do
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+        // nothing to do
     }
 
     @Override
@@ -114,10 +141,6 @@ public final class ImmutableObservableList<E> extends ObservableListBase<E> impl
     @SuppressWarnings("unchecked")
     public static <T> ImmutableObservableList<T> emptyList() {
         return (ImmutableObservableList<T>) EMPTY;
-    }
-
-    public void copyInto(Object[] out, int offset) {
-        System.arraycopy(array, 0, out, offset, array.length);
     }
 
     @SafeVarargs
