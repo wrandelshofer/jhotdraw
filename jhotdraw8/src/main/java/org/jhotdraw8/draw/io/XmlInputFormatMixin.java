@@ -4,29 +4,15 @@
  */
 package org.jhotdraw8.draw.io;
 
-import ch.systransis.arl.ferro.io.ManifestReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
-import java.net.URL;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * XmlInputFormatMixin.
@@ -41,32 +27,13 @@ public interface XmlInputFormatMixin {
     boolean isNamespaceAware();
 
     default Figure read(InputStream in, Drawing drawing) throws IOException {
-        try {
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            if (isNamespaceAware()) {
-                builderFactory.setNamespaceAware(true);
-            }
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            Document doc = builder.parse(in);
-            return read(doc, drawing);
-        } catch (SAXException | ParserConfigurationException ex) {
-            throw new IOException(ex);
-        }
+        Document doc = XmlUtil.read(in, isNamespaceAware());
+        return read(doc, drawing);
     }
 
     default Figure read(Reader in, Drawing drawing) throws IOException {
-        try {
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            if (isNamespaceAware()) {
-                builderFactory.setNamespaceAware(true);
-            }
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            InputSource inputSource = new InputSource(in);
-            Document doc = builder.parse(inputSource);
-            return read(doc, drawing);
-        } catch (SAXException | ParserConfigurationException ex) {
-            throw new IOException(ex);
-        }
+        Document doc = XmlUtil.read(in, isNamespaceAware());
+        return read(doc, drawing);
     }
 
     default Figure read(String string, Drawing drawing) throws IOException {
