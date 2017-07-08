@@ -32,7 +32,7 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * AbstractLabelConnectionFigure.
+ * A Label that can be attached to another Figure by setting LABEL_CONNECTOR and LABEL_TARGET.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
