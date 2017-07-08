@@ -10,6 +10,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import java.util.List;
 import javafx.collections.FXCollections;
+import javafx.css.StyleOrigin;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
@@ -52,7 +53,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     public AbstractRegionFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
-        set(STROKE_TYPE, StrokeType.INSIDE);
+        setStyled(StyleOrigin.USER_AGENT, STROKE_TYPE, StrokeType.INSIDE);
     }
 
     public AbstractRegionFigure(Rectangle2D rect) {
