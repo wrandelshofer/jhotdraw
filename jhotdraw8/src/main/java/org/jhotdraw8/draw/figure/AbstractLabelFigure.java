@@ -30,8 +30,6 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import static org.jhotdraw8.draw.figure.TextFigure.ORIGIN;
-import static org.jhotdraw8.draw.figure.TextableFigure.TEXT;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
