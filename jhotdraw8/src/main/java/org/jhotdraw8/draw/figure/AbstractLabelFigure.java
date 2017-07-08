@@ -40,7 +40,7 @@ import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.draw.key.Paintable;
 
 /**
- * AbstractLabelFigure.
+ * A Label that can be placed anywhere on a drawing.
  *
  * @author Werner Randelshofer
  * @version $Id$
