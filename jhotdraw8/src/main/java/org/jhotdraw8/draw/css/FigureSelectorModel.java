@@ -268,11 +268,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         }
         boolean isInitialValue = !element.containsKey(StyleOrigin.USER, key);
         if ((key instanceof CompositeMapAccessor)) {
-            for (MapAccessor subkey: (Set<MapAccessor>) ((CompositeMapAccessor)key).getSubAccessors()) {
+            for (MapAccessor subkey : (Set<MapAccessor>) ((CompositeMapAccessor) key).getSubAccessors()) {
                 // FIXME should recurse here
-            if (element.containsKey(StyleOrigin.USER, subkey)) {
-                isInitialValue = false;
-            }}
+                if (element.containsKey(StyleOrigin.USER, subkey)) {
+                    isInitialValue = false;
+                }
+            }
         }
         if (isInitialValue) {
             return INITIAL_VALUE_KEYWORD;
