@@ -63,8 +63,9 @@ public interface StrokeableFigure extends Figure {
      */
     public static EnumStyleableFigureKey<StrokeLineJoin> STROKE_LINE_JOIN = new EnumStyleableFigureKey<>("stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), false,StrokeLineJoin.MITER);
     /**
-     * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
-     * value: {@code 4.0}.
+     * Defines the limit for the {@code StrokeLineJoin.MITER} style. 
+     * <p>
+     * Default value: {@code 4.0}.
      * <p>
      * References:
      * <p>
