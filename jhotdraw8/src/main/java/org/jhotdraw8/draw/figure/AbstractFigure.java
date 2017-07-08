@@ -144,51 +144,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public String toString() {
-        String className = getClass().getName();
-        className = className.substring(className.lastIndexOf('.') + 1);
-        StringBuilder buf = new StringBuilder();
-        buf.append(className).append('@')//
-                .append(Integer.toHexString(hashCode()))//
-                .append('{');//
-        boolean isFirst = true;
-        for (Map.Entry<Key<?>, Object> e : getProperties().entrySet()) {
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                buf.append(',');
-            }
-            buf.append(e.getKey());
-            buf.append('=');
-            if (e.getValue() instanceof Figure) {
-                Figure f = (Figure) e.getValue();
-                className = f.getClass().getName();
-                className = className.substring(className.lastIndexOf('.') + 1);
-                buf.append(className).append('@').append(f.hashCode());
-            } else {
-                buf.append(e.getValue());
-            }
-        }
-        if (dependentFigures != null) {
-            buf.append(", deps={");
-            isFirst = true;
-            for (Figure f : dependentFigures) {
-                if (isFirst) {
-                    isFirst = false;
-                } else {
-                    buf.append(',');
-                }
-                className = f.getClass().getName();
-                className = className.substring(className.lastIndexOf('.') + 1);
-                buf.append(className).append('@').append(f.hashCode());
-            }
-            buf.append('}');
-        }
-        buf.append('}');
-        return buf.toString();
-    }
-
-    @Override
     public void updateCss() {
         getStyleableMap().clearNonUserValues();
         Drawing d = getDrawing();
