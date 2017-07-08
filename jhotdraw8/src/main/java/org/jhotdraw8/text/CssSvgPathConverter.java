@@ -55,7 +55,7 @@ public class CssSvgPathConverter implements Converter<String> {
 
   @Override
     public String getHelpText() {
-        StringBuilder buf = new StringBuilder("Format of ⟨SvgPath⟩: \" ⟨moveTo ⟩ { moveTo｜⟨lineTo⟩｜⟨quadTo⟩｜⟨cubicTo⟩｜⟨arcTo⟩｜⟨closePath⟩ } \"");
+        StringBuilder buf = new StringBuilder("Format of ⟨SvgPath⟩: \" ⟨moveTo ⟩｛ moveTo｜⟨lineTo⟩｜⟨quadTo⟩｜⟨cubicTo⟩｜⟨arcTo⟩｜⟨closePath⟩ ｝ \"");
         buf.append("\nFormat of ⟨moveTo ⟩: M ⟨x⟩ ⟨y⟩ ｜m ⟨x⟩ ⟨y⟩ ");
         buf.append("\nFormat of ⟨lineTo ⟩: L ⟨x⟩ ⟨y⟩ ｜l ⟨x⟩ ⟨y⟩ | H ⟨x⟩ | h ⟨x⟩ | V ⟨y⟩ | v ⟨y⟩");
         buf.append("\nFormat of ⟨quadTo ⟩: Q ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩ ｜q ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩ ｜T ⟨x⟩ ⟨y⟩ ｜t ⟨x⟩ ⟨y⟩");
