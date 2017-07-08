@@ -145,4 +145,8 @@ public class Transforms {
         return tx == null ? b : tx.transform(b);
     }
 
+    public static Point2D transform(Transform tx, double x, double y) {
+        return tx == null ? new Point2D(x, y) : tx.transform(x, y);
+    }
+
 }
