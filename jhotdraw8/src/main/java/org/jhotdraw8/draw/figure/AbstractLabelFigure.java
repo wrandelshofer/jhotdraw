@@ -81,6 +81,15 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
+    protected <T> void changed(Key<T> key, T oldv, T newv) {
+        super.changed(key, oldv, newv);
+        if ((key instanceof FigureKey)
+                && ((FigureKey) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT)) {
+            invalidateBounds();
+        }
+    }
+
+    @Override
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setAutoSizeChildren(false);
@@ -135,19 +144,21 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
                 textNode.getBaselineOffset() + i.getTop() + i.getBottom());
     }
 
+    @Override
+    public PathIterator getPathIterator(AffineTransform tx) {
+        Text tn = new Text();
+        tn.setText(getText(null));
+        tn.setX(getStyled(ORIGIN).getX());
+        tn.setY(getStyled(ORIGIN).getY());
+        tn.setBoundsType(TextBoundsType.VISUAL);
+        applyFontableFigureProperties(null, tn);
+        return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
+    }
+
     protected abstract String getText(RenderContext ctx);
 
     private void invalidateBounds() {
         boundsInLocal = null;
-    }
-
-    @Override
-    protected <T> void changed(Key<T> key, T oldv, T newv) {
-        super.changed(key,oldv,newv);
-        if ((key instanceof FigureKey)
-                && ((FigureKey) key).getDirtyMask().containsOneOf(DirtyBits.LAYOUT)) {
-            invalidateBounds();
-        }
     }
 
     @Override
@@ -163,11 +174,16 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         invalidateBounds();
     }
 
+    protected void updateGroupNode(RenderContext ctx, Group node) {
+
+    }
+
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         Region r = (Region) g.getProperties().get("region");
         Text t = (Text) g.getProperties().get("text");
+        updateGroupNode(ctx, g);
         updateRegionNode(ctx, r);
         updateTextNode(ctx, t);
 
@@ -219,14 +235,4 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         applyFontableFigureProperties(ctx, tn);
     }
 
-    @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
-        Text tn = new Text();
-        tn.setText(getText(null));
-        tn.setX(getStyled(ORIGIN).getX());
-        tn.setY(getStyled(ORIGIN).getY());
-        tn.setBoundsType(TextBoundsType.VISUAL);
-        applyFontableFigureProperties(null, tn);
-        return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
-    }
 }
