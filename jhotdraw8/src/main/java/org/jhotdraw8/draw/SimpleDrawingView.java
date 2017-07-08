@@ -4,27 +4,30 @@
  */
 package org.jhotdraw8.draw;
 
-import org.jhotdraw8.draw.figure.SimpleDrawing;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.model.DrawingModelEvent;
-import org.jhotdraw8.draw.model.DrawingModel;
 import java.io.IOException;
+import static java.lang.Math.max;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -32,27 +35,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
-import org.jhotdraw8.beans.NonnullProperty;
-import org.jhotdraw8.draw.constrain.Constrainer;
-import org.jhotdraw8.draw.constrain.NullConstrainer;
-import org.jhotdraw8.draw.tool.Tool;
-import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.draw.handle.Handle;
-import static java.lang.Math.*;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.ObservableSet;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -60,18 +42,35 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.app.EditableComponent;
+import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.draw.constrain.Constrainer;
+import org.jhotdraw8.draw.constrain.NullConstrainer;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.SimpleDrawing;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.model.DrawingModelEvent;
 import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.LAYOUT_CHANGED;
 import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.LAYOUT_SUBJECT_CHANGED;
 import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED;
 import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.STYLE_CHANGED;
 import static org.jhotdraw8.draw.model.DrawingModelEvent.EventType.TRANSFORM_CHANGED;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
+import org.jhotdraw8.draw.tool.Tool;
+import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
@@ -91,13 +90,14 @@ import org.jhotdraw8.util.ReversedList;
  * @author werni
  */
 public class SimpleDrawingView extends AbstractDrawingView implements EditableComponent {
+
     private final static double INVSQRT2 = 1.0 / Math.sqrt(2);
     /**
      * Selection tolerance. Selectable margin around a figure.
      */
     public final static double TOLERANCE = 5;
 
-    public final static double TOLERANCE_SQUARED = TOLERANCE*TOLERANCE;
+    public final static double TOLERANCE_SQUARED = TOLERANCE * TOLERANCE;
     private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
 
     private Rectangle canvasPane;
@@ -125,7 +125,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * This will render the drawing without adding it to the scene graph.
      */
     private ImageView drawingImageView = null;//new ImageView();
-
 
     /**
      * The drawingProperty holds the drawing that is presented by this drawing
@@ -263,7 +262,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * The set of all secondary handles. One handle at a time may create
      * secondary handles.
      */
-    private final LinkedList<Handle> secondaryHandles = new LinkedList<>();
+    private final ArrayList<Handle> secondaryHandles = new ArrayList<>();
     /**
      * If too many figures are selected, we only draw one outline handle for all
      * selected figures instead of one outline handle for each selected figure.
@@ -303,6 +302,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }*/
         }
     };
+
     {
         constrainer.addListener((o, oldValue, newValue) -> updateConstrainer(oldValue, newValue));
     }
@@ -310,22 +310,22 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public SimpleDrawingView() {
         init();
     }
+
     @Override
     public ObjectProperty<Layer> activeLayerProperty() {
         return activeLayer;
     }
-
 
     private void clearNodes() {
         figureToNodeMap.clear();
         nodeToFigureMap.clear();
         dirtyFigureNodes.clear();
     }
+
     @Override
     public void clearSelection() {
         getSelectedFigures().clear();
     }
-
 
     @Override
     public NonnullProperty<Constrainer> constrainerProperty() {
@@ -353,7 +353,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             } else {
                 return shape.contains(point);
             }
-            
+
         } else if (node instanceof Rectangle) {
             return Geom.contains(node.getBoundsInLocal(), point, tolerance);
         } else if (node instanceof Shape) {// no special treatment for other shapes
@@ -371,6 +371,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             return Geom.contains(node.getBoundsInLocal(), point, tolerance);
         }
     }
+
     private Image createCheckerboardImage(Color c1, Color c2, int size) {
         WritableImage img = new WritableImage(size * 2, size * 2);
         PixelWriter w = img.getPixelWriter();
@@ -384,6 +385,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         return img;
     }
+
     /**
      * Creates selection handles and adds them to the provided list.
      *
@@ -391,14 +393,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      */
     protected void createHandles(Map<Figure, List<Handle>> handles) {
         ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
-        if (selection.size()>1) {
+        if (selection.size() > 1) {
             if (getAnchorHandleType() != null) {
                 Figure anchor = selection.get(0);
                 List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
                 anchor.createHandles(getAnchorHandleType(), list);
             }
             if (getLeadHandleType() != null) {
-                Figure anchor = selection.get(selection.size()-1);
+                Figure anchor = selection.get(selection.size() - 1);
                 List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
                 anchor.createHandles(getLeadHandleType(), list);
             }
@@ -410,24 +412,25 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             handles.put(figure, list);
         }
     }
+
     @Override
     public void deleteSelection() {
         ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
         DrawingModel model = getModel();
         for (Figure f : figures) {
             if (f.isDeletable()) {
-                for (Figure d:f.preorderIterable()) {
+                for (Figure d : f.preorderIterable()) {
                     model.disconnect(d);
                 }
                 model.removeFromParent(f);
             }
         }
     }
+
     @Override
     public ReadOnlyObjectProperty<Drawing> drawingProperty() {
         return drawing.getReadOnlyProperty();
     }
-
 
     public void dump(Node n, int depth) {
         for (int i = 0; i < depth; i++) {
@@ -447,11 +450,11 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
         }
     }
+
     @Override
     public void duplicateSelection() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 
     @Override
     public Figure findFigure(double vx, double vy) {
@@ -464,14 +467,29 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return f;
     }
 
-
+    /**
+     * Finds a figure at the specified coordinate, but looks only at figures in the specified set.
+     * 
+     * @param vx point in view coordinates
+     * @param vy point in view coordinates
+     * @param figures figures of interest
+     * @return a figure in the specified set which contains the point, or null.
+     */
     @Override
     public Figure findFigure(double vx, double vy, Set<Figure> figures) {
-        Drawing dr = getDrawing();
-        Figure f = findFigureRecursiveInSet((Parent) getNode(dr), viewToWorld(vx, vy), figures, TOLERANCE / getZoomFactor());
+        Node worldNode = getNode(getDrawing());
+        Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToDrawing(vx, vy));
+        for (Figure f : figures) {
+            Node n = getNode(f);
+            Point2D pointInLocal = n.sceneToLocal(pointInScene);
+            if (contains(n, pointInLocal, TOLERANCE)) {
+                return f;
+            }
+        }
 
-        return f;
+        return null;
     }
+
     private Figure findFigureRecursive(Parent p, Point2D pp, double tolerance) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
@@ -495,41 +513,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return null;
     }
 
-    private Figure findFigureRecursiveInSet(Parent p, Point2D pp, Set<Figure> figures, double tolerance) {
-        if (p==null)return null;
-        ObservableList<Node> list = p.getChildrenUnmodifiable();
-        for (int i = list.size() - 1; i >= 0; i--) {// front to back
-            Node n = list.get(i);
-            if (!n.isVisible()) {
-                continue;
-            }
-            Point2D pl = n.parentToLocal(pp);
-            double localTolerance = n.parentToLocal(0, 0).distance(n.parentToLocal(tolerance * INVSQRT2, tolerance * INVSQRT2));
-            if (contains(n, pl, localTolerance)) {
-                Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable() || !figures.contains(f)) {
-                    if (n instanceof Parent) {
-                        f = findFigureRecursiveInSet((Parent) n, pl, figures, localTolerance);
-                    }
-                }
-                if (f != null && f.isSelectable() && figures.contains(f)) {
-                    return f;
-                }
-            }
-        }
-        return null;
-    }
-
-
     @Override
     public List<Figure> findFigures(double vx, double vy, boolean decompose) {
         Transform vt = getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
-        List<Figure> list = new LinkedList<Figure>();
+        List<Figure> list = new ArrayList<Figure>();
         findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose);
         return list;
     }
-
 
     @Override
     public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
@@ -537,7 +528,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
-        List<Figure> list = new LinkedList<Figure>();
+        List<Figure> list = new ArrayList<Figure>();
         findFiguresInsideRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose);
         return list;
     }
@@ -580,7 +571,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
-        List<Figure> list = new LinkedList<Figure>();
+        List<Figure> list = new ArrayList<Figure>();
         findFiguresIntersectingRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose);
         return list;
     }
@@ -603,6 +594,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
         }
     }
+
     private void findFiguresRecursive(Parent p, Point2D pp, List<Figure> found, boolean decompose) {
         double tolerance = TOLERANCE / getZoomFactor();
         ObservableList<Node> list = p.getChildrenUnmodifiable();
@@ -632,6 +624,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
         }
     }
+
     @Override
     public Handle findHandle(double vx, double vy) {
         if (recreateHandles) {
@@ -640,8 +633,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         for (Map.Entry<Node, Handle> e : new ReversedList<>(nodeToHandleMap.entrySet())) {
             final Node node = e.getKey();
             final Handle handle = e.getValue();
-            if (!handle.isSelectable())continue;
-            if (handle.contains(this,vx,vy, TOLERANCE_SQUARED)) {
+            if (!handle.isSelectable()) {
+                continue;
+            }
+            if (handle.contains(this, vx, vy, TOLERANCE_SQUARED)) {
                 return handle;
             } else {
                 if (contains(node, new Point2D(vx, vy), TOLERANCE)) {
@@ -649,18 +644,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 }
             }
         }
-        /*
-        for (Node n : handlesPane.getChildren()) {
-        Point2D pl = n.parentToLocal(vx, vy);
-        if (isInsideRadius(n, pl, HANDLE_TOLERANCE)) {
-        Handle h = nodeToHandleMap.get(n);
-        if (h.isSelectable()) {
-        return h;
-        }
-        }
-        }*/
         return null;
     }
+
     @Override
     public ReadOnlyBooleanProperty focusedProperty() {
         return focused.getReadOnlyProperty();
@@ -687,17 +673,22 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         return result.keySet();
     }
+
     @Override
     public DrawingModel getModel() {
         return drawingModel.get();
     }
+
     @Override
     public Node getNode() {
         return node;
     }
+
     @Override
     public Node getNode(Figure f) {
-        if (f==null) return null;
+        if (f == null) {
+            return null;
+        }
         Node n = figureToNodeMap.get(f);
         if (n == null) {
             n = f.createNode(this);
@@ -707,6 +698,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         return n;
     }
+
     /**
      * XXX use this to center scroll pane on view when zooming.
      */
@@ -717,30 +709,34 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         return (ScrollPane) p;
     }
+
     @Override
     public Transform getViewToWorld() {
         if (viewToWorldTransform == null) {
             // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(-drawingPane.getTranslateX() + overlaysPane.getTranslateX(), -drawingPane.getTranslateY() + overlaysPane.getTranslateX());
             double zoom = zoomFactor.get();
-            viewToWorldTransform = (zoom == 1.0) ? tr : Transforms.concat(new Scale(1.0 / zoom, 1.0 / zoom),tr);
+            viewToWorldTransform = (zoom == 1.0) ? tr : Transforms.concat(new Scale(1.0 / zoom, 1.0 / zoom), tr);
         }
         return viewToWorldTransform;
     }
+
     @Override
     public Transform getWorldToView() {
         if (worldToViewTransform == null) {
             // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(drawingPane.getTranslateX() - overlaysPane.getTranslateX(), drawingPane.getTranslateY() - overlaysPane.getTranslateX());
             double zoom = zoomFactor.get();
-            worldToViewTransform = (zoom == 1.0) ? tr : Transforms.concat(tr,new Scale(zoom, zoom));
+            worldToViewTransform = (zoom == 1.0) ? tr : Transforms.concat(tr, new Scale(zoom, zoom));
         }
         return worldToViewTransform;
     }
+
     private void handleConstrainerInvalidated(Observable o) {
         invalidateConstrainerNode();
         repaint();
     }
+
     private void handleDrawingChanged() {
         clearNodes();
         clearSelection();
@@ -758,23 +754,25 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             updateLayout();
             handleSubtreeNodesChanged(d);
             repaint();
-            
+
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
                 Layer layer = (Layer) d.getChild(i);
                 if (!layer.isEditable() && layer.isVisible()) {
                     activeLayer.set(layer);
                     break;
                 }
-                
+
             }
         }
     }
+
     private void handleFigureAdded(Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             invalidateFigureNode(f);
         }
         repaint();
     }
+
     private void handleFigureRemoved(Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             removeNode(f);
@@ -782,12 +780,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         invalidateHandles();
         repaint();
     }
+
     private void handleFigureRemovedFromDrawing(Figure figure) {
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
         for (Figure f : figure.preorderIterable()) {
             selectedFigures.remove(f);
         }
     }
+
     private void handleNewDrawingModel(DrawingModel oldValue, DrawingModel newValue) {
         if (oldValue != null) {
             clearSelection();
@@ -805,6 +805,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             repaint();
         }
     }
+
     private void handleNodeChanged(Figure f) {
         invalidateFigureNode(f);
         if (f == getDrawing()) {
@@ -815,40 +816,42 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         repaint();
     }
+
     private void handleSubtreeNodesChanged(Figure figures) {
         for (Figure f : figures.preorderIterable()) {
             dirtyFigureNodes.add(f);
             dirtyHandles.add(f);
         }
     }
+
     private void init() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
-        
+
         try {
             rootPane = loader.load(SimpleDrawingView.class.getResourceAsStream("SimpleDrawingView.fxml"));
         } catch (IOException ex) {
             throw new InternalError(ex);
         }
-        
+
         canvasPane = new Rectangle();
         canvasPane.setId("canvasPane");
         canvasPane.setFill(new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false));
-        
+
         drawingSubScene = new Group();
         drawingSubScene.setManaged(false);
         drawingSubScene.setMouseTransparent(true);
         overlaysSubScene = new Group();
         overlaysSubScene.setManaged(false);
         rootPane.getChildren().addAll(drawingSubScene, overlaysSubScene);
-        
+
         drawingPane = new Group();
         //drawingPane.setCacheHint(CacheHint.QUALITY);
         drawingPane.setCache(false);
         //drawingPane.setScaleX(zoomFactor.get());
         //drawingPane.setScaleY(zoomFactor.get());
         drawingSubScene.getChildren().addAll(canvasPane, drawingPane);
-        
+
         toolPane = new BorderPane();
         toolPane.setId("toolPane");
         toolPane.setBackground(Background.EMPTY);
@@ -864,27 +867,29 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         overlaysPane.getChildren().addAll(gridPane, handlesPane, toolPane);
         overlaysPane.setManaged(false);
         overlaysSubScene.getChildren().add(overlaysPane);
-        
+
         // We use a change listener instead of an invalidation listener here,
         // because we only want to update the layout, when the new value is
         // different from the old value!
         drawingPane.layoutBoundsProperty().addListener((observer, oldValue, newValue) -> {
             updateLayout();
         });
-        
+
         drawingModel.get().setRoot(new SimpleDrawing());
         handleNewDrawingModel(null, drawingModel.get());
-        
+
         // Set stylesheet
         rootPane.getStylesheets().add("org/jhotdraw8/draw/SimpleDrawingView.css");
-        
+
         // set root
         node = new SimpleDrawingViewNode();
         node.setCenter(rootPane);
     }
+
     private void invalidateConstrainerNode() {
         constrainerNodeValid = false;
     }
+
     private void invalidateFigureNode(Figure f) {
         dirtyFigureNodes.add(f);
         if (handles.containsKey(f)) {
@@ -898,6 +903,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         repaint();
     }
+
     /**
      * Gets the currently active selection handles. / private
      * java.util.List<Handle> getSelectionHandles() { validateHandles(); return
@@ -917,10 +923,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-
     private void invalidateWorldViewTransforms() {
         worldToViewTransform = viewToWorldTransform = null;
     }
+
     /**
      * Returns true if the point is inside the radius from the center of the
      * node.
@@ -938,6 +944,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         double dy = point.getY() - cy;
         return dx * dx + dy * dy < squaredRadius;
     }
+
     @Override
     public NonnullProperty<DrawingModel> modelProperty() {
         return drawingModel;
@@ -951,11 +958,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public ObservableList<String> overlayStylesheets() {
         return overlaysPane.getStylesheets();
     }
+
     public void recreateHandles() {
         handlesAreValid = false;
         recreateHandles = true;
         repaint();
     }
+
     private void removeNode(Figure f) {
         Node oldNode = figureToNodeMap.remove(f);
         if (oldNode != null) {
@@ -963,6 +972,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         dirtyFigureNodes.remove(f);
     }
+
     /**
      * Repaints the view.
      */
@@ -978,25 +988,26 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             Platform.runLater(repainter);
         }
     }
-    
+
     @Override
     public void scrollFigureToVisible(Figure f) {
-        Bounds boundsInView =  worldToView( f.localToWorld(  f.getBoundsInLocal()));
+        Bounds boundsInView = worldToView(f.localToWorld(f.getBoundsInLocal()));
         scrollRectToVisible(boundsInView);
     }
+
     public void scrollRectToVisible(Bounds boundsInView) {
         ScrollPane sp = getScrollPane();
         final Bounds contentPaneBounds = sp.getContent().getBoundsInLocal();
-        
+
         double width = contentPaneBounds.getWidth();
         double height = sp.getContent().getBoundsInLocal().getHeight();
-        
-        double x = boundsInView.getMinX()+boundsInView.getWidth()*0.5;
-        double y = boundsInView.getMinY()+boundsInView.getHeight()*0.5;
-        
+
+        double x = boundsInView.getMinX() + boundsInView.getWidth() * 0.5;
+        double y = boundsInView.getMinY() + boundsInView.getHeight() * 0.5;
+
         // scrolling values range from 0 to 1
-        sp.setVvalue(Geom.clamp(y/height,0.0,1.0));
-        sp.setHvalue(Geom.clamp(x/width,0.0,1.0));        
+        sp.setVvalue(Geom.clamp(y / height, 0.0, 1.0));
+        sp.setHvalue(Geom.clamp(x / width, 0.0, 1.0));
     }
 
     /**
@@ -1020,10 +1031,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         getSelectedFigures().clear();
         getSelectedFigures().addAll(figures);
     }
+
     @Override
     public ReadOnlyBooleanProperty selectionEmptyProperty() {
         return selectedFiguresProperty().emptyProperty();
     }
+
     private void updateConstrainer(Constrainer oldValue, Constrainer newValue) {
         if (oldValue != null) {
             gridPane.getChildren().remove(oldValue.getNode());
@@ -1038,6 +1051,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             repaint();
         }
     }
+
     private void updateHandles() {
         if (recreateHandles) {
             // FIXME - We create and destroy many handles here!!!
@@ -1066,6 +1080,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
         }
     }
+
     /**
      * Updates the layout of the drawing pane and the panes laid over it.
      */
@@ -1073,15 +1088,17 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (node == null) {
             return;
         }
-        
+
         double f = getZoomFactor();
         Drawing d = getDrawing();
-        if (d==null) return;
+        if (d == null) {
+            return;
+        }
         double dw = d.get(Drawing.WIDTH);
         double dh = d.get(Drawing.HEIGHT);
         int imgw = Math.min(16000, Math.max(1, (int) (dw)));
         int imgh = Math.min(16000, Math.max(1, (int) (dh)));
-        
+
         if (drawingImageView != null) {
             if (drawingImage == null || drawingImage.getWidth() != imgw || drawingImage.getHeight() != imgh) {
                 drawingImage = null;
@@ -1092,13 +1109,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 // repaint();
             }
         }
-        
+
         Bounds bounds = drawingPane.getLayoutBounds();
         double x = bounds.getMinX() * f;
         double y = bounds.getMinY() * f;
         double w = bounds.getWidth() * f;
         double h = bounds.getHeight() * f;
-        
+
         Bounds scaledBounds = new BoundingBox(x, y, w, h);
         if (Objects.equals(scaledBounds, previousScaledBounds)) {
             return;
@@ -1106,35 +1123,36 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         previousScaledBounds = scaledBounds;
 //    drawingPane.setTranslateX(max(0, -x));
 // drawingPane.setTranslateY(max(0, -y));
-if (d != null) {
-    canvasPane.setTranslateX(max(0, -x));
-    canvasPane.setTranslateY(max(0, -y));
-    canvasPane.setWidth(dw * f);
-    canvasPane.setHeight(dh * f);
-}
+        if (d != null) {
+            canvasPane.setTranslateX(max(0, -x));
+            canvasPane.setTranslateY(max(0, -y));
+            canvasPane.setWidth(dw * f);
+            canvasPane.setHeight(dh * f);
+        }
 //backgroundPane.layout();
 
-double padding = 20;
-double lw = max(max(0, x) + w, max(0, -x) + dw * f);
-double lh = max(max(0, y) + h, max(0, -y) + dh * f);
+        double padding = 20;
+        double lw = max(max(0, x) + w, max(0, -x) + dw * f);
+        double lh = max(max(0, y) + h, max(0, -y) + dh * f);
 //overlaysPane.setTranslateX(-padding);
 //overlaysPane.setTranslateY(-padding);
-drawingPane.setTranslateX(padding);
-drawingPane.setTranslateY(padding);
-canvasPane.setTranslateX(padding);
-canvasPane.setTranslateY(padding);
-toolPane.resize(lw + padding * 2, lh + padding * 2);
-toolPane.layout();
+        drawingPane.setTranslateX(padding);
+        drawingPane.setTranslateY(padding);
+        canvasPane.setTranslateX(padding);
+        canvasPane.setTranslateY(padding);
+        toolPane.resize(lw + padding * 2, lh + padding * 2);
+        toolPane.layout();
 
-overlaysPane.setClip(new Rectangle(0, 0, lw + padding * 2, lh + padding * 2));
+        overlaysPane.setClip(new Rectangle(0, 0, lw + padding * 2, lh + padding * 2));
 
 // drawingPane.setClip(new Rectangle(0,0,lw,lh));
-rootPane.setPrefSize(lw + padding * 2, lh + padding * 2);
-rootPane.setMaxSize(lw + padding * 2, lh + padding * 2);
+        rootPane.setPrefSize(lw + padding * 2, lh + padding * 2);
+        rootPane.setMaxSize(lw + padding * 2, lh + padding * 2);
 
-invalidateWorldViewTransforms();
-invalidateHandleNodes();
+        invalidateWorldViewTransforms();
+        invalidateHandleNodes();
     }
+
     private void updateNodes() {
         if (!renderIntoImage) {
             // create copies of the lists to allow for concurrent modification
@@ -1157,7 +1175,7 @@ invalidateHandleNodes();
                 }, params, drawingImage);
             }
         }
-        
+
         if (!recreateHandles) {
             Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[dirtyHandles.size()]);
             dirtyHandles.clear();
@@ -1173,7 +1191,7 @@ invalidateHandleNodes();
         for (Handle h : secondaryHandles) {
             h.updateNode(this);
         }
-        
+
         if (!constrainerNodeValid) {
             constrainerNodeValid = true;
             Constrainer c = getConstrainer();
@@ -1182,6 +1200,7 @@ invalidateHandleNodes();
             }
         }
     }
+
     @Override
     protected void updateTool(Tool oldValue, Tool newValue) {
         if (oldValue != null) {
@@ -1197,6 +1216,7 @@ invalidateHandleNodes();
             focused.bind(t.getNode().focusedProperty());
         }
     }
+
     private void updateTreeStructure(Figure parent) {
         // Since we don't know which figures have been removed from
         // the drawing, we have to get rid of them on ourselves.
@@ -1210,6 +1230,7 @@ invalidateHandleNodes();
         }
         handleSubtreeNodesChanged(parent);
     }
+
     /**
      * Validates the handles.
      */
@@ -1218,18 +1239,20 @@ invalidateHandleNodes();
         // the DrawingView has a DrawingEditor.*/
         if (!handlesAreValid /*
                 * && getEditor() != null
-                */) {
+                 */) {
             handlesAreValid = true;
             updateHandles();
             updateLayout();
         }
     }
+
     @Override
     public DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }
+
     private class SimpleDrawingViewNode extends BorderPane implements EditableComponent {
-        
+
         public SimpleDrawingViewNode() {
             setFocusTraversable(true);
             setId("drawingView");
@@ -1239,43 +1262,44 @@ invalidateHandleNodes();
         public void selectAll() {
             SimpleDrawingView.this.selectAll();
         }
-        
+
         @Override
         public void clearSelection() {
             SimpleDrawingView.this.clearSelection();
         }
-        
+
         @Override
         public ReadOnlyBooleanProperty selectionEmptyProperty() {
             return SimpleDrawingView.this.selectedFiguresProperty().emptyProperty();
         }
-        
+
         @Override
         public void deleteSelection() {
             SimpleDrawingView.this.deleteSelection();
         }
-        
+
         @Override
         public void duplicateSelection() {
             SimpleDrawingView.this.duplicateSelection();
         }
-        
+
         @Override
         public void cut() {
             SimpleDrawingView.this.cut();
         }
-        
+
         @Override
         public void copy() {
             SimpleDrawingView.this.copy();
         }
-        
+
         @Override
         public void paste() {
             SimpleDrawingView.this.paste();
         }
     }
+
     private static class FixedSizedGroup extends Group {
-        
+
     }
 }
