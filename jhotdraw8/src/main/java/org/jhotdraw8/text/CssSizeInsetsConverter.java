@@ -10,7 +10,7 @@ import java.text.ParseException;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
+ * Converts a {@code CssSizeInsets} into a {@code String} and vice
  * versa.
  *
  * @author Werner Randelshofer
@@ -20,6 +20,11 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
 
    // FIXME must use CssParser instead of PatternConverter!!
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Insets⟩: ⟨all-insets⟩｜⟨top&bottom⟩ ⟨left&right⟩｜⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
+    }
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, CssSizeInsets value) throws IOException {
@@ -59,4 +64,6 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
     public CssSizeInsets getDefaultValue() {
         return new CssSizeInsets();
     }
+    
+    
 }
