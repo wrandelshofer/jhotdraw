@@ -5,6 +5,7 @@
 package org.jhotdraw8.text;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import javafx.scene.shape.SVGPath;
@@ -52,6 +53,18 @@ public class CssSvgPathConverter implements Converter<String> {
         return p;
     }
 
+  @Override
+    public String getHelpText() {
+        StringBuilder buf = new StringBuilder("Format of ⟨SvgPath⟩: \" ⟨moveTo ⟩ { moveTo｜⟨lineTo⟩｜⟨quadTo⟩｜⟨cubicTo⟩｜⟨arcTo⟩｜⟨closePath⟩ } \"");
+        buf.append("\nFormat of ⟨moveTo ⟩: M ⟨x⟩ ⟨y⟩ ｜m ⟨x⟩ ⟨y⟩ ");
+        buf.append("\nFormat of ⟨lineTo ⟩: L ⟨x⟩ ⟨y⟩ ｜l ⟨x⟩ ⟨y⟩ | H ⟨x⟩ | h ⟨x⟩ | V ⟨y⟩ | v ⟨y⟩");
+        buf.append("\nFormat of ⟨quadTo ⟩: Q ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩ ｜q ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩ ｜T ⟨x⟩ ⟨y⟩ ｜t ⟨x⟩ ⟨y⟩");
+        buf.append("\nFormat of ⟨cubicTo ⟩: C ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩  ⟨x2⟩ ⟨y2⟩ ｜c ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩  ⟨x2⟩ ⟨y2⟩｜ S ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩ ｜s ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩");
+        buf.append("\nFormat of ⟨arcTo ⟩: A ⟨x⟩ ⟨y⟩ ⟨r1⟩ ⟨r2⟩ ⟨angle⟩ ⟨larrgeArcFlag⟩ ⟨sweepFlag⟩ ｜a ⟨x⟩ ⟨y⟩ ⟨r1⟩ ⟨r2⟩ ⟨angle⟩ ⟨larrgeArcFlag⟩ ⟨sweepFlag⟩ ");
+        buf.append("\nFormat of ⟨closePath ⟩: Z ｜z ");
+        return buf.toString();
+    }
+
     @Override
     public void toString(Appendable out, IdFactory idFactory, String value) throws IOException {
         if (value == null) {
@@ -97,4 +110,6 @@ public class CssSvgPathConverter implements Converter<String> {
         
         return null;
     }
+    
+    
 }
