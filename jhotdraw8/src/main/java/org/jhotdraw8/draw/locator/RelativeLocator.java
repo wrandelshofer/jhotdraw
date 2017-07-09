@@ -10,7 +10,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
 
 /**
- * A locator that specfies a point that is relative to the bounds of a figure.
+ * A locator that specifies a point that is relative to the bounds of a figure.
  *
  * @author Werner Randelshofer
  * @version $Id$
