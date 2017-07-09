@@ -78,6 +78,7 @@
 
 /* Styles connected connection point handles. See {@code Handle}. */
 .handle-connection-point-connected {
+  -fx-stroke: darkcyan;
   -fx-border-color: darkcyan;
   -fx-background-color: darkcyan;
 }
