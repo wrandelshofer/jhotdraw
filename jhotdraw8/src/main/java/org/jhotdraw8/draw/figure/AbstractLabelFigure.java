@@ -155,7 +155,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     protected abstract String getText(RenderContext ctx);
 
-    private void invalidateBounds() {
+    protected void invalidateBounds() {
         boundsInLocal = null;
     }
 
