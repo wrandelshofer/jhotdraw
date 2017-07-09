@@ -14,36 +14,40 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
-import javafx.scene.transform.Transform;
+import javafx.scene.Group;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LabelConnectorHandle;
 import org.jhotdraw8.draw.handle.LineConnectorHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * A Label that can be attached to another Figure by setting LABEL_CONNECTOR and LABEL_TARGET.
+ * A Label that can be attached to another Figure by setting LABEL_CONNECTOR and
+ * LABEL_TARGET.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
-        implements ConnectingFigure {
+        implements ConnectingFigure, TransformableFigure {
 
     /**
      * The horizontal position of the text. Default value: {@code baseline}
      */
-    public static EnumStyleableFigureKey<HPos> TEXT_HPOS = new EnumStyleableFigureKey<>("textHPos", HPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false,HPos.LEFT);
+    public static EnumStyleableFigureKey<HPos> TEXT_HPOS = new EnumStyleableFigureKey<>("textHPos", HPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false, HPos.LEFT);
 
     /**
      * The label target.
@@ -60,7 +64,13 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The perpendicular offset of the label.
      */
-    public final static DoubleStyleableFigureKey LABEL_OFFSET = new DoubleStyleableFigureKey("labelOffset", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 13.0);
+    public final static DoubleStyleableFigureKey LABEL_PERPENDICULAR_OFFSET = new DoubleStyleableFigureKey("labelPerpendicularOffset", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 13.0);
+    /**
+     * The position relative to the parent (respectively the offset).
+     */
+    public static final Point2DStyleableFigureKey LABEL_TRANSLATE = new Point2DStyleableFigureKey(
+            "labelTranslation", DirtyMask
+                    .of(DirtyBits.NODE, DirtyBits.LAYOUT), new Point2D(0, 0));
     /**
      * Holds a strong reference to the property.
      */
@@ -118,7 +128,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new LineConnectorHandle(this, LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
+            list.add(new LabelConnectorHandle(this, ORIGIN,LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
         } else if (handleType == HandleType.POINT) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
             list.add(new LineConnectorHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
@@ -163,15 +173,22 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
 
     @Override
     public void layout() {
+
+        Figure labelTarget = get(LABEL_TARGET);
+        if (labelTarget == null || labelTarget == this) {
+            invalidateBounds();
+            invalidateTransforms();
+            return;
+        }
         Point2D labeledLoc = get(LABELED_LOCATION);
         Connector labelConnector = get(LABEL_CONNECTOR);
-        Figure labelTarget = get(LABEL_TARGET);
         Point2D perp;
         if (labelConnector != null && labelTarget != null) {
             labeledLoc = labelConnector.getPositionInWorld(this, labelTarget);
             perp = Geom.perp(Transforms.deltaTransform(getWorldToLocal(), labelConnector.getTangentInWorld(this, labelTarget)));
+            labeledLoc = Transforms.transform(labelTarget.getParentToLocal(), labeledLoc);
         } else {
-            perp = new Point2D(0, -1);
+            perp = new Point2D(0, 1);
         }
 
         set(LABELED_LOCATION, labeledLoc);
@@ -187,8 +204,20 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 tx = -b.getWidth();
                 break;
         }
-        Point2D origin = labeledLoc.add(perp.multiply(getStyled(LABEL_OFFSET))).add(tx,0);
+
+        Point2D origin = labeledLoc;// labeledLoc.add(perp.multiply(getStyled(LABEL_PERPENDICULAR_OFFSET))).add(tx, 0);
+
+        Point2D labelTranslation = getStyled(LABEL_TRANSLATE);
+        origin = origin.add(labelTranslation);
         set(ORIGIN, origin);
+        if (labelTarget != null) {
+            setTransforms(labelTarget.getLocalToParent());
+        } else {
+            setTransforms();
+        }
+
+        invalidateBounds();
+        invalidateTransforms();
     }
 
     @Override
@@ -206,18 +235,25 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void reshapeInLocal(Transform transform) {
-        if (get(LABEL_TARGET) == null) {
-            set(ORIGIN, transform.transform(get(ORIGIN)));
-            set(LABELED_LOCATION, get(ORIGIN));
-        }
+    public void updateGroupNode(RenderContext ctx, Group node) {
+        super.updateGroupNode(ctx, node);
+        applyTransformableFigureProperties(node);
     }
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
         if (get(LABEL_TARGET) == null) {
-            set(ORIGIN, new Point2D(x, y));
+            super.reshapeInLocal(x, y, width, height);
             set(LABELED_LOCATION, get(ORIGIN));
+            set(LABEL_TRANSLATE, new Point2D(0, 0));
+        } else {
+            Bounds bounds = getBoundsInLocal();
+            double newX, newY;
+            newX = x + Math.min(0, width);
+            newY = y + Math.min(0, height);
+            Point2D oldValue = get(LABEL_TRANSLATE);
+            set(LABEL_TRANSLATE,
+                    new Point2D(oldValue.getX() + newX - bounds.getMinX(), oldValue.getY() + newY - bounds.getMinY()));
         }
     }
 

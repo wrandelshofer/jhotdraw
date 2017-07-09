@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -13,6 +14,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -35,25 +37,30 @@ import org.jhotdraw8.geom.Transforms;
  *
  * @author werni
  */
-public class LineConnectorHandle extends AbstractConnectorHandle {
+public class LabelConnectorHandle extends AbstractConnectorHandle {
 
     private static final Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Circle REGION_SHAPE = new Circle(4);
 
+    private final Group groupNode;
     private final Region targetNode;
-
-    public LineConnectorHandle(ConnectingFigure figure, MapAccessor<Point2D> pointKey,
+    private final Line lineNode;
+    protected final MapAccessor<Point2D> originKey;
+    public LabelConnectorHandle(ConnectingFigure figure,  MapAccessor<Point2D> originKey,MapAccessor<Point2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
-        this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED, pointKey,
+        this(figure, STYLECLASS_HANDLE_CONNECTION_POINT_DISCONNECTED, STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED,originKey, pointKey,
                 connectorKey, targetKey);
     }
 
-    public LineConnectorHandle(ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected, MapAccessor<Point2D> pointKey,
+    public LabelConnectorHandle(ConnectingFigure figure, String styleclassDisconnected, String styleclassConnected,MapAccessor<Point2D> originKey, MapAccessor<Point2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         super(figure, styleclassDisconnected, styleclassConnected, pointKey,
                 connectorKey, targetKey);
+        
+        this.originKey=originKey;
+        lineNode=new Line();
         targetNode = new Region();
         targetNode.setShape(REGION_SHAPE);
         targetNode.setManaged(false);
@@ -62,13 +69,17 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
         targetNode.resize(10, 10);
         targetNode.getStyleClass().setAll(styleclassDisconnected, STYLECLASS_HANDLE);
         targetNode.setBorder(REGION_BORDER);
+        
+        lineNode.getStyleClass().add(styleclassConnected);
+        groupNode=new Group();
+        groupNode.getChildren().addAll(lineNode,targetNode);
     }
 
    
 
     @Override
-    public Region getNode() {
-        return targetNode;
+    public Group getNode() {
+        return groupNode;
     }
 
    
@@ -89,8 +100,15 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
         if (isConnected) {
             connectorLocation = view.worldToView(f.get(connectorKey).getPositionInWorld(owner, f.get(targetKey)));
             targetNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
+            Point2D origin=t.transform(f.get(originKey));
+            lineNode.setStartX(origin.getX());
+            lineNode.setStartY(origin.getY());
+            lineNode.setEndX(connectorLocation.getX());
+            lineNode.setEndY(connectorLocation.getY());
+            lineNode.setVisible(true);
         } else {
             connectorLocation = null;
+            lineNode.setVisible(false);
         }
     }
 
