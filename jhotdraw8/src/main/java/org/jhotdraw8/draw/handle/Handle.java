@@ -120,6 +120,10 @@ public interface Handle {
      * Style class for handles which mark the pivot point of a transformation.
      */
     public final static String STYLECLASS_HANDLE_PIVOT = "handle-pivot";
+    /**
+     * Style class for handles for custom features.
+     */
+    public final static String STYLECLASS_HANDLE_CUSTOM = "handle-custom";
 
     // ---
     // Behavior

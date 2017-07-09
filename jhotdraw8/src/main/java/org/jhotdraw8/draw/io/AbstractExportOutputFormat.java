@@ -197,7 +197,16 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
         }
     }
 
-    protected abstract void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
+    /**
+     * Writes the node to the specified file as a Slice. May destroy the state of the node in the process!
+     * @param file a file
+     * @param slice the Slice
+     * @param node a node
+     * @param dpi dots per inch
+     * @return returns true if the state of the node was destroyed
+     * @throws IOException 
+     */
+    protected abstract boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
 
     protected void writeSlices(File dir, Drawing drawing) throws IOException {
         setExternalHome(dir == null ? null : dir.toURI());
@@ -232,7 +241,6 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, dpi);
 
-        Node node = toNode(drawing, Collections.singleton(drawing), hints);
 
         IdFactory idFactory = new SimpleIdFactory();
         for (Figure slice : slices) {
@@ -240,9 +248,13 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
                 idFactory.putId( slice.getId(), slice);
             }
         }
+            Node node = null;
         for (Slice slice : slices) {
             File filename = new File(dir, idFactory.createId(slice, "Slice") + suffix + "." + getExtension());
-            writeSlice(filename, slice, node, dpi);
+            if (node==null)
+            node = toNode(drawing, Collections.singleton(drawing), hints);
+            boolean destroyedNode=writeSlice(filename, slice, node, dpi);
+            if (destroyedNode) node=null;
         }
     }
 }

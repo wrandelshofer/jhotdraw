@@ -5,19 +5,27 @@
 package org.jhotdraw8.draw.figure;
 
 import static java.lang.Math.*;
+import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.PointHandle;
+import org.jhotdraw8.draw.handle.ResizeHandleKit;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 
 /**
@@ -30,7 +38,7 @@ import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SliceFigure extends AbstractLeafFigure implements Slice,TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
+public class SliceFigure extends AbstractLeafFigure implements Slice, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -42,6 +50,9 @@ public class SliceFigure extends AbstractLeafFigure implements Slice,Transformab
     public final static DoubleStyleableFigureKey WIDTH = new DoubleStyleableFigureKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey HEIGHT = new DoubleStyleableFigureKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static Rectangle2DStyleableMapAccessor BOUNDS = new Rectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    public final static DoubleStyleableFigureKey SLICE_ORIGIN_X = new DoubleStyleableFigureKey("sliceOriginX", DirtyMask.of(DirtyBits.NODE), 0.0);
+    public final static DoubleStyleableFigureKey SLICE_ORIGIN_Y = new DoubleStyleableFigureKey("sliceOriginY", DirtyMask.of(DirtyBits.NODE), 0.0);
+    public final static Point2DStyleableMapAccessor SLICE_ORIGIN = new Point2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
 
     public SliceFigure() {
         this(0, 0, 1, 1);
@@ -56,8 +67,24 @@ public class SliceFigure extends AbstractLeafFigure implements Slice,Transformab
     }
 
     @Override
+    public void createHandles(HandleType handleType, List<Handle> list) {
+        if (handleType == HandleType.POINT) {
+            list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_POINT_OUTLINE));
+            ResizeHandleKit.addCornerResizeHandles(this, list, Handle.STYLECLASS_HANDLE_POINT);
+            list.add(new PointHandle(this, Handle.STYLECLASS_HANDLE_CUSTOM, SLICE_ORIGIN));
+        } else {
+            super.createHandles(handleType, list); //To change body of generated methods, choose Tools | Templates.
+        }
+    }
+
+    @Override
     public Bounds getBoundsInLocal() {
         return new BoundingBox(get(X), get(Y), get(WIDTH), get(HEIGHT));
+    }
+
+    @Override
+    public Point2D getSliceOrigin() {
+        return get(SLICE_ORIGIN);
     }
 
     @Override
@@ -100,4 +127,5 @@ public class SliceFigure extends AbstractLeafFigure implements Slice,Transformab
     public boolean isSuitableParent(Figure newParent) {
         return Slice.super.isSuitableParent(newParent);
     }
+
 }

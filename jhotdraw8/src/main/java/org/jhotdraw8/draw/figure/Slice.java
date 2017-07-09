@@ -4,6 +4,9 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+
 /**
  * Defines a slice of a drawing.
  * <p>
@@ -26,4 +29,14 @@ public interface Slice extends Figure {
         return false;
     }
 
+    /**
+     * For vector graphics output. Specifies where the origin of the coordinate system in the exported
+     * slice is. By default, this is the top left corner of the slice.
+     * 
+     * @return origin of coordinate system
+     */
+    default Point2D getSliceOrigin() {
+        final Bounds b = getBoundsInLocal();
+        return new Point2D(b.getMinX(), b.getMinY());
+    }
 }

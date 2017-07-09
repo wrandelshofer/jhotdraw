@@ -88,6 +88,7 @@ import org.jhotdraw8.text.XmlNumberConverter;
 import org.jhotdraw8.text.SvgPaintConverter;
 import org.jhotdraw8.text.XmlSizeListConverter;
 import org.jhotdraw8.util.ReversedList;
+import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -117,7 +118,6 @@ public class SvgExporter implements InternalExternalUriMixin {
     private URI externalHome;
     private IdFactory idFactory = new SimpleIdFactory();
     private final Object imageUriKey;
-    private String indent = "  ";
     private URI internalHome;
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
@@ -152,14 +152,6 @@ public class SvgExporter implements InternalExternalUriMixin {
      */
     public void setExternalHome(URI uri) {
         externalHome = uri;
-    }
-
-    public String getIndent() {
-        return indent;
-    }
-
-    public void setIndent(String indent) {
-        this.indent = indent;
     }
 
     public URI getInternalHome() {
@@ -236,20 +228,15 @@ public class SvgExporter implements InternalExternalUriMixin {
                 docElement.getParentNode().insertBefore(doc.createComment(commentText), docElement);
             }
 
-            String linebreak = "\n";
             idFactory.reset();
             initIdFactoryRecursively(drawingNode);
             Element defsElement = doc.createElement("defs");
             writeDefsRecursively(doc, defsElement, drawingNode);
             if (defsElement.getChildNodes().getLength() > 0) {
-                docElement.appendChild(doc.createTextNode(linebreak));
                 docElement.appendChild(defsElement);
-                defsElement.appendChild(doc.createTextNode(linebreak));
-                docElement.appendChild(doc.createTextNode(linebreak));
             }
             writeDocumentElementAttributes(docElement, drawingNode);
-            writeNodeRecursively(doc, docElement, drawingNode, linebreak);
-            docElement.appendChild(doc.createTextNode(linebreak));
+            writeNodeRecursively(doc, docElement, drawingNode);
 
             return doc;
         } catch (ParserConfigurationException ex) {
@@ -259,26 +246,12 @@ public class SvgExporter implements InternalExternalUriMixin {
 
     public void write(OutputStream out, javafx.scene.Node drawing) throws IOException {
         Document doc = toDocument(drawing);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
+        XmlUtil.write(out, doc);
     }
 
     public void write(Writer out, javafx.scene.Node drawing) throws IOException {
         Document doc = toDocument(drawing);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
+        XmlUtil.write(out, doc);
     }
 
     private Element writeArc(Document doc, Element parent, Arc node) {
@@ -377,10 +350,8 @@ public class SvgExporter implements InternalExternalUriMixin {
         if (idFactory.getId(clip) == null) {
             String id = idFactory.createId(clip, "clipPath");
             Element elem = doc.createElement("clipPath");
-            defsNode.appendChild(doc.createTextNode("\n"));
-            writeNodeRecursively(doc, elem, clip, "\n");
+            writeNodeRecursively(doc, elem, clip);
             elem.setAttribute("id", id);
-            elem.appendChild(doc.createTextNode("\n"));
             defsNode.appendChild(elem);
         }
     }
@@ -545,13 +516,12 @@ public class SvgExporter implements InternalExternalUriMixin {
         return elem;
     }
 
-    private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node, String linebreak) throws IOException {
+    private void writeNodeRecursively(Document doc, Element parent, javafx.scene.Node node) throws IOException {
         if (isSkipNode(node)) {
             return;
         }
         Element elem = null;
         if (node instanceof Shape) {
-            parent.appendChild(doc.createTextNode(linebreak));
             elem = writeShape(doc, parent, (Shape) node);
             writeFillAttributes(elem, (Shape) node);
             writeStrokeAttributes(elem, (Shape) node);
@@ -569,14 +539,11 @@ public class SvgExporter implements InternalExternalUriMixin {
                 }
             }
             if (!omitGroup) {
-                parent.appendChild(doc.createTextNode(linebreak));
                 elem = writeGroup(doc, parent, (Group) node);
             }
         } else if (node instanceof Region) {
-            parent.appendChild(doc.createTextNode(linebreak));
             elem = writeRegion(doc, parent, (Region) node);
         } else if (node instanceof ImageView) {
-            parent.appendChild(doc.createTextNode(linebreak));
             elem = writeImageView(doc, parent, (ImageView) node);
         } else {
             throw new UnsupportedOperationException("not yet implemented for " + node);
@@ -590,13 +557,9 @@ public class SvgExporter implements InternalExternalUriMixin {
 
         if (node instanceof Parent) {
             final Parent pp = (Parent) node;
-            final String lbi = linebreak + indent;
             final Element parentElement = elem == null ? parent : elem;
             for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                writeNodeRecursively(doc, parentElement, child, lbi);
-            }
-            if (elem != null && !pp.getChildrenUnmodifiable().isEmpty()) {
-                elem.appendChild(doc.createTextNode(linebreak));
+                writeNodeRecursively(doc, parentElement, child);
             }
         }
 

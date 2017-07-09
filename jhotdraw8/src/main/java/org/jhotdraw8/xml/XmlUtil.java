@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
@@ -148,6 +149,10 @@ public class XmlUtil {
     }
 
     public static void write(OutputStream out, Document doc) throws IOException {
+        StreamResult result = new StreamResult(out);
+        write(result, doc);
+    }
+    public static void write(Writer out, Document doc) throws IOException {
         StreamResult result = new StreamResult(out);
         write(result, doc);
     }

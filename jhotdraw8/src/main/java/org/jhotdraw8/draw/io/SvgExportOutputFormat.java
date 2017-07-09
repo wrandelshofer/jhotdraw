@@ -14,10 +14,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -58,11 +60,15 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     private final static String SKIP_KEY = "skip";
 
-    public final static DataFormat SVG_FORMAT;static {
-    DataFormat fmt= DataFormat.lookupMimeType("image/svg+xml");
-    if (fmt==null) fmt=new DataFormat("image/svg+xml");
-    SVG_FORMAT=fmt;
-}
+    public final static DataFormat SVG_FORMAT;
+
+    static {
+        DataFormat fmt = DataFormat.lookupMimeType("image/svg+xml");
+        if (fmt == null) {
+            fmt = new DataFormat("image/svg+xml");
+        }
+        SVG_FORMAT = fmt;
+    }
 
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XLINK_Q = "xlink";
@@ -71,7 +77,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     private final String SVG_NS = "http://www.w3.org/2000/svg";
 
     private IdFactory idFactory = new SimpleIdFactory();
-    private String indent = "  ";
 
     private final String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
@@ -92,14 +97,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     @Override
     protected String getExtension() {
         return "svg";
-    }
-
-    public String getIndent() {
-        return indent;
-    }
-
-    public void setIndent(String indent) {
-        this.indent = indent;
     }
 
     @Override
@@ -199,26 +196,31 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     }
 
     @Override
-    protected void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
+    protected boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
         SvgExporter exporter = createExporter();
         markNodesOutsideBoundsWithSkip(node, slice.getBoundsInLocal());
-        final Transform worldToLocal = slice.getWorldToLocal();
+        Transform worldToLocal = slice.getWorldToLocal();
+        Point2D sliceOrigin = slice.getSliceOrigin();
+        worldToLocal = Transforms.concat(worldToLocal, new Translate(-sliceOrigin.getX(), -sliceOrigin.getY()));
         if (worldToLocal != null) {
             node.getTransforms().setAll(worldToLocal);
         }
+        new TransformFlattener().flattenTranslates(node);
         Document doc = exporter.toDocument(node);
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
         node.getTransforms().clear();
         XmlUtil.write(file, doc);
+        return true;
     }
 
     private void writeSliceElementAttributes(Element docElement, Slice slice) throws IOException {
         Bounds b = slice.getBoundsInLocal();
+        Point2D sliceOrigin = slice.getSliceOrigin();
         Transform tx = slice.getWorldToLocal();
         docElement.setAttribute("width", nb.toString(b.getWidth()));
         docElement.setAttribute("height", nb.toString(b.getHeight()));
         docElement.setAttribute("viewBox", nb.
-                toString(b.getMinX()) + " " + nb.toString(b.getMinY())
+                toString(b.getMinX() - sliceOrigin.getX()) + " " + nb.toString(b.getMinY() - sliceOrigin.getY())
                 + " " + nb.toString(b.getWidth()) + " " + nb.toString(b.getHeight()));
     }
 

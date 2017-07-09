@@ -50,12 +50,16 @@
 }
 
 /* Styles move and point handles. See {@code Handle}. */
+.handle-custom {
+  -fx-border-color: black;
+  -fx-background-color: yellow;
+}
+
 .handle-move,
 .handle-multi-move {
   -fx-border-color: blue;
   -fx-background-color: white;
 }
-
 .handle-move-locked {
   -fx-border-color: white;
   -fx-background-color: blue;

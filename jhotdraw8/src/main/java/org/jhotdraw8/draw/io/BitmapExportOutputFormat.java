@@ -206,11 +206,12 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
-    protected void writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
+    protected boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
         WritableImage image = renderSlice(slice, slice.getBoundsInLocal(), node, dpi);
         try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
             writeImage(out, image, dpi);
         }
+        return false;
     }
 
 }
