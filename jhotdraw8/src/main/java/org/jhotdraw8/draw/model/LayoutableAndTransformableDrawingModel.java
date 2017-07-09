@@ -377,10 +377,10 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 }
             }
 
-            // all figures with dirty bit "TRANSFORM" or "LAYOUT"
+            // all figures with dirty bit "TRANSFORM" or "LAYOUT" or "LAYOUT_OBSERVERS"
             // induce a dirty bit "TRANSFORM" on all ancestors which implement the TransformableFigure interface.
             // induce a dirty bit "LAYOUT" on all ancestors which implement the LayoutableFigure interface.
-            DirtyMask dmTransformLayout = DirtyMask.of(DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
+            DirtyMask dmTransformLayout = DirtyMask.of(DirtyBits.TRANSFORM, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
@@ -395,8 +395,8 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                     }
                 }
             }
-            // all figures with dirty bit "TRANSFORM"
-            // induce a dirty bit "LAYOUT_OBSERVERS" and "TRANSFORM_NOTIFY"  on all descendants
+            // all figures with dirty bit "TRANSFORM" 
+            // induce a dirty bit "LAYOUT" and "TRANSFORM_NOTIFY"  on all descendants
             DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
             DirtyMask dmTransformNotify = DirtyMask.of(DirtyBits.TRANSFORM_NOTIFY);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
@@ -404,11 +404,11 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmTransform) && !dm.intersects(dmTransformNotify)) {
                     for (Figure a : f.preorderIterable()) {
-                        markDirty(a, DirtyBits.LAYOUT_OBSERVERS, DirtyBits.TRANSFORM_NOTIFY);
+                        markDirty(a, DirtyBits.LAYOUT, DirtyBits.TRANSFORM_NOTIFY);
                     }
                 }
             }
-            // all figures with dirty bit "TRANSFORM_NOTIFY"
+            // all figures with dirty bit "TRANSFORM"
             // invoke transformNotify
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
@@ -418,15 +418,16 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 }
             }
 
-            // all figures with dirty flag "LAYOUT"
-            // induce a dirty flag "LAYOUT_OBSERVERS" on dependent figures,
+            // all figures with dirty flag "LAYOUT" or "LAYOUT_OBSERVERS".
+            // induce a dirty flag "LAYOUT" on dependent figures,
             // and induce a dirty Flag "NODE" on ancestors which implement the TransformableFigure interface. // really??
             DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
+            DirtyMask dmLayoutOrObservers = DirtyMask.of(DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS);
             List<Figure> todo = new ArrayList<>();
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmLayout)) {
+                if (dm.intersects(dmLayoutOrObservers)) {
                     for (Figure subtree : f.preorderIterable()) {
                         for (Figure d : subtree.getLayoutObservers()) {
                             todo.add(d);
@@ -437,9 +438,6 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                             markDirty(a, DirtyBits.NODE);
                         }
                     }
-                }
-                if (dm.intersects(DirtyBits.LAYOUT_OBSERVERS)) {
-                    todo.add(f);
                 }
             }
 
@@ -452,7 +450,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                 }
             }
             
-            // all figures with dirty flag "LAYOUT_OBSERVERS" must be laid out
+            // all figures which observed a figure with dirty flag "LAYOUT" must be laid out
             // transitively, including all of their layoutable ancestors.
             Set<Figure> transitive = new LinkedHashSet<>(todo);
             transitivelyCollectDependentFigures(todo, transitive);
