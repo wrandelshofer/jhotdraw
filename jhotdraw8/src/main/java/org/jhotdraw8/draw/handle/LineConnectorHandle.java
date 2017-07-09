@@ -57,8 +57,8 @@ public class LineConnectorHandle extends AbstractHandle {
     private final MapAccessor<Connector> connectorKey;
     private Point2D connectorLocation;
 
-   // private final Region connectorNode;
-   // private final javafx.scene.Group groupNode;
+    // private final Region connectorNode;
+    // private final javafx.scene.Group groupNode;
     private boolean isConnected;
     private boolean isDragging;
     private final Region lineNode;
@@ -108,7 +108,7 @@ public class LineConnectorHandle extends AbstractHandle {
 
     @Override
     public Cursor getCursor() {
-        return isConnected &&isDragging ? Cursor.NONE : Cursor.MOVE;
+        return isConnected && isDragging ? Cursor.NONE : Cursor.MOVE;
     }
 
     public Point2D getLocationInView() {
@@ -143,18 +143,18 @@ public class LineConnectorHandle extends AbstractHandle {
         Connector newConnector = null;
         Figure newConnectedFigure = null;
         isConnected = false;
-            // must clear end target, otherwise findConnector won't work as expected
+        // must clear end target, otherwise findConnector won't work as expected
         DrawingModel model = view.getModel();
-            model.set(o, targetKey, null);
+        model.set(o, targetKey, null);
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
             for (Figure f1 : list) {
                 for (Figure ff : f1.breadthFirstIterable()) {
-                    if (ff instanceof ConnectableFigure) {
+                    if (owner != ff && (ff instanceof ConnectableFigure)) {
                         ConnectableFigure cff = (ConnectableFigure) ff;
                         Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                         if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                            newConnector = cff.findConnector( cff.worldToLocal(constrainedPoint), o);
+                            newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), o);
                             if (newConnector != null && o.canConnect(ff, newConnector)) {
                                 newConnectedFigure = ff;
                                 constrainedPoint = newConnector.getPositionInLocal(o, ff);
@@ -202,11 +202,11 @@ public class LineConnectorHandle extends AbstractHandle {
 
         if (isConnected) {
             connectorLocation = view.worldToView(f.get(connectorKey).getPositionInWorld(owner, f.get(targetKey)));
-                lineNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
+            lineNode.relocate(connectorLocation.getX() - 5, connectorLocation.getY() - 5);
         } else {
             connectorLocation = null;
         }
-/*
+        /*
         groupNode.getChildren().clear();
         groupNode.getChildren().addAll(connectorNode, lineNode);*/
     }
