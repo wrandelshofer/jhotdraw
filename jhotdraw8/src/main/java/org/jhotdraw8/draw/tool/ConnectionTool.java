@@ -124,7 +124,7 @@ public class ConnectionTool extends AbstractTool {
                 List<Figure> list = view.findFigures(pointInViewCoordinates, true);
                 for (Figure f1 : list) {
                     for (Figure ff : f1.breadthFirstIterable()) {
-                        if (ff instanceof ConnectableFigure) {
+                        if (figure != ff && (ff instanceof ConnectableFigure)) {
                             ConnectableFigure cff = (ConnectableFigure) ff;
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                             if (ff.getBoundsInLocal().contains(pointInLocal)) {
@@ -169,7 +169,7 @@ public class ConnectionTool extends AbstractTool {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
             for (Figure f1 : list) {
                 for (Figure ff : f1.breadthFirstIterable()) {
-                    if (ff instanceof ConnectableFigure) {
+                    if (figure != ff && (ff instanceof ConnectableFigure)) {
                         ConnectableFigure cff = (ConnectableFigure) ff;
                         Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                         if (ff.getBoundsInLocal().contains(pointInLocal)) {
