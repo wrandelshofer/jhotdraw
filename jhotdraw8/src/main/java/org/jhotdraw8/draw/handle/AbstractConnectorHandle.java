@@ -57,6 +57,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     protected final String styleclassConnected;
     protected final String styleclassDisconnected;
     protected final MapAccessor<Figure> targetKey;
+    private boolean editable=true;
 
     public AbstractConnectorHandle(ConnectingFigure figure, MapAccessor<Point2D> pointKey,
             MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
@@ -105,6 +106,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
 
     @Override
     public void handleMouseDragged(MouseEvent event, DrawingView view) {
+        if (!editable)return;
         isDragging = true;
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
@@ -158,6 +160,14 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     @Override
     public void handleMouseReleased(MouseEvent event, DrawingView dv) {
         isDragging = false;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     @Override
