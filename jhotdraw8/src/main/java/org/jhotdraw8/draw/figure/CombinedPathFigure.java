@@ -50,7 +50,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     public final static EnumStyleableFigureKey<CagOperation> CAG_OPERATION = new EnumStyleableFigureKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), true, null);
     public final static EnumStyleableFigureKey<FillRule> FILL_RULE = BezierFigure.FILL_RULE;
     /**
-     * The CSS type selector for group objects is @code("group"}.
+     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "CombinedPath";
 

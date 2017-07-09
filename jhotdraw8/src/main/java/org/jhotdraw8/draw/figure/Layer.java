@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.figure.Figure;
 public interface Layer extends Figure {
 
     /**
-     * The CSS type selector for a layer figure is {@code "layer"}.
+     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Layer";
 

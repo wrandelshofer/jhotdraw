@@ -22,7 +22,7 @@ public class GroupFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
 
     /**
-     * The CSS type selector for group objects is @code("group"}.
+     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Group";
 

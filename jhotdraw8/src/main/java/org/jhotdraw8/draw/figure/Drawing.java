@@ -121,7 +121,7 @@ public interface Drawing extends Figure {
     public final static CssColorStyleableFigureKey BACKGROUND = new CssColorStyleableFigureKey("background", new CssColor("white", Color.WHITE));
 
     /**
-     * The CSS type selector for a drawing figure is {@code "Drawing"}.
+     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Drawing";
 

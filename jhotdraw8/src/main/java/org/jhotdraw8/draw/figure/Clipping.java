@@ -23,7 +23,7 @@ import org.jhotdraw8.draw.figure.Figure;
 public interface Clipping extends Figure {
 
     /**
-     * The CSS type selector for a clipping figure is {@code "Clipping"}.
+     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "Clipping";
 
