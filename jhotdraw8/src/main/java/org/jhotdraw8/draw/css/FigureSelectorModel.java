@@ -260,15 +260,15 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-    public String getAttribute(Figure element, String attributeName) {
         @SuppressWarnings("unchecked")
+    public String getAttribute(Figure element, String attributeName) {
         StyleableMapAccessor<Object> key = (StyleableMapAccessor<Object>) findKey(element, attributeName);
         if (key == null) {
             return null;
         }
         boolean isInitialValue = !element.containsKey(StyleOrigin.USER, key);
         if ((key instanceof CompositeMapAccessor)) {
-            for (MapAccessor subkey : (Set<MapAccessor>) ((CompositeMapAccessor) key).getSubAccessors()) {
+            for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
                 // FIXME should recurse here
                 if (element.containsKey(StyleOrigin.USER, subkey)) {
                     isInitialValue = false;
