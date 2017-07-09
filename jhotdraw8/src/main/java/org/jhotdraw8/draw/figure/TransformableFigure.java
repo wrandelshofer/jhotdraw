@@ -109,6 +109,16 @@ public interface TransformableFigure extends TransformCacheableFigure {
     public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
 
     /**
+     * Convenience method for setting a new value for the {@link#TRANSFORMS}
+     * property.
+     *
+     * @param transforms new value
+     */
+    default void setTransforms(Transform... transforms) {
+        set(TRANSFORMS, new ImmutableObservableList<>(transforms));
+    }
+
+    /**
      * Updates a figure node with all transformation properties defined in this
      * interface.
      * <p>
@@ -138,9 +148,10 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
-    default void applyTransformableFigureProperties(RenderContext ctx,Node node) {
+    default void applyTransformableFigureProperties(RenderContext ctx, Node node) {
         applyTransformableFigureProperties(node);
     }
+
     default void applyTransformableFigurePropertiesWRONG(Node node) {
         double tx = getStyled(TRANSLATE_X);
         double ty = getStyled(TRANSLATE_Y);
@@ -355,6 +366,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     /**
      * Returns null if identity.
+     *
      * @param styled whether the styled value should be used
      * @return the transform or null
      */
@@ -441,7 +453,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     public static Set<Key<?>> getDeclaredKeys() {
         Set<Key<?>> keys = new LinkedHashSet<>();
-       Figure.getDeclaredKeys(TransformableFigure.class, keys);
+        Figure.getDeclaredKeys(TransformableFigure.class, keys);
         return keys;
     }
 }
