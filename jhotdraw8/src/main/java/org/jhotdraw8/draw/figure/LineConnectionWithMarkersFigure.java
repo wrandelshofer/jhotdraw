@@ -14,17 +14,13 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import static org.jhotdraw8.draw.figure.LineFigure.END_X;
-import static org.jhotdraw8.draw.figure.LineFigure.END_Y;
-import static org.jhotdraw8.draw.figure.LineFigure.START_X;
-import static org.jhotdraw8.draw.figure.LineFigure.START_Y;
+import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.draw.key.CssColor;
 
 /**
  * LineConnectionWithMarkersFigure.
