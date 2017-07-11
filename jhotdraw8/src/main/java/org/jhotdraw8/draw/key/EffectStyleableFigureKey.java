@@ -12,14 +12,14 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssEffectConverter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * EffectStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements StyleableMapAccessor<Effect> {
+public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements WriteableStyleableMapAccessor<Effect> {
 
     final static long serialVersionUID = 1L;
     private final CssEffectConverter converter = new CssEffectConverter();

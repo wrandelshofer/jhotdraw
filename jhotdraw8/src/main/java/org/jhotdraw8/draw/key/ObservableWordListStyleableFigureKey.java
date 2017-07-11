@@ -16,14 +16,14 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssWordListConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * ObservableWordListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class ObservableWordListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<String>> implements StyleableMapAccessor<ImmutableObservableList<String>> {
+public class ObservableWordListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<String>> implements WriteableStyleableMapAccessor<ImmutableObservableList<String>> {
 
     private final static long serialVersionUID = 1L;
 

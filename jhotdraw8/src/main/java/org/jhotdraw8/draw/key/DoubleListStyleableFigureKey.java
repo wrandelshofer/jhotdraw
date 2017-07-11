@@ -15,14 +15,14 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssDoubleListConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * DoubleListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class DoubleListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Double>> implements StyleableMapAccessor<ImmutableObservableList<Double>> {
+public class DoubleListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Double>> implements WriteableStyleableMapAccessor<ImmutableObservableList<Double>> {
 
     private final static long serialVersionUID = 1L;
 

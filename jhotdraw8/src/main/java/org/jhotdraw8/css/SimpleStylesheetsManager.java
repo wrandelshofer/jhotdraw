@@ -27,9 +27,9 @@ import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * SimpleStylesheetsManager.

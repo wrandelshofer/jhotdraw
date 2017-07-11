@@ -11,14 +11,14 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssEnumConverter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * EnumStyleableFigureKey.
  *
  * @author werni
  */
-public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T> implements StyleableMapAccessor<T> {
+public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T> implements WriteableStyleableMapAccessor<T> {
 
     private final static long serialVersionUID = 1L;
 

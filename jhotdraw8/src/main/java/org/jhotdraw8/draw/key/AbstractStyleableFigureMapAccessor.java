@@ -13,7 +13,7 @@ import java.util.Set;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * AbstractStyleableFigureMapAccessor.
@@ -21,7 +21,7 @@ import org.jhotdraw8.styleable.StyleableMapAccessor;
  * @author Werner Randelshofer
  * @param <T> the value type
  */
-public abstract class AbstractStyleableFigureMapAccessor<T> implements StyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
+public abstract class AbstractStyleableFigureMapAccessor<T> implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T>, FigureKey<T> {
 
     private static final long serialVersionUID = 1L;
 

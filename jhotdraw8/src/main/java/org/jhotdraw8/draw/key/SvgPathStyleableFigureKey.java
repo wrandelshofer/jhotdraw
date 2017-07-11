@@ -15,14 +15,14 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssSvgPathConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * SvgPathStyleableFigureKey.
  *
  * @author werni
  */
-public class SvgPathStyleableFigureKey extends SimpleFigureKey<String> implements StyleableMapAccessor<String> {
+public class SvgPathStyleableFigureKey extends SimpleFigureKey<String> implements WriteableStyleableMapAccessor<String> {
 
     private final static long serialVersionUID = 1L;
 

@@ -15,15 +15,15 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.text.CssPoint2DListConverter;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * DoubleListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class Point2DListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Point2D>> implements StyleableMapAccessor<ImmutableObservableList<Point2D>> {
+public class Point2DListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Point2D>> implements WriteableStyleableMapAccessor<ImmutableObservableList<Point2D>> {
 
     private final static long serialVersionUID = 1L;
 

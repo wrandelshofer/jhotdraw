@@ -14,14 +14,14 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssColorConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * CssColorStyleableFigureKey.
  *
  * @author werni
  */
-public class CssColorStyleableFigureKey extends SimpleFigureKey<CssColor> implements StyleableMapAccessor<CssColor> {
+public class CssColorStyleableFigureKey extends SimpleFigureKey<CssColor> implements WriteableStyleableMapAccessor<CssColor> {
 
     private final static long serialVersionUID = 1L;
 

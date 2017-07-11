@@ -16,6 +16,7 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.ObservableWordListFigureKey;
 import org.jhotdraw8.draw.key.SimpleFigureKey;
+import org.jhotdraw8.draw.key.StringReadOnlyStyleableFigureKey;
 
 /**
  * {@code StyleableFigure} supports styling of a figure using
@@ -32,7 +33,7 @@ public interface StyleableFigure extends Figure {
      *
      * Default value: {@code null}.
      */
-    public static SimpleFigureKey<String> ID = new SimpleFigureKey<String>("id", String.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), null);
+    public static StringReadOnlyStyleableFigureKey ID = new StringReadOnlyStyleableFigureKey("id", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE),null );
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.

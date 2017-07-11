@@ -15,14 +15,14 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssUriConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * URIStyleableFigureKey.
  *
  * @author werni
  */
-public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements StyleableMapAccessor<URI> {
+public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements WriteableStyleableMapAccessor<URI> {
 
     private final static long serialVersionUID = 1L;
 

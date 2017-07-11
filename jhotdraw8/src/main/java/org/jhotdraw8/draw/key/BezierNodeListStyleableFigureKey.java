@@ -16,15 +16,15 @@ import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.text.CssBezierNodeListConverter;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * BezierNodeListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class BezierNodeListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<BezierNode>> implements StyleableMapAccessor<ImmutableObservableList<BezierNode>> {
+public class BezierNodeListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<BezierNode>> implements WriteableStyleableMapAccessor<ImmutableObservableList<BezierNode>> {
 
     private final static long serialVersionUID = 1L;
 

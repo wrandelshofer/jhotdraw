@@ -12,14 +12,14 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssEnumConverter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * BlendModeStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> implements StyleableMapAccessor<BlendMode> {
+public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> implements WriteableStyleableMapAccessor<BlendMode> {
 
     final static long serialVersionUID = 1L;
 

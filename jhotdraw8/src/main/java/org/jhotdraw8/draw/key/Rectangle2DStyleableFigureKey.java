@@ -15,14 +15,14 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssRectangle2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * Rectangle2DStyleableFigureKey.
  *
  * @author werni
  */
-public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> implements StyleableMapAccessor<Rectangle2D> {
+public class Rectangle2DStyleableFigureKey extends SimpleFigureKey<Rectangle2D> implements WriteableStyleableMapAccessor<Rectangle2D> {
 
     private final static long serialVersionUID = 1L;
 

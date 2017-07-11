@@ -15,16 +15,16 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssRegexConverter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.text.Regex;
 import org.jhotdraw8.text.StyleConverterAdapter;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * RegexStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements StyleableMapAccessor<Regex> {
+public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements WriteableStyleableMapAccessor<Regex> {
 
     final static long serialVersionUID = 1L;
     private final CssRegexConverter converter;

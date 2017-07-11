@@ -26,8 +26,8 @@ import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * AbstractFigure.
@@ -74,8 +74,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
         for (MapAccessor<?> key : getSupportedKeys()) {
-            if (key instanceof StyleableMapAccessor<?>) {
-                StyleableMapAccessor<?> sk = (StyleableMapAccessor<?>) key;
+            if (key instanceof WriteableStyleableMapAccessor<?>) {
+                WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) key;
 
                 CssMetaData<? extends Styleable, ?> md = sk.getCssMetaData();
                 list.add(md);

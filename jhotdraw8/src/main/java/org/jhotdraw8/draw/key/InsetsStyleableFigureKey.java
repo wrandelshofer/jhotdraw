@@ -15,14 +15,14 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssInsetsConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * InsetsStyleableFigureKey.
  *
  * @author werni
  */
-public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements StyleableMapAccessor<Insets> {
+public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements WriteableStyleableMapAccessor<Insets> {
 
     private final static long serialVersionUID = 1L;
 

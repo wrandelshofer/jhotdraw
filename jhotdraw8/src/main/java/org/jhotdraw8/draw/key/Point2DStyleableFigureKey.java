@@ -15,14 +15,14 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssPoint2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * Point2DStyleableFigureKey.
  *
  * @author werni
  */
-public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implements StyleableMapAccessor<Point2D> {
+public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implements WriteableStyleableMapAccessor<Point2D> {
 
     private final static long serialVersionUID = 1L;
 

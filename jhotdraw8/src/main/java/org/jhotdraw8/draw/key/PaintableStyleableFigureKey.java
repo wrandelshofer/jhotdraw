@@ -14,14 +14,14 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssPaintableConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * PaintStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class PaintableStyleableFigureKey extends SimpleFigureKey<Paintable> implements StyleableMapAccessor<Paintable> {
+public class PaintableStyleableFigureKey extends SimpleFigureKey<Paintable> implements WriteableStyleableMapAccessor<Paintable> {
 
     private final static long serialVersionUID = 1L;
 

@@ -14,15 +14,15 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssFontConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.text.CssFont;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * FontStyleableFigureKey.
  *
  * @author werni
  */
-public class FontStyleableFigureKey extends SimpleFigureKey<CssFont> implements StyleableMapAccessor<CssFont> {
+public class FontStyleableFigureKey extends SimpleFigureKey<CssFont> implements WriteableStyleableMapAccessor<CssFont> {
 
     private final static long serialVersionUID = 1L;
 

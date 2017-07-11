@@ -15,7 +15,7 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  * @param <T> The value type.
  */
-public interface StyleableMapAccessor<T> extends MapAccessor<T> {
+public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
 
     final static long serialVersionUID = 1L;
 
@@ -67,5 +67,6 @@ public interface StyleableMapAccessor<T> extends MapAccessor<T> {
         }
         return b.toString();
     }
+
 
 }

@@ -10,19 +10,19 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssSize2D;
 import org.jhotdraw8.text.CssSize2DConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * Size2DStyleableFigureKey.
  *
  * @author werni
  */
-public class Size2DStyleableFigureKey extends SimpleFigureKey<CssSize2D> implements StyleableMapAccessor<CssSize2D> {
+public class Size2DStyleableFigureKey extends SimpleFigureKey<CssSize2D> implements WriteableStyleableMapAccessor<CssSize2D> {
 
     private final static long serialVersionUID = 1L;
     private Converter<CssSize2D> converter;

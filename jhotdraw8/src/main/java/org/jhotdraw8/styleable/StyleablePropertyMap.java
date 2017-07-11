@@ -246,9 +246,9 @@ public class StyleablePropertyMap {
         @SuppressWarnings("unchecked")
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
         if (sp == null) {
-            if (key instanceof StyleableMapAccessor) {
+            if (key instanceof WriteableStyleableMapAccessor) {
                 @SuppressWarnings("unchecked")
-                StyleableProperty<T> temp = new MapStyleableProperty<>(key, ((StyleableMapAccessor) key).getCssMetaData());
+                StyleableProperty<T> temp = new MapStyleableProperty<>(key, ((WriteableStyleableMapAccessor) key).getCssMetaData());
                 sp = temp;
             } else {
                 @SuppressWarnings("unchecked")

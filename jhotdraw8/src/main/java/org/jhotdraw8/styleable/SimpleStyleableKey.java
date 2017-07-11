@@ -13,7 +13,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author werni
  */
-public class SimpleStyleableKey<T> extends ObjectKey<T> implements StyleableMapAccessor<T> {
+public class SimpleStyleableKey<T> extends ObjectKey<T> implements WriteableStyleableMapAccessor<T> {
 
     private final static long serialVersionUID = 1L;
 

@@ -13,17 +13,17 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.StyleableMapAccessor;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.text.CssTransformListConverter;
+import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * TransformListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Transform>> implements StyleableMapAccessor<ImmutableObservableList<Transform>> {
+public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Transform>> implements WriteableStyleableMapAccessor<ImmutableObservableList<Transform>> {
 
     private final static long serialVersionUID = 1L;
 

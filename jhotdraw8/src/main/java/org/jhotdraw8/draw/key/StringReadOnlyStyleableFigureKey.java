@@ -1,4 +1,4 @@
-/* @(#)DoubleStyleableFigureKey.java
+/* @(#)StringStyleableFigureKey.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -11,31 +11,29 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.CssDoubleConverter;
+import org.jhotdraw8.text.CssStringConverter;
 import org.jhotdraw8.text.StyleConverterAdapter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
- * DoubleStyleableFigureKey.
+ * StringStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements WriteableStyleableMapAccessor<Double> {
+public class StringReadOnlyStyleableFigureKey extends SimpleFigureKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
-    private final CssMetaData<? extends Styleable, Double> cssMetaData;
-
-    private final CssDoubleConverter converter = new CssDoubleConverter();
+    private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
-     * Creates a new instance with the specified name and with null as the
-     * default value.
+     * Creates a new instance with the specified name and with an empty String
+     * as the default value.
      *
      * @param name The name of the key.
      */
-    public DoubleStyleableFigureKey(String name) {
-        this(name, null);
+    public StringReadOnlyStyleableFigureKey(String name) {
+        this(name, "");
     }
 
     /**
@@ -44,8 +42,8 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleStyleableFigureKey(String name, Double defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
+    public StringReadOnlyStyleableFigureKey(String name, String defaultValue) {
+        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
 
     /**
@@ -55,8 +53,20 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
      * @param mask The dirty mask.
      * @param defaultValue The default value.
      */
-    public DoubleStyleableFigureKey(String name, DirtyMask mask, Double defaultValue) {
-        super(name, Double.class, mask, defaultValue);
+    public StringReadOnlyStyleableFigureKey(String name, DirtyMask mask, String defaultValue) {
+        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
+    }
+
+    /**
+     * Creates a new instance with the specified name, mask and default value.
+     *
+     * @param name The name of the key.
+     * @param mask The dirty mask.
+     * @param defaultValue The default value.
+     * @param helpText the help text
+     */
+    public StringReadOnlyStyleableFigureKey(String name, DirtyMask mask, String defaultValue, String helpText) {
+        super(name, String.class, true, mask, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
          cssMetaData = factory.createSizeCssMetaData(
@@ -64,29 +74,31 @@ public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements
          StyleablePropertyBean spb = (StyleablePropertyBean) s;
          return spb.getStyleableProperty(this);
          });*/
-
-        Function<Styleable, StyleableProperty<Double>> function = s -> {
+        converter = new CssStringConverter('\'', helpText);
+        Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Double> converter
-                = new StyleConverterAdapter<Double>(new CssDoubleConverter());
-        CssMetaData<Styleable, Double> md
-                = new SimpleCssMetaData<Styleable, Double>(property, function,
+        final StyleConverter<String, String> converter  = new StyleConverterAdapter<String>(this.converter);
+        CssMetaData<Styleable, String> md
+                = new SimpleCssMetaData<Styleable, String>(property, function,
                         converter, defaultValue, inherits);
         cssMetaData = md;
     }
 
     @Override
-    public CssMetaData<? extends Styleable, Double> getCssMetaData() {
+    public CssMetaData<? extends Styleable, String> getCssMetaData() {
         return cssMetaData;
 
     }
 
+    private final CssStringConverter converter;
+
     @Override
-    public Converter<Double> getConverter() {
+    public Converter<String> getConverter() {
+
         return converter;
     }
 }
