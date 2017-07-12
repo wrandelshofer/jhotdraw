@@ -9,9 +9,6 @@ import java.nio.CharBuffer;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
-import javafx.collections.FXCollections;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.io.IdFactory;
 
@@ -47,6 +44,9 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ImmutableObservableList<String> value) throws IOException {
+        if (value == null) {
+            return;
+        }
         Object[] v = new Object[value.size() + 1];
         v[0] = value.size();
         value.copyInto(v, 1);
@@ -56,7 +56,7 @@ public class CssWordListConverter implements Converter<ImmutableObservableList<S
     @Override
     public ImmutableObservableList<String> fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ImmutableObservableList<String> l = new ImmutableObservableList<>(v,1,(int)v[0]);
+        ImmutableObservableList<String> l = new ImmutableObservableList<>(v, 1, (int) v[0]);
         return l;
     }
 
