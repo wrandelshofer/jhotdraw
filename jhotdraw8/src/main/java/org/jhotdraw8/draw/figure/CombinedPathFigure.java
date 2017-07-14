@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Paint;
@@ -25,12 +23,12 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
+import org.jhotdraw8.draw.key.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.CombinedPathIterator;
 import org.jhotdraw8.geom.Path2DDoubleBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
-import org.jhotdraw8.draw.key.Paintable;
 
 /**
  * This is lake a group, but the shapes of the child figures are presented as a
