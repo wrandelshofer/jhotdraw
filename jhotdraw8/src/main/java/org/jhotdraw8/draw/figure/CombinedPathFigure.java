@@ -46,7 +46,6 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         ConnectableFigure, PathIterableFigure {
 
     public final static EnumStyleableFigureKey<CagOperation> CAG_OPERATION = new EnumStyleableFigureKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), true, null);
-    public final static EnumStyleableFigureKey<FillRule> FILL_RULE = BezierFigure.FILL_RULE;
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
@@ -189,7 +188,6 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         applyStrokeableFigureProperties(n);
         applyTransformableFigureProperties(n);
         applyCompositableFigureProperties(n);
-        n.setFillRule(getStyled(FILL_RULE));
 
         n.getElements().setAll(Shapes.fxPathElementsFromAWT(getPathIterator(null)));
     }
