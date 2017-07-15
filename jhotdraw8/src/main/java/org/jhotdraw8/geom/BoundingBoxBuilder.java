@@ -23,7 +23,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class BoundingBoxBuilder extends AbstractPathBuilder {
 
-    private double minx = Double.MAX_VALUE, miny = Double.MAX_VALUE, maxx = Double.MIN_VALUE, maxy = Double.MIN_VALUE;
+    private double minx = Double.POSITIVE_INFINITY, miny = Double.POSITIVE_INFINITY, maxx = Double.NEGATIVE_INFINITY, maxy = Double.NEGATIVE_INFINITY;
 
     @Override
     protected void doClosePath() {
@@ -60,22 +60,34 @@ public class BoundingBoxBuilder extends AbstractPathBuilder {
         addToBounds(x2, y2);
     }
 
-   public Rectangle getRectangle() {
-       return new Rectangle(minx,miny,maxx-minx,maxy-miny);
-   }
-   public BoundingBox getBoundingBox() {
-       return new BoundingBox(minx,miny,maxx-minx,maxy-miny);
-   }
-   public Path getPath() {
-       Path p = new Path();
-       addPathElementsTo(p.getElements());
-       return p;
-   }
-   public void addPathElementsTo(List<PathElement> elements) {
-       elements.add(new MoveTo(minx,miny));
-       elements.add(new LineTo(maxx,miny));
-       elements.add(new LineTo(maxx,maxy));
-       elements.add(new LineTo(minx,maxy));
-       elements.add(new ClosePath());
-   }
+    public Rectangle getRectangle() {
+        if (Double.isNaN(minx)) {
+            return new Rectangle(0, 0, 0, 0);
+        }
+        return new Rectangle(minx, miny, maxx - minx, maxy - miny);
+    }
+
+    public BoundingBox getBoundingBox() {
+        if (Double.isNaN(minx)) {
+            return new BoundingBox(0, 0, 0, 0);
+        }
+        return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
+    }
+
+    public Path getPath() {
+        Path p = new Path();
+        addPathElementsTo(p.getElements());
+        return p;
+    }
+
+    public void addPathElementsTo(List<PathElement> elements) {
+        if (Double.isNaN(minx)) {
+            return;
+        }
+        elements.add(new MoveTo(minx, miny));
+        elements.add(new LineTo(maxx, miny));
+        elements.add(new LineTo(maxx, maxy));
+        elements.add(new LineTo(minx, maxy));
+        elements.add(new ClosePath());
+    }
 }
