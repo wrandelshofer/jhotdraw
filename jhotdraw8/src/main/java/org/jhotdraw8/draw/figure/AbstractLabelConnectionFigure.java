@@ -133,7 +133,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             list.add(new LabelConnectorHandle(this, ORIGIN,LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
         } else if (handleType == HandleType.POINT) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new LineConnectorHandle(this, Handle.STYLECLASS_HANDLE_POINT, Handle.STYLECLASS_HANDLE_POINT_CONNECTED, LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
+            list.add(new LabelConnectorHandle(this, ORIGIN,LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
         } else {
             super.createHandles(handleType, list);
         }
