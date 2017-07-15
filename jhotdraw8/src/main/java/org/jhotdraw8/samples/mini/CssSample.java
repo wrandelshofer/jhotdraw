@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LineConnectionFigure;
+import org.jhotdraw8.draw.figure.SimpleLineConnectionFigure;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.SimpleDrawingView;
@@ -23,9 +23,9 @@ import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.draw.figure.LineFigure;
-import org.jhotdraw8.draw.figure.RectangleFigure;
-import org.jhotdraw8.draw.figure.TextFigure;
+import org.jhotdraw8.draw.figure.SimpleLineFigure;
+import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
+import org.jhotdraw8.draw.figure.SimpleTextFigure;
 import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.Tool;
 
@@ -41,15 +41,15 @@ public class CssSample extends Application {
     public void start(Stage primaryStage) throws Exception {
         Drawing drawing = new SimpleDrawing();
 
-        RectangleFigure vertex1 = new RectangleFigure(10, 10, 30, 20);
-        RectangleFigure vertex2 = new RectangleFigure(50, 40, 30, 20);
-        TextFigure vertex3 = new TextFigure(120, 50, "Lorem Ipsum");
-        RectangleFigure vertex4 = new RectangleFigure(90, 100, 30, 20);
+        SimpleRectangleFigure vertex1 = new SimpleRectangleFigure(10, 10, 30, 20);
+        SimpleRectangleFigure vertex2 = new SimpleRectangleFigure(50, 40, 30, 20);
+        SimpleTextFigure vertex3 = new SimpleTextFigure(120, 50, "Lorem Ipsum");
+        SimpleRectangleFigure vertex4 = new SimpleRectangleFigure(90, 100, 30, 20);
 
-        LineConnectionFigure edge12 = new LineConnectionFigure();
-        LineConnectionFigure edge23 = new LineConnectionFigure();
-        LineConnectionFigure edge3Null = new LineConnectionFigure();
-        LineConnectionFigure edgeNullNull = new LineConnectionFigure();
+        SimpleLineConnectionFigure edge12 = new SimpleLineConnectionFigure();
+        SimpleLineConnectionFigure edge23 = new SimpleLineConnectionFigure();
+        SimpleLineConnectionFigure edge3Null = new SimpleLineConnectionFigure();
+        SimpleLineConnectionFigure edgeNullNull = new SimpleLineConnectionFigure();
 
         edge12.setStartConnection(vertex1, new RectangleConnector());
         edge12.setEndConnection(vertex2, new RectangleConnector());
@@ -57,13 +57,13 @@ public class CssSample extends Application {
         edge23.setStartConnection(vertex2, new RectangleConnector());
         edge23.setEndConnection(vertex3, new RectangleConnector());
         edge3Null.setStartConnection(vertex3, new RectangleConnector());
-        edge3Null.set(LineConnectionFigure.END, new Point2D(145, 15));
-        edgeNullNull.set(LineConnectionFigure.START, new Point2D(65, 90));
-        edgeNullNull.set(LineConnectionFigure.END, new Point2D(145, 95));
+        edge3Null.set(SimpleLineConnectionFigure.END, new Point2D(145, 15));
+        edgeNullNull.set(SimpleLineConnectionFigure.START, new Point2D(65, 90));
+        edgeNullNull.set(SimpleLineConnectionFigure.END, new Point2D(145, 95));
 
-        LineFigure line1 = new LineFigure();
-        line1.set(LineFigure.START, new Point2D(50, 150));
-        line1.set(LineFigure.END, new Point2D(100, 150));
+        SimpleLineFigure line1 = new SimpleLineFigure();
+        line1.set(SimpleLineFigure.START, new Point2D(50, 150));
+        line1.set(SimpleLineFigure.END, new Point2D(100, 150));
 
         Layer layer = new SimpleLayer();
         drawing.add(layer);

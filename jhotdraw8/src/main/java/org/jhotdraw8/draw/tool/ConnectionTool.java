@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LineConnectionFigure;
+import org.jhotdraw8.draw.figure.SimpleLineConnectionFigure;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
@@ -119,7 +119,7 @@ public class ConnectionTool extends AbstractTool {
             Figure newConnectionTarget = null;
             DrawingModel model = view.getModel();
             // must clear end target, otherwise findConnector won't work as expected
-            model.set(figure, LineConnectionFigure.END_TARGET, null);
+            model.set(figure, SimpleLineConnectionFigure.END_TARGET, null);
             if (!event.isMetaDown()) {
                 List<Figure> list = view.findFigures(pointInViewCoordinates, true);
                 for (Figure f1 : list) {
@@ -139,9 +139,9 @@ public class ConnectionTool extends AbstractTool {
                 }
             }
 
-            model.set(figure, LineConnectionFigure.END, figure.worldToLocal(constrainedPoint));
-            model.set(figure, LineConnectionFigure.END_CONNECTOR, newConnector);
-            model.set(figure, LineConnectionFigure.END_TARGET, newConnectionTarget);
+            model.set(figure, SimpleLineConnectionFigure.END, figure.worldToLocal(constrainedPoint));
+            model.set(figure, SimpleLineConnectionFigure.END_CONNECTOR, newConnector);
+            model.set(figure, SimpleLineConnectionFigure.END_TARGET, newConnectionTarget);
         }
         event.consume();
     }
@@ -183,8 +183,8 @@ public class ConnectionTool extends AbstractTool {
                 }
             }
         }
-        figure.set(LineConnectionFigure.START_CONNECTOR, newConnector);
-        figure.set(LineConnectionFigure.START_TARGET, newConnectedFigure);
+        figure.set(SimpleLineConnectionFigure.START_CONNECTOR, newConnector);
+        figure.set(SimpleLineConnectionFigure.START_TARGET, newConnectedFigure);
 
         dm.addChildTo(figure, layer);
         event.consume();

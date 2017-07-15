@@ -55,26 +55,26 @@ import org.jhotdraw8.draw.action.SelectSameAction;
 import org.jhotdraw8.draw.action.SendToBackAction;
 import org.jhotdraw8.draw.action.UngroupAction;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.draw.figure.BezierFigure;
+import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.EllipseFigure;
+import org.jhotdraw8.draw.figure.SimpleEllipseFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FillableFigure;
-import org.jhotdraw8.draw.figure.GroupFigure;
-import org.jhotdraw8.draw.figure.ImageFigure;
-import org.jhotdraw8.draw.figure.LabelFigure;
+import org.jhotdraw8.draw.figure.SimpleGroupFigure;
+import org.jhotdraw8.draw.figure.SimpleImageFigure;
+import org.jhotdraw8.draw.figure.SimpleLabelFigure;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
-import org.jhotdraw8.draw.figure.LineFigure;
-import org.jhotdraw8.draw.figure.PageFigure;
-import org.jhotdraw8.draw.figure.PageLabelFigure;
-import org.jhotdraw8.draw.figure.PolygonFigure;
-import org.jhotdraw8.draw.figure.PolylineFigure;
-import org.jhotdraw8.draw.figure.RectangleFigure;
+import org.jhotdraw8.draw.figure.SimpleLineConnectionWithMarkersFigure;
+import org.jhotdraw8.draw.figure.SimpleLineFigure;
+import org.jhotdraw8.draw.figure.SimplePageFigure;
+import org.jhotdraw8.draw.figure.SimplePageLabelFigure;
+import org.jhotdraw8.draw.figure.SimplePolygonFigure;
+import org.jhotdraw8.draw.figure.SimplePolylineFigure;
+import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.figure.SimpleLayer;
-import org.jhotdraw8.draw.figure.SliceFigure;
+import org.jhotdraw8.draw.figure.SimpleSliceFigure;
 import org.jhotdraw8.draw.figure.StrokeableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -242,7 +242,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
                 getApplication(), this,
                 VIEWTOGGLE_PROPERTIES,
                 Resources.getResources("org.jhotdraw8.samples.grapher.Labels"), detailsVisible));
-        map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(GroupFigure::new)));
+        map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(SimpleGroupFigure::new)));
         map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(CombinedPathFigure::new)));
         map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
         map.put(AddToGroupAction.ID, new AddToGroupAction(getApplication(), editor));
@@ -260,29 +260,29 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
         ttbar.addTool(new SelectionTool("tool.moveFigure", HandleType.MOVE, null, HandleType.LEAD, labels), 1, 0);
         ttbar.addTool(new SelectionTool("tool.selectPoint", HandleType.POINT, labels), 0, 1);
         ttbar.addTool(new SelectionTool("tool.transform", HandleType.TRANSFORM, labels), 1, 1);
-        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 2, 0, 16);
-        ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(EllipseFigure::new), layerFactory), 3, 0);
-        ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(LineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
-        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 2, 1, 16);
-        ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory), 4, 1);
-        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory), 5, 1);
-        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory), 6, 1);
+        ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(SimpleRectangleFigure::new), layerFactory), 2, 0, 16);
+        ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(SimpleEllipseFigure::new), layerFactory), 3, 0);
+        ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(SimpleLineConnectionWithMarkersFigure::new), layerFactory), 3, 1);
+        ttbar.addTool(new CreationTool("edit.createLine", labels, () -> createFigure(SimpleLineFigure::new), layerFactory), 2, 1, 16);
+        ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, SimplePolylineFigure.POINTS, () -> createFigure(SimplePolylineFigure::new), layerFactory), 4, 1);
+        ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels, SimplePolygonFigure.POINTS, () -> createFigure(SimplePolygonFigure::new), layerFactory), 5, 1);
+        ttbar.addTool(new BezierCreationTool("edit.createBezier", labels, SimpleBezierFigure.PATH, () -> createFigure(SimpleBezierFigure::new), layerFactory), 6, 1);
         ttbar.addTool(new CreationTool("edit.createText", labels,//
-                () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
+                () -> createFigure(() -> new SimpleLabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
                 layerFactory), 6, 0);
         ttbar.addTool(new CreationTool("edit.createPageLabel", labels,//
-                () -> createFigure(() -> new PageLabelFigure(0, 0,
-                labels.getFormatted("pageLabel.text", PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
+                () -> createFigure(() -> new SimplePageLabelFigure(0, 0,
+                labels.getFormatted("pageLabel.text", SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
                 FillableFigure.FILL, null, StrokeableFigure.STROKE, null)), //
                 layerFactory), 9, 1);
-        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(ImageFigure::new), layerFactory), 4, 0);
-        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 8, 0, 16);
+        ttbar.addTool(new ImageCreationTool("edit.createImage", labels, () -> createFigure(SimpleImageFigure::new), layerFactory), 4, 0);
+        ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SimpleSliceFigure::new), layerFactory), 8, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
-            PageFigure pf = new PageFigure();
-            pf.set(PageFigure.PAPER_SIZE, new CssSize2D(297, 210, "mm"));
-            pf.set(PageFigure.PAGE_INSETS, new CssSizeInsets(2, 1, 2, 1, "cm"));
-            PageLabelFigure pl = new PageLabelFigure(940, 700, labels.getFormatted("pageLabel.text",
-                    PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
+            SimplePageFigure pf = new SimplePageFigure();
+            pf.set(SimplePageFigure.PAPER_SIZE, new CssSize2D(297, 210, "mm"));
+            pf.set(SimplePageFigure.PAGE_INSETS, new CssSizeInsets(2, 1, 2, 1, "cm"));
+            SimplePageLabelFigure pl = new SimplePageLabelFigure(940, 700, labels.getFormatted("pageLabel.text",
+                    SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
                     FillableFigure.FILL, null, StrokeableFigure.STROKE, null);
             pf.add(pl);
             return pf;

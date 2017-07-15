@@ -24,13 +24,13 @@ import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Page;
-import org.jhotdraw8.draw.figure.PageFigure;
+import org.jhotdraw8.draw.figure.SimplePageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.UnitConverter;
 import org.jhotdraw8.text.CssSize;
 import org.jhotdraw8.text.CssSize2D;
+import org.jhotdraw8.draw.figure.Page;
 
 /**
  * PrinterExportFormat.
@@ -144,12 +144,12 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     @Override
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
+        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();
 
-        printSlice(page.get(PageFigure.PAPER_SIZE), page, pageBounds, node, pagesDpi * factor);
+        printSlice(page.get(SimplePageFigure.PAPER_SIZE), page, pageBounds, node, pagesDpi * factor);
     }
 
     protected boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {

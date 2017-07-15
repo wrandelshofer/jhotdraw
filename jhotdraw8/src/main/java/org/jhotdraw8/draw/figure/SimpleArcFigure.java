@@ -4,73 +4,54 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.transform.Transform;
 import static java.lang.Math.*;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
-import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.connector.EllipseConnector;
-import static org.jhotdraw8.draw.figure.RectangleFigure.ARC_HEIGHT;
-import static org.jhotdraw8.draw.figure.RectangleFigure.ARC_WIDTH;
-import static org.jhotdraw8.draw.figure.RectangleFigure.HEIGHT;
-import static org.jhotdraw8.draw.figure.RectangleFigure.WIDTH;
-import static org.jhotdraw8.draw.figure.RectangleFigure.X;
-import static org.jhotdraw8.draw.figure.RectangleFigure.Y;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
+import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
-import org.jhotdraw8.draw.locator.RelativeLocator;
-import org.jhotdraw8.geom.Shapes;
 
 /**
- * Renders a {@code javafx.scene.shape.Ellipse}.
+ * Renders a {@code javafx.scene.shape.Arc}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class EllipseFigure extends AbstractLeafFigure 
-        implements StrokeableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, 
-        LockableFigure, CompositableFigure,ConnectableFigure,PathIterableFigure {
+public class SimpleArcFigure extends AbstractLeafFigure implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
 
-    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
-    public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
-    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
-    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
-    public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Ellipse";
+    public final static String TYPE_SELECTOR = "Arc";
 
-    public EllipseFigure() {
+    public final static DoubleStyleableFigureKey CENTER_X = new DoubleStyleableFigureKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey CENTER_Y = new DoubleStyleableFigureKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey RADIUS_X = new DoubleStyleableFigureKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey RADIUS_Y = new DoubleStyleableFigureKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 1.0);
+    public final static DoubleStyleableFigureKey START_ANGLE = new DoubleStyleableFigureKey("startAngle", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey ARC_LENGTH = new DoubleStyleableFigureKey("arcLength", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 360.0);
+    public final static EnumStyleableFigureKey<ArcType> ARC_TYPE = new EnumStyleableFigureKey<ArcType>("arcType", ArcType.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), false,ArcType.ROUND);
+    public final static Point2DStyleableMapAccessor CENTER = new Point2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
+    public final static Point2DStyleableMapAccessor RADIUS = new Point2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
+
+    public SimpleArcFigure() {
         this(0, 0, 1, 1);
     }
 
-    public EllipseFigure(double x, double y, double width, double height) {
+    public SimpleArcFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }
 
-    public EllipseFigure(Rectangle2D rect) {
+    public SimpleArcFigure(Rectangle2D rect) {
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
-    }
-
-    @Override
-    public Node createNode(RenderContext drawingView) {
-        return new Ellipse();
-    }
-
-    @Override
-    public Connector findConnector(Point2D p, Figure prototype) {
-        return new EllipseConnector(new RelativeLocator(getBoundsInLocal(),p));
     }
 
     @Override
@@ -80,20 +61,12 @@ public class EllipseFigure extends AbstractLeafFigure
         return new BoundingBox(get(CENTER_X) - rx, get(CENTER_Y) - ry, rx * 2.0, ry * 2.0);
     }
 
-
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
-        Ellipse shape=new Ellipse();
-       shape.setCenterX(get(CENTER_X));
-        shape.setCenterY(get(CENTER_Y));
-        shape.setRadiusX(get(RADIUS_X));
-        shape.setRadiusY(get(RADIUS_Y));
-       return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
-    }
-
-    @Override
-    public String getTypeSelector() {
-        return TYPE_SELECTOR;
+    public void reshapeInLocal(Transform transform) {
+        Bounds r = getBoundsInLocal();
+        Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+        b = transform.transform(b);
+        reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override
@@ -107,8 +80,13 @@ public class EllipseFigure extends AbstractLeafFigure
     }
 
     @Override
+    public Node createNode(RenderContext drawingView) {
+        return new Arc();
+    }
+
+    @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Ellipse n = (Ellipse) node;
+        Arc n = (Arc) node;
         applyHideableFigureProperties(n);
         applyTransformableFigureProperties(n);
         applyStrokeableFigureProperties(n);
@@ -119,7 +97,14 @@ public class EllipseFigure extends AbstractLeafFigure
         n.setCenterY(getStyled(CENTER_Y));
         n.setRadiusX(getStyled(RADIUS_X));
         n.setRadiusY(getStyled(RADIUS_Y));
+        n.setStartAngle(getStyled(START_ANGLE));
+        n.setLength(getStyled(ARC_LENGTH));
+        n.setType(getStyled(ARC_TYPE));
         n.applyCss();
     }
 
+    @Override
+    public String getTypeSelector() {
+        return TYPE_SELECTOR;
+    }
 }

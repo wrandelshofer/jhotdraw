@@ -13,7 +13,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.LineConnectionFigure;
+import org.jhotdraw8.draw.figure.SimpleLineConnectionFigure;
 import org.jhotdraw8.geom.Transforms;
 
 /**
@@ -73,10 +73,10 @@ public class LineOutlineHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
-        points[0] = f.get(LineConnectionFigure.START).getX();
-        points[1] = f.get(LineConnectionFigure.START).getY();
-        points[2] = f.get(LineConnectionFigure.END).getX();
-        points[3] = f.get(LineConnectionFigure.END).getY();
+        points[0] = f.get(SimpleLineConnectionFigure.START).getX();
+        points[1] = f.get(SimpleLineConnectionFigure.START).getY();
+        points[2] = f.get(SimpleLineConnectionFigure.END).getX();
+        points[3] = f.get(SimpleLineConnectionFigure.END).getY();
 
         if (t != null) {
             t.transform2DPoints(points, 0, points, 0, 2);

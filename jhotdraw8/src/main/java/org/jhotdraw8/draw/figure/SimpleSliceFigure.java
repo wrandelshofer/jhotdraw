@@ -38,7 +38,7 @@ import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class SliceFigure extends AbstractLeafFigure implements Slice, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
+public class SimpleSliceFigure extends AbstractLeafFigure implements Slice, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -54,15 +54,15 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     public final static DoubleStyleableFigureKey SLICE_ORIGIN_Y = new DoubleStyleableFigureKey("sliceOriginY", DirtyMask.of(DirtyBits.NODE), 0.0);
     public final static Point2DStyleableMapAccessor SLICE_ORIGIN = new Point2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
 
-    public SliceFigure() {
+    public SimpleSliceFigure() {
         this(0, 0, 1, 1);
     }
 
-    public SliceFigure(double x, double y, double width, double height) {
+    public SimpleSliceFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }
 
-    public SliceFigure(Rectangle2D rect) {
+    public SimpleSliceFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 

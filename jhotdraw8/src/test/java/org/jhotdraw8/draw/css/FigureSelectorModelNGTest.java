@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.css;
 
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.draw.figure.FillableFigure;
-import org.jhotdraw8.draw.figure.LabelFigure;
+import org.jhotdraw8.draw.figure.SimpleLabelFigure;
 import org.jhotdraw8.draw.key.PaintableStyleableFigureKey;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.draw.key.Paintable;
@@ -32,7 +32,7 @@ public class FigureSelectorModelNGTest {
     @Test
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
         System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
-        LabelFigure figure = new LabelFigure();
+        SimpleLabelFigure figure = new SimpleLabelFigure();
         FigureSelectorModel instance = new FigureSelectorModel();
         
         final PaintableStyleableFigureKey key = FillableFigure.FILL;

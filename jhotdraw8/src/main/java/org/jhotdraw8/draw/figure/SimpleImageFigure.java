@@ -1,4 +1,4 @@
-/* @(#)ImageFigure.java
+/* @(#)SimpleImageFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -22,11 +22,11 @@ import org.jhotdraw8.draw.key.UriStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 
 /**
- * ImageFigure.
+ * SimpleImageFigure.
  *
  * @author Werner Randelshofer
  */
-public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure {
+public class SimpleImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -41,23 +41,23 @@ public class ImageFigure extends AbstractLeafFigure implements ResizableFigure, 
      */
     public final static UriStyleableFigureKey IMAGE_URI = new UriStyleableFigureKey("src", null);
 
-    public final static DoubleStyleableFigureKey X = RectangleFigure.X;
-    public final static DoubleStyleableFigureKey Y = RectangleFigure.Y;
-    public final static DoubleStyleableFigureKey WIDTH = RectangleFigure.WIDTH;
-    public final static DoubleStyleableFigureKey HEIGHT = RectangleFigure.HEIGHT;
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
+    public final static DoubleStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static DoubleStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    public final static DoubleStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    public final static DoubleStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static Rectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
     private Image cachedImage;
     private URI cachedImageUri;
 
-    public ImageFigure() {
+    public SimpleImageFigure() {
         this(0, 0, 1, 1);
     }
 
-    public ImageFigure(double x, double y, double width, double height) {
+    public SimpleImageFigure(double x, double y, double width, double height) {
         set(BOUNDS, new Rectangle2D(x, y, width, height));
     }
 
-    public ImageFigure(Rectangle2D rect) {
+    public SimpleImageFigure(Rectangle2D rect) {
         set(BOUNDS, rect);
     }
 

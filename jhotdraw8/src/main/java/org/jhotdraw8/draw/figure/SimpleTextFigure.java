@@ -1,4 +1,4 @@
-/* @(#)TextFigure.java
+/* @(#)SimpleTextFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -10,31 +10,26 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import static org.jhotdraw8.draw.figure.LineFigure.END_X;
-import static org.jhotdraw8.draw.figure.LineFigure.END_Y;
-import static org.jhotdraw8.draw.figure.LineFigure.START_X;
-import static org.jhotdraw8.draw.figure.LineFigure.START_Y;
-import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.Point2DStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 /**
- * {@code TextFigure} is a {@code FontableFigure} which supports stroking and
+ * {@code SimpleTextFigure} is a {@code FontableFigure} which supports stroking and
  * filling of the text.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class TextFigure extends AbstractLeafFigure
+public class SimpleTextFigure extends AbstractLeafFigure
         implements StrokeableFigure, FillableFigure, TransformableFigure, FontableFigure,
         TextableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,
         ConnectableFigure, PathIterableFigure {
@@ -47,15 +42,15 @@ public class TextFigure extends AbstractLeafFigure
 
     private Text textNode;
 
-    public TextFigure() {
+    public SimpleTextFigure() {
         this(0, 0, "");
     }
 
-    public TextFigure(Point2D position, String text) {
+    public SimpleTextFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public TextFigure(double x, double y, String text) {
+    public SimpleTextFigure(double x, double y, String text) {
         set(TEXT, text);
         set(ORIGIN, new Point2D(x, y));
     }

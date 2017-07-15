@@ -38,11 +38,11 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
 
 
-    public final static DoubleStyleableFigureKey X = RectangleFigure.X;
-    public final static DoubleStyleableFigureKey Y = RectangleFigure.Y;
-    public final static DoubleStyleableFigureKey WIDTH = RectangleFigure.WIDTH;
-    public final static DoubleStyleableFigureKey HEIGHT = RectangleFigure.HEIGHT;
-    public final static Rectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
+    public final static DoubleStyleableFigureKey X = SimpleRectangleFigure.X;
+    public final static DoubleStyleableFigureKey Y = SimpleRectangleFigure.Y;
+    public final static DoubleStyleableFigureKey WIDTH = SimpleRectangleFigure.WIDTH;
+    public final static DoubleStyleableFigureKey HEIGHT = SimpleRectangleFigure.HEIGHT;
+    public final static Rectangle2DStyleableMapAccessor BOUNDS = SimpleRectangleFigure.BOUNDS;
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
 
     protected transient List<PathElement> pathElements;

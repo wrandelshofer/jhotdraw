@@ -6,12 +6,12 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.draw.figure.BezierFigure;
+import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * A {@link Locator} which can be used to place a label on the path of a
- * {@link BezierFigure}.
+ * {@link SimpleBezierFigure}.
  * <p>
  * The point is located at a distance and an angle relative to the total length
  * of the bezier path.
@@ -51,12 +51,12 @@ public class BezierLabelLocator implements Locator {
 
     @Override
     public Point2D locate(Figure owner) {
-        return getRelativePoint((BezierFigure) owner);
+        return getRelativePoint((SimpleBezierFigure) owner);
     }
 
     @Override
     public Point2D locate(Figure owner, Figure label) {
-        Point2D relativePoint = getRelativeLabelPoint((BezierFigure) owner, label);
+        Point2D relativePoint = getRelativeLabelPoint((SimpleBezierFigure) owner, label);
         return relativePoint;
     }
 
@@ -67,7 +67,7 @@ public class BezierLabelLocator implements Locator {
      * @param owner the owner
      * @return the coordinates
      */
-    public Point2D getRelativePoint(BezierFigure owner) {
+    public Point2D getRelativePoint(SimpleBezierFigure owner) {
         Point2D point = owner.getPointOnPath((float) relativePosition, 3);
         Point2D nextPoint = owner.getPointOnPath(
                 (relativePosition < 0.5) ? (float) relativePosition + 0.1f : (float) relativePosition - 0.1f,
@@ -99,7 +99,7 @@ public class BezierLabelLocator implements Locator {
      * @param label the label
      * @return the position
      */
-    public Point2D getRelativeLabelPoint(BezierFigure owner, Figure label) {
+    public Point2D getRelativeLabelPoint(SimpleBezierFigure owner, Figure label) {
         // Get a point on the path an the next point on the path
         Point2D point = owner.getPointOnPath((float) relativePosition, 3);
         if (point == null) {

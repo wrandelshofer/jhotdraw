@@ -31,8 +31,9 @@ import org.jhotdraw8.geom.Shapes;
  * rawcoder $$
  */
 public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
-        implements StrokeableFigure, FillableFigure, PathIterableFigure {
+        implements PathIterableFigure {
 
+    // FIXME should not make this user-editable in this base class!
     public final static SvgPathStyleableFigureKey START_MARKER = new SvgPathStyleableFigureKey("marker-shape-start", DirtyMask.of(DirtyBits.NODE), null);
     public final static SvgPathStyleableFigureKey END_MARKER = new SvgPathStyleableFigureKey("marker-shape-end", DirtyMask.of(DirtyBits.NODE), null);
     public final static DoubleStyleableFigureKey START_MARKER_LINE_INSET = new DoubleStyleableFigureKey("marker-line-inset-start", DirtyMask.of(DirtyBits.NODE), 0.0);
@@ -50,11 +51,10 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
 
     public AbstractLineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
-        setStyled(StyleOrigin.USER_AGENT,FILL, new CssColor("black", Color.BLACK));
-        setStyled(StyleOrigin.USER_AGENT,START_MARKER_LINE_INSET, 10.0);
-        setStyled(StyleOrigin.USER_AGENT,END_MARKER_LINE_INSET, 10.0);
-        setStyled(StyleOrigin.USER_AGENT,START_MARKER, "M0,0 L-10,5 -10,-5Z");
-        setStyled(StyleOrigin.USER_AGENT,END_MARKER, "M0,0 L-10,5 -10,-5Z");
+        setStyled(StyleOrigin.USER_AGENT, START_MARKER_LINE_INSET, 10.0);
+        setStyled(StyleOrigin.USER_AGENT, END_MARKER_LINE_INSET, 10.0);
+        setStyled(StyleOrigin.USER_AGENT, START_MARKER, "M0,0 L-10,5 -10,-5Z");
+        setStyled(StyleOrigin.USER_AGENT, END_MARKER, "M0,0 L-10,5 -10,-5Z");
     }
 
     @Override
@@ -67,11 +67,37 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         return g;
     }
 
+    /**
+     * This method can be overridden by a subclass to apply styles to the line
+     * node.
+     */
+    protected void updateLineNode(RenderContext ctx, Line node) {
+
+    }
+
+    /**
+     * This method can be overridden by a subclass to apply styles to the line
+     * node.
+     */
+    protected void updateStartMarkerNode(RenderContext ctx, SVGPath node) {
+
+    }
+
+    /**
+     * This method can be overridden by a subclass to apply styles to the line
+     * node.
+     */
+    protected void updateEndMarkerNode(RenderContext ctx, SVGPath node) {
+
+    }
+
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         javafx.scene.Group g = (javafx.scene.Group) node;
-
         Line lineNode = (Line) g.getProperties().get("line");
+        final SVGPath startMarkerNode = (SVGPath) g.getProperties().get("startMarker");
+        final SVGPath endMarkerNode = (SVGPath) g.getProperties().get("endMarker");
+
         Point2D start = get(START);
         Point2D end = get(END);
 
@@ -79,9 +105,9 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         final double endInset = getStyled(END_MARKER_LINE_INSET);
         final String startMarkerStr = getStyled(START_MARKER);
 
-        updateMarkerNode(ctx, g, (SVGPath) g.getProperties().get("startMarker"), start, end, startMarkerStr, getStyled(START_MARKER_SCALE_FACTOR));
+        updateMarkerNode(ctx, g, startMarkerNode, start, end, startMarkerStr, getStyled(START_MARKER_SCALE_FACTOR));
         final String endMarkerStr = getStyled(END_MARKER);
-        updateMarkerNode(ctx, g, (SVGPath) g.getProperties().get("endMarker"), end, start, endMarkerStr, getStyled(END_MARKER_SCALE_FACTOR));
+        updateMarkerNode(ctx, g, endMarkerNode, end, start, endMarkerStr, getStyled(END_MARKER_SCALE_FACTOR));
 
         Point2D dir = end.subtract(start).normalize();
         if (startInset != 0 && startMarkerStr != null) {
@@ -94,13 +120,16 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         lineNode.setStartY(start.getY());
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
+
+        updateLineNode(ctx, lineNode);
+        updateStartMarkerNode(ctx, startMarkerNode);
+        updateEndMarkerNode(ctx, endMarkerNode);
     }
 
     private void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
             SVGPath markerNode,
             Point2D start, Point2D end, String svgString, double markerScaleFactor) {
         if (svgString != null) {
-            applyFillableFigureProperties(markerNode);
             markerNode.setContent(svgString);
             double angle = Math.atan2(start.getY() - end.getY(), start.getX() - end.getX());
             markerNode.getTransforms().setAll(
@@ -116,10 +145,11 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
         }
 
     }
+
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         // FIXME include markers in path
-        return Shapes.awtShapeFromFX(new Line(get(START_X),get(START_Y),get(END_X),get(END_Y))).getPathIterator(tx);
+        return Shapes.awtShapeFromFX(new Line(get(START_X), get(START_Y), get(END_X), get(END_Y))).getPathIterator(tx);
     }
 
 }

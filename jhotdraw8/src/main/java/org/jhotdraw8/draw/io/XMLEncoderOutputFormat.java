@@ -11,7 +11,7 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePersistenceDelegate;
-import org.jhotdraw8.draw.figure.RectangleFigure;
+import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 
 /**
  * XMLEncoderOutputFormat.
@@ -37,7 +37,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
            /* final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
             o.setPersistenceDelegate(Figure.class, delegate);
             o.setPersistenceDelegate(Drawing.class, delegate);
-            o.setPersistenceDelegate(RectangleFigure.class, delegate);*/
+            o.setPersistenceDelegate(SimpleRectangleFigure.class, delegate);*/
             o.writeObject(drawing);
         }
     }

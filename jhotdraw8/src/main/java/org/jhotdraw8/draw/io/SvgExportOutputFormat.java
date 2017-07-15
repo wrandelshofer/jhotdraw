@@ -31,9 +31,8 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.ImageFigure;
-import org.jhotdraw8.draw.figure.Page;
-import org.jhotdraw8.draw.figure.PageFigure;
+import org.jhotdraw8.draw.figure.SimpleImageFigure;
+import org.jhotdraw8.draw.figure.SimplePageFigure;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.geom.Transforms;
@@ -49,6 +48,7 @@ import org.jhotdraw8.text.XmlSizeListConverter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.jhotdraw8.draw.figure.Page;
 
 /**
  * Exports a JavaFX scene graph to SVG.
@@ -88,7 +88,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     private final CssTransformListConverter txc = new CssTransformListConverter();
 
     private SvgExporter createExporter() {
-        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
+        SvgExporter exporter = new SvgExporter(SimpleImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setExternalHome(getExternalHome());
         exporter.setInternalHome(getInternalHome());
         return exporter;
@@ -174,7 +174,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     @Override
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
+        CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
 
         SvgExporter exporter = createExporter();
         markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
@@ -188,8 +188,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     private void writePageElementAttributes(Element docElement, Page page, int internalPageNumber) throws IOException {
         Bounds b = page.getBoundsInLocal();
         Bounds pb = page.getPageBounds(internalPageNumber);
-        docElement.setAttribute("width", sznb.toString(page.get(PageFigure.PAPER_WIDTH)));
-        docElement.setAttribute("height", sznb.toString(page.get(PageFigure.PAPER_HEIGHT)));
+        docElement.setAttribute("width", sznb.toString(page.get(SimplePageFigure.PAPER_WIDTH)));
+        docElement.setAttribute("height", sznb.toString(page.get(SimplePageFigure.PAPER_HEIGHT)));
         docElement.setAttribute("viewBox", nb.
                 toString(pb.getMinX()) + " " + nb.toString(pb.getMinY())
                 + " " + nb.toString(pb.getWidth()) + " " + nb.toString(pb.getHeight()));

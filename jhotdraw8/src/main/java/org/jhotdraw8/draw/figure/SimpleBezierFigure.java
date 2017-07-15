@@ -1,4 +1,4 @@
-/* @(#)BezierFigure.java
+/* @(#)SimpleBezierFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -12,7 +12,6 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
@@ -30,7 +29,6 @@ import org.jhotdraw8.draw.key.BezierNodeListStyleableFigureKey;
 import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
@@ -44,7 +42,7 @@ import org.jhotdraw8.geom.Shapes;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BezierFigure extends AbstractLeafFigure
+public class SimpleBezierFigure extends AbstractLeafFigure
         implements StrokeableFigure, FillableFigure, TransformableFigure, HideableFigure,
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {

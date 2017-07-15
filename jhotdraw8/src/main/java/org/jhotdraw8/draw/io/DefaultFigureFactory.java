@@ -29,27 +29,27 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.SimpleClipping;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.GroupFigure;
-import org.jhotdraw8.draw.figure.LineConnectionFigure;
+import org.jhotdraw8.draw.figure.SimpleGroupFigure;
+import org.jhotdraw8.draw.figure.SimpleLineConnectionFigure;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
-import org.jhotdraw8.draw.figure.LabelFigure;
+import org.jhotdraw8.draw.figure.SimpleLabelFigure;
 import org.jhotdraw8.draw.figure.SimpleLayer;
 import org.jhotdraw8.draw.figure.StrokeableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.figure.BezierFigure;
+import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
-import org.jhotdraw8.draw.figure.ImageFigure;
-import org.jhotdraw8.draw.figure.EllipseFigure;
-import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
-import org.jhotdraw8.draw.figure.LineFigure;
-import org.jhotdraw8.draw.figure.PageFigure;
-import org.jhotdraw8.draw.figure.PageLabelFigure;
-import org.jhotdraw8.draw.figure.PolygonFigure;
-import org.jhotdraw8.draw.figure.PolylineFigure;
-import org.jhotdraw8.draw.figure.TextFigure;
-import org.jhotdraw8.draw.figure.RectangleFigure;
-import org.jhotdraw8.draw.figure.SliceFigure;
+import org.jhotdraw8.draw.figure.SimpleImageFigure;
+import org.jhotdraw8.draw.figure.SimpleEllipseFigure;
+import org.jhotdraw8.draw.figure.SimpleLineConnectionWithMarkersFigure;
+import org.jhotdraw8.draw.figure.SimpleLineFigure;
+import org.jhotdraw8.draw.figure.SimplePageFigure;
+import org.jhotdraw8.draw.figure.SimplePageLabelFigure;
+import org.jhotdraw8.draw.figure.SimplePolygonFigure;
+import org.jhotdraw8.draw.figure.SimplePolylineFigure;
+import org.jhotdraw8.draw.figure.SimpleTextFigure;
+import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
+import org.jhotdraw8.draw.figure.SimpleSliceFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.draw.key.CssColor;
@@ -102,12 +102,12 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         super(idFactory);
         addFigureKeysAndNames("Layer", SimpleLayer.class);
         addFigureKeysAndNames("Clipping", SimpleClipping.class);
-        addFigureKeysAndNames("Rectangle", RectangleFigure.class);
-        addFigureKeysAndNames("Slice", SliceFigure.class);
-        addFigureKeysAndNames("Group", GroupFigure.class);
-        addFigureKeysAndNames("Polyline", PolylineFigure.class);
-        addFigureKeysAndNames("Polygon", PolygonFigure.class);
-        addFigureKeysAndNames("Page", PageFigure.class);
+        addFigureKeysAndNames("Rectangle", SimpleRectangleFigure.class);
+        addFigureKeysAndNames("Slice", SimpleSliceFigure.class);
+        addFigureKeysAndNames("Group", SimpleGroupFigure.class);
+        addFigureKeysAndNames("Polyline", SimplePolylineFigure.class);
+        addFigureKeysAndNames("Polygon", SimplePolygonFigure.class);
+        addFigureKeysAndNames("Page", SimplePageFigure.class);
         addFigureKeysAndNames("CombinedPath", CombinedPathFigure.class);
 
         {
@@ -120,30 +120,30 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         }
 
         {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(TextFigure.class));
-            keys.remove(TextFigure.TEXT);
-            addNodeListKey(TextFigure.class, "", TextFigure.TEXT);
-            addFigureKeysAndNames("Text", TextFigure.class, keys);
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(SimpleTextFigure.class));
+            keys.remove(SimpleTextFigure.TEXT);
+            addNodeListKey(SimpleTextFigure.class, "", SimpleTextFigure.TEXT);
+            addFigureKeysAndNames("Text", SimpleTextFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(LabelFigure.class));
-            keys.remove(LabelFigure.TEXT);
-            addNodeListKey(LabelFigure.class, "", LabelFigure.TEXT);
-            addFigureKeysAndNames("Label", LabelFigure.class, keys);
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(SimpleLabelFigure.class));
+            keys.remove(SimpleLabelFigure.TEXT);
+            addNodeListKey(SimpleLabelFigure.class, "", SimpleLabelFigure.TEXT);
+            addFigureKeysAndNames("Label", SimpleLabelFigure.class, keys);
         }
         {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(PageLabelFigure.class));
-            keys.remove(PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
-            addNodeListKey(PageLabelFigure.class, "", PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
-            addFigureKeysAndNames("PageLabel", PageLabelFigure.class, keys);
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(SimplePageLabelFigure.class));
+            keys.remove(SimplePageLabelFigure.TEXT_WITH_PLACEHOLDERS);
+            addNodeListKey(SimplePageLabelFigure.class, "", SimplePageLabelFigure.TEXT_WITH_PLACEHOLDERS);
+            addFigureKeysAndNames("PageLabel", SimplePageLabelFigure.class, keys);
         }
 
-        addFigureKeysAndNames("Line", LineFigure.class);
-        addFigureKeysAndNames("Ellipse", EllipseFigure.class);
-        addFigureKeysAndNames("LineConnection", LineConnectionFigure.class);
-        addFigureKeysAndNames("LineConnectionWithMarkers", LineConnectionWithMarkersFigure.class);
-        addFigureKeysAndNames("Image", ImageFigure.class);
-        addFigureKeysAndNames("BezierPath", BezierFigure.class);
+        addFigureKeysAndNames("Line", SimpleLineFigure.class);
+        addFigureKeysAndNames("Ellipse", SimpleEllipseFigure.class);
+        addFigureKeysAndNames("LineConnection", SimpleLineConnectionFigure.class);
+        addFigureKeysAndNames("LineConnectionWithMarkers", SimpleLineConnectionWithMarkersFigure.class);
+        addFigureKeysAndNames("Image", SimpleImageFigure.class);
+        addFigureKeysAndNames("BezierPath", SimpleBezierFigure.class);
 
         addConverterForType(String.class, new DefaultConverter());
         addConverterForType(Point2D.class, new XmlPoint2DConverter());
@@ -181,8 +181,8 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
         addConverter(StrokeableFigure.STROKE_TYPE, new XmlEnumConverter<StrokeType>(StrokeType.class));
         addConverter(TransformableFigure.TRANSFORMS, new XmlTransformListConverter());
-        addConverter(PolylineFigure.POINTS, new CssPoint2DListConverter());
-        addConverter(BezierFigure.PATH, new XmlBezierNodeListConverter(true));
+        addConverter(SimplePolylineFigure.POINTS, new CssPoint2DListConverter());
+        addConverter(SimpleBezierFigure.PATH, new XmlBezierNodeListConverter(true));
 
         removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
 

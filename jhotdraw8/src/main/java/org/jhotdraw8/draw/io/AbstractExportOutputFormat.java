@@ -21,12 +21,12 @@ import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.draw.figure.Page;
 
 /**
  * AbstractExportOutputFormat.

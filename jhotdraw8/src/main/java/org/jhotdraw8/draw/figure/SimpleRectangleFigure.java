@@ -1,4 +1,4 @@
-/* @(#)RectangleFigure.java
+/* @(#)SimpleRectangleFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -6,16 +6,15 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -24,6 +23,7 @@ import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SymmetricPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 /**
@@ -32,7 +32,7 @@ import org.jhotdraw8.geom.Shapes;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class RectangleFigure extends AbstractLeafFigure
+public class SimpleRectangleFigure extends AbstractLeafFigure
         implements StrokeableFigure, FillableFigure, TransformableFigure, 
         ResizableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure, 
         ConnectableFigure, PathIterableFigure {
@@ -51,16 +51,16 @@ public class RectangleFigure extends AbstractLeafFigure
     public final static DoubleStyleableFigureKey ARC_WIDTH = new DoubleStyleableFigureKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), 0.0);
     public final static SymmetricPoint2DStyleableMapAccessor ARC = new SymmetricPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
-    public RectangleFigure() {
+    public SimpleRectangleFigure() {
         this(0, 0, 1, 1);
     }
 
-    public RectangleFigure(double x, double y, double width, double height) {
+    public SimpleRectangleFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
         set(STROKE_TYPE, StrokeType.INSIDE);
     }
 
-    public RectangleFigure(Rectangle2D rect) {
+    public SimpleRectangleFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 

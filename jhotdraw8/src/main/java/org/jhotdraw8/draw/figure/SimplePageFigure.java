@@ -1,4 +1,4 @@
-/* @(#)PageFigure.java
+/* @(#)SimplePageFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -31,7 +31,6 @@ import org.jhotdraw8.draw.key.CssColor;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.Paintable;
 import org.jhotdraw8.draw.key.PaperSizeStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
@@ -50,7 +49,7 @@ import org.jhotdraw8.text.CssSize2D;
  *
  * @author Werner Randelshofer
  */
-public class PageFigure extends AbstractCompositeFigure implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
+public class SimplePageFigure extends AbstractCompositeFigure implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
 FillableFigure, StrokeableFigure
 {
 
@@ -82,7 +81,7 @@ FillableFigure, StrokeableFigure
     private final static Object PAGE_BOUNDS_PROPERTY = new Object();
 private final static Object CURRENT_PAGE_PROPERTY = new Object();
 
-    public PageFigure() {
+    public SimplePageFigure() {
         set(FILL, new CssColor(Color.TRANSPARENT));
         set(STROKE_TYPE, StrokeType.CENTERED);
     }

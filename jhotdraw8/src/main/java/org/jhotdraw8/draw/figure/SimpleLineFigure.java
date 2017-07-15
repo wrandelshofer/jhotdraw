@@ -1,4 +1,4 @@
-/* @(#)LineFigure.java
+/* @(#)SimpleLineFigure.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -6,26 +6,26 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.transform.Transform;
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
 import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Transform;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.PointHandle;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.PointHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.PointLocator;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 /**
@@ -34,7 +34,7 @@ import org.jhotdraw8.geom.Shapes;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class LineFigure extends AbstractLeafFigure 
+public class SimpleLineFigure extends AbstractLeafFigure 
         implements StrokeableFigure, HideableFigure, StyleableFigure, LockableFigure, 
         CompositableFigure, TransformableFigure, PathIterableFigure {
 
@@ -50,16 +50,16 @@ public class LineFigure extends AbstractLeafFigure
     public final static Point2DStyleableMapAccessor START = new Point2DStyleableMapAccessor("start", START_X, START_Y);
     public final static Point2DStyleableMapAccessor END = new Point2DStyleableMapAccessor("end", END_X, END_Y);
 
-    public LineFigure() {
+    public SimpleLineFigure() {
         this(0, 0, 1, 1);
     }
 
-    public LineFigure(double startX, double startY, double endX, double endY) {
+    public SimpleLineFigure(double startX, double startY, double endX, double endY) {
         set(START, new Point2D(startX, startY));
         set(END, new Point2D(endX, endY));
     }
 
-    public LineFigure(Point2D start, Point2D end) {
+    public SimpleLineFigure(Point2D start, Point2D end) {
         set(START, start);
         set(END, end);
     }

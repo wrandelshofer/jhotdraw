@@ -6,27 +6,25 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.transform.Transform;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
 import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
 import org.jhotdraw8.draw.handle.PolylineOutlineHandle;
-import org.jhotdraw8.draw.key.FigureKey;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 /**
@@ -35,7 +33,7 @@ import org.jhotdraw8.geom.Shapes;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PolylineFigure extends AbstractLeafFigure
+public class SimplePolylineFigure extends AbstractLeafFigure
         implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, 
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure{
@@ -46,16 +44,16 @@ public class PolylineFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Polyline";
 
-    public PolylineFigure() {
+    public SimplePolylineFigure() {
         this(0, 0, 1, 1);
     }
 
-    public PolylineFigure(double startX, double startY, double endX, double endY) {
+    public SimplePolylineFigure(double startX, double startY, double endX, double endY) {
         set(POINTS, ImmutableObservableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
         set(FILL, null);
     }
 
-    public PolylineFigure(Point2D... points) {
+    public SimplePolylineFigure(Point2D... points) {
         set(POINTS, ImmutableObservableList.of(points));
         set(FILL, null);
     }

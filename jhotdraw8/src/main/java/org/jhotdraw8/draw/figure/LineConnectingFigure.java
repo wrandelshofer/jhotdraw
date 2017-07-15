@@ -23,7 +23,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
    /**
      * The end position of the line.
      */
-    public static Point2DStyleableMapAccessor END = LineFigure.END;
+    public static Point2DStyleableMapAccessor END = SimpleLineFigure.END;
     /**
      * The end connector.
      */
@@ -35,15 +35,15 @@ public interface LineConnectingFigure extends ConnectingFigure {
     /**
      * The end position of the line.
      */
-    public static DoubleStyleableFigureKey END_X = LineFigure.END_X;
+    public static DoubleStyleableFigureKey END_X = SimpleLineFigure.END_X;
     /**
      * The end position of the line.
      */
-    public static DoubleStyleableFigureKey END_Y = LineFigure.END_Y;
+    public static DoubleStyleableFigureKey END_Y = SimpleLineFigure.END_Y;
     /**
      * The start position of the line.
      */
-    public static Point2DStyleableMapAccessor START = LineFigure.START;
+    public static Point2DStyleableMapAccessor START = SimpleLineFigure.START;
     /**
      * The start connector.
      */
@@ -55,11 +55,11 @@ public interface LineConnectingFigure extends ConnectingFigure {
     /**
      * The start position of the line.
      */
-    public static DoubleStyleableFigureKey START_X = LineFigure.START_X;
+    public static DoubleStyleableFigureKey START_X = SimpleLineFigure.START_X;
     /**
      * The start position of the line.
      */
-    public static DoubleStyleableFigureKey START_Y = LineFigure.START_Y;
+    public static DoubleStyleableFigureKey START_Y = SimpleLineFigure.START_Y;
         default boolean isStartConnected() {
         return get(START_CONNECTOR)!=null&&get(START_TARGET)!=null;
     }

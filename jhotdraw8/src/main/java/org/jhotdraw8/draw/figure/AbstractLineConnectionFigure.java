@@ -4,23 +4,23 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.draw.handle.HandleType;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.draw.connector.Connector;
-import static java.lang.Math.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import org.jhotdraw8.draw.handle.LineConnectorHandle;
 import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LineConnectionOutlineHandle;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
 import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;

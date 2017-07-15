@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
-import org.jhotdraw8.draw.figure.ImageFigure;
+import org.jhotdraw8.draw.figure.SimpleImageFigure;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.util.Resources;
@@ -26,7 +26,7 @@ import org.jhotdraw8.util.Resources;
  */
 public class ImageCreationTool extends CreationTool {
 
-    private MapAccessor<URI> uriKey = ImageFigure.IMAGE_URI;
+    private MapAccessor<URI> uriKey = SimpleImageFigure.IMAGE_URI;
     private URIChooser uriChooser;
     private URI uri;
 

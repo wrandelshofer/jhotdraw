@@ -10,9 +10,6 @@ import javafx.print.Paper;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
-import org.jhotdraw8.draw.key.SimpleFigureKey;
 import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.text.CssSize2D;
 

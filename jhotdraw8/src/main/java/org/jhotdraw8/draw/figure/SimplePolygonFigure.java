@@ -6,26 +6,25 @@ package org.jhotdraw8.draw.figure;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.transform.Transform;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.ImmutableObservableList;
-import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
-import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
 import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
 import org.jhotdraw8.draw.handle.PolygonOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 /**
@@ -34,7 +33,7 @@ import org.jhotdraw8.geom.Shapes;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class PolygonFigure extends AbstractLeafFigure 
+public class SimplePolygonFigure extends AbstractLeafFigure 
         implements StrokeableFigure, FillableFigure, HideableFigure, StyleableFigure, 
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure, 
         ConnectableFigure, PathIterableFigure {
@@ -44,17 +43,17 @@ public class PolygonFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Polygon";
 
-    public final static Point2DListStyleableFigureKey POINTS = PolylineFigure.POINTS;
+    public final static Point2DListStyleableFigureKey POINTS = SimplePolylineFigure.POINTS;
 
-    public PolygonFigure() {
+    public SimplePolygonFigure() {
         this(0, 0, 1, 1);
     }
 
-    public PolygonFigure(double startX, double startY, double endX, double endY) {
+    public SimplePolygonFigure(double startX, double startY, double endX, double endY) {
         set(POINTS, ImmutableObservableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
     }
 
-    public PolygonFigure(Point2D... points) {
+    public SimplePolygonFigure(Point2D... points) {
         set(POINTS, ImmutableObservableList.of(points));
     }
 

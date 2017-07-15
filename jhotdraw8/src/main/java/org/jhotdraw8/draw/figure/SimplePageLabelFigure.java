@@ -1,4 +1,4 @@
-/* @(#)PageLabelFigure.java
+/* @(#)SimplePageLabelFigure.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -14,12 +14,12 @@ import org.jhotdraw8.draw.key.StringStyleableFigureKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
- * PageLabelFigure.
+ * SimplePageLabelFigure.
  *
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class PageLabelFigure extends AbstractLabelFigure implements HideableFigure, FontableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
+public class SimplePageLabelFigure extends AbstractLabelFigure implements HideableFigure, FontableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
  public final static String TYPE_SELECTOR = "PageLabel";
     public final static String NUM_PAGES_PLACEHOLDER = "${numPages}";
     public final static String PAGE_PLACEHOLDER = "${page}";
@@ -29,15 +29,15 @@ public class PageLabelFigure extends AbstractLabelFigure implements HideableFigu
     public final static StringStyleableFigureKey TEXT_WITH_PLACEHOLDERS = new StringStyleableFigureKey("text", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "",
             "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER);
 
-    public PageLabelFigure() {
+    public SimplePageLabelFigure() {
         this(0, 0, "");
     }
 
-    public PageLabelFigure(Point2D position, String text) {
+    public SimplePageLabelFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public PageLabelFigure(double x, double y, String text, Object... keyValues) {
+    public SimplePageLabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT_WITH_PLACEHOLDERS, text);
         set(ORIGIN, new Point2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
