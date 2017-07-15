@@ -6,13 +6,7 @@ package org.jhotdraw8.text;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
-import java.text.Normalizer;
 import java.text.ParseException;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
-import javafx.collections.FXCollections;
-import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.ImmutableObservableSet;
 import org.jhotdraw8.io.IdFactory;
 
@@ -25,9 +19,14 @@ public class CssSetConverter<E> implements Converter<ImmutableObservableSet<E>> 
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, ImmutableObservableSet<E> value) throws IOException {
-        StringBuilder buf=new StringBuilder();
-        for (E e:value) {
-            if (buf.length()!=0)buf.append(", ");
+        if (value == null) {
+            return;
+        }
+        StringBuilder buf = new StringBuilder();
+        for (E e : value) {
+            if (buf.length() != 0) {
+                buf.append(", ");
+            }
             buf.append(e.toString());
         }
         out.append(buf.toString());
