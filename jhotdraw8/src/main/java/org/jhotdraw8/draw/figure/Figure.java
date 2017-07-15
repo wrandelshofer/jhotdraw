@@ -974,6 +974,16 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * See {#link #reshapeInLocal(Transform)} for a description of this method.
      *
+     * @param bounds the desired bounds
+     */
+    default void reshapeInLocal(Bounds bounds) {
+        reshapeInLocal(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
+    }
+    /**
+     * Attempts to change the local bounds of the figure.
+     * <p>
+     * See {#link #reshapeInLocal(Transform)} for a description of this method.
+     *
      * @param x desired x-position in parent coordinates
      * @param y desired y-position in parent coordinates
      * @param width desired width in parent coordinates, may be negative
