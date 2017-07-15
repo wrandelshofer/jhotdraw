@@ -225,6 +225,50 @@ public class Shapes {
         return p;
     }
 
+    public static <T extends PathBuilder> T buildFromFXPathElements(T builder, List<PathElement> pathElements) {
+        double x = 0;
+        double y = 0;
+        for (PathElement pe : pathElements) {
+            if (pe instanceof MoveTo) {
+                MoveTo e = (MoveTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.moveTo(x, y);
+            } else if (pe instanceof LineTo) {
+                LineTo e = (LineTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.lineTo(x, y);
+            } else if (pe instanceof CubicCurveTo) {
+                CubicCurveTo e = (CubicCurveTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.curveTo(e.getControlX1(), e.getControlY1(), e.getControlX2(), e.getControlY2(), x, y);
+            } else if (pe instanceof QuadCurveTo) {
+                QuadCurveTo e = (QuadCurveTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.quadTo(e.getControlX(), e.getControlY(), x, y);
+            } else if (pe instanceof ArcTo) {
+                ArcTo e = (ArcTo) pe;
+                x = e.getX();
+                y = e.getY();
+                builder.arcTo(e.getRadiusX(), e.getRadiusY(), e.getXAxisRotation(), x, y, e.isLargeArcFlag(), e.isSweepFlag());
+            } else if (pe instanceof HLineTo) {
+                HLineTo e = (HLineTo) pe;
+                x = e.getX();
+                builder.lineTo(x, y);
+            } else if (pe instanceof VLineTo) {
+                VLineTo e = (VLineTo) pe;
+                y = e.getY();
+                builder.lineTo(x, y);
+            } else if (pe instanceof ClosePath) {
+                builder.closePath();
+            }
+        }
+        return builder;
+    }
+
     private static Shape awtShapeFromFXPolygon(Polygon node) {
         Path2D.Double p = new Path2D.Double();
         List<Double> ps = node.getPoints();
@@ -307,7 +351,7 @@ public class Shapes {
         return b.get();
     }
 
-    public static <T extends PathBuilder> T buildFromPathIterator(T builder, PathIterator iter)  {
+    public static <T extends PathBuilder> T buildFromPathIterator(T builder, PathIterator iter) {
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
