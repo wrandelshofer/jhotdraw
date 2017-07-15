@@ -39,7 +39,7 @@ public class CssSvgPathConverter implements Converter<String> {
                 throw new ParseException("String expected. " + tt.currentToken(), buf.position());
             }
             if (!"none".equals(tt.currentStringValue())) {
-                throw new ParseException("none or String expected. " + tt.currentToken(), buf.position());
+                throw new ParseException("none or String expected. " + tt.currentToken()+" "+tt.currentStringValue(), buf.position());
             }
             p = null;
         } else {
