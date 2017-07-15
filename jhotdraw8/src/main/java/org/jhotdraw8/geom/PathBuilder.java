@@ -15,7 +15,7 @@ import javafx.geometry.Point2D;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-interface PathBuilder {
+public interface PathBuilder {
 
     /**
      * ArcTo. Adds an elliptical arc, defined by two radii, an angle from the
