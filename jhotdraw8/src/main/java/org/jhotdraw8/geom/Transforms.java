@@ -149,4 +149,16 @@ public class Transforms {
         return tx == null ? new Point2D(x, y) : tx.transform(x, y);
     }
 
+/** Rotates from normalized tangent vector. 
+ * <p>
+ * A tangent vector pointing to (1,0) results in an identity matrix.
+ */    
+    public static Transform rotate(Point2D tangent, Point2D pivot) {
+      double theta=  Math.atan2(tangent.getY(), tangent.getX());
+      return  Transform.rotate(theta*180.0/Math.PI, pivot.getX(), pivot.getY());
+    }
+    public static Transform rotate(double tangentx, double tangenty, double pivotx, double pivoty) {
+      double theta=  Math.atan2(tangenty, tangentx);
+      return  Transform.rotate(theta*180.0/Math.PI, pivotx, pivoty);
+    }
 }
