@@ -307,7 +307,7 @@ public class Shapes {
         return b.get();
     }
 
-    public static <T extends PathBuilder> T buildFromPathIterator(T builder, PathIterator iter) throws IOException {
+    public static <T extends PathBuilder> T buildFromPathIterator(T builder, PathIterator iter)  {
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {

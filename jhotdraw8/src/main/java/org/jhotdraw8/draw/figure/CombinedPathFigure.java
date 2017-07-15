@@ -82,15 +82,17 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                 if (strokeWidth > 0.0) {
                     BasicStroke basicStroke;
                     final ImmutableObservableList<Double> dashArray = f.getStyled(STROKE_DASH_ARRAY);
-                    if (dashArray != null&&!dashArray.isEmpty()) {
+                    if (dashArray != null && !dashArray.isEmpty()) {
                         double dashOffset = f.getStyled(STROKE_DASH_OFFSET);
                         float[] dash = new float[dashArray.size()];
-                        boolean allZero=false;
+                        boolean allZero = false;
                         for (int i = 0, n = dashArray.size(); i < n; i++) {
                             dash[i] = dashArray.get(i).floatValue();
-                            allZero=allZero&&dash[i]==0f;
+                            allZero = allZero && dash[i] == 0f;
                         }
-                        if (allZero)dash=null;
+                        if (allZero) {
+                            dash = null;
+                        }
                         basicStroke = new BasicStroke((float) strokeWidth, Shapes.awtCapFromFX(f.getStyled(STROKE_LINE_CAP)),
                                 Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue(), dash, (float) dashOffset);
 
@@ -99,11 +101,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                                 Shapes.awtJoinFromFX(f.getStyled(STROKE_LINE_JOIN)), f.getStyled(STROKE_MITER_LIMIT).floatValue());
 
                     }
-                    try {
-                        iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), iter).get()).getPathIterator(null);
-                    } catch (IOException ex) {
-                        ex.printStackTrace(); // should never happen, if it still happens we just return the un-stroked iterator
-                    }
+                    iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), iter).get()).getPathIterator(null);
                 }
             }
         }
@@ -128,35 +126,31 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     private PathIterator getPathIteratorCAG(AffineTransform tx, CagOperation op) {
         Area area = null;
         boolean first = true;
-        try {
-            for (Figure child : getChildren()) {
-                if (child instanceof PathIterableFigure) {
-                    final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
-                    if (first) {
-                        first = false;
-                        area = new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), childPathIterator).get());
-                    } else {
-                        Area area1 = new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), childPathIterator).get());
-                        switch (op) {
-                            case ADD:
-                            default:
-                                area.add(area1);
-                                break;
-                            case INTERSECT:
-                                area.intersect(area1);
-                                break;
-                            case SUBTRACT:
-                                area.subtract(area1);
-                                break;
-                            case XOR:
-                                area.exclusiveOr(area1);
-                                break;
-                        }
+        for (Figure child : getChildren()) {
+            if (child instanceof PathIterableFigure) {
+                final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
+                if (first) {
+                    first = false;
+                    area = new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), childPathIterator).get());
+                } else {
+                    Area area1 = new Area(Shapes.buildFromPathIterator(new Path2DDoubleBuilder(), childPathIterator).get());
+                    switch (op) {
+                        case ADD:
+                        default:
+                            area.add(area1);
+                            break;
+                        case INTERSECT:
+                            area.intersect(area1);
+                            break;
+                        case SUBTRACT:
+                            area.subtract(area1);
+                            break;
+                        case XOR:
+                            area.exclusiveOr(area1);
+                            break;
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         PathIterator iter = area != null ? area.getPathIterator(null) : new CombinedPathIterator(getStyled(FILL_RULE), Collections.emptyList());
         return iter;
