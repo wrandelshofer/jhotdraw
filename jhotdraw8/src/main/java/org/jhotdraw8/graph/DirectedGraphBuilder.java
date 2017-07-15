@@ -104,15 +104,16 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
         if (v == null) {
             throw new IllegalArgumentException("v=null");
         }
-        if (null == vertexMap.put(v, vertices.size())) {
+        vertexMap.computeIfAbsent(v, k -> {
             vertices.add(v);
             vertexCount++;
             if (lastEdge.length < vertexCount * LASTEDGE_NUM_FIELDS) {
                 int[] tmp = lastEdge;
-                lastEdge = new int[lastEdge.length * LASTEDGE_NUM_FIELDS];
+                lastEdge = new int[lastEdge.length * 2 * LASTEDGE_NUM_FIELDS];
                 System.arraycopy(tmp, 0, lastEdge, 0, tmp.length);
             }
-        }
+            return vertices.size() - 1;
+        });
     }
 
     /**
@@ -152,14 +153,14 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
             System.arraycopy(tmp, 0, edges, 0, tmp.length);
         }
 
-        int edgeCountOfA = lastEdge[a *LASTEDGE_NUM_FIELDS+LASTEDGE_COUNT_FIELD];
+        int edgeCountOfA = lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD];
         int lastEdgeIdOfA = lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD];
 
         int newLastEdgeIdOfA = edgeCount;
-        edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS+EDGES_VERTEX_FIELD] = b;
+        edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD] = b;
         edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_POINTER_FIELD] = (edgeCountOfA != 0) ? lastEdgeIdOfA : SENTINEL;
 
-        lastEdge[a * LASTEDGE_NUM_FIELDS+LASTEDGE_COUNT_FIELD] = edgeCountOfA + 1;
+        lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD] = edgeCountOfA + 1;
         lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD] = newLastEdgeIdOfA;
 
         edgeCount++;
@@ -181,7 +182,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
         for (int j = i - 1; j >= 0; j--) {
             edgeId = edges[edgeId * EDGES_NUM_FIELDS + EDGES_POINTER_FIELD];
         }
-        return edges[edgeId * EDGES_NUM_FIELDS+EDGES_VERTEX_FIELD];
+        return edges[edgeId * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD];
     }
 
     @Override
@@ -191,7 +192,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
 
     @Override
     public int getNextCount(int vi) {
-        return lastEdge[vi * LASTEDGE_NUM_FIELDS+LASTEDGE_COUNT_FIELD];
+        return lastEdge[vi * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD];
     }
 
     @Override

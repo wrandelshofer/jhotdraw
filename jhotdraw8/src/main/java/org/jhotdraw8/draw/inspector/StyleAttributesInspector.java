@@ -254,7 +254,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             for (Parent p = textArea; p != null; p = p.getParent()) {
                 m.invoke(p, DirtyBits.NODE_CONTENTS);
             }
-        } catch (NoSuchMethodException|IllegalAccessException|IllegalAccessError|InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | IllegalAccessError | InvocationTargetException e) {
             System.out.println("StylesAttributesInspector e:" + e);
         }
 
@@ -293,10 +293,11 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
             FigureSelectorModel fsm = (FigureSelectorModel) sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
             for (Figure f : d.breadthFirstIterable()) {
-                sm.applyStylesheetTo(StyleOrigin.USER, s, f);
-                m.fireNodeInvalidated(f);
-                m.fireTransformInvalidated(f);
-                m.fireLayoutInvalidated(f);
+                if (sm.applyStylesheetTo(StyleOrigin.USER, s, f)) {
+                    m.fireNodeInvalidated(f);
+                    m.fireTransformInvalidated(f);
+                    m.fireLayoutInvalidated(f);
+                }
             }
         } catch (IOException ex) {
             ex.printStackTrace();

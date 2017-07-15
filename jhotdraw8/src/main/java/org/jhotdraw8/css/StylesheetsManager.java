@@ -98,6 +98,7 @@ public interface StylesheetsManager<E> {
      * values
      * @param s the stylesheet
      * @param element the element
+     * @return true if an element was selected
      */
-    public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element);
+    public boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element);
 }

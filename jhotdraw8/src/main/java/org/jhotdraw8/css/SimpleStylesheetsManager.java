@@ -8,28 +8,21 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
-import org.jhotdraw8.draw.figure.Figure;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 /**
  * SimpleStylesheetsManager.
@@ -294,12 +287,17 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     @Override
-    public void applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E elem) {
+    public boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
-        for (Map.Entry<Integer, Declaration> entry : collectApplicableDeclarations(elem, s,
-                new LinkedList<Map.Entry<Integer, Declaration>>())) {
+        final List<Map.Entry<Integer, Declaration>> applicableDeclarations = collectApplicableDeclarations(elem, s,
+                new LinkedList<Map.Entry<Integer, Declaration>>());
+        if (applicableDeclarations.isEmpty()) {
+            return false;
+        }
+        for (Map.Entry<Integer, Declaration> entry : applicableDeclarations) {
             Declaration d = entry.getValue();
             selectorModel.setAttribute(elem, styleOrigin, d.getProperty(), d.getTermsAsString());
         }
+        return true;
     }
 }

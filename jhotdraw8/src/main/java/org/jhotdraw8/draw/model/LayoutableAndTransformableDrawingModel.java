@@ -29,6 +29,8 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.FigureKey;
 import static org.jhotdraw8.draw.model.DrawingModel.ROOT_PROPERTY;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.graph.DirectedGraphBuilder;
+import org.jhotdraw8.graph.DirectedGraphs;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 /**
@@ -365,46 +367,34 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
         if (!valid) {
             isValidating = true;
 
+            // all figures with dirty bit "STYLE"
+            // invoke stylesheetNotify
+            // induce a dirty bit "TRANSFORM", "NODE" and "LAYOUT
+            Set<Figure> visited = new HashSet<>();
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmStyle)) {
+                if (dm.intersects(dmStyle) && visited.add(f)) {
                     f.stylesheetNotify();
-                    for (Figure subf : f.preorderIterable()) {
-                        markDirty(subf, DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
-                    }
+                    markDirty(f, DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
                 }
             }
 
-            // all figures with dirty bit "TRANSFORM" or "LAYOUT" or "LAYOUT_OBSERVERS"
-            // induce a dirty bit "TRANSFORM" on all ancestors which implement the TransformableFigure interface.
-            // induce a dirty bit "LAYOUT" on all ancestors which implement the LayoutableFigure interface.
-            DirtyMask dmTransformLayout = DirtyMask.of(DirtyBits.TRANSFORM, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS);
-            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
-                Figure f = entry.getKey();
-                DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmTransformLayout)) {
-                    for (Figure a : f.ancestorIterable()) {
-                        if (a instanceof TransformableFigure) {
-                            markDirty(a, DirtyBits.NODE, DirtyBits.TRANSFORM);
-                        }
-                        if (a.isLayoutable()) {
-                            markDirty(a, DirtyBits.NODE, DirtyBits.LAYOUT);
-                        }
-                    }
-                }
-            }
-            // all figures with dirty bit "TRANSFORM" 
-            // induce a dirty bit "LAYOUT" and "TRANSFORM_NOTIFY"  on all descendants
+            // all figures with dirty bit "TRANSFORM"
+            // induce a dirty bit "TRANSFORM" on all descendants which implement the TransformableFigure interface.
+            visited.clear();
             DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
-            DirtyMask dmTransformNotify = DirtyMask.of(DirtyBits.TRANSFORM_NOTIFY);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmTransform) && !dm.intersects(dmTransformNotify)) {
+                if (dm.intersects(dmTransform) && visited.add(f)) {
                     for (Figure a : f.preorderIterable()) {
-                        markDirty(a, DirtyBits.LAYOUT, DirtyBits.TRANSFORM_NOTIFY);
+                        if (visited.add(a)) {
+                            if (a instanceof TransformableFigure) {
+                                markDirty(a, DirtyBits.TRANSFORM);
+                            }
+                        }
                     }
                 }
             }
@@ -413,55 +403,59 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmTransformNotify)) {
+                if (dm.intersects(dmTransform)) {
                     f.transformNotify();
                 }
             }
 
-            // all figures with dirty flag "LAYOUT" or "LAYOUT_OBSERVERS".
-            // induce a dirty flag "LAYOUT" on dependent figures,
-            // and induce a dirty Flag "NODE" on ancestors which implement the TransformableFigure interface. // really??
+            // all figures with dirty bit "LAYOUT" must be laid out
+            // all observers of figures with dirty bit "LAYOUT_OBBSERVERS" must be laid out.
+            visited.clear();
             DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
-            DirtyMask dmLayoutOrObservers = DirtyMask.of(DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS);
-            List<Figure> todo = new ArrayList<>();
+            DirtyMask dmLayoutObservers = DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS);
+            Set<Figure> todo = new LinkedHashSet<>();
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmLayoutOrObservers)) {
-                    for (Figure subtree : f.preorderIterable()) {
-                        for (Figure d : subtree.getLayoutObservers()) {
-                            todo.add(d);
-                        }
+                if (dm.intersects(dmLayout) && visited.add(f)) {
+                    for (Figure a : f.preorderIterable()) {
+                        todo.add(a);
                     }
-                    for (Figure a : f.ancestorIterable()) {
-                        if (a instanceof TransformableFigure) {
-                            markDirty(a, DirtyBits.NODE);
-                        }
+                } else if (dm.intersects(dmLayoutObservers) && visited.add(f)) {
+                    for (Figure obs : f.getLayoutObservers()) {
+                        todo.add(obs);
                     }
                 }
             }
-
-            // all figures with dirty flag "LAYOUT" must be laid out
-            for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
-                Figure f = entry.getKey();
-                DirtyMask dm = entry.getValue();
-                if (dm.intersects(dmLayout)) {
-                    this.layout(f);
+            // build a graph which includdes all figures that must be laid out and all their observers
+            // transitively
+            visited.clear();
+            DirectedGraphBuilder<Figure> graphBuilder = new DirectedGraphBuilder<>();
+            while (!todo.isEmpty()) {
+                Figure f = todo.iterator().next();
+                todo.remove(f);
+                if (visited.add(f)) {
+                    graphBuilder.addVertex(f);
+                    for (Figure obs : f.getLayoutObservers()) {
+                            graphBuilder.addVertex(obs);
+                            graphBuilder.addEdge(f, obs);
+                            todo.add(obs);
+                    }
                 }
             }
-            
-            // all figures which observed a figure with dirty flag "LAYOUT" must be laid out
-            // transitively, including all of their layoutable ancestors.
-            Set<Figure> transitive = new LinkedHashSet<>(todo);
-            transitivelyCollectDependentFigures(todo, transitive);
-            collectLayoutableAncestors(new ArrayList<>(transitive), transitive);
-            for (Figure f : transitive) {
-                markDirty(f, DirtyBits.NODE);
-                this.layout(f);
+            System.out.println(graphBuilder.dump());
+            visited.clear();
+            if (graphBuilder.getVertexCount() > 0) {
+                for (Figure f : DirectedGraphs.sortTopologically(graphBuilder)) {
+                    if (visited.add(f)) {
+                        f.layoutNotify();
+                        markDirty(f, DirtyBits.NODE);
+                    }
+                }
             }
 
             // For all figures with dirty flag Node 
-            // we must fireDrawingModelEvent node invalidation
+            // we must fireNodeInvalidated node invalidation
             DirtyMask dmNode = DirtyMask.of(DirtyBits.NODE);
             for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
                 Figure f = entry.getKey();
