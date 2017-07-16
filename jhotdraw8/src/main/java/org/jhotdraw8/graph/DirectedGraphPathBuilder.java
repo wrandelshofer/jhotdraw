@@ -41,6 +41,7 @@ public class DirectedGraphPathBuilder<V> {
         while (i.hasNext()) {
             V current = i.next();
             if (!breadthFirstSearch(graph, prev, current, pathElements)) {
+                System.out.println("  DirectedGraphPathBuilder could not build path. found only:" + pathElements + " waypoints:" + waypoints);
                 return null;
             }
             prev = current;
@@ -97,6 +98,7 @@ public class DirectedGraphPathBuilder<V> {
         for (; data != null; data = bfsData.get(data.parent)) {
             pathElements.add(insertionPoint, data.node);
         }
+        pathElements.add(insertionPoint, root);
         return true;
     }
 }
