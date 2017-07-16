@@ -27,6 +27,8 @@ import org.jhotdraw8.draw.key.Paintable;
  * be stroked.
  *
  * @design.pattern Figure Mixin, Traits.
+ * 
+ * FIXME most doubles should be CSS sizes!
  *
  * @author Werner Randelshofer
  * @version $Id$
