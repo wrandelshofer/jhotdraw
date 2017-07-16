@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import ch.systransis.arl.ferro.graph.VertexPath;
 import org.jhotdraw8.graph.DirectedGraph;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
