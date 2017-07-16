@@ -443,7 +443,6 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
                     }
                 }
             }
-            System.out.println(graphBuilder.dump());
             visited.clear();
             if (graphBuilder.getVertexCount() > 0) {
                 for (Figure f : DirectedGraphs.sortTopologically(graphBuilder)) {
