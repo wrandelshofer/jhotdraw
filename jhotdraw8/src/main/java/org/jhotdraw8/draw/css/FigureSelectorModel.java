@@ -80,26 +80,30 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
         return (styleClasses == null) ? Collections.emptySet() : new HashSet<String>(element.getStyleClass());
     }
 
-    private WriteableStyleableMapAccessor<?> findKey(Figure element, String attributeName) {
-        if (mappedFigureClasses.add(element.getClass())) {
-            for (MapAccessor<?> k : element.getSupportedKeys()) {
-                if (k instanceof WriteableStyleableMapAccessor) {
-                    WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) k;
-                    nameToKeyMap.put(element.getClass() + "$" + sk.getCssName(), sk);
-                }
+    private void mapFigureClass(Figure element) {
+        for (MapAccessor<?> k : element.getSupportedKeys()) {
+            if (k instanceof WriteableStyleableMapAccessor) {
+                WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) k;
+                nameToKeyMap.put(element.getClass() + "$" + sk.getCssName(), sk);
+            }
+            if (k instanceof ReadOnlyStyleableMapAccessor) {
+                ReadOnlyStyleableMapAccessor<?> sk = (ReadOnlyStyleableMapAccessor<?>) k;
+                nameToReadOnlyKeyMap.put(element.getClass() + "$" + sk.getCssName(), sk);
             }
         }
-        return nameToKeyMap.get(element.getClass() + "$" + attributeName);
+    }
+
+    private WriteableStyleableMapAccessor<?> findKey(Figure element, String attributeName) {
+        if (mappedFigureClasses.add(element.getClass())) {
+            mapFigureClass(element);
+        }
+        WriteableStyleableMapAccessor<?> result = nameToKeyMap.get(element.getClass() + "$" + attributeName);
+        return result;
     }
 
     private ReadOnlyStyleableMapAccessor<?> findReadOnlyKey(Figure element, String attributeName) {
         if (mappedFigureClasses.add(element.getClass())) {
-            for (MapAccessor<?> k : element.getSupportedKeys()) {
-                if (k instanceof ReadOnlyStyleableMapAccessor) {
-                    ReadOnlyStyleableMapAccessor<?> sk = (ReadOnlyStyleableMapAccessor<?>) k;
-                    nameToReadOnlyKeyMap.put(element.getClass() + "$" + sk.getCssName(), sk);
-                }
-            }
+            mapFigureClass(element);
         }
         return nameToReadOnlyKeyMap.get(element.getClass() + "$" + attributeName);
     }
@@ -274,7 +278,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     }
 
     @Override
-        @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public String getAttribute(Figure element, String attributeName) {
         WriteableStyleableMapAccessor<Object> key = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
         if (key == null) {
