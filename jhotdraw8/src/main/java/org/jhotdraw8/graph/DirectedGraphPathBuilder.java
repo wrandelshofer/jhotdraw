@@ -38,10 +38,10 @@ public class DirectedGraphPathBuilder<V> {
             return null;
         }
         V prev = i.next();
+        pathElements.add(prev); // root element
         while (i.hasNext()) {
             V current = i.next();
             if (!breadthFirstSearch(graph, prev, current, pathElements)) {
-                System.out.println("  DirectedGraphPathBuilder could not build path. found only:" + pathElements + " waypoints:" + waypoints);
                 return null;
             }
             prev = current;
@@ -68,7 +68,7 @@ public class DirectedGraphPathBuilder<V> {
      * @param root the starting point of the search
      * @param goal the goal of the search
      * @param pathElements Adds the resulting path to the provided list of path
-     * elements
+     * elements. Does not add the root element to the path.
      * @return true on success
      */
     private boolean breadthFirstSearch(DirectedGraph<V> graph, V root, V goal, ArrayList<V> pathElements) {
@@ -98,7 +98,6 @@ public class DirectedGraphPathBuilder<V> {
         for (; data != null; data = bfsData.get(data.parent)) {
             pathElements.add(insertionPoint, data.node);
         }
-        pathElements.add(insertionPoint, root);
         return true;
     }
 }
