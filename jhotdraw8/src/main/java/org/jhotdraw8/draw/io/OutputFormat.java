@@ -10,9 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.Map;
-import javafx.scene.input.DataFormat;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 
 /**
