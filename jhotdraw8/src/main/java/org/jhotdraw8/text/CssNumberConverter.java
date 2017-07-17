@@ -10,9 +10,7 @@ import java.text.ParseException;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.CssTokenizerInterface;
 import org.jhotdraw8.io.CharBufferReader;
-import org.jhotdraw8.io.DefaultUnitConverter;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.SimpleIdFactory;
 
 /**
  * CssDoubleConverter.
@@ -45,6 +43,9 @@ public class CssNumberConverter implements Converter<Number> {
 
     @Override
     public Number fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        if (buf == null) {
+            return null;
+        }
         int start = buf.position();
         CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
         Number sz = parseNumber(tt);
@@ -67,27 +68,27 @@ public class CssNumberConverter implements Converter<Number> {
         }
         Number value = null;
         switch (tt.nextToken()) {
-            case CssTokenizerInterface.TT_NUMBER:
-                value = tt.currentNumericValue();
+        case CssTokenizerInterface.TT_NUMBER:
+            value = tt.currentNumericValue();
+            break;
+        case CssTokenizerInterface.TT_IDENT: {
+            switch (tt.currentStringValue()) {
+            case "INF":
+                value = Double.POSITIVE_INFINITY;
                 break;
-            case CssTokenizerInterface.TT_IDENT: {
-                switch (tt.currentStringValue()) {
-                    case "INF":
-                        value = Double.POSITIVE_INFINITY;
-                        break;
-                    case "-INF":
-                        value = Double.NEGATIVE_INFINITY;
-                        break;
-                    case "NaN":
-                        value = Double.NaN;
-                        break;
-                    default:
-                        throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
-                }
+            case "-INF":
+                value = Double.NEGATIVE_INFINITY;
                 break;
-            }
+            case "NaN":
+                value = Double.NaN;
+                break;
             default:
-                throw new ParseException("number expected", tt.getStartPosition());
+                throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
+            }
+            break;
+        }
+        default:
+            throw new ParseException("number expected", tt.getStartPosition());
         }
         return value;
     }
