@@ -19,7 +19,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
-import org.jhotdraw8.net.UriUtilX;
+import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 
 /**
@@ -130,18 +130,18 @@ public class OpenFileAction extends AbstractApplicationAction {
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         ((message == null) ? "" : message));
                 alert.getDialogPane().setMaxWidth(640.0);
-                alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtilX.getName(uri)));
+                alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
                 alert.showAndWait();
                 v.removeDisabler(this);
             } else {
                 v.setURI(uri);
                 v.setDataFormat(dataFormat);
                 v.clearModified();
-                v.setTitle(UriUtilX.getName(uri));
+                v.setTitle(UriUtil.getName(uri));
 
                 String mimeType =  (chooser.getDataFormat() == null) ? null
                         :  chooser.getDataFormat().getIdentifiers().iterator().next();
-                getApplication().addRecentURI(UriUtilX.addQuery(uri, "mimeType",mimeType));
+                getApplication().addRecentURI(UriUtil.addQuery(uri, "mimeType",mimeType));
                 v.removeDisabler(this);
             }
         });
