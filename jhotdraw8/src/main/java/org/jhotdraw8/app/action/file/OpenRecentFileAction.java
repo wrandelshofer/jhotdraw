@@ -18,7 +18,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.net.URIUtil;
+import org.jhotdraw8.net.UriUtilX;
 import org.jhotdraw8.util.Resources;
 
 /**
@@ -66,7 +66,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     public OpenRecentFileAction(Application app, URI uri) {
         super(app);
         this.uri = uri;
-        set(Action.LABEL, URIUtil.getName(uri));
+        set(Action.LABEL, UriUtilX.getName(uri));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         Alert alert = new Alert(Alert.AlertType.ERROR,
                 ((message == null) ? "" : message));
         alert.getDialogPane().setMaxWidth(640.0);
-        alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", URIUtil.getName(uri)));
+        alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtilX.getName(uri)));
         
         // Note: we must invoke clear() or read() on the project, before we start using it.
         v.clear();
@@ -122,8 +122,8 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         v.addDisabler(this);
 
         final DataFormat format;
-        Map<String, String> query = URIUtil.parseQuery(uri);
-        URI u = URIUtil.clearQuery(uri);
+        Map<String, String> query = UriUtilX.parseQuery(uri);
+        URI u = UriUtilX.clearQuery(uri);
         String formatString = query.get("mimeType");
         if (formatString != null) {
             format = DataFormat.lookupMimeType(formatString);
@@ -141,7 +141,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                     v.setURI(uri);
                     v.setDataFormat(format);
                     v.clearModified();
-                    v.setTitle(URIUtil.getName(uri));
+                    v.setTitle(UriUtilX.getName(uri));
                     v.removeDisabler(this);
                 }
             });

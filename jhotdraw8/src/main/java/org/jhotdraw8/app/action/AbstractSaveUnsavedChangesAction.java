@@ -23,15 +23,15 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
-import org.jhotdraw8.net.URIUtil;
+import org.jhotdraw8.net.UriUtilX;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
 import org.jhotdraw8.app.DocumentProject;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
- * to write unsaved changes of a {@link org.jhotdraw8.app.DocumentProject} before a
- * destructive action is performed.
+ * to write unsaved changes of a {@link org.jhotdraw8.app.DocumentProject}
+ * before a destructive action is performed.
  * <p>
  * If the view has no unsaved changes, method {@code doIt} is invoked
  * immediately. If unsaved changes are present, a dialog is shown asking whether
@@ -64,7 +64,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
      * @param view the view
      */
     public AbstractSaveUnsavedChangesAction(Application app, DocumentProject view) {
-        super(app, view,DocumentProject.class);
+        super(app, view, DocumentProject.class);
     }
 
     @Override
@@ -75,7 +75,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
         } else if (isMayCreateProject()) {
             app.createProject().thenAccept(v -> {
                 app.add(v);
-                handleActionOnProjectPerformed((DocumentProject)v);//FIXME class cast exception
+                handleActionOnProjectPerformed((DocumentProject) v);//FIXME class cast exception
             });
         }
     }
@@ -105,29 +105,29 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                     ButtonType result = alert.getResult();
                     if (result != null) {
                         switch (result.getButtonData()) {
-                            default:
-                            case CANCEL_CLOSE:
+                        default:
+                        case CANCEL_CLOSE:
+                            v.removeDisabler(this);
+                            if (oldFocusOwner != null) {
+                                oldFocusOwner.requestFocus();
+                            }
+                            break;
+                        case NO:
+                            doIt(v).whenComplete((r, e) -> {
+                                // FIXME check success
                                 v.removeDisabler(this);
                                 if (oldFocusOwner != null) {
                                     oldFocusOwner.requestFocus();
                                 }
-                                break;
-                            case NO:
-                                doIt(v).whenComplete((r, e) -> {
-                                    // FIXME check success
-                                    v.removeDisabler(this);
-                                    if (oldFocusOwner != null) {
-                                        oldFocusOwner.requestFocus();
-                                    }
-                                });
-                                break;
-                            case YES:
-                                // this is a little bit quirky.
-                                // saveView may start a worker thread
-                                // and thus will enable the view at
-                                // a later point in time.
-                                saveView(v);
-                                break;
+                            });
+                            break;
+                        case YES:
+                            // this is a little bit quirky.
+                            // saveView may start a worker thread
+                            // and thus will enable the view at
+                            // a later point in time.
+                            saveView(v);
+                            break;
                         }
                     }
                 });
@@ -194,20 +194,19 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 break;
             }
             if (uri != null) {
-                saveViewToURI(v, uri, chooser);
+                saveViewToURI(v, uri, chooser, chooser.getDataFormat());
             }
             v.removeDisabler(this);
             if (oldFocusOwner != null) {
                 oldFocusOwner.requestFocus();
             }
         } else {
-            saveViewToURI(v, v.getURI(), null);
+            saveViewToURI(v, v.getURI(), null, v.getDataFormat());
         }
     }
 
-    protected void saveViewToURI(final DocumentProject v, final URI uri, final URIChooser chooser) {
-        final DataFormat dataFormat = chooser.getDataFormat();
-        v.write(uri, chooser == null ? null : dataFormat,null).handle((result, exception) -> {
+    protected void saveViewToURI(final DocumentProject v, final URI uri, final URIChooser chooser, final DataFormat dataFormat) {
+        v.write(uri, chooser == null ? null : dataFormat, null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -220,7 +219,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         ((message == null) ? "" : message));
                 alert.getDialogPane().setMaxWidth(640.0);
-                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
+                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtilX.getName(uri)));
                 alert.showAndWait();
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -230,8 +229,8 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 v.setURI(uri);
                 v.setDataFormat(dataFormat);
                 v.clearModified();
-                v.setTitle(URIUtil.getName(uri));
-                app.addRecentURI(uri);
+                v.setTitle(UriUtilX.getName(uri));
+                app.addRecentURI(dataFormat == null ? uri : UriUtilX.addQuery(uri, "mimeType", dataFormat.getIdentifiers().iterator().next()));
                 doIt(v);
             }
             return null;

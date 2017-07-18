@@ -12,7 +12,7 @@ import java.util.concurrent.CompletionStage;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.net.URIUtil;
+import org.jhotdraw8.net.UriUtilX;
 import org.jhotdraw8.app.DocumentProject;
 
 /**
@@ -64,7 +64,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
         super(app, view);
         this.uri = uri;
         setMayCreateProject(true);
-        set(Action.LABEL, URIUtil.getName(uri));
+        set(Action.LABEL, UriUtilX.getName(uri));
     }
 
     /*
@@ -130,7 +130,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
                     view.read(uri, null);
                 } else {
                     Resources labels = Resources.getBundle("org.jhotdraw8.app.Labels");
-                    throw new IOException(labels.getFormatted("file.read.fileDoesNotExist.message", URIUtil.getName(uri)));
+                    throw new IOException(labels.getFormatted("file.read.fileDoesNotExist.message", UriUtilX.getName(uri)));
                 }
             }
 
@@ -155,7 +155,7 @@ public class LoadRecentFileAction extends AbstractSaveUnsavedChangesAction {
 
                 JSheet.showMessageSheet(view.getComponent(),
                         "<html>" + UIManager.getString("OptionPane.css")
-                        + "<b>" + labels.getFormatted("file.read.couldntLoad.message", URIUtil.getName(uri)) + "</b><p>"
+                        + "<b>" + labels.getFormatted("file.read.couldntLoad.message", UriUtilX.getName(uri)) + "</b><p>"
                         + error,
                         JOptionPane.ERROR_MESSAGE, new SheetListener() {
 

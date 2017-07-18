@@ -22,7 +22,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.gui.URIChooser;
-import org.jhotdraw8.net.URIUtil;
+import org.jhotdraw8.net.UriUtilX;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.Project;
@@ -235,7 +235,7 @@ public class ExitAction extends AbstractApplicationAction {
                 getApplication().removeDisabler(this);
             }
         } else {
-            saveToFileAndReviewNext(v.getURI(), null);
+            saveToFileAndReviewNext(v.getURI(), v.getDataFormat());
         }
     }
 
@@ -275,7 +275,7 @@ public class ExitAction extends AbstractApplicationAction {
                 String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
                 Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                 Alert alert = new Alert(Alert.AlertType.ERROR,
-                        labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
+                        labels.getFormatted("file.save.couldntSave.message", UriUtilX.getName(uri)) + "</b><p>"
                         + ((message == null) ? "" : message));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();
@@ -287,7 +287,7 @@ public class ExitAction extends AbstractApplicationAction {
                 v.setURI(uri);
                 v.setDataFormat(format);
                 v.clearModified();
-                app.addRecentURI(uri);
+                app.addRecentURI(format==null?uri:UriUtilX.addQuery(uri, "mimeType", format.getIdentifiers().iterator().next()));
             }
             return null;
         });
@@ -306,7 +306,7 @@ public class ExitAction extends AbstractApplicationAction {
                 String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
                 Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
                 Alert alert = new Alert(Alert.AlertType.ERROR,
-                        labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
+                        labels.getFormatted("file.save.couldntSave.message", UriUtilX.getName(uri)) + "</b><p>"
                         + ((message == null) ? "" : message));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();

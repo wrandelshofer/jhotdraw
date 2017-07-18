@@ -22,7 +22,7 @@ import org.jhotdraw8.app.action.AbstractProjectAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
-import org.jhotdraw8.net.URIUtil;
+import org.jhotdraw8.net.UriUtilX;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
 import org.jhotdraw8.app.DocumentProject;
@@ -112,7 +112,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 oldFocusOwner.requestFocus();
             }
         } else {
-            saveProjectChooseOptions(v, v.getURI(), null);
+            saveProjectChooseOptions(v, v.getURI(), v.getDataFormat());
         }
     }
 
@@ -149,7 +149,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         ((message == null) ? "" : message));
                 alert.getDialogPane().setMaxWidth(640.0);
-                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)));
+                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtilX.getName(uri)));
                 alert.showAndWait();
                 project.removeDisabler(this);
                 if (oldFocusOwner != null) {
