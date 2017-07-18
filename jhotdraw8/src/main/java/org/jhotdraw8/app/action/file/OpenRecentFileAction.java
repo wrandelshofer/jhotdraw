@@ -123,7 +123,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
         final DataFormat format;
         Map<String, String> query = UriUtil.parseQuery(uri);
-        URI u = UriUtil.clearQuery(uri);
+        URI u = UriUtil.clearQuery(uri);// FIXME only remove "mimeType" query.
         String formatString = query.get("mimeType");
         if (formatString != null) {
             format = DataFormat.lookupMimeType(formatString);
@@ -138,7 +138,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                 } else if (exception != null) {
                     handleException(v, exception);
                 } else {
-                    v.setURI(uri);
+                    v.setURI(u);
                     v.setDataFormat(format);
                     v.clearModified();
                     v.setTitle(UriUtil.getName(uri));
