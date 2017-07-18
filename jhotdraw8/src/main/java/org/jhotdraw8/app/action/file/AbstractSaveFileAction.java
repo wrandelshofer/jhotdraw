@@ -156,7 +156,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                     oldFocusOwner.requestFocus();
                 }
             } else {
-                handleSucceded(project, uri);
+                handleSucceded(project, uri, format);
                 project.removeDisabler(this);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
@@ -170,5 +170,5 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         return null;
     }
 
-    protected abstract void handleSucceded(DocumentProject v, URI uri);
+    protected abstract void handleSucceded(DocumentProject v, URI uri, DataFormat format);
 }

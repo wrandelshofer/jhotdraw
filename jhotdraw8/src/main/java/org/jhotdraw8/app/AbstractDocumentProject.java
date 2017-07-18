@@ -9,6 +9,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.input.DataFormat;
 
 /**
  * AbstractDocumentProject.
@@ -21,6 +22,7 @@ public abstract class AbstractDocumentProject extends AbstractProject implements
 
     protected final BooleanProperty modified = new SimpleBooleanProperty();
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
+    protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>();
 
     @Override
     public BooleanProperty modifiedProperty() {
@@ -41,5 +43,9 @@ public abstract class AbstractDocumentProject extends AbstractProject implements
         return uri;
     }
 
+    @Override
+    public ObjectProperty<DataFormat> dataFormatProperty() {
+        return dataFormat;
+    }
 
 }

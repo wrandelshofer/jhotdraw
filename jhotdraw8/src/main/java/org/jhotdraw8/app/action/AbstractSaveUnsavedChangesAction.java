@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -205,7 +206,8 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
     }
 
     protected void saveViewToURI(final DocumentProject v, final URI uri, final URIChooser chooser) {
-        v.write(uri, chooser == null ? null : chooser.getDataFormat(),null).handle((result, exception) -> {
+        final DataFormat dataFormat = chooser.getDataFormat();
+        v.write(uri, chooser == null ? null : dataFormat,null).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -226,6 +228,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 }
             } else {
                 v.setURI(uri);
+                v.setDataFormat(dataFormat);
                 v.clearModified();
                 v.setTitle(URIUtil.getName(uri));
                 app.addRecentURI(uri);

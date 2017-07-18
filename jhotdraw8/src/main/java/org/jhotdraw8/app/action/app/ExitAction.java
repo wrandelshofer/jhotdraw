@@ -285,6 +285,7 @@ public class ExitAction extends AbstractApplicationAction {
                 }
             } else {
                 v.setURI(uri);
+                v.setDataFormat(format);
                 v.clearModified();
                 app.addRecentURI(uri);
             }
@@ -315,6 +316,7 @@ public class ExitAction extends AbstractApplicationAction {
                 }
             } else {
                 v.setURI(uri);
+                v.setDataFormat(format);
                 v.clearModified();
                 reviewNext();
             }

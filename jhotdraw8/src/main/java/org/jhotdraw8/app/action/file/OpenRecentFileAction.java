@@ -121,12 +121,14 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         final Application app = getApplication();
         v.addDisabler(this);
 
-        DataFormat format = null;
+        final DataFormat format;
         Map<String, String> query = URIUtil.parseQuery(uri);
         URI u = URIUtil.clearQuery(uri);
         String formatString = query.get("mimeType");
         if (formatString != null) {
             format = DataFormat.lookupMimeType(formatString);
+        }else{
+            format = null;
         }
         // Open the file
         try {
@@ -137,6 +139,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                     handleException(v, exception);
                 } else {
                     v.setURI(uri);
+                    v.setDataFormat(format);
                     v.clearModified();
                     v.setTitle(URIUtil.getName(uri));
                     v.removeDisabler(this);

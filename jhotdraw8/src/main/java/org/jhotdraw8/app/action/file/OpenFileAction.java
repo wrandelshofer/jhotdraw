@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.concurrent.CancellationException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.Project;
@@ -114,9 +115,10 @@ public class OpenFileAction extends AbstractApplicationAction {
         final Application app = getApplication();
         app.removeDisabler(this);
         v.addDisabler(this);
+        final DataFormat dataFormat = chooser.getDataFormat();
 
         // Open the file
-        v.read(uri, chooser == null ? null : chooser.getDataFormat(), null, false).whenComplete((result, exception) -> {
+        v.read(uri, chooser == null ? null : dataFormat, null, false).whenComplete((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
             } else if (exception != null) {
@@ -133,6 +135,7 @@ public class OpenFileAction extends AbstractApplicationAction {
                 v.removeDisabler(this);
             } else {
                 v.setURI(uri);
+                v.setDataFormat(dataFormat);
                 v.clearModified();
                 v.setTitle(URIUtil.getName(uri));
 

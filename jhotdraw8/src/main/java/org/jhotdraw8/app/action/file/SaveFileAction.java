@@ -8,10 +8,10 @@
 package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.URIUtil;
-import org.jhotdraw8.app.Project;
 import org.jhotdraw8.app.DocumentProject;
 
 /**
@@ -76,8 +76,9 @@ public class SaveFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void handleSucceded(DocumentProject v, URI uri) {
+    protected void handleSucceded(DocumentProject v, URI uri, DataFormat format) {
         v.setURI(uri);
+        v.setDataFormat(format);
         v.clearModified();
         v.setTitle(URIUtil.getName(uri));
         app.addRecentURI(uri);

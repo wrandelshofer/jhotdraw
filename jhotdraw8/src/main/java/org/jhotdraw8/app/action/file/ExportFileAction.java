@@ -86,7 +86,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void handleSucceded(DocumentProject v, URI uri) {
+    protected void handleSucceded(DocumentProject v, URI uri, DataFormat format) {
         // empty
     }
 }

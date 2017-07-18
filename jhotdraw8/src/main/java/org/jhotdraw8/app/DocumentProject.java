@@ -51,6 +51,16 @@ public interface DocumentProject extends Project {
         uriProperty().set(newValue);
     }
 
+    public ObjectProperty<DataFormat> dataFormatProperty();
+
+    default public DataFormat getDataFormat() {
+        return dataFormatProperty().get();
+    }
+
+    default public void setDataFormat(DataFormat newValue) {
+        dataFormatProperty().set(newValue);
+    }
+
     /**
      * Asynchronously reads data from the specified URI and appends it to the
      * content of the view. This method must not change the current document in
