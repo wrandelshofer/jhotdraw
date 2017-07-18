@@ -1,4 +1,4 @@
-/* @(#)CssDoubleConverter.java
+/* @(#)CssNumberConverter.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -13,15 +13,14 @@ import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * CssDoubleConverter.
+ * CssNumberConverter.
  * <p>
  * Parses the following EBNF from the
  * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
  * CSS Reference Guide</a>.
  * </p>
  * <pre>
- * Size := Double, [Unit] ;
- * Unit := ("px"|"mm"|"cm"|in"|"pt"|"pc"]"em"|"ex") ;
+ * Number := Double ;
  * </pre>
  *
  * // FIXME should return a Size object and not just a Double.
