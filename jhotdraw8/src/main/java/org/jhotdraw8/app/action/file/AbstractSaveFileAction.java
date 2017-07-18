@@ -78,8 +78,6 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
         saveProjectChooseUri(v);
     }
 
-
-
     protected void saveProjectChooseUri(final DocumentProject v) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
@@ -98,7 +96,7 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
-                alert.getDialogPane().setMaxWidth(640.0);
+                            alert.getDialogPane().setMaxWidth(640.0);
                             alert.showAndWait();
                             continue Outer;
                         }
@@ -117,14 +115,15 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
             saveProjectChooseOptions(v, v.getURI(), null);
         }
     }
+
     protected void saveProjectChooseOptions(final DocumentProject v, URI uri, DataFormat format) {
         Map<? super Key<?>, Object> options = null;
         Dialog<Map<? super Key<?>, Object>> dialog = createOptionsDialog(format);
         if (dialog != null) {
             dialog.initModality(Modality.WINDOW_MODAL);
-          dialog.initOwner(v.getNode().getScene().getWindow());          
+            dialog.initOwner(v.getNode().getScene().getWindow());
             Optional< Map<? super Key<?>, Object>> result = dialog.showAndWait();
-            
+
             if (result.isPresent()) {
                 options = result.get();
             } else {
@@ -132,10 +131,11 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
                 return;
             }
         }
-        saveProjectToUri(v, uri,format,options);
+        saveProjectToUri(v, uri, format, options);
     }
+
     protected void saveProjectToUri(final DocumentProject project, final URI uri, final DataFormat format, Map<? super Key<?>, Object> options) {
-        project.write(uri, format,options).handle((result, exception) -> {
+        project.write(uri, format, options).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 project.removeDisabler(this);
                 if (oldFocusOwner != null) {

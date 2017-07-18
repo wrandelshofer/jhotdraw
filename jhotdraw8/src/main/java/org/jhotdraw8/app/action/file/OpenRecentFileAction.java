@@ -8,22 +8,18 @@
 package org.jhotdraw8.app.action.file;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.concurrent.CancellationException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
+import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.net.URIUtil;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.app.Project;
-import org.jhotdraw8.app.DocumentProject;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
