@@ -11,7 +11,7 @@ import java.net.URI;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.gui.URIChooser;
-import org.jhotdraw8.net.UriUtil;
+import org.jhotdraw8.net.UriUtilX;
 import org.jhotdraw8.app.DocumentProject;
 
 /**
@@ -80,8 +80,8 @@ public class SaveFileAction extends AbstractSaveFileAction {
         v.setURI(uri);
         v.setDataFormat(format);
         v.clearModified();
-        v.setTitle(UriUtil.getName(uri));
-        app.addRecentURI(format == null ? uri : UriUtil.addQuery(uri, "mimeType", format.getIdentifiers().iterator().next()));
+        v.setTitle(UriUtilX.getName(uri));
+        app.addRecentURI(format == null ? uri : UriUtilX.addQuery(uri, "mimeType", format.getIdentifiers().iterator().next()));
     }
 
 }
