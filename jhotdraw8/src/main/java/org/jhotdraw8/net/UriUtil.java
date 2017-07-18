@@ -1,5 +1,5 @@
 /*
- * @(#)UriUtilX.java
+ * @(#)UriUtil.java
  * 
  * Copyright (c) 2009-2010 The authors and contributors of JHotDraw.
  * 
@@ -15,12 +15,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * UriUtilX.
+ * UriUtil.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class UriUtilX {
+public class UriUtil {
 
     /**
      * Prevent instance creation.

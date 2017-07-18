@@ -18,7 +18,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentProject;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.net.UriUtilX;
+import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 
 /**
@@ -66,7 +66,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     public OpenRecentFileAction(Application app, URI uri) {
         super(app);
         this.uri = uri;
-        set(Action.LABEL, UriUtilX.getName(uri));
+        set(Action.LABEL, UriUtil.getName(uri));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         Alert alert = new Alert(Alert.AlertType.ERROR,
                 ((message == null) ? "" : message));
         alert.getDialogPane().setMaxWidth(640.0);
-        alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtilX.getName(uri)));
+        alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
         
         // Note: we must invoke clear() or read() on the project, before we start using it.
         v.clear();
@@ -122,8 +122,8 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         v.addDisabler(this);
 
         final DataFormat format;
-        Map<String, String> query = UriUtilX.parseQuery(uri);
-        URI u = UriUtilX.clearQuery(uri);// FIXME only remove "mimeType" query.
+        Map<String, String> query = UriUtil.parseQuery(uri);
+        URI u = UriUtil.clearQuery(uri);// FIXME only remove "mimeType" query.
         String formatString = query.get("mimeType");
         if (formatString != null) {
             format = DataFormat.lookupMimeType(formatString);
@@ -141,7 +141,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                     v.setURI(u);
                     v.setDataFormat(format);
                     v.clearModified();
-                    v.setTitle(UriUtilX.getName(uri));
+                    v.setTitle(UriUtil.getName(uri));
                     v.removeDisabler(this);
                 }
             });

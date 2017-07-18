@@ -23,7 +23,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.gui.URIChooser;
-import org.jhotdraw8.net.UriUtilX;
+import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.app.Project;
 import org.jhotdraw8.app.DocumentProject;
@@ -219,7 +219,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         ((message == null) ? "" : message));
                 alert.getDialogPane().setMaxWidth(640.0);
-                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtilX.getName(uri)));
+                alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));
                 alert.showAndWait();
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -229,8 +229,8 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 v.setURI(uri);
                 v.setDataFormat(dataFormat);
                 v.clearModified();
-                v.setTitle(UriUtilX.getName(uri));
-                app.addRecentURI(dataFormat == null ? uri : UriUtilX.addQuery(uri, "mimeType", dataFormat.getIdentifiers().iterator().next()));
+                v.setTitle(UriUtil.getName(uri));
+                app.addRecentURI(dataFormat == null ? uri : UriUtil.addQuery(uri, "mimeType", dataFormat.getIdentifiers().iterator().next()));
                 doIt(v);
             }
             return null;
