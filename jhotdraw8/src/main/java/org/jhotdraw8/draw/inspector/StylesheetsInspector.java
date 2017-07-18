@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
 import javafx.collections.ObservableList;
@@ -33,7 +34,6 @@ import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.text.XmlUriConverter;
-import org.jhotdraw8.util.Resources;
 
 /**
  * FXML Controller class
@@ -84,18 +84,8 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             }
             listView.getItems().addListener((InvalidationListener) (o -> onListChanged()));
             // int counter = 0;
-            addButton.addEventHandler(ActionEvent.ACTION, o -> {
-
-                listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css"));
-            });
-            removeButton.addEventHandler(ActionEvent.ACTION, o -> {
-                ObservableList<URI> items = listView.getItems();
-                ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
-                Collections.sort(indices);
-                for (int i = indices.size() - 1; i >= 0; i--) {
-                    items.remove((int) indices.get(i));
-                }
-            });
+            addButton.addEventHandler(ActionEvent.ACTION, this::onAddAction);
+            removeButton.addEventHandler(ActionEvent.ACTION, this::onRemoveAction);
             removeButton.disableProperty().bind(Bindings.equal(listView.getSelectionModel().selectedIndexProperty(), -1));
             refreshButton.addEventHandler(ActionEvent.ACTION, o -> getDrawingModel().fireStyleInvalidated(getDrawing()));
 
@@ -183,6 +173,19 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     @Override
     public Node getNode() {
         return node;
+    }
+
+    private void onRemoveAction(ActionEvent event) {
+        ObservableList<URI> items = listView.getItems();
+        ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
+        Collections.sort(indices);
+        for (int i = indices.size() - 1; i >= 0; i--) {
+            items.remove((int) indices.get(i));
+        }
+    }
+
+    private void onAddAction(ActionEvent event) {
+        listView.getItems().add(URI.create("stylesheet" + (++counter) + ".css"));
     }
 
 }
