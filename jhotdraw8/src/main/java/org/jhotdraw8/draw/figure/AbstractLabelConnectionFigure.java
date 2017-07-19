@@ -20,8 +20,8 @@ import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LabelConnectorHandle;
-import org.jhotdraw8.draw.handle.LineConnectorHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.key.BooleanStyleableFigureKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
@@ -67,6 +67,10 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * The offset is perpendicular to the tangent line of the figure.
      */
     public final static DoubleStyleableFigureKey LABEL_OFFSET = new DoubleStyleableFigureKey("labelOffset", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
+    /**
+     * Whether the label should be rotated with the target.
+     */
+    public final static BooleanStyleableFigureKey LABEL_AUTOROTATE = new BooleanStyleableFigureKey("labelAutorotate", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), false);
     /**
      * The position relative to the parent (respectively the offset).
      */
@@ -130,10 +134,10 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             }
         } else if (handleType == HandleType.RESIZE) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new LabelConnectorHandle(this, ORIGIN,LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
+            list.add(new LabelConnectorHandle(this, ORIGIN, LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
         } else if (handleType == HandleType.POINT) {
             list.add(new BoundsInLocalOutlineHandle(this, Handle.STYLECLASS_HANDLE_MOVE_OUTLINE));
-            list.add(new LabelConnectorHandle(this, ORIGIN,LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
+            list.add(new LabelConnectorHandle(this, ORIGIN, LABELED_LOCATION, LABEL_CONNECTOR, LABEL_TARGET));
         } else {
             super.createHandles(handleType, list);
         }
@@ -184,11 +188,16 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         }
         Point2D labeledLoc = get(LABELED_LOCATION);
         Connector labelConnector = get(LABEL_CONNECTOR);
-        Point2D perp;
+        final Point2D perp;
         if (labelConnector != null && labelTarget != null) {
             labeledLoc = labelConnector.getPositionInWorld(this, labelTarget);
-            perp = Geom.perp(Transforms.deltaTransform(getWorldToLocal(), labelConnector.getTangentInWorld(this, labelTarget)));
+            final Point2D tangent = labelConnector.getTangentInWorld(this, labelTarget);
+            perp = Geom.perp(Transforms.deltaTransform(getWorldToLocal(), tangent));
             labeledLoc = Transforms.transform(labelTarget.getParentToLocal(), labeledLoc);
+            if (getStyled(LABEL_AUTOROTATE)) {
+                double theta = Math.atan2(tangent.getY(), tangent.getX());
+                set(ROTATE, theta * 180.0 / Math.PI);
+            }
         } else {
             perp = new Point2D(0, 1);
         }
