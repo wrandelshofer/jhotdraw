@@ -105,6 +105,10 @@ public interface Handle {
      */
     public final static String STYLECLASS_HANDLE_CONNECTION_POINT_CONNECTED = "handle-connection-point-connected";
     /**
+     * Style class for handles which draw a connection line of a shape.
+     */
+    public final static String STYLECLASS_HANDLE_CONNECTION_LINE_CONNECTED = "handle-connection-line-connected";
+    /**
      * Style class for handles which allow to resize a shape.
      */
     public final static String STYLECLASS_HANDLE_RESIZE = "handle-resize";
