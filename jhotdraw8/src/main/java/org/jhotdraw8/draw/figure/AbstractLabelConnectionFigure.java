@@ -66,7 +66,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * <p>
      * The offset is perpendicular to the tangent line of the figure.
      */
-    public final static DoubleStyleableFigureKey LABEL_PERPENDICULAR_OFFSET = new DoubleStyleableFigureKey("labelPerpendicularOffset", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
+    public final static DoubleStyleableFigureKey LABEL_OFFSET = new DoubleStyleableFigureKey("labelOffset", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), 0.0);
     /**
      * The position relative to the parent (respectively the offset).
      */
@@ -207,7 +207,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 break;
         }
 
-        Point2D origin = labeledLoc.add(perp.multiply(getStyled(LABEL_PERPENDICULAR_OFFSET))).add(tx, 0);
+        Point2D origin = labeledLoc.add(perp.multiply(getStyled(LABEL_OFFSET))).add(tx, 0);
 
         Point2D labelTranslation = getStyled(LABEL_TRANSLATE);
         origin = origin.add(labelTranslation);
