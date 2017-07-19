@@ -120,76 +120,48 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean attributeValueEquals(Figure element, String attributeName, String requestedValue) {
-        @SuppressWarnings("unchecked")
-        ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadOnlyKey(element, attributeName);
-        if (k == null) {
-            return false;
-        }
-        Object value = element.get(k);
-
-        // FIXME get rid of special treatment for CssStringConverter
-        @SuppressWarnings("unchecked")
-        Converter<Object> c = k.getConverter();
-        String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getConverter().toString(value);
-
-        return requestedValue.equals(stringValue);
+        String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
+        return stringValue != null && requestedValue.equals(stringValue);
     }
 
     @Override
     public boolean attributeValueStartsWith(Figure element, String attributeName, String substring) {
+        String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
+        return stringValue != null && stringValue.startsWith(substring);
+    }
+
+    protected ReadOnlyStyleableMapAccessor<Object> getReadOnlyAttributeAccessor(Figure element, String attributeName) {
         @SuppressWarnings("unchecked")
         ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadOnlyKey(element, attributeName);
-        if (k == null) {
-            return false;
-        }
+        return k;
+    }
+
+    protected String getReadOnlyAttributeValueAsString(Figure element, String attributeName) {
+        ReadOnlyStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, attributeName);
         Object value = element.get(k);
+
+        // FIXME get rid of special treatment for CssStringConverter
         @SuppressWarnings("unchecked")
         Converter<Object> c = k.getConverter();
         String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getConverter().toString(value);
-        return stringValue.startsWith(substring);
+        return stringValue;
     }
 
     @Override
     public boolean attributeValueEndsWith(Figure element, String attributeName, String substring) {
-        @SuppressWarnings("unchecked")
-        ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadOnlyKey(element, attributeName);
-        if (k == null) {
-            return false;
-        }
-        Object value = element.get(k);
-
-        // FIXME get rid of special treatment for CssStringConverter
-        @SuppressWarnings("unchecked")
-        Converter<Object> c = k.getConverter();
-        String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getConverter().toString(value);
-
-        return stringValue.endsWith(substring);
+        String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
+        return stringValue != null && stringValue.endsWith(substring);
     }
 
     @Override
     public boolean attributeValueContains(Figure element, String attributeName, String substring) {
-        @SuppressWarnings("unchecked")
-        ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadOnlyKey(element, attributeName);
-        if (k == null) {
-            return false;
-        }
-        Object value = element.get(k);
-
-        // FIXME get rid of special treatment for CssStringConverter
-        @SuppressWarnings("unchecked")
-        Converter<Object> c = k.getConverter();
-        String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getConverter().toString(value);
-
-        return stringValue.contains(substring);
+        String stringValue = getReadOnlyAttributeValueAsString(element, attributeName);
+        return stringValue != null && stringValue.contains(substring);
     }
 
     @Override
     public boolean attributeValueContainsWord(Figure element, String attributeName, String word) {
-        @SuppressWarnings("unchecked")
-        ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadOnlyKey(element, attributeName);
-        if (k == null) {
-            return false;
-        }
+        ReadOnlyStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, attributeName);
         Object value = element.get(k);
         if (value instanceof Collection) {
             @SuppressWarnings("unchecked")
@@ -201,6 +173,12 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                     if (o != null && word.equals(o.toString())) {
                         return true;
                     }
+                }
+            }
+        } else if (value instanceof String) {
+            for (String s : ((String) value).split("\\s+")) {
+                if (s.equals(word)) {
+                    return true;
                 }
             }
         }
