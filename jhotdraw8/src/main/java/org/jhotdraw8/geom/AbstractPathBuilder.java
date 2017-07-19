@@ -22,9 +22,9 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         doArcTo(radiusX, radiusY, xAxisRotation, x, y, largeArcFlag, sweepFlag);
         lastX = x;
         lastY = y;
-         lastCX = x;
+        lastCX = x;
         lastCY = y;
-   }
+    }
 
     @Override
     public final void closePath() {
@@ -36,7 +36,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         doCurveTo(x1, y1, x2, y2, x, y);
         lastX = x;
         lastY = y;
-         lastCX = x2;
+        lastCX = x2;
         lastCY = y2;
     }
 
@@ -54,18 +54,18 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     protected abstract void doQuadTo(double x1, double y1, double x2, double y2);
 
-    protected void doSmoothCurveTo(double x1,double y1, double x2, double y2, double x, double y) {
-        doCurveTo(x1,y1,x2, y2, x, y);
+    protected void doSmoothCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
+        doCurveTo(x1, y1, x2, y2, x, y);
     }
 
     protected void doSmoothQuadTo(double x1, double y1, double x, double y) {
-        doQuadTo(x1,y1, x, y);
+        doQuadTo(x1, y1, x, y);
     }
-
 
     public Point2D getLastPoint() {
-        return new Point2D(lastX,lastY);
+        return new Point2D(lastX, lastY);
     }
+
     @Override
     public double getLastX() {
         return lastX;
@@ -75,6 +75,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
     public double getLastY() {
         return lastY;
     }
+
     @Override
     public double getLastCX() {
         return lastCX;
@@ -90,7 +91,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         doLineTo(x, y);
         lastX = x;
         lastY = y;
-         lastCX = x;
+        lastCX = x;
         lastCY = y;
     }
 
@@ -99,7 +100,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         doMoveTo(x, y);
         lastX = x;
         lastY = y;
-         lastCX = x;
+        lastCX = x;
         lastCY = y;
     }
 
@@ -108,26 +109,26 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         doQuadTo(x1, y1, x, y);
         lastX = x;
         lastY = y;
-         lastCX = x1;
+        lastCX = x1;
         lastCY = y1;
     }
 
     @Override
     public final void smoothCurveTo(double x2, double y2, double x, double y) {
         doSmoothCurveTo(
-                lastX-lastCX+lastX, lastY-lastCY+lastY, x2, y2, x, y);
+                lastX - lastCX + lastX, lastY - lastCY + lastY, x2, y2, x, y);
         lastX = x;
         lastY = y;
-         lastCX = x2;
+        lastCX = x2;
         lastCY = y2;
     }
 
     @Override
     public final void smoothQuadTo(double x, double y) {
         doSmoothQuadTo(
-                lastX-lastCX+lastX, lastY-lastCY+lastY,  x, y);
-      lastCX=   lastX-lastCX+lastX;
-      lastCY=lastY-lastCY+lastY;
+                lastX - lastCX + lastX, lastY - lastCY + lastY, x, y);
+        lastCX = lastX - lastCX + lastX;
+        lastCY = lastY - lastCY + lastY;
         lastX = x;
         lastY = y;
     }
