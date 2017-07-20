@@ -138,6 +138,9 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     protected String getReadOnlyAttributeValueAsString(Figure element, String attributeName) {
         ReadOnlyStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, attributeName);
+        if (k == null) {
+            return null;
+        }
         Object value = element.get(k);
 
         // FIXME get rid of special treatment for CssStringConverter
