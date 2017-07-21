@@ -499,7 +499,7 @@ public class LayoutableAndTransformableDrawingModel extends AbstractDrawingModel
 
         switch (event.getEventType()) {
             case LAYOUT_SUBJECT_CHANGED:
-                figure.layoutSubjectChangeNotify();
+                figure.layoutSubjectChangedNotify();
                 markDirty(figure, DirtyBits.LAYOUT_OBSERVERS);
                 invalidate();
                 break;

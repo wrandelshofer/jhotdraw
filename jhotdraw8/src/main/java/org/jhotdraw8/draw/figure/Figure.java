@@ -402,7 +402,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The default implementation of this method is empty.
      */
-    default void layoutSubjectChangeNotify() {
+    default void layoutSubjectChangedNotify() {
     }
 
     /**

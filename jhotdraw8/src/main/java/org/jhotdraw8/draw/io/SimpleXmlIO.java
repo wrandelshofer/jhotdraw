@@ -229,6 +229,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             return clipping;
         }
     }
+
     /**
      * Reads drawing or clipping starting from the specified node. The idFactory
      * must have been iniitalised before this method is called.
@@ -245,12 +246,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         Clipping clipping = null;
         NodeList list = drawingElement.getChildNodes();
         comments = new ArrayList<>();
-                    Figure f = readNodesRecursively(drawingElement);
-                    if (f instanceof Drawing) {
-                        external = (Drawing) f;
-                    } else if (f instanceof Clipping) {
-                        clipping = (Clipping) f;
-                    }
+        Figure f = readNodesRecursively(drawingElement);
+        if (f instanceof Drawing) {
+            external = (Drawing) f;
+        } else if (f instanceof Clipping) {
+            clipping = (Clipping) f;
+        }
         if (external != null) {
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = list.item(i);
@@ -426,6 +427,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Reads the attributes of the specified element.
+     *
+     * @param figure the figure
+     * @param elem an element with attributes for the figure
+     * @throws java.io.IOException
      */
     protected void readElementAttributes(Figure figure, Element elem) throws IOException {
         for (MapAccessor<?> ma : figureFactory.figureAttributeKeys(figure)) {
@@ -529,9 +534,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             if (id != null && !id.isEmpty()) {
                 if (idFactory.getObject(id) != null) {
                     System.err.println("SimpleXmlIO warning: duplicate id " + id + " in element " + elem.getTagName());
-                    idFactory.putId(id,figure);
+                    idFactory.putId(id, figure);
                 } else {
-                    idFactory.putId(id,figure);
+                    idFactory.putId(id, figure);
                 }
             }
             return figure;
@@ -541,6 +546,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Creates a figure but does not process the getProperties.
+     *
      * @param node a node
      * @return a figure
      * @throws java.io.IOException in case of failure
