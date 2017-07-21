@@ -15,7 +15,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssRegexConverter;
-import org.jhotdraw8.text.Regex;
+import org.jhotdraw8.text.RegexReplace;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
@@ -24,11 +24,11 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  *
  * @author Werner Randelshofer
  */
-public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements WriteableStyleableMapAccessor<Regex> {
+public class RegexStyleableFigureKey extends SimpleFigureKey<RegexReplace> implements WriteableStyleableMapAccessor<RegexReplace> {
 
     final static long serialVersionUID = 1L;
     private final CssRegexConverter converter;
-    private final CssMetaData<? extends Styleable, Regex> cssMetaData;
+    private final CssMetaData<? extends Styleable, RegexReplace> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -37,7 +37,7 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements W
      * @param name The name of the key.
      */
     public RegexStyleableFigureKey(String name) {
-        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new Regex());
+        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new RegexReplace());
     }
 
     /**
@@ -46,7 +46,7 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements W
      * @param name The name of the key.
      * @param defaultValue The default value.
      */
-    public RegexStyleableFigureKey(String name, Regex defaultValue) {
+    public RegexStyleableFigureKey(String name, RegexReplace defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), defaultValue);
     }
 
@@ -58,7 +58,7 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements W
      * @param mask the dirty mask
      * @param defaultValue The default value.
      */
-    public RegexStyleableFigureKey(String name, DirtyMask mask, Regex defaultValue) {
+    public RegexStyleableFigureKey(String name, DirtyMask mask, RegexReplace defaultValue) {
         this(name, true, mask, defaultValue);
     }
 
@@ -70,32 +70,32 @@ public class RegexStyleableFigureKey extends SimpleFigureKey<Regex> implements W
      * @param mask the dirty mask
      * @param defaultValue The default value.
      */
-    public RegexStyleableFigureKey(String name, boolean nullable, DirtyMask mask, Regex defaultValue) {
-        super(name, Regex.class, nullable, mask, defaultValue);
+    public RegexStyleableFigureKey(String name, boolean nullable, DirtyMask mask, RegexReplace defaultValue) {
+        super(name, RegexReplace.class, nullable, mask, defaultValue);
 
-        Function<Styleable, StyleableProperty<Regex>> function = s -> {
+        Function<Styleable, StyleableProperty<RegexReplace>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, Regex> cnvrtr
-                = new StyleConverterAdapter<Regex>(getConverter());
-        CssMetaData<Styleable, Regex> md
-                = new SimpleCssMetaData<Styleable, Regex>(property, function,
+        final StyleConverter<String, RegexReplace> cnvrtr
+                = new StyleConverterAdapter<RegexReplace>(getConverter());
+        CssMetaData<Styleable, RegexReplace> md
+                = new SimpleCssMetaData<Styleable, RegexReplace>(property, function,
                         cnvrtr, defaultValue, inherits);
         cssMetaData = md;
         converter = new CssRegexConverter(isNullable());
     }
 
     @Override
-    public CssMetaData<? extends Styleable, Regex> getCssMetaData() {
+    public CssMetaData<? extends Styleable, RegexReplace> getCssMetaData() {
         return cssMetaData;
 
     }
 
     @Override
-    public Converter<Regex> getConverter() {
+    public Converter<RegexReplace> getConverter() {
         return converter;
     }
 }

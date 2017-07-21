@@ -68,7 +68,7 @@ import org.jhotdraw8.text.CssSizeConverter;
 import org.jhotdraw8.text.CssSizeInsets;
 import org.jhotdraw8.text.CssSizeInsetsConverter;
 import org.jhotdraw8.draw.key.Paintable;
-import org.jhotdraw8.text.Regex;
+import org.jhotdraw8.text.RegexReplace;
 import org.jhotdraw8.text.XmlUrlConverter;
 import org.jhotdraw8.text.XmlUriConverter;
 import org.jhotdraw8.text.XmlBooleanConverter;
@@ -173,7 +173,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(FillRule.class, new XmlEnumConverter<FillRule>(FillRule.class));
         addConverterForType(FontWeight.class, new XmlEnumConverter<>(FontWeight.class));
         addConverterForType(FontPosture.class, new XmlEnumConverter<>(FontPosture.class));
-        addConverterForType(Regex.class, new CssRegexConverter(true));
+        addConverterForType(RegexReplace.class, new CssRegexConverter(true));
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssDoubleListConverter());

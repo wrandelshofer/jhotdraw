@@ -1,4 +1,4 @@
-/* @(#)Regex.java
+/* @(#)RegexReplace.java
  * Copyright (c) 2015 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -14,18 +14,18 @@ import java.util.regex.Pattern;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class Regex {
+public class RegexReplace {
 
     private final String find;
     private final String replace;
     private transient Pattern pattern;
 
-    public Regex() {
+    public RegexReplace() {
         this.find = null;
         this.replace = null;
     }
 
-    public Regex(String find, String replace) {
+    public RegexReplace(String find, String replace) {
         this.find = find;
         this.replace = replace;
     }
@@ -92,7 +92,7 @@ public class Regex {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Regex other = (Regex) obj;
+        final RegexReplace other = (RegexReplace) obj;
         if (!Objects.equals(this.find, other.find)) {
             return false;
         }

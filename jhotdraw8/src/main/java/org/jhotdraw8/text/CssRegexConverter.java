@@ -17,15 +17,15 @@ import org.jhotdraw8.io.IdFactory;
  *
  * Parses the following EBNF:
  * <pre>
- * Regex := "none" | "regex(" Find  ","   [ Replace ] ")" ;
- * Find := TT_STRING;
- * Replace := TT_STRING;
- * </pre>
+ RegexReplace := "none" | "regex(" Find  ","   [ Replace ] ")" ;
+ Find := TT_STRING;
+ Replace := TT_STRING;
+ </pre>
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CssRegexConverter implements Converter<Regex> {
+public class CssRegexConverter implements Converter<RegexReplace> {
 
     private final CssStringConverter stringConverter = new CssStringConverter();
     private final boolean nullable;
@@ -47,7 +47,7 @@ public class CssRegexConverter implements Converter<Regex> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Regex value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, RegexReplace value) throws IOException {
         if (value == null) {
             if (nullable) {
                 out.append("none");
@@ -74,7 +74,7 @@ public class CssRegexConverter implements Converter<Regex> {
     }
 
     @Override
-    public Regex fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public RegexReplace fromString(CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         CssTokenizerInterface tt = new CssTokenizer(new StringReader(in.toString()));
         tt.setSkipWhitespaces(true);
         String find = null;
@@ -91,7 +91,7 @@ public class CssRegexConverter implements Converter<Regex> {
                 if ("none".equals(tt.currentStringValue())) {
                     tt.skipWhitespace();
                     in.position(tt.getStartPosition());
-                    return new Regex();
+                    return new RegexReplace();
                 } else {
                     throw new ParseException("\"replace(\" or \"none\" expected", tt.getStartPosition());
                 }
@@ -131,12 +131,12 @@ public class CssRegexConverter implements Converter<Regex> {
         }
         tt.skipWhitespace();
         in.position(tt.getStartPosition());
-        return new Regex(find, replace);
+        return new RegexReplace(find, replace);
     }
 
     @Override
-    public Regex getDefaultValue() {
-        return new Regex();
+    public RegexReplace getDefaultValue() {
+        return new RegexReplace();
     }
 
 }

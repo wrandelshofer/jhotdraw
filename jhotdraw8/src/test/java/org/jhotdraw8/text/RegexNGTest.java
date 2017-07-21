@@ -19,12 +19,12 @@ public class RegexNGTest {
     public RegexNGTest() {
     }
     /**
-     * Test of toString method, of class Regex.
+     * Test of toString method, of class RegexReplace.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        Regex instance = new Regex();
+        RegexReplace instance = new RegexReplace();
         String expResult = "///";
         String result = instance.toString();
         assertEquals(result, expResult);

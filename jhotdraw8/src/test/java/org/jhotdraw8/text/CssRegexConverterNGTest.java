@@ -5,7 +5,7 @@
 package org.jhotdraw8.text;
 
 import org.jhotdraw8.text.CssRegexConverter;
-import org.jhotdraw8.text.Regex;
+import org.jhotdraw8.text.RegexReplace;
 import static org.testng.Assert.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -20,7 +20,7 @@ public class CssRegexConverterNGTest {
     @Test(dataProvider = "regexOutputData")
     public void testFromStringApply(String inputCssRegex, String inputValue, String expectedValue) throws Exception {
         CssRegexConverter c = new CssRegexConverter(false);
-        Regex rgx = c.fromString(inputCssRegex);
+        RegexReplace rgx = c.fromString(inputCssRegex);
         String actualValue = rgx.apply(inputValue);
         assertEquals(actualValue, expectedValue);
     }
@@ -39,7 +39,7 @@ public class CssRegexConverterNGTest {
     @Test(dataProvider = "regexConverterData")
     public void testRegexFromStringReplace(String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
         CssRegexConverter c = new CssRegexConverter(false);
-        Regex rgx = c.fromString(inputCssRegex);
+        RegexReplace rgx = c.fromString(inputCssRegex);
         assertEquals(rgx.getFind(), expectedFind,"find");
         assertEquals(rgx.getReplace(), expectedReplace,"replace");
     }

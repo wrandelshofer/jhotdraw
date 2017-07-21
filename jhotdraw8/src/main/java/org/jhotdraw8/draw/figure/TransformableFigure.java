@@ -115,7 +115,11 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * @param transforms new value
      */
     default void setTransforms(Transform... transforms) {
-        set(TRANSFORMS, new ImmutableObservableList<>(transforms));
+        if (transforms.length == 1 && transforms[0].isIdentity()) {
+            set(TRANSFORMS, ImmutableObservableList.emptyList());
+        } else {
+            set(TRANSFORMS, new ImmutableObservableList<>(transforms));
+        }
     }
 
     /**
