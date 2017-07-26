@@ -129,6 +129,8 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         // Meta prevents connection
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+            
+            SearchLoop: 
             for (Figure f1 : list) {
                 for (Figure ff : f1.breadthFirstIterable()) {
                     if (owner != ff && (ff instanceof ConnectableFigure)) {
@@ -140,7 +142,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                                 newConnectedFigure = ff;
                                 constrainedPoint = newConnector.getPositionInLocal(o, ff);
                                 isConnected = true;
-                                break;
+                                break SearchLoop;
                             }
                         }
                     }

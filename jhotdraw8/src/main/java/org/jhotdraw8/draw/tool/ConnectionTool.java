@@ -122,6 +122,7 @@ public class ConnectionTool extends AbstractTool {
             model.set(figure, SimpleLineConnectionFigure.END_TARGET, null);
             if (!event.isMetaDown()) {
                 List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+                SearchLoop:
                 for (Figure f1 : list) {
                     for (Figure ff : f1.breadthFirstIterable()) {
                         if (figure != ff && (ff instanceof ConnectableFigure)) {
@@ -131,7 +132,7 @@ public class ConnectionTool extends AbstractTool {
                                 newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure);
                                 if (newConnector != null && figure.canConnect(ff, newConnector)) {
                                     newConnectionTarget = ff;
-                                    break;
+                                    break SearchLoop;
                                 }
                             }
                         }
@@ -167,6 +168,8 @@ public class ConnectionTool extends AbstractTool {
         Figure newConnectedFigure = null;
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+            
+            SearchLoop:
             for (Figure f1 : list) {
                 for (Figure ff : f1.breadthFirstIterable()) {
                     if (figure != ff && (ff instanceof ConnectableFigure)) {
@@ -176,7 +179,7 @@ public class ConnectionTool extends AbstractTool {
                             newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure);
                             if (newConnector != null && figure.canConnect(ff, newConnector)) {
                                 newConnectedFigure = ff;
-                                break;
+                                break SearchLoop;
                             }
                         }
                     }
