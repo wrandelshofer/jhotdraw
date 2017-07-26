@@ -498,50 +498,22 @@ public interface DrawingView extends RenderContext {
     }
 
     /**
-     * Returns the drawing to view transformation.
-     *
-     * @return the transformation
-     */
-    default Transform getDrawingToView() {
-        return Transforms.concat(getDrawing().getLocalToParent(),getWorldToView());
-    }
-
-    /**
-     * Returns the view to drawing transformation.
-     *
-     * @return the transformation, null if identity
-     */
-    default Transform getViewToDrawing() {
-        return Transforms.concat(getViewToWorld(),getDrawing().getParentToLocal());
-    }
-
-    /**
-     * Converts view coordinates into drawing coordinates.
-     *
-     * @param view a point in view coordinates
-     * @return the corresponding point in drawing coordinates
-     */
-    default Point2D viewToDrawing(Point2D view) {
-        return getViewToDrawing().transform(view);
-    }
-
-    /**
-     * Converts drawing coordinates into view coordinates.
-     *
-     * @param drawing a point in world coordinates
-     * @return the corresponding point in drawing coordinates
-     */
-    default Point2D drawingToView(Point2D drawing) {
-        return getDrawingToView().transform(drawing);
-    }
-
-    /**
      * Converts view coordinates into world coordinates.
      *
      * @param view a point in view coordinates
      * @return the corresponding point in world coordinates
      */
     default Point2D viewToWorld(Point2D view) {
+        return getViewToWorld().transform(view);
+    }
+
+    /**
+     * Converts view coordinates into world coordinates.
+     *
+     * @param view a rectangle in view coordinates
+     * @return the corresponding point in world coordinates
+     */
+    default Bounds viewToWorld(Bounds view) {
         return getViewToWorld().transform(view);
     }
 
@@ -562,27 +534,6 @@ public interface DrawingView extends RenderContext {
      */
     default Bounds worldToView(Bounds world) {
         return getWorldToView().transform(world);
-    }
-    /**
-     * Converts view coordinates into drawing coordinates.
-     *
-     * @param vx the x coordinate of a point in view coordinates
-     * @param vy the y coordinate of a point in view coordinates
-     * @return the corresponding point in drawing coordinates
-     */
-    default Point2D viewToDrawing(double vx, double vy) {
-        return getViewToDrawing().transform(vx, vy);
-    }
-
-    /**
-     * Converts drawing coordinates into view coordinates.
-     *
-     * @param dx the x coordinate of a point in drawing coordinates
-     * @param dy the y coordinate of a point in drawing coordinates
-     * @return the corresponding point in view coordinates
-     */
-    default Point2D drawingToView(double dx, double dy) {
-        return getDrawingToView().transform(dx, dy);
     }
 
     /**
@@ -645,5 +596,15 @@ public interface DrawingView extends RenderContext {
     
     /** Scrolls the specified figure to visible.
      * @param f A figure in the drawing of this DrawingView. */ 
-    void scrollFigureToVisible(Figure f);
+    default void scrollFigureToVisible(Figure f) {
+        Bounds boundsInView = worldToView(f.localToWorld(f.getBoundsInLocal()));
+        scrollRectToVisible(boundsInView);
+    }
+    /** Scrolls the specified rectangle to visible.
+     * @param boundsInView A rectangle in view coordinates. */ 
+    void scrollRectToVisible(Bounds boundsInView);
+    
+    /** Returns the visible rectangle of the drawing view in view coordinates.*/
+    Bounds getVisibleRect();
+
 }

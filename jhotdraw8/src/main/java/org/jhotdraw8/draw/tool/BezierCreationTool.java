@@ -97,7 +97,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         if (createdFigure != null) {
             double x2 = event.getX();
             double y2 = event.getY();
-            Point2D c2 = dv.viewToDrawing(x2, y2);
+            Point2D c2 = dv.viewToWorld(x2, y2);
             DrawingModel dm = dv.getModel();
             if (dragStartIndex == -1) {
                 points.set(points.size() - 1, new BezierNode(c2));
@@ -116,7 +116,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             dragStartIndex = -1;
             double x2 = event.getX();
             double y2 = event.getY();
-            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToDrawing(x2, y2));
+            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x2, y2));
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, new BezierNode(c2));
             dm.set(createdFigure, key, new ImmutableObservableList<>(points));
@@ -133,7 +133,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         double y1 = event.getY();
 
         DrawingModel dm = view.getModel();
-        Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToDrawing(new Point2D(x1, y1)));
+        Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToWorld(new Point2D(x1, y1)));
         if (createdFigure == null) {
             createdFigure = createFigure();
             points = new ArrayList<>();

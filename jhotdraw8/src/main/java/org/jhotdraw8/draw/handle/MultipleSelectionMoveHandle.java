@@ -74,7 +74,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     private Point2D getLocation(DrawingView dv) {
-        return locationInDrawing == null ? null : dv.drawingToView(locationInDrawing);
+        return locationInDrawing == null ? null : dv.worldToView(locationInDrawing);
     }
 
     public Point2D getLocationInView() {

@@ -459,17 +459,18 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Override
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
-        Figure f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), 0.0);
+        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), 0.0);
 
         if (f == null) {
-            f = findFigureRecursive((Parent) getNode(dr), viewToDrawing(vx, vy), TOLERANCE / getZoomFactor());
+            f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), TOLERANCE / getZoomFactor());
         }
         return f;
     }
 
     /**
-     * Finds a figure at the specified coordinate, but looks only at figures in the specified set.
-     * 
+     * Finds a figure at the specified coordinate, but looks only at figures in
+     * the specified set.
+     *
      * @param vx point in view coordinates
      * @param vy point in view coordinates
      * @param figures figures of interest
@@ -478,7 +479,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Override
     public Figure findFigure(double vx, double vy, Set<Figure> figures) {
         Node worldNode = getNode(getDrawing());
-        Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToDrawing(vx, vy));
+        Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToWorld(vx, vy));
         for (Figure f : figures) {
             Node n = getNode(f);
             Point2D pointInLocal = n.sceneToLocal(pointInScene);
@@ -989,18 +990,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    @Override
-    public void scrollFigureToVisible(Figure f) {
-        Bounds boundsInView = worldToView(f.localToWorld(f.getBoundsInLocal()));
-        scrollRectToVisible(boundsInView);
-    }
-
     public void scrollRectToVisible(Bounds boundsInView) {
         ScrollPane sp = getScrollPane();
         final Bounds contentPaneBounds = sp.getContent().getBoundsInLocal();
 
         double width = contentPaneBounds.getWidth();
-        double height = sp.getContent().getBoundsInLocal().getHeight();
+        double height = contentPaneBounds.getHeight();
 
         double x = boundsInView.getMinX() + boundsInView.getWidth() * 0.5;
         double y = boundsInView.getMinY() + boundsInView.getHeight() * 0.5;
@@ -1008,6 +1003,36 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // scrolling values range from 0 to 1
         sp.setVvalue(Geom.clamp(y / height, 0.0, 1.0));
         sp.setHvalue(Geom.clamp(x / width, 0.0, 1.0));
+    }
+
+    @Override
+    public Bounds getVisibleRect() {
+        ScrollPane scrollPane = getScrollPane();
+        if (scrollPane == null) {
+            return new BoundingBox(0, 0, 1, 1);
+        }
+
+        final Bounds viewportBounds = scrollPane.getViewportBounds();
+        final Bounds contentPaneBounds = scrollPane.getContent().getBoundsInLocal();
+
+        final double hmin = scrollPane.getHmin();
+        final double hmax = scrollPane.getHmax();
+        final double hvalue = scrollPane.getHvalue();
+        final double contentWidth = contentPaneBounds.getWidth();
+        final double viewportWidth = viewportBounds.getWidth();
+
+        final double vmin = scrollPane.getVmin();
+        final double vmax = scrollPane.getVmax();
+        final double vvalue = scrollPane.getVvalue();
+        final double contentHeight = contentPaneBounds.getHeight();
+        final double viewportHeight = viewportBounds.getHeight();
+
+        final double hoffset = Math.max(0, contentWidth - viewportWidth) * (hvalue - hmin) / (hmax - hmin);
+        final double voffset = Math.max(0, contentHeight - viewportHeight) * (vvalue - vmin) / (vmax - vmin);
+
+        final Bounds rect = new BoundingBox(hoffset, voffset, viewportBounds.getWidth(), viewportHeight);
+
+        return rect;
     }
 
     /**

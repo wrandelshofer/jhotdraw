@@ -4,9 +4,9 @@
  */
 package org.jhotdraw8.draw.constrain;
 
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import static java.lang.Math.*;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
+import static java.lang.Math.round;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -14,16 +14,21 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Geom;
 
 /**
  * GridConstrainer.
@@ -320,9 +325,13 @@ public class GridConstrainer extends AbstractConstrainer {
         ObservableList<PathElement> major = majorNode.getElements();
         minor.clear();
         major.clear();
+        
+        Bounds visibleRect = drawingView.getVisibleRect();
+     visibleRect=   drawingView.viewToWorld(visibleRect);
+        
         if (drawGrid.get()) {
             Drawing drawing = drawingView.getDrawing();
-            Transform t = drawingView.getDrawingToView();
+            Transform t = drawingView.getWorldToView();
 
             double dx = 0;
             double dy = 0;
@@ -346,7 +355,9 @@ public class GridConstrainer extends AbstractConstrainer {
             // render minor
             Point2D scaled = t.deltaTransform(gxdelta, gydelta);
             if (scaled.getX() > 2 && gmx != 1) {
-                for (int i = 0, n = (int) Math.ceil((dw - gx0) / gxdelta); i < n; i++) {
+                final int start=0;
+                final int end= (int) Math.ceil((dw - gx0) / gxdelta);
+                for (int i = start; i < end; i++) {
                     if (gmx > 0 && i % gmx == 0) {
                         continue;
                     }
@@ -363,7 +374,9 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
             if (scaled.getY() > 2 && gmy != 1) {
-                for (int i = 0, n = (int) Math.ceil((dh - gy0) / gydelta); i < n; i++) {
+                final int start=0;
+                final int end=  (int) Math.ceil((dh - gy0) / gydelta);
+                for (int i = start; i < end; i++) {
                     if (gmy > 0 && i % gmy == 0) {
                         continue;
                     }
@@ -413,6 +426,14 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
         }
+        
+Bounds b=        drawingView.getVisibleRect();
+b = Geom.grow(b, -20, -20);
+major.add(new MoveTo(b.getMinX(), b.getMinY()));
+major.add(new LineTo(b.getMaxX(), b.getMinY()));
+major.add(new LineTo(b.getMaxX(), b.getMaxY()));
+major.add(new LineTo(b.getMinX(), b.getMaxY()));
+major.add(new ClosePath());
     }
 
     public DoubleProperty widthProperty() {

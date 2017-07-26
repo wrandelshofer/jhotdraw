@@ -88,7 +88,7 @@ private double defaultHeight=10;
         double anchorY=Geom.clamp(createdFigure.get(AnchorableFigure.ANCHOR_Y),0,1);
         
         
-        Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToDrawing(new Point2D(x1, y1)));
+        Point2D c = view.getConstrainer().constrainPoint(createdFigure, view.viewToWorld(new Point2D(x1, y1)));
         createdFigure.reshapeInLocal(c.getX()-defaultWidth*anchorX, c.getY()-defaultHeight*anchorY, defaultWidth, defaultHeight);
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getDrawing();
@@ -104,8 +104,8 @@ private double defaultHeight=10;
     protected void handleMouseReleased(MouseEvent event, DrawingView dv) {
         if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
-                Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToDrawing(x1, y1));
-                Point2D c2 = dv.getConstrainer().translatePoint(createdFigure, dv.viewToDrawing(x1
+                Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x1, y1));
+                Point2D c2 = dv.getConstrainer().translatePoint(createdFigure, dv.viewToWorld(x1
                         + minSize, y1 + minSize), Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
                     c2 = new Point2D(c1.getX() + defaultWidth, c1.getY() + defaultHeight);
@@ -127,8 +127,8 @@ private double defaultHeight=10;
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
-            Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToDrawing(x1, y1));
-            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToDrawing(x2, y2));
+            Point2D c1 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x1, y1));
+            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x2, y2));
             double newWidth = c2.getX() - c1.getX();
             double newHeight = c2.getY() - c1.getY();
             // shift keeps the aspect ratio
