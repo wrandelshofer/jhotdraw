@@ -11,10 +11,10 @@
       <columns>
         <TreeTableColumn fx:id="visibleColumn" prefWidth="75.0" sortable="false" text="%object.visible.text" />
         <TreeTableColumn fx:id="lockedColumn" prefWidth="75.0" sortable="false" text="%object.locked.text" />
-        <TreeTableColumn fx:id="typeColumn" maxWidth="1.7976931348623157E308" prefWidth="160.0" text="%object.type.text" />
-        <TreeTableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" prefWidth="120.0" text="%object.id.text" />
-        <TreeTableColumn fx:id="styleClassesColumn" prefWidth="160.0" text="%object.styleClasses.text" />
-        <TreeTableColumn fx:id="pseudoClassesColumn" prefWidth="160.0" text="%object.pseudoClasses.text" />
+        <TreeTableColumn fx:id="typeColumn" maxWidth="1.7976931348623157E308" prefWidth="160.0" sortable="false" text="%object.type.text" />
+        <TreeTableColumn fx:id="idColumn" maxWidth="1.7976931348623157E308" prefWidth="120.0" sortable="false" text="%object.id.text" />
+        <TreeTableColumn fx:id="styleClassesColumn" prefWidth="160.0" sortable="false" text="%object.styleClasses.text" />
+        <TreeTableColumn fx:id="pseudoClassesColumn" prefWidth="160.0" sortable="false" text="%object.pseudoClasses.text" />
       </columns>
     </TreeTableView>
   </center>
