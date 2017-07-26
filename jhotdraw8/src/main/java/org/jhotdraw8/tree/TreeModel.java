@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.tree;
 
-import org.jhotdraw8.tree.TreeModelEvent;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
