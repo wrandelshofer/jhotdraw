@@ -28,6 +28,7 @@ import org.jhotdraw8.app.action.file.CloseFileAction;
 import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.app.action.file.NewFileAction;
 import org.jhotdraw8.app.action.file.OpenFileAction;
+import org.jhotdraw8.app.action.file.RevertFileAction;
 import org.jhotdraw8.app.action.file.SaveFileAction;
 import org.jhotdraw8.app.action.file.SaveFileAsAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -202,6 +203,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         map.put(AboutAction.ID, new AboutAction(app));
         map.put(ExitAction.ID, new ExitAction(app));
         map.put(NewFileAction.ID, new NewFileAction(app));
+        map.put(RevertFileAction.ID, new RevertFileAction(app,null));
         map.put(OpenFileAction.ID, new OpenFileAction(app));
         map.put(SaveFileAction.ID, new SaveFileAction(app));
         map.put(SaveFileAsAction.ID, new SaveFileAsAction(app));
