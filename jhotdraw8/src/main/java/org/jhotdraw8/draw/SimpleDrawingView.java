@@ -6,6 +6,7 @@ package org.jhotdraw8.draw;
 
 import java.io.IOException;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -700,15 +701,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return n;
     }
 
-    /**
-     * XXX use this to center scroll pane on view when zooming.
-     */
     private ScrollPane getScrollPane() {
-        Parent p = (Parent) getNode();
-        while (p != null && !(p instanceof ScrollPane)) {
-            p = p.getParent();
-        }
-        return (ScrollPane) p;
+        return scrollPane;
     }
 
     @Override
@@ -885,6 +879,35 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // set root
         node = new SimpleDrawingViewNode();
         node.setCenter(rootPane);
+
+        // install/deiinstall listeners to scrollpane
+        node.sceneProperty().addListener(this::updateScrollPaneListeners);
+    }
+
+    private ScrollPane scrollPane;
+    private final InvalidationListener visibleRectChangedHandler = this::handleVisibleRectChanged;
+
+    private void updateScrollPaneListeners(Observable o) {
+        if (scrollPane != null) {
+            scrollPane.vvalueProperty().removeListener(visibleRectChangedHandler);
+            scrollPane.hvalueProperty().removeListener(visibleRectChangedHandler);
+        }
+
+        for (Parent p = (Parent) node.getParent(); p != null; p = p.getParent()) {
+            if (p instanceof ScrollPane) {
+                scrollPane = (ScrollPane) p;
+                break;
+            }
+        }
+        if (scrollPane != null) {
+            scrollPane.vvalueProperty().addListener(visibleRectChangedHandler);
+            scrollPane.hvalueProperty().addListener(visibleRectChangedHandler);
+        }
+    }
+
+    private void handleVisibleRectChanged(Observable o) {
+        invalidateConstrainerNode();
+        repaint();
     }
 
     private void invalidateConstrainerNode() {
@@ -992,10 +1015,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     public void scrollRectToVisible(Bounds boundsInView) {
         ScrollPane sp = getScrollPane();
-        final Bounds contentPaneBounds = sp.getContent().getBoundsInLocal();
+        if (sp == null) {
+            return;
+        }
 
-        double width = contentPaneBounds.getWidth();
-        double height = contentPaneBounds.getHeight();
+        final Bounds viewportBounds = scrollPane.getViewportBounds();
+
+        double width = viewportBounds.getWidth();
+        double height = viewportBounds.getHeight();
 
         double x = boundsInView.getMinX() + boundsInView.getWidth() * 0.5;
         double y = boundsInView.getMinY() + boundsInView.getHeight() * 0.5;
@@ -1009,10 +1036,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public Bounds getVisibleRect() {
         ScrollPane scrollPane = getScrollPane();
         if (scrollPane == null) {
-            return new BoundingBox(0, 0, 1, 1);
+            return getNode().getBoundsInLocal();
         }
 
         final Bounds viewportBounds = scrollPane.getViewportBounds();
+        final Bounds scrollPaneBounds = scrollPane.getBoundsInLocal();
+
         final Bounds contentPaneBounds = scrollPane.getContent().getBoundsInLocal();
 
         final double hmin = scrollPane.getHmin();
@@ -1030,7 +1059,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         final double hoffset = Math.max(0, contentWidth - viewportWidth) * (hvalue - hmin) / (hmax - hmin);
         final double voffset = Math.max(0, contentHeight - viewportHeight) * (vvalue - vmin) / (vmax - vmin);
 
-        final Bounds rect = new BoundingBox(hoffset, voffset, viewportBounds.getWidth(), viewportHeight);
+        final Bounds rect = new BoundingBox(hoffset, voffset, viewportWidth, viewportHeight);
 
         return rect;
     }
@@ -1218,11 +1247,15 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
 
         if (!constrainerNodeValid) {
-            constrainerNodeValid = true;
-            Constrainer c = getConstrainer();
-            if (c != null) {
-                c.updateNode(this);
-            }
+            updateConstrainerNode();
+        }
+    }
+
+    private void updateConstrainerNode() {
+        constrainerNodeValid = true;
+        Constrainer c = getConstrainer();
+        if (c != null) {
+            c.updateNode(this);
         }
     }
 

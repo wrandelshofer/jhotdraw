@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.constrain;
 
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.Math.round;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -326,9 +328,8 @@ public class GridConstrainer extends AbstractConstrainer {
         minor.clear();
         major.clear();
         
-        Bounds visibleRect = drawingView.getVisibleRect();
-     visibleRect=   drawingView.viewToWorld(visibleRect);
-        
+        Bounds visibleRect =  drawingView.viewToWorld(drawingView.getVisibleRect());
+
         if (drawGrid.get()) {
             Drawing drawing = drawingView.getDrawing();
             Transform t = drawingView.getWorldToView();
@@ -355,8 +356,8 @@ public class GridConstrainer extends AbstractConstrainer {
             // render minor
             Point2D scaled = t.deltaTransform(gxdelta, gydelta);
             if (scaled.getX() > 2 && gmx != 1) {
-                final int start=0;
-                final int end= (int) Math.ceil((dw - gx0) / gxdelta);
+                final int start = (int) ceil((max(0,visibleRect.getMinX()) - gx0) / gxdelta);
+                final int end= (int) ceil((min(dw,visibleRect.getMaxX()) - gx0) / gxdelta);
                 for (int i = start; i < end; i++) {
                     if (gmx > 0 && i % gmx == 0) {
                         continue;
@@ -374,8 +375,8 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
             if (scaled.getY() > 2 && gmy != 1) {
-                final int start=0;
-                final int end=  (int) Math.ceil((dh - gy0) / gydelta);
+                final int start = (int) ceil((max(0,visibleRect.getMinY()) - gy0) / gydelta);
+                final int end=  (int) Math.ceil((min(dh,visibleRect.getMaxY()) - gy0) / gydelta);
                 for (int i = start; i < end; i++) {
                     if (gmy > 0 && i % gmy == 0) {
                         continue;
@@ -398,7 +399,9 @@ public class GridConstrainer extends AbstractConstrainer {
             double gmxdelta = gxdelta * gmx;
             scaled = t.deltaTransform(gmxdelta, gmydelta);
             if (scaled.getX() > 2) {
-                for (int i = 0, n = (int) Math.ceil((dw - gx0) / (gmxdelta)); i < n; i++) {
+                final int start = (int) ceil((max(0,visibleRect.getMinX()) - gx0) / gmxdelta);
+                final int end= (int) ceil((min(dw,visibleRect.getMaxX()) - gx0) / gmxdelta);
+                for (int i =start;i<end; i++) {
                     double x = gx0 + i * gmxdelta;
                     double x1 = x;
                     double y1 = 0;
@@ -412,7 +415,9 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
             if (scaled.getY() > 2) {
-                for (int i = 0, n = (int) Math.ceil((dh - gy0) / (gmydelta)); i < n; i++) {
+                final int start = (int) ceil((max(0,visibleRect.getMinY()) - gy0) / gmydelta);
+                final int end=  (int) Math.ceil((min(dh,visibleRect.getMaxY()) - gy0) / gmydelta);
+                for (int i = start; i< end; i++) {
                     double y = gy0 + i * gmydelta;
                     double x1 = 0;
                     double y1 = y;
@@ -426,14 +431,6 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
         }
-        
-Bounds b=        drawingView.getVisibleRect();
-b = Geom.grow(b, -20, -20);
-major.add(new MoveTo(b.getMinX(), b.getMinY()));
-major.add(new LineTo(b.getMaxX(), b.getMinY()));
-major.add(new LineTo(b.getMaxX(), b.getMaxY()));
-major.add(new LineTo(b.getMinX(), b.getMaxY()));
-major.add(new ClosePath());
     }
 
     public DoubleProperty widthProperty() {

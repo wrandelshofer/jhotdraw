@@ -604,7 +604,8 @@ public interface DrawingView extends RenderContext {
      * @param boundsInView A rectangle in view coordinates. */ 
     void scrollRectToVisible(Bounds boundsInView);
     
-    /** Returns the visible rectangle of the drawing view in view coordinates.*/
+    /** Returns the visible rectangle of the drawing view in view coordinates
+     * @return the portion of the DrawingView that is visible on screen.*/
     Bounds getVisibleRect();
 
 }
