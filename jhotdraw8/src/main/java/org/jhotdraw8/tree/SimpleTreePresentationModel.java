@@ -4,10 +4,6 @@
  */
 package org.jhotdraw8.tree;
 
-import java.util.HashMap;
-import java.util.Map;
-import javafx.scene.control.TreeItem;
-import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.event.Listener;
 
 /**
