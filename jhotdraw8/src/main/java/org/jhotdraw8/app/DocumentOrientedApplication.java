@@ -37,6 +37,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -126,9 +129,10 @@ public class DocumentOrientedApplication extends AbstractApplication {
      * @param actions the action map
      * @return the menu bar
      */
-    protected MenuBar createMenuBar(HierarchicalMap<String, Action> actions) {
+    protected MenuBar createMenuBar(Stage stage, HierarchicalMap<String, Action> actions) {
         MenuBar mb = model.createMenuBar();
         Deque<Menu> todo = new LinkedList<>(mb.getMenus());
+        final List<KeyCombination> accelerators = new ArrayList<>();
         while (!todo.isEmpty()) {
             for (MenuItem mi : todo.remove().getItems()) {
                 if (mi instanceof Menu) {
@@ -143,10 +147,26 @@ public class DocumentOrientedApplication extends AbstractApplication {
                         systemMenuActiveProjectActions.add(a);
                         Actions.bindMenuItem(mi, a, true);
                     }
+                    KeyCombination accelerator = mi.getAccelerator();
+                    if (accelerator != null) {
+                        accelerators.add(accelerator);
+                    }
                 }
             }
         }
         updateRecentMenuItemsMB(mb.getMenus());
+
+        // Filter all key codes which are defined in the menu bar
+        // XXX maybe this is needed on Mac OS X only
+        if (stage != null) {
+            stage.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                for (KeyCombination acc : accelerators) {
+                    if (acc.match(event)) {
+                        event.consume();
+                    }
+                }
+            });
+        }
 
         return mb;
     }
@@ -260,7 +280,7 @@ public class DocumentOrientedApplication extends AbstractApplication {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(project.getNode());
         if (!isSystemMenuSupported) {
-            MenuBar mb = createMenuBar(project.getActionMap());
+            MenuBar mb = createMenuBar(stage, project.getActionMap());
             mb.setUseSystemMenuBar(true);
             borderPane.setTop(mb);
         }
@@ -282,7 +302,6 @@ public class DocumentOrientedApplication extends AbstractApplication {
             project.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
 
-        //stage.addEventFilter(KeyEvent.KEY_RELEASED, event -> System.out.println(event));
         stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
             if (newValue) {
                 activeProject.set(project);
@@ -400,13 +419,15 @@ public class DocumentOrientedApplication extends AbstractApplication {
         } catch (IllegalAccessError e) {
             System.err.println("Warning: can not access com.sun.javafx.tk.Toolkit");
         }
+        isSystemMenuSupported = false;
+
         actionMap = model.createApplicationActionMap(this);
         loadRecentUris(model.getName());
         if (isSystemMenuSupported) {
             Platform.setImplicitExit(false);
             systemMenus = new ArrayList<>();
             ArrayList<MenuBase> menus = new ArrayList<>();
-            MenuBar mb = createMenuBar(getActionMap());
+            MenuBar mb = createMenuBar(null, getActionMap());
             for (Menu m : mb.getMenus()) {
                 systemMenus.add(m);
                 menus.add(GlobalMenuAdapter.adapt(m));
