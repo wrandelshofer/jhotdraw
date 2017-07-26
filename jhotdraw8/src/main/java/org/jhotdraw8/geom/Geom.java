@@ -185,8 +185,10 @@ public class Geom {
      * @return the center
      */
     public static Point2D center(Bounds r) {
-        return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
-                + r.getHeight() * 0.5);
+        return new Point2D(
+                r.getMinX() + r.getWidth() * 0.5, 
+                r.getMinY() + r.getHeight() * 0.5
+        );
     }
 
     /**
