@@ -72,37 +72,21 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                     }
 
                     buf.append(')');
-                } else if (tx instanceof Scale) {
+                } else if ((tx instanceof Scale) && ((Scale) tx).getPivotX() == 0.0 && ((Scale) tx).getPivotY() == 0.0) {
                     Scale ts = (Scale) tx;
-                    if (ts.getPivotX() != 0.0 || ts.getPivotY() != 0.0) {
-                        // [a c e]   [ x 0 (1-x)*pivotx ]
-                        // [b d f] = [ 0 y (1-y)*pivoty ]
-                        // [0 0 1]   [ 0 0      1       ]
-                        buf.append("matrix(")
-                                .append(nb.toString(ts.getMxx()))//a
-                                .append(",0") // b
-                                .append(",0,") // c
-                                .append(nb.toString(ts.getMyy())) // d
-                                .append(',')
-                                .append(nb.toString(ts.getTx())) // e
-                                .append(',')
-                                .append(nb.toString(ts.getTy())) // f
-                                .append(')');
-                    } else {
-                        buf.append("scale(")
-                                .append(nb.toString(ts.getX()));
-                        if (ts.getTy() != ts.getTx()) {
-                            buf.append(',')
-                                    .append(nb.toString(ts.getY()));
-                        }
-                        buf.append(')');
+                    buf.append("scale(")
+                            .append(nb.toString(ts.getX()));
+                    if (ts.getX() != ts.getY()) {
+                        buf.append(',')
+                                .append(nb.toString(ts.getY()));
                     }
+                    buf.append(')');
                 } else if (tx instanceof Rotate) {
                     Rotate tr = (Rotate) tx;
                     buf.append("rotate(")
                             .append(nb.toString(tr.getAngle()));
                     if (tr.getPivotX() != 0.0 || tr.getPivotY() != 0.0) {
-                        buf.append(',')
+                        buf.append(' ')
                                 .append(nb.toString(tr.getPivotX()))
                                 .append(',')
                                 .append(nb.toString(tr.getPivotY()));
@@ -116,11 +100,11 @@ public class SvgTransformListConverter implements Converter<List<Transform>> {
                             .append(nb.toString(tx.getMxx()))//a
                             .append(',')
                             .append(nb.toString(tx.getMyx()))//b
-                            .append(',')
+                            .append(' ')
                             .append(nb.toString(tx.getMxy()))//c
                             .append(',')
                             .append(nb.toString(tx.getMyy()))//d
-                            .append(',')
+                            .append(' ')
                             .append(nb.toString(tx.getTx()))//e
                             .append(',')
                             .append(nb.toString(tx.getTy()))//f
