@@ -382,7 +382,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
 
             // all figures with dirty bit "TRANSFORM"
-            // induce a dirty bit "TRANSFORM" on all descendants which implement the TransformableFigure interface.
+            // induce dirty bits "TRANSFORM" and "LAYOUT_OBSERVERS" on all descendants which implement the TransformableFigure interface.
             visited.clear();
             DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
@@ -392,7 +392,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     for (Figure a : f.preorderIterable()) {
                         if (visited.add(a)) {
                             if (a instanceof TransformableFigure) {
-                                markDirty(a, DirtyBits.TRANSFORM);
+                                markDirty(a, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS);
                             }
                         }
                     }
