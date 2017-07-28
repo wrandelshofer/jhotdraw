@@ -891,9 +891,11 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (scrollPane != null) {
             scrollPane.vvalueProperty().removeListener(visibleRectChangedHandler);
             scrollPane.hvalueProperty().removeListener(visibleRectChangedHandler);
+            scrollPane.widthProperty().removeListener(visibleRectChangedHandler);
+            scrollPane.heightProperty().removeListener(visibleRectChangedHandler);
         }
 
-        for (Parent p = (Parent) node.getParent(); p != null; p = p.getParent()) {
+        for (Parent p = node.getParent(); p != null; p = p.getParent()) {
             if (p instanceof ScrollPane) {
                 scrollPane = (ScrollPane) p;
                 break;
@@ -902,6 +904,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (scrollPane != null) {
             scrollPane.vvalueProperty().addListener(visibleRectChangedHandler);
             scrollPane.hvalueProperty().addListener(visibleRectChangedHandler);
+            scrollPane.widthProperty().addListener(visibleRectChangedHandler);
+            scrollPane.heightProperty().addListener(visibleRectChangedHandler);
         }
     }
 
