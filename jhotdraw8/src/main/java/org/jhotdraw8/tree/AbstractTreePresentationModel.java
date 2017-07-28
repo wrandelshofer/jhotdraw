@@ -11,8 +11,8 @@ import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.event.Listener;
 
 /**
- * The {@code ETreePresentationModel} can be used to present a
- * {@code TreeModel} in a {@code TreeView} or a {@code TreeTableView}.
+ * The {@code ETreePresentationModel} can be used to present a {@code TreeModel}
+ * in a {@code TreeView} or a {@code TreeTableView}.
  * <p>
  * Maps {@code TreeModel} to a {@code TreeItem&lt;E&gt;} hierarchy.
  * <p>
@@ -64,20 +64,21 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     protected abstract void handleNewTreeModel(TreeModel<N> oldValue, TreeModel<N> newValue);
 
     protected void handleRootChanged() {
-        TreeModel<N> m=getTreeModel();
+        TreeModel<N> m = getTreeModel();
         N drawing = m.getRoot();
         root.setValue(drawing);
         root.getChildren().clear();
         items.clear();
         items.put(drawing, root);
         int childIndex = 0;
-        if (drawing!=null) {
-        for (int i=0,n=m.getChildCount(drawing);i<n;i++) {
-         N child =m.getChildAt(drawing, i);
-            handleNodeAddedToTree(child, drawing, childIndex);
-            handleNodeAdded(child, drawing, childIndex);
-            childIndex++;
-        }}
+        if (drawing != null) {
+            for (int i = 0, n = m.getChildCount(drawing); i < n; i++) {
+                N child = m.getChildAt(drawing, i);
+                handleNodeAddedToTree(child, drawing, childIndex);
+                handleNodeAdded(child, drawing, childIndex);
+                childIndex++;
+            }
+        }
     }
 
     protected void handleNodeAdded(N f, N parentE, int index) {
@@ -100,13 +101,13 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     }
 
     protected void handleNodeAddedToTree(N f, N parent, int index) {
-        TreeModel<N> m=getTreeModel();
+        TreeModel<N> m = getTreeModel();
         TreeItem<N> item = new TreeItem<>(f);
         item.setExpanded(false);
         items.put(f, item);
         int childIndex = 0;
-        for (int i=0,n=m.getChildCount(f);i<n;i++) {
-         N child =m.getChildAt(f, i);
+        for (int i = 0, n = m.getChildCount(f); i < n; i++) {
+            N child = m.getChildAt(f, i);
             handleNodeAddedToTree(child, f, childIndex);
             handleNodeAdded(child, f, childIndex);
             childIndex++;
