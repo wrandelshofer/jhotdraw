@@ -2,7 +2,7 @@
  * Copyright (c) 2016 by the authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.collection;
+package org.jhotdraw8.tree;
 
 import java.util.ArrayDeque;
 import java.util.Collections;

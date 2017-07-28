@@ -31,7 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.collection.ExpandedTreeItemIterator;
+import org.jhotdraw8.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.collection.ImmutableObservableList;
 import org.jhotdraw8.collection.ImmutableObservableSet;
 import org.jhotdraw8.draw.DrawingView;
