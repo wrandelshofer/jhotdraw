@@ -1018,22 +1018,21 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     public void scrollRectToVisible(Bounds boundsInView) {
-        ScrollPane sp = getScrollPane();
-        if (sp == null) {
+        ScrollPane scrollPane = getScrollPane();
+        if (scrollPane == null) {
             return;
         }
 
-        final Bounds viewportBounds = scrollPane.getViewportBounds();
+        final Bounds contentBounds = scrollPane.getContent().getBoundsInLocal();
 
-        double width = viewportBounds.getWidth();
-        double height = viewportBounds.getHeight();
+        double width = contentBounds.getWidth();
+        double height = contentBounds.getHeight();
 
         double x = boundsInView.getMinX() + boundsInView.getWidth() * 0.5;
         double y = boundsInView.getMinY() + boundsInView.getHeight() * 0.5;
-
         // scrolling values range from 0 to 1
-        sp.setVvalue(Geom.clamp(y / height, 0.0, 1.0));
-        sp.setHvalue(Geom.clamp(x / width, 0.0, 1.0));
+        scrollPane.setVvalue(Geom.clamp(y / height, 0.0, 1.0));
+        scrollPane.setHvalue(Geom.clamp(x / width, 0.0, 1.0));
     }
 
     @Override
@@ -1044,20 +1043,19 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
 
         final Bounds viewportBounds = scrollPane.getViewportBounds();
-        final Bounds scrollPaneBounds = scrollPane.getBoundsInLocal();
 
-        final Bounds contentPaneBounds = scrollPane.getContent().getBoundsInLocal();
+        final Bounds contentBounds = scrollPane.getContent().getBoundsInLocal();
 
         final double hmin = scrollPane.getHmin();
         final double hmax = scrollPane.getHmax();
         final double hvalue = scrollPane.getHvalue();
-        final double contentWidth = contentPaneBounds.getWidth();
+        final double contentWidth = contentBounds.getWidth();
         final double viewportWidth = viewportBounds.getWidth();
 
         final double vmin = scrollPane.getVmin();
         final double vmax = scrollPane.getVmax();
         final double vvalue = scrollPane.getVvalue();
-        final double contentHeight = contentPaneBounds.getHeight();
+        final double contentHeight = contentBounds.getHeight();
         final double viewportHeight = viewportBounds.getHeight();
 
         final double hoffset = Math.max(0, contentWidth - viewportWidth) * (hvalue - hmin) / (hmax - hmin);
