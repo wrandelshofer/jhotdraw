@@ -17,7 +17,7 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.collection.TreeNode;
+import org.jhotdraw8.tree.TreeNode;
 import org.jhotdraw8.app.Project;
 
 /**

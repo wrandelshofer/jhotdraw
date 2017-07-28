@@ -40,7 +40,7 @@ import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
 import org.jhotdraw8.draw.handle.TransformHandleKit;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.collection.TreeNode;
+import org.jhotdraw8.tree.TreeNode;
 import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.locator.RelativeLocator;
