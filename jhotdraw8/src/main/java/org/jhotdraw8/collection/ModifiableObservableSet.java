@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
@@ -27,6 +28,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     private final Set<E> backingSet;
     private List<SetChangeListener<? super E>> changeListeners;
     private List<InvalidationListener> invalidationListeners;
+    private InvalidationListener itemHandler = this::itemInvalidated;
 
     public ModifiableObservableSet(Collection<E> copyMe) {
         backingSet = new LinkedHashSet<>(copyMe);
@@ -92,6 +94,9 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     private void fireAdded(E e) {
+        if (e instanceof Observable) {
+            ((Observable) e).addListener(itemHandler);
+        }
         if (changeListeners != null) {
             SetChangeListener.Change<E> change = new SetChangeListener.Change<E>(this) {
                 @Override
@@ -119,7 +124,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
             }
         }
     }
-    
+
     /**
      * The method {@code invalidated()} can be overridden to receive
      * invalidation notifications. This is the preferred option in
@@ -129,7 +134,11 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
      */
     protected void invalidated() {
     }
-    
+
+    private void itemInvalidated(Observable o) {
+        fireInvalidated();
+    }
+
     private void fireInvalidated() {
         invalidated();
         if (invalidationListeners != null) {
@@ -140,6 +149,9 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     private void fireRemoved(E e) {
+        if (e instanceof Observable) {
+            ((Observable) e).removeListener(itemHandler);
+        }
         if (changeListeners != null) {
             SetChangeListener.Change<E> change = new SetChangeListener.Change<E>(this) {
                 @Override
