@@ -29,4 +29,11 @@ public class VertexPath<V> {
         return elements;
     }
 
+    @Override
+    public String toString() {
+        return "VertexPath{" + elements + '}';
+    }
+
+
+
 }
