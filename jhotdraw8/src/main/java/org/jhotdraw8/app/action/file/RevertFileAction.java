@@ -68,7 +68,7 @@ public class RevertFileAction extends AbstractProjectAction<DocumentProject> {
 
         final BiFunction<Void, Throwable, Void> handler = (ignore, throwable) -> {
             if (throwable != null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, throwable.getLocalizedMessage() == null ? throwable.toString() : throwable.getLocalizedMessage());
+                Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(throwable));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();
                 throwable.printStackTrace();

@@ -7,10 +7,10 @@
  */
 package org.jhotdraw8.app.action;
 
+import java.util.concurrent.CompletionException;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.Project;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
@@ -59,4 +59,20 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      * @param app the applicatoin
      */
     protected abstract void handleActionPerformed(ActionEvent event, Application app);
+
+    protected String createErrorMessage(Throwable t) {
+        StringBuilder buf = new StringBuilder();
+        for (; t != null; t = t.getCause()) {
+            if ((t instanceof CompletionException) && t.getCause() != null) {
+                continue;
+            }
+            if (buf.length() != 0) {
+                buf.append('\n');
+            }
+            final String msg = t.getLocalizedMessage();
+            buf.append(msg == null ? t.toString() : msg);
+        }
+        return buf.toString();
+    }
+
 }

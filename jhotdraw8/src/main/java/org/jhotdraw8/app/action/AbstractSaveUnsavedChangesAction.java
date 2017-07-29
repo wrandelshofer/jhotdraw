@@ -214,10 +214,8 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAc
                 }
             } else if (exception != null) {
                 Throwable value = exception;
-                String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
                 Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-                Alert alert = new Alert(Alert.AlertType.ERROR,
-                        ((message == null) ? "" : message));
+                Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));
                 alert.showAndWait();

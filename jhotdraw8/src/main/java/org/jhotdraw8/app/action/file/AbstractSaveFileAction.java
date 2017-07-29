@@ -144,10 +144,8 @@ public abstract class AbstractSaveFileAction extends AbstractProjectAction<Docum
             } else if (exception != null) {
                 Throwable value = exception;
                 value.printStackTrace();
-                String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
                 Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-                Alert alert = new Alert(Alert.AlertType.ERROR,
-                        ((message == null) ? "" : message));
+                Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)));
                 alert.showAndWait();

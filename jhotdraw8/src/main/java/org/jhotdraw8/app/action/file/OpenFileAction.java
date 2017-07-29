@@ -124,11 +124,8 @@ public class OpenFileAction extends AbstractApplicationAction {
             } else if (exception != null) {
                 Throwable value = exception;
                 value.printStackTrace();
-                String message = (value != null && value.getMessage()
-                        != null) ? value.getMessage() : value.toString();
                 Resources labels = Resources.getResources("org.jhotdraw8.app.Labels");
-                Alert alert = new Alert(Alert.AlertType.ERROR,
-                        ((message == null) ? "" : message));
+                Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(value));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
                 alert.showAndWait();
@@ -139,9 +136,9 @@ public class OpenFileAction extends AbstractApplicationAction {
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
 
-                String mimeType =  (chooser.getDataFormat() == null) ? null
-                        :  chooser.getDataFormat().getIdentifiers().iterator().next();
-                getApplication().addRecentURI(UriUtil.addQuery(uri, "mimeType",mimeType));
+                String mimeType = (chooser.getDataFormat() == null) ? null
+                        : chooser.getDataFormat().getIdentifiers().iterator().next();
+                getApplication().addRecentURI(UriUtil.addQuery(uri, "mimeType", mimeType));
                 v.removeDisabler(this);
             }
         });
