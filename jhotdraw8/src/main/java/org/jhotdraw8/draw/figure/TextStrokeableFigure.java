@@ -74,20 +74,20 @@ public interface TextStrokeableFigure extends Figure {
     public static DoubleStyleableFigureKey TEXT_STROKE_MITER_LIMIT = new DoubleStyleableFigureKey("text-stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), 4.0);
     /**
      * Defines the paint used for filling the outline of the figure. Default
-     * value: {@code Color.BLACK}.
+     * value: {@code null}.
      * <p>
      * References:
      * <p>
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    public static PaintableStyleableFigureKey TEXT_STROKE_COLOR = new PaintableStyleableFigureKey("text-stroke", new CssColor("black", Color.BLACK));
+    public static PaintableStyleableFigureKey TEXT_STROKE_COLOR = new PaintableStyleableFigureKey("text-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
-     * Default value: {@code StrokeType.CENTERED}.
+     * Default value: {@code StrokeType.OUTSIDE}.
      */
-    public static EnumStyleableFigureKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableFigureKey<>("text-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false,StrokeType.CENTERED);
+    public static EnumStyleableFigureKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableFigureKey<>("text-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), false,StrokeType.OUTSIDE);
     /**
      * Defines the width of the outline of the figure.
      * <p>
