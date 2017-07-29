@@ -50,6 +50,7 @@ import org.jhotdraw8.draw.figure.SimplePolylineFigure;
 import org.jhotdraw8.draw.figure.SimpleTextFigure;
 import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
 import org.jhotdraw8.draw.figure.SimpleSliceFigure;
+import org.jhotdraw8.draw.figure.TextStrokeableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.draw.key.CssColor;
@@ -174,12 +175,14 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(FontWeight.class, new XmlEnumConverter<>(FontWeight.class));
         addConverterForType(FontPosture.class, new XmlEnumConverter<>(FontPosture.class));
         addConverterForType(RegexReplace.class, new CssRegexConverter(true));
+        addConverterForType(StrokeLineJoin.class, new XmlEnumConverter<>(StrokeLineJoin.class));
+        addConverterForType(StrokeLineCap.class, new XmlEnumConverter<>(StrokeLineCap.class));
+        addConverterForType(StrokeType.class, new XmlEnumConverter<>(StrokeType.class));
+        
 
         addConverter(StyleableFigure.STYLE_CLASS, new CssWordListConverter());
+        addConverter(TextStrokeableFigure.TEXT_STROKE_DASH_ARRAY, new CssDoubleListConverter());
         addConverter(StrokeableFigure.STROKE_DASH_ARRAY, new CssDoubleListConverter());
-        addConverter(StrokeableFigure.STROKE_LINE_CAP, new XmlEnumConverter<StrokeLineCap>(StrokeLineCap.class));
-        addConverter(StrokeableFigure.STROKE_LINE_JOIN, new XmlEnumConverter<StrokeLineJoin>(StrokeLineJoin.class));
-        addConverter(StrokeableFigure.STROKE_TYPE, new XmlEnumConverter<StrokeType>(StrokeType.class));
         addConverter(TransformableFigure.TRANSFORMS, new XmlTransformListConverter());
         addConverter(SimplePolylineFigure.POINTS, new CssPoint2DListConverter());
         addConverter(SimpleBezierFigure.PATH, new XmlBezierNodeListConverter(true));
