@@ -433,13 +433,6 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @throws java.io.IOException
      */
     protected void readElementAttributes(Figure figure, Element elem) throws IOException {
-        for (MapAccessor<?> ma : figureFactory.figureAttributeKeys(figure)) {
-            @SuppressWarnings("unchecked")
-            MapAccessor<Object> mao = (MapAccessor<Object>) ma;
-            Object defaultValue = figureFactory.getDefaultValue(figure, ma);
-            figure.set(mao, defaultValue);
-        }
-
         NamedNodeMap attrs = elem.getAttributes();
         for (int i = 0, n = attrs.getLength(); i < n; i++) {
             Attr attr = (Attr) attrs.item(i);
