@@ -230,5 +230,9 @@ public interface PathBuilder {
     default void smoothQuadTo(double x, double y) {
         quadTo(getLastX()-getLastCX()+getLastX(), getLastY()-getLastCY()+getLastY(), x, y);
     }
+    
+    default void finish() {
+        
+    }
 
 }
