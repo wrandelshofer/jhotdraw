@@ -6,6 +6,7 @@ package org.jhotdraw8.css;
 
 import java.util.Set;
 import javafx.css.StyleOrigin;
+import org.jhotdraw8.draw.figure.Figure;
 
 /**
  * This is a model on which a {@code CssAST.SelectorGroup} can perform a match
@@ -94,6 +95,8 @@ public interface SelectorModel<T> {
      * attribute with this name.
      */
     String getAttribute(T element, String name);
+
+    public String getAttribute(T element, StyleOrigin origin, String name);
 
     /**
      * Returns all styleable attributes of the element.

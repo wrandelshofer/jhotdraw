@@ -37,7 +37,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.ast.Stylesheet;
@@ -74,6 +76,17 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
     private TextArea textArea;
     @FXML
     private TextArea helpTextArea;
+    @FXML
+    private RadioButton showAttributeValues;
+
+    @FXML
+    private ToggleGroup shownValues;
+
+    @FXML
+    private RadioButton showStylesheetValues;
+
+    @FXML
+    private RadioButton showSpecifiedValues;
 
     private Node node;
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter();
@@ -123,7 +136,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 throw new InternalError(ex);
             }
         });
-        Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
+        Preferences prefs = Preferences.userNodeForPackage(StyleAttributesInspector.class);
         updateContentsCheckBox.setSelected(prefs.getBoolean("updateContents", true));
         updateContentsCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("updateContents", newValue));
@@ -146,6 +159,36 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::updateHelpText);
+
+        switch (prefs.get("shownValues", "user")) {
+            case "author":
+                showStylesheetValues.setSelected(true);
+                break;
+            case "user":
+                showAttributeValues.setSelected(true);
+                break;
+            case "styled":
+            default:
+                showSpecifiedValues.setSelected(true);
+                break;
+        }
+
+        shownValues.selectedToggleProperty().addListener(this::updateShownValues);
+    }
+
+    protected void updateShownValues(Observable o) {
+        Preferences prefs = Preferences.userNodeForPackage(StyleAttributesInspector.class);
+        String origin;
+        if (showAttributeValues.isSelected()) {
+            origin = "user";
+        } else if (showStylesheetValues.isSelected()) {
+            origin = "author";
+        } else {
+            origin = "styled";
+        }
+        prefs.put("shownValues", origin);
+
+        updateTextArea();
     }
 
     @Override
@@ -200,6 +243,15 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         Map<String, String> attr = new TreeMap<>();
         Map<String, String> description = new TreeMap<>();
 
+        final StyleOrigin origin;
+        if (showAttributeValues.isSelected()) {
+            origin = StyleOrigin.USER;
+        } else if (showStylesheetValues.isSelected()) {
+            origin = StyleOrigin.AUTHOR;
+        } else {
+            origin = null;
+        }
+
         boolean first = true;
         for (Figure f : newValue) {
             selectorModel.getAttributeNames(f);
@@ -209,7 +261,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 type = selectorModel.getType(f);
                 styleClasses.addAll(selectorModel.getStyleClasses(f));
                 for (String name : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
-                    attr.put(name, selectorModel.getAttribute(f, name));
+                    attr.put(name, selectorModel.getAttribute(f, origin, name));
                 }
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
@@ -219,7 +271,7 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
                 for (String name : attr.keySet()) {
                     String oldAttrValue = attr.get(name);
                     if (oldAttrValue != null) {
-                        String newAttrValue = selectorModel.getAttribute(f, name);
+                        String newAttrValue = selectorModel.getAttribute(f, origin, name);
                         if (!oldAttrValue.equals(newAttrValue)) {
                             attr.put(name, "/* multiple values */");
                         }

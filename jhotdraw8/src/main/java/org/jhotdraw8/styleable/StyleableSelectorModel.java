@@ -40,6 +40,15 @@ public class StyleableSelectorModel implements SelectorModel<Styleable> {
     }
 
     @Override
+    public String getAttribute(Styleable element, StyleOrigin origin, String name) {
+        if (origin == StyleOrigin.USER) {
+            return getAttribute(element, name);
+        } else {
+            return SelectorModel.INITIAL_VALUE_KEYWORD;
+        }
+    }
+
+    @Override
     public boolean hasId(Styleable element, String id) {
         return id.equals(element.getId());
     }

@@ -261,23 +261,30 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     @SuppressWarnings("unchecked")
     public String getAttribute(Figure element, String attributeName) {
+        return getAttribute(element, StyleOrigin.USER, attributeName);
+    }
+    @SuppressWarnings("unchecked")
+    public String getAttribute(Figure element, StyleOrigin origin, String attributeName) {
         WriteableStyleableMapAccessor<Object> key = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
         if (key == null) {
             return null;
         }
-        boolean isInitialValue = !element.containsKey(StyleOrigin.USER, key);
+        boolean isInitialValue = origin!=null&& !element.containsKey(origin, key);
+        if (isInitialValue) {
         if ((key instanceof CompositeMapAccessor)) {
             for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
                 // FIXME should recurse here
-                if (element.containsKey(StyleOrigin.USER, subkey)) {
+                if (element.containsKey(origin, subkey)) {
                     isInitialValue = false;
+                    break;
                 }
             }
+        }
         }
         if (isInitialValue) {
             return INITIAL_VALUE_KEYWORD;
         }
-        return key.getConverter().toString(element.get(key));
+        return key.getConverter().toString(element.getStyled(origin,key));
     }
 
     public Converter<?> getConverter(Figure element, String attributeName) {

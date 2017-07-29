@@ -6,7 +6,10 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -32,6 +35,26 @@
                   <MenuItem mnemonicParsing="false">
                      <graphic>
                     <CheckBox fx:id="updateContentsCheckBox" minWidth="24.0" mnemonicParsing="false" selected="true" text="%updateContents.checkBox.text" />
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <RadioButton fx:id="showAttributeValues" mnemonicParsing="false" selected="true" text="%shownValues.attributeValues">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="shownValues" />
+                           </toggleGroup>
+                        </RadioButton>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <RadioButton fx:id="showStylesheetValues" mnemonicParsing="false" text="%shownValues.stylesheetValues" toggleGroup="$shownValues" />
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false">
+                     <graphic>
+                        <RadioButton fx:id="showSpecifiedValues" mnemonicParsing="false" text="%shownValues.specifiedValues" toggleGroup="$shownValues" />
                      </graphic>
                   </MenuItem>
               </items>

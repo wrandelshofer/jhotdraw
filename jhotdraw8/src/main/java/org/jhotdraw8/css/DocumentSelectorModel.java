@@ -11,6 +11,7 @@ import java.util.Set;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.css.StyleOrigin;
+import org.jhotdraw8.draw.figure.Figure;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -29,6 +30,15 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
 
     public MapProperty<String, Set<Element>> additionalPseudoClassStatesProperty() {
         return additionalPseudoClassStates;
+    }
+
+    @Override
+    public String getAttribute(Element elem, StyleOrigin origin, String name) {
+        if (origin == StyleOrigin.USER) {
+            return getAttribute(elem, name);
+        } else {
+            return SelectorModel.INITIAL_VALUE_KEYWORD;
+        }
     }
 
     @Override

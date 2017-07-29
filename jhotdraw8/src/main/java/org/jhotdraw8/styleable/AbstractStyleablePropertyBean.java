@@ -28,7 +28,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
         @Override
         @SuppressWarnings("unchecked")
         protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
-            changed((Key<Object>)change.getKey(),change.getValueRemoved(),change.getValueAdded());
+            changed((Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
             AbstractStyleablePropertyBean.this.callObservers(origin, willChange, change);
             super.callObservers(origin, willChange, change);
         }
@@ -72,6 +72,9 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
 
     @Override
     public <T> T getStyled(StyleOrigin origin, MapAccessor<T> key) {
+        if (origin == null) {
+            return getStyled(key);
+        }
         Map<Key<?>, Object> map = getStyleableMap().getMap(origin);
         return key.get(map);
     }
@@ -113,7 +116,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
      * @param oldValue the old value
      * @param newValue the new value
      */
-    protected <T>void changed(Key<T> key, T oldValue, T newValue) {
+    protected <T> void changed(Key<T> key, T oldValue, T newValue) {
     }
 
     /**
@@ -128,6 +131,5 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
 
     }
-    
-    
+
 }
