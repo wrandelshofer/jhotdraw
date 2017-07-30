@@ -13,10 +13,12 @@ import org.jhotdraw8.text.Converter;
  *
  * @author werni
  */
-public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
+public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadOnlyStyleableMapAccessor<T> {
 
     private final static long serialVersionUID = 1L;
 
+    private  CssMetaData<?, T> cssMetaData;
+    private  Converter<T> converter;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -27,7 +29,7 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * @param metaData The CSS meta data.
      * @param converter the converter
      */
-    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
+    public SimpleReadOnlyStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
         this(key, clazz, null, metaData, converter, null);
     }
 
@@ -41,7 +43,7 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * @param converter the converter
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+    public SimpleReadOnlyStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
         this(key, clazz, null, metaData, converter, defaultValue);
     }
 
@@ -57,9 +59,34 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * @param converter the converter
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
-        super(key, clazz, typeParameters, metaData, converter, defaultValue);
+    public SimpleReadOnlyStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+        super(key, clazz, typeParameters, defaultValue);
+        this.converter = converter;
+        this.cssMetaData = metaData;
     }
 
-  
+    @Override
+    public CssMetaData<?, T> getCssMetaData() {
+        return null;
+    }
+
+    /** Setter method, if the css meta data can not be provided in the call to super() in the constructor.
+     * @param cssMetaData the meta data
+     */
+    protected void setCssMetaData(CssMetaData<?, T> cssMetaData) {
+        this.cssMetaData = cssMetaData;
+    }
+
+    @Override
+    public Converter<T> getConverter() {
+        return converter;
+    }
+
+    /** Setter method, if the converter can not be provided in the call to super() in the constructor.
+     * @param converter the converter
+     */
+    public void setConverter(Converter<T> converter) {
+        this.converter = converter;
+    }
+
 }

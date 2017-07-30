@@ -49,8 +49,21 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * @return name string.
      */
     default String getCssName() {
-        StringBuilder b = new StringBuilder();
-        String name = getName();
+        return toCssName(getName());
+    }
+
+    /**
+     * Returns the CSS name string.
+     * <p>
+     * The default implementation converts the name from "camel case" to "dash
+     * separated words".
+     *
+     * @param camelCaseName string
+     * @return cssName string.
+     */
+    public static String toCssName(String camelCaseName) {
+        final StringBuilder b = new StringBuilder();
+        final String name = camelCaseName;
         boolean insertDash = false;
         for (int i = 0, n = name.length(); i < n; i++) {
             char ch = name.charAt(i);
@@ -67,6 +80,5 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
         }
         return b.toString();
     }
-
 
 }
