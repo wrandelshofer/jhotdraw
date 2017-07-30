@@ -164,6 +164,7 @@ public class SelectionTool extends AbstractTool {
                 if (isSelectBehindEnabled() && (event.isAltDown())) {
                     // Select a figure behind the current selection
                     pressedFigure = null;
+                    Figure firstFigure=null;
                     boolean selectionFound = false;
                     for (Figure f : view.findFigures(vx, vy, false)) {
                         if (view.selectedFiguresProperty().contains(f)) {
@@ -175,9 +176,9 @@ public class SelectionTool extends AbstractTool {
                             break;
                         }
                     }
-                    // find in entire drawing
+                    // take first figure
                     if (pressedFigure == null) {
-                        pressedFigure = view.findFigure(vx, vy);
+                        pressedFigure = firstFigure;
                     }
                 } else {
                     // find in selection
