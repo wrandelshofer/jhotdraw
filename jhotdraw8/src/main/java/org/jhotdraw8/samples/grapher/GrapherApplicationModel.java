@@ -5,6 +5,7 @@
 package org.jhotdraw8.samples.grapher;
 
 import java.util.ResourceBundle;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.SimpleApplicationModel;
 import org.jhotdraw8.app.action.Action;
@@ -27,11 +28,20 @@ import org.jhotdraw8.util.Resources;
  * rawcoder $$
  */
 public class GrapherApplicationModel extends SimpleApplicationModel {
+public final static DataFormat GRAPHER_FORMAT;
+
+    static {
+        DataFormat fmt = DataFormat.lookupMimeType("application/xml+grapher");
+        if (fmt == null) {
+            fmt = new DataFormat("application/xml+grapher");
+        }
+        GRAPHER_FORMAT = fmt;
+    }
 
     public GrapherApplicationModel() {
         super("Grapher", GrapherProject::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
-                "XML Files", XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT, "*.xml");
+                "Grapher Files", GRAPHER_FORMAT, "*.xml");
         getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_FORMAT, "*.svg"));
         getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_FORMAT, "*.png"));
         getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_FORMAT, "*.ser.xml"));
