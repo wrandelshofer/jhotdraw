@@ -26,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.beans.NonnullProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
+import org.jhotdraw8.draw.figure.Figures;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
@@ -145,6 +146,13 @@ public interface DrawingView extends RenderContext {
      * no layers or no layer has been activated.
      */
     ObjectProperty<Layer> activeLayerProperty();
+    
+    default void scrollSelectedFiguresToVisible() {
+        final ObservableSet<Figure> selectedFigures = getSelectedFigures();
+        if (!selectedFigures.isEmpty()) {
+            scrollRectToVisible(Figures.getBounds(selectedFigures));
+        }
+    }
 
     /**
      * The tool which currently edits this {@code DrawingView}.
@@ -212,19 +220,20 @@ public interface DrawingView extends RenderContext {
      * @return the handle key
      */
     NonnullProperty<HandleType> handleTypeProperty();
+
     /**
      * The handle type used for marking the anchor of a selection.
      *
      * @return the handle key
      */
     ObjectProperty<HandleType> anchorHandleTypeProperty();
+
     /**
      * The handle type used for marking the lead of a selection.
      *
      * @return the handle key
      */
     ObjectProperty<HandleType> leadHandleTypeProperty();
-
 
     /**
      * The handle type for multiple selection.
@@ -414,85 +423,87 @@ public interface DrawingView extends RenderContext {
     default List<Figure> findFiguresIntersecting(Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
-
+    
     default void setDrawing(Drawing newValue) {
         getModel().setRoot(newValue);
     }
-
+    
     default Drawing getDrawing() {
         return modelProperty().get().getDrawing();
     }
-
+    
     default void setConstrainer(Constrainer newValue) {
         constrainerProperty().set(newValue);
     }
-
+    
     default Constrainer getConstrainer() {
         return constrainerProperty().get();
     }
-
+    
     default void setTool(Tool newValue) {
         toolProperty().set(newValue);
     }
-
+    
     default Tool getTool() {
         return toolProperty().get();
     }
-
+    
     default void setActiveHandle(Handle newValue) {
         activeHandleProperty().set(newValue);
     }
-
+    
     default Handle getActiveHandle() {
         return activeHandleProperty().get();
     }
-
+    
     default void setHandleType(HandleType newValue) {
         handleTypeProperty().set(newValue);
     }
-
+    
     default HandleType getHandleType() {
         return handleTypeProperty().get();
     }
+
     default void setAnchorHandleType(HandleType newValue) {
         anchorHandleTypeProperty().set(newValue);
     }
-
+    
     default HandleType getAnchorHandleType() {
         return anchorHandleTypeProperty().get();
     }
+
     default void setLeadHandleType(HandleType newValue) {
         leadHandleTypeProperty().set(newValue);
     }
-
+    
     default HandleType getLeadHandleType() {
         return leadHandleTypeProperty().get();
     }
-
+    
     default void setMultiHandleType(HandleType newValue) {
         multiHandleTypeProperty().set(newValue);
     }
-
+    
     default HandleType getMultiHandleType() {
         return multiHandleTypeProperty().get();
     }
-
+    
     default void setActiveLayer(Layer newValue) {
         activeLayerProperty().set(newValue);
     }
-
+    
     default Layer getActiveLayer() {
         return activeLayerProperty().get();
     }
-
+    
     default void setZoomFactor(double newValue) {
         zoomFactorProperty().set(newValue);
     }
-
+    
     default double getZoomFactor() {
         return zoomFactorProperty().get();
     }
-
+    
     default ObservableSet<Figure> getSelectedFigures() {
         return selectedFiguresProperty();
     }
@@ -526,6 +537,7 @@ public interface DrawingView extends RenderContext {
     default Point2D worldToView(Point2D world) {
         return getWorldToView().transform(world);
     }
+
     /**
      * Converts world coordinates into view coordinates.
      *
@@ -575,37 +587,47 @@ public interface DrawingView extends RenderContext {
     default void setModel(DrawingModel newValue) {
         modelProperty().set(newValue);
     }
-
+    
     default void setClipboardOutputFormat(ClipboardOutputFormat newValue) {
         clipboardOutputFormatProperty().set(newValue);
     }
-
+    
     default void setClipboardInputFormat(ClipboardInputFormat newValue) {
         clipboardInputFormatProperty().set(newValue);
     }
-
+    
     default ClipboardOutputFormat getClipboardOutputFormat() {
         return clipboardOutputFormatProperty().get();
     }
-
+    
     default ClipboardInputFormat getClipboardInputFormat() {
         return clipboardInputFormatProperty().get();
     }
-
-    public void recreateHandles();
     
-    /** Scrolls the specified figure to visible.
-     * @param f A figure in the drawing of this DrawingView. */ 
+    public void recreateHandles();
+
+    /**
+     * Scrolls the specified figure to visible.
+     *
+     * @param f A figure in the drawing of this DrawingView.
+     */    
     default void scrollFigureToVisible(Figure f) {
         Bounds boundsInView = worldToView(f.localToWorld(f.getBoundsInLocal()));
         scrollRectToVisible(boundsInView);
     }
-    /** Scrolls the specified rectangle to visible.
-     * @param boundsInView A rectangle in view coordinates. */ 
-    void scrollRectToVisible(Bounds boundsInView);
-    
-    /** Returns the visible rectangle of the drawing view in view coordinates
-     * @return the portion of the DrawingView that is visible on screen.*/
-    Bounds getVisibleRect();
 
+    /**
+     * Scrolls the specified rectangle to visible.
+     *
+     * @param boundsInView A rectangle in view coordinates.
+     */    
+    void scrollRectToVisible(Bounds boundsInView);
+
+    /**
+     * Returns the visible rectangle of the drawing view in view coordinates
+     *
+     * @return the portion of the DrawingView that is visible on screen.
+     */
+    Bounds getVisibleRect();
+    
 }

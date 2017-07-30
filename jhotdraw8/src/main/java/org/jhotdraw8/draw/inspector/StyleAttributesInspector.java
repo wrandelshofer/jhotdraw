@@ -31,6 +31,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -64,6 +65,9 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
 
     @FXML
     private Button applyButton;
+
+    @FXML
+    private Button selectButton;
 
     @FXML
     private CheckBox updateContentsCheckBox;
@@ -147,7 +151,8 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         showHelpTextCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("showHelpText", newValue));
 
-        applyButton.setOnAction(event -> apply());
+        applyButton.setOnAction(this::apply);
+        selectButton.setOnAction(this::select);
         composeAttributesCheckBox.setOnAction(event -> updateTextArea());
         node.visibleProperty().addListener((o, oldValue, newValue) -> {
             if (newValue) {
@@ -320,7 +325,48 @@ public class StyleAttributesInspector extends AbstractSelectionInspector {
         textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
     }
 
-    private void apply() {
+    private void select(ActionEvent event) {
+        CssParser parser = new CssParser();
+        try {
+            Stylesheet s = parser.parseStylesheet(textArea.getText());
+            if (!parser.getParseExceptions().isEmpty()) {
+                System.out.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
+            }
+
+            Drawing d = drawingView.getDrawing();
+            DrawingModel m = drawingView.getModel();
+            ObservableMap<String, Set<Figure>> pseudoStyles = FXCollections.observableHashMap();
+            HashSet<Figure> fs = new HashSet<>(drawingView.getSelectedFigures());
+
+            // handling of emptyness must be consistent with code in
+            // handleSelectionChanged() method
+            if (fs.isEmpty()) {
+                fs.add(d);
+            }
+
+            pseudoStyles.put("selected", fs);
+
+            List<Figure> matchedFigures = new ArrayList<>();
+            StylesheetsManager<Figure> sm = d.getStyleManager();
+            FigureSelectorModel fsm = (FigureSelectorModel) sm.getSelectorModel();
+            fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
+            for (Figure f : d.breadthFirstIterable()) {
+                if (sm.matchesElement(s, f)) {
+                    matchedFigures.add(f);
+                }
+            }
+            
+            drawingView.getSelectedFigures().clear();
+            drawingView.getSelectedFigures().addAll(matchedFigures);
+            drawingView.scrollSelectedFiguresToVisible();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+   
+    }
+    
+    private void apply(ActionEvent event) {
         CssParser parser = new CssParser();
         try {
             Stylesheet s = parser.parseStylesheet(textArea.getText());

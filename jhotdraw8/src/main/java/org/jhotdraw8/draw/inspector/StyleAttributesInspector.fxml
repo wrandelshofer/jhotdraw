@@ -60,6 +60,7 @@
               </items>
             </MenuButton>
         <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+            <Button fx:id="selectButton" mnemonicParsing="false" text="%selectButton.text" />
         <Button fx:id="applyButton" mnemonicParsing="false" text="%applyButton.text">
           <HBox.margin>
             <Insets left="4.0" />

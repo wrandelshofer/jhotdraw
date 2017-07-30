@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javafx.css.StyleOrigin;
+import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -101,4 +102,23 @@ public interface StylesheetsManager<E> {
      * @return true if an element was selected
      */
     public boolean applyStylesheetTo(StyleOrigin styleOrigin, Stylesheet s, E element);
+
+    /**
+     * Returns true if the provided stylesheet has selectors which match the
+     * specified element.
+     *
+     * @param s the stylesheet
+     * @param elem the element
+     * @return true the element was selected
+     */
+    default boolean matchesElement(Stylesheet s, E elem) {
+        SelectorModel<E> selectorModel = getSelectorModel();
+        for (StyleRule r : s.getStyleRules()) {
+            if (null != r.getSelectorGroup().match(selectorModel, elem)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
