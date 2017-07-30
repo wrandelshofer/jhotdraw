@@ -986,7 +986,7 @@ public class Geom {
      * @return the perpendicular vector of length {@code 1}
      */
     public static Point2D perp(Point2D tangent) {
-        return perp(0, 0, tangent.getX(), tangent.getY());
+        return new Point2D(tangent.getY(),-tangent.getX());
     }
 
     /**

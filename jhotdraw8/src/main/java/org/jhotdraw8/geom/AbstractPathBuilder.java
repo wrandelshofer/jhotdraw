@@ -46,6 +46,8 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     protected abstract void doClosePath();
 
+    protected abstract void doFinish();
+
     protected abstract void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3);
 
     protected abstract void doLineTo(double x, double y);
@@ -60,6 +62,11 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     protected void doSmoothQuadTo(double x1, double y1, double x, double y) {
         doQuadTo(x1, y1, x, y);
+    }
+
+    @Override
+    public void finish() {
+        doFinish();
     }
 
     public Point2D getLastPoint() {

@@ -30,9 +30,10 @@ public class FXPathPointsBuilder extends AbstractPathBuilder {
     public FXPathPointsBuilder(List<PathElement> elements) {
         this(5, elements);
     }
+
     public FXPathPointsBuilder(int squareSize, List<PathElement> elements) {
         this.elements = elements;
-        this.squareSize=squareSize;
+        this.squareSize = squareSize;
     }
 
     @Override
@@ -98,4 +99,10 @@ public class FXPathPointsBuilder extends AbstractPathBuilder {
         elements.add(new LineTo(x - halfSize, y + halfSize));
         elements.add(new ClosePath());
     }
+
+    @Override
+    protected void doFinish() {
+// empty
+    }
+
 }

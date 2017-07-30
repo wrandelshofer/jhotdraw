@@ -115,5 +115,10 @@ public class NineSliceScalingBuilder extends AbstractPathBuilder {
         Point2D p2=transform(x2,y2);
         target.quadTo(p1.getX(),p1.getY(),p2.getX(),p2.getY());
     }
+    @Override
+    protected void doFinish() {
+       target.finish();
+    }
+
 
 }

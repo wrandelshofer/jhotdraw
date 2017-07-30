@@ -63,6 +63,11 @@ public class FXPathBuilder extends AbstractPathBuilder {
         elements.add(new QuadCurveTo(x, y, x0, y0));
     }
 
+    @Override
+    protected void doFinish() {
+// empty
+    }
+
     public Path get() {
         finish();
         return new Path(elements);

@@ -43,4 +43,9 @@ private Path2D.Double path= new Path2D.Double();
     public Path2D.Double get() {
         return path;
     }
+    @Override
+    protected void doFinish() {
+      // empty
+    }
+
 }

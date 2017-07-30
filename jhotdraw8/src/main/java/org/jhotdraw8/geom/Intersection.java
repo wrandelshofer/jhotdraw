@@ -57,6 +57,10 @@ public class Intersection {
         this.status = status;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     /**
      * Appends a point and the parameter t.
      */
@@ -1552,6 +1556,8 @@ public static Intersection intersectBezier3Circle(Point2D p1, Point2D p2, Point2
 
     /**
      * Computes the intersection between a circle and a line.
+     * <p>
+     * FIXME actually computes line intersection with parameter t of line, and not t of circl 
      *
      * @param c the center of the circle
      * @param r the radius of the circle
@@ -1814,6 +1820,8 @@ public static Intersection intersectEllipseRectangle(Point2D c, double rx, doubl
         } else if (deter == 0) {
             result = new Intersection(Status.NO_INTERSECTION_TANGENT);
             // NOTE: should calculate this point
+            double u = (-b) / (2 * a);
+            result.put(u, lerp(x1, y1, x2, y2, u));
         } else {
             double e = Math.sqrt(deter);
             double u1 = (-b + e) / (2 * a);

@@ -62,7 +62,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder {
 
     public Rectangle getRectangle() {
         if (Double.isNaN(minx)) {
-            return new Rectangle(0, 0, 0, 0);
+            return null;
         }
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
     }
@@ -78,6 +78,11 @@ public class BoundingBoxBuilder extends AbstractPathBuilder {
         Path p = new Path();
         addPathElementsTo(p.getElements());
         return p;
+    }
+
+    @Override
+    protected void doFinish() {
+        // empty
     }
 
     public void addPathElementsTo(List<PathElement> elements) {

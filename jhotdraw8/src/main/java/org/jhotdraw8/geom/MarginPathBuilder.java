@@ -117,14 +117,14 @@ public class MarginPathBuilder extends AbstractPathBuilder {
         target.quadTo(x1, y1, x2, y2);
     }
 
-    @Override
-    public void finish() {
-        doEnd();
-        target.finish();
-    }
-
     private enum Op {
         MoveTo, LineTo, CurveTo, QuadTo, ClosePath
     }
+    @Override
+    protected void doFinish() {
+        doEnd();
+       target.finish();
+    }
+
 
 }

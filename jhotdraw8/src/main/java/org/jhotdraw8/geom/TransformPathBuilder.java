@@ -40,6 +40,11 @@ public class TransformPathBuilder extends AbstractPathBuilder {
     }
 
     @Override
+    protected void doFinish() {
+       target.finish();
+    }
+
+    @Override
     protected void doLineTo(double x, double y) {
         if (transform == null) {
             target.lineTo(x,y);

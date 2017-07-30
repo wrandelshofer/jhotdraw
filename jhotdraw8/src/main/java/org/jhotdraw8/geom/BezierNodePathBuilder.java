@@ -77,5 +77,10 @@ public class BezierNodePathBuilder extends AbstractPathBuilder {
     public ImmutableObservableList<BezierNode> getNodes() {
         return new ImmutableObservableList<>(nodes);
     }
+    @Override
+    protected void doFinish() {
+      // 
+    }
+
 
 }
