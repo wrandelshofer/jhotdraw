@@ -5,9 +5,11 @@
 package org.jhotdraw8.draw.figure;
 
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.util.List;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -23,21 +25,30 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.key.DirtyBits;
+import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
-import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
-import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.FigureKey;
-import org.jhotdraw8.draw.locator.RelativeLocator;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Paintable;
+import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
+import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.Transforms;
 
 /**
  * A Label that can be placed anywhere on a drawing.
@@ -91,12 +102,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setAutoSizeChildren(false);
-        Region r = new Region();
-        r.setScaleShape(true);
-        // g.getChildren().add(r);
+        Path p = new Path();
         Text text = new Text();
-        g.getChildren().add(text);
-        g.getProperties().put("region", r);
+        g.getChildren().addAll(p, text);
+        g.getProperties().put("path", p);
         g.getProperties().put("text", text);
         return g;
     }
@@ -179,12 +188,13 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
-        Region r = (Region) g.getProperties().get("region");
+        Path p = (Path) g.getProperties().get("path");
         Text t = (Text) g.getProperties().get("text");
         updateGroupNode(ctx, g);
-        updateRegionNode(ctx, r);
+        updatePathNode(ctx, p);
         updateTextNode(ctx, t);
 
+        /*
         if (getStyled(FILL) != null || getStyled(STROKE) != null) {
             if (g.getChildren().size() != 2) {
                 g.getChildren().setAll(r, t);
@@ -193,35 +203,36 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
             if (g.getChildren().size() != 1) {
                 g.getChildren().setAll(t);
             }
-        }
+        }*/
     }
 
-    protected void updateRegionNode(RenderContext ctx, Region node) {
+    protected void updatePathNode(RenderContext ctx, Path node) {
+        applyFillableFigureProperties(node);
+        applyStrokeableFigureProperties(node);
+
         String content = getStyled(SHAPE);
-        SVGPath svgPath;
-        if (content != null) {
-            svgPath = new SVGPath();
-            svgPath.setContent(content);
-        } else {
-            svgPath = null;
+        if (content == null || content.trim().isEmpty()) {
+            content = "M 0,0 1,0 1,1 0,1 Z";
         }
-        node.setShape(svgPath);
-
         Bounds b = getBoundsInLocal();
-        node.resizeRelocate(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
 
-        Paint fillColor = Paintable.getPaint(getStyled(FILL));
-        node.setBackground(fillColor == null ? null : new Background(new BackgroundFill(fillColor, null, null)));
+        try {
+            AWTPathBuilder builder = new AWTPathBuilder();
+            Shapes.buildFromSvgString(builder, content);
+            Path2D.Double path = builder.get();
+            FXPathBuilder builder2 = new FXPathBuilder();
 
-        Paint strokeColor = Paintable.getPaint(getStyled(STROKE));
-        double strokeWidth = getStyled(STROKE_WIDTH);
-        if (strokeColor == null || strokeWidth == 0) {
-            node.setBorder(Border.EMPTY);
-        } else {
-            BorderStrokeStyle bss = new BorderStrokeStyle(getStyled(STROKE_TYPE),
-                    getStyled(STROKE_LINE_JOIN), getStyled(STROKE_LINE_CAP), getStyled(STROKE_MITER_LIMIT), getStyled(STROKE_DASH_OFFSET), getStyled(STROKE_DASH_ARRAY));
-            node.setBorder(new Border(new BorderStroke(strokeColor,
-                    bss, CornerRadii.EMPTY, new BorderWidths(strokeWidth))));
+            Transform tx = Transforms.createReshapeTransform(Geom.getBounds(path), getBoundsInLocal());
+            AffineTransform at = Transforms.toAWT(tx);
+
+            Shapes.buildFromPathIterator(builder2, path.getPathIterator(at));
+            List<PathElement> elements = builder2.getElements();
+            node.getElements().setAll(elements);
+
+            node.setVisible(true);
+        } catch (IOException ex) {
+            node.setVisible(false);
+            return;
         }
     }
 

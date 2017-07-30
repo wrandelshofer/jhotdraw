@@ -186,7 +186,7 @@ public class Geom {
      */
     public static Point2D center(Bounds r) {
         return new Point2D(
-                r.getMinX() + r.getWidth() * 0.5, 
+                r.getMinX() + r.getWidth() * 0.5,
                 r.getMinY() + r.getHeight() * 0.5
         );
     }
@@ -496,6 +496,17 @@ public class Geom {
     public static Point2D east(Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth(), r.getMinY()
                 + r.getHeight() / 2);
+    }
+
+    /**
+     * Gets the bounds of the specified shape.
+     *
+     * @param shape an AWT shape
+     * @return JavaFX bounds
+     */
+    public static Bounds getBounds(java.awt.Shape shape) {
+        java.awt.geom.Rectangle2D r = shape.getBounds2D();
+        return new BoundingBox(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
     /**
@@ -986,7 +997,7 @@ public class Geom {
      * @return the perpendicular vector of length {@code 1}
      */
     public static Point2D perp(Point2D tangent) {
-        return new Point2D(tangent.getY(),-tangent.getX());
+        return new Point2D(tangent.getY(), -tangent.getX());
     }
 
     /**

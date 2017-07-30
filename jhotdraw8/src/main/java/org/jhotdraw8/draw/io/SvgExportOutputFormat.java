@@ -127,7 +127,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
-        SvgExporter exporter = createExporter();
+        final SvgExporter exporter = createExporter();
+        exporter.setSkipInvisibleNodes(false);
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
         return doc;
@@ -175,11 +176,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     @Override
     protected void writePage(File file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(SimplePageFigure.PAPER_WIDTH);
-
-        SvgExporter exporter = createExporter();
         markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
-        Document doc = exporter.toDocument(node);
+        final SvgExporter exporter = createExporter();
+        final Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
         XmlUtil.write(file, doc);
@@ -197,7 +197,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
 
     @Override
     protected boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException {
-        SvgExporter exporter = createExporter();
         markNodesOutsideBoundsWithSkip(node, slice.getBoundsInLocal());
         Transform worldToLocal = slice.getWorldToLocal();
         Point2D sliceOrigin = slice.getSliceOrigin();
@@ -206,7 +205,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
             node.getTransforms().setAll(worldToLocal);
         }
         new TransformFlattener().flattenTranslates(node);
-        Document doc = exporter.toDocument(node);
+        final SvgExporter exporter = createExporter();
+        final Document doc = exporter.toDocument(node);
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
         node.getTransforms().clear();
         XmlUtil.write(file, doc);

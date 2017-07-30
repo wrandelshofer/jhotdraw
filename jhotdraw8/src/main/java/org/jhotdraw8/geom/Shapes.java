@@ -325,7 +325,7 @@ public class Shapes {
     }
 
     private static Shape awtShapeFromFXSvgPath(SVGPath node) {
-        Path2DDoubleBuilder b = new Path2DDoubleBuilder();
+        AWTPathBuilder b = new AWTPathBuilder();
         try {
             buildFromSvgString(b, node.getContent());
         } catch (IOException ex) {
@@ -345,7 +345,7 @@ public class Shapes {
      * @throws java.io.IOException if the String is not a valid path
      */
     public static Path2D.Double awtShapeFromSvgString(String str) throws IOException {
-        Path2DDoubleBuilder b = new Path2DDoubleBuilder();
+        AWTPathBuilder b = new AWTPathBuilder();
         buildFromSvgString(b, str);
 
         return b.get();

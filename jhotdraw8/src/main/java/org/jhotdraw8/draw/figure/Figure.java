@@ -990,23 +990,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param height desired height in parent coordinates, may be negative
      */
     default void reshapeInLocal(double x, double y, double width, double height) {
-        if (width == 0 || height == 0) {
-            return;
-        }
-
-        Bounds oldBounds = getBoundsInLocal();
-
-        double sx = width / oldBounds.getWidth();
-        double sy = height / oldBounds.getHeight();
-
-        Transform tx = new Translate(x - oldBounds.getMinX(), y - oldBounds.getMinY());
-        if (!Double.isNaN(sx) && !Double.isNaN(sy)
-                && !Double.isInfinite(sx) && !Double.isInfinite(sy)
-                && (sx != 1d || sy != 1d)) {
-            tx = Transforms.concat(tx, new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
-        }
-
-        Figure.this.reshapeInLocal(tx);
+        Transform tx = Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height);
+        reshapeInLocal(tx);
     }
 
     /**

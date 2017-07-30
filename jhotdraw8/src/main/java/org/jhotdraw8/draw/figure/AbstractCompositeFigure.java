@@ -5,16 +5,14 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.collections.ObservableList;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
-import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.collection.IndexedSet;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import java.util.ArrayList;
+import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.collection.IndexedSet;
 import org.jhotdraw8.collection.Key;
 
 /**
@@ -182,7 +180,8 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     /**
      * Replaces the children of this figure with the specified list of children.
      * <p>
-     * This method is used for XML serialization using the Java XMLEncoder and XMLDecoder classes.
+     * This method is used for XML serialization using the Java XMLEncoder and
+     * XMLDecoder classes.
      *
      * @param newChildren the new children
      */
@@ -193,7 +192,8 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     /**
      * Returns a new list instance with all children of this figure.
      * <p>
-     * This method is used for XML serialization using the Java XMLEncoder and XMLDecoder classes.
+     * This method is used for XML serialization using the Java XMLEncoder and
+     * XMLDecoder classes.
      *
      * @return a new list instance
      */
