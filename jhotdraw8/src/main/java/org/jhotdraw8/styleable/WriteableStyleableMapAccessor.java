@@ -4,11 +4,6 @@
  */
 package org.jhotdraw8.styleable;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.text.Converter;
-
 /**
  * Interface for keys which support styled values from CSS.
  *
