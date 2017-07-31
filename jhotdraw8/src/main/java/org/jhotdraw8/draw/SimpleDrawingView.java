@@ -6,7 +6,6 @@ package org.jhotdraw8.draw;
 
 import java.io.IOException;
 import static java.lang.Math.max;
-import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,10 +35,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
@@ -120,12 +117,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      */
     private final Set<Figure> dirtyHandles = new HashSet<>();
     private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
-    private WritableImage drawingImage = null;
-    /**
-     * Set drawingImageView to a non-null value to force rendering into a image.
-     * This will render the drawing without adding it to the scene graph.
-     */
-    private ImageView drawingImageView = null;//new ImageView();
 
     /**
      * The drawingProperty holds the drawing that is presented by this drawing
@@ -196,47 +187,42 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
 
     };
-    private final Listener<TreeModelEvent<Figure>> treeModelHandler = new Listener<TreeModelEvent<Figure>>() {
-
-        @Override
-        public void handle(TreeModelEvent<Figure> event) {
-            Figure f = event.getNode();
-            switch (event.getEventType()) {
-                case NODE_ADDED_TO_PARENT:
-                    handleFigureAdded(f);
-                    break;
-                case NODE_REMOVED_FROM_PARENT:
-                    handleFigureRemoved(f);
-                    break;
-                case NODE_ADDED_TO_TREE:
-                    handleFigureRemovedFromDrawing(f);
-                    break;
-                case NODE_REMOVED_FROM_TREE:
-                    for (Figure d : f.preorderIterable()) {
-                        getSelectedFigures().remove(d);
-                    }
-                    repaint();
-                    break;
-                case NODE_CHANGED:
-                    handleNodeChanged(f);
-                    break;
-                case ROOT_CHANGED:
-                    handleDrawingChanged();
-                    updateLayout();
-                    repaint();
-                    break;
-                case SUBTREE_NODES_CHANGED:
-                    handleSubtreeNodesChanged(f);
-                    repaint();
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + " not supported");
+    private final Listener<TreeModelEvent<Figure>> treeModelHandler = (TreeModelEvent<Figure> event) -> {
+        Figure f = event.getNode();
+        switch (event.getEventType()) {
+        case NODE_ADDED_TO_PARENT:
+            handleFigureAdded(f);
+            break;
+        case NODE_REMOVED_FROM_PARENT:
+            handleFigureRemoved(f);
+            break;
+        case NODE_ADDED_TO_TREE:
+            handleFigureRemovedFromDrawing(f);
+            break;
+        case NODE_REMOVED_FROM_TREE:
+            for (Figure d : f.preorderIterable()) {
+                getSelectedFigures().remove(d);
             }
+            repaint();
+            break;
+        case NODE_CHANGED:
+            handleNodeChanged(f);
+            break;
+        case ROOT_CHANGED:
+            handleDrawingChanged();
+            updateLayout();
+            repaint();
+            break;
+        case SUBTREE_NODES_CHANGED:
+            handleSubtreeNodesChanged(f);
+            repaint();
+            break;
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + " not supported");
         }
-
     };
-    private InvalidationListener modelInvalidationListener = o -> repaint();
+    private final InvalidationListener modelInvalidationListener = o -> repaint();
 
     private SimpleDrawingViewNode node;
     /**
@@ -519,7 +505,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public List<Figure> findFigures(double vx, double vy, boolean decompose) {
         Transform vt = getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
-        List<Figure> list = new ArrayList<Figure>();
+        List<Figure> list = new ArrayList<>();
         findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose);
         return list;
     }
@@ -530,7 +516,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
-        List<Figure> list = new ArrayList<Figure>();
+        List<Figure> list = new ArrayList<>();
         findFiguresInsideRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose);
         return list;
     }
@@ -573,7 +559,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
-        List<Figure> list = new ArrayList<Figure>();
+        List<Figure> list = new ArrayList<>();
         findFiguresIntersectingRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose);
         return list;
     }
@@ -740,11 +726,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Drawing d = getModel().getDrawing();
         drawing.set(d);
         if (d != null) {
-            if (drawingImageView != null) {
-                drawingPane.getChildren().add(drawingImageView);
-            } else {
-                drawingPane.getChildren().add(getNode(d));
-            }
+            drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
             updateLayout();
             handleSubtreeNodesChanged(d);
@@ -945,6 +927,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * Invalidates the handles.
      */
+    @Override
     public void invalidateHandles() {
         if (handlesAreValid) {
             handlesAreValid = false;
@@ -987,6 +970,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return overlaysPane.getStylesheets();
     }
 
+    @Override
     public void recreateHandles() {
         handlesAreValid = false;
         recreateHandles = true;
@@ -1017,13 +1001,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
+    @Override
     public void scrollRectToVisible(Bounds boundsInView) {
-        ScrollPane scrollPane = getScrollPane();
-        if (scrollPane == null) {
+        ScrollPane sp = getScrollPane();
+        if (sp == null) {
             return;
         }
 
-        final Bounds contentBounds = scrollPane.getContent().getBoundsInLocal();
+        final Bounds contentBounds = sp.getContent().getBoundsInLocal();
 
         double width = contentBounds.getWidth();
         double height = contentBounds.getHeight();
@@ -1031,30 +1016,30 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         double x = boundsInView.getMinX() + boundsInView.getWidth() * 0.5;
         double y = boundsInView.getMinY() + boundsInView.getHeight() * 0.5;
         // scrolling values range from 0 to 1
-        scrollPane.setVvalue(Geom.clamp(y / height, 0.0, 1.0));
-        scrollPane.setHvalue(Geom.clamp(x / width, 0.0, 1.0));
+        sp.setVvalue(Geom.clamp(y / height, 0.0, 1.0));
+        sp.setHvalue(Geom.clamp(x / width, 0.0, 1.0));
     }
 
     @Override
     public Bounds getVisibleRect() {
-        ScrollPane scrollPane = getScrollPane();
-        if (scrollPane == null) {
+        ScrollPane sp = getScrollPane();
+        if (sp == null) {
             return getNode().getBoundsInLocal();
         }
 
-        final Bounds viewportBounds = scrollPane.getViewportBounds();
+        final Bounds viewportBounds = sp.getViewportBounds();
 
-        final Bounds contentBounds = scrollPane.getContent().getBoundsInLocal();
+        final Bounds contentBounds = sp.getContent().getBoundsInLocal();
 
-        final double hmin = scrollPane.getHmin();
-        final double hmax = scrollPane.getHmax();
-        final double hvalue = scrollPane.getHvalue();
+        final double hmin = sp.getHmin();
+        final double hmax = sp.getHmax();
+        final double hvalue = sp.getHvalue();
         final double contentWidth = contentBounds.getWidth();
         final double viewportWidth = viewportBounds.getWidth();
 
-        final double vmin = scrollPane.getVmin();
-        final double vmax = scrollPane.getVmax();
-        final double vvalue = scrollPane.getVvalue();
+        final double vmin = sp.getVmin();
+        final double vmax = sp.getVmax();
+        final double vvalue = sp.getVvalue();
         final double contentHeight = contentBounds.getHeight();
         final double viewportHeight = viewportBounds.getHeight();
 
@@ -1155,17 +1140,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         int imgw = Math.min(16000, Math.max(1, (int) (dw)));
         int imgh = Math.min(16000, Math.max(1, (int) (dh)));
 
-        if (drawingImageView != null) {
-            if (drawingImage == null || drawingImage.getWidth() != imgw || drawingImage.getHeight() != imgh) {
-                drawingImage = null;
-                drawingImageView.setImage(null);
-                drawingImage = new WritableImage(imgw, imgh);
-                drawingImageView.setImage(drawingImage);
-                //dirtyFigureNodes.add(d);
-                // repaint();
-            }
-        }
-
         Bounds bounds = drawingPane.getLayoutBounds();
         double x = bounds.getMinX() * f;
         double y = bounds.getMinY() * f;
@@ -1216,19 +1190,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             dirtyFigureNodes.clear();
             for (Figure f : copyOfDirtyFigureNodes) {
                 f.updateNode(this, getNode(f));
-            }
-            if (copyOfDirtyFigureNodes.length != 0 && drawingImageView != null) {
-                renderIntoImage = true;
-                long start = System.currentTimeMillis();
-                Node n = getNode(getDrawing());
-                SnapshotParameters params = new SnapshotParameters();
-                n.snapshot(result -> {
-                    System.out.println("rendering done in:" + (System.currentTimeMillis() - start) + "ms");
-                    renderIntoImage = false;
-                    drawingImage = result.getImage();
-                    drawingImageView.setImage(result.getImage());
-                    return null;
-                }, params, drawingImage);
             }
         }
 
@@ -1282,9 +1243,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // the drawing, we have to get rid of them on ourselves.
         // XXX This is a really slow operation. If each figure would store a
         // reference to its drawing it would perform better.
-        Drawing drawing = getDrawing();
-        for (Figure f : new ArrayList<Figure>(figureToNodeMap.keySet())) {
-            if (f.getRoot() != drawing) {
+        Drawing d = getDrawing();
+        for (Figure f : new ArrayList<>(figureToNodeMap.keySet())) {
+            if (f.getRoot() != d) {
                 removeNode(f);
             }
         }
@@ -1357,9 +1318,5 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         public void paste() {
             SimpleDrawingView.this.paste();
         }
-    }
-
-    private static class FixedSizedGroup extends Group {
-
     }
 }
