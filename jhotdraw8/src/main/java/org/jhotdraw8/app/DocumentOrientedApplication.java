@@ -419,7 +419,6 @@ public class DocumentOrientedApplication extends AbstractApplication {
         } catch (IllegalAccessError e) {
             System.err.println("Warning: can not access com.sun.javafx.tk.Toolkit");
         }
-        isSystemMenuSupported = false;
 
         actionMap = model.createApplicationActionMap(this);
         loadRecentUris(model.getName());
