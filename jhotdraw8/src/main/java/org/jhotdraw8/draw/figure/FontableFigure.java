@@ -113,7 +113,7 @@ public interface FontableFigure extends Figure {
     }
 
     /**
-     * Updates a text node with fontable properties.
+     * Updates a Laeled node with fontable properties.
      *
      * @param ctx context
      * @param text a text node
