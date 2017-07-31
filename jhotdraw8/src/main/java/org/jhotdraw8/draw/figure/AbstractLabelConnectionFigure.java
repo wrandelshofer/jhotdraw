@@ -216,7 +216,8 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 break;
         }
 
-        Point2D origin = labeledLoc.add(perp.multiply(getStyled(LABEL_OFFSET))).add(tx, 0);
+        // Note: must subtract LABEL_OFFSET, because it points downwards but perp points upwards.
+        Point2D origin = labeledLoc.add(perp.multiply(-getStyled(LABEL_OFFSET))).add(tx, 0);
 
         Point2D labelTranslation = getStyled(LABEL_TRANSLATE);
         origin = origin.add(labelTranslation);
