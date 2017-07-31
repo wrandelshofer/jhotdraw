@@ -86,6 +86,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * about the center of the figure.
      */
     public static Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
+    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
@@ -105,22 +106,6 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * Defines the translation on the axes about the center of the figure.
      */
     public static Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
-
-    public static TransformListStyleableFigureKey TRANSFORMS = new TransformListStyleableFigureKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableObservableList.emptyList());
-
-    /**
-     * Convenience method for setting a new value for the {@link#TRANSFORMS}
-     * property.
-     *
-     * @param transforms new value
-     */
-    default void setTransforms(Transform... transforms) {
-        if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, ImmutableObservableList.emptyList());
-        } else {
-            set(TRANSFORMS, new ImmutableObservableList<>(transforms));
-        }
-    }
 
     /**
      * Updates a figure node with all transformation properties defined in this
@@ -154,6 +139,47 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     default void applyTransformableFigureProperties(RenderContext ctx, Node node) {
         applyTransformableFigureProperties(node);
+    }
+
+    default void clearTransforms() {
+        set(SCALE_X, 1.0);
+        set(SCALE_Y, 1.0);
+        set(ROTATE, 0.0);
+        set(TRANSLATE_X, 0.0);
+        set(TRANSLATE_Y, 0.0);
+        set(TRANSFORMS, ImmutableObservableList.of());
+    }
+
+    default void flattenTransforms() {
+        Transform p2l = getLocalToParent(false);
+        set(SCALE_X, 1.0);
+        set(SCALE_Y, 1.0);
+        set(ROTATE, 0.0);
+        set(TRANSLATE_X, 0.0);
+        set(TRANSLATE_Y, 0.0);
+        if (p2l.isIdentity()) {
+            set(TRANSFORMS, ImmutableObservableList.emptyList());
+        } else {
+            set(TRANSFORMS, ImmutableObservableList.of(p2l));
+        }
+    }
+
+    default Transform getInverseTransform() {
+        List<Transform> list = getStyled(TRANSFORMS);
+        Transform t;
+        if (list.isEmpty()) {
+            t = null; // leave null
+        } else {
+            try {
+                t = list.get(list.size() - 1).createInverse();
+                for (int i = list.size() - 2; i >= 0; i--) {
+                    t = Transforms.concat(t, list.get(i).createInverse());
+                }
+            } catch (NonInvertibleTransformException e) {
+                throw new InternalError(e);
+            }
+        }
+        return t;
     }
 
     @Override
@@ -228,129 +254,6 @@ public interface TransformableFigure extends TransformCacheableFigure {
         return list;
     }
 
-    default boolean hasTransforms() {
-        return !get(TRANSFORMS).isEmpty();
-    }
-
-    default boolean hasCenterTransforms() {
-        double sx = getStyled(SCALE_X);
-        double sy = getStyled(SCALE_Y);
-        double r = getStyled(ROTATE);
-        double tx = getStyled(TRANSLATE_X);
-        double ty = getStyled(TRANSLATE_Y);
-        return sx != 1 || sy != 1 || r != 0 || tx != 0 || ty != 0;
-    }
-
-    @Override
-    default void reshapeInLocal(Transform transform) {
-        if (hasCenterTransforms()&&!(transform instanceof Translate)) {
-            List<Transform> ts = get(TRANSFORMS);
-            if (ts.isEmpty()) {
-                set(TRANSFORMS, ImmutableObservableList.of(transform));
-            } else {
-                int last = ts.size() - 1;
-                Transform concatenatedWithLast = Transforms.concat(ts.get(last), transform);
-                if (concatenatedWithLast instanceof Affine) {
-                    set(TRANSFORMS, ImmutableObservableList.add(ts, transform));
-                } else {
-                    set(TRANSFORMS, ImmutableObservableList.set(ts, last, concatenatedWithLast));
-                }
-            }
-            return;
-        }
-
-        Bounds b = getBoundsInLocal();
-        b = transform.transform(b);
-        reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
-    }
-
-    @Override
-    default void reshapeInParent(Transform transform) {
-        final boolean hasCenters = hasCenterTransforms();
-        final boolean hasTransforms = hasTransforms();
-        if (!hasTransforms && (transform instanceof Translate)) {
-            reshapeInLocal(transform);
-            return;
-        }
-        if (hasCenters || hasTransforms()) {
-            if (transform instanceof Translate) {
-                Translate translate = (Translate) transform;
-                if (!hasCenters) {
-                    Point2D p = getParentToLocal().deltaTransform(translate.getTx(), translate.getTy());
-                    reshapeInLocal(new Translate(p.getX(), p.getY()));
-                } else {
-                    set(TRANSLATE_X, get(TRANSLATE_X) + translate.getTx());
-                    set(TRANSLATE_Y, get(TRANSLATE_Y) + translate.getTy());
-                }
-            } else {
-                flattenTransforms();
-                List<Transform> transforms = get(TRANSFORMS);
-                if (transforms.isEmpty()) {
-                    set(TRANSFORMS, ImmutableObservableList.of(transform));
-                } else {
-                    set(TRANSFORMS, ImmutableObservableList.add(transforms, 0, transform));
-                }
-            }
-        } else {
-            reshapeInLocal(Transforms.concat(getParentToLocal(), transform));
-        }
-    }
-
-    @Override
-    default void transformInParent(Transform t) {
-        if (t == null || t.isIdentity()) {
-            return;
-        }
-        if (t instanceof Translate) {
-            Translate tr = (Translate) t;
-            set(TRANSLATE_X, get(TRANSLATE_X) + tr.getTx());
-            set(TRANSLATE_Y, get(TRANSLATE_Y) + tr.getTy());
-            return;
-        } else {
-            flattenTransforms();
-            List<Transform> transforms = new ArrayList<>(get(TRANSFORMS));
-            if (transforms.isEmpty()) {
-                set(TRANSFORMS, ImmutableObservableList.of(t));
-            } else {
-                set(TRANSFORMS, ImmutableObservableList.add(transforms, 0, t));
-            }
-        }
-    }
-
-    @Override
-    default void transformInLocal(Transform t) {
-        flattenTransforms();
-        List<Transform> transforms = get(TRANSFORMS);
-        if (transforms.isEmpty()) {
-            set(TRANSFORMS, ImmutableObservableList.of(t));
-        } else {
-            set(TRANSFORMS, ImmutableObservableList.add(transforms, t));
-        }
-    }
-
-    default void flattenTransforms() {
-        Transform p2l = getLocalToParent(false);
-        set(SCALE_X, 1.0);
-        set(SCALE_Y, 1.0);
-        set(ROTATE, 0.0);
-        set(TRANSLATE_X, 0.0);
-        set(TRANSLATE_Y, 0.0);
-        if (p2l.isIdentity()) {
-            set(TRANSFORMS, ImmutableObservableList.emptyList());
-        } else {
-            set(TRANSFORMS, ImmutableObservableList.of(p2l));
-        }
-    }
-
-    default void clearTransforms() {
-        set(SCALE_X, 1.0);
-        set(SCALE_Y, 1.0);
-        set(ROTATE, 0.0);
-        set(TRANSLATE_X, 0.0);
-        set(TRANSLATE_Y, 0.0);
-        set(TRANSFORMS, ImmutableObservableList.of());
-    }
-
     /**
      * Returns null if identity.
      */
@@ -416,22 +319,31 @@ public interface TransformableFigure extends TransformCacheableFigure {
         return t;
     }
 
-    default Transform getInverseTransform() {
-        List<Transform> list = getStyled(TRANSFORMS);
-        Transform t;
-        if (list.isEmpty()) {
-            t = null; // leave null
+    /**
+     * Convenience method for setting a new value for the {@link#TRANSFORMS}
+     * property.
+     *
+     * @param transforms new value
+     */
+    default void setTransforms(Transform... transforms) {
+        if (transforms.length == 1 && transforms[0].isIdentity()) {
+            set(TRANSFORMS, ImmutableObservableList.emptyList());
         } else {
-            try {
-                t = list.get(list.size() - 1).createInverse();
-                for (int i = list.size() - 2; i >= 0; i--) {
-                    t = Transforms.concat(t, list.get(i).createInverse());
-                }
-            } catch (NonInvertibleTransformException e) {
-                throw new InternalError(e);
-            }
+            set(TRANSFORMS, new ImmutableObservableList<>(transforms));
         }
-        return t;
+    }
+
+    default boolean hasCenterTransforms() {
+        double sx = getStyled(SCALE_X);
+        double sy = getStyled(SCALE_Y);
+        double r = getStyled(ROTATE);
+        double tx = getStyled(TRANSLATE_X);
+        double ty = getStyled(TRANSLATE_Y);
+        return sx != 1 || sy != 1 || r != 0 || tx != 0 || ty != 0;
+    }
+
+    default boolean hasTransforms() {
+        return !get(TRANSFORMS).isEmpty();
     }
 
     @Override
@@ -443,6 +355,93 @@ public interface TransformableFigure extends TransformCacheableFigure {
         return TransformCacheableFigure.super.invalidateTransforms()
                 | null != set(FigureImplementationDetails.PARENT_TO_LOCAL, null)
                 | null != set(FigureImplementationDetails.LOCAL_TO_PARENT, null);
+    }
+
+    @Override
+    default void reshapeInLocal(Transform transform) {
+        if (hasCenterTransforms() && !(transform instanceof Translate)) {
+            List<Transform> ts = get(TRANSFORMS);
+            if (ts.isEmpty()) {
+                set(TRANSFORMS, ImmutableObservableList.of(transform));
+            } else {
+                int last = ts.size() - 1;
+                Transform concatenatedWithLast = Transforms.concat(ts.get(last), transform);
+                if (concatenatedWithLast instanceof Affine) {
+                    set(TRANSFORMS, ImmutableObservableList.add(ts, transform));
+                } else {
+                    set(TRANSFORMS, ImmutableObservableList.set(ts, last, concatenatedWithLast));
+                }
+            }
+            return;
+        }
+
+        Bounds b = getBoundsInLocal();
+        b = transform.transform(b);
+        reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+    }
+
+    @Override
+    default void reshapeInParent(Transform transform) {
+        final boolean hasCenters = hasCenterTransforms();
+        final boolean hasTransforms = hasTransforms();
+        if (!hasTransforms && (transform instanceof Translate)) {
+            reshapeInLocal(transform);
+            return;
+        }
+        if (hasCenters || hasTransforms()) {
+            if (transform instanceof Translate) {
+                Translate translate = (Translate) transform;
+                if (!hasCenters) {
+                    Point2D p = getParentToLocal().deltaTransform(translate.getTx(), translate.getTy());
+                    reshapeInLocal(new Translate(p.getX(), p.getY()));
+                } else {
+                    set(TRANSLATE_X, get(TRANSLATE_X) + translate.getTx());
+                    set(TRANSLATE_Y, get(TRANSLATE_Y) + translate.getTy());
+                }
+            } else {
+                flattenTransforms();
+                List<Transform> transforms = get(TRANSFORMS);
+                if (transforms.isEmpty()) {
+                    set(TRANSFORMS, ImmutableObservableList.of(transform));
+                } else {
+                    set(TRANSFORMS, ImmutableObservableList.add(transforms, 0, transform));
+                }
+            }
+        } else {
+            reshapeInLocal(Transforms.concat(getParentToLocal(), transform));
+        }
+    }
+
+    @Override
+    default void transformInLocal(Transform t) {
+        flattenTransforms();
+        List<Transform> transforms = get(TRANSFORMS);
+        if (transforms.isEmpty()) {
+            set(TRANSFORMS, ImmutableObservableList.of(t));
+        } else {
+            set(TRANSFORMS, ImmutableObservableList.add(transforms, t));
+        }
+    }
+
+    @Override
+    default void transformInParent(Transform t) {
+        if (t == null || t.isIdentity()) {
+            return;
+        }
+        if (t instanceof Translate) {
+            Translate tr = (Translate) t;
+            set(TRANSLATE_X, get(TRANSLATE_X) + tr.getTx());
+            set(TRANSLATE_Y, get(TRANSLATE_Y) + tr.getTy());
+            return;
+        } else {
+            flattenTransforms();
+            List<Transform> transforms = new ArrayList<>(get(TRANSFORMS));
+            if (transforms.isEmpty()) {
+                set(TRANSFORMS, ImmutableObservableList.of(t));
+            } else {
+                set(TRANSFORMS, ImmutableObservableList.add(transforms, 0, t));
+            }
+        }
     }
 
     public static Set<Key<?>> getDeclaredKeys() {
