@@ -158,7 +158,6 @@ public class SelectionTool extends AbstractTool {
                     pressedFigure = null;
                     Figure firstFigure=null;
                     boolean selectionFound = false;
-System.out.println("SelectionTool findFigures:"+ view.findFigures(vx, vy, false));
                     for (Figure f : view.findFigures(vx, vy, false)) {
                         if (firstFigure == null) {
                             firstFigure = f;
