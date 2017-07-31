@@ -193,17 +193,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         updateGroupNode(ctx, g);
         updatePathNode(ctx, p);
         updateTextNode(ctx, t);
-
-        /*
-        if (getStyled(FILL) != null || getStyled(STROKE) != null) {
-            if (g.getChildren().size() != 2) {
-                g.getChildren().setAll(r, t);
-            }
-        } else {
-            if (g.getChildren().size() != 1) {
-                g.getChildren().setAll(t);
-            }
-        }*/
     }
 
     protected void updatePathNode(RenderContext ctx, Path node) {
