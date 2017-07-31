@@ -27,6 +27,7 @@ public class DirectedGraphs {
     /**
      * Sorts the specified directed graph topologically.
      *
+     * @param <V> the vertex type
      * @param m the graph
      * @return the sorted list of vertices
      */
@@ -38,7 +39,7 @@ public class DirectedGraphs {
             im = (IntDirectedGraph) m;
         }
         int[] a = sortTopologicallyInt(im);
-        List<V> result = new ArrayList<V>(a.length);
+        List<V> result = new ArrayList<>(a.length);
         for (int i = 0; i < a.length; i++) {
             result.add(m.getVertex(a[i]));
         }

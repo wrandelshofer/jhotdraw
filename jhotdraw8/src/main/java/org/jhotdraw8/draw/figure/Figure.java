@@ -4,48 +4,46 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.draw.handle.HandleType;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.css.Styleable;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import javafx.css.Styleable;
-import javafx.geometry.BoundingBox;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.ResizeHandleKit;
 import org.jhotdraw8.draw.handle.RotateHandle;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.handle.BoundsInTransformOutlineHandle;
 import org.jhotdraw8.draw.handle.TransformHandleKit;
-import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.tree.TreeNode;
-import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.locator.RelativeLocator;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.tree.TreeNode;
 
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
@@ -87,7 +85,7 @@ import org.jhotdraw8.geom.Transforms;
  * The parent/child relationships are typically used for grouping figures into
  * {@code Layer}s, {@code Group}s and into layout hierarchies.<br>
  * The provider/dependant relationships are typically used for the creation of
- * line connections between figures, such as with {@link LineConnectionFigure}.
+ * line connections between figures, such as with {@link SimpleLineConnectionFigure}.
  * The strategy for updating the state of dependent figures is implement in
  * {@link DrawingModel}.
  * <p>
@@ -99,7 +97,7 @@ import org.jhotdraw8.geom.Transforms;
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
- * {@link org.jhotdraw8.styleable.StyleableMapAccessor}.</p>
+ * {@link org.jhotdraw8.styleable.WriteableStyleableMapAccessor}.</p>
  * <p>
  * <b>Update Strategy.</b> A figure does not automatically update its computed
  * property values. The update strategy is factored out into

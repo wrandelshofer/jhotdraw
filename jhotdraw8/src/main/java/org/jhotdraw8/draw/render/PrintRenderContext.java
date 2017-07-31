@@ -21,7 +21,7 @@ public interface PrintRenderContext extends RenderContext {
     // ---
     /**
      * The figure which defines the layout of the current print page. This is
-     * typically a {@link org.jhotdraw8.draw.figure.PageFigure}.
+     * typically a {@link org.jhotdraw8.draw.figure.Page}.
      */
     Key<Figure> PAGE_FIGURE = new ObjectKey<>("pageFigure", Figure.class, null);
     /**

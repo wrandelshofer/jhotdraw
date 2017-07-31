@@ -35,7 +35,7 @@ public interface IntDoubleVertexGraph {
     /** Returns the i-th adjacent vertex of v.
      * 
      * @param v a vertex
-     * @return i the index
+     * @param i the index
      * @return the i-th adjacent vertex of v
      */
      int getAdjacent(int v, int i);

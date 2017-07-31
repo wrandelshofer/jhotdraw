@@ -58,6 +58,7 @@ public interface DirectedGraph<V> {
 
     /**
      * Dumps the graph for debugging purposes.
+     * @return a dump of the directed graph
      */
     default String dump() {
         return dump(Object::toString);
@@ -128,6 +129,8 @@ public interface DirectedGraph<V> {
 
     /**
      * Dumps the graph for debugging purposes.
+     * @param toStringFunction a function which converts a vertex to a string
+     * @return the dumped graph
      */
     default String dump(Function<V, String> toStringFunction) {
         StringBuilder buf = new StringBuilder();

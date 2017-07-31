@@ -20,7 +20,7 @@ import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 
 /**
- * Draws points of the path of a {@PathIterableFigure}.
+ * Draws points of the path of a {@link PathIterableFigure}.
  * <p>
  * Does not provide interactions. Just increases the hit area of the figure.
  *

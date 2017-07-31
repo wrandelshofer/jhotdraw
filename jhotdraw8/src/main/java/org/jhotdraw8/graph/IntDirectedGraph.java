@@ -29,8 +29,8 @@ public interface IntDirectedGraph {
     /** Returns the i-th next vertex of v.
      * 
      * @param v a vertex
+     * @param i the index of the desired next vertex
      * @return i the index
-     * @return the i-th next vertex of v
      */
      int getNext(int v, int i);
     

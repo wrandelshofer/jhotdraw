@@ -204,7 +204,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat, 
      * @param node a node
      * @param dpi dots per inch
      * @return returns true if the state of the node was destroyed
-     * @throws IOException 
+     * @throws IOException in case of failure
      */
     protected abstract boolean writeSlice(File file, Slice slice, Node node, double dpi) throws IOException;
 

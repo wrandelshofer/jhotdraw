@@ -157,17 +157,32 @@ public class Transforms {
     }
 
     /**
-     * Rotates from normalized tangent vector.
+     * Rotates from tangent vector.
      * <p>
      * A tangent vector pointing to (1,0) results in an identity matrix.
+     * <p>
+     * @param tangent a tangent vector
+     * @param pivot the pivot of the rotation
+     * @return a rotation transform
      */
     public static Transform rotate(Point2D tangent, Point2D pivot) {
         double theta = Math.atan2(tangent.getY(), tangent.getX());
         return Transform.rotate(theta * 180.0 / Math.PI, pivot.getX(), pivot.getY());
     }
 
-    public static Transform rotate(double tangentx, double tangenty, double pivotx, double pivoty) {
-        double theta = Math.atan2(tangenty, tangentx);
-        return Transform.rotate(theta * 180.0 / Math.PI, pivotx, pivoty);
+    /**
+     * Rotates from tangent vector.
+     * <p>
+     * A tangent vector pointing to (1,0) results in an identity matrix.
+     * <p>
+     * @param tangentX a tangent vector
+     * @param tangentY a tangent vector
+     * @param pivotX the pivot of the rotation
+     * @param pivotY the pivot of the rotation
+     * @return a rotation transform
+     */
+    public static Transform rotate(double tangentX, double tangentY, double pivotX, double pivotY) {
+        double theta = Math.atan2(tangentY, tangentX);
+        return Transform.rotate(theta * 180.0 / Math.PI, pivotX, pivotY);
     }
 }

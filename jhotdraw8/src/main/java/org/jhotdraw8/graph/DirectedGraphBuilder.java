@@ -122,7 +122,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
      * @return the model
      */
     public ImmutableDirectedGraph<V> build() {
-        ImmutableDirectedGraph<V> model = new ImmutableDirectedGraph<V>(vertexCount, edgeCount);
+        ImmutableDirectedGraph<V> model = new ImmutableDirectedGraph<>(vertexCount, edgeCount);
         for (V v : vertices) {
             model.buildAddVertex(v);
         }
@@ -210,7 +210,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
     }
 
     public static <X> DirectedGraphBuilder<X> ofDirectedGraph(DirectedGraph<X> model) {
-        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<X>();
+        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>();
         for (int i = 0, n = model.getVertexCount(); i < n; i++) {
             X v = model.getVertex(i);
             b.addVertex(v);
@@ -231,7 +231,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
      * @return a subset of the directed graph
      */
     public static <X> DirectedGraphBuilder<X> subsetOfDirectedGraph(DirectedGraph<X> model, Set<X> vertices) {
-        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<X>();
+        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>();
         for (X v : vertices) {
             b.addVertex(v);
         }
@@ -249,13 +249,14 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
     /**
      * Creates a graph with all edges inverted.
      *
+     * @param <X> the vertex type
      * @param graph a graph
      * @return a new graph with inverted edges
      */
     public static <X> DirectedGraphBuilder<X> inverseOfDirectedGraph(DirectedGraph<X> graph) {
         int edgeCount = countEdges(graph);
 
-        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<X>(graph.getVertexCount(), edgeCount);
+        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>(graph.getVertexCount(), edgeCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
             X v = graph.getVertex(i);
             b.addVertex(v);
@@ -272,6 +273,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
     /**
      * Counts the edges of the provided graph.
      *
+     * @param <X> the vertex type
      * @param graph a graph
      * @return the number of edges
      */

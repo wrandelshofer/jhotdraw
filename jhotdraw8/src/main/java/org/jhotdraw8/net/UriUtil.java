@@ -43,9 +43,9 @@ public class UriUtil {
     }
 
     /**
-     * Adds a query. If a query is already present, adds it after a '&'
+     * Adds a query. If a query is already present, adds it after a {@literal '&'}
      * character. Both, the key, and the value may not include the characters
-     * '&' and '='.
+     * {@literal '&'} and '='.
      *
      * @param uri an uri
      * @param key the key
@@ -67,8 +67,8 @@ public class UriUtil {
     }
 
     /**
-     * Adds a query. If a query is already present, adds it after a '&'
-     * character. The query may not include the character '&'.
+     * Adds a query. If a query is already present, adds it after a {@literal '&'}
+     * character. The query may not include the character {@literal '&'}.
      *
      * @param uri an uri
      * @param query the query
@@ -116,7 +116,7 @@ public class UriUtil {
 
     /**
      * Parses the query of the URI. Assumes that the query consists of
-     * '&'-separated, key '=' value pairs.
+     * {@literal '&'}-separated, key '=' value pairs.
      *
      * @param uri an URI
      * @return a map

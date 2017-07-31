@@ -124,8 +124,9 @@ public class DocumentOrientedApplication extends AbstractApplication {
     }
 
     /**
-     * Creates a menu bar.
+     * Creates a menu bar and sets it to the stage or to the system menu.
      *
+     * @param stage the stage, or null to set the system menu
      * @param actions the action map
      * @return the menu bar
      */

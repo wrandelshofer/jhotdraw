@@ -21,7 +21,6 @@ import javafx.scene.transform.Translate;
  * The coordinate space is split along minx, miny, maxx, maxy into 9 pieces:
  * top-left, top-right, bottom-right, bottom-left, top, right, bottom, left,
  * center.
- * <p>
  * <ul>
  * <li>the top left piece is translated by the scaled distance from the left and
  * the top inset to the pivot.</li>

@@ -26,7 +26,7 @@ public interface MapAccessor<T> extends Serializable {
     /**
      * Whether the map contains all keys required by this map accessor.
      * 
-    * @param map
+    * @param map a map
      * @return true if map contains all keys required by this map accessor.
      */
     boolean containsKey(Map<Key<?>, Object> map);

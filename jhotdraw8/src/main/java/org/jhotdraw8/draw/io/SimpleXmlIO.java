@@ -162,12 +162,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Reads drawing or clipping starting from the specified node. The idFactory
-     * must have been iniitalised before this method is called.
+     * must have been initialized before this method is called.
      *
-     * @param doc
-     * @param oldDrawing
-     * @return
-     * @throws IOException
+     * @param doc the document
+     * @param oldDrawing the drawing
+     * @return a figure
+     * @throws IOException in case of failure
      */
     protected Figure readDrawingOrClippingFromDocument(Document doc, Drawing oldDrawing) throws IOException {
 
@@ -232,12 +232,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Reads drawing or clipping starting from the specified node. The idFactory
-     * must have been iniitalised before this method is called.
+     * must have been initialized before this method is called.
      *
-     * @param drawingElement
-     * @param oldDrawing
-     * @return
-     * @throws IOException
+     * @param drawingElement the drawing element
+     * @param oldDrawing a drawing or null
+     * @return the figure
+     * @throws IOException in case of failure
      */
     protected Figure readDrawingOrClipping(Element drawingElement, Drawing oldDrawing) throws IOException {
 
@@ -430,7 +430,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      *
      * @param figure the figure
      * @param elem an element with attributes for the figure
-     * @throws java.io.IOException
+     * @throws java.io.IOException in case of failure
      */
     protected void readElementAttributes(Figure figure, Element elem) throws IOException {
         NamedNodeMap attrs = elem.getAttributes();
@@ -464,6 +464,10 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Reads the children of the specified element as a node list.
+     * 
+     * @param figure the figure to which the node list will be applied
+     * @param elem the element
+     * @throws java.io.IOException in case of failure
      */
     protected void readElementNodeList(Figure figure, Element elem) throws IOException {
         Set<MapAccessor<?>> keys = figureFactory.figureNodeListKeys(figure);
@@ -508,6 +512,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Creates a figure but does not process the getProperties.
+     * @param node the node, which defines the figure
+     * @return the created figure
+     * @throws java.io.IOException in case of failure
      */
     protected Figure readNode(Node node) throws IOException {
         if (node instanceof Element) {

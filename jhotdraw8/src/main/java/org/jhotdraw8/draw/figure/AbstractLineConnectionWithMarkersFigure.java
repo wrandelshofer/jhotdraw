@@ -80,6 +80,8 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     /**
      * This method can be overridden by a subclass to apply styles to the line
      * node.
+     * @param ctx the context
+     * @param node the node
      */
     protected void updateLineNode(RenderContext ctx, Line node) {
 
@@ -88,6 +90,8 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     /**
      * This method can be overridden by a subclass to apply styles to the line
      * node.
+     * @param ctx the context
+     * @param node the node
      */
     protected void updateStartMarkerNode(RenderContext ctx, SVGPath node) {
 
@@ -96,6 +100,8 @@ public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLi
     /**
      * This method can be overridden by a subclass to apply styles to the line
      * node.
+     * @param ctx the context
+     * @param node the node
      */
     protected void updateEndMarkerNode(RenderContext ctx, SVGPath node) {
 
