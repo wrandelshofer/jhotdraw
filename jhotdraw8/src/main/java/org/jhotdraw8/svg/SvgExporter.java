@@ -17,6 +17,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -1090,8 +1091,25 @@ public class SvgExporter implements InternalExternalUriMixin {
         parent.appendChild(elem);
         elem.appendChild(doc.createTextNode(node.getText()));
 
+        VPos vpos = node.getTextOrigin();
+        final double vposOffset;
+        switch (vpos) {
+            default:
+            case BASELINE:
+                vposOffset = 0;
+                break;
+            case BOTTOM: // bottom of multiline text
+                vposOffset = 0;// FIXME this is incorrect
+                break;
+            case CENTER:// FIXME this is incorrect
+                vposOffset = node.getBoundsInLocal().getHeight() * 0.5;
+                break;
+            case TOP:// FIXME this is incorrect
+                vposOffset = node.getBoundsInLocal().getHeight();
+                break;
+        }
         elem.setAttribute("x", nb.toString(node.getX()));
-        elem.setAttribute("y", nb.toString(node.getY()));
+        elem.setAttribute("y", nb.toString(node.getY() + vposOffset));
 
         writeTextAttributes(elem, node);
 
