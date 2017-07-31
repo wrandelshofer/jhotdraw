@@ -913,7 +913,7 @@ public class Shapes {
         double[] coords = new double[6];
         double prevX = 0, prevY = 0;
         double moveX = 0, moveY = 0;
-        for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), tolerance); !i.isDone(); i.next()) {
+        for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), Math.abs(tolerance+0.1e-4)); !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
                 case PathIterator.SEG_CLOSE:
                     if (Geom.lineContainsPoint(

@@ -190,36 +190,36 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private final Listener<TreeModelEvent<Figure>> treeModelHandler = (TreeModelEvent<Figure> event) -> {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-            handleFigureAdded(f);
-            break;
-        case NODE_REMOVED_FROM_PARENT:
-            handleFigureRemoved(f);
-            break;
-        case NODE_ADDED_TO_TREE:
-            handleFigureRemovedFromDrawing(f);
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            for (Figure d : f.preorderIterable()) {
-                getSelectedFigures().remove(d);
-            }
-            repaint();
-            break;
-        case NODE_CHANGED:
-            handleNodeChanged(f);
-            break;
-        case ROOT_CHANGED:
-            handleDrawingChanged();
-            updateLayout();
-            repaint();
-            break;
-        case SUBTREE_NODES_CHANGED:
-            handleSubtreeNodesChanged(f);
-            repaint();
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + " not supported");
+            case NODE_ADDED_TO_PARENT:
+                handleFigureAdded(f);
+                break;
+            case NODE_REMOVED_FROM_PARENT:
+                handleFigureRemoved(f);
+                break;
+            case NODE_ADDED_TO_TREE:
+                handleFigureRemovedFromDrawing(f);
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                for (Figure d : f.preorderIterable()) {
+                    getSelectedFigures().remove(d);
+                }
+                repaint();
+                break;
+            case NODE_CHANGED:
+                handleNodeChanged(f);
+                break;
+            case ROOT_CHANGED:
+                handleDrawingChanged();
+                updateLayout();
+                repaint();
+                break;
+            case SUBTREE_NODES_CHANGED:
+                handleSubtreeNodesChanged(f);
+                repaint();
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
     };
     private final InvalidationListener modelInvalidationListener = o -> repaint();
@@ -330,23 +330,33 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @return true if the node contains the point
      */
     private boolean contains(Node node, Point2D point, double tolerance) {
-        if (tolerance == 0) {
-            return node.contains(point);
-        }
+        double toleranceInLocal = tolerance/node.getLocalToSceneTransform().deltaTransform(1,1).magnitude();
+
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
-            if (shape.getFill() == null) {
-                return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()), tolerance);
-            } else {
-                return shape.contains(point);
+            if (shape.contains(point)) {
+                return true;
             }
 
+            double widthFactor;
+            switch (shape.getStrokeType()) {
+                case CENTERED:
+                default:
+                    widthFactor = 0.5;
+                    break;
+                case INSIDE:
+                    widthFactor = 0;
+                    break;
+                case OUTSIDE:
+                    widthFactor = 1;
+                    break;
+            }
+            return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()),
+                    shape.getStrokeWidth() * widthFactor + toleranceInLocal);
         } else if (node instanceof Rectangle) {
-            return Geom.contains(node.getBoundsInLocal(), point, tolerance);
-        } else if (node instanceof Shape) {// no special treatment for other shapes
-            return node.contains(point);
+            return Geom.contains(node.getBoundsInLocal(), point, toleranceInLocal);
         } else if (node instanceof Group) {
-            if (Geom.contains(node.getBoundsInLocal(), point, tolerance)) {
+            if (Geom.contains(node.getBoundsInLocal(), point, toleranceInLocal)) {
                 for (Node child : ((Group) node).getChildren()) {
                     if (contains(child, child.parentToLocal(point), tolerance)) {
                         return true;
@@ -446,11 +456,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Override
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
-        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), 0.0);
-
-        if (f == null) {
-            f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), TOLERANCE / getZoomFactor());
-        }
+        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), TOLERANCE );
         return f;
     }
 
@@ -461,16 +467,20 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @param vx point in view coordinates
      * @param vy point in view coordinates
      * @param figures figures of interest
+     * @param tolerance
      * @return a figure in the specified set which contains the point, or null.
      */
     @Override
     public Figure findFigure(double vx, double vy, Set<Figure> figures) {
+        return findFigure(vx,vy,figures,TOLERANCE);
+    }
+    public Figure findFigure(double vx, double vy, Set<Figure> figures, double tolerance) {
         Node worldNode = getNode(getDrawing());
         Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToWorld(vx, vy));
         for (Figure f : figures) {
             Node n = getNode(f);
             Point2D pointInLocal = n.sceneToLocal(pointInScene);
-            if (contains(n, pointInLocal, TOLERANCE)) {
+            if (contains(n, pointInLocal, tolerance)) {
                 return f;
             }
         }
@@ -584,7 +594,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void findFiguresRecursive(Parent p, Point2D pp, List<Figure> found, boolean decompose) {
-        double tolerance = TOLERANCE / getZoomFactor();
+        double tolerance = TOLERANCE;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);

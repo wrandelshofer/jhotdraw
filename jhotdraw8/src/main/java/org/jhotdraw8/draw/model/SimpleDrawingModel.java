@@ -520,7 +520,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 break;
             }
             case LAYOUT_CHANGED:
-                markDirty(figure, DirtyBits.LAYOUT);
+                // A layout change also changes the transform of the figure, because its center may have moved
+                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.TRANSFORM);
                 invalidate();
                 break;
             case STYLE_CHANGED:

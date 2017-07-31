@@ -156,21 +156,6 @@ public interface TransformableFigure extends TransformCacheableFigure {
         applyTransformableFigureProperties(node);
     }
 
-    default void applyTransformableFigurePropertiesWRONG(Node node) {
-        double tx = getStyled(TRANSLATE_X);
-        double ty = getStyled(TRANSLATE_Y);
-        double r = getStyled(ROTATE);
-        double sx = getStyled(SCALE_X);
-        double sy = getStyled(SCALE_Y);
-        List<Transform> t = getStyled(TRANSFORMS);
-        node.setTranslateX(tx);
-        node.setTranslateY(ty);
-        node.setRotate(r);
-        node.setScaleX(sx);
-        node.setScaleY(sy);
-        node.getTransforms().setAll(t);
-    }
-
     @Override
     default Transform getLocalToParent() {
         return getLocalToParent(true);
@@ -258,7 +243,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     @Override
     default void reshapeInLocal(Transform transform) {
-        if (hasCenterTransforms()) {
+        if (hasCenterTransforms()&&!(transform instanceof Translate)) {
             List<Transform> ts = get(TRANSFORMS);
             if (ts.isEmpty()) {
                 set(TRANSFORMS, ImmutableObservableList.of(transform));
@@ -282,6 +267,11 @@ public interface TransformableFigure extends TransformCacheableFigure {
     @Override
     default void reshapeInParent(Transform transform) {
         final boolean hasCenters = hasCenterTransforms();
+        final boolean hasTransforms = hasTransforms();
+        if (!hasTransforms && (transform instanceof Translate)) {
+            reshapeInLocal(transform);
+            return;
+        }
         if (hasCenters || hasTransforms()) {
             if (transform instanceof Translate) {
                 Translate translate = (Translate) transform;

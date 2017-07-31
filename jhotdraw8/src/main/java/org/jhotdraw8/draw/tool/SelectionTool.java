@@ -152,21 +152,17 @@ public class SelectionTool extends AbstractTool {
                     node.setCursor(Cursor.DEFAULT);
                 }
 
-                /*
-             if (pressedFigure == null && tolerance != 0) {
-             List<Figure> fs = view.findFiguresIntersecting(vx - tolerance, vy
-             - tolerance, tolerance * 2, tolerance * 2, false);
-             if (!fs.isEmpty()) {
-             pressedFigure = fs.get(0);
-             }
-             }*/
                 // "alt" modifier selects figure behind.
                 if (isSelectBehindEnabled() && (event.isAltDown())) {
                     // Select a figure behind the current selection
                     pressedFigure = null;
                     Figure firstFigure=null;
                     boolean selectionFound = false;
+System.out.println("SelectionTool findFigures:"+ view.findFigures(vx, vy, false));
                     for (Figure f : view.findFigures(vx, vy, false)) {
+                        if (firstFigure == null) {
+                            firstFigure = f;
+                        }
                         if (view.selectedFiguresProperty().contains(f)) {
                             selectionFound = true;
                             continue;
