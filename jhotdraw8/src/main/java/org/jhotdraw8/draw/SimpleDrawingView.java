@@ -330,7 +330,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @return true if the node contains the point
      */
     private boolean contains(Node node, Point2D point, double tolerance) {
-        double toleranceInLocal = tolerance/node.getLocalToSceneTransform().deltaTransform(1,1).magnitude();
+        double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(1, 1).magnitude();
 
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
@@ -456,7 +456,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     @Override
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
-        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), TOLERANCE );
+        Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy), TOLERANCE);
         return f;
     }
 
@@ -472,8 +472,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      */
     @Override
     public Figure findFigure(double vx, double vy, Set<Figure> figures) {
-        return findFigure(vx,vy,figures,TOLERANCE);
+        return findFigure(vx, vy, figures, TOLERANCE);
     }
+
     public Figure findFigure(double vx, double vy, Set<Figure> figures, double tolerance) {
         Node worldNode = getNode(getDrawing());
         Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToWorld(vx, vy));
@@ -1328,5 +1329,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         public void paste() {
             SimpleDrawingView.this.paste();
         }
+    }
+
+    public ObservableList<String> getStylesheets() {
+        return rootPane.getStylesheets();
     }
 }
