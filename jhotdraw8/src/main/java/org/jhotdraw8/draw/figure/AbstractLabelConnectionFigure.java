@@ -199,7 +199,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 set(ROTATE, theta * 180.0 / Math.PI);
             }
         } else {
-            perp = new Point2D(0, 1);
+            perp = new Point2D(0, -1);
         }
 
         set(LABELED_LOCATION, labeledLoc);
