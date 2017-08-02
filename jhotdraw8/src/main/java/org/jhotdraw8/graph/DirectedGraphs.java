@@ -149,7 +149,7 @@ public class DirectedGraphs {
         Map<V, Set<V>> sets = new LinkedHashMap<>();
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
             final V v = g.getVertex(i);
-            Set<V> initialSet=new LinkedHashSet<>();
+            Set<V> initialSet = new LinkedHashSet<>();
             initialSet.add(v);
             sets.put(v, initialSet);
         }
@@ -176,15 +176,16 @@ public class DirectedGraphs {
             }
         }
 
-        Map<Set<V>,Object> forestMap = new IdentityHashMap<Set<V>,Object>();
+        Map<Set<V>, Object> forestMap = new IdentityHashMap<Set<V>, Object>();
         List<Set<V>> forest = new ArrayList<>();
         for (Set<V> set : sets.values()) {
-            if (null==forestMap.put(set,set)) {
+            if (null == forestMap.put(set, set)) {
                 forest.add(set);
             }
         }
         return forest;
     }
+
     /**
      * Given an int directed graph, returns all disjoint sets of vertices.
      * <p>
@@ -193,8 +194,8 @@ public class DirectedGraphs {
      * @param g a directed graph
      * @return the disjoint sets.
      */
-    public static List<Set<Integer>> findDisjointSets(IntDirectedGraph  g) {
-        List<Set<Integer>> sets = new ArrayList<>(g.getVertexCount());
+    public static List<Set<Integer>> findDisjointSets(IntDirectedGraph g) {
+        final List<Set<Integer>> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
             final LinkedHashSet<Integer> initialSet = new LinkedHashSet<>();
             initialSet.add(v);
@@ -202,8 +203,8 @@ public class DirectedGraphs {
         }
         for (int u = 0, n = g.getVertexCount(); u < n; u++) {
             for (int v = 0, m = g.getNextCount(u); v < m; v++) {
-                Set<Integer> uset = sets.get(u);
-                Set<Integer> vset = sets.get(v);
+                final Set<Integer> uset = sets.get(u);
+                final Set<Integer> vset = sets.get(v);
                 if (uset != vset) {
                     if (uset.size() < vset.size()) {
                         for (Integer uu : uset) {
@@ -217,17 +218,16 @@ public class DirectedGraphs {
                         uset.addAll(vset);
                     }
                 }
-
             }
         }
 
-       Map<Set<Integer>,Object> forestMap = new IdentityHashMap<Set<Integer>,Object>();
-        List<Set<Integer>> forest = new ArrayList<>();
+        final Map<Set<Integer>, Object> forestMap = new IdentityHashMap<Set<Integer>, Object>();
+        final List<Set<Integer>> forest = new ArrayList<>();
         for (Set<Integer> set : sets) {
-            if (null==forestMap.put(set,set)) {
+            if (null == forestMap.put(set, set)) {
                 forest.add(set);
             }
         }
         return forest;
-     }
+    }
 }
