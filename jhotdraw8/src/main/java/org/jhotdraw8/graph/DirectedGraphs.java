@@ -147,10 +147,10 @@ public class DirectedGraphs {
      * @return the disjoint sets.
      */
     public static <V> List<Set<V>> findDisjointSets(DirectedGraph<V> g) {
-        Map<V, Set<V>> sets = new LinkedHashMap<>();
+        Map<V, List<V>> sets = new LinkedHashMap<>();
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
             final V v = g.getVertex(i);
-            Set<V> initialSet = new LinkedHashSet<>();
+            List<V> initialSet = new ArrayList<>();
             initialSet.add(v);
             sets.put(v, initialSet);
         }
@@ -158,8 +158,8 @@ public class DirectedGraphs {
             V u = g.getVertex(i);
             for (int j = 0, m = g.getNextCount(u); j < m; j++) {
                 V v = g.getNext(u, j);
-                Set<V> uset = sets.get(u);
-                Set<V> vset = sets.get(v);
+                List<V> uset = sets.get(u);
+                List<V> vset = sets.get(v);
                 if (uset != vset) {
                     if (uset.size() < vset.size()) {
                         for (V uu : uset) {
@@ -177,11 +177,11 @@ public class DirectedGraphs {
             }
         }
 
-        Map<Set<V>, Object> forestMap = new IdentityHashMap<Set<V>, Object>();
+        Map<List<V>, Object> forestMap = new IdentityHashMap<>();
         List<Set<V>> forest = new ArrayList<>();
-        for (Set<V> set : sets.values()) {
+        for (List<V> set : sets.values()) {
             if (null == forestMap.put(set, set)) {
-                forest.add(set);
+                forest.add(new LinkedHashSet<>(set));
             }
         }
         return forest;
