@@ -38,8 +38,7 @@ import org.jhotdraw8.tree.TreeModelEvent;
  * layout observing figures, like {@code LineConnectionFigure}.
  *
  * @author Werner Randelshofer
- * @version $Id: SimpleDrawingModel.java 1139 2016-09-17
- 23:38:39Z rawcoder $
+ * @version $Id: SimpleDrawingModel.java 1139 2016-09-17 23:38:39Z rawcoder $
  */
 public class SimpleDrawingModel extends AbstractDrawingModel {
 
@@ -148,6 +147,13 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     event.getNewValue()));
             Key<?> k = event.getKey();
             if (k instanceof FigureKey && ((FigureKey<?>) k).getDirtyMask().containsOneOf(DirtyBits.LAYOUT_SUBJECT)) {
+                // The layout subject may change its style if a layout observer is added/removed
+                if (event.getOldValue() instanceof Figure) {
+                    fireStyleInvalidated((Figure) event.getOldValue());
+                }
+                if (event.getNewValue() instanceof Figure) {
+                    fireStyleInvalidated((Figure) event.getNewValue());
+                }
                 fireDrawingModelEvent(DrawingModelEvent.layoutSubjectChanged(this, event.getSource()));
                 layoutSubjectChange.addAll(event.getSource().getLayoutSubjects());
                 for (Figure f : new ArrayList<>(layoutSubjectChange)) {
@@ -437,9 +443,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 if (visited.add(f)) {
                     graphBuilder.addVertex(f);
                     for (Figure obs : f.getLayoutObservers()) {
-                            graphBuilder.addVertex(obs);
-                            graphBuilder.addEdge(f, obs);
-                            todo.add(obs);
+                        graphBuilder.addVertex(obs);
+                        graphBuilder.addEdge(f, obs);
+                        todo.add(obs);
                     }
                 }
             }
