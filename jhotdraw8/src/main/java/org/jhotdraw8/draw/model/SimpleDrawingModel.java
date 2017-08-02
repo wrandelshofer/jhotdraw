@@ -376,7 +376,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // all figures with dirty bit "STYLE"
             // invoke stylesheetNotify
             // induce a dirty bit "TRANSFORM", "NODE" and "LAYOUT
-            Set<Figure> visited = new HashSet<>();
+            final Set<Figure> visited = new HashSet<>((int)(dirties.size()*1.4));
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
@@ -419,7 +419,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             visited.clear();
             DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
             DirtyMask dmLayoutObservers = DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS);
-            Set<Figure> todo = new LinkedHashSet<>();
+            Set<Figure> todo = new LinkedHashSet<>(dirties.size()); // FIXME will probably be more than dirties.size!
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
