@@ -6,6 +6,7 @@ package org.jhotdraw8.graph;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -195,16 +196,16 @@ public class DirectedGraphs {
      * @return the disjoint sets.
      */
     public static List<Set<Integer>> findDisjointSets(IntDirectedGraph g) {
-        final List<Set<Integer>> sets = new ArrayList<>(g.getVertexCount());
+        final List<List<Integer>> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
-            final LinkedHashSet<Integer> initialSet = new LinkedHashSet<>();
+            final List<Integer> initialSet = new ArrayList<>();
             initialSet.add(v);
             sets.add(initialSet);
         }
         for (int u = 0, n = g.getVertexCount(); u < n; u++) {
             for (int v = 0, m = g.getNextCount(u); v < m; v++) {
-                final Set<Integer> uset = sets.get(u);
-                final Set<Integer> vset = sets.get(v);
+                final List<Integer> uset = sets.get(u);
+                final List<Integer> vset = sets.get(v);
                 if (uset != vset) {
                     if (uset.size() < vset.size()) {
                         for (Integer uu : uset) {
@@ -221,11 +222,12 @@ public class DirectedGraphs {
             }
         }
 
-        final Map<Set<Integer>, Object> forestMap = new IdentityHashMap<Set<Integer>, Object>();
+        final Map<List<Integer>,Object> forestMap = new IdentityHashMap<List<Integer>,Object>();
         final List<Set<Integer>> forest = new ArrayList<>();
-        for (Set<Integer> set : sets) {
-            if (null == forestMap.put(set, set)) {
-                forest.add(set);
+        for (List<Integer> set : sets) {
+            if (!forestMap.containsKey(set)) {
+                forestMap.put(set,set);
+                forest.add(new LinkedHashSet<>(set));
             }
         }
         return forest;
