@@ -17,8 +17,8 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.tree.TreeNode;
 import org.jhotdraw8.app.Project;
+import org.jhotdraw8.collection.Iterators;
 
 /**
  * GroupAction.
@@ -107,7 +107,7 @@ public class GroupAction extends AbstractSelectedAction {
 
         // Note: we iterate here over all figures because we must add
         //       the selected figures from back to front to the group
-        for (Figure child : TreeNode.toList(drawing.breadthFirstIterable())) {
+        for (Figure child : Iterators.toList(drawing.breadthFirstIterable())) {
             if (!figures.contains(child)) {
                 continue;
             }

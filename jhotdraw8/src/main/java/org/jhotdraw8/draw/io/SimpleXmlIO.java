@@ -375,9 +375,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @Override
     public Figure read(File file, Drawing drawing) throws IOException {
-        setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
-        setInternalHome(drawing == null ? getExternalHome() : drawing.get(Drawing.DOCUMENT_HOME));
-        return InputFormat.super.read(file, drawing);
+        try {
+            setExternalHome(file.getParentFile() == null ? new File(System.getProperty("user.home")).toURI() : file.getParentFile().toURI());
+            setInternalHome(drawing == null ? getExternalHome() : drawing.get(Drawing.DOCUMENT_HOME));
+            return InputFormat.super.read(file, drawing);
+        } catch (IOException e) {
+            throw new IOException("Error reading " + file + ".", e);
+        }
     }
 
     public Figure read(Document in, Drawing drawing) throws IOException {
@@ -464,7 +468,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Reads the children of the specified element as a node list.
-     * 
+     *
      * @param figure the figure to which the node list will be applied
      * @param elem the element
      * @throws java.io.IOException in case of failure
@@ -512,6 +516,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     /**
      * Creates a figure but does not process the getProperties.
+     *
      * @param node the node, which defines the figure
      * @return the created figure
      * @throws java.io.IOException in case of failure

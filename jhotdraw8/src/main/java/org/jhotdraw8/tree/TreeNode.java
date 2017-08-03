@@ -374,17 +374,6 @@ public interface TreeNode<T extends TreeNode<T>> {
         }
     }
 
-    /**
-     * Creates an eagerly copied list from an iterator.
-     *
-     * @param <T> the value type
-     * @param iterable the iterable
-     * @return the list
-     */
-    static <T> ArrayList<T> toList(Iterable<T> iterable) {
-        ArrayList<T> list = new ArrayList<>();
-        iterable.forEach(list::add);
-        return list;
-    }
+
 
 }
