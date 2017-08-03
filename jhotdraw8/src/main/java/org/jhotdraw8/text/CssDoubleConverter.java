@@ -63,7 +63,7 @@ public class CssDoubleConverter implements Converter<Double> {
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨Doule⟩: ⟨double⟩";
+        return "Format of ⟨Double⟩: ⟨double⟩";
     }
 
 }
