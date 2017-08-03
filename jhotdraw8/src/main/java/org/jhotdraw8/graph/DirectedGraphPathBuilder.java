@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 /**
  * DirectedGraphPathBuilder.
@@ -29,20 +30,23 @@ public class DirectedGraphPathBuilder<V> {
      * @param graph a graph
      * @param waypoints waypoints, the iteration sequence of this collection
      * determines how the waypoints are traversed
-     * @return a VertexPath if traversion is possible, null otherwise
+     * @return a VertexPath if traversion is possible
+     * @throws org.jhotdraw8.graph.PathBuilderException if traversion is not
+     * possible
      */
-    public VertexPath<V> buildPath(DirectedGraph<V> graph, Collection<V> waypoints) {
+    public VertexPath<V> buildPath(DirectedGraph<V> graph, Collection<V> waypoints) throws PathBuilderException {
         Iterator<V> i = waypoints.iterator();
         ArrayList<V> pathElements = new ArrayList<>();
         if (!i.hasNext()) {
-            return null;
+            throw new PathBuilderException("No waypoints provided");
         }
         V prev = i.next();
         pathElements.add(prev); // root element
         while (i.hasNext()) {
             V current = i.next();
             if (!breadthFirstSearch(graph, prev, current, pathElements)) {
-                return null;
+                throw new PathBuilderException("Breadh first search stalled at vertex: " + current
+                        + " waypoints: " + waypoints.stream().map(Object::toString).collect(Collectors.joining(", ")) + ".");
             }
             prev = current;
         }
