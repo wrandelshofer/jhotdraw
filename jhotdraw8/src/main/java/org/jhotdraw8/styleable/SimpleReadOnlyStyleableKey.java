@@ -67,7 +67,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
 
     @Override
     public CssMetaData<?, T> getCssMetaData() {
-        return null;
+        return cssMetaData;
     }
 
     /** Setter method, if the css meta data can not be provided in the call to super() in the constructor.

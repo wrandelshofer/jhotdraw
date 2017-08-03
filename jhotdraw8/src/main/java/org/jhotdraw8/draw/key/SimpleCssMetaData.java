@@ -15,10 +15,12 @@ import javafx.css.StyleableProperty;
  * SimpleCssMetaData.
  *
  * @author Werner Randelshofer
+ * @param <S> the type of the styleable object that can be styled with this metadata 
+ * @param <V> the type of the property value
  */
-class SimpleCssMetaData<S extends Styleable, V> extends CssMetaData<S, V> {
+public class SimpleCssMetaData<S extends Styleable, V> extends CssMetaData<S, V> {
 
-    SimpleCssMetaData(
+    public SimpleCssMetaData(
             final String property,
             final Function<S, StyleableProperty<V>> function,
             final StyleConverter<?, V> converter,

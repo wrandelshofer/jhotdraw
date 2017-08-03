@@ -5,7 +5,6 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
-import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.text.Converter;
 
 /**
