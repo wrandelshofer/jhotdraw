@@ -838,7 +838,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     default boolean isVisible() {
         Figure node = this;
         while (node != null) {
-            if (!node.get(HideableFigure.VISIBLE)) {
+            if (!node.getStyled(HideableFigure.VISIBLE)) {
                 return false;
             }
             node = node.getParent();

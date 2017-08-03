@@ -137,28 +137,35 @@ public class SelectionTool extends AbstractTool {
         double vx = event.getX();
         double vy = event.getY();
 
-        if (event.isControlDown()) {
-            SelectAreaTracker t = getSelectAreaTracker();
-            setTracker(t);
+        // HandleTracker may capture mouse event!
+        Handle h = view.findHandle(vx, vy);
+        if (h != null && h.isEditable()) {
+            if (updateCursor) {
+                node.setCursor(h.getCursor());
+            }
+            setTracker(getHandleTracker(h));
         } else {
-            Handle h = view.findHandle(vx, vy);
-            if (h != null && h.getOwner().isEditable()) {
-                if (updateCursor) {
-                    node.setCursor(h.getCursor());
-                }
-                setTracker(getHandleTracker(h));
+            if (updateCursor) {
+                node.setCursor(Cursor.DEFAULT);
+            }
+            tracker = null;
+        }
+
+        if (tracker == null) {
+        // Mouse event not captured by handle tracker => Process mouse event on our own.
+            if (event.isControlDown()) {
+                SelectAreaTracker t = getSelectAreaTracker();
+                setTracker(t);
             } else {
-                if (updateCursor) {
-                    node.setCursor(Cursor.DEFAULT);
-                }
 
                 // "alt" modifier selects figure behind.
                 if (isSelectBehindEnabled() && (event.isAltDown())) {
                     // Select a figure behind the current selection
                     pressedFigure = null;
-                    Figure firstFigure=null;
+                    Figure firstFigure = null;
                     boolean selectionFound = false;
                     for (Figure f : view.findFigures(vx, vy, false)) {
+                        if (f.isVisible())
                         if (firstFigure == null) {
                             firstFigure = f;
                         }

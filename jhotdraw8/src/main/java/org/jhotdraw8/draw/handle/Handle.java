@@ -236,4 +236,13 @@ public interface Handle {
       * @return true if we picked the handle
      */
     boolean contains(DrawingView dv, double x, double y, double tolerance);
+
+    /**
+     * Returns true if this handle is editable.
+     * 
+     * @return the default implementation returns true if the owner is editable
+     */
+    default boolean isEditable() {
+        return getOwner().isEditable();
+    }
 }

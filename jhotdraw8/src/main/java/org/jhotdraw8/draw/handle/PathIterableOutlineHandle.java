@@ -66,6 +66,11 @@ public class PathIterableOutlineHandle extends AbstractHandle {
     }
 
     @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
     public boolean isSelectable() {
         return selectable;
     }

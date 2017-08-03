@@ -604,7 +604,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 Point2D pl = n.parentToLocal(pp);
                 if (contains(n, pl, tolerance)) { // only drill down if the parent contains the point
                     Figure f = nodeToFigureMap.get(n);
-                    if (f != null && f.isSelectable()) {
+                    if (f != null && f.isSelectable() && f1.isVisible()) {
                         found.add(f);
                     }
                     if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
