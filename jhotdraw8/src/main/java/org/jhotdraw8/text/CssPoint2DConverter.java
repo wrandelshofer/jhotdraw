@@ -37,4 +37,10 @@ public class CssPoint2DConverter implements Converter<Point2D> {
     public Point2D getDefaultValue() {
         return new Point2D(0, 0);
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Point2D⟩: ⟨x⟩ ⟨y⟩";
+    }
+
 }

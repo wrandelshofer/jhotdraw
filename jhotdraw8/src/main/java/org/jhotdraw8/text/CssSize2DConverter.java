@@ -11,8 +11,7 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * Converts a {@code CssSize2D} into a {@code String} and vice
- * versa.
+ * Converts a {@code CssSize2D} into a {@code String} and vice versa.
  *
  * @author Werner Randelshofer
  * @version $Id$
@@ -35,6 +34,12 @@ public class CssSize2DConverter implements Converter<CssSize2D> {
 
     @Override
     public CssSize2D getDefaultValue() {
-        return new CssSize2D(new CssSize(0,null), new CssSize(0,null));
+        return new CssSize2D(new CssSize(0, null), new CssSize(0, null));
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Size2D⟩: ⟨x⟩ ⟨y⟩";
+    }
+
 }

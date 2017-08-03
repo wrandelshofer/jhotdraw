@@ -29,90 +29,97 @@ import org.jhotdraw8.io.SimpleIdFactory;
  */
 public class CssSizeConverter implements Converter<CssSize> {
 
-  private final static NumberConverter numberConverter = new NumberConverter();
-  private final boolean nullable;
+    private final static NumberConverter numberConverter = new NumberConverter();
+    private final boolean nullable;
 
-  public CssSizeConverter() {
-    this(false);
-  }
-
-  public CssSizeConverter(boolean nullable) {
-    this.nullable = nullable;
-  }
-
-  @Override
-  public CssSize fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-    int start=buf.position();
-    CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
-    CssSize sz= parseSize(tt);
-    buf.position(start+tt.getEndPosition());
-    return sz;
-  }
-
-  @Override
-  public CssSize getDefaultValue() {
-    return new CssSize(0.0, null);
-  }
-
-  public CssSize parseSize(CssTokenizerInterface tt) throws ParseException, IOException {
-    tt.skipWhitespace();
-    if (nullable && tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
-      //tt.skipWhitespace();
-      return null;
-    } else {
-      tt.pushBack();
+    public CssSizeConverter() {
+        this(false);
     }
-    Number value = null;
-    String units;
-    switch (tt.nextToken()) {
-      case CssTokenizerInterface.TT_DIMENSION:
-        value = tt.currentNumericValue();
-        units = tt.currentStringValue();
-        break;
-      case CssTokenizerInterface.TT_PERCENTAGE:
-        value = tt.currentNumericValue();
-        units = "%";
-        break;
-      case CssTokenizerInterface.TT_NUMBER:
-        value = tt.currentNumericValue();
-        units = null;
-        break;
-      case CssTokenizerInterface.TT_IDENT: {
-        switch (tt.currentStringValue()) {
-          case "INF":
-            value = Double.POSITIVE_INFINITY;
-            break;
-          case "-INF":
-            value = Double.NEGATIVE_INFINITY;
-            break;
-          case "NaN":
-            value = Double.NaN;
-            break;
-          default:
-            throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
+
+    public CssSizeConverter(boolean nullable) {
+        this.nullable = nullable;
+    }
+
+    @Override
+    public CssSize fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        int start = buf.position();
+        CssTokenizerInterface tt = new CssTokenizer(new CharBufferReader(buf));
+        CssSize sz = parseSize(tt);
+        buf.position(start + tt.getEndPosition());
+        return sz;
+    }
+
+    @Override
+    public CssSize getDefaultValue() {
+        return new CssSize(0.0, null);
+    }
+
+    public CssSize parseSize(CssTokenizerInterface tt) throws ParseException, IOException {
+        tt.skipWhitespace();
+        if (nullable && tt.nextToken() == CssTokenizer.TT_IDENT && "none".equals(tt.currentStringValue())) {
+            //tt.skipWhitespace();
+            return null;
+        } else {
+            tt.pushBack();
         }
-        units = null;
-        break;
-      }
-      default:
-        throw new ParseException("number expected", tt.getStartPosition());
+        Number value = null;
+        String units;
+        switch (tt.nextToken()) {
+            case CssTokenizerInterface.TT_DIMENSION:
+                value = tt.currentNumericValue();
+                units = tt.currentStringValue();
+                break;
+            case CssTokenizerInterface.TT_PERCENTAGE:
+                value = tt.currentNumericValue();
+                units = "%";
+                break;
+            case CssTokenizerInterface.TT_NUMBER:
+                value = tt.currentNumericValue();
+                units = null;
+                break;
+            case CssTokenizerInterface.TT_IDENT: {
+                switch (tt.currentStringValue()) {
+                    case "INF":
+                        value = Double.POSITIVE_INFINITY;
+                        break;
+                    case "-INF":
+                        value = Double.NEGATIVE_INFINITY;
+                        break;
+                    case "NaN":
+                        value = Double.NaN;
+                        break;
+                    default:
+                        throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
+                }
+                units = null;
+                break;
+            }
+            default:
+                throw new ParseException("number expected", tt.getStartPosition());
+        }
+        return new CssSize(value.doubleValue(), units);
     }
-    return new CssSize(value.doubleValue(), units);
-  }
 
-  @Override
-  public void toString(Appendable out, IdFactory idFactory, CssSize value) throws IOException {
-    if (value == null) {
-      if (nullable) {
-        out.append("none");
-        return;
-      } else {
-        value = getDefaultValue();
-      }
+    @Override
+    public void toString(Appendable out, IdFactory idFactory, CssSize value) throws IOException {
+        if (value == null) {
+            if (nullable) {
+                out.append("none");
+                return;
+            } else {
+                value = getDefaultValue();
+            }
+        }
+        numberConverter.toString(out, idFactory, value.getValue());
+        if (value.getUnits() != null) {
+            out.append(value.getUnits());
+        }
     }
-    numberConverter.toString(out, idFactory, value.getValue());
-    if (value.getUnits() != null) {
-      out.append(value.getUnits());
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Size⟩: ⟨size⟩ | ⟨percentage⟩% | ⟨size⟩⟨Units⟩"
+                + "\nFormat of ⟨Units⟩: mm | cm | em | ex | in | pc | px | pt";
     }
-  }
+
 }

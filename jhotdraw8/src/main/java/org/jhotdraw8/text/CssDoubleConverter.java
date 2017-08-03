@@ -32,32 +32,38 @@ import org.jhotdraw8.io.UnitConverter;
  */
 public class CssDoubleConverter implements Converter<Double> {
 
-    private final  CssSizeConverter sizeConverter ;
+    private final CssSizeConverter sizeConverter;
     private final UnitConverter unitConverter;
-    
+
     public CssDoubleConverter() {
         this(DefaultUnitConverter.getInstance(), false);
     }
 
-    public CssDoubleConverter(UnitConverter unitConverter , boolean nullable) {
+    public CssDoubleConverter(UnitConverter unitConverter, boolean nullable) {
         this.unitConverter = unitConverter;
-        sizeConverter =new CssSizeConverter(nullable);
+        sizeConverter = new CssSizeConverter(nullable);
     }
-
 
     @Override
     public Double fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        CssSize size=sizeConverter.fromString(buf,idFactory);
-        return size==null?null:unitConverter.convert(size.getValue(),size.getUnits(), "px");
+        CssSize size = sizeConverter.fromString(buf, idFactory);
+        return size == null ? null : unitConverter.convert(size.getValue(), size.getUnits(), "px");
     }
 
     @Override
     public Double getDefaultValue() {
         return 0.0;
     }
+
     @Override
     public void toString(Appendable out, IdFactory idFactory, Double value) throws IOException {
-        CssSize size=value==null?null:new CssSize(value,null);
-        sizeConverter.toString(out,idFactory,size);
+        CssSize size = value == null ? null : new CssSize(value, null);
+        sizeConverter.toString(out, idFactory, size);
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Doule⟩: ⟨double⟩";
+    }
+
 }

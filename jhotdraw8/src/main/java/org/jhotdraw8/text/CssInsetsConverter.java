@@ -18,6 +18,8 @@ import org.jhotdraw8.io.IdFactory;
  * omitted, it is the same as right. If bottom is omitted, it is the same as
  * top. If right is omitted it is the same as top.
  * <pre>
+ * insets       = top-right-bottom-left ;
+ * insets       = top-bottom, right-left ;
  * insets       = top , right , bottom, left ;
  * </pre> *
  *
@@ -39,7 +41,7 @@ public class CssInsetsConverter implements Converter<Insets> {
                     formatter.toStr(out, idFactory, 2, value.getTop(), value.getRight());
                 }
             } else {
-                formatter.toStr(out, idFactory, 3, value.getTop(), value.getRight(), value.getBottom());
+                formatter.toStr(out, idFactory, 4, value.getTop(), value.getRight(), value.getBottom(), value.getLeft());
             }
         } else {
             formatter.toStr(out, idFactory, 4, value.getTop(), value.getRight(), value.getBottom(), value.getLeft());
@@ -54,12 +56,12 @@ public class CssInsetsConverter implements Converter<Insets> {
                 return new Insets(((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue());
             case 2:
                 return new Insets(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue());
-            case 3:
-                return new Insets(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[3]).doubleValue(), ((Number) v[2]).doubleValue());
+            // case 3:
+            //   return new Insets(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[3]).doubleValue(), ((Number) v[2]).doubleValue());
             case 4:
                 return new Insets(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue(), ((Number) v[3]).doubleValue(), ((Number) v[4]).doubleValue());
             default:
-                throw new ParseException("Insets with 1 to 4 dimension values expected.", buf.position());
+                throw new ParseException("Insets with 1, 2 or 4 values expected.", buf.position());
         }
     }
 
@@ -67,4 +69,10 @@ public class CssInsetsConverter implements Converter<Insets> {
     public Insets getDefaultValue() {
         return new Insets(0, 0, 0, 0);
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩ ⟨left-right⟩ ｜ ⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
+    }
+
 }

@@ -54,4 +54,10 @@ public class CssScale3DConverter implements Converter<Point3D> {
     public Point3D getDefaultValue() {
         return new Point3D(1, 1, 1);
     }
+    
+        @Override
+    public String getHelpText() {
+        return "Format of ⟨Scale3D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩ ｜ ⟨xs⟩ ⟨ys⟩ ⟨zs⟩";
+    }
+
 }

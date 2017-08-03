@@ -50,4 +50,10 @@ public class CssSymmetricPoint2DConverter implements Converter<Point2D> {
     public Point2D getDefaultValue() {
         return new Point2D(0, 0);
     }
+    
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨SymmetricPoint2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";
+    }
+    
 }

@@ -67,27 +67,27 @@ public class CssNumberConverter implements Converter<Number> {
         }
         Number value = null;
         switch (tt.nextToken()) {
-        case CssTokenizerInterface.TT_NUMBER:
-            value = tt.currentNumericValue();
-            break;
-        case CssTokenizerInterface.TT_IDENT: {
-            switch (tt.currentStringValue()) {
-            case "INF":
-                value = Double.POSITIVE_INFINITY;
+            case CssTokenizerInterface.TT_NUMBER:
+                value = tt.currentNumericValue();
                 break;
-            case "-INF":
-                value = Double.NEGATIVE_INFINITY;
+            case CssTokenizerInterface.TT_IDENT: {
+                switch (tt.currentStringValue()) {
+                    case "INF":
+                        value = Double.POSITIVE_INFINITY;
+                        break;
+                    case "-INF":
+                        value = Double.NEGATIVE_INFINITY;
+                        break;
+                    case "NaN":
+                        value = Double.NaN;
+                        break;
+                    default:
+                        throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
+                }
                 break;
-            case "NaN":
-                value = Double.NaN;
-                break;
-            default:
-                throw new ParseException("number expected:" + tt.currentStringValue(), tt.getStartPosition());
             }
-            break;
-        }
-        default:
-            throw new ParseException("number expected", tt.getStartPosition());
+            default:
+                throw new ParseException("number expected", tt.getStartPosition());
         }
         return value;
     }
@@ -104,4 +104,10 @@ public class CssNumberConverter implements Converter<Number> {
         }
         numberConverter.toString(out, idFactory, value);
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Numer⟩: ⟨number⟩";
+    }
+
 }

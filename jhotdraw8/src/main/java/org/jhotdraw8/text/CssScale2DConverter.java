@@ -24,11 +24,11 @@ public class CssScale2DConverter implements Converter<Point2D> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, Point2D value) throws IOException {
-            if (value.getX() == value.getY()) {
-                formatter.toStr(out, idFactory, 1, value.getX());
-            } else {
-                formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
-            }
+        if (value.getX() == value.getY()) {
+            formatter.toStr(out, idFactory, 1, value.getX());
+        } else {
+            formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
+        }
     }
 
     @Override
@@ -48,4 +48,10 @@ public class CssScale2DConverter implements Converter<Point2D> {
     public Point2D getDefaultValue() {
         return new Point2D(1, 1);
     }
+
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Scale2D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩";
+    }
+
 }
