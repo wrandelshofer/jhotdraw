@@ -18,8 +18,8 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     private boolean needsMoveTo = false;
     private final PathBuilder target;
     private final double offset;
-    private final ArrayList<Point2D> segments=new ArrayList<>();
-    private final ArrayList<Point2D> disks=new ArrayList<>();
+    private final ArrayList<Point2D> segments = new ArrayList<>();
+    private final ArrayList<Point2D> disks = new ArrayList<>();
 
     public OffsetPathBuilder(PathBuilder target, double offset) {
         this.target = target;
@@ -47,10 +47,10 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     protected void doLineTo(double x, double y) {
         Point2D shift = new Point2D(y - getLastY(), getLastX() - x).normalize().multiply(offset);
         if (needsMoveTo) {
-        segments.add(new Point2D(getLastX() + shift.getX(), getLastY() + shift.getY()));
-        needsMoveTo=false;
-        }else{
-        segments.add(new Point2D(getLastX() + shift.getX(), getLastY() + shift.getY()));// bevel joint
+            segments.add(new Point2D(getLastX() + shift.getX(), getLastY() + shift.getY()));
+            needsMoveTo = false;
+        } else {
+            segments.add(new Point2D(getLastX() + shift.getX(), getLastY() + shift.getY()));// bevel joint
         }
         segments.add(new Point2D(x + shift.getX(), y + shift.getY()));
     }
@@ -63,38 +63,46 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doQuadTo(double x1, double y1, double x2, double y2) {
-               // FIXME should flatten curve
+        // FIXME should flatten curve
 
     }
 
     private void flush() {
-        // FIXME clip lines
-        /*
-        for (int i=0,n=segments.size();i<n-3;i+=2) {
+        // clip lines
+        for (int i = 0, n = segments.size(); i < n - 2; ++i) {
             Point2D a1 = segments.get(i);
-            Point2D a2 = segments.get(i+1);
-        for (int j=i+2;j<n-1;j+=2) {
-            Point2D b1 = segments.get(j);
-            Point2D b2 = segments.get(j+1);
-           Intersection inter= Intersection.intersectLineLine(a1, a2, b1, b2);
-           if (inter.getStatus()==Intersection.Status.INTERSECTION) {
-               Point2D p=inter.getPoints().iterator().next();
-               segments.set(i+1, p);
-               segments.set(j, p);
-           }
-        }}*/
-                
-                
-        for (int i=0,n=segments.size();i<n;i++) {
-            Point2D p = segments.get(i);
-            if (i==0)target.moveTo(p);
-            else target.lineTo(p);
+            Point2D a2 = segments.get(i + 1);
+            for (int j = i + 1; j < n - 1; ++j) {
+                Point2D b1 = segments.get(j);
+                Point2D b2 = segments.get(j + 1);
+                Intersection inter = Intersection.intersectLineLine(a1, a2, b1, b2);
+                if (inter.getStatus() == Intersection.Status.INTERSECTION) {
+                    Point2D p = inter.getPoints().iterator().next();
+                    segments.set(i + 1, p);
+                    segments.set(j, p);
+                    // delete all points between i and j
+                    for (int k=i+1;k<j;k++) {
+                        segments.remove(i+1);
+                    }
+                    n-=j-1-i;
+                    j-=j-1-i;
+                }
+            }
         }
-        
+
+        for (int i = 0, n = segments.size(); i < n; i++) {
+            Point2D p = segments.get(i);
+            if (i == 0) {
+                target.moveTo(p);
+            } else {
+                target.lineTo(p);
+            }
+        }
+
         segments.clear();
         disks.clear();
     }
-    
+
     @Override
     protected void doFinish() {
         if (needsMoveTo) {
