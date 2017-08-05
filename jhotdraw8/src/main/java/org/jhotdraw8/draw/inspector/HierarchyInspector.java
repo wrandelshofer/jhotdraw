@@ -75,7 +75,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         if (model.isUpdating()) {
 //        updateSelectionInTree();
         } else {
-            updateSelectionInView();
+            updateSelectionInDrawingView();
         }
     };
     @FXML
@@ -367,7 +367,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
     }
 
-    private void updateSelectionInView() {
+    private void updateSelectionInDrawingView() {
         if (!isUpdatingSelectionInView) {
             isUpdatingSelectionInView = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
