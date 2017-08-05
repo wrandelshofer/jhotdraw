@@ -32,6 +32,7 @@ public class IntList {
 
     /**
      * Creates a new empty instance with the specified initial capacity.
+     * @param initialCapacity the initial capacity
      */
     public IntList(int initialCapacity) {
         increaseCapacity(initialCapacity);
@@ -81,6 +82,7 @@ public class IntList {
 
     /**
      * Returns the size of the list.
+     * @return the size
      */
     public int size() {
         return size;
@@ -114,13 +116,19 @@ public class IntList {
     /**
      * Adds a new item to the end of the list.
      *
-     * @param newItem
+     * @param newItem the new item
      */
     public void add(int newItem) {
         increaseCapacity(size + 1);
         items[size++] = newItem;
     }
 
+    /**
+     * Inserts a new item at the specified index into this list.
+     *
+     * @param index the index
+     * @param newItem the new item
+     */
     public void add(int index, int newItem) {
         rangeCheck(index, size + 1);
         increaseCapacity(size + 1);
@@ -130,7 +138,7 @@ public class IntList {
     }
 
     /**
-     * Removes the item at the specified index
+     * Removes the item at the specified index from this list.
      *
      * @param index an index
      * @return the removed item
@@ -147,8 +155,11 @@ public class IntList {
     }
 
     /**
-     * Returns the first index of the item, or -1 if the list does not contain
+     * Returns the first index of the item, or -1 if this list does not contain
      * the item.
+     * 
+     * @param item the item
+     * @return the index of the item, or -1.
      */
     public int indexOf(int item) {
         for (int i = 0; i < size; i++) {
@@ -191,7 +202,7 @@ public class IntList {
     }
 
     /**
-     * Returns a stream for processing the items.
+     * Returns a stream for processing the items of this list.
      *
      * @return a stream
      */
