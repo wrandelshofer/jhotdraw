@@ -13,7 +13,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * A {@code Project} provides a user interface for a project which is identified
+ * A {@code Project} provides a user interface for a resource which is identified
  * by an URI.
  * <p>
  * The life-cycle of a project object is managed by an application. See the
