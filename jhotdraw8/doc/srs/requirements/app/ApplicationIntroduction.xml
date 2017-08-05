@@ -4,13 +4,10 @@
     <para>The purpose of the application framework, is</para>
     <itemizedlist>
         <listitem>
-            <para>to manage the life-cycle of the application process</para>
+            <para>to define a design for a project-oriented application,</para>
         </listitem>
         <listitem>
-            <para>to manage the life-cycles of projects</para>
-        </listitem>
-        <listitem>  
-            <para>to provide containers for the user interface elements of the projects</para>
+            <para>to provide building blocks for the implementation of the design.</para>
         </listitem>
     </itemizedlist>
 </section>
