@@ -27,7 +27,6 @@ public class XmlIntegerConverter implements Converter<Integer> {
      *
      * @param min the min
      * @param max the max
-     * @param multiplier the multiplier
      */
     public XmlIntegerConverter(int min, int max) {
         this(min, max, false, null);
@@ -38,7 +37,6 @@ public class XmlIntegerConverter implements Converter<Integer> {
      *
      * @param min the min
      * @param max the max
-     * @param multiplier the multiplier
      * @param allowsNullValue whether null values are allowed
      */
     public XmlIntegerConverter(int min, int max, boolean allowsNullValue) {
