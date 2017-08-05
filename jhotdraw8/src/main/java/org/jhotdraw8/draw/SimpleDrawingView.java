@@ -462,12 +462,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     /**
      * Finds a figure at the specified coordinate, but looks only at figures in
-     * the specified set.
+     * the specified set. 
+     * <p>
+     * Uses a default tolerance value. See {@link #findFigure(double, double, java.util.Set, double) }.
      *
      * @param vx point in view coordinates
      * @param vy point in view coordinates
      * @param figures figures of interest
-     * @param tolerance
      * @return a figure in the specified set which contains the point, or null.
      */
     @Override
@@ -475,6 +476,17 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return findFigure(vx, vy, figures, TOLERANCE);
     }
 
+    /**
+     * Finds a figure at the specified coordinate, but looks only at figures in
+     * the specified set.
+     *
+     * @param vx point in view coordinates
+     * @param vy point in view coordinates
+     * @param figures figures of interest
+     * @param tolerance the number of pixels around the figure in view coordinates, in which the
+     * the point is considered to be inside the figure
+     * @return a figure in the specified set which contains the point, or null.
+     */
     public Figure findFigure(double vx, double vy, Set<Figure> figures, double tolerance) {
         Node worldNode = getNode(getDrawing());
         Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToWorld(vx, vy));
