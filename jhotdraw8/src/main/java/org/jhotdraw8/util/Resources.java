@@ -86,6 +86,7 @@ public class Resources extends ResourceBundle implements Serializable {
     private static List<ResourceDecoder> decoders = new ArrayList<>();
     /**
      * The global verbose property.
+     * FIXME use logging API instead
      */
     private static boolean isVerbose = false;
     /**
@@ -222,7 +223,9 @@ public class Resources extends ResourceBundle implements Serializable {
             if (potentialParent == null) {
                 System.err.println("Can't find parent resource bundle. =" + PARENT_RESOURCE_KEY + "=" + parentBaseName);
             } else {
-                //System.out.println("Found parent resource bundle. " + PARENT_RESOURCE_KEY + "=" + parentBaseName);
+                if (isVerbose) {
+                    System.out.println("Found parent resource bundle. " + PARENT_RESOURCE_KEY + "=" + parentBaseName);
+                }
             }
         } catch (MissingResourceException e) {
         }
@@ -296,6 +299,9 @@ public class Resources extends ResourceBundle implements Serializable {
         }
         if (parent != null) {
             return parent.containsKey(key);
+        }
+        if (isVerbose) {
+            System.out.println("Can't find resource for bundle " + baseName + " key not found: " + key);
         }
         return false;
     }
