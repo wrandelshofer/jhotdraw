@@ -12,10 +12,10 @@
     <property name="jdk" value="${java.home}/.."/>
     <property name="jdk.version" value="8"/>
 
-    <property name="copyright" value="Copyright (c) 2016 by the authors and contributors of JHotDraw."/>
+    <property name="copyright" value="Copyright (c) 2017 by the authors and contributors of JHotDraw."/>
     <exec executable="svnversion" outputproperty="svn.version" />
     <!--property name="version" value="rev${svn.version}"-->
-    <property name="version" value="git20170608-6d6a32c"/>
+    <property name="version" value="git20170731_003-2a0a2963"/>
 
     <property name="manifest.application-name" value="${ant.project.name}"/>
     <property name="manifest.implementation-version" value="${version}"/>
@@ -105,16 +105,13 @@
         </copy>
     </target>
     <target name="do-docbook.copy" depends="init">
-        <copy  todir="${build.doc.doc}/handbook">
+        <copy  todir="${build.doc.doc}">
             <fileset dir="${doc}"/>
         </copy>
         <copy  todir="${lib.doc.docbook-xsl}">
             <fileset dir="${doc}/config">
                 <include name="*.xsl"/>
             </fileset>
-        </copy>
-        <copy  todir="${build.doc.doc}/srs">
-            <fileset dir="${doc}"/>
         </copy>
         <copy  todir="${lib.doc.docbook-xsl}">
             <fileset dir="${doc}">
@@ -296,8 +293,8 @@
             <arg value="bibliography.collection"/>
             <arg value="${basedir}/${doc}/bibliography.xml"/>
             <arg value="--xinclude"/>
-            <!--<arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>-->
-            <arg value="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"/>
+            <arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
+            <!--<arg value="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"/>-->
             <srcfile/>
           
             <fileset dir="${build.doc.doc}" >
@@ -483,15 +480,15 @@
     </macrodef>
     <target name="do-docbook.transform.saxon.chunk" depends="init,do-docbook.crossreference" description="uses saxon">
         <call-saxon destdir="${build.doc}/chunk/handbook"
-                    srcfile="${build.doc.doc}/handbook/handbook/Book.xml"
-                    srcdir="${build.doc.doc}/handbook/handbook"
+                    srcfile="${build.doc.doc}/handbook/Book.xml"
+                    srcdir="${build.doc.doc}/handbook"
                     destfile="${build.doc}/chunk/handbook/JHotDraw8Handbook.xhtml"
                     style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
         />
         
         <call-saxon destdir="${build.doc}/chunk/srs"
-                    srcfile="${build.doc.doc}/srs/srs/Book.xml"
-                    srcdir="${build.doc.doc}/srs/srs"
+                    srcfile="${build.doc.doc}/srs/Book.xml"
+                    srcdir="${build.doc.doc}/srs"
                     destfile="${build.docl}/chunk/srs/JHotDraw8SRS.xhtml"
                     style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
         />
@@ -530,7 +527,7 @@
     </target>
     <target name="do-docbook.transform.saxon.xhtml5" depends="init,do-docbook.crossreference" description="uses saxon">
          <call-saxon destdir="${build.doc}/html5/handbook"
-                    srcfile="${build.doc.doc}/handbook/JHotDraw8Handbook.xml"
+                    srcfile="${build.doc.doc}/handbook/Book.xml"
                     srcdir="${build.doc.doc}/handbook"
                     destfile="${build.doc}/html5/handbook/JHotDraw8Handbook.xhtml"
                     style="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"
