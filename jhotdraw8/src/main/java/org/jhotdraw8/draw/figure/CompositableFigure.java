@@ -57,7 +57,10 @@ public interface CompositableFigure extends Figure {
      * @param node a node which was created with method {@link #createNode}.
      */
     default void applyCompositableFigureProperties(Node node) {
-        node.setBlendMode(getStyled(BLEND_MODE));
+        // Performance: JavaFX performs compositing on a Group node, when blend mode != null, altough
+        //                    this should be equivalent to SRC_OVER.
+        final BlendMode blendMode = getStyled(BLEND_MODE);
+        node.setBlendMode(blendMode==BlendMode.SRC_OVER? null:blendMode);
         node.setEffect(getStyled(EFFECT));
         node.setOpacity(getStyled(OPACITY));
     }
