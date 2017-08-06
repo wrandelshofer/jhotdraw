@@ -824,7 +824,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    private void init() {
+    protected void init() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
