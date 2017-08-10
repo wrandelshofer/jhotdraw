@@ -1,8 +1,5 @@
-/*
- * @(#)ActivityModel.java  1.3  2011-05-01
- *
- * Copyright (c) 2011 The authors and contributors of JHotDraw.
- * 
+/* @(#)ActivityModel.java  1.3  2011-05-01
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the  
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.

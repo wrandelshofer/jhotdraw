@@ -1,9 +1,6 @@
-/*
- * @(#)NumberedEditorKit.java
- *
- * Copyright (c) 2005 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the
- * accompanying license terms.
+/* @(#)NumberedEditorKit.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  *
  * Original version (c) Stanislav Lapitsky
  * http://www.developer.com/java/other/article.php/3318421

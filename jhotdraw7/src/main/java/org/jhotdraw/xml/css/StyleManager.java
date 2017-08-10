@@ -1,9 +1,6 @@
-/*
- * @(#)StyleManager.java
- *
- * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
- * accompanying license terms.
+/* @(#)StyleManager.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  *
  * Original code taken from article "Swing and CSS" by Joshua Marinacci 10/14/2003
  * http://today.java.net/pub/a/today/2003/10/14/swingcss.html

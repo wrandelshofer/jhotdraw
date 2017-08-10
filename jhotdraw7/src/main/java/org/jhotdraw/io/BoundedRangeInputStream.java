@@ -1,9 +1,6 @@
-/*
- * @(#)BoundedRangeModel.java
- *
- * Copyright (c) 1999-2008 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
- * accompanying license terms.
+/* @(#)BoundedRangeModel.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 //package ch.randelshofer.io;
 package org.jhotdraw.io;

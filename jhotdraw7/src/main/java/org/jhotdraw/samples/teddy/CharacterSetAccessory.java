@@ -1,9 +1,6 @@
-/*
- * @(#)CharacterSetAccessory.java
- *
- * Copyright (c) 2005 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the
- * accompanying license terms.
+/* @(#)CharacterSetAccessory.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 package org.jhotdraw.samples.teddy;
 
