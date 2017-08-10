@@ -1,9 +1,5 @@
-/*
- * @(#)ClearSelectionAction.java
- *
- * Copyright (c) 2015 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
- * accompanying license terms.
+/* @(#)ClearSelectionAction.java
+ * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app.action.edit;
 

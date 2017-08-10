@@ -1,8 +1,5 @@
-/*
- * @(#)AbstractSaveUnsavedChangesAction.java
- *
- * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+/* @(#)AbstractSaveUnsavedChangesAction.java
+ * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app.action;
 

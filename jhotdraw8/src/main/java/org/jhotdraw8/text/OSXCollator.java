@@ -1,7 +1,5 @@
-/*
- * @(#)OSXCollator.java  
- * Copyright (c) 2017 by the authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+/* @(#)OSXCollator.java  
+ * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.text;
 

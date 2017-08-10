@@ -1,8 +1,5 @@
-/*
- * @(#)StreamPosTokenizer.java
- * 
- * Copyright (c) 2009-2010 The authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+/* @(#)StreamPosTokenizer.java
+ * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.io;
 
