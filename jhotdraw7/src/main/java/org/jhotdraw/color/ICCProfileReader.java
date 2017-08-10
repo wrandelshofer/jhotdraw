@@ -1,6 +1,6 @@
 /* @(#)ICCProfileReader.java
- * Copyright (c) 2016 by the authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 package org.jhotdraw.color;
 
@@ -17,7 +17,7 @@ import java.io.IOException;
  * Version 3.2 November 20, 1995. International Color Consortium.</a>.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class ICCProfileReader {
 

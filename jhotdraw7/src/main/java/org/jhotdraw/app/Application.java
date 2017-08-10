@@ -1,9 +1,6 @@
-/*
- * @(#)Application.java
- *
- * Copyright (c) 1996-2011 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
- * accompanying license terms.
+/* @(#)Application.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 package org.jhotdraw.app;
 
@@ -50,7 +47,7 @@ import org.jhotdraw.gui.URIChooser;
  *         DefaultApplicationModel model = new DefaultApplicationModel();
  *         model.setName("MyApplication");
  *         model.setVersion("1.0");
- *         model.setCopyright("Copyright 2006 (c) Werner Randelshofer. All Rights Reserved.");
+ *         model.setCopyright("Copyright © 1996-2017 The authors and contributors of JHotDraw.
  *         model.setViewClassName("org.jhotdraw.myapplication.MyView");
  *         app.setModel(model);
  *         app.launch(args);

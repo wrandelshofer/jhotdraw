@@ -4,9 +4,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/main/java/org/jhotdraw/samples/odg/io/ODGStylesReader.java</file>
-            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/main/java/org/jhotdraw/samples/odg/io/DefaultODGFigureFactory.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/main/java/org/jhotdraw/draw/GraphicalCompositeFigure.java</file>
             <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/main/java/org/jhotdraw/samples/odg/io/ODGInputFormat.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/main/java/org/jhotdraw/samples/odg/io/DefaultODGFigureFactory.java</file>
+            <file>file:/Users/Shared/Developer/Java/JHotDraw/current/git/jhotdraw/jhotdraw7/src/main/java/org/jhotdraw/samples/odg/io/ODGStylesReader.java</file>
         </group>
     </open-files>
 </project-private>

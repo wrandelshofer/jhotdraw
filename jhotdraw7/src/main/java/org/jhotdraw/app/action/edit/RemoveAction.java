@@ -1,7 +1,6 @@
-/*
- * @(#)RemoveAction.java
+/* @(#)RemoveAction.java
  * 
- * Copyright (c) 2011 by the original authors of JHotDraw
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
  * and all its contributors.
  * All rights reserved.
  * 
@@ -23,7 +22,7 @@ import javax.swing.JComponent;
  * just removed from the application.
  *
  * @author Werner Randelshofer
- * @version 1.0 2011-07-28 Created.
+ * @version $Id$
  */
 public class RemoveAction extends DeleteAction {
     private static final long serialVersionUID = 1L;

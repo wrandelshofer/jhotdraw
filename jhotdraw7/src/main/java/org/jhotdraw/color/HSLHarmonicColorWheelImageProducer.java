@@ -1,9 +1,7 @@
 /**
  * @(#)HSLHarmonicColorWheelImageProducer.java
- *
- * Copyright (c) 2008 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the
- * accompanying license terms.
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 package org.jhotdraw.color;
 
@@ -15,7 +13,7 @@ import java.awt.color.ColorSpace;
  * HSLHarmonicColorWheelImageProducer.
  *
  * @author Werner Randelshofer
- * @version $Id: HSLHarmonicColorWheelImageProducer.java 717 2010-11-21
+ * @version $Id$
  * 12:30:57Z rawcoder $
  */
 public class HSLHarmonicColorWheelImageProducer extends PolarColorWheelImageProducer {

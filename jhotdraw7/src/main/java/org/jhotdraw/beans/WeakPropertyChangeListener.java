@@ -1,7 +1,6 @@
-/*
- * @(#)WeakPropertyChangeListener.java
+/* @(#)WeakPropertyChangeListener.java
  * 
- * Copyright (c) 2009-2010 The authors and contributors of JHotDraw.
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
  * 
  * The copyright of this software is owned by the authors and  
  * contributors of the JHotDraw project ("the copyright holders").  
@@ -11,8 +10,7 @@
  *
  * This class has been derived from WeakPropertyChangeListener.java,
  * v 1.2 2005-06-20 18:26:16 by Paul Speed.
- *
- * Copyright (c) 2004, Paul Speed
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

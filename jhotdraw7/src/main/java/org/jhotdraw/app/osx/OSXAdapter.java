@@ -1,9 +1,6 @@
-/*
- * @(#)OSXAdapter.java
- *
- * Copyright (c) 2009-2010 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the
- * accompanying license terms.
+/* @(#)OSXAdapter.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  *
  * This class has been derived from class OSXAdapter 2.0 by Apple Inc.
  * http://developer.apple.com/mac/library/samplecode/OSXAdapter/listing3.html

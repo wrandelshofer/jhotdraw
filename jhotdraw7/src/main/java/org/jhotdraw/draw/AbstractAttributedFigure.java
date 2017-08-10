@@ -1,9 +1,6 @@
-/*
- * @(#)AbstractAttributedFigure.java
- *
- * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
- * accompanying license terms.
+/* @(#)AbstractAttributedFigure.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 package org.jhotdraw.draw;
 
@@ -22,7 +19,7 @@ import org.jhotdraw.xml.DOMStorable;
  * its own attribute set.
  *
  * @author Werner Randelshofer
- * @version $Id: AbstractAttributedFigure.java 778 2012-04-13 15:37:19Z rawcoder
+ * @version $Id$
  * $
  */
 public abstract class AbstractAttributedFigure extends AbstractFigure implements DOMStorable {

@@ -1,9 +1,6 @@
-/*
- * @(#)ColorWheelImageProducer.java
- *
- * Copyright (c) 2008 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
- * accompanying license terms.
+/* @(#)ColorWheelImageProducer.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 package org.jhotdraw.color;
 
@@ -16,7 +13,7 @@ import java.awt.color.ColorSpace;
  * @see JColorWheel
  *
  * @author  Werner Randelshofer
- * @version $Id: ColorWheelImageProducer.java 628 2010-01-20 14:51:38Z rawcoder $
+ * @version $Id$
  */
 public class QuantizingColorWheelImageProducer extends AbstractColorWheelImageProducer {
     /** Lookup table for angular component values. */

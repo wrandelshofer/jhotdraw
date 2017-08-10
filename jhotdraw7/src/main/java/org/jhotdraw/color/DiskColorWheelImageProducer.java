@@ -1,9 +1,6 @@
-/*
- * @(#)DiskColorWheelImageProducer.java
- *
- * Copyright (c) 2008 The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the 
- * accompanying license terms.
+/* @(#)DiskColorWheelImageProducer.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 package org.jhotdraw.color;
 
@@ -20,7 +17,7 @@ import static java.lang.Math.*;
  * @see JColorWheel
  *
  * @author  Werner Randelshofer
- * @version $Id: DiskColorWheelImageProducer.java 527 2009-06-07 14:28:19Z rawcoder $
+ * @version $Id$
  */
 public class DiskColorWheelImageProducer extends AbstractColorWheelImageProducer {
 

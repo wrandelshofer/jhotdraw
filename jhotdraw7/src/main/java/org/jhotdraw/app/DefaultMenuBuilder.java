@@ -1,10 +1,6 @@
-/*
- * @(#)DefaultMenuBuilder.java
- * 
- * Copyright (c) 2010 The authors and contributors of JHotDraw.
- * 
- * You may not use, copy or modify this file, except in compliance with the 
- * accompanying license terms.
+/* @(#)DefaultMenuBuilder.java
+ * Copyright © 1996-2017 The authors and contributors of JHotDraw.
+ * MIT License, CC-by License, or LGPL License.
  */
 package org.jhotdraw.app;
 
@@ -44,7 +40,7 @@ import org.jhotdraw.app.action.file.SaveFileAsAction;
  * {@code DefaultMenuBuilder}.
  *
  * @author Werner Randelshofer
- * @version 1.0 2010-11-14 Created.
+ * @version $Id$
  */
 public class DefaultMenuBuilder implements MenuBuilder {
     /** Whether icons in menu items shall be removed. */
