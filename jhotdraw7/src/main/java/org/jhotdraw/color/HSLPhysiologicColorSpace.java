@@ -1,6 +1,10 @@
-/* @(#)HSLPhysiologicColorSpace.java
- * Copyright © 1996-2017 The authors and contributors of JHotDraw.
- * MIT License, CC-by License, or LGPL License.
+/*
+ * @(#)HSLPhysiologicColorSpace.java
+ * 
+ * Copyright (c) 2010 The authors and contributors of JHotDraw.
+ * 
+ * You may not use, copy or modify this file, except in compliance with the 
+ * accompanying license terms.
  */
 package org.jhotdraw.color;
 
@@ -11,7 +15,7 @@ import java.awt.color.ColorSpace;
  * opposite green and yellow is opposite blue.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: HSLPhysiologicColorSpace.java 717 2010-11-21 12:30:57Z rawcoder
  * $
  */
 public class HSLPhysiologicColorSpace extends AbstractNamedColorSpace {

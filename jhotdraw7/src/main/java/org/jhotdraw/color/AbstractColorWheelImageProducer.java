@@ -1,6 +1,10 @@
-/* @(#)AbstractColorWheelImageProducer.java
- * Copyright © 1996-2017 The authors and contributors of JHotDraw.
- * MIT License, CC-by License, or LGPL License.
+/*
+ * @(#)AbstractColorWheelImageProducer.java
+ * 
+ * Copyright (c) 2010 The authors and contributors of JHotDraw.
+ * 
+ * You may not use, copy or modify this file, except in compliance with the 
+ * accompanying license terms.
  */
 package org.jhotdraw.color;
 
@@ -18,7 +22,7 @@ import java.awt.image.MemoryImageSource;
  * AbstractColorWheelImageProducer.
  *
  * @author Werner Randelshofer
- * @version $Id$
+ * @version $Id: AbstractColorWheelImageProducer.java 785 2013-12-01 19:16:30Z
  * rawcoder $
  */
 public abstract class AbstractColorWheelImageProducer extends MemoryImageSource {
