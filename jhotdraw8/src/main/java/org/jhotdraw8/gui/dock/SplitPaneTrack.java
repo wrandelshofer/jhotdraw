@@ -13,7 +13,7 @@ import javafx.scene.control.SplitPane;
  * SplitPaneTrack.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SplitPaneTrack extends SplitPane implements Track {
 

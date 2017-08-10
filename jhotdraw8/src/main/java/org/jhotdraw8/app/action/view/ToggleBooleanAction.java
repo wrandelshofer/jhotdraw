@@ -15,7 +15,7 @@ import org.jhotdraw8.app.Project;
  * This action toggles the state of its boolean property.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class ToggleBooleanAction extends AbstractProjectAction<Project> {
     private BooleanProperty value;

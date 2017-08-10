@@ -31,8 +31,7 @@ import org.jhotdraw8.draw.figure.Page;
  * AbstractExportOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $$Id: AbstractExportOutputFormat.java 1258 2017-01-05 18:38:14Z
- * rawcoder $$
+ * @version $Id$
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat, InternalExternalUriMixin {
 

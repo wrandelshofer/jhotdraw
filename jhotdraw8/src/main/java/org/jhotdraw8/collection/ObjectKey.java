@@ -28,7 +28,6 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <T> The value type.
  */
 public class ObjectKey<T> implements Key<T> {
 

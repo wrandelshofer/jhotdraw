@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.key.SimpleFigureKey;
  * LineConnectingFigure.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface LineConnectingFigure extends ConnectingFigure {
    /**

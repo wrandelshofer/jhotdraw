@@ -20,6 +20,7 @@ import javafx.util.Callback;
  * ListViewUtil.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class ListViewUtil {
 

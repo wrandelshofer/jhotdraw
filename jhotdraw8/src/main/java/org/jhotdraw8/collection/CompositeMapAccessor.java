@@ -11,6 +11,7 @@ import java.util.Set;
  *
  * @param <T> the value type
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface CompositeMapAccessor<T> extends MapAccessor<T> {
 

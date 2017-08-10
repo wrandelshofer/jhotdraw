@@ -10,7 +10,7 @@ import org.jhotdraw8.geom.Geom;
  * PrefsIntKey.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class PrefsIntKey {
 

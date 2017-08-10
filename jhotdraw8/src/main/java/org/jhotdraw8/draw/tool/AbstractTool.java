@@ -34,6 +34,7 @@ import org.jhotdraw8.util.Resources;
  * AbstractAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public abstract class AbstractTool extends AbstractDisableable implements Tool {
 

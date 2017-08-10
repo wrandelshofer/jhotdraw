@@ -9,8 +9,7 @@ import org.jhotdraw8.graph.DirectedGraph;
  * ReferenceToIntDirectedGraphMixin.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <V> vertex type
+ * @version $Id$
  */
 public interface ReferenceToIntDirectedGraphMixin<V> extends DirectedGraph<V>,
         IntDirectedGraph {

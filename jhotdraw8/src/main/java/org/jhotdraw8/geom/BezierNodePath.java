@@ -18,7 +18,7 @@ import javafx.scene.shape.FillRule;
  * BezierNodePath.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class BezierNodePath implements Shape {
 

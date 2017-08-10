@@ -17,7 +17,6 @@ import org.jhotdraw8.io.IdFactory;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <T> The type of the data value
  */
 public interface Converter<T> {
 

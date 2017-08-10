@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.Key;
  * ExportOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface ExportOutputFormat {
 

@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
  * Pair.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface Pair<V> {
 

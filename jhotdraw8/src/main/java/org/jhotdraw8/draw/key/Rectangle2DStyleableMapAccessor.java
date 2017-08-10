@@ -21,7 +21,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 /**
  * Rectangle2DStyleableMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Rectangle2D> {
 

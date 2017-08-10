@@ -28,6 +28,7 @@ import org.jhotdraw8.io.UnitConverter;
  * // FIXME should return a Size object and not just a Double.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssDoubleConverter implements Converter<Double> {
 

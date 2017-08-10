@@ -11,6 +11,7 @@ import org.jhotdraw8.text.XmlNumberConverter;
  * PreservedToken.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class PreservedToken extends AST {
 

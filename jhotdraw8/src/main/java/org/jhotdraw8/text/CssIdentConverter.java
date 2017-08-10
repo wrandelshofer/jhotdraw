@@ -37,6 +37,7 @@ import org.jhotdraw8.io.CharBufferReader;
  * </pre>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssIdentConverter implements Converter<String> {
 

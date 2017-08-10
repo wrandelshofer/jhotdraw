@@ -13,7 +13,7 @@ import javafx.geometry.Bounds;
  * Figures.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Figures {
 

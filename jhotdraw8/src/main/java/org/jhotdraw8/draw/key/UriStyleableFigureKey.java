@@ -19,7 +19,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * URIStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class UriStyleableFigureKey extends SimpleFigureKey<URI> implements WriteableStyleableMapAccessor<URI> {
 

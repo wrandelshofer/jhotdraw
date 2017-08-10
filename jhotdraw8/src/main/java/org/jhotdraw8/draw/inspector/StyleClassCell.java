@@ -21,7 +21,8 @@ import org.jhotdraw8.util.Resources;
  *
  * XXX all keys must be customizable
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class StyleClassCell extends ListCell<StyleClassItem> {
 

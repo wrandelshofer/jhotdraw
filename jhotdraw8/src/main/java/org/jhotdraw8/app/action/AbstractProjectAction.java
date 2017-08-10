@@ -19,7 +19,6 @@ import org.jhotdraw8.app.Project;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <P> the project type which is supported by this action
  */
 public abstract class AbstractProjectAction<P extends Project> extends AbstractApplicationAction {
 

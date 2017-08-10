@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * SimpleLabelConnectionFigure.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
         implements HideableFigure, FontableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {

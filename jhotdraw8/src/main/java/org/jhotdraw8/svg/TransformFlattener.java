@@ -21,7 +21,7 @@ import javafx.scene.transform.Translate;
  * TransformFlattener.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class TransformFlattener {
 

@@ -7,6 +7,7 @@ package org.jhotdraw8.text;
  * XmlRegexConverter.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class XmlRegexConverter extends CssRegexConverter {
 

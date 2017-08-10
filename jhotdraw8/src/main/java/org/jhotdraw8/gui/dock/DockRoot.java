@@ -60,7 +60,7 @@ import javafx.util.Duration;
  * tracks which only have one child from its hierarchy.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DockRoot extends Control {
 

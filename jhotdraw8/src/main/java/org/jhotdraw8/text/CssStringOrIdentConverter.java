@@ -25,8 +25,7 @@ import org.jhotdraw8.io.CharBufferReader;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $Id: CssStringOrIdentConverter.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id$
  */
 public class CssStringOrIdentConverter implements Converter<String> {
 

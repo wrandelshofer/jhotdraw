@@ -47,6 +47,7 @@ import org.jhotdraw8.text.CssSize2D;
  * Defines a page layout for printing.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SimplePageFigure extends AbstractCompositeFigure implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
 FillableFigure, StrokeableFigure

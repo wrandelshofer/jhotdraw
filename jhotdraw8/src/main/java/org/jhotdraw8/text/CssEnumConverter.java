@@ -15,6 +15,7 @@ import org.jhotdraw8.io.IdFactory;
  * CssEnumConverter. Converts all enum names to lower-case.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssEnumConverter<E extends Enum<E>> implements Converter<E> {
 

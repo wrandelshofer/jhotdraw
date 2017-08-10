@@ -32,7 +32,8 @@ import org.jhotdraw8.util.Resources;
  * XXX all keys must be customizable FIXME property binding in this class is a
  * mess
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class LayerCell extends ListCell<Figure> {
 

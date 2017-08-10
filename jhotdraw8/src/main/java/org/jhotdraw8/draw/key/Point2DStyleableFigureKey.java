@@ -19,7 +19,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * Point2DStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class Point2DStyleableFigureKey extends SimpleFigureKey<Point2D> implements WriteableStyleableMapAccessor<Point2D> {
 

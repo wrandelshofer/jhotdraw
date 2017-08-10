@@ -7,6 +7,7 @@ package org.jhotdraw8.text;
  * XmlEffectConverter.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class XmlEffectConverter extends CssEffectConverter {
 

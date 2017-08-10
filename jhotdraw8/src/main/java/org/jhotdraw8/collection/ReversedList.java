@@ -14,6 +14,7 @@ import javafx.collections.transformation.TransformationList;
  * reverse.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class ReversedList<E> extends TransformationList<E, E> {
 

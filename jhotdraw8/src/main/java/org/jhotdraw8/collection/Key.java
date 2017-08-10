@@ -35,7 +35,6 @@ import javafx.collections.ObservableMap;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <T> The value type.
  */
 public interface Key<T> extends MapAccessor<T> {
 

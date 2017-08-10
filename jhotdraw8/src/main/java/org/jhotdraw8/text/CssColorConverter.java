@@ -31,6 +31,7 @@ import org.jhotdraw8.io.CharBufferReader;
  * </pre>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssColorConverter implements Converter<CssColor> {
 

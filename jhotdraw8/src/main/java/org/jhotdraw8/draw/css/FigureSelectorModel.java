@@ -28,6 +28,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * FigureSelectorModel.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class FigureSelectorModel implements SelectorModel<Figure> {
 

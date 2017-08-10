@@ -36,6 +36,7 @@ import org.jhotdraw8.io.IdFactory;
  * </pre>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssLinearGradientConverter implements Converter<CssLinearGradient> {
 

@@ -52,7 +52,8 @@ import org.jhotdraw8.tree.SimpleTreePresentationModel;
 /**
  * FXML Controller class
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 

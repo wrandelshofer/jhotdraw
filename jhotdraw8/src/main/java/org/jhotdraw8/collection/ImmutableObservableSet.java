@@ -18,8 +18,7 @@ import javafx.collections.SetChangeListener;
  * ImmutableObservableSet.
  *
  * @author Werner Randelshofer
- * @version $$Id: ImmutableObservableSet.java 1238 2016-12-20 10:38:27Z rawcoder
- * $$
+ * @version $Id$
  */
 public final class ImmutableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 

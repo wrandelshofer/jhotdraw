@@ -20,8 +20,7 @@ import org.jhotdraw8.draw.tool.Tool;
  * LineConnectionFigure.
  *
  * @author Werner Randelshofer
- * @version $Id: ConnectingFiguresSample.java 1237 2016-12-20 08:57:59Z rawcoder
- * $
+ * @version $Id$
  */
 public class ConnectingFiguresSampleMain extends Application {
 

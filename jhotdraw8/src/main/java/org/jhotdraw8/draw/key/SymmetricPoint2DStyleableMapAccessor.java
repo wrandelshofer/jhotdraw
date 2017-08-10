@@ -21,7 +21,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 /**
  * SymmetricPoint2DStyleableMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SymmetricPoint2DStyleableMapAccessor extends Point2DStyleableMapAccessor  {
 

@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
  * ResizePane.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class ResizePane extends BorderPane {
 

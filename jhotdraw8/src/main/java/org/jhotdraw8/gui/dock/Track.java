@@ -16,7 +16,7 @@ import javafx.scene.Node;
  * {@link DockRoot}s.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface Track {
 

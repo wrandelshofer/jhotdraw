@@ -27,8 +27,7 @@ import org.jhotdraw8.css.ast.Stylesheet;
  * SimpleStylesheetsManager.
  *
  * @author Werner Randelshofer
- * @version $Id: SimpleStylesheetsManager.java 1120 2016-01-15 17:37:49Z
- * rawcoder $
+ * @version $Id$
  * @param <E> the element type that can be styled by this style manager
  */
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {

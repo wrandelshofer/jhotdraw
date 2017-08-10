@@ -33,6 +33,7 @@ import org.jhotdraw8.collection.KeyMapEntryProperty;
  * </ul>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class StyleablePropertyMap {
 

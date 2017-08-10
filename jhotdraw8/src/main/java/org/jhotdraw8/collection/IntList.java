@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
  * A lightweight int array list implementation for performance critical code.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntList {
 

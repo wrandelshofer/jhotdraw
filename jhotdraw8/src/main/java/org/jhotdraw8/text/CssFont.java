@@ -15,6 +15,7 @@ import javafx.scene.text.FontWeight;
  * XXX move this into a package for JavaFX font related stuff
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssFont {
 

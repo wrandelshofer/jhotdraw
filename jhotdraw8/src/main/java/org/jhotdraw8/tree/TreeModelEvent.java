@@ -13,8 +13,7 @@ import org.jhotdraw8.event.Event;
  * TreeModelEvent.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <E> element type
+ * @version $Id$
  */
 public class TreeModelEvent<E> extends Event<TreeModel<E>> {
 

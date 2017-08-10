@@ -39,8 +39,7 @@ import org.jhotdraw8.app.DocumentProject;
  * only invoked after the view was successfully saved.
  *
  * @author Werner Randelshofer
- * @version $Id: AbstractSaveUnsavedChangesAction.java 788 2014-03-22 07:56:28Z
- * rawcoder $
+ * @version $Id$
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractProjectAction<DocumentProject> {
 

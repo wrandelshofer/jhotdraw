@@ -12,8 +12,7 @@ import java.util.Set;
  * SetValueMapAccessor.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <E> the element type of the set
+ * @version $Id$
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
 private final static long serialVersionUID=1L;

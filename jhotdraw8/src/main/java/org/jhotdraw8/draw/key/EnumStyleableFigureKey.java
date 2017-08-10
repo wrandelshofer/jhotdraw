@@ -15,7 +15,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * EnumStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class EnumStyleableFigureKey<T extends Enum<T>> extends SimpleFigureKey<T> implements WriteableStyleableMapAccessor<T> {
 

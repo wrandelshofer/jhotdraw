@@ -23,7 +23,8 @@ import org.jhotdraw8.text.CssFont;
 /**
  * FontStyleableMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class FontStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssFont> {
 

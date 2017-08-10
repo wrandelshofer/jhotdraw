@@ -107,6 +107,7 @@ import org.jhotdraw8.io.CharBufferReader;
  * </ul>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssTokenizer implements CssTokenizerInterface {
 

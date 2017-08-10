@@ -21,6 +21,7 @@ import org.jhotdraw8.draw.figure.Grouping;
  * AddToGroupAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class AddToGroupAction extends AbstractSelectedAction {
 

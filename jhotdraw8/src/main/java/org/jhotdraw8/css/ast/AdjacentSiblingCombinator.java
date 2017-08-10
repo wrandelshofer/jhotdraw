@@ -11,8 +11,7 @@ import org.jhotdraw8.css.SelectorModel;
  * matches the element.
  *
  * @author Werner Randelshofer
- * @version $Id: AdjacentSiblingCombinator.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id$
  */
 public class AdjacentSiblingCombinator extends Combinator {
 

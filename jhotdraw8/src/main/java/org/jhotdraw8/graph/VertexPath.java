@@ -14,7 +14,7 @@ import java.util.List;
  * Path elements are vertices.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class VertexPath<V> {
 

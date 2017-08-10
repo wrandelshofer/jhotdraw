@@ -13,8 +13,7 @@ import org.jhotdraw8.event.Listener;
  * AbstractDrawingModel.
  *
  * @author Werner Randelshofer
- * @version $$Id: AbstractDrawingModel.java 1149 2016-11-18 11:00:10Z rawcoder
- * $$
+ * @version $Id$
  */
 public abstract class AbstractDrawingModel extends AbstractTreeModel<Figure> implements DrawingModel {
 

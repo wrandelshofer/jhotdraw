@@ -8,7 +8,8 @@ import org.jhotdraw8.app.Project;
 /**
  * An application view which can return an editor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface EditorView {
 

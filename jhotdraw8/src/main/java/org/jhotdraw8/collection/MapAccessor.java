@@ -17,6 +17,7 @@ import java.util.Map;
  *
  * @param <T> The value type.
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface MapAccessor<T> extends Serializable {
 

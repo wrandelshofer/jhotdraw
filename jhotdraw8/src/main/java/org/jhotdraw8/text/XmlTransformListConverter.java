@@ -7,8 +7,7 @@ package org.jhotdraw8.text;
  * XmlTransformListConverter.
  *
  * @author Werner Randelshofer
- * @version $Id: XmlTransformListConverter.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id$
  */
 public class XmlTransformListConverter extends CssTransformListConverter {
 

@@ -17,7 +17,7 @@ import org.jhotdraw8.text.CssStop;
  * CssLinearGradient.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssLinearGradient implements Paintable {
 

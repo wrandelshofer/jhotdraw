@@ -19,7 +19,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * FontStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class FontStyleableFigureKey extends SimpleFigureKey<CssFont> implements WriteableStyleableMapAccessor<CssFont> {
 

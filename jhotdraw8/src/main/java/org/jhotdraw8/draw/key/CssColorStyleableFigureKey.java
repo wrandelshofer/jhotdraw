@@ -18,7 +18,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * CssColorStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssColorStyleableFigureKey extends SimpleFigureKey<CssColor> implements WriteableStyleableMapAccessor<CssColor> {
 

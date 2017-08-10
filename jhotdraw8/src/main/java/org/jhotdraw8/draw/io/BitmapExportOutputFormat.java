@@ -52,8 +52,7 @@ import org.jhotdraw8.draw.figure.Page;
  * BitmapExportOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $$Id: BitmapExportOutputFormat.java 1237 2016-12-20 08:57:59Z
- * rawcoder $$
+ * @version $Id$
  */
 public class BitmapExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
 

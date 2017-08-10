@@ -36,6 +36,7 @@ import org.jhotdraw8.geom.Transforms;
  * local.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class RotateHandle extends AbstractHandle {
 

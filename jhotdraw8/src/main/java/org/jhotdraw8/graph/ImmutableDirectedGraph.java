@@ -14,7 +14,7 @@ import java.util.function.Function;
  * ImmutableDirectedGraph.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
         implements ReferenceToIntDirectedGraphMixin<V> {

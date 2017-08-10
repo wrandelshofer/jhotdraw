@@ -18,8 +18,7 @@ import java.util.function.Function;
  * An edge is an ordered (directed) pair of two vertices {@code e=(v_i, v_j)}.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <V> the vertex type
+ * @version $Id$
  */
 public interface DirectedGraph<V> {
 

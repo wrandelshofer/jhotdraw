@@ -29,8 +29,7 @@ import org.jhotdraw8.draw.locator.PointLocator;
  * Base class for line connection figure.
  *
  * @author Werner Randelshofer
- * @version $Id: LineConnectionFigure_1.java 1279 2017-01-07 18:15:07Z rawcoder
- * $
+ * @version $Id$
  */
 public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         implements NonTransformableFigure, LineConnectingFigure {

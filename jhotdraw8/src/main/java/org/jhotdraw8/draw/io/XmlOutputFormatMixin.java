@@ -22,8 +22,7 @@ import org.w3c.dom.Document;
  * XmlOutputFormatMixin.
  *
  * @author Werner Randelshofer
- * @version $$Id: XmlOutputFormatMixin.java 1237 2016-12-20 08:57:59Z rawcoder
- * $$
+ * @version $Id$
  */
 public interface XmlOutputFormatMixin extends OutputFormat, InternalExternalUriMixin {
 

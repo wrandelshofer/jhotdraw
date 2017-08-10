@@ -23,8 +23,7 @@ import org.jhotdraw8.util.Resources;
  * GrapherApplicationModel.
  *
  * @author Werner Randelshofer
- * @version $$Id: GrapherApplicationModel.java 1224 2016-12-18 19:10:23Z
- * rawcoder $$
+ * @version $Id$
  */
 public class GrapherApplicationModel extends SimpleApplicationModel {
 public final static DataFormat GRAPHER_FORMAT;

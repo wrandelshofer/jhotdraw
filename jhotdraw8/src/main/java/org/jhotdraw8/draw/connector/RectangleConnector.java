@@ -20,7 +20,7 @@ import static org.jhotdraw8.draw.figure.StrokeableFigure.STROKE;
  * RectangleConnector.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class RectangleConnector extends LocatorConnector {
 

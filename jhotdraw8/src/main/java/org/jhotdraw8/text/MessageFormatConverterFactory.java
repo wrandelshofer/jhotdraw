@@ -37,8 +37,7 @@ import java.util.Locale;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id: MessageFormatConverterFactory.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id$
  */
 public class MessageFormatConverterFactory implements ConverterFactory {
 

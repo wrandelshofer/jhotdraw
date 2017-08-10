@@ -13,8 +13,7 @@ import org.jhotdraw8.geom.Transforms;
  * @design.pattern Figure Mixin, Traits.
  *
  * @author Werner Randelshofer
- * @version $Id: NonTransformableFigure.java 1206 2016-12-17 12:42:21Z rawcoder
- * $
+ * @version $Id$
  */
 public interface NonTransformableFigure extends TransformCacheableFigure {
 

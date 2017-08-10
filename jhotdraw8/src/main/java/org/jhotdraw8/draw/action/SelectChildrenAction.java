@@ -20,6 +20,7 @@ import org.jhotdraw8.app.action.Action;
  * SelectChildrenAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SelectChildrenAction extends AbstractSelectedAction {
 

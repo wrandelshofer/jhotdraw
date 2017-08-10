@@ -12,7 +12,7 @@ import javafx.scene.Node;
  * A {@code Dock} contains one or more {@link DockItem}s.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface Dock {
 

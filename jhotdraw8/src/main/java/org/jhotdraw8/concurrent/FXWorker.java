@@ -14,7 +14,7 @@ import javafx.application.Platform;
  * FXWorker.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class FXWorker {
 

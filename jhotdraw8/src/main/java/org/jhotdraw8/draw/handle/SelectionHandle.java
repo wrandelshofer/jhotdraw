@@ -31,6 +31,7 @@ import org.jhotdraw8.geom.Transforms;
  * Handle for showing that a figure is selected.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SelectionHandle extends LocatorHandle {
 

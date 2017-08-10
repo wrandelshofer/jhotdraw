@@ -17,6 +17,7 @@ import org.jhotdraw8.io.IdFactory;
  * specified in a separate attribute.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SvgPaintConverter extends CssPaintConverter {
 

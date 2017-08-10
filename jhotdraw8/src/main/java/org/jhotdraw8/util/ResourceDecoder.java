@@ -7,7 +7,7 @@ package org.jhotdraw8.util;
  * Decodes a resource value.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface ResourceDecoder {
 

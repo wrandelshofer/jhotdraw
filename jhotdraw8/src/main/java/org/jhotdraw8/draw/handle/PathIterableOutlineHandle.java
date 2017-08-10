@@ -23,7 +23,7 @@ import org.jhotdraw8.geom.Transforms;
  * Draws an outline of the path of a {@link PathIterableFigure}.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class PathIterableOutlineHandle extends AbstractHandle {
 

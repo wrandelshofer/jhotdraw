@@ -21,7 +21,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 /**
  * InsetsStyleableMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Insets> {
 

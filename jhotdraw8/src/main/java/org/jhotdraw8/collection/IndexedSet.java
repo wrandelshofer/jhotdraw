@@ -20,6 +20,7 @@ import javafx.collections.ObservableListBase;
  * The set is backed by a list.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
 

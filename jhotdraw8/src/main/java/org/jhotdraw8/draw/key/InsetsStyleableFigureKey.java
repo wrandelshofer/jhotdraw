@@ -19,7 +19,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * InsetsStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class InsetsStyleableFigureKey extends SimpleFigureKey<Insets> implements WriteableStyleableMapAccessor<Insets> {
 

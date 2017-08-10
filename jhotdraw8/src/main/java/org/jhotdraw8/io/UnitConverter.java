@@ -11,7 +11,7 @@ import org.jhotdraw8.text.CssSize;
  * UnitConverter.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface UnitConverter {
 

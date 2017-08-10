@@ -19,6 +19,7 @@ import org.jhotdraw8.text.StyleConverterAdapter;
  * StringStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class StringReadOnlyStyleableFigureKey extends SimpleFigureKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 

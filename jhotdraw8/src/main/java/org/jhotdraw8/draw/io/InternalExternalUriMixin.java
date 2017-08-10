@@ -9,7 +9,7 @@ import java.net.URI;
  * InternalExternalUriMixin.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface InternalExternalUriMixin {
 

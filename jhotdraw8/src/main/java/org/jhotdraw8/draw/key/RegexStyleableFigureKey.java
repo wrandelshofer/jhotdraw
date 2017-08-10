@@ -22,6 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * RegexStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class RegexStyleableFigureKey extends SimpleFigureKey<RegexReplace> implements WriteableStyleableMapAccessor<RegexReplace> {
 

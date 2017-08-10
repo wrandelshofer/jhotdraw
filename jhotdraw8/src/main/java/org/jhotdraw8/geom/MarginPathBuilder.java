@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
  * FIXME this implementation currently only works with straight line segments.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class MarginPathBuilder extends AbstractPathBuilder {
 

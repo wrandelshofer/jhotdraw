@@ -10,7 +10,7 @@ import org.jhotdraw8.io.DefaultUnitConverter;
  * CssSize.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssSize {
 

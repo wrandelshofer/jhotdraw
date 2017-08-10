@@ -10,7 +10,8 @@ import org.jhotdraw8.text.Converter;
 /**
  * SimpleStyleableKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadOnlyStyleableMapAccessor<T> {
 

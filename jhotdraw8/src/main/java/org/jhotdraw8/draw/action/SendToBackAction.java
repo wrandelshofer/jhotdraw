@@ -18,6 +18,7 @@ import org.jhotdraw8.app.Project;
  * SendToBackAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SendToBackAction extends AbstractSelectedAction {
 

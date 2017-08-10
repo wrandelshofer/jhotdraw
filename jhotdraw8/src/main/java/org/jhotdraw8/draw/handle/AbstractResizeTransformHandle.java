@@ -23,8 +23,7 @@ import org.jhotdraw8.geom.Transforms;
  * AbstractResizeTransformHandle.
  *
  * @author Werner Randelshofer
- * @version $$Id: AbstractResizeTransformHandle.java 1219 2016-12-18 13:24:24Z
- * rawcoder $$
+ * @version $Id$
  */
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
 

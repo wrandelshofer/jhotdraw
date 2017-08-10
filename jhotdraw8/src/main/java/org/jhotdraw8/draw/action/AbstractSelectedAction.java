@@ -20,6 +20,7 @@ import org.jhotdraw8.app.Project;
  * disabled.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public abstract class AbstractSelectedAction extends AbstractProjectAction<Project> {
 

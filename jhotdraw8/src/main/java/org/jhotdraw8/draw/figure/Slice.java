@@ -14,7 +14,7 @@ import javafx.geometry.Point2D;
  * A slice may not have children.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface Slice extends Figure {
 

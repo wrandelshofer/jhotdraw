@@ -20,6 +20,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * DoubleListStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class DoubleListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Double>> implements WriteableStyleableMapAccessor<ImmutableObservableList<Double>> {
 

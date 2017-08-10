@@ -22,8 +22,7 @@ import org.jhotdraw8.io.CharBufferReader;
  * The null value will be converted to the CSS identifier "none".
  *
  * @author Werner Randelshofer
- * @version $Id: XmlBezierNodeListConverter.java 1336 2017-01-21 16:56:49Z
- * rawcoder $
+ * @version $Id$
  */
 public class XmlBezierNodeListConverter implements Converter<ImmutableObservableList<BezierNode>> {
 

@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * SimpleLineConnectionWithMarkersFigure.
  *
  * @author Werner Randelshofer
- * @version $$Id: SimpleLineConnectionWithMarkersFigure.java 1330 2017-01-21 00:12:13Z
+ * @version $Id$
  rawcoder $$
  */
 public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectionWithMarkersFigure

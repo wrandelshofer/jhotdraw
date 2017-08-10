@@ -17,9 +17,8 @@ import org.jhotdraw8.collection.Key;
  * BooleanPropertyCheckBoxTreeTableCell.
  *
  * @author Werner Randelshofer
- * @version $$Id: BooleanPropertyCheckBoxTreeTableCell.java 1235 2016-12-19
- * 23:35:25Z rawcoder $$
- * @param <S> the row typei
+ * @version $Id$
+ * @param <S> the row type
  */
 public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Boolean> {
 

@@ -16,8 +16,7 @@ import org.jhotdraw8.app.Application;
  * {@link org.jhotdraw8.app.Disableable} or when its application is disabled.
  *
  * @author Werner Randelshofer.
- * @version $Id: AbstractApplicationAction.java 1169 2016-12-11 12:51:19Z
- * rawcoder $
+ * @version $Id$
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
 

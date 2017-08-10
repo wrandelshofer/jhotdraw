@@ -14,8 +14,7 @@ import org.jhotdraw8.event.Listener;
  * Note: for performance reasons we do not expand the tree nodes by default.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <N> the node type
+ * @version $Id$
  */
 public class SimpleTreePresentationModel<N> extends AbstractTreePresentationModel<N> {
 

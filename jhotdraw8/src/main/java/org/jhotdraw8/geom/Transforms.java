@@ -21,7 +21,7 @@ import javafx.geometry.Point2D;
  * Transforms.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Transforms {
 

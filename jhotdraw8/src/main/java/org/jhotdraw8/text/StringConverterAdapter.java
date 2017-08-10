@@ -12,7 +12,7 @@ import javafx.util.StringConverter;
  * {@code javafx.util.StringConverter} API.
  *
  * @author Werner Randelshofer
- * @version $Id: StringConverterAdapter.java 1149 2016-11-18 11:00:10Z
+ * @version $Id$
  rawcoder $
  * @param <T> the value type
  */

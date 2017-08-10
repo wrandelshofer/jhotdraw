@@ -12,7 +12,7 @@ import javafx.geometry.Point2D;
  * PathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface PathBuilder {
 

@@ -44,8 +44,7 @@ import org.jhotdraw8.css.CssTokenizerInterface;
  * </a>
  *
  * @author Werner Randelshofer
- * @version $Id: SvgTransformListConverter.java 1189 2016-12-13 22:48:43Z
- * rawcoder $
+ * @version $Id$
  */
 public class SvgTransformListConverter implements Converter<List<Transform>> {
 

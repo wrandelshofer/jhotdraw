@@ -19,6 +19,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * StringStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class StringOrIdentStyleableFigureKey extends SimpleFigureKey<String> implements WriteableStyleableMapAccessor<String> {
 

@@ -21,6 +21,7 @@ import org.jhotdraw8.app.Project;
  * RemoveTransformationsAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class RemoveTransformationsAction extends AbstractSelectedAction {
 

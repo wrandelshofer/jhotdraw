@@ -39,6 +39,7 @@ import org.jhotdraw8.collection.IntList;
  *
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssScanner {
 

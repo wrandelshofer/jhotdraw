@@ -21,6 +21,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * ObservableWordListStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class ObservableWordListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<String>> implements WriteableStyleableMapAccessor<ImmutableObservableList<String>> {
 

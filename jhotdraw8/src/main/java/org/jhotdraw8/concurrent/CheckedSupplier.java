@@ -8,7 +8,7 @@ package org.jhotdraw8.concurrent;
  *
  * @param <T> the result type
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface CheckedSupplier<T> {
 

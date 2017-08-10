@@ -25,6 +25,7 @@ import org.jhotdraw8.io.SimpleIdFactory;
  * </pre>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssSizeConverter implements Converter<CssSize> {
 

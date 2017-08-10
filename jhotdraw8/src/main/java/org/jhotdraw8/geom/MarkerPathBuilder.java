@@ -12,7 +12,7 @@ import javafx.scene.transform.Translate;
  * The path itself is not included by the builder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class MarkerPathBuilder extends AbstractPathBuilder {
 

@@ -54,7 +54,8 @@ import org.jhotdraw8.util.Resources;
 /**
  * FXML Controller class
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class LayersInspector extends AbstractDrawingInspector {
 

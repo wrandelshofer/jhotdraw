@@ -13,8 +13,7 @@ import org.jhotdraw8.io.IdFactory;
  * Allows to use a {@code java.text.Format} with the {@code Converter} API.
  *
  * @author Werner Randelshofer
- * @version $Id: ConverterFormatAdapter.java 1149 2016-11-18 11:00:10Z rawcoder
- * $
+ * @version $Id$
  */
 public class ConverterFormatAdapter implements Converter<Object> {
 

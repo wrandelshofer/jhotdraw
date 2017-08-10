@@ -11,6 +11,7 @@ import javafx.application.Platform;
  * PlatformUtil.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class PlatformUtil {
 

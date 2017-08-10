@@ -17,8 +17,7 @@ import org.jhotdraw8.geom.Transforms;
  * @design.pattern Figure Mixin, Traits.
  *
  * @author Werner Randelshofer
- * @version $Id: TransformCacheableFigure.java 1120 2016-01-15 17:37:49Z
- * rawcoder $
+ * @version $Id$
  */
 public interface TransformCacheableFigure extends CacheableFigure {
 

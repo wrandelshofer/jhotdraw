@@ -39,7 +39,7 @@ import org.jhotdraw8.draw.tool.Tool;
  * AbstractDrawingView.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public abstract class AbstractDrawingView extends SimplePropertyBean implements DrawingView {
 

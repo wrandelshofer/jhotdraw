@@ -11,7 +11,7 @@ import javafx.stage.FileChooser;
  * URIExtensionFilter.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class URIExtensionFilter {
 

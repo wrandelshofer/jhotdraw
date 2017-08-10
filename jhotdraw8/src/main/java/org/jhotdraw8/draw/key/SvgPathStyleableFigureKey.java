@@ -19,7 +19,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * SvgPathStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SvgPathStyleableFigureKey extends SimpleFigureKey<String> implements WriteableStyleableMapAccessor<String> {
 

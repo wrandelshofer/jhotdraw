@@ -12,7 +12,7 @@ import javafx.beans.Observable;
  * AbstractObservable.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class AbstractObservable implements ObservableMixin {
 

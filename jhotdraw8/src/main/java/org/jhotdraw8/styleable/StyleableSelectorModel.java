@@ -27,8 +27,7 @@ import org.w3c.dom.Element;
  * StyleableSelectorModel.
  *
  * @author Werner Randelshofer
- * @version $Id: StyleableSelectorModel.java 1120 2016-01-15 17:37:49Z rawcoder
- * $
+ * @version $Id$
  */
 public class StyleableSelectorModel implements SelectorModel<Styleable> {
 

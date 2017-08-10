@@ -38,6 +38,7 @@ import org.jhotdraw8.io.CharBufferReader;
  * </pre>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssRadialGradientConverter implements Converter<CssRadialGradient> {
 

@@ -22,6 +22,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * BezierNodeListStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class BezierNodeListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<BezierNode>> implements WriteableStyleableMapAccessor<ImmutableObservableList<BezierNode>> {
 

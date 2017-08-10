@@ -9,7 +9,7 @@ import org.jhotdraw8.graph.GraphWithKnownEdgeCount;
  * ImmutableIntDirectedGraph.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class ImmutableIntDirectedGraph implements IntDirectedGraph, GraphWithKnownEdgeCount {
 // FIXME  The arrays can be condensed by factor 2.

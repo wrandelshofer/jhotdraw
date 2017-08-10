@@ -29,8 +29,7 @@ import org.jhotdraw8.app.DocumentProject;
  * <p>
  *
  * @author Werner Randelshofer
- * @version $Id: AbstractSaveFileAction.java 1169 2016-12-11 12:51:19Z rawcoder
- * $
+ * @version $Id$
  */
 public abstract class AbstractSaveFileAction extends AbstractProjectAction<DocumentProject> {
 

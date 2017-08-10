@@ -10,6 +10,7 @@ import javafx.scene.input.Clipboard;
  * ClipboardIO.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface ClipboardIO<T> {
 

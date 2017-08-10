@@ -10,7 +10,7 @@ import javafx.geometry.Point2D;
  * CssSize2D.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssSize2D {
 

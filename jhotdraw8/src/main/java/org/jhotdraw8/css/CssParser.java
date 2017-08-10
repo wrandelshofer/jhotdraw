@@ -145,6 +145,7 @@ import org.jhotdraw8.css.ast.UniversalSelector;
  * </ul>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssParser {
 

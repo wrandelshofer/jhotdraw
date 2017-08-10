@@ -35,7 +35,7 @@ import org.jhotdraw8.draw.figure.Page;
  * PrinterExportFormat.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class PrinterExportFormat extends AbstractExportOutputFormat {
 

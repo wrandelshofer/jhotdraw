@@ -15,6 +15,7 @@ import org.jhotdraw8.collection.MapAccessor;
  * AbstractStyleablePropertyBean.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
 

@@ -16,7 +16,7 @@ import org.jhotdraw8.text.XmlIntegerConverter;
  * IntegerStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntegerStyleableKey extends SimpleStyleableKey<Integer> {
 

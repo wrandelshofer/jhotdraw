@@ -38,7 +38,7 @@ import org.jhotdraw8.geom.Transforms;
  * LABEL_TARGET.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         implements ConnectingFigure, TransformableFigure {

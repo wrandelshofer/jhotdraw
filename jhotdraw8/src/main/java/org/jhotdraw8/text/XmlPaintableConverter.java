@@ -7,8 +7,7 @@ package org.jhotdraw8.text;
  * XmlPaintableConverter.
  *
  * @author Werner Randelshofer
- * @version $$Id: XmlPaintableConverter.java 1154 2016-11-19 15:50:08Z rawcoder
- * $$
+ * @version $Id$
  */
 public class XmlPaintableConverter extends CssPaintableConverter {
 

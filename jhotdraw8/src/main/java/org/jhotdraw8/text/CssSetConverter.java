@@ -13,6 +13,7 @@ import org.jhotdraw8.io.IdFactory;
  * CssSetConverter.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssSetConverter<E> implements Converter<ImmutableObservableSet<E>> {
 

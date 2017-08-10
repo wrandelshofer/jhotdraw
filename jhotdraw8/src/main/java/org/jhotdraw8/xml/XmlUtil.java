@@ -45,7 +45,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * XmlUtil.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class XmlUtil {
 

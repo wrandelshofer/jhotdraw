@@ -10,7 +10,7 @@ import java.util.Objects;
  * CssStop.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssStop {
 

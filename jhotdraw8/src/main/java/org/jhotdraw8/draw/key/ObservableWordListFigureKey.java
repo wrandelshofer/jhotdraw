@@ -9,6 +9,7 @@ import org.jhotdraw8.collection.ImmutableObservableList;
  * ObservableWordListStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class ObservableWordListFigureKey extends SimpleFigureKey<ImmutableObservableList<String>> {
 

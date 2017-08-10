@@ -26,6 +26,7 @@ import org.jhotdraw8.geom.Transforms;
  * Handle for the point of a figure.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class BezierNodeTangentHandle extends AbstractHandle {
 

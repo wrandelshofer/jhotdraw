@@ -37,7 +37,8 @@ import org.jhotdraw8.text.XmlUriConverter;
 /**
  * FXML Controller class
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class StylesheetsInspector extends AbstractDrawingInspector {
 

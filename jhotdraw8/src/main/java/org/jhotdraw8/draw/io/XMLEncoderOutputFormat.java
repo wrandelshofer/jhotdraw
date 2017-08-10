@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.figure.SimpleRectangleFigure;
  * XMLEncoderOutputFormat.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class XMLEncoderOutputFormat implements OutputFormat {
 

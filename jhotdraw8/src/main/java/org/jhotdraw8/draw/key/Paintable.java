@@ -9,7 +9,7 @@ import javafx.scene.paint.Paint;
  * Paintable.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface Paintable {
 

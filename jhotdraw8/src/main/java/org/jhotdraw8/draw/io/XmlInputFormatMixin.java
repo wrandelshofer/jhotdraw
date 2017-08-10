@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
  * XmlInputFormatMixin.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface XmlInputFormatMixin {
 

@@ -9,7 +9,7 @@ package org.jhotdraw8.graph;
  * are integers from  {@code 0} to {@code vertexCount - 1}.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface IntDoubleVertexGraph {
     /** Returns the number of vertices {@code V}.

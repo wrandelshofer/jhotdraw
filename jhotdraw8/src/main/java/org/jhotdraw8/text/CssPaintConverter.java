@@ -32,6 +32,7 @@ import org.jhotdraw8.io.IdFactory;
  * </p>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssPaintConverter implements Converter<Paint> {
 

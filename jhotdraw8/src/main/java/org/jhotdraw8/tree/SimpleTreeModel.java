@@ -16,8 +16,7 @@ import org.jhotdraw8.event.Listener;
  * SimpleTreeModel.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <E> the element type
+ * @version $Id$
  */
 public class SimpleTreeModel<E> implements TreeModel<E> {
 

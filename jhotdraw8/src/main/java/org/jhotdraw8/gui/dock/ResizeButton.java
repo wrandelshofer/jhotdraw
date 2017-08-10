@@ -19,7 +19,7 @@ import javafx.scene.paint.Color;
  * ResizeButton.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class ResizeButton extends Region {
 

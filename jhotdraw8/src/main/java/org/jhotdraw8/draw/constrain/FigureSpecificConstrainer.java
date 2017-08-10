@@ -24,8 +24,7 @@ import org.jhotdraw8.draw.DrawingView;
  * </p>
  *
  * @author Werner Randelshofer
- * @version $Id: FigureSpecificConstrainer.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id$
  */
 public class FigureSpecificConstrainer extends AbstractConstrainer implements Constrainer {
 

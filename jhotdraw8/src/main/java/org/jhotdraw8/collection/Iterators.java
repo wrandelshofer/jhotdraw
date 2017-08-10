@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Collections.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Iterators {
 

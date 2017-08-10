@@ -32,7 +32,8 @@ import org.jhotdraw8.geom.Transforms;
  * {@code styleclassDisconnected} and {@code styleclassConnected} given in the
  * constructor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class LineConnectorHandle extends AbstractConnectorHandle {
 

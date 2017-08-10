@@ -15,7 +15,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * DoubleStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class BooleanFigureKey extends SimpleFigureKey<Boolean> {
 

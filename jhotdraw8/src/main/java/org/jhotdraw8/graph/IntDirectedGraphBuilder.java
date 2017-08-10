@@ -12,7 +12,7 @@ import java.util.Map;
  * IntDirectedGraphBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class IntDirectedGraphBuilder implements IntDirectedGraph {
 

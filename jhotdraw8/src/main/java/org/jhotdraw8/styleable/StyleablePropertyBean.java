@@ -27,6 +27,7 @@ import org.jhotdraw8.collection.MapAccessor;
  *
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface StyleablePropertyBean extends PropertyBean, Styleable {
 

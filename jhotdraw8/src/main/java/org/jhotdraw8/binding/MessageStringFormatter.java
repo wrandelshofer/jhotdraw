@@ -20,8 +20,7 @@ import javafx.collections.ObservableList;
  * value using a choice: {@code {0,choice,0#false|1#true} }
  *
  * @author Werner Randelshofer
- * @version $Id: MessageStringFormatter.java 1149 2016-11-18 11:00:10Z rawcoder
- * $
+ * @version $Id$
  */
 public abstract class MessageStringFormatter extends StringBinding {
 

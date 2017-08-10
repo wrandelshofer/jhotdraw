@@ -9,7 +9,7 @@ import javafx.geometry.Point2D;
  * AbstractPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public abstract class AbstractPathBuilder implements PathBuilder {
 

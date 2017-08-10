@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
  * VBoxTrack.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class VBoxTrack extends VBox implements Track {
 

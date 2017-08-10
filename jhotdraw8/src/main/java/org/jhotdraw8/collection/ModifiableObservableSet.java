@@ -19,8 +19,7 @@ import javafx.collections.SetChangeListener;
  * ModifiableObservableSet.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <E> the element type
+ * @version $Id$
  */
 public class ModifiableObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
 

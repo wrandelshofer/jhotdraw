@@ -21,7 +21,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 /**
  * Point2DStyleableMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class Point2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Point2D> {
 

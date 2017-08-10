@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
  * DirectedGraphPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <V> the vertex type
+ * @version $Id$
  */
 public class DirectedGraphPathBuilder<V> {
 

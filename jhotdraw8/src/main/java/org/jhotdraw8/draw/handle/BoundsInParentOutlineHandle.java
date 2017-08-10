@@ -19,8 +19,7 @@ import org.jhotdraw8.geom.Transforms;
  * interactions.
  *
  * @author Werner Randelshofer
- * @version $Id: BoundsInParentOutlineHandle.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id$
  */
 public class BoundsInParentOutlineHandle extends AbstractHandle {
 

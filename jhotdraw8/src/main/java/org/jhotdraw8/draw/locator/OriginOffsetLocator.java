@@ -13,7 +13,7 @@ import org.jhotdraw8.geom.Geom;
  * A locator that specifies a point as an offset to the top left corner (origin) of the figure..
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class OriginOffsetLocator extends AbstractLocator {
 

@@ -40,6 +40,7 @@ import org.jhotdraw8.geom.Transforms;
  * Handle for moving (translating) a figure.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class BezierNodeMoveHandle extends AbstractHandle {
 

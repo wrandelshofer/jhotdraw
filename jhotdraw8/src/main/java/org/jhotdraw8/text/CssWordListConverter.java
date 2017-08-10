@@ -32,6 +32,7 @@ import org.jhotdraw8.io.IdFactory;
  * </ul>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssWordListConverter implements Converter<ImmutableObservableList<String>> {
 

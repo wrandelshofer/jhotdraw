@@ -39,8 +39,7 @@ import javafx.scene.input.KeyEvent;
  * @see SelectionTool
  *
  * @author Werner Randelshofer
- * @version $Id: SimpleSelectAreaTracker.java 1151 2016-11-18 14:49:32Z rawcoder
- * $
+ * @version $Id$
  */
 public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAreaTracker {
 

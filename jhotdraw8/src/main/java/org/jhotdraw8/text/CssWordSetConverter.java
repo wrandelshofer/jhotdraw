@@ -35,6 +35,7 @@ import org.jhotdraw8.io.IdFactory;
  * </ul>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssWordSetConverter implements Converter<ImmutableObservableSet<String>> {
 

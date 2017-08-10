@@ -84,7 +84,8 @@ import org.jhotdraw8.util.ReversedList;
 /**
  * FXML Controller class
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SimpleDrawingView extends AbstractDrawingView implements EditableComponent {
 

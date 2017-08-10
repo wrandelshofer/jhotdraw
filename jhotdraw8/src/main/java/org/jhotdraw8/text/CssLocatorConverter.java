@@ -19,6 +19,7 @@ import org.jhotdraw8.io.IdFactory;
  * Currently converts relative locators only.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssLocatorConverter implements Converter<Locator> {
 

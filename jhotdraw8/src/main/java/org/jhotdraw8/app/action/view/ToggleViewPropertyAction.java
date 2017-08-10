@@ -16,6 +16,7 @@ import org.jhotdraw8.app.Project;
  * ToggleViewPropertyAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class ToggleViewPropertyAction extends AbstractProjectAction<Project> {
 

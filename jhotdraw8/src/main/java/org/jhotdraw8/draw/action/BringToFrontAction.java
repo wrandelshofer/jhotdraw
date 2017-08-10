@@ -19,6 +19,7 @@ import org.jhotdraw8.app.Project;
  * BringToFrontAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class BringToFrontAction extends AbstractSelectedAction {
 

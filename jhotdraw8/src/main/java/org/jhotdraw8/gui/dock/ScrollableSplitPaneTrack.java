@@ -21,8 +21,7 @@ import org.jhotdraw8.gui.CustomSkin;
  * ScrollableVBoxTrack.
  *
  * @author Werner Randelshofer
- * @version $$Id: ScrollableVBoxTrack_1.java 1374 2017-02-10 21:42:41Z rawcoder
- * $$
+ * @version $Id$
  */
 public class ScrollableSplitPaneTrack extends Control implements Track {
 

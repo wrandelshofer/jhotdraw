@@ -10,7 +10,7 @@ import java.awt.geom.Path2D;
  * Path2DDoubleBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class AWTPathBuilder extends AbstractPathBuilder {
 private Path2D.Double path= new Path2D.Double();

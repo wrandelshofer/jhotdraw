@@ -19,6 +19,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * DoubleStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class DoubleStyleableFigureKey extends SimpleFigureKey<Double> implements WriteableStyleableMapAccessor<Double> {
 

@@ -9,8 +9,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
  * ReadOnlyNonnullWrapper.
  *
  * @author Werner Randelshofer
- * @version $Id: ReadOnlyNonnullWrapper.java 1149 2016-11-18 11:00:10Z rawcoder
- * $
+ * @version $Id$
  */
 public class ReadOnlyNonnullWrapper<T> extends ReadOnlyObjectWrapper<T> {
 

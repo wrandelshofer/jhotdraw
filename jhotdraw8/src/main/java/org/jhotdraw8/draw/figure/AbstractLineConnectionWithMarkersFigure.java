@@ -25,8 +25,7 @@ import org.jhotdraw8.geom.Shapes;
  * LineConnectionWithMarkersFigure.
  *
  * @author Werner Randelshofer
- * @version $$Id: LineConnectionWithMarkersFigure.java 1330 2017-01-21 00:12:13Z
- * rawcoder $$
+ * @version $Id$
  */
 public abstract class AbstractLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {

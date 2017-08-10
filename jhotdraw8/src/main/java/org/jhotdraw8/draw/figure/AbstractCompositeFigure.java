@@ -19,8 +19,7 @@ import org.jhotdraw8.collection.Key;
  * @design.pattern Figure Composite, Composite.
  *
  * @author Werner Randelshofer
- * @version $Id: AbstractCompositeFigure.java 1235 2016-12-19 23:35:25Z rawcoder
- * $
+ * @version $Id$
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
 

@@ -21,6 +21,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * DoubleListStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class Point2DListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Point2D>> implements WriteableStyleableMapAccessor<ImmutableObservableList<Point2D>> {
 

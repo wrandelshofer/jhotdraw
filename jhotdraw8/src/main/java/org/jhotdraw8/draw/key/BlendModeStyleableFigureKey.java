@@ -17,6 +17,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * BlendModeStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class BlendModeStyleableFigureKey extends SimpleFigureKey<BlendMode> implements WriteableStyleableMapAccessor<BlendMode> {
 

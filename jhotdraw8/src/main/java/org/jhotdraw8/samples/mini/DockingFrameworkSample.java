@@ -26,6 +26,7 @@ import org.jhotdraw8.gui.dock.Track;
  * DockingFrameworkSample.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class DockingFrameworkSample extends Application {
 

@@ -25,7 +25,7 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
  * DocumentApplication.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DocumentApplication extends AbstractApplication {
 

@@ -26,7 +26,8 @@ import org.jhotdraw8.tree.TreeModelEvent;
 /**
  * FXML Controller class
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class DrawingInspector extends AbstractDrawingInspector {
 

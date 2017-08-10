@@ -14,8 +14,7 @@ import org.jhotdraw8.io.IdFactory;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id: CssRectangle2DConverter.java 1149 2016-11-18 11:00:10Z rawcoder
- * $
+ * @version $Id$
  */
 public class CssRectangle2DConverter implements Converter<Rectangle2D> {
 

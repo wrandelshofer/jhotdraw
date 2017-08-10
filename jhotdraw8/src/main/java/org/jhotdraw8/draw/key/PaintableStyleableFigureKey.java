@@ -19,6 +19,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * PaintStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class PaintableStyleableFigureKey extends SimpleFigureKey<Paintable> implements WriteableStyleableMapAccessor<Paintable> {
 

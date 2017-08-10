@@ -36,7 +36,7 @@ import javafx.scene.transform.Translate;
  *
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class NineSliceScalingBuilder extends AbstractPathBuilder {
 

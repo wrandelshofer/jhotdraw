@@ -12,6 +12,7 @@ import org.jhotdraw8.io.IdFactory;
  * XmlIntegerConverter.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class XmlIntegerConverter implements Converter<Integer> {
 

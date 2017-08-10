@@ -10,7 +10,7 @@ import javafx.geometry.Insets;
  * CssSizeInsets.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssSizeInsets {
 

@@ -12,6 +12,7 @@ import javafx.stage.Window;
  * FileURIChooser.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class DirectoryURIChooser implements URIChooser {
 

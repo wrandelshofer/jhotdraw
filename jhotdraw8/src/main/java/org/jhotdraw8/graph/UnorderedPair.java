@@ -11,8 +11,7 @@ import java.util.Objects;
  * This is a value type.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <V> vertex type
+ * @version $Id$
  */
 public class UnorderedPair<V> implements Pair<V> {
 

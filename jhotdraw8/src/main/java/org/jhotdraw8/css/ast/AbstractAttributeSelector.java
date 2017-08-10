@@ -7,8 +7,7 @@ package org.jhotdraw8.css.ast;
  * An abstract "attribute selector" matches an element based on its attributes.
  *
  * @author Werner Randelshofer
- * @version $Id: AbstractAttributeSelector.java 1149 2016-11-18 11:00:10Z
- * rawcoder $
+ * @version $Id$
  */
 public abstract class AbstractAttributeSelector extends SimpleSelector {
 

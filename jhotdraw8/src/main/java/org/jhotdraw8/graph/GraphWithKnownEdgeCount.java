@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
  * GraphWithKnownEdgeCount.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface GraphWithKnownEdgeCount {
 

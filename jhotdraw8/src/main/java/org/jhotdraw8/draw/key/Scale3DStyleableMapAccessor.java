@@ -21,7 +21,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 /**
  * Scale3DStyleableMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class Scale3DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<Point3D> {
 

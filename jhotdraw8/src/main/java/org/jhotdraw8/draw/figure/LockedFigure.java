@@ -11,6 +11,7 @@ import org.jhotdraw8.collection.BooleanKey;
  * @design.pattern Figure Mixin, Traits.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface LockedFigure extends Figure {
 

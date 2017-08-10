@@ -23,7 +23,8 @@ import org.jhotdraw8.text.XmlNumberConverter;
 /**
  * FXML Controller class
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class GridInspector extends AbstractDrawingViewInspector {
 

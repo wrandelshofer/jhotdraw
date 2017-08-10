@@ -22,7 +22,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 /**
  * CssSize2DStyleableMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class Size2DStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<CssSize2D> {
 

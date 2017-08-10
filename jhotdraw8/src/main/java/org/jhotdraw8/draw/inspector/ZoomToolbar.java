@@ -21,7 +21,8 @@ import org.jhotdraw8.draw.DrawingView;
 /**
  * FXML Controller class
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class ZoomToolbar extends BorderPane {
 

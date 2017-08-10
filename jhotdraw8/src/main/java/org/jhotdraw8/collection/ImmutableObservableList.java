@@ -17,8 +17,7 @@ import javafx.collections.ObservableListBase;
  * An immutable observable list.
  *
  * @author Werner Randelshofer
- * @version $$Id: ImmutableObservableList.java 1239 2016-12-20 11:19:20Z
- * rawcoder $$
+ * @version $Id$
  * @param <E> element type
  */
 public final class ImmutableObservableList<E> extends AbstractList<E> implements ObservableList<E> {

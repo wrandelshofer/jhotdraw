@@ -40,8 +40,7 @@ import org.jhotdraw8.util.Resources;
  * SimpleApplicationModel.
  *
  * @author Werner Randelshofer
- * @version $Id: SimpleApplicationModel.java 1199 2016-12-16 13:14:53Z rawcoder
- * $
+ * @version $Id$
  */
 public class SimpleApplicationModel implements ApplicationModel {
 

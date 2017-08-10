@@ -12,6 +12,7 @@ import org.jhotdraw8.io.IdFactory;
  * XmlDoubleConverter.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class XmlDoubleConverter implements Converter<Double> {
 

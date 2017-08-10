@@ -15,7 +15,7 @@ import javafx.scene.transform.Transform;
  * </ul>
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class BezierNode {
 

@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * SimplePageLabelFigure.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SimplePageLabelFigure extends AbstractLabelFigure implements HideableFigure, FontableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
  public final static String TYPE_SELECTOR = "PageLabel";

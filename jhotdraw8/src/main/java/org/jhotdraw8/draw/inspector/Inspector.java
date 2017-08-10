@@ -8,7 +8,8 @@ import org.jhotdraw8.draw.DrawingView;
 
 /**
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface Inspector {
 

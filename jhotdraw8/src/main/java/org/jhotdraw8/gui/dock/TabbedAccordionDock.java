@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
  * TabbedAccordionDock.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class TabbedAccordionDock extends Control implements Dock {
 

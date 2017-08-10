@@ -17,8 +17,7 @@ import java.util.Set;
  * DirectedGraphBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <V> vertex type
+ * @version $Id$
  */
 public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGraph, GraphWithKnownEdgeCount {
 

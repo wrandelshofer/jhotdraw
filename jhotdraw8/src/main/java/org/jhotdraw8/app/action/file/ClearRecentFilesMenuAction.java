@@ -19,8 +19,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  *
  *
  * @author Werner Randelshofer.
- * @version $Id: ClearRecentFilesMenuAction.java 1205 2016-12-16 23:21:54Z
- * rawcoder $
+ * @version $Id$
  */
 public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
 

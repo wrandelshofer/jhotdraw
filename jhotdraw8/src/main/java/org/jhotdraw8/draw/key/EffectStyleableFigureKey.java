@@ -17,6 +17,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * EffectStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class EffectStyleableFigureKey extends SimpleFigureKey<Effect> implements WriteableStyleableMapAccessor<Effect> {
 

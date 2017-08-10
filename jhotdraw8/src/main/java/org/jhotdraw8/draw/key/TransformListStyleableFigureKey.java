@@ -21,6 +21,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  * TransformListStyleableFigureKey.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class TransformListStyleableFigureKey extends SimpleFigureKey<ImmutableObservableList<Transform>> implements WriteableStyleableMapAccessor<ImmutableObservableList<Transform>> {
 

@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.ImmutableObservableList;
  * BezierNodePathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class BezierNodePathBuilder extends AbstractPathBuilder {
 

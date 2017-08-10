@@ -22,6 +22,7 @@ import org.jhotdraw8.util.Resources;
  * @design.pattern CreationTool AbstractFactory, Client.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class ImageCreationTool extends CreationTool {
 

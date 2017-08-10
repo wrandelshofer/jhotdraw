@@ -10,7 +10,7 @@ import javafx.geometry.Point2D;
  * OffsetPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class OffsetPathBuilder extends AbstractPathBuilder {
 

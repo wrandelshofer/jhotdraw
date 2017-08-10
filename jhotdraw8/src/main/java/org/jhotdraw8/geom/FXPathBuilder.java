@@ -18,7 +18,7 @@ import javafx.scene.shape.QuadCurveTo;
  * FXPathBuilder.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class FXPathBuilder extends AbstractPathBuilder {
 

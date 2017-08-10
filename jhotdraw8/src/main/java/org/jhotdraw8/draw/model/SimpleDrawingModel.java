@@ -37,7 +37,7 @@ import org.jhotdraw8.tree.TreeModelEvent;
  * layout observing figures, like {@code LineConnectionFigure}.
  *
  * @author Werner Randelshofer
- * @version $Id: SimpleDrawingModel.java 1139 2016-09-17 23:38:39Z rawcoder $
+ * @version $Id$
  */
 public class SimpleDrawingModel extends AbstractDrawingModel {
 

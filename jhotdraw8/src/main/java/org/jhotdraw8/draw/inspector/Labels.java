@@ -10,7 +10,7 @@ import org.jhotdraw8.util.Resources;
  * Labels.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Labels {
 

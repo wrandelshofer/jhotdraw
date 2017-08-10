@@ -14,8 +14,7 @@ import org.jhotdraw8.io.IdFactory;
  * versa.
  *
  * @author Werner Randelshofer
- * @version $Id: CssBoundingBoxConverter.java 1149 2016-11-18 11:00:10Z rawcoder
- * $
+ * @version $Id$
  */
 public class CssBoundingBoxConverter implements Converter<BoundingBox> {
 

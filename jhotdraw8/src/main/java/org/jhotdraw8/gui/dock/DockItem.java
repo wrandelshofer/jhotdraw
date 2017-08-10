@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
  * Represents an item which can be added to a {@code Dock}.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DockItem extends Tab {
     static DockItem draggedTab;

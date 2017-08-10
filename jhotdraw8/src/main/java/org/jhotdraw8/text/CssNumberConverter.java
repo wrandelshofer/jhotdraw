@@ -25,6 +25,7 @@ import org.jhotdraw8.io.IdFactory;
  * // FIXME should return a Size object and not just a Double.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssNumberConverter implements Converter<Number> {
 

@@ -14,7 +14,7 @@ import javafx.scene.shape.FillRule;
  * CombinedPathIterator.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CombinedPathIterator implements PathIterator {
 

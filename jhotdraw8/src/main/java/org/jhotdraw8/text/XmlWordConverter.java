@@ -12,6 +12,7 @@ import org.jhotdraw8.io.IdFactory;
  * XmlWordConverter.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class XmlWordConverter implements Converter<String> {
 

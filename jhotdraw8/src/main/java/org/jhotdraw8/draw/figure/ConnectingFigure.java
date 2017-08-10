@@ -17,7 +17,7 @@ import static org.jhotdraw8.draw.figure.AbstractLineConnectionFigure.START_TARGE
  * ConnectingFigure.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public interface ConnectingFigure extends Figure {
     /**

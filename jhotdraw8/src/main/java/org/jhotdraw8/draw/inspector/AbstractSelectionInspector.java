@@ -20,6 +20,7 @@ import org.jhotdraw8.event.Listener;
  * AbstractSelectionInspector.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public abstract class AbstractSelectionInspector implements Inspector {
 

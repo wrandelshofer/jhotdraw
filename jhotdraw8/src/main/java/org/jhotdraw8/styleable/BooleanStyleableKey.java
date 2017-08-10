@@ -10,7 +10,7 @@ import org.jhotdraw8.text.CssBooleanConverter;
  * BooleanStyleableKey.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class BooleanStyleableKey extends SimpleStyleableKey<Boolean> {
 

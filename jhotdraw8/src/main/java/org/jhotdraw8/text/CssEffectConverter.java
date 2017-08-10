@@ -77,6 +77,7 @@ import org.jhotdraw8.io.IdFactory;
  * CSS Reference Guide</a>.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssEffectConverter implements Converter<Effect> {
 

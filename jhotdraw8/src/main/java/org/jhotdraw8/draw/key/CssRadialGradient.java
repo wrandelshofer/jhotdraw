@@ -17,7 +17,7 @@ import org.jhotdraw8.text.CssStop;
  * CssRadialGradient.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CssRadialGradient implements Paintable {
 

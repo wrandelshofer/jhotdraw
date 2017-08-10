@@ -43,7 +43,7 @@ import static org.jhotdraw8.geom.Geom.pointOnLine;
  * Copyright © 2011-2016 Mike "Pomax" Kamermansy.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Intersection {
 

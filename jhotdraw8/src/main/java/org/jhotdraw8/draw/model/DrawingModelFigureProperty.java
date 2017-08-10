@@ -15,6 +15,7 @@ import org.jhotdraw8.event.WeakListener;
  * If the key is not declared by the figure, then the value will always be null.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 

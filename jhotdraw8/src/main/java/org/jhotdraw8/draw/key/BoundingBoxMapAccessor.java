@@ -11,7 +11,8 @@ import org.jhotdraw8.collection.MapAccessor;
 /**
  * BoundingBoxMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class BoundingBoxMapAccessor extends AbstractFigureMapAccessor<BoundingBox> {
 

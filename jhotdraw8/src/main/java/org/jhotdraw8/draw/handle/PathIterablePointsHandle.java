@@ -24,7 +24,7 @@ import org.jhotdraw8.geom.Transforms;
  * Does not provide interactions. Just increases the hit area of the figure.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class PathIterablePointsHandle extends AbstractHandle {
 

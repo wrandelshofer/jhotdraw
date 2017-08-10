@@ -19,7 +19,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 /**
  * Size2DStyleableFigureKey.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class Size2DStyleableFigureKey extends SimpleFigureKey<CssSize2D> implements WriteableStyleableMapAccessor<CssSize2D> {
 

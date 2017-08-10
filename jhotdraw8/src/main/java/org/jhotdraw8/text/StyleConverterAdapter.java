@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
  * API.
  *
  * @author Werner Randelshofer
- * @version $Id: StyleConverterAdapter.java 1149 2016-11-18 11:00:10Z
+ * @version $Id$
  rawcoder $
  */
 public class StyleConverterAdapter<T> extends StyleConverter<String, T> {

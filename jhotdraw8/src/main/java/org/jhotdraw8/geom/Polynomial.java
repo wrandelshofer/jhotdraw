@@ -32,7 +32,7 @@ import java.util.Arrays;
  * 2000-2003 (c) David Eberly. Magic Software, Inc.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class Polynomial {
 

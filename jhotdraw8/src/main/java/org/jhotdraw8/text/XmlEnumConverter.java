@@ -13,6 +13,7 @@ import org.jhotdraw8.io.IdFactory;
  * WordConverter.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class XmlEnumConverter<E extends Enum<E>> implements Converter<E> {
 

@@ -18,7 +18,7 @@ import javafx.scene.shape.Rectangle;
  * Builds a bounding box path.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class BoundingBoxBuilder extends AbstractPathBuilder {
 

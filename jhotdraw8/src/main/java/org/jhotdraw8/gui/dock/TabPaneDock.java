@@ -16,7 +16,7 @@ import javafx.scene.control.TabPane;
  * A TabPaneDock.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class TabPaneDock extends Control implements Dock {
 

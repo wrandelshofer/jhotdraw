@@ -26,6 +26,7 @@ import org.jhotdraw8.geom.Geom;
  * Handle for moving all selected figures.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class MultipleSelectionMoveHandle extends AbstractHandle {
 

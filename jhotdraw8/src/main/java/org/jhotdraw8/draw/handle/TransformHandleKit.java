@@ -38,6 +38,7 @@ import org.jhotdraw8.geom.Transforms;
  * FIXME implement me
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class TransformHandleKit {
 

@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
  * PathBuilderException.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class PathBuilderException extends Exception {
 

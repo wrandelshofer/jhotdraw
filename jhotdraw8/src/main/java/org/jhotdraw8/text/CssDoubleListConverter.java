@@ -22,6 +22,7 @@ import org.jhotdraw8.io.UnitConverter;
  * Parses a list of sizes.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class CssDoubleListConverter implements Converter<ImmutableObservableList<Double>> {
 

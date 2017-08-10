@@ -37,7 +37,6 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  * @version $Id$
- * @param <T> the type of nodes in the tree structure.
  */
 public interface TreeNode<T extends TreeNode<T>> {
 

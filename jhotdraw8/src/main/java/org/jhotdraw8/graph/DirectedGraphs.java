@@ -17,7 +17,7 @@ import org.jhotdraw8.collection.IntList;
  * Provides algorithms for directed graphs.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DirectedGraphs {
 

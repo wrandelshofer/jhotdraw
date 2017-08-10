@@ -36,7 +36,7 @@ import org.jhotdraw8.geom.Transforms;
  * Only children which are PathIterableFigures are considered.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CombinedPathFigure extends AbstractCompositeFigure
         implements StrokeableFigure, FillableFigure, Grouping,

@@ -24,6 +24,7 @@ import org.jhotdraw8.draw.locator.RelativeLocator;
  * SimpleImageFigure.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SimpleImageFigure extends AbstractLeafFigure implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure,ConnectableFigure {
 

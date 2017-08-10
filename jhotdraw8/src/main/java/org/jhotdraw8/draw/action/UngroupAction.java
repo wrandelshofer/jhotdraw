@@ -24,6 +24,7 @@ import org.jhotdraw8.draw.figure.Grouping;
  * UngroupAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class UngroupAction extends AbstractSelectedAction {
 

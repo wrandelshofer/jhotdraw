@@ -7,7 +7,7 @@ package org.jhotdraw8.io;
  * DefaultUnitConverter.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class DefaultUnitConverter implements UnitConverter {
 

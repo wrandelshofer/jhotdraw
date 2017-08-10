@@ -13,7 +13,7 @@ import java.util.Map;
  * CachingCollator.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CachingCollator implements Comparator<String> {
 

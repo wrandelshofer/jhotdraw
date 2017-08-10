@@ -10,6 +10,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
  * AbstractDrawingInspector.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public abstract class AbstractDrawingViewInspector implements Inspector {
 

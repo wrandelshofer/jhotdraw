@@ -23,6 +23,7 @@ import org.jhotdraw8.collection.Iterators;
  * GroupAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class GroupAction extends AbstractSelectedAction {
 

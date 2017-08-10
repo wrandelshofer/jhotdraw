@@ -24,6 +24,7 @@ import org.jhotdraw8.draw.key.StringReadOnlyStyleableFigureKey;
  * @design.pattern Figure Mixin, Traits.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public interface StyleableFigure extends Figure {
 

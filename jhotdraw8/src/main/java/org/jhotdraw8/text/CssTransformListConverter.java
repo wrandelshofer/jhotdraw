@@ -62,8 +62,7 @@ import org.jhotdraw8.css.CssTokenizerInterface;
  * </a>
  *
  * @author Werner Randelshofer
- * @version $Id: CssTransformListConverter.java 1120 2016-01-15 17:37:49Z
- * rawcoder $
+ * @version $Id$
  */
 public class CssTransformListConverter implements Converter<ImmutableObservableList<Transform>> {
 

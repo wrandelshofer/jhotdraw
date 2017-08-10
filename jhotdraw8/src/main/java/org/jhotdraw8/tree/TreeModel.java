@@ -15,8 +15,7 @@ import org.jhotdraw8.event.Listener;
  * TreeModel.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- * @param <E> the node type
+ * @version $Id$
  */
 public interface TreeModel<E> extends ObservableMixin {
     /**

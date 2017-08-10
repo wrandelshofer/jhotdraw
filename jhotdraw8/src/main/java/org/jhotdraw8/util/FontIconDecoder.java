@@ -20,7 +20,7 @@ import javafx.scene.text.Text;
  * </pre>
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class FontIconDecoder implements ResourceDecoder {
 

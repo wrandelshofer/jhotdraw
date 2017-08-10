@@ -10,7 +10,7 @@ import javafx.scene.control.SkinBase;
  * A custom skin without behavior.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class CustomSkin<C extends Control> extends SkinBase<C> {
 

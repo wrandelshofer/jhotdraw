@@ -21,7 +21,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 /**
  * BoundingBoxStyleableMapAccessor.
  *
- * @author werni
+ * @author Werner Randelshofer
+ * @version $Id$
  */
 public class BoundingBoxStyleableMapAccessor extends AbstractStyleableFigureMapAccessor<BoundingBox> {
 

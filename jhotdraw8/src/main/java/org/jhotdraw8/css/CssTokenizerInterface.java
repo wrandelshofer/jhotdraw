@@ -9,8 +9,7 @@ import java.io.IOException;
  * CssTokenizerInterface.
  *
  * @author Werner Randelshofer
- * @version $$Id: CssTokenizerInterface.java 1194 2016-12-14 22:10:57Z rawcoder
- * $$
+ * @version $Id$
  */
 public interface CssTokenizerInterface {
 

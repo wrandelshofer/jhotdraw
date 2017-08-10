@@ -33,6 +33,7 @@ import org.jhotdraw8.css.CssTokenizerInterface;
  * </p>
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class XmlFontConverter implements Converter<Font> {
 

@@ -27,6 +27,7 @@ import javafx.scene.shape.Shape;
  * {@code reshapeInLocal} method, if the Figure is transformable.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class ResizeHandleKit {
 

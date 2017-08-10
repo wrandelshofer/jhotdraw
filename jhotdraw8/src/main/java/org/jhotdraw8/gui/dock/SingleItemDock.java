@@ -20,7 +20,7 @@ import org.jhotdraw8.gui.CustomSkin;
  * SingleItemDock is a non-editable dock which can hold exactly one item.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
+ * @version $Id$
  */
 public class SingleItemDock extends Control implements Dock {
 

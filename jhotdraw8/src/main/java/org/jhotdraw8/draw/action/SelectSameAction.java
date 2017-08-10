@@ -20,6 +20,7 @@ import org.jhotdraw8.app.action.Action;
  * SelectSameAction.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class SelectSameAction extends AbstractSelectedAction {
 

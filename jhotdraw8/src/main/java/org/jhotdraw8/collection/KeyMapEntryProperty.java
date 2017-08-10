@@ -12,6 +12,7 @@ import javafx.collections.ObservableMap;
  * of Key.
  *
  * @author Werner Randelshofer
+ * @version $Id$
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
 
