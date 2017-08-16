@@ -30,6 +30,7 @@ import javafx.collections.ObservableSet;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -166,23 +167,23 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         public void handle(DrawingModelEvent event) {
             Figure f = event.getNode();
             switch (event.getEventType()) {
-                case LAYOUT_CHANGED:
-                    if (f == getDrawing()) {
-                        invalidateConstrainerNode();
-                        invalidateWorldViewTransforms();
-                        repaint();
-                    }
-                    break;
-                case STYLE_CHANGED:
+            case LAYOUT_CHANGED:
+                if (f == getDrawing()) {
+                    invalidateConstrainerNode();
+                    invalidateWorldViewTransforms();
                     repaint();
-                    break;
-                case PROPERTY_VALUE_CHANGED:
-                case LAYOUT_SUBJECT_CHANGED:
-                case TRANSFORM_CHANGED:
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + " not supported");
+                }
+                break;
+            case STYLE_CHANGED:
+                repaint();
+                break;
+            case PROPERTY_VALUE_CHANGED:
+            case LAYOUT_SUBJECT_CHANGED:
+            case TRANSFORM_CHANGED:
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
             }
         }
 
@@ -190,36 +191,36 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private final Listener<TreeModelEvent<Figure>> treeModelHandler = (TreeModelEvent<Figure> event) -> {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-            case NODE_ADDED_TO_PARENT:
-                handleFigureAdded(f);
-                break;
-            case NODE_REMOVED_FROM_PARENT:
-                handleFigureRemoved(f);
-                break;
-            case NODE_ADDED_TO_TREE:
-                handleFigureRemovedFromDrawing(f);
-                break;
-            case NODE_REMOVED_FROM_TREE:
-                for (Figure d : f.preorderIterable()) {
-                    getSelectedFigures().remove(d);
-                }
-                repaint();
-                break;
-            case NODE_CHANGED:
-                handleNodeChanged(f);
-                break;
-            case ROOT_CHANGED:
-                handleDrawingChanged();
-                updateLayout();
-                repaint();
-                break;
-            case SUBTREE_NODES_CHANGED:
-                handleSubtreeNodesChanged(f);
-                repaint();
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + " not supported");
+        case NODE_ADDED_TO_PARENT:
+            handleFigureAdded(f);
+            break;
+        case NODE_REMOVED_FROM_PARENT:
+            handleFigureRemoved(f);
+            break;
+        case NODE_ADDED_TO_TREE:
+            handleFigureRemovedFromDrawing(f);
+            break;
+        case NODE_REMOVED_FROM_TREE:
+            for (Figure d : f.preorderIterable()) {
+                getSelectedFigures().remove(d);
+            }
+            repaint();
+            break;
+        case NODE_CHANGED:
+            handleNodeChanged(f);
+            break;
+        case ROOT_CHANGED:
+            handleDrawingChanged();
+            updateLayout();
+            repaint();
+            break;
+        case SUBTREE_NODES_CHANGED:
+            handleSubtreeNodesChanged(f);
+            repaint();
+            break;
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + " not supported");
         }
     };
     private final InvalidationListener modelInvalidationListener = o -> repaint();
@@ -238,6 +239,20 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private Bounds previousScaledBounds = null;
     private boolean recreateHandles;
     boolean renderIntoImage = false;
+
+    /**
+     * The name of the margin property.
+     */
+    public final static String MARGIN_PROPERTY = "margin";
+
+    /**
+     * Margin around the drawing.
+     */
+    private final ObjectProperty<Insets> margin = new NonnullProperty<Insets>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
+
+    {
+        margin.addListener(observable -> updateLayout());
+    }
 
     private Runnable repainter = null;
     /**
@@ -280,13 +295,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             if (constrainer.get() != null) {
                 constrainer.get().updateNode(SimpleDrawingView.this);
             }
-
-            // zoom towards the center of the drawing
-            /*ScrollPane scrollPane = getScrollPane();
-            if (scrollPane != null) {
-            scrollPane.setVvalue(0.5);
-            scrollPane.setHvalue(0.5);
-            }*/
         }
     };
 
@@ -340,16 +348,16 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
             double widthFactor;
             switch (shape.getStrokeType()) {
-                case CENTERED:
-                default:
-                    widthFactor = 0.5;
-                    break;
-                case INSIDE:
-                    widthFactor = 0;
-                    break;
-                case OUTSIDE:
-                    widthFactor = 1;
-                    break;
+            case CENTERED:
+            default:
+                widthFactor = 0.5;
+                break;
+            case INSIDE:
+                widthFactor = 0;
+                break;
+            case OUTSIDE:
+                widthFactor = 1;
+                break;
             }
             return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()),
                     shape.getStrokeWidth() * widthFactor + toleranceInLocal);
@@ -462,9 +470,10 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     /**
      * Finds a figure at the specified coordinate, but looks only at figures in
-     * the specified set. 
+     * the specified set.
      * <p>
-     * Uses a default tolerance value. See {@link #findFigure(double, double, java.util.Set, double) }.
+     * Uses a default tolerance value. See {@link #findFigure(double, double, java.util.Set, double)
+     * }.
      *
      * @param vx point in view coordinates
      * @param vy point in view coordinates
@@ -483,8 +492,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @param vx point in view coordinates
      * @param vy point in view coordinates
      * @param figures figures of interest
-     * @param tolerance the number of pixels around the figure in view coordinates, in which the
-     * the point is considered to be inside the figure
+     * @param tolerance the number of pixels around the figure in view
+     * coordinates, in which the the point is considered to be inside the figure
      * @return a figure in the specified set which contains the point, or null.
      */
     public Figure findFigure(double vx, double vy, Set<Figure> figures, double tolerance) {
@@ -835,7 +844,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
 
         canvasPane = new Rectangle();
-        canvasPane.setId("canvasPane");
+        canvasPane.setId(CANVAS_PANE_ID);
         canvasPane.setFill(new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false));
 
         drawingSubScene = new Group();
@@ -846,14 +855,11 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         rootPane.getChildren().addAll(drawingSubScene, overlaysSubScene);
 
         drawingPane = new Group();
-        //drawingPane.setCacheHint(CacheHint.QUALITY);
         drawingPane.setCache(false);
-        //drawingPane.setScaleX(zoomFactor.get());
-        //drawingPane.setScaleY(zoomFactor.get());
         drawingSubScene.getChildren().addAll(canvasPane, drawingPane);
 
         toolPane = new BorderPane();
-        toolPane.setId("toolPane");
+        toolPane.setId(TOOL_PANE_ID);
         toolPane.setBackground(Background.EMPTY);
         toolPane.setManaged(false);
         handlesPane = new Group();
@@ -871,9 +877,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // We use a change listener instead of an invalidation listener here,
         // because we only want to update the layout, when the new value is
         // different from the old value!
-        drawingPane.layoutBoundsProperty().addListener((observer, oldValue, newValue) -> {
-            updateLayout();
-        });
+        drawingPane.layoutBoundsProperty().addListener(observer -> updateLayout());
 
         drawingModel.get().setRoot(new SimpleDrawing());
         handleNewDrawingModel(null, drawingModel.get());
@@ -888,6 +892,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // install/deiinstall listeners to scrollpane
         node.sceneProperty().addListener(this::updateScrollPaneListeners);
     }
+    /**
+     * The id of the tool pane for CSS styling.
+     */
+    public static final String TOOL_PANE_ID = "toolPane";
+    /**
+     * The id of the canvas pane for CSS styling.
+     */
+    public static final String CANVAS_PANE_ID = "canvasPane";
 
     private ScrollPane scrollPane;
     private final InvalidationListener visibleRectChangedHandler = this::handleVisibleRectChanged;
@@ -1184,23 +1196,27 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
 //backgroundPane.layout();
 
-        double padding = 20;
+        final Insets margin = getMargin();
+        final double marginL = margin.getLeft();
+        final double marginR = margin.getRight();
+        final double marginT = margin.getTop();
+        final double marginB = margin.getBottom();
+
         double lw = max(max(0, x) + w, max(0, -x) + dw * f);
         double lh = max(max(0, y) + h, max(0, -y) + dh * f);
-//overlaysPane.setTranslateX(-padding);
-//overlaysPane.setTranslateY(-padding);
-        drawingPane.setTranslateX(padding);
-        drawingPane.setTranslateY(padding);
-        canvasPane.setTranslateX(padding);
-        canvasPane.setTranslateY(padding);
-        toolPane.resize(lw + padding * 2, lh + padding * 2);
+
+        drawingPane.setTranslateX(marginL);
+        drawingPane.setTranslateY(marginT);
+        canvasPane.setTranslateX(marginL);
+        canvasPane.setTranslateY(marginT);
+        toolPane.resize(lw + marginL + marginR, lh + marginT + marginB);
         toolPane.layout();
 
-        overlaysPane.setClip(new Rectangle(0, 0, lw + padding * 2, lh + padding * 2));
+        overlaysPane.setClip(new Rectangle(0, 0, lw + marginL + marginR, lh + marginT + marginB));
 
 // drawingPane.setClip(new Rectangle(0,0,lw,lh));
-        rootPane.setPrefSize(lw + padding * 2, lh + padding * 2);
-        rootPane.setMaxSize(lw + padding * 2, lh + padding * 2);
+        rootPane.setPrefSize(lw + marginL + marginR, lh + marginT + marginB);
+        rootPane.setMaxSize(lw + marginL + marginR, lh + marginT + marginB);
 
         invalidateWorldViewTransforms();
         invalidateHandleNodes();
@@ -1346,4 +1362,21 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public ObservableList<String> getStylesheets() {
         return rootPane.getStylesheets();
     }
+
+    public Insets getMargin() {
+        return margin.get();
+    }
+
+    public void setMargin(Insets value) {
+        margin.set(value);
+    }
+
+    /**
+     * The top, right, bottom, and left margin around the drawing.
+     * The default value is: {@code new Insets(20, 20, 20, 20)}.
+     */
+    public ObjectProperty<Insets> marginProperty() {
+        return margin;
+    }
+
 }
