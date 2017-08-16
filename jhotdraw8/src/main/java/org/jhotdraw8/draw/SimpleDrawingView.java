@@ -1373,7 +1373,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     /**
      * The top, right, bottom, and left margin around the drawing.
-     * The default value is: {@code new Insets(20, 20, 20, 20)}.
+     * 
+     * @return The margin. The default value is: {@code new Insets(20, 20, 20, 20)}.
      */
     public ObjectProperty<Insets> marginProperty() {
         return margin;
