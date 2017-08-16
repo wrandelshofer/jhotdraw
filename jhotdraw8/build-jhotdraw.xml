@@ -13,9 +13,7 @@
     <property name="jdk.version" value="8"/>
 
     <property name="copyright" value="Copyright (c) 2017 by the authors and contributors of JHotDraw."/>
-    <exec executable="svnversion" outputproperty="svn.version" />
-    <!--property name="version" value="rev${svn.version}"-->
-    <property name="version" value="git20170731_003-2a0a2963"/>
+    <property name="version" value="git20170816_001-5bed1339"/>
 
     <property name="manifest.application-name" value="${ant.project.name}"/>
     <property name="manifest.implementation-version" value="${version}"/>
@@ -775,10 +773,11 @@
             </fileset>
         </copy>
         <jar file="${dist}/${ant.project.name}-source.jar">
-            <fileset dir=".">
+            <fileset dir="${src}/main">
                 <exclude name=".*"/>
-                <exclude name="build/**"/>
-                <exclude name="dist/**"/>
+            </fileset>
+            <fileset dir=".">
+                <include name="*.md"/>
             </fileset>
         </jar>
         <jar file="${dist}/${ant.project.name}-javadoc.jar">
