@@ -119,12 +119,7 @@
     /* -fx-border-style: dashed;*//* XXX very poor performance with dashed lines! */
 }
 
-/* Styles the background pane which fills the background of the viewport that contains the canvasPane and the toolPane.*/
-#backgroundPane {
-}
-
 #toolEventPane {
-    -fx-border-color: transparent;
     -fx-border-width: 1.4;
 }
 

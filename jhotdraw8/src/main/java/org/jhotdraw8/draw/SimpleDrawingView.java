@@ -852,10 +852,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         drawingSubScene.setMouseTransparent(true);
         overlaysSubScene = new Group();
         overlaysSubScene.setManaged(false);
-        rootPane.getChildren().addAll(drawingSubScene, overlaysSubScene);
-
         drawingPane = new Group();
-        drawingPane.setCache(false);
         drawingSubScene.getChildren().addAll(canvasPane, drawingPane);
 
         toolPane = new BorderPane();
@@ -873,6 +870,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         overlaysPane.getChildren().addAll(gridPane, handlesPane, toolPane);
         overlaysPane.setManaged(false);
         overlaysSubScene.getChildren().add(overlaysPane);
+        rootPane.getChildren().addAll(drawingSubScene, overlaysSubScene);
 
         // We use a change listener instead of an invalidation listener here,
         // because we only want to update the layout, when the new value is
@@ -1172,8 +1170,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
         double dw = d.get(Drawing.WIDTH);
         double dh = d.get(Drawing.HEIGHT);
-        int imgw = Math.min(16000, Math.max(1, (int) (dw)));
-        int imgh = Math.min(16000, Math.max(1, (int) (dh)));
 
         Bounds bounds = drawingPane.getLayoutBounds();
         double x = bounds.getMinX() * f;
@@ -1186,15 +1182,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             return;
         }
         previousScaledBounds = scaledBounds;
-//    drawingPane.setTranslateX(max(0, -x));
-// drawingPane.setTranslateY(max(0, -y));
+
+        
         if (d != null) {
             canvasPane.setTranslateX(max(0, -x));
             canvasPane.setTranslateY(max(0, -y));
             canvasPane.setWidth(dw * f);
             canvasPane.setHeight(dh * f);
         }
-//backgroundPane.layout();
 
         final Insets margin = getMargin();
         final double marginL = margin.getLeft();
