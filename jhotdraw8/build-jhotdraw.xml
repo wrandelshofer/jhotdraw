@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  * @(#)build-jhotdraw8.xml
- * Copyright (c) 2015 by the authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+ * Copyright (c) 2015-2017 by the authors and contributors of JHotDraw. MIT License.
 -->
 <project name="jhotdraw8" basedir="." default="all">
   
@@ -12,8 +11,24 @@
     <property name="jdk" value="${java.home}/.."/>
     <property name="jdk.version" value="8"/>
 
+        <exec executable="git" outputproperty="git.hash.date.author" failifexecutionfails="false" errorproperty="">
+            <arg value="log"/>
+            <arg value="-1"/>
+            <arg value="--pretty=format:%h %cI %cn"/>
+        </exec>
+        <exec executable="git" outputproperty="git.describe" failifexecutionfails="false" errorproperty="">
+            <arg value="describe"/>
+            <arg value="--tags"/>
+            <arg value="--always"/>
+            <arg value="HEAD"/>
+        </exec>
+        
+     <property name="name" value="${ant.project.name}"/>
     <property name="copyright" value="Copyright (c) 2017 by the authors and contributors of JHotDraw."/>
-    <property name="version" value="git20170816_001-5bed1339"/>
+    <property name="license.name" value="MIT License"/>
+    <property name="license" value="${license.name}. https://opensource.org/licenses/mit-license.php"/>
+    <property name="version" value="${git.describe}"/>
+    <echo message="${name} ${version} / desc:${git.describe} rev:${git.hash.date.author}"/>
 
     <property name="manifest.application-name" value="${ant.project.name}"/>
     <property name="manifest.implementation-version" value="${version}"/>
