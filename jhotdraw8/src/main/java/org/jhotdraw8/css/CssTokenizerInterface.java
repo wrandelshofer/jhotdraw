@@ -41,6 +41,9 @@ public interface CssTokenizerInterface {
     int TT_UNICODE_RANGE = -13;
     int TT_URI = -12;
 
+    /** Returns the current value converted to a string.
+     * The returned value can be used for String comparisons of the value.
+     */
     default String currentValue() {
         switch (currentToken()) {
             case TT_AT_KEYWORD:
@@ -58,7 +61,7 @@ public interface CssTokenizerInterface {
             case TT_COLUMN:
                 return "|";
             case TT_COMMENT:
-                return "/*" + currentStringValue() + "*/";
+                return currentStringValue();
             case TT_DASH_MATCH:
                 return "|=";
             case TT_DIMENSION:
@@ -66,9 +69,9 @@ public interface CssTokenizerInterface {
             case TT_EOF:
                 return "eof";
             case TT_FUNCTION:
-                return currentStringValue() + "(";
+                return currentStringValue();
             case TT_HASH:
-                return "#" + currentStringValue();
+                return currentStringValue();
             case TT_IDENT:
                 return currentStringValue();
             case TT_INCLUDE_MATCH:
@@ -82,7 +85,7 @@ public interface CssTokenizerInterface {
             case TT_S:
                 return " ";
             case TT_STRING:
-                return '"' + currentStringValue() + '"';
+                return currentStringValue();
             case TT_SUBSTRING_MATCH:
                 return "*=";
             case TT_SUFFIX_MATCH:
@@ -90,7 +93,7 @@ public interface CssTokenizerInterface {
             case TT_UNICODE_RANGE:
                 return currentStringValue();
             case TT_URI:
-                return "url(" + currentStringValue() + ")";
+                return currentStringValue();
             default:
                 return Character.toString((char) currentToken());
         }

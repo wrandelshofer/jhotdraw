@@ -529,7 +529,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new EqualsMatchSelector(attributeName, tt.currentValue());
+                selector = new EqualsMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizerInterface.TT_INCLUDE_MATCH:
                 if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
@@ -537,7 +537,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new IncludeMatchSelector(attributeName, tt.currentValue());
+                selector = new IncludeMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizerInterface.TT_DASH_MATCH:
                 if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
@@ -545,7 +545,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new DashMatchSelector(attributeName, tt.currentValue());
+                selector = new DashMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizerInterface.TT_PREFIX_MATCH:
                 if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
@@ -553,7 +553,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new PrefixMatchSelector(attributeName, tt.currentValue());
+                selector = new PrefixMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizerInterface.TT_SUFFIX_MATCH:
                 if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
@@ -561,7 +561,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new SuffixMatchSelector(attributeName, tt.currentValue());
+                selector = new SuffixMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case CssTokenizerInterface.TT_SUBSTRING_MATCH:
                 if (tt.nextToken() != CssTokenizerInterface.TT_IDENT
@@ -569,7 +569,7 @@ public class CssParser {
                         && tt.currentToken() != CssTokenizerInterface.TT_NUMBER) {
                     throw new ParseException("AttributeSelector: identifier, string or number expected. Line:"+ tt.getLineNumber()+".", tt.getStartPosition());
                 }
-                selector = new SubstringMatchSelector(attributeName, tt.currentValue());
+                selector = new SubstringMatchSelector(attributeName, tt.currentStringValue());
                 break;
             case ']':
                 selector = new ExistsMatchSelector(attributeName);
