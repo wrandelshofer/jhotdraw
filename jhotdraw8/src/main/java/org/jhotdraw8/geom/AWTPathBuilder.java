@@ -1,19 +1,20 @@
-/* @(#)Path2DDoubleBuilder.java
+/* @(#)AWTPathBuilder.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-
 package org.jhotdraw8.geom;
 
 import java.awt.geom.Path2D;
 
 /**
- * Path2DDoubleBuilder.
+ * Builds an AWT {@code Path2D.Double}.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class AWTPathBuilder extends AbstractPathBuilder {
-private Path2D.Double path= new Path2D.Double();
+
+    private Path2D.Double path = new Path2D.Double();
+
     @Override
     protected void doClosePath() {
         path.closePath();
@@ -31,7 +32,7 @@ private Path2D.Double path= new Path2D.Double();
 
     @Override
     protected void doMoveTo(double x, double y) {
-        path.moveTo(x, y);        
+        path.moveTo(x, y);
     }
 
     @Override
@@ -42,9 +43,10 @@ private Path2D.Double path= new Path2D.Double();
     public Path2D.Double get() {
         return path;
     }
+
     @Override
     protected void doFinish() {
-      // empty
+        // empty
     }
 
 }
