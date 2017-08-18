@@ -5,7 +5,6 @@ package org.jhotdraw8.geom;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import javafx.geometry.Point2D;
 
@@ -99,7 +98,7 @@ public class FXConvexHull {
             return false;
         }
 
-        double val = (p2.getX() * p3.getY()+ p1.getX() * p2.getY() + p3.getX() * p1.getY()) - (p2.getX() * p1.getY() + p3.getX() * p2.getY() + p1.getX() * p3.getY());
+        double val = (p2.getX() * p3.getY() + p1.getX() * p2.getY() + p3.getX() * p1.getY()) - (p2.getX() * p1.getY() + p3.getX() * p2.getY() + p1.getX() * p3.getY());
         return val > 0;
     }
 }
