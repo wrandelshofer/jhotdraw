@@ -37,7 +37,7 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
-        doStartMarker(x1, y1);
+        doStartOrMidMarker(x1, y1);
         tangentX = x2;
         tangentY = y2;
         needsEndMarker = true;
@@ -51,23 +51,28 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doLineTo(double x, double y) {
-        doStartMarker(x, y);
+        doStartOrMidMarker(x, y);
         tangentX = getLastX();
         tangentY = getLastY();
         needsEndMarker = true;
     }
 
-    private void doStartMarker(double x, double y) {
+    private void doStartOrMidMarker(double x, double y) {
+        final Path2D.Double marker;
         if (needsStartMarker) {
             needsStartMarker = false;
-            if (startMarker == null) {
-                return;
-            }
-            double x0 = getLastX();
-            double y0 = getLastY();
-            Transform tx = Transforms.rotate(x0 - x, y0 - y, 0, 0).createConcatenation(new Translate(x, y));
-            Shapes.buildFromPathIterator(out, startMarker.getPathIterator(Transforms.toAWT(tx)));
+            marker = startMarker;
+        } else {
+            marker = midMarker;
         }
+
+        if (marker == null) {
+            return;
+        }
+        final double x0 = getLastX();
+        final double y0 = getLastY();
+        final Transform tx = Transforms.rotate(x0 - x, y0 - y, 0, 0).createConcatenation(new Translate(x, y));
+        Shapes.buildFromPathIterator(out, marker.getPathIterator(Transforms.toAWT(tx)));
     }
 
     private void doEndMarker() {
@@ -92,7 +97,7 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doQuadTo(double x1, double y1, double x2, double y2) {
-        doStartMarker(x1, y1);
+        doStartOrMidMarker(x1, y1);
         tangentX = x1;
         tangentY = y1;
         needsEndMarker = true;
