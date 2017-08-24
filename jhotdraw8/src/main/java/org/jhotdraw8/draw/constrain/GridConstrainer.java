@@ -444,4 +444,12 @@ public class GridConstrainer extends AbstractConstrainer {
         return y;
     }
 
+    public double getY() {
+        return y.get();
+    }
+
+    public double getX() {
+        return x.get();
+    }
+
 }
