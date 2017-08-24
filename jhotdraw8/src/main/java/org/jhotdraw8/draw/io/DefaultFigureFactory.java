@@ -38,6 +38,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.SimpleBezierFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
+import org.jhotdraw8.draw.figure.LabelAutorotate;
 import org.jhotdraw8.draw.figure.SimpleImageFigure;
 import org.jhotdraw8.draw.figure.SimpleEllipseFigure;
 import org.jhotdraw8.draw.figure.SimpleLineConnectionWithMarkersFigure;
@@ -100,6 +101,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
     }
     public DefaultFigureFactory(IdFactory idFactory){
         super(idFactory);
+        
         addFigureKeysAndNames("Layer", SimpleLayer.class);
         addFigureKeysAndNames("Clipping", SimpleClipping.class);
         addFigureKeysAndNames("Rectangle", SimpleRectangleFigure.class);
@@ -173,6 +175,7 @@ public class DefaultFigureFactory extends SimpleFigureFactory {
         addConverterForType(FillRule.class, new XmlEnumConverter<FillRule>(FillRule.class));
         addConverterForType(FontWeight.class, new XmlEnumConverter<>(FontWeight.class));
         addConverterForType(FontPosture.class, new XmlEnumConverter<>(FontPosture.class));
+        addConverterForType(LabelAutorotate.class, new XmlEnumConverter<>(LabelAutorotate.class));
         addConverterForType(RegexReplace.class, new CssRegexConverter(true));
         addConverterForType(StrokeLineJoin.class, new XmlEnumConverter<>(StrokeLineJoin.class));
         addConverterForType(StrokeLineCap.class, new XmlEnumConverter<>(StrokeLineCap.class));
