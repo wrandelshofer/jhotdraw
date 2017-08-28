@@ -67,7 +67,7 @@
     <property name="src.doc.xsl" value="${src}/doc/xsl"/>
 
     <target name="init">
-        <echo message="doc: ${basedir}/${doc}"/>
+        <echo message="version: ${version}"/>
     </target>
 
     <target name="do-clean.compile" depends="init">
