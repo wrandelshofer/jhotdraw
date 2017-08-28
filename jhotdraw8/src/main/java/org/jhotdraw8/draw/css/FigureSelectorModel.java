@@ -165,6 +165,9 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @Override
     public boolean attributeValueContainsWord(Figure element, String attributeName, String word) {
         ReadOnlyStyleableMapAccessor<Object> k = getReadOnlyAttributeAccessor(element, attributeName);
+        if (k == null) {
+            return false;
+        }
         Object value = element.get(k);
         if (value instanceof Collection) {
             @SuppressWarnings("unchecked")
@@ -263,28 +266,29 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     public String getAttribute(Figure element, String attributeName) {
         return getAttribute(element, StyleOrigin.USER, attributeName);
     }
+
     @SuppressWarnings("unchecked")
     public String getAttribute(Figure element, StyleOrigin origin, String attributeName) {
         WriteableStyleableMapAccessor<Object> key = (WriteableStyleableMapAccessor<Object>) findKey(element, attributeName);
         if (key == null) {
             return null;
         }
-        boolean isInitialValue = origin!=null&& !element.containsKey(origin, key);
+        boolean isInitialValue = origin != null && !element.containsKey(origin, key);
         if (isInitialValue) {
-        if ((key instanceof CompositeMapAccessor)) {
-            for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
-                // FIXME should recurse here
-                if (element.containsKey(origin, subkey)) {
-                    isInitialValue = false;
-                    break;
+            if ((key instanceof CompositeMapAccessor)) {
+                for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
+                    // FIXME should recurse here
+                    if (element.containsKey(origin, subkey)) {
+                        isInitialValue = false;
+                        break;
+                    }
                 }
             }
-        }
         }
         if (isInitialValue) {
             return INITIAL_VALUE_KEYWORD;
         }
-        return key.getConverter().toString(element.getStyled(origin,key));
+        return key.getConverter().toString(element.getStyled(origin, key));
     }
 
     public Converter<?> getConverter(Figure element, String attributeName) {
