@@ -84,7 +84,11 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
 
     @Override
     public CssSizeInsets get(Map<? super Key<?>, Object> a) {
-        return new CssSizeInsets(topKey.get(a), rightKey.get(a), bottomKey.get(a), leftKey.get(a));
+        final CssSize top = topKey.get(a);
+        final CssSize right = rightKey.get(a);
+        final CssSize bottom = bottomKey.get(a);
+        final CssSize left = leftKey.get(a);
+        return new CssSizeInsets(top, right, bottom, left);
     }
 
     @Override
