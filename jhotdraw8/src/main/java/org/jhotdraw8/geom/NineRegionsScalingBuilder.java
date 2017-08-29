@@ -1,4 +1,4 @@
-/* @(#)NineSliceScalingBuilder.java
+/* @(#)NineRegionsScalingBuilder.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom;
@@ -11,7 +11,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 
 /**
- * This builder slices the input path into 9 pieces, and scales them by the
+ * This builder slices the input path into 9 regions, and scales them by the
  * specified scale factor and pivot.
  * <p>
  * The builder takes a four values minx, miny, maxx, maxy as input, or a
@@ -38,14 +38,14 @@ import javafx.scene.transform.Translate;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class NineSliceScalingBuilder extends AbstractPathBuilder {
+public class NineRegionsScalingBuilder extends AbstractPathBuilder {
 
     private final double minX, minY, maxX, maxY;
-    private final Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
+    private Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
     private final PathBuilder target;
 
-    public NineSliceScalingBuilder(PathBuilder target, double sx, double sy, double pivotX, double pivotY, double minX, double minY, double maxX, double maxY) {
-        this.target=target;
+    public NineRegionsScalingBuilder(PathBuilder target, double sx, double sy, double pivotX, double pivotY, double minX, double minY, double maxX, double maxY) {
+        this.target = target;
         this.minX = minX;
         this.maxX = maxX;
         this.minY = minY;
@@ -61,62 +61,78 @@ public class NineSliceScalingBuilder extends AbstractPathBuilder {
         bottomLeft = new Scale(sx, sy, pivotX, pivotY).createConcatenation(new Translate((minX - pivotX * sx), (maxY - pivotY) * sy));
     }
 
-    public NineSliceScalingBuilder(PathBuilder target, double sx, double sy, double pivotX, double pivotY, Bounds bounds, Insets insets) {
-        this(target, sx, sy, pivotX, pivotY,
+    /**
+     * Creates a new instance.
+     * @param dest The destination (target) of the builder.
+     * @param bounds The bounds of the source image.
+     * @param insets The nine regions in the bounds of the source image.
+     * @param destBounds The bounds of the destination image.
+     */
+    public NineRegionsScalingBuilder(PathBuilder dest, Bounds bounds, Insets insets, Bounds destBounds) {
+        this(dest, destBounds.getWidth() / bounds.getWidth(), destBounds.getHeight() / bounds.getHeight(), bounds.getMinX(), bounds.getMinY(),
                 bounds.getMinX() + insets.getLeft(),
                 bounds.getMinY() + insets.getTop(),
                 bounds.getMaxX() - insets.getRight(),
                 bounds.getMaxY() - insets.getBottom()
         );
-
+        Translate t = new Translate(destBounds.getMinX() - bounds.getMinX(), destBounds.getMinY() - bounds.getMinY());
+        center = Transforms.concat(center, t);
+        top = Transforms.concat(top, t);
+        bottom = Transforms.concat(bottom, t);
+        right = Transforms.concat(right, t);
+        left = Transforms.concat(left, t);
+        topLeft = Transforms.concat(topLeft, t);
+        topRight = Transforms.concat(topRight, t);
+        bottomRight = Transforms.concat(bottomRight, t);
+        bottomLeft = Transforms.concat(bottomLeft, t);
     }
 
     @Override
     protected void doClosePath() {
         target.closePath();
     }
-    
+
     private Point2D transform(double x, double y) {
-        if (x< minX) {
-            
-        }else if (x>maxX) {
-            
-        }else{
-            
+        if (x < minX) {
+
+        } else if (x > maxX) {
+
+        } else {
+
         }
-        return new Point2D(x,y);
+        return new Point2D(x, y);
     }
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
-        Point2D p1=transform(x1,y1);
-        Point2D p2=transform(x2,y2);
-        Point2D p3=transform(x3,y3);
-        target.curveTo(p1.getX(),p1.getY(),p2.getX(),p2.getY(),p3.getX(),p3.getY());
+        Point2D p1 = transform(x1, y1);
+        Point2D p2 = transform(x2, y2);
+        Point2D p3 = transform(x3, y3);
+        target.curveTo(p1.getX(), p1.getY(), p2.getX(), p2.getY(), p3.getX(), p3.getY());
     }
 
     @Override
     protected void doLineTo(double x, double y) {
-        Point2D p=transform(x,y);
-        target.lineTo(p.getX(),p.getY());
+        Point2D p = transform(x, y);
+        target.lineTo(p.getX(), p.getY());
     }
 
     @Override
     protected void doMoveTo(double x, double y) {
-        Point2D p=transform(x,y);
-        target.moveTo(p.getX(),p.getY());
+        Point2D p = transform(x, y);
+        target.moveTo(p.getX(), p.getY());
     }
 
     @Override
     protected void doQuadTo(double x1, double y1, double x2, double y2) {
-        Point2D p1=transform(x1,y1);
-        Point2D p2=transform(x2,y2);
-        target.quadTo(p1.getX(),p1.getY(),p2.getX(),p2.getY());
-    }
-    @Override
-    protected void doFinish() {
-       target.finish();
+        Point2D p1 = transform(x1, y1);
+        Point2D p2 = transform(x2, y2);
+        target.quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
+    @Override
+    protected void doFinish() {
+        target.finish();
+    }
 
 }
