@@ -9,15 +9,14 @@ import java.text.ParseException;
 import org.jhotdraw8.io.IdFactory;
 
 /**
- * Converts a {@code CssSizeInsets} into a {@code String} and vice
- * versa.
+ * Converts a {@code CssSizeInsets} into a {@code String} and vice versa.
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
 public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
 
-   // FIXME must use CssParser instead of PatternConverter!!
+    // FIXME must use CssParser instead of PatternConverter!!
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 
     @Override
@@ -30,7 +29,7 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
         if (value.getRight() == value.getLeft()) {
             if (value.getTop() == value.getBottom()) {
                 if (value.getTop() == value.getLeft()) {
-                    formatter.toStr(out, idFactory, 1, value.getTop());
+                        formatter.toStr(out, idFactory, 1, value.getTop());
                 } else {
                     formatter.toStr(out, idFactory, 2, value.getTop(), value.getRight());
                 }
@@ -63,6 +62,5 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
     public CssSizeInsets getDefaultValue() {
         return new CssSizeInsets();
     }
-    
-    
+
 }
