@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.figure;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.List;
 import javafx.geometry.BoundingBox;
@@ -28,14 +29,18 @@ import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.SizeInsetsStyleableMapAccessor;
+import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
 import org.jhotdraw8.draw.locator.RelativeLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.NineRegionsScalingBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.text.CssSize;
 
 /**
  * A Label that can be placed anywhere on a drawing.
@@ -56,7 +61,26 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static DoubleStyleableFigureKey PADDING_RIGHT = new DoubleStyleableFigureKey("paddingRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static DoubleStyleableFigureKey PADDING_TOP = new DoubleStyleableFigureKey("paddingTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
     public final static InsetsStyleableMapAccessor PADDING = new InsetsStyleableMapAccessor("padding", PADDING_TOP, PADDING_RIGHT, PADDING_BOTTOM, PADDING_LEFT);
-
+    public final static SizeStyleableFigureKey SHAPE_SLICE_BOTTOM = new SizeStyleableFigureKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static SizeStyleableFigureKey SHAPE_SLICE_LEFT = new SizeStyleableFigureKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static SizeStyleableFigureKey SHAPE_SLICE_RIGHT = new SizeStyleableFigureKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static SizeStyleableFigureKey SHAPE_SLICE_TOP = new SizeStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    /**
+     * This property specifies inward offsets from the top, right, bottom, and
+     * left edges of the border image defined by the 
+     * {
+     *
+     * @see #SHAPE} property, dividing it into nine regions. Percentages are
+     * relative to the size of the image: the width of the image for the
+     * horizontal offsets, the height for vertical offsets. Numbers represent
+     * pixel units in the image. See
+     * <a href="https://www.w3.org/TR/css3-background/#border-image-slice">CSS3
+     * Background: border-image-slice</a>.
+     */
+    public final static SizeInsetsStyleableMapAccessor SHAPE_SLICE = new SizeInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
+    /**
+     * Defines the border image as an SVG path.
+     */
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
 
     protected transient Bounds boundsInLocal;
@@ -196,6 +220,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
             AWTPathBuilder builder = new AWTPathBuilder();
             Shapes.buildFromSvgString(builder, content);
             Path2D.Double path = builder.get();
+            //final Rectangle2D bounds2D = path.getBounds2D();
+            //Insets shapeSlice = getStyled(SHAPE_SLICE).getConvertedValue(bounds2D.getWidth(), bounds2D.getHeight());
+            //TODO use NineRegionsScalingBuilder here.
+
             FXPathBuilder builder2 = new FXPathBuilder();
 
             Transform tx = Transforms.createReshapeTransform(Geom.getBounds(path), getBoundsInLocal());
