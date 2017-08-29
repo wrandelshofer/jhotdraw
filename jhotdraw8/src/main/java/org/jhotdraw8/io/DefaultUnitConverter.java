@@ -18,9 +18,14 @@ public class DefaultUnitConverter implements UnitConverter {
     }
 
     private final double dpi;
+    private final double percentageFactor;
 
     public DefaultUnitConverter(double dpi) {
+        this(dpi,100.0);
+    }
+    public DefaultUnitConverter(double dpi, double percentageFactor) {
         this.dpi = dpi;
+        this.percentageFactor=percentageFactor;
     }
 
     public DefaultUnitConverter() {
@@ -29,5 +34,8 @@ public class DefaultUnitConverter implements UnitConverter {
 
     public double getDpi() {
         return dpi;
+    }
+    public double getPercentageFactor() {
+        return percentageFactor;
     }
 }
