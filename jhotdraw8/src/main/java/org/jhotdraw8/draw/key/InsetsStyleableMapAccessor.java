@@ -16,6 +16,8 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.CssInsetsConverter;
+import org.jhotdraw8.text.CssSize;
+import org.jhotdraw8.text.CssSizeInsets;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 /**
@@ -83,7 +85,16 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableFigureMapAccess
 
     @Override
     public Insets get(Map<? super Key<?>, Object> a) {
-        return new Insets(topKey.get(a), rightKey.get(a), bottomKey.get(a), leftKey.get(a));
+        final Double top = topKey.get(a);
+        final Double right = rightKey.get(a);
+        final Double bottom = bottomKey.get(a);
+        final Double left = leftKey.get(a);
+        return new Insets(
+                top == null ? 0.0 : top,
+                right == null ? 0.0 : right,
+                bottom == null ? 0.0 : bottom,
+                left == null ? 0.0 : left
+        );
     }
 
     @Override
