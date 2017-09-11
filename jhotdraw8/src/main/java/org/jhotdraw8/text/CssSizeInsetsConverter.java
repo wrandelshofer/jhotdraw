@@ -19,6 +19,9 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
     // FIXME must use CssParser instead of PatternConverter!!
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 
+    /** Whether the user may enter a null value. */
+    private boolean nullable = false;
+
     @Override
     public String getHelpText() {
         return "Format of ⟨Insets⟩: ⟨all-insets⟩｜⟨top&bottom⟩ ⟨left&right⟩｜⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
@@ -26,10 +29,14 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
 
     @Override
     public void toString(Appendable out, IdFactory idFactory, CssSizeInsets value) throws IOException {
+        if (value == null || value.getLeft() == null || value.getRight() == null | value.getTop() == null || value.getBottom() == null) {
+            out.append("none");
+            return;
+        }
         if (value.getRight() == value.getLeft()) {
             if (value.getTop() == value.getBottom()) {
                 if (value.getTop() == value.getLeft()) {
-                        formatter.toStr(out, idFactory, 1, value.getTop());
+                    formatter.toStr(out, idFactory, 1, value.getTop());
                 } else {
                     formatter.toStr(out, idFactory, 2, value.getTop(), value.getRight());
                 }
@@ -43,6 +50,11 @@ public class CssSizeInsetsConverter implements Converter<CssSizeInsets> {
 
     @Override
     public CssSizeInsets fromString(CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+        String str = buf.toString();
+        if (nullable && "none".equals(str.trim())) {
+            return null;
+        }
+
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
             case 1:

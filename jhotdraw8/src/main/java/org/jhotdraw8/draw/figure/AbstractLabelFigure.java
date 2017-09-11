@@ -29,6 +29,7 @@ import org.jhotdraw8.draw.key.DoubleStyleableFigureKey;
 import org.jhotdraw8.draw.key.FigureKey;
 import org.jhotdraw8.draw.key.InsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SizeInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.SizeStyleableFigureKey;
 import org.jhotdraw8.draw.key.SvgPathStyleableFigureKey;
@@ -67,21 +68,30 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static SizeStyleableFigureKey SHAPE_SLICE_TOP = new SizeStyleableFigureKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     /**
      * This property specifies inward offsets from the top, right, bottom, and
-     * left edges of the border image defined by the 
-     * {
-     *
-     * @see #SHAPE} property, dividing it into nine regions. Percentages are
-     * relative to the size of the image: the width of the image for the
-     * horizontal offsets, the height for vertical offsets. Numbers represent
-     * pixel units in the image. See
+     * left edges of the border image defined by the {@link #SHAPE_BOUNDS}
+     * property, dividing it into nine regions. Percentages are relative to the
+     * shape bounds: the width for the horizontal offsets, the height for the
+     * vertical offsets. Numbers represent pixel units in the image.
+     * <p>
+     * See
      * <a href="https://www.w3.org/TR/css3-background/#border-image-slice">CSS3
      * Background: border-image-slice</a>.
      */
     public final static SizeInsetsStyleableMapAccessor SHAPE_SLICE = new SizeInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
     /**
+     * This property specifies the bounds of a {@link SHAPE} property. If the
+     * bounds are null or empty, then the bounds of the shape are used.
+     */
+    public final static DoubleStyleableFigureKey SHAPE_BOUNDS_X = new DoubleStyleableFigureKey("shapeBoundsX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey SHAPE_BOUNDS_Y = new DoubleStyleableFigureKey("shapeBoundsY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey SHAPE_BOUNDS_WIDTH = new DoubleStyleableFigureKey("shapeBoundsWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static DoubleStyleableFigureKey SHAPE_BOUNDS_HEIGHT = new DoubleStyleableFigureKey("shapeBoundsHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), 0.0);
+    public final static Rectangle2DStyleableMapAccessor SHAPE_BOUNDS = new Rectangle2DStyleableMapAccessor("shapeBounds", SHAPE_BOUNDS_X, SHAPE_BOUNDS_Y, SHAPE_BOUNDS_WIDTH, SHAPE_BOUNDS_HEIGHT);
+    /**
      * Defines the border image as an SVG path.
      */
     public final static SvgPathStyleableFigureKey SHAPE = new SvgPathStyleableFigureKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
+    private static final String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
     protected transient Bounds boundsInLocal;
     private Text textNode;
@@ -212,7 +222,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
         String content = getStyled(SHAPE);
         if (content == null || content.trim().isEmpty()) {
-            content = "M 0,0 1,0 1,1 0,1 Z";
+            content = SVG_SQUARE;
         }
         Bounds b = getBoundsInLocal();
 
@@ -220,13 +230,43 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
             AWTPathBuilder builder = new AWTPathBuilder();
             Shapes.buildFromSvgString(builder, content);
             Path2D.Double path = builder.get();
-            //final Rectangle2D bounds2D = path.getBounds2D();
-            //Insets shapeSlice = getStyled(SHAPE_SLICE).getConvertedValue(bounds2D.getWidth(), bounds2D.getHeight());
-            //TODO use NineRegionsScalingBuilder here.
 
             FXPathBuilder builder2 = new FXPathBuilder();
 
-            Transform tx = Transforms.createReshapeTransform(Geom.getBounds(path), getBoundsInLocal());
+            javafx.geometry.Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
+
+            final Bounds srcBounds = shapeBounds == null || Geom.isEmpty(shapeBounds) ? Geom.getBounds(path) : Geom.getBounds(shapeBounds);
+            Insets shapeSlice = getStyled(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
+            final NineRegionsScalingBuilder nineRegionsScalingBuilder = new NineRegionsScalingBuilder(builder2, srcBounds, shapeSlice, b);
+
+            Shapes.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
+            List<PathElement> elements = builder2.getElements();
+            node.getElements().setAll(elements);
+            node.setVisible(true);
+        } catch (IOException ex) {
+            node.setVisible(false);
+            return;
+        }
+    }
+
+    protected void updatePathNodeOld(RenderContext ctx, Path node) {
+        applyFillableFigureProperties(node);
+        applyStrokeableFigureProperties(node);
+
+        String content = getStyled(SHAPE);
+        if (content == null || content.trim().isEmpty()) {
+            content = SVG_SQUARE;
+        }
+        Bounds b = getBoundsInLocal();
+
+        try {
+            AWTPathBuilder builder = new AWTPathBuilder();
+            Shapes.buildFromSvgString(builder, content);
+            Path2D.Double path = builder.get();
+
+            FXPathBuilder builder2 = new FXPathBuilder();
+
+            Transform tx = Transforms.createReshapeTransform(Geom.getBounds(path), b);
             AffineTransform at = Transforms.toAWT(tx);
 
             Shapes.buildFromPathIterator(builder2, path.getPathIterator(at));

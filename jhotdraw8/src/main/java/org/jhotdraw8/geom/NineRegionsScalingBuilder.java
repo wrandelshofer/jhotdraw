@@ -41,50 +41,73 @@ import javafx.scene.transform.Translate;
 public class NineRegionsScalingBuilder extends AbstractPathBuilder {
 
     private final double minX, minY, maxX, maxY;
-    private Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
+    private final Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
     private final PathBuilder target;
-
-    public NineRegionsScalingBuilder(PathBuilder target, double sx, double sy, double pivotX, double pivotY, double minX, double minY, double maxX, double maxY) {
-        this.target = target;
-        this.minX = minX;
-        this.maxX = maxX;
-        this.minY = minY;
-        this.maxY = maxY;
-        center = new Scale(sx, sy, pivotX, pivotY);
-        top = new Scale(sx, 1, pivotX, 0).createConcatenation(new Translate(0, (minY - pivotY) * sy));
-        bottom = new Scale(sx, 1, pivotX, 0).createConcatenation(new Translate(0, (maxY - pivotY) * sy));
-        right = new Scale(1, sy, 0, pivotY).createConcatenation(new Translate((maxX - pivotX) * sx, 0));
-        left = new Scale(1, sy, 0, pivotY).createConcatenation(new Translate((minX - pivotX) * sx, 0));
-        topLeft = new Scale(sx, sy, pivotX, pivotY).createConcatenation(new Translate((minX - pivotX * sx), (minY - pivotY) * sy));
-        topRight = new Scale(sx, sy, pivotX, pivotY).createConcatenation(new Translate((maxX - pivotX * sx), (minY - pivotY) * sy));
-        bottomRight = new Scale(sx, sy, pivotX, pivotY).createConcatenation(new Translate((minX - pivotX * sx), (maxY - pivotY) * sy));
-        bottomLeft = new Scale(sx, sy, pivotX, pivotY).createConcatenation(new Translate((minX - pivotX * sx), (maxY - pivotY) * sy));
-    }
 
     /**
      * Creates a new instance.
+     *
      * @param dest The destination (target) of the builder.
-     * @param bounds The bounds of the source image.
-     * @param insets The nine regions in the bounds of the source image.
+     * @param srcBounds The bounds of the source image.
+     * @param srcInsets The nine regions in the bounds of the source image.
      * @param destBounds The bounds of the destination image.
      */
-    public NineRegionsScalingBuilder(PathBuilder dest, Bounds bounds, Insets insets, Bounds destBounds) {
-        this(dest, destBounds.getWidth() / bounds.getWidth(), destBounds.getHeight() / bounds.getHeight(), bounds.getMinX(), bounds.getMinY(),
-                bounds.getMinX() + insets.getLeft(),
-                bounds.getMinY() + insets.getTop(),
-                bounds.getMaxX() - insets.getRight(),
-                bounds.getMaxY() - insets.getBottom()
+    public NineRegionsScalingBuilder(PathBuilder dest, Bounds srcBounds, Insets srcInsets, Bounds destBounds) {
+        this.target = dest;
+
+        double it = srcInsets.getTop(), ib = srcInsets.getBottom(), ir = srcInsets.getRight(), il = srcInsets.getLeft();
+
+        Bounds si = Geom.subtractInsets(srcBounds, srcInsets);
+        this.minX = si.getMinX();
+        this.maxX = si.getMaxX();
+        this.minY = si.getMinY();
+        this.maxY = si.getMaxY();
+
+        double sx = srcBounds.getMinX(),
+                sy = srcBounds.getMinY(),
+                sw = srcBounds.getWidth(),
+                sh = srcBounds.getHeight();
+        double dx = destBounds.getMinX(),
+                dy = destBounds.getMinY(),
+                dw = destBounds.getWidth(),
+                dh = destBounds.getHeight();
+
+        center = Transforms.createReshapeTransform(
+                sx + il, sy + it, sw - il - ir, sh - it - ib,
+                dx + il, dy + it, dw - il - ir, dh - it - ib
         );
-        Translate t = new Translate(destBounds.getMinX() - bounds.getMinX(), destBounds.getMinY() - bounds.getMinY());
-        center = Transforms.concat(center, t);
-        top = Transforms.concat(top, t);
-        bottom = Transforms.concat(bottom, t);
-        right = Transforms.concat(right, t);
-        left = Transforms.concat(left, t);
-        topLeft = Transforms.concat(topLeft, t);
-        topRight = Transforms.concat(topRight, t);
-        bottomRight = Transforms.concat(bottomRight, t);
-        bottomLeft = Transforms.concat(bottomLeft, t);
+        top = Transforms.createReshapeTransform(
+                sx + il, sy + it, sw - il - ir, it,
+                dx + il, dy + it, dw - il - ir, it
+        );
+        bottom = Transforms.createReshapeTransform(
+                sx + il, sy + sh - ib, sw - il - ir, ib,
+                dx + il, dy + dh - ib, dw - il - ir, ib
+        );
+        left = Transforms.createReshapeTransform(
+                sx, sy + it, il, sh - it - ib,
+                dx, dy + it, il, dh - it - ib
+        );
+        right = Transforms.createReshapeTransform(
+                sx + sw - ir, sy + it, ir, sh - it - ib,
+                dx + dw - ir, dy + it, ir, dh - it - ib
+        );
+        topLeft = Transforms.createReshapeTransform(
+                sx, sy, il, it,
+                dx, dy, il, it
+        );
+        bottomLeft = Transforms.createReshapeTransform(
+                sx, sy + sh - ib, il, ib,
+                dx, dy + sh - ib, il, ib
+        );
+        topRight = Transforms.createReshapeTransform(
+                sx + sw - ir, sy, ir, it,
+                dx + dw - ir, dy, ir, it
+        );
+        bottomRight = Transforms.createReshapeTransform(
+                sx + sw - ir, sy + sh - ib, ir, ib,
+                dx + sw - ir, dy + dh - ib, ir, ib
+        );
     }
 
     @Override
@@ -93,14 +116,33 @@ public class NineRegionsScalingBuilder extends AbstractPathBuilder {
     }
 
     private Point2D transform(double x, double y) {
+        final Transform t;
         if (x < minX) {
-
+            if (y < minY) {
+                t = topLeft;
+            } else if (y > maxY) {
+                t = bottomLeft;
+            } else {
+                t = left;
+            }
         } else if (x > maxX) {
-
+            if (y < minY) {
+                t = topRight;
+            } else if (y > maxY) {
+                t = bottomRight;
+            } else {
+                t = right;
+            }
         } else {
-
+            if (y < minY) {
+                t = top;
+            } else if (y > maxY) {
+                t = bottom;
+            } else {
+                t = center;
+            }
         }
-        return new Point2D(x, y);
+        return t.transform(x, y);
     }
 
     @Override

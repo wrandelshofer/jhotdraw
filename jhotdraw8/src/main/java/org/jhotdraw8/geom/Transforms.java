@@ -33,29 +33,29 @@ public class Transforms {
         return concat(concat(a, b), c);
     }
 
-    public static Transform createReshapeTransform(Bounds f, Bounds t) {
+    public static Transform createReshapeTransform(Bounds src, Bounds dest) {
         return createReshapeTransform(
-                f.getMinX(), f.getMinY(), f.getWidth(), f.getHeight(),
-                t.getMinX(), t.getMinY(), t.getWidth(), t.getHeight()
+                src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
+                dest.getMinX(), dest.getMinY(), dest.getWidth(), dest.getHeight()
         );
     }
 
-    public static Transform createReshapeTransform(Bounds f, double tx, double ty, double tw, double th) {
+    public static Transform createReshapeTransform(Bounds src, double destX, double destY, double destW, double destH) {
         return createReshapeTransform(
-                f.getMinX(), f.getMinY(), f.getWidth(), f.getHeight(),
-                tx, ty, tw, th
+                src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
+                destX, destY, destW, destH
         );
     }
 
-    public static Transform createReshapeTransform(double fx, double fy, double fw, double fh, double tx, double ty, double tw, double th) {
-        double sx = tw / fw;
-        double sy = th / fh;
+    public static Transform createReshapeTransform(double sx, double sy, double sw, double sh, double dx, double dy, double dw, double dh) {
+        double scaleX = dw / sw;
+        double scaleY = dh / sh;
 
-        Transform t = new Translate(tx - fx, ty - fy);
-        if (!Double.isNaN(sx) && !Double.isNaN(sy)
-                && !Double.isInfinite(sx) && !Double.isInfinite(sy)
-                && (sx != 1d || sy != 1d)) {
-            t = Transforms.concat(t, new Scale(sx, sy, fx, fy));
+        Transform t = new Translate(dx - sx, dy - sy);
+        if (!Double.isNaN(scaleX) && !Double.isNaN(scaleY)
+                && !Double.isInfinite(scaleX) && !Double.isInfinite(scaleY)
+                && (scaleX != 1d || scaleY != 1d)) {
+            t = Transforms.concat(t, new Scale(scaleX, scaleY, sx, sy));
         }
         return t;
     }

@@ -88,6 +88,9 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
         final CssSize right = rightKey.get(a);
         final CssSize bottom = bottomKey.get(a);
         final CssSize left = leftKey.get(a);
+        if (top == null || right == null || bottom == null | left == null) {
+            return null;
+        }
         return new CssSizeInsets(
                 top == null ? CssSize.ZERO : top,
                 right == null ? CssSize.ZERO : right,
@@ -99,10 +102,17 @@ public class SizeInsetsStyleableMapAccessor extends AbstractStyleableFigureMapAc
     @Override
     public CssSizeInsets put(Map<? super Key<?>, Object> a, CssSizeInsets value) {
         CssSizeInsets oldValue = get(a);
-        topKey.put(a, value.getTop());
-        rightKey.put(a, value.getRight());
-        bottomKey.put(a, value.getBottom());
-        leftKey.put(a, value.getLeft());
+        if (value == null) {
+            topKey.put(a, null);
+            rightKey.put(a, null);
+            bottomKey.put(a, null);
+            leftKey.put(a, null);
+        } else {
+            topKey.put(a, value.getTop());
+            rightKey.put(a, value.getRight());
+            bottomKey.put(a, value.getBottom());
+            leftKey.put(a, value.getLeft());
+        }
         return oldValue;
     }
 

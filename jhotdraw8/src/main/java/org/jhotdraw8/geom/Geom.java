@@ -9,6 +9,7 @@ import java.awt.geom.PathIterator;
 import static java.lang.Math.*;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
@@ -504,6 +505,16 @@ public class Geom {
     public static Bounds getBounds(java.awt.Shape shape) {
         java.awt.geom.Rectangle2D r = shape.getBounds2D();
         return new BoundingBox(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+    }
+
+    /**
+     * Gets the bounds of the specified shape.
+     *
+     * @param r a rectangle
+     * @return JavaFX bounds
+     */
+    public static Bounds getBounds(Rectangle2D r) {
+        return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
     /**
@@ -1096,6 +1107,15 @@ public class Geom {
         return a * a + b * b;
     }
 
+    static Bounds subtractInsets(Bounds b, Insets i) {
+        return new BoundingBox(
+                b.getMinX() + i.getLeft(),
+                b.getMinY() + i.getTop(),
+                b.getWidth() - i.getLeft() - i.getRight(),
+                b.getHeight() - i.getTop() - i.getBottom()
+        );
+    }
+
     public static Transform toDeltaTransform(Transform t) {
         Transform d = new Affine(t.getMxx(), t.getMxy(), 0.0,
                 t.getMyx(), t.getMyy(), 0.0);
@@ -1103,6 +1123,10 @@ public class Geom {
     }
 
     public static String toString(Bounds b) {
+        return b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
+    }
+
+    public static String toString(Rectangle2D b) {
         return b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
@@ -1155,5 +1179,15 @@ public class Geom {
         } else {
             return (py - y1) / h;
         }
+    }
+
+    /**
+     * Returns true if the widht or the height is less or equal 0.
+     *
+     * @param b a rectangle
+     * @return true if empty
+     */
+    public static boolean isEmpty(Rectangle2D b) {
+        return b.getWidth() <= 0 || b.getHeight() <= 0;
     }
 }
