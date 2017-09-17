@@ -432,7 +432,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     }
                 }
             }
-            // build a graph which includdes all figures that must be laid out and all their observers
+            // build a graph which includes all figures that must be laid out and all their observers
             // transitively
             visited.clear();
             DirectedGraphBuilder<Figure> graphBuilder = new DirectedGraphBuilder<>();

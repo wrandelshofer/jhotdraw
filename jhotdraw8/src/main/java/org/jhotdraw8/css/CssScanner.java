@@ -5,7 +5,7 @@ package org.jhotdraw8.css;
 
 import java.io.IOException;
 import java.io.Reader;
-import org.jhotdraw8.collection.IntList;
+import org.jhotdraw8.collection.IntArrayList;
 
 /**
  * The {@code CssScanner} preprocesses an input stream of UTF-16 code points for
@@ -70,7 +70,7 @@ public class CssScanner {
     /**
      * Stack of pushed back characters.
      */
-    private final IntList pushedChars = new IntList();
+    private final IntArrayList pushedChars = new IntArrayList();
 
     public CssScanner(Reader reader) {
         this.in = reader;

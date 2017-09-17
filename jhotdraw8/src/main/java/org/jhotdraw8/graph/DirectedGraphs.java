@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.jhotdraw8.collection.IntList;
+import org.jhotdraw8.collection.IntArrayList;
 
 /**
  * Provides algorithms for directed graphs.
@@ -195,16 +195,16 @@ public class DirectedGraphs {
      * @return the disjoint sets.
      */
     public static List<Set<Integer>> findDisjointSets(IntDirectedGraph g) {
-        final List<IntList> sets = new ArrayList<>(g.getVertexCount());
+        final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
-            final IntList initialSet = new IntList(1);
+            final IntArrayList initialSet = new IntArrayList(1);
             initialSet.add(v);
             sets.add(initialSet);
         }
         for (int u = 0, n = g.getVertexCount(); u < n; u++) {
             for (int v = 0, m = g.getNextCount(u); v < m; v++) {
-                final IntList uset = sets.get(u);
-                final IntList vset = sets.get(v);
+                final IntArrayList uset = sets.get(u);
+                final IntArrayList vset = sets.get(v);
                 if (uset != vset) {
                     if (uset.size() < vset.size()) {
                         for (int i = 0, usize = uset.size(); i < usize; i++) {
@@ -223,9 +223,9 @@ public class DirectedGraphs {
             }
         }
 
-        final Map<IntList, Object> setMap = new IdentityHashMap<IntList, Object>();
+        final Map<IntArrayList, Object> setMap = new IdentityHashMap<IntArrayList, Object>();
         final List<Set<Integer>> disjointSets = new ArrayList<>();
-        for (IntList set : sets) {
+        for (IntArrayList set : sets) {
             if (!setMap.containsKey(set)) {
                 setMap.put(set, set);
                 disjointSets.add(set.addAllInto(new LinkedHashSet<Integer>()));

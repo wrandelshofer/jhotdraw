@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.collection.IntList;
+import org.jhotdraw8.collection.IntArrayList;
 
 /**
  * Provides algorithms for fitting BezierFit curves to a set of digitized
@@ -239,7 +239,7 @@ public class BezierFit {
      * maximal angle between points.
      */
     public static ArrayList<ArrayList<Point2D>> splitAtCorners(java.util.List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
-        IntList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
+        IntArrayList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
         ArrayList<ArrayList<Point2D>> segments = new ArrayList<ArrayList<Point2D>>(cornerIndices.size() + 1);
 
         if (cornerIndices.size() == 0) {
@@ -264,8 +264,8 @@ public class BezierFit {
      * for corner detection
      * @return list of corner indices.
      */
-    public static IntList findCorners(java.util.List<Point2D> digitizedPoints, double minAngle, double minDistance) {
-        IntList cornerIndices = new IntList();
+    public static IntArrayList findCorners(java.util.List<Point2D> digitizedPoints, double minAngle, double minDistance) {
+        IntArrayList cornerIndices = new IntArrayList();
 
         double squaredDistance = minDistance * minDistance;
 
