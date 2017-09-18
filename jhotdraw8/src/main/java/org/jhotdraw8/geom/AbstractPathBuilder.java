@@ -138,5 +138,5 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         lastX = x;
         lastY = y;
     }
-
+    
 }

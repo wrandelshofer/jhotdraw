@@ -8,10 +8,6 @@ import java.awt.geom.PathIterator;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
-import static org.jhotdraw8.draw.figure.SimpleLineFigure.END_X;
-import static org.jhotdraw8.draw.figure.SimpleLineFigure.END_Y;
-import static org.jhotdraw8.draw.figure.SimpleLineFigure.START_X;
-import static org.jhotdraw8.draw.figure.SimpleLineFigure.START_Y;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 

@@ -20,7 +20,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  */
 public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure, 
-        LockableFigure, CompositableFigure, FillableFigure, StrokeableFigure {
+        LockableFigure, CompositableFigure, FillableFigure, StrokeableFigure, StartAndEndMarkerableFigure, StrokeCuttableFigure {
 
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -71,4 +71,34 @@ public class SimpleLineConnectionWithMarkersFigure extends AbstractLineConnectio
         super.updateStartMarkerNode(ctx, node); 
         applyFillableFigureProperties(node);
     }    
+
+    @Override
+    public double getMarkerEndScaleFactor() {
+        return StartAndEndMarkerableFigure.super.getMarkerEndScaleFactor(); 
+    }
+
+    @Override
+    public String getMarkerEndShape() {
+        return StartAndEndMarkerableFigure.super.getMarkerEndShape(); 
+    }
+
+    @Override
+    public double getMarkerStartScaleFactor() {
+        return StartAndEndMarkerableFigure.super.getMarkerStartScaleFactor(); 
+    }
+
+    @Override
+    public String getMarkerStartShape() {
+        return StartAndEndMarkerableFigure.super.getMarkerStartShape(); 
+    }
+
+    @Override
+    public double getStrokeCutEnd() {
+        return StrokeCuttableFigure.super.getStrokeCutEnd(); 
+    }
+
+    @Override
+    public double getStrokeCutStart() {
+        return StrokeCuttableFigure.super.getStrokeCutStart(); 
+    }
 }
