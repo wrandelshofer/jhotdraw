@@ -20,13 +20,13 @@ import java.util.Set;
  */
 public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGraph {
 
-    private final static int SENTINEL = -1;
     private final static int EDGES_NUM_FIELDS = 2;
     private final static int EDGES_POINTER_FIELD = 1;
     private final static int EDGES_VERTEX_FIELD = 0;
-    private final static int LASTEDGE_NUM_FIELDS = 2;
     private final static int LASTEDGE_COUNT_FIELD = 0;
+    private final static int LASTEDGE_NUM_FIELDS = 2;
     private final static int LASTEDGE_POINTER_FIELD = 1;
+    private final static int SENTINEL = -1;
 
     private int edgeCount;
     /**
@@ -112,7 +112,11 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
             return vertices.size() - 1;
         });
     }
-    
+
+    public DirectedGraph<V> build() {
+        return new ImmutableDirectedGraph<V>(this);
+    }
+
     /**
      * Builder-method: adds a directed edge from 'a' to 'b'.
      * <p>
@@ -186,6 +190,30 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
         return vertexMap.get(v);
     }
 
+    /**
+     * Creates a graph with all edges inverted.
+     *
+     * @param <X> the vertex type
+     * @param graph a graph
+     * @return a new graph with inverted edges
+     */
+    public static <X> DirectedGraphBuilder<X> inverseOfDirectedGraph(DirectedGraph<X> graph) {
+        final int edgeCount = graph.getEdgeCount();
+
+        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>(graph.getVertexCount(), edgeCount);
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            X v = graph.getVertex(i);
+            b.addVertex(v);
+        }
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            X v = graph.getVertex(i);
+            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                b.addEdge(graph.getNext(v, j), v);
+            }
+        }
+        return b;
+    }
+
     public static <X> DirectedGraphBuilder<X> ofDirectedGraph(DirectedGraph<X> model) {
         DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>();
         for (int i = 0, n = model.getVertexCount(); i < n; i++) {
@@ -223,31 +251,4 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
         return b;
     }
 
-    /**
-     * Creates a graph with all edges inverted.
-     *
-     * @param <X> the vertex type
-     * @param graph a graph
-     * @return a new graph with inverted edges
-     */
-    public static <X> DirectedGraphBuilder<X> inverseOfDirectedGraph(DirectedGraph<X> graph) {
-       final int edgeCount = graph.getEdgeCount();
-
-        DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>(graph.getVertexCount(), edgeCount);
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            X v = graph.getVertex(i);
-            b.addVertex(v);
-        }
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            X v = graph.getVertex(i);
-            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addEdge(graph.getNext(v, j), v);
-            }
-        }
-        return b;
-    }
-    
-    public DirectedGraph<V> build() {
-        return new ImmutableDirectedGraph<V>(this);
-    }
 }

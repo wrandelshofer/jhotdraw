@@ -1,7 +1,6 @@
 /* @(#)DirectedGraph.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
-
 package org.jhotdraw8.graph;
 
 import java.util.Iterator;
@@ -19,31 +18,48 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <V> the vertex type
  */
 public interface DirectedGraph<V> {
 
     /**
-     * Returns the number of vertices {@code V}.
+     * Dumps the graph for debugging purposes.
      *
-     * @return vertex count
+     * @return a dump of the directed graph
      */
-    int getVertexCount();
+    default String dump() {
+        return dump(Object::toString);
+    }
 
     /**
-     * Returns Vertex vi.
+     * Dumps the graph for debugging purposes.
      *
-     * @param indexOfVertex index of vertex
-     * @return vertex vi
+     * @param toStringFunction a function which converts a vertex to a string
+     * @return the dumped graph
      */
-    V getVertex(int indexOfVertex);
+    default String dump(Function<V, String> toStringFunction) {
+        StringBuilder buf = new StringBuilder();
+        buf.append("DirectedGraph:");
+        for (int ii = 0, nn = getVertexCount(); ii < nn; ii++) {
+            V v = getVertex(ii);
+            buf.append("\n  ").append(toStringFunction.apply(v)).append(" -> ");
+            for (int i = 0, n = getNextCount(v); i < n; i++) {
+                if (i != 0) {
+                    buf.append(", ");
+                }
+                buf.append(toStringFunction.apply(getNext(v, i)));
+            }
+            buf.append('.');
+        }
+        return buf.toString();
+    }
 
     /**
-     * Returns the number of next vertices of v.
+     * Returns the number of edges.
      *
-     * @param vertex a vertex
-     * @return the number of next vertices of v.
+     * @return edge count
      */
-    int getNextCount(V vertex);
+    int getEdgeCount();
 
     /**
      * Returns the i-th next vertex of v.
@@ -54,18 +70,13 @@ public interface DirectedGraph<V> {
      */
     V getNext(V vertex, int i);
 
-    /** Returns the number of edges.
-     * @return edge count
-     */
-    int getEdgeCount();
-
     /**
-     * Dumps the graph for debugging purposes.
-     * @return a dump of the directed graph
+     * Returns the number of next vertices of v.
+     *
+     * @param vertex a vertex
+     * @return the number of next vertices of v.
      */
-    default String dump() {
-        return dump(Object::toString);
-    }
+    int getNextCount(V vertex);
 
     /**
      * Returns the next vertices after the specified vertex.
@@ -100,6 +111,21 @@ public interface DirectedGraph<V> {
     }
 
     /**
+     * Returns Vertex vi.
+     *
+     * @param indexOfVertex index of vertex
+     * @return vertex vi
+     */
+    V getVertex(int indexOfVertex);
+
+    /**
+     * Returns the number of vertices {@code V}.
+     *
+     * @return vertex count
+     */
+    int getVertexCount();
+
+    /**
      * Dumps the graph for debugging purposes.
      *
      * /** Returns all vertices.
@@ -130,25 +156,4 @@ public interface DirectedGraph<V> {
         return () -> new VertexIterator();
     }
 
-    /**
-     * Dumps the graph for debugging purposes.
-     * @param toStringFunction a function which converts a vertex to a string
-     * @return the dumped graph
-     */
-    default String dump(Function<V, String> toStringFunction) {
-        StringBuilder buf = new StringBuilder();
-        buf.append("DirectedGraph:");
-        for (int ii = 0, nn = getVertexCount(); ii < nn; ii++) {
-            V v = getVertex(ii);
-            buf.append("\n  ").append(toStringFunction.apply(v)).append(" -> ");
-            for (int i = 0, n = getNextCount(v); i < n; i++) {
-                if (i != 0) {
-                    buf.append(", ");
-                }
-                buf.append(toStringFunction.apply(getNext(v, i)));
-            }
-            buf.append('.');
-        }
-        return buf.toString();
-    }
 }

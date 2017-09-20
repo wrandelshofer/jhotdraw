@@ -15,6 +15,11 @@ import java.util.Map;
 public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
 
     /**
+     * Holds the number of edges.
+     */
+    private final int edgeCount;
+
+    /**
      * Holds the edges.
      * <p>
      * Contains no entry if a vertex has no edges. Contains an array if a vertex
@@ -26,11 +31,6 @@ public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
      * Holds the vertices.
      */
     private final Object[] vertices;
-
-    /**
-     * Holds the number of edges.
-     */
-    private final int edgeCount;
 
     /**
      * Creates a new instance from the specified graph.
