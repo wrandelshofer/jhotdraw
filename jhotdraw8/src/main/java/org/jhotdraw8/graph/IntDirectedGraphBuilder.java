@@ -16,66 +16,15 @@ import java.util.Map;
  */
 public class IntDirectedGraphBuilder implements IntDirectedGraph {
 
-    private final static int SENTINEL = -1;
     private final static int EDGES_NUM_FIELDS = 2;
     private final static int EDGES_POINTER_FIELD = 1;
     private final static int EDGES_VERTEX_FIELD = 0;
-    private final static int LASTEDGE_NUM_FIELDS = 2;
     private final static int LASTEDGE_COUNT_FIELD = 0;
+    private final static int LASTEDGE_NUM_FIELDS = 2;
     private final static int LASTEDGE_POINTER_FIELD = 1;
 
-    public static IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
-        int edgeCount = countEdges(graph);
+    private final static int SENTINEL = -1;
 
-        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), edgeCount);
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            int v = i;
-            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addEdge(v, graph.getNext(v, j));
-            }
-        }
-        return b;
-    }
-
-    /**
-     * Creates a graph with all edges inverted.
-     *
-     * @param graph a graph
-     * @return a new graph with inverted edges
-     */
-    public static IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
-        int edgeCount = countEdges(graph);
-
-        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), edgeCount);
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-            int v = i;
-            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addEdge(graph.getNext(v, j), v);
-            }
-        }
-        return b;
-    }
-
-    /**
-     * Counts the edges of the provided graph.
-     *
-     * @param graph a graph
-     * @return the number of edges
-     */
-    public static int countEdges(IntDirectedGraph graph) {
-        int edgeCount;
-        if (graph instanceof GraphWithKnownEdgeCount) {
-            edgeCount = ((GraphWithKnownEdgeCount) graph).getEdgeCount();
-        } else {
-            edgeCount = 0;
-            for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-                int v = i;
-                edgeCount += graph.getNextCount(v);
-            }
-
-        }
-        return edgeCount;
-    }
     private int edgeCount;
     /**
      * Table of edges.
@@ -113,45 +62,10 @@ public class IntDirectedGraphBuilder implements IntDirectedGraph {
     }
 
     /**
-     * Builder-method: adds a vertex.
-     */
-    public void addVertex() {
-        setVertexCount(vertexCount + 1);
-    }
-
-    public void setVertexCount(int newValue) {
-        if (newValue < vertexCount) {
-            throw new IllegalArgumentException("can only add vertices:" + newValue);
-        }
-        vertexCount = newValue;
-        if (lastEdge.length < vertexCount * LASTEDGE_NUM_FIELDS) {
-            int[] tmp = lastEdge;
-            lastEdge = new int[lastEdge.length * LASTEDGE_NUM_FIELDS];
-            System.arraycopy(tmp, 0, lastEdge, 0, tmp.length);
-        }
-    }
-
-    /**
-     * Builds the model.
-     *
-     * @return the model
-     */
-    public ImmutableIntDirectedGraph build() {
-        ImmutableIntDirectedGraph model = new ImmutableIntDirectedGraph(vertexCount, edgeCount);
-
-        for (int i = 0; i < vertexCount; i++) {
-            int v = i;
-            for (int j = 0, m = getNextCount(i); j < m; j++) {
-                model.buildAddEdge(v, getNext(i, j));
-            }
-        }
-        return model;
-    }
-
-    /**
      * Builder-method: adds a directed edge from 'a' to 'b'.
      * <p>
-     * Before you may call this method, you must have called {@link #setVertexCount(int)}.
+     * Before you may call this method, you must have called
+     * {@link #setVertexCount(int)}.
      *
      * @param a vertex a
      * @param b vertex b
@@ -174,6 +88,22 @@ public class IntDirectedGraphBuilder implements IntDirectedGraph {
         lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD] = newLastEdgeIdOfA;
 
         edgeCount++;
+    }
+
+    /**
+     * Builder-method: adds a vertex.
+     */
+    public void addVertex() {
+        setVertexCount(vertexCount + 1);
+    }
+
+    public ImmutableIntDirectedGraph build() {
+        return new ImmutableIntDirectedGraph(this);
+    }
+
+    @Override
+    public int getEdgeCount() {
+        return edgeCount;
     }
 
     @Override
@@ -199,6 +129,18 @@ public class IntDirectedGraphBuilder implements IntDirectedGraph {
     @Override
     public int getVertexCount() {
         return vertexCount;
+    }
+
+    public void setVertexCount(int newValue) {
+        if (newValue < vertexCount) {
+            throw new IllegalArgumentException("can only add vertices:" + newValue);
+        }
+        vertexCount = newValue;
+        if (lastEdge.length < vertexCount * LASTEDGE_NUM_FIELDS) {
+            int[] tmp = lastEdge;
+            lastEdge = new int[lastEdge.length * LASTEDGE_NUM_FIELDS];
+            System.arraycopy(tmp, 0, lastEdge, 0, tmp.length);
+        }
     }
 
     /**
@@ -264,6 +206,37 @@ public class IntDirectedGraphBuilder implements IntDirectedGraph {
                 }
             }
         }
+    }
 
+    /**
+     * Creates a graph with all edges inverted.
+     *
+     * @param graph a graph
+     * @return a new graph with inverted edges
+     */
+    public static IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
+        int edgeCount = graph.getEdgeCount();
+
+        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), edgeCount);
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            int v = i;
+            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                b.addEdge(graph.getNext(v, j), v);
+            }
+        }
+        return b;
+    }
+
+    public static IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
+        int edgeCount = graph.getEdgeCount();
+
+        IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), edgeCount);
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            int v = i;
+            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
+                b.addEdge(v, graph.getNext(v, j));
+            }
+        }
+        return b;
     }
 }

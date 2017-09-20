@@ -3,7 +3,9 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.graph.GraphWithKnownEdgeCount;
+import static ch.systransis.arl.editor.model.nodeimpl.PIOPathNode.DescType.Vertex;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ImmutableIntDirectedGraph.
@@ -11,89 +13,94 @@ import org.jhotdraw8.graph.GraphWithKnownEdgeCount;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ImmutableIntDirectedGraph implements IntDirectedGraph, GraphWithKnownEdgeCount {
-// FIXME  The arrays can be condensed by factor 2.
-    private final int vertexCount;
+public class ImmutableIntDirectedGraph implements IntDirectedGraph {
 
     /**
-     * Table of edges.
-     * <p>
-     * {@code edges[i * 2} contains the index of the vertex of the i-th edge.
-     * <p>
-     * {@code edges[i * 2 + 1} contains the index of the next edge.
+     * Holds the edges.
      */
     private final int[] edges;
 
-    private int edgeCount;
-
     /**
-     * Table of last edges.
-     * <p>
-     * {@code lastEdge[i * 2+1} contains the index of the last edge of the i-th
-     * vertex.
-     * <p>
-     * {@code lastEdge[i * 2} contains the number of edges of the i-th vertex.
+     * Holds offsets into the edges table for each vertex.
      */
-    private final int[] lastEdge;
+    private final int[] vertices;
 
     /**
-     * Builder-constructor.
+     * Creates a new instance from the specified graph.
      *
-     * @param vertexCapacity
-     * @param edgeCapacity
+     * @param graph a graph
      */
-    ImmutableIntDirectedGraph(int vertexCapacity, int edgeCapacity) {
-        this.vertexCount = vertexCapacity;
-        this.edges = new int[edgeCapacity * 2];
-        this.lastEdge = new int[vertexCapacity * 2];
+    public ImmutableIntDirectedGraph(IntDirectedGraph graph) {
+        int edgeCount = 0;
+
+        final int edgeCapacity = graph.getEdgeCount();
+        final int vertexCapacity = graph.getVertexCount();
+
+        this.edges = new int[edgeCapacity];
+        this.vertices = new int[vertexCapacity];
+
+        for (int a = 0; a < vertexCapacity; a++) {
+            vertices[a] = edgeCount;
+            for (int i = 0, n = graph.getNextCount(a); i < n; i++) {
+                edges[edgeCount++] = graph.getNext(a, i);
+            }
+        }
     }
 
     /**
-     * Builder-method: adds a directed edge from 'a' to 'b'.
-     * <p>
-     * Before you may call this method, you must have called {@link #buildSetVertexCount(int)
-     * }
-     * and {@link #buildSetEdgeCount(int) }.
+     * Creates a new instance from the specified graph.
      *
-     * @param a vertex a
-     * @param b vertex b
+     * @param graph a graph
      */
-    void buildAddEdge(int a, int b) {
-        int edgeCountOfA = lastEdge[a * 2];
-        int lastEdgeIdOfA = lastEdge[a * 2 + 1];
+    public <V> ImmutableIntDirectedGraph(DirectedGraph<V> graph) {
+        int edgeCount = 0;
 
-        int newLastEdgeIdOfA = edgeCount;
+        final int edgeCapacity = graph.getEdgeCount();
+        final int vertexCapacity = graph.getVertexCount();
 
-        edges[newLastEdgeIdOfA * 2] = b;
-        edges[newLastEdgeIdOfA * 2 + 1] = (edgeCountOfA != 0) ? lastEdgeIdOfA : -1;
+        this.edges = new int[edgeCapacity];
+        this.vertices = new int[vertexCapacity];
 
-        lastEdge[a * 2] = edgeCountOfA + 1;
-        lastEdge[a * 2 + 1] = newLastEdgeIdOfA;
+        Map<V, Integer> vertexMap = new HashMap<>(vertexCapacity);
+        for (int a = 0; a < vertexCapacity; a++) {
+            vertexMap.put(graph.getVertex(a), a);
+        }
 
-        edgeCount++;
+        for (int a = 0; a < vertexCapacity; a++) {
+            V va = graph.getVertex(a);
+            vertices[a] = edgeCount;
+            for (int i = 0, n = graph.getNextCount(va); i < n; i++) {
+                edges[edgeCount++] = vertexMap.get(graph.getNext(va, i));
+            }
+        }
     }
 
     @Override
     public int getEdgeCount() {
-        return edgeCount;
+        return edges.length;
     }
 
     @Override
     public int getNext(int vi, int i) {
-        int edgeId = lastEdge[vi * 2 + 1];
-        for (int j = i - 1; j >= 0; j--) {
-            edgeId = edges[edgeId * 2 + 1];
+        if (i < 0 || i >= getNextCount(vi)) {
+            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNext(vi, i));
         }
-        return edges[edgeId * 2];
+        return edges[vertices[vi] + i];
     }
 
     @Override
     public int getNextCount(int vi) {
-        return lastEdge[vi * 2];
+        final int vertexCount = getVertexCount();
+        if (vi < 0 || vi >= vertexCount) {
+            throw new IllegalArgumentException("vi(" + vi + ") < 0 || vi >= " + vertexCount);
+        }
+        final int offset = vertices[vi];
+        final int nextOffset = (vi == vertexCount - 1) ? edges.length : vertices[vi + 1];
+        return nextOffset - offset;
     }
 
     @Override
     public int getVertexCount() {
-        return vertexCount;
+        return vertices.length;
     }
 }

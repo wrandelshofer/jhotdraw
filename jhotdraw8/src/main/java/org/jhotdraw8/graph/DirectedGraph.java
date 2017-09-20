@@ -54,6 +54,11 @@ public interface DirectedGraph<V> {
      */
     V getNext(V vertex, int i);
 
+    /** Returns the number of edges.
+     * @return edge count
+     */
+    int getEdgeCount();
+
     /**
      * Dumps the graph for debugging purposes.
      * @return a dump of the directed graph

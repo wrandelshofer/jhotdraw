@@ -3,12 +3,8 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.graph.ReferenceToIntDirectedGraphMixin;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * ImmutableDirectedGraph.
@@ -16,56 +12,83 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class ImmutableDirectedGraph<V> extends ImmutableIntDirectedGraph
-        implements ReferenceToIntDirectedGraphMixin<V> {
+public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
 
     /**
-     * Maps a vertex to a vertex index.
+     * Holds the edges.
+     * <p>
+     * Contains no entry if a vertex has no edges. Contains an array if a vertex
+     * has one or more edges.
      */
-    private final Map<V, Integer> vertexMap;
+    private final Map<V, Object[]> edges;
 
     /**
-     * Table of vertices.
+     * Holds the vertices.
      */
-    private final List<V> vertices;
-
-    public ImmutableDirectedGraph(int vertexCapacity, int edgeCapacity) {
-        super(vertexCapacity, edgeCapacity);
-        this.vertexMap = new HashMap<>(vertexCapacity + vertexCapacity * 40 / 100, 0.75f);
-        this.vertices = new ArrayList<>(vertexCapacity);
-    }
+    private final Object[] vertices;
 
     /**
-     * Builder-method: adds a vertex.
+     * Holds the number of edges.
+     */
+    private final int edgeCount;
+
+    /**
+     * Creates a new instance from the specified graph.
      *
-     * @param v vertex
+     * @param graph a graph
      */
-    void buildAddVertex(V v) {
-        vertexMap.put(v, vertices.size());
-        vertices.add(v);
-    }
+    public ImmutableDirectedGraph(DirectedGraph<V> graph) {
+        edgeCount = graph.getEdgeCount();
+        final int vertexCapacity = graph.getVertexCount();
 
-    /**
-     * Builder-method: adds an adjacent edge.
-     *
-     * @param va vertex a
-     * @param vb vertex b
-     */
-    void buildAddEdge(V va, V vb) {
-        int a = vertexMap.get(va);
-        int b = vertexMap.get(vb);
-        buildAddEdge(a, b);
+        this.vertices = new Object[vertexCapacity];
+        this.edges = new HashMap<>(vertexCapacity);
+
+        for (int a = 0; a < vertexCapacity; a++) {
+            V va = graph.getVertex(a);
+            vertices[a] = va;
+            final int nextCount = graph.getNextCount(va);
+            if (nextCount > 0) {
+                Object[] edgeList = new Object[nextCount];
+                for (int i = 0; i < nextCount; i++) {
+                    edgeList[i++] = graph.getNext(va, i);
+                }
+                edges.put(va, edgeList);
+            }
+        }
     }
 
     @Override
-    public V getVertex(int vi) {
-        return vertices.get(vi);
+    public int getEdgeCount() {
+        return edgeCount;
     }
 
     @Override
-    public int indexOfVertex(Object v) {
-        return vertexMap.get(v);
+    public V getNext(V v, int i) {
+        final Object[] edgeList = edges.get(v);
+        if (edgeList == null) {
+            throw new IllegalArgumentException("vertex v(" + v + ") has no edges.");
+        }
+        @SuppressWarnings("unchecked")
+        final V b = (V) edgeList[i];
+        return b;
     }
 
-  
+    @Override
+    public int getNextCount(V v) {
+        final Object[] edgeList = edges.get(v);
+        return edgeList == null ? 0 : edgeList.length;
+    }
+
+    @Override
+    public V getVertex(int indexOfVertex) {
+        @SuppressWarnings("unchecked")
+        final V v = (V) vertices[indexOfVertex];
+        return v;
+    }
+
+    @Override
+    public int getVertexCount() {
+        return vertices.length;
+    }
 }

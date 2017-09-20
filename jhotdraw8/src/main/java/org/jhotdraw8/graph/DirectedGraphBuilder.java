@@ -4,7 +4,6 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.graph.ImmutableDirectedGraph;
-import org.jhotdraw8.graph.GraphWithKnownEdgeCount;
 import org.jhotdraw8.graph.IntDirectedGraphBuilder;
 import org.jhotdraw8.graph.DirectedGraph;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.Set;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGraph, GraphWithKnownEdgeCount {
+public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGraph {
 
     private final static int SENTINEL = -1;
     private final static int EDGES_NUM_FIELDS = 2;
@@ -113,27 +112,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
             return vertices.size() - 1;
         });
     }
-
-    /**
-     * Builds the model.
-     *
-     * @return the model
-     */
-    public ImmutableDirectedGraph<V> build() {
-        ImmutableDirectedGraph<V> model = new ImmutableDirectedGraph<>(vertexCount, edgeCount);
-        for (V v : vertices) {
-            model.buildAddVertex(v);
-        }
-
-        for (int i = 0; i < vertexCount; i++) {
-            V v = getVertex(i);
-            for (int j = 0, m = getNextCount(i); j < m; j++) {
-                model.buildAddEdge(v, getVertex(getNext(i, j)));
-            }
-        }
-        return model;
-    }
-
+    
     /**
      * Builder-method: adds a directed edge from 'a' to 'b'.
      * <p>
@@ -252,7 +231,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
      * @return a new graph with inverted edges
      */
     public static <X> DirectedGraphBuilder<X> inverseOfDirectedGraph(DirectedGraph<X> graph) {
-        int edgeCount = countEdges(graph);
+       final int edgeCount = graph.getEdgeCount();
 
         DirectedGraphBuilder<X> b = new DirectedGraphBuilder<>(graph.getVertexCount(), edgeCount);
         for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
@@ -267,30 +246,8 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
         }
         return b;
     }
-
-    /**
-     * Counts the edges of the provided graph.
-     *
-     * @param <X> the vertex type
-     * @param graph a graph
-     * @return the number of edges
-     */
-    public static <X> int countEdges(DirectedGraph<X> graph) {
-        if (graph instanceof IntDirectedGraph) {
-            return IntDirectedGraphBuilder.countEdges((IntDirectedGraph) graph);
-        }
-
-        int edgeCount;
-        if (graph instanceof GraphWithKnownEdgeCount) {
-            edgeCount = ((GraphWithKnownEdgeCount) graph).getEdgeCount();
-        } else {
-            edgeCount = 0;
-            for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
-                X v = graph.getVertex(i);
-                edgeCount += graph.getNextCount(v);
-            }
-        }
-        return edgeCount;
+    
+    public DirectedGraph<V> build() {
+        return new ImmutableDirectedGraph<V>(this);
     }
-
 }
