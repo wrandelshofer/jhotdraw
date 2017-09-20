@@ -11,6 +11,7 @@ import java.util.Map;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <V> the vertex type
  */
 public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
 
