@@ -53,7 +53,7 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
      */
     private final Map<V, Integer> vertexMap;
     /**
-     * Maps a vertex index to a vertex..
+     * Maps a vertex index to a vertex.
      */
     private final List<V> vertices;
 

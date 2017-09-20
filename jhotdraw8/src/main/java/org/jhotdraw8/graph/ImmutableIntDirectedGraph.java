@@ -50,6 +50,7 @@ public class ImmutableIntDirectedGraph implements IntDirectedGraph {
     /**
      * Creates a new instance from the specified graph.
      *
+     * @param <V> the vertex type
      * @param graph a graph
      */
     public <V> ImmutableIntDirectedGraph(DirectedGraph<V> graph) {
