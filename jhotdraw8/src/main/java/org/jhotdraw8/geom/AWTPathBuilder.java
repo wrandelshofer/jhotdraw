@@ -41,6 +41,7 @@ public class AWTPathBuilder extends AbstractPathBuilder {
     }
 
     public Path2D.Double get() {
+        finish();
         return path;
     }
 

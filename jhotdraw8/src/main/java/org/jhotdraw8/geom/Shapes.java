@@ -343,7 +343,6 @@ public class Shapes {
     public static Path2D.Double awtShapeFromSvgString(String str) throws IOException {
         AWTPathBuilder b = new AWTPathBuilder();
         buildFromSvgString(b, str);
-
         return b.get();
     }
 
