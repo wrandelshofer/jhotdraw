@@ -23,10 +23,11 @@ public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
     /**
      * Holds the edges.
      * <p>
-     * Contains no entry if a vertex has no edges. Contains an array if a vertex
-     * has one or more edges.
-     */ 
-    private final Map<V, Object[]> edges;
+     * Contains no entry if a vertex has no edges. Contains a vertex if the
+     * vertex has only one edge, contains an array if a vertex has one or more
+     * edges.
+     */
+    private final Map<V, Object> edges;
 
     /**
      * Holds the vertices.
@@ -49,7 +50,9 @@ public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
             V va = graph.getVertex(a);
             vertices[a] = va;
             final int nextCount = graph.getNextCount(va);
-            if (nextCount > 0) {
+            if (nextCount == 1) {
+                edges.put(va, graph.getNext(va, 0));
+            } else if (nextCount > 1) {
                 Object[] edgeList = new Object[nextCount];
                 for (int i = 0; i < nextCount; i++) {
                     edgeList[i++] = graph.getNext(va, i);
@@ -66,19 +69,25 @@ public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
 
     @Override
     public V getNext(V v, int i) {
-        final Object[] edgeList = edges.get(v);
-        if (edgeList == null) {
+        Object edgeListOrVertex = edges.get(v);
+        if (edgeListOrVertex instanceof Object[]) {
+            final Object[] edgeList = (Object[]) edgeListOrVertex;
+            return (V) edgeList[i];
+        }
+        if (edgeListOrVertex == null) {
             throw new IllegalArgumentException("vertex v(" + v + ") has no edges.");
         }
-        @SuppressWarnings("unchecked")
-        final V b = (V) edgeList[i];
-        return b;
+        return (V) edgeListOrVertex;
     }
 
     @Override
     public int getNextCount(V v) {
-        final Object[] edgeList = edges.get(v);
-        return edgeList == null ? 0 : edgeList.length;
+        Object edgeListOrVertex = edges.get(v);
+        if (edgeListOrVertex instanceof Object[]) {
+            final Object[] edgeList = (Object[]) edgeListOrVertex;
+            return edgeList.length;
+        }
+        return edgeListOrVertex == null ? 0 : 1;
     }
 
     @Override
