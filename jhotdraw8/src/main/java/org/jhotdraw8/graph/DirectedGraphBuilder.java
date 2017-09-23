@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.graph.ImmutableDirectedGraph;
-import org.jhotdraw8.graph.IntDirectedGraphBuilder;
-import org.jhotdraw8.graph.DirectedGraph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +14,7 @@ import java.util.Set;
  *
  * @author Werner Randelshofer
  * @version $Id$
+ * @param <V> the vertex type
  */
 public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGraph {
 
