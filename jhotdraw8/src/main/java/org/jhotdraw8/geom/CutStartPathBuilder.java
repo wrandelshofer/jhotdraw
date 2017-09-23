@@ -1,4 +1,4 @@
-/* @(#)ClipStartPathBuilder.java
+/* @(#)CutStartPathBuilder.java
  * Copyright (c) 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom;
@@ -11,19 +11,17 @@ import javafx.geometry.Point2D;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class ClipStartPathBuilder extends AbstractPathBuilder {
+public class CutStartPathBuilder extends AbstractPathBuilder {
 
-    private final int radius;
+    private final double radius;
     private final PathBuilder out;
-    private final int cx;
-    private final int cy;
+    private double cx;
+    private double cy;
     private boolean done;
 
-    public ClipStartPathBuilder(PathBuilder out, int cx, int cy, int radius) {
+    public CutStartPathBuilder(PathBuilder out, double radius) {
         this.radius = radius;
         this.out = out;
-        this.cx = cx;
-        this.cy = cy;
     }
 
     @Override
@@ -96,6 +94,9 @@ public class ClipStartPathBuilder extends AbstractPathBuilder {
         if (done) {
             out.moveTo(x, y);
             return;
+        }else {
+            cx=x;
+            cy=y;
         }
     }
 
