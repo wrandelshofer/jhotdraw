@@ -1,4 +1,4 @@
-/* @(#)CombinedPathFigure.java
+/* @(#)ConcatenatedPathFigure.java
  * Copyright © 2017 by the authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableFigureKey;
 import org.jhotdraw8.draw.key.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.CombinedPathIterator;
+import org.jhotdraw8.geom.ConcatenatedPathIterator;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
@@ -38,7 +38,7 @@ import org.jhotdraw8.geom.Transforms;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class CombinedPathFigure extends AbstractCompositeFigure
+public class ConcatenatedPathFigure extends AbstractCompositeFigure
         implements StrokeableFigure, FillableFigure, Grouping,
         ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
         CompositableFigure,
@@ -118,7 +118,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
             final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
             iterators.add(childPathIterator);
         }
-        return new CombinedPathIterator(getStyled(FILL_RULE), iterators);
+        return new ConcatenatedPathIterator(getStyled(FILL_RULE), iterators);
 
     }
 
@@ -151,7 +151,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                 }
             }
         }
-        PathIterator iter = area != null ? area.getPathIterator(null) : new CombinedPathIterator(getStyled(FILL_RULE), Collections.emptyList());
+        PathIterator iter = area != null ? area.getPathIterator(null) : new ConcatenatedPathIterator(getStyled(FILL_RULE), Collections.emptyList());
         return iter;
     }
 
