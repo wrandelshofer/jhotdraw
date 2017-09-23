@@ -65,18 +65,18 @@ public class CssSample extends Application {
         line1.set(SimpleLineFigure.END, new Point2D(100, 150));
 
         Layer layer = new SimpleLayer();
-        drawing.add(layer);
+        drawing.addChild(layer);
 
-        layer.add(vertex1);
-        layer.add(vertex2);
-        layer.add(vertex3);
-        layer.add(vertex4);
+        layer.addChild(vertex1);
+        layer.addChild(vertex2);
+        layer.addChild(vertex3);
+        layer.addChild(vertex4);
 
-        layer.add(edge12);
-        layer.add(edge23);
-        layer.add(edge3Null);
-        layer.add(edgeNullNull);
-        layer.add(line1);
+        layer.addChild(edge12);
+        layer.addChild(edge23);
+        layer.addChild(edge3Null);
+        layer.addChild(edgeNullNull);
+        layer.addChild(line1);
 
         vertex1.set(StyleableFigure.ID, "vertex1");
         vertex2.set(StyleableFigure.ID, "vertex2");

@@ -123,7 +123,7 @@ public class SimpleBezierFigure extends AbstractLeafFigure
         pathNode.setFillRule(getStyled(FILL_RULE));
         final List<PathElement> elements = Shapes.fxPathElementsFromAWT(new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(null));
         /*        if (getStyled(CLOSED)) {
-            elements.add(new ClosePath());
+            elements.addChild(new ClosePath());
         }*/
         if (!pathNode.getElements().equals(elements)) {
             pathNode.getElements().setAll(elements);

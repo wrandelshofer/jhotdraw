@@ -3,7 +3,6 @@
  */
 package org.jhotdraw8.graph;
 
-import static ch.systransis.arl.editor.model.nodeimpl.PIOPathNode.DescType.Vertex;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -25,7 +25,7 @@ public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
      * <p>
      * Contains no entry if a vertex has no edges. Contains an array if a vertex
      * has one or more edges.
-     */
+     */ 
     private final Map<V, Object[]> edges;
 
     /**

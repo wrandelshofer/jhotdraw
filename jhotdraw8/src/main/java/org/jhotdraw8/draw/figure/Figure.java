@@ -307,7 +307,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param newChild the new child
      */
-    default void add(Figure newChild) {
+    default void addChild(Figure newChild) {
         getChildren().add(newChild);
     }
 
@@ -922,12 +922,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param child a child of the figure
      */
-    default void remove(Figure child) {
+    default void removeChild(Figure child) {
         getChildren().remove(child);
     }
 
     /**
-     * Requests to remove all connection targets.
+     * Requests to removeChild all connection targets.
      */
     void removeAllLayoutSubjects();
 
@@ -1066,19 +1066,19 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * This method is invoked by a {@code RenderContext}, when it needs to
      * update the node which represents the scene graph in the figure.
      * <p>
-     * A figure which is composed from child figures, must add the nodes of its
-     * getChildren to its node. This ensures that coordinate space
-     * transformations of the composed figure are properly propagated to its
-     * getChildren.
-     * </p>
+ A figure which is composed from child figures, must addChild the nodes of its
+ getChildren to its node. This ensures that coordinate space
+ transformations of the composed figure are properly propagated to its
+ getChildren.
+ </p>
      * <pre>
      * public void updateNode(RenderContext rc, Node n) {
      *     ObservableList&lt;Node&gt; group = ((Group) n).getChildren();
-     * group.clear();
-     * for (Figure child : children()) {
-     * group.add(rc.getNode(child));
-     * }
-     * </pre>
+ group.clear();
+ for (Figure child : children()) {
+ group.addChild(rc.getNode(child));
+ }
+ </pre>
      * <p>
      * A figure may be shown in multiple {@code RenderContext}s. Each
      * {@code RenderContext} uses this method to update the a JavaFX node for

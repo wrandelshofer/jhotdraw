@@ -36,6 +36,8 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
+    private final Map<? super Key<?>, Object> cachedValues = new HashMap<>();
+
     private ObservableSet<Figure> dependentFigures;
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<Figure>(this, PARENT_PROPERTY) {
 
@@ -49,9 +51,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     };
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
-    private final Map<? super Key<?>, Object> cachedValues = new HashMap<>();
-
-
 
     @Override
     @SuppressWarnings("unchecked")
@@ -67,6 +66,11 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
                 firePropertyChangeEvent(this, FigurePropertyChangeEvent.EventType.CHANGED, (Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
             }
         }
+    }
+
+    @Override
+    public <T> T getCachedValue(Key<T> key) {
+        return key.get(cachedValues);
     }
 
     @Override
@@ -99,6 +103,51 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         return propertyChangeListeners;
     }
 
+    /**
+     * Returns a new map instance with all properties of this figure.
+     * <p>
+     * This method is used for XML serialization using the Java XMLEncoder and
+     * XMLDecoder classes.
+     *
+     * @return a new list instance
+     */
+    public HashMap<String, Object> getPropertyMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        for (Map.Entry<Key<?>, Object> e : getProperties().entrySet()) {
+            Key<?> k = e.getKey();
+            if (!Objects.equals(e.getValue(), k.getDefaultValue())) {
+                result.put(k.getName(), e.getValue());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Replaces the properties map of this figure with the contents of the
+     * specified map.
+     * <p>
+     * This method is used for XML serialization using the Java XMLEncoder and
+     * XMLDecoder classes.
+     *
+     * @param newMap the new properties
+     */
+    public void setPropertyMap(HashMap<String, Object> newMap) {
+        HashMap<String, Key<?>> keyst = new HashMap<>();
+        Map<Key<?>, Object> m = getProperties();
+        for (MapAccessor<?> ma : Figure.getDeclaredAndInheritedMapAccessors(getClass())) {
+            if (ma instanceof Key<?>) {
+                keyst.put(ma.getName(), (Key<?>) ma);
+            }
+        }
+        for (Map.Entry<String, Object> e : newMap.entrySet()) {
+            String name = e.getKey();
+            Key<?> key = keyst.get(name);
+            if (key != null) {
+                m.put(key, e.getValue());
+            }
+        }
+    }
+
     @Override
     public boolean hasPropertyChangeListeners() {
         return propertyChangeListeners != null && !propertyChangeListeners.isEmpty();
@@ -109,8 +158,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      * figure.
      * <p>
      * This implementation returns false if {@code newParent} is a
-     * {@link Drawing}. Because only {@link org.jhotdraw8.draw.figure.Layer}s may have
-     * {@code org.jhotdraw8.draw.Drawing} as a parent.
+     * {@link Drawing}. Because only {@link org.jhotdraw8.draw.figure.Layer}s
+     * may have {@code org.jhotdraw8.draw.Drawing} as a parent.
      *
      * @param newParent The new parent figure.
      * @return true if {@code newParent} is an acceptable parent
@@ -135,11 +184,17 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     /**
      * This implementation is empty.
+     *
      * @param connectedFigure the connected figure
      */
     @Override
     public void removeLayoutSubject(Figure connectedFigure) {
         // empty
+    }
+
+    @Override
+    public <T> T setCachedValue(Key<T> key, T value) {
+        return key.put(cachedValues, value);
     }
 
     @Override
@@ -156,55 +211,4 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         invalidateTransforms();
     }
 
-    @Override
-    public <T> T setCachedValue(Key<T> key, T value) {
-        return key.put(cachedValues, value);
-    }
-
-    @Override
-    public <T> T getCachedValue(Key<T> key) {
-        return key.get(cachedValues);
-    }
-    
-       /**
-     * Replaces the properties map of this figure with the contents of the specified map.
-     * <p>
-     * This method is used for XML serialization using the Java XMLEncoder and XMLDecoder classes.
-     *
-     * @param newMap the new properties
-     */
-    public void setPropertyMap(HashMap<String,Object> newMap) {
-        HashMap<String,Key<?>> keyst=new HashMap<>();
-        Map<Key<?>,Object> m=getProperties();
-        for (MapAccessor<?> ma:Figure.getDeclaredAndInheritedMapAccessors(getClass()))
-            if (ma instanceof Key<?>) {
-                keyst.put(ma.getName(),(Key<?>)ma);
-            }
-        for (Map.Entry<String,Object> e:newMap.entrySet()) {
-            String name=e.getKey();
-            Key<?> key=keyst.get(name);
-            if (key!=null) {
-            m.put(key,e.getValue());
-            }
-        }
-    }
-
-    /**
-     * Returns a new map instance with all properties of this figure.
-     * <p>
-     * This method is used for XML serialization using the Java XMLEncoder and
-     * XMLDecoder classes.
-     *
-     * @return a new list instance
-     */
-    public HashMap<String,Object> getPropertyMap() {
-        HashMap<String,Object> result=new HashMap<>();
-        for (Map.Entry<Key<?>,Object> e:getProperties().entrySet()) {
-            Key<?> k=e.getKey();
-            if (!Objects.equals(e.getValue(),k.getDefaultValue())) {
-            result.put(k.getName(),e.getValue());
-            }
-        }
-        return result;
-    }
 }

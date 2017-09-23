@@ -407,7 +407,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 }
             }
             for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
-                newDrawing.remove(f);
+                newDrawing.removeChild(f);
                 String id = idFactory.createId(f);
                 f.set(StyleableFigure.ID, id);
                 if (f instanceof Layer) {
@@ -569,7 +569,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                         if (!child.isSuitableParent(figure)) {
                             throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + ((Element) node).getTagName() + ".");
                         }
-                        figure.add(child);
+                        figure.addChild(child);
                     }
                 }
                 if (!comments.isEmpty()) {

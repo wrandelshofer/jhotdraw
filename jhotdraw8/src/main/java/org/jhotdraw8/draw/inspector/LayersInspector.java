@@ -369,8 +369,8 @@ public class LayersInspector extends AbstractDrawingInspector {
                         continue;
                     }
                     if (f.getLayer() == from) {
-                        // add child moves a figure, so we do not need to
-                        // remove it explicitly
+                        // addChild child moves a figure, so we do not need to
+                        // removeChild it explicitly
                         model.addChildTo(f, to);
                     }
                 }

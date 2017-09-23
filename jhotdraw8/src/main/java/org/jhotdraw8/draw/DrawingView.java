@@ -160,8 +160,8 @@ public interface DrawingView extends RenderContext {
      * {@code Node} of the tool to its tool panel which is stacked on top of the
      * drawing panel. It then invokes {@code toolsetDrawingView(this)}.
      * <p>
-     * Setting a tool will remove the previous tool. The drawing view invokes
-     * {@code tool.setDrawingView(null)} and then removes its {@code Node} from
+ Setting a tool will removeChild the previous tool. The drawing view invokes
+ {@code tool.setDrawingView(null)} and then removes its {@code Node} from
      * its tool panel.
      *
      * @return the tool property, with {@code getBean()} returning this drawing

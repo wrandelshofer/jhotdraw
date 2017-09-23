@@ -5,7 +5,6 @@ package org.jhotdraw8.tree;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
@@ -29,6 +28,7 @@ import java.util.List;
  * parameter. The types {@literal <P>} and {@literal <C>} are checked at
  * runtime.
  *
+ * @param <T> the type of the tree node
  * @design.pattern TreeNode Composite, Component. The composite pattern is used
  * to model a tree structure.
  *

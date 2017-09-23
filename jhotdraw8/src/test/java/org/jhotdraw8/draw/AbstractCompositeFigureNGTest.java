@@ -37,7 +37,7 @@ public class AbstractCompositeFigureNGTest {
         Figure parent = new AbstractCompositeFigureImpl();
         Figure child = new AbstractCompositeFigureImpl();
         
-        parent.add(child);
+        parent.addChild(child);
         
         assertTrue(parent.getChildren().contains(child));
         assertEquals(child.getParent(),parent);
@@ -47,8 +47,8 @@ public class AbstractCompositeFigureNGTest {
         Figure parent = new AbstractCompositeFigureImpl();
         Figure child = new AbstractCompositeFigureImpl();
         
-        parent.add(child);
-        parent.remove(child);
+        parent.addChild(child);
+        parent.removeChild(child);
         
         assertFalse(parent.getChildren().contains(child));
         assertNull(child.getParent());
@@ -59,8 +59,8 @@ public class AbstractCompositeFigureNGTest {
         Figure parent2 = new AbstractCompositeFigureImpl();
         Figure child = new AbstractCompositeFigureImpl();
         
-        parent1.add(child);
-        parent2.add(child);
+        parent1.addChild(child);
+        parent2.addChild(child);
         
         assertFalse(parent1.getChildren().contains(child));
         assertTrue(parent2.getChildren().contains(child));
@@ -72,9 +72,9 @@ public class AbstractCompositeFigureNGTest {
         Figure child1 = new AbstractCompositeFigureImpl();
         Figure child2 = new AbstractCompositeFigureImpl();
         
-        parent1.add(child1);
-        parent1.add(child2);
-        parent1.add(child1);
+        parent1.addChild(child1);
+        parent1.addChild(child2);
+        parent1.addChild(child1);
         
         assertEquals(parent1.getChildren().size(),2   );
         assertTrue(parent1.getChildren().contains(child1));
@@ -89,8 +89,8 @@ public class AbstractCompositeFigureNGTest {
         Figure child1 = new AbstractCompositeFigureImpl();
         Figure child2 = new AbstractCompositeFigureImpl();
         
-        parent1.add(child2);
-        parent1.add(child1);
+        parent1.addChild(child2);
+        parent1.addChild(child1);
         parent1.getChildren().add(0,child1);
         
         assertEquals(parent1.getChildren().size(),2   );

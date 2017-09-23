@@ -283,7 +283,7 @@ public class GrapherProject extends AbstractDocumentProject implements DocumentP
             SimplePageLabelFigure pl = new SimplePageLabelFigure(940, 700, labels.getFormatted("pageLabel.text",
                     SimplePageLabelFigure.PAGE_PLACEHOLDER, SimplePageLabelFigure.NUM_PAGES_PLACEHOLDER),
                     FillableFigure.FILL, null, StrokeableFigure.STROKE, null);
-            pf.add(pl);
+            pf.addChild(pl);
             return pf;
         }), layerFactory), 8, 1, 16);
         ttbar.setDrawingEditor(editor);

@@ -538,7 +538,7 @@ public class SimpleFigureFactory implements FigureFactory {
      * accessor.
      */
     protected void removeRedundantKeys() {
-        // FIXME must remove redundant keys per figure
+        // FIXME must removeChild redundant keys per figure
 
         HashSet<MapAccessor<?>> redundantKeys = new HashSet<>();
 

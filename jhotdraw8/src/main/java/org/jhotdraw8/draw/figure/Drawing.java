@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.DrawingEditor;
  * the figures.
  * <p>
  * <b>Layers.</b> By convention the children of a {@code Drawing} must be
- * {@link Layer}s. To add figures to a drawing, first add a layer, and then add the figures to the layer.</p>
+ * {@link Layer}s. To addChild figures to a drawing, first addChild a layer, and then addChild the figures to the layer.</p>
  *
  * @design.pattern Drawing Framework, KeyAbstraction. The drawing framework
  * supports the creation of editors for structured drawings. The key

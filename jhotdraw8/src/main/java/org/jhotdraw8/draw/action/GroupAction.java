@@ -65,7 +65,7 @@ public class GroupAction extends AbstractSelectedAction {
     }
 
     public static void group(DrawingView view, Collection<Figure> figures, Supplier<Figure> groupFactory) {
-        // We don't add an empty group
+        // We don't addChild an empty group
         if (figures.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be grouped");
             alert.getDialogPane().setMaxWidth(640.0);
@@ -105,7 +105,7 @@ public class GroupAction extends AbstractSelectedAction {
         Figure group = groupFactory.get();
         model.addChildTo(group, parent);
 
-        // Note: we iterate here over all figures because we must add
+        // Note: we iterate here over all figures because we must addChild
         //       the selected figures from back to front to the group
         for (Figure child : Iterators.toList(drawing.breadthFirstIterable())) {
             if (!figures.contains(child)) {

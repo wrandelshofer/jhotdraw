@@ -42,7 +42,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         protected void onAdded(Figure e) {
             Figure oldParent = e.getParent();
             if (oldParent != null && oldParent != AbstractCompositeFigure.this) {
-                oldParent.remove(e);
+                oldParent.removeChild(e);
             }
             e.parentProperty().set(AbstractCompositeFigure.this);
         }
@@ -93,11 +93,11 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
                                     int lastIndex = children.lastIndexOf(added);
                                     int firstIndex = children.indexOf(added);
                                     if (lastIndex != firstIndex) {
-                                        children.remove(firstIndex == i ? lastIndex : firstIndex);
+                                        children.removeChild(firstIndex == i ? lastIndex : firstIndex);
                                     }
                                 } else {
                                     System.out.println("AbstractCompositeFigure.oldParentOfAdded " + oldParentOfAdded);
-                                    oldParentOfAdded.remove(added);
+                                    oldParentOfAdded.removeChild(added);
                                 }
                             }
                             added.parentProperty().set(AbstractCompositeFigure.this);

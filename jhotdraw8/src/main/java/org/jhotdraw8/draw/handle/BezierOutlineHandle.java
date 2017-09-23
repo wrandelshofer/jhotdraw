@@ -77,7 +77,7 @@ public class BezierOutlineHandle extends AbstractHandle {
             Point2D pInDrawing = dv.viewToWorld(new Point2D(px, py));
             pInDrawing = dv.getConstrainer().constrainPoint(owner, pInDrawing);
             Point2D pInLocal = owner.worldToLocal(pInDrawing);
-            //dv.getModel().set(owner, key, ImmutableObservableList.add(owner.get(key), insertAt, pInLocal));
+            //dv.getModel().set(owner, key, ImmutableObservableList.addChild(owner.get(key), insertAt, pInLocal));
             dv.recreateHandles();
         }
     }

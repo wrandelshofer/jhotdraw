@@ -1144,7 +1144,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
 
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
-            //dirtyHandles.add(entry.getKey());
+            //dirtyHandles.addChild(entry.getKey());
             for (Handle handle : entry.getValue()) {
                 Node n = handle.getNode();
                 if (nodeToHandleMap.put(n, handle) == null) {

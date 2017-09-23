@@ -241,7 +241,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         Figure oldParent = child.getParent();
         if (oldParent != null) {
             int oldChildIndex = oldParent.getChildren().indexOf(child);
-            oldParent.remove(child);
+            oldParent.removeChild(child);
             fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent((DrawingModel) this, child, oldParent, oldChildIndex));
             fireTreeModelEvent(TreeModelEvent.nodeInvalidated((DrawingModel) this, oldParent));
         }
