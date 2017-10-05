@@ -262,6 +262,7 @@ public class Shapes {
                 builder.closePath();
             }
         }
+        builder.finish();
         return builder;
     }
 
@@ -370,6 +371,7 @@ public class Shapes {
                     throw new InternalError("unsupported segment type:" + iter.currentSegment(coords));
             }
         }
+        builder.finish();
         return builder;
     }
 
@@ -383,7 +385,7 @@ public class Shapes {
      * @param str the SVG path
      * @throws java.io.IOException if the String is not a valid path
      */
-    public static void buildFromSvgString(PathBuilder builder, String str) throws IOException {
+    public static PathBuilder buildFromSvgString(PathBuilder builder, String str) throws IOException {
         try {
             Point2D.Double p = new Point2D.Double();
             Point2D.Double c1 = new Point2D.Double();
@@ -777,6 +779,9 @@ public class Shapes {
         } catch (IllegalPathStateException e) {
             throw new IOException(e);
         }
+        
+        builder.finish();
+        return builder;
     }
 
     /**

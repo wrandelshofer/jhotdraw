@@ -378,6 +378,17 @@ public interface TransformableFigure extends TransformCacheableFigure {
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
+    
+    /**
+     * Throws unsupported operation exception.
+     * @param x
+     * @param y
+     * @param width
+     * @param hight 
+     */
+    default void reshapeInLocal(double x, double y, double width, double height) {
+        throw new UnsupportedOperationException("this method must be overriden");
+    }
 
     @Override
     default void reshapeInParent(Transform transform) {

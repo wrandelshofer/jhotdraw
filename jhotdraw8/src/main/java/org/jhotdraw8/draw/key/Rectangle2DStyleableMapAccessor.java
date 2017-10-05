@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.draw.key;
 
+import static java.lang.Double.max;
 import java.util.Map;
 import java.util.function.Function;
 import javafx.css.CssMetaData;
@@ -83,7 +84,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableFigureMapA
 
     @Override
     public Rectangle2D get(Map<? super Key<?>, Object> a) {
-        return new Rectangle2D(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
+        return new Rectangle2D(xKey.get(a), yKey.get(a), max(0.0,widthKey.get(a)), max(0.0,heightKey.get(a)));
     }
 
     @Override

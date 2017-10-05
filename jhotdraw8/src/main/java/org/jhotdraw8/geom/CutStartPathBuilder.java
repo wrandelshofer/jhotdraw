@@ -44,7 +44,8 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
                 Geom.splitCubicCurve(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
                 break;
             case NO_INTERSECTION_INSIDE:
-                // skip lineTo
+            cx=x3;
+            cy=y3;
                 break;
             case NO_INTERSECTION_OUTSIDE:
             case NO_INTERSECTION_TANGENT:
@@ -74,7 +75,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
                 Point2D p = i.getLastPoint();
                 out.moveTo(p.getX(), p.getY());
                 out.lineTo(x, y);
-
+                done=true;
                 break;
             case NO_INTERSECTION_INSIDE:
                 // skip lineTo
@@ -115,7 +116,8 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
 
                 break;
             case NO_INTERSECTION_INSIDE:
-                // skip lineTo
+            cx=x2;
+            cy=y2;
                 break;
             case NO_INTERSECTION_OUTSIDE:
             case NO_INTERSECTION_TANGENT:

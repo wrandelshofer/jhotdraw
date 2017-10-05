@@ -7,7 +7,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import static java.lang.Math.*;
-import static java.lang.System.out;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -16,6 +15,7 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.util.function.Double2Consumer;
 import org.jhotdraw8.util.function.Double4Consumer;
 import org.jhotdraw8.util.function.Double6Consumer;
 
@@ -1274,4 +1274,28 @@ public class Geom {
         }
     }
 
+    /**
+     * Splits the provided line into two parts.
+     *
+     * @param x1 point 1 of the line
+     * @param y1 point 1 of the line
+     * @param x2 point 2 of the line
+     * @param y2 point 2 of the line
+     * @param t where to split
+     * @param leftLineTo if not null, accepts the curve from x1,y1 to t
+     * @param rightLineTo if not null, accepts the curve from t to x2,y2
+     */
+    public static void splitLine(double x1, double y1, double x2, double y2, double t,
+            Double2Consumer leftLineTo,
+            Double2Consumer rightLineTo) {
+        final double x12 = (x2 - x1) * t + x1;
+        final double y12 = (y2 - y1) * t + y1;
+
+        if (leftLineTo != null) {
+            leftLineTo.accept(x12, y12);
+        }
+        if (rightLineTo != null) {
+            rightLineTo.accept( x2, y2);
+        }
+    }
 }

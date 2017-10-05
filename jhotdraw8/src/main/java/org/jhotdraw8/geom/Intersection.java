@@ -12,6 +12,7 @@
 package org.jhotdraw8.geom;
 
 import java.awt.geom.PathIterator;
+import static java.lang.Math.abs;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -488,6 +489,8 @@ public class Intersection {
 
         if (result.size() > 0) {
             result.status = Status.INTERSECTION;
+        } else {
+            result.status = intersectPointEllipse(p1, ec, rx, ry).status;
         }
 
         return result;
@@ -1075,6 +1078,8 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
 
         if (result.size() > 0) {
             result.status = Status.INTERSECTION;
+        } else {
+            result.status = intersectPointEllipse(p1, ec, rx, ry).status;
         }
 
         return result;
@@ -1249,6 +1254,7 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
 
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
+            // FIXME compute inside/outside
         }
 
         return result;
@@ -1295,6 +1301,31 @@ public static Intersection intersectBezier2Rectangle(Point2D p1, Point2D p2, Poi
                     p.getY() - b * (c2.getX() - c1.getX())
             )
             );
+        }
+        return result;
+    }
+    private final static double EPSILON = 1e-6;
+
+    /**
+     * Computes the intersection between a point and a circle.
+     *
+     * @param point the point
+     * @param center the center of the circle
+     * @param r the radius of the circle
+     * @return computed intersection
+     */
+    public static Intersection intersectPointCircle(Point2D point, Point2D center, double radius) {
+        Intersection result;
+
+        final double distance = point.distance(center);
+
+        if (distance - radius < EPSILON) {
+            result = new Intersection(Status.INTERSECTION);
+            result.put(0.0, point);
+        } else if (distance < radius) {
+            result = new Intersection(Status.NO_INTERSECTION_INSIDE);
+        } else {
+            result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
         }
         return result;
     }
@@ -1423,9 +1454,8 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
 
         Polynomial yPoly = Intersection.bezout(a, b);
         double[] yRoots = yPoly.getRoots();
-        double epsilon = 1e-3;
-        double norm0 = (a[0] * a[0] + 2 * a[1] * a[1] + a[2] * a[2]) * epsilon;
-        double norm1 = (b[0] * b[0] + 2 * b[1] * b[1] + b[2] * b[2]) * epsilon;
+        double norm0 = (a[0] * a[0] + 2 * a[1] * a[1] + a[2] * a[2]) * EPSILON;
+        double norm1 = (b[0] * b[0] + 2 * b[1] * b[1] + b[2] * b[2]) * EPSILON;
         Intersection result = new Intersection(Status.NO_INTERSECTION);
 
         for (int y = 0; y < yRoots.length; y++) {
@@ -1437,14 +1467,13 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
             double[] xRoots = xPoly.getRoots();
 
             for (int x = 0; x < xRoots.length; x++) {
-                double test
-                        = (a[0] * xRoots[x] + a[1] * yRoots[y] + a[3]) * xRoots[x]
+                double test = (a[0] * xRoots[x] + a[1] * yRoots[y] + a[3]) * xRoots[x]
                         + (a[2] * yRoots[y] + a[4]) * yRoots[y] + a[5];
                 if (Math.abs(test) < norm0) {
-                    test
-                            = (b[0] * xRoots[x] + b[1] * yRoots[y] + b[3]) * xRoots[x]
+                    test = (b[0] * xRoots[x] + b[1] * yRoots[y] + b[3]) * xRoots[x]
                             + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
                     if (Math.abs(test) < norm1) {
+                        // FIXME compute angle in radians
                         result.put(Double.NaN, new Point2D(xRoots[x], yRoots[y]));
                     }
                 }
@@ -1454,6 +1483,36 @@ public static Intersection intersectEllipseEllipse(Point2D c1, double rx1, doubl
         if (!result.isEmpty()) {
             result.status = Status.INTERSECTION;
         }
+        return result;
+    }
+
+    /**
+     * Computes the intersection between two ellipses.
+     *
+     * @param point the point
+     * @param center the center of the ellipse
+     * @param rx the x-radius of ellipse
+     * @param ry the y-radius of ellipse
+     * @return computed intersection
+     */
+    public static Intersection intersectPointEllipse(Point2D point, Point2D center, double rx, double ry) {
+        Intersection result = new Intersection(Status.INTERSECTION);
+
+        double px = point.getX();
+        double py = point.getY();
+        double cx = center.getX();
+        double cy = center.getY();
+
+        double det = (px - cx) * (px - cx) / (rx * rx) + (py - py) * (py - py) / (ry * ry);
+        if (abs(det) - 1 == EPSILON) {
+            result = new Intersection(Status.INTERSECTION);
+            result.put(0, point);
+        } else if (det < 1) {
+            result = new Intersection(Status.NO_INTERSECTION_INSIDE);
+        } else {
+            result = new Intersection(Status.NO_INTERSECTION_OUTSIDE);
+        }
+
         return result;
     }
 
