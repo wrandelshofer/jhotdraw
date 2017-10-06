@@ -294,7 +294,7 @@ public class Geom {
      * @return the constrained value
      */
     public static double clamp(double value, double min, double max) {
-        if (value < min) {
+        if (Double.isNaN(value)||value < min) {
             return min;
         }
         if (value > max) {
