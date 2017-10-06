@@ -1095,6 +1095,10 @@ public class Shapes {
         return buf.toString();
     }
 
+    public static String svgStringFromElements(List<PathElement> elements) {
+        return svgStringFromAWT(awtShapeFromFXPathElements(elements));
+    }
+
     public static List<PathElement> transformFXPathElements(List<PathElement> elements, javafx.scene.transform.Transform fxT) {
         ArrayList<PathElement> result = new ArrayList<>();
         awtShapeFromFXPathElements(elements);
