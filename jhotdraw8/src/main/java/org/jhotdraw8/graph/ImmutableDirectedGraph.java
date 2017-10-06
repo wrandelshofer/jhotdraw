@@ -55,7 +55,7 @@ public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
             } else if (nextCount > 1) {
                 Object[] edgeList = new Object[nextCount];
                 for (int i = 0; i < nextCount; i++) {
-                    edgeList[i++] = graph.getNext(va, i);
+                    edgeList[i] = graph.getNext(va, i);
                 }
                 edges.put(va, edgeList);
             }
@@ -72,12 +72,16 @@ public class ImmutableDirectedGraph<V> implements DirectedGraph<V> {
         Object edgeListOrVertex = edges.get(v);
         if (edgeListOrVertex instanceof Object[]) {
             final Object[] edgeList = (Object[]) edgeListOrVertex;
-            return (V) edgeList[i];
+            @SuppressWarnings("unchecked")
+            final V next = (V) edgeList[i];
+            return next;
         }
         if (edgeListOrVertex == null) {
             throw new IllegalArgumentException("vertex v(" + v + ") has no edges.");
         }
-        return (V) edgeListOrVertex;
+        @SuppressWarnings("unchecked")
+        final V next = (V) edgeListOrVertex;
+        return next;
     }
 
     @Override
