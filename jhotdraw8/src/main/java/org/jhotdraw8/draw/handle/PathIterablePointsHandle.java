@@ -82,7 +82,7 @@ public class PathIterablePointsHandle extends AbstractHandle {
         List<PathElement> elements = new ArrayList<>();
         FXPathPointsBuilder builder = new FXPathPointsBuilder(elements);
         Shapes.buildFromPathIterator(builder, f.getPathIterator(Shapes.awtTransformFromFX(t)));
-        
+
         node.getElements().setAll(builder.getElements());
     }
 
