@@ -112,7 +112,11 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
     }
 
     public DirectedGraph<V> build() {
-        return new ImmutableDirectedGraph<V>(this);
+        final ImmutableDirectedGraph<V> graph = new ImmutableDirectedGraph<V>(this);;
+        if (!new DirectedGraphValidator<V>().validate(graph)) {
+            throw new IllegalArgumentException("graph is not valid");
+        }
+        return graph;
     }
 
     /**
@@ -133,11 +137,11 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
         }
 
         int edgeCountOfA = lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD];
-        int lastEdgeIdOfA = lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD];
+        int lastEdgeIdOfA = edgeCountOfA==0?SENTINEL:lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD];
 
         int newLastEdgeIdOfA = edgeCount;
         edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_VERTEX_FIELD] = b;
-        edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_POINTER_FIELD] = (edgeCountOfA != 0) ? lastEdgeIdOfA : SENTINEL;
+        edges[newLastEdgeIdOfA * EDGES_NUM_FIELDS + EDGES_POINTER_FIELD] = lastEdgeIdOfA ;
 
         lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_COUNT_FIELD] = edgeCountOfA + 1;
         lastEdge[a * LASTEDGE_NUM_FIELDS + LASTEDGE_POINTER_FIELD] = newLastEdgeIdOfA;
@@ -176,6 +180,9 @@ public class DirectedGraphBuilder<V> implements DirectedGraph<V>, IntDirectedGra
 
     @Override
     public V getVertex(int vi) {
+        if (vertices.get(vi)==null) {
+            System.err.println("DIrectedGraphBuilder is broken");
+        }
         return vertices.get(vi);
     }
 
